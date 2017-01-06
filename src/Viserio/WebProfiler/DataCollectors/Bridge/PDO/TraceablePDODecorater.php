@@ -103,9 +103,6 @@ class TraceablePDODecorater extends PDO
 
     /**
      * {@inhritdoc}.
-     *
-     * @param mixed $statement
-     * @param mixed $driver_options
      */
     public function prepare($statement, $driver_options = [])
     {

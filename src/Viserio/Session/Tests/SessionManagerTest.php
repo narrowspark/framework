@@ -31,7 +31,7 @@ class SessionManagerTest extends TestCase
         $config->shouldReceive('get')
             ->with('cache.drivers', []);
         $config->shouldReceive('get')
-            ->with('cache.namespace');
+            ->with('cache.namespace', false);
 
         $manager = new SessionManager($config, $encrypter);
         $manager->setContainer(new ArrayContainer([

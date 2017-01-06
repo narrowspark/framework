@@ -41,7 +41,7 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
         }
 
         if (self::getConfig($container, 'collector.files', false)) {
-            $profiler->addCollector(static::createFilesLoadedCollector($container));
+            $profiler->addCollector(self::createFilesLoadedCollector($container));
         }
 
         return $profiler;

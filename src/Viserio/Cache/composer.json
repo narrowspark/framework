@@ -48,7 +48,6 @@
     "require-dev": {
         "cache/array-adapter"                 : "^0.4",
         "cache/filesystem-adapter"            : "^0.3",
-        "cache/session-handler"               : "^0.2",
         "cache/void-adapter"                  : "^0.3",
         "container-interop/service-provider"  : "^0.3",
         "micheh/psr7-cache"                   : "^0.5",
@@ -85,7 +84,6 @@
         "cache/memcached-adapter"             : "Required to use the Memcached cache (^0.3).",
         "cache/mongodb-adapter"               : "Required to use the Mongodb cache (^0.2).",
         "cache/predis-adapter"                : "Required to use the Predis cache (^0.4).",
-        "cache/session-handler"               : "Required to use the Session cache (^0.2).",
         "cache/void-adapter"                  : "Required to use the Void cache (^0.3).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."

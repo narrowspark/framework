@@ -15,8 +15,9 @@ use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Support\Http\ClientIp;
+use Psr\Log\LoggerAwareInterface;
 
-class WebProfiler implements WebProfilerContract
+class WebProfiler implements WebProfilerContract, LoggerAwareInterface
 {
     use CacheItemPoolAwareTrait;
     use EventsAwareTrait;

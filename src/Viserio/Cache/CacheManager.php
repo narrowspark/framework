@@ -13,7 +13,6 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
-use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
 use Cache\SessionHandler\Psr6SessionHandler;
@@ -27,9 +26,13 @@ use Psr\SimpleCache\CacheInterface;
 use Redis;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Support\AbstractManager;
+use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
 
-class CacheManager extends AbstractManager implements CacheManagerContract
+class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -62,31 +65,18 @@ class CacheManager extends AbstractManager implements CacheManagerContract
     /**
      * {@inheritdoc}
      */
-    public function getSimpleCache($pool = null): CacheInterface
-    {
-        if ($pool instanceof CacheItemPoolInterface) {
-            return new SimpleCacheBridge($pool);
-        }
-
-        return new SimpleCacheBridge($this->driver($pool));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function createDriver(array $config)
     {
         $driver = parent::createDriver($config);
+        $namespace = $this->config->get($this->getConfigName() . '.namespace', false);
 
-        $namespace = $this->config->get($this->getConfigName() . '.namespace');
-
-        if ($namespace !== null && $driver instanceof HierarchicalPoolInterface) {
-            return $this->namespacedPool($driver, $namespace);
+        if ($namespace && $driver instanceof HierarchicalPoolInterface) {
+            $driver = $this->namespacedPool($driver, $namespace);
         }
 
-        // if ($this->config->get($this->getConfigName() . '.simple_cache')) {
-        //     return new SimpleCacheBridge($driver);
-        // }
+        if ($this->logger !== null) {
+            $driver->setLogger($this->getLogger());
+        }
 
         return $driver;
     }
@@ -254,20 +244,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract
     protected function createNullDriver(array $config): VoidCachePool
     {
         return new VoidCachePool();
-    }
-
-    /**
-     * Create an instance of the session cache driver.
-     *
-     * @param array $config
-     *
-     * @return \Cache\SessionHandler\Psr6SessionHandler
-     */
-    protected function createSessionDriver(array $config): Psr6SessionHandler
-    {
-        $pool = $this->driver($config['pool']);
-
-        return new Psr6SessionHandler($pool, $config['config']);
     }
 
     /**
