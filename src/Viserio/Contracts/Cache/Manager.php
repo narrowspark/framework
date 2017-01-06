@@ -16,13 +16,4 @@ interface Manager
      * @return \Cache\Adapter\Chain\CachePoolChain
      */
     public function chain(array $pools, ?array $options = null): CachePoolChain;
-
-    /**
-     * Get a simple cache bridge.
-     *
-     * @param \Psr\Cache\CacheItemPoolInterface|string|null $pool
-     *
-     * @return \Psr\SimpleCache\CacheInterface
-     */
-    public function getSimpleCache($pool = null): CacheInterface;
 }

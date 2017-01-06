@@ -8,8 +8,9 @@ use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translation\MessageSelector as MessageSelectorContract;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
+use Psr\Log\LoggerAwareInterface;
 
-class Translator implements TranslatorContract
+class Translator implements TranslatorContract, LoggerAwareInterface
 {
     use LoggerAwareTrait;
     use ValidateLocaleTrait;

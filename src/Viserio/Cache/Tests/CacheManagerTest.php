@@ -2,18 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Tests;
 
+use Mockery as Mock;
 use Cache\Adapter\Chain\CachePoolChain;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Void\VoidCachePool;
 use Cache\Namespaced\NamespacedCachePool;
-use Cache\SessionHandler\Psr6SessionHandler;
 use Interop\Container\ContainerInterface;
 use League\Flysystem\Adapter\Local;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
 class CacheManagerTest extends TestCase
 {
@@ -30,6 +31,16 @@ class CacheManagerTest extends TestCase
         );
     }
 
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
     public function testArrayPoolCall()
     {
         $this->manager->getConfig()
@@ -39,8 +50,25 @@ class CacheManagerTest extends TestCase
         $this->manager->getConfig()
             ->shouldReceive('get')
             ->once()
-            ->with('cache.namespace')
-            ->andReturn(null);
+            ->with('cache.namespace', false)
+            ->andReturn(false);
+
+        self::assertInstanceOf(ArrayCachePool::class, $this->manager->driver('array'));
+    }
+
+    public function testArrayPoolCallWithLog()
+    {
+        $this->manager->getConfig()
+            ->shouldReceive('get')
+            ->once()
+            ->with('cache.drivers', []);
+        $this->manager->getConfig()
+            ->shouldReceive('get')
+            ->once()
+            ->with('cache.namespace', false)
+            ->andReturn(false);
+
+        $this->manager->setLogger($this->mock(PsrLoggerInterface::class));
 
         self::assertInstanceOf(ArrayCachePool::class, $this->manager->driver('array'));
     }
@@ -55,31 +83,10 @@ class CacheManagerTest extends TestCase
         $this->manager->getConfig()
             ->shouldReceive('get')
             ->once()
-            ->with('cache.namespace')
+            ->with('cache.namespace', false)
             ->andReturn('viserio');
 
         self::assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('array'));
-    }
-
-    public function testDontNamespceSessionHandler()
-    {
-        $this->manager->getConfig()
-            ->shouldReceive('get')
-            ->twice()
-            ->with('cache.drivers', [])
-            ->andReturn([
-                'session' => [
-                    'pool'   => 'array',
-                    'config' => [],
-                ],
-            ]);
-        $this->manager->getConfig()
-            ->shouldReceive('get')
-            ->twice()
-            ->with('cache.namespace')
-            ->andReturn('viserio');
-
-        self::assertInstanceOf(Psr6SessionHandler::class, $this->manager->driver('session'));
     }
 
     public function testNamespacedNullPoolCall()
@@ -90,7 +97,7 @@ class CacheManagerTest extends TestCase
 
         $this->manager->getConfig()->shouldReceive('get')
             ->once()
-            ->with('cache.namespace')
+            ->with('cache.namespace', false)
             ->andReturn('viserio');
 
         self::assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('null'));
@@ -106,7 +113,7 @@ class CacheManagerTest extends TestCase
         $this->manager->getConfig()
             ->shouldReceive('get')
             ->twice()
-            ->with('cache.namespace')
+            ->with('cache.namespace', false)
             ->andReturn('viserio');
 
         $this->manager->getConfig()
@@ -135,8 +142,8 @@ class CacheManagerTest extends TestCase
         $this->manager->getConfig()
             ->shouldReceive('get')
             ->once()
-            ->with('cache.namespace')
-            ->andReturn(null);
+            ->with('cache.namespace', false)
+            ->andReturn(false);
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')

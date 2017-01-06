@@ -338,7 +338,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param array       $choices
      * @param string|null $default
      * @param mixed       $attempts
-     * @param bool|null   $multiple
+     * @param bool        $multiple
      *
      * @return string
      */
@@ -347,7 +347,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
         array $choices,
         ?string $default = null,
         $attempts = null,
-        ?bool $multiple = null
+        bool $multiple = false
     ): string {
         $question = new ChoiceQuestion($question, $choices, $default);
 

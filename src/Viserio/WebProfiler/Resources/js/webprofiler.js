@@ -39,6 +39,13 @@ if (typeof(WebProfiler) == 'undefined') {
 
         localStorage.setItem(profilerStorageKey + name, value);
     };
+    var resizeBodyAndTabContent = function(panelHeight, tabContentHeight) {
+        $(panelBodyClass).height(panelHeight);
+        $('.webprofiler-tabs-tab-content').height(tabContentHeight);
+
+        setPreference('panelHeight', panelHeight);
+        setPreference('tabContentHeight', tabContentHeight);
+    };
 
     // Symfony VarDumper: Close the by default expanded objects
     WebProfiler.symfony = function() {
@@ -134,10 +141,8 @@ if (typeof(WebProfiler) == 'undefined') {
 
     WebProfiler.resize = function() {
         var resizeIsActive = false;
-        var resizeBodyAndTabContent = function() {
-            $(panelBodyClass).height($(window).height() - 38);
-            $('.webprofiler-tabs-tab-content').height($(panelBodyClass).height() - 87);
-        };
+        var panelHeight = $(window).height() - 38;
+        var tabContentHeight = $(panelBodyClass).height() - 87;
 
         $(bodyMenu + ' .webprofiler-body-resize-panel').on('click', function(e) {
             if (resizeIsActive) {
@@ -148,7 +153,7 @@ if (typeof(WebProfiler) == 'undefined') {
                 $(this).removeClass('orginal-size-panel');
             } else {
                 resizeIsActive = true;
-                resizeBodyAndTabContent();
+                resizeBodyAndTabContent(panelHeight, tabContentHeight);
 
                 $(this).addClass('orginal-size-panel');
             }
@@ -156,9 +161,12 @@ if (typeof(WebProfiler) == 'undefined') {
 
         $(window).resize(function() {
             if (resizeIsActive) {
-                resizeBodyAndTabContent();
+                resizeBodyAndTabContent(panelHeight, tabContentHeight);
             }
         });
+    };
+
+    WebProfiler.restoreState = function() {
     };
 })(WebProfiler.$);
 

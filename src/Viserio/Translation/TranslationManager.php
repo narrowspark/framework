@@ -12,8 +12,9 @@ use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContra
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
+use Psr\Log\LoggerAwareInterface;
 
-class TranslationManager implements TranslationManagerContract
+class TranslationManager implements TranslationManagerContract, LoggerAwareInterface
 {
     use ValidateLocaleTrait;
     use LoaderAwareTrait;
