@@ -4,8 +4,9 @@ namespace Viserio\Events\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
-use Viserio\Events\Dispatcher;
+use Viserio\Events\EventManager;
 use Viserio\Events\Providers\EventsServiceProvider;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 
 class EventsServiceProviderTest extends TestCase
 {
@@ -14,6 +15,8 @@ class EventsServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new EventsServiceProvider());
 
-        self::assertInstanceOf(Dispatcher::class, $container->get(Dispatcher::class));
+        self::assertInstanceOf(EventManagerContract::class, $container->get(EventManagerContract::class));
+        self::assertInstanceOf(EventManagerContract::class, $container->get(EventManager::class));
+        self::assertInstanceOf(EventManagerContract::class, $container->get('events'));
     }
 }

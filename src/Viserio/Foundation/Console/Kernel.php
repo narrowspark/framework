@@ -12,7 +12,7 @@ use Viserio\Console\Application as Cerebro;
 use Viserio\Console\Command\ClosureCommand;
 use Viserio\Contracts\Console\Kernel as KernelContract;
 use Viserio\Contracts\Console\Terminable as TerminableContract;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
@@ -71,11 +71,11 @@ class Kernel implements KernelContract, TerminableContract
      * Create a new console kernel instance.
      *
      * @param \Viserio\Contracts\Foundation\Application $app
-     * @param \Viserio\Contracts\Events\Dispatcher      $events
+     * @param \Viserio\Contracts\Events\EventManager      $events
      */
     public function __construct(
         ApplicationContract $app,
-        DispatcherContract $events
+        EventManagerContract $events
     ) {
         $this->app    = $app;
         $this->events = $events;

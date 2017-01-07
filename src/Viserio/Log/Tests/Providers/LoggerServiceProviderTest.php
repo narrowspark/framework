@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Log\Log;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Log\Providers\LoggerServiceProvider;
@@ -63,6 +63,6 @@ class LoggerServiceProviderTest extends TestCase
         self::assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
         self::assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
         self::assertInstanceOf(MonologWriter::class, $container->get(Log::class));
-        self::assertInstanceOf(DispatcherContract::class, $container->get('logger')->getEventsDispatcher());
+        self::assertInstanceOf(EventManagerContract::class, $container->get('logger')->getEventManager());
     }
 }

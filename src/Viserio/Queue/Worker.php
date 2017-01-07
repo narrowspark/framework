@@ -6,16 +6,19 @@ use ErrorException;
 use ParseError;
 use Throwable;
 use TypeError;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Exception\Handler as ExceptionHandlerContract;
 use Viserio\Contracts\Queue\Exception\TimeoutException;
 use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
 use Viserio\Contracts\Queue\Worker as WorkerContract;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 
 class Worker implements WorkerContract
 {
+    use EventsAwareTrait;
+
     /**
      * The queue manager instance.
      *
@@ -33,7 +36,7 @@ class Worker implements WorkerContract
     /**
      * The event dispatcher instance.
      *
-     * @var \Viserio\Contracts\Events\Dispatcher
+     * @var \Viserio\Contracts\Events\EventManager
      */
     protected $events;
 
@@ -49,12 +52,12 @@ class Worker implements WorkerContract
      *
      * @param \Viserio\Queue\QueueManager                     $manager
      * @param \Viserio\Contracts\Queue\FailedJobProvider|null $failed
-     * @param \Viserio\Contracts\Events\Dispatcher|null       $events
+     * @param \Viserio\Contracts\Events\EventManager|null     $events
      */
     public function __construct(
         QueueManager $manager,
         FailedJobProviderContract $failed = null,
-        DispatcherContract $events = null
+        EventManagerContract $events = null
     ) {
         $this->manager = $manager;
         $this->failed  = $failed;
@@ -194,16 +197,6 @@ class Worker implements WorkerContract
     public function getManager(): QueueManager
     {
         return $this->manager;
-    }
-
-    /**
-     * Get the events dispatcher instance.
-     *
-     * @return \Viserio\Contracts\Events\Dispatcher
-     */
-    public function getEventDispatcher(): DispatcherContract
-    {
-        return $this->events;
     }
 
     /**

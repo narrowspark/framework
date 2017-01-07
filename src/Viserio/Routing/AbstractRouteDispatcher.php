@@ -209,7 +209,7 @@ abstract class AbstractRouteDispatcher
         $this->current = $route;
 
         if ($this->events !== null) {
-            $this->getEventsDispatcher()->trigger('route.matched', [$route, $request]);
+            $this->getEventManager()->trigger('route.matched', [$route, $request]);
         }
 
         return $this->runRouteWithinStack($route, $request);

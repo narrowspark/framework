@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use StdClass;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Foundation\Application;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
@@ -52,7 +52,7 @@ class ApplicationTest extends TestCase
             ->once()
             ->with('locale.changed', ['foo']);
 
-        $app->instance(DispatcherContract::class, $events);
+        $app->instance(EventManagerContract::class, $events);
 
         $app->setLocale('foo');
 

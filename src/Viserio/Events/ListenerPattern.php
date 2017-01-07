@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Events;
 
 use Closure;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 
 class ListenerPattern
 {
@@ -68,7 +68,7 @@ class ListenerPattern
     ];
 
     /**
-     * Constructor.
+     * Create a new listener pattern instance.
      *
      * @param string $eventPattern
      * @param mixed  $listener
@@ -121,10 +121,10 @@ class ListenerPattern
     /**
      * Adds this pattern's listener to an event.
      *
-     * @param DispatcherContract $dispatcher
-     * @param string             $eventName
+     * @param \Viserio\Contracts\Events\EventManager $dispatcher
+     * @param string                                 $eventName
      */
-    public function bind(DispatcherContract $dispatcher, string $eventName)
+    public function bind(EventManagerContract $dispatcher, string $eventName)
     {
         if (isset($this->events[$eventName])) {
             return;
@@ -138,9 +138,9 @@ class ListenerPattern
      * Removes this pattern's listener from all events to which it was
      * previously added.
      *
-     * @param DispatcherContract $dispatcher
+     * @param \Viserio\Contracts\Events\EventManager $dispatcher
      */
-    public function unbind(DispatcherContract $dispatcher)
+    public function unbind(EventManagerContract $dispatcher)
     {
         foreach ($this->events as $eventName => $value) {
             $dispatcher->detach($eventName, $this->getListener());

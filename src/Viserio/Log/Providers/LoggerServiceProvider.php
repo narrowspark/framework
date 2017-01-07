@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Log\Log;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Log\Writer as MonologWriter;
@@ -46,8 +46,8 @@ class LoggerServiceProvider implements ServiceProvider
     {
         $logger = new MonologWriter(new Logger(self::getConfig($container, 'env', 'production')));
 
-        if ($container->has(DispatcherContract::class)) {
-            $logger->setEventsDispatcher($container->get(DispatcherContract::class));
+        if ($container->has(EventManagerContract::class)) {
+            $logger->setEventManager($container->get(EventManagerContract::class));
         }
 
         return $logger;

@@ -7,7 +7,7 @@ use Interop\Container\ServiceProvider;
 use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Events\EventManager;
 
-class EventsServiceProvider implements ServiceProvider
+class EventDataCollectorServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
@@ -16,12 +16,6 @@ class EventsServiceProvider implements ServiceProvider
     {
         return [
             EventManagerContract::class => [self::class, 'createEventEventManager'],
-            EventManager::class         => function (ContainerInterface $container) {
-                return $container->get(EventManagerContract::class);
-            },
-            'events' => function (ContainerInterface $container) {
-                return $container->get(EventManagerContract::class);
-            },
         ];
     }
 

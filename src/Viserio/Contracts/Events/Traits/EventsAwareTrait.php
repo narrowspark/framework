@@ -3,25 +3,25 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Events\Traits;
 
 use RuntimeException;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 
 trait EventsAwareTrait
 {
     /**
-     * Event dispatcher instance.
+     * Event manager instance.
      *
-     * @var \Viserio\Contracts\Events\Dispatcher|null
+     * @var \Viserio\Contracts\Events\EventManager|null
      */
     protected $events;
 
     /**
-     * Set a event dispatcher instance.
+     * Set a event manager instance.
      *
-     * @param \Viserio\Contracts\Events\Dispatcher $events
+     * @param \Viserio\Contracts\Events\EventManager $events
      *
      * @return $this
      */
-    public function setEventsDispatcher(DispatcherContract $events)
+    public function setEventManager(EventManagerContract $events)
     {
         $this->events = $events;
 
@@ -29,16 +29,16 @@ trait EventsAwareTrait
     }
 
     /**
-     * Get the event dispatcher instance.
+     * Get the event manager instance.
      *
      * @throws \RuntimeException
      *
-     * @return \Viserio\Contracts\Events\Dispatcher
+     * @return \Viserio\Contracts\Events\EventManager
      */
-    public function getEventsDispatcher(): DispatcherContract
+    public function getEventManager(): EventManagerContract
     {
         if (! $this->events) {
-            throw new RuntimeException('Events dispatcher is not set up.');
+            throw new RuntimeException('EventManager is not set up.');
         }
 
         return $this->events;

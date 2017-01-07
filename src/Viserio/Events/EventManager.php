@@ -2,16 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Events;
 
-use Interop\Container\ContainerInterface;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Contracts\Events\Event as EventContract;
 use Viserio\Events\Traits\ValidateNameTrait;
-use Viserio\Support\Traits\InvokerAwareTrait;
 
-class Dispatcher implements DispatcherContract
+class EventManager implements EventManagerContract
 {
-    use ContainerAwareTrait;
-    use InvokerAwareTrait;
     use ValidateNameTrait;
 
     /**
@@ -43,21 +39,7 @@ class Dispatcher implements DispatcherContract
     private $patterns = [];
 
     /**
-     * Create a new event dispatcher instance.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * {@inhertidoc}.
-     *
-     * @param string $eventName
-     * @param mixed  $listener
-     * @param int    $priority
+     * {@inhertidoc}
      */
     public function attach(string $eventName, $listener, int $priority = 0)
     {
@@ -73,41 +55,27 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}.
-     *
-     * @param string $eventName
-     * @param mixed  $listener
-     * @param int    $priority
+     * {@inhertidoc}
      */
-    public function once(string $eventName, $listener, int $priority = 0)
+    public function trigger($event, $target = null, array $argv = []): bool
     {
-        $this->validateEventName($eventName);
+        if (is_object($event) && $event instanceof EventContract) {
+            $event = $event;
+        } else {
+            $event = new Event($event, $target, $argv);
+        }
 
-        $wrapper = null;
-        $wrapper = function () use ($eventName, $listener, &$wrapper) {
-            $this->detach($eventName, $wrapper);
-
-            return $this->getInvoker()->call($listener, func_get_args());
-        };
-
-        $this->attach($eventName, $wrapper, $priority);
-    }
-
-    /**
-     * {@inhertidoc}.
-     *
-     * @param string $eventName
-     * @param array  $arguments
-     */
-    public function trigger(string $eventName, array $arguments = []): bool
-    {
-        $listeners = $this->getListeners($eventName);
+        $listeners = $this->getListeners($event->getName());
 
         foreach ($listeners as $listener) {
             $result = false;
 
+            if ($event->isPropagationStopped()) {
+                return false;
+            }
+
             if ($listener !== null) {
-                $result = $this->getInvoker()->call($listener, $arguments);
+                $result = $listener($event);
             }
 
             if ($result === false) {
@@ -118,10 +86,15 @@ class Dispatcher implements DispatcherContract
         return true;
     }
 
-    /**
-     * {@inhertidoc}.
+   /**
+     * Returns the list of listeners for an event.
+     *
+     * The list is returned as an array, and the list of events are sorted by
+     * their priority.
      *
      * @param string $eventName
+     *
+     * @return array
      */
     public function getListeners(string $eventName): array
     {
@@ -141,10 +114,7 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}.
-     *
-     * @param string $eventName
-     * @param mixed  $listener
+     * {@inhertidoc}
      */
     public function detach(string $eventName, $listener): bool
     {
@@ -172,25 +142,21 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}.
-     *
-     * @param null|mixed $eventName
+     * {@inhertidoc}
      */
-    public function removeAllListeners($eventName = null)
+    public function clearListeners(string $eventName): void
     {
-        if ($eventName !== null) {
-            $this->validateEventName($eventName);
+        $this->validateEventName($eventName);
 
-            unset($this->listeners[$eventName], $this->syncedEvents[$eventName]);
-        } else {
-            $this->listeners = $this->syncedEvents = [];
-        }
+        unset($this->listeners[$eventName], $this->syncedEvents[$eventName]);
     }
 
     /**
-     * {@inhertidoc}.
+     * Determine if a given event has listeners.
      *
      * @param string $eventName
+     *
+     * @return bool
      */
     public function hasListeners(string $eventName): bool
     {
@@ -259,7 +225,7 @@ class Dispatcher implements DispatcherContract
      * This method will lazily register the listener when a matching event is
      * dispatched.
      *
-     * @param ListenerPattern $pattern
+     * @param \Viserio\Events\ListenerPattern $pattern
      */
     protected function addListenerPattern(ListenerPattern $pattern)
     {

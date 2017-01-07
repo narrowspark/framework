@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
@@ -99,12 +99,12 @@ class Kernel implements TerminableContract, KernelContract
      *
      * @param \Viserio\Contracts\Foundation\Application $app
      * @param \Viserio\Contracts\Routing\Router         $router
-     * @param \Viserio\Contracts\Events\Dispatcher      $events
+     * @param \Viserio\Contracts\Events\EventManager    $events
      */
     public function __construct(
         ApplicationContract $app,
         RouterContract $router,
-        DispatcherContract $events
+        EventManagerContract $events
     ) {
         $this->app    = $app;
         $this->events = $events;
