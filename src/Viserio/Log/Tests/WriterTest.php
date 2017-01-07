@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Log\Tests;
 
-use Interop\Container\ContainerInterface as ContainerContract;
 use Mockery as Mock;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;

@@ -4,8 +4,8 @@ namespace Viserio\Events\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
-use Viserio\Events\EventManager;
 use Viserio\Events\Event;
+use Viserio\Events\EventManager;
 use Viserio\Events\Tests\Fixture\EventListener;
 
 class EventManagerTest extends TestCase

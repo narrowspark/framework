@@ -41,8 +41,8 @@ class Event implements EventContract
     /**
      * Create a new event instance.
      *
-     * @param string             $eventName event name
-     * @param string|object|null $target event context, object or classname
+     * @param string             $eventName  event name
+     * @param string|object|null $target     event context, object or classname
      * @param array              $parameters event parameters
      *
      * @throws InvalidArgumentException if event name is invalid
@@ -58,13 +58,13 @@ class Event implements EventContract
 
         $this->validateEventName($eventName);
 
-        $this->name = $eventName;
-        $this->target = $target;
+        $this->name       = $eventName;
+        $this->target     = $target;
         $this->parameters = $parameters;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -72,7 +72,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTarget()
     {
@@ -80,7 +80,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getParams(): array
     {
@@ -100,7 +100,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isPropagationStopped(): bool
     {

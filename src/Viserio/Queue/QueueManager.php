@@ -8,7 +8,6 @@ use Narrowspark\Arr\Arr;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use RuntimeException;
 use Viserio\Connect\ConnectManager;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;

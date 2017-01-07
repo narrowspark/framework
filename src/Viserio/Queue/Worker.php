@@ -7,13 +7,13 @@ use ParseError;
 use Throwable;
 use TypeError;
 use Viserio\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as ExceptionHandlerContract;
 use Viserio\Contracts\Queue\Exception\TimeoutException;
 use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
 use Viserio\Contracts\Queue\Worker as WorkerContract;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 
 class Worker implements WorkerContract
 {

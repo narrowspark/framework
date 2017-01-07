@@ -71,7 +71,7 @@ class Kernel implements KernelContract, TerminableContract
      * Create a new console kernel instance.
      *
      * @param \Viserio\Contracts\Foundation\Application $app
-     * @param \Viserio\Contracts\Events\EventManager      $events
+     * @param \Viserio\Contracts\Events\EventManager    $events
      */
     public function __construct(
         ApplicationContract $app,

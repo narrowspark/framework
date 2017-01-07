@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Events;
 
-use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Events\Event as EventContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Events\Traits\ValidateNameTrait;
 
 class EventManager implements EventManagerContract
@@ -39,7 +39,8 @@ class EventManager implements EventManagerContract
     private $patterns = [];
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param mixed $listener
      */
     public function attach(string $eventName, $listener, int $priority = 0)
     {
@@ -55,7 +56,9 @@ class EventManager implements EventManagerContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param mixed      $event
+     * @param null|mixed $target
      */
     public function trigger($event, $target = null, array $argv = []): bool
     {
@@ -86,7 +89,7 @@ class EventManager implements EventManagerContract
         return true;
     }
 
-   /**
+    /**
      * Returns the list of listeners for an event.
      *
      * The list is returned as an array, and the list of events are sorted by
@@ -114,7 +117,8 @@ class EventManager implements EventManagerContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param mixed $listener
      */
     public function detach(string $eventName, $listener): bool
     {
@@ -142,7 +146,7 @@ class EventManager implements EventManagerContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
      */
     public function clearListeners(string $eventName): void
     {

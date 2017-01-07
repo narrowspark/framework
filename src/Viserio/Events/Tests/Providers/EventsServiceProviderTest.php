@@ -4,9 +4,9 @@ namespace Viserio\Events\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Events\EventManager;
 use Viserio\Events\Providers\EventsServiceProvider;
-use Viserio\Contracts\Events\EventManager as EventManagerContract;
 
 class EventsServiceProviderTest extends TestCase
 {
