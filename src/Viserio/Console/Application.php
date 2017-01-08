@@ -88,21 +88,16 @@ class Application extends SymfonyConsole implements ApplicationContract
             define('CEREBRO_BINARY', 'cerebro');
         }
 
-        $this->name    = $name;
-        $this->version = $version;
-
-        $this->setAutoExit(false);
-        $this->setCatchExceptions(false);
-
-        parent::__construct($name, $version);
-
+        $this->name             = $name;
+        $this->version          = $version;
         $this->container        = $container;
         $this->expressionParser = new Parser();
 
-        if ($container->has(EventManagerContract::class)) {
-            $this->events = $container->get(EventManagerContract::class);
-            $this->events->trigger(new CerebroStartingEvent($this));
-        }
+        $this->setAutoExit(false);
+        $this->setCatchExceptions(false);
+        $this->createCerebroEvent($container);
+
+        parent::__construct($name, $version);
 
         $this->bootstrap();
     }
@@ -266,6 +261,26 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
+        $commandName = $this->createCommandStartingEvent($input);
+
+        $exitCode = parent::run($input, $output);
+
+        $this->createCommandTerminatingEvent($commandName, $input, $exitCode);
+
+        return $exitCode;
+    }
+
+    /**
+     * Create a command starting event.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     *
+     * @return string
+     */
+    protected function createCommandStartingEvent(InputInterface $input): string
+    {
+        $commandName = '';
+
         if ($this->events !== null) {
             if ($input instanceof InputInterface) {
                 $commandName = $this->getCommandName($input);
@@ -277,16 +292,26 @@ class Application extends SymfonyConsole implements ApplicationContract
             ));
         }
 
-        $exitCode = parent::run($input, $output);
+        return $commandName;
+    }
 
+    /**
+     * Create a command terminating event.
+     *
+     * @param string                                          $commandName
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param int                                             $exitCode
+     *
+     * @return void
+     */
+    protected function createCommandTerminatingEvent(string $commandName, InputInterface $input, int $exitCode): void
+    {
         if ($this->events !== null) {
             $this->getEventManager()->trigger(new CommandTerminatingEvent(
                 $this,
                 ['command_name' => $commandName, 'input' => $input, 'exit_code' => $exitCode]
             ));
         }
-
-        return $exitCode;
     }
 
     /**
@@ -361,6 +386,21 @@ class Application extends SymfonyConsole implements ApplicationContract
     {
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
+        }
+    }
+
+    /**
+     * Creating a cerebro starting event.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private function createCerebroEvent(ContainerContract $container): void
+    {
+        if ($container->has(EventManagerContract::class)) {
+            $this->events = $container->get(EventManagerContract::class);
+            $this->events->trigger(new CerebroStartingEvent($this));
         }
     }
 }

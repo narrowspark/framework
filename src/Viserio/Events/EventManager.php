@@ -66,15 +66,12 @@ class EventManager implements EventManagerContract
      */
     public function trigger($event, $target = null, array $argv = []): bool
     {
-        if (is_object($event) && $event instanceof EventContract) {
-            $event = $event;
-        } else {
+        if (!is_object($event) && !($event instanceof EventContract)) {
             $event = new Event($event, $target, $argv);
         }
 
-        $name              = $event->getName();
-        $this->triggered[] = $name;
-        $listeners         = $this->getListeners($name);
+        $this->triggered[] = $event->getName();
+        $listeners         = $this->getListeners($event->getName());
 
         foreach ($listeners as $listener) {
             $result = false;

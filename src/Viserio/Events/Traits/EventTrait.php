@@ -33,7 +33,9 @@ trait EventTrait
     protected $propagationStopped = false;
 
     /**
-     * {@inheritdoc}
+     * Get event name.
+     *
+     * @return string
      */
     public function getName(): string
     {
@@ -41,7 +43,9 @@ trait EventTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Get target/context from which event was triggered.
+     *
+     * @return null|string|object
      */
     public function getTarget()
     {
@@ -49,7 +53,9 @@ trait EventTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Get parameters passed to the event.
+     *
+     * @return array
      */
     public function getParams(): array
     {
@@ -69,7 +75,9 @@ trait EventTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Has this event indicated event propagation should stop?
+     *
+     * @return bool
      */
     public function isPropagationStopped(): bool
     {
