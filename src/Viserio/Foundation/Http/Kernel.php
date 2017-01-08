@@ -189,7 +189,7 @@ class Kernel implements TerminableContract, KernelContract
             $this,
             [
                 'server_request' => $serverRequest,
-                'response' => $response
+                'response'       => $response,
             ]
         );
 
@@ -231,7 +231,7 @@ class Kernel implements TerminableContract, KernelContract
                 $this,
                 [
                     'server_request' => $serverRequest,
-                    'response' => $response
+                    'response'       => $response,
                 ]
             );
         } catch (Throwable $exception) {
@@ -244,7 +244,7 @@ class Kernel implements TerminableContract, KernelContract
                 $this,
                 [
                     'server_request' => $serverRequest,
-                    'response' => $response
+                    'response'       => $response,
                 ]
             );
         }

@@ -4,8 +4,8 @@ namespace Viserio\Events;
 
 use InvalidArgumentException;
 use Viserio\Contracts\Events\Event as EventContract;
-use Viserio\Events\Traits\ValidateNameTrait;
 use Viserio\Events\Traits\EventTrait;
+use Viserio\Events\Traits\ValidateNameTrait;
 
 class Event implements EventContract
 {

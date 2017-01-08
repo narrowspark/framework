@@ -4,11 +4,11 @@ namespace Viserio\Events\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Events\DataCollectors\ViserioEventDataCollector;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
-use Psr\Http\Message\ServerRequestInterface;
 
 class EventDataCollectorServiceProvider implements ServiceProvider
 {

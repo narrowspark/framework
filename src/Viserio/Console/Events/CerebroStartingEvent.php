@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Console\Events;
 
+use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Events\Event as EventContract;
 use Viserio\Events\Traits\EventTrait;
-use Viserio\Contracts\Console\Application as ApplicationContract;
 
 class CerebroStartingEvent implements EventContract
 {

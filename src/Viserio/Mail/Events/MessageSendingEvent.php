@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Mail\Events;
 
 use Viserio\Contracts\Events\Event as EventContract;
-use Viserio\Events\Traits\EventTrait;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
+use Viserio\Events\Traits\EventTrait;
 
 class MessageSendingEvent implements EventContract
 {

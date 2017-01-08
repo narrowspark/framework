@@ -32,18 +32,18 @@ class EventManager implements EventManagerContract
     protected $sorted = [];
 
     /**
-     * Wildcard patterns.
-     *
-     * @var array
-     */
-    private $patterns = [];
-
-    /**
      * The event triggered stack.
      *
      * @var array
      */
     protected $triggered = [];
+
+    /**
+     * Wildcard patterns.
+     *
+     * @var array
+     */
+    private $patterns = [];
 
     /**
      * {@inheritdoc}

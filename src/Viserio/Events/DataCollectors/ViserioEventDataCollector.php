@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Events\DataCollectors;
 
 use Closure;
-use ReflectionFunction;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
+use ReflectionFunction;
 use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
+use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
 
 class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareContract
 {
@@ -71,9 +71,10 @@ class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareC
     }
 
     /**
-     * [onWildcardEvent description]
+     * [onWildcardEvent description].
      *
      * @return void
+     * @param  mixed $event
      */
     public function onWildcardEvent($event)
     {
@@ -81,14 +82,14 @@ class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareC
         $time = microtime(true);
 
         // Get the arguments passed to the event
-        $params = [];#$this->prepareParams(func_get_args());
+        $params = []; //$this->prepareParams(func_get_args());
 
         // Find all listeners for the current event
         foreach ($this->events->getListeners($name) as $i => $listener) {
             // Check if it's an object + method name
             if (is_array($listener) && count($listener) > 1 && is_object($listener[0])) {
                 list($class, $method) = $listener;
-error_log(var_dump($listener));
+                error_log(var_dump($listener));
                 // Skip this class itself
                 if ($class instanceof static) {
                     continue;

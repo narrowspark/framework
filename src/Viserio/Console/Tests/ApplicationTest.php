@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use StdClass;
 use Symfony\Component\Console\Input\StringInput;
@@ -13,7 +13,6 @@ use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Console\Events\CommandStartingEvent;
 
 class ApplicationTest extends TestCase
 {

@@ -15,15 +15,15 @@ use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
 use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
+use Viserio\Console\Events\CerebroStartingEvent;
+use Viserio\Console\Events\CommandStartingEvent;
+use Viserio\Console\Events\CommandTerminatingEvent;
 use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Support\Invoker;
-use Viserio\Console\Events\CommandTerminatingEvent;
-use Viserio\Console\Events\CommandStartingEvent;
-use Viserio\Console\Events\CerebroStartingEvent;
-use Viserio\Contracts\Events\EventManager as EventManagerContract;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
