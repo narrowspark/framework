@@ -66,7 +66,7 @@ class EventManager implements EventManagerContract
      */
     public function trigger($event, $target = null, array $argv = []): bool
     {
-        if (!is_object($event) && !($event instanceof EventContract)) {
+        if (! is_object($event) && ! ($event instanceof EventContract)) {
             $event = new Event($event, $target, $argv);
         }
 
