@@ -19,7 +19,7 @@ interface Event
     public function getTarget();
 
     /**
-     * Get parameters passed to the event.response-status-red.
+     * Get parameters passed to the event.
      *
      * @return array
      */

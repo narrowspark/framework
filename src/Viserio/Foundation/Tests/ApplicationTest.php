@@ -50,7 +50,7 @@ class ApplicationTest extends TestCase
         $events = $this->mock(StdClass::class);
         $events->shouldReceive('trigger')
             ->once()
-            ->with('locale.changed', ['foo']);
+            ->with('locale.changed', $app, ['locale' => 'foo']);
 
         $app->instance(EventManagerContract::class, $events);
 

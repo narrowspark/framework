@@ -25,8 +25,8 @@ class EventsServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createEventEventManager(ContainerInterface $container): EventManager
+    public static function createEventEventManager(): EventManager
     {
-        return new EventManager($container);
+        return new EventManager();
     }
 }

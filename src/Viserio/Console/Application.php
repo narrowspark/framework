@@ -20,6 +20,10 @@ use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Support\Invoker;
+use Viserio\Console\Events\CommandTerminatingEvent;
+use Viserio\Console\Events\CommandStartingEvent;
+use Viserio\Console\Events\CerebroStartingEvent;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -95,8 +99,9 @@ class Application extends SymfonyConsole implements ApplicationContract
         $this->container        = $container;
         $this->expressionParser = new Parser();
 
-        if ($this->events !== null) {
-            $this->events->trigger('cerebro.starting', [$this]);
+        if ($container->has(EventManagerContract::class)) {
+            $this->events = $container->get(EventManagerContract::class);
+            $this->events->trigger(new CerebroStartingEvent($this));
         }
 
         $this->bootstrap();
@@ -210,6 +215,8 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @param \Closure $callback
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public static function starting(Closure $callback): void
     {
@@ -220,6 +227,8 @@ class Application extends SymfonyConsole implements ApplicationContract
      * Clear the console application bootstrappers.
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public static function clearBootstrappers(): void
     {
@@ -262,13 +271,19 @@ class Application extends SymfonyConsole implements ApplicationContract
                 $commandName = $this->getCommandName($input);
             }
 
-            $this->events->trigger('command.starting', [$commandName, $input]);
+            $this->getEventManager()->trigger(new CommandStartingEvent(
+                $this,
+                ['command_name' => $commandName, 'input' => $input]
+            ));
         }
 
         $exitCode = parent::run($input, $output);
 
         if ($this->events !== null) {
-            $this->events->trigger('command.terminating', [$commandName, $input, $exitCode]);
+            $this->getEventManager()->trigger(new CommandTerminatingEvent(
+                $this,
+                ['command_name' => $commandName, 'input' => $input, 'exit_code' => $exitCode]
+            ));
         }
 
         return $exitCode;

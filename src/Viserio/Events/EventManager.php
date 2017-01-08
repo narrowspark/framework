@@ -39,8 +39,14 @@ class EventManager implements EventManagerContract
     private $patterns = [];
 
     /**
-     * {@inhertidoc}.
-     * @param mixed $listener
+     * The event triggered stack.
+     *
+     * @var array
+     */
+    protected $triggered = [];
+
+    /**
+     * {@inheritdoc}
      */
     public function attach(string $eventName, $listener, int $priority = 0)
     {
@@ -56,9 +62,7 @@ class EventManager implements EventManagerContract
     }
 
     /**
-     * {@inhertidoc}.
-     * @param mixed      $event
-     * @param null|mixed $target
+     * {@inheritdoc}
      */
     public function trigger($event, $target = null, array $argv = []): bool
     {
@@ -68,7 +72,9 @@ class EventManager implements EventManagerContract
             $event = new Event($event, $target, $argv);
         }
 
-        $listeners = $this->getListeners($event->getName());
+        $name              = $event->getName();
+        $this->triggered[] = $name;
+        $listeners         = $this->getListeners($name);
 
         foreach ($listeners as $listener) {
             $result = false;
@@ -86,7 +92,19 @@ class EventManager implements EventManagerContract
             }
         }
 
+        array_pop($this->triggered);
+
         return true;
+    }
+
+    /**
+     * Get the event that is currently triggered.
+     *
+     * @return string
+     */
+    public function triggered(): string
+    {
+        return end($this->triggered);
     }
 
     /**
@@ -117,8 +135,7 @@ class EventManager implements EventManagerContract
     }
 
     /**
-     * {@inhertidoc}.
-     * @param mixed $listener
+     * {@inheritdoc}
      */
     public function detach(string $eventName, $listener): bool
     {
@@ -146,7 +163,7 @@ class EventManager implements EventManagerContract
     }
 
     /**
-     * {@inhertidoc}.
+     * {@inheritdoc}
      */
     public function clearListeners(string $eventName): void
     {

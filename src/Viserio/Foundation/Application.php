@@ -106,14 +106,14 @@ class Application extends Container implements ApplicationContract
         foreach ($bootstrappers as $bootstrapper) {
             $this->get(EventManagerContract::class)->trigger(
                 'bootstrapping.' . str_replace('\\', '', $bootstrapper),
-                [$this]
+                $this
             );
 
             $this->make($bootstrapper)->bootstrap($this);
 
             $this->get(EventManagerContract::class)->trigger(
                 'bootstrapped.' . str_replace('\\', '', $bootstrapper),
-                [$this]
+                $this
             );
         }
     }
@@ -145,7 +145,7 @@ class Application extends Container implements ApplicationContract
             $this->get(TranslationManager::class)->setLocale($locale);
         }
 
-        $this->get(EventManagerContract::class)->trigger('locale.changed', [$locale]);
+        $this->get(EventManagerContract::class)->trigger('locale.changed', $this, ['locale' => $locale]);
 
         return $this;
     }

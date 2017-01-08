@@ -270,8 +270,7 @@ class MailerTest extends TestCase
         $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
         $event->shouldReceive('trigger')
-            ->once()
-            ->with('events.message.sending', [$mimeMessage]);
+            ->once();
 
         $mailer->setEventManager($event);
 

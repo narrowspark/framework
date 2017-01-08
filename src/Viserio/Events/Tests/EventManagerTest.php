@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Events\Tests;
 
-use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
 use Viserio\Events\Event;
 use Viserio\Events\EventManager;
@@ -20,7 +19,7 @@ class EventManagerTest extends TestCase
 
     public function setup()
     {
-        $this->dispatcher = new EventManager(new ArrayContainer([]));
+        $this->dispatcher = new EventManager();
         $this->listener   = new EventListener();
     }
 
@@ -383,7 +382,7 @@ class EventManagerTest extends TestCase
             return 'callback';
         };
 
-        $ee = new EventManager(new ArrayContainer([]));
+        $ee = new EventManager();
         $ee->attach('foo', $listenerProvider);
 
         self::assertEquals(

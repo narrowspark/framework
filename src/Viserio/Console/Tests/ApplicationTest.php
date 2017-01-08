@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests;
 
+use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
 use StdClass;
@@ -10,9 +12,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Console\Events\CommandStartingEvent;
 
 class ApplicationTest extends TestCase
 {
+    use MockeryTrait;
+
     /**
      * @var Application
      */
@@ -33,6 +39,29 @@ class ApplicationTest extends TestCase
             'param'             => 'bob',
             'stdClass2'         => $stdClass2,
             'command.arr.greet' => [$this, 'foo'],
+        ]);
+
+        $this->application = new Application($container, '1.0.0');
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
+    public function testCerebroStartingEventIstriggered()
+    {
+        $events = $this->mock(EventManagerContract::class);
+        $events->shouldReceive('trigger')
+            ->once();
+
+        $container = new ArrayContainer([
+            EventManagerContract::class => $events,
         ]);
 
         $this->application = new Application($container, '1.0.0');
@@ -71,6 +100,21 @@ class ApplicationTest extends TestCase
 
     public function testItShouldRunSimpleCommand()
     {
+        $this->application->command('greet', function (OutputInterface $output) {
+            $output->write('hello');
+        });
+
+        self::assertOutputIs('greet', 'hello');
+    }
+
+    public function testItShouldRunSimpleCommandWithEvents()
+    {
+        $event = $this->mock(EventManagerContract::class);
+        $event->shouldReceive('trigger')
+            ->twice();
+
+        $this->application->setEventManager($event);
+
         $this->application->command('greet', function (OutputInterface $output) {
             $output->write('hello');
         });

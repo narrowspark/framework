@@ -184,14 +184,14 @@ abstract class AbstractRouteDispatcher
      *
      * @param string                                   $identifier
      * @param array                                    $segments
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function handleFound(
         string $identifier,
         array $segments,
-        ServerRequestInterface $request
+        ServerRequestInterface $serverRequest
     ): ResponseInterface {
         $route = $this->routes->match($identifier);
 
@@ -204,15 +204,19 @@ abstract class AbstractRouteDispatcher
         }
 
         // Add route to the request's attributes in case a middleware or handler needs access to the route
-        $request = $request->withAttribute('_route', $route);
+        $serverRequest = $serverRequest->withAttribute('_route', $route);
 
         $this->current = $route;
 
         if ($this->events !== null) {
-            $this->getEventManager()->trigger('route.matched', [$route, $request]);
+            $this->getEventManager()->trigger(
+                'route.matched',
+                $this,
+                ['route' => $route, 'server_request' => $serverRequest]
+            );
         }
 
-        return $this->runRouteWithinStack($route, $request);
+        return $this->runRouteWithinStack($route, $serverRequest);
     }
 
     /**
