@@ -9,10 +9,10 @@ use Viserio\Events\Tests\Fixture\EventListener;
 
 class EventManagerTest extends TestCase
 {
-    private const coreRequest   = 'core.request';
-    private const coreException = 'core.exception';
-    private const apiRequest    = 'api.request';
-    private const apiException  = 'api.exception';
+    private const COREREQUEST   = 'core.request';
+    private const COREEXCEPTION = 'core.exception';
+    private const APIREQUEST    = 'api.request';
+    private const APIEXCEPTION  = 'api.exception';
 
     private $dispatcher;
     private $listener;
@@ -36,10 +36,10 @@ class EventManagerTest extends TestCase
     {
         $ee = $this->dispatcher;
 
-        self::assertFalse($ee->hasListeners(self::coreRequest));
-        self::assertFalse($ee->hasListeners(self::coreException));
-        self::assertFalse($ee->hasListeners(self::apiRequest));
-        self::assertFalse($ee->hasListeners(self::apiException));
+        self::assertFalse($ee->hasListeners(self::COREREQUEST));
+        self::assertFalse($ee->hasListeners(self::COREEXCEPTION));
+        self::assertFalse($ee->hasListeners(self::APIREQUEST));
+        self::assertFalse($ee->hasListeners(self::APIEXCEPTION));
     }
 
     public function testListeners()
@@ -282,40 +282,40 @@ class EventManagerTest extends TestCase
         $ee->attach('core.*', [$this->listener, 'onCore']);
         $ee->attach('core2.*', [$this->listener, 'onCore']);
         $ee->attach('*.exception', [$this->listener, 'onException']);
-        $ee->attach(self::coreRequest, [$this->listener, 'onCoreRequest']);
+        $ee->attach(self::COREREQUEST, [$this->listener, 'onCoreRequest']);
 
-        self::assertNumberListenersAdded(3, self::coreRequest);
-        self::assertNumberListenersAdded(3, self::coreException);
-        self::assertNumberListenersAdded(1, self::apiRequest);
-        self::assertNumberListenersAdded(2, self::apiException);
+        self::assertNumberListenersAdded(3, self::COREREQUEST);
+        self::assertNumberListenersAdded(3, self::COREEXCEPTION);
+        self::assertNumberListenersAdded(1, self::APIREQUEST);
+        self::assertNumberListenersAdded(2, self::APIEXCEPTION);
 
         $ee->detach('#', [$this->listener, 'onAny']);
 
-        self::assertNumberListenersAdded(2, self::coreRequest);
-        self::assertNumberListenersAdded(2, self::coreException);
-        self::assertNumberListenersAdded(0, self::apiRequest);
-        self::assertNumberListenersAdded(1, self::apiException);
+        self::assertNumberListenersAdded(2, self::COREREQUEST);
+        self::assertNumberListenersAdded(2, self::COREEXCEPTION);
+        self::assertNumberListenersAdded(0, self::APIREQUEST);
+        self::assertNumberListenersAdded(1, self::APIEXCEPTION);
 
         $ee->detach('core.*', [$this->listener, 'onCore']);
 
-        self::assertNumberListenersAdded(1, self::coreRequest);
-        self::assertNumberListenersAdded(1, self::coreException);
-        self::assertNumberListenersAdded(0, self::apiRequest);
-        self::assertNumberListenersAdded(1, self::apiException);
+        self::assertNumberListenersAdded(1, self::COREREQUEST);
+        self::assertNumberListenersAdded(1, self::COREEXCEPTION);
+        self::assertNumberListenersAdded(0, self::APIREQUEST);
+        self::assertNumberListenersAdded(1, self::APIEXCEPTION);
 
         $ee->detach('*.exception', [$this->listener, 'onException']);
 
-        self::assertNumberListenersAdded(1, self::coreRequest);
-        self::assertNumberListenersAdded(0, self::coreException);
-        self::assertNumberListenersAdded(0, self::apiRequest);
-        self::assertNumberListenersAdded(0, self::apiException);
+        self::assertNumberListenersAdded(1, self::COREREQUEST);
+        self::assertNumberListenersAdded(0, self::COREEXCEPTION);
+        self::assertNumberListenersAdded(0, self::APIREQUEST);
+        self::assertNumberListenersAdded(0, self::APIEXCEPTION);
 
-        $ee->detach(self::coreRequest, [$this->listener, 'onCoreRequest']);
+        $ee->detach(self::COREREQUEST, [$this->listener, 'onCoreRequest']);
 
-        self::assertNumberListenersAdded(0, self::coreRequest);
-        self::assertNumberListenersAdded(0, self::coreException);
-        self::assertNumberListenersAdded(0, self::apiRequest);
-        self::assertNumberListenersAdded(0, self::apiException);
+        self::assertNumberListenersAdded(0, self::COREREQUEST);
+        self::assertNumberListenersAdded(0, self::COREEXCEPTION);
+        self::assertNumberListenersAdded(0, self::APIREQUEST);
+        self::assertNumberListenersAdded(0, self::APIEXCEPTION);
 
         $ee->detach('empty.*', '');
     }
@@ -326,17 +326,17 @@ class EventManagerTest extends TestCase
 
         $ee->attach('#', [$this->listener, 'onAny']);
 
-        self::assertTrue($ee->hasListeners(self::coreRequest));
-        self::assertNumberListenersAdded(1, self::coreRequest);
+        self::assertTrue($ee->hasListeners(self::COREREQUEST));
+        self::assertNumberListenersAdded(1, self::COREREQUEST);
 
-        self::assertTrue($ee->hasListeners(self::coreException));
-        self::assertNumberListenersAdded(1, self::coreException);
+        self::assertTrue($ee->hasListeners(self::COREEXCEPTION));
+        self::assertNumberListenersAdded(1, self::COREEXCEPTION);
 
-        self::assertTrue($ee->hasListeners(self::apiRequest));
-        self::assertNumberListenersAdded(1, self::apiRequest);
+        self::assertTrue($ee->hasListeners(self::APIREQUEST));
+        self::assertNumberListenersAdded(1, self::APIREQUEST);
 
-        self::assertTrue($ee->hasListeners(self::apiException));
-        self::assertNumberListenersAdded(1, self::apiException);
+        self::assertTrue($ee->hasListeners(self::APIEXCEPTION));
+        self::assertNumberListenersAdded(1, self::APIEXCEPTION);
     }
 
     public function testAttachToUnsetSyncedEventsIfMatchRegex()
@@ -345,11 +345,11 @@ class EventManagerTest extends TestCase
 
         $ee->attach('core.*', [$this->listener, 'onCore']);
 
-        self::assertNumberListenersAdded(1, self::coreRequest);
+        self::assertNumberListenersAdded(1, self::COREREQUEST);
 
         $ee->attach('core.*', [$this->listener, 'onCore']);
 
-        self::assertNumberListenersAdded(2, self::coreRequest);
+        self::assertNumberListenersAdded(2, self::COREREQUEST);
     }
 
     public function testTrigger()
@@ -359,12 +359,12 @@ class EventManagerTest extends TestCase
         $ee->attach('#', [$this->listener, 'onAny']);
         $ee->attach('core.*', [$this->listener, 'onCore']);
         $ee->attach('*.exception', [$this->listener, 'onException']);
-        $ee->attach(self::coreRequest, [$this->listener, 'onCoreRequest']);
+        $ee->attach(self::COREREQUEST, [$this->listener, 'onCoreRequest']);
 
-        $ee->trigger(new Event(self::coreRequest));
-        $ee->trigger(self::coreException);
-        $ee->trigger(self::apiRequest);
-        $ee->trigger(self::apiException);
+        $ee->trigger(new Event(self::COREREQUEST));
+        $ee->trigger(self::COREEXCEPTION);
+        $ee->trigger(self::APIREQUEST);
+        $ee->trigger(self::APIEXCEPTION);
 
         self::assertEquals(4, $this->listener->onAnyInvoked);
         self::assertEquals(2, $this->listener->onCoreInvoked);
