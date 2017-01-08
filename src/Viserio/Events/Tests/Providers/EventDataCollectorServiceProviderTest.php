@@ -5,13 +5,13 @@ namespace Viserio\Events\Tests\Providers;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Viserio\Container\Container;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Events\Providers\EventDataCollectorServiceProvider;
-use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\Container\Container;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Events\Providers\EventDataCollectorServiceProvider;
 use Viserio\Events\Providers\EventsServiceProvider;
+use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
 
 class EventDataCollectorServiceProviderTest extends TestCase
 {
