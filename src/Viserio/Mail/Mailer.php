@@ -14,6 +14,7 @@ use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Mail\Message as MessageContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Support\Traits\InvokerAwareTrait;
+use Viserio\Mail\Events\MessageSendingEvent;
 
 class Mailer implements MailerContract
 {

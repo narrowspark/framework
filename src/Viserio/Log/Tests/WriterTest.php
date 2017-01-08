@@ -230,7 +230,7 @@ class WriterTest extends TestCase
         $events->attach(
             'viserio.log',
             function ($event) {
-                $param = $event->getTarget();
+                $param = $event->getParams();
 
                 $_SERVER['__log.level'] = $param['level'];
                 $_SERVER['__log.message'] = $param['message'];
