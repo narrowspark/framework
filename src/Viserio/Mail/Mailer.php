@@ -13,8 +13,8 @@ use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Mail\Message as MessageContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
-use Viserio\Support\Traits\InvokerAwareTrait;
 use Viserio\Mail\Events\MessageSendingEvent;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Mailer implements MailerContract
 {
