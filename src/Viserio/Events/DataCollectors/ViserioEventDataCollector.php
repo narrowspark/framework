@@ -2,15 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Events\DataCollectors;
 
-use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use ReflectionFunction;
+use Viserio\Contracts\Events\Event as EventContract;
 use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
-use Viserio\Contracts\Events\Event as EventContract;
 
 class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareContract
 {
@@ -44,7 +42,7 @@ class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareC
     {
         parent::collect($serverRequest, $response);
 
-        $this->events->attach('#', function (EventContract $event) {
+        $this->events->attach('#', function (EventContract $event) {
             $time = microtime(true);
 
             $this->addMeasure($event->getName(), $time, $time, $event->getParams());
