@@ -8,7 +8,7 @@ use StdClass;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Mail\Message as MessageContract;
 use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\View as ViewContract;
@@ -246,7 +246,7 @@ class MailerTest extends TestCase
     public function testMailerPlainSend()
     {
         unset($_SERVER['__mailer.test']);
-        $event = $this->mock(DispatcherContract::class);
+        $event = $this->mock(EventManagerContract::class);
 
         $mailer = $this->getMockBuilder(Mailer::class)
             ->setMethods(['createMessage'])
@@ -270,10 +270,9 @@ class MailerTest extends TestCase
         $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
         $event->shouldReceive('trigger')
-            ->once()
-            ->with('events.message.sending', [$mimeMessage]);
+            ->once();
 
-        $mailer->setEventsDispatcher($event);
+        $mailer->setEventManager($event);
 
         $message->shouldReceive('getSwiftMessage')
             ->once()

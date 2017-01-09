@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Events\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Contracts\Events\Dispatcher;
+use Viserio\Contracts\Events\EventManager;
 use Viserio\Events\ListenerPattern;
 
 class ListenerPatternTest extends TestCase
@@ -80,7 +80,7 @@ class ListenerPatternTest extends TestCase
         ];
     }
 
-    public function testDispatcherBinding()
+    public function testEventManagerBinding()
     {
         $listener = function () {
             return 'callback';
@@ -88,8 +88,8 @@ class ListenerPatternTest extends TestCase
 
         $pattern = new ListenerPattern('core.*', $listener, $priority = 0);
 
-        $dispatcher = $this->getMockBuilder(Dispatcher::class)
-            ->setMethods(['attach', 'once', 'trigger', 'getListeners', 'detach', 'removeAllListeners', 'hasListeners'])
+        $dispatcher = $this->getMockBuilder(EventManager::class)
+            ->setMethods(['attach', 'detach', 'trigger', 'clearListeners'])
             ->getMock();
         $dispatcher->expects($this->once())
             ->method('attach')

@@ -15,9 +15,13 @@ use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
 use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
+use Viserio\Console\Events\CerebroStartingEvent;
+use Viserio\Console\Events\CommandStartingEvent;
+use Viserio\Console\Events\CommandTerminatingEvent;
 use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Support\Invoker;
 
@@ -84,20 +88,16 @@ class Application extends SymfonyConsole implements ApplicationContract
             define('CEREBRO_BINARY', 'cerebro');
         }
 
-        $this->name    = $name;
-        $this->version = $version;
-
-        $this->setAutoExit(false);
-        $this->setCatchExceptions(false);
-
-        parent::__construct($name, $version);
-
+        $this->name             = $name;
+        $this->version          = $version;
         $this->container        = $container;
         $this->expressionParser = new Parser();
 
-        if ($this->events !== null) {
-            $this->events->trigger('cerebro.starting', [$this]);
-        }
+        $this->setAutoExit(false);
+        $this->setCatchExceptions(false);
+        $this->createCerebroEvent($container);
+
+        parent::__construct($name, $version);
 
         $this->bootstrap();
     }
@@ -210,6 +210,8 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @param \Closure $callback
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public static function starting(Closure $callback): void
     {
@@ -220,6 +222,8 @@ class Application extends SymfonyConsole implements ApplicationContract
      * Clear the console application bootstrappers.
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public static function clearBootstrappers(): void
     {
@@ -257,21 +261,57 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
+        $commandName = $this->createCommandStartingEvent($input);
+
+        $exitCode = parent::run($input, $output);
+
+        $this->createCommandTerminatingEvent($commandName, $input, $exitCode);
+
+        return $exitCode;
+    }
+
+    /**
+     * Create a command starting event.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     *
+     * @return string
+     */
+    protected function createCommandStartingEvent(InputInterface $input): string
+    {
+        $commandName = '';
+
         if ($this->events !== null) {
             if ($input instanceof InputInterface) {
                 $commandName = $this->getCommandName($input);
             }
 
-            $this->events->trigger('command.starting', [$commandName, $input]);
+            $this->getEventManager()->trigger(new CommandStartingEvent(
+                $this,
+                ['command_name' => $commandName, 'input' => $input]
+            ));
         }
 
-        $exitCode = parent::run($input, $output);
+        return $commandName;
+    }
 
+    /**
+     * Create a command terminating event.
+     *
+     * @param string                                          $commandName
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param int                                             $exitCode
+     *
+     * @return void
+     */
+    protected function createCommandTerminatingEvent(string $commandName, InputInterface $input, int $exitCode): void
+    {
         if ($this->events !== null) {
-            $this->events->trigger('command.terminating', [$commandName, $input, $exitCode]);
+            $this->getEventManager()->trigger(new CommandTerminatingEvent(
+                $this,
+                ['command_name' => $commandName, 'input' => $input, 'exit_code' => $exitCode]
+            ));
         }
-
-        return $exitCode;
     }
 
     /**
@@ -346,6 +386,21 @@ class Application extends SymfonyConsole implements ApplicationContract
     {
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
+        }
+    }
+
+    /**
+     * Creating a cerebro starting event.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private function createCerebroEvent(ContainerContract $container): void
+    {
+        if ($container->has(EventManagerContract::class)) {
+            $this->events = $container->get(EventManagerContract::class);
+            $this->events->trigger(new CerebroStartingEvent($this));
         }
     }
 }

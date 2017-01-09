@@ -4,8 +4,8 @@ namespace Viserio\Events\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Events\Dispatcher;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Events\EventManager;
 
 class EventsServiceProvider implements ServiceProvider
 {
@@ -15,18 +15,18 @@ class EventsServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            DispatcherContract::class => [self::class, 'createEventDispatcher'],
-            Dispatcher::class         => function (ContainerInterface $container) {
-                return $container->get(DispatcherContract::class);
+            EventManagerContract::class => [self::class, 'createEventEventManager'],
+            EventManager::class         => function (ContainerInterface $container) {
+                return $container->get(EventManagerContract::class);
             },
             'events' => function (ContainerInterface $container) {
-                return $container->get(DispatcherContract::class);
+                return $container->get(EventManagerContract::class);
             },
         ];
     }
 
-    public static function createEventDispatcher(ContainerInterface $container): Dispatcher
+    public static function createEventEventManager(): EventManager
     {
-        return new Dispatcher($container);
+        return new EventManager();
     }
 }

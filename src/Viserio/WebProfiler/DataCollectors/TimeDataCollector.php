@@ -38,7 +38,7 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
     protected $measures = [];
 
     /**
-     * Create new time collector.
+     * Create new time collector instance.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      */

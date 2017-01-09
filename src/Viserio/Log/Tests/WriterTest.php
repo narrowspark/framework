@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Log\Tests;
 
-use Interop\Container\ContainerInterface as ContainerContract;
 use Mockery as Mock;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Viserio\Events\Dispatcher;
+use Viserio\Events\EventManager;
 use Viserio\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Log\Tests\Fixture\JsonableClass;
 use Viserio\Log\Writer;
@@ -61,7 +60,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->useFiles(__DIR__);
     }
 
@@ -77,7 +76,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->useDailyFiles(__DIR__, 5);
     }
 
@@ -93,7 +92,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->error('foo');
     }
 
@@ -109,7 +108,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->emergency('foo');
     }
 
@@ -125,7 +124,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->alert('foo');
     }
 
@@ -141,7 +140,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->critical('foo');
     }
 
@@ -157,7 +156,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->warning('foo');
     }
 
@@ -173,7 +172,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->notice('foo');
     }
 
@@ -189,7 +188,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->info('foo');
     }
 
@@ -205,7 +204,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->debug('foo');
     }
 
@@ -221,19 +220,21 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($this->getEventsDispatcher());
+        $writer->setEventManager(new EventManager());
         $writer->log('debug', 'foo');
     }
 
-    public function testWriterFiresEventsDispatcher()
+    public function testWriterTriggerEventManager()
     {
-        $events = $this->getEventsDispatcher();
+        $events = new EventManager();
         $events->attach(
             'viserio.log',
-            function ($level, $message, array $context = []) {
-                $_SERVER['__log.level'] = $level;
-                $_SERVER['__log.message'] = $message;
-                $_SERVER['__log.context'] = $context;
+            function ($event) {
+                $param = $event->getParams();
+
+                $_SERVER['__log.level'] = $param['level'];
+                $_SERVER['__log.message'] = $param['message'];
+                $_SERVER['__log.context'] = $param['context'];
             }
         );
         $monolog = $this->mock(Logger::class);
@@ -246,7 +247,7 @@ class WriterTest extends TestCase
             ->once();
 
         $writer = new Writer($monolog);
-        $writer->setEventsDispatcher($events);
+        $writer->setEventManager($events);
         $writer->error('foo');
 
         self::assertTrue(isset($_SERVER['__log.level']));
@@ -283,12 +284,5 @@ class WriterTest extends TestCase
         $writer->log('info', ['message' => true]);
         $writer->log('debug', new ArrayableClass());
         $writer->log('warning', new JsonableClass());
-    }
-
-    protected function getEventsDispatcher()
-    {
-        return new Dispatcher(
-            $this->mock(ContainerContract::class)
-        );
     }
 }

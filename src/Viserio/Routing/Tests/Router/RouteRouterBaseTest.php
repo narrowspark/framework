@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use Viserio\Events\Dispatcher;
+use Viserio\Events\EventManager;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Routing\Router;
@@ -26,7 +26,7 @@ abstract class RouteRouterBaseTest extends TestCase
         $router    = new Router($container);
         $router->setCachePath(__DIR__ . '/../Cache/' . $name . '.cache');
         $router->refreshCache(true);
-        $router->setEventsDispatcher(new Dispatcher($container));
+        $router->setEventManager(new EventManager());
 
         $this->definitions($router);
 
