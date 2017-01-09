@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Swift_Mailer;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
@@ -76,8 +76,8 @@ class MailServiceProvider implements ServiceProvider
             $mailer->setViewFactory($container->get(ViewFactoryContract::class));
         }
 
-        if ($container->has(DispatcherContract::class)) {
-            $mailer->setEventsDispatcher($container->get(DispatcherContract::class));
+        if ($container->has(EventManagerContract::class)) {
+            $mailer->setEventManager($container->get(EventManagerContract::class));
         }
 
         // If a "from" address is set, we will set it on the mailer so that all mail

@@ -13,6 +13,7 @@ use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Mail\Message as MessageContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
+use Viserio\Mail\Events\MessageSendingEvent;
 use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Mailer implements MailerContract
@@ -222,7 +223,7 @@ class Mailer implements MailerContract
     protected function sendSwiftMessage(Swift_Mime_Message $message): int
     {
         if ($this->events !== null) {
-            $this->events->trigger('events.message.sending', [$message]);
+            $this->events->trigger(new MessageSendingEvent($this, ['message' => $message]));
         }
 
         try {

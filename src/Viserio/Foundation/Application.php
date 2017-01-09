@@ -6,7 +6,7 @@ use Closure;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
@@ -104,16 +104,16 @@ class Application extends Container implements ApplicationContract
         $this->hasBeenBootstrapped = true;
 
         foreach ($bootstrappers as $bootstrapper) {
-            $this->get(DispatcherContract::class)->trigger(
+            $this->get(EventManagerContract::class)->trigger(
                 'bootstrapping.' . str_replace('\\', '', $bootstrapper),
-                [$this]
+                $this
             );
 
             $this->make($bootstrapper)->bootstrap($this);
 
-            $this->get(DispatcherContract::class)->trigger(
+            $this->get(EventManagerContract::class)->trigger(
                 'bootstrapped.' . str_replace('\\', '', $bootstrapper),
-                [$this]
+                $this
             );
         }
     }
@@ -145,7 +145,7 @@ class Application extends Container implements ApplicationContract
             $this->get(TranslationManager::class)->setLocale($locale);
         }
 
-        $this->get(DispatcherContract::class)->trigger('locale.changed', [$locale]);
+        $this->get(EventManagerContract::class)->trigger('locale.changed', $this, ['locale' => $locale]);
 
         return $this;
     }

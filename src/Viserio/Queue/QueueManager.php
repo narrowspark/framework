@@ -8,13 +8,12 @@ use Narrowspark\Arr\Arr;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use RuntimeException;
 use Viserio\Connect\ConnectManager;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Encryption\Traits\EncrypterAwareTrait;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Queue\Factory as FactoryContract;
 use Viserio\Contracts\Queue\Monitor as MonitorContract;
@@ -54,7 +53,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function failing($callback)
     {
-        $this->container->get(DispatcherContract::class)->attach('viserio.job.failed', $callback);
+        $this->container->get(EventManagerContract::class)->attach('viserio.job.failed', $callback);
     }
 
     /**
@@ -62,7 +61,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function stopping($callback)
     {
-        $this->container->get(DispatcherContract::class)->attach('viserio.worker.stopping', $callback);
+        $this->container->get(EventManagerContract::class)->attach('viserio.worker.stopping', $callback);
     }
 
     /**
@@ -70,7 +69,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function exceptionOccurred($callback)
     {
-        $this->container->get(DispatcherContract::class)->attach('viserio.job.exception.occurred', $callback);
+        $this->container->get(EventManagerContract::class)->attach('viserio.job.exception.occurred', $callback);
     }
 
     /**
@@ -80,7 +79,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function before($callback)
     {
-        $this->container->get(DispatcherContract::class)->attach('viserio.job.processing', $callback);
+        $this->container->get(EventManagerContract::class)->attach('viserio.job.processing', $callback);
     }
 
     /**
@@ -90,7 +89,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function after($callback)
     {
-        $this->container->get(DispatcherContract::class)->attach('viserio.job.processed', $callback);
+        $this->container->get(EventManagerContract::class)->attach('viserio.job.processed', $callback);
     }
 
     /**
@@ -111,18 +110,6 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
         }
 
         return $this->connections[$name];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEventsDispatcher(): DispatcherContract
-    {
-        if (! $this->events || $this->container->has(DispatcherContract::class)) {
-            throw new RuntimeException('Events dispatcher is not set up.');
-        }
-
-        return $this->events ?? $this->container->get(DispatcherContract::class);
     }
 
     /**
