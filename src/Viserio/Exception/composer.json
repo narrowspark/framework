@@ -20,8 +20,7 @@
     "require": {
         "php"                                 : "^7.1",
         "narrowspark/http-status"             : "^2.0",
-        "http-interop/http-factory"           : "^0.2",
-        "ramsey/uuid"                         : "^3.4",
+        "psr/log"                             : "^1.0",
         "symfony/debug"                       : "^3.1",
         "viserio/config"                      : "self.version",
         "viserio/cotracts"                    : "self.version"

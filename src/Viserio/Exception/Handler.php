@@ -15,6 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -26,15 +27,20 @@ use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Contracts\Exception\Filter as FilterContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
+use Viserio\Contracts\Log\LoggerAwareTrait;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Transformers\CommandLineTransformer;
+use Symfony\Component\Debug\FatalErrorHandler\UndefinedFunctionFatalErrorHandler;
+use Symfony\Component\Debug\FatalErrorHandler\UndefinedMethodFatalErrorHandler;
+use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
 
 class Handler implements HandlerContract
 {
     use ConfigAwareTrait;
     use ContainerAwareTrait;
+    use LoggerAwareTrait;
 
     /**
      * Exception displayers.
@@ -87,10 +93,12 @@ class Handler implements HandlerContract
      * Create a new exception handler instance.
      *
      * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Log\LoggerInterface|null         $logger
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, ?LoggerInterface $logger = null)
     {
         $this->container = $container;
+        $this->logger    = $logger;
     }
 
     /**
@@ -214,17 +222,16 @@ class Handler implements HandlerContract
     {
         error_reporting(E_ALL);
 
-        // Register the PHP error handler.
-        set_error_handler([$this, 'handleError']);
+        $this->registerErrorHandler();
 
-        // Register the PHP exception handler.
-        set_exception_handler([$this, 'handleException']);
+        // The DebugClassLoader attempts to throw more helpful exceptions
+        // when a class isn't found by the registered autoloaders.
+        DebugClassLoader::enable();
 
-        // Register the PHP shutdown handler.
-        register_shutdown_function([$this, 'handleShutdown']);
+        $this->registerExceptionHandler();
 
         if ($this->getContainer()->get(RepositoryContract::class)->get('exception.env', null) !== 'testing') {
-            ini_set('display_errors', 'Off');
+            $this->registerShutdownHandler();
         }
     }
 
@@ -262,7 +269,7 @@ class Handler implements HandlerContract
 
         $transformed = $this->getTransformed($exception);
 
-        if (php_sapi_name() === 'cli') {
+        if (PHP_SAPI === 'cli') {
             (new ConsoleApplication())->renderException($transformed, new ConsoleOutput());
         } else {
             $response = $this->getPreparedResponse(
@@ -530,5 +537,58 @@ class Handler implements HandlerContract
         }
 
         return $response;
+    }
+
+    /**
+     * Register the PHP error handler.
+     *
+     * @return void
+     */
+    protected function registerErrorHandler(): void
+    {
+        set_error_handler(array($this, 'handleError'));
+    }
+
+    /**
+     * Register the PHP exception handler.
+     *
+     * @return void
+     */
+    protected function registerExceptionHandler(): void
+    {
+        if (PHP_SAPI !== 'cli') {
+            ini_set('display_errors', 0);
+        } elseif (! ini_get('log_errors') || ini_get('error_log')) {
+            // CLI - display errors only if they're not already logged to STDERR
+            ini_set('display_errors', 1);
+        }
+
+        set_exception_handler(array($this, 'handleException'));
+    }
+
+    /**
+     * Register the PHP shutdown handler.
+     *
+     * @return void
+     */
+    protected function registerShutdownHandler(): void
+    {
+        register_shutdown_function(array($this, 'handleShutdown'));
+    }
+
+    /**
+     * Gets the fatal error handlers.
+     *
+     * Override this method if you want to define more fatal error handlers.
+     *
+     * @return \Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface[]
+     */
+    protected function getFatalErrorHandlers(): array
+    {
+        return [
+            new UndefinedFunctionFatalErrorHandler(),
+            new UndefinedMethodFatalErrorHandler(),
+            new ClassNotFoundFatalErrorHandler(),
+        ];
     }
 }
