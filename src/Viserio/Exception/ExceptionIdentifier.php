@@ -47,7 +47,7 @@ class ExceptionIdentifier
     /**
      * Generate v4 UUID.
      *
-     * @param  string $data
+     * @param string $data
      *
      * @return string
      */
