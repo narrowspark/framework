@@ -19,6 +19,7 @@
     ],
     "require": {
         "php"                                 : "^7.1",
+        "http-interop/http-factory"           : "^0.2",
         "narrowspark/http-status"             : "^2.0",
         "psr/log"                             : "^1.0",
         "symfony/debug"                       : "^3.1",

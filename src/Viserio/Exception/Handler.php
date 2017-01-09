@@ -90,15 +90,25 @@ class Handler implements HandlerContract
     protected $dontReport = [];
 
     /**
+     * ExceptionIdentifier instance.
+     *
+     * @var \Viserio\Exception\ExceptionIdentifier
+     */
+    protected $exceptionIdentifier;
+
+    /**
      * Create a new exception handler instance.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param \Psr\Log\LoggerInterface|null         $logger
      */
-    public function __construct(ContainerInterface $container, ?LoggerInterface $logger = null)
+    public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->logger    = $logger;
+        $this->container           = $container;
+        $this->exceptionIdentifier = new ExceptionIdentifier();
+
+        if ($this->container->has(LoggerInterface::class)) {
+            $this->logger = $this->container->get(LoggerInterface::class);
+        }
     }
 
     /**
@@ -196,9 +206,9 @@ class Handler implements HandlerContract
             return;
         }
 
-        if ($this->getContainer()->has(LoggerInterface::class)) {
+        if ($this->logger !== null) {
             try {
-                $logger = $this->getContainer()->get(LoggerInterface::class);
+                $logger = $this->getLogger();
             } catch (Throwable $exception) {
                 // throw the original exception
                 throw $exception;
@@ -206,9 +216,9 @@ class Handler implements HandlerContract
         }
 
         $level = $this->getLevel($exception);
-        $id    = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
+        $id    = $this->exceptionIdentifier->identify($exception);
 
-        if ($this->getContainer()->has(LoggerInterface::class)) {
+        if ($this->logger !== null) {
             $logger->{$level}($exception, ['identification' => ['id' => $id]]);
         }
     }
@@ -385,7 +395,7 @@ class Handler implements HandlerContract
         Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
-        $id = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
+        $id = $this->exceptionIdentifier->identify($exception);
 
         if ($transformed instanceof Error) {
             $transformed = new FatalErrorException(
@@ -466,6 +476,11 @@ class Handler implements HandlerContract
 
         foreach ($filters as $filter) {
             $filterClass = is_object($filter) ? $filter : $container->get($filter);
+
+            if (! filterClass) {
+                continue;
+            }
+
             $displayers  = $filterClass->filter($displayers, $request, $original, $transformed, $code);
         }
 

@@ -13,7 +13,6 @@ use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\ViewDisplayer;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
-use Viserio\Exception\ExceptionIdentifier;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
@@ -32,7 +31,6 @@ class ExceptionServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            ExceptionIdentifier::class => [self::class, 'createExceptionIdentifier'],
             ExceptionInfo::class       => [self::class, 'createExceptionInfo'],
             Handler::class             => [self::class, 'createExceptionHandler'],
             HandlerContract::class     => function (ContainerInterface $container) {
@@ -46,11 +44,6 @@ class ExceptionServiceProvider implements ServiceProvider
             CanDisplayFilter::class       => [self::class, 'createCanDisplayFilter'],
             CommandLineTransformer::class => [self::class, 'createCommandLineTransformer'],
         ];
-    }
-
-    public static function createExceptionIdentifier(): ExceptionIdentifier
-    {
-        return new ExceptionIdentifier();
     }
 
     public static function createExceptionInfo(): ExceptionInfo
