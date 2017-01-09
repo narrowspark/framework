@@ -32,13 +32,6 @@ class EventManager implements EventManagerContract
     protected $sorted = [];
 
     /**
-     * The event triggered stack.
-     *
-     * @var array
-     */
-    protected $triggered = [];
-
-    /**
      * Wildcard patterns.
      *
      * @var array
@@ -70,8 +63,7 @@ class EventManager implements EventManagerContract
             $event = new Event($event, $target, $argv);
         }
 
-        $this->triggered[] = $event->getName();
-        $listeners         = $this->getListeners($event->getName());
+        $listeners = $this->getListeners($event->getName());
 
         foreach ($listeners as $listener) {
             $result = false;
@@ -81,7 +73,8 @@ class EventManager implements EventManagerContract
             }
 
             if ($listener !== null) {
-                $result = $listener($event);
+                $listener($event);
+                $result = true;
             }
 
             if ($result === false) {
@@ -89,19 +82,7 @@ class EventManager implements EventManagerContract
             }
         }
 
-        array_pop($this->triggered);
-
         return true;
-    }
-
-    /**
-     * Get the event that is currently triggered.
-     *
-     * @return string
-     */
-    public function triggered(): string
-    {
-        return end($this->triggered);
     }
 
     /**
