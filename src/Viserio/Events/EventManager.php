@@ -73,8 +73,7 @@ class EventManager implements EventManagerContract
             }
 
             if ($listener !== null) {
-                $listener($event);
-                $result = true;
+                $result = $listener($event);
             }
 
             if ($result === false) {
