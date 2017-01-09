@@ -19,6 +19,7 @@ use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
 use Symfony\Component\Debug\FatalErrorHandler\UndefinedFunctionFatalErrorHandler;
 use Symfony\Component\Debug\FatalErrorHandler\UndefinedMethodFatalErrorHandler;
@@ -30,7 +31,7 @@ use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Contracts\Exception\Filter as FilterContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
-use Viserio\Contracts\Log\LoggerAwareTrait;
+use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
@@ -80,6 +81,19 @@ class Handler implements HandlerContract
     protected $filters = [
         VerboseFilter::class,
         CanDisplayFilter::class,
+    ];
+
+    /**
+     * Array of fatal error handlers.
+     *
+     * Override this variable if you want to define more fatal error handlers.
+     *
+     * @return \Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface[]
+     */
+    protected $fatalErrorHandlers = [
+        UndefinedFunctionFatalErrorHandler::class,
+        UndefinedMethodFatalErrorHandler::class,
+        ClassNotFoundFatalErrorHandler::class,
     ];
 
     /**
@@ -206,27 +220,16 @@ class Handler implements HandlerContract
             return;
         }
 
-        if ($this->logger !== null) {
-            try {
-                $logger = $this->getLogger();
-            } catch (Throwable $exception) {
-                // throw the original exception
-                throw $exception;
-            }
-        }
-
         $level = $this->getLevel($exception);
         $id    = $this->exceptionIdentifier->identify($exception);
 
         if ($this->logger !== null) {
-            $logger->{$level}($exception, ['identification' => ['id' => $id]]);
+            $this->getLogger()->{$level}($exception, ['identification' => ['id' => $id]]);
         }
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function register()
     {
@@ -247,8 +250,6 @@ class Handler implements HandlerContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function unregister()
     {
@@ -264,7 +265,7 @@ class Handler implements HandlerContract
         string $file = '',
         int $line = 0,
         $context = null
-    ) {
+    ): void {
         if ($level & error_reporting()) {
             throw new ErrorException($message, 0, $level, $file, $line);
         }
@@ -273,17 +274,25 @@ class Handler implements HandlerContract
     /**
      * {@inheritdoc}
      */
-    public function handleException(Throwable $exception)
+    public function handleException($exception)
     {
+        $exception = $this->prepareAndWrapException($exception);
+
         $this->report($exception);
 
         $transformed = $this->getTransformed($exception);
+        $container   = $this->container;
 
         if (PHP_SAPI === 'cli') {
-            (new ConsoleApplication())->renderException($transformed, new ConsoleOutput());
+            if ($container->has(ConsoleApplication::class)) {
+                $container->get(ConsoleApplication::class)
+                    ->renderException($transformed, new ConsoleOutput());
+            } else {
+                throw $exception;
+            }
         } else {
             $response = $this->getPreparedResponse(
-                $this->getContainer(),
+                $container,
                 $exception,
                 $transformed
             );
@@ -294,8 +303,6 @@ class Handler implements HandlerContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function handleShutdown()
     {
@@ -346,7 +353,7 @@ class Handler implements HandlerContract
     {
         $dontReport = array_merge(
             $this->dontReport,
-            $this->getContainer()->get(RepositoryContract::class)->get('', [])
+            $this->getContainer()->get(RepositoryContract::class)->get('shouldnt_report', [])
         );
 
         foreach ($dontReport as $type) {
@@ -385,32 +392,21 @@ class Handler implements HandlerContract
      * Create a response for the given exception.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $exception
-     * @param \Throwable                               $transformed
+     * @param \Throwable|\Exception                    $exception
+     * @param \Throwable|\Exception                    $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getResponse(
         ServerRequestInterface $request,
-        Throwable $exception,
-        Throwable $transformed
+        $exception,
+        $transformed
     ): ResponseInterface {
-        $id = $this->exceptionIdentifier->identify($exception);
-
-        if ($transformed instanceof Error) {
-            $transformed = new FatalErrorException(
-                $transformed->getMessage(),
-                $transformed->getCode(),
-                E_ERROR,
-                $transformed->getFile(),
-                $transformed->getLine(),
-                $transformed->getTrace()
-            );
-        }
-
-        $flattened = FlattenException::create($transformed);
-        $code      = $flattened->getStatusCode();
-        $headers   = $flattened->getHeaders();
+        $id          = $this->exceptionIdentifier->identify($exception);
+        $transformed = $this->prepareAndWrapException($transformed);
+        $flattened   = FlattenException::create($transformed);
+        $code        = $flattened->getStatusCode();
+        $headers     = $flattened->getHeaders();
 
         return $this->getDisplayer(
             $request,
@@ -477,7 +473,7 @@ class Handler implements HandlerContract
         foreach ($filters as $filter) {
             $filterClass = is_object($filter) ? $filter : $container->get($filter);
 
-            if (! filterClass) {
+            if (! $filterClass) {
                 continue;
             }
 
@@ -490,13 +486,13 @@ class Handler implements HandlerContract
     /**
      * Get the transformed exception.
      *
-     * @param \Throwable $exception
+     * @param \Throwable|\Exception $exception
      *
-     * @return \Throwable
+     * @return \Throwable|\Exception
      */
-    protected function getTransformed(Throwable $exception): Throwable
+    protected function getTransformed($exception)
     {
-        $container    = $this->getContainer();
+        $container    = $this->container;
         $transformers = array_merge(
             $this->transformers,
             $container->get(RepositoryContract::class)->get('exception.transformers', [])
@@ -528,15 +524,15 @@ class Handler implements HandlerContract
      * Get a prepared response with the transformed exception.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param \Throwable                            $exception
-     * @param \Throwable                            $transformed
+     * @param \Throwable|\Exception                 $exception
+     * @param \Throwable|\Exception                 $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getPreparedResponse(
         ContainerInterface $container,
-        Throwable $exception,
-        Throwable $transformed
+        $exception,
+        $transformed
     ): ResponseInterface {
         try {
             $response = $this->getResponse(
@@ -544,7 +540,7 @@ class Handler implements HandlerContract
                 $exception,
                 $transformed
             );
-        } catch (Throwable $exception) {
+        } catch (Throwable | Exception $exception) {
             $this->report($exception);
 
             $response = $container->get(ResponseFactoryInterface::class)->createResponse();
@@ -572,10 +568,10 @@ class Handler implements HandlerContract
     protected function registerExceptionHandler(): void
     {
         if (PHP_SAPI !== 'cli') {
-            ini_set('display_errors', 0);
+            ini_set('display_errors', '0');
         } elseif (! ini_get('log_errors') || ini_get('error_log')) {
             // CLI - display errors only if they're not already logged to STDERR
-            ini_set('display_errors', 1);
+            ini_set('display_errors', '1');
         }
 
         set_exception_handler([$this, 'handleException']);
@@ -592,18 +588,43 @@ class Handler implements HandlerContract
     }
 
     /**
-     * Gets the fatal error handlers.
+     * Prepare and wrap exception in a fatal error handler.
      *
-     * Override this method if you want to define more fatal error handlers.
+     * @param \Throwable|\Exception $exception
      *
-     * @return \Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface[]
+     * @return \Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|\Throwable|\Error
      */
-    protected function getFatalErrorHandlers(): array
+    protected function prepareAndWrapException($exception)
     {
-        return [
-            new UndefinedFunctionFatalErrorHandler(),
-            new UndefinedMethodFatalErrorHandler(),
-            new ClassNotFoundFatalErrorHandler(),
-        ];
+        if (! $exception instanceof Exception) {
+            $exception = new FatalThrowableError($exception);
+        } elseif ($exception instanceof Error) {
+            $exception = new FatalErrorException(
+                $exception->getMessage(),
+                $exception->getCode(),
+                E_ERROR,
+                $exception->getFile(),
+                $exception->getLine(),
+                $exception->getTrace()
+            );
+        }
+
+        if ($exception instanceof FatalErrorException && ! $exception instanceof OutOfMemoryException) {
+            $error = [
+                'type' => $exception->getSeverity(),
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+            ];
+
+            foreach ($this->fatalErrorHandlers as $handler) {
+                if ($e = (new $handler())->handleError($error, $exception)) {
+                    $exception = $e;
+                    break;
+                }
+            }
+        }
+
+        return $exception;
     }
 }

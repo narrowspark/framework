@@ -105,7 +105,7 @@ interface Handler
         string $file = '',
         int $line = 0,
         $context = null
-    );
+    ): void;
 
     /**
      * Handle an uncaught exception from the application.
@@ -114,11 +114,11 @@ interface Handler
      * the HTTP and Console kernels. But, fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param \Throwable $exception
+     * @param \Throwable|\Exception $exception
      *
-     * @return null|string
+     * @return void|string
      */
-    public function handleException(Throwable $exception);
+    public function handleException($exception);
 
     /**
      * Handle the PHP shutdown event.
