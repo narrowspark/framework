@@ -611,10 +611,10 @@ class Handler implements HandlerContract
 
         if ($exception instanceof FatalErrorException && ! $exception instanceof OutOfMemoryException) {
             $error = [
-                'type' => $exception->getSeverity(),
+                'type'    => $exception->getSeverity(),
                 'message' => $exception->getMessage(),
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
+                'file'    => $exception->getFile(),
+                'line'    => $exception->getLine(),
             ];
 
             foreach ($this->fatalErrorHandlers as $handler) {
