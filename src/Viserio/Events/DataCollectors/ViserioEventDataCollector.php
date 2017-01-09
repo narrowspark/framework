@@ -10,6 +10,7 @@ use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
+use Viserio\Contracts\Events\Event as EventContract;
 
 class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareContract
 {
@@ -43,7 +44,11 @@ class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareC
     {
         parent::collect($serverRequest, $response);
 
-        $this->events->attach('#', [$this, 'onWildcardEvent']);
+        $this->events->attach('#', function (EventContract $event) {
+            $time = microtime(true);
+
+            $this->addMeasure($event->getName(), $time, $time, $event->getParams());
+        });
 
         $this->data['events'] = count($this->data['measures']);
     }
@@ -68,51 +73,5 @@ class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareC
         $html = '';
 
         return $html;
-    }
-
-    /**
-     * [onWildcardEvent description].
-     *
-     * @return void
-     * @param  mixed $event
-     */
-    public function onWildcardEvent($event)
-    {
-        $name = $event->getName();
-        $time = microtime(true);
-
-        // Get the arguments passed to the event
-        $params = []; //$this->prepareParams(func_get_args());
-
-        // Find all listeners for the current event
-        foreach ($this->events->getListeners($name) as $i => $listener) {
-            // Check if it's an object + method name
-            if (is_array($listener) && count($listener) > 1 && is_object($listener[0])) {
-                list($class, $method) = $listener;
-                error_log(var_dump($listener));
-                // Skip this class itself
-                if ($class instanceof static) {
-                    continue;
-                }
-
-                // Format the listener to readable format
-                $listener = get_class($class) . '@' . $method;
-            } elseif ($listener instanceof Closure) {
-                $reflector = new ReflectionFunction($listener);
-
-                // Skip our own listeners
-                if ($reflector->getNamespaceName() == 'Viserio\Events\DataCollectors') {
-                    continue;
-                }
-
-                // Format the closure to a readable format
-                $filename = ltrim(str_replace(base_path(), '', $reflector->getFileName()), '/');
-                $listener = $reflector->getName() . ' (' . $filename . ':' . $reflector->getStartLine() . '-' . $reflector->getEndLine() . ')';
-            }
-
-            $params['listeners.' . $i] = $listener;
-        }
-
-        $this->addMeasure($name, $time, $time, $params);
     }
 }
