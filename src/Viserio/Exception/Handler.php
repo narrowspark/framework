@@ -37,7 +37,7 @@ use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Transformers\CommandLineTransformer;
 
-class Handler implements HandlerContract
+class Handler extends ErrorHandler implements HandlerContract
 {
     use ConfigAwareTrait;
     use ContainerAwareTrait;
@@ -257,16 +257,38 @@ class Handler implements HandlerContract
     }
 
     /**
-     * {@inheritdoc}
+     * Convert errors into ErrorException objects.
+     *
+     * This method catches PHP errors and converts them into ErrorException objects;
+     * these ErrorException objects are then thrown and caught by Viserio's
+     * built-in or custom error handlers.
+     *
+     * @param int        $type    The numeric type of the Error
+     * @param string     $message The error message
+     * @param string     $file    The absolute path to the affected file
+     * @param int        $line    The line number of the error in the affected file
+     * @param null       $context
+     * @param array|null $backtrace
+     *
+     * @throws \ErrorException
+     *
+     * @return bool Returns false when no handling happens so that the PHP engine can handle the error itself
+     *
+     * @internal
      */
     public function handleError(
-        int $level,
+        int $type,
         string $message,
         string $file = '',
         int $line = 0,
-        $context = null
+        $context = null,
+        array $backtrace = null
     ): void {
-        if ($level & error_reporting()) {
+        // Level is the current error reporting level to manage silent error.
+        // Strong errors are not authorized to be silenced.
+        $level = error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
+
+        if ($level) {
             throw new ErrorException($message, 0, $level, $file, $line);
         }
     }
