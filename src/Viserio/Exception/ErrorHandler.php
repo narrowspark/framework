@@ -4,23 +4,23 @@ namespace Viserio\Exception;
 
 use Error;
 use ErrorException;
-use RuntimeException;
-use Throwable;
-use Symfony\Component\Debug\Exception\FatalErrorException;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Symfony\Component\Debug\Exception\OutOfMemoryException;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Exception\Transformers\CommandLineTransformer;
-use Viserio\Contracts\Exception\Transformer as TransformerContract;
-use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
-use Symfony\Component\Debug\FatalErrorHandler\UndefinedFunctionFatalErrorHandler;
-use Symfony\Component\Debug\FatalErrorHandler\UndefinedMethodFatalErrorHandler;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
+use RuntimeException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Debug\Exception\FatalErrorException;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Symfony\Component\Debug\Exception\OutOfMemoryException;
+use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
+use Symfony\Component\Debug\FatalErrorHandler\UndefinedFunctionFatalErrorHandler;
+use Symfony\Component\Debug\FatalErrorHandler\UndefinedMethodFatalErrorHandler;
+use Throwable;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
+use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class ErrorHandler
 {
@@ -104,7 +104,6 @@ class ErrorHandler
             $this->getLogger()->{$level}($exception, ['identification' => ['id' => $id]]);
         }
     }
-
 
     /**
      * Add the transformed instance.
