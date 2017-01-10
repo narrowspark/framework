@@ -4,16 +4,11 @@ namespace Viserio\Exception;
 
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
-use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
-use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\DebugClassLoader;
-use Symfony\Component\Debug\Exception\FatalErrorException;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
@@ -21,7 +16,6 @@ use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Contracts\Exception\Filter as FilterContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
@@ -29,7 +23,6 @@ use Viserio\Exception\Filters\VerboseFilter;
 class Handler extends ErrorHandler implements HandlerContract
 {
     use ConfigAwareTrait;
-    use LoggerAwareTrait;
 
     /**
      * Exception displayers.
@@ -37,20 +30,6 @@ class Handler extends ErrorHandler implements HandlerContract
      * @var array
      */
     protected $displayers = [];
-
-    /**
-     * Exception levels.
-     *
-     * @var array
-     */
-    protected $defaultLevels = [
-        FatalThrowableError::class          => 'critical',
-        FatalErrorException::class          => 'error',
-        Throwable::class                    => 'error',
-        NotFoundException::class            => 'notice',
-        AbstractClientErrorException::class => 'notice',
-        AbstractServerErrorException::class => 'error',
-    ];
 
     /**
      * Exception filters.
@@ -61,13 +40,6 @@ class Handler extends ErrorHandler implements HandlerContract
         VerboseFilter::class,
         CanDisplayFilter::class,
     ];
-
-    /**
-     * A list of the exception types that should not be reported.
-     *
-     * @var array
-     */
-    protected $dontReport = [];
 
     /**
      * ExceptionIdentifier instance.
@@ -144,33 +116,6 @@ class Handler extends ErrorHandler implements HandlerContract
     /**
      * {@inheritdoc}
      */
-    public function addShouldntReport(Throwable $exception): HandlerContract
-    {
-        $this->dontReport[] = $exception;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function report(Throwable $exception)
-    {
-        if ($this->shouldntReport($exception)) {
-            return;
-        }
-
-        $level = $this->getLevel($exception);
-        $id    = $this->exceptionIdentifier->identify($exception);
-
-        if ($this->logger !== null) {
-            $this->getLogger()->{$level}($exception, ['identification' => ['id' => $id]]);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function register()
     {
         error_reporting(E_ALL);
@@ -231,29 +176,6 @@ class Handler extends ErrorHandler implements HandlerContract
         }
 
         return false;
-    }
-
-    /**
-     * Get the exception level.
-     *
-     * @param \Throwable $exception
-     *
-     * @return string
-     */
-    protected function getLevel(Throwable $exception): string
-    {
-        $levels = array_merge(
-            $this->defaultLevels,
-            $this->getContainer()->get(RepositoryContract::class)->get('exception.levels', [])
-        );
-
-        foreach ($levels as $class => $level) {
-            if ($exception instanceof $class) {
-                return $level;
-            }
-        }
-
-        return 'error';
     }
 
     /**

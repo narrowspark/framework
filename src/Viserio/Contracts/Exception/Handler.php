@@ -41,24 +41,6 @@ interface Handler
     public function getFilters(): array;
 
     /**
-     * Report or log an exception.
-     *
-     * @param \Throwable $exception
-     *
-     * @return void|null
-     */
-    public function report(Throwable $exception);
-
-    /**
-     * Determine if the exception shouldn't be reported.
-     *
-     * @param \Throwable $exception
-     *
-     * @return $this
-     */
-    public function addShouldntReport(Throwable $exception): Handler;
-
-    /**
      * Register the exception / Error handlers for the application.
      */
     public function register();

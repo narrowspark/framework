@@ -5,19 +5,27 @@ namespace Viserio\Exception;
 use Error;
 use ErrorException;
 use RuntimeException;
+use Throwable;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Exception\Transformers\CommandLineTransformer;
+use Viserio\Contracts\Exception\Transformer as TransformerContract;
 use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
 use Symfony\Component\Debug\FatalErrorHandler\UndefinedFunctionFatalErrorHandler;
 use Symfony\Component\Debug\FatalErrorHandler\UndefinedMethodFatalErrorHandler;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Exception\Transformer as TransformerContract;
-use Viserio\Exception\Transformers\CommandLineTransformer;
+use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
+use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
+use Narrowspark\HttpStatus\Exception\NotFoundException;
+use Symfony\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 
 class ErrorHandler
 {
     use ContainerAwareTrait;
+    use LoggerAwareTrait;
 
     /**
      * Exception transformers.
@@ -40,6 +48,63 @@ class ErrorHandler
         UndefinedMethodFatalErrorHandler::class,
         ClassNotFoundFatalErrorHandler::class,
     ];
+
+    /**
+     * Exception levels.
+     *
+     * @var array
+     */
+    protected $defaultLevels = [
+        FatalThrowableError::class          => 'critical',
+        FatalErrorException::class          => 'error',
+        Throwable::class                    => 'error',
+        NotFoundException::class            => 'notice',
+        AbstractClientErrorException::class => 'notice',
+        AbstractServerErrorException::class => 'error',
+    ];
+
+    /**
+     * A list of the exception types that should not be reported.
+     *
+     * @var array
+     */
+    protected $dontReport = [];
+
+    /**
+     * Determine if the exception shouldn't be reported.
+     *
+     * @param \Throwable $exception
+     *
+     * @return $this
+     */
+    public function addShouldntReport(Throwable $exception): self
+    {
+        $this->dontReport[] = $exception;
+
+        return $this;
+    }
+
+    /**
+     * Report or log an exception.
+     *
+     * @param \Throwable $exception
+     *
+     * @return void|null
+     */
+    public function report(Throwable $exception)
+    {
+        if ($this->shouldntReport($exception)) {
+            return;
+        }
+
+        $level = $this->getLevel($exception);
+        $id    = $this->exceptionIdentifier->identify($exception);
+
+        if ($this->logger !== null) {
+            $this->getLogger()->{$level}($exception, ['identification' => ['id' => $id]]);
+        }
+    }
+
 
     /**
      * Add the transformed instance.
@@ -301,5 +366,32 @@ class ErrorHandler
         }
 
         return $exception;
+    }
+
+    /**
+     * Get the exception level.
+     *
+     * @param \Throwable $exception
+     *
+     * @return string
+     */
+    protected function getLevel(Throwable $exception): string
+    {
+        $levels = $this->defaultLevels;
+
+        if ($this->container->has(RepositoryContract::class)) {
+            $levels = array_merge(
+                $levels,
+                $this->container->get(RepositoryContract::class)->get('exception.levels', [])
+            );
+        }
+
+        foreach ($levels as $class => $level) {
+            if ($exception instanceof $class) {
+                return $level;
+            }
+        }
+
+        return 'error';
     }
 }
