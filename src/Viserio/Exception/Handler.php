@@ -263,10 +263,10 @@ class Handler extends ErrorHandler implements HandlerContract
      * these ErrorException objects are then thrown and caught by Viserio's
      * built-in or custom error handlers.
      *
-     * @param int        $type    The numeric type of the Error
-     * @param string     $message The error message
-     * @param string     $file    The absolute path to the affected file
-     * @param int        $line    The line number of the error in the affected file
+     * @param int        $type      The numeric type of the Error
+     * @param string     $message   The error message
+     * @param string     $file      The absolute path to the affected file
+     * @param int        $line      The line number of the error in the affected file
      * @param null       $context
      * @param array|null $backtrace
      *
