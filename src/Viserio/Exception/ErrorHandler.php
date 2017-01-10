@@ -8,12 +8,12 @@ use RuntimeException;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Exception\Transformers\CommandLineTransformer;
-use Viserio\Contracts\Exception\Transformer as TransformerContract;
 use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
 use Symfony\Component\Debug\FatalErrorHandler\UndefinedFunctionFatalErrorHandler;
 use Symfony\Component\Debug\FatalErrorHandler\UndefinedMethodFatalErrorHandler;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Exception\Transformer as TransformerContract;
+use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class ErrorHandler
 {
