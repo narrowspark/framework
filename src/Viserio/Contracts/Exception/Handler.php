@@ -25,22 +25,6 @@ interface Handler
     public function getDisplayers(): array;
 
     /**
-     * Add the transformed instance.
-     *
-     * @param Transformer $transformer
-     *
-     * @return $this
-     */
-    public function addTransformer(Transformer $transformer): Handler;
-
-    /**
-     * Get the transformer exceptions.
-     *
-     * @return array
-     */
-    public function getTransformers(): array;
-
-    /**
      * Add the filter instance.
      *
      * @param Filter $filter
@@ -83,24 +67,6 @@ interface Handler
      * Unregister the PHP error handler.
      */
     public function unregister();
-
-    /**
-     * Handle an uncaught exception from the application.
-     *
-     * Note: Most exceptions can be handled via the try / catch block in
-     * the HTTP and Console kernels. But, fatal error exceptions must
-     * be handled differently since they are not normal exceptions.
-     *
-     * @param \Throwable|\Exception $exception
-     *
-     * @return void|string
-     */
-    public function handleException($exception);
-
-    /**
-     * Handle the PHP shutdown event.
-     */
-    public function handleShutdown();
 
     /**
      * Render an exception into a response.
