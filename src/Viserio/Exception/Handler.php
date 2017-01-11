@@ -12,7 +12,6 @@ use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Contracts\Exception\Filter as FilterContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
@@ -22,8 +21,6 @@ use Viserio\Exception\Filters\VerboseFilter;
 
 class Handler extends ErrorHandler implements HandlerContract
 {
-    use ConfigAwareTrait;
-
     /**
      * Exception displayers.
      *
@@ -254,11 +251,13 @@ class Handler extends ErrorHandler implements HandlerContract
         Throwable $transformed,
         int $code
     ): array {
-        $container = $this->getContainer();
-        $filters   = array_merge(
-            $this->filters,
-            $container->get(RepositoryContract::class)->get('exception.filters', [])
-        );
+        $container = $this->container;
+        if (condition) {
+            $filters   = array_merge(
+                $this->filters,
+                $container->get(RepositoryContract::class)->get('exception.filters', [])
+            );
+        }
 
         foreach ($filters as $filter) {
             $filterClass = is_object($filter) ? $filter : $container->get($filter);

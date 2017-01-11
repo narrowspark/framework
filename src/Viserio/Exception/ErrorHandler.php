@@ -21,9 +21,12 @@ use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Exception\Transformers\CommandLineTransformer;
+use Interop\Config\ConfigurationTrait;
+use Interop\Config\RequiresConfig;
 
-class ErrorHandler
+class ErrorHandler implements RequiresConfig
 {
+    use ConfigurationTrait;
     use ContainerAwareTrait;
     use LoggerAwareTrait;
 
@@ -69,6 +72,22 @@ class ErrorHandler
      * @var array
      */
     protected $dontReport = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dimensions(): iterable
+    {
+        return ['viserio', 'exception'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mandatoryOptions(): iterable
+    {
+        return ['driverClass', 'params'];
+    }
 
     /**
      * Determine if the exception shouldn't be reported.

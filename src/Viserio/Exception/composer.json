@@ -22,6 +22,7 @@
         "http-interop/http-factory"           : "^0.2",
         "narrowspark/http-status"             : "^2.0",
         "psr/log"                             : "^1.0",
+        "sandrokeil/interop-config"           : "^2.0",
         "symfony/debug"                       : "^3.1",
         "viserio/config"                      : "self.version",
         "viserio/cotracts"                    : "self.version"
