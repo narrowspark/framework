@@ -4,6 +4,8 @@ namespace Viserio\Exception;
 
 use Error;
 use ErrorException;
+use Interop\Config\ConfigurationTrait;
+use Interop\Config\RequiresConfig;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
@@ -21,8 +23,6 @@ use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Exception\Transformers\CommandLineTransformer;
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
 
 class ErrorHandler implements RequiresConfig
 {
