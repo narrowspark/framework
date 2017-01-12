@@ -65,13 +65,13 @@ class Handler extends ErrorHandler implements HandlerContract
             parent::defaultOptions(),
             [
                 'exception' => [
-                    'displayers' => [],
+                    'displayers'        => [],
                     'default_displayer' => HtmlDisplayer::class,
-                    'filters' => [
+                    'filters'           => [
                         VerboseFilter::class,
                         CanDisplayFilter::class,
                     ],
-                ]
+                ],
             ]
         );
     }

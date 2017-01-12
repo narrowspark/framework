@@ -6,15 +6,15 @@ use Error;
 use ErrorException;
 use Exception;
 use Interop\Config\ConfigurationTrait;
+use Interop\Config\ProvidesDefaultOptions;
 use Interop\Config\RequiresConfig;
 use Interop\Config\RequiresMandatoryOptions;
-use Interop\Config\ProvidesDefaultOptions;
 use Interop\Container\ContainerInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
-use RuntimeException;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
@@ -24,11 +24,11 @@ use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
 use Symfony\Component\Debug\FatalErrorHandler\UndefinedFunctionFatalErrorHandler;
 use Symfony\Component\Debug\FatalErrorHandler\UndefinedMethodFatalErrorHandler;
 use Throwable;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Exception\Transformers\CommandLineTransformer;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, ProvidesDefaultOptions
 {
@@ -98,7 +98,7 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
             'exception' => [
                 // A list of the exception types that should not be reported.
                 'dont_report' => [],
-                'levels' => [
+                'levels'      => [
                     FatalThrowableError::class          => 'critical',
                     FatalErrorException::class          => 'error',
                     Throwable::class                    => 'error',
@@ -109,15 +109,15 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
                 ],
                 // Exception transformers.
                 'transformers' => [
-                    CommandLineTransformer::class
+                    CommandLineTransformer::class,
                 ],
                 // Array of fatal error handlers.
                 'fatal_error_handlers' => [
                     UndefinedFunctionFatalErrorHandler::class,
                     UndefinedMethodFatalErrorHandler::class,
                     ClassNotFoundFatalErrorHandler::class,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -133,26 +133,6 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
         $this->dontReport[] = $exception;
 
         return $this;
-    }
-
-    /**
-     * Create handler configuration.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @see \Viserio\Exception\ErrorHandler::options()
-     *
-     * @return void
-     */
-    protected function createConfiguration(ContainerInterface $container): void
-    {
-        if ($container->has(RepositoryContract::class)) {
-            $config = $container->get(RepositoryContract::class);
-        } else {
-            $config = $container->get('config');
-        }
-
-        $this->config = $this->options($config);
     }
 
     /**
@@ -308,6 +288,26 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
                 )
             );
         }
+    }
+
+    /**
+     * Create handler configuration.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @see \Viserio\Exception\ErrorHandler::options()
+     *
+     * @return void
+     */
+    protected function createConfiguration(ContainerInterface $container): void
+    {
+        if ($container->has(RepositoryContract::class)) {
+            $config = $container->get(RepositoryContract::class);
+        } else {
+            $config = $container->get('config');
+        }
+
+        $this->config = $this->options($config);
     }
 
     /**
