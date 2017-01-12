@@ -4,12 +4,17 @@ namespace Viserio\Exception;
 
 use Error;
 use ErrorException;
+use Exception;
 use Interop\Config\ConfigurationTrait;
 use Interop\Config\RequiresConfig;
+use Interop\Config\RequiresMandatoryOptions;
+use Interop\Config\ProvidesDefaultOptions;
+use Interop\Container\ContainerInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use RuntimeException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
@@ -23,48 +28,27 @@ use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Exception\Transformers\CommandLineTransformer;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 
-class ErrorHandler implements RequiresConfig
+class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, ProvidesDefaultOptions
 {
     use ConfigurationTrait;
     use ContainerAwareTrait;
     use LoggerAwareTrait;
 
     /**
+     * Handler config.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $config = [];
+
+    /**
      * Exception transformers.
      *
      * @var array
      */
-    protected $transformers = [
-        CommandLineTransformer::class,
-    ];
-
-    /**
-     * Array of fatal error handlers.
-     *
-     * Override this variable if you want to define more fatal error handlers.
-     *
-     * @return \Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface[]
-     */
-    protected $fatalErrorHandlers = [
-        UndefinedFunctionFatalErrorHandler::class,
-        UndefinedMethodFatalErrorHandler::class,
-        ClassNotFoundFatalErrorHandler::class,
-    ];
-
-    /**
-     * Exception levels.
-     *
-     * @var array
-     */
-    protected $defaultLevels = [
-        FatalThrowableError::class          => 'critical',
-        FatalErrorException::class          => 'error',
-        Throwable::class                    => 'error',
-        NotFoundException::class            => 'notice',
-        AbstractClientErrorException::class => 'notice',
-        AbstractServerErrorException::class => 'error',
-    ];
+    protected $transformers = [];
 
     /**
      * A list of the exception types that should not be reported.
@@ -72,6 +56,22 @@ class ErrorHandler implements RequiresConfig
      * @var array
      */
     protected $dontReport = [];
+
+    /**
+     * Create a new error handler instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+
+        if ($this->container->has(LoggerInterface::class)) {
+            $this->logger = $this->container->get(LoggerInterface::class);
+        }
+
+        $this->createConfiguration($container);
+    }
 
     /**
      * {@inheritdoc}
@@ -86,7 +86,39 @@ class ErrorHandler implements RequiresConfig
      */
     public function mandatoryOptions(): iterable
     {
-        return ['driverClass', 'params'];
+        return ['dont_report', 'levels', 'transformers', 'fatal_error_handlers'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function defaultOptions(): iterable
+    {
+        return [
+            'exception' => [
+                // A list of the exception types that should not be reported.
+                'dont_report' => [],
+                'levels' => [
+                    FatalThrowableError::class          => 'critical',
+                    FatalErrorException::class          => 'error',
+                    Throwable::class                    => 'error',
+                    Exception::class                    => 'error',
+                    NotFoundException::class            => 'notice',
+                    AbstractClientErrorException::class => 'notice',
+                    AbstractServerErrorException::class => 'error',
+                ],
+                // Exception transformers.
+                'transformers' => [
+                    CommandLineTransformer::class
+                ],
+                // Array of fatal error handlers.
+                'fatal_error_handlers' => [
+                    UndefinedFunctionFatalErrorHandler::class,
+                    UndefinedMethodFatalErrorHandler::class,
+                    ClassNotFoundFatalErrorHandler::class,
+                ]
+            ]
+        ];
     }
 
     /**
@@ -101,6 +133,26 @@ class ErrorHandler implements RequiresConfig
         $this->dontReport[] = $exception;
 
         return $this;
+    }
+
+    /**
+     * Create handler configuration.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @see \Viserio\Exception\ErrorHandler::options()
+     *
+     * @return void
+     */
+    protected function createConfiguration(ContainerInterface $container): void
+    {
+        if ($container->has(RepositoryContract::class)) {
+            $config = $container->get(RepositoryContract::class);
+        } else {
+            $config = $container->get('config');
+        }
+
+        $this->config = $this->options($config);
     }
 
     /**
@@ -208,7 +260,7 @@ class ErrorHandler implements RequiresConfig
      */
     public function handleException($exception)
     {
-        $exception = $this->prepareAndWrapException($exception);
+        $exception = $this->prepareException($exception);
 
         $this->report($exception);
 
@@ -310,13 +362,13 @@ class ErrorHandler implements RequiresConfig
     }
 
     /**
-     * Prepare and wrap exception in a fatal error handler.
+     * Prepare exception in a fatal error handler.
      *
      * @param \Throwable|\Exception $exception
      *
      * @return \Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|\Throwable|\Error
      */
-    protected function prepareAndWrapException($exception)
+    protected function prepareException($exception)
     {
         if (! $exception instanceof Exception) {
             $exception = new FatalThrowableError($exception);
@@ -362,14 +414,10 @@ class ErrorHandler implements RequiresConfig
     protected function getTransformed($exception)
     {
         $container    = $this->container;
-        $transformers = $this->transformers;
-
-        if ($container->has(RepositoryContract::class)) {
-            $transformers = array_merge(
-                $transformers,
-                $container->get(RepositoryContract::class)->get('exception.transformers', [])
-            );
-        }
+        $transformers = array_merge(
+            $this->transformers,
+            $this->config['transformers']
+        );
 
         foreach ($transformers as $transformer) {
             if (is_object($transformer)) {
@@ -395,16 +443,7 @@ class ErrorHandler implements RequiresConfig
      */
     protected function getLevel(Throwable $exception): string
     {
-        $levels = $this->defaultLevels;
-
-        if ($this->container->has(RepositoryContract::class)) {
-            $levels = array_merge(
-                $levels,
-                $this->container->get(RepositoryContract::class)->get('exception.levels', [])
-            );
-        }
-
-        foreach ($levels as $class => $level) {
+        foreach ($this->config['levels'] as $class => $level) {
             if ($exception instanceof $class) {
                 return $level;
             }

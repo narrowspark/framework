@@ -7,11 +7,9 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Contracts\Exception\Filter as FilterContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
@@ -22,28 +20,18 @@ use Viserio\Exception\Filters\VerboseFilter;
 class Handler extends ErrorHandler implements HandlerContract
 {
     /**
-     * Exception displayers.
+     * ExceptionIdentifier instance.
      *
-     * @var array
+     * @var \Viserio\Exception\ExceptionIdentifier
      */
-    protected $displayers = [];
+    protected $exceptionIdentifier;
 
     /**
      * Exception filters.
      *
      * @var array
      */
-    protected $filters = [
-        VerboseFilter::class,
-        CanDisplayFilter::class,
-    ];
-
-    /**
-     * ExceptionIdentifier instance.
-     *
-     * @var \Viserio\Exception\ExceptionIdentifier
-     */
-    protected $exceptionIdentifier;
+    protected $filters = [];
 
     /**
      * Create a new exception handler instance.
@@ -52,12 +40,40 @@ class Handler extends ErrorHandler implements HandlerContract
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container           = $container;
-        $this->exceptionIdentifier = new ExceptionIdentifier();
+        parent::__construct($container);
 
-        if ($this->container->has(LoggerInterface::class)) {
-            $this->logger = $this->container->get(LoggerInterface::class);
-        }
+        $this->exceptionIdentifier = new ExceptionIdentifier();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mandatoryOptions(): iterable
+    {
+        return array_merge(
+            parent::mandatoryOptions(),
+            ['default_displayer', 'displayers', 'env', 'filters']
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function defaultOptions(): iterable
+    {
+        return array_merge(
+            parent::defaultOptions(),
+            [
+                'exception' => [
+                    'displayers' => [],
+                    'default_displayer' => HtmlDisplayer::class,
+                    'filters' => [
+                        VerboseFilter::class,
+                        CanDisplayFilter::class,
+                    ],
+                ]
+            ]
+        );
     }
 
     /**
@@ -125,7 +141,7 @@ class Handler extends ErrorHandler implements HandlerContract
 
         $this->registerExceptionHandler();
 
-        if ($this->getContainer()->get(RepositoryContract::class)->get('exception.env', null) !== 'testing') {
+        if ($this->config['env'] !== 'testing') {
             $this->registerShutdownHandler();
         }
     }
@@ -163,7 +179,7 @@ class Handler extends ErrorHandler implements HandlerContract
     {
         $dontReport = array_merge(
             $this->dontReport,
-            $this->getContainer()->get(RepositoryContract::class)->get('shouldnt_report', [])
+            $this->config['dont_report']
         );
 
         foreach ($dontReport as $type) {
@@ -173,34 +189,6 @@ class Handler extends ErrorHandler implements HandlerContract
         }
 
         return false;
-    }
-
-    /**
-     * Create a response for the given exception.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable|\Exception                    $exception
-     * @param \Throwable|\Exception                    $transformed
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function getResponse(
-        ServerRequestInterface $request,
-        $exception,
-        $transformed
-    ): ResponseInterface {
-        $id          = $this->exceptionIdentifier->identify($exception);
-        $transformed = $this->prepareAndWrapException($transformed);
-        $flattened   = FlattenException::create($transformed);
-        $code        = $flattened->getStatusCode();
-        $headers     = $flattened->getHeaders();
-
-        return $this->getDisplayer(
-            $request,
-            $exception,
-            $transformed,
-            $code
-        )->display($transformed, $id, $code, $headers);
     }
 
     /**
@@ -219,18 +207,20 @@ class Handler extends ErrorHandler implements HandlerContract
         Throwable $transformed,
         int $code
     ): DisplayerContract {
-        $config = $this->getContainer()->get(RepositoryContract::class);
-
         $displayers = array_merge(
             $this->displayers,
-            $config->get('exception.displayers', [])
+            $this->config['displayers']
         );
 
         if ($filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
             return $filtered[0];
         }
 
-        return $this->getContainer()->get($config->get('exception.default', HtmlDisplayer::class));
+        if (is_object($this->config['default_displayer'])) {
+            return $this->config['default_displayer'];
+        }
+
+        return $this->container->get($this->config['default_displayer']);
     }
 
     /**
@@ -251,20 +241,13 @@ class Handler extends ErrorHandler implements HandlerContract
         Throwable $transformed,
         int $code
     ): array {
-        $container = $this->container;
-        if (condition) {
-            $filters   = array_merge(
-                $this->filters,
-                $container->get(RepositoryContract::class)->get('exception.filters', [])
-            );
-        }
+        $filters = array_merge(
+            $this->filters,
+            $this->config['filters']
+        );
 
         foreach ($filters as $filter) {
-            $filterClass = is_object($filter) ? $filter : $container->get($filter);
-
-            if (! $filterClass) {
-                continue;
-            }
+            $filterClass = is_object($filter) ? $filter : $this->container->get($filter);
 
             $displayers  = $filterClass->filter($displayers, $request, $original, $transformed, $code);
         }
@@ -300,5 +283,33 @@ class Handler extends ErrorHandler implements HandlerContract
         }
 
         return $response;
+    }
+
+    /**
+     * Create a response for the given exception.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Throwable|\Exception                    $exception
+     * @param \Throwable|\Exception                    $transformed
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function getResponse(
+        ServerRequestInterface $request,
+        $exception,
+        $transformed
+    ): ResponseInterface {
+        $id          = $this->exceptionIdentifier->identify($exception);
+        $transformed = $this->prepareAndWrapException($transformed);
+        $flattened   = FlattenException::create($transformed);
+        $code        = $flattened->getStatusCode();
+        $headers     = $flattened->getHeaders();
+
+        return $this->getDisplayer(
+            $request,
+            $exception,
+            $transformed,
+            $code
+        )->display($transformed, $id, $code, $headers);
     }
 }
