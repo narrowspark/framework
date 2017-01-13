@@ -2,13 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Transformers;
 
-use ErrorException;
-use Exception;
-use Throwable;
-use Viserio\Contracts\Exception\Transformer as TransformerContract;
-use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
+use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
+use Throwable;
+use Viserio\Contracts\Exception\Transformer as TransformerContract;
 
 class UndefinedFunctionFatalErrorTransformer implements TransformerContract
 {

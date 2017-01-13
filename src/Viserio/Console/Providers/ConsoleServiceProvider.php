@@ -5,10 +5,10 @@ namespace Viserio\Console\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
+use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Console\Application;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
-use Symfony\Component\Console\Application as SymfonyConsole;
 
 class ConsoleServiceProvider implements ServiceProvider
 {
