@@ -5,10 +5,10 @@ namespace Viserio\Exception\Displayers;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Exception\ExceptionInfo;
-use Viserio\Http\Response\JsonResponse;
 use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
+use Viserio\Exception\ExceptionInfo;
+use Viserio\Http\Response\JsonResponse;
 
 class JsonDisplayer implements DisplayerContract
 {

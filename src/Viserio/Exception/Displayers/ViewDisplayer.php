@@ -5,11 +5,11 @@ namespace Viserio\Exception\Displayers;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
+use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\Http\Response\HtmlResponse;
-use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 
 class ViewDisplayer implements DisplayerContract
 {

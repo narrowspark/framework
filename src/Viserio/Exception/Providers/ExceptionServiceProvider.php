@@ -17,7 +17,6 @@ use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Handler;
-use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class ExceptionServiceProvider implements ServiceProvider
 {
