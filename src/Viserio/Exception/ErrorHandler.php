@@ -184,14 +184,6 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
      */
     public function addTransformer(TransformerContract $transformer): self
     {
-        $transformerClass = is_object($transformer) ? get_class($transformer) : $transformer;
-
-        if (in_array($transformerClass, $this->transformers)) {
-            $pos = array_search($transformerClass, $this->transformers);
-
-            unset($this->transformers[$pos]);
-        }
-
         $this->transformers[] = $transformer;
 
         return $this;
@@ -255,7 +247,7 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
      *
      * @throws \Throwable
      *
-     * @return void|string
+     * @return void
      *
      * @internal
      */

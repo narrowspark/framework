@@ -88,12 +88,6 @@ class Handler extends ErrorHandler implements HandlerContract
      */
     public function addDisplayer(DisplayerContract $displayer): HandlerContract
     {
-        if (in_array($displayer, $this->displayers)) {
-            $pos = array_search($displayer, $this->displayers);
-
-            unset($this->displayers[$pos]);
-        }
-
         $this->displayers[] = $displayer;
 
         return $this;
@@ -112,14 +106,6 @@ class Handler extends ErrorHandler implements HandlerContract
      */
     public function addFilter(FilterContract $filter): HandlerContract
     {
-        $filterClass = is_object($filter) ? get_class($filter) : $filter;
-
-        if (in_array($filterClass, $this->filters)) {
-            $pos = array_search($filterClass, $this->filters);
-
-            unset($this->filters[$pos]);
-        }
-
         $this->filters[] = $filter;
 
         return $this;
@@ -188,7 +174,7 @@ class Handler extends ErrorHandler implements HandlerContract
             $transformed
         );
 
-        return (string) $response->getBody();
+        echo (string) $response->getBody();
     }
 
     /**
