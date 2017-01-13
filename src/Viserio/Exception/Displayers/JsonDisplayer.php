@@ -7,9 +7,14 @@ use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\Http\Response\JsonResponse;
+use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 
 class JsonDisplayer implements DisplayerContract
 {
+    use ResponseFactoryAwareTrait;
+    use StreamFactoryAwareTrait;
+
     /**
      * The exception info instance.
      *
@@ -18,13 +23,21 @@ class JsonDisplayer implements DisplayerContract
     protected $info;
 
     /**
-     * Create a new json displayer instance.
+     * Create a new html displayer instance.
      *
-     * @param \Viserio\Exception\ExceptionInfo $info
+     * @param \Viserio\Exception\ExceptionInfo               $info
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
+     * @param string                                         $path
      */
-    public function __construct(ExceptionInfo $info)
-    {
-        $this->info = $info;
+    public function __construct(
+        ExceptionInfo $info,
+        ResponseFactoryInterface $responseFactory,
+        StreamFactoryInterface $streamFactory
+    ) {
+        $this->info            = $info;
+        $this->responseFactory = $responseFactory;
+        $this->streamFactory   = $streamFactory;
     }
 
     /**
