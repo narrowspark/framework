@@ -41,21 +41,32 @@ class ExceptionIdentifier
         }
 
         // generate, store, and return the id
-        return $this->identification[$hash] = $this->uuid4(random_bytes(16));
+        return $this->identification[$hash] = $this->uuid4();
     }
 
     /**
      * Generate v4 UUID.
      *
+     * We're generating uuids according to the official v4 spec.
+     *
      * @param string $data
      *
      * @return string
      */
-    private function uuid4(string $data): string
+    private function uuid4(): string
     {
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
+        $hash = bin2hex(random_bytes(16))
+        ;
+        $timeHi = hexdec(substr($hash, 12, 4)) & 0x0fff;
+        $timeHi &= ~(0xf000);
+        $timeHi |= 4 << 12;
 
-        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+        $clockSeqHi = hexdec(substr($hash, 16, 2)) & 0x3f;
+        $clockSeqHi &= ~(0xc0);
+        $clockSeqHi |= 0x80;
+
+        $params = [substr($hash, 0, 8), substr($hash, 8, 4), sprintf('%04x', $timeHi), sprintf('%02x', $clockSeqHi), substr($hash, 18, 2), substr($hash, 20, 12)];
+
+        return vsprintf('%08s-%04s-%04s-%02s%02s-%012s', $params);
     }
 }

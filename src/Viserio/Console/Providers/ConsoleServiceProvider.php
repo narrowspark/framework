@@ -8,6 +8,7 @@ use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 use Viserio\Console\Application;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Symfony\Component\Console\Application as SymfonyConsole;
 
 class ConsoleServiceProvider implements ServiceProvider
 {
@@ -23,6 +24,9 @@ class ConsoleServiceProvider implements ServiceProvider
         return [
             ApplicationContract::class => [self::class, 'createCerebro'],
             Application::class         => function (ContainerInterface $container) {
+                return $container->get(ApplicationContract::class);
+            },
+            SymfonyConsole::class      => function (ContainerInterface $container) {
                 return $container->get(ApplicationContract::class);
             },
             'console' => function (ContainerInterface $container) {

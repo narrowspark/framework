@@ -19,16 +19,15 @@ use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Symfony\Component\Debug\Exception\OutOfMemoryException;
-use Symfony\Component\Debug\FatalErrorHandler\ClassNotFoundFatalErrorHandler;
-use Symfony\Component\Debug\FatalErrorHandler\UndefinedFunctionFatalErrorHandler;
-use Symfony\Component\Debug\FatalErrorHandler\UndefinedMethodFatalErrorHandler;
 use Throwable;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
+use Viserio\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Exception\Transformers\CommandLineTransformer;
+use Viserio\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
+use Viserio\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
 
 class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, ProvidesDefaultOptions
 {
@@ -86,7 +85,7 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
      */
     public function mandatoryOptions(): iterable
     {
-        return ['dont_report', 'levels', 'transformers', 'fatal_error_handlers'];
+        return ['dont_report', 'levels', 'transformers'];
     }
 
     /**
@@ -109,13 +108,10 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
                 ],
                 // Exception transformers.
                 'transformers' => [
+                    ClassNotFoundFatalErrorTransformer::class,
                     CommandLineTransformer::class,
-                ],
-                // Array of fatal error handlers.
-                'fatal_error_handlers' => [
-                    UndefinedFunctionFatalErrorHandler::class,
-                    UndefinedMethodFatalErrorHandler::class,
-                    ClassNotFoundFatalErrorHandler::class,
+                    UndefinedFunctionFatalErrorTransformer::class,
+                    UndefinedMethodFatalErrorTransformer::class,
                 ],
             ],
         ];
@@ -234,6 +230,8 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
      *
      * @param \Throwable|\Exception $exception
      *
+     * @throws \Throwable
+     *
      * @return void|string
      *
      * @internal
@@ -252,21 +250,17 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
                 $container->get(ConsoleApplication::class)
                     ->renderException($transformed, new ConsoleOutput());
             } else {
-                throw $exception;
+                throw $transformed;
             }
-        } else {
-            $response = $this->getPreparedResponse(
-                $container,
-                $exception,
-                $transformed
-            );
-
-            return (string) $response->getBody();
         }
+
+        throw $exception;
     }
 
     /**
-     * Handle the PHP shutdown event.
+     * Shutdown registered function for handling PHP fatal errors.
+     *
+     * @internal
      */
     public function handleShutdown()
     {
@@ -383,22 +377,6 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
             );
         }
 
-        if ($exception instanceof FatalErrorException && ! $exception instanceof OutOfMemoryException) {
-            $error = [
-                'type'    => $exception->getSeverity(),
-                'message' => $exception->getMessage(),
-                'file'    => $exception->getFile(),
-                'line'    => $exception->getLine(),
-            ];
-
-            foreach ($this->fatalErrorHandlers as $handler) {
-                if ($e = (new $handler())->handleError($error, $exception)) {
-                    $exception = $e;
-                    break;
-                }
-            }
-        }
-
         return $exception;
     }
 
@@ -425,7 +403,7 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
             } elseif ($container->has($transformer)) {
                 $transformerClass = $container->get($transformer);
             } else {
-                throw new RuntimeException('');
+                throw new RuntimeException(sprintf('Transformer [%s] not found.', (string) $transformer));
             }
 
             $exception = $transformerClass->transform($exception);
@@ -450,5 +428,28 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
         }
 
         return 'error';
+    }
+
+    /**
+     * Determine if the exception is in the "do not report" list.
+     *
+     * @param \Throwable $exception
+     *
+     * @return bool
+     */
+    protected function shouldntReport(Throwable $exception): bool
+    {
+        $dontReport = array_merge(
+            $this->dontReport,
+            $this->config['dont_report']
+        );
+
+        foreach ($dontReport as $type) {
+            if ($exception instanceof $type) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

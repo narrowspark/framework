@@ -34,6 +34,13 @@ class Handler extends ErrorHandler implements HandlerContract
     protected $filters = [];
 
     /**
+     * Exception displayers.
+     *
+     * @var array
+     */
+    protected $displayers = [];
+
+    /**
      * Create a new exception handler instance.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -133,11 +140,11 @@ class Handler extends ErrorHandler implements HandlerContract
     {
         error_reporting(E_ALL);
 
-        $this->registerErrorHandler();
-
         // The DebugClassLoader attempts to throw more helpful exceptions
         // when a class isn't found by the registered autoloaders.
         DebugClassLoader::enable();
+
+        $this->registerErrorHandler();
 
         $this->registerExceptionHandler();
 
@@ -157,6 +164,36 @@ class Handler extends ErrorHandler implements HandlerContract
     /**
      * {@inheritdoc}
      */
+    public function handleException($exception)
+    {
+        $exception = $this->prepareException($exception);
+
+        $this->report($exception);
+
+        $transformed = $this->getTransformed($exception);
+        $container   = $this->container;
+
+        if (PHP_SAPI === 'cli') {
+            if ($container->has(ConsoleApplication::class)) {
+                $container->get(ConsoleApplication::class)
+                    ->renderException($transformed, new ConsoleOutput());
+            } else {
+                throw $transformed;
+            }
+        }
+
+        $response = $this->getPreparedResponse(
+            $container,
+            $exception,
+            $transformed
+        );
+
+        return (string) $response->getBody();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function render(ServerRequestInterface $request, Throwable $exception): ResponseInterface
     {
         $transformed = $this->getTransformed($exception);
@@ -166,29 +203,6 @@ class Handler extends ErrorHandler implements HandlerContract
             $exception,
             $transformed
         );
-    }
-
-    /**
-     * Determine if the exception is in the "do not report" list.
-     *
-     * @param \Throwable $exception
-     *
-     * @return bool
-     */
-    protected function shouldntReport(Throwable $exception): bool
-    {
-        $dontReport = array_merge(
-            $this->dontReport,
-            $this->config['dont_report']
-        );
-
-        foreach ($dontReport as $type) {
-            if ($exception instanceof $type) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
