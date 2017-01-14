@@ -19,6 +19,7 @@ use Viserio\Exception\Transformers\CommandLineTransformer;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\View\Providers\ViewServiceProvider;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class ExceptionServiceProviderTest extends TestCase
 {
@@ -30,8 +31,8 @@ class ExceptionServiceProviderTest extends TestCase
         $container->register(new ViewServiceProvider());
         $container->register(new FilesServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
+        $container->get(RepositoryContract::class)->setArray(['viserio' => ['exception' => ['env' => 'dev', 'default_displayer' => '']]]);
 
-        self::assertInstanceOf(ExceptionIdentifier::class, $container->get(ExceptionIdentifier::class));
         self::assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfo::class));
         self::assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
         self::assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));
@@ -39,7 +40,6 @@ class ExceptionServiceProviderTest extends TestCase
         self::assertInstanceOf(WhoopsDisplayer::class, $container->get(WhoopsDisplayer::class));
         self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
         self::assertInstanceOf(CanDisplayFilter::class, $container->get(CanDisplayFilter::class));
-        self::assertInstanceOf(CommandLineTransformer::class, $container->get(CommandLineTransformer::class));
         self::assertInstanceOf(Handler::class, $container->get(Handler::class));
     }
 

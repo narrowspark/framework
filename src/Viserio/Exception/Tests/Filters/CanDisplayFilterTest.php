@@ -9,6 +9,8 @@ use Psr\Http\Message\RequestInterface;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Filters\CanDisplayFilter;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class CanDisplayFilterTest extends TestCase
 {

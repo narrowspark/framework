@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Displayers;
 
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;

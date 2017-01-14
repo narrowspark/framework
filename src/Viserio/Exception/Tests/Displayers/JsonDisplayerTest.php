@@ -7,12 +7,14 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\ExceptionInfo;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class JsonDisplayerTest extends TestCase
 {
     public function testServerError()
     {
-        $displayer = new JsonDisplayer(new ExceptionInfo());
+        $displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
 
         $response = $displayer->display(new Exception(), 'foo', 500, []);
         $expected = '{"errors":[{"id":"foo","status":500,"title":"Internal Server Error","detail":"An error has occurred and this resource cannot be displayed."}]}';
@@ -24,7 +26,7 @@ class JsonDisplayerTest extends TestCase
 
     public function testClientError()
     {
-        $displayer = new JsonDisplayer(new ExceptionInfo());
+        $displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
 
         $response = $displayer->display(new Exception(), 'bar', 401, []);
         $expected = '{"errors":[{"id":"bar","status":401,"title":"Unauthorized","detail":"Authentication is required and has failed or has not yet been provided."}]}';
@@ -36,7 +38,7 @@ class JsonDisplayerTest extends TestCase
 
     public function testProperties()
     {
-        $displayer = new JsonDisplayer(new ExceptionInfo());
+        $displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
 
         self::assertFalse($displayer->isVerbose());
         self::assertTrue($displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));

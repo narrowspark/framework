@@ -16,8 +16,9 @@ use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
+use Interop\Config\RequiresMandatoryOptions;
 
-class Handler extends ErrorHandler implements HandlerContract
+class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptions
 {
     /**
      * ExceptionIdentifier instance.
@@ -57,10 +58,7 @@ class Handler extends ErrorHandler implements HandlerContract
      */
     public function mandatoryOptions(): iterable
     {
-        return array_merge(
-            parent::mandatoryOptions(),
-            ['default_displayer', 'displayers', 'env', 'filters']
-        );
+        return ['default_displayer', 'env'];
     }
 
     /**
@@ -69,18 +67,16 @@ class Handler extends ErrorHandler implements HandlerContract
     public function defaultOptions(): iterable
     {
         return array_merge(
-            parent::defaultOptions(),
-            [
-                'exception' => [
+                parent::defaultOptions(),
+                [
                     'displayers'        => [],
                     'default_displayer' => HtmlDisplayer::class,
                     'filters'           => [
                         VerboseFilter::class,
                         CanDisplayFilter::class,
                     ],
-                ],
-            ]
-        );
+                ]
+            );
     }
 
     /**
@@ -88,7 +84,7 @@ class Handler extends ErrorHandler implements HandlerContract
      */
     public function addDisplayer(DisplayerContract $displayer): HandlerContract
     {
-        $this->displayers[] = $displayer;
+        $this->displayers[get_class($displayer)] = $displayer;
 
         return $this;
     }
@@ -106,7 +102,7 @@ class Handler extends ErrorHandler implements HandlerContract
      */
     public function addFilter(FilterContract $filter): HandlerContract
     {
-        $this->filters[] = $filter;
+        $this->filters[get_class($filter)] = $filter;
 
         return $this;
     }
@@ -150,7 +146,7 @@ class Handler extends ErrorHandler implements HandlerContract
     /**
      * {@inheritdoc}
      */
-    public function handleException($exception)
+    public function handleException(Throwable $exception): void
     {
         $exception = $this->prepareException($exception);
 
@@ -182,13 +178,70 @@ class Handler extends ErrorHandler implements HandlerContract
      */
     public function render(ServerRequestInterface $request, Throwable $exception): ResponseInterface
     {
-        $transformed = $this->getTransformed($exception);
+        $exception = $this->prepareException($exception);
 
         return $this->getPreparedResponse(
-            $this->getContainer(),
+            $this->container,
             $exception,
-            $transformed
+            $this->getTransformed($exception)
         );
+    }
+
+    /**
+     * Get a prepared response with the transformed exception.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Throwable                            $exception
+     * @param \Throwable                            $transformed
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function getPreparedResponse(
+        ContainerInterface $container,
+        Throwable $exception,
+        Throwable $transformed
+    ): ResponseInterface {
+        try {
+            $response = $this->getResponse(
+                $container->get(ServerRequestInterface::class),
+                $exception,
+                $transformed
+            );
+        } catch (Throwable $exception) {
+            $this->report($exception);
+
+            $response = $container->get(ResponseFactoryInterface::class)->createResponse();
+            $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
+        }
+
+        return $response;
+    }
+
+    /**
+     * Create a response for the given exception.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Throwable                               $exception
+     * @param \Throwable                               $transformed
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function getResponse(
+        ServerRequestInterface $request,
+        Throwable $exception,
+        Throwable $transformed
+    ): ResponseInterface {
+        $id          = $this->exceptionIdentifier->identify($exception);
+        $flattened   = FlattenException::create($exception);
+        $code        = $flattened->getStatusCode();
+        $headers     = $flattened->getHeaders();
+
+        return $this->getDisplayer(
+            $request,
+            $exception,
+            $transformed,
+            $code
+        )->display($transformed, $id, $code, $headers);
     }
 
     /**
@@ -253,63 +306,5 @@ class Handler extends ErrorHandler implements HandlerContract
         }
 
         return array_values($displayers);
-    }
-
-    /**
-     * Get a prepared response with the transformed exception.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Throwable|\Exception                 $exception
-     * @param \Throwable|\Exception                 $transformed
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function getPreparedResponse(
-        ContainerInterface $container,
-        $exception,
-        $transformed
-    ): ResponseInterface {
-        try {
-            $response = $this->getResponse(
-                $container->get(ServerRequestInterface::class),
-                $exception,
-                $transformed
-            );
-        } catch (Throwable | Exception $exception) {
-            $this->report($exception);
-
-            $response = $container->get(ResponseFactoryInterface::class)->createResponse();
-            $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
-        }
-
-        return $response;
-    }
-
-    /**
-     * Create a response for the given exception.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable|\Exception                    $exception
-     * @param \Throwable|\Exception                    $transformed
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function getResponse(
-        ServerRequestInterface $request,
-        $exception,
-        $transformed
-    ): ResponseInterface {
-        $id          = $this->exceptionIdentifier->identify($exception);
-        $transformed = $this->prepareAndWrapException($transformed);
-        $flattened   = FlattenException::create($transformed);
-        $code        = $flattened->getStatusCode();
-        $headers     = $flattened->getHeaders();
-
-        return $this->getDisplayer(
-            $request,
-            $exception,
-            $transformed,
-            $code
-        )->display($transformed, $id, $code, $headers);
     }
 }

@@ -8,7 +8,6 @@ use Exception;
 use Interop\Config\ConfigurationTrait;
 use Interop\Config\ProvidesDefaultOptions;
 use Interop\Config\RequiresConfig;
-use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
@@ -29,7 +28,7 @@ use Viserio\Exception\Transformers\CommandLineTransformer;
 use Viserio\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
 
-class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, ProvidesDefaultOptions
+class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
 {
     use ConfigurationTrait;
     use ContainerAwareTrait;
@@ -106,36 +105,26 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
-    {
-        return ['dont_report', 'levels', 'transformers'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function defaultOptions(): iterable
     {
         return [
-            'exception' => [
-                // A list of the exception types that should not be reported.
-                'dont_report' => [],
-                'levels'      => [
-                    FatalThrowableError::class          => 'critical',
-                    FatalErrorException::class          => 'error',
-                    Throwable::class                    => 'error',
-                    Exception::class                    => 'error',
-                    NotFoundException::class            => 'notice',
-                    AbstractClientErrorException::class => 'notice',
-                    AbstractServerErrorException::class => 'error',
-                ],
-                // Exception transformers.
-                'transformers' => [
-                    new ClassNotFoundFatalErrorTransformer(),
-                    new CommandLineTransformer(),
-                    new UndefinedFunctionFatalErrorTransformer(),
-                    new UndefinedMethodFatalErrorTransformer(),
-                ],
+            // A list of the exception types that should not be reported.
+            'dont_report' => [],
+            'levels'      => [
+                FatalThrowableError::class          => 'critical',
+                FatalErrorException::class          => 'error',
+                Throwable::class                    => 'error',
+                Exception::class                    => 'error',
+                NotFoundException::class            => 'notice',
+                AbstractClientErrorException::class => 'notice',
+                AbstractServerErrorException::class => 'error',
+            ],
+            // Exception transformers.
+            'transformers' => [
+                new ClassNotFoundFatalErrorTransformer(),
+                new CommandLineTransformer(),
+                new UndefinedFunctionFatalErrorTransformer(),
+                new UndefinedMethodFatalErrorTransformer(),
             ],
         ];
     }
@@ -149,7 +138,7 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
      */
     public function addShouldntReport(Throwable $exception): self
     {
-        $this->dontReport[] = $exception;
+        $this->dontReport[get_class($exception)] = $exception;
 
         return $this;
     }
@@ -184,7 +173,7 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
      */
     public function addTransformer(TransformerContract $transformer): self
     {
-        $this->transformers[] = $transformer;
+        $this->transformers[get_class($transformer)] = $transformer;
 
         return $this;
     }
@@ -243,7 +232,7 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
      * the HTTP and Console kernels. But, fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param \Throwable|\Exception $exception
+     * @param \Throwable $exception
      *
      * @throws \Throwable
      *
@@ -251,7 +240,7 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
      *
      * @internal
      */
-    public function handleException($exception)
+    public function handleException(Throwable $exception): void
     {
         $exception = $this->prepareException($exception);
 
@@ -373,11 +362,11 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
     /**
      * Prepare exception in a fatal error handler.
      *
-     * @param \Throwable|\Exception $exception
+     * @param \Throwable $exception
      *
      * @return \Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|\Throwable|\Error
      */
-    protected function prepareException($exception)
+    protected function prepareException(Throwable $exception)
     {
         if (! $exception instanceof Exception) {
             $exception = new FatalThrowableError($exception);
@@ -398,13 +387,13 @@ class ErrorHandler implements RequiresConfig, RequiresMandatoryOptions, Provides
     /**
      * Get the transformed exception.
      *
-     * @param \Throwable|\Exception $exception
+     * @param \Throwable $exception
      *
      * @throws \RuntimeException If transformer is not found.
      *
-     * @return \Throwable|\Exception
+     * @return \Throwable
      */
-    protected function getTransformed($exception)
+    protected function getTransformed(Throwable $exception)
     {
         $container    = $this->container;
         $transformers = array_merge(
