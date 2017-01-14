@@ -5,21 +5,19 @@ namespace Viserio\Exception\Tests\Providers;
 use PHPUnit\Framework\TestCase;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\ViewDisplayer;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
-use Viserio\Exception\ExceptionIdentifier;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Handler;
 use Viserio\Exception\Providers\ExceptionServiceProvider;
-use Viserio\Exception\Transformers\CommandLineTransformer;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\View\Providers\ViewServiceProvider;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class ExceptionServiceProviderTest extends TestCase
 {

@@ -27,31 +27,6 @@ class HandlerTest extends TestCase
 {
     use MockeryTrait;
 
-    private function getContainer()
-    {
-        $container = $this->mock(ContainerInterface::class);
-        $container->shouldReceive('has')
-            ->with(RepositoryContract::class)
-            ->andReturn(true);
-        $container->shouldReceive('get')
-            ->with(RepositoryContract::class)
-            ->andReturn(['viserio' => ['exception' => ['env' => 'dev', 'default_displayer' => HtmlDisplayer::class]]]);
-        $container->shouldReceive('has')
-            ->with(LoggerInterface::class)
-            ->andReturn(true);
-        $container->shouldReceive('get')
-            ->with(ExceptionIdentifier::class)
-            ->andReturn(new ExceptionIdentifier());
-        $container->shouldReceive('get')
-            ->with(ResponseInterface::class)
-            ->andReturn($this->mock(ResponseInterface::class));
-        $container->shouldReceive('get')
-            ->with(ServerRequestInterface::class)
-            ->andReturn($this->mock(ServerRequestInterface::class));
-
-        return $container;
-    }
-
     public function testAddAndGetDisplayer()
     {
         $container = $this->getContainer();
@@ -170,5 +145,30 @@ class HandlerTest extends TestCase
         } catch (ErrorException $e) {
             self::assertInstanceOf(ErrorException::class, $e);
         }
+    }
+
+    private function getContainer()
+    {
+        $container = $this->mock(ContainerInterface::class);
+        $container->shouldReceive('has')
+            ->with(RepositoryContract::class)
+            ->andReturn(true);
+        $container->shouldReceive('get')
+            ->with(RepositoryContract::class)
+            ->andReturn(['viserio' => ['exception' => ['env' => 'dev', 'default_displayer' => HtmlDisplayer::class]]]);
+        $container->shouldReceive('has')
+            ->with(LoggerInterface::class)
+            ->andReturn(true);
+        $container->shouldReceive('get')
+            ->with(ExceptionIdentifier::class)
+            ->andReturn(new ExceptionIdentifier());
+        $container->shouldReceive('get')
+            ->with(ResponseInterface::class)
+            ->andReturn($this->mock(ResponseInterface::class));
+        $container->shouldReceive('get')
+            ->with(ServerRequestInterface::class)
+            ->andReturn($this->mock(ServerRequestInterface::class));
+
+        return $container;
     }
 }

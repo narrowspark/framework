@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Exception;
 
+use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
@@ -16,7 +17,6 @@ use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
-use Interop\Config\RequiresMandatoryOptions;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptions
 {
