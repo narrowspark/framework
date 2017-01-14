@@ -389,7 +389,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
      *
      * @param \Throwable $exception
      *
-     * @throws \RuntimeException If transformer is not found.
+     * @throws \RuntimeException if transformer is not found
      *
      * @return \Throwable
      */

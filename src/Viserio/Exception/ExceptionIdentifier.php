@@ -55,7 +55,7 @@ class ExceptionIdentifier
      */
     private function uuid4(): string
     {
-        $hash = bin2hex(random_bytes(16));
+        $hash   = bin2hex(random_bytes(16));
         $timeHi = hexdec(mb_substr($hash, 12, 4)) & 0x0fff;
         $timeHi &= ~(0xf000);
         $timeHi |= 4 << 12;
