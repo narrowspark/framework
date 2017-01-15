@@ -30,7 +30,6 @@ class JsonDisplayer implements DisplayerContract
      * @param \Viserio\Exception\ExceptionInfo               $info
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param string                                         $path
      */
     public function __construct(
         ExceptionInfo $info,

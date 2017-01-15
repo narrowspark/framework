@@ -204,7 +204,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
      *
      * @throws \ErrorException
      *
-     * @return bool Returns false when no handling happens so that the PHP engine can handle the error itself
+     * @return void
      *
      * @internal
      */

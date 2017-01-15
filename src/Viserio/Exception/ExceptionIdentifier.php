@@ -49,8 +49,6 @@ class ExceptionIdentifier
      *
      * We're generating uuids according to the official v4 spec.
      *
-     * @param string $data
-     *
      * @return string
      */
     private function uuid4(): string
