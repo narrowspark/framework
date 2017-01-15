@@ -92,7 +92,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
+        $this->container           = $container;
         $this->exceptionIdentifier = new ExceptionIdentifier();
 
         if ($this->container->has(LoggerInterface::class)) {
