@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Database;
+namespace Viserio\Bridge\Doctrine;
 
 use Doctrine\DBAL\Driver\Statement as DriverStatement;
 use Narrowspark\Collection\Collection;

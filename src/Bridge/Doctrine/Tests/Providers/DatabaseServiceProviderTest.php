@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Database\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\Tests\Providers;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
@@ -9,8 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Database\Connection;
-use Viserio\Database\Providers\DatabaseServiceProvider;
+use Viserio\Bridge\Doctrine\Connection;
+use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
 
 class DatabaseServiceProviderTest extends TestCase
 {

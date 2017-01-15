@@ -48,8 +48,8 @@
         <testsuite name="Narrowspark Cron Component Test Suite">
             <directory>./src/Viserio/Cron/Tests</directory>
         </testsuite>
-       <testsuite name="Narrowspark Database Component Test Suite">
-            <directory>./src/Viserio/Database/Tests</directory>
+       <testsuite name="Narrowspark Doctrine Bridge Test Suite">
+            <directory>./src/Bridge/Doctrine/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Encryption Component Test Suite">
             <directory>./src/Viserio/Encryption/Tests</directory>

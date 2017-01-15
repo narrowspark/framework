@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Database\Providers;
+namespace Viserio\Bridge\Doctrine\Providers;
 
 use Doctrine\DBAL\Migrations\Configuration\Configuration;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand;
@@ -12,7 +12,7 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
-use Viserio\Database\Connection;
+use Viserio\Bridge\Doctrine\Connection;
 
 class MigrationsServiceProvider implements ServiceProvider
 {

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Database;
+namespace Viserio\Bridge\Doctrine;
 
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Connection as DoctrineConnection;
@@ -10,7 +10,7 @@ class Connection extends DoctrineConnection
     /**
      * {@inheritdoc}
      *
-     * @return \Viserio\Database\Statement
+     * @return \Viserio\Bridge\Doctrine\Statement
      */
     public function prepare($statement): Statement
     {
@@ -20,7 +20,7 @@ class Connection extends DoctrineConnection
     /**
      * {@inheritdoc}
      *
-     * @return \Viserio\Database\Statement
+     * @return \Viserio\Bridge\Doctrine\Statement
      */
     public function executeQuery($query, array $params = [], $types = [], QueryCacheProfile $qcp = null): Statement
     {
@@ -30,7 +30,7 @@ class Connection extends DoctrineConnection
     /**
      * {@inheritdoc}
      *
-     * @return \Viserio\Database\Statement
+     * @return \Viserio\Bridge\Doctrine\Statement
      */
     public function query(...$args): Statement
     {
