@@ -35,6 +35,13 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
     use LoggerAwareTrait;
 
     /**
+     * ExceptionIdentifier instance.
+     *
+     * @var \Viserio\Exception\ExceptionIdentifier
+     */
+    protected $exceptionIdentifier;
+
+    /**
      * Handler config.
      *
      * @var array|\ArrayAccess
@@ -86,6 +93,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->exceptionIdentifier = new ExceptionIdentifier();
 
         if ($this->container->has(LoggerInterface::class)) {
             $this->logger = $this->container->get(LoggerInterface::class);

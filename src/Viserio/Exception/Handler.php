@@ -21,13 +21,6 @@ use Viserio\Exception\Filters\VerboseFilter;
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptions
 {
     /**
-     * ExceptionIdentifier instance.
-     *
-     * @var \Viserio\Exception\ExceptionIdentifier
-     */
-    protected $exceptionIdentifier;
-
-    /**
      * Exception filters.
      *
      * @var array
@@ -49,8 +42,6 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
-
-        $this->exceptionIdentifier = new ExceptionIdentifier();
     }
 
     /**
