@@ -124,9 +124,9 @@
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/Viserio/</directory>
+            <directory suffix=".php">./src/</directory>
             <exclude>
-                <directory>./src/Viserio/*/Tests</directory>
+                <directory>./src/*/*/Tests</directory>
             </exclude>
         </whitelist>
     </filter>
