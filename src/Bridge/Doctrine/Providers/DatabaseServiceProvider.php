@@ -13,8 +13,8 @@ use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Bridge\Doctrine\Connection;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class DatabaseServiceProvider implements ServiceProvider
 {

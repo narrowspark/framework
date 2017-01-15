@@ -7,10 +7,10 @@ use Doctrine\DBAL\Configuration;
 use Narrowspark\Collection\Collection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\HelperSet;
-use Viserio\Config\Providers\ConfigServiceProvider;
-use Viserio\Container\Container;
 use Viserio\Bridge\Doctrine\Connection;
 use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
+use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Container\Container;
 
 class DatabaseServiceProviderTest extends TestCase
 {

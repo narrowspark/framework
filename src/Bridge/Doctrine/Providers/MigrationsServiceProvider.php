@@ -11,8 +11,8 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Bridge\Doctrine\Connection;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class MigrationsServiceProvider implements ServiceProvider
 {
