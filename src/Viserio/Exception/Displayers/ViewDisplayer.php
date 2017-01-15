@@ -2,15 +2,22 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Displayers;
 
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
+use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\Http\Response\HtmlResponse;
 
 class ViewDisplayer implements DisplayerContract
 {
+    use ResponseFactoryAwareTrait;
+    use StreamFactoryAwareTrait;
+
     /**
      * The exception info instance.
      *
@@ -26,15 +33,23 @@ class ViewDisplayer implements DisplayerContract
     protected $factory;
 
     /**
-     * Create a new json displayer instance.
+     * Create a new html displayer instance.
      *
-     * @param \Viserio\Exception\ExceptionInfo $info
-     * @param \Viserio\Contracts\View\Factory  $factory
+     * @param \Viserio\Exception\ExceptionInfo               $info
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
+     * @param \Viserio\Contracts\View\Factory                $factory
      */
-    public function __construct(ExceptionInfo $info, FactoryContract $factory)
-    {
-        $this->info    = $info;
-        $this->factory = $factory;
+    public function __construct(
+        ExceptionInfo $info,
+        ResponseFactoryInterface $responseFactory,
+        StreamFactoryInterface $streamFactory,
+        FactoryContract $factory
+    ) {
+        $this->info            = $info;
+        $this->responseFactory = $responseFactory;
+        $this->streamFactory   = $streamFactory;
+        $this->factory         = $factory;
     }
 
     /**

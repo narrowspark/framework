@@ -14,6 +14,7 @@ class CommandTerminatingEvent implements EventContract
      * Create a new command terminating event.
      *
      * @param \Viserio\Contracts\Console\Application $application
+     * @param array                                  $params
      *
      * @codeCoverageIgnore
      */

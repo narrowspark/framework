@@ -23,7 +23,7 @@ class VerboseFilterTest extends TestCase
         $request    = $this->mock(RequestInterface::class);
         $exception  = new Exception();
         $verbose    = new WhoopsDisplayer();
-        $standard   = new JsonDisplayer(new ExceptionInfo());
+        $standard   = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
         $displayers = (new VerboseFilter(true))->filter([$verbose, $standard], $request, $exception, $exception, 500);
 
         self::assertSame([$verbose, $standard], $displayers);
@@ -34,7 +34,7 @@ class VerboseFilterTest extends TestCase
         $request    = $this->mock(RequestInterface::class);
         $exception  = new Exception();
         $verbose    = new WhoopsDisplayer();
-        $standard   = new JsonDisplayer(new ExceptionInfo());
+        $standard   = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
         $displayers = (new VerboseFilter(false))->filter([$verbose, $standard], $request, $exception, $exception, 500);
 
         self::assertSame([$standard], $displayers);
@@ -44,7 +44,7 @@ class VerboseFilterTest extends TestCase
     {
         $request    = $this->mock(RequestInterface::class);
         $exception  = new Exception();
-        $json       = new JsonDisplayer(new ExceptionInfo());
+        $json       = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
         $html       = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), 'foo');
         $displayers = (new VerboseFilter(true))->filter([$json, $html], $request, $exception, $exception, 500);
 
@@ -55,7 +55,7 @@ class VerboseFilterTest extends TestCase
     {
         $request    = $this->mock(RequestInterface::class);
         $exception  = new Exception();
-        $json       = new JsonDisplayer(new ExceptionInfo());
+        $json       = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
         $displayers = (new VerboseFilter(false))->filter([$json], $request, $exception, $exception, 500);
 
         self::assertSame([$json], $displayers);

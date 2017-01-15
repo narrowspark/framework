@@ -9,6 +9,8 @@ use Viserio\Contracts\View\Factory;
 use Viserio\Contracts\View\View;
 use Viserio\Exception\Displayers\ViewDisplayer;
 use Viserio\Exception\ExceptionInfo;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class ViewDisplayerTest extends TestCase
 {
@@ -30,7 +32,7 @@ class ViewDisplayerTest extends TestCase
                 ['id' => 'foo', 'code' => 502, 'name' => 'Bad Gateway', 'detail' => 'The server was acting as a gateway or proxy and received an invalid response from the upstream server.', 'summary' => 'Houston, We Have A Problem.']
             )
             ->andReturn($view);
-        $displayer = new ViewDisplayer(new ExceptionInfo(), $factory);
+        $displayer = new ViewDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $factory);
 
         $response = $displayer->display(new Exception(), 'foo', 502, []);
 
@@ -50,7 +52,7 @@ class ViewDisplayerTest extends TestCase
             ->once()
             ->with('errors.500')
             ->andReturn(true);
-        $displayer = new ViewDisplayer(new ExceptionInfo(), $factory);
+        $displayer = new ViewDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $factory);
         $exception = new Exception();
 
         self::assertFalse($displayer->isVerbose());
@@ -66,7 +68,7 @@ class ViewDisplayerTest extends TestCase
             ->once()
             ->with('errors.500')
             ->andReturn(false);
-        $displayer = new ViewDisplayer(new ExceptionInfo(), $factory);
+        $displayer = new ViewDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $factory);
         $exception = new Exception();
 
         self::assertFalse($displayer->isVerbose());

@@ -25,22 +25,6 @@ interface Handler
     public function getDisplayers(): array;
 
     /**
-     * Add the transformed instance.
-     *
-     * @param Transformer $transformer
-     *
-     * @return $this
-     */
-    public function addTransformer(Transformer $transformer): Handler;
-
-    /**
-     * Get the transformer exceptions.
-     *
-     * @return array
-     */
-    public function getTransformers(): array;
-
-    /**
      * Add the filter instance.
      *
      * @param Filter $filter
@@ -57,24 +41,6 @@ interface Handler
     public function getFilters(): array;
 
     /**
-     * Report or log an exception.
-     *
-     * @param \Throwable $exception
-     *
-     * @return void|null
-     */
-    public function report(Throwable $exception);
-
-    /**
-     * Determine if the exception shouldn't be reported.
-     *
-     * @param \Throwable $exception
-     *
-     * @return $this
-     */
-    public function addShouldntReport(Throwable $exception): Handler;
-
-    /**
      * Register the exception / Error handlers for the application.
      */
     public function register();
@@ -83,47 +49,6 @@ interface Handler
      * Unregister the PHP error handler.
      */
     public function unregister();
-
-    /**
-     * Convert errors into ErrorException objects.
-     *
-     * This method catches PHP errors and converts them into ErrorException objects;
-     * these ErrorException objects are then thrown and caught by Viserio's
-     * built-in or custom error handlers.
-     *
-     * @param int    $level   The numeric type of the Error
-     * @param string $message The error message
-     * @param string $file    The absolute path to the affected file
-     * @param int    $line    The line number of the error in the affected file
-     * @param null   $context
-     *
-     * @throws \ErrorException
-     */
-    public function handleError(
-        int $level,
-        string $message,
-        string $file = '',
-        int $line = 0,
-        $context = null
-    );
-
-    /**
-     * Handle an uncaught exception from the application.
-     *
-     * Note: Most exceptions can be handled via the try / catch block in
-     * the HTTP and Console kernels. But, fatal error exceptions must
-     * be handled differently since they are not normal exceptions.
-     *
-     * @param \Throwable $exception
-     *
-     * @return null|string
-     */
-    public function handleException(Throwable $exception);
-
-    /**
-     * Handle the PHP shutdown event.
-     */
-    public function handleShutdown();
 
     /**
      * Render an exception into a response.

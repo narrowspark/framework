@@ -28,7 +28,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Event name cant be empty.
      */
     public function testSetName()
@@ -37,7 +37,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The event name must only contain the characters A-Z, a-z, 0-9, _, and '.'.
      */
     public function testSetNameWithInvalidName()

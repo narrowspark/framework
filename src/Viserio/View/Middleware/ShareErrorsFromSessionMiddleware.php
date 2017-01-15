@@ -28,7 +28,7 @@ class ShareErrorsFromSessionMiddleware implements ServerMiddlewareInterface
     }
 
     /**
-     * {@inhertidoc}.
+     * {@inheritdoc}
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {

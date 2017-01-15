@@ -13,12 +13,10 @@ use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\ViewDisplayer;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
-use Viserio\Exception\ExceptionIdentifier;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Handler;
-use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class ExceptionServiceProvider implements ServiceProvider
 {
@@ -32,7 +30,6 @@ class ExceptionServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            ExceptionIdentifier::class => [self::class, 'createExceptionIdentifier'],
             ExceptionInfo::class       => [self::class, 'createExceptionInfo'],
             Handler::class             => [self::class, 'createExceptionHandler'],
             HandlerContract::class     => function (ContainerInterface $container) {
@@ -44,13 +41,7 @@ class ExceptionServiceProvider implements ServiceProvider
             WhoopsDisplayer::class        => [self::class, 'createWhoopsDisplayer'],
             VerboseFilter::class          => [self::class, 'createVerboseFilter'],
             CanDisplayFilter::class       => [self::class, 'createCanDisplayFilter'],
-            CommandLineTransformer::class => [self::class, 'createCommandLineTransformer'],
         ];
-    }
-
-    public static function createExceptionIdentifier(): ExceptionIdentifier
-    {
-        return new ExceptionIdentifier();
     }
 
     public static function createExceptionInfo(): ExceptionInfo
@@ -75,22 +66,26 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer
     {
-        return new JsonDisplayer($container->get(ExceptionInfo::class));
+        return new JsonDisplayer(
+            $container->get(ExceptionInfo::class),
+            $container->get(ResponseFactoryInterface::class),
+            $container->get(StreamFactoryInterface::class)
+        );
     }
 
     public static function createViewDisplayer(ContainerInterface $container): ViewDisplayer
     {
-        return new ViewDisplayer($container->get(ExceptionInfo::class), $container->get(FactoryContract::class));
+        return new ViewDisplayer(
+            $container->get(ExceptionInfo::class),
+            $container->get(ResponseFactoryInterface::class),
+            $container->get(StreamFactoryInterface::class),
+            $container->get(FactoryContract::class)
+        );
     }
 
     public static function createWhoopsDisplayer(): WhoopsDisplayer
     {
         return new WhoopsDisplayer();
-    }
-
-    public static function createCommandLineTransformer(): CommandLineTransformer
-    {
-        return new CommandLineTransformer();
     }
 
     public static function createVerboseFilter(ContainerInterface $container): VerboseFilter

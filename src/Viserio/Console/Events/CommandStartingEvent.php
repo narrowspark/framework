@@ -14,6 +14,7 @@ class CommandStartingEvent implements EventContract
      * Create a new command starting event.
      *
      * @param \Viserio\Contracts\Console\Application $application
+     * @param array                                  $params
      *
      * @codeCoverageIgnore
      */

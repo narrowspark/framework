@@ -59,7 +59,7 @@ trait ServiceProviderConfigAwareTrait
      *
      * @return mixed
      */
-    private static function getDotedConfig(array $array, $id, $default)
+    private static function getDotedConfig(array $array, string $id, $default)
     {
         foreach (explode('.', $id) as $segment) {
             if (! array_key_exists($segment, $array)) {
