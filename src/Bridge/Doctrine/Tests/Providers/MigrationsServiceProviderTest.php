@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Database\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
+use Viserio\Bridge\Doctrine\Providers\MigrationsServiceProvider;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Database\Providers\DatabaseServiceProvider;
-use Viserio\Database\Providers\MigrationsServiceProvider;
 use Viserio\Support\Env;
 
 class MigrationsServiceProviderTest extends TestCase

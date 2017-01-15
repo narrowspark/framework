@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Database\Providers;
+namespace Viserio\Bridge\Doctrine\Providers;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
@@ -13,8 +13,8 @@ use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
+use Viserio\Bridge\Doctrine\Connection;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
-use Viserio\Database\Connection;
 
 class DatabaseServiceProvider implements ServiceProvider
 {
