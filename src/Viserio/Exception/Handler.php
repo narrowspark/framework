@@ -58,16 +58,16 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     public function defaultOptions(): iterable
     {
         return array_merge(
-                parent::defaultOptions(),
-                [
-                    'displayers'        => [],
-                    'default_displayer' => HtmlDisplayer::class,
-                    'filters'           => [
-                        VerboseFilter::class,
-                        CanDisplayFilter::class,
-                    ],
-                ]
-            );
+            parent::defaultOptions(),
+            [
+                'displayers'        => [],
+                'default_displayer' => HtmlDisplayer::class,
+                'filters'           => [
+                    VerboseFilter::class,
+                    CanDisplayFilter::class,
+                ],
+            ]
+        );
     }
 
     /**
