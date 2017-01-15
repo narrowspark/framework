@@ -2,19 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Tests\Transformers;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Debug\Exception\FatalErrorException;
-use Viserio\Exception\Transformers\CommandLineTransformer;
-use Viserio\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Symfony\Component\Debug\Exception\UndefinedFunctionException;
+use Viserio\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 
 class UndefinedFunctionFatalErrorTransformerTest extends TestCase
 {
     public function testExceptionIsWrapped()
     {
         $transformer = new UndefinedFunctionFatalErrorTransformer();
-        $exception = $transformer->transform(
+        $exception   = $transformer->transform(
             new FatalErrorException('Call to undefined function test_namespaced_function()', 0, 1, 'foo.php', 12)
         );
 
@@ -28,7 +26,7 @@ class UndefinedFunctionFatalErrorTransformerTest extends TestCase
     public function testExceptionIsNotWrapped()
     {
         $transformer = new UndefinedFunctionFatalErrorTransformer();
-        $exception = $transformer->transform(
+        $exception   = $transformer->transform(
             new FatalErrorException('', 0, 1, 'foo.php', 12)
         );
 

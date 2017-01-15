@@ -2,19 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Tests\Transformers;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Debug\Exception\FatalErrorException;
-use Viserio\Exception\Transformers\CommandLineTransformer;
-use Viserio\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
 use Symfony\Component\Debug\Exception\UndefinedMethodException;
+use Viserio\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
 
 class UndefinedMethodFatalErrorTransformerTest extends TestCase
 {
     public function testExceptionIsWrapped()
     {
         $transformer = new UndefinedMethodFatalErrorTransformer();
-        $exception = $transformer->transform(
+        $exception   = $transformer->transform(
             new FatalErrorException('Call to undefined method SplObjectStorage::what()', 0, 1, 'foo.php', 12)
         );
 
@@ -28,7 +26,7 @@ class UndefinedMethodFatalErrorTransformerTest extends TestCase
     public function testExceptionIsNotWrapped()
     {
         $transformer = new UndefinedMethodFatalErrorTransformer();
-        $exception = $transformer->transform(
+        $exception   = $transformer->transform(
             new FatalErrorException('', 0, 1, 'foo.php', 12)
         );
 
