@@ -143,11 +143,11 @@
             "src/Viserio/helpers.php"
         ],
         "psr-4": {
-            "Viserio\\"                                      : "src/Viserio/",
-            "Viserio\\Bridge\\"                              : "src/Bridge/",
+            "Viserio\\Component\\"                           : "src/Viserio/Component/",
+            "Viserio\\Bridge\\"                              : "src/Viserio/Bridge/",
             "Narrowspark\\"                                  : "benchmarks/"
         },
-        "exclude-from-classmap"                              : ["src/Viserio/**/Tests/", "benchmarks/"]
+        "exclude-from-classmap"                              : ["src/Viserio/Component/**/Tests/", "src/Viserio/Bridge/**/Tests/", "benchmarks/"]
     },
     "extra": {
         "branch-alias": {
