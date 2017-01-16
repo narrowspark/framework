@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extension;
 
 use Twig_Extension;
-use Twig_SimpleFunction;
 use Twig_SimpleFilter;
+use Twig_SimpleFunction;
 use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 
@@ -13,7 +13,7 @@ class Translator extends Twig_Extension
     use TranslatorAwareTrait;
 
     /**
-     * Create a new translator extension
+     * Create a new translator extension.
      *
      * @param \Viserio\Contracts\Translation\Translator
      */
@@ -23,7 +23,7 @@ class Translator extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -31,7 +31,7 @@ class Translator extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFunctions(): array
     {
@@ -42,7 +42,7 @@ class Translator extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFilters(): array
     {

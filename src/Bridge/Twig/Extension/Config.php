@@ -4,15 +4,15 @@ namespace Viserio\Bridge\Twig\Extension;
 
 use Twig_Extension;
 use Twig_SimpleFunction;
-use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 
 class Config extends Twig_Extension
 {
     use ConfigAwareTrait;
 
     /**
-     * Create a new config extension
+     * Create a new config extension.
      *
      * @param \Viserio\Contracts\Config\Repository
      */
@@ -22,7 +22,7 @@ class Config extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -30,7 +30,7 @@ class Config extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFunctions(): array
     {

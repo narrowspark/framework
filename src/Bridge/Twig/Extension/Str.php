@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extension;
 
 use Twig_Extension;
-use Twig_SimpleFunction;
 use Twig_SimpleFilter;
+use Twig_SimpleFunction;
 use Viserio\Support\Str as ViserioStr;
 
 class Str extends Twig_Extension
@@ -28,6 +28,7 @@ class Str extends Twig_Extension
      * Set a new string callback.
      *
      * @param string|object
+     * @param mixed $callback
      *
      * @return void
      */
@@ -37,7 +38,7 @@ class Str extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -45,7 +46,7 @@ class Str extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFunctions(): array
     {
@@ -63,7 +64,7 @@ class Str extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFilters(): array
     {

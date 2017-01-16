@@ -5,9 +5,9 @@ namespace Viserio\Bridge\Twig\Extension;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig_Environment;
+use Twig_Extension;
 use Twig_SimpleFunction;
 use Twig_Template;
-use Twig_Extension;
 
 /**
  * Dump a variable or the view context.
@@ -26,7 +26,7 @@ class DumpExtension extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFunctions()
     {
@@ -42,7 +42,7 @@ class DumpExtension extends Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
