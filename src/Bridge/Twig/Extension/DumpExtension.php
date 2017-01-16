@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extension;
 
-use Twig_Template;
-use Twig_Environment;
-use Twig_SimpleFunction;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use Twig_Environment;
+use Twig_SimpleFunction;
+use Twig_Template;
 
 /**
- * Dump a variable or the view context
+ * Dump a variable or the view context.
  *
  * Based on the Symfony Twig Bridge Dump Extension
  *
@@ -17,7 +17,7 @@ use Symfony\Component\VarDumper\Dumper\HtmlDumper;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class Dump extends \Twig_Extension
+class DumpExtension extends \Twig_Extension
 {
     public function __construct()
     {
@@ -25,7 +25,7 @@ class Dump extends \Twig_Extension
     }
 
     /**
-     * {inheritdoc}
+     * {inheritdoc}.
      */
     public function getFunctions()
     {
@@ -33,15 +33,15 @@ class Dump extends \Twig_Extension
             new Twig_SimpleFunction(
                 'dump',
                 [$this, 'dump'],
-                ['is_safe' => ['html'],
-                'needs_context' => true,
-                'needs_environment' => true]
+                ['is_safe'          => ['html'],
+                'needs_context'     => true,
+                'needs_environment' => true, ]
             ),
         ];
     }
 
     /**
-     * {inheritdoc}
+     * {inheritdoc}.
      */
     public function getName()
     {
@@ -49,11 +49,11 @@ class Dump extends \Twig_Extension
     }
 
     /**
-     * {inheritdoc}
+     * {inheritdoc}.
      */
     public function dump(Twig_Environment $env, $context)
     {
-        if (!$env->isDebug()) {
+        if (! $env->isDebug()) {
             return;
         }
 
@@ -61,7 +61,7 @@ class Dump extends \Twig_Extension
             $vars = [];
 
             foreach ($context as $key => $value) {
-                if (!$value instanceof Twig_Template) {
+                if (! $value instanceof Twig_Template) {
                     $vars[$key] = $value;
                 }
             }
@@ -73,7 +73,7 @@ class Dump extends \Twig_Extension
             unset($vars[0], $vars[1]);
         }
 
-        $dump = fopen('php://memory', 'r+b');
+        $dump   = fopen('php://memory', 'r+b');
         $dumper = new HtmlDumper($dump);
 
         foreach ($vars as $value) {

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig;
 
+use Interop\Container\ContainerInterface;
 use Twig_Environment;
 use Twig_LoaderInterface;
-use Interop\Container\ContainerInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\View\Finder as FinderContract;
 
@@ -15,7 +15,7 @@ class TwigEnvironment extends Twig_Environment
     /**
      * {@inheritdoc}
      */
-    public function __construct(Twig_LoaderInterface $loader, array $options = [], ContainerInterface $container)
+    public function __construct(Twig_LoaderInterface $loader, array $options, ContainerInterface $container)
     {
         parent::__construct($loader, $options);
 
@@ -45,10 +45,10 @@ class TwigEnvironment extends Twig_Environment
         if ($this->container->has('twig.extensions')) {
             foreach ((array) $this->container->get('twig.extensions') as $extension) {
                 $extension = '.' . $extension;
-                $length    = strlen($extension);
+                $length    = mb_strlen($extension);
 
-                if (substr($name, -$length, $length) === $extension) {
-                    $name = substr($name, 0, -$length);
+                if (mb_substr($name, -$length, $length) === $extension) {
+                    $name = mb_substr($name, 0, -$length);
                 }
             }
         }
@@ -56,12 +56,12 @@ class TwigEnvironment extends Twig_Environment
         // Normalize namespace and delimiters
         $delimiter = FinderContract::HINT_PATH_DELIMITER;
 
-        if (strpos($name, $delimiter) === false) {
+        if (mb_strpos($name, $delimiter) === false) {
             return str_replace('/', '.', $name);
         }
 
         list($namespace, $name) = explode($delimiter, $name);
 
-        return $namespace.$delimiter.str_replace('/', '.', $name);
+        return $namespace . $delimiter . str_replace('/', '.', $name);
     }
 }
