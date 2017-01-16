@@ -7,6 +7,7 @@ use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig_Environment;
 use Twig_SimpleFunction;
 use Twig_Template;
+use Twig_Extension;
 
 /**
  * Dump a variable or the view context.
@@ -17,7 +18,7 @@ use Twig_Template;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class DumpExtension extends \Twig_Extension
+class DumpExtension extends Twig_Extension
 {
     public function __construct()
     {
@@ -25,7 +26,7 @@ class DumpExtension extends \Twig_Extension
     }
 
     /**
-     * {inheritdoc}.
+     * {@inheritDoc}
      */
     public function getFunctions()
     {
@@ -41,7 +42,7 @@ class DumpExtension extends \Twig_Extension
     }
 
     /**
-     * {inheritdoc}.
+     * {@inheritDoc}
      */
     public function getName()
     {

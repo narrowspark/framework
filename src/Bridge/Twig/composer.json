@@ -21,12 +21,18 @@
         "php"                                 : "^7.1",
         "container-interop/container-interop" : "^1.1",
         "twig/twig"                           : "^2.0",
+        "viserio/contracts"                   : "self.version",
         "viserio/view"                        : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",
+        "danielstjules/stringy"               : "^2.3",
         "phpunit/phpunit"                     : "~5.7",
-        "viserio/container"                   : "self.version"
+        "viserio/config"                      : "self.version",
+        "viserio/container"                   : "self.version",
+        "viserio/session"                     : "self.version",
+        "viserio/support"                     : "self.version",
+        "viserio/translation"                 : "self.version"
     },
     "autoload": {
         "psr-4": {
