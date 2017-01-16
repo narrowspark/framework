@@ -40,7 +40,6 @@
     "require": {
         "php"                                 : "^7.1",
         "cache/chain-adapter"                 : "^0.4",
-        "cache/namespaced-cache"              : "^0.1",
         "cache/simple-cache-bridge"           : "^0.1",
         "viserio/config"                      : "self.version",
         "viserio/cotracts"                    : "self.version"
@@ -48,6 +47,7 @@
     "require-dev": {
         "cache/array-adapter"                 : "^0.4",
         "cache/filesystem-adapter"            : "^0.3",
+        "cache/namespaced-cache"              : "^0.1",
         "cache/void-adapter"                  : "^0.3",
         "container-interop/service-provider"  : "^0.3",
         "micheh/psr7-cache"                   : "^0.5",
@@ -82,6 +82,7 @@
         "cache/filesystem-adapter"            : "Required to use the Filesystem cache (^0.3).",
         "cache/memcache-adapter"              : "Required to use the Memcache cache (^0.3).",
         "cache/memcached-adapter"             : "Required to use the Memcached cache (^0.3).",
+        "cache/namespaced-adapter"            : "Required to use the Namespaced cache (^0.1).",
         "cache/mongodb-adapter"               : "Required to use the Mongodb cache (^0.2).",
         "cache/predis-adapter"                : "Required to use the Predis cache (^0.4).",
         "cache/void-adapter"                  : "Required to use the Void cache (^0.3).",

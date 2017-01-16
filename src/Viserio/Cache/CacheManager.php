@@ -67,7 +67,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
         $driver    = parent::createDriver($config);
         $namespace = $this->config->get($this->getConfigName() . '.namespace', false);
 
-        if ($namespace && $driver instanceof HierarchicalPoolInterface) {
+        if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
             $driver = $this->namespacedPool($driver, $namespace);
         }
 
