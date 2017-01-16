@@ -242,8 +242,8 @@ abstract class AbstractRouteDispatcher
     /**
      * Run the given route within a Stack "onion" instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route         $route
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Psr\Http\Message\ServerRequestInterface   $request
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

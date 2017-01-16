@@ -11,10 +11,10 @@ interface Filter
      * Filter and return the displayers.
      *
      * @param \Viserio\Component\Contracts\Exception\Displayer[] $displayers
-     * @param \Psr\Http\Message\RequestInterface       $request
-     * @param \Throwable                               $original
-     * @param \Throwable                               $transformed
-     * @param int                                      $code
+     * @param \Psr\Http\Message\RequestInterface                 $request
+     * @param \Throwable                                         $original
+     * @param \Throwable                                         $transformed
+     * @param int                                                $code
      *
      * @return \Viserio\Component\Contracts\Exception\Displayer[]
      */

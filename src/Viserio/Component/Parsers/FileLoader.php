@@ -36,7 +36,7 @@ class FileLoader implements LoaderContract
      * Create a new fileloader.
      *
      * @param \Viserio\Component\Contracts\Parsers\TaggableParser $parser
-     * @param array                                     $directories
+     * @param array                                               $directories
      */
     public function __construct(TaggableParserContract $parser, array $directories = [])
     {

@@ -38,9 +38,9 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Create a new URL Generator instance.
      *
-     * @param \Viserio\Component\Routing\RouteCollection          $routes
-     * @param \Psr\Http\Message\ServerRequestInterface  $request
-     * @param \Interop\Http\Factory\UriFactoryInterface $uriFactory
+     * @param \Viserio\Component\Routing\RouteCollection $routes
+     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Interop\Http\Factory\UriFactoryInterface  $uriFactory
      */
     public function __construct(
         RouteCollection $routes,
@@ -76,8 +76,8 @@ class UrlGenerator implements UrlGeneratorContract
      * Get the URL for a given route instance.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
-     * @param array                            $parameters
-     * @param bool                             $absolute
+     * @param array                                      $parameters
+     * @param bool                                       $absolute
      *
      * @throws \Viserio\Component\Routing\Exceptions\UrlGenerationException
      *

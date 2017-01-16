@@ -146,7 +146,7 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
      * Adds a data collector.
      *
      * @param \Viserio\Component\Contracts\WebProfiler\DataCollector $collector
-     * @param int                                          $priority
+     * @param int                                                    $priority
      *
      * @throws \RuntimeException
      *

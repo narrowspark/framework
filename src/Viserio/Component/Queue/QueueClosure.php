@@ -28,7 +28,7 @@ class QueueClosure
      * Run the Closure based queue job.
      *
      * @param \Viserio\Component\Contracts\Queue\Job $job
-     * @param array                        $data
+     * @param array                                  $data
      */
     public function run(JobContract $job, array $data)
     {

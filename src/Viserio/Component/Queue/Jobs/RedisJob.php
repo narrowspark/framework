@@ -39,11 +39,11 @@ class RedisJob extends AbstractJob
     /**
      * Create a new job instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Queue\Connectors\RedisQueue  $redis
-     * @param string                                $job
-     * @param string                                $reserved
-     * @param string                                $queue
+     * @param \Interop\Container\ContainerInterface          $container
+     * @param \Viserio\Component\Queue\Connectors\RedisQueue $redis
+     * @param string                                         $job
+     * @param string                                         $reserved
+     * @param string                                         $queue
      */
     public function __construct(
         ContainerInterface $container,

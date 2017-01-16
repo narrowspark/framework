@@ -36,7 +36,7 @@ class OpenHandlerController extends AbstractController
      *
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param \Viserio\Component\WebProfiler\WebProfiler               $webprofiler
+     * @param \Viserio\Component\WebProfiler\WebProfiler     $webprofiler
      */
     public function __construct(
         ResponseFactoryInterface $responseFactory,

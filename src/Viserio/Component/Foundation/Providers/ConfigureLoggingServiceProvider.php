@@ -36,7 +36,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      * Configure the Monolog handlers for the application.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Contracts\Log\Log            $log
+     * @param \Viserio\Component\Contracts\Log\Log  $log
      */
     private static function configureHandlers(ContainerInterface $container, LogContract $log)
     {
@@ -52,7 +52,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      * Configure the Monolog handlers for the application.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Contracts\Log\Log            $log
+     * @param \Viserio\Component\Contracts\Log\Log  $log
      * @param string                                $level
      */
     private static function configureSingleHandler(ContainerInterface $container, LogContract $log, string $level)
@@ -67,7 +67,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      * Configure the Monolog handlers for the application.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Contracts\Log\Log            $log
+     * @param \Viserio\Component\Contracts\Log\Log  $log
      * @param string                                $level
      */
     private static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level)
@@ -86,7 +86,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      * Configure the Monolog handlers for the application.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Contracts\Log\Log            $log
+     * @param \Viserio\Component\Contracts\Log\Log  $log
      * @param string                                $level
      */
     private static function configureErrorlogHandler(ContainerInterface $container, LogContract $log, string $level)

@@ -26,7 +26,7 @@ class EncryptionWrapper
      * Create a new encryption wrapper instance.
      *
      * @param \Viserio\Component\Contracts\Filesystem\Filesystem $adapter
-     * @param \Defuse\Crypto\Key                       $key
+     * @param \Defuse\Crypto\Key                                 $key
      */
     public function __construct(FilesystemContract $adapter, Key $key)
     {

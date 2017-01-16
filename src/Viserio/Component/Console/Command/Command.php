@@ -359,9 +359,9 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     /**
      * Format input to textual table.
      *
-     * @param array                                      $headers
+     * @param array                                                $headers
      * @param array|\Viserio\Component\Contracts\Support\Arrayable $rows
-     * @param string                                     $style
+     * @param string                                               $style
      */
     public function table(array $headers, $rows, string $style = 'default')
     {

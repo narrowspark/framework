@@ -189,10 +189,10 @@ class Mailer implements MailerContract
      * Add the content to a given message.
      *
      * @param \Viserio\Component\Mail\Message $message
-     * @param string|null           $view
-     * @param string|null           $plain
-     * @param string|null           $raw
-     * @param array                 $data
+     * @param string|null                     $view
+     * @param string|null                     $plain
+     * @param string|null                     $raw
+     * @param array                           $data
      */
     protected function addContent(MessageContract $message, $view, $plain, $raw, array $data)
     {
@@ -255,7 +255,7 @@ class Mailer implements MailerContract
     /**
      * Call the provided message builder.
      *
-     * @param \Closure|string|null  $callback
+     * @param \Closure|string|null            $callback
      * @param \Viserio\Component\Mail\Message $message
      *
      * @throws \InvalidArgumentException

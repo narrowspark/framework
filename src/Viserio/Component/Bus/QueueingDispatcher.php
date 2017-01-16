@@ -67,7 +67,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
      * Push the command onto the given queue instance.
      *
      * @param \Viserio\Component\Contracts\Queue\QueueConnector $queue
-     * @param mixed                                   $command
+     * @param mixed                                             $command
      *
      * @return mixed
      */

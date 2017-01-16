@@ -55,8 +55,8 @@ class View implements ArrayAccess, ViewContract
      *
      * @param \Viserio\Component\View\Factory                      $factory
      * @param \Viserio\Component\Contracts\View\Engine             $engine
-     * @param string                                     $view
-     * @param array                                      $fileInfo
+     * @param string                                               $view
+     * @param array                                                $fileInfo
      * @param array|\Viserio\Component\Contracts\Support\Arrayable $data
      */
     public function __construct(Factory $factory, EngineContract $engine, string $view, array $fileInfo, $data = [])

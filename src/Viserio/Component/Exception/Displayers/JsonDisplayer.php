@@ -27,7 +27,7 @@ class JsonDisplayer implements DisplayerContract
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Exception\ExceptionInfo               $info
+     * @param \Viserio\Component\Exception\ExceptionInfo     $info
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
      */

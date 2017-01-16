@@ -91,7 +91,7 @@ class RouteTreeNode
     /**
      * Update RouteTreeNode class.
      *
-     * @param array                                   $matchers
+     * @param array                                             $matchers
      * @param \Viserio\Component\Contracts\Routing\NodeContents $contents
      *
      * @return \Viserio\Component\Routing\Generator\RouteTreeNode

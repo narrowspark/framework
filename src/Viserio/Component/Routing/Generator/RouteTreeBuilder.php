@@ -62,9 +62,9 @@ class RouteTreeBuilder
      *
      * @param \Viserio\Component\Routing\Generator\RouteTreeNode $node
      * @param \Viserio\Component\Contracts\Routing\Route         $route
-     * @param array                                    $segments
-     * @param int                                      $segmentDepth
-     * @param array                                    $parameterIndexNameMap
+     * @param array                                              $segments
+     * @param int                                                $segmentDepth
+     * @param array                                              $parameterIndexNameMap
      */
     protected function addRouteToNode(
         RouteTreeNode $node,

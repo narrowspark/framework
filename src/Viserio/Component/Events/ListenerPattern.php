@@ -122,7 +122,7 @@ class ListenerPattern
      * Adds this pattern's listener to an event.
      *
      * @param \Viserio\Component\Contracts\Events\EventManager $dispatcher
-     * @param string                                 $eventName
+     * @param string                                           $eventName
      */
     public function bind(EventManagerContract $dispatcher, string $eventName)
     {

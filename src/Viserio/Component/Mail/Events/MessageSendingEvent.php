@@ -14,7 +14,7 @@ class MessageSendingEvent implements EventContract
      * Create a new cerebro starting event.
      *
      * @param \Viserio\Component\Contracts\Mail\Mailer $mailer
-     * @param array                          $param
+     * @param array                                    $param
      *
      * @codeCoverageIgnore
      */

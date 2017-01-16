@@ -30,10 +30,10 @@ interface Worker
     /**
      * Process a given job from the queue.
      *
-     * @param string                       $connection
+     * @param string                                 $connection
      * @param \Viserio\Component\Contracts\Queue\Job $job
-     * @param int                          $maxTries
-     * @param int                          $delay
+     * @param int                                    $maxTries
+     * @param int                                    $delay
      *
      * @throws \Throwable
      */

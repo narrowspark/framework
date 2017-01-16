@@ -35,8 +35,8 @@ class Paginator extends AbstractPaginator
     /**
      * Create a new paginator.
      *
-     * @param \Viserio\Component\Contracts\Pagination\Adapter    $adapter
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Viserio\Component\Contracts\Pagination\Adapter $adapter
+     * @param \Psr\Http\Message\ServerRequestInterface        $request
      */
     public function __construct(AdapterContract $adapter, ServerRequestInterface $request)
     {

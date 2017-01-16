@@ -236,7 +236,7 @@ class Worker implements WorkerContract
      * Get the next job from the queue connection.
      *
      * @param \Viserio\Component\Contracts\Queue\QueueConnector $connection
-     * @param string|null                             $queue
+     * @param string|null                                       $queue
      *
      * @return \Viserio\Component\Contracts\Queue\Job|null
      */
@@ -299,7 +299,7 @@ class Worker implements WorkerContract
     /**
      * Log a failed job into storage.
      *
-     * @param string                       $connection
+     * @param string                                 $connection
      * @param \Viserio\Component\Contracts\Queue\Job $job
      *
      * @return void|null
@@ -332,7 +332,7 @@ class Worker implements WorkerContract
     /**
      * Raise the before queue job event.
      *
-     * @param string                       $connection
+     * @param string                                 $connection
      * @param \Viserio\Component\Contracts\Queue\Job $job
      */
     protected function raiseBeforeJobEvent(string $connection, JobContract $job)
@@ -352,7 +352,7 @@ class Worker implements WorkerContract
     /**
      * Raise the after queue job event.
      *
-     * @param string                       $connection
+     * @param string                                 $connection
      * @param \Viserio\Component\Contracts\Queue\Job $job
      */
     protected function raiseAfterJobEvent(string $connection, JobContract $job)
@@ -372,10 +372,10 @@ class Worker implements WorkerContract
     /**
      * Handle an exception that occurred while the job was running.
      *
-     * @param string                       $connection
+     * @param string                                 $connection
      * @param \Viserio\Component\Contracts\Queue\Job $job
-     * @param int                          $delay
-     * @param \Throwable                   $exception
+     * @param int                                    $delay
+     * @param \Throwable                             $exception
      *
      * @throws \Throwable
      */

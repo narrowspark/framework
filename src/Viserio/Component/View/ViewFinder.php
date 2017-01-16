@@ -50,8 +50,8 @@ class ViewFinder implements FinderContract
      * Create a new file view loader instance.
      *
      * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
-     * @param array                                    $paths
-     * @param null|array                               $extensions
+     * @param array                                              $paths
+     * @param null|array                                         $extensions
      */
     public function __construct(FilesystemContract $files, array $paths, array $extensions = null)
     {

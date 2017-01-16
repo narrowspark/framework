@@ -101,8 +101,8 @@ class ViewServiceProvider implements ServiceProvider
     /**
      * Register the PHP engine implementation.
      *
-     * @param \Viserio\Component\View\Engines\EngineResolver  $engines
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\View\Engines\EngineResolver $engines
+     * @param \Interop\Container\ContainerInterface          $container
      */
     protected static function registerPhpEngine(EngineResolver $engines, ContainerInterface $container)
     {
@@ -114,8 +114,8 @@ class ViewServiceProvider implements ServiceProvider
     /**
      * Register the File engine implementation.
      *
-     * @param \Viserio\Component\View\Engines\EngineResolver  $engines
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\View\Engines\EngineResolver $engines
+     * @param \Interop\Container\ContainerInterface          $container
      */
     protected static function registerFileEngine(EngineResolver $engines, ContainerInterface $container)
     {
@@ -127,8 +127,8 @@ class ViewServiceProvider implements ServiceProvider
     /**
      * Register the PHP engine implementation.
      *
-     * @param \Viserio\Component\View\Engines\EngineResolver  $engines
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\View\Engines\EngineResolver $engines
+     * @param \Interop\Container\ContainerInterface          $container
      */
     protected static function registerTwigEngine(EngineResolver $engines, ContainerInterface $container)
     {
@@ -140,8 +140,8 @@ class ViewServiceProvider implements ServiceProvider
     /**
      * Register the PHP engine implementation.
      *
-     * @param \Viserio\Component\View\Engines\EngineResolver  $engines
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\View\Engines\EngineResolver $engines
+     * @param \Interop\Container\ContainerInterface          $container
      */
     protected static function registerPlatesEngine(EngineResolver $engines, ContainerInterface $container)
     {
