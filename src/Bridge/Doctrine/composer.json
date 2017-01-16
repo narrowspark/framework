@@ -1,5 +1,5 @@
 {
-    "name"       : "viserio/bridge/Doctrine",
+    "name"       : "viserio/bridge/doctrine",
     "type"       : "library",
     "description": "The Viserio Doctrine bridge.",
     "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations", "bridge"],
@@ -22,13 +22,12 @@
         "doctrine/dbal"                          : "^2.5",
         "doctrine/migrations"                    : "^1.4",
         "narrowspark/collection"                 : "^0.1",
-        "ocramius/proxy-manager"                 : "^2"
+        "ocramius/proxy-manager"                 : "^2.0"
     },
     "require-dev": {
         "container-interop/service-provider"     : "^0.3",
         "phpunit/phpunit"                        : "~5.7",
-        "viserio/container"                      : "self.version",
-        "viserio/support"                        : "self.version"
+        "viserio/container"                      : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -51,7 +50,6 @@
         "ext-pdo-sqlite"                         : "Required to use SQLite databases",
         "ext-pdo_sqlsrv"                         : "Required to use MSSQL databases on Windows platform",
         "viserio/statical-proxy"                 : "Required to use the proxy instances (self.version).",
-        "viserio/support"                        : "Required to use the Env instances in MigrationsServiceProvider (self.version)."
     },
     "extra": {
         "branch-alias": {

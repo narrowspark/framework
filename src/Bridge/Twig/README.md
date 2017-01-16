@@ -1,6 +1,6 @@
-# Viserio Doctrine package
+# Viserio Twig Bridge
 
-This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
+This bridge is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
 [![Author](http://img.shields.io/badge/author-@anolilab-blue.svg?style=flat-square)](https://twitter.com/anolilab)
 [![Quality Score](https://img.shields.io/scrutinizer/g/narrowspark/framework.svg?style=flat-square)](https://scrutinizer-ci.com/g/narrowspark/framework/code-structure/master)
@@ -21,7 +21,7 @@ Thank you for considering contributing to the Narrowspark framework! The contrib
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/bridge/doctrine
+composer require viserio/bridge/twig
 ```
 
 ## Official Documentation
