@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig;
 
-use Twig_LoaderInterface;
+use InvalidArgumentException;
 use Twig_Error_Loader;
 use Twig_ExistsLoaderInterface;
-use InvalidArgumentException;
+use Twig_LoaderInterface;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 
@@ -116,7 +116,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     }
 
     /**
-     * Normalize the Twig template name to a name the ViewFinder can use
+     * Normalize the Twig template name to a name the ViewFinder can use.
      *
      * @param string $name
      *
@@ -125,8 +125,9 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     protected function normalizeName(string $name): string
     {
         if ($this->files->getExtension($name) === $this->extension) {
-            $name = substr($name, 0, - (strlen($this->extension) + 1));
+            $name = mb_substr($name, 0, -(mb_strlen($this->extension) + 1));
         }
+
         return $name;
     }
 }
