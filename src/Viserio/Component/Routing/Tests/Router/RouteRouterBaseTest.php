@@ -23,8 +23,8 @@ abstract class RouteRouterBaseTest extends TestCase
         parent::setUp();
 
         $cachefolder = __DIR__ . '/../Cache/';
-        $name      = (new ReflectionClass($this))->getShortName();
-        $container = $this->mock(ContainerInterface::class);
+        $name        = (new ReflectionClass($this))->getShortName();
+        $container   = $this->mock(ContainerInterface::class);
 
         if (! is_dir($cachefolder)) {
             mkdir($cachefolder);
