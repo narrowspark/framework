@@ -418,7 +418,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $directories = $this->allDirectories($dirname);
 
         foreach ($directories as $dirname) {
-            @rmdir($dirname);
+            @rmdir($this->getNormalizedOrPrefixedPath($dirname));
         }
 
         return true;
@@ -580,12 +580,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $contents = $this->driver->listContents($directory, $recursive);
 
-        $dirs = [];
-
-        foreach ($this->filterContentsByType($contents, $typ) as $dir) {
-            $dirs[] = $this->getNormalizedOrPrefixedPath($dir);
-        }
-
-        return $dirs;
+        return $this->filterContentsByType($contents, $typ);
     }
 }
