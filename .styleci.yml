@@ -9,8 +9,8 @@ finder:
     - vendor
     - build
   not-path:
-    - src/Viserio/Validation/Sanitizer.php
-    - src/Viserio/WebProfiler/Resources/views/webprofiler.html.php
+    - src/Viserio/Component/Validation/Sanitizer.php
+    - src/Viserio/Component/WebProfiler/Resources/views/webprofiler.html.php
 
 enabled:
   - align_equals

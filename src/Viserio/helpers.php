@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Viserio\Support\Env;
+use Viserio\Component\Support\Env;
 
 if (! function_exists('env')) {
     /**
