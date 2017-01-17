@@ -429,9 +429,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function isDirectory(string $dirname): bool
     {
-        $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
-
-        return is_dir($prefix . $dirname);
+        return is_dir($this->getNormalizedOrPrefixedPath($dirname));
     }
 
     /**
@@ -510,12 +508,12 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      *
      * @return string
      */
-    protected function getNormalzedOrPrefixedPath(string $path): string
+    protected function getNormalizedOrPrefixedPath(string $path): string
     {
         if (isset($this->driver)) {
             $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
 
-            return $prefix . $path;
+            $path = $prefix . $path;
         }
 
         return self::normalizeDirectorySeparator($path);
@@ -582,6 +580,12 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $contents = $this->driver->listContents($directory, $recursive);
 
-        return $this->filterContentsByType($contents, $typ);
+        $dirs = [];
+
+        foreach ($this->filterContentsByType($contents, $typ) as $dir) {
+            $dirs[] = $this->getNormalizedOrPrefixedPath($dir);
+        }
+
+        return $dirs;
     }
 }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests;
 
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Util;
 use org\bovigo\vfs\content\LargeFileContent;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +29,11 @@ class FilesystemAdapterTest extends TestCase
      */
     public function setUp()
     {
-        $this->root = __DIR__ . '/stubs';
+        $this->root = __DIR__ . '/FileCache';
+
+        if (!is_dir($this->root)) {
+            mkdir($this->root, 777);
+        }
 
         $connector = new LocalConnector();
 
@@ -44,7 +49,7 @@ class FilesystemAdapterTest extends TestCase
 
     public function testGetDriver()
     {
-        self::assertInstanceOf('\League\Flysystem\AdapterInterface', $this->adapter->getDriver());
+        self::assertInstanceOf(AdapterInterface::class, $this->adapter->getDriver());
     }
 
     public function testIsDir()

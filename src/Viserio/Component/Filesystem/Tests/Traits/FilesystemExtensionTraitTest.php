@@ -63,7 +63,7 @@ class FilesystemExtensionTraitTest extends TestCase
      *
      * @return string
      */
-    protected function getNormalzedOrPrefixedPath(string $path): string
+    protected function getNormalizedOrPrefixedPath(string $path): string
     {
         if (isset($this->driver)) {
             $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';

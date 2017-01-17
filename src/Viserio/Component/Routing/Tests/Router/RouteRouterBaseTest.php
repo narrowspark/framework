@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Mockery as Mock;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,11 @@ abstract class RouteRouterBaseTest extends TestCase
 
         $name      = (new ReflectionClass($this))->getShortName();
         $container = $this->mock(ContainerInterface::class);
+
+        if (!is_dir(__DIR__ . '/../Cache/')) {
+            mkdir(__DIR__ . '/../Cache/', 777);
+        }
+
         $router    = new Router($container);
         $router->setCachePath(__DIR__ . '/../Cache/' . $name . '.cache');
         $router->refreshCache(true);
@@ -31,6 +37,18 @@ abstract class RouteRouterBaseTest extends TestCase
         $this->definitions($router);
 
         $this->router = $router;
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+
+        $this->delTree(__DIR__ . '/../Cache/');
     }
 
     /**
@@ -53,4 +71,15 @@ abstract class RouteRouterBaseTest extends TestCase
     }
 
     abstract protected function definitions($routes);
+
+    private function delTree($dir)
+    {
+        $files = array_diff(scandir($dir), ['.', '..']);
+
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+        }
+
+        return rmdir($dir);
+    }
 }

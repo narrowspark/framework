@@ -461,7 +461,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      *
      * @return string
      */
-    protected function getNormalzedOrPrefixedPath(string $path): string
+    protected function getNormalizedOrPrefixedPath(string $path): string
     {
         return self::normalizeDirectorySeparator($path);
     }
