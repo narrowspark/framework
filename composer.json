@@ -33,8 +33,6 @@
         "ext-openssl"                                        : "*",
         "cache/array-adapter"                                : "^0.4",
         "cache/chain-adapter"                                : "^0.4",
-        "cache/namespaced-cache"                             : "^0.1",
-        "cache/simple-cache-bridge"                          : "^0.1",
         "cakephp/chronos"                                    : "^1.0",
         "container-interop/container-interop"                : "^1.1",
         "container-interop/service-provider"                 : "^0.3",
@@ -110,6 +108,7 @@
     "require-dev": {
         "aws/aws-sdk-php"                                    : "^3.18",
         "cache/filesystem-adapter"                           : "^0.3",
+        "cache/namespaced-cache"                             : "^0.1",
         "cache/session-handler"                              : "^0.2",
         "cache/void-adapter"                                 : "^0.3",
         "guzzlehttp/guzzle"                                  : "^6.0",
@@ -144,11 +143,11 @@
             "src/Viserio/helpers.php"
         ],
         "psr-4": {
-            "Viserio\\"                                      : "src/Viserio/",
-            "Viserio\\Bridge\\"                              : "src/Bridge/",
+            "Viserio\\Component\\"                           : "src/Viserio/Component/",
+            "Viserio\\Bridge\\"                              : "src/Viserio/Bridge/",
             "Narrowspark\\"                                  : "benchmarks/"
         },
-        "exclude-from-classmap"                              : ["src/Viserio/**/Tests/", "benchmarks/"]
+        "exclude-from-classmap"                              : ["src/Viserio/Component/**/Tests/", "src/Viserio/Bridge/**/Tests/", "benchmarks/"]
     },
     "extra": {
         "branch-alias": {
@@ -164,11 +163,11 @@
         "cache/filesystem-adapter"                           : "Required to use the Filesystem cache (^0.3).",
         "cache/memcache-adapter"                             : "Required to use the Memcache cache (^0.3).",
         "cache/memcached-adapter"                            : "Required to use the Memcached cache (^0.3).",
+        "cache/namespaced-adapter"                           : "Required to use the Namespaced cache (^0.1).",
         "cache/mongodb-adapter"                              : "Required to use the Mongodb cache (^0.2).",
         "cache/predis-adapter"                               : "Required to use the Predis cache (^0.4).",
         "cache/session-handler"                              : "Required to use the Session cache (^0.1).",
         "cache/void-adapter"                                 : "Required to use the Void cache (^0.3).",
-        "ext-pdo"                                            : "Required to use PDO adapters",
         "ext-pdo_dblib"                                      : "Required to use MSSQL databases on Liunx/UNIX platform",
         "ext-pdo-firebird"                                   : "Required to use Firebird databases",
         "ext-pdo-mysql"                                      : "Required to use MySQL or MariaDB databases",

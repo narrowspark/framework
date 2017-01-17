@@ -1,0 +1,94 @@
+{
+    "name"       : "viserio/cache",
+    "type"       : "library",
+    "description": "The Viserio Cache package.",
+    "keywords"   : [
+        "narrowspark",
+        "viserio",
+        "apc",
+        "apcu",
+        "redis",
+        "mongodb",
+        "mongo",
+        "sqlite",
+        "mysql",
+        "postgres",
+        "pgsql",
+        "memcached",
+        "memcache",
+        "psrCache",
+        "psr-6",
+        "psr-cache",
+        "filesystem",
+        "cache",
+        "caching"
+    ],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                 : "^7.1",
+        "cache/chain-adapter"                 : "^0.4",
+        "cache/simple-cache-bridge"           : "^0.1",
+        "viserio/config"                      : "self.version",
+        "viserio/cotracts"                    : "self.version"
+    },
+    "require-dev": {
+        "cache/array-adapter"                 : "^0.4",
+        "cache/filesystem-adapter"            : "^0.3",
+        "cache/namespaced-cache"              : "^0.1",
+        "cache/void-adapter"                  : "^0.3",
+        "container-interop/service-provider"  : "^0.3",
+        "micheh/psr7-cache"                   : "^0.5",
+        "narrowspark/testing-helper"          : "^2.0",
+        "phpunit/phpunit"                     : "~5.7",
+        "viserio/container"                   : "self.version"
+    },
+    "provide": {
+        "psr/cache-implementation"            : "^1.0",
+        "psr/simple-cache-implementation"     : "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Cache\\"                : ""
+        },
+        "exclude-from-classmap"               : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Cache\\Tests\\"         : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                      : "1.0-dev"
+        }
+    },
+    "suggest": {
+        "cache/apc-adapter"                   : "Required to use the Apc cache (^0.3).",
+        "cache/apcu-adapter"                  : "Required to use the Apcu cache (^0.3).",
+        "cache/array-adapter"                 : "Required to use the Array cache (^0.4)",
+        "cache/filesystem-adapter"            : "Required to use the Filesystem cache (^0.3).",
+        "cache/memcache-adapter"              : "Required to use the Memcache cache (^0.3).",
+        "cache/memcached-adapter"             : "Required to use the Memcached cache (^0.3).",
+        "cache/namespaced-adapter"            : "Required to use the Namespaced cache (^0.1).",
+        "cache/mongodb-adapter"               : "Required to use the Mongodb cache (^0.2).",
+        "cache/predis-adapter"                : "Required to use the Predis cache (^0.4).",
+        "cache/void-adapter"                  : "Required to use the Void cache (^0.3).",
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
+    },
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
+}

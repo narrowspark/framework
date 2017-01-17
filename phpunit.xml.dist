@@ -24,109 +24,113 @@
     </php>
 
     <testsuites>
+        <testsuite name="Narrowspark Doctrine Bridge Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Twig Bridge Test Suite">
+            <directory>./src/Viserio/Bridge/Twig/Tests</directory>
+        </testsuite>
+
         <testsuite name="Narrowspark Bus Component Test Suite">
-            <directory>./src/Viserio/Bus/Tests</directory>
+            <directory>./src/Viserio/Component/Bus/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Cache Component Test Suite">
-            <directory>./src/Viserio/Cache/Tests</directory>
+            <directory>./src/Viserio/Component/Cache/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Config Component Test Suite">
-            <directory>./src/Viserio/Config/Tests</directory>
+            <directory>./src/Viserio/Component/Config/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Console Component Test Suite">
-            <directory>./src/Viserio/Console/Tests</directory>
+            <directory>./src/Viserio/Component/Console/Tests</directory>
         </testsuite>
        <testsuite name="Narrowspark Container Component Test Suite">
-            <directory>./src/Viserio/Container/Tests</directory>
+            <directory>./src/Viserio/Component/Container/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Contracts Component Test Suite">
-            <directory>./src/Viserio/Contracts/Tests</directory>
+            <directory>./src/Viserio/Component/Contracts/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Cookie Component Test Suite">
-            <directory>./src/Viserio/Cookie/Tests</directory>
+            <directory>./src/Viserio/Component/Cookie/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Cron Component Test Suite">
-            <directory>./src/Viserio/Cron/Tests</directory>
-        </testsuite>
-       <testsuite name="Narrowspark Doctrine Bridge Test Suite">
-            <directory>./src/Bridge/Doctrine/Tests</directory>
+            <directory>./src/Viserio/Component/Cron/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Encryption Component Test Suite">
-            <directory>./src/Viserio/Encryption/Tests</directory>
+            <directory>./src/Viserio/Component/Encryption/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Events Component Test Suite">
-            <directory>./src/Viserio/Events/Tests</directory>
+            <directory>./src/Viserio/Component/Events/Tests</directory>
         </testsuite>
        <testsuite name="Narrowspark Exception Component Test Suite">
-            <directory>./src/Viserio/Exception/Tests</directory>
+            <directory>./src/Viserio/Component/Exception/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Filesystem Component Test Suite">
-            <directory>./src/Viserio/Filesystem/Tests</directory>
+            <directory>./src/Viserio/Component/Filesystem/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Foundation Component Test Suite">
-            <directory>./src/Viserio/Foundation/Tests</directory>
+            <directory>./src/Viserio/Component/Foundation/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Hashing Component Test Suite">
-            <directory>./src/Viserio/Hashing/Tests</directory>
+            <directory>./src/Viserio/Component/Hashing/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Http Component Test Suite">
-            <directory>./src/Viserio/Http/Tests</directory>
+            <directory>./src/Viserio/Component/Http/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark HttpFactory Component Test Suite">
-            <directory>./src/Viserio/HttpFactory/Tests</directory>
+            <directory>./src/Viserio/Component/HttpFactory/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Log Component Test Suite">
-            <directory>./src/Viserio/Log/Tests</directory>
+            <directory>./src/Viserio/Component/Log/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Mail Component Test Suite">
-            <directory>./src/Viserio/Mail/Tests</directory>
+            <directory>./src/Viserio/Component/Mail/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Middleware Component Test Suite">
-            <directory>./src/Viserio/Middleware/Tests</directory>
+            <directory>./src/Viserio/Component/Middleware/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Pagination Component Test Suite">
-            <directory>./src/Viserio/Pagination/Tests</directory>
+            <directory>./src/Viserio/Component/Pagination/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Parsers Component Test Suite">
-            <directory>./src/Viserio/Parsers/Tests</directory>
+            <directory>./src/Viserio/Component/Parsers/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Pipeline Component Test Suite">
-            <directory>./src/Viserio/Pipeline/Tests</directory>
+            <directory>./src/Viserio/Component/Pipeline/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Queue Component Test Suite">
-            <directory>./src/Viserio/Queue/Tests</directory>
+            <directory>./src/Viserio/Component/Queue/Tests</directory>
         </testsuite>
        <testsuite name="Narrowspark Routing Component Test Suite">
-            <directory>./src/Viserio/Routing/Tests</directory>
+            <directory>./src/Viserio/Component/Routing/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Session Component Test Suite">
-            <directory>./src/Viserio/Session/Tests</directory>
+            <directory>./src/Viserio/Component/Session/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark StaticalProxy Component Test Suite">
-            <directory>./src/Viserio/StaticalProxy/Tests</directory>
+            <directory>./src/Viserio/Component/StaticalProxy/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Support Component Test Suite">
-            <directory>./src/Viserio/Support/Tests</directory>
+            <directory>./src/Viserio/Component/Support/Tests</directory>
         </testsuite>
        <testsuite name="Narrowspark Translation Component Test Suite">
-            <directory>./src/Viserio/Translation/Tests</directory>
+            <directory>./src/Viserio/Component/Translation/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Validation Component Test Suite">
-            <directory>./src/Viserio/Validation/Tests</directory>
+            <directory>./src/Viserio/Component/Validation/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark View Component Test Suite">
-            <directory>./src/Viserio/View/Tests</directory>
+            <directory>./src/Viserio/Component/View/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark WebProfiler Component Test Suite">
-            <directory>./src/Viserio/WebProfiler/Tests</directory>
+            <directory>./src/Viserio/Component/WebProfiler/Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/</directory>
+            <directory suffix="Test.php">./src/</directory>
             <exclude>
-                <directory>./src/*/*/Tests</directory>
+                <directory>./src/Viserio/*/*/Tests</directory>
             </exclude>
         </whitelist>
     </filter>
