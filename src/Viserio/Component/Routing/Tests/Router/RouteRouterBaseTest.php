@@ -22,15 +22,16 @@ abstract class RouteRouterBaseTest extends TestCase
     {
         parent::setUp();
 
+        $cachefolder = __DIR__ . '/../Cache/';
         $name      = (new ReflectionClass($this))->getShortName();
         $container = $this->mock(ContainerInterface::class);
 
-        if (! is_dir(__DIR__ . '/../Cache/')) {
-            mkdir(__DIR__ . '/../Cache/', 777);
+        if (! is_dir($cachefolder)) {
+            mkdir($cachefolder);
         }
 
         $router    = new Router($container);
-        $router->setCachePath(__DIR__ . '/../Cache/' . $name . '.cache');
+        $router->setCachePath($cachefolder . $name . '.cache');
         $router->refreshCache(true);
         $router->setEventManager(new EventManager());
 

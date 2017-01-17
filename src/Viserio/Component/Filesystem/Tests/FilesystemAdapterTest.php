@@ -32,7 +32,7 @@ class FilesystemAdapterTest extends TestCase
         $this->root = __DIR__ . '/FileCache';
 
         if (! is_dir($this->root)) {
-            mkdir($this->root, 777);
+            mkdir($this->root);
         }
 
         $connector = new LocalConnector();

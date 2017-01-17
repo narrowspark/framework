@@ -20,8 +20,10 @@ class RouterTest extends TestCase
     {
         parent::setUp();
 
-        if (! is_dir(__DIR__ . '/../Cache/')) {
-            mkdir(__DIR__ . '/../Cache/', 777);
+        $cachefolder = __DIR__ . '/../Cache/';
+
+        if (! is_dir($cachefolder)) {
+            mkdir($cachefolder);
         }
 
         $router = new Router($this->mock(ContainerInterface::class));
