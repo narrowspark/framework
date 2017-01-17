@@ -31,7 +31,7 @@ class FilesystemAdapterTest extends TestCase
     {
         $this->root = __DIR__ . '/FileCache';
 
-        if (!is_dir($this->root)) {
+        if (! is_dir($this->root)) {
             mkdir($this->root, 777);
         }
 
