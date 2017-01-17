@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extension;
 
+use Twig_Extension;
+use Twig_SimpleFunction;
 use Viserio\Contracts\Session\Store as StoreContract;
 
 class Session extends Twig_Extension
