@@ -2,6 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Engines;
 
+use ErrorException;
+use Twig_Error_Loader;
+use Twig_Error;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
@@ -37,7 +40,11 @@ class TwigEngine implements EngineContract
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        return $this->getInstance()->render($fileInfo['name'], $data);
+        try {
+            $content = $this->getInstance()->render($fileInfo['name'], $data);
+        } catch (Twig_Error $exception) {
+            $this->handleTwigError($exception);
+        }
     }
 
     /**
@@ -50,7 +57,7 @@ class TwigEngine implements EngineContract
         if (! $this->parserInstance) {
             $config = $this->config['engine']['twig'] ?? [];
             $twig   = new Twig_Environment(
-                $this->loader(),
+                $this->getLoader(),
                 $config['options'] ?? []
             );
 
@@ -73,7 +80,7 @@ class TwigEngine implements EngineContract
      *
      * @return \Twig_Loader_Filesystem
      */
-    protected function loader(): Twig_Loader_Filesystem
+    protected function getLoader(): Twig_Loader_Filesystem
     {
         $config = $this->config['template'] ?? [];
         $loader = new Twig_Loader_Filesystem($config['default'] ?? []);
@@ -85,5 +92,36 @@ class TwigEngine implements EngineContract
         }
 
         return $loader;
+    }
+
+    /**
+     * Handle a TwigError exception.
+     *
+     * @param \Twig_Error $exception
+     *
+     * @throws \Twig_Error|\ErrorException
+     */
+    protected function handleTwigError(Twig_Error $exception)
+    {
+        $templateFile = $exception->getTemplateFile();
+        $templateLine = $exception->getTemplateLine();
+        $file         = null;
+
+        if ($templateFile && file_exists($templateFile)) {
+            $file = $templateFile;
+        }
+
+        if ($file !== null) {
+            $exception = new ErrorException(
+                $exception->getMessage(),
+                0,
+                1,
+                $file,
+                $templateLine,
+                $exception
+            );
+        }
+
+        throw $exception;
     }
 }
