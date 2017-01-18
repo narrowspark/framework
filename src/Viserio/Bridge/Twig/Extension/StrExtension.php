@@ -7,7 +7,7 @@ use Twig_SimpleFilter;
 use Twig_SimpleFunction;
 use Viserio\Support\Str as ViserioStr;
 
-class Str extends Twig_Extension
+class StrExtension extends Twig_Extension
 {
     /**
      * @var string|object

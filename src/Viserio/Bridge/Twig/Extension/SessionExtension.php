@@ -6,7 +6,7 @@ use Twig_Extension;
 use Twig_SimpleFunction;
 use Viserio\Contracts\Session\Store as StoreContract;
 
-class Session extends Twig_Extension
+class SessionExtension extends Twig_Extension
 {
     /**
      * Viserio session instance.

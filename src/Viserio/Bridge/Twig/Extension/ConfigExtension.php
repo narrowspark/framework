@@ -7,7 +7,7 @@ use Twig_SimpleFunction;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 
-class Config extends Twig_Extension
+class ConfigExtension extends Twig_Extension
 {
     use ConfigAwareTrait;
 

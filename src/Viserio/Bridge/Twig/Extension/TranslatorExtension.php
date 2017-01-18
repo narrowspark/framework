@@ -8,7 +8,7 @@ use Twig_SimpleFunction;
 use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 
-class Translator extends Twig_Extension
+class TranslatorExtension extends Twig_Extension
 {
     use TranslatorAwareTrait;
 
