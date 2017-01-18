@@ -6,7 +6,7 @@ use Twig_Extension;
 use Twig_SimpleFilter;
 
 /**
- * Based on the Symfony Twig Bridge Code Extension
+ * Based on the Symfony Twig Bridge Code Extension.
  *
  * Twig extension relate to PHP code and used by the profiler and the default exception templates.
  *
@@ -15,7 +15,7 @@ use Twig_SimpleFilter;
 class CodeExtension extends Twig_Extension
 {
     /**
-     * The format for links to source files
+     * The format for links to source files.
      *
      * @var string|\Symfony\Component\HttpKernel\Debug\FileLinkFormatter
      */
@@ -45,8 +45,8 @@ class CodeExtension extends Twig_Extension
     public function __construct($fileLinkFormat, string $rootDir, string $charset)
     {
         $this->fileLinkFormat = $fileLinkFormat ?: ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
-        $this->rootDir = str_replace('/', DIRECTORY_SEPARATOR, dirname($rootDir)) . DIRECTORY_SEPARATOR;
-        $this->charset = $charset;
+        $this->rootDir        = str_replace('/', DIRECTORY_SEPARATOR, dirname($rootDir)) . DIRECTORY_SEPARATOR;
+        $this->charset        = $charset;
     }
 
     /**
@@ -54,17 +54,17 @@ class CodeExtension extends Twig_Extension
      */
     public function getFilters()
     {
-        return array(
-            new Twig_SimpleFilter('abbr_class', array($this, 'abbrClass'), array('is_safe' => array('html'))),
-            new Twig_SimpleFilter('abbr_method', array($this, 'abbrMethod'), array('is_safe' => array('html'))),
-            new Twig_SimpleFilter('format_args', array($this, 'formatArgs'), array('is_safe' => array('html'))),
-            new Twig_SimpleFilter('format_args_as_text', array($this, 'formatArgsAsText')),
-            new Twig_SimpleFilter('file_excerpt', array($this, 'fileExcerpt'), array('is_safe' => array('html'))),
-            new Twig_SimpleFilter('format_file', array($this, 'formatFile'), array('is_safe' => array('html'))),
-            new Twig_SimpleFilter('format_file_from_text', array($this, 'formatFileFromText'), array('is_safe' => array('html'))),
-            new Twig_SimpleFilter('format_log_message', array($this, 'formatLogMessage'), array('is_safe' => array('html'))),
-            new Twig_SimpleFilter('file_link', array($this, 'getFileLink')),
-        );
+        return [
+            new Twig_SimpleFilter('abbr_class', [$this, 'abbrClass'], ['is_safe' => ['html']]),
+            new Twig_SimpleFilter('abbr_method', [$this, 'abbrMethod'], ['is_safe' => ['html']]),
+            new Twig_SimpleFilter('format_args', [$this, 'formatArgs'], ['is_safe' => ['html']]),
+            new Twig_SimpleFilter('format_args_as_text', [$this, 'formatArgsAsText']),
+            new Twig_SimpleFilter('file_excerpt', [$this, 'fileExcerpt'], ['is_safe' => ['html']]),
+            new Twig_SimpleFilter('format_file', [$this, 'formatFile'], ['is_safe' => ['html']]),
+            new Twig_SimpleFilter('format_file_from_text', [$this, 'formatFileFromText'], ['is_safe' => ['html']]),
+            new Twig_SimpleFilter('format_log_message', [$this, 'formatLogMessage'], ['is_safe' => ['html']]),
+            new Twig_SimpleFilter('file_link', [$this, 'getFileLink']),
+        ];
     }
 
     public function abbrClass($class)
@@ -77,9 +77,9 @@ class CodeExtension extends Twig_Extension
 
     public function abbrMethod($method)
     {
-        if (false !== strpos($method, '::')) {
+        if (false !== mb_strpos($method, '::')) {
             list($class, $method) = explode('::', $method, 2);
-            $result = sprintf('%s::%s()', $this->abbrClass($class), $method);
+            $result               = sprintf('%s::%s()', $this->abbrClass($class), $method);
         } elseif ('Closure' === $method) {
             $result = sprintf('<abbr title="%s">%s</abbr>', $method, $method);
         } else {
@@ -98,18 +98,18 @@ class CodeExtension extends Twig_Extension
      */
     public function formatArgs($args)
     {
-        $result = array();
+        $result = [];
         foreach ($args as $key => $item) {
             if ('object' === $item[0]) {
-                $parts = explode('\\', $item[1]);
-                $short = array_pop($parts);
+                $parts          = explode('\\', $item[1]);
+                $short          = array_pop($parts);
                 $formattedValue = sprintf('<em>object</em>(<abbr title="%s">%s</abbr>)', $item[1], $short);
             } elseif ('array' === $item[0]) {
                 $formattedValue = sprintf('<em>array</em>(%s)', is_array($item[1]) ? $this->formatArgs($item[1]) : $item[1]);
             } elseif ('null' === $item[0]) {
                 $formattedValue = '<em>null</em>';
             } elseif ('boolean' === $item[0]) {
-                $formattedValue = '<em>'.strtolower(var_export($item[1], true)).'</em>';
+                $formattedValue = '<em>' . mb_strtolower(var_export($item[1], true)) . '</em>';
             } elseif ('resource' === $item[0]) {
                 $formattedValue = '<em>resource</em>';
             } else {
@@ -153,21 +153,21 @@ class CodeExtension extends Twig_Extension
             $code = preg_replace('#^<code.*?>\s*<span.*?>(.*)</span>\s*</code>#s', '\\1', $code);
             // split multiline spans
             $code = preg_replace_callback('#<span ([^>]++)>((?:[^<]*+<br \/>)++[^<]*+)</span>#', function ($m) {
-                return "<span $m[1]>".str_replace('<br />', "</span><br /><span $m[1]>", $m[2]).'</span>';
+                return "<span $m[1]>" . str_replace('<br />', "</span><br /><span $m[1]>", $m[2]) . '</span>';
             }, $code);
             $content = explode('<br />', $code);
 
-            $lines = array();
+            $lines = [];
 
             if (0 > $srcContext) {
                 $srcContext = count($content);
             }
 
             for ($i = max($line - $srcContext, 1), $max = min($line + $srcContext, count($content)); $i <= $max; ++$i) {
-                $lines[] = '<li'.($i == $line ? ' class="selected"' : '').'><a class="anchor" name="line'.$i.'"></a><code>'.self::fixCodeMarkup($content[$i - 1]).'</code></li>';
+                $lines[] = '<li' . ($i == $line ? ' class="selected"' : '') . '><a class="anchor" name="line' . $i . '"></a><code>' . self::fixCodeMarkup($content[$i - 1]) . '</code></li>';
             }
 
-            return '<ol start="'.max($line - $srcContext, 1).'">'.implode("\n", $lines).'</ol>';
+            return '<ol start="' . max($line - $srcContext, 1) . '">' . implode("\n", $lines) . '</ol>';
         }
     }
 
@@ -186,10 +186,10 @@ class CodeExtension extends Twig_Extension
 
         if (null === $text) {
             $text = str_replace('/', DIRECTORY_SEPARATOR, $file);
-            if (0 === strpos($text, $this->rootDir)) {
-                $text = substr($text, strlen($this->rootDir));
+            if (0 === mb_strpos($text, $this->rootDir)) {
+                $text = mb_substr($text, mb_strlen($this->rootDir));
                 $text = explode(DIRECTORY_SEPARATOR, $text, 2);
-                $text = sprintf('<abbr title="%s%2$s">%s</abbr>%s', $this->rootDir, $text[0], isset($text[1]) ? DIRECTORY_SEPARATOR.$text[1] : '');
+                $text = sprintf('<abbr title="%s%2$s">%s</abbr>%s', $this->rootDir, $text[0], isset($text[1]) ? DIRECTORY_SEPARATOR . $text[1] : '');
             }
         }
 
@@ -213,7 +213,7 @@ class CodeExtension extends Twig_Extension
     public function getFileLink($file, $line): string
     {
         if ($fmt = $this->fileLinkFormat) {
-            return is_string($fmt) ? strtr($fmt, array('%f' => $file, '%l' => $line)) : $fmt->format($file, $line);
+            return is_string($fmt) ? strtr($fmt, ['%f' => $file, '%l' => $line]) : $fmt->format($file, $line);
         }
 
         return false;
@@ -222,20 +222,21 @@ class CodeExtension extends Twig_Extension
     public function formatFileFromText($text)
     {
         return preg_replace_callback('/in ("|&quot;)?(.+?)\1(?: +(?:on|at))? +line (\d+)/s', function ($match) {
-            return 'in '.$this->formatFile($match[2], $match[3]);
+            return 'in ' . $this->formatFile($match[2], $match[3]);
         }, $text);
     }
 
     /**
      * @internal
+     * @param mixed $message
      */
     public function formatLogMessage($message, array $context)
     {
-        if ($context && false !== strpos($message, '{')) {
-            $replacements = array();
+        if ($context && false !== mb_strpos($message, '{')) {
+            $replacements = [];
             foreach ($context as $key => $val) {
                 if (is_scalar($val)) {
-                    $replacements['{'.$key.'}'] = $val;
+                    $replacements['{' . $key . '}'] = $val;
                 }
             }
 
@@ -258,16 +259,16 @@ class CodeExtension extends Twig_Extension
     protected static function fixCodeMarkup($line)
     {
         // </span> ending tag from previous line
-        $opening = strpos($line, '<span');
-        $closing = strpos($line, '</span>');
+        $opening = mb_strpos($line, '<span');
+        $closing = mb_strpos($line, '</span>');
 
         if (false !== $closing && (false === $opening || $closing < $opening)) {
             $line = substr_replace($line, '', $closing, 7);
         }
 
         // missing </span> tag at the end of line
-        $opening = strpos($line, '<span');
-        $closing = strpos($line, '</span>');
+        $opening = mb_strpos($line, '<span');
+        $closing = mb_strpos($line, '</span>');
 
         if (false !== $opening && (false === $closing || $closing > $opening)) {
             $line .= '</span>';
