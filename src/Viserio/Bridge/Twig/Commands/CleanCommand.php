@@ -23,8 +23,8 @@ class CleanCommand extends Command
     public function handle()
     {
         $container = $this->getContainer();
-        $twig  = $container->get('twig');
-        $files = $container->get(FilesystemContract::class);
+        $twig      = $container->get('twig');
+        $files     = $container->get(FilesystemContract::class);
 
         $cacheDir = $twig->getCache();
 

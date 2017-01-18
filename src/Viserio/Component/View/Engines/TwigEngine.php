@@ -3,9 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Engines;
 
 use ErrorException;
-use Twig_Error_Loader;
-use Twig_Error;
 use Twig_Environment;
+use Twig_Error;
 use Twig_Loader_Filesystem;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
 
