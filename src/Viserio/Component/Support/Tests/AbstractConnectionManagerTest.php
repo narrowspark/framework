@@ -22,7 +22,7 @@ class AbstractConnectionManagerTest extends TestCase
         $config->shouldReceive('get')->once();
 
         $manager = new TestConnectionManager($config);
-        $manager->connection('fail');
+        $manager->getConnection('fail');
     }
 
     public function testConnection()
@@ -41,7 +41,7 @@ class AbstractConnectionManagerTest extends TestCase
 
         $manager = new TestConnectionManager($config);
 
-        self::assertTrue($manager->connection());
+        self::assertTrue($manager->getConnection());
         self::assertTrue(is_array($manager->getConnections('class')));
     }
 
@@ -60,7 +60,7 @@ class AbstractConnectionManagerTest extends TestCase
             return new stdClass();
         });
 
-        self::assertInstanceOf(stdClass::class, $manager->connection('test'));
+        self::assertInstanceOf(stdClass::class, $manager->getConnection('test'));
     }
 
     public function testGetConfig()
@@ -158,10 +158,10 @@ class AbstractConnectionManagerTest extends TestCase
         });
 
         self::assertTrue($manager->hasConnection('stdclass2'));
-        self::assertInstanceOf(stdClass::class, $manager->connection('stdclass2'));
+        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdclass2'));
 
         $manager->reconnect('stdclass2');
 
-        self::assertInstanceOf(stdClass::class, $manager->connection('stdclass2'));
+        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdclass2'));
     }
 }

@@ -36,11 +36,11 @@ class AbstractManagerTest extends TestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        self::assertTrue($manager->driver('test'));
+        self::assertTrue($manager->getDriver('test'));
 
-        self::assertEquals(['name' => 'config', 'driver' => 'config'], $manager->driver('config'));
+        self::assertEquals(['name' => 'config', 'driver' => 'config'], $manager->getDriver('config'));
 
-        self::assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->driver('value'));
+        self::assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->getDriver('value'));
         self::assertTrue($manager->hasDriver('value'));
         self::assertEquals([
             'test'   => true,
@@ -48,7 +48,7 @@ class AbstractManagerTest extends TestCase
             'value'  => ['name' => 'value', 'driver' => 'foo'],
         ], $manager->getDrivers());
 
-        self::assertInstanceOf('stdClass', $manager->driver('testmanager'));
+        self::assertInstanceOf('stdClass', $manager->getDriver('testmanager'));
     }
 
     public function testCustomeDriver()
@@ -75,7 +75,7 @@ class AbstractManagerTest extends TestCase
             return 'custom';
         });
 
-        self::assertSame('custom', $manager->driver('custom'));
+        self::assertSame('custom', $manager->getDriver('custom'));
     }
 
     /**
@@ -94,7 +94,7 @@ class AbstractManagerTest extends TestCase
                 ],
             ],
         ]));
-        $manager->driver('dont');
+        $manager->getDriver('dont');
     }
 
     public function testCall()
@@ -122,7 +122,7 @@ class AbstractManagerTest extends TestCase
         });
         $manager->setDefaultDriver('call');
 
-        $driver = $manager->driver('call');
+        $driver = $manager->getDriver('call');
 
         self::assertInstanceOf(ArrayContainer::class, $driver);
         self::assertFalse($manager->has('test'));
@@ -154,7 +154,7 @@ class AbstractManagerTest extends TestCase
         };
         $manager->extend(__CLASS__, $driver);
 
-        self::assertEquals($manager, $manager->driver(__CLASS__));
+        self::assertEquals($manager, $manager->getDriver(__CLASS__));
         self::assertTrue($manager->hasDriver(__CLASS__));
     }
 

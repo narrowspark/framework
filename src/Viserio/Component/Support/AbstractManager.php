@@ -105,7 +105,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      *
      * @return mixed
      */
-    public function driver(string $driver = null)
+    public function getDriver(string $driver = null)
     {
         $driver = $driver ?? $this->getDefaultDriver();
 

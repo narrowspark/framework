@@ -46,6 +46,6 @@ class CacheServiceProvider implements ServiceProvider
 
     public static function registerDefaultCache(ContainerInterface $container): CacheItemPoolInterface
     {
-        return $container->get(CacheManager::class)->driver();
+        return $container->get(CacheManager::class)->getDriver();
     }
 }
