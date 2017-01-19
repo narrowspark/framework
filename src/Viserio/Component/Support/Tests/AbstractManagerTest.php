@@ -26,9 +26,9 @@ class AbstractManagerTest extends TestCase
                 'test' => [
                     'default' => 'test',
                     'drivers' => [
-                        'test' => ['driver' => 'test'],
-                        'config' => ['driver' => 'config'],
-                        'value' => ['driver' => 'foo'],
+                        'test'        => ['driver' => 'test'],
+                        'config'      => ['driver' => 'config'],
+                        'value'       => ['driver' => 'foo'],
                         'testmanager' => ['driver' => 'testmanager'],
                     ],
                 ],
@@ -67,7 +67,7 @@ class AbstractManagerTest extends TestCase
                     'drivers' => [
                         'custom' => [''],
                     ],
-                ]
+                ],
             ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
@@ -90,9 +90,9 @@ class AbstractManagerTest extends TestCase
                     'test' => [
                         'default' => 'test',
                         'drivers' => [],
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ]));
         $manager->driver('dont');
     }
@@ -113,7 +113,7 @@ class AbstractManagerTest extends TestCase
                     'drivers' => [
                         'call' => [''],
                     ],
-                ]
+                ],
             ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
@@ -144,7 +144,7 @@ class AbstractManagerTest extends TestCase
                     'drivers' => [
                         __CLASS__ => [''],
                     ],
-                ]
+                ],
             ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
@@ -176,7 +176,7 @@ class AbstractManagerTest extends TestCase
                             'servers' => 'localhost',
                         ],
                     ],
-                ]
+                ],
             ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
@@ -198,7 +198,7 @@ class AbstractManagerTest extends TestCase
                 'test' => [
                     'default' => 'example',
                     'drivers' => [],
-                ]
+                ],
             ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
