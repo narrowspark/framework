@@ -46,7 +46,7 @@ class CachedFactory
      *
      * @return \League\Flysystem\Cached\CacheInterface
      */
-    public function connection(array $config): CacheInterface
+    public function getConnection(array $config): CacheInterface
     {
         if (! isset($config['cache'], $config['cache']['driver'])) {
             throw new InvalidArgumentException('A driver must be specified.');

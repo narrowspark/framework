@@ -12,6 +12,7 @@ use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
 use Viserio\Component\Filesystem\Providers\FilesystemServiceProvider;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class FilesystemServiceProviderTest extends TestCase
 {
@@ -21,11 +22,20 @@ class FilesystemServiceProviderTest extends TestCase
         $container->register(new ConfigServiceProvider());
         $container->register(new FilesystemServiceProvider());
         $container->register(new CacheServiceProvider());
-
-        $container->get('config')->setArray([
-            'filesystem.connections' => [
-                'local' => [
-                    'path' => __DIR__, 'prefix' => 'your-prefix',
+        $container->get(RepositoryContract::class)->setArray([
+            'viserio' => [
+                'filesystem' => [
+                    'default'   => 'local',
+                    'connections' => [
+                        'local' => [
+                            'path' => __DIR__, 'prefix' => 'your-prefix',
+                        ],
+                    ],
+                ],
+                'cache' => [
+                    'default'   => 'array',
+                    'drivers'   => [],
+                    'namespace' => false,
                 ],
             ],
         ]);

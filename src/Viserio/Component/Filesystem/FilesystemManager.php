@@ -50,13 +50,13 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     public function getFlysystemAdapter(string $name = null): AdapterInterface
     {
-        return parent::connection($name);
+        return parent::getConnection($name);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function connection(string $name = null)
+    public function getConnection(string $name = null)
     {
         $name = $name ?? $this->getDefaultConnection();
 

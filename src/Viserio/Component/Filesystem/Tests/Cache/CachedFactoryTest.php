@@ -23,7 +23,7 @@ class CachedFactoryTest extends TestCase
     {
         $cache = new CachedFactory($this->mock(FilesystemManager::class));
 
-        $cache->connection(['test']);
+        $cache->getConnection(['test']);
     }
 
     /**
@@ -37,7 +37,7 @@ class CachedFactoryTest extends TestCase
             ->andReturn(false);
         $cache = new CachedFactory($manager);
 
-        $cache->connection([
+        $cache->getConnection([
             'cache' => [
                 'driver' => 'local',
             ],
@@ -57,7 +57,7 @@ class CachedFactoryTest extends TestCase
 
         $cache = new CachedFactory($manager);
 
-        $adapter = $cache->connection([
+        $adapter = $cache->getConnection([
             'cache' => [
                 'driver' => 'local',
                 'name'   => 'local',
@@ -83,7 +83,7 @@ class CachedFactoryTest extends TestCase
 
         $cache = new CachedFactory($manager, $cacheManager);
 
-        $adapter = $cache->connection([
+        $adapter = $cache->getConnection([
             'cache' => [
                 'driver' => 'array',
                 'name'   => 'array',
