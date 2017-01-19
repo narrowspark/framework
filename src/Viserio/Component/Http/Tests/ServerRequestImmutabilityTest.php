@@ -7,7 +7,7 @@ use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\Http\Tests\Fixture\MutableObject;
 
 /**
- * Ported from psr7immutability
+ * Ported from psr7immutability.
  *
  * @link https://github.com/pmjones/psr7immutability
  */
@@ -78,7 +78,7 @@ class ServerRequestImmutabilityTest extends TestCase
         $request = $this->request->withAttribute(
             'testArray',
             [
-                'testRef' => &$testRef
+                'testRef' => &$testRef,
             ]
         );
 
@@ -182,7 +182,7 @@ class ServerRequestImmutabilityTest extends TestCase
     {
         $testRef = 'foo';
         $request = $this->request->withParsedBody([
-            'testRef' => &$testRef
+            'testRef' => &$testRef,
         ]);
 
         // value should still be 'foo'
