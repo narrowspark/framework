@@ -12,31 +12,28 @@ class AbstractManagerTest extends TestCase
 {
     use MockeryTrait;
 
-    public function testConfigSetGet()
-    {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get');
-
-        $manager = new TestManager($config);
-        $manager->setConfig($config);
-
-        self::assertSame($config, $manager->getConfig());
-    }
-
     public function testDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('test.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'test' => [''],
+                'test' => ['default' => 'test', 'drivers' => ['test' => ['']]],
             ]);
 
-        $manager = new TestManager($config);
+        $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
         self::assertTrue($manager->driver('test'));
 
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
         $config->shouldReceive('get')
             ->once()
             ->with('test.drivers', [])
@@ -81,7 +78,7 @@ class AbstractManagerTest extends TestCase
                 'custom' => [''],
             ]);
 
-        $manager = new TestManager($config);
+        $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
         $manager->extend('custom', function () {
             return 'custom';
         });
@@ -97,7 +94,7 @@ class AbstractManagerTest extends TestCase
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get');
 
-        $manager = new TestManager($config);
+        $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
         $manager->driver('dont');
     }
 
@@ -114,7 +111,7 @@ class AbstractManagerTest extends TestCase
             ->once()
             ->with('test.default', 'call');
 
-        $manager = new TestManager($config);
+        $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
         $manager->extend('call', function () {
             return new ArrayContainer();
         });
@@ -141,7 +138,7 @@ class AbstractManagerTest extends TestCase
                 __CLASS__ => [''],
             ]);
 
-        $manager = new TestManager($config);
+        $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
         $driver = function () {
             return $this;
@@ -164,7 +161,7 @@ class AbstractManagerTest extends TestCase
                 ],
             ]);
 
-        $manager = new TestManager($config);
+        $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
         self::assertTrue(is_array($manager->getDriverConfig('pdo')));
     }
@@ -177,7 +174,7 @@ class AbstractManagerTest extends TestCase
             ->with('test.default', '')
             ->andReturn('example');
 
-        $manager = new TestManager($config);
+        $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
         self::assertSame('example', $manager->getDefaultDriver());
 

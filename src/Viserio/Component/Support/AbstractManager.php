@@ -4,14 +4,24 @@ namespace Viserio\Component\Support;
 
 use Closure;
 use InvalidArgumentException;
+use Interop\Config\ConfigurationTrait;
+use Interop\Config\RequiresMandatoryOptions;
+use Interop\Config\RequiresConfig;
+use Interop\Container\ContainerInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
-abstract class AbstractManager
+abstract class AbstractManager implements RequiresMandatoryOptions
 {
     use ContainerAwareTrait;
-    use ConfigAwareTrait;
+    use ConfigurationTrait;
+
+    /**
+     * Handler config.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $config = [];
 
     /**
      * The registered custom driver creators.
@@ -30,11 +40,29 @@ abstract class AbstractManager
     /**
      * Create a new manager instance.
      *
-     * @param \Viserio\Component\Contracts\Config\Repository $config
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(RepositoryContract $config)
+    public function __construct(ContainerInterface $container)
     {
-        $this->config = $config;
+        $this->container = $container;
+
+        $this->createConfiguration($container);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dimensions(): iterable
+    {
+        return ['viserio', $this->getConfigName()];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mandatoryOptions(): iterable
+    {
+        return ['default', 'drivers'];
     }
 
     /**
@@ -57,7 +85,7 @@ abstract class AbstractManager
      */
     public function getDefaultDriver(): string
     {
-        return $this->config->get($this->getConfigName() . '.default', '');
+        return $this->config['default'];
     }
 
     /**
@@ -67,7 +95,7 @@ abstract class AbstractManager
      */
     public function setDefaultDriver(string $name)
     {
-        $this->config->set($this->getConfigName() . '.default', $name);
+        $this->config['default'] = $name;
     }
 
     /**
@@ -139,7 +167,7 @@ abstract class AbstractManager
     {
         $name = $name ?? $this->getDefaultDriver();
 
-        $drivers = $this->config->get($this->getConfigName() . '.drivers', []);
+        $drivers = $this->config['drivers'] ?? [];
 
         if (isset($drivers[$name]) && is_array($drivers[$name])) {
             $config         = $drivers[$name];
@@ -192,4 +220,24 @@ abstract class AbstractManager
      * @return string
      */
     abstract protected function getConfigName(): string;
+
+    /**
+     * Create handler configuration.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @see \Viserio\Component\Exception\ErrorHandler::options()
+     *
+     * @return void
+     */
+    protected function createConfiguration(ContainerInterface $container): void
+    {
+        if ($container->has(RepositoryContract::class)) {
+            $config = $container->get(RepositoryContract::class);
+        } else {
+            $config = $container->get('config');
+        }
+
+        $this->config = $this->options($config);
+    }
 }
