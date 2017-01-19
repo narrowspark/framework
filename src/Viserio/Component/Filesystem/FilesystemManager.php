@@ -12,10 +12,21 @@ use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Support\AbstractConnectionManager;
+use Interop\Config\ProvidesDefaultOptions;
 
-class FilesystemManager extends AbstractConnectionManager
+class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptions
 {
     use CacheManagerAwareTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function defaultOptions(): iterable
+    {
+        return [
+            'default' => 'local',
+        ];
+    }
 
     /**
      * Get a crypted aware connection instance.
@@ -28,14 +39,6 @@ class FilesystemManager extends AbstractConnectionManager
     public function cryptedConnection(Key $key, string $name = null)
     {
         return new EncryptionWrapper($this->connection($name), $key);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultConnection(): string
-    {
-        return $this->config->get($this->getConfigName() . '.default', 'local');
     }
 
     /**
@@ -105,7 +108,7 @@ class FilesystemManager extends AbstractConnectionManager
      */
     protected function getCacheConfig(string $name): array
     {
-        $cache = $this->config->get($this->getConfigName() . '.cached');
+        $cache = $this->config['cached'];
 
         if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
             throw new InvalidArgumentException(sprintf('Cache [%s] not configured.', $name));

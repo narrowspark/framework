@@ -8,12 +8,20 @@ use Interop\Config\RequiresConfig;
 use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractConnectionManager implements RequiresConfig, RequiresMandatoryOptions
 {
     use ContainerAwareTrait;
     use ConfigurationTrait;
+
+    /**
+     * Handler config.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $config = [];
 
     /**
      * The active connection instances.
@@ -37,6 +45,8 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+
+        $this->createConfiguration($container);
     }
 
     /**
@@ -65,7 +75,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function mandatoryOptions(): iterable
     {
-        return ['default', 'connections'];
+        return ['connections'];
     }
 
     /**
@@ -101,7 +111,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
 
         $this->disconnect($name);
 
-        return $this->connection($name);
+        return $this->getConnection($name);
     }
 
     /**
@@ -123,7 +133,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function getDefaultConnection(): string
     {
-        return $this->config[$this->getConfigName() . '.default'];
+        return $this->config['default'];
     }
 
     /**
@@ -133,7 +143,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function setDefaultConnection(string $name)
     {
-        $this->config[$this->getConfigName() . '.default'] = $name;
+        $this->config['default'] = $name;
     }
 
     /**
@@ -182,7 +192,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        $connections = $this->config[$this->getConfigName() . '.connections'];
+        $connections = $this->config['connections'];
 
         if (isset($connections[$name]) && is_array($connections[$name])) {
             $config         = $connections[$name];
@@ -235,4 +245,24 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      * @return string
      */
     abstract protected function getConfigName(): string;
+
+    /**
+     * Create handler configuration.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @see \Viserio\Component\Exception\ErrorHandler::options()
+     *
+     * @return void
+     */
+    protected function createConfiguration(ContainerInterface $container): void
+    {
+        if ($container->has(RepositoryContract::class)) {
+            $config = $container->get(RepositoryContract::class);
+        } else {
+            $config = $container->get('config');
+        }
+
+        $this->config = $this->options($config);
+    }
 }

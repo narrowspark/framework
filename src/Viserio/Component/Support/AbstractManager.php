@@ -75,7 +75,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      */
     public function mandatoryOptions(): iterable
     {
-        return ['default', 'drivers'];
+        return ['drivers'];
     }
 
     /**
