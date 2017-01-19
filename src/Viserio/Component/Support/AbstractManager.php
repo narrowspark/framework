@@ -3,11 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use InvalidArgumentException;
 use Interop\Config\ConfigurationTrait;
 use Interop\Config\RequiresMandatoryOptions;
-use Interop\Config\RequiresConfig;
 use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
@@ -50,6 +49,19 @@ abstract class AbstractManager implements RequiresMandatoryOptions
     }
 
     /**
+     * Dynamically call the default driver instance.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return call_user_func_array([$this->driver(), $method], $parameters);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function dimensions(): iterable
@@ -63,19 +75,6 @@ abstract class AbstractManager implements RequiresMandatoryOptions
     public function mandatoryOptions(): iterable
     {
         return ['default', 'drivers'];
-    }
-
-    /**
-     * Dynamically call the default driver instance.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        return call_user_func_array([$this->driver(), $method], $parameters);
     }
 
     /**
