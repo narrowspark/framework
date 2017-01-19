@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
 use Twig_Loader_Array;
-use Viserio\Component\View\Engines\TwigEngine as BaseTwigEngine;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\View\Engines\TwigEngine as BaseTwigEngine;
 
 class TwigEngine extends BaseTwigEngine
 {

@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Engines;
 
 use ErrorException;
-use Twig_LoaderInterface;
 use Twig_Environment;
 use Twig_Error;
 use Twig_Loader_Filesystem;
+use Twig_LoaderInterface;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
 
 class TwigEngine implements EngineContract

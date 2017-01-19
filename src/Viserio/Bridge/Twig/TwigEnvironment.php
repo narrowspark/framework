@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig;
 
+use Interop\Config\ConfigurationTrait;
 use Interop\Container\ContainerInterface;
 use Twig_Environment;
 use Twig_LoaderInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\View\Finder as FinderContract;
-use Interop\Config\ConfigurationTrait;
 
 class TwigEnvironment extends Twig_Environment
 {
