@@ -59,7 +59,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array([$this->driver(), $method], $parameters);
+        return call_user_func_array([$this->getDriver(), $method], $parameters);
     }
 
     /**
