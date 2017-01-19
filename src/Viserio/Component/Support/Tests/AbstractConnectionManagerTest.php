@@ -23,7 +23,7 @@ class AbstractConnectionManagerTest extends TestCase
             'config' => [
                 'viserio' => [
                     'connection' => [
-                        'default' => 'test',
+                        'default'     => 'test',
                         'connections' => [],
                     ],
                 ],
@@ -44,7 +44,7 @@ class AbstractConnectionManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'connection' => [
-                    'default' => 'test',
+                    'default'     => 'test',
                     'connections' => [
                         'test' => [],
                     ],
@@ -52,7 +52,7 @@ class AbstractConnectionManagerTest extends TestCase
             ]);
 
         $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config
+            RepositoryContract::class => $config,
         ]));
 
         self::assertTrue($manager->getConnection());
@@ -71,7 +71,7 @@ class AbstractConnectionManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'connection' => [
-                    'default' => 'test',
+                    'default'     => 'test',
                     'connections' => [
                         'test' => [],
                     ],
@@ -79,7 +79,7 @@ class AbstractConnectionManagerTest extends TestCase
             ]);
 
         $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config
+            RepositoryContract::class => $config,
         ]));
         $manager->extend('test', function () {
             return new stdClass();
@@ -100,7 +100,7 @@ class AbstractConnectionManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'connection' => [
-                    'default' => 'pdo',
+                    'default'     => 'pdo',
                     'connections' => [
                         'pdo' => [
                             'servers' => 'localhost',
@@ -110,7 +110,7 @@ class AbstractConnectionManagerTest extends TestCase
             ]);
 
         $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config
+            RepositoryContract::class => $config,
         ]));
 
         self::assertTrue(is_array($manager->getConnectionConfig('pdo')));
@@ -128,15 +128,15 @@ class AbstractConnectionManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'connection' => [
-                    'default' => 'foo',
+                    'default'     => 'foo',
                     'connections' => [
-                        'foo' => ['driver']
+                        'foo' => ['driver'],
                     ],
                 ],
             ]);
 
         $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config
+            RepositoryContract::class => $config,
         ]));
 
         self::assertSame([], $manager->getConnections());
@@ -160,13 +160,13 @@ class AbstractConnectionManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'connection' => [
-                    'default' => 'example',
+                    'default'     => 'example',
                     'connections' => [],
                 ],
             ]);
 
         $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config
+            RepositoryContract::class => $config,
         ]));
 
         self::assertSame('example', $manager->getDefaultConnection());
@@ -188,7 +188,7 @@ class AbstractConnectionManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'connection' => [
-                    'default' => 'stdclass2',
+                    'default'     => 'stdclass2',
                     'connections' => [
                         'stdclass2' => [
                             'servers' => 'localhost',
@@ -198,7 +198,7 @@ class AbstractConnectionManagerTest extends TestCase
             ]);
 
         $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config
+            RepositoryContract::class => $config,
         ]));
         $manager->extend('stdclass2', function ($options) {
             return new stdClass();

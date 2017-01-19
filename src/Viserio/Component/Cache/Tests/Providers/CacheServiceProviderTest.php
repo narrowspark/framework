@@ -21,11 +21,11 @@ class CacheServiceProviderTest extends TestCase
         $container->get(RepositoryContract::class)->setArray([
             'viserio' => [
                 'cache' => [
-                    'default' => 'array',
-                    'drivers' => [],
+                    'default'   => 'array',
+                    'drivers'   => [],
                     'namespace' => false,
                 ],
-            ]
+            ],
         ]);
 
         self::assertInstanceOf(CacheManager::class, $container->get(CacheManager::class));

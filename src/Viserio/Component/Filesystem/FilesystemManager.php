@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
 use Defuse\Crypto\Key;
+use Interop\Config\ProvidesDefaultOptions;
 use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
@@ -12,7 +13,6 @@ use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Support\AbstractConnectionManager;
-use Interop\Config\ProvidesDefaultOptions;
 
 class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptions
 {

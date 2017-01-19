@@ -7,15 +7,14 @@ use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Void\VoidCachePool;
 use Cache\Namespaced\NamespacedCachePool;
-use Interop\Container\ContainerInterface;
 use League\Flysystem\Adapter\Local;
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Narrowspark\TestingHelper\ArrayContainer;
 
 class CacheManagerTest extends TestCase
 {
@@ -43,13 +42,13 @@ class CacheManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'cache' => [
-                    'drivers' => [],
+                    'drivers'   => [],
                     'namespace' => false,
                 ],
             ]);
         $manager = new CacheManager(
             new ArrayContainer([
-                RepositoryContract::class => $config
+                RepositoryContract::class => $config,
             ])
         );
 
@@ -68,14 +67,14 @@ class CacheManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'cache' => [
-                    'default' => 'array',
-                    'drivers' => [],
+                    'default'   => 'array',
+                    'drivers'   => [],
                     'namespace' => false,
                 ],
             ]);
         $manager = new CacheManager(
             new ArrayContainer([
-                RepositoryContract::class => $config
+                RepositoryContract::class => $config,
             ])
         );
 
@@ -96,14 +95,14 @@ class CacheManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'cache' => [
-                    'default' => 'array',
-                    'drivers' => [],
+                    'default'   => 'array',
+                    'drivers'   => [],
                     'namespace' => 'viserio',
                 ],
             ]);
         $manager = new CacheManager(
             new ArrayContainer([
-                RepositoryContract::class => $config
+                RepositoryContract::class => $config,
             ])
         );
 
@@ -122,14 +121,14 @@ class CacheManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'cache' => [
-                    'default' => 'null',
-                    'drivers' => [],
+                    'default'   => 'null',
+                    'drivers'   => [],
                     'namespace' => 'viserio',
                 ],
             ]);
         $manager = new CacheManager(
             new ArrayContainer([
-                RepositoryContract::class => $config
+                RepositoryContract::class => $config,
             ])
         );
 
@@ -148,17 +147,17 @@ class CacheManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'cache' => [
-                    'default' => 'null',
-                    'drivers' => [],
+                    'default'   => 'null',
+                    'drivers'   => [],
                     'namespace' => 'viserio',
-                    'chain' => [
-                        'options' => []
-                    ]
+                    'chain'     => [
+                        'options' => [],
+                    ],
                 ],
             ]);
         $manager = new CacheManager(
             new ArrayContainer([
-                RepositoryContract::class => $config
+                RepositoryContract::class => $config,
             ])
         );
 
@@ -190,8 +189,8 @@ class CacheManagerTest extends TestCase
             ]);
         $manager = new CacheManager(
             new ArrayContainer([
-                'local' => new Local(__DIR__ . '/'),
-                RepositoryContract::class => $config
+                'local'                   => new Local(__DIR__ . '/'),
+                RepositoryContract::class => $config,
             ])
         );
 
