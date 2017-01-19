@@ -23,7 +23,7 @@
         "cakephp/chronos"                                    : "^1.0",
         "narrowspark/arr"                                    : "^1.0",
         "psr/http-message"                                   : "^1.0",
-        "viserio/config"                                     : "self.version",
+        "sandrokeil/interop-config"                          : "^2.0",
         "viserio/cotracts"                                   : "self.version",
         "viserio/encrypter"                                  : "self.version",
         "viserio/support"                                    : "self.version"
@@ -38,6 +38,7 @@
         "phpunit/phpunit"                                    : "~5.7",
         "http-interop/http-middleware"                       : "^0.3",
         "viserio/cache"                                      : "self.version",
+        "viserio/config"                                     : "self.version",
         "viserio/cookie"                                     : "self.version",
         "viserio/filesystem"                                 : "self.version",
         "viserio/http-factory"                               : "self.version"

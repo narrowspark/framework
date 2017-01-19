@@ -21,8 +21,6 @@
         "php"                                 : "^7.1",
         "defuse/php-encryption"               : "^2.0",
         "ext-openssl"                         : "*",
-        "paragonie/constant_time_encoding"    : "^2.0",
-        "phpseclib/phpseclib"                 : "^2.0",
         "viserio/contracts"                   : "self.version"
     },
     "require-dev": {

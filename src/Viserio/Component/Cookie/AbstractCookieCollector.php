@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
-class AbstractCookieCollector
+abstract class AbstractCookieCollector
 {
     /**
      * All stored cookies.
