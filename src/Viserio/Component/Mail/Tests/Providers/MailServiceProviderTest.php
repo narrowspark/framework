@@ -26,20 +26,24 @@ class MailServiceProviderTest extends TestCase
         $container->register(new EventsServiceProvider());
         $container->register(new MailServiceProvider());
 
-        $container->get(RepositoryContract::class)->set('mail', [
-            'drivers' => [
-                'smtp' => [
-                    'host' => 'smtp.mailgun.org',
-                    'port' => '25',
+        $container->get(RepositoryContract::class)->setArray([
+            'viserio' => [
+                'mail' => [
+                    'drivers' => [
+                        'smtp' => [
+                            'host' => 'smtp.mailgun.org',
+                            'port' => '25',
+                        ],
+                    ],
+                    'from' => [
+                        'address' => '',
+                        'name'    => '',
+                    ],
+                    'to' => [
+                        'address' => '',
+                        'name'    => '',
+                    ],
                 ],
-            ],
-            'from' => [
-                'address' => '',
-                'name'    => '',
-            ],
-            'to' => [
-                'address' => '',
-                'name'    => '',
             ],
         ]);
 
@@ -58,12 +62,18 @@ class MailServiceProviderTest extends TestCase
         $container->register(new FilesServiceProvider());
         $container->register(new ViewServiceProvider());
 
-        $container->get(RepositoryContract::class)->set('mail', ['drivers' => [
-            'smtp' => [
-                'host' => 'smtp.mailgun.org',
-                'port' => '25',
+        $container->get(RepositoryContract::class)->setArray([
+            'viserio' => [
+                'mail' => [
+                    'drivers' => [
+                        'smtp' => [
+                            'host' => 'smtp.mailgun.org',
+                            'port' => '25',
+                        ],
+                    ],
+                ],
             ],
-        ]]);
+        ]);
         $container->instance(QueueContract::class, $this->getMockBuilder(QueueContract::class)->getMock());
 
         self::assertInstanceOf(QueueMailer::class, $container->get(MailerContract::class));
