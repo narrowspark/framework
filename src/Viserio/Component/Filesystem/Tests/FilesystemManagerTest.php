@@ -8,6 +8,7 @@ use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;
 use MongoClient;
 use MongoConnectionException;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Cache\Manager as CacheManager;
@@ -15,7 +16,6 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
-use Narrowspark\TestingHelper\ArrayContainer;
 
 class FilesystemManagerTest extends TestCase
 {

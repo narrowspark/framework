@@ -8,11 +8,11 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Cache\Providers\CacheServiceProvider;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
 use Viserio\Component\Filesystem\Providers\FilesystemServiceProvider;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class FilesystemServiceProviderTest extends TestCase
 {
@@ -25,7 +25,7 @@ class FilesystemServiceProviderTest extends TestCase
         $container->get(RepositoryContract::class)->setArray([
             'viserio' => [
                 'filesystem' => [
-                    'default'   => 'local',
+                    'default'     => 'local',
                     'connections' => [
                         'local' => [
                             'path' => __DIR__, 'prefix' => 'your-prefix',
