@@ -38,7 +38,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     public function cryptedConnection(Key $key, string $name = null)
     {
-        return new EncryptionWrapper($this->connection($name), $key);
+        return new EncryptionWrapper($this->getConnection($name), $key);
     }
 
     /**
@@ -132,7 +132,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
         if (isset($config['cache']) && is_array($config['cache'])) {
             $cacheFactory = new CachedFactory($this, $this->getCacheManager());
 
-            $adapter = new CachedAdapter($adapter, $cacheFactory->connection($config));
+            $adapter = new CachedAdapter($adapter, $cacheFactory->getConnection($config));
 
             unset($config['cache']);
         }
