@@ -36,6 +36,7 @@
     ],
     "require": {
         "php"                                 : "^7.1",
+        "container-interop/container-interop" : "^1.1",
         "league/flysystem"                    : "^1.0.27",
         "narrowspark/arr"                     : "^1.0",
         "sandrokeil/interop-config"           : "^2.0",
