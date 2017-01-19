@@ -9,11 +9,11 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class ServerRequestFactoryTest extends TestCase
 {
-    private $factory;
+    private $request;
 
     public function setUp()
     {
-        $this->factory = new ServerRequestFactory();
+        $this->request = new ServerRequestFactory();
     }
 
     public function dataGetUriFromGlobals()
@@ -93,7 +93,7 @@ class ServerRequestFactoryTest extends TestCase
     public function testGetUriFromGlobals($expected, $serverParams)
     {
         $_SERVER       = $serverParams;
-        $serverRequest = $this->factory->createServerRequest($_SERVER);
+        $serverRequest = $this->request->createServerRequest($_SERVER);
 
         self::assertEquals(new Uri($expected), $serverRequest->getUri());
     }
@@ -151,7 +151,7 @@ class ServerRequestFactoryTest extends TestCase
             ],
         ];
 
-        $server = $this->factory->createServerRequest($_SERVER);
+        $server = $this->request->createServerRequest($_SERVER);
 
         self::assertEquals('POST', $server->getMethod());
         self::assertEquals([
