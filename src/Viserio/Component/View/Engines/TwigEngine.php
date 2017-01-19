@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Engines;
 
 use ErrorException;
+use Twig_LoaderInterface;
 use Twig_Environment;
 use Twig_Error;
 use Twig_Loader_Filesystem;
@@ -44,6 +45,8 @@ class TwigEngine implements EngineContract
         } catch (Twig_Error $exception) {
             $this->handleTwigError($exception);
         }
+
+        return $content;
     }
 
     /**
@@ -77,9 +80,9 @@ class TwigEngine implements EngineContract
     /**
      * Twig paths loader.
      *
-     * @return \Twig_Loader_Filesystem
+     * @return \Twig_LoaderInterface
      */
-    protected function getLoader(): Twig_Loader_Filesystem
+    protected function getLoader(): Twig_LoaderInterface
     {
         $config = $this->config['template'] ?? [];
         $loader = new Twig_Loader_Filesystem($config['default'] ?? []);

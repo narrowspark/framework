@@ -7,15 +7,17 @@ use Twig_Environment;
 use Twig_LoaderInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\View\Finder as FinderContract;
+use Interop\Config\ConfigurationTrait;
 
 class TwigEnvironment extends Twig_Environment
 {
+    use ConfigurationTrait;
     use ContainerAwareTrait;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(Twig_LoaderInterface $loader, array $options, ContainerInterface $container)
+    public function __construct(Twig_LoaderInterface $loader, ContainerInterface $container, array $options)
     {
         parent::__construct($loader, $options);
 
