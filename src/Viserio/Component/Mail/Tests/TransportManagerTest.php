@@ -39,7 +39,7 @@ class TransportManagerTest extends TestCase
 
         $manager = new TransportManager(new ArrayContainer([
             RepositoryContract::class => $config,
-            LoggerInterface::class => $this->mock(LoggerInterface::class),
+            LoggerInterface::class    => $this->mock(LoggerInterface::class),
         ]));
 
         self::assertInstanceOf(LogTransport::class, $manager->getDriver('log'));

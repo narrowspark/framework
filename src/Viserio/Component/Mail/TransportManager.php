@@ -4,6 +4,7 @@ namespace Viserio\Component\Mail;
 
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
+use Interop\Config\ProvidesDefaultOptions;
 use Narrowspark\Arr\Arr;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
@@ -15,7 +16,6 @@ use Viserio\Component\Mail\Transport\Mandrill as MandrillTransport;
 use Viserio\Component\Mail\Transport\Ses as SesTransport;
 use Viserio\Component\Mail\Transport\SparkPost as SparkPostTransport;
 use Viserio\Component\Support\AbstractManager;
-use Interop\Config\ProvidesDefaultOptions;
 
 class TransportManager extends AbstractManager implements ProvidesDefaultOptions
 {
