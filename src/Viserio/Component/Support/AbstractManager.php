@@ -9,8 +9,9 @@ use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Interop\Config\RequiresConfig;
 
-abstract class AbstractManager implements RequiresMandatoryOptions
+abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptions
 {
     use ContainerAwareTrait;
     use ConfigurationTrait;

@@ -23,32 +23,22 @@ class AbstractManagerTest extends TestCase
             ->once()
             ->with('viserio')
             ->andReturn([
-                'test' => ['default' => 'test', 'drivers' => ['test' => ['']]],
+                'test' => [
+                    'default' => 'test',
+                    'drivers' => [
+                        'test' => ['driver' => 'test'],
+                        'config' => ['driver' => 'config'],
+                        'value' => ['driver' => 'foo'],
+                        'testmanager' => ['driver' => 'testmanager'],
+                    ],
+                ],
             ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
         self::assertTrue($manager->driver('test'));
 
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('test.drivers', [])
-            ->andReturn([
-                'config' => ['driver' => 'config'],
-            ]);
-
         self::assertEquals(['name' => 'config', 'driver' => 'config'], $manager->driver('config'));
-
-        $config->shouldReceive('get')
-            ->once()
-            ->with('test.drivers', [])
-            ->andReturn([
-                'value' => ['driver' => 'foo'],
-            ]);
 
         self::assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->driver('value'));
         self::assertTrue($manager->hasDriver('value'));
@@ -58,24 +48,26 @@ class AbstractManagerTest extends TestCase
             'value'  => ['name' => 'value', 'driver' => 'foo'],
         ], $manager->getDrivers());
 
-        $config->shouldReceive('get')
-            ->once()
-            ->with('test.drivers', [])
-            ->andReturn([
-                'testmanager' => ['driver' => 'testmanager'],
-            ]);
-
         self::assertInstanceOf('stdClass', $manager->driver('testmanager'));
     }
 
     public function testCustomeDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('test.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'custom' => [''],
+                'test' => [
+                    'default' => 'test',
+                    'drivers' => [
+                        'custom' => [''],
+                    ],
+                ]
             ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
@@ -88,39 +80,47 @@ class AbstractManagerTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Driver [dont] not supported.
      */
     public function testDriverToThrowException()
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get');
-
-        $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
+        $manager = new TestManager(new ArrayContainer([
+            'config' => [
+                'viserio' => [
+                    'test' => [
+                        'default' => 'test',
+                        'drivers' => [],
+                    ]
+                ]
+            ]
+        ]));
         $manager->driver('dont');
     }
 
     public function testCall()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('test.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'call' => [''],
+                'test' => [
+                    'default' => 'test',
+                    'drivers' => [
+                        'call' => [''],
+                    ],
+                ]
             ]);
-        $config->shouldReceive('set')
-            ->once()
-            ->with('test.default', 'call');
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
         $manager->extend('call', function () {
             return new ArrayContainer();
         });
         $manager->setDefaultDriver('call');
-
-        $config->shouldReceive('get')
-            ->once()
-            ->with('test.default', '')
-            ->andReturn('call');
 
         $driver = $manager->driver('call');
 
@@ -131,11 +131,20 @@ class AbstractManagerTest extends TestCase
     public function testCustomDriverClosureBoundObjectIsCacheManager()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('test.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                __CLASS__ => [''],
+                'test' => [
+                    'default' => __CLASS__,
+                    'drivers' => [
+                        __CLASS__ => [''],
+                    ],
+                ]
             ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
@@ -152,13 +161,22 @@ class AbstractManagerTest extends TestCase
     public function testGetDriverConfig()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('test.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'pdo' => [
-                    'servers' => 'localhost',
-                ],
+                'test' => [
+                    'default' => 'pdo',
+                    'drivers' => [
+                        'pdo' => [
+                            'servers' => 'localhost',
+                        ],
+                    ],
+                ]
             ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
@@ -169,23 +187,25 @@ class AbstractManagerTest extends TestCase
     public function testDefaultDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('test.default', '')
-            ->andReturn('example');
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'test' => [
+                    'default' => 'example',
+                    'drivers' => [],
+                ]
+            ]);
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
         self::assertSame('example', $manager->getDefaultDriver());
 
-        $config->shouldReceive('set')
-            ->once()
-            ->with('test.default', 'new');
         $manager->setDefaultDriver('new');
-        $config->shouldReceive('get')
-            ->once()
-            ->with('test.default', '')
-            ->andReturn('new');
 
         self::assertSame('new', $manager->getDefaultDriver());
     }
