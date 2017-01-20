@@ -4,7 +4,6 @@ namespace Viserio\Component\Session;
 
 use Interop\Config\ProvidesDefaultOptions;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use RuntimeException;
 use SessionHandlerInterface;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
@@ -216,15 +215,9 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
      */
     protected function createCacheBased($driver, array $options = []): StoreContract
     {
-        $container = $this->container;
-
-        if (! $container->has(CacheManagerContract::class)) {
-            throw new RuntimeException('');
-        }
-
         return $this->buildSession(
             new CacheBasedSessionHandler(
-                clone $container->get(CacheManagerContract::class)->getDriver($driver, $options),
+                clone $this->container->get(CacheManagerContract::class)->getDriver($driver, $options),
                 $this->config['lifetime']
             )
         );
