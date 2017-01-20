@@ -27,8 +27,13 @@ class SessionServiceProviderTest extends TestCase
         $container->get('config')->set('encryption', [
             'key' => $key->saveToAsciiSafeString(),
         ]);
-        $container->get('config')->set('session', [
-            'path'     => '',
+        $container->get('config')->set('viserio.session', [
+            'default'  => 'local',
+            'drivers'  => [
+                'local' => [
+                    'path' => '',
+                ],
+            ],
             'lifetime' => 3000,
             'cookie'   => 'test',
         ]);

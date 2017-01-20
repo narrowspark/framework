@@ -4,6 +4,7 @@ namespace Viserio\Component\Mail;
 
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
+use Interop\Config\ProvidesDefaultOptions;
 use Narrowspark\Arr\Arr;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
@@ -16,36 +17,17 @@ use Viserio\Component\Mail\Transport\Ses as SesTransport;
 use Viserio\Component\Mail\Transport\SparkPost as SparkPostTransport;
 use Viserio\Component\Support\AbstractManager;
 
-class TransportManager extends AbstractManager
+class TransportManager extends AbstractManager implements ProvidesDefaultOptions
 {
     /**
-     * Get the default driver name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getDefaultDriver(): string
+    public function defaultOptions(): iterable
     {
-        return $this->config->get($this->getConfigName() . '.default', 'smtp');
+        return [
+            'default' => 'smtp',
+        ];
     }
-
-    /**
-     * Get the configuration for a driver.
-     *
-     * @param string $name
-     *
-     * @return array
-     */
-    // public function getDriverConfig(string $name): array
-    // {
-    //     $name = $name ?? $this->getDefaultDriver();
-
-    //     $drivers = $this->config->get($this->getConfigName(), []);
-
-    //     $config         = $drivers;
-    //     $config['name'] = $name;
-
-    //     return $config;
-    // }
 
     /**
      * Create an instance of the Log Swift Transport driver.

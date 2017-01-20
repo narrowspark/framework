@@ -20,28 +20,6 @@ class SessionManagerTest extends TestCase
 {
     use MockeryTrait;
 
-    protected $manager;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $encrypter = new Encrypter(Key::createNewRandomKey());
-        $config    = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->with('cache.drivers', []);
-        $config->shouldReceive('get')
-            ->with('cache.namespace', false);
-
-        $manager = new SessionManager($config, $encrypter);
-        $manager->setContainer(new ArrayContainer([
-            JarContract::class          => $this->mock(JarContract::class),
-            CacheManagerContract::class => new CacheManager($config),
-        ]));
-
-        $this->manager = $manager;
-    }
-
     public function tearDown()
     {
         $this->manager = null;
@@ -56,22 +34,28 @@ class SessionManagerTest extends TestCase
 
     public function testCookieStore()
     {
-        $manager = $this->manager;
-        $manager->getConfig()
-            ->shouldReceive('get')
-            ->with('session.drivers', [])
-            ->once();
-        $manager->getConfig()
-            ->shouldReceive('get')
-            ->with('session.cookie', '')
-            ->once()
-            ->andReturn('test');
-        $manager->getConfig()
-            ->shouldReceive('get')
-            ->with('session.lifetime')
-            ->once()
-            ->andReturn(5);
-        $session = $manager->driver('cookie');
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->twice()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->twice()
+            ->with('viserio')
+            ->andReturn([
+                'session' => [
+                    'drivers' => [
+                    ],
+                    'cookie'   => '',
+                    'lifetime' => 5,
+                ],
+                'cache' => [
+                    'drivers'   => [],
+                    'namespace' => false,
+                ],
+            ]);
+        $manager = $this->getSessionManager($config);
+        $session = $manager->getDriver('cookie');
 
         $session->setRequestOnHandler($this->mock(ServerRequestInterface::class));
 
@@ -81,23 +65,43 @@ class SessionManagerTest extends TestCase
 
     public function testArrayStore()
     {
-        $manager = $this->manager;
-        $manager->getConfig()
-            ->shouldReceive('get')
-            ->with('session.drivers', [])
-            ->once();
-        $manager->getConfig()
-            ->shouldReceive('get')
-            ->with('session.lifetime')
-            ->once()
-            ->andReturn(5);
-        $manager->getConfig()
-            ->shouldReceive('get')
-            ->with('session.cookie', '')
-            ->once()
-            ->andReturn('test');
-        $session = $manager->driver('array');
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->twice()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->twice()
+            ->with('viserio')
+            ->andReturn([
+                'session' => [
+                    'drivers' => [
+                    ],
+                    'cookie'   => 'test',
+                    'lifetime' => 5,
+                ],
+                'cache' => [
+                    'drivers'   => [],
+                    'namespace' => false,
+                ],
+            ]);
+        $manager = $this->getSessionManager($config);
+        $session = $manager->getDriver('array');
 
         self::assertInstanceOf(StoreContract::class, $session);
+    }
+
+    private function getSessionManager($config)
+    {
+        return new SessionManager(
+            new ArrayContainer([
+                RepositoryContract::class   => $config,
+                JarContract::class          => $this->mock(JarContract::class),
+                CacheManagerContract::class => new CacheManager(new ArrayContainer([
+                    RepositoryContract::class   => $config,
+                ])),
+            ]),
+            new Encrypter(Key::createNewRandomKey())
+        );
     }
 }

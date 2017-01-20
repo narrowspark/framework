@@ -30,11 +30,6 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
     private $files;
 
     /**
-     * @var \Viserio\Component\Session\SessionManager
-     */
-    private $manager;
-
-    /**
      * @var \Viserio\Component\Encryption\Encrypter
      */
     private $encrypter;
@@ -44,18 +39,9 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
         parent::setUp();
 
         $this->files = new Filesystem();
-
         $this->files->createDirectory(__DIR__ . '/stubs');
 
         $this->encrypter = new Encrypter(Key::createNewRandomKey());
-        $config          = $this->mock(RepositoryContract::class);
-
-        $manager = new SessionManager($config, $this->encrypter);
-        $manager->setContainer(new ArrayContainer([
-            FilesystemContract::class => $this->files,
-        ]));
-
-        $this->manager = $manager;
     }
 
     public function tearDown()
@@ -73,66 +59,37 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
 
     public function testSessionCsrfMiddlewareSetCookie()
     {
-        $manager = $this->manager;
-        $config  = $manager->getConfig();
-
-        $config->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('session.drivers', []);
-        $config->shouldReceive('get')
-            ->with('app.env')
-            ->andReturn('dev');
-        $config->shouldReceive('get')
-            ->with('session.driver', null)
-            ->twice()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.driver', 'local')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.path')
-            ->times(3)
-            ->andReturn(__DIR__ . '/stubs');
-        $config->shouldReceive('get')
-            ->with('session.csrf.samesite', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.csrf.livetime', $time = Chronos::now()->getTimestamp() + 60 * 120)
-            ->once()
-            ->andReturn($time);
-        $config->shouldReceive('get')
-            ->with('session.cookie', '')
-            ->once()
-            ->andReturn('session');
-        $config->shouldReceive('get')
-            ->with('session.expire_on_close', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.lottery')
-            ->once()
-            ->andReturn([2, 100]);
-        $config->shouldReceive('get')
-            ->with('session.lifetime')
-            ->twice()
-            ->andReturn(5);
-        $config->shouldReceive('get')
-            ->with('session.http_only', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.domain')
-            ->twice()
-            ->andReturn('/');
-        $config->shouldReceive('get')
-            ->with('session.secure', false)
-            ->twice()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.lifetime', 1440)
-            ->andReturn(1440);
+            ->with('viserio')
+            ->andReturn([
+                'session' => [
+                    'default' => 'local',
+                    'drivers' => [
+                        'local' => [
+                            'path' => __DIR__ . '/stubs',
+                        ],
+                    ],
+                    'cookie'          => 'session',
+                    'path'            => __DIR__ . '/stubs',
+                    'expire_on_close' => false,
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
+                    'csrf'            => [
+                        'samesite' => false,
+                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
+                    ],
+                ],
+            ]);
+        $manager = $this->getSessionManager($config);
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
         $request = $request->withMethod('PUT');
@@ -159,66 +116,37 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
 
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN()
     {
-        $manager = $this->manager;
-        $config  = $manager->getConfig();
-
-        $config->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('session.drivers', []);
-        $config->shouldReceive('get')
-            ->with('app.env')
-            ->andReturn('dev');
-        $config->shouldReceive('get')
-            ->with('session.driver', null)
-            ->twice()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.driver', 'local')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.path')
-            ->times(3)
-            ->andReturn(__DIR__ . '/stubs');
-        $config->shouldReceive('get')
-            ->with('session.csrf.samesite', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.csrf.livetime', $time = Chronos::now()->getTimestamp() + 60 * 120)
-            ->once()
-            ->andReturn($time);
-        $config->shouldReceive('get')
-            ->with('session.cookie', '')
-            ->once()
-            ->andReturn('session');
-        $config->shouldReceive('get')
-            ->with('session.expire_on_close', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.lottery')
-            ->once()
-            ->andReturn([2, 100]);
-        $config->shouldReceive('get')
-            ->with('session.lifetime')
-            ->twice()
-            ->andReturn(5);
-        $config->shouldReceive('get')
-            ->with('session.http_only', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.domain')
-            ->twice()
-            ->andReturn('/');
-        $config->shouldReceive('get')
-            ->with('session.secure', false)
-            ->twice()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.lifetime', 1440)
-            ->andReturn(1440);
+            ->with('viserio')
+            ->andReturn([
+                'session' => [
+                    'default' => 'local',
+                    'drivers' => [
+                        'local' => [
+                            'path' => __DIR__ . '/stubs',
+                        ],
+                    ],
+                    'cookie'          => 'session',
+                    'path'            => __DIR__ . '/stubs',
+                    'expire_on_close' => false,
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
+                    'csrf'            => [
+                        'samesite' => false,
+                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
+                    ],
+                ],
+            ]);
+        $manager = $this->getSessionManager($config);
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
         $request = $request->withMethod('PUT');
@@ -245,66 +173,37 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
 
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN()
     {
-        $manager = $this->manager;
-        $config  = $manager->getConfig();
-
-        $config->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('session.drivers', []);
-        $config->shouldReceive('get')
-            ->with('app.env')
-            ->andReturn('dev');
-        $config->shouldReceive('get')
-            ->with('session.driver', null)
-            ->twice()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.driver', 'local')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.path')
-            ->times(3)
-            ->andReturn(__DIR__ . '/stubs');
-        $config->shouldReceive('get')
-            ->with('session.csrf.samesite', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.csrf.livetime', $time = Chronos::now()->getTimestamp() + 60 * 120)
-            ->once()
-            ->andReturn($time);
-        $config->shouldReceive('get')
-            ->with('session.cookie', '')
-            ->once()
-            ->andReturn('session');
-        $config->shouldReceive('get')
-            ->with('session.expire_on_close', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.lottery')
-            ->once()
-            ->andReturn([2, 100]);
-        $config->shouldReceive('get')
-            ->with('session.lifetime')
-            ->twice()
-            ->andReturn(5);
-        $config->shouldReceive('get')
-            ->with('session.http_only', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.domain')
-            ->twice()
-            ->andReturn('/');
-        $config->shouldReceive('get')
-            ->with('session.secure', false)
-            ->twice()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.lifetime', 1440)
-            ->andReturn(1440);
+            ->with('viserio')
+            ->andReturn([
+                'session' => [
+                    'default' => 'local',
+                    'drivers' => [
+                        'local' => [
+                            'path' => __DIR__ . '/stubs',
+                        ],
+                    ],
+                    'cookie'          => 'session',
+                    'path'            => __DIR__ . '/stubs',
+                    'expire_on_close' => false,
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
+                    'csrf'            => [
+                        'samesite' => false,
+                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
+                    ],
+                ],
+            ]);
+        $manager = $this->getSessionManager($config);
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
         $request = $request->withMethod('PUT');
@@ -337,42 +236,37 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
      */
     public function testSessionCsrfMiddlewareToThrowException()
     {
-        $manager = $this->manager;
-        $config  = $manager->getConfig();
-
-        $config->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('session.drivers', []);
-        $config->shouldReceive('get')
-            ->with('app.env')
-            ->andReturn('dev');
-        $config->shouldReceive('get')
-            ->with('session.driver', null)
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.driver', 'local')
-            ->once()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.path')
-            ->once()
-            ->andReturn(__DIR__ . '/stubs');
-        $config->shouldReceive('get')
-            ->with('session.lifetime')
-            ->once()
-            ->andReturn(1440);
-        $config->shouldReceive('get')
-            ->with('session.cookie', '')
-            ->once()
-            ->andReturn('test');
-        $config->shouldReceive('get')
-            ->with('session.lottery')
-            ->once()
-            ->andReturn([2, 100]);
-        $config->shouldReceive('get')
-            ->with('session.lifetime', 1440)
-            ->andReturn(1440);
+            ->with('viserio')
+            ->andReturn([
+                'session' => [
+                    'default' => 'local',
+                    'drivers' => [
+                        'local' => [
+                            'path' => __DIR__ . '/stubs',
+                        ],
+                    ],
+                    'cookie'          => 'session',
+                    'path'            => __DIR__ . '/stubs',
+                    'expire_on_close' => false,
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
+                    'csrf'            => [
+                        'samesite' => false,
+                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
+                    ],
+                ],
+            ]);
+        $manager = $this->getSessionManager($config);
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
         $request = $request->withMethod('PUT');
@@ -390,5 +284,16 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
         $response = $dispatcher->dispatch($request);
 
         self::assertTrue(is_array($response->getHeader('Set-Cookie')));
+    }
+
+    private function getSessionManager($config)
+    {
+        return new SessionManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+                FilesystemContract::class => $this->files,
+            ]),
+            $this->encrypter
+        );
     }
 }

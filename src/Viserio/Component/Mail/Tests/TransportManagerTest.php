@@ -21,127 +21,216 @@ class TransportManagerTest extends TestCase
 {
     use MockeryTrait;
 
-    /**
-     * @var \Viserio\Component\Mail\TransportManager
-     */
-    protected $manager;
-
-    public function setUp()
-    {
-        $this->manager = new TransportManager($this->mock(RepositoryContract::class));
-    }
-
     public function testLogTransporter()
     {
-        $manager = $this->manager;
-        $manager->getConfig()->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('mail.drivers', []);
-        $manager->setContainer(new ArrayContainer([
-            LoggerInterface::class => $this->mock(LoggerInterface::class),
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'mail' => [
+                    'drivers'   => [],
+                ],
+            ]);
+
+        $manager = new TransportManager(new ArrayContainer([
+            RepositoryContract::class => $config,
+            LoggerInterface::class    => $this->mock(LoggerInterface::class),
         ]));
 
-        self::assertInstanceOf(LogTransport::class, $manager->driver('log'));
+        self::assertInstanceOf(LogTransport::class, $manager->getDriver('log'));
     }
 
     public function testMailTransport()
     {
-        $manager = $this->manager;
-        $manager->getConfig()->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('mail.drivers', []);
-        self::assertInstanceOf(Swift_MailTransport::class, $manager->driver('mail'));
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'mail' => [
+                    'drivers'   => [],
+                ],
+            ]);
+
+        $manager = new TransportManager(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
+
+        self::assertInstanceOf(Swift_MailTransport::class, $manager->getDriver('mail'));
     }
 
     public function testSendmailTransport()
     {
-        $manager = $this->manager;
-        $manager->getConfig()->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('mail.drivers', []);
-        self::assertInstanceOf(Swift_SendmailTransport::class, $manager->driver('sendmail'));
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'mail' => [
+                    'drivers'   => [],
+                ],
+            ]);
+
+        $manager = new TransportManager(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
+
+        self::assertInstanceOf(Swift_SendmailTransport::class, $manager->getDriver('sendmail'));
     }
 
     public function testSmtpTransport()
     {
-        $manager = $this->manager;
-        $manager->getConfig()->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('mail.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'smtp' => [
-                    'host'       => '',
-                    'port'       => '',
-                    'encryption' => '',
-                    'username'   => '',
-                    'password'   => '',
-                    'stream'     => '',
+                'mail' => [
+                    'drivers'   => [
+                        'smtp' => [
+                            'host'       => '',
+                            'port'       => '',
+                            'encryption' => '',
+                            'username'   => '',
+                            'password'   => '',
+                            'stream'     => '',
+                        ],
+                    ],
                 ],
             ]);
 
-        self::assertInstanceOf(Swift_SmtpTransport::class, $manager->driver('smtp'));
+        $manager = new TransportManager(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
+
+        self::assertInstanceOf(Swift_SmtpTransport::class, $manager->getDriver('smtp'));
     }
 
     public function testMailgunTransport()
     {
-        $manager = $this->manager;
-        $manager->getConfig()->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('mail.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'mailgun' => [
-                    'secret' => '',
-                    'domain' => '',
+                'mail' => [
+                    'drivers'   => [
+                        'mailgun' => [
+                            'secret' => '',
+                            'domain' => '',
+                        ],
+                    ],
                 ],
             ]);
 
-        self::assertInstanceOf(MailgunTransport::class, $manager->driver('mailgun'));
+        $manager = new TransportManager(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
+
+        self::assertInstanceOf(MailgunTransport::class, $manager->getDriver('mailgun'));
     }
 
     public function testMandrillTransport()
     {
-        $manager = $this->manager;
-        $manager->getConfig()->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('mail.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'mandrill' => [
-                    'secret' => '',
+                'mail' => [
+                    'drivers'   => [
+                        'mandrill' => [
+                            'secret' => '',
+                        ],
+                    ],
                 ],
             ]);
 
-        self::assertInstanceOf(MandrillTransport::class, $manager->driver('mandrill'));
+        $manager = new TransportManager(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
+
+        self::assertInstanceOf(MandrillTransport::class, $manager->getDriver('mandrill'));
     }
 
     public function testSparkPostTransport()
     {
-        $manager = $this->manager;
-        $manager->getConfig()->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('mail.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'sparkpost' => [
-                    'secret' => '',
+                'mail' => [
+                    'drivers'   => [
+                        'sparkpost' => [
+                            'secret' => '',
+                        ],
+                    ],
                 ],
             ]);
 
-        self::assertInstanceOf(SparkPostTransport::class, $manager->driver('sparkpost'));
+        $manager = new TransportManager(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
+
+        self::assertInstanceOf(SparkPostTransport::class, $manager->getDriver('sparkpost'));
     }
 
     public function testSesTransport()
     {
-        $manager = $this->manager;
-        $manager->getConfig()->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('mail.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'ses' => [
-                    'secret' => '',
-                    'key'    => '',
-                    'region' => 'us-west-2',
+                'mail' => [
+                    'drivers'   => [
+                        'ses' => [
+                            'secret' => '',
+                            'key'    => '',
+                            'region' => 'us-west-2',
+                        ],
+                    ],
                 ],
             ]);
 
-        self::assertInstanceOf(SesTransport::class, $manager->driver('ses'));
+        $manager = new TransportManager(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
+
+        self::assertInstanceOf(SesTransport::class, $manager->getDriver('ses'));
     }
 }

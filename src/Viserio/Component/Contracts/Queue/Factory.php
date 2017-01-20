@@ -11,5 +11,5 @@ interface Factory
      *
      * @return mixed
      */
-    public function connection(string $name = null);
+    public function getConnection(string $name = null);
 }

@@ -8,9 +8,6 @@ use Narrowspark\Arr\Arr;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use Viserio\Component\Connect\ConnectManager;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
@@ -27,25 +24,23 @@ use Viserio\Component\Support\AbstractConnectionManager;
 
 class QueueManager extends AbstractConnectionManager implements MonitorContract, FactoryContract
 {
-    use ContainerAwareTrait;
     use EventsAwareTrait;
     use EncrypterAwareTrait;
 
     /**
      * Create a new queue manager instance.
      *
-     * @param \Viserio\Component\Contracts\Config\Repository    $config
      * @param \Interop\Container\ContainerInterface             $container
      * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(
-        RepositoryContract $config,
         ContainerInteropInterface $container,
         EncrypterContract $encrypter
     ) {
-        $this->config    = $config;
         $this->container = $container;
         $this->encrypter = $encrypter;
+
+        $this->createConfiguration($container);
     }
 
     /**
@@ -95,7 +90,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * {@inheritdoc}
      */
-    public function connection(string $name = null)
+    public function getConnection(string $name = null)
     {
         $name = $name ?? $this->getDefaultConnection();
 
@@ -194,10 +189,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     protected function createRedisConnection(array $config): RedisQueue
     {
-        $connect = new ConnectManager($this->config);
-
         $queue = new RedisQueue(
-            $connect->connection($config['connection']),
+            $this->getContainer()->get('redis'),
             $config['queue'],
             Arr::get($config, 'expire', 90)
         );

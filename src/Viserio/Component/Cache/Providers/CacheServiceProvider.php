@@ -7,7 +7,6 @@ use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class CacheServiceProvider implements ServiceProvider
@@ -38,14 +37,11 @@ class CacheServiceProvider implements ServiceProvider
 
     public static function registerCacheFactory(ContainerInterface $container): CacheManager
     {
-        $cache = new CacheManager($container->get(RepositoryContract::class));
-        $cache->setContainer($container);
-
-        return $cache;
+        return new CacheManager($container);
     }
 
     public static function registerDefaultCache(ContainerInterface $container): CacheItemPoolInterface
     {
-        return $container->get(CacheManager::class)->driver();
+        return $container->get(CacheManager::class)->getDriver();
     }
 }
