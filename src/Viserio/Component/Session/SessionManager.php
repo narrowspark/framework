@@ -4,6 +4,7 @@ namespace Viserio\Component\Session;
 
 use Interop\Config\ProvidesDefaultOptions;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use RuntimeException;
 use SessionHandlerInterface;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
@@ -15,7 +16,6 @@ use Viserio\Component\Session\Handler\CacheBasedSessionHandler;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Support\AbstractManager;
-use RuntimeException;
 
 class SessionManager extends AbstractManager implements ProvidesDefaultOptions
 {

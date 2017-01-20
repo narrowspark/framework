@@ -32,7 +32,7 @@ class SessionServiceProviderTest extends TestCase
             'drivers'  => [
                 'local' => [
                     'path' => '',
-                ]
+                ],
             ],
             'lifetime' => 3000,
             'cookie'   => 'test',
