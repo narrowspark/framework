@@ -147,9 +147,9 @@ class CacheManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'cache' => [
-                    'default'   => 'null',
-                    'drivers'   => [],
-                    'namespace' => 'viserio',
+                    'default'       => 'null',
+                    'drivers'       => [],
+                    'namespace'     => 'viserio',
                     'chain_options' => [],
                 ],
             ]);
