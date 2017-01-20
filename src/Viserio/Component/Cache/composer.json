@@ -39,6 +39,7 @@
     ],
     "require": {
         "php"                                 : "^7.1",
+        "cache/array-adapter"                 : "^0.4",
         "cache/chain-adapter"                 : "^0.4",
         "container-interop/container-interop" : "^1.1",
         "sandrokeil/interop-config"           : "^2.0",

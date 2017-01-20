@@ -17,6 +17,8 @@ class RequestCookiesTest extends TestCase
 
     public function tearDown()
     {
+        unset($_SERVER['SERVER_ADDR']);
+
         parent::tearDown();
 
         $this->allowMockingNonExistentMethods(true);
@@ -38,7 +40,12 @@ class RequestCookiesTest extends TestCase
     {
         $cookie  = new Cookie('encrypted', 'jiafs89320jadfa');
         $cookie2 = new Cookie('encrypted2', 'jiafs89320jadfa');
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
+        $request = (new ServerRequestFactory())->createServerRequest($server);
         $cookies = RequestCookies::fromRequest($request);
         $cookies = $cookies->add($cookie);
         $cookies = $cookies->add($cookie2);

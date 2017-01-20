@@ -18,6 +18,8 @@ class AddQueuedCookiesToResponseMiddlewareTest extends TestCase
 
     public function tearDown()
     {
+        unset($_SERVER['SERVER_ADDR']);
+
         parent::tearDown();
 
         $this->allowMockingNonExistentMethods(true);
@@ -33,7 +35,11 @@ class AddQueuedCookiesToResponseMiddlewareTest extends TestCase
 
         $middleware = new AddQueuedCookiesToResponseMiddleware($jar);
 
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
+        $request = (new ServerRequestFactory())->createServerRequest($server);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);

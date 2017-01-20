@@ -4,7 +4,6 @@ namespace Viserio\Component\HttpFactory;
 
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 use UnexpectedValueException;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\Http\Stream\LazyOpenStream;
@@ -23,7 +22,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $server        = $this->normalizeServer($server);
         $requestMethod = $method ?? $server['REQUEST_METHOD'] ?? 'GET';
         $headers       = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
-        $uri           = $uri ?? $this->getUriFromGlobals();
+        $uri           = $uri ?? Uri::createFromServer($server);
 
         $serverRequest = new ServerRequest(
             $uri,
@@ -39,54 +38,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             ->withQueryParams($_GET)
             ->withParsedBody($_POST)
             ->withUploadedFiles(Util::normalizeFiles($_FILES));
-    }
-
-    /**
-     * Get a Uri populated with values from $_SERVER.
-     *
-     * @return \Psr\Http\Message\UriInterface
-     */
-    protected function getUriFromGlobals(): UriInterface
-    {
-        $uri       = new Uri('');
-        $addSchema = false;
-
-        if (isset($_SERVER['HTTP_HOST'])) {
-            $http = explode(':', $_SERVER['HTTP_HOST']);
-            $uri  = $uri->withHost($http[0]);
-
-            if (isset($http[1])) {
-                $uri = $uri->withPort($http[1]);
-            }
-
-            $addSchema = true;
-        } elseif (isset($_SERVER['SERVER_NAME'])) {
-            $uri = $uri->withHost($_SERVER['SERVER_NAME']);
-
-            if (isset($_SERVER['SERVER_PORT'])) {
-                $uri = $uri->withPort($_SERVER['SERVER_PORT']);
-            }
-
-            $addSchema = true;
-        }
-
-        if ($addSchema) {
-            $uri = $uri->withScheme(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https' : 'http');
-        }
-
-        if (isset($_SERVER['SERVER_PORT'])) {
-            $uri = $uri->withPort($_SERVER['SERVER_PORT']);
-        }
-
-        if (isset($_SERVER['REQUEST_URI'])) {
-            $uri = $uri->withPath(current(explode('?', $_SERVER['REQUEST_URI'])));
-        }
-
-        if (isset($_SERVER['QUERY_STRING'])) {
-            $uri = $uri->withQuery($_SERVER['QUERY_STRING']);
-        }
-
-        return $uri;
     }
 
     /**
