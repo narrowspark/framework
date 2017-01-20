@@ -150,9 +150,7 @@ class CacheManagerTest extends TestCase
                     'default'   => 'null',
                     'drivers'   => [],
                     'namespace' => 'viserio',
-                    'chain'     => [
-                        'options' => [],
-                    ],
+                    'chain_options' => [],
                 ],
             ]);
         $manager = new CacheManager(

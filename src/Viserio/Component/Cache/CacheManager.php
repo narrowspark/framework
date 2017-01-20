@@ -58,7 +58,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
 
         return new CachePoolChain(
             $resolvedPools,
-            $options ?? (array) $this->config['chain']['options'] ?? []
+            $options ?? (array) $this->config['chain_options'] ?? []
         );
     }
 
