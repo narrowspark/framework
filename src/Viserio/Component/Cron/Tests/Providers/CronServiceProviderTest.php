@@ -8,9 +8,9 @@ use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cache\Providers\CacheServiceProvider;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class CronServiceProviderTest extends TestCase
 {
