@@ -7,7 +7,6 @@ use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;

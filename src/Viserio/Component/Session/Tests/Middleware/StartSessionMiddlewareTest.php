@@ -63,16 +63,16 @@ class StartSessionMiddlewareTest extends TestCase
             ->andReturn([
                 'session' => [
                     'drivers' => [
-                        'local' => []
+                        'local' => [],
                     ],
-                    'cookie' => 'test',
-                    'path' => __DIR__ . '/stubs',
+                    'cookie'          => 'test',
+                    'path'            => __DIR__ . '/stubs',
                     'expire_on_close' => false,
-                    'lottery' => [2, 100],
-                    'lifetime' => 1440,
-                    'domain' => '/',
-                    'http_only' => false,
-                    'secure' => false,
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
                 ],
             ]);
         $manager = $this->getSessionManager($config);
@@ -100,16 +100,16 @@ class StartSessionMiddlewareTest extends TestCase
             ->andReturn([
                 'session' => [
                     'drivers' => [
-                        'cookie' => []
+                        'cookie' => [],
                     ],
-                    'cookie' => 'test',
-                    'path' => __DIR__ . '/stubs',
+                    'cookie'          => 'test',
+                    'path'            => __DIR__ . '/stubs',
                     'expire_on_close' => false,
-                    'lottery' => [2, 100],
-                    'lifetime' => 1440,
-                    'domain' => '/',
-                    'http_only' => false,
-                    'secure' => false,
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
                 ],
             ]);
         $manager = $this->getSessionManager($config);

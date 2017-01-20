@@ -46,8 +46,8 @@ class SessionManagerTest extends TestCase
                 'session' => [
                     'drivers' => [
                     ],
-                    'cookie' => '',
-                    'lifetime' => 5
+                    'cookie'   => '',
+                    'lifetime' => 5,
                 ],
                 'cache' => [
                     'drivers'   => [],
@@ -77,8 +77,8 @@ class SessionManagerTest extends TestCase
                 'session' => [
                     'drivers' => [
                     ],
-                    'cookie' => 'test',
-                    'lifetime' => 5
+                    'cookie'   => 'test',
+                    'lifetime' => 5,
                 ],
                 'cache' => [
                     'drivers'   => [],

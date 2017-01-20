@@ -72,21 +72,21 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
                     'default' => 'local',
                     'drivers' => [
                         'local' => [
-                            'path' => __DIR__ . '/stubs'
-                        ]
+                            'path' => __DIR__ . '/stubs',
+                        ],
                     ],
-                    'cookie' => 'session',
-                    'path' => __DIR__ . '/stubs',
+                    'cookie'          => 'session',
+                    'path'            => __DIR__ . '/stubs',
                     'expire_on_close' => false,
-                    'lottery' => [2, 100],
-                    'lifetime' => 1440,
-                    'domain' => '/',
-                    'http_only' => false,
-                    'secure' => false,
-                    'csrf' => [
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
+                    'csrf'            => [
                         'samesite' => false,
-                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120
-                    ]
+                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
+                    ],
                 ],
             ]);
         $manager = $this->getSessionManager($config);
@@ -129,21 +129,21 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
                     'default' => 'local',
                     'drivers' => [
                         'local' => [
-                            'path' => __DIR__ . '/stubs'
-                        ]
+                            'path' => __DIR__ . '/stubs',
+                        ],
                     ],
-                    'cookie' => 'session',
-                    'path' => __DIR__ . '/stubs',
+                    'cookie'          => 'session',
+                    'path'            => __DIR__ . '/stubs',
                     'expire_on_close' => false,
-                    'lottery' => [2, 100],
-                    'lifetime' => 1440,
-                    'domain' => '/',
-                    'http_only' => false,
-                    'secure' => false,
-                    'csrf' => [
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
+                    'csrf'            => [
                         'samesite' => false,
-                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120
-                    ]
+                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
+                    ],
                 ],
             ]);
         $manager = $this->getSessionManager($config);
@@ -186,21 +186,21 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
                     'default' => 'local',
                     'drivers' => [
                         'local' => [
-                            'path' => __DIR__ . '/stubs'
-                        ]
+                            'path' => __DIR__ . '/stubs',
+                        ],
                     ],
-                    'cookie' => 'session',
-                    'path' => __DIR__ . '/stubs',
+                    'cookie'          => 'session',
+                    'path'            => __DIR__ . '/stubs',
                     'expire_on_close' => false,
-                    'lottery' => [2, 100],
-                    'lifetime' => 1440,
-                    'domain' => '/',
-                    'http_only' => false,
-                    'secure' => false,
-                    'csrf' => [
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
+                    'csrf'            => [
                         'samesite' => false,
-                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120
-                    ]
+                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
+                    ],
                 ],
             ]);
         $manager = $this->getSessionManager($config);
@@ -249,21 +249,21 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
                     'default' => 'local',
                     'drivers' => [
                         'local' => [
-                            'path' => __DIR__ . '/stubs'
-                        ]
+                            'path' => __DIR__ . '/stubs',
+                        ],
                     ],
-                    'cookie' => 'session',
-                    'path' => __DIR__ . '/stubs',
+                    'cookie'          => 'session',
+                    'path'            => __DIR__ . '/stubs',
                     'expire_on_close' => false,
-                    'lottery' => [2, 100],
-                    'lifetime' => 1440,
-                    'domain' => '/',
-                    'http_only' => false,
-                    'secure' => false,
-                    'csrf' => [
+                    'lottery'         => [2, 100],
+                    'lifetime'        => 1440,
+                    'domain'          => '/',
+                    'http_only'       => false,
+                    'secure'          => false,
+                    'csrf'            => [
                         'samesite' => false,
-                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120
-                    ]
+                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
+                    ],
                 ],
             ]);
         $manager = $this->getSessionManager($config);

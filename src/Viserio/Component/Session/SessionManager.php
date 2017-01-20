@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session;
 
+use Interop\Config\ProvidesDefaultOptions;
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use SessionHandlerInterface;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
@@ -15,8 +15,6 @@ use Viserio\Component\Session\Handler\CacheBasedSessionHandler;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Support\AbstractManager;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Interop\Config\ProvidesDefaultOptions;
 
 class SessionManager extends AbstractManager implements ProvidesDefaultOptions
 {
