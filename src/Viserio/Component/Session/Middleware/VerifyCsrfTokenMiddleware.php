@@ -21,6 +21,13 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
     protected $manager;
 
     /**
+     * Manager default driver config.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $config = [];
+
+    /**
      * The URIs that should be excluded from CSRF verification.
      *
      * @var array
@@ -31,10 +38,13 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      * Create a new session middleware.
      *
      * @param \Viserio\Component\Session\SessionManager $manager
+     * @param string                                    $env
      */
-    public function __construct(SessionManager $manager)
+    public function __construct(SessionManager $manager, string $env = 'production')
     {
         $this->manager = $manager;
+        $this->env     = $env;
+        $this->config  = $manager->getDriverConfig($manager->getDefaultDriver());
     }
 
     /**
@@ -65,7 +75,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return php_sapi_name() == 'cli' && $this->manager->getConfig()->get('app.env') == 'testing';
+        return php_sapi_name() == 'cli' && $this->env === 'testing';
     }
 
     /**
@@ -126,17 +136,17 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
         ServerRequestInterface $request,
         ResponseInterface $response
     ): ResponseInterface {
-        $config = $this->manager->getConfig();
+        $config = $this->config;
 
         $setCookie = new SetCookie(
             'XSRF-TOKEN',
             $request->getAttribute('session')->getToken(),
-            $config->get('session.csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
-            $config->get('session.path'),
-            $config->get('session.domain'),
-            $config->get('session.secure', false),
+            $config['csrf.livetime'] ?? Chronos::now()->getTimestamp() + 60 * 120,
+            $config['path'],
+            $config['domain'],
+            $config['secure'] ?? false,
             false,
-            $config->get('session.csrf.samesite', false)
+            $config['csrf.samesite'] ?? false
         );
 
         return $response->withAddedHeader('Set-Cookie', (string) $setCookie);

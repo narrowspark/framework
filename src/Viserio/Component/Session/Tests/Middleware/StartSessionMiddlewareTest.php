@@ -28,11 +28,6 @@ class StartSessionMiddlewareTest extends TestCase
      */
     private $files;
 
-    /**
-     * @var \Viserio\Component\Session\SessionManager
-     */
-    private $manager;
-
     public function setUp()
     {
         parent::setUp();
@@ -40,27 +35,12 @@ class StartSessionMiddlewareTest extends TestCase
         $this->files = new Filesystem();
 
         $this->files->createDirectory(__DIR__ . '/stubs');
-
-        $encrypter = new Encrypter(Key::createNewRandomKey());
-        $config    = $this->mock(RepositoryContract::class);
-
-        $jar = $this->mock(JarContract::class);
-        $jar->shouldReceive('queue')
-            ->andReturn(true);
-
-        $manager = new SessionManager($config, $encrypter);
-        $manager->setContainer(new ArrayContainer([
-            FilesystemContract::class => $this->files,
-            JarContract::class        => $jar,
-        ]));
-
-        $this->manager = $manager;
     }
 
     public function tearDown()
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
-        $this->files = $this->manager = null;
+        $this->files = null;
 
         parent::tearDown();
 
@@ -72,55 +52,30 @@ class StartSessionMiddlewareTest extends TestCase
 
     public function testAddSessionToResponse()
     {
-        $manager = $this->manager;
-        $config  = $manager->getConfig();
-
-        $config->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('session.drivers', []);
-        $config->shouldReceive('get')
-            ->with('session.driver', 'local')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.driver', null)
-            ->twice()
-            ->andReturn('local');
-        $config->shouldReceive('get')
-            ->with('session.lifetime')
-            ->twice()
-            ->andReturn(5);
-        $config->shouldReceive('get')
-            ->with('session.cookie', '')
-            ->once()
-            ->andReturn('test');
-        $config->shouldReceive('get')
-            ->with('session.path')
-            ->twice()
-            ->andReturn(__DIR__ . '/stubs');
-        $config->shouldReceive('get')
-            ->with('session.expire_on_close', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.lottery')
-            ->once()
-            ->andReturn([2, 100]);
-        $config->shouldReceive('get')
-            ->with('session.lifetime', 1440)
-            ->andReturn(1440);
-        $config->shouldReceive('get')
-            ->with('session.domain')
-            ->once()
-            ->andReturn('/');
-        $config->shouldReceive('get')
-            ->with('session.secure', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.http_only', false)
-            ->once()
-            ->andReturn(false);
+            ->with('viserio')
+            ->andReturn([
+                'session' => [
+                    'drivers' => [
+                        'local' => []
+                    ],
+                    'cookie' => 'test',
+                    'path' => __DIR__ . '/stubs',
+                    'expire_on_close' => false,
+                    'lottery' => [2, 100],
+                    'lifetime' => 1440,
+                    'domain' => '/',
+                    'http_only' => false,
+                    'secure' => false,
+                ],
+            ]);
+        $manager = $this->getSessionManager($config);
 
         $middleware = new StartSessionMiddleware($manager);
         $request    = (new ServerRequestFactory())->createServerRequest($_SERVER);
@@ -134,35 +89,30 @@ class StartSessionMiddlewareTest extends TestCase
 
     public function testAddSessionToCookie()
     {
-        $manager = $this->manager;
-        $config  = $manager->getConfig();
-
-        $config->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('session.drivers', []);
-        $config->shouldReceive('get')
-            ->with('session.driver', 'local')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->andReturn('cookie');
-        $config->shouldReceive('get')
-            ->with('session.driver', null)
-            ->twice()
-            ->andReturn('cookie');
-        $config->shouldReceive('get')
-            ->with('session.lifetime')
-            ->once()
-            ->andReturn(5);
-        $config->shouldReceive('get')
-            ->with('session.cookie', '')
-            ->once()
-            ->andReturn('test');
-        $config->shouldReceive('get')
-            ->with('session.lottery')
-            ->once()
-            ->andReturn([2, 100]);
-        $config->shouldReceive('get')
-            ->with('session.lifetime', 1440)
-            ->andReturn(1440);
+            ->with('viserio')
+            ->andReturn([
+                'session' => [
+                    'drivers' => [
+                        'cookie' => []
+                    ],
+                    'cookie' => 'test',
+                    'path' => __DIR__ . '/stubs',
+                    'expire_on_close' => false,
+                    'lottery' => [2, 100],
+                    'lifetime' => 1440,
+                    'domain' => '/',
+                    'http_only' => false,
+                    'secure' => false,
+                ],
+            ]);
+        $manager = $this->getSessionManager($config);
 
         $middleware = new StartSessionMiddleware($manager);
         $request    = (new ServerRequestFactory())->createServerRequest($_SERVER);
@@ -172,5 +122,17 @@ class StartSessionMiddlewareTest extends TestCase
 
             return (new ResponseFactory())->createResponse(200);
         }));
+    }
+
+    private function getSessionManager($config)
+    {
+        return new SessionManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+                FilesystemContract::class => $this->files,
+                JarContract::class        => $this->mock(JarContract::class),
+            ]),
+            new Encrypter(Key::createNewRandomKey())
+        );
     }
 }

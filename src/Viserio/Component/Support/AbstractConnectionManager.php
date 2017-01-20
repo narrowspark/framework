@@ -79,6 +79,16 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     }
 
     /**
+     * Get manager config.
+     *
+     * @return array
+     */
+    public function getConfig(): array
+    {
+        return $this->config;
+    }
+
+    /**
      * Get a connection instance.
      *
      * @param string|null $name

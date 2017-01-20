@@ -17,7 +17,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
     use ConfigurationTrait;
 
     /**
-     * Handler config.
+     * Manager config.
      *
      * @var array|\ArrayAccess
      */
@@ -76,6 +76,16 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
     public function mandatoryOptions(): iterable
     {
         return ['drivers'];
+    }
+
+    /**
+     * Get manager config.
+     *
+     * @return array
+     */
+    public function getConfig(): array
+    {
+        return $this->config;
     }
 
     /**
