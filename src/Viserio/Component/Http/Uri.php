@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http;
 
 use InvalidArgumentException;
+use League\Uri\Parser;
 use Psr\Http\Message\UriInterface;
 use Viserio\Component\Http\Uri\Filter\Fragment;
 use Viserio\Component\Http\Uri\Filter\Host;
@@ -10,7 +11,6 @@ use Viserio\Component\Http\Uri\Filter\Path;
 use Viserio\Component\Http\Uri\Filter\Port;
 use Viserio\Component\Http\Uri\Filter\Query;
 use Viserio\Component\Http\Uri\Filter\Scheme;
-use League\Uri\Parser;
 
 class Uri implements UriInterface
 {
