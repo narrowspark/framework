@@ -4,11 +4,9 @@ namespace Viserio\Component\HttpFactory;
 
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 use UnexpectedValueException;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\Http\Stream\LazyOpenStream;
-use Viserio\Component\Http\Uri;
 use Viserio\Component\Http\Util;
 
 class ServerRequestFactory implements ServerRequestFactoryInterface
