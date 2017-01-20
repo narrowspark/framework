@@ -25,6 +25,13 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
     protected $manager;
 
     /**
+     * Driver config.
+     *
+     * @var array
+     */
+    protected $driverConfig = [];
+
+    /**
      * Manager default driver config.
      *
      * @var array|\ArrayAccess
@@ -38,8 +45,9 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
      */
     public function __construct(SessionManager $manager)
     {
-        $this->manager = $manager;
-        $this->config  = $manager->getDriverConfig($manager->getDefaultDriver());
+        $this->manager      = $manager;
+        $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
+        $this->config       = $manager->getConfig();
     }
 
     /**
@@ -174,10 +182,11 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
             $session->getName(),
             $session->getId(),
             $this->getCookieExpirationDate($config),
-            $config['path'],
-            $config['domain'],
+            $config['path'] ?? '/',
+            $config['domain'] ?? null,
             $config['secure'] ?? false,
-            $config['http_only'] ?? false
+            $config['http_only'] ?? false,
+            $config['same_site'] ?? false
         );
 
         return $response->withAddedHeader('Set-Cookie', (string) $setCookie);
@@ -217,8 +226,6 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
      */
     private function isSessionConfigured(): bool
     {
-        $config = $this->manager->getConfig();
-
-        return ($config['driver'] ?? null) !== null;
+        return isset($this->config['drivers'][$this->manager->getDefaultDriver()]);
     }
 }

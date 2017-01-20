@@ -36,11 +36,11 @@ class SessionManagerTest extends TestCase
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
-            ->once()
+            ->twice()
             ->with('viserio')
             ->andReturn(true);
         $config->shouldReceive('offsetGet')
-            ->once()
+            ->twice()
             ->with('viserio')
             ->andReturn([
                 'session' => [
@@ -67,11 +67,11 @@ class SessionManagerTest extends TestCase
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
-            ->once()
+            ->twice()
             ->with('viserio')
             ->andReturn(true);
         $config->shouldReceive('offsetGet')
-            ->once()
+            ->twice()
             ->with('viserio')
             ->andReturn([
                 'session' => [
@@ -97,7 +97,9 @@ class SessionManagerTest extends TestCase
             new ArrayContainer([
                 RepositoryContract::class   => $config,
                 JarContract::class          => $this->mock(JarContract::class),
-                CacheManagerContract::class => new CacheManager($config),
+                CacheManagerContract::class => new CacheManager(new ArrayContainer([
+                    RepositoryContract::class   => $config,
+                ])),
             ]),
             new Encrypter(Key::createNewRandomKey())
         );

@@ -15,6 +15,7 @@ use Viserio\Component\Session\Handler\CacheBasedSessionHandler;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Support\AbstractManager;
+use RuntimeException;
 
 class SessionManager extends AbstractManager implements ProvidesDefaultOptions
 {

@@ -62,20 +62,30 @@ class StartSessionMiddlewareTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
+                    'default' => 'local',
                     'drivers' => [
-                        'local' => [],
+                        'local' => [
+                            'path' => __DIR__ . '/stubs',
+                        ],
                     ],
                     'cookie'          => 'test',
-                    'path'            => __DIR__ . '/stubs',
+                    'path'            => '/',
                     'expire_on_close' => false,
                     'lottery'         => [2, 100],
                     'lifetime'        => 1440,
-                    'domain'          => '/',
+                    'domain'          => 'google.com',
                     'http_only'       => false,
                     'secure'          => false,
                 ],
             ]);
-        $manager = $this->getSessionManager($config);
+        $manager = new SessionManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+                FilesystemContract::class => $this->files,
+                JarContract::class        => $this->mock(JarContract::class),
+            ]),
+            new Encrypter(Key::createNewRandomKey())
+        );
 
         $middleware = new StartSessionMiddleware($manager);
         $request    = (new ServerRequestFactory())->createServerRequest($_SERVER);
@@ -99,11 +109,11 @@ class StartSessionMiddlewareTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
+                    'default' => 'cookie',
                     'drivers' => [
                         'cookie' => [],
                     ],
                     'cookie'          => 'test',
-                    'path'            => __DIR__ . '/stubs',
                     'expire_on_close' => false,
                     'lottery'         => [2, 100],
                     'lifetime'        => 1440,
@@ -112,7 +122,19 @@ class StartSessionMiddlewareTest extends TestCase
                     'secure'          => false,
                 ],
             ]);
-        $manager = $this->getSessionManager($config);
+
+        $jar = $this->mock(JarContract::class);
+        $jar->shouldReceive('queue')
+            ->once();
+
+        $manager = new SessionManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+                FilesystemContract::class => $this->files,
+                JarContract::class        => $jar,
+            ]),
+            new Encrypter(Key::createNewRandomKey())
+        );
 
         $middleware = new StartSessionMiddleware($manager);
         $request    = (new ServerRequestFactory())->createServerRequest($_SERVER);
@@ -122,17 +144,5 @@ class StartSessionMiddlewareTest extends TestCase
 
             return (new ResponseFactory())->createResponse(200);
         }));
-    }
-
-    private function getSessionManager($config)
-    {
-        return new SessionManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-                FilesystemContract::class => $this->files,
-                JarContract::class        => $this->mock(JarContract::class),
-            ]),
-            new Encrypter(Key::createNewRandomKey())
-        );
     }
 }

@@ -21,6 +21,13 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
     protected $manager;
 
     /**
+     * Driver config.
+     *
+     * @var array
+     */
+    protected $driverConfig = [];
+
+    /**
      * Manager default driver config.
      *
      * @var array|\ArrayAccess
@@ -42,9 +49,10 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      */
     public function __construct(SessionManager $manager, string $env = 'production')
     {
-        $this->manager = $manager;
-        $this->env     = $env;
-        $this->config  = $manager->getDriverConfig($manager->getDefaultDriver());
+        $this->manager      = $manager;
+        $this->env          = $env;
+        $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
+        $this->config       = $manager->getConfig();
     }
 
     /**
