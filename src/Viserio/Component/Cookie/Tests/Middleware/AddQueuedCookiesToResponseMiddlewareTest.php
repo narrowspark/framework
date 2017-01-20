@@ -35,7 +35,7 @@ class AddQueuedCookiesToResponseMiddlewareTest extends TestCase
 
         $middleware = new AddQueuedCookiesToResponseMiddleware($jar);
 
-        $server = $_SERVER;
+        $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 

@@ -37,7 +37,7 @@ class EncryptedCookiesMiddlewareTest extends TestCase
     {
         $encrypter = new Encrypter(Key::createNewRandomKey());
 
-        $server = $_SERVER;
+        $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
@@ -68,7 +68,7 @@ class EncryptedCookiesMiddlewareTest extends TestCase
     {
         $encrypter = new Encrypter(Key::createNewRandomKey());
 
-        $server = $_SERVER;
+        $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 

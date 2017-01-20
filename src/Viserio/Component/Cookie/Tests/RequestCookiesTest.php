@@ -41,7 +41,7 @@ class RequestCookiesTest extends TestCase
         $cookie  = new Cookie('encrypted', 'jiafs89320jadfa');
         $cookie2 = new Cookie('encrypted2', 'jiafs89320jadfa');
 
-        $server = $_SERVER;
+        $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
