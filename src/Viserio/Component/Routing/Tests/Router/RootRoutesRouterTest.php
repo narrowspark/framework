@@ -80,7 +80,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 );
         })->setParameter('name', 'root-slash');
 
-        $router->get('foo/bar/åαф', function ($request, $args) {
+        $router->get('foo/bar/%C3%A5%CE%B1%D1%84', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(
