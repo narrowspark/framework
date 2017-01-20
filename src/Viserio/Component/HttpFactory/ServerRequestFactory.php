@@ -7,8 +7,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\Http\Stream\LazyOpenStream;
-use Viserio\Component\Http\Util;
 use Viserio\Component\Http\Uri;
+use Viserio\Component\Http\Util;
 
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
