@@ -8,6 +8,7 @@ use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;
 use MongoClient;
 use MongoConnectionException;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Cache\Manager as CacheManager;
@@ -23,45 +24,69 @@ class FilesystemManagerTest extends TestCase
     public function testAwsS3ConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'awss3' => [
-                    'key'     => 'your-key',
-                    'secret'  => 'your-secret',
-                    'bucket'  => 'your-bucket',
-                    'region'  => 'us-east-1',
-                    'version' => 'latest',
+                'filesystem' => [
+                    'connections'   => [
+                        'awss3' => [
+                            'key'     => 'your-key',
+                            'secret'  => 'your-secret',
+                            'bucket'  => 'your-bucket',
+                            'region'  => 'us-east-1',
+                            'version' => 'latest',
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('awss3')
+            $manager->getConnection('awss3')
         );
     }
 
     public function testDropboxConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'dropbox' => [
-                    'token' => 'your-token',
-                    'app'   => 'your-app',
+                'filesystem' => [
+                    'connections'   => [
+                        'dropbox' => [
+                            'token' => 'your-token',
+                            'app'   => 'your-app',
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('dropbox')
+            $manager->getConnection('dropbox')
         );
     }
 
@@ -72,23 +97,35 @@ class FilesystemManagerTest extends TestCase
         }
 
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'ftp' => [
-                    'host'     => 'ftp.example.com',
-                    'port'     => 21,
-                    'username' => 'your-username',
-                    'password' => 'your-password',
+                'filesystem' => [
+                    'connections'   => [
+                        'ftp' => [
+                            'host'     => 'ftp.example.com',
+                            'port'     => 21,
+                            'username' => 'your-username',
+                            'password' => 'your-password',
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('ftp')
+            $manager->getConnection('ftp')
         );
     }
 
@@ -99,22 +136,34 @@ class FilesystemManagerTest extends TestCase
         }
 
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'gridfs' => [
-                    'server'   => 'mongodb://localhost:27017',
-                    'database' => 'your-database',
+                'filesystem' => [
+                    'connections'   => [
+                        'gridfs' => [
+                            'server'   => 'mongodb://localhost:27017',
+                            'database' => 'your-database',
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         try {
             self::assertInstanceOf(
                 FilesystemAdapter::class,
-                $manager->connection('gridfs')
+                $manager->getConnection('gridfs')
             );
         } catch (MongoConnectionException $e) {
             $this->markTestSkipped('No mongo serer running');
@@ -124,63 +173,99 @@ class FilesystemManagerTest extends TestCase
     public function testLocalConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'local' => [
-                    'path' => __DIR__,
+                'filesystem' => [
+                    'connections'   => [
+                        'local' => [
+                            'path' => __DIR__,
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('local')
+            $manager->getConnection('local')
         );
     }
 
     public function testNullConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'null' => [],
+                'filesystem' => [
+                    'connections'   => [
+                        'null' => [],
+                    ],
+                ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('null')
+            $manager->getConnection('null')
         );
     }
 
     public function testRackspaceConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'rackspace' => [
-                    'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-                    'region'    => 'LON',
-                    'username'  => 'your-username',
-                    'apiKey'    => 'your-api-key',
-                    'container' => 'your-container',
+                'filesystem' => [
+                    'connections'   => [
+                        'rackspace' => [
+                            'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+                            'region'    => 'LON',
+                            'username'  => 'your-username',
+                            'apiKey'    => 'your-api-key',
+                            'container' => 'your-container',
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         try {
             self::assertInstanceOf(
                 FilesystemAdapter::class,
-                $manager->connection('rackspace')
+                $manager->getConnection('rackspace')
             );
         } catch (CurlException $e) {
             $this->markTestSkipped('No internet connection');
@@ -192,99 +277,159 @@ class FilesystemManagerTest extends TestCase
     public function testSftpConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'sftp' => [
-                    'host'     => 'sftp.example.com',
-                    'port'     => 22,
-                    'username' => 'your-username',
-                    'password' => 'your-password',
+                'filesystem' => [
+                    'connections'   => [
+                        'sftp' => [
+                            'host'     => 'sftp.example.com',
+                            'port'     => 22,
+                            'username' => 'your-username',
+                            'password' => 'your-password',
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('sftp')
+            $manager->getConnection('sftp')
         );
     }
 
     public function testVfsConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'vfs' => [],
+                'filesystem' => [
+                    'connections'   => [
+                        'vfs' => [],
+                    ],
+                ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('vfs')
+            $manager->getConnection('vfs')
         );
     }
 
     public function testWebDavConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'webdav' => [
-                    'baseUri'  => 'http://example.org/dav/',
-                    'userName' => 'your-username',
-                    'password' => 'your-password',
+                'filesystem' => [
+                    'connections'   => [
+                        'webdav' => [
+                            'baseUri'  => 'http://example.org/dav/',
+                            'userName' => 'your-username',
+                            'password' => 'your-password',
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('webdav')
+            $manager->getConnection('webdav')
         );
     }
 
     public function testZipConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'zip' => [
-                    'path' => __DIR__ . '\Adapters\stubs\test.zip',
+                'filesystem' => [
+                    'connections'   => [
+                        'zip' => [
+                            'path' => __DIR__ . '\Adapters\stubs\test.zip',
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('zip')
+            $manager->getConnection('zip')
         );
     }
 
     public function testgetFlysystemAdapter()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'zip' => [
-                    'path' => __DIR__ . '\Adapters\stubs\test.zip',
+                'filesystem' => [
+                    'connections'   => [
+                        'zip' => [
+                            'path' => __DIR__ . '\Adapters\stubs\test.zip',
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             AdapterInterface::class,
@@ -295,27 +440,36 @@ class FilesystemManagerTest extends TestCase
     public function testCachedAdapter()
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
-            ->andReturn([
-                'local' => [
-                    'path'  => __DIR__,
-                    'cache' => 'local',
-                ],
-            ]);
-        $config->shouldReceive('get')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->with('filesystem.cached')
+            ->with('viserio')
             ->andReturn([
-                'local' => [
-                    'driver' => 'local',
-                    'key'    => 'test',
-                    'expire' => 6000,
+                'filesystem' => [
+                    'connections'   => [
+                        'local' => [
+                            'path'  => __DIR__,
+                            'cache' => 'local',
+                        ],
+                    ],
+                    'cached' => [
+                        'local' => [
+                            'driver' => 'local',
+                            'key'    => 'test',
+                            'expire' => 6000,
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         $cacheManager = $this->mock(CacheManager::class);
         $cacheManager->shouldReceive('hasDriver')
@@ -325,7 +479,7 @@ class FilesystemManagerTest extends TestCase
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->connection('local')
+            $manager->getConnection('local')
         );
     }
 
@@ -333,16 +487,28 @@ class FilesystemManagerTest extends TestCase
     {
         $key    = Key::createNewRandomKey();
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('filesystem.connections', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'local' => [
-                    'path' => __DIR__,
+                'filesystem' => [
+                    'connections'   => [
+                        'local' => [
+                            'path' => __DIR__,
+                        ],
+                    ],
                 ],
             ]);
 
-        $manager = new FilesystemManager($config);
+        $manager = new FilesystemManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         self::assertInstanceOf(
             EncryptionWrapper::class,

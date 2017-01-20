@@ -89,10 +89,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
 
     /**
      * Create a new container instance.
-     *
-     * @param string|null $proxyDirectory
      */
-    public function __construct(string $proxyDirectory = null)
+    public function __construct()
     {
         // Auto-register the container
         $this->instance(Container::class, $this);

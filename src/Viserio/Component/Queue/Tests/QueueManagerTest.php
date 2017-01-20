@@ -16,15 +16,33 @@ class QueueManagerTest extends TestCase
 
     public function testConnection()
     {
+        $container = $this->mock(ContainerInteropInterface::class);
+
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('queue.connections', [])
-            ->andReturn([]);
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'queue' => [
+                    'connections' => [
+                    ],
+                ],
+            ]);
+        $container->shouldReceive('has')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn(true);
+        $container->shouldReceive('get')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn($config);
 
         $manager = new QueueManager(
-            $config,
-            $this->mock(ContainerInteropInterface::class),
+            $container,
             $this->mock(EncrypterContract::class)
         );
 
@@ -32,7 +50,7 @@ class QueueManagerTest extends TestCase
             return new TestQueue();
         });
 
-        $connection = $manager->connection('testqueue');
+        $connection = $manager->getConnection('testqueue');
 
         self::assertInstanceOf(ContainerInteropInterface::class, $connection->getContainer());
         self::assertInstanceOf(EncrypterContract::class, $connection->getEncrypter());
@@ -40,11 +58,33 @@ class QueueManagerTest extends TestCase
 
     public function testSetAndGetEncrypter()
     {
+        $container = $this->mock(ContainerInteropInterface::class);
+
         $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'queue' => [
+                    'connections' => [
+                    ],
+                ],
+            ]);
+        $container->shouldReceive('has')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn(true);
+        $container->shouldReceive('get')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn($config);
 
         $manager = new QueueManager(
-            $this->mock(RepositoryContract::class),
-            $this->mock(ContainerInteropInterface::class),
+            $container,
             $this->mock(EncrypterContract::class)
         );
 

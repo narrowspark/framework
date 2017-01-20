@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
 use Defuse\Crypto\Key;
+use Interop\Config\ProvidesDefaultOptions;
 use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
@@ -13,9 +14,19 @@ use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Support\AbstractConnectionManager;
 
-class FilesystemManager extends AbstractConnectionManager
+class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptions
 {
     use CacheManagerAwareTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function defaultOptions(): iterable
+    {
+        return [
+            'default' => 'local',
+        ];
+    }
 
     /**
      * Get a crypted aware connection instance.
@@ -27,15 +38,7 @@ class FilesystemManager extends AbstractConnectionManager
      */
     public function cryptedConnection(Key $key, string $name = null)
     {
-        return new EncryptionWrapper($this->connection($name), $key);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultConnection(): string
-    {
-        return $this->config->get($this->getConfigName() . '.default', 'local');
+        return new EncryptionWrapper($this->getConnection($name), $key);
     }
 
     /**
@@ -47,13 +50,13 @@ class FilesystemManager extends AbstractConnectionManager
      */
     public function getFlysystemAdapter(string $name = null): AdapterInterface
     {
-        return parent::connection($name);
+        return parent::getConnection($name);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function connection(string $name = null)
+    public function getConnection(string $name = null)
     {
         $name = $name ?? $this->getDefaultConnection();
 
@@ -105,7 +108,7 @@ class FilesystemManager extends AbstractConnectionManager
      */
     protected function getCacheConfig(string $name): array
     {
-        $cache = $this->config->get($this->getConfigName() . '.cached');
+        $cache = $this->config['cached'];
 
         if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
             throw new InvalidArgumentException(sprintf('Cache [%s] not configured.', $name));
@@ -129,7 +132,7 @@ class FilesystemManager extends AbstractConnectionManager
         if (isset($config['cache']) && is_array($config['cache'])) {
             $cacheFactory = new CachedFactory($this, $this->getCacheManager());
 
-            $adapter = new CachedAdapter($adapter, $cacheFactory->connection($config));
+            $adapter = new CachedAdapter($adapter, $cacheFactory->getConnection($config));
 
             unset($config['cache']);
         }

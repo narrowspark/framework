@@ -40,9 +40,10 @@
     "require": {
         "php"                                 : "^7.1",
         "cache/chain-adapter"                 : "^0.4",
-        "cache/simple-cache-bridge"           : "^0.1",
-        "viserio/config"                      : "self.version",
-        "viserio/cotracts"                    : "self.version"
+        "container-interop/container-interop" : "^1.1",
+        "sandrokeil/interop-config"           : "^2.0",
+        "viserio/cotracts"                    : "self.version",
+        "viserio/support"                     : "self.version"
     },
     "require-dev": {
         "cache/array-adapter"                 : "^0.4",
@@ -53,6 +54,7 @@
         "micheh/psr7-cache"                   : "^0.5",
         "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "~5.7",
+        "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version"
     },
     "provide": {

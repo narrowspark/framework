@@ -8,6 +8,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cache\Providers\CacheServiceProvider;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 
@@ -22,7 +23,16 @@ class CronServiceProviderTest extends TestCase
         $container->register(new CacheServiceProvider());
         $container->register(new CronServiceProvider());
 
-        $container->get('config')->set('cron', [
+        $container->get(RepositoryContract::class)->setArray([
+            'viserio' => [
+                'cache' => [
+                    'default'   => 'array',
+                    'drivers'   => [],
+                    'namespace' => false,
+                ],
+            ],
+        ]);
+        $container->get(RepositoryContract::class)->set('cron', [
             'console'    => 'cerebro',
             'mutex_path' => __DIR__ . '/..',
             'path'       => __DIR__ . '..',
@@ -52,6 +62,15 @@ class CronServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new CronServiceProvider());
 
+        $container->instance('config', [
+            'viserio' => [
+                'cache' => [
+                    'default'   => 'array',
+                    'drivers'   => [],
+                    'namespace' => false,
+                ],
+            ],
+        ]);
         $container->instance('viserio.cron.options', [
             'console'    => 'cerebro',
             'mutex_path' => __DIR__ . '/..',

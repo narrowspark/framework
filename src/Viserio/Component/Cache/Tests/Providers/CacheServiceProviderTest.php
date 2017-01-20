@@ -9,6 +9,7 @@ use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Cache\Providers\CacheServiceProvider;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class CacheServiceProviderTest extends TestCase
 {
@@ -17,6 +18,15 @@ class CacheServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new CacheServiceProvider());
         $container->register(new ConfigServiceProvider());
+        $container->get(RepositoryContract::class)->setArray([
+            'viserio' => [
+                'cache' => [
+                    'default'   => 'array',
+                    'drivers'   => [],
+                    'namespace' => false,
+                ],
+            ],
+        ]);
 
         self::assertInstanceOf(CacheManager::class, $container->get(CacheManager::class));
         self::assertInstanceOf(CacheManager::class, $container->get('cache'));

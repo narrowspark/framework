@@ -7,7 +7,6 @@ use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;
@@ -26,13 +25,29 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
     protected $manager;
 
     /**
+     * Driver config.
+     *
+     * @var array
+     */
+    protected $driverConfig = [];
+
+    /**
+     * Manager default driver config.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $config = [];
+
+    /**
      * Create a new session middleware.
      *
      * @param \Viserio\Component\Session\SessionManager $manager
      */
     public function __construct(SessionManager $manager)
     {
-        $this->manager = $manager;
+        $this->manager      = $manager;
+        $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
+        $this->config       = $manager->getConfig();
     }
 
     /**
@@ -100,7 +115,7 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
      */
     protected function getSession(ServerRequestInterface $request): StoreContract
     {
-        $session = $this->manager->driver();
+        $session = $this->manager->getDriver();
         $cookies = RequestCookies::fromRequest($request);
 
         $session->setId($cookies->get($session->getName()) ?? '');
@@ -134,8 +149,7 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
      */
     protected function collectGarbage(StoreContract $session)
     {
-        $config      = $this->manager->getConfig();
-        $lottery     = $config->get('session.lottery');
+        $lottery     = $this->config['lottery'];
         $hitsLottery = random_int(1, $lottery[1]) <= $lottery[0];
 
         // Here we will see if this request hits the garbage collection lottery by hitting
@@ -162,16 +176,17 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
             return $response;
         }
 
-        $config = $this->manager->getConfig();
+        $config = $this->config;
 
         $setCookie = new SetCookie(
             $session->getName(),
             $session->getId(),
             $this->getCookieExpirationDate($config),
-            $config->get('session.path'),
-            $config->get('session.domain'),
-            $config->get('session.secure', false),
-            $config->get('session.http_only', false)
+            $config['path'] ?? '/',
+            $config['domain'] ?? null,
+            $config['secure'] ?? false,
+            $config['http_only'] ?? false,
+            $config['same_site'] ?? false
         );
 
         return $response->withAddedHeader('Set-Cookie', (string) $setCookie);
@@ -185,7 +200,7 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
     protected function getSessionLifetimeInSeconds(): int
     {
         // Default 1 day
-        $lifetime = $this->manager->getConfig()->get('session.lifetime', 1440);
+        $lifetime = $this->config['lifetime'] ?? 1440;
 
         return Chronos::now()->subMinutes($lifetime)->getTimestamp();
     }
@@ -193,15 +208,15 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
     /**
      * Get the cookie lifetime in seconds.
      *
-     * @param \Viserio\Component\Contracts\Config\Repository $config
+     * @param array $config
      *
      * @return int|\Cake\Chronos\Chronos
      */
-    protected function getCookieExpirationDate(RepositoryContract $config)
+    protected function getCookieExpirationDate(array $config)
     {
-        return $config->get('session.expire_on_close', false) ?
+        return ($config['expire_on_close'] ?? false) ?
             0 :
-            Chronos::now()->addMinutes($config->get('session.lifetime'));
+            Chronos::now()->addMinutes($config['lifetime']);
     }
 
     /**
@@ -211,6 +226,6 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
      */
     private function isSessionConfigured(): bool
     {
-        return $this->manager->getConfig()->get('session.driver', null) !== null;
+        return isset($this->config['drivers'][$this->manager->getDefaultDriver()]);
     }
 }

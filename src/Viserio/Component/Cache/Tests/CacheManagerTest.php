@@ -7,9 +7,9 @@ use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Void\VoidCachePool;
 use Cache\Namespaced\NamespacedCachePool;
-use Interop\Container\ContainerInterface;
 use League\Flysystem\Adapter\Local;
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
@@ -19,17 +19,6 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 class CacheManagerTest extends TestCase
 {
     use MockeryTrait;
-
-    protected $manager;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->manager = new CacheManager(
-            $this->mock(RepositoryContract::class)
-        );
-    }
 
     public function tearDown()
     {
@@ -43,116 +32,166 @@ class CacheManagerTest extends TestCase
 
     public function testArrayPoolCall()
     {
-        $this->manager->getConfig()
-            ->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('cache.drivers', []);
-        $this->manager->getConfig()
-            ->shouldReceive('get')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->with('cache.namespace', false)
-            ->andReturn(false);
+            ->with('viserio')
+            ->andReturn([
+                'cache' => [
+                    'drivers'   => [],
+                    'namespace' => false,
+                ],
+            ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
-        self::assertInstanceOf(ArrayCachePool::class, $this->manager->driver('array'));
+        self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
     public function testArrayPoolCallWithLog()
     {
-        $this->manager->getConfig()
-            ->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('cache.drivers', []);
-        $this->manager->getConfig()
-            ->shouldReceive('get')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->with('cache.namespace', false)
-            ->andReturn(false);
+            ->with('viserio')
+            ->andReturn([
+                'cache' => [
+                    'default'   => 'array',
+                    'drivers'   => [],
+                    'namespace' => false,
+                ],
+            ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
-        $this->manager->setLogger($this->mock(PsrLoggerInterface::class));
+        $manager->setLogger($this->mock(PsrLoggerInterface::class));
 
-        self::assertInstanceOf(ArrayCachePool::class, $this->manager->driver('array'));
+        self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
     public function testNamespacedArrayPoolCall()
     {
-        $this->manager->getConfig()
-            ->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('cache.drivers', []);
-
-        $this->manager->getConfig()
-            ->shouldReceive('get')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->with('cache.namespace', false)
-            ->andReturn('viserio');
+            ->with('viserio')
+            ->andReturn([
+                'cache' => [
+                    'default'   => 'array',
+                    'drivers'   => [],
+                    'namespace' => 'viserio',
+                ],
+            ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
-        self::assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('array'));
+        self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('array'));
     }
 
     public function testNamespacedNullPoolCall()
     {
-        $this->manager->getConfig()->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('cache.drivers', []);
-
-        $this->manager->getConfig()->shouldReceive('get')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->with('cache.namespace', false)
-            ->andReturn('viserio');
+            ->with('viserio')
+            ->andReturn([
+                'cache' => [
+                    'default'   => 'null',
+                    'drivers'   => [],
+                    'namespace' => 'viserio',
+                ],
+            ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
-        self::assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('null'));
+        self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
     }
 
     public function testChain()
     {
-        $this->manager->getConfig()
-            ->shouldReceive('get')
-            ->twice()
-            ->with('cache.drivers', []);
-
-        $this->manager->getConfig()
-            ->shouldReceive('get')
-            ->twice()
-            ->with('cache.namespace', false)
-            ->andReturn('viserio');
-
-        $this->manager->getConfig()
-            ->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('cache.chain.options', [])
-            ->andReturn([]);
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'cache' => [
+                    'default'       => 'null',
+                    'drivers'       => [],
+                    'namespace'     => 'viserio',
+                    'chain_options' => [],
+                ],
+            ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
-        $chain = $this->manager->chain(['array', 'null', new VoidCachePool()]);
+        $chain = $manager->chain(['array', 'null', new VoidCachePool()]);
 
         self::assertInstanceOf(CachePoolChain::class, $chain);
     }
 
     public function testFilesystem()
     {
-        $this->manager->getConfig()
-            ->shouldReceive('get')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->with('cache.drivers', [])
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
             ->andReturn([
-                'filesystem' => [
-                    'connection' => 'local',
+                'cache' => [
+                    'default' => 'null',
+                    'drivers' => [
+                        'filesystem' => [
+                            'connection' => 'local',
+                        ],
+                    ],
+                    'namespace' => false,
                 ],
             ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                'local'                   => new Local(__DIR__ . '/'),
+                RepositoryContract::class => $config,
+            ])
+        );
 
-        $this->manager->getConfig()
-            ->shouldReceive('get')
-            ->once()
-            ->with('cache.namespace', false)
-            ->andReturn(false);
-
-        $container = $this->mock(ContainerInterface::class);
-        $container->shouldReceive('get')
-            ->once()
-            ->with('local')
-            ->andReturn(new Local(__DIR__ . '/'));
-
-        $this->manager->setContainer($container);
-
-        self::assertInstanceOf(FilesystemCachePool::class, $this->manager->driver('filesystem'));
+        self::assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));
     }
 }
