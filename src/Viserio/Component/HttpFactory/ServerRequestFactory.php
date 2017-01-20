@@ -8,6 +8,7 @@ use UnexpectedValueException;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 use Viserio\Component\Http\Util;
+use Viserio\Component\Http\Uri;
 
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
@@ -21,7 +22,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $server        = $this->normalizeServer($server);
         $requestMethod = $method ?? $server['REQUEST_METHOD'] ?? 'GET';
         $headers       = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
-        $uri           = $uri ?? HttpUri::createFromServer($server);
+        $uri           = $uri ?? Uri::createFromServer($server);
 
         $serverRequest = new ServerRequest(
             $uri,
