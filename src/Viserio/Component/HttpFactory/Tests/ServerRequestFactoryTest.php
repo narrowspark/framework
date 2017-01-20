@@ -21,7 +21,7 @@ class ServerRequestFactoryTest extends TestCase
         $server = [
             'PHP_SELF'             => '/doc/framwork.php',
             'GATEWAY_INTERFACE'    => 'CGI/1.1',
-            'SERVER_ADDR'          => 'Server IP: 127.0.0.1',
+            'SERVER_ADDR'          => '127.0.0.1',
             'SERVER_NAME'          => 'www.narrowspark.com',
             'SERVER_SOFTWARE'      => 'Apache/2.2.15 (Win32) JRun/4.0 PHP/7.0.7',
             'SERVER_PROTOCOL'      => 'HTTP/1.0',
@@ -48,6 +48,10 @@ class ServerRequestFactoryTest extends TestCase
             'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
         ];
 
+        $noHost = $server;
+
+        unset($noHost['HTTP_HOST']);
+
         return [
             'Normal request' => [
                 'http://www.narrowspark.com/doc/framwork.php?id=10&user=foo',
@@ -62,24 +66,12 @@ class ServerRequestFactoryTest extends TestCase
                 $server,
             ],
             'HTTP_HOST missing' => [
-                'http://www.narrowspark.com/doc/framwork.php?id=10&user=foo',
-                array_merge($server, ['HTTP_HOST' => null]),
+                'http://127.0.0.1/doc/framwork.php?id=10&user=foo',
+                $noHost,
             ],
             'No query String' => [
                 'http://www.narrowspark.com/doc/framwork.php',
                 array_merge($server, ['REQUEST_URI' => '/doc/framwork.php', 'QUERY_STRING' => '']),
-            ],
-            'Different port' => [
-                'http://www.narrowspark.com:8324/doc/framwork.php?id=10&user=foo',
-                array_merge($server, ['HTTP_HOST' => 'www.narrowspark.com:8324', 'SERVER_PORT' => '8324']),
-                ],
-                'HTTP_HOST missing different port' => [
-                'http://www.narrowspark.com:8324/doc/framwork.php?id=10&user=foo',
-                array_merge($server, ['HTTP_HOST' => null, 'SERVER_PORT' => '8324']),
-            ],
-            'Empty server variable' => [
-                '',
-                [],
             ],
         ];
     }
@@ -92,8 +84,7 @@ class ServerRequestFactoryTest extends TestCase
      */
     public function testGetUriFromGlobals($expected, $serverParams)
     {
-        $_SERVER       = $serverParams;
-        $serverRequest = $this->factory->createServerRequest($_SERVER);
+        $serverRequest = $this->factory->createServerRequest($serverParams);
 
         self::assertEquals(new Uri($expected), $serverRequest->getUri());
     }
@@ -103,7 +94,7 @@ class ServerRequestFactoryTest extends TestCase
         $_SERVER = [
             'PHP_SELF'             => '/doc/framwork.php',
             'GATEWAY_INTERFACE'    => 'CGI/1.1',
-            'SERVER_ADDR'          => 'Server IP: 127.0.0.1',
+            'SERVER_ADDR'          => '127.0.0.1',
             'SERVER_NAME'          => 'www.narrowspark.com',
             'SERVER_SOFTWARE'      => 'Apache/2.2.15 (Win32) JRun/4.0 PHP/7.0.7',
             'SERVER_PROTOCOL'      => 'HTTP/1.0',
@@ -188,7 +179,7 @@ class ServerRequestFactoryTest extends TestCase
         self::assertEquals($_POST, $server->getParsedBody());
         self::assertEquals($_GET, $server->getQueryParams());
         self::assertEquals(
-            new Uri('http://www.narrowspark.com/doc/framwork.php?id=10&user=foo'),
+            new Uri('https://www.narrowspark.com/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
 

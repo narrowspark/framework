@@ -4,12 +4,8 @@ namespace Viserio\Component\Http;
 
 use League\Uri\Schemes\Http as HttpUri;
 use Psr\Http\Message\UriInterface;
-use Viserio\Component\Http\Uri\Filter\Fragment;
-use Viserio\Component\Http\Uri\Filter\Host;
-use Viserio\Component\Http\Uri\Filter\Path;
-use Viserio\Component\Http\Uri\Filter\Port;
-use Viserio\Component\Http\Uri\Filter\Query;
-use Viserio\Component\Http\Uri\Filter\Scheme;
+use League\Uri\Schemes\AbstractUri;
+use League\Uri\Schemes\UriException;
 
 class Uri extends HttpUri implements UriInterface
 {
@@ -32,5 +28,84 @@ class Uri extends HttpUri implements UriInterface
         $this->fragment  = $this->formatQueryAndFragment($components['fragment']);
 
         $this->assertValidState();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function createFromString(string $uri = ''): AbstractUri
+    {
+        $components = self::getParser()(self::filterString($uri));
+
+        return (new static())
+            ->withScheme($components['scheme'])
+            ->withHost($components['host'])
+            ->withUserInfo($components['user'], $components['pass'])
+            ->withPort(self::$supported_schemes[$components['scheme']] ?? null)
+            ->withPath($components['path'])
+            ->withQuery($components['query'])
+            ->withFragment($components['fragment']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function createFromServer(array $server): HttpUri
+    {
+        list($user, $pass) = static::fetchUserInfo($server);
+        list($host, $port) = static::fetchHostname($server);
+        list($path, $query) = static::fetchRequestUri($server);
+        $scheme             = static::fetchScheme($server);
+
+        return (new static())
+            ->withHost($host)
+            ->withScheme($scheme)
+            ->withPort(self::$supported_schemes[$scheme] ?? null)
+            ->withUserInfo($user, $pass)
+            ->withPath($path)
+            ->withQuery($query ?? '');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function __set_state(array $components): AbstractUri
+    {
+        $user_info = explode(':', $components['user_info'], 2);
+        $components['user'] = array_shift($user_info);
+        $components['pass'] = array_shift($user_info);
+
+        return (new static())
+            ->withHost($components['host'])
+            ->withScheme($components['scheme'])
+            ->withUserInfo($components['user'], $components['pass'])
+            ->withPort(self::$supported_schemes[$components['scheme']] ?? null)
+            ->withPath($components['path'])
+            ->withQuery($components['query'])
+            ->withFragment($components['fragment']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function createFromComponents(array $components): AbstractUri
+    {
+        $components += [
+            'scheme' => null, 'user' => null, 'pass' => null, 'host' => null,
+            'port' => null, 'path' => '', 'query' => null, 'fragment' => null,
+        ];
+
+        if (null !== $components['host'] && !self::getParser()->isHost($components['host'])) {
+            throw UriException::createFromInvalidHost($components['host']);
+        }
+
+        return (new static())
+            ->withHost($components['host'])
+            ->withScheme($components['scheme'])
+            ->withUserInfo($components['user'], $components['pass'])
+            ->withPort(self::$supported_schemes[$components['scheme']] ?? null)
+            ->withPath($components['path'])
+            ->withQuery($components['query'])
+            ->withFragment($components['fragment']);
     }
 }

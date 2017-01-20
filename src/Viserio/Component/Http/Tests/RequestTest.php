@@ -310,7 +310,7 @@ class RequestTest extends AbstractMessageTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to parse URI: ///.
+     * @expectedExceptionMessage Invalid URI: The submitted uri `///` is invalid for the following scheme(s): `http, https`
      */
     public function testValidateRequestUri()
     {
