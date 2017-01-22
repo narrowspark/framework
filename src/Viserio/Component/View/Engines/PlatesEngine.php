@@ -4,10 +4,7 @@ namespace Viserio\Component\View\Engines;
 
 use Exception;
 use League\Plates\Engine as LeagueEngine;
-use League\Plates\Extension\Asset;
-use League\Plates\Extension\URI;
 use League\Plates\Template\Template;
-use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 
 class PlatesEngine extends AbstractBaseEngine
@@ -59,7 +56,7 @@ class PlatesEngine extends AbstractBaseEngine
     {
         if (! $this->engine) {
             $config = $this->config;
-            $paths = $config['paths'];
+            $paths  = $config['paths'];
 
             $this->engine = new LeagueEngine(
                 // First value is the default folder

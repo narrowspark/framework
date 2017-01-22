@@ -2,17 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
+use Twig_Environment;
 use Twig_LexerInterface;
-use Interop\Container\ContainerInterface;
 use Twig_Loader_Array;
 use Twig_LoaderInterface;
-use Twig_Environment;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
+use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\View\Engines\TwigEngine as BaseTwigEngine;
-use Viserio\Bridge\Twig\TwigEnvironment;
-use Viserio\Component\Contracts\Traits\CreateConfigurationTrait;
 
 class TwigEngine extends BaseTwigEngine implements ProvidesDefaultOptions
 {
@@ -24,9 +22,9 @@ class TwigEngine extends BaseTwigEngine implements ProvidesDefaultOptions
         return [
             'twig' => [
                 'options' => [
-                    'file_extension' => 'twig'
-                ]
-            ]
+                    'file_extension' => 'twig',
+                ],
+            ],
         ];
     }
 
@@ -35,7 +33,7 @@ class TwigEngine extends BaseTwigEngine implements ProvidesDefaultOptions
      */
     protected function getLoader(): Twig_LoaderInterface
     {
-        $config = $this->config;
+        $config  = $this->config;
         $loaders = [
             new TwigLoader(
                 $this->container->get(FilesystemContract::class),

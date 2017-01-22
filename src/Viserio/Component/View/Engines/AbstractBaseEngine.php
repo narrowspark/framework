@@ -48,7 +48,7 @@ abstract class AbstractBaseEngine implements EngineContract, RequiresConfig, Req
     {
         return [
             'paths',
-            'engines'
+            'engines',
         ];
     }
 }

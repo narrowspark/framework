@@ -228,6 +228,7 @@ class CodeExtension extends Twig_Extension
 
     /**
      * @internal
+     *
      * @param mixed $message
      */
     public function formatLogMessage($message, array $context)

@@ -11,7 +11,6 @@ use Viserio\Component\Contracts\View\EngineResolver as EngineResolverContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
-use Viserio\Component\Support\Str;
 use Viserio\Component\View\Traits\NormalizeNameTrait;
 
 class Factory implements FactoryContract
@@ -398,12 +397,12 @@ class Factory implements FactoryContract
      */
     private function endsWith(string $haystack, string $needle): bool
     {
-        $length = strlen($needle);
+        $length = mb_strlen($needle);
 
         if ($length == 0) {
             return true;
         }
 
-        return (substr($haystack, -$length) === $needle);
+        return mb_substr($haystack, -$length) === $needle;
     }
 }

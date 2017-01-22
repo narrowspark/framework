@@ -4,10 +4,8 @@ namespace Viserio\Bridge\Twig;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\View\Engines\EngineResolver;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\View\Engines\EngineResolver;
 
 class TwigBridgeServiceProvider implements ServiceProvider
 {

@@ -8,7 +8,6 @@ use Twig_Environment;
 use Twig_Error;
 use Twig_Loader_Filesystem;
 use Twig_LoaderInterface;
-use Viserio\Component\Contracts\View\Engine as EngineContract;
 
 class TwigEngine extends AbstractBaseEngine
 {
@@ -32,8 +31,8 @@ class TwigEngine extends AbstractBaseEngine
                         'file_extension',
                         'options' => [
                             'debug',
-                            'cache'
-                        ]
+                            'cache',
+                        ],
                     ],
                 ],
             ]
