@@ -14,7 +14,7 @@ class ConfigExtension extends Twig_Extension
     /**
      * Create a new config extension.
      *
-     * @param \Viserio\Contracts\Config\Repository
+     * @param \Viserio\Contracts\Config\Repository $config
      */
     public function __construct(RepositoryContract $config)
     {

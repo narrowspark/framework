@@ -38,7 +38,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     /**
      * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
      * @param \Viserio\Component\Contracts\View\Finder           $finder
-     * @param string                                             $extension Twig file extension.
+     * @param string                                             $extension twig file extension
      */
     public function __construct(FilesystemContract $files, FinderContract $finder, string $extension = 'twig')
     {

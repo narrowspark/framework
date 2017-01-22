@@ -392,6 +392,7 @@ class Factory implements FactoryContract
      *
      * @param string $haystack
      * @param string $needles
+     * @param string $needle
      *
      * @return bool
      */

@@ -18,7 +18,7 @@ class SessionExtension extends Twig_Extension
     /**
      * Create a new session extension.
      *
-     * @param \Viserio\Contracts\Session\Store
+     * @param \Viserio\Contracts\Session\Store $session
      */
     public function __construct(StoreContract $session)
     {

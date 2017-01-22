@@ -15,7 +15,7 @@ class TranslatorExtension extends Twig_Extension
     /**
      * Create a new translator extension.
      *
-     * @param \Viserio\Contracts\Translation\Translator
+     * @param \Viserio\Contracts\Translation\Translator $translator
      */
     public function __construct(TranslatorContract $translator)
     {
