@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Tests;
 
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem;
+use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Narrowspark\TestingHelper\ArrayContainer;
 
 class ViewFinderTest extends TestCase
 {
@@ -349,14 +349,14 @@ class ViewFinderTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'view' => [
-                    'paths' => [$this->getPath()],
-                    'extensions' => ['php', 'phtml', 'css']
+                    'paths'      => [$this->getPath()],
+                    'extensions' => ['php', 'phtml', 'css'],
                 ],
             ]);
 
         return new ViewFinder(new ArrayContainer([
             FilesystemContract::class => $this->mock(Filesystem::class),
-            RepositoryContract::class => $config
+            RepositoryContract::class => $config,
         ]));
     }
 }

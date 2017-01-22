@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Support\Traits;
 
-use RuntimeException;
 use Interop\Container\ContainerInterface;
+use RuntimeException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 trait CreateConfigurationTrait
@@ -27,9 +27,9 @@ trait CreateConfigurationTrait
         if ($this->config !== null) {
             if ($container->has(RepositoryContract::class)) {
                 $config = $container->get(RepositoryContract::class);
-            } elseif($container->has('config')) {
+            } elseif ($container->has('config')) {
                 $config = $container->get('config');
-            } elseif($container->has('options')) {
+            } elseif ($container->has('options')) {
                 $config = $container->get('options');
             } else {
                 throw new RuntimeException('No configuration found.');
