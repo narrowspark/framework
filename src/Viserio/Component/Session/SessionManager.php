@@ -50,7 +50,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
      * Create an instance of the file session driver.
      *
      * @param array $config
-
+     *
      * @return \Viserio\Component\Contracts\Session\Store
      */
     protected function createLocalDriver(array $config): StoreContract
