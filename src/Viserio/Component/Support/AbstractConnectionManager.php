@@ -10,18 +10,13 @@ use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
 
 abstract class AbstractConnectionManager implements RequiresConfig, RequiresMandatoryOptions
 {
-    use ContainerAwareTrait;
     use ConfigurationTrait;
-
-    /**
-     * Handler config.
-     *
-     * @var array|\ArrayAccess
-     */
-    protected $config = [];
+    use ContainerAwareTrait;
+    use CreateConfigurationTrait;
 
     /**
      * The active connection instances.
@@ -255,24 +250,4 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      * @return string
      */
     abstract protected function getConfigName(): string;
-
-    /**
-     * Create handler configuration.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @see \Viserio\Component\Exception\ErrorHandler::options()
-     *
-     * @return void
-     */
-    protected function createConfiguration(ContainerInterface $container): void
-    {
-        if ($container->has(RepositoryContract::class)) {
-            $config = $container->get(RepositoryContract::class);
-        } else {
-            $config = $container->get('config');
-        }
-
-        $this->config = $this->options($config);
-    }
 }

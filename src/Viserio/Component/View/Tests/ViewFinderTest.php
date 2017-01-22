@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Filesystem\Filesystem;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;
+use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Narrowspark\TestingHelper\ArrayContainer;
 
 class ViewFinderTest extends TestCase
 {
@@ -336,6 +339,24 @@ class ViewFinderTest extends TestCase
 
     protected function getFinder()
     {
-        return new ViewFinder($this->mock(Filesystem::class), [$this->getPath()], ['php', 'phtml', 'css']);
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'view' => [
+                    'paths' => [$this->getPath()],
+                    'extensions' => ['php', 'phtml', 'css']
+                ],
+            ]);
+
+        return new ViewFinder(new ArrayContainer([
+            FilesystemContract::class => $this->mock(Filesystem::class),
+            RepositoryContract::class => $config
+        ]));
     }
 }
