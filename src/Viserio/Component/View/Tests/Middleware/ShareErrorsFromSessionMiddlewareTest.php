@@ -42,7 +42,11 @@ class ShareErrorsFromSessionMiddlewareTest extends TestCase
 
         $middleware = new ShareErrorsFromSessionMiddleware($view);
 
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
+        $request = (new ServerRequestFactory())->createServerRequest($server);
         $request = $request->withAttribute('session', $session);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {

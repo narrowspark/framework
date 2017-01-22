@@ -8,7 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\View\DataCollectors\ViserioViewDataCollector;
 use Viserio\Component\View\Engines\EngineResolver;
 use Viserio\Component\View\Engines\FileEngine;
 use Viserio\Component\View\Engines\PhpEngine;
@@ -44,18 +43,10 @@ class ViewServiceProvider implements ServiceProvider
             'view' => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },
-            ViserioViewDataCollector::class => [self::class, 'createViserioViewDataCollector'],
         ];
     }
 
-    public static function createViserioViewDataCollector(ContainerInterface $container): ViserioViewDataCollector
-    {
-        return new ViserioViewDataCollector(
-            self::getConfig($container, 'collector.collect_data', true)
-        );
-    }
-
-    public static function createEngineResolver(ContainerInterface $container)
+    public static function createEngineResolver(ContainerInterface $container): EngineResolver
     {
         $engines = new EngineResolver();
 
@@ -133,7 +124,7 @@ class ViewServiceProvider implements ServiceProvider
     protected static function registerTwigEngine(EngineResolver $engines, ContainerInterface $container)
     {
         $engines->register('twig', function () use ($container) {
-            return new TwigEngine(self::getConfig($container, 'view', []));
+            return new TwigEngine($container);
         });
     }
 
@@ -145,17 +136,8 @@ class ViewServiceProvider implements ServiceProvider
      */
     protected static function registerPlatesEngine(EngineResolver $engines, ContainerInterface $container)
     {
-        $request = null;
-
-        if ($container->has(ServerRequestInterface::class)) {
-            $request = $container->get(ServerRequestInterface::class);
-        }
-
-        $engines->register('plates', function () use ($container, $request) {
-            return new PlatesEngine(
-                self::getConfig($container, 'view', []),
-                $request
-            );
+        $engines->register('plates', function () use ($container) {
+            return new PlatesEngine($container);
         });
     }
 }

@@ -3,21 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Engines;
 
 use ErrorException;
+use RuntimeException;
 use Twig_Environment;
 use Twig_Error;
 use Twig_Loader_Filesystem;
 use Twig_LoaderInterface;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
 
-class TwigEngine implements EngineContract
+class TwigEngine extends AbstractBaseEngine
 {
-    /**
-     * Config array.
-     *
-     * @var array
-     */
-    protected $config;
-
     /**
      * The Twig environment for rendering templates.
      *
@@ -26,13 +20,24 @@ class TwigEngine implements EngineContract
     protected $parserInstance;
 
     /**
-     * Create a new twig view instance.
-     *
-     * @param array $config
+     * {@inheritdoc}
      */
-    public function __construct(array $config)
+    public function mandatoryOptions(): iterable
     {
-        $this->config = $config;
+        return array_merge(
+            parent::mandatoryOptions(),
+            [
+                'engines' => [
+                    'twig' => [
+                        'file_extension',
+                        'options' => [
+                            'debug',
+                            'cache'
+                        ]
+                    ],
+                ],
+            ]
+        );
     }
 
     /**
@@ -52,21 +57,27 @@ class TwigEngine implements EngineContract
     /**
      * Creates new Twig_Environment if it doesn't already exist, and returns it.
      *
+     * @throws \RuntimeException
+     *
      * @return \Twig_Environment
      */
     protected function getInstance(): Twig_Environment
     {
         if (! $this->parserInstance) {
-            $config = $this->config['engine']['twig'] ?? [];
-            $twig   = new Twig_Environment(
-                $this->getLoader(),
-                $config['options'] ?? []
-            );
+            $config = $this->config['engines']['twig'];
+            $twig   = $this->getTwigEnvironment($config['options']);
 
             // @codeCoverageIgnoreStart
-            if (($extensions = $config['extensions'] ?? null) !== null) {
-                foreach ($extensions as $extension) {
-                    $twig->addExtension(is_object($extension) ? $extension : new $extension());
+            if (isset($config['extensions']) && is_array($config['extensions'])) {
+                foreach ($config['extensions'] as $extension) {
+                    if (is_object($extension)) {
+                        $twig->addExtension($extension);
+                    } else {
+                        throw new RuntimeException(sprintf(
+                            'Plates extension [%s] is not a object.',
+                            (string) $extension
+                        ));
+                    }
                 }
             }
             // @codeCoverageIgnoreEnd
@@ -78,22 +89,28 @@ class TwigEngine implements EngineContract
     }
 
     /**
+     * Get the twig environment.
+     *
+     * @param array $options
+     *
+     * @return \Twig_Environment
+     */
+    protected function getTwigEnvironment(array $options): Twig_Environment
+    {
+        return new Twig_Environment(
+            $this->getLoader(),
+            $options
+        );
+    }
+
+    /**
      * Twig paths loader.
      *
      * @return \Twig_LoaderInterface
      */
     protected function getLoader(): Twig_LoaderInterface
     {
-        $config = $this->config['template'] ?? [];
-        $loader = new Twig_Loader_Filesystem($config['default'] ?? []);
-
-        if (($paths = $config['paths'] ?? null) !== null) {
-            foreach ($paths as $name => $path) {
-                $loader->addPath($path, $name);
-            }
-        }
-
-        return $loader;
+        return new Twig_Loader_Filesystem($config['paths']);
     }
 
     /**

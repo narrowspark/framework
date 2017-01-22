@@ -2,36 +2,32 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
+use Twig_LexerInterface;
+use Interop\Container\ContainerInterface;
 use Twig_Loader_Array;
+use Twig_LoaderInterface;
+use Twig_Environment;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\View\Engines\TwigEngine as BaseTwigEngine;
+use Viserio\Bridge\Twig\TwigEnvironment;
+use Viserio\Component\Contracts\Traits\CreateConfigurationTrait;
 
-class TwigEngine extends BaseTwigEngine
+class TwigEngine extends BaseTwigEngine implements ProvidesDefaultOptions
 {
     /**
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * {@inheritdoc}
      */
-    protected $files;
-
-    /**
-     * @var \Viserio\Component\Contracts\View\Finder
-     */
-    protected $finder;
-
-    /**
-     * Create a new twig view instance.
-     *
-     * @param array                                              $config
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
-     * @param \Viserio\Component\Contracts\View\Finder           $finder
-     */
-    public function __construct(array $config, FilesystemContract $files, FinderContract $finder)
+    public function defaultOptions(): iterable
     {
-        $this->config = $config;
-        $this->files  = $files;
-        $this->finder = $finder;
+        return [
+            'twig' => [
+                'options' => [
+                    'file_extension' => 'twig'
+                ]
+            ]
+        ];
     }
 
     /**
@@ -40,18 +36,51 @@ class TwigEngine extends BaseTwigEngine
     protected function getLoader(): Twig_LoaderInterface
     {
         $config = $this->config;
+        $loaders = [
+            new TwigLoader(
+                $this->container->get(FilesystemContract::class),
+                $this->container->get(FinderContract::class),
+                $config['twig']['file_extension']
+            ),
+        ];
 
-        $loader = new Twig_Loader_Chain([
-            new Twig_Loader_Array($config['templates'] ?? []),
-            new TwigLoader($this->files, $this->finder = $finder, $config['extension'] ?? 'twig'),
-        ]);
-
-        if (($paths = $config['paths'] ?? null) !== null) {
-            foreach ($paths as $name => $path) {
-                $loader->addPath($path, $name);
-            }
+        if (isset($config['twig']['templates']) && is_array($config['twig']['templates'])) {
+            $loaders[] = new Twig_Loader_Array($config['twig']['templates']);
         }
 
-        return $loader;
+        if (isset($config['twig']['loader']) && is_array($config['twig']['loader'])) {
+            $loaders = array_merge($loaders, $config['twig']['loader']);
+        }
+
+        return new Twig_Loader_Chain($loaders);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTwigEnvironment(array $options): Twig_Environment
+    {
+        return new TwigEnvironment(
+            $this->getLoader(),
+            $options
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getInstance(): Twig_Environment
+    {
+        if (! $this->parserInstance) {
+            $twig = parent::getInstance();
+
+            if ($this->container->has(Twig_LexerInterface::class)) {
+                $twig->setLexer($this->container->get(Twig_LexerInterface::class));
+            }
+
+            $this->parserInstance = $twig;
+        }
+
+        return $this->parserInstance;
     }
 }

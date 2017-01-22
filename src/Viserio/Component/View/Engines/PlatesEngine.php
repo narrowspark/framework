@@ -9,17 +9,9 @@ use League\Plates\Extension\URI;
 use League\Plates\Template\Template;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
-use Viserio\Component\Contracts\View\Engine as EnginesContract;
 
-class PlatesEngine implements EnginesContract
+class PlatesEngine extends AbstractBaseEngine
 {
-    /**
-     * Config array.
-     *
-     * @var array
-     */
-    protected $config;
-
     /**
      * Engine instance.
      *
@@ -28,29 +20,20 @@ class PlatesEngine implements EnginesContract
     protected $engine;
 
     /**
-     * Server request instance.
-     *
-     * @var \Psr\Http\Message\ServerRequestInterface
+     * {@inheritdoc}
      */
-    protected $request;
-
-    /**
-     * All available extensions.
-     *
-     * @var array
-     */
-    protected $availableExtensions = [];
-
-    /**
-     * Create a new plates view instance.
-     *
-     * @param array                                         $config
-     * @param \Psr\Http\Message\ServerRequestInterface|null $request
-     */
-    public function __construct(array $config, ServerRequestInterface $request = null)
+    public function mandatoryOptions(): iterable
     {
-        $this->config  = $config;
-        $this->request = $request;
+        return array_merge(
+            parent::mandatoryOptions(),
+            [
+                'engines' => [
+                    'plates' => [
+                        'file_extension',
+                    ],
+                ],
+            ]
+        );
     }
 
     /**
@@ -59,39 +42,14 @@ class PlatesEngine implements EnginesContract
     public function get(array $fileInfo, array $data = []): string
     {
         $engine = $this->getLoader();
-        $config = $this->config['engine']['plates'] ?? [];
-
-        if ($this->request !== null) {
-            // Set uri extensions
-            $engine->loadExtension(new URI($this->request->getUri()->getPath()));
-        }
-
-        // Set asset extensions
-        $engine->loadExtension(new Asset($config['asset'] ?? null));
-
-        // Get all extensions
-        if (($exceptions = $config['extensions'] ?? null) !== null) {
-            foreach ($exceptions as $extension) {
-                if (is_object($extension)) {
-                    $engine->loadExtension($extension);
-                } else {
-                    throw new RuntimeException(sprintf(
-                        'Plates extension [%s => %s] is not a object.',
-                        (string) $extension,
-                        gettype($extension)
-                    ));
-                }
-            }
-        }
+        $config = $this->config['engines']['plates'];
+        $engine = $this->loadExtension($engine, $config['extensions'] ?? []);
 
         if (! $engine->exists($fileInfo['name'])) {
             throw new Exception(sprintf('Template [%s] dont exist!', $fileInfo['name']));
         }
 
-        // Creat a new template
-        $template = new Template($engine, $fileInfo['name']);
-
-        return $template->render($data);
+        return $engine->render($fileInfo['name'], $data);
     }
 
     /**
@@ -101,19 +59,55 @@ class PlatesEngine implements EnginesContract
     {
         if (! $this->engine) {
             $config = $this->config;
+            $paths = $config['paths'];
 
             $this->engine = new LeagueEngine(
-                $config['template']['default'] ?? null,
-                $config['engine']['plates']['file_extension'] ?? null
+                // First value is the default folder
+                array_values($paths)[0],
+                $config['engines']['plates']['file_extension']
             );
 
-            if (($paths = $config['template']['paths'] ?? null) !== null) {
-                foreach ((array) $paths as $name => $addPaths) {
-                    $this->engine->addFolder($name, $addPaths);
+            $paths = array_shift($paths);
+
+            if (! empty($paths) && is_array($paths)) {
+                foreach ($paths as $name => $path) {
+                    if (is_array($path)) {
+                        $this->engine->addFolder($name, $path[0], $path[1]);
+                    } else {
+                        $this->engine->addFolder($name, $path);
+                    }
                 }
             }
         }
 
         return $this->engine;
+    }
+
+    /**
+     * load extension for plates.
+     *
+     * @param \League\Plates\Engine $engine
+     * @param array|null            $exceptions
+     *
+     * @throws \RuntimeException
+     *
+     * @return \League\Plates\Engine
+     */
+    private function loadExtension(LeagueEngine $engine, ?array $exceptions): LeagueEngine
+    {
+        if (! empty($exceptions) && is_array($exceptions)) {
+            foreach ($exceptions as $extension) {
+                if (is_object($extension)) {
+                    $engine->loadExtension($extension);
+                } else {
+                    throw new RuntimeException(sprintf(
+                        'Plates extension [%s] is not a object.',
+                        (string) $extension
+                    ));
+                }
+            }
+        }
+
+        return $engine;
     }
 }

@@ -20,7 +20,8 @@
     "require": {
         "php"                                                : "^7.1",
         "container-interop/container-interop"                : "^1.1",
-        "danielstjules/stringy"                              : "^2.3",
+        "narrowspark/arr"                                    : "^2.1",
+        "sandrokeil/interop-config"                          : "^2.0",
         "viserio/contracts"                                  : "self.version",
         "viserio/filesystem"                                 : "self.version",
         "viserio/support"                                    : "self.version"
