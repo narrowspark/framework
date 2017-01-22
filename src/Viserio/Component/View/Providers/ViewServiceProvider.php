@@ -4,9 +4,7 @@ namespace Viserio\Component\View\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\View\Engines\EngineResolver;
 use Viserio\Component\View\Engines\FileEngine;
 use Viserio\Component\View\Engines\PhpEngine;
@@ -17,10 +15,6 @@ use Viserio\Component\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.view';
-
     /**
      * {@inheritdoc}
      */
@@ -61,16 +55,7 @@ class ViewServiceProvider implements ServiceProvider
 
     public static function createViewFinder(ContainerInterface $container)
     {
-        $paths = array_merge(
-            [self::getConfig($container, 'template.default', '')],
-            self::getConfig($container, 'template.paths', [])
-        );
-
-        return new ViewFinder(
-            $container->get(Filesystem::class),
-            $paths,
-            self::getConfig($container, 'file_extensions', null)
-        );
+        return new ViewFinder($container);
     }
 
     public static function createViewFactory(ContainerInterface $container)

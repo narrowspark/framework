@@ -6,9 +6,16 @@ use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Interop\Container\ContainerInterface;
+use Interop\Config\ConfigurationTrait;
+use Interop\Config\RequiresConfig;
+use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
 
-class ViewFinder implements FinderContract
+class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOptions
 {
+    use ConfigurationTrait;
+    use CreateConfigurationTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
@@ -49,18 +56,37 @@ class ViewFinder implements FinderContract
     /**
      * Create a new file view loader instance.
      *
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
-     * @param array                                              $paths
-     * @param null|array                                         $extensions
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(FilesystemContract $files, array $paths, array $extensions = null)
+    public function __construct(ContainerInterface $container)
     {
-        $this->files = $files;
-        $this->paths = $paths;
+        $this->files = $container->get(FilesystemContract::class);
 
-        if ($extensions !== null) {
-            $this->extensions = array_merge($this->extensions, $extensions);
+        $this->createConfiguration($container);
+
+        $this->paths = $this->config['paths'];
+
+        if (isset($this->config['extensions']) && is_array($this->config['extensions'])) {
+            $this->extensions = array_merge($this->extensions, $this->config['extensions']);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dimensions(): iterable
+    {
+        return ['viserio', 'view'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mandatoryOptions(): iterable
+    {
+        return [
+            'paths',
+        ];
     }
 
     /**
