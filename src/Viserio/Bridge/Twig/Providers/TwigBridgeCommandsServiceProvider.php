@@ -5,6 +5,8 @@ namespace Viserio\Bridge\Twig;
 use Viserio\Bridge\Twig\Commands\CleanCommand;
 use Viserio\Bridge\Twig\Commands\DebugCommand;
 use Viserio\Bridge\Twig\Commands\LintCommand;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 
 class TwigBridgeCommandsServiceProvider implements ServiceProvider
 {
