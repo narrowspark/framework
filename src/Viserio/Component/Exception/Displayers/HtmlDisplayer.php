@@ -2,6 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayers;
 
+use Interop\Config\ConfigurationTrait;
+use Interop\Config\ProvidesDefaultOptions;
+use Interop\Config\RequiresConfig;
+use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -9,12 +13,8 @@ use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
-use Viserio\Component\Exception\ExceptionInfo;
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\ProvidesDefaultOptions;
-use Interop\Config\RequiresConfig;
-use Interop\Container\ContainerInterface;
 use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Viserio\Component\Exception\ExceptionInfo;
 
 class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaultOptions
 {
@@ -42,7 +42,8 @@ class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaul
      *
      * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container)
+    {
         $this->info            = $container->get(ExceptionInfo::class);
         $this->responseFactory = $container->get(ResponseFactoryInterface::class);
         $this->streamFactory   = $container->get(StreamFactoryInterface::class);

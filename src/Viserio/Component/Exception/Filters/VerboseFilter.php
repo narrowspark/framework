@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Filters;
 
+use Interop\Config\ConfigurationTrait;
+use Interop\Config\RequiresConfig;
+use Interop\Config\RequiresMandatoryOptions;
+use Interop\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Throwable;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
-use Interop\Container\ContainerInterface;
 use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
-use Interop\Config\RequiresMandatoryOptions;
 
 class VerboseFilter implements FilterContract, RequiresConfig, RequiresMandatoryOptions
 {

@@ -5,9 +5,10 @@ namespace Viserio\Component\Exception\Tests;
 use ErrorException;
 use Exception;
 use Interop\Container\ContainerInterface;
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -22,8 +23,6 @@ use Viserio\Component\Exception\Handler;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
-use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 
 class HandlerTest extends TestCase
 {
@@ -159,10 +158,10 @@ class HandlerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'exception' => [
-                    'env' => 'dev',
+                    'env'               => 'dev',
                     'default_displayer' => HtmlDisplayer::class,
-                    'template_path' => __DIR__ . '/../../Resources/error.html',
-                    'debug' => false,
+                    'template_path'     => __DIR__ . '/../../Resources/error.html',
+                    'debug'             => false,
                 ],
             ]);
         $container = $this->mock(ContainerInterface::class);

@@ -5,6 +5,7 @@ namespace Viserio\Component\Exception;
 use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,7 +18,6 @@ use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
 use Viserio\Component\Exception\Filters\VerboseFilter;
-use Interop\Http\Factory\StreamFactoryInterface;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptions
 {

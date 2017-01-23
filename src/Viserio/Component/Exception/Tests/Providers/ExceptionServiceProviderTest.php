@@ -31,9 +31,9 @@ class ExceptionServiceProviderTest extends TestCase
         $container->register(new HttpFactoryServiceProvider());
         $container->get(RepositoryContract::class)->setArray(['viserio' => [
                 'exception' => [
-                    'env' => 'dev',
-                    'debug' => false,
-                    'default_displayer' => ''
+                    'env'               => 'dev',
+                    'debug'             => false,
+                    'default_displayer' => '',
                 ],
                 'view' => [
                     'paths' => [],

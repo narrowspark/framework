@@ -3,16 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Displayers;
 
 use Exception;
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Narrowspark\TestingHelper\ArrayContainer;
-use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 
 class HtmlDisplayerTest extends TestCase
 {
@@ -89,10 +89,10 @@ class HtmlDisplayerTest extends TestCase
             ]);
 
         return new HtmlDisplayer(new ArrayContainer([
-            RepositoryContract::class => $config,
-            ExceptionInfo::class => new ExceptionInfo(),
+            RepositoryContract::class       => $config,
+            ExceptionInfo::class            => new ExceptionInfo(),
             ResponseFactoryInterface::class => new ResponseFactory(),
-            StreamFactoryInterface::class => new StreamFactory()
+            StreamFactoryInterface::class   => new StreamFactory(),
         ]));
     }
 }

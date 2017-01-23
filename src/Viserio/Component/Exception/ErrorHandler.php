@@ -19,15 +19,14 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
 use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
-use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
 
 class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
 {

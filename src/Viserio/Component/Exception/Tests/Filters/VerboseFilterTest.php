@@ -3,9 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Filters;
 
 use Exception;
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Displayers\JsonDisplayer;
 use Viserio\Component\Exception\Displayers\WhoopsDisplayer;
@@ -13,10 +17,6 @@ use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filters\VerboseFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
-use Narrowspark\TestingHelper\ArrayContainer;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 
 class VerboseFilterTest extends TestCase
 {
@@ -78,15 +78,15 @@ class VerboseFilterTest extends TestCase
             ->andReturn([
                 'exception' => [
                     'template_path' => __DIR__ . '/../../Resources/error.html',
-                    'debug' => $debug,
+                    'debug'         => $debug,
                 ],
             ]);
 
         return new ArrayContainer([
-            RepositoryContract::class => $config,
-            ExceptionInfo::class => new ExceptionInfo(),
+            RepositoryContract::class       => $config,
+            ExceptionInfo::class            => new ExceptionInfo(),
             ResponseFactoryInterface::class => new ResponseFactory(),
-            StreamFactoryInterface::class => new StreamFactory()
+            StreamFactoryInterface::class   => new StreamFactory(),
         ]);
     }
 }
