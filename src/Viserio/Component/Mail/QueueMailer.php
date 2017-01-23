@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
+use Interop\Container\ContainerInterface;
 use Closure;
 use Opis\Closure\SerializableClosure;
-use Swift_Mailer;
 use Viserio\Component\Contracts\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Component\Contracts\Queue\Job as JobContract;
 use Viserio\Component\Contracts\Queue\Queue as QueueContract;
@@ -21,13 +21,13 @@ class QueueMailer extends Mailer implements QueueMailerContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                            $swift
-     * @param \Viserio\Component\Contracts\Queue\Queue $queue
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(Swift_Mailer $swift, QueueContract $queue)
+    public function __construct(ContainerInterface $container)
     {
-        $this->swift = $swift;
-        $this->queue = $queue;
+        parent::__construct($container);
+
+        $this->queue = $container->get(QueueContract::class);
     }
 
     /**

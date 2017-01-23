@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Engines;
 
+use Interop\Container\ContainerInterface;
 use Interop\Config\ConfigurationTrait;
 use Interop\Config\RequiresConfig;
 use Interop\Config\RequiresMandatoryOptions;

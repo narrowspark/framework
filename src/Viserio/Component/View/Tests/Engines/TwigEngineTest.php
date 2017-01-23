@@ -4,19 +4,58 @@ namespace Viserio\Component\View\Tests\Engines;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\View\Engines\TwigEngine;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 
 class TwigEngineTest extends TestCase
 {
+    use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->delTree(__DIR__ .'/../Cache');
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
     public function testGet()
     {
-        $engine = new TwigEngine([
-            'template' => [
-                'default' => __DIR__ . '/../Fixture/',
-                'paths'   => [
-                    __DIR__,
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'view' => [
+                    'paths'      => [
+                        __DIR__ . '/../Fixture/',
+                        __DIR__,
+                    ],
+                    'extensions' => ['phtml', 'php'],
+                    'engines' => [
+                        'twig' => [
+                            'options' => [
+                                'debug' => false,
+                                'cache' => __DIR__ .'/../Cache',
+                            ],
+                        ],
+                    ],
                 ],
-            ],
-        ]);
+            ]);
+
+        $engine = new TwigEngine(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
 
         $template = $engine->get(['name' => 'twightml.twig.html']);
 
@@ -32,5 +71,16 @@ class TwigEngineTest extends TestCase
     hallo
 </body>
 </html>'), trim($template));
+    }
+
+    private function delTree($dir)
+    {
+        $files = array_diff(scandir($dir), ['.', '..']);
+
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+        }
+
+        return rmdir($dir);
     }
 }

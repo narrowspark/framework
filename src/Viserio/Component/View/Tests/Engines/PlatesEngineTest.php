@@ -4,6 +4,8 @@ namespace Viserio\Component\View\Tests\Engines;
 
 use League\Plates\Extension\Asset;
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -26,16 +28,31 @@ class PlatesEngineTest extends TestCase
 
     public function testGet()
     {
-        $engine = new PlatesEngine(
-            [
-                'template' => [
-                    'default' => __DIR__ . '/../Fixture/',
-                    'paths'   => [
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'view' => [
+                    'paths'      => [
+                        __DIR__ . '/../Fixture/',
                         __DIR__,
                     ],
+                    'extensions' => ['phtml', 'php'],
+                    'engines' => [
+                        'plates' => [
+                        ],
+                    ],
                 ],
-            ]
-        );
+            ]);
+
+        $engine = new PlatesEngine(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
 
         $template = $engine->get(['name' => 'plates.php']);
 
@@ -55,28 +72,34 @@ class PlatesEngineTest extends TestCase
 
     public function testGetWithExtensions()
     {
-        $uri = $this->mock(UriInterface::class);
-        $uri->shouldReceive('getPath')
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
             ->once()
-            ->andReturn('');
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('getUri')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
             ->once()
-            ->andReturn($uri);
-
-        $engine = new PlatesEngine(
-            [
-                'template' => [
-                    'default' => __DIR__ . '/../Fixture/',
-                ],
-                'engine' => [
-                    'plates' => [
-                        'asset' => __DIR__,
+            ->with('viserio')
+            ->andReturn([
+                'view' => [
+                    'paths'      => [
+                        __DIR__ . '/../Fixture/',
+                        __DIR__,
+                    ],
+                    'extensions' => ['phtml', 'php'],
+                    'engines' => [
+                        'plates' => [
+                            'extensions' => [
+                                new Asset(__DIR__),
+                            ],
+                        ],
                     ],
                 ],
-            ],
-            $request
-        );
+            ]);
+
+        $engine = new PlatesEngine(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
 
         $template = $engine->get(['name' => 'plates.php']);
 
@@ -96,24 +119,36 @@ class PlatesEngineTest extends TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Plates extension [0 => integer] is not a object.
+     * @expectedExceptionMessage Plates extension [0] is not a object.
      */
     public function testGetWithExtensionsThrowException()
     {
-        $engine = new PlatesEngine(
-            [
-                'template' => [
-                    'default' => __DIR__ . '/../Fixture/',
-                ],
-                'engine' => [
-                    'plates' => [
-                        'extensions' => [
-                            0,
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'view' => [
+                    'paths'      => [
+                        __DIR__ . '/../Fixture/',
+                        __DIR__,
+                    ],
+                    'extensions' => ['phtml', 'php'],
+                    'engines' => [
+                        'plates' => [
+                            'extensions' => [0],
                         ],
                     ],
                 ],
-            ]
-        );
+            ]);
+
+        $engine = new PlatesEngine(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
 
         $engine->get(['name' => 'plates.php']);
     }
@@ -124,13 +159,30 @@ class PlatesEngineTest extends TestCase
      */
     public function testGetThrowExceptionOnFileDontExist()
     {
-        $engine = new PlatesEngine(
-            [
-                'template' => [
-                    'default' => __DIR__,
+                $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'view' => [
+                    'paths'      => [
+                        __DIR__,
+                    ],
+                    'extensions' => ['phtml', 'php'],
+                    'engines' => [
+                        'plates' => [
+                        ],
+                    ],
                 ],
-            ]
-        );
+            ]);
+
+        $engine = new PlatesEngine(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
 
         $engine->get(['name' => 'plates.php']);
     }

@@ -15,6 +15,7 @@ use Viserio\Component\Contracts\Queue\Queue as QueueContract;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
 use Viserio\Component\Mail\QueueMailer;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Component\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
 class QueueMailerTest extends TestCase
@@ -169,8 +170,11 @@ class QueueMailerTest extends TestCase
     protected function getMailer()
     {
         $mailer = new QueueMailer(
-            $this->mock(Swift_Mailer::class),
-            $this->mock(QueueContract::class)
+            new ArrayContainer([
+                'config' => ['viserio' => ['mail' => []]],
+                Swift_Mailer::class => $this->mock(Swift_Mailer::class),
+                QueueContract::class => $this->mock(QueueContract::class),
+            ])
         );
 
         return $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
@@ -179,8 +183,11 @@ class QueueMailerTest extends TestCase
     protected function getMocks(): array
     {
         return [
-            $this->mock(Swift_Mailer::class),
-            $this->mock(QueueContract::class),
+            new ArrayContainer([
+                'config' => ['viserio' => ['mail' => []]],
+                Swift_Mailer::class => $this->mock(Swift_Mailer::class),
+                QueueContract::class => $this->mock(QueueContract::class),
+            ])
         ];
     }
 }

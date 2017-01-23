@@ -8,6 +8,7 @@ use Narrowspark\Arr\Arr;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_Message;
+use Interop\Container\ContainerInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
@@ -15,10 +16,15 @@ use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Interop\Config\ConfigurationTrait;
+use Interop\Config\RequiresConfig;
+use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
 
-class Mailer implements MailerContract
+class Mailer implements MailerContract, RequiresConfig
 {
+    use ConfigurationTrait;
     use ContainerAwareTrait;
+    use CreateConfigurationTrait;
     use InvokerAwareTrait;
     use EventsAwareTrait;
     use ViewAwareTrait;
@@ -54,11 +60,37 @@ class Mailer implements MailerContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer $swift
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(Swift_Mailer $swift)
+    public function __construct(ContainerInterface $container)
     {
-        $this->swift = $swift;
+        $this->createConfiguration($container);
+
+        // If a "from" address is set, we will set it on the mailer so that all mail
+        // messages sent by the applications will utilize the same "from" address
+        // on each one, which makes the developer's life a lot more convenient.
+        $from = $this->config['from'] ?? null;
+
+        if (is_array($from) && isset($from['address'], $from['name'])) {
+            $this->alwaysFrom($from['address'], $from['name']);
+        }
+
+        $to = $this->config['to'] ?? null;
+
+        if (is_array($to) && isset($to['address'], $to['name'])) {
+            $this->alwaysTo($to['address'], $to['name']);
+        }
+
+        $this->container = $container;
+        $this->swift     = $container->get(Swift_Mailer::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dimensions(): iterable
+    {
+        return ['viserio', 'mail'];
     }
 
     /**

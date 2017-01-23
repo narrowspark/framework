@@ -44,6 +44,10 @@ class MailServiceProviderTest extends TestCase
                         'name'    => '',
                     ],
                 ],
+                'view' => [
+                    'paths'      => [__DIR__],
+                    'extensions' => ['php'],
+                ],
             ],
         ]);
 
@@ -71,6 +75,10 @@ class MailServiceProviderTest extends TestCase
                             'port' => '25',
                         ],
                     ],
+                ],
+                'view' => [
+                    'paths'      => [__DIR__],
+                    'extensions' => ['php'],
                 ],
             ],
         ]);

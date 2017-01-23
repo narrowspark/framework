@@ -26,7 +26,6 @@ class PlatesEngine extends AbstractBaseEngine
             [
                 'engines' => [
                     'plates' => [
-                        'file_extension',
                     ],
                 ],
             ]
@@ -40,7 +39,7 @@ class PlatesEngine extends AbstractBaseEngine
     {
         $engine = $this->getLoader();
         $config = $this->config['engines']['plates'];
-        $engine = $this->loadExtension($engine, $config['extensions'] ?? []);
+        $engine = $this->loadExtension($engine, $config['extensions'] ?? null);
 
         if (! $engine->exists($fileInfo['name'])) {
             throw new Exception(sprintf('Template [%s] dont exist!', $fileInfo['name']));
@@ -61,7 +60,7 @@ class PlatesEngine extends AbstractBaseEngine
             $this->engine = new LeagueEngine(
                 // First value is the default folder
                 array_values($paths)[0],
-                $config['engines']['plates']['file_extension']
+                $config['engines']['plates']['file_extension'] ?? null
             );
 
             $paths = array_shift($paths);

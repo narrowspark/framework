@@ -32,8 +32,17 @@ class ViewServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new FilesServiceProvider());
         $container->register(new ViewServiceProvider());
-
-        $container->instance(ServerRequestInterface::class, $this->mock(ServerRequestInterface::class));
+        $container->instance('config', [
+            'viserio' => [
+                'view' => [
+                    'paths'      => [
+                        __DIR__ . '/../Fixture/',
+                        __DIR__,
+                    ],
+                    'extensions' => ['phtml', 'php'],
+                ],
+            ]
+        ]);
 
         self::assertInstanceOf(Factory::class, $container->get(Factory::class));
         self::assertInstanceOf(Factory::class, $container->get('view'));

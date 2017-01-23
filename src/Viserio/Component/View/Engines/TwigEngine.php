@@ -28,7 +28,6 @@ class TwigEngine extends AbstractBaseEngine
             [
                 'engines' => [
                     'twig' => [
-                        'file_extension',
                         'options' => [
                             'debug',
                             'cache',
@@ -109,7 +108,7 @@ class TwigEngine extends AbstractBaseEngine
      */
     protected function getLoader(): Twig_LoaderInterface
     {
-        return new Twig_Loader_Filesystem($config['paths']);
+        return new Twig_Loader_Filesystem($this->config['paths']);
     }
 
     /**

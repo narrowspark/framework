@@ -13,6 +13,7 @@ use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
 use Viserio\Component\Mail\Mailer;
+use Narrowspark\TestingHelper\ArrayContainer;
 
 class MailerTest extends TestCase
 {
@@ -59,7 +60,7 @@ class MailerTest extends TestCase
         $message->shouldReceive('bcc')
             ->once();
 
-        $this->setSwiftMailer($mailer);
+        $mailer = $this->setSwiftMailer($mailer);
 
         $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
@@ -121,7 +122,7 @@ class MailerTest extends TestCase
         $message->shouldReceive('setFrom')
             ->never();
 
-        $this->setSwiftMailer($mailer);
+        $mailer = $this->setSwiftMailer($mailer);
 
         $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
@@ -182,7 +183,7 @@ class MailerTest extends TestCase
         $message->shouldReceive('setFrom')
             ->never();
 
-        $this->setSwiftMailer($mailer);
+        $mailer = $this->setSwiftMailer($mailer);
 
         $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
@@ -222,7 +223,7 @@ class MailerTest extends TestCase
         $message->shouldReceive('setFrom')
             ->never();
 
-        $this->setSwiftMailer($mailer);
+        $mailer = $this->setSwiftMailer($mailer);
 
         $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
@@ -265,7 +266,7 @@ class MailerTest extends TestCase
         $message->shouldReceive('setFrom')
             ->never();
 
-        $this->setSwiftMailer($mailer);
+        $mailer = $this->setSwiftMailer($mailer);
 
         $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
@@ -295,18 +296,24 @@ class MailerTest extends TestCase
      */
     public function testMailerToThrowExceptionOnView()
     {
-        $mailer = new Mailer($this->mock(Swift_Mailer::class));
+        $mailer = new Mailer(new ArrayContainer([
+            'config' => ['viserio' => ['mail' => []]],
+            Swift_Mailer::class => $this->mock(Swift_Mailer::class),
+        ]));
 
         $mailer->send(new StdClass());
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Callback is not valid.
+     * @expectedException \Invoker\Exception\NotCallableException
+     * @expectedExceptionMessage Instance of stdClass is not a callable
      */
     public function testMailerToThrowExceptionOnCallback()
     {
-        $mailer = new Mailer($this->mock(Swift_Mailer::class));
+        $mailer = new Mailer(new ArrayContainer([
+            'config' => ['viserio' => ['mail' => []]],
+            Swift_Mailer::class => $this->mock(Swift_Mailer::class),
+        ]));
 
         $mailer->send('test', [], new StdClass());
     }
@@ -329,7 +336,10 @@ class MailerTest extends TestCase
     protected function getMocks(): array
     {
         return [
-            $this->mock(Swift_Mailer::class),
+            new ArrayContainer([
+                'config' => ['viserio' => ['mail' => []]],
+                Swift_Mailer::class => $this->mock(Swift_Mailer::class),
+            ])
         ];
     }
 }
