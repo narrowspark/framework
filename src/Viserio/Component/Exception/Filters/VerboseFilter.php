@@ -5,24 +5,41 @@ namespace Viserio\Component\Exception\Filters;
 use Psr\Http\Message\RequestInterface;
 use Throwable;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
+use Interop\Config\ConfigurationTrait;
+use Interop\Config\RequiresConfig;
+use Interop\Container\ContainerInterface;
+use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Interop\Config\RequiresMandatoryOptions;
 
-class VerboseFilter implements FilterContract
+class VerboseFilter implements FilterContract, RequiresConfig, RequiresMandatoryOptions
 {
-    /**
-     * Is debug mode enabled?
-     *
-     * @var bool
-     */
-    protected $debug;
+    use ConfigurationTrait;
+    use CreateConfigurationTrait;
 
     /**
      * Create a new verbose filter instance.
      *
-     * @param bool $debug
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(bool $debug)
+    public function __construct(ContainerInterface $container)
     {
-        $this->debug = $debug;
+        $this->createConfiguration($container);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dimensions(): iterable
+    {
+        return ['viserio', 'exception'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mandatoryOptions(): iterable
+    {
+        return ['debug'];
     }
 
     /**
@@ -35,7 +52,7 @@ class VerboseFilter implements FilterContract
         Throwable $transformed,
         int $code
     ): array {
-        if ($this->debug !== true) {
+        if ($this->config['debug'] !== true) {
             foreach ($displayers as $index => $displayer) {
                 if ($displayer->isVerbose()) {
                     unset($displayers[$index]);

@@ -7,7 +7,6 @@ use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Displayers\JsonDisplayer;
@@ -20,27 +19,23 @@ use Viserio\Component\Exception\Handler;
 
 class ExceptionServiceProvider implements ServiceProvider
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.exception';
-
     /**
      * {@inheritdoc}
      */
     public function getServices()
     {
         return [
-            ExceptionInfo::class       => [self::class, 'createExceptionInfo'],
-            Handler::class             => [self::class, 'createExceptionHandler'],
-            HandlerContract::class     => function (ContainerInterface $container) {
+            ExceptionInfo::class    => [self::class, 'createExceptionInfo'],
+            Handler::class          => [self::class, 'createExceptionHandler'],
+            HandlerContract::class  => function (ContainerInterface $container) {
                 return $container->get(Handler::class);
             },
-            HtmlDisplayer::class          => [self::class, 'createHtmlDisplayer'],
-            JsonDisplayer::class          => [self::class, 'createJsonDisplayer'],
-            ViewDisplayer::class          => [self::class, 'createViewDisplayer'],
-            WhoopsDisplayer::class        => [self::class, 'createWhoopsDisplayer'],
-            VerboseFilter::class          => [self::class, 'createVerboseFilter'],
-            CanDisplayFilter::class       => [self::class, 'createCanDisplayFilter'],
+            HtmlDisplayer::class    => [self::class, 'createHtmlDisplayer'],
+            JsonDisplayer::class    => [self::class, 'createJsonDisplayer'],
+            ViewDisplayer::class    => [self::class, 'createViewDisplayer'],
+            WhoopsDisplayer::class  => [self::class, 'createWhoopsDisplayer'],
+            VerboseFilter::class    => [self::class, 'createVerboseFilter'],
+            CanDisplayFilter::class => [self::class, 'createCanDisplayFilter'],
         ];
     }
 
@@ -56,12 +51,7 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createHtmlDisplayer(ContainerInterface $container): HtmlDisplayer
     {
-        return new HtmlDisplayer(
-            $container->get(ExceptionInfo::class),
-            $container->get(ResponseFactoryInterface::class),
-            $container->get(StreamFactoryInterface::class),
-            self::getConfig($container, 'template', __DIR__ . '/../Resources/error.html')
-        );
+        return new HtmlDisplayer($container);
     }
 
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer
@@ -90,7 +80,7 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createVerboseFilter(ContainerInterface $container): VerboseFilter
     {
-        return new VerboseFilter(self::getConfig($container, 'debug', false));
+        return new VerboseFilter($container);
     }
 
     public static function createCanDisplayFilter(): CanDisplayFilter

@@ -27,11 +27,13 @@ use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
+use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
 
 class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
 {
     use ConfigurationTrait;
     use ContainerAwareTrait;
+    use CreateConfigurationTrait;
     use LoggerAwareTrait;
 
     /**
@@ -271,26 +273,6 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
                 )
             );
         }
-    }
-
-    /**
-     * Create handler configuration.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @see \Viserio\Component\Exception\ErrorHandler::options()
-     *
-     * @return void
-     */
-    protected function createConfiguration(ContainerInterface $container): void
-    {
-        if ($container->has(RepositoryContract::class)) {
-            $config = $container->get(RepositoryContract::class);
-        } else {
-            $config = $container->get('config');
-        }
-
-        $this->config = $this->options($config);
     }
 
     /**

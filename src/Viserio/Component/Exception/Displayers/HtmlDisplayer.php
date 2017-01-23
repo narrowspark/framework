@@ -10,11 +10,18 @@ use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Component\Exception\ExceptionInfo;
+use Interop\Config\ConfigurationTrait;
+use Interop\Config\ProvidesDefaultOptions;
+use Interop\Config\RequiresConfig;
+use Interop\Container\ContainerInterface;
+use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
 
-class HtmlDisplayer implements DisplayerContract
+class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaultOptions
 {
     use ResponseFactoryAwareTrait;
     use StreamFactoryAwareTrait;
+    use ConfigurationTrait;
+    use CreateConfigurationTrait;
 
     /**
      * The exception info instance.
@@ -33,21 +40,32 @@ class HtmlDisplayer implements DisplayerContract
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Exception\ExceptionInfo     $info
-     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
-     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param string                                         $path
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(
-        ExceptionInfo $info,
-        ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface $streamFactory,
-        string $path
-    ) {
-        $this->info            = $info;
-        $this->responseFactory = $responseFactory;
-        $this->streamFactory   = $streamFactory;
-        $this->path            = $path;
+    public function __construct(ContainerInterface $container) {
+        $this->info            = $container->get(ExceptionInfo::class);
+        $this->responseFactory = $container->get(ResponseFactoryInterface::class);
+        $this->streamFactory   = $container->get(StreamFactoryInterface::class);
+
+        $this->createConfiguration($container);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dimensions(): iterable
+    {
+        return ['viserio', 'exception'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function defaultOptions(): iterable
+    {
+        return [
+            'template_path' => __DIR__ . '/../Resources/error.html',
+        ];
     }
 
     /**
@@ -100,7 +118,7 @@ class HtmlDisplayer implements DisplayerContract
      */
     protected function render(array $info): string
     {
-        $content = file_get_contents($this->path);
+        $content = file_get_contents($this->config['template_path']);
 
         foreach ($info as $key => $val) {
             $content = str_replace("{{ $$key }}", $val, $content);

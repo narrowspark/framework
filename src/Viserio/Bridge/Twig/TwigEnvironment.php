@@ -47,8 +47,8 @@ class TwigEnvironment extends Twig_Environment
      */
     protected function normalizeName(string $name): string
     {
-        if (isset($this->options['file_extension'])) {
-            foreach ((array) $this->options['file_extension'] as $extension) {
+        if (isset($this->options['file_extensions']) && is_array($this->options['file_extensions'])) {
+            foreach ($this->options['file_extensions'] as $extension) {
                 $extension = '.' . $extension;
                 $length    = mb_strlen($extension);
 

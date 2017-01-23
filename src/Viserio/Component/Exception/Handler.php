@@ -17,6 +17,7 @@ use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
 use Viserio\Component\Exception\Filters\VerboseFilter;
+use Interop\Http\Factory\StreamFactoryInterface;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptions
 {
@@ -194,7 +195,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     ): ResponseInterface {
         try {
             $response = $this->getResponse(
-                $container->get(ServerRequestInterface::class),
+                $container->get(StreamFactoryInterface::class)->createStream(),
                 $exception,
                 $transformed
             );
