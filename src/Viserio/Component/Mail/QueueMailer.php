@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
-use Interop\Container\ContainerInterface;
 use Closure;
+use Interop\Container\ContainerInterface;
 use Opis\Closure\SerializableClosure;
 use Viserio\Component\Contracts\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Component\Contracts\Queue\Job as JobContract;

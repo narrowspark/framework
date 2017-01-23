@@ -5,7 +5,6 @@ namespace Viserio\Component\View\Tests\Providers;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\View\Engines\EngineResolver;
@@ -41,7 +40,7 @@ class ViewServiceProviderTest extends TestCase
                     ],
                     'extensions' => ['phtml', 'php'],
                 ],
-            ]
+            ],
         ]);
 
         self::assertInstanceOf(Factory::class, $container->get(Factory::class));

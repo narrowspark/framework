@@ -4,6 +4,7 @@ namespace Viserio\Component\Mail\Tests;
 
 use Interop\Container\ContainerInterface;
 use Mockery;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use StdClass;
@@ -15,7 +16,6 @@ use Viserio\Component\Contracts\Queue\Queue as QueueContract;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
 use Viserio\Component\Mail\QueueMailer;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Component\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
 class QueueMailerTest extends TestCase
@@ -171,8 +171,8 @@ class QueueMailerTest extends TestCase
     {
         $mailer = new QueueMailer(
             new ArrayContainer([
-                'config' => ['viserio' => ['mail' => []]],
-                Swift_Mailer::class => $this->mock(Swift_Mailer::class),
+                'config'             => ['viserio' => ['mail' => []]],
+                Swift_Mailer::class  => $this->mock(Swift_Mailer::class),
                 QueueContract::class => $this->mock(QueueContract::class),
             ])
         );
@@ -184,10 +184,10 @@ class QueueMailerTest extends TestCase
     {
         return [
             new ArrayContainer([
-                'config' => ['viserio' => ['mail' => []]],
-                Swift_Mailer::class => $this->mock(Swift_Mailer::class),
+                'config'             => ['viserio' => ['mail' => []]],
+                Swift_Mailer::class  => $this->mock(Swift_Mailer::class),
                 QueueContract::class => $this->mock(QueueContract::class),
-            ])
+            ]),
         ];
     }
 }

@@ -5,11 +5,9 @@ namespace Viserio\Component\View\Tests\Engines;
 use League\Plates\Extension\Asset;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\View\Engines\PlatesEngine;
 
 class PlatesEngineTest extends TestCase
@@ -43,7 +41,7 @@ class PlatesEngineTest extends TestCase
                         __DIR__,
                     ],
                     'extensions' => ['phtml', 'php'],
-                    'engines' => [
+                    'engines'    => [
                         'plates' => [
                         ],
                     ],
@@ -87,7 +85,7 @@ class PlatesEngineTest extends TestCase
                         __DIR__,
                     ],
                     'extensions' => ['phtml', 'php'],
-                    'engines' => [
+                    'engines'    => [
                         'plates' => [
                             'extensions' => [
                                 new Asset(__DIR__),
@@ -138,7 +136,7 @@ class PlatesEngineTest extends TestCase
                         __DIR__,
                     ],
                     'extensions' => ['phtml', 'php'],
-                    'engines' => [
+                    'engines'    => [
                         'plates' => [
                             'extensions' => [0],
                         ],
@@ -159,7 +157,7 @@ class PlatesEngineTest extends TestCase
      */
     public function testGetThrowExceptionOnFileDontExist()
     {
-                $config = $this->mock(RepositoryContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
             ->once()
             ->with('viserio')
@@ -173,7 +171,7 @@ class PlatesEngineTest extends TestCase
                         __DIR__,
                     ],
                     'extensions' => ['phtml', 'php'],
-                    'engines' => [
+                    'engines'    => [
                         'plates' => [
                         ],
                     ],

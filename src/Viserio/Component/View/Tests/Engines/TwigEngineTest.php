@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Tests\Engines;
 
-use PHPUnit\Framework\TestCase;
-use Viserio\Component\View\Engines\TwigEngine;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\View\Engines\TwigEngine;
 
 class TwigEngineTest extends TestCase
 {
@@ -17,7 +17,7 @@ class TwigEngineTest extends TestCase
     {
         parent::tearDown();
 
-        $this->delTree(__DIR__ .'/../Cache');
+        $this->delTree(__DIR__ . '/../Cache');
 
         $this->allowMockingNonExistentMethods(true);
 
@@ -42,11 +42,11 @@ class TwigEngineTest extends TestCase
                         __DIR__,
                     ],
                     'extensions' => ['phtml', 'php'],
-                    'engines' => [
+                    'engines'    => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,
-                                'cache' => __DIR__ .'/../Cache',
+                                'cache' => __DIR__ . '/../Cache',
                             ],
                         ],
                     ],
