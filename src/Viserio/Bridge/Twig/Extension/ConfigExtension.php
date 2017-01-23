@@ -4,8 +4,8 @@ namespace Viserio\Bridge\Twig\Extension;
 
 use Twig_Extension;
 use Twig_SimpleFunction;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Config\Traits\ConfigAwareTrait;
 
 class ConfigExtension extends Twig_Extension
 {
@@ -14,7 +14,7 @@ class ConfigExtension extends Twig_Extension
     /**
      * Create a new config extension.
      *
-     * @param \Viserio\Contracts\Config\Repository $config
+     * @param \Viserio\Component\Contracts\Config\Repository $config
      */
     public function __construct(RepositoryContract $config)
     {

@@ -5,8 +5,8 @@ namespace Viserio\Bridge\Twig\Extension;
 use Twig_Extension;
 use Twig_SimpleFilter;
 use Twig_SimpleFunction;
-use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
-use Viserio\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
+use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
 class TranslatorExtension extends Twig_Extension
 {
@@ -15,7 +15,7 @@ class TranslatorExtension extends Twig_Extension
     /**
      * Create a new translator extension.
      *
-     * @param \Viserio\Contracts\Translation\Translator $translator
+     * @param \Viserio\Component\Contracts\Translation\Translator $translator
      */
     public function __construct(TranslatorContract $translator)
     {

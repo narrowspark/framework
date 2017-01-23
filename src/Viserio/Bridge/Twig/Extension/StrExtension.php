@@ -5,7 +5,7 @@ namespace Viserio\Bridge\Twig\Extension;
 use Twig_Extension;
 use Twig_SimpleFilter;
 use Twig_SimpleFunction;
-use Viserio\Support\Str as ViserioStr;
+use Viserio\Component\Support\Str as ViserioStr;
 
 class StrExtension extends Twig_Extension
 {
