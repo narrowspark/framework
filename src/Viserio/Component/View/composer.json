@@ -52,7 +52,6 @@
     },
     "suggest": {
         "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
-        "league/plates"                                      : "Required to use the League Plates view adapter (^3.1).",
         "viserio/http-factory"                               : "Required to use the proxie View::createResponseView (^0.3)."
     },
     "extra": {
