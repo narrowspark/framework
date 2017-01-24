@@ -7,6 +7,7 @@ use Interop\Config\RequiresConfig;
 use Interop\Config\RequiresMandatoryOptions;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
 
 class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryOptions
 {
