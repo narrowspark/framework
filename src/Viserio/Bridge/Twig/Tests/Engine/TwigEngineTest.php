@@ -7,7 +7,9 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\View\Engines\TwigEngine;
+use Viserio\Bridge\Twig\Engine\TwigEngine;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 
 class TwigEngineTest extends TestCase
 {
@@ -33,7 +35,7 @@ class TwigEngineTest extends TestCase
             ->with('viserio')
             ->andReturn(true);
         $config->shouldReceive('offsetGet')
-            ->once()
+            ->times(3)
             ->with('viserio')
             ->andReturn([
                 'view' => [
@@ -55,6 +57,10 @@ class TwigEngineTest extends TestCase
 
         $engine = new TwigEngine(new ArrayContainer([
             RepositoryContract::class => $config,
+            Twig_Environment::class => new Twig_Environment(
+                new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
+                $config['viserio']['view']['engines']['twig']['options']
+            ),
         ]));
 
         $template = $engine->get(['name' => 'twightml.twig.html']);

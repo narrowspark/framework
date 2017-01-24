@@ -28,11 +28,11 @@ class ViewServiceProvider implements ServiceProvider
                 return $container->get(ViewFinder::class);
             },
             FactoryContract::class  => [self::class, 'createViewFactory'],
-            Factory::class          => function (ContainerInterface $container) {
-                return $container->get(Factory::class);
+            Factory::class => function (ContainerInterface $container) {
+                return $container->get(FactoryContract::class);
             },
             'view'                  => function (ContainerInterface $container) {
-                return $container->get(Factory::class);
+                return $container->get(FactoryContract::class);
             },
         ];
     }

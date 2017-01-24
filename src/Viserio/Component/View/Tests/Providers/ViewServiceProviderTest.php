@@ -11,6 +11,7 @@ use Viserio\Component\View\Engines\EngineResolver;
 use Viserio\Component\View\Factory;
 use Viserio\Component\View\Providers\ViewServiceProvider;
 use Viserio\Component\View\ViewFinder;
+use Viserio\Component\Contracts\View\Factory as FactoryContract;
 
 class ViewServiceProviderTest extends TestCase
 {
@@ -43,8 +44,9 @@ class ViewServiceProviderTest extends TestCase
             ],
         ]);
 
-        self::assertInstanceOf(Factory::class, $container->get(Factory::class));
-        self::assertInstanceOf(Factory::class, $container->get('view'));
+        self::assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
+        self::assertInstanceOf(FactoryContract::class, $container->get(Factory::class));
+        self::assertInstanceOf(FactoryContract::class, $container->get('view'));
         self::assertInstanceOf(ViewFinder::class, $container->get('view.finder'));
         self::assertInstanceOf(ViewFinder::class, $container->get(ViewFinder::class));
         self::assertInstanceOf(EngineResolver::class, $container->get('view.engine.resolver'));

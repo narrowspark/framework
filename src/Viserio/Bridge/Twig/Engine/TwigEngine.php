@@ -3,11 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
 use ErrorException;
-use Interop\Config\ProvidesDefaultOptions;
-use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Twig_Environment;
 use Twig_Error;
+use Twig_Loader_Filesystem;
+use Twig_LoaderInterface;
+use Interop\Config\ProvidesDefaultOptions;
+use Interop\Container\ContainerInterface;
+use Viserio\Component\View\Engines\AbstractBaseEngine;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
 {
@@ -71,7 +74,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        $twig = $this->addExtensions($this->twig, $config);
+        $twig = $this->addExtensions($this->twig, $this->config['engines']['twig']);
 
         try {
             $content = $twig->render($fileInfo['name'], $data);
@@ -91,20 +94,16 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
      */
     protected function handleTwigError(Twig_Error $exception)
     {
-        $templateFile = $exception->getTemplateFile();
+        $source       = $exception->getSourceContext();
         $templateLine = $exception->getTemplateLine();
         $file         = null;
-
-        if ($templateFile && file_exists($templateFile)) {
-            $file = $templateFile;
-        }
 
         if ($file !== null) {
             $exception = new ErrorException(
                 $exception->getMessage(),
                 0,
                 1,
-                $file,
+                $source->getName(),
                 $templateLine,
                 $exception
             );
