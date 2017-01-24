@@ -34,9 +34,11 @@ class DumpExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'dump',
                 [$this, 'dump'],
-                ['is_safe'          => ['html'],
-                'needs_context'     => true,
-                'needs_environment' => true, ]
+                [
+                    'is_safe'          => ['html'],
+                    'needs_context'     => true,
+                    'needs_environment' => true,
+                ]
             ),
         ];
     }
@@ -58,7 +60,7 @@ class DumpExtension extends Twig_Extension
             return;
         }
 
-        if (2 === func_num_args()) {
+        if (func_num_args() === 2) {
             $vars = [];
 
             foreach ($context as $key => $value) {
