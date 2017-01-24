@@ -35,7 +35,7 @@ class DumpExtension extends Twig_Extension
                 'dump',
                 [$this, 'dump'],
                 [
-                    'is_safe'          => ['html'],
+                    'is_safe'           => ['html'],
                     'needs_context'     => true,
                     'needs_environment' => true,
                 ]
