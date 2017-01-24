@@ -6,10 +6,10 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Viserio\Bridge\Twig\Engine\TwigEngine;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class TwigEngineTest extends TestCase
 {
@@ -57,7 +57,7 @@ class TwigEngineTest extends TestCase
 
         $engine = new TwigEngine(new ArrayContainer([
             RepositoryContract::class => $config,
-            Twig_Environment::class => new Twig_Environment(
+            Twig_Environment::class   => new Twig_Environment(
                 new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),

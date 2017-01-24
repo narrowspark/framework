@@ -6,12 +6,12 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\View\Engines\EngineResolver;
 use Viserio\Component\View\Factory;
 use Viserio\Component\View\Providers\ViewServiceProvider;
 use Viserio\Component\View\ViewFinder;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
 
 class ViewServiceProviderTest extends TestCase
 {
