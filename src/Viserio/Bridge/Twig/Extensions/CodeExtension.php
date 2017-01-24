@@ -178,7 +178,7 @@ class CodeExtension extends Twig_Extension
     /**
      * Fix code markup.
      *
-     * @param  string $line
+     * @param string $line
      *
      * @return string
      */

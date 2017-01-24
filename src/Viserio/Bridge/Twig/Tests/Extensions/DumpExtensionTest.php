@@ -2,33 +2,37 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extensions;
 
-use Throwable;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\VarDumper;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Throwable;
 use Twig_Environment;
 use Twig_Loader_Array;
-use Viserio\Bridge\Twig\Extensions\DumpExtension;
 use Twig_LoaderInterface;
+use Viserio\Bridge\Twig\Extensions\DumpExtension;
 
 class DumpExtensionTest extends TestCase
 {
     /**
      * @dataProvider getDumpTags
+     * @param mixed $template
+     * @param mixed $debug
+     * @param mixed $expectedOutput
+     * @param mixed $expectedDumped
      */
     public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped)
     {
         $extension = new DumpExtension();
-        $twig = new Twig_Environment(new Twig_Loader_Array(array('template' => $template)), array(
-            'debug' => $debug,
-            'cache' => false,
+        $twig      = new Twig_Environment(new Twig_Loader_Array(['template' => $template]), [
+            'debug'         => $debug,
+            'cache'         => false,
             'optimizations' => 0,
-        ));
+        ]);
         $twig->addExtension($extension);
-        $dumped = null;
-        $exception = null;
-        $prevDumper = VarDumper::setHandler(function ($var) use (&$dumped) { $dumped = $var; });
+        $dumped     = null;
+        $exception  = null;
+        $prevDumper = VarDumper::setHandler(function ($var) use (&$dumped) {
+            $dumped = $var;
+        });
 
         try {
             $this->assertEquals($expectedOutput, $twig->render('template'));
@@ -46,28 +50,33 @@ class DumpExtensionTest extends TestCase
 
     public function getDumpTags()
     {
-        return array(
-            array('A{% dump %}B', true, 'AB', array()),
-            array('A{% set foo="bar"%}B{% dump %}C', true, 'ABC', array('foo' => 'bar')),
-            array('A{% dump %}B', false, 'AB', null),
-        );
+        return [
+            ['A{% dump %}B', true, 'AB', []],
+            ['A{% set foo="bar"%}B{% dump %}C', true, 'ABC', ['foo' => 'bar']],
+            ['A{% dump %}B', false, 'AB', null],
+        ];
     }
+
     /**
      * @dataProvider getDumpArgs
+     * @param mixed $context
+     * @param mixed $args
+     * @param mixed $expectedOutput
+     * @param mixed $debug
      */
     public function testDump($context, $args, $expectedOutput, $debug = true)
     {
         $extension = new DumpExtension();
-        $twig = new Twig_Environment($this->getMockBuilder(Twig_LoaderInterface::class)->getMock(), array(
-            'debug' => $debug,
-            'cache' => false,
+        $twig      = new Twig_Environment($this->getMockBuilder(Twig_LoaderInterface::class)->getMock(), [
+            'debug'         => $debug,
+            'cache'         => false,
             'optimizations' => 0,
-        ));
+        ]);
 
         array_unshift($args, $context);
         array_unshift($args, $twig);
 
-        $dump = call_user_func_array(array($extension, 'dump'), $args);
+        $dump = call_user_func_array([$extension, 'dump'], $args);
 
         if ($debug) {
             $this->assertStringStartsWith('<script>', $dump);
@@ -80,24 +89,24 @@ class DumpExtensionTest extends TestCase
 
     public function getDumpArgs()
     {
-        return array(
-            array(array(), array(), '', false),
-            array(array(), array(), "<pre class=sf-dump id=sf-dump data-indent-pad=\"  \">[]\n</pre><script>Sfdump(\"sf-dump\")</script>\n"),
-            array(
-                array(),
-                array(123, 456),
+        return [
+            [[], [], '', false],
+            [[], [], "<pre class=sf-dump id=sf-dump data-indent-pad=\"  \">[]\n</pre><script>Sfdump(\"sf-dump\")</script>\n"],
+            [
+                [],
+                [123, 456],
                 "<pre class=sf-dump id=sf-dump data-indent-pad=\"  \"><span class=sf-dump-num>123</span>\n</pre><script>Sfdump(\"sf-dump\")</script>\n"
-                ."<pre class=sf-dump id=sf-dump data-indent-pad=\"  \"><span class=sf-dump-num>456</span>\n</pre><script>Sfdump(\"sf-dump\")</script>\n",
-            ),
-            array(
-                array('foo' => 'bar'),
-                array(),
+                . "<pre class=sf-dump id=sf-dump data-indent-pad=\"  \"><span class=sf-dump-num>456</span>\n</pre><script>Sfdump(\"sf-dump\")</script>\n",
+            ],
+            [
+                ['foo' => 'bar'],
+                [],
                 "<pre class=sf-dump id=sf-dump data-indent-pad=\"  \"><span class=sf-dump-note>array:1</span> [<samp>\n"
-                ."  \"<span class=sf-dump-key>foo</span>\" => \"<span class=sf-dump-str title=\"3 characters\">bar</span>\"\n"
-                ."</samp>]\n"
-                ."</pre><script>Sfdump(\"sf-dump\")</script>\n",
-            ),
-        );
+                . "  \"<span class=sf-dump-key>foo</span>\" => \"<span class=sf-dump-str title=\"3 characters\">bar</span>\"\n"
+                . "</samp>]\n"
+                . "</pre><script>Sfdump(\"sf-dump\")</script>\n",
+            ],
+        ];
     }
 
     public function testGetName()
