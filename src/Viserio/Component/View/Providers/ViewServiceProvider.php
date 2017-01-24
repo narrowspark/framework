@@ -12,6 +12,8 @@ use Viserio\Component\View\Engines\PlatesEngine;
 use Viserio\Component\View\Engines\TwigEngine;
 use Viserio\Component\View\Factory;
 use Viserio\Component\View\ViewFinder;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 
 class ViewServiceProvider implements ServiceProvider
 {
@@ -25,15 +27,15 @@ class ViewServiceProvider implements ServiceProvider
             'view.engine.resolver' => function (ContainerInterface $container) {
                 return $container->get(EngineResolver::class);
             },
-            ViewFinder::class => [self::class, 'createViewFinder'],
-            'view.finder'     => function (ContainerInterface $container) {
+            ViewFinder::class      => [self::class, 'createViewFinder'],
+            'view.finder'          => function (ContainerInterface $container) {
                 return $container->get(ViewFinder::class);
             },
-            Factory::class         => [self::class, 'createViewFactory'],
-            FactoryContract::class => function (ContainerInterface $container) {
+            FactoryContract::class  => [self::class, 'createViewFactory'],
+            Factory::class => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },
-            'view' => function (ContainerInterface $container) {
+            'view'                  => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },
         ];
@@ -46,19 +48,19 @@ class ViewServiceProvider implements ServiceProvider
         // Next we will register the various engines with the engines so that the
         // environment can resolve the engines it needs for various views based
         // on the extension of view files. We call a method for each engines.
-        foreach (['file', 'php', 'twig', 'plates'] as $engineClass) {
+        foreach (['file', 'php'] as $engineClass) {
             self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
         return $engines;
     }
 
-    public static function createViewFinder(ContainerInterface $container)
+    public static function createViewFinder(ContainerInterface $container): ViewFinder
     {
         return new ViewFinder($container);
     }
 
-    public static function createViewFactory(ContainerInterface $container)
+    public static function createViewFactory(ContainerInterface $container): FactoryContract
     {
         $view = new Factory(
             $container->get(EngineResolver::class),
@@ -66,9 +68,6 @@ class ViewServiceProvider implements ServiceProvider
         );
 
         $view->share('app', $container);
-        $view->addExtension('html', 'twig');
-        $view->addExtension('twig.html', 'twig');
-        $view->addExtension('plates.php', 'plates');
 
         return $view;
     }
@@ -96,32 +95,6 @@ class ViewServiceProvider implements ServiceProvider
     {
         $engines->register('file', function () {
             return new FileEngine();
-        });
-    }
-
-    /**
-     * Register the PHP engine implementation.
-     *
-     * @param \Viserio\Component\View\Engines\EngineResolver $engines
-     * @param \Interop\Container\ContainerInterface          $container
-     */
-    protected static function registerTwigEngine(EngineResolver $engines, ContainerInterface $container)
-    {
-        $engines->register('twig', function () use ($container) {
-            return new TwigEngine($container);
-        });
-    }
-
-    /**
-     * Register the PHP engine implementation.
-     *
-     * @param \Viserio\Component\View\Engines\EngineResolver $engines
-     * @param \Interop\Container\ContainerInterface          $container
-     */
-    protected static function registerPlatesEngine(EngineResolver $engines, ContainerInterface $container)
-    {
-        $engines->register('plates', function () use ($container) {
-            return new PlatesEngine($container);
         });
     }
 }

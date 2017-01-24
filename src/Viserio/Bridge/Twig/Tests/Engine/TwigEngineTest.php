@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\View\Tests\Engines;
+namespace Viserio\Bridge\Twig\Tests\Engine;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;

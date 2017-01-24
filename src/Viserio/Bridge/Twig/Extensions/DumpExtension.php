@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Twig\Extension;
+namespace Viserio\Bridge\Twig\Extensions;
 
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;

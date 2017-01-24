@@ -27,6 +27,7 @@
         "container-interop/service-provider"  : "^0.3",
         "danielstjules/stringy"               : "^2.3",
         "phpunit/phpunit"                     : "~5.7",
+        "symfony/var-dumper"                  : "^3.1",
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version",
         "viserio/session"                     : "self.version",

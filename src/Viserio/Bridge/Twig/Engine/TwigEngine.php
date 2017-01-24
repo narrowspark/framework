@@ -2,28 +2,67 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
-use Interop\Config\ProvidesDefaultOptions;
+use ErrorException;
+use RuntimeException;
 use Twig_Environment;
-use Twig_LexerInterface;
-use Twig_Loader_Array;
+use Twig_Error;
+use Twig_Loader_Filesystem;
 use Twig_LoaderInterface;
-use Viserio\Bridge\Twig\Loader as TwigLoader;
-use Viserio\Bridge\Twig\TwigEnvironment;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\View\Engines\TwigEngine as BaseTwigEngine;
+use Interop\Config\ProvidesDefaultOptions;
+use Interop\Container\ContainerInterface;
 
-class TwigEngine extends BaseTwigEngine implements ProvidesDefaultOptions
+class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
 {
+    /**
+     * Twig environment.
+     *
+     * @var \Twig_Environment
+     */
+    protected $twig;
+
+    /**
+     * Create a new twig engine instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+
+        $this->twig = $container->get(Twig_Environment::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mandatoryOptions(): iterable
+    {
+        return array_merge(
+            parent::mandatoryOptions(),
+            [
+                'engines' => [
+                    'twig' => [
+                        'options' => [
+                            'debug',
+                            'cache',
+                        ],
+                    ],
+                ],
+            ]
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
     public function defaultOptions(): iterable
     {
         return [
-            'twig' => [
-                'options' => [
-                    'file_extension' => 'twig',
+            'engines' => [
+                'twig' => [
+                    'options' => [
+                        'file_extension' => 'twig',
+                    ],
                 ],
             ],
         ];
@@ -32,54 +71,75 @@ class TwigEngine extends BaseTwigEngine implements ProvidesDefaultOptions
     /**
      * {@inheritdoc}
      */
-    protected function getLoader(): Twig_LoaderInterface
+    public function get(array $fileInfo, array $data = []): string
     {
-        $config  = $this->config;
-        $loaders = [
-            new TwigLoader(
-                $this->container->get(FilesystemContract::class),
-                $this->container->get(FinderContract::class),
-                $config['twig']['file_extension']
-            ),
-        ];
+        $twig = $this->addExtensions($this->twig, $config);
 
-        if (isset($config['twig']['templates']) && is_array($config['twig']['templates'])) {
-            $loaders[] = new Twig_Loader_Array($config['twig']['templates']);
+        try {
+            $content = $twig->render($fileInfo['name'], $data);
+        } catch (Twig_Error $exception) {
+            $this->handleTwigError($exception);
         }
 
-        if (isset($config['twig']['loader']) && is_array($config['twig']['loader'])) {
-            $loaders = array_merge($loaders, $config['twig']['loader']);
-        }
-
-        return new Twig_Loader_Chain($loaders);
+        return $content;
     }
 
     /**
-     * {@inheritdoc}
+     * Handle a TwigError exception.
+     *
+     * @param \Twig_Error $exception
+     *
+     * @throws \Twig_Error|\ErrorException
      */
-    protected function getTwigEnvironment(array $options): Twig_Environment
+    protected function handleTwigError(Twig_Error $exception)
     {
-        return new TwigEnvironment(
-            $this->getLoader(),
-            $options
-        );
+        $templateFile = $exception->getTemplateFile();
+        $templateLine = $exception->getTemplateLine();
+        $file         = null;
+
+        if ($templateFile && file_exists($templateFile)) {
+            $file = $templateFile;
+        }
+
+        if ($file !== null) {
+            $exception = new ErrorException(
+                $exception->getMessage(),
+                0,
+                1,
+                $file,
+                $templateLine,
+                $exception
+            );
+        }
+
+        throw $exception;
     }
 
     /**
-     * {@inheritdoc}
+     * Add extensions to twig environment.
+     *
+     * @param \Twig_Environment $twig
+     * @param array             $config
+     *
+     * @codeCoverageIgnore
      */
-    protected function getInstance(): Twig_Environment
+    protected function addExtensions(Twig_Environment $twig, array $config): Twig_Environment
     {
-        if (! $this->parserInstance) {
-            $twig = parent::getInstance();
-
-            if ($this->container->has(Twig_LexerInterface::class)) {
-                $twig->setLexer($this->container->get(Twig_LexerInterface::class));
+        if (isset($config['extensions']) && is_array($config['extensions'])) {
+            foreach ($config['extensions'] as $extension) {
+                if (is_string($extension) && $this->container->has($extension)) {
+                    $twig->addExtension($this->container->get($extension));
+                } elseif (is_object($extension)) {
+                    $twig->addExtension($extension);
+                } else {
+                    throw new RuntimeException(sprintf(
+                        'Plates extension [%s] is not a object.',
+                        (string) $extension
+                    ));
+                }
             }
-
-            $this->parserInstance = $twig;
         }
 
-        return $this->parserInstance;
+        return $twig;
     }
 }
