@@ -14,6 +14,7 @@ class DumpExtensionTest extends TestCase
 {
     /**
      * @dataProvider getDumpTags
+     *
      * @param mixed $template
      * @param mixed $debug
      * @param mixed $expectedOutput
@@ -21,13 +22,13 @@ class DumpExtensionTest extends TestCase
      */
     public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped)
     {
-        $extension = new DumpExtension();
-        $twig      = new Twig_Environment(new Twig_Loader_Array(['template' => $template]), [
+        $twig = new Twig_Environment(new Twig_Loader_Array(['template' => $template]), [
             'debug'         => $debug,
             'cache'         => false,
             'optimizations' => 0,
         ]);
-        $twig->addExtension($extension);
+        $twig->addExtension(new DumpExtension());
+
         $dumped     = null;
         $exception  = null;
         $prevDumper = VarDumper::setHandler(function ($var) use (&$dumped) {
@@ -41,7 +42,7 @@ class DumpExtensionTest extends TestCase
 
         VarDumper::setHandler($prevDumper);
 
-        if (null !== $exception) {
+        if ($exception !== null) {
             throw $exception;
         }
 
@@ -59,6 +60,7 @@ class DumpExtensionTest extends TestCase
 
     /**
      * @dataProvider getDumpArgs
+     *
      * @param mixed $context
      * @param mixed $args
      * @param mixed $expectedOutput
@@ -87,7 +89,7 @@ class DumpExtensionTest extends TestCase
         $this->assertEquals($expectedOutput, $dump);
     }
 
-    public function getDumpArgs()
+    public function getDumpArgs(): array
     {
         return [
             [[], [], '', false],
@@ -111,6 +113,6 @@ class DumpExtensionTest extends TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('Viserio_Bridge_Twig_Extension_Code', (new DumpExtension())->getName());
+        $this->assertEquals('Viserio_Bridge_Twig_Extension_Dump', (new DumpExtension())->getName());
     }
 }
