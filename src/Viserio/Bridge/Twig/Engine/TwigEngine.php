@@ -3,13 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
 use ErrorException;
+use Interop\Config\ProvidesDefaultOptions;
+use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Twig_Environment;
 use Twig_Error;
-use Twig_Loader_Filesystem;
-use Twig_LoaderInterface;
-use Interop\Config\ProvidesDefaultOptions;
-use Interop\Container\ContainerInterface;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
 {

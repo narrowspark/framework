@@ -8,12 +8,8 @@ use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\View\Engines\EngineResolver;
 use Viserio\Component\View\Engines\FileEngine;
 use Viserio\Component\View\Engines\PhpEngine;
-use Viserio\Component\View\Engines\PlatesEngine;
-use Viserio\Component\View\Engines\TwigEngine;
 use Viserio\Component\View\Factory;
 use Viserio\Component\View\ViewFinder;
-use Twig_Environment;
-use Twig_Loader_Filesystem;
 
 class ViewServiceProvider implements ServiceProvider
 {
@@ -32,7 +28,7 @@ class ViewServiceProvider implements ServiceProvider
                 return $container->get(ViewFinder::class);
             },
             FactoryContract::class  => [self::class, 'createViewFactory'],
-            Factory::class => function (ContainerInterface $container) {
+            Factory::class          => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },
             'view'                  => function (ContainerInterface $container) {

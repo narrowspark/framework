@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Commands;
 
-use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Interop\Config\ConfigurationTrait;
 use Interop\Config\RequiresConfig;
 use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 
 class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryOptions
 {
