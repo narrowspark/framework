@@ -26,6 +26,8 @@
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",
         "danielstjules/stringy"               : "^2.3",
+        "narrowspark/testing-helper"          : "^2.0",
+        "mockery/mockery"                     : "^0.9",
         "phpunit/phpunit"                     : "~5.7",
         "symfony/var-dumper"                  : "^3.1",
         "viserio/config"                      : "self.version",

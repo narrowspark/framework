@@ -17,7 +17,7 @@ class CodeExtension extends Twig_Extension
     /**
      * The format for links to source files.
      *
-     * @var string|\Symfony\Component\HttpKernel\Debug\FileLinkFormatter
+     * @var string
      */
     private $fileLinkFormat;
 
@@ -38,11 +38,11 @@ class CodeExtension extends Twig_Extension
     /**
      * Constructor.
      *
-     * @param string|\Symfony\Component\HttpKernel\Debug\FileLinkFormatter $fileLinkFormat
-     * @param string                                                       $rootDir
-     * @param string                                                       $charset
+     * @param string $fileLinkFormat
+     * @param string $rootDir
+     * @param string $charset
      */
-    public function __construct($fileLinkFormat, string $rootDir, string $charset)
+    public function __construct(string $fileLinkFormat, string $rootDir, string $charset)
     {
         $this->fileLinkFormat = $fileLinkFormat ?: ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
         $this->rootDir        = str_replace('/', DIRECTORY_SEPARATOR, dirname($rootDir)) . DIRECTORY_SEPARATOR;
@@ -60,10 +60,6 @@ class CodeExtension extends Twig_Extension
             new Twig_SimpleFilter('format_args', [$this, 'formatArgs'], ['is_safe' => ['html']]),
             new Twig_SimpleFilter('format_args_as_text', [$this, 'formatArgsAsText']),
             new Twig_SimpleFilter('file_excerpt', [$this, 'fileExcerpt'], ['is_safe' => ['html']]),
-            new Twig_SimpleFilter('format_file', [$this, 'formatFile'], ['is_safe' => ['html']]),
-            new Twig_SimpleFilter('format_file_from_text', [$this, 'formatFileFromText'], ['is_safe' => ['html']]),
-            new Twig_SimpleFilter('format_log_message', [$this, 'formatLogMessage'], ['is_safe' => ['html']]),
-            new Twig_SimpleFilter('file_link', [$this, 'getFileLink']),
         ];
     }
 
@@ -172,85 +168,6 @@ class CodeExtension extends Twig_Extension
     }
 
     /**
-     * Formats a file path.
-     *
-     * @param string      $file An absolute file path
-     * @param int         $line The line number
-     * @param string|null $text Use this text for the link rather than the file path
-     *
-     * @return string
-     */
-    public function formatFile(string $file, int $line, ?string $text = null): string
-    {
-        $file = trim($file);
-
-        if (null === $text) {
-            $text = str_replace('/', DIRECTORY_SEPARATOR, $file);
-            if (0 === mb_strpos($text, $this->rootDir)) {
-                $text = mb_substr($text, mb_strlen($this->rootDir));
-                $text = explode(DIRECTORY_SEPARATOR, $text, 2);
-                $text = sprintf('<abbr title="%s%2$s">%s</abbr>%s', $this->rootDir, $text[0], isset($text[1]) ? DIRECTORY_SEPARATOR . $text[1] : '');
-            }
-        }
-
-        $text = "$text at line $line";
-
-        if (false !== $link = $this->getFileLink($file, $line)) {
-            return sprintf('<a href="%s" title="Click to open this file" class="file_link">%s</a>', htmlspecialchars($link, ENT_COMPAT | ENT_SUBSTITUTE, $this->charset), $text);
-        }
-
-        return $text;
-    }
-
-    /**
-     * Returns the link for a given file/line pair.
-     *
-     * @param string $file An absolute file path
-     * @param int    $line The line number
-     *
-     * @return string A link of false
-     */
-    public function getFileLink($file, $line): string
-    {
-        if ($fmt = $this->fileLinkFormat) {
-            return is_string($fmt) ? strtr($fmt, ['%f' => $file, '%l' => $line]) : $fmt->format($file, $line);
-        }
-
-        return false;
-    }
-
-    public function formatFileFromText($text)
-    {
-        return preg_replace_callback('/in ("|&quot;)?(.+?)\1(?: +(?:on|at))? +line (\d+)/s', function ($match) {
-            return 'in ' . $this->formatFile($match[2], $match[3]);
-        }, $text);
-    }
-
-    /**
-     * @internal
-     *
-     * @param mixed $message
-     * @param array $context
-     */
-    public function formatLogMessage($message, array $context)
-    {
-        if ($context && false !== mb_strpos($message, '{')) {
-            $replacements = [];
-            foreach ($context as $key => $val) {
-                if (is_scalar($val)) {
-                    $replacements['{' . $key . '}'] = $val;
-                }
-            }
-
-            if ($replacements) {
-                $message = strtr($message, $replacements);
-            }
-        }
-
-        return htmlspecialchars($message, ENT_COMPAT | ENT_SUBSTITUTE, $this->charset);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getName()
@@ -258,7 +175,14 @@ class CodeExtension extends Twig_Extension
         return 'Viserio_Bridge_Twig_Extension_Code';
     }
 
-    protected static function fixCodeMarkup($line)
+    /**
+     * Fix code markup.
+     *
+     * @param  string $line
+     *
+     * @return string
+     */
+    protected static function fixCodeMarkup(string $line): string
     {
         // </span> ending tag from previous line
         $opening = mb_strpos($line, '<span');
