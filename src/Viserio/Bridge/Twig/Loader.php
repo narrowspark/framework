@@ -36,6 +36,8 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     protected $cache = [];
 
     /**
+     * Create a new twig loader instance.
+     *
      * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
      * @param \Viserio\Component\Contracts\View\Finder           $finder
      * @param string                                             $extension twig file extension

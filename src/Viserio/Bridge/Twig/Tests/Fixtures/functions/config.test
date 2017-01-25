@@ -1,0 +1,12 @@
+--TEST--
+"config" functions
+--TEMPLATE--
+{{ config('test') }}
+{{ config_get('test') }}
+{{ config_has('test') ? 'OK' : 'KO' }}
+--DATA--
+return array()
+--EXPECT--
+test
+test
+OK

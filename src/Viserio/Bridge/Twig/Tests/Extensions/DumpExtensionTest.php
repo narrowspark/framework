@@ -12,42 +12,42 @@ use Viserio\Bridge\Twig\Extensions\DumpExtension;
 
 class DumpExtensionTest extends TestCase
 {
-    // /**
-    //  * @dataProvider getDumpTags
-    //  *
-    //  * @param mixed $template
-    //  * @param mixed $debug
-    //  * @param mixed $expectedOutput
-    //  * @param mixed $expectedDumped
-    //  */
-    // public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped)
-    // {
-    //     $twig = new Twig_Environment(new Twig_Loader_Array(['template' => $template]), [
-    //         'debug'         => $debug,
-    //         'cache'         => false,
-    //         'optimizations' => 0,
-    //     ]);
-    //     $twig->addExtension(new DumpExtension());
+    /**
+     * @dataProvider getDumpTags
+     *
+     * @param mixed $template
+     * @param mixed $debug
+     * @param mixed $expectedOutput
+     * @param mixed $expectedDumped
+     */
+    public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped)
+    {
+        $twig = new Twig_Environment(new Twig_Loader_Array(['template' => $template]), [
+            'debug'         => $debug,
+            'cache'         => false,
+            'optimizations' => 0,
+        ]);
+        $twig->addExtension(new DumpExtension());
 
-    //     $dumped     = null;
-    //     $exception  = null;
-    //     $prevDumper = VarDumper::setHandler(function ($var) use (&$dumped) {
-    //         $dumped = $var;
-    //     });
+        $dumped     = null;
+        $exception  = null;
+        $prevDumper = VarDumper::setHandler(function ($var) use (&$dumped) {
+            $dumped = $var;
+        });
 
-    //     try {
-    //         $this->assertEquals($expectedOutput, $twig->render('template'));
-    //     } catch (Throwable $exception) {
-    //     }
+        try {
+            $this->assertEquals($expectedOutput, $twig->render('template'));
+        } catch (Throwable $exception) {
+        }
 
-    //     VarDumper::setHandler($prevDumper);
+        VarDumper::setHandler($prevDumper);
 
-    //     if ($exception !== null) {
-    //         throw $exception;
-    //     }
+        if ($exception !== null) {
+            throw $exception;
+        }
 
-    //     $this->assertSame($expectedDumped, $dumped);
-    // }
+        $this->assertSame($expectedDumped, $dumped);
+    }
 
     public function getDumpTags()
     {

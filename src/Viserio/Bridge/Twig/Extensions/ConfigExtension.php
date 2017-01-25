@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extensions;
 
 use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig_Function;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Config\Traits\ConfigAwareTrait;
 
@@ -35,9 +35,9 @@ class ConfigExtension extends Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new Twig_SimpleFunction('config', [$this->config, 'get']),
-            new Twig_SimpleFunction('config_get', [$this->config, 'get']),
-            new Twig_SimpleFunction('config_has', [$this->config, 'has']),
+            new Twig_Function('config', [$this->config, 'get']),
+            new Twig_Function('config_get', [$this->config, 'get']),
+            new Twig_Function('config_has', [$this->config, 'has']),
         ];
     }
 }

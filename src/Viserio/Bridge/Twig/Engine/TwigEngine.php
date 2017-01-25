@@ -92,7 +92,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
      */
     protected function handleTwigError(Twig_Error $exception)
     {
-        $source       = $exception->getSourceContext();
+        $templateName = $exception->getTemplateName();
         $templateLine = $exception->getTemplateLine();
         $file         = null;
 
@@ -101,7 +101,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
                 $exception->getMessage(),
                 0,
                 1,
-                $source->getName(),
+                $templateName,
                 $templateLine,
                 $exception
             );
@@ -115,8 +115,6 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
      *
      * @param \Twig_Environment $twig
      * @param array             $config
-     *
-     * @codeCoverageIgnore
      */
     protected function addExtensions(Twig_Environment $twig, array $config): Twig_Environment
     {

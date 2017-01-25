@@ -6,8 +6,9 @@ use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig_Environment;
 use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig_Function;
 use Twig_Template;
+use Viserio\Bridge\Twig\TokenParsers\DumpTokenParser;
 
 /**
  * Dump a variable or the view context.
@@ -31,7 +32,7 @@ class DumpExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction(
+            new Twig_Function(
                 'dump',
                 [$this, 'dump'],
                 [
@@ -41,6 +42,11 @@ class DumpExtension extends Twig_Extension
                 ]
             ),
         ];
+    }
+
+    public function getTokenParsers()
+    {
+        return [new DumpTokenParser()];
     }
 
     /**

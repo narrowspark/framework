@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extensions;
 
 use Twig_Extension;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
+use Twig_Filter;
+use Twig_Function;
 use Viserio\Component\Support\Str as ViserioStr;
 
 class StrExtension extends Twig_Extension
@@ -51,13 +51,13 @@ class StrExtension extends Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new Twig_SimpleFunction(
+            new Twig_Function(
                 'str_*',
                 function (string $name) {
                     $arguments = array_slice(func_get_args(), 1);
                     $name      = ViserioStr::camelize($name);
 
-                    return call_user_func_array([$this->callback, $name], $arguments);
+                    return call_user_func_array([$this->callback, (string) $name], $arguments);
                 }
             ),
         ];
@@ -69,13 +69,13 @@ class StrExtension extends Twig_Extension
     public function getFilters(): array
     {
         return [
-            new Twig_SimpleFilter(
+            new Twig_Filter(
                 'str_*',
                 function (string $name) {
                     $arguments = array_slice(func_get_args(), 1);
                     $name      = ViserioStr::camelize($name);
 
-                    return call_user_func_array([$this->callback, $name], $arguments);
+                    return call_user_func_array([$this->callback, (string) $name], $arguments);
                 }
             ),
         ];

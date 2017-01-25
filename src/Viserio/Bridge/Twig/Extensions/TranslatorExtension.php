@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extensions;
 
 use Twig_Extension;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
+use Twig_Filter;
+use Twig_Function;
 use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
@@ -36,8 +36,8 @@ class TranslatorExtension extends Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new Twig_SimpleFunction('trans', [$this->translator, 'trans']),
-            new Twig_SimpleFunction('trans_choice', [$this->translator, 'transChoice']),
+            new Twig_Function('trans', [$this->translator, 'trans']),
+            new Twig_Function('trans_choice', [$this->translator, 'transChoice']),
         ];
     }
 
@@ -47,7 +47,7 @@ class TranslatorExtension extends Twig_Extension
     public function getFilters(): array
     {
         return [
-            new Twig_SimpleFilter(
+            new Twig_Filter(
                 'trans',
                 [$this->translator, 'trans'],
                 [
@@ -55,7 +55,7 @@ class TranslatorExtension extends Twig_Extension
                     'is_safe'    => ['html'],
                 ]
             ),
-            new Twig_SimpleFilter(
+            new Twig_Filter(
                 'trans_choice',
                 [$this->translator, 'transChoice'],
                 [

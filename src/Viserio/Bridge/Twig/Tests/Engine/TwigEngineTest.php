@@ -40,7 +40,7 @@ class TwigEngineTest extends TestCase
             ->andReturn([
                 'view' => [
                     'paths'      => [
-                        __DIR__ . '/../Fixture/',
+                        __DIR__ . '/../Fixtures/',
                         __DIR__,
                     ],
                     'extensions' => ['phtml', 'php'],

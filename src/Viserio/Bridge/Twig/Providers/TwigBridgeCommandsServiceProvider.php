@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Twig;
+namespace Viserio\Bridge\Twig\Providers;
 
 use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Twig\Commands\CleanCommand;
