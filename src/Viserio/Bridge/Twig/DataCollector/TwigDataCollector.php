@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\DataCollector;
 
+use Twig_Profiler_Profile;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
@@ -14,6 +15,23 @@ class TwigDataCollector extends AbstractDataCollector implements
     PanelAwareContract,
     TooltipAwareContract
 {
+    /**
+     * Twig profiler profile.
+     *
+     * @var \Twig_Profiler_Profile
+     */
+    private $profile;
+
+    /**
+     * Create new files loaded collector instance.
+     *
+     * @param \Twig_Profiler_Profile $basePath
+     */
+    public function __construct(Twig_Profiler_Profile $profile)
+    {
+        $this->profile = $profile;
+    }
+
     /**
      * {@inheritdoc}
      */
