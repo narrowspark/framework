@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\DataCollector;
 
-use Twig_Profiler_Profile;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Twig_Profiler_Profile;
 use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
