@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Commands;
 
-use Twig_Environment;
 use ReflectionFunction;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Twig_Environment;
 use UnexpectedValueException;
 use Viserio\Component\Console\Command\Command;
 
@@ -32,7 +32,7 @@ class DebugCommand extends Command
      */
     public function handle()
     {
-        $container = $this-getContainer();
+        $container = $this - getContainer();
 
         if (! $container->has(Twig_Environment::class)) {
             $this->error('The Twig environment needs to be set.');
@@ -40,13 +40,13 @@ class DebugCommand extends Command
 
         $twig = $container->get(Twig_Environment::class);
 
-        $types = array('functions', 'filters', 'tests', 'globals');
+        $types = ['functions', 'filters', 'tests', 'globals'];
 
         if ($this->input->getOption('format') === 'json') {
-            $data = array();
+            $data = [];
 
             foreach ($types as $type) {
-                foreach ($twig->{'get'.ucfirst($type)}() as $name => $entity) {
+                foreach ($twig->{'get' . ucfirst($type)}() as $name => $entity) {
                     $data[$type][$name] = $this->getMetadata($type, $entity);
                 }
             }
@@ -59,15 +59,15 @@ class DebugCommand extends Command
         $filter = $this->input->getArgument('filter');
 
         foreach ($types as $index => $type) {
-            $items = array();
+            $items = [];
 
-            foreach ($twig->{'get'.ucfirst($type)}() as $name => $entity) {
-                if (!$filter || false !== strpos($name, $filter)) {
-                    $items[$name] = $name.$this->getPrettyMetadata($type, $entity);
+            foreach ($twig->{'get' . ucfirst($type)}() as $name => $entity) {
+                if (! $filter || false !== mb_strpos($name, $filter)) {
+                    $items[$name] = $name . $this->getPrettyMetadata($type, $entity);
                 }
             }
 
-            if (!$items) {
+            if (! $items) {
                 continue;
             }
 
