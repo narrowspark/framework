@@ -2,15 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Commands;
 
-use PHPUnit\Framework\TestCase;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Symfony\Component\Console\Output\OutputInterface;
-use Viserio\Bridge\Twig\Commands\CleanCommand;
-use Symfony\Component\Console\Input\ArrayInput;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
+use Viserio\Bridge\Twig\Commands\CleanCommand;
+use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 
 class CleanCommandTest extends TestCase
 {
@@ -38,7 +36,7 @@ class CleanCommandTest extends TestCase
             ->andReturn(true);
         $container = new ArrayContainer([
             FilesystemContract::class => $files,
-            'config' => [
+            'config'                  => [
                 'viserio' => [
                     'view' => [
                         'engines' => [
@@ -48,12 +46,12 @@ class CleanCommandTest extends TestCase
                                 ],
                             ],
                         ],
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ]);
 
-        $command = new CleanCommand;
+        $command = new CleanCommand();
         $command->setContainer($container);
 
         $tester = new CommandTester($command);
@@ -75,7 +73,7 @@ class CleanCommandTest extends TestCase
             ->andReturn(false);
         $container = new ArrayContainer([
             FilesystemContract::class => $files,
-            'config' => [
+            'config'                  => [
                 'viserio' => [
                     'view' => [
                         'engines' => [
@@ -85,12 +83,12 @@ class CleanCommandTest extends TestCase
                                 ],
                             ],
                         ],
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ]);
 
-        $command = new CleanCommand;
+        $command = new CleanCommand();
         $command->setContainer($container);
 
         $tester = new CommandTester($command);

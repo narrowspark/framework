@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Commands;
 
-use Viserio\Component\Console\Command\Command;
-use UnexpectedValueException;
-use ReflectionMethod;
 use ReflectionFunction;
+use ReflectionMethod;
+use UnexpectedValueException;
+use Viserio\Component\Console\Command\Command;
 
 class DebugCommand extends Command
 {
@@ -47,7 +47,7 @@ class DebugCommand extends Command
             }
 
             if (is_array($cb)) {
-                if (!method_exists($cb[0], $cb[1])) {
+                if (! method_exists($cb[0], $cb[1])) {
                     return;
                 }
 
@@ -68,13 +68,13 @@ class DebugCommand extends Command
                     return false;
                 }
 
-                return !$param->getClass() || $param->getClass()->getName() !== 'Twig_Environment';
+                return ! $param->getClass() || $param->getClass()->getName() !== 'Twig_Environment';
             });
 
             // format args
             $args = array_map(function ($param) {
                 if ($param->isDefaultValueAvailable()) {
-                    return $param->getName().' = '.json_encode($param->getDefaultValue());
+                    return $param->getName() . ' = ' . json_encode($param->getDefaultValue());
                 }
 
                 return $param->getName();
@@ -101,25 +101,24 @@ class DebugCommand extends Command
             if ($meta === null) {
                 return '(unknown?)';
             }
-
         } catch (UnexpectedValueException $e) {
-            return ' <error>'.$e->getMessage().'</error>';
+            return ' <error>' . $e->getMessage() . '</error>';
         }
 
         if ($type === 'globals') {
             if (is_object($meta)) {
-                return ' = object('.get_class($meta).')';
+                return ' = object(' . get_class($meta) . ')';
             }
 
-            return ' = '.substr(@json_encode($meta), 0, 50);
+            return ' = ' . mb_substr(@json_encode($meta), 0, 50);
         }
 
         if ($type === 'functions') {
-            return '('.implode(', ', $meta).')';
+            return '(' . implode(', ', $meta) . ')';
         }
 
         if ($type === 'filters') {
-            return $meta ? '('.implode(', ', $meta).')' : '';
+            return $meta ? '(' . implode(', ', $meta) . ')' : '';
         }
     }
 }

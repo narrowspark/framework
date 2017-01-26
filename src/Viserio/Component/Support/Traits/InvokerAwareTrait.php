@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Traits;
 
 use Interop\Container\ContainerInterface;
-use Viserio\Component\Support\Invoker;
 use Invoker\InvokerInterface;
+use Viserio\Component\Support\Invoker;
 
 trait InvokerAwareTrait
 {
