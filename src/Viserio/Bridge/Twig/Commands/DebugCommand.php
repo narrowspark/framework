@@ -4,10 +4,10 @@ namespace Viserio\Bridge\Twig\Commands;
 
 use ReflectionFunction;
 use ReflectionMethod;
-use UnexpectedValueException;
-use Viserio\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use UnexpectedValueException;
+use Viserio\Component\Console\Command\Command;
 
 class DebugCommand extends Command
 {
@@ -53,7 +53,7 @@ class DebugCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'The output format (text or json)',
-                'text'
+                'text',
             ],
         ];
     }
