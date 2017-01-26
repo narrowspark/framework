@@ -391,7 +391,6 @@ class Factory implements FactoryContract
      * Determine if a given string ends with a given substring.
      *
      * @param string $haystack
-     * @param string $needles
      * @param string $needle
      *
      * @return bool
