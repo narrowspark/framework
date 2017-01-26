@@ -6,6 +6,8 @@ use ReflectionFunction;
 use ReflectionMethod;
 use UnexpectedValueException;
 use Viserio\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class DebugCommand extends Command
 {
@@ -17,8 +19,43 @@ class DebugCommand extends Command
     /**
      * {@inheritdoc}
      */
+    protected $description = 'Shows a list of twig functions, filters, globals and tests';
+
+    /**
+     * {@inheritdoc}
+     */
     public function handle()
     {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getArguments()
+    {
+        return [
+            [
+                'filter',
+                InputArgument::OPTIONAL,
+                'Show details for all entries matching this filter.',
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getOptions()
+    {
+        return [
+            [
+                'format',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The output format (text or json)',
+                'text'
+            ],
+        ];
     }
 
     /**
@@ -89,7 +126,15 @@ class DebugCommand extends Command
         }
     }
 
-    private function getPrettyMetadata($type, $entity)
+    /**
+     * Transform metadata.
+     *
+     * @param string $type
+     * @param object $entity
+     *
+     * @return string
+     */
+    private function getPrettyMetadata(string $type, $entity): string
     {
         if ($type === 'tests') {
             return '';
