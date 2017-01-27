@@ -29,8 +29,9 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
     public function getServices()
     {
         return [
-            TwigEnvironment::class  => [self::class, 'createTwigEnvironment'],
-            FactoryContract::class  => [self::class, 'createViewFactory'],
+            Twig_LoaderInterface::class => [self::class, 'createTwigLoader'],
+            TwigEnvironment::class      => [self::class, 'createTwigEnvironment'],
+            FactoryContract::class      => [self::class, 'createViewFactory'],
         ];
     }
 
@@ -68,15 +69,16 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
         return $view;
     }
 
-    public function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
+    public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        $this->createConfiguration($container);
+        if (count($this->config) === 0) {
+            $this->createConfiguration($container);
+        }
 
-        $config  = $this->config['engines']['twig'];
-        $options = $config['options'];
+        $options  = $this->config['engines']['twig']['options'];
 
         $twig = new TwigEnvironment(
-            self::createTwigLoader($container, $config),
+            $container->get(Twig_LoaderInterface::class),
             $options
         );
 
@@ -99,8 +101,14 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
      *
      * @return \Twig_LoaderInterface
      */
-    protected static function createTwigLoader(ContainerInterface $container, array $config): Twig_LoaderInterface
+    public static function createTwigLoader(ContainerInterface $container): Twig_LoaderInterface
     {
+        if (count($this->config) === 0) {
+            $this->createConfiguration($container);
+        }
+
+        $config  = $this->config['engines']['twig'];
+
         $loaders = [
             new TwigLoader(
                 $container->get(FilesystemContract::class),
@@ -116,8 +124,8 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
             $loaders[] = new Twig_Loader_Array($config['templates']);
         }
 
-        if (isset($config['loader']) && is_array($config['loader'])) {
-            $loaders = array_merge($loaders, $config['loader']);
+        if (isset($config['loaders']) && is_array($config['loaders'])) {
+            $loaders = array_merge($loaders, $config['loaders']);
         }
 
         return new Twig_Loader_Chain($loaders);

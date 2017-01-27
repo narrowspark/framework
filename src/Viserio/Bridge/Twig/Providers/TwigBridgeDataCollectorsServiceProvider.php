@@ -53,7 +53,9 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
     {
-        $this->createConfiguration($container);
+        if (count($this->config) === 0) {
+            $this->createConfiguration($container);
+        }
 
         $profiler = $container->get(WebProfilerContract::class);
 
@@ -73,7 +75,9 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        $this->createConfiguration($container);
+        if (count($this->config) === 0) {
+            $this->createConfiguration($container);
+        }
 
         $twig = $container->get(TwigEnvironment::class);
 
