@@ -12,6 +12,7 @@ use Twig_Loader_Array;
 use Twig_LoaderInterface;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
+use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
@@ -91,7 +92,7 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
     }
 
     /**
-     * [createTwigLoader description].
+     * Create a twig bridge loader.
      *
      * @param \Interop\Container\ContainerInterface $container
      * @param array                                 $config
@@ -103,10 +104,13 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
         $loaders = [
             new TwigLoader(
                 $container->get(FilesystemContract::class),
-                $container->get(FinderContract::class),
-                $config['file_extension'] ?? 'twig'
+                $container->get(FinderContract::class)
             ),
         ];
+
+        if (isset($config['file_extension'])) {
+            $loaders->setExtension($config['file_extension']);
+        }
 
         if (isset($config['templates']) && is_array($config['templates'])) {
             $loaders[] = new Twig_Loader_Array($config['templates']);

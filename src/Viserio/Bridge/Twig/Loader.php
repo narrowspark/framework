@@ -26,7 +26,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      *
      * @var string
      */
-    protected $extension;
+    protected $extension = 'twig';
 
     /**
      * Template lookup cache.
@@ -40,13 +40,23 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      *
      * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
      * @param \Viserio\Component\Contracts\View\Finder           $finder
-     * @param string                                             $extension twig file extension
      */
-    public function __construct(FilesystemContract $files, FinderContract $finder, string $extension = 'twig')
+    public function __construct(FilesystemContract $files, FinderContract $finder)
     {
-        $this->files     = $files;
-        $this->finder    = $finder;
+        $this->files  = $files;
+        $this->finder = $finder;
+    }
+
+    /**
+     * Set file extension for the twig loader.
+     *
+     * @param string $extension
+     */
+    public function setExtension(string $extension): Twig_LoaderInterface
+    {
         $this->extension = $extension;
+
+        return $this;
     }
 
     /**
