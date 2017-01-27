@@ -4,9 +4,9 @@ namespace Viserio\Bridge\Twig\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Twig_Profiler_Profile;
 use Twig_Markup;
 use Twig_Profiler_Dumper_Html;
+use Twig_Profiler_Profile;
 use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
