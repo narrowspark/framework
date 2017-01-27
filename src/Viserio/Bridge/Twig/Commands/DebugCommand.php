@@ -32,7 +32,7 @@ class DebugCommand extends Command
      */
     public function handle()
     {
-        $container = $this - getContainer();
+        $container = $this->getContainer();
 
         if (! $container->has(Twig_Environment::class)) {
             $this->error('The Twig environment needs to be set.');
@@ -67,7 +67,7 @@ class DebugCommand extends Command
                 }
             }
 
-            if (! $items) {
+            if (empty($items)) {
                 continue;
             }
 

@@ -78,7 +78,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      */
     public function getSourceContext($name)
     {
-        return $this->files->get($this->findTemplate($name));
+        return $this->files->read($this->findTemplate($name));
     }
 
     /**
@@ -108,7 +108,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      */
     public function findTemplate(string $name): string
     {
-        if ($this->files->exists($name)) {
+        if ($this->files->has($name)) {
             return $name;
         }
 

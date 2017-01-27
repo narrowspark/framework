@@ -97,7 +97,6 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
      * Create a twig bridge loader.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param array                                 $config
      *
      * @return \Twig_LoaderInterface
      */
