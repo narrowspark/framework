@@ -82,7 +82,7 @@ class DebugCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [
             [
@@ -96,7 +96,7 @@ class DebugCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
             [

@@ -4,6 +4,6 @@ namespace Viserio\Bridge\Twig\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
 
-class TwigBridgeServiceProviderTest extends TestCase
-{
-}
+// class TwigBridgeServiceProviderTest extends TestCase
+// {
+// }

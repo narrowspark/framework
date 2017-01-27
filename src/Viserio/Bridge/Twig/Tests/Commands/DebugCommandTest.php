@@ -4,6 +4,6 @@ namespace Viserio\Bridge\Twig\Tests\Commands;
 
 use PHPUnit\Framework\TestCase;
 
-class DebugCommandTest extends TestCase
-{
-}
+// class DebugCommandTest extends TestCase
+// {
+// }

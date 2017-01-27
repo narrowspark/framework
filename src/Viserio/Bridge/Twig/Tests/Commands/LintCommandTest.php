@@ -4,6 +4,6 @@ namespace Viserio\Bridge\Twig\Tests\Commands;
 
 use PHPUnit\Framework\TestCase;
 
-class LintCommandTest extends TestCase
-{
-}
+// class LintCommandTest extends TestCase
+// {
+// }
