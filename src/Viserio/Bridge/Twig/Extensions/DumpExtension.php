@@ -21,6 +21,16 @@ use Viserio\Bridge\Twig\TokenParsers\DumpTokenParser;
  */
 class DumpExtension extends Twig_Extension
 {
+    /**
+     * Cloner instance.
+     *
+     * @var \Symfony\Component\VarDumper\Cloner\VarCloner
+     */
+    protected $cloner;
+
+    /**
+     * Create a new dump extension.
+     */
     public function __construct()
     {
         $this->cloner = new VarCloner();
