@@ -13,7 +13,7 @@ trait CreateOptionsTrait
      *
      * @var array|\ArrayAccess
      */
-    protected static $options = [];
+    protected $options = [];
 
     /**
      * Create configuration.
@@ -24,9 +24,9 @@ trait CreateOptionsTrait
      *
      * @return void
      */
-    protected static function createOptions(ContainerInterface $container): void
+    protected function configureOptions(ContainerInterface $container): void
     {
-        if (self::$options !== null) {
+        if ($this->$options === null) {
             if ($container->has(RepositoryContract::class)) {
                 $options = $container->get(RepositoryContract::class);
             } elseif ($container->has('config')) {
@@ -36,8 +36,8 @@ trait CreateOptionsTrait
             } else {
                 throw new RuntimeException('No configuration found.');
             }
-        }
 
-        self::$options = self::options($options);
+            $this->$options = $this->options($options);
+        }
     }
 }
