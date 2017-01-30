@@ -8,8 +8,8 @@ use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOptions

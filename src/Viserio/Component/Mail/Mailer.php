@@ -15,9 +15,9 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 class Mailer implements MailerContract, RequiresConfig

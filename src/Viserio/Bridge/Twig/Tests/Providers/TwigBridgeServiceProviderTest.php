@@ -4,14 +4,13 @@ namespace Viserio\Bridge\Twig\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
 use Twig_LoaderInterface;
+use Viserio\Bridge\Twig\Loader as TwigLoader;
+use Viserio\Bridge\Twig\Providers\TwigBridgeServiceProvider;
 use Viserio\Bridge\Twig\TwigEnvironment;
+use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
-use Viserio\Component\Container\Container;
-use Viserio\Bridge\Twig\Providers\TwigBridgeServiceProvider;
-use Viserio\Bridge\Twig\Loader as TwigLoader;
 
 class TwigBridgeServiceProviderTest extends TestCase
 {

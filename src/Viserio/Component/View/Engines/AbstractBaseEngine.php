@@ -6,8 +6,8 @@ use Interop\Config\ConfigurationTrait;
 use Interop\Config\RequiresConfig;
 use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 
 abstract class AbstractBaseEngine implements EngineContract, RequiresConfig, RequiresMandatoryOptions
 {

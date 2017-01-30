@@ -13,8 +13,8 @@ use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Exception\ExceptionInfo;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 
 class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaultOptions
 {
