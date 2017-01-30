@@ -14,14 +14,14 @@ use Viserio\Bridge\Twig\Extensions\DumpExtension;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 
 class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
-    use CreateConfigurationTrait;
+    use CreateOptionsTrait;
 
     /**
      * {@inheritdoc}
@@ -29,7 +29,10 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
     public function getServices()
     {
         return [
-            Twig_LoaderInterface::class => [self::class, 'createTwigLoader'],
+            TwigLoader::class           => [self::class, 'createTwigLoader'],
+            Twig_LoaderInterface::class => function (ContainerInterface $container) {
+                return $container->get(TwigLoader::class);
+            },
             TwigEnvironment::class      => [self::class, 'createTwigEnvironment'],
             FactoryContract::class      => [self::class, 'createViewFactory'],
         ];
@@ -71,11 +74,11 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        if (count($this->config) === 0) {
-            $this->createConfiguration($container);
+        if (count(self::$options) === 0) {
+            self::createOptions($container);
         }
 
-        $options  = $this->config['engines']['twig']['options'];
+        $options  = self::$options['engines']['twig']['options'];
 
         $twig = new TwigEnvironment(
             $container->get(Twig_LoaderInterface::class),
@@ -102,11 +105,11 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
      */
     public static function createTwigLoader(ContainerInterface $container): Twig_LoaderInterface
     {
-        if (count($this->config) === 0) {
-            $this->createConfiguration($container);
+        if (count(self::$options) === 0) {
+            self::createOptions($container);
         }
 
-        $config  = $this->config['engines']['twig'];
+        $config  = self::$options['engines']['twig'];
 
         $loaders = [
             new TwigLoader(

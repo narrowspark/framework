@@ -122,7 +122,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
 
         $this->registerExceptionHandler();
 
-        if ($this->config['env'] !== 'testing') {
+        if (self::$options['env'] !== 'testing') {
             $this->registerShutdownHandler();
         }
     }
@@ -254,18 +254,18 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     ): DisplayerContract {
         $displayers = array_merge(
             $this->displayers,
-            $this->config['displayers']
+            self::$options['displayers']
         );
 
         if ($filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
             return $filtered[0];
         }
 
-        if (is_object($this->config['default_displayer'])) {
-            return $this->config['default_displayer'];
+        if (is_object(self::$options['default_displayer'])) {
+            return self::$options['default_displayer'];
         }
 
-        return $this->container->get($this->config['default_displayer']);
+        return $this->container->get(self::$options['default_displayer']);
     }
 
     /**
@@ -288,7 +288,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     ): array {
         $filters = array_merge(
             $this->filters,
-            $this->config['filters']
+            self::$options['filters']
         );
 
         foreach ($filters as $filter) {

@@ -15,7 +15,7 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
-use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
@@ -24,7 +24,7 @@ class Mailer implements MailerContract, RequiresConfig
 {
     use ConfigurationTrait;
     use ContainerAwareTrait;
-    use CreateConfigurationTrait;
+    use CreateOptionsTrait;
     use InvokerAwareTrait;
     use EventsAwareTrait;
     use ViewAwareTrait;
@@ -64,18 +64,18 @@ class Mailer implements MailerContract, RequiresConfig
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->createConfiguration($container);
+        self::createOptions($container);
 
         // If a "from" address is set, we will set it on the mailer so that all mail
         // messages sent by the applications will utilize the same "from" address
         // on each one, which makes the developer's life a lot more convenient.
-        $from = $this->config['from'] ?? null;
+        $from = self::$options['from'] ?? null;
 
         if (is_array($from) && isset($from['address'], $from['name'])) {
             $this->alwaysFrom($from['address'], $from['name']);
         }
 
-        $to = $this->config['to'] ?? null;
+        $to = self::$options['to'] ?? null;
 
         if (is_array($to) && isset($to['address'], $to['name'])) {
             $this->alwaysTo($to['address'], $to['name']);

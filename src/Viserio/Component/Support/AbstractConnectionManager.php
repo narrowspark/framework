@@ -9,13 +9,13 @@ use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 
 abstract class AbstractConnectionManager implements RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
     use ContainerAwareTrait;
-    use CreateConfigurationTrait;
+    use CreateOptionsTrait;
 
     /**
      * The active connection instances.
@@ -40,7 +40,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     {
         $this->container = $container;
 
-        $this->createConfiguration($container);
+        self::createOptions($container);
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function getConfig(): array
     {
-        return $this->config;
+        return self::$options;
     }
 
     /**
@@ -137,7 +137,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function getDefaultConnection(): string
     {
-        return $this->config['default'];
+        return self::$options['default'];
     }
 
     /**
@@ -147,7 +147,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function setDefaultConnection(string $name)
     {
-        $this->config['default'] = $name;
+        self::$options['default'] = $name;
     }
 
     /**
@@ -196,7 +196,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        $connections = $this->config['connections'];
+        $connections = self::$options['connections'];
 
         if (isset($connections[$name]) && is_array($connections[$name])) {
             $config         = $connections[$name];

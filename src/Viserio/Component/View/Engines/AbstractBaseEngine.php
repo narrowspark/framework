@@ -6,13 +6,13 @@ use Interop\Config\ConfigurationTrait;
 use Interop\Config\RequiresConfig;
 use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
-use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
 
 abstract class AbstractBaseEngine implements EngineContract, RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
-    use CreateConfigurationTrait;
+    use CreateOptionsTrait;
 
     /**
      * Container instance.
@@ -31,7 +31,7 @@ abstract class AbstractBaseEngine implements EngineContract, RequiresConfig, Req
         $this->container  = $container;
 
         if ($container !== null) {
-            $this->createConfiguration($container);
+            self::createOptions($container);
         }
     }
 

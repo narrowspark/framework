@@ -33,7 +33,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
         $this->container = $container;
         $this->encrypter = $encrypter;
 
-        $this->createConfiguration($container);
+        self::createOptions($container);
     }
 
     /**
@@ -59,7 +59,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
             new FileSessionHandler(
                 $this->getContainer()->get(FilesystemContract::class),
                 $config['path'],
-                $this->config['lifetime']
+                self::$options['lifetime']
             )
         );
     }
@@ -74,7 +74,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
         return $this->buildSession(
             new CookieSessionHandler(
                 $this->getContainer()->get(JarContract::class),
-                $this->config['lifetime']
+                self::$options['lifetime']
             )
         );
     }
@@ -114,7 +114,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
     {
         return $this->createCacheBased(
             'mongodb',
-            $this->config['mongodb']
+            self::$options['mongodb']
         );
     }
 
@@ -129,7 +129,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
     {
         return $this->createCacheBased(
             'predis',
-            $this->config['predis']
+            self::$options['predis']
         );
     }
 
@@ -144,7 +144,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
     {
         return $this->createCacheBased(
             'redis',
-            $this->config['redis']
+            self::$options['redis']
         );
     }
 
@@ -159,7 +159,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
     {
         return $this->createCacheBased(
             'filesystem',
-            $this->config['flysystem']
+            self::$options['flysystem']
         );
     }
 
@@ -220,7 +220,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
         return $this->buildSession(
             new CacheBasedSessionHandler(
                 clone $this->container->get(CacheManagerContract::class)->getDriver($driver, $options),
-                $this->config['lifetime']
+                self::$options['lifetime']
             )
         );
     }
@@ -235,7 +235,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
         return new Store(
-            $this->config['cookie'] ?? '',
+            self::$options['cookie'] ?? '',
             $handler,
             $this->getEncrypter()
         );

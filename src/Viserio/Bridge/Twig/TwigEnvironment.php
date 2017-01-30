@@ -22,9 +22,9 @@ class TwigEnvironment extends Twig_Environment
      */
     public function __construct(Twig_LoaderInterface $loader, array $options)
     {
-        parent::__construct($loader, $options);
-
         $this->options = $options;
+
+        parent::__construct($loader, $this->options);
     }
 
     /**
@@ -33,7 +33,7 @@ class TwigEnvironment extends Twig_Environment
     public function loadTemplate($name, $index = null)
     {
         $template = parent::loadTemplate($name, $index);
-        $template->setName($this->normalizeName($name));
+        $template->setName($this->normalizedName($name));
 
         return $template;
     }
@@ -45,7 +45,7 @@ class TwigEnvironment extends Twig_Environment
      *
      * @return string
      */
-    protected function normalizeName(string $name): string
+    protected function normalizedName(string $name): string
     {
         if (isset($this->options['file_extensions']) && is_array($this->options['file_extensions'])) {
             foreach ($this->options['file_extensions'] as $extension) {

@@ -13,7 +13,7 @@ use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
-use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Exception\ExceptionInfo;
 
 class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaultOptions
@@ -21,7 +21,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaul
     use ResponseFactoryAwareTrait;
     use StreamFactoryAwareTrait;
     use ConfigurationTrait;
-    use CreateConfigurationTrait;
+    use CreateOptionsTrait;
 
     /**
      * The exception info instance.
@@ -48,7 +48,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaul
         $this->responseFactory = $container->get(ResponseFactoryInterface::class);
         $this->streamFactory   = $container->get(StreamFactoryInterface::class);
 
-        $this->createConfiguration($container);
+        self::createOptions($container);
     }
 
     /**
@@ -119,7 +119,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaul
      */
     protected function render(array $info): string
     {
-        $content = file_get_contents($this->config['template_path']);
+        $content = file_get_contents(self::$options['template_path']);
 
         foreach ($info as $key => $val) {
             $content = str_replace("{{ $$key }}", $val, $content);

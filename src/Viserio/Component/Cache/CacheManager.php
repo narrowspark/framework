@@ -58,7 +58,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
 
         return new CachePoolChain(
             $resolvedPools,
-            $options ?? (array) $this->config['chain_options'] ?? []
+            $options ?? (array) self::$options['chain_options'] ?? []
         );
     }
 
@@ -68,7 +68,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     public function createDriver(array $config)
     {
         $driver    = parent::createDriver($config);
-        $namespace = $this->config['namespace'] ?? false;
+        $namespace = self::$options['namespace'] ?? false;
 
         if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
             $driver = $this->namespacedPool($driver, $namespace);

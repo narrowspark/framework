@@ -1,41 +1,43 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Contracts\Support\Traits;
+namespace Viserio\Component\Support\Traits;
 
 use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
-trait CreateConfigurationTrait
+trait CreateOptionsTrait
 {
     /**
      * Config array.
      *
      * @var array|\ArrayAccess
      */
-    protected $config = [];
+    protected static $options = [];
 
     /**
      * Create configuration.
      *
      * @param \Interop\Container\ContainerInterface $container
      *
+     * @throws \RuntimeException
+     *
      * @return void
      */
-    protected function createConfiguration(ContainerInterface $container): void
+    protected static function createOptions(ContainerInterface $container): void
     {
-        if ($this->config !== null) {
+        if (self::$options !== null) {
             if ($container->has(RepositoryContract::class)) {
-                $config = $container->get(RepositoryContract::class);
+                $options = $container->get(RepositoryContract::class);
             } elseif ($container->has('config')) {
-                $config = $container->get('config');
+                $options = $container->get('config');
             } elseif ($container->has('options')) {
-                $config = $container->get('options');
+                $options = $container->get('options');
             } else {
                 throw new RuntimeException('No configuration found.');
             }
         }
 
-        $this->config = $this->options($config);
+        self::$options = self::options($options);
     }
 }

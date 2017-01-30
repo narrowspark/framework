@@ -12,11 +12,15 @@ use Viserio\Component\Contracts\View\Finder as FinderContract;
 class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
 {
     /**
+     * The filesystem instance.
+     *
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem
      */
     protected $files;
 
     /**
+     * The finder instance.
+     *
      * @var \Viserio\Component\Contracts\View\Finder
      */
     protected $finder;
@@ -51,6 +55,8 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      * Set file extension for the twig loader.
      *
      * @param string $extension
+     *
+     * @codeCoverageIgnore
      */
     public function setExtension(string $extension): Twig_LoaderInterface
     {
@@ -83,6 +89,8 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getCacheKey($name): string
     {
@@ -119,7 +127,8 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         }
 
         try {
-            $this->cache[$name] = $this->finder->find($name);
+            $found              = $this->finder->find($name);
+            $this->cache[$name] = $found['path'];
         } catch (InvalidArgumentException $exception) {
             throw new Twig_Error_Loader($exception->getMessage());
         }

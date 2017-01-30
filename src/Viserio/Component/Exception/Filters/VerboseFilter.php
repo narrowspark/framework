@@ -9,12 +9,12 @@ use Interop\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Throwable;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
-use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 
 class VerboseFilter implements FilterContract, RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
-    use CreateConfigurationTrait;
+    use CreateOptionsTrait;
 
     /**
      * Create a new verbose filter instance.
@@ -23,7 +23,7 @@ class VerboseFilter implements FilterContract, RequiresConfig, RequiresMandatory
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->createConfiguration($container);
+        self::createOptions($container);
     }
 
     /**
@@ -52,7 +52,7 @@ class VerboseFilter implements FilterContract, RequiresConfig, RequiresMandatory
         Throwable $transformed,
         int $code
     ): array {
-        if ($this->config['debug'] !== true) {
+        if (self::$options['debug'] !== true) {
             foreach ($displayers as $index => $displayer) {
                 if ($displayer->isVerbose()) {
                     unset($displayers[$index]);

@@ -22,7 +22,7 @@ use Throwable;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
@@ -32,7 +32,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
 {
     use ConfigurationTrait;
     use ContainerAwareTrait;
-    use CreateConfigurationTrait;
+    use CreateOptionsTrait;
     use LoggerAwareTrait;
 
     /**
@@ -77,7 +77,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
             $this->logger = $this->container->get(LoggerInterface::class);
         }
 
-        $this->createConfiguration($container);
+        self::createOptions($container);
     }
 
     /**
@@ -364,7 +364,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
         $container    = $this->container;
         $transformers = array_merge(
             $this->transformers,
-            $this->config['transformers']
+            self::$options['transformers']
         );
 
         foreach ($transformers as $transformer) {
@@ -391,7 +391,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
      */
     protected function getLevel(Throwable $exception): string
     {
-        foreach ($this->config['levels'] as $class => $level) {
+        foreach (self::$options['levels'] as $class => $level) {
             if ($exception instanceof $class) {
                 return $level;
             }
@@ -411,7 +411,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
     {
         $dontReport = array_merge(
             $this->dontReport,
-            $this->config['dont_report']
+            self::$options['dont_report']
         );
 
         foreach ($dontReport as $type) {

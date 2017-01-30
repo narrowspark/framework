@@ -40,7 +40,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
         $this->container = $container;
         $this->encrypter = $encrypter;
 
-        $this->createConfiguration($container);
+        self::createOptions($container);
     }
 
     /**

@@ -11,13 +11,13 @@ use Twig_Extension_Profiler;
 use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 use Viserio\Bridge\Twig\TwigEnvironment;
-use Viserio\Component\Contracts\Support\Traits\CreateConfigurationTrait;
+use Viserio\Component\Support\Traits\CreateOptionsTrait;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
-    use CreateConfigurationTrait;
+    use CreateOptionsTrait;
 
     /**
      * {@inheritdoc}
@@ -53,13 +53,13 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
     {
-        if (count($this->config) === 0) {
-            $this->createConfiguration($container);
+        if (count(self::$options) === 0) {
+            self::createOptions($container);
         }
 
         $profiler = $container->get(WebProfilerContract::class);
 
-        if ($this->config['collector']['twig'] !== false) {
+        if (self::$options['collector']['twig'] !== false) {
             $profiler->addCollector(new TwigDataCollector(
                 $container->get(Twig_Profiler_Profile::class)
             ));
@@ -75,13 +75,13 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        if (count($this->config) === 0) {
-            $this->createConfiguration($container);
+        if (count(self::$options) === 0) {
+            self::createOptions($container);
         }
 
         $twig = $container->get(TwigEnvironment::class);
 
-        if ($this->config['collector']['twig'] !== false) {
+        if (self::$options['collector']['twig'] !== false) {
             $twig->addExtension(new Twig_Extension_Profiler(
                 $container->get(Twig_Profiler_Profile::class)
             ));
