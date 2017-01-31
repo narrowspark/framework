@@ -6,14 +6,14 @@ use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
-trait CreateOptionsTrait
+trait ConfigureOptionsTrait
 {
     /**
      * Config array.
      *
      * @var array|\ArrayAccess
      */
-    protected $options = [];
+    protected $options;
 
     /**
      * Create configuration.
@@ -22,11 +22,11 @@ trait CreateOptionsTrait
      *
      * @throws \RuntimeException
      *
-     * @return void
+     * @return array
      */
-    protected function configureOptions(ContainerInterface $container): void
+    protected function configureOptions(ContainerInterface $container): array
     {
-        if ($this->$options === null) {
+        if ($this->options === null) {
             if ($container->has(RepositoryContract::class)) {
                 $options = $container->get(RepositoryContract::class);
             } elseif ($container->has('config')) {
@@ -37,7 +37,9 @@ trait CreateOptionsTrait
                 throw new RuntimeException('No configuration found.');
             }
 
-            $this->$options = $this->options($options);
+            $this->options = $this->options($options);
         }
+
+        return $this->options;
     }
 }

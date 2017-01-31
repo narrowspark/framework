@@ -108,7 +108,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function getCacheConfig(string $name): array
     {
-        $cache = self::$options['cached'];
+        $cache = $this->options['cached'];
 
         if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
             throw new InvalidArgumentException(sprintf('Cache [%s] not configured.', $name));

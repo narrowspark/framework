@@ -26,13 +26,13 @@ use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
+use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
 {
     use ConfigurationTrait;
     use ContainerAwareTrait;
-    use CreateOptionsTrait;
+    use ConfigureOptionsTrait;
     use LoggerAwareTrait;
 
     /**
@@ -77,7 +77,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
             $this->logger = $this->container->get(LoggerInterface::class);
         }
 
-        self::createOptions($container);
+        $this->configureOptions($container);
     }
 
     /**
@@ -364,7 +364,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
         $container    = $this->container;
         $transformers = array_merge(
             $this->transformers,
-            self::$options['transformers']
+            $this->options['transformers']
         );
 
         foreach ($transformers as $transformer) {
@@ -391,7 +391,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
      */
     protected function getLevel(Throwable $exception): string
     {
-        foreach (self::$options['levels'] as $class => $level) {
+        foreach ($this->options['levels'] as $class => $level) {
             if ($exception instanceof $class) {
                 return $level;
             }
@@ -411,7 +411,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
     {
         $dontReport = array_merge(
             $this->dontReport,
-            self::$options['dont_report']
+            $this->options['dont_report']
         );
 
         foreach ($dontReport as $type) {

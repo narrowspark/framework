@@ -9,13 +9,13 @@ use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
+use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 abstract class AbstractConnectionManager implements RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
     use ContainerAwareTrait;
-    use CreateOptionsTrait;
+    use ConfigureOptionsTrait;
 
     /**
      * The active connection instances.
@@ -40,7 +40,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     {
         $this->container = $container;
 
-        self::createOptions($container);
+        $this->configureOptions($container);
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function getConfig(): array
     {
-        return self::$options;
+        return $this->options;
     }
 
     /**
@@ -137,7 +137,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function getDefaultConnection(): string
     {
-        return self::$options['default'];
+        return $this->options['default'];
     }
 
     /**
@@ -147,7 +147,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function setDefaultConnection(string $name)
     {
-        self::$options['default'] = $name;
+        $this->options['default'] = $name;
     }
 
     /**
@@ -196,7 +196,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        $connections = self::$options['connections'];
+        $connections = $this->options['connections'];
 
         if (isset($connections[$name]) && is_array($connections[$name])) {
             $config         = $connections[$name];

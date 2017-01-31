@@ -16,12 +16,12 @@ use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
+use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
-    use CreateOptionsTrait;
+    use ConfigureOptionsTrait;
 
     /**
      * {@inheritdoc}
@@ -74,11 +74,8 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        if (count(self::$options) === 0) {
-            self::createOptions($container);
-        }
-
-        $options  = self::$options['engines']['twig']['options'];
+        $config  = self::configureOptionsStatic($container);
+        $options = $config['engines']['twig']['options'];
 
         $twig = new TwigEnvironment(
             $container->get(Twig_LoaderInterface::class),
@@ -105,11 +102,8 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
      */
     public static function createTwigLoader(ContainerInterface $container): Twig_LoaderInterface
     {
-        if (count(self::$options) === 0) {
-            self::createOptions($container);
-        }
-
-        $config  = self::$options['engines']['twig'];
+        $config  = self::configureOptionsStatic($container);
+        $options = $options['engines']['twig'];
 
         $loaders = [
             new TwigLoader(
@@ -118,18 +112,27 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
             ),
         ];
 
-        if (isset($config['file_extension'])) {
-            $loaders->setExtension($config['file_extension']);
+        if (isset($options['file_extension'])) {
+            $loaders->setExtension($options['file_extension']);
         }
 
-        if (isset($config['templates']) && is_array($config['templates'])) {
-            $loaders[] = new Twig_Loader_Array($config['templates']);
+        if (isset($options['templates']) && is_array($options['templates'])) {
+            $loaders[] = new Twig_Loader_Array($options['templates']);
         }
 
-        if (isset($config['loaders']) && is_array($config['loaders'])) {
-            $loaders = array_merge($loaders, $config['loaders']);
+        if (isset($options['loaders']) && is_array($options['loaders'])) {
+            $loaders = array_merge($loaders, $options['loaders']);
         }
 
         return new Twig_Loader_Chain($loaders);
+    }
+
+    public static function __callStatic($name, array $arguments)
+    {
+        if ($name !== 'configureOptionsStatic') {
+            return;
+        }
+
+        return $this->configureOptions($arguments[0]);
     }
 }

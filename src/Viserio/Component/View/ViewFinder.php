@@ -9,13 +9,13 @@ use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
+use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
-    use CreateOptionsTrait;
+    use ConfigureOptionsTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
@@ -62,12 +62,12 @@ class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOpt
     {
         $this->files = $container->get(FilesystemContract::class);
 
-        self::createOptions($container);
+        $this->configureOptions($container);
 
-        $this->paths = self::$options['paths'];
+        $this->paths = $this->options['paths'];
 
-        if (isset(self::$options['extensions']) && is_array(self::$options['extensions'])) {
-            $this->extensions = array_merge($this->extensions, self::$options['extensions']);
+        if (isset($this->options['extensions']) && is_array($this->options['extensions'])) {
+            $this->extensions = array_merge($this->extensions, $this->options['extensions']);
         }
     }
 

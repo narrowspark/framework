@@ -72,7 +72,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        $twig = $this->addExtensions($this->twig, $this->config['engines']['twig']);
+        $twig = $this->addExtensions($this->twig, $this->options['engines']['twig']);
 
         try {
             $content = $twig->render($fileInfo['name'], $data);

@@ -9,13 +9,13 @@ use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
+use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
     use ContainerAwareTrait;
-    use CreateOptionsTrait;
+    use ConfigureOptionsTrait;
 
     /**
      * The registered custom driver creators.
@@ -40,7 +40,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
     {
         $this->container = $container;
 
-        self::createOptions($container);
+        $this->configureOptions($container);
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      */
     public function getConfig(): array
     {
-        return self::$options;
+        return $this->options;
     }
 
     /**
@@ -89,7 +89,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      */
     public function getDefaultDriver(): string
     {
-        return self::$options['default'];
+        return $this->options['default'];
     }
 
     /**
@@ -99,7 +99,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      */
     public function setDefaultDriver(string $name)
     {
-        self::$options['default'] = $name;
+        $this->options['default'] = $name;
     }
 
     /**
@@ -171,7 +171,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
     {
         $name = $name ?? $this->getDefaultDriver();
 
-        $drivers = self::$options['drivers'] ?? [];
+        $drivers = $this->options['drivers'] ?? [];
 
         if (isset($drivers[$name]) && is_array($drivers[$name])) {
             $config         = $drivers[$name];

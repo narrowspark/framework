@@ -12,12 +12,12 @@ use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
+use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
-    use CreateOptionsTrait;
+    use ConfigureOptionsTrait;
 
     /**
      * {@inheritdoc}
@@ -53,13 +53,11 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
     {
-        if (count(self::$options) === 0) {
-            self::createOptions($container);
-        }
+        self::configureOptionsStatic($container);
 
         $profiler = $container->get(WebProfilerContract::class);
 
-        if (self::$options['collector']['twig'] !== false) {
+        if ($this->options['collector']['twig'] !== false) {
             $profiler->addCollector(new TwigDataCollector(
                 $container->get(Twig_Profiler_Profile::class)
             ));
@@ -75,18 +73,25 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        if (count(self::$options) === 0) {
-            self::createOptions($container);
-        }
+        self::configureOptionsStatic($container);
 
         $twig = $container->get(TwigEnvironment::class);
 
-        if (self::$options['collector']['twig'] !== false) {
+        if ($this->options['collector']['twig'] !== false) {
             $twig->addExtension(new Twig_Extension_Profiler(
                 $container->get(Twig_Profiler_Profile::class)
             ));
         }
 
         return $twig;
+    }
+
+    public static function __callStatic($name, array $arguments)
+    {
+        if ($name !== 'configureOptionsStatic') {
+            return;
+        }
+
+        return $this->configureOptions($arguments[0]);
     }
 }

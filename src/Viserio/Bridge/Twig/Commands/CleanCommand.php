@@ -7,12 +7,12 @@ use Interop\Config\RequiresConfig;
 use Interop\Config\RequiresMandatoryOptions;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Support\Traits\CreateOptionsTrait;
+use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryOptions
 {
     use ConfigurationTrait;
-    use CreateOptionsTrait;
+    use ConfigureOptionsTrait;
 
     /**
      * {@inheritdoc}
@@ -55,10 +55,10 @@ class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryO
     {
         $container = $this->getContainer();
 
-        self::createOptions($container);
+        $this->configureOptions($container);
 
         $files    = $container->get(FilesystemContract::class);
-        $cacheDir = $this->config['engines']['twig']['options']['cache'];
+        $cacheDir = $this->options['engines']['twig']['options']['cache'];
 
         $files->deleteDirectory($cacheDir);
 
