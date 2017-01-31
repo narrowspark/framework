@@ -19,6 +19,15 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
     use ConfigurationTrait;
     use ConfigureOptionsTrait;
 
+    public static function __callStatic($name, array $arguments)
+    {
+        if ($name !== 'configureOptionsStatic') {
+            return;
+        }
+
+        return $this->configureOptions($arguments[0]);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -84,14 +93,5 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
         }
 
         return $twig;
-    }
-
-    public static function __callStatic($name, array $arguments)
-    {
-        if ($name !== 'configureOptionsStatic') {
-            return;
-        }
-
-        return $this->configureOptions($arguments[0]);
     }
 }
