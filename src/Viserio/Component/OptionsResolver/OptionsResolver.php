@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
-use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
 use Interop\Container\ContainerInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
 
 class OptionsResolver implements ResolverContract
 {
@@ -35,8 +35,7 @@ class OptionsResolver implements ResolverContract
             return $container->get('config');
         } elseif ($container->has('options')) {
             return $container->get('options');
-        } else {
-            throw new RuntimeException('No configuration found.');
         }
+        throw new RuntimeException('No configuration found.');
     }
 }
