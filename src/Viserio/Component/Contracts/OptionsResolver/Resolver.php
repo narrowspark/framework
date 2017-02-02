@@ -4,5 +4,4 @@ namespace Viserio\Component\Contracts\OptionsResolver;
 
 interface Resolver
 {
-
 }

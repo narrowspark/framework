@@ -3,15 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
 use ArrayAccess;
-use Iterator;
 use Interop\Container\ContainerInterface;
+use Iterator;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
 
 class OptionsResolver implements ResolverContract
 {
@@ -39,7 +39,7 @@ class OptionsResolver implements ResolverContract
      */
     public function resolve(?iterable $config = null, string $configId = null): iterable
     {
-        $config = $this->contaienr !== null && $config === null ? $this->configureOptions($this->getContainer()) : $config;
+        $config     = $this->contaienr !== null && $config === null ? $this->configureOptions($this->getContainer()) : $config;
         $dimensions = $this->configClass->getDimensions();
         $dimensions = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
 
@@ -53,11 +53,11 @@ class OptionsResolver implements ResolverContract
 
         // get configuration for provided dimensions
         foreach ($dimensions as $dimension) {
-            if ((array) $config !== $config && !$config instanceof ArrayAccess) {
+            if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
                 throw UnexpectedValueException::invalidOptions($dimensions, $dimension);
             }
 
-            if (!isset($config[$dimension])) {
+            if (! isset($config[$dimension])) {
                 if (! $this->configClass instanceof RequiresMandatoryOptions && $this->configClass instanceof ProvidesDefaultOptions) {
                     break;
                 }
@@ -68,7 +68,7 @@ class OptionsResolver implements ResolverContract
             $config = $config[$dimension];
         }
 
-        if ((array) $config !== $config && !$config instanceof ArrayAccess) {
+        if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
             throw UnexpectedValueException::invalidOptions($this->configClass->getDimensions());
         }
 
@@ -78,7 +78,7 @@ class OptionsResolver implements ResolverContract
 
         if ($this->configClass instanceof ProvidesDefaultOptions) {
             $options = $this->configClass->getDefaultOptions();
-            $config = array_replace_recursive(
+            $config  = array_replace_recursive(
                 $options instanceof Iterator ? iterator_to_array($options) : (array) $options,
                 (array) $config
             );
@@ -110,14 +110,14 @@ class OptionsResolver implements ResolverContract
         }
 
         foreach ($dimensions as $dimension) {
-            if (((array) $config !== $config && !$config instanceof ArrayAccess)
-                || (!isset($config[$dimension]) && $this->configClass instanceof RequiresMandatoryOptionsContract)
-                || (!isset($config[$dimension]) && !$this->configClass instanceof ProvidesDefaultOptionsContract)
+            if (((array) $config !== $config && ! $config instanceof ArrayAccess)
+                || (! isset($config[$dimension]) && $this->configClass instanceof RequiresMandatoryOptionsContract)
+                || (! isset($config[$dimension]) && ! $this->configClass instanceof ProvidesDefaultOptionsContract)
             ) {
                 return false;
             }
 
-            if ($this->configClass instanceof ProvidesDefaultOptionsContract && !isset($config[$dimension])) {
+            if ($this->configClass instanceof ProvidesDefaultOptionsContract && ! isset($config[$dimension])) {
                 return true;
             }
 
@@ -134,7 +134,7 @@ class OptionsResolver implements ResolverContract
      * @param iterable    $config
      * @param string|null $configId Config name, must be provided if factory uses RequiresConfigId interface
      *
-     * @return iterable             options Default options or an empty array
+     * @return iterable options Default options or an empty array
      */
     public function optionsWithFallback(iterable $config, ?string $configId = null)
     {
@@ -152,7 +152,7 @@ class OptionsResolver implements ResolverContract
     }
 
     /**
-     * Checks if a mandatory param is missing, supports recursion
+     * Checks if a mandatory param is missing, supports recursion.
      *
      * @param iterable $mandatoryOptions
      * @param iterable $config
@@ -162,9 +162,9 @@ class OptionsResolver implements ResolverContract
     protected function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
     {
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
-            $useRecursion = !is_scalar($mandatoryOption);
+            $useRecursion = ! is_scalar($mandatoryOption);
 
-            if (!$useRecursion && isset($config[$mandatoryOption])) {
+            if (! $useRecursion && isset($config[$mandatoryOption])) {
                 continue;
             }
 
