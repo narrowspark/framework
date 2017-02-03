@@ -2,15 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Providers;
 
-use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Twig_Extension_Profiler;
 use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 use Viserio\Bridge\Twig\TwigEnvironment;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, RequiresConfig, RequiresMandatoryOptions

@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
 use ErrorException;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Twig_Environment;
 use Twig_Error;
-use Viserio\Component\View\Engines\AbstractBaseEngine;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
+use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\View\Engines\AbstractBaseEngine;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
 {

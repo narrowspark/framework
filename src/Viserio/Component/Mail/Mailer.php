@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
 use Closure;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 use Interop\Config\RequiresConfig;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;

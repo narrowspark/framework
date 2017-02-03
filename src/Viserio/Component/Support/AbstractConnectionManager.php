@@ -3,12 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 
 abstract class AbstractConnectionManager implements RequiresConfig, RequiresMandatoryOptions
 {

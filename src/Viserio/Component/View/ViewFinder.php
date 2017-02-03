@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\View;
 
-use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOptions

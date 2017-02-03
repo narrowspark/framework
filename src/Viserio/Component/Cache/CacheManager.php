@@ -15,7 +15,6 @@ use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
@@ -25,6 +24,7 @@ use Psr\Log\LoggerAwareInterface;
 use Redis;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Viserio\Component\Support\AbstractManager;
 
 class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface, ProvidesDefaultOptions

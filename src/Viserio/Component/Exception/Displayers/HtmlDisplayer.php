@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayers;
 
-use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Interop\Config\RequiresConfig;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
@@ -13,6 +11,7 @@ use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Viserio\Component\Exception\ExceptionInfo;
 
 class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaultOptions

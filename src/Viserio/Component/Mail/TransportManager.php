@@ -4,12 +4,12 @@ namespace Viserio\Component\Mail;
 
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Narrowspark\Arr\Arr;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Viserio\Component\Mail\Transport\Log as LogTransport;
 use Viserio\Component\Mail\Transport\Mailgun as MailgunTransport;
 use Viserio\Component\Mail\Transport\Mandrill as MandrillTransport;

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Engines;
 
-use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 use Viserio\Component\Contracts\View\Engine as EngineContract;

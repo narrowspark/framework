@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
 use ArrayAccess;
-use Interop\Container\ContainerInterface;
 use Iterator;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
@@ -185,6 +184,7 @@ class OptionsResolver implements ResolverContract
      * Create configuration.
      *
      * @param \Interop\Container\ContainerInterface $container
+     * @param mixed                                 $data
      *
      * @throws \RuntimeException
      *
