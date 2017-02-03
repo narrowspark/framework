@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
 abstract class AbstractOptionsResolver implements ResolverContract
 {
