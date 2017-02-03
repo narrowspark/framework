@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
 use Defuse\Crypto\Key;
-use Interop\Config\ProvidesDefaultOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
@@ -21,7 +21,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'default' => 'local',

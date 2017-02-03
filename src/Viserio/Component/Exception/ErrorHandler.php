@@ -5,8 +5,8 @@ namespace Viserio\Component\Exception;
 use Error;
 use ErrorException;
 use Exception;
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\ProvidesDefaultOptions;
+use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Interop\Config\RequiresConfig;
 use Interop\Container\ContainerInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
@@ -26,7 +26,6 @@ use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
-use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
 {
@@ -83,7 +82,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -91,7 +90,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             // A list of the exception types that should not be reported.

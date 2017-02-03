@@ -2,18 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Commands;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
-use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryOptions
 {
-    use ConfigurationTrait;
-    use ConfigureOptionsTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -25,9 +21,16 @@ class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryO
     protected $description = 'Clean the Twig Cache';
 
     /**
+     * Config array.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $options;
+
+    /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', 'view'];
     }
@@ -35,7 +38,7 @@ class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryO
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return [
             'engines' => [
@@ -55,7 +58,12 @@ class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryO
     {
         $container = $this->getContainer();
 
-        $this->configureOptions($container);
+        if ($this->options === null) {
+            $optionsResolver = new OptionsResolver($this);
+            $optionsResolver->setContainer($this->container);
+
+            $this->options = $optionsResolver->resolve();
+        }
 
         $files    = $container->get(FilesystemContract::class);
         $cacheDir = $this->options['engines']['twig']['options']['cache'];

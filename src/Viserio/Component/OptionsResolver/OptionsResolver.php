@@ -39,7 +39,7 @@ class OptionsResolver implements ResolverContract
      */
     public function resolve(?iterable $config = null, string $configId = null): iterable
     {
-        $config     = $this->contaienr !== null && $config === null ? $this->configureOptions($this->getContainer()) : $config;
+        $config     = $this->resolveOptions($config);
         $dimensions = $this->configClass->getDimensions();
         $dimensions = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
 
@@ -73,7 +73,7 @@ class OptionsResolver implements ResolverContract
         }
 
         if ($this->configClass instanceof RequiresMandatoryOptions) {
-            $this->checkMandatoryOptions($this->configClass->getMandatoryOptions(), $config);
+            $this->checkgetMandatoryOptions($this->configClass->getMandatoryOptions(), $config);
         }
 
         if ($this->configClass instanceof ProvidesDefaultOptions) {
@@ -154,14 +154,14 @@ class OptionsResolver implements ResolverContract
     /**
      * Checks if a mandatory param is missing, supports recursion.
      *
-     * @param iterable $mandatoryOptions
+     * @param iterable $getMandatoryOptions
      * @param iterable $config
      *
      * @throws MandatoryOptionNotFoundException
      */
-    protected function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
+    protected function checkgetMandatoryOptions(iterable $getMandatoryOptions, iterable $config): void
     {
-        foreach ($mandatoryOptions as $key => $mandatoryOption) {
+        foreach ($getMandatoryOptions as $key => $mandatoryOption) {
             $useRecursion = ! is_scalar($mandatoryOption);
 
             if (! $useRecursion && isset($config[$mandatoryOption])) {
@@ -169,7 +169,7 @@ class OptionsResolver implements ResolverContract
             }
 
             if ($useRecursion && isset($config[$key])) {
-                $this->checkMandatoryOptions($mandatoryOption, $config[$key]);
+                $this->checkgetMandatoryOptions($mandatoryOption, $config[$key]);
 
                 return;
             }
@@ -188,16 +188,20 @@ class OptionsResolver implements ResolverContract
      *
      * @throws \RuntimeException
      *
-     * @return iterable
+     * @return array|\Array
      */
-    protected function configureOptions(ContainerInterface $container): iterable
+    protected function resolveOptions($data)
     {
-        if ($container->has(RepositoryContract::class)) {
-            return $container->get(RepositoryContract::class);
-        } elseif ($container->has('config')) {
-            return $container->get('config');
-        } elseif ($container->has('options')) {
-            return $container->get('options');
+        if ($this->container !== null && $data === null) {
+            if ($this->container->has(RepositoryContract::class)) {
+                return $this->container->get(RepositoryContract::class);
+            } elseif ($this->container->has('config')) {
+                return $this->container->get('config');
+            } elseif ($this->container->has('options')) {
+                return $this->container->get('options');
+            }
+        } elseif ($data !== null) {
+            return $data;
         }
 
         throw new RuntimeException('No configuration found.');

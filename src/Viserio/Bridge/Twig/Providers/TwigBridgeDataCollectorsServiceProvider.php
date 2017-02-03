@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Providers;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
-use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Twig_Extension_Profiler;
@@ -12,13 +12,9 @@ use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, RequiresConfig, RequiresMandatoryOptions
 {
-    use ConfigurationTrait;
-    use ConfigureOptionsTrait;
-
     public static function __callStatic($name, array $arguments)
     {
         if ($name !== 'configureOptionsStatic') {
@@ -43,7 +39,7 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', 'webprofiler'];
     }
@@ -51,7 +47,7 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return [
             'collector' => [

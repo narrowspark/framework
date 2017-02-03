@@ -4,7 +4,7 @@ namespace Viserio\Component\Mail;
 
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
-use Interop\Config\ProvidesDefaultOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Narrowspark\Arr\Arr;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
@@ -22,7 +22,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'default' => 'smtp',

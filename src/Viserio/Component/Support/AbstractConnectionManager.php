@@ -3,13 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
-use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 abstract class AbstractConnectionManager implements RequiresConfig, RequiresMandatoryOptions
 {
@@ -59,7 +58,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', $this->getConfigName()];
     }
@@ -67,7 +66,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return ['connections'];
     }

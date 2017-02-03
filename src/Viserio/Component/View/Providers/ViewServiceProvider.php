@@ -9,6 +9,7 @@ use Viserio\Component\View\Engines\EngineResolver;
 use Viserio\Component\View\Engines\FileEngine;
 use Viserio\Component\View\Engines\PhpEngine;
 use Viserio\Component\View\Factory;
+use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider
@@ -23,9 +24,12 @@ class ViewServiceProvider implements ServiceProvider
             'view.engine.resolver' => function (ContainerInterface $container) {
                 return $container->get(EngineResolver::class);
             },
-            ViewFinder::class      => [self::class, 'createViewFinder'],
+            FinderContract::class  => [self::class, 'createViewFinder'],
+            ViewFinder::class      => function (ContainerInterface $container) {
+                return $container->get(FinderContract::class);
+            },
             'view.finder'          => function (ContainerInterface $container) {
-                return $container->get(ViewFinder::class);
+                return $container->get(FinderContract::class);
             },
             FactoryContract::class  => [self::class, 'createViewFactory'],
             Factory::class          => function (ContainerInterface $container) {

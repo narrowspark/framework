@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayers;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\ProvidesDefaultOptions;
+use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Interop\Config\RequiresConfig;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
@@ -14,14 +14,11 @@ use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Component\Exception\ExceptionInfo;
-use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaultOptions
 {
     use ResponseFactoryAwareTrait;
     use StreamFactoryAwareTrait;
-    use ConfigurationTrait;
-    use ConfigureOptionsTrait;
 
     /**
      * The exception info instance.
@@ -54,7 +51,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaul
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -62,7 +59,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresConfig, ProvidesDefaul
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'template_path' => __DIR__ . '/../Resources/error.html',

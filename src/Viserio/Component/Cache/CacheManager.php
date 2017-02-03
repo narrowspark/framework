@@ -15,7 +15,7 @@ use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
-use Interop\Config\ProvidesDefaultOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
@@ -34,7 +34,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'default' => 'array',

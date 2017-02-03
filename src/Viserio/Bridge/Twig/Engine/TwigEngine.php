@@ -3,15 +3,19 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
 use ErrorException;
-use Interop\Config\ProvidesDefaultOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Twig_Environment;
 use Twig_Error;
 use Viserio\Component\View\Engines\AbstractBaseEngine;
+use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
 {
+    use ContainerAwareTrait;
+
     /**
      * Twig environment.
      *
@@ -20,24 +24,38 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
     protected $twig;
 
     /**
-     * Create a new twig engine instance.
+     * Config array.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $options;
+
+    /**
+     * Create a new engine instance.
      *
      * @param \Interop\Container\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
-        parent::__construct($container);
+        $this->container  = $container;
 
-        $this->twig = $container->get(Twig_Environment::class);
+        if ($this->options === null) {
+            $optionsResolver = new OptionsResolver($this);
+            $optionsResolver->setContainer($this->container);
+
+            $this->options = $optionsResolver->resolve();
+        }
+
+        $this->twig = $this->container->get(Twig_Environment::class);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return array_merge(
-            parent::mandatoryOptions(),
+            parent::getMandatoryOptions(),
             [
                 'engines' => [
                     'twig' => [
@@ -54,7 +72,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'engines' => [

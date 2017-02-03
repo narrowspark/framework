@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
 use Closure;
-use Interop\Config\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 use Interop\Config\RequiresConfig;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
@@ -17,7 +17,6 @@ use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
-use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 class Mailer implements MailerContract, RequiresConfig
@@ -88,7 +87,7 @@ class Mailer implements MailerContract, RequiresConfig
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', 'mail'];
     }

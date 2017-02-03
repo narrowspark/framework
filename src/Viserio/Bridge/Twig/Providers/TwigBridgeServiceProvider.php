@@ -2,13 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Providers;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
-use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Twig_LexerInterface;
 use Twig_Loader_Array;
+use Twig_Loader_Chain;
 use Twig_LoaderInterface;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
@@ -16,21 +17,10 @@ use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 
 class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, RequiresMandatoryOptions
 {
-    use ConfigurationTrait;
-    use ConfigureOptionsTrait;
-
-    public static function __callStatic($name, array $arguments)
-    {
-        if ($name !== 'configureOptionsStatic') {
-            return;
-        }
-
-        return $this->configureOptions($arguments[0]);
-    }
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -50,7 +40,7 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', 'view'];
     }
@@ -58,7 +48,7 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return [
             'paths',
@@ -83,8 +73,13 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        $config  = self::configureOptionsStatic($container);
-        $options = $config['engines']['twig']['options'];
+        if (self::$options === null) {
+            $optionsResolver = new OptionsResolver(new static());
+            $optionsResolver->setContainer($container);
+            self::$options = $optionsResolver->resolve();
+        }
+
+        $options = self::$options['engines']['twig']['options'];
 
         $twig = new TwigEnvironment(
             $container->get(Twig_LoaderInterface::class),
@@ -111,8 +106,13 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
      */
     public static function createTwigLoader(ContainerInterface $container): Twig_LoaderInterface
     {
-        $config  = self::configureOptionsStatic($container);
-        $options = $options['engines']['twig'];
+        if (self::$options === null) {
+            $optionsResolver = new OptionsResolver(new static());
+            $optionsResolver->setContainer($container);
+            self::$options = $optionsResolver->resolve();
+        }
+
+        $options = self::$options['engines']['twig'];
 
         $loaders = [
             new TwigLoader(

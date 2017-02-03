@@ -27,7 +27,7 @@
     "require-dev": {
         "mockery/mockery"                                    : "^0.9",
         "mouf/picotainer"                                    : "^1.0",
-        "phpunit/phpunit"                                    : "~5.7",
+        "phpunit/phpunit"                                    : "~5.7 || ^6.0",
         "narrowspark/testing-helper"                         : "^2.0"
     },
     "provide": {

@@ -2,20 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\View;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
-use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\Support\Traits\ConfigureOptionsTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOptions
 {
-    use ConfigurationTrait;
-    use ConfigureOptionsTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
@@ -54,6 +51,13 @@ class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOpt
     protected $extensions = [];
 
     /**
+     * Config array.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $options;
+
+    /**
      * Create a new file view loader instance.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -62,7 +66,12 @@ class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOpt
     {
         $this->files = $container->get(FilesystemContract::class);
 
-        $this->configureOptions($container);
+        if ($this->options === null) {
+            $optionsResolver = new OptionsResolver($this);
+            $optionsResolver->setContainer($container);
+
+            $this->options = $optionsResolver->resolve();
+        }
 
         $this->paths = $this->options['paths'];
 
@@ -74,7 +83,7 @@ class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOpt
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', 'view'];
     }
@@ -82,7 +91,7 @@ class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOpt
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return [
             'paths',

@@ -4,6 +4,7 @@ namespace Viserio\Bridge\Twig\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
 use Twig_LoaderInterface;
+use Twig_Loader_Chain;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Bridge\Twig\Providers\TwigBridgeServiceProvider;
 use Viserio\Bridge\Twig\TwigEnvironment;
@@ -28,12 +29,19 @@ class TwigBridgeServiceProviderTest extends TestCase
                         __DIR__ . '/../Fixture/',
                         __DIR__,
                     ],
+                    'engines' => [
+                        'twig' => [
+                            'options' => [
+                                'debug' => false,
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ]);
 
-        self::assertInstanceOf(TwigLoader::class, $container->get(TwigLoader::class));
-        self::assertInstanceOf(TwigLoader::class, $container->get(Twig_LoaderInterface::class));
+        self::assertInstanceOf(Twig_Loader_Chain::class, $container->get(TwigLoader::class));
+        self::assertInstanceOf(Twig_Loader_Chain::class, $container->get(Twig_LoaderInterface::class));
         self::assertInstanceOf(TwigEnvironment::class, $container->get(TwigEnvironment::class));
         self::assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
     }

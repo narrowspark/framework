@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session;
 
-use Interop\Config\ProvidesDefaultOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use SessionHandlerInterface;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
@@ -39,7 +39,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'default' => 'array',

@@ -28,7 +28,7 @@
         "container-interop/container-interop"                : "^1.1",
         "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^2.0",
-        "phpunit/phpunit"                                    : "~5.7",
+        "phpunit/phpunit"                                    : "~5.7 || ^6.0",
         "viserio/container"                                  : "self.version"
     },
     "autoload": {

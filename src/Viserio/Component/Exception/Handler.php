@@ -48,7 +48,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return ['default_displayer', 'env'];
     }
@@ -56,7 +56,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return array_merge(
             parent::defaultOptions(),
