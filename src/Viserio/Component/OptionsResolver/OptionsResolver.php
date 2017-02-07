@@ -4,7 +4,6 @@ namespace Viserio\Component\OptionsResolver;
 
 use ArrayAccess;
 use Iterator;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 
 class OptionsResolver extends AbstractOptionsResolver
