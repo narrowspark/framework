@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Component\Events\Event;
 
-class EventTest extends \PHPUnit_Framework_TestCase
+class EventTest extends TestCase
 {
     /**
      * @var Event

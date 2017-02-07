@@ -13,20 +13,22 @@ services:
 matrix:
   include:
     - php: 7.1
-      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
+      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true PHPUNIT=true
     - php: 7.1
-      env: SETUP=basic PHPSTAN=true
+      env: SETUP=lowest PHPUNIT=false
     - php: 7.1
-      env: SETUP=lowest
+      env: SETUP=basic PHPUNIT=false
     - php: 7.1
-      env: SETUP=basic
+      env: SETUP=stable PHPUNIT=false
     - php: 7.1
-      env: SETUP=stable
+      env: SETUP=basic PHPSTAN=true PHPUNIT=false
   allow_failures:
-    - env: SETUP=lowest
+    - env: SETUP=lowest PHPUNIT=false
       php: 7.1
+    - php: 7.1
+      env: SETUP=basic PHPSTAN=true PHPUNIT=false
     # - env: SETUP=basic HUMBUG=true
-    #   php: 7.0
+    #   php: 7.1
   fast_finish: true
 
 cache:

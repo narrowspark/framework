@@ -11,9 +11,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
 
 abstract class AbstractConnectionManager implements RequiresConfig, RequiresMandatoryOptions
 {
-    use ConfigurationTrait;
     use ContainerAwareTrait;
-    use ConfigureOptionsTrait;
 
     /**
      * The active connection instances.
@@ -30,6 +28,13 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     protected $extensions = [];
 
     /**
+     * Config array.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $options;
+
+    /**
      * Create a new manager instance.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -38,7 +43,12 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     {
         $this->container = $container;
 
-        $this->configureOptions($container);
+        if ($this->options === null) {
+            $optionsResolver = new OptionsResolver($this);
+            $optionsResolver->setContainer($this->container);
+
+            $this->options = $optionsResolver->resolve();
+        }
     }
 
     /**

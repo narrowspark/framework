@@ -5,13 +5,10 @@ namespace Viserio\Component\OptionsResolver;
 use ArrayAccess;
 use Iterator;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 
 class OptionsResolver extends AbstractOptionsResolver
 {
-    use ContainerAwareTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -51,7 +48,7 @@ class OptionsResolver extends AbstractOptionsResolver
         }
 
         if ($this->configClass instanceof RequiresMandatoryOptions) {
-            $this->checkgetMandatoryOptions($this->configClass->getMandatoryOptions(), $config);
+            $this->checkMandatoryOptions($this->configClass->getMandatoryOptions(), $config);
         }
 
         if ($this->configClass instanceof ProvidesDefaultOptions) {
@@ -63,62 +60,5 @@ class OptionsResolver extends AbstractOptionsResolver
         }
 
         return $config;
-    }
-
-    /**
-     * Checks if a mandatory param is missing, supports recursion.
-     *
-     * @param iterable $getMandatoryOptions
-     * @param iterable $config
-     *
-     * @throws MandatoryOptionNotFoundException
-     */
-    protected function checkgetMandatoryOptions(iterable $getMandatoryOptions, iterable $config): void
-    {
-        foreach ($getMandatoryOptions as $key => $mandatoryOption) {
-            $useRecursion = ! is_scalar($mandatoryOption);
-
-            if (! $useRecursion && isset($config[$mandatoryOption])) {
-                continue;
-            }
-
-            if ($useRecursion && isset($config[$key])) {
-                $this->checkgetMandatoryOptions($mandatoryOption, $config[$key]);
-
-                return;
-            }
-
-            throw MandatoryOptionNotFoundException::missingOption(
-                $this->configClass->getDimensions(),
-                $useRecursion ? $key : $mandatoryOption
-            );
-        }
-    }
-
-    /**
-     * Create configuration.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param mixed                                 $data
-     *
-     * @throws \RuntimeException
-     *
-     * @return array|\Array
-     */
-    protected function resolveOptions($data)
-    {
-        if ($this->container !== null && $data === null) {
-            if ($this->container->has(RepositoryContract::class)) {
-                return $this->container->get(RepositoryContract::class);
-            } elseif ($this->container->has('config')) {
-                return $this->container->get('config');
-            } elseif ($this->container->has('options')) {
-                return $this->container->get('options');
-            }
-        } elseif ($data !== null) {
-            return $data;
-        }
-
-        throw new RuntimeException('No configuration found.');
     }
 }

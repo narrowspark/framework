@@ -5,9 +5,12 @@ namespace Viserio\Component\OptionsResolver;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
+use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractOptionsResolver implements ResolverContract
 {
+    use ContainerAwareTrait;
+
     /**
      * Config class.
      *
@@ -23,6 +26,36 @@ abstract class AbstractOptionsResolver implements ResolverContract
     public function __construct(RequiresConfigContract $configClass)
     {
         $this->configClass = $configClass;
+    }
+
+    /**
+     * Checks if a mandatory param is missing, supports recursion.
+     *
+     * @param iterable $mandatoryOptions
+     * @param iterable $config
+     *
+     * @throws MandatoryOptionNotFoundException
+     */
+    protected function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
+    {
+        foreach ($mandatoryOptions as $key => $mandatoryOption) {
+            $useRecursion = ! is_scalar($mandatoryOption);
+
+            if (! $useRecursion && isset($config[$mandatoryOption])) {
+                continue;
+            }
+
+            if ($useRecursion && isset($config[$key])) {
+                $this->checkMandatoryOptions($mandatoryOption, $config[$key]);
+
+                return;
+            }
+
+            throw MandatoryOptionNotFoundException::missingOption(
+                $this->configClass->getDimensions(),
+                $useRecursion ? $key : $mandatoryOption
+            );
+        }
     }
 
     /**
@@ -50,42 +83,43 @@ abstract class AbstractOptionsResolver implements ResolverContract
     }
 
     /**
-     * Checks if options are available depending on implemented interfaces and checks that the retrieved options from
-     * the dimensions path are an array or have implemented \ArrayAccess. The RequiresConfigId interface is supported.
+     * Checks if options are available depending on implemented interfaces and checks that the retrieved options
+     * are an array or have implemented \ArrayAccess. The RequiresConfigId interface is supported.
      *
-     * `canRetrieveOptions()` returning true does not mean that `options($config)` will not throw an exception.
-     * It does however mean that `options()` will not throw an `OptionNotFoundException`. Mandatory options are
+     * `canRetrieveOptions()` returning true does not mean that `resolve($config)` will not throw an exception.
+     * It does however mean that `resolve()` will not throw an `OptionNotFoundException`. Mandatory options are
      * not checked.
      *
      * @param iterable    $config   Configuration
      * @param string|null $configId Config name, must be provided if factory uses RequiresConfigId interface
      *
-     * @return bool True if options depending on dimensions are available, otherwise false
+     * @return bool True if options are available, otherwise false
      */
-    protected function canRetrieveOptions(iterable $config, string $configId = null): bool
+    abstract protected function canRetrieveOptions(iterable $config, string $configId = null): bool;
+
+    /**
+     * Get configuration.
+     *
+     * @param \Interop\Container\ContainerInterface|\ArrayAccess|array $data
+     *
+     * @throws \RuntimeException
+     *
+     * @return array|\ArrayAccess
+     */
+    protected function resolveConfiguration($data)
     {
-        $dimensions = $this->configClass->getDimensions();
-        $dimensions = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
-
-        if ($this->configClass instanceof RequiresConfigIdContract) {
-            $dimensions[] = $configId;
+        if ($data instanceof ContainerInterface) {
+            if ($data->has(RepositoryContract::class)) {
+                return $data->get(RepositoryContract::class);
+            } elseif ($data->has('config')) {
+                return $data->get('config');
+            } elseif ($data->has('options')) {
+                return $data->get('options');
+            }
+        } elseif ($data instanceof ArrayAccess || is_array($data)) {
+            return $data;
         }
 
-        foreach ($dimensions as $dimension) {
-            if (((array) $config !== $config && ! $config instanceof ArrayAccess)
-                || (! isset($config[$dimension]) && $this->configClass instanceof RequiresMandatoryOptionsContract)
-                || (! isset($config[$dimension]) && ! $this->configClass instanceof ProvidesDefaultOptionsContract)
-            ) {
-                return false;
-            }
-
-            if ($this->configClass instanceof ProvidesDefaultOptionsContract && ! isset($config[$dimension])) {
-                return true;
-            }
-
-            $config = $config[$dimension];
-        }
-
-        return (array) $config === $config || $config instanceof ArrayAccess;
+        throw new RuntimeException('No configuration found.');
     }
 }
