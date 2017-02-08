@@ -2,9 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
-use Interop\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
 
 abstract class AbstractOptionsResolver implements ResolverContract

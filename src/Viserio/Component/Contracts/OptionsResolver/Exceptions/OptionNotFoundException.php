@@ -24,7 +24,7 @@ class OptionNotFoundException extends OutOfBoundsException
         Throwable $previous = null,
         $path = null
     ) {
-        $position = [];
+        $position   = [];
         $dimensions = $factory->getDimensions();
 
         if ($factory instanceof RequiresConfigIdContract) {

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\OptionsResolver\Exceptions;
 
-use Throwable;
 use OutOfBoundsException;
+use Throwable;
 
 class MandatoryOptionNotFoundException extends OutOfBoundsException
 {

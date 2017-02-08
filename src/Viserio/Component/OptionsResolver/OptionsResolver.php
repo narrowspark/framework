@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
 use ArrayAccess;
-use RuntimeException;
-use Iterator;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Iterator;
+use RuntimeException;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
 class OptionsResolver extends AbstractOptionsResolver
 {
@@ -112,7 +112,6 @@ class OptionsResolver extends AbstractOptionsResolver
      */
     protected function getConfigurableClass()
     {
-
     }
 
     /**

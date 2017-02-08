@@ -11,10 +11,10 @@ class UniversalContainerIdConfiguration implements RequiresConfigId, Providesget
 {
     use ConfigurationTrait;
 
-    const TYPE_ARRAY_ITERATOR = 0;
-    const TYPE_ARRAY_OBJECT   = 1;
-    const TYPE_ARRAY_ARRAY    = 2;
-    const TYPE_ONLY_ITERATOR  = 3;
+    public const TYPE_ARRAY_ITERATOR = 0;
+    public const TYPE_ARRAY_OBJECT   = 1;
+    public const TYPE_ARRAY_ARRAY    = 2;
+    public const TYPE_ONLY_ITERATOR  = 3;
 
     private static $dimensions = [
         'doctrine',
