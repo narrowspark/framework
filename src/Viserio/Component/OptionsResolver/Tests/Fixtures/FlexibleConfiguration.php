@@ -2,13 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 
-class FlexibleConfiguration implements RequiresConfig
+class FlexibleConfiguration implements RequiresConfigContract
 {
-    use ConfigurationTrait;
-
     public function getDimensions(): iterable
     {
         return ['one', 'two', 'three', 'four'];

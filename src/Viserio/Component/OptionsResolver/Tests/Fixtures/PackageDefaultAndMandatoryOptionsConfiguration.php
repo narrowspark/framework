@@ -2,15 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\ProvidesgetGefaultOptions;
-use Interop\Config\RequiresConfig;
-use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class PackageDefaultAndgetMandatoryOptionsConfiguration implements RequiresConfig, ProvidesgetGefaultOptions, RequiresMandatoryOptions
+class PackageDefaultAndgetMandatoryOptionsConfiguration implements RequiresConfigContract, ProvidesgetGefaultOptions, RequiresMandatoryOptions
 {
-    use ConfigurationTrait;
-
     /**
      * @interitdoc
      */

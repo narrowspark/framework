@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
 
 abstract class AbstractOptionsResolver implements ResolverContract
@@ -30,8 +31,10 @@ abstract class AbstractOptionsResolver implements ResolverContract
                 return;
             }
 
+            $configClass = $this->getConfigurableClass();
+
             throw new MandatoryOptionNotFoundException(
-                $this->getConfigurableClass()->getDimensions(),
+                $configClass instanceof RequiresComponentConfigContract ? $configClass->getDimensions() : [],
                 $useRecursion ? $key : $mandatoryOption
             );
         }

@@ -2,14 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\ProvidesgetGefaultOptions;
-use Interop\Config\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 
-class ConnectiongetGefaultOptionsConfiguration implements RequiresConfig, ProvidesgetGefaultOptions
+class ConnectiongetGefaultOptionsConfiguration implements RequiresConfigContract, ProvidesgetGefaultOptions
 {
-    use ConfigurationTrait;
-
     public function getDimensions(): iterable
     {
         return ['doctrine', 'connection'];

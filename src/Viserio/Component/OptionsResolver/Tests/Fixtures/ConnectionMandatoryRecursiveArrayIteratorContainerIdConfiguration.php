@@ -2,14 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfigId;
-use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class ConnectionMandatoryRecursiveArrayIteratorContainerIdConfiguration implements RequiresConfigId, RequiresMandatoryOptions
+class ConnectionMandatoryRecursiveArrayIteratorContainerIdConfiguration implements RequiresConfigContractId, RequiresMandatoryOptions
 {
-    use ConfigurationTrait;
-
     /**
      * @interitdoc
      */

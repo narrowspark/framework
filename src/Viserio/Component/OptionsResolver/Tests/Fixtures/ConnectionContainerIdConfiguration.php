@@ -2,13 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfigId;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 
-class ConnectionContainerIdConfiguration implements RequiresConfigId
+class ConnectionContainerIdConfiguration implements RequiresConfigContractId
 {
-    use ConfigurationTrait;
-
     /**
      * @interitdoc
      */

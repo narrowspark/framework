@@ -1,13 +1,10 @@
 <?php
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 
-class PlainConfiguration implements RequiresConfig
+class PlainConfiguration implements RequiresConfigContract
 {
-    use ConfigurationTrait;
-
     /**
      * @interitdoc
      */
@@ -16,5 +13,3 @@ class PlainConfiguration implements RequiresConfig
         return [];
     }
 }
-<?php
-namespace InteropTest\Config\TestAsset;

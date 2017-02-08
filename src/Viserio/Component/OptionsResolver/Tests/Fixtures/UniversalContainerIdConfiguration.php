@@ -2,15 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\ProvidesgetGefaultOptions;
-use Interop\Config\RequiresConfigId;
-use Interop\Config\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class UniversalContainerIdConfiguration implements RequiresConfigId, ProvidesgetGefaultOptions, RequiresMandatoryOptions
+class UniversalContainerIdConfiguration implements RequiresConfigContractId, ProvidesgetGefaultOptions, RequiresMandatoryOptions
 {
-    use ConfigurationTrait;
-
     public const TYPE_ARRAY_ITERATOR = 0;
     public const TYPE_ARRAY_OBJECT   = 1;
     public const TYPE_ARRAY_ARRAY    = 2;
