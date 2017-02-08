@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Component\OptionsResolver\Fixtures;
+namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
 use Interop\Config\ConfigurationTrait;
 use Interop\Config\RequiresConfig;

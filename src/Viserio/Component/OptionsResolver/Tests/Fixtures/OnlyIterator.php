@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\OptionsResolver\Fixtures;
+namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
 class OnlyIterator implements \Iterator
 {
