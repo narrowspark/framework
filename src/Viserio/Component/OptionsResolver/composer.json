@@ -2,7 +2,7 @@
     "name"       : "viserio/options-resolver",
     "type"       : "library",
     "description": "The Viserio Pagination package.",
-    "keywords"   : ["narrowspark", "viserio", "options", "option", "component"],
+    "keywords"   : ["narrowspark", "viserio", "options", "option", "component", "resolver"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {

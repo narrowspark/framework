@@ -2,39 +2,20 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Interop\Container\ContainerInterface;
+use Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
 
 abstract class AbstractOptionsResolver implements ResolverContract
 {
-    use ContainerAwareTrait;
-
-    /**
-     * Config class.
-     *
-     * @var \Viserio\Component\Contracts\OptionsResolver\RequiresConfig
-     */
-    protected $configClass;
-
-    /**
-     * Create a new file options resolver instance.
-     *
-     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
-     */
-    public function __construct(RequiresConfigContract $configClass)
-    {
-        $this->configClass = $configClass;
-    }
-
     /**
      * Checks if a mandatory param is missing, supports recursion.
      *
      * @param iterable $mandatoryOptions
      * @param iterable $config
      *
-     * @throws MandatoryOptionNotFoundException
+     * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
      */
     protected function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
     {
@@ -51,35 +32,11 @@ abstract class AbstractOptionsResolver implements ResolverContract
                 return;
             }
 
-            throw MandatoryOptionNotFoundException::missingOption(
-                $this->configClass->getDimensions(),
+            throw new MandatoryOptionNotFoundException(
+                $this->getConfigurableClass()->getDimensions(),
                 $useRecursion ? $key : $mandatoryOption
             );
         }
-    }
-
-    /**
-     * Checks if options can be retrieved from config and if not, default options (ProvidesDefaultOptions interface) or
-     * an empty array will be returned.
-     *
-     * @param iterable    $config
-     * @param string|null $configId Config name, must be provided if factory uses RequiresConfigId interface
-     *
-     * @return array options Default options or an empty array
-     */
-    protected function getFallbackOptions(iterable $config, ?string $configId = null): array
-    {
-        $options = [];
-
-        if ($this->canRetrieveOptions($config, $configId)) {
-            $options = $this->options($config, $configId);
-        }
-
-        if (empty($options) && $this instanceof ProvidesDefaultOptionsContract) {
-            $options = $this->configClass->getDefaultOptions();
-        }
-
-        return $options;
     }
 
     /**
@@ -98,7 +55,7 @@ abstract class AbstractOptionsResolver implements ResolverContract
     abstract protected function canRetrieveOptions(iterable $config, string $configId = null): bool;
 
     /**
-     * Get configuration.
+     * Get resolve the right configuration data.
      *
      * @param \Interop\Container\ContainerInterface|\ArrayAccess|array $data
      *
@@ -106,20 +63,12 @@ abstract class AbstractOptionsResolver implements ResolverContract
      *
      * @return array|\ArrayAccess
      */
-    protected function resolveConfiguration($data)
-    {
-        if ($data instanceof ContainerInterface) {
-            if ($data->has(RepositoryContract::class)) {
-                return $data->get(RepositoryContract::class);
-            } elseif ($data->has('config')) {
-                return $data->get('config');
-            } elseif ($data->has('options')) {
-                return $data->get('options');
-            }
-        } elseif ($data instanceof ArrayAccess || is_array($data)) {
-            return $data;
-        }
+    abstract protected function resolveConfiguration($data);
 
-        throw new RuntimeException('No configuration found.');
-    }
+    /**
+     * Returns a configurable class.
+     *
+     * @return \Viserio\Component\Contracts\OptionsResolver\RequiresConfig
+     */
+    abstract protected function getConfigurableClass();
 }
