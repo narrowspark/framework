@@ -4,11 +4,11 @@ namespace Viserio\Bridge\Twig\Commands;
 
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 
-class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryOptions
+class CleanCommand extends Command implements RequiresComponentConfigContract, RequiresMandatoryOptions
 {
     /**
      * {@inheritdoc}
@@ -59,10 +59,8 @@ class CleanCommand extends Command implements RequiresConfig, RequiresMandatoryO
         $container = $this->getContainer();
 
         if ($this->options === null) {
-            $optionsResolver = new OptionsResolver($this);
-            $optionsResolver->setContainer($this->container);
-
-            $this->options = $optionsResolver->resolve();
+            $optionsResolver = $container->get(ComponentOptionsResolver::class);
+            $this->options   = $optionsResolver->configure($this, $container)->resolve();
         }
 
         $files    = $container->get(FilesystemContract::class);

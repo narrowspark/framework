@@ -3,9 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
 use ArrayAccess;
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Iterator;
 use RuntimeException;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
@@ -16,10 +18,10 @@ class ComponentOptionsResolver extends AbstractOptionsResolver
     /**
      * {@inheritdoc}
      */
-    public function resolve(?iterable $config = null, string $configId = null): iterable
+    public function resolve(string $configId = null): array
     {
-        $configClass = $this->getConfigurableClass();
-        $config      = $this->resolveOptions($config);
+        $configClass = $this->configClass;
+        $config      = $this->config;
         $dimensions  = $configClass->getDimensions();
         $dimensions  = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
 
@@ -38,7 +40,9 @@ class ComponentOptionsResolver extends AbstractOptionsResolver
             }
 
             if (! isset($config[$dimension])) {
-                if (! $configClass instanceof RequiresMandatoryOptionsContract && $configClass instanceof ProvidesDefaultOptionsContract) {
+                if (! $configClass instanceof RequiresMandatoryOptionsContract &&
+                    $configClass instanceof ProvidesDefaultOptionsContract
+                ) {
                     break;
                 }
 
@@ -68,53 +72,6 @@ class ComponentOptionsResolver extends AbstractOptionsResolver
     }
 
     /**
-     * Checks if options are available depending on implemented interfaces and checks that the retrieved options from
-     * the dimensions path are an array or have implemented \ArrayAccess. The RequiresConfigId interface is supported.
-     *
-     * `canRetrieveOptions()` returning true does not mean that `options($config)` will not throw an exception.
-     * It does however mean that `options()` will not throw an `OptionNotFoundException`. Mandatory options are
-     * not checked.
-     *
-     * @param iterable    $config   Configuration
-     * @param string|null $configId Config name, must be provided if factory uses RequiresConfigId interface
-     *
-     * @return bool True if options depending on dimensions are available, otherwise false
-     */
-    protected function canRetrieveOptions(iterable $config, string $configId = null): bool
-    {
-        $dimensions = $this->configClass->getDimensions();
-        $dimensions = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
-
-        if ($this->configClass instanceof RequiresConfigIdContract) {
-            $dimensions[] = $configId;
-        }
-
-        foreach ($dimensions as $dimension) {
-            if (((array) $config !== $config && ! $config instanceof ArrayAccess)
-                || (! isset($config[$dimension]) && $this->configClass instanceof RequiresMandatoryOptionsContract)
-                || (! isset($config[$dimension]) && ! $this->configClass instanceof ProvidesDefaultOptionsContract)
-            ) {
-                return false;
-            }
-
-            if ($this->configClass instanceof ProvidesDefaultOptionsContract && ! isset($config[$dimension])) {
-                return true;
-            }
-
-            $config = $config[$dimension];
-        }
-
-        return (array) $config === $config || $config instanceof ArrayAccess;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigurableClass()
-    {
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function resolveConfiguration($data)
@@ -127,6 +84,8 @@ class ComponentOptionsResolver extends AbstractOptionsResolver
             } elseif ($data->has('options')) {
                 return $data->get('options');
             }
+        } elseif (is_iterable($data)) {
+            return $data;
         }
 
         throw new RuntimeException('No configuration found.');

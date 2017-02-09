@@ -9,7 +9,7 @@ use Twig_Environment;
 use Twig_Error;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 use Viserio\Component\View\Engines\AbstractBaseEngine;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
@@ -40,10 +40,8 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
         $this->container  = $container;
 
         if ($this->options === null) {
-            $optionsResolver = new OptionsResolver($this);
-            $optionsResolver->setContainer($this->container);
-
-            $this->options = $optionsResolver->resolve();
+            $optionsResolver = $container->get(ComponentOptionsResolver::class);
+            $this->options   = $optionsResolver->configure($this, $container)->resolve();
         }
 
         $this->twig = $this->container->get(Twig_Environment::class);

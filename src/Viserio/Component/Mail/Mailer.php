@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
 use Closure;
-use Interop\Config\RequiresConfig;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Narrowspark\Arr\Arr;
@@ -14,15 +13,14 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
-class Mailer implements MailerContract, RequiresConfig
+class Mailer implements MailerContract, RequiresComponentConfigContract
 {
-    use ConfigurationTrait;
     use ContainerAwareTrait;
-    use ConfigureOptionsTrait;
     use InvokerAwareTrait;
     use EventsAwareTrait;
     use ViewAwareTrait;
@@ -56,13 +54,23 @@ class Mailer implements MailerContract, RequiresConfig
     protected $failedRecipients = [];
 
     /**
+     * Config array.
+     *
+     * @var array|\ArrayAccess
+     */
+    protected $options;
+
+    /**
      * Create a new Mailer instance.
      *
      * @param \Interop\Container\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->configureOptions($container);
+        $this->container = $container;
+
+        $optionsResolver = $container->get(ComponentOptionsResolver::class);
+        $this->options   = $optionsResolver->configure($this, $container)->resolve();
 
         // If a "from" address is set, we will set it on the mailer so that all mail
         // messages sent by the applications will utilize the same "from" address
@@ -79,8 +87,7 @@ class Mailer implements MailerContract, RequiresConfig
             $this->alwaysTo($to['address'], $to['name']);
         }
 
-        $this->container = $container;
-        $this->swift     = $container->get(Swift_Mailer::class);
+        $this->swift = $this->container->get(Swift_Mailer::class);
     }
 
     /**

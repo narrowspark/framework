@@ -8,6 +8,7 @@ use Viserio\Bridge\Twig\Commands\DebugCommand;
 use Viserio\Bridge\Twig\Commands\LintCommand;
 use Viserio\Bridge\Twig\Providers\TwigBridgeCommandsServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class TwigBridgeCommandsServiceProviderTest extends TestCase
 {
@@ -15,6 +16,7 @@ class TwigBridgeCommandsServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new TwigBridgeCommandsServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
 
         static::assertEquals(
             [

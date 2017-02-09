@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Bridge\Twig\Commands\CleanCommand;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 
 class CleanCommandTest extends TestCase
 {
@@ -35,8 +36,9 @@ class CleanCommandTest extends TestCase
             ->with(__DIR__)
             ->andReturn(true);
         $container = new ArrayContainer([
-            FilesystemContract::class => $files,
-            'config'                  => [
+            ComponentOptionsResolver::class => new ComponentOptionsResolver(),
+            FilesystemContract::class       => $files,
+            'config'                        => [
                 'viserio' => [
                     'view' => [
                         'engines' => [
@@ -72,8 +74,9 @@ class CleanCommandTest extends TestCase
             ->once()
             ->andReturn(false);
         $container = new ArrayContainer([
-            FilesystemContract::class => $files,
-            'config'                  => [
+            ComponentOptionsResolver::class => new ComponentOptionsResolver(),
+            FilesystemContract::class       => $files,
+            'config'                        => [
                 'viserio' => [
                     'view' => [
                         'engines' => [

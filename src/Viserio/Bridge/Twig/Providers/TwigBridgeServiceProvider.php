@@ -12,14 +12,19 @@ use Viserio\Bridge\Twig\Extensions\DumpExtension;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, RequiresMandatoryOptions
+class TwigBridgeServiceProvider implements ServiceProvider, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
     private static $options;
 
     /**
@@ -73,11 +78,7 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        if (self::$options === null) {
-            $optionsResolver = new OptionsResolver(new static());
-            $optionsResolver->setContainer($container);
-            self::$options = $optionsResolver->resolve();
-        }
+        self::resolveOptions($container);
 
         $options = self::$options['engines']['twig']['options'];
 
@@ -106,11 +107,7 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
      */
     public static function createTwigLoader(ContainerInterface $container): Twig_LoaderInterface
     {
-        if (self::$options === null) {
-            $optionsResolver = new OptionsResolver(new static());
-            $optionsResolver->setContainer($container);
-            self::$options = $optionsResolver->resolve();
-        }
+        self::resolveOptions($container);
 
         $options = self::$options['engines']['twig'];
 
@@ -134,5 +131,21 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresConfig, Requ
         }
 
         return new Twig_Loader_Chain($loaders);
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options   = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

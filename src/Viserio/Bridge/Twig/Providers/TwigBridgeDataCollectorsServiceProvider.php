@@ -8,20 +8,19 @@ use Twig_Extension_Profiler;
 use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 use Viserio\Bridge\Twig\TwigEnvironment;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 
-class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, RequiresConfig, RequiresMandatoryOptions
+class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
-    public static function __callStatic($name, array $arguments)
-    {
-        if ($name !== 'configureOptionsStatic') {
-            return;
-        }
-
-        return $this->configureOptions($arguments[0]);
-    }
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -57,7 +56,7 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
     {
-        self::configureOptionsStatic($container);
+        self::resolveOptions($container);
 
         $profiler = $container->get(WebProfilerContract::class);
 
@@ -77,7 +76,7 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        self::configureOptionsStatic($container);
+        self::resolveOptions($container);
 
         $twig = $container->get(TwigEnvironment::class);
 
@@ -88,5 +87,21 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
         }
 
         return $twig;
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options   = $container->get(ComponentOptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

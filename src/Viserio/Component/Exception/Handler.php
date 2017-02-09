@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception;
 
-use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
@@ -15,11 +14,12 @@ use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
 use Viserio\Component\Exception\Filters\VerboseFilter;
 
-class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptions
+class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
     /**
      * Exception filters.

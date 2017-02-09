@@ -12,7 +12,7 @@ set +e
 bash -e <<TRY
     if [[ "$PHPUNIT" = true && "$CHECK_CS" = true && "$SEND_COVERAGE" = true ]]; then
         vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-text="php://stdout" --coverage-clover=coverage.xml;
-    elseif [[ "$PHPUNIT" = true ]]; then
+    elif [[ "$PHPUNIT" = true ]]; then
         vendor/bin/phpunit -c phpunit.xml.dist --verbose;
     fi
 

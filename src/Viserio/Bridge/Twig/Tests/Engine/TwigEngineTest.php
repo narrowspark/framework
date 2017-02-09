@@ -10,6 +10,7 @@ use Twig_Environment;
 use Twig_Loader_Filesystem;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 
 class TwigEngineTest extends TestCase
 {
@@ -56,8 +57,9 @@ class TwigEngineTest extends TestCase
             ]);
 
         $engine = new TwigEngine(new ArrayContainer([
-            RepositoryContract::class => $config,
-            Twig_Environment::class   => new Twig_Environment(
+            RepositoryContract::class       => $config,
+            ComponentOptionsResolver::class => new ComponentOptionsResolver(),
+            Twig_Environment::class         => new Twig_Environment(
                 new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),

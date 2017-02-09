@@ -5,7 +5,6 @@ namespace Viserio\Component\Exception;
 use Error;
 use ErrorException;
 use Exception;
-use Interop\Config\RequiresConfig;
 use Interop\Container\ContainerInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
@@ -20,17 +19,16 @@ use Throwable;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
 
-class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
+class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
-    use ConfigurationTrait;
     use ContainerAwareTrait;
-    use ConfigureOptionsTrait;
     use LoggerAwareTrait;
 
     /**
