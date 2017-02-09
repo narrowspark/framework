@@ -16,7 +16,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 
 class TwigBridgeServiceProvider implements ServiceProvider, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
@@ -143,7 +143,7 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresComponentCon
     private static function resolveOptions(ContainerInterface $container): void
     {
         if (self::$options === null) {
-            self::$options   = $container->get(OptionsResolver::class)
+            self::$options = $container->get(ComponentOptionsResolver::class)
                 ->configure(new static(), $container)
                 ->resolve();
         }

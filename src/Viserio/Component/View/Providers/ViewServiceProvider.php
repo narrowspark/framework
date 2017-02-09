@@ -11,6 +11,7 @@ use Viserio\Component\View\Engines\FileEngine;
 use Viserio\Component\View\Engines\PhpEngine;
 use Viserio\Component\View\Factory;
 use Viserio\Component\View\ViewFinder;
+use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 
 class ViewServiceProvider implements ServiceProvider
 {
@@ -57,7 +58,7 @@ class ViewServiceProvider implements ServiceProvider
 
     public static function createViewFinder(ContainerInterface $container): ViewFinder
     {
-        return new ViewFinder($container);
+        return new ViewFinder($container->get(FilesystemContract::class), $container);
     }
 
     public static function createViewFactory(ContainerInterface $container): FactoryContract

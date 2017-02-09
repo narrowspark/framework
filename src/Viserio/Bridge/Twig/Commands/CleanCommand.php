@@ -5,10 +5,10 @@ namespace Viserio\Bridge\Twig\Commands;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 
-class CleanCommand extends Command implements RequiresComponentConfigContract, RequiresMandatoryOptions
+class CleanCommand extends Command implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     /**
      * {@inheritdoc}

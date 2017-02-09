@@ -5,13 +5,13 @@ namespace Viserio\Component\View;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOptions
+class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -60,17 +60,17 @@ class ViewFinder implements FinderContract, RequiresConfig, RequiresMandatoryOpt
     /**
      * Create a new file view loader instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $container
+     * @param \Interop\Container\ContainerInterface|iterable     $options
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(FilesystemContract $files, $options)
     {
-        $this->files = $container->get(FilesystemContract::class);
+        $this->files = $files;
 
         if ($this->options === null) {
-            $optionsResolver = new OptionsResolver($this);
-            $optionsResolver->setContainer($container);
-
-            $this->options = $optionsResolver->resolve();
+            $this->options = (new ComponentOptionsResolver())
+                ->configure($this, $options)
+                ->resolve();
         }
 
         $this->paths = $this->options['paths'];
