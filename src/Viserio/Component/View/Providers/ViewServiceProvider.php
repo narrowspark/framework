@@ -4,6 +4,7 @@ namespace Viserio\Component\View\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\View\Engines\EngineResolver;
@@ -11,7 +12,6 @@ use Viserio\Component\View\Engines\FileEngine;
 use Viserio\Component\View\Engines\PhpEngine;
 use Viserio\Component\View\Factory;
 use Viserio\Component\View\ViewFinder;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 
 class ViewServiceProvider implements ServiceProvider
 {
