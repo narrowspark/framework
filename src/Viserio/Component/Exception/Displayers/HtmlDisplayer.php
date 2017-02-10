@@ -13,9 +13,11 @@ use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\ExceptionInfo;
+use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
 
 class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
+    use ComponentConfigurationTrait;
     use ResponseFactoryAwareTrait;
     use StreamFactoryAwareTrait;
 
@@ -36,15 +38,18 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * Create a new html displayer instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Exception\ExceptionInfo     $info
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
+     * @param \Interop\Container\ContainerInterface|inter    $data
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ExceptionInfo $info, ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory, $data)
     {
-        $this->info            = $container->get(ExceptionInfo::class);
-        $this->responseFactory = $container->get(ResponseFactoryInterface::class);
-        $this->streamFactory   = $container->get(StreamFactoryInterface::class);
+        $this->info            = $info;
+        $this->responseFactory = $responseFactory;
+        $this->streamFactory   = $streamFactory;
 
-        $this->configureOptions($container);
+        $this->configureOptions($data);
     }
 
     /**

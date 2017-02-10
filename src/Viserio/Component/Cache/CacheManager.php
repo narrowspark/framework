@@ -24,12 +24,25 @@ use Psr\Log\LoggerAwareInterface;
 use Redis;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
+use Interop\Container\ContainerInterface;
 
-class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface, ProvidesDefaultOptions
+class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface, ProvidesDefaultOptionsContract
 {
     use LoggerAwareTrait;
+
+    /**
+     * Create a new cache manager instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+
+        $this->container = $container;
+    }
 
     /**
      * {@inheritdoc}

@@ -25,10 +25,12 @@ use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
+use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
 
 class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
     use ContainerAwareTrait;
+    use ComponentConfigurationTrait;
     use LoggerAwareTrait;
 
     /**
@@ -39,11 +41,11 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     protected $exceptionIdentifier;
 
     /**
-     * Handler config.
+     * Config array.
      *
      * @var array|\ArrayAccess
      */
-    protected $config = [];
+    protected $options;
 
     /**
      * Exception transformers.
@@ -73,7 +75,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             $this->logger = $this->container->get(LoggerInterface::class);
         }
 
-        $this->configureOptions($container);
+        $this->configureOptions($this->container);
     }
 
     /**

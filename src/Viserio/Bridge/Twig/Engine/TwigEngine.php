@@ -8,13 +8,14 @@ use RuntimeException;
 use Twig_Environment;
 use Twig_Error;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
-use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\View\Engines\AbstractBaseEngine;
+use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
 
-class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
+class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsContract
 {
     use ContainerAwareTrait;
+    use ComponentConfigurationTrait;
 
     /**
      * Twig environment.
@@ -24,25 +25,15 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptions
     protected $twig;
 
     /**
-     * Config array.
-     *
-     * @var array|\ArrayAccess
-     */
-    protected $options;
-
-    /**
      * Create a new engine instance.
      *
      * @param \Interop\Container\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container  = $container;
+        $this->container = $container;
 
-        if ($this->options === null) {
-            $optionsResolver = $container->get(ComponentOptionsResolver::class);
-            $this->options   = $optionsResolver->configure($this, $container)->resolve();
-        }
+        $this->configureOptions($this->container);
 
         $this->twig = $this->container->get(Twig_Environment::class);
     }

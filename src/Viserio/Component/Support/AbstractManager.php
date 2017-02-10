@@ -6,19 +6,14 @@ use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
 
-abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptions
+abstract class AbstractManager implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use ContainerAwareTrait;
-
-    /**
-     * The registered custom driver creators.
-     *
-     * @var array
-     */
-    protected $extensions = [];
+    use ComponentConfigurationTrait;
 
     /**
      * The array of created "drivers".
@@ -28,27 +23,20 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
     protected $drivers = [];
 
     /**
-     * Config array.
+     * The registered custom driver creators.
      *
-     * @var array|\ArrayAccess
+     * @var array
      */
-    protected $options;
+    protected $extensions = [];
 
     /**
      * Create a new manager instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Interop\Container\ContainerInterface|iterable $config
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($data)
     {
-        $this->container = $container;
-
-        if ($this->options === null) {
-            $optionsResolver = new OptionsResolver($this);
-            $optionsResolver->setContainer($this->container);
-
-            $this->options = $optionsResolver->resolve();
-        }
+        $this->configureOptions($data);
     }
 
     /**

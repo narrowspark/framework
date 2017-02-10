@@ -17,10 +17,12 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
 
 class Mailer implements MailerContract, RequiresComponentConfigContract
 {
     use ContainerAwareTrait;
+    use ComponentConfigurationTrait;
     use InvokerAwareTrait;
     use EventsAwareTrait;
     use ViewAwareTrait;
@@ -54,23 +56,14 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     protected $failedRecipients = [];
 
     /**
-     * Config array.
-     *
-     * @var array|\ArrayAccess
-     */
-    protected $options;
-
-    /**
      * Create a new Mailer instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Swift_Mailer                                   $swiftMailer
+     * @param \Interop\Container\ContainerInterface|interable $data
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Swift_Mailer $swiftMailer, $data)
     {
-        $this->container = $container;
-
-        $optionsResolver = $container->get(ComponentOptionsResolver::class);
-        $this->options   = $optionsResolver->configure($this, $container)->resolve();
+        $this->configureOptions($data);
 
         // If a "from" address is set, we will set it on the mailer so that all mail
         // messages sent by the applications will utilize the same "from" address
@@ -87,7 +80,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
             $this->alwaysTo($to['address'], $to['name']);
         }
 
-        $this->swift = $this->container->get(Swift_Mailer::class);
+        $this->swift = $swiftMailer;
     }
 
     /**

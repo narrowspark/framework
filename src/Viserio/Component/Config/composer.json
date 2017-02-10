@@ -20,8 +20,8 @@
     "require": {
         "php"                                : "^7.1",
         "narrowspark/arr"                    : "^2.1",
-        "sandrokeil/interop-config"          : "^2.0",
-        "viserio/cotracts"                   : "self.version"
+        "viserio/cotracts"                   : "self.version",
+        "viserio/options-resolver"           : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",

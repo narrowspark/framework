@@ -6,12 +6,14 @@ use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
 
-abstract class AbstractConnectionManager implements RequiresConfig, RequiresMandatoryOptions
+abstract class AbstractConnectionManager implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use ContainerAwareTrait;
+    use ComponentConfigurationTrait;
 
     /**
      * The active connection instances.
@@ -28,27 +30,13 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     protected $extensions = [];
 
     /**
-     * Config array.
+     * Create a new connection manager instance.
      *
-     * @var array|\ArrayAccess
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
-    protected $options;
-
-    /**
-     * Create a new manager instance.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct($data)
     {
-        $this->container = $container;
-
-        if ($this->options === null) {
-            $optionsResolver = new OptionsResolver($this);
-            $optionsResolver->setContainer($this->container);
-
-            $this->options = $optionsResolver->resolve();
-        }
+        $this->configureOptions($data);
     }
 
     /**

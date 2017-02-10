@@ -9,12 +9,12 @@ use League\Flysystem\Cached\CachedAdapter;
 use Narrowspark\Arr\Arr;
 use Viserio\Component\Contracts\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Support\AbstractConnectionManager;
 
-class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptions
+class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
 {
     use CacheManagerAwareTrait;
 

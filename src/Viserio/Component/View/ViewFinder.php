@@ -9,10 +9,12 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
 
 class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
+    use ComponentConfigurationTrait;
 
     /**
      * The filesystem instance.
@@ -50,27 +52,16 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     protected $extensions = [];
 
     /**
-     * Config array.
-     *
-     * @var array|\ArrayAccess
-     */
-    protected $options;
-
-    /**
      * Create a new file view loader instance.
      *
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $container
-     * @param \Interop\Container\ContainerInterface|iterable     $options
+     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
+     * @param \Interop\Container\ContainerInterface|iterable     $data
      */
-    public function __construct(FilesystemContract $files, $options)
+    public function __construct(FilesystemContract $files, $data)
     {
         $this->files = $files;
 
-        if ($this->options === null) {
-            $this->options = (new ComponentOptionsResolver())
-                ->configure($this, $options)
-                ->resolve();
-        }
+        $this->configureOptions($data);
 
         $this->paths = $this->options['paths'];
 

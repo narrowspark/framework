@@ -54,10 +54,16 @@ class MailServiceProvider implements ServiceProvider
     public static function createMailer(ContainerInterface $container): MailerContract
     {
         if ($container->has(QueueContract::class)) {
-            $mailer = new QueueMailer($container);
+            $mailer = new QueueMailer(
+                $container->get(Swift_Mailer::class),
+                $container->get(QueueContract::class),
+                $container
+            );
         } else {
-            $mailer = new Mailer($container);
+            $mailer = new Mailer($container->get(Swift_Mailer::class), $container);
         }
+
+        $mailer->setContainer($container);
 
         if ($container->has(ViewFactoryContract::class)) {
             $mailer->setViewFactory($container->get(ViewFactoryContract::class));

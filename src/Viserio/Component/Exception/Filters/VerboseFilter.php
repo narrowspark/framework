@@ -2,23 +2,25 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Filters;
 
-use Interop\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Throwable;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
 
-class VerboseFilter implements FilterContract, RequiresConfig, RequiresMandatoryOptions
+class VerboseFilter implements FilterContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
+    use ComponentConfigurationTrait;
+
     /**
      * Create a new verbose filter instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Interop\Container\ContainerInterface|interable $data
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($data)
     {
-        $this->configureOptions($container);
+        $this->configureOptions($data);
     }
 
     /**

@@ -9,19 +9,19 @@ use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CacheBasedSessionHandler;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Support\AbstractManager;
 
-class SessionManager extends AbstractManager implements ProvidesDefaultOptions
+class SessionManager extends AbstractManager implements ProvidesDefaultOptionsContract
 {
     use EncrypterAwareTrait;
 
     /**
-     * Constructor.
+     * Create a new session manager instance.
      *
      * @param \Interop\Container\ContainerInterface             $container
      * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
@@ -30,10 +30,10 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptions
         ContainerInteropInterface $container,
         EncrypterContract $encrypter
     ) {
+        parent::__construct($container);
+
         $this->container = $container;
         $this->encrypter = $encrypter;
-
-        $this->configureOptions($container);
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Viserio\Component\Cookie\Traits;
 
 use InvalidArgumentException;
 
-trait CookieValidatorTratis
+trait CookieValidatorTrait
 {
     /**
      * Validates the name attribute.
