@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use StdClass;
 use Swift_Mailer;

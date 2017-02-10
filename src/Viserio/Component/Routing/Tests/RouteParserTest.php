@@ -3,8 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
-use Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException;
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\RouteParser;
