@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
 use Closure;
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Narrowspark\Arr\Arr;
 use Swift_Mailer;
@@ -16,8 +15,8 @@ use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
-use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
+use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 class Mailer implements MailerContract, RequiresComponentConfigContract
 {

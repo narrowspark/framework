@@ -26,6 +26,7 @@ trait ComponentConfigurationTrait
      *
      * @param \Interop\Container\ContainerInterface|iterable $config
      * @param string|null                                    $id
+     * @param mixed                                          $data
      *
      * @return void
      */

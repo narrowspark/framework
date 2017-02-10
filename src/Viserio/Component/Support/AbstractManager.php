@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -33,6 +32,7 @@ abstract class AbstractManager implements RequiresComponentConfigContract, Requi
      * Create a new manager instance.
      *
      * @param \Interop\Container\ContainerInterface|iterable $config
+     * @param mixed                                          $data
      */
     public function __construct($data)
     {

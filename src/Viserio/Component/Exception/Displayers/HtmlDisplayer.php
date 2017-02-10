@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
