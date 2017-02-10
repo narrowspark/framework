@@ -49,7 +49,7 @@ class VerboseFilterTest extends TestCase
         $request    = $this->mock(RequestInterface::class);
         $exception  = new Exception();
         $json       = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
-        $html       = new HtmlDisplayer($this->getContainer());
+        $html       = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $this->getContainer());
         $displayers = (new VerboseFilter($this->getContainer(true)))->filter([$json, $html], $request, $exception, $exception, 500);
 
         self::assertSame([$json, $html], $displayers);

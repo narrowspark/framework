@@ -88,11 +88,13 @@ class HtmlDisplayerTest extends TestCase
                 ],
             ]);
 
-        return new HtmlDisplayer(new ArrayContainer([
-            RepositoryContract::class       => $config,
-            ExceptionInfo::class            => new ExceptionInfo(),
-            ResponseFactoryInterface::class => new ResponseFactory(),
-            StreamFactoryInterface::class   => new StreamFactory(),
-        ]));
+        return new HtmlDisplayer(
+            new ExceptionInfo(),
+            new ResponseFactory(),
+            new StreamFactory(),
+            new ArrayContainer([
+                RepositoryContract::class => $config
+            ])
+        );
     }
 }

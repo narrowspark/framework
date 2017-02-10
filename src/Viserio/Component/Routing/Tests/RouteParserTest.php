@@ -143,10 +143,8 @@ class RouteParserTest extends TestCase
      */
     public function testInvalidRouteParsing($uri, $expectedExceptionType)
     {
-        $this->setExpectedExceptionRegExp(
-            $expectedExceptionType ?: RuntimeException::class,
-            '/.*/'
-        );
+        $this->expectedException              = $expectedExceptionType ?: RuntimeException::class;
+        $this->expectedExceptionMessageRegExp = '/.*/';
 
         (new RouteParser())->parse($uri, []);
     }

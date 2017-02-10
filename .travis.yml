@@ -15,15 +15,15 @@ matrix:
     - php: 7.1
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true PHPUNIT=true
     - php: 7.1
-      env: SETUP=lowest PHPUNIT=false
+      env: SETUP=lowest PHPUNIT=true
     - php: 7.1
-      env: SETUP=basic PHPUNIT=false
+      env: SETUP=basic PHPUNIT=true
     - php: 7.1
-      env: SETUP=stable PHPUNIT=false
+      env: SETUP=stable PHPUNIT=true
     - php: 7.1
       env: SETUP=basic PHPSTAN=true PHPUNIT=false
   allow_failures:
-    - env: SETUP=lowest PHPUNIT=false
+    - env: SETUP=lowest PHPUNIT=true
       php: 7.1
     - php: 7.1
       env: SETUP=basic PHPSTAN=true PHPUNIT=false

@@ -31,11 +31,8 @@ trait ConfigurationTrait
     public function configureOptions(iterable $data, string $id = null): void
     {
         if (static::$resolvedClass === null) {
-            $container = $data instanceof ContainerInterface ? $data :
-                $this->container instanceof ContainerInterface ? $this->container : null;
-
-            if ($container !== null && $container->has(OptionsResolver::class)) {
-                static::$resolvedClass = $container->get(OptionsResolver::class);
+            if (isset($this->container) && $this->container->has(OptionsResolver::class)) {
+                static::$resolvedClass = $this->container->get(OptionsResolver::class);
             } else {
                 static::$resolvedClass = new OptionsResolver();
             }

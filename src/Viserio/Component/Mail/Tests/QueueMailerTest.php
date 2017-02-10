@@ -170,10 +170,10 @@ class QueueMailerTest extends TestCase
     protected function getMailer()
     {
         $mailer = new QueueMailer(
+            $this->mock(Swift_Mailer::class),
+            $this->mock(QueueContract::class),
             new ArrayContainer([
-                'config'             => ['viserio' => ['mail' => []]],
-                Swift_Mailer::class  => $this->mock(Swift_Mailer::class),
-                QueueContract::class => $this->mock(QueueContract::class),
+                'config' => ['viserio' => ['mail' => []]],
             ])
         );
 
@@ -183,10 +183,10 @@ class QueueMailerTest extends TestCase
     protected function getMocks(): array
     {
         return [
+            $this->mock(Swift_Mailer::class),
+            $this->mock(QueueContract::class),
             new ArrayContainer([
-                'config'             => ['viserio' => ['mail' => []]],
-                Swift_Mailer::class  => $this->mock(Swift_Mailer::class),
-                QueueContract::class => $this->mock(QueueContract::class),
+                'config' => ['viserio' => ['mail' => []]],
             ]),
         ];
     }

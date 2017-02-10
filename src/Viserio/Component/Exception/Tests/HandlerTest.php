@@ -23,6 +23,7 @@ use Viserio\Component\Exception\Handler;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
+use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 
 class HandlerTest extends TestCase
 {
@@ -38,7 +39,7 @@ class HandlerTest extends TestCase
 
         $info = $this->mock(ExceptionInfo::class);
 
-        $handler->addDisplayer(new HtmlDisplayer($container));
+        $handler->addDisplayer(new HtmlDisplayer($info, new ResponseFactory(), new StreamFactory(), $container));
         $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
         $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
         $handler->addDisplayer(new WhoopsDisplayer());
@@ -189,6 +190,9 @@ class HandlerTest extends TestCase
         $container->shouldReceive('get')
             ->with(ExceptionInfo::class)
             ->andReturn($this->mock(ExceptionInfo::class));
+        $container->shouldReceive('has')
+            ->with(ComponentOptionsResolver::class)
+            ->andReturn(false);
 
         return $container;
     }

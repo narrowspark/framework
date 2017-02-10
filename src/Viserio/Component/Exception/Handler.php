@@ -36,16 +36,6 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     protected $displayers = [];
 
     /**
-     * Create a new exception handler instance.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getMandatoryOptions(): iterable
@@ -59,7 +49,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     public function getDefaultOptions(): iterable
     {
         return array_merge(
-            parent::defaultOptions(),
+            parent::getDefaultOptions(),
             [
                 'displayers'        => [],
                 'default_displayer' => HtmlDisplayer::class,

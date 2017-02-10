@@ -39,6 +39,8 @@ class TransportManagerTest extends TestCase
 
         $manager = new TransportManager(new ArrayContainer([
             RepositoryContract::class => $config,
+        ]));
+        $manager->setContainer(new ArrayContainer([
             LoggerInterface::class    => $this->mock(LoggerInterface::class),
         ]));
 

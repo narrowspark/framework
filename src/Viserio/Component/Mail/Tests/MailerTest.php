@@ -296,10 +296,10 @@ class MailerTest extends TestCase
      */
     public function testMailerToThrowExceptionOnView()
     {
-        $mailer = new Mailer(new ArrayContainer([
-            'config'            => ['viserio' => ['mail' => []]],
-            Swift_Mailer::class => $this->mock(Swift_Mailer::class),
-        ]));
+        $mailer = new Mailer(
+            $this->mock(Swift_Mailer::class),
+            ['config' => ['viserio' => ['mail' => []]],]
+        );
 
         $mailer->send(new StdClass());
     }
@@ -310,10 +310,10 @@ class MailerTest extends TestCase
      */
     public function testMailerToThrowExceptionOnCallback()
     {
-        $mailer = new Mailer(new ArrayContainer([
-            'config'            => ['viserio' => ['mail' => []]],
-            Swift_Mailer::class => $this->mock(Swift_Mailer::class),
-        ]));
+        $mailer = new Mailer(
+            $this->mock(Swift_Mailer::class),
+            ['config' => ['viserio' => ['mail' => []]],]
+        );
 
         $mailer->send('test', [], new StdClass());
     }
@@ -336,10 +336,8 @@ class MailerTest extends TestCase
     protected function getMocks(): array
     {
         return [
-            new ArrayContainer([
-                'config'            => ['viserio' => ['mail' => []]],
-                Swift_Mailer::class => $this->mock(Swift_Mailer::class),
-            ]),
+            $this->mock(Swift_Mailer::class),
+            'config' => ['viserio' => ['mail' => []]],
         ];
     }
 }

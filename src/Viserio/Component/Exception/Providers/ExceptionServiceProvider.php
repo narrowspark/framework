@@ -51,7 +51,12 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createHtmlDisplayer(ContainerInterface $container): HtmlDisplayer
     {
-        return new HtmlDisplayer($container);
+        return new HtmlDisplayer(
+            $container->get(ExceptionInfo::class),
+            $container->get(ResponseFactoryInterface::class),
+            $container->get(StreamFactoryInterface::class),
+            $container
+        );
     }
 
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer

@@ -24,17 +24,21 @@ trait ComponentConfigurationTrait
     /**
      * Configure and resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface|iterable $config
+     * @param \Interop\Container\ContainerInterface|iterable $data
      * @param string|null                                    $id
-     * @param mixed                                          $data
      *
      * @return void
      */
     public function configureOptions($data, string $id = null): void
     {
         if (static::$resolvedClass === null) {
-            $container = $data instanceof ContainerInterface ? $data :
-                $this->container instanceof ContainerInterface ? $this->container : null;
+            $container = null;
+
+            if ($data instanceof ContainerInterface) {
+                $container = $data;
+            } elseif (isset($this->container)) {
+                $container = $this->container instanceof ContainerInterface ? $this->container : null;
+            }
 
             if ($container !== null && $container->has(ComponentOptionsResolver::class)) {
                 static::$resolvedClass = $container->get(ComponentOptionsResolver::class);

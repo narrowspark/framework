@@ -354,9 +354,11 @@ class ViewFinderTest extends TestCase
                 ],
             ]);
 
-        return new ViewFinder(new ArrayContainer([
-            FilesystemContract::class => $this->mock(Filesystem::class),
-            RepositoryContract::class => $config,
-        ]));
+        return new ViewFinder(
+            $this->mock(Filesystem::class),
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
     }
 }
