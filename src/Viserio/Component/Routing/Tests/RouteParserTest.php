@@ -140,12 +140,11 @@ class RouteParserTest extends TestCase
      *
      * @param mixed $uri
      * @param mixed $expectedExceptionType
+     *
+     * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException
      */
-    public function testInvalidRouteParsing($uri, $expectedExceptionType)
+    public function testInvalidRouteParsing($uri)
     {
-        $this->expectedException              = $expectedExceptionType ?: RuntimeException::class;
-        $this->expectedExceptionMessageRegExp = '/.*/';
-
         (new RouteParser())->parse($uri, []);
     }
 
@@ -154,23 +153,18 @@ class RouteParserTest extends TestCase
         return [
             [
                 'abc',
-                InvalidRoutePatternException::class,
             ],
             [
                 '/test/{a/bc}',
-                InvalidRoutePatternException::class,
             ],
             [
                 '/test/{a{bc}',
-                InvalidRoutePatternException::class,
             ],
             [
                 '/test/{abc}}',
-                InvalidRoutePatternException::class,
             ],
             [
                 '/test/{a{bc}}',
-                InvalidRoutePatternException::class,
             ],
         ];
     }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
 use StdClass;
 use Swift_Mailer;
@@ -297,7 +298,7 @@ class MailerTest extends TestCase
     {
         $mailer = new Mailer(
             $this->mock(Swift_Mailer::class),
-            ['config' => ['viserio' => ['mail' => []]]]
+            ['viserio' => ['mail' => []]]
         );
 
         $mailer->send(new StdClass());
@@ -307,11 +308,26 @@ class MailerTest extends TestCase
      * @expectedException \Invoker\Exception\NotCallableException
      * @expectedExceptionMessage Instance of stdClass is not a callable
      */
+    public function testMailerToThrowExceptionOnCallbackWithContainer()
+    {
+        $mailer = new Mailer(
+            $this->mock(Swift_Mailer::class),
+            ['viserio' => ['mail' => []]]
+        );
+        $mailer->setContainer(new ArrayContainer([]));
+
+        $mailer->send('test', [], new StdClass());
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Callback is not valid.
+     */
     public function testMailerToThrowExceptionOnCallback()
     {
         $mailer = new Mailer(
             $this->mock(Swift_Mailer::class),
-            ['config' => ['viserio' => ['mail' => []]]]
+            ['viserio' => ['mail' => []]]
         );
 
         $mailer->send('test', [], new StdClass());
