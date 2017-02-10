@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
 use Closure;
-use Swift_Mailer;
 use Opis\Closure\SerializableClosure;
+use Swift_Mailer;
 use Viserio\Component\Contracts\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Component\Contracts\Queue\Job as JobContract;
 use Viserio\Component\Contracts\Queue\Queue as QueueContract;

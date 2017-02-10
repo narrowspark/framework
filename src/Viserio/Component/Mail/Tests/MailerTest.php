@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests;
 
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use StdClass;
@@ -298,7 +297,7 @@ class MailerTest extends TestCase
     {
         $mailer = new Mailer(
             $this->mock(Swift_Mailer::class),
-            ['config' => ['viserio' => ['mail' => []]],]
+            ['config' => ['viserio' => ['mail' => []]]]
         );
 
         $mailer->send(new StdClass());
@@ -312,7 +311,7 @@ class MailerTest extends TestCase
     {
         $mailer = new Mailer(
             $this->mock(Swift_Mailer::class),
-            ['config' => ['viserio' => ['mail' => []]],]
+            ['config' => ['viserio' => ['mail' => []]]]
         );
 
         $mailer->send('test', [], new StdClass());
