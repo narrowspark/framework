@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests;
 
 use Interop\Container\ContainerInterface;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,16 @@ use Viserio\Component\Queue\Tests\Fixture\InteractsWithQueue;
 class CallQueuedHandlerTest extends TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testCall()
     {

@@ -6,6 +6,7 @@ use Aws\Result;
 use Aws\Sqs\SqsClient;
 use Cake\Chronos\Chronos;
 use Interop\Container\ContainerInterface;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Queue\Connectors\SqsQueue;
@@ -66,6 +67,16 @@ class SqsQueueTest extends TestCase
                 ],
             ],
         ]);
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
     }
 
     public function testPopProperlyPopsJobOffOfSqs()

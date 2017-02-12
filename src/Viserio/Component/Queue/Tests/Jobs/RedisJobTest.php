@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Jobs;
 
 use Interop\Container\ContainerInterface;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -12,6 +13,16 @@ use Viserio\Component\Queue\Jobs\RedisJob;
 class RedisJobTest extends TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testReleaseProperlyReleasesJobOntoRedis()
     {

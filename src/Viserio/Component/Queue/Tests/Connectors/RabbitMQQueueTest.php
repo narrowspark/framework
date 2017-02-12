@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Interop\Container\ContainerInterface;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -15,6 +16,16 @@ use Viserio\Component\Queue\Jobs\RabbitMQJob;
 class RabbitMQQueueTest extends TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testPushProperlyPushesJobOnToRabbitMQ()
     {
