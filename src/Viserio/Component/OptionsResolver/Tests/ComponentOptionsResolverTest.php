@@ -62,6 +62,7 @@ class ComponentOptionsResolverTest extends TestCase
      *
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
      * @expectedExceptionMessage The configuration
+     *
      * @param mixed $config
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfConfigIdIsMissingWithRequiresConfigId($config)
@@ -139,6 +140,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsReturnsDataWithContainerId($config)
@@ -155,6 +157,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsReturnsData($config)
@@ -169,6 +172,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsReturnsDataWithFlexibleDimensions($config)
@@ -184,6 +188,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsReturnsDataWithNoDimensions($config): void
@@ -199,6 +204,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsReturnsDataWithDefaultOptions($config): void
@@ -257,6 +263,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsThatDefaultOptionsNotOverrideProvidedOptions($config): void
@@ -285,6 +292,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsChecksMandatoryOptions($config): void
@@ -300,6 +308,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsChecksMandatoryOptionsWithContainerId($config): void
@@ -320,6 +329,7 @@ class ComponentOptionsResolverTest extends TestCase
      *
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
      * @expectedExceptionMessage Mandatory option "params"
+     *
      * @param mixed $config
      */
     public function testOptionsThrowsMandatoryOptionNotFoundExceptionIfMandatoryOptionIsMissing($config): void
@@ -338,6 +348,7 @@ class ComponentOptionsResolverTest extends TestCase
      *
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
      * @expectedExceptionMessage Mandatory option "dbname"
+     *
      * @param mixed $config
      */
     public function testOptionsThrowsMandatoryOptionNotFoundExceptionIfMandatoryOptionRecursiveIsMissing($config): void
@@ -353,6 +364,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsWithRecursiveMandatoryOptionCheck($config): void
@@ -368,6 +380,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfig
+     *
      * @param mixed $config
      */
     public function testOptionsWithRecursiveArrayIteratorMandatoryOptionCheck($config): void
@@ -417,6 +430,7 @@ class ComponentOptionsResolverTest extends TestCase
 
     /**
      * @dataProvider providerConfigObjects
+     *
      * @param mixed $config
      * @param mixed $type
      */
