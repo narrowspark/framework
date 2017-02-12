@@ -5,7 +5,7 @@ namespace Viserio\Component\Mail\Tests;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use StdClass;
+use stdClass;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
@@ -301,7 +301,7 @@ class MailerTest extends TestCase
             ['viserio' => ['mail' => []]]
         );
 
-        $mailer->send(new StdClass());
+        $mailer->send(new stdClass());
     }
 
     /**
@@ -316,11 +316,11 @@ class MailerTest extends TestCase
         );
         $mailer->setContainer(new ArrayContainer([]));
 
-        $mailer->send('test', [], new StdClass());
+        $mailer->send('test', [], new stdClass());
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Callback is not valid.
      */
     public function testMailerToThrowExceptionOnCallback()
@@ -330,7 +330,7 @@ class MailerTest extends TestCase
             ['viserio' => ['mail' => []]]
         );
 
-        $mailer->send('test', [], new StdClass());
+        $mailer->send('test', [], new stdClass());
     }
 
     protected function setSwiftMailer($mailer)

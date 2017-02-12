@@ -5,7 +5,7 @@ namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class ConnectionMandatoryRecursiveContainerIdConfiguration implements RequiresConfigContractId, RequiresMandatoryOptions
+class ConnectionMandatoryRecursiveContainerIdConfiguration implements RequiresConfigIdContract, RequiresMandatoryOptionsContract
 {
     /**
      * @interitdoc

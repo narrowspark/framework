@@ -26,7 +26,8 @@
         "container-interop/service-provider"    : "^0.3",
         "narrowspark/testing-helper"            : "^1.5",
         "phpunit/phpunit"                       : "~5.7 || ^6.0",
-        "viserio/config"                        : "self.version"
+        "viserio/config"                        : "self.version",
+        "viserio/container"                     : "self.version"
     },
     "autoload": {
         "psr-4": {

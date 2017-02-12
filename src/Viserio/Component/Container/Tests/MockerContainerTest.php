@@ -4,7 +4,7 @@ namespace Viserio\Component\Container\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use StdClass;
+use stdClass;
 use Viserio\Component\Container\MockContainer;
 
 class MockerContainerTest extends TestCase
@@ -22,7 +22,7 @@ class MockerContainerTest extends TestCase
         $this->services  = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
 
         foreach (array_keys($this->services) as $id) {
-            $service     = new StdClass();
+            $service     = new stdClass();
             $service->id = $id;
 
             $this->services[$id] = $service;
@@ -58,7 +58,7 @@ class MockerContainerTest extends TestCase
 
     public function testThatServiceCanBeMocked()
     {
-        $mock = $this->container->mock('test.service_1', StdClass::class);
+        $mock = $this->container->mock('test.service_1', stdClass::class);
 
         self::assertTrue($this->container->has('test.service_1'));
         self::assertNotSame($this->services['test.service_1'], $mock);
@@ -71,13 +71,13 @@ class MockerContainerTest extends TestCase
      */
     public function testThatServiceCannotBeMockedIfItDoesNotExist()
     {
-        $this->container->mock('test.new_service', StdClass::class);
+        $this->container->mock('test.new_service', stdClass::class);
     }
 
     public function testThatMockedServicesAreAccessible()
     {
-        $mock1          = $this->container->mock('test.service_1', StdClass::class);
-        $mock2          = $this->container->mock('test.service_2', StdClass::class);
+        $mock1          = $this->container->mock('test.service_1', stdClass::class);
+        $mock2          = $this->container->mock('test.service_2', stdClass::class);
         $mockedServices = $this->container->getMockedServices();
 
         self::assertEquals(['mock::test.service_1' => $mock1, 'mock::test.service_2' => $mock2], $mockedServices);
@@ -85,8 +85,8 @@ class MockerContainerTest extends TestCase
 
     public function testThatServiceCanBeMockedOnce()
     {
-        $mock1 = $this->container->mock('test.service_1', StdClass::class);
-        $mock2 = $this->container->mock('test.service_1', StdClass::class);
+        $mock1 = $this->container->mock('test.service_1', stdClass::class);
+        $mock2 = $this->container->mock('test.service_1', stdClass::class);
 
         self::assertSame($mock1, $mock2);
         self::assertSame($mock2, $this->container->get('test.service_1'));
@@ -94,7 +94,7 @@ class MockerContainerTest extends TestCase
 
     public function testThatMockCanBeRemovedAndContainerFallsBackToTheOriginalService()
     {
-        $mock = $this->container->mock('test.service_1', StdClass::class);
+        $mock = $this->container->mock('test.service_1', stdClass::class);
         $this->container->unmock('test.service_1');
 
         self::assertTrue($this->container->has('test.service_1'));

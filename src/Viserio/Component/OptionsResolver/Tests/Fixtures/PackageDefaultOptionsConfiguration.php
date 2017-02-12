@@ -5,7 +5,7 @@ namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 
-class PackagegetGefaultOptionsConfiguration implements RequiresConfigContract, ProvidesgetGefaultOptions
+class PackageDefaultOptionsConfiguration implements RequiresConfigContract, ProvidesDefaultOptionsContract
 {
     /**
      * @interitdoc
@@ -18,7 +18,7 @@ class PackagegetGefaultOptionsConfiguration implements RequiresConfigContract, P
     /**
      * @interitdoc
      */
-    public function getGefaultOptions(): array
+    public function getDefaultOptions(): array
     {
         return [
             'minLength' => 2,

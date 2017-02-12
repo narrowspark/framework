@@ -6,7 +6,7 @@ use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as Provid
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class PackageDefaultAndgetMandatoryOptionsConfiguration implements RequiresConfigContract, ProvidesgetGefaultOptions, RequiresMandatoryOptions
+class PackageDefaultAndMandatoryOptionsConfiguration implements RequiresConfigContract, ProvidesDefaultOptionsContract, RequiresMandatoryOptionsContract
 {
     /**
      * @interitdoc
@@ -19,7 +19,7 @@ class PackageDefaultAndgetMandatoryOptionsConfiguration implements RequiresConfi
     /**
      * @interitdoc
      */
-    public function getGefaultOptions(): array
+    public function getDefaultOptions(): array
     {
         return [
             'minLength' => 2,

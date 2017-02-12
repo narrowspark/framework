@@ -7,7 +7,7 @@ use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use StdClass;
+use stdClass;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
@@ -26,7 +26,7 @@ class QueueMailerTest extends TestCase
     {
         $message = $this->mock(MessageContract::class);
 
-        $mockMailer = $this->mock(StdClass::class);
+        $mockMailer = $this->mock(stdClass::class);
         $mockMailer->shouldReceive('mail')
             ->once()
             ->with($message);

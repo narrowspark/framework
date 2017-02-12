@@ -48,7 +48,11 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      *
      * @var array
      */
-    protected $extensions = [];
+    protected $extensions = [
+        'php',
+        'phtml',
+        'css',
+    ];
 
     /**
      * Create a new file view loader instance.

@@ -6,7 +6,7 @@ use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as Provid
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class ConnectiongetGefaultOptionsMandatoryConfiguration implements RequiresConfigContract, RequiresMandatoryOptions, ProvidesgetGefaultOptions
+class ConnectionDefaultOptionsMandatoryConfiguration implements RequiresConfigContract, RequiresMandatoryOptionsContract, ProvidesDefaultOptionsContract
 {
     public function getDimensions(): iterable
     {
@@ -18,7 +18,7 @@ class ConnectiongetGefaultOptionsMandatoryConfiguration implements RequiresConfi
         return ['driverClass'];
     }
 
-    public function getGefaultOptions(): array
+    public function getDefaultOptions(): array
     {
         return [
             'params' => [

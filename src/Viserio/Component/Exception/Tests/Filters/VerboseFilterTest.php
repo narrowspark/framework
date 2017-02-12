@@ -8,7 +8,7 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Displayers\JsonDisplayer;
@@ -24,7 +24,7 @@ class VerboseFilterTest extends TestCase
 
     public function testDebugStaysOnTop()
     {
-        $request    = $this->mock(RequestInterface::class);
+        $request    = $this->mock(ServerRequestInterface::class);
         $exception  = new Exception();
         $verbose    = new WhoopsDisplayer();
         $standard   = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
@@ -35,7 +35,7 @@ class VerboseFilterTest extends TestCase
 
     public function testDebugIsRemoved()
     {
-        $request    = $this->mock(RequestInterface::class);
+        $request    = $this->mock(ServerRequestInterface::class);
         $exception  = new Exception();
         $verbose    = new WhoopsDisplayer();
         $standard   = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
@@ -46,7 +46,7 @@ class VerboseFilterTest extends TestCase
 
     public function testNoChangeInDebugMode()
     {
-        $request    = $this->mock(RequestInterface::class);
+        $request    = $this->mock(ServerRequestInterface::class);
         $exception  = new Exception();
         $json       = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
         $html       = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $this->getContainer());
@@ -57,7 +57,7 @@ class VerboseFilterTest extends TestCase
 
     public function testNoChangeNotInDebugMode()
     {
-        $request    = $this->mock(RequestInterface::class);
+        $request    = $this->mock(ServerRequestInterface::class);
         $exception  = new Exception();
         $json       = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
         $displayers = (new VerboseFilter($this->getContainer()))->filter([$json], $request, $exception, $exception, 500);

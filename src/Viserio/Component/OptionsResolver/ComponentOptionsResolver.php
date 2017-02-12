@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Iterator;
 use RuntimeException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
@@ -46,7 +47,7 @@ class ComponentOptionsResolver extends AbstractOptionsResolver
                     break;
                 }
 
-                throw OptionNotFoundException::missingOptions($this, $dimension, $configId);
+                throw new OptionNotFoundException($configClass, $dimension, $configId);
             }
 
             $config = $config[$dimension];
@@ -68,7 +69,7 @@ class ComponentOptionsResolver extends AbstractOptionsResolver
             );
         }
 
-        return $config;
+        return (array) $config;
     }
 
     /**

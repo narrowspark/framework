@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Filters;
 
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -44,7 +44,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
      */
     public function filter(
         array $displayers,
-        RequestInterface $request,
+        ServerRequestInterface $request,
         Throwable $original,
         Throwable $transformed,
         int $code

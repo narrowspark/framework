@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Tests\Fixture;
 
-use StdClass;
+use stdClass;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class FacadeObjectStub extends StaticalProxy
@@ -12,6 +12,6 @@ class FacadeObjectStub extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return new StdClass();
+        return new stdClass();
     }
 }

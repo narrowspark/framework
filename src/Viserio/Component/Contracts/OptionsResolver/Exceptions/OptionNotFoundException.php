@@ -4,6 +4,7 @@ namespace Viserio\Component\Contracts\OptionsResolver\Exceptions;
 
 use OutOfBoundsException;
 use Throwable;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 
 class OptionNotFoundException extends OutOfBoundsException
@@ -17,7 +18,7 @@ class OptionNotFoundException extends OutOfBoundsException
      * @param null|mixed                                                    $path
      */
     public function __construct(
-        RequiresConfigIdContract $factory,
+        RequiresConfigContract $factory,
         $currentDimension,
         ?string $configId,
         $code = 0,
@@ -48,7 +49,7 @@ class OptionNotFoundException extends OutOfBoundsException
                 '.'
             );
         } else {
-            $message = sprintf('No options set for configuration "%s"', implode('.', $position));
+            $message = sprintf('No options set for configuration "%s".', implode('.', $position));
         }
 
         parent::__construct(

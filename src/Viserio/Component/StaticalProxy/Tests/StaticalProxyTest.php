@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use StdClass;
+use stdClass;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\StaticalProxy\Tests\Fixture\ExceptionFacadeStub;
 use Viserio\Component\StaticalProxy\Tests\Fixture\FacadeObjectStub;
@@ -24,7 +24,7 @@ class StaticalProxyTest extends TestCase
         StaticalProxy::clearResolvedInstances();
 
         $container = $this->mock(ContainerInterface::class);
-        $container->shouldReceive('get')->andReturn(new StdClass());
+        $container->shouldReceive('get')->andReturn(new stdClass());
         FacadeStub::setContainer($container);
     }
 
@@ -40,10 +40,10 @@ class StaticalProxyTest extends TestCase
     public function testgetInstance()
     {
         $container = $this->mock(ContainerInterface::class);
-        $container->shouldReceive('get')->with('baz')->andReturn(new StdClass());
+        $container->shouldReceive('get')->with('baz')->andReturn(new stdClass());
         ProxyStub::setContainer($container);
 
-        self::assertEquals(new StdClass(), ProxyStub::getInstance());
+        self::assertEquals(new stdClass(), ProxyStub::getInstance());
     }
 
     public function testCallStatic()
@@ -83,13 +83,13 @@ class StaticalProxyTest extends TestCase
 
     public function testGetStaticalProxyRoot()
     {
-        self::assertEquals(new StdClass(), FacadeObjectStub::getStaticalProxyRoot());
+        self::assertEquals(new stdClass(), FacadeObjectStub::getStaticalProxyRoot());
     }
 
     public function testFacadeCallsUnderlyingApplication()
     {
         $container = $this->mock(ContainerInterface::class);
-        $mock      = Mock::mock('StdClass');
+        $mock      = Mock::mock('stdClass');
         $mock->shouldReceive('bar')->once()->andReturn('baz');
         $container->shouldReceive('get')->once()->andReturn($mock);
 
@@ -100,7 +100,7 @@ class StaticalProxyTest extends TestCase
     public function testShouldReceiveReturnsAMockeryMock()
     {
         $container = $this->mock(ContainerInterface::class);
-        $container->shouldReceive('get')->with('foo')->andReturn(new StdClass());
+        $container->shouldReceive('get')->with('foo')->andReturn(new stdClass());
 
         FacadeStub::setContainer($container);
 
@@ -113,7 +113,7 @@ class StaticalProxyTest extends TestCase
     public function testShouldReceiveCanBeCalledTwice()
     {
         $container = $this->mock(ContainerInterface::class);
-        $container->shouldReceive('get')->with('foo')->andReturn(new StdClass());
+        $container->shouldReceive('get')->with('foo')->andReturn(new stdClass());
 
         FacadeStub::setContainer($container);
 

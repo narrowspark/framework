@@ -41,13 +41,6 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     protected $exceptionIdentifier;
 
     /**
-     * Config array.
-     *
-     * @var array|\ArrayAccess
-     */
-    protected $options;
-
-    /**
      * Exception transformers.
      *
      * @var array

@@ -6,7 +6,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use StdClass;
+use stdClass;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\Application;
@@ -25,9 +25,9 @@ class ApplicationTest extends TestCase
 
     public function setUp()
     {
-        $stdClass       = new StdClass();
+        $stdClass       = new stdClass();
         $stdClass->foo  = 'hello';
-        $stdClass2      = new StdClass();
+        $stdClass2      = new stdClass();
         $stdClass2->foo = 'nope!';
 
         $container = new ArrayContainer([
@@ -176,7 +176,7 @@ class ApplicationTest extends TestCase
 
     public function testItShouldInjectTypeHintInPriority()
     {
-        $this->application->command('greet', function (OutputInterface $output, StdClass $param) {
+        $this->application->command('greet', function (OutputInterface $output, stdClass $param) {
             $output->write($param->foo);
         });
 
@@ -199,7 +199,7 @@ class ApplicationTest extends TestCase
 
     public function testItcanInjectUsingTypeHints()
     {
-        $this->application->command('greet', function (OutputInterface $output, StdClass $stdClass) {
+        $this->application->command('greet', function (OutputInterface $output, stdClass $stdClass) {
             $output->write($stdClass->foo);
         });
 

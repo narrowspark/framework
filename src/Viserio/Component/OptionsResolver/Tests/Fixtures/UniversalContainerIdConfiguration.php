@@ -6,7 +6,7 @@ use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as Provid
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class UniversalContainerIdConfiguration implements RequiresConfigContractId, ProvidesgetGefaultOptions, RequiresMandatoryOptions
+class UniversalContainerIdConfiguration implements RequiresConfigIdContract, ProvidesDefaultOptionsContract, RequiresMandatoryOptionsContract
 {
     public const TYPE_ARRAY_ITERATOR = 0;
     public const TYPE_ARRAY_OBJECT   = 1;
@@ -23,7 +23,7 @@ class UniversalContainerIdConfiguration implements RequiresConfigContractId, Pro
         'driverClass',
     ];
 
-    private static $getGefaultOptions = [
+    private static $getDefaultOptions = [
         'params' => [
             'host' => 'awesomehost',
             'port' => '4444',
@@ -47,9 +47,9 @@ class UniversalContainerIdConfiguration implements RequiresConfigContractId, Pro
         return $this->getData('getMandatoryOptions');
     }
 
-    public function getGefaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
-        return $this->getData('getGefaultOptions');
+        return $this->getData('getDefaultOptions');
     }
 
     private function getData($name)

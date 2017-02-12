@@ -195,9 +195,7 @@ class Factory implements FactoryContract
             throw new InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
         }
 
-        $engine = $this->extensions[$extension];
-
-        return $this->engines->resolve($engine);
+        return $this->engines->resolve($this->extensions[$extension]);
     }
 
     /**

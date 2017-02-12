@@ -19,7 +19,7 @@ trait ComponentConfigurationTrait
      *
      * @var \Viserio\Component\OptionsResolver\ComponentOptionsResolver
      */
-    protected static $resolvedClass;
+    protected $resolvedClass;
 
     /**
      * Configure and resolve component options.
@@ -31,22 +31,22 @@ trait ComponentConfigurationTrait
      */
     public function configureOptions($data, string $id = null): void
     {
-        if (static::$resolvedClass === null) {
+        if ($this->resolvedClass === null) {
             $container = null;
 
             if ($data instanceof ContainerInterface) {
                 $container = $data;
-            } elseif (isset($this->container)) {
-                $container = $this->container instanceof ContainerInterface ? $this->container : null;
+            } elseif (isset($this->container) && $this->container instanceof ContainerInterface) {
+                $container = $this->container;
             }
 
             if ($container !== null && $container->has(ComponentOptionsResolver::class)) {
-                static::$resolvedClass = $container->get(ComponentOptionsResolver::class);
+                $this->resolvedClass = $container->get(ComponentOptionsResolver::class);
             } else {
-                static::$resolvedClass = new ComponentOptionsResolver();
+                $this->resolvedClass = new ComponentOptionsResolver();
             }
         }
 
-        $this->options = static::$resolvedClass->configure($this, $data)->resolve($id);
+        $this->options = $this->resolvedClass->configure($this, $data)->resolve($id);
     }
 }

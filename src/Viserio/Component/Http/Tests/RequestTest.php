@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use StdClass;
+use stdClass;
 use Viserio\Component\Http\Request;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
@@ -407,7 +407,7 @@ class RequestTest extends AbstractMessageTest
      */
     public function testRequestToThrowException()
     {
-        new Request(new StdClass(), 'GET');
+        new Request(new stdClass(), 'GET');
     }
 
     /**

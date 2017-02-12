@@ -349,7 +349,6 @@ class ViewFinderTest extends TestCase
             ->andReturn([
                 'view' => [
                     'paths'      => [$this->getPath()],
-                    'extensions' => ['php', 'phtml', 'css'],
                 ],
             ]);
 

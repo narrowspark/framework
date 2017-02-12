@@ -4,7 +4,7 @@ namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 
-class ConnectionContainerIdConfiguration implements RequiresConfigContractId
+class ConnectionContainerIdConfiguration implements RequiresConfigIdContract
 {
     /**
      * @interitdoc

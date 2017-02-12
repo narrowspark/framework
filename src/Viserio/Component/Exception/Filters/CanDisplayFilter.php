@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Filters;
 
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 
@@ -13,7 +13,7 @@ class CanDisplayFilter implements FilterContract
      */
     public function filter(
         array $displayers,
-        RequestInterface $request,
+        ServerRequestInterface $request,
         Throwable $original,
         Throwable $transformed,
         int $code

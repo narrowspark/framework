@@ -18,7 +18,7 @@ trait ConfigurationTrait
      *
      * @var \Viserio\Component\OptionsResolver\OptionsResolver
      */
-    protected static $resolvedClass;
+    protected $resolvedClass;
 
     /**
      * Configure and resolve options.
@@ -30,14 +30,14 @@ trait ConfigurationTrait
      */
     public function configureOptions(iterable $data, string $id = null): void
     {
-        if (static::$resolvedClass === null) {
+        if ($this->resolvedClass === null) {
             if (isset($this->container) && $this->container->has(OptionsResolver::class)) {
-                static::$resolvedClass = $this->container->get(OptionsResolver::class);
+                $this->resolvedClass = $this->container->get(OptionsResolver::class);
             } else {
-                static::$resolvedClass = new OptionsResolver();
+                $this->resolvedClass = new OptionsResolver();
             }
         }
 
-        $this->options = static::$optionsResolver->configure($this, $data)->resolve($id);
+        $this->options = $this->optionsResolver->configure($this, $data)->resolve($id);
     }
 }

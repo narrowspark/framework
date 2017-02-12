@@ -4,7 +4,6 @@ namespace Viserio\Component\Exception;
 
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -185,7 +184,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     ): ResponseInterface {
         try {
             $response = $this->getResponse(
-                $container->get(StreamFactoryInterface::class)->createStream(),
+                $container->get(ServerRequestInterface::class),
                 $exception,
                 $transformed
             );
