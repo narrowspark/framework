@@ -9,8 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Bridge\Twig\Extensions\StrExtension;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class TwigEngineTest extends TestCase
 {
@@ -117,8 +117,8 @@ class TwigEngineTest extends TestCase
                     ],
                     'extensions' => [
                         new StrExtension(),
-                        StrExtension::class
-                    ]
+                        StrExtension::class,
+                    ],
                 ],
             ]);
         $config->shouldReceive('offsetGet')
@@ -137,8 +137,8 @@ class TwigEngineTest extends TestCase
                             ],
                             'extensions' => [
                                 new StrExtension(),
-                                StrExtension::class
-                            ]
+                                StrExtension::class,
+                            ],
                         ],
                     ],
                 ],
@@ -150,7 +150,7 @@ class TwigEngineTest extends TestCase
                 new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            StrExtension::class             => new StrExtension()
+            StrExtension::class             => new StrExtension(),
         ]));
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
