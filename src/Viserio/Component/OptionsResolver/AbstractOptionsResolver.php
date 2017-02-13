@@ -4,13 +4,13 @@ namespace Viserio\Component\OptionsResolver;
 
 use ArrayAccess;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException;
+use Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException;
+use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
-use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException;
+use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
 
 abstract class AbstractOptionsResolver implements ResolverContract
 {

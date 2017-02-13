@@ -6,7 +6,6 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Swift_MailTransport;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;

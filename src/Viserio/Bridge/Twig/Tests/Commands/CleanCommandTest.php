@@ -36,7 +36,7 @@ class CleanCommandTest extends TestCase
             ->with(__DIR__)
             ->andReturn(true);
         $container = new ArrayContainer([
-            OptionsResolver::class => new OptionsResolver(),
+            OptionsResolver::class          => new OptionsResolver(),
             FilesystemContract::class       => $files,
             'config'                        => [
                 'viserio' => [
@@ -74,7 +74,7 @@ class CleanCommandTest extends TestCase
             ->once()
             ->andReturn(false);
         $container = new ArrayContainer([
-            OptionsResolver::class => new OptionsResolver(),
+            OptionsResolver::class          => new OptionsResolver(),
             FilesystemContract::class       => $files,
             'config'                        => [
                 'viserio' => [

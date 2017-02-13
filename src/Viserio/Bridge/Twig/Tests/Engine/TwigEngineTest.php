@@ -72,7 +72,7 @@ class TwigEngineTest extends TestCase
 
         $engine = new TwigEngine(new ArrayContainer([
             RepositoryContract::class       => $config,
-            OptionsResolver::class => new OptionsResolver(),
+            OptionsResolver::class          => new OptionsResolver(),
             Twig_Environment::class         => new Twig_Environment(
                 new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']

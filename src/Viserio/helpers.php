@@ -30,7 +30,7 @@ if (! function_exists('dd')) {
     function dd(): void
     {
         array_map(function ($x) {
-            (new Dumper)->dump($x);
+            (new Dumper())->dump($x);
         }, func_get_args());
 
         die(1);
@@ -41,12 +41,13 @@ if (! function_exists('retry')) {
     /**
      * Retry an operation a given number of times.
      *
-     * @param  int  $times
-     * @param  callable  $callback
-     * @param  int  $sleep
-     * @return mixed
+     * @param int      $times
+     * @param callable $callback
+     * @param int      $sleep
      *
      * @throws \Throwable
+     *
+     * @return mixed
      */
     function retry($times, callable $callback, $sleep = 0)
     {
