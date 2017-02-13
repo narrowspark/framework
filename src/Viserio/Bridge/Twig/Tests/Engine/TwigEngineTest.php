@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
+use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Bridge\Twig\Extensions\StrExtension;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
@@ -24,9 +25,6 @@ class TwigEngineTest extends TestCase
 
         // Verify Mockery expectations.
         Mock::close();
-
-        $this->delTree(__DIR__ . '/../Cache');
-        $this->delTree(__DIR__ . '/../Cache2');
     }
 
     public function testGet()
@@ -34,25 +32,10 @@ class TwigEngineTest extends TestCase
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
             ->once()
-            ->with('paths')
-            ->andReturn(true);
-        $config->shouldReceive('offsetExists')
-            ->twice()
-            ->with('engines')
+            ->with('viserio')
             ->andReturn(true);
         $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('engines')
-            ->andReturn([
-                'twig' => [
-                    'options' => [
-                        'debug' => false,
-                        'cache' => __DIR__ . '/../Cache',
-                    ],
-                ],
-            ]);
-        $config->shouldReceive('offsetGet')
-            ->times(2)
+            ->times(3)
             ->with('viserio')
             ->andReturn([
                 'view' => [
@@ -93,38 +76,19 @@ class TwigEngineTest extends TestCase
     hallo
 </body>
 </html>'), trim($template));
+
+        $this->delTree(__DIR__ . '/../Cache');
     }
 
     public function testAddTwigExtensions()
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
+        $repository = $this->mock(RepositoryContract::class);
+        $repository->shouldReceive('has')
             ->once()
-            ->with('paths')
+            ->with('view')
             ->andReturn(true);
-        $config->shouldReceive('offsetExists')
-            ->twice()
-            ->with('engines')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('engines')
-            ->andReturn([
-                'twig' => [
-                    'options' => [
-                        'debug' => false,
-                        'cache' => __DIR__ . '/../Cache2',
-                    ],
-                    'extensions' => [
-                        new StrExtension(),
-                        StrExtension::class,
-                    ],
-                ],
-            ]);
-        $config->shouldReceive('offsetGet')
-            ->times(2)
-            ->with('viserio')
-            ->andReturn([
+        $config =  [
+            'viserio' => [
                 'view' => [
                     'paths'      => [
                         __DIR__ . '/../Fixtures/',
@@ -133,24 +97,25 @@ class TwigEngineTest extends TestCase
                         'twig' => [
                             'options' => [
                                 'debug' => false,
-                                'cache' => __DIR__ . '/../Cache2',
+                                'cache' => __DIR__ . '/../Cache',
                             ],
                             'extensions' => [
                                 new StrExtension(),
-                                StrExtension::class,
+                                ConfigExtension::class,
                             ],
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ];
 
         $engine = new TwigEngine(new ArrayContainer([
-            RepositoryContract::class       => $config,
+            'config'                        => $config,
             Twig_Environment::class         => new Twig_Environment(
                 new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            StrExtension::class             => new StrExtension(),
+            ConfigExtension::class => new ConfigExtension($repository),
         ]));
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
@@ -164,9 +129,50 @@ class TwigEngineTest extends TestCase
     <link rel="stylesheet" href="">
 </head>
 <body>
-    hallo
+    test_t_e_s_t
+    OK
 </body>
 </html>'), trim($template));
+
+        $this->delTree(__DIR__ . '/../Cache');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Twig extension [Viserio\Bridge\Twig\Extensions\ConfigExtension] is not a object.
+     */
+    public function testTwigExtensionsToThrowException()
+    {
+        $config =  [
+            'viserio' => [
+                'view' => [
+                    'paths'      => [
+                        __DIR__ . '/../Fixtures/',
+                    ],
+                    'engines'    => [
+                        'twig' => [
+                            'options' => [
+                                'debug' => false,
+                                'cache' => __DIR__ . '/../Cache',
+                            ],
+                            'extensions' => [
+                                ConfigExtension::class,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $engine = new TwigEngine(new ArrayContainer([
+            'config'                        => $config,
+            Twig_Environment::class         => new Twig_Environment(
+                new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
+                $config['viserio']['view']['engines']['twig']['options']
+            ),
+        ]));
+
+        $engine->get([]);
     }
 
     private function delTree($dir)

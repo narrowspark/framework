@@ -99,7 +99,7 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
     private static function resolveOptions(ContainerInterface $container): void
     {
         if (self::$options === null) {
-            self::$options   = $container->get(OptionsResolver::class)
+            self::$options = $container->get(OptionsResolver::class)
                 ->configure(new static(), $container)
                 ->resolve();
         }

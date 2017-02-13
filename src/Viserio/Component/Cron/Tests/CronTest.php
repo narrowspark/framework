@@ -403,6 +403,6 @@ class CronTest extends TestCase
             return $this->spliceIntoPosition(1, "*/{$x}");
         });
 
-        $this->assertEquals('*/6 * * * * *', $cron->everyXMinutes(6)->getExpression());
+        self::assertEquals('*/6 * * * * *', $cron->everyXMinutes(6)->getExpression());
     }
 }

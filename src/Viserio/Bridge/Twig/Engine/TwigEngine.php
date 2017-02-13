@@ -2,11 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
-use ErrorException;
 use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Twig_Environment;
-use Twig_Error;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
@@ -81,40 +79,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     {
         $twig = $this->addExtensions($this->twig, $this->options['engines']['twig']);
 
-        try {
-            $content = $twig->render($fileInfo['name'], $data);
-        } catch (Twig_Error $exception) {
-            $this->handleTwigError($exception);
-        }
-
-        return $content;
-    }
-
-    /**
-     * Handle a TwigError exception.
-     *
-     * @param \Twig_Error $exception
-     *
-     * @throws \Twig_Error|\ErrorException
-     */
-    protected function handleTwigError(Twig_Error $exception)
-    {
-        $templateName = $exception->getSourceContext()->getName();
-        $templateLine = $exception->getTemplateLine();
-        $file         = null;
-
-        if ($file !== null) {
-            $exception = new ErrorException(
-                $exception->getMessage(),
-                0,
-                1,
-                $templateName,
-                $templateLine,
-                $exception
-            );
-        }
-
-        throw $exception;
+        return $twig->render($fileInfo['name'], $data);
     }
 
     /**
@@ -133,7 +98,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
                     $twig->addExtension($extension);
                 } else {
                     throw new RuntimeException(sprintf(
-                        'Plates extension [%s] is not a object.',
+                        'Twig extension [%s] is not a object.',
                         (string) $extension
                     ));
                 }

@@ -623,9 +623,9 @@ class ContainerTest extends TestCase
 
             return $obj;
         });
-        $this->assertFalse(ContainerLazyExtendFixture::$initialized);
+        self::assertFalse(ContainerLazyExtendFixture::$initialized);
         $container->make(ContainerLazyExtendFixture::class);
-        $this->assertTrue(ContainerLazyExtendFixture::$initialized);
+        self::assertTrue(ContainerLazyExtendFixture::$initialized);
     }
 
     public function testContextualBindingWorksForExistingInstancedBindings()
@@ -638,7 +638,7 @@ class ContainerTest extends TestCase
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerImplementationTwoFixture::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerImplementationTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -654,7 +654,7 @@ class ContainerTest extends TestCase
 
         $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -671,7 +671,7 @@ class ContainerTest extends TestCase
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectTwoFixture::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -688,7 +688,7 @@ class ContainerTest extends TestCase
         $container->instance('stub', new ContainerImplementationFixture());
         $container->alias('stub', ContainerContractFixtureInterface::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -705,7 +705,7 @@ class ContainerTest extends TestCase
         $container->bind('stub', ContainerImplementationFixture::class);
         $container->alias('stub', ContainerContractFixtureInterface::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -722,12 +722,12 @@ class ContainerTest extends TestCase
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectInstantiationsFixture::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectInstantiationsFixture::class,
             $container->make(ContainerTestContextInjectTwoFixture::class)->impl
         );
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerImplementationFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -742,7 +742,7 @@ class ContainerTest extends TestCase
         $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
         $container->instance('ContainerTestContextInjectInstantiationsFixture', new ContainerTestContextInjectInstantiationsFixture());
 
-        $this->assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
+        self::assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
 
         $container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
@@ -753,6 +753,6 @@ class ContainerTest extends TestCase
         $container->make(ContainerTestContextInjectOneFixture::class);
         $container->make(ContainerTestContextInjectOneFixture::class);
 
-        $this->assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
+        self::assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
     }
 }

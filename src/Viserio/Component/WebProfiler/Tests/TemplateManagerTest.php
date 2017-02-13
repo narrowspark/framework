@@ -33,7 +33,7 @@ class TemplateManagerTest extends TestCase
     {
         $original = "This is a <a href=''>Foo</a> test string";
 
-        $this->assertEquals(
+        self::assertEquals(
             TemplateManager::escape($original),
             'This is a &lt;a href=&#039;&#039;&gt;Foo&lt;/a&gt; test string'
         );
@@ -46,7 +46,7 @@ class TemplateManagerTest extends TestCase
         $original = base64_decode('VGhpcyBpcyBhbiBpbGxlZ2FsIHV0Zi04IHNlcXVlbmNlOiDD');
 
         // Test that the escaped string is kinda similar in length, not empty
-        $this->assertLessThan(
+        self::assertLessThan(
             10,
             abs(mb_strlen($original) - mb_strlen(TemplateManager::escape($original)))
         );

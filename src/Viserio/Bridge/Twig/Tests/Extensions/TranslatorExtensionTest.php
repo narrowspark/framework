@@ -27,11 +27,11 @@ class TranslatorExtensionTest extends TestCase
         $extension = new TranslatorExtension($this->mock(TranslatorContract::class));
         $functions = $extension->getFunctions();
 
-        $this->assertEquals('trans', $functions[0]->getName());
-        $this->assertEquals('trans', $functions[0]->getCallable()[1]);
+        self::assertEquals('trans', $functions[0]->getName());
+        self::assertEquals('trans', $functions[0]->getCallable()[1]);
 
-        $this->assertEquals('trans_choice', $functions[1]->getName());
-        $this->assertEquals('transChoice', $functions[1]->getCallable()[1]);
+        self::assertEquals('trans_choice', $functions[1]->getName());
+        self::assertEquals('transChoice', $functions[1]->getCallable()[1]);
     }
 
     public function testGetFilters()
@@ -39,16 +39,16 @@ class TranslatorExtensionTest extends TestCase
         $extension = new TranslatorExtension($this->mock(TranslatorContract::class));
         $filter    = $extension->getFilters();
 
-        $this->assertEquals('trans', $filter[0]->getName());
-        $this->assertEquals('trans', $filter[0]->getCallable()[1]);
+        self::assertEquals('trans', $filter[0]->getName());
+        self::assertEquals('trans', $filter[0]->getCallable()[1]);
 
-        $this->assertEquals('trans_choice', $filter[1]->getName());
-        $this->assertEquals('transChoice', $filter[1]->getCallable()[1]);
+        self::assertEquals('trans_choice', $filter[1]->getName());
+        self::assertEquals('transChoice', $filter[1]->getCallable()[1]);
     }
 
     public function testGetName()
     {
-        $this->assertEquals(
+        self::assertEquals(
             'Viserio_Bridge_Twig_Extension_Translator',
             (new TranslatorExtension($this->mock(TranslatorContract::class)))->getName()
         );

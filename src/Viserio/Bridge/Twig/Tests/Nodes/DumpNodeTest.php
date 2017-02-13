@@ -30,7 +30,7 @@ if ($this->env->isDebug()) {
 }
 
 EOTXT;
-        $this->assertSame($expected, $compiler->compile($node)->getSource());
+        self::assertSame($expected, $compiler->compile($node)->getSource());
     }
 
     public function testIndented()
@@ -51,7 +51,7 @@ EOTXT;
     }
 
 EOTXT;
-        $this->assertSame($expected, $compiler->compile($node, 1)->getSource());
+        self::assertSame($expected, $compiler->compile($node, 1)->getSource());
     }
 
     public function testOneVar()
@@ -71,7 +71,7 @@ if ($this->env->isDebug()) {
 EOTXT;
         $expected = preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
 
-        $this->assertSame($expected, $compiler->compile($node)->getSource());
+        self::assertSame($expected, $compiler->compile($node)->getSource());
     }
 
     public function testMultiVars()
@@ -95,6 +95,6 @@ if ($this->env->isDebug()) {
 EOTXT;
         $expected = preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
 
-        $this->assertSame($expected, $compiler->compile($node)->getSource());
+        self::assertSame($expected, $compiler->compile($node)->getSource());
     }
 }

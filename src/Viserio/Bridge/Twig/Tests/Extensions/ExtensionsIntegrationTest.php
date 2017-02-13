@@ -14,79 +14,83 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
-// class ExtensionsIntegrationTest extends Twig_Test_IntegrationTestCase
-// {
-//     use MockeryTrait;
+if (! class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase');
+}
 
-//     public function tearDown()
-//     {
-//         parent::tearDown();
+class ExtensionsIntegrationTest extends Twig_Test_IntegrationTestCase
+{
+    use MockeryTrait;
 
-//         $this->allowMockingNonExistentMethods(true);
+    public function tearDown()
+    {
+        parent::tearDown();
 
-//         // Verify Mockery expectations.
-//         Mock::close();
-//     }
+        $this->allowMockingNonExistentMethods(true);
 
-//     public function getExtensions()
-//     {
-//         return [
-//             new SessionExtension($this->getSessionMock()),
-//             new StrExtension(),
-//             new ConfigExtension($this->getConfigMock()),
-//             new DumpExtension(),
-//             new TranslatorExtension($this->getTranslatorMock()),
-//         ];
-//     }
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
-//     public function getFixturesDir()
-//     {
-//         return __DIR__ . '/../Fixtures/';
-//     }
+    public function getExtensions()
+    {
+        return [
+            new SessionExtension($this->getSessionMock()),
+            new StrExtension(),
+            new ConfigExtension($this->getConfigMock()),
+            new DumpExtension(),
+            new TranslatorExtension($this->getTranslatorMock()),
+        ];
+    }
 
-//     public function getLegacyTests()
-//     {
-//         return $this->getTests('testLegacyIntegration', false);
-//     }
+    public function getFixturesDir()
+    {
+        return __DIR__ . '/../Fixtures/';
+    }
 
-//     private function getSessionMock()
-//     {
-//         $session = $this->mock(StoreContract::class);
-//         $session->shouldReceive('get')
-//             ->with('test')
-//             ->andReturn('test');
-//         $session->shouldReceive('has')
-//             ->with('test')
-//             ->andReturn(true);
-//         $session->shouldReceive('getToken')
-//             ->andReturn('18191ds198189d1as89');
+    public function getLegacyTests()
+    {
+        return $this->getTests('testLegacyIntegration', false);
+    }
 
-//         return $session;
-//     }
+    private function getSessionMock()
+    {
+        $session = $this->mock(StoreContract::class);
+        $session->shouldReceive('get')
+            ->with('test')
+            ->andReturn('test');
+        $session->shouldReceive('has')
+            ->with('test')
+            ->andReturn(true);
+        $session->shouldReceive('getToken')
+            ->andReturn('18191ds198189d1as89');
 
-//     private function getConfigMock()
-//     {
-//         $config = $this->mock(RepositoryContract::class);
-//         $config->shouldReceive('get')
-//             ->with('test')
-//             ->andReturn('test');
-//         $config->shouldReceive('has')
-//             ->with('test')
-//             ->andReturn(true);
+        return $session;
+    }
 
-//         return $config;
-//     }
+    private function getConfigMock()
+    {
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('get')
+            ->with('test')
+            ->andReturn('test');
+        $config->shouldReceive('has')
+            ->with('test')
+            ->andReturn(true);
 
-//     private function getTranslatorMock()
-//     {
-//         $translator = $this->mock(TranslatorContract::class);
-//         $translator->shouldReceive('trans')
-//             ->with('test')
-//             ->andReturn('test');
-//         $translator->shouldReceive('transChoice')
-//             ->with('{0} There are no apples|{1} There is one apple', 1)
-//             ->andReturn('There is one apple');
+        return $config;
+    }
 
-//         return $translator;
-//     }
-// }
+    private function getTranslatorMock()
+    {
+        $translator = $this->mock(TranslatorContract::class);
+        $translator->shouldReceive('trans')
+            ->with('test')
+            ->andReturn('test');
+        $translator->shouldReceive('transChoice')
+            ->with('{0} There are no apples|{1} There is one apple', 1)
+            ->andReturn('There is one apple');
+
+        return $translator;
+    }
+}

@@ -48,27 +48,27 @@ class EventTest extends TestCase
 
     public function testGetName()
     {
-        $this->assertSame('test', $this->event->getName());
+        self::assertSame('test', $this->event->getName());
     }
 
     public function testGetTarget()
     {
-        $this->assertEquals($this, $this->event->getTarget());
+        self::assertEquals($this, $this->event->getTarget());
     }
 
     public function testGetParams()
     {
         $p = $this->event->getParams();
 
-        $this->assertArrayHasKey('invoker', $p);
+        self::assertArrayHasKey('invoker', $p);
     }
 
     public function testStopPropagation()
     {
-        $this->assertFalse($this->event->isPropagationStopped());
+        self::assertFalse($this->event->isPropagationStopped());
 
         $this->event->stopPropagation();
 
-        $this->assertTrue($this->event->isPropagationStopped());
+        self::assertTrue($this->event->isPropagationStopped());
     }
 }

@@ -294,7 +294,7 @@ class ApplicationTest extends TestCase
 
         $this->application->setDefaultCommand('run');
 
-        $this->assertOutputIs('', 'hello');
+        self::assertOutputIs('', 'hello');
     }
 
     /**

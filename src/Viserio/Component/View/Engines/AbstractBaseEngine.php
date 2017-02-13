@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Engines;
 
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
 
-abstract class AbstractBaseEngine implements EngineContract, RequiresConfig, RequiresMandatoryOptions
+abstract class AbstractBaseEngine implements EngineContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     /**
      * {@inheritdoc}

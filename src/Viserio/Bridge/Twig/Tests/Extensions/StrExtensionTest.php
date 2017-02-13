@@ -32,16 +32,16 @@ class StrExtensionTest extends TestCase
     {
         $string = $this->getString();
 
-        $this->assertEquals(Str::class, $string->getCallback());
+        self::assertEquals(Str::class, $string->getCallback());
 
         $string->setCallback('FooBar');
 
-        $this->assertEquals('FooBar', $string->getCallback());
+        self::assertEquals('FooBar', $string->getCallback());
     }
 
     public function testName()
     {
-        $this->assertInternalType('string', $this->getString()->getName());
+        self::assertInternalType('string', $this->getString()->getName());
     }
 
     public function testFunctionCallback()
@@ -53,7 +53,7 @@ class StrExtensionTest extends TestCase
         $string = $this->getString();
         $string->setCallback($mock);
 
-        $this->assertInternalType('array', $string->getFunctions());
+        self::assertInternalType('array', $string->getFunctions());
 
         call_user_func($string->getFunctions()[0]->getCallable(), 'foo_bar');
     }
@@ -63,7 +63,7 @@ class StrExtensionTest extends TestCase
         $string   = $this->getString();
         $function = $string->getFunctions()[0];
 
-        $this->assertFalse(in_array('html', $function->getSafe($this->mock('Twig_Node'))));
+        self::assertFalse(in_array('html', $function->getSafe($this->mock('Twig_Node'))));
     }
 
     public function testCustomFilters()
@@ -71,14 +71,14 @@ class StrExtensionTest extends TestCase
         $string  = $this->getString();
         $filters = $string->getFilters();
 
-        $this->assertInternalType('array', $filters);
+        self::assertInternalType('array', $filters);
 
         foreach ($filters as $filter) {
             if (! in_array($filter->getName(), $this->customFilters)) {
                 continue;
             }
 
-            $this->assertEquals(Str::class, $filter->getCallable()[0]);
+            self::assertEquals(Str::class, $filter->getCallable()[0]);
         }
     }
 

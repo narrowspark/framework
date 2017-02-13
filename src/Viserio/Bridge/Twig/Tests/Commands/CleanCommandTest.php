@@ -61,7 +61,7 @@ class CleanCommandTest extends TestCase
 
         $output = $tester->getDisplay();
 
-        $this->assertContains('Twig cache failed to be cleaned.', $output);
+        self::assertContains('Twig cache failed to be cleaned.', $output);
     }
 
     public function testSuccess()
@@ -99,6 +99,6 @@ class CleanCommandTest extends TestCase
 
         $output = $tester->getDisplay();
 
-        $this->assertContains('Twig cache cleaned.', $output);
+        self::assertContains('Twig cache cleaned.', $output);
     }
 }

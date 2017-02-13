@@ -4,13 +4,13 @@ namespace Viserio\Bridge\Twig\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Twig_Environment as TwigEnvironment;
 use Twig_LexerInterface;
 use Twig_Loader_Array;
 use Twig_Loader_Chain;
 use Twig_LoaderInterface;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
-use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
@@ -109,18 +109,18 @@ class TwigBridgeServiceProvider implements ServiceProvider, RequiresComponentCon
     {
         self::resolveOptions($container);
 
+        $loaders = [];
         $options = self::$options['engines']['twig'];
-
-        $loaders = [
-            new TwigLoader(
-                $container->get(FilesystemContract::class),
-                $container->get(FinderContract::class)
-            ),
-        ];
+        $loader  = new TwigLoader(
+            $container->get(FilesystemContract::class),
+            $container->get(FinderContract::class)
+        );
 
         if (isset($options['file_extension'])) {
-            $loaders->setExtension($options['file_extension']);
+            $loader->setExtension($options['file_extension']);
         }
+
+        $loaders[] = $loader;
 
         if (isset($options['templates']) && is_array($options['templates'])) {
             $loaders[] = new Twig_Loader_Array($options['templates']);
