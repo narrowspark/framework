@@ -6,11 +6,11 @@ use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 class CleanCommand extends Command implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
-    use ComponentConfigurationTrait;
+    use ConfigurationTrait;
 
     /**
      * {@inheritdoc}

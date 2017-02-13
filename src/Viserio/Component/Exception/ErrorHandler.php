@@ -25,12 +25,12 @@ use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
-use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
     use ContainerAwareTrait;
-    use ComponentConfigurationTrait;
+    use ConfigurationTrait;
     use LoggerAwareTrait;
 
     /**

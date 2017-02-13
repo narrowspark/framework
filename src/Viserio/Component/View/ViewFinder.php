@@ -7,13 +7,13 @@ use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
-    use ComponentConfigurationTrait;
+    use ConfigurationTrait;
 
     /**
      * The filesystem instance.
@@ -52,6 +52,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         'php',
         'phtml',
         'css',
+        'js',
     ];
 
     /**

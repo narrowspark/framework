@@ -7,12 +7,12 @@ use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 abstract class AbstractConnectionManager implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use ContainerAwareTrait;
-    use ComponentConfigurationTrait;
+    use ConfigurationTrait;
 
     /**
      * The active connection instances.

@@ -29,17 +29,44 @@ if (! function_exists('dd')) {
      */
     function dd(): void
     {
-        $caller = debug_backtrace()[0];
-        $caller = $caller['function'] . ':' . $caller['line'];
-
-        // if (config('app.debug')) {
-        //     array_map(function ($x) {
-        //         (new Dumper)->dump($x);
-        //     }, array_merge(["Executed in $caller"], func_get_args()));
-        // } else {
-        //     logger()->warning("Attempted to use dd outside debug mode in $caller", func_get_args());
-        // }
+        array_map(function ($x) {
+            (new Dumper)->dump($x);
+        }, func_get_args());
 
         die(1);
+    }
+}
+
+if (! function_exists('retry')) {
+    /**
+     * Retry an operation a given number of times.
+     *
+     * @param  int  $times
+     * @param  callable  $callback
+     * @param  int  $sleep
+     * @return mixed
+     *
+     * @throws \Throwable
+     */
+    function retry($times, callable $callback, $sleep = 0)
+    {
+        $times--;
+        beginning:
+
+        try {
+            return $callback();
+        } catch (\Throwable $e) {
+            if (! $times) {
+                throw $e;
+            }
+
+            $times--;
+
+            if ($sleep) {
+                usleep($sleep * 1000);
+            }
+
+            goto beginning;
+        }
     }
 }

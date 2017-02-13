@@ -24,7 +24,9 @@ class ConfigExtensionTest extends TestCase
 
     public function testGetFunctions()
     {
-        $extension = new ConfigExtension($this->mock(RepositoryContract::class));
+        $config = $this->mock(RepositoryContract::class);
+
+        $extension = new ConfigExtension($config);
         $functions = $extension->getFunctions();
 
         $this->assertEquals('config', $functions[0]->getName());

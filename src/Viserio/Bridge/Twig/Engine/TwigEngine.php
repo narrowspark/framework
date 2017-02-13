@@ -9,13 +9,13 @@ use Twig_Environment;
 use Twig_Error;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\View\Engines\AbstractBaseEngine;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsContract
 {
     use ContainerAwareTrait;
-    use ComponentConfigurationTrait;
+    use ConfigurationTrait;
 
     /**
      * Twig environment.

@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-class ComponentConfigurationTraitAndContainerAwareConfiguration implements RequiresConfigContract
+class ConfigurationTraitAndContainerAwareConfiguration implements RequiresComponentConfigContract
 {
     use ContainerAwareTrait;
-    use ComponentConfigurationTrait;
+    use ConfigurationTrait;
 
     public function getOptions($data)
     {

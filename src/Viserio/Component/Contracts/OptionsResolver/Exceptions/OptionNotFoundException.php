@@ -6,6 +6,8 @@ use OutOfBoundsException;
 use Throwable;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 
 class OptionNotFoundException extends OutOfBoundsException
 {
@@ -26,9 +28,9 @@ class OptionNotFoundException extends OutOfBoundsException
         $path = null
     ) {
         $position   = [];
-        $dimensions = $factory->getDimensions();
+        $dimensions = $factory instanceof RequiresComponentConfigContract ? $factory->getDimensions() : [];
 
-        if ($factory instanceof RequiresConfigIdContract) {
+        if ($factory instanceof RequiresConfigIdContract || $factory instanceof RequiresComponentConfigIdContract) {
             $dimensions[] = $configId;
         }
 
@@ -40,16 +42,13 @@ class OptionNotFoundException extends OutOfBoundsException
             }
         }
 
-        if ($factory instanceof RequiresConfigIdContract &&
+        if (($factory instanceof RequiresConfigIdContract || $factory instanceof RequiresComponentConfigIdContract) &&
             $configId === null &&
             count($dimensions) === count($position)
         ) {
-            $message = rtrim(
-                sprintf('The configuration "%s" needs a config id.', implode('.', $position)),
-                '.'
-            );
+            $message = sprintf('The configuration "%s" needs a config id.', rtrim(implode('.', $position), '.'));
         } else {
-            $message = sprintf('No options set for configuration "%s".', implode('.', $position));
+            $message = sprintf('No options set for configuration "%s".', rtrim(implode('.', $position), '.'));
         }
 
         parent::__construct(

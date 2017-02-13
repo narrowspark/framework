@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\OptionsResolver\Traits\ComponentConfigurationTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-class ComponentConfigurationTraitAwareConfiguration implements RequiresConfigContract
+class ConfigurationTraitAwareConfiguration implements RequiresComponentConfigContract
 {
-    use ComponentConfigurationTrait;
+    use ConfigurationTrait;
 
     public function getOptions($data)
     {

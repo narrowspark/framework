@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class ConnectionDefaultOptionsMandatoryContainetIdConfiguration implements RequiresConfigIdContract, RequiresMandatoryOptionsContract, ProvidesDefaultOptionsContract
+class ConnectionDefaultOptionsMandatoryContainetIdConfiguration implements RequiresComponentConfigIdContract, RequiresMandatoryOptionsContract, ProvidesDefaultOptionsContract
 {
     public function getDimensions(): iterable
     {

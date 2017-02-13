@@ -2,10 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
+use ArrayAccess;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\Resolver as ResolverContract;
+use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException;
 
 abstract class AbstractOptionsResolver implements ResolverContract
 {
@@ -41,8 +46,10 @@ abstract class AbstractOptionsResolver implements ResolverContract
      * @param iterable $config
      *
      * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
+     *
+     * @return void
      */
-    protected function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
+    protected function checkMandatoryOptions(iterable $mandatoryOptions, $config): void
     {
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
             $useRecursion = ! is_scalar($mandatoryOption);
@@ -64,6 +71,45 @@ abstract class AbstractOptionsResolver implements ResolverContract
                 $useRecursion ? $key : $mandatoryOption
             );
         }
+    }
+
+    /**
+     * Get configuration for provided dimensions.
+     *
+     * @param iterable                                                    $dimensions
+     * @param iterable                                                    $config
+     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
+     * @param null|string                                                 $configId
+     *
+     * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
+     *
+     * @return iterable|object
+     */
+    protected function getConfigurationDimensions(
+        iterable $dimensions,
+        $config,
+        RequiresConfigContract $configClass,
+        ?string $configId
+    ) {
+        foreach ($dimensions as $dimension) {
+            if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
+                throw new UnexpectedValueException($dimensions, $dimension);
+            }
+
+            if (! isset($config[$dimension])) {
+                if (! $configClass instanceof RequiresMandatoryOptionsContract &&
+                    $configClass instanceof ProvidesDefaultOptionsContract
+                ) {
+                    break;
+                }
+
+                throw new OptionNotFoundException($configClass, $dimension, $configId);
+            }
+
+            $config = $config[$dimension];
+        }
+
+        return $config;
     }
 
     /**

@@ -10,7 +10,7 @@ use Twig_Environment;
 use Twig_Loader_Filesystem;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class TwigEngineTest extends TestCase
 {
@@ -33,10 +33,25 @@ class TwigEngineTest extends TestCase
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
             ->once()
-            ->with('viserio')
+            ->with('paths')
+            ->andReturn(true);
+        $config->shouldReceive('offsetExists')
+            ->twice()
+            ->with('engines')
             ->andReturn(true);
         $config->shouldReceive('offsetGet')
-            ->times(3)
+            ->once()
+            ->with('engines')
+            ->andReturn([
+                'twig' => [
+                    'options' => [
+                        'debug' => false,
+                        'cache' => __DIR__ . '/../Cache',
+                    ],
+                ],
+            ]);
+        $config->shouldReceive('offsetGet')
+            ->times(2)
             ->with('viserio')
             ->andReturn([
                 'view' => [
@@ -44,7 +59,6 @@ class TwigEngineTest extends TestCase
                         __DIR__ . '/../Fixtures/',
                         __DIR__,
                     ],
-                    'extensions' => ['phtml', 'php'],
                     'engines'    => [
                         'twig' => [
                             'options' => [
@@ -58,7 +72,7 @@ class TwigEngineTest extends TestCase
 
         $engine = new TwigEngine(new ArrayContainer([
             RepositoryContract::class       => $config,
-            ComponentOptionsResolver::class => new ComponentOptionsResolver(),
+            OptionsResolver::class => new OptionsResolver(),
             Twig_Environment::class         => new Twig_Environment(
                 new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']

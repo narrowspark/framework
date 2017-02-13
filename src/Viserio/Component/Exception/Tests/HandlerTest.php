@@ -23,7 +23,7 @@ use Viserio\Component\Exception\Handler;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
-use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class HandlerTest extends TestCase
 {
@@ -191,7 +191,7 @@ class HandlerTest extends TestCase
             ->with(ExceptionInfo::class)
             ->andReturn($this->mock(ExceptionInfo::class));
         $container->shouldReceive('has')
-            ->with(ComponentOptionsResolver::class)
+            ->with(OptionsResolver::class)
             ->andReturn(false);
 
         return $container;

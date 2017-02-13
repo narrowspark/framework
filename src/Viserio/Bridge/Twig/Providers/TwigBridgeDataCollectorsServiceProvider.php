@@ -11,7 +11,7 @@ use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
@@ -99,7 +99,7 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
     private static function resolveOptions(ContainerInterface $container): void
     {
         if (self::$options === null) {
-            self::$options   = $container->get(ComponentOptionsResolver::class)
+            self::$options   = $container->get(OptionsResolver::class)
                 ->configure(new static(), $container)
                 ->resolve();
         }

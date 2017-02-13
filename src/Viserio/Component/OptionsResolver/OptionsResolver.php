@@ -3,13 +3,19 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
 use ArrayAccess;
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Iterator;
 use RuntimeException;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig;
 
 class OptionsResolver extends AbstractOptionsResolver
 {
@@ -19,36 +25,24 @@ class OptionsResolver extends AbstractOptionsResolver
     public function resolve(string $configId = null): array
     {
         $configClass = $this->configClass;
-        $config      = $this->resolveConfiguration($config);
-        $dimensions  = $configClass->getDimensions();
-        $dimensions  = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
+        $config      = $this->config;
+        $dimensions  = [];
 
-        if ($configClass instanceof RequiresConfigIdContract) {
+        if ($configClass instanceof RequiresComponentConfigContract) {
+            $dimensions  = $configClass->getDimensions();
+            $dimensions  = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
+        }
+
+        if ($configClass instanceof RequiresConfigIdContract || $configClass instanceof RequiresComponentConfigIdContract) {
             $dimensions[] = $configId;
         } elseif ($configId !== null) {
             throw new InvalidArgumentException(
-                sprintf('The factory "%s" does not support multiple instances.', __CLASS__)
+                sprintf('The factory "%s" does not support multiple instances.', get_class($this->configClass))
             );
         }
 
         // get configuration for provided dimensions
-        foreach ($dimensions as $dimension) {
-            if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
-                throw new UnexpectedValueException($dimensions, $dimension);
-            }
-
-            if (! isset($config[$dimension])) {
-                if (! $configClass instanceof RequiresMandatoryOptionsContract &&
-                    $configClass instanceof ProvidesDefaultOptionsContract
-                ) {
-                    break;
-                }
-
-                throw new OptionNotFoundException($this, $dimension, $configId);
-            }
-
-            $config = $config[$dimension];
-        }
+        $config = $this->getConfigurationDimensions($dimensions, $config, $configClass, $configId);
 
         if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
             throw new UnexpectedValueException($configClass->getDimensions());
@@ -66,7 +60,7 @@ class OptionsResolver extends AbstractOptionsResolver
             );
         }
 
-        return $config;
+        return (array) $config;
     }
 
     /**
@@ -74,7 +68,15 @@ class OptionsResolver extends AbstractOptionsResolver
      */
     protected function resolveConfiguration($data)
     {
-        if (is_iterable($data)) {
+        if ($data instanceof ContainerInterface) {
+            if ($data->has(RepositoryContract::class)) {
+                return $data->get(RepositoryContract::class);
+            } elseif ($data->has('config')) {
+                return $data->get('config');
+            } elseif ($data->has('options')) {
+                return $data->get('options');
+            }
+        } elseif (is_iterable($data)) {
             return $data;
         }
 

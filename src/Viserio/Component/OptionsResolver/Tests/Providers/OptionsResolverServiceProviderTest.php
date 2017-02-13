@@ -4,7 +4,6 @@ namespace Viserio\Component\OptionsResolver\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\ComponentOptionsResolver;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
@@ -15,7 +14,6 @@ class OptionsResolverServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new OptionsResolverServiceProvider());
 
-        self::assertInstanceOf(ComponentOptionsResolver::class, $container->get(ComponentOptionsResolver::class));
         self::assertInstanceOf(OptionsResolver::class, $container->get(OptionsResolver::class));
     }
 }

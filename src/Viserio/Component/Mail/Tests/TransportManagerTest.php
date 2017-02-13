@@ -47,29 +47,6 @@ class TransportManagerTest extends TestCase
         self::assertInstanceOf(LogTransport::class, $manager->getDriver('log'));
     }
 
-    public function testMailTransport()
-    {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'mail' => [
-                    'drivers'   => [],
-                ],
-            ]);
-
-        $manager = new TransportManager(new ArrayContainer([
-            RepositoryContract::class => $config,
-        ]));
-
-        self::assertInstanceOf(Swift_MailTransport::class, $manager->getDriver('mail'));
-    }
-
     public function testSendmailTransport()
     {
         $config = $this->mock(RepositoryContract::class);
