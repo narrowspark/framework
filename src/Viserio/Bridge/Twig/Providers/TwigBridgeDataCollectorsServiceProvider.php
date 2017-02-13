@@ -60,7 +60,7 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
         $profiler = $container->get(WebProfilerContract::class);
 
-        if ($this->options['collector']['twig'] !== false) {
+        if (self::$options['collector']['twig'] !== false) {
             $profiler->addCollector(new TwigDataCollector(
                 $container->get(Twig_Profiler_Profile::class)
             ));
@@ -80,7 +80,7 @@ class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider, Requir
 
         $twig = $container->get(TwigEnvironment::class);
 
-        if ($this->options['collector']['twig'] !== false) {
+        if (self::$options['collector']['twig'] !== false) {
             $twig->addExtension(new Twig_Extension_Profiler(
                 $container->get(Twig_Profiler_Profile::class)
             ));

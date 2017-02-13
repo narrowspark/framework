@@ -151,7 +151,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon'  => __DIR__ . '/../Resources/icons/ic_view_quilt_white_24px.svg',
+            'icon'  => file_get_contents(__DIR__ . '/../Resources/icons/ic_view_quilt_white_24px.svg'),
             'label' => 'Twig',
             'value' => $this->getComputedData('template_count'),
         ];
