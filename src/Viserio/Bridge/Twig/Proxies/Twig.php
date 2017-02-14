@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Proxies;
 
-use Viserio\Bridge\Twig\TwigEnvironment;
+use Twig_Environment as TwigEnvironment;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Twig extends StaticalProxy

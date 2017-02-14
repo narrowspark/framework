@@ -14,14 +14,12 @@ class UnexpectedValueException extends PhpUnexpectedValueException
      * @param mixed           $currentDimension Current configuration key
      * @param int             $code
      * @param null|\Throwable $previous
-     * @param null|mixed      $path
      */
     public function __construct(
         iterable $dimensions,
         $currentDimension = null,
         int $code = 0,
-        Throwable $previous = null,
-        $path = null
+        Throwable $previous = null
     ) {
         $position = [];
 

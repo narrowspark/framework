@@ -18,7 +18,7 @@ class ConfigExtension extends Twig_Extension
      */
     public function __construct(RepositoryContract $config)
     {
-        $this->options = $config;
+        $this->config = $config;
     }
 
     /**
@@ -35,9 +35,9 @@ class ConfigExtension extends Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new Twig_Function('config', [$this->options, 'get']),
-            new Twig_Function('config_get', [$this->options, 'get']),
-            new Twig_Function('config_has', [$this->options, 'has']),
+            new Twig_Function('config', [$this->config, 'get']),
+            new Twig_Function('config_get', [$this->config, 'get']),
+            new Twig_Function('config_has', [$this->config, 'has']),
         ];
     }
 }

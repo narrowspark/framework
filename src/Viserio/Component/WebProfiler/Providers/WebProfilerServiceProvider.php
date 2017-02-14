@@ -21,7 +21,10 @@ use Viserio\Component\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\Component\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\Component\WebProfiler\WebProfiler;
 
-class WebProfilerServiceProvider implements ServiceProvider, RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresMandatoryOptionsContract
+class WebProfilerServiceProvider implements ServiceProvider,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresMandatoryOptionsContract
 {
     /**
      * Resolved cached options.

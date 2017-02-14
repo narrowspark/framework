@@ -12,20 +12,18 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConf
 class OptionNotFoundException extends OutOfBoundsException
 {
     /**
-     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfigId $factory
-     * @param mixed                                                         $currentDimension Current configuration key
-     * @param string|null                                                   $configId
-     * @param int                                                           $code
-     * @param null|\Throwable                                               $previous
-     * @param null|mixed                                                    $path
+     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $factory
+     * @param mixed                                                       $currentDimension Current configuration key
+     * @param string|null                                                 $configId
+     * @param int                                                         $code
+     * @param null|\Throwable                                             $previous
      */
     public function __construct(
         RequiresConfigContract $factory,
         $currentDimension,
         ?string $configId,
         int $code = 0,
-        Throwable $previous = null,
-        $path = null
+        Throwable $previous = null
     ) {
         $position   = [];
         $dimensions = $factory instanceof RequiresComponentConfigContract ? $factory->getDimensions() : [];

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig;
 
 use InvalidArgumentException;
+use Twig_Source;
 use Twig_Error_Loader;
 use Twig_ExistsLoaderInterface;
 use Twig_LoaderInterface;
@@ -84,7 +85,9 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      */
     public function getSourceContext($name)
     {
-        return $this->files->read($this->findTemplate($name));
+        $template = $this->findTemplate($name);
+
+        return new Twig_Source($this->files->read($template), $name, $template);
     }
 
     /**

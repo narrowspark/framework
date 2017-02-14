@@ -31,7 +31,9 @@ class OptionsResolver extends AbstractOptionsResolver
             $dimensions  = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
         }
 
-        if ($configClass instanceof RequiresConfigIdContract || $configClass instanceof RequiresComponentConfigIdContract) {
+        if ($configClass instanceof RequiresConfigIdContract ||
+            $configClass instanceof RequiresComponentConfigIdContract
+        ) {
             $dimensions[] = $configId;
         } elseif ($configId !== null) {
             throw new InvalidArgumentException(

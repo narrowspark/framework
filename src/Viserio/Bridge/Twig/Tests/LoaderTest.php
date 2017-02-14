@@ -67,12 +67,15 @@ class LoaderTest extends TestCase
         $file->shouldReceive('read')
             ->once()
             ->with('test.twig')
-            ->andReturn('test.twig');
+            ->andReturn('test');
         $finder = $this->mock(FinderContract::class);
 
         $loader = new Loader($file, $finder);
+        $source = $loader->getSourceContext('test.twig');
 
-        self::assertSame('test.twig', $loader->getSourceContext('test.twig'));
+        self::assertSame('test.twig', $source->getName());
+        self::assertSame('test', $source->getCode());
+        self::assertSame('test.twig', $source->getPath());
     }
 
     public function testIsFresh()

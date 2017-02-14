@@ -42,8 +42,12 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
      * @param \Interop\Container\ContainerInterface|iterable $data
      */
-    public function __construct(ExceptionInfo $info, ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory, $data)
-    {
+    public function __construct(
+        ExceptionInfo $info,
+        ResponseFactoryInterface $responseFactory,
+        StreamFactoryInterface $streamFactory,
+        $data
+    ) {
         $this->info            = $info;
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
