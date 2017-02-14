@@ -12,14 +12,14 @@ class MandatoryOptionNotFoundException extends OutOfBoundsException
      *
      * @param iterable        $dimensions
      * @param string          $option
-     * @param mixed           $code
+     * @param int             $code
      * @param null|\Throwable $previous
      * @param null|mixed      $path
      */
     public function __construct(
         iterable $dimensions,
         string $option,
-        $code = 0,
+        int $code = 0,
         Throwable $previous = null,
         $path = null
     ) {

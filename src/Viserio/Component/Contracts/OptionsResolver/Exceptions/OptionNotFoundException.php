@@ -15,7 +15,7 @@ class OptionNotFoundException extends OutOfBoundsException
      * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfigId $factory
      * @param mixed                                                         $currentDimension Current configuration key
      * @param string|null                                                   $configId
-     * @param mixed                                                         $code
+     * @param int                                                           $code
      * @param null|\Throwable                                               $previous
      * @param null|mixed                                                    $path
      */
@@ -23,7 +23,7 @@ class OptionNotFoundException extends OutOfBoundsException
         RequiresConfigContract $factory,
         $currentDimension,
         ?string $configId,
-        $code = 0,
+        int $code = 0,
         Throwable $previous = null,
         $path = null
     ) {

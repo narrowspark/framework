@@ -16,7 +16,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     /**
      * Create a new verbose filter instance.
      *
-     * @param \Interop\Container\ContainerInterface|interable $data
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
     public function __construct($data)
     {

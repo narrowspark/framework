@@ -23,7 +23,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
      *
      * @param \Swift_Mailer                                   $swiftMailer
      * @param \Viserio\Component\Contracts\Queue\Queue        $queue
-     * @param \Interop\Container\ContainerInterface|interable $data
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
     public function __construct(Swift_Mailer $swiftMailer, QueueContract $queue, $data)
     {

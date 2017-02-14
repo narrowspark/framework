@@ -49,7 +49,7 @@ abstract class AbstractOptionsResolver implements ResolverContract
      *
      * @return void
      */
-    protected function checkMandatoryOptions(iterable $mandatoryOptions, $config): void
+    protected function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
     {
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
             $useRecursion = ! is_scalar($mandatoryOption);

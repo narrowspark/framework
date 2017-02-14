@@ -40,7 +40,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      * @param \Viserio\Component\Exception\ExceptionInfo     $info
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param \Interop\Container\ContainerInterface|inter    $data
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
     public function __construct(ExceptionInfo $info, ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory, $data)
     {

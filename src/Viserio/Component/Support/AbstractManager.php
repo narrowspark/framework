@@ -31,8 +31,7 @@ abstract class AbstractManager implements RequiresComponentConfigContract, Requi
     /**
      * Create a new manager instance.
      *
-     * @param \Interop\Container\ContainerInterface|iterable $config
-     * @param mixed                                          $data
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
     public function __construct($data)
     {
