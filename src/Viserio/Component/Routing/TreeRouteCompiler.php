@@ -94,6 +94,7 @@ PHP;
      * @param anonymous//src/Viserio/Component/Routing/TreeRouteCompiler.php$0 $code
      * @param array $routeTree
      * @param anonymous//src/Viserio/Component/Routing/TreeRouteCompiler.php$0 $code
+     * @param mixed $code
      */
     protected function compileRouteTree($code, array $routeTree)
     {
