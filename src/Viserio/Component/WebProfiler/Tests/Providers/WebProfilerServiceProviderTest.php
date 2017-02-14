@@ -6,7 +6,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
@@ -37,8 +37,10 @@ class WebProfilerServiceProviderTest extends TestCase
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new EventsServiceProvider());
-        $container->register(new ConfigServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new WebProfilerServiceProvider());
+
+        $container->instance('config', ['viserio' => ['webprofiler' => ['enable' => true]]]);
 
         self::assertInstanceOf(AssetsRenderer::class, $container->get(AssetsRenderer::class));
         self::assertInstanceOf(WebProfiler::class, $container->get(WebProfiler::class));
@@ -52,7 +54,10 @@ class WebProfilerServiceProviderTest extends TestCase
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new RoutingServiceProvider());
         $container->register(new EventsServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new WebProfilerServiceProvider());
+
+        $container->instance('config', ['viserio' => ['webprofiler' => ['enable' => true]]]);
 
         $router  = $container->get(RouterContract::class);
         $routes  = $router->getRoutes()->getRoutes();

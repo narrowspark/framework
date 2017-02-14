@@ -13,6 +13,7 @@ use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 use Viserio\Component\WebProfiler\Providers\WebProfilerPsr6CacheBridgeServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class WebProfilerPsr6CacheBridgeServiceProviderTest extends TestCase
 {
@@ -34,8 +35,11 @@ class WebProfilerPsr6CacheBridgeServiceProviderTest extends TestCase
         $container->instance(CacheItemPoolInterface::class, $this->mock(CacheItemPoolInterface::class));
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->register(new HttpFactoryServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new WebProfilerServiceProvider());
         $container->register(new WebProfilerPsr6CacheBridgeServiceProvider());
+
+        $container->instance('config', ['viserio' => ['webprofiler' => ['enable' => true]]]);
 
         self::assertInstanceOf(WebProfilerContract::class, $container->get(WebProfilerContract::class));
         self::assertInstanceOf(TraceableCacheItemDecorater::class, $container->get(CacheItemPoolInterface::class));

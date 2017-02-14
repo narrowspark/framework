@@ -19,8 +19,9 @@ use Viserio\Component\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\Component\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\Component\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\Component\WebProfiler\WebProfiler;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class WebProfilerServiceProvider implements ServiceProvider, RequiresComponentConfigContract, ProvidesDefaultOptionsContract
+class WebProfilerServiceProvider implements ServiceProvider, RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresMandatoryOptionsContract
 {
     /**
      * Resolved cached options.
@@ -50,6 +51,16 @@ class WebProfilerServiceProvider implements ServiceProvider, RequiresComponentCo
     public function getDimensions(): iterable
     {
         return ['viserio', 'webprofiler'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return [
+            'enable',
+        ];
     }
 
     /**

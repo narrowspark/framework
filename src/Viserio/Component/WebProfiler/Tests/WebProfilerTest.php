@@ -84,11 +84,15 @@ class WebProfilerTest extends TestCase
         $assets   = new AssetsRenderer();
         $profiler = new WebProfiler($assets);
 
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
         $profiler->enable();
         $response = (new ResponseFactory())->createResponse(200);
 
         $response = $profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequest($_SERVER),
+            (new ServerRequestFactory())->createServerRequest($server),
             $response
         );
 
@@ -120,8 +124,12 @@ class WebProfilerTest extends TestCase
         $response = $response->withBody($stream);
         $profiler->setStreamFactory(new StreamFactory());
 
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
         $response = $profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequest($_SERVER),
+            (new ServerRequestFactory())->createServerRequest($server),
             $response
         );
 
@@ -145,11 +153,15 @@ class WebProfilerTest extends TestCase
         $assets   = new AssetsRenderer();
         $profiler = new WebProfiler($assets);
 
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
         $profiler->disable();
         $orginalResponse = (new ResponseFactory())->createResponse(200);
 
         $response = $profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequest($_SERVER),
+            (new ServerRequestFactory())->createServerRequest($server),
             $orginalResponse
         );
 

@@ -11,12 +11,19 @@ use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\DataCollectors\FilesLoadedCollector;
 use Viserio\Component\Foundation\DataCollectors\NarrowsparkDataCollector;
 use Viserio\Component\Foundation\DataCollectors\ViserioHttpDataCollector;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class FoundationDataCollectorsServiceProvider implements ServiceProvider
+class FoundationDataCollectorsServiceProvider implements ServiceProvider, RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresMandatoryOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.webprofiler';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -28,19 +35,53 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'webprofiler'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'collector' => [
+                'narrowspark' => false,
+                'files'       => false,
+                'viserio'     => [
+                    'http' => false,
+                ],
+            ],
+        ];
+    }
+
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
     {
+        self::resolveOptions($container);
+
         $profiler = $container->get(WebProfilerContract::class);
 
-        if (self::getConfig($container, 'collector.narrowspark', false)) {
+        if (self::$options['collector']['narrowspark']) {
             $profiler->addCollector(static::createNarrowsparkDataCollector());
         }
 
-        if (self::getConfig($container, 'collector.viserio.http', false)) {
+        if (self::$options['collector']['viserio']['http']) {
             $profiler->addCollector(static::createViserioHttpDataCollector($container), 1);
         }
 
-        if (self::getConfig($container, 'collector.files', false)) {
+        if (self::$options['collector']['files']) {
             $profiler->addCollector(self::createFilesLoadedCollector($container));
         }
 
@@ -65,5 +106,21 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
         $config = $container->get(RepositoryContract::class);
 
         return new FilesLoadedCollector($config->get('path.base'));
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

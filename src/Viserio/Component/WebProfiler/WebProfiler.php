@@ -206,7 +206,7 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
 
         $token = mb_substr(hash('sha256', uniqid((string) mt_rand(), true)), 0, 6);
         $response->withHeader('X-Debug-Token', $token);
-
+        //@TODO Send json data or redirect.
         try {
             if ($this->isRedirect($response)) {
                 // $this->stackData();
