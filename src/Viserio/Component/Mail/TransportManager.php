@@ -4,12 +4,11 @@ namespace Viserio\Component\Mail;
 
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
-use Interop\Config\ProvidesDefaultOptions;
 use Narrowspark\Arr\Arr;
 use Psr\Log\LoggerInterface;
-use Swift_MailTransport;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Mail\Transport\Log as LogTransport;
 use Viserio\Component\Mail\Transport\Mailgun as MailgunTransport;
 use Viserio\Component\Mail\Transport\Mandrill as MandrillTransport;
@@ -17,12 +16,12 @@ use Viserio\Component\Mail\Transport\Ses as SesTransport;
 use Viserio\Component\Mail\Transport\SparkPost as SparkPostTransport;
 use Viserio\Component\Support\AbstractManager;
 
-class TransportManager extends AbstractManager implements ProvidesDefaultOptions
+class TransportManager extends AbstractManager implements ProvidesDefaultOptionsContract
 {
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'default' => 'smtp',
@@ -37,16 +36,6 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
     protected function createLogDriver(): LogTransport
     {
         return new LogTransport($this->getContainer()->get(LoggerInterface::class));
-    }
-
-    /**
-     * Create an instance of the Mail Swift Transport driver.
-     *
-     * @return \Swift_MailTransport
-     */
-    protected function createMailDriver(): Swift_MailTransport
-    {
-        return Swift_MailTransport::newInstance();
     }
 
     /**

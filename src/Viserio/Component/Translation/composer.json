@@ -26,7 +26,7 @@
         "container-interop/service-provider"  : "^0.3",
         "mikey179/vfsStream"                  : "^1.6",
         "narrowspark/testing-helper"          : "^2.0",
-        "phpunit/phpunit"                     : "~5.7",
+        "phpunit/phpunit"                     : "~5.7 || ^6.0",
         "viserio/container"                   : "self.version",
         "viserio/log"                         : "self.version",
         "viserio/parsers"                     : "self.version",

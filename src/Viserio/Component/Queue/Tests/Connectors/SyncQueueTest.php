@@ -4,6 +4,7 @@ namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Exception;
 use Interop\Container\ContainerInterface;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Opis\Closure\SerializableClosure;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,16 @@ use Viserio\Component\Queue\Tests\Fixture\SyncQueueHandler;
 class SyncQueueTest extends TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testPushShouldRunJobInstantly()
     {

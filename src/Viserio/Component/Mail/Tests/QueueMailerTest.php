@@ -4,9 +4,10 @@ namespace Viserio\Component\Mail\Tests;
 
 use Interop\Container\ContainerInterface;
 use Mockery;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use StdClass;
+use stdClass;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
@@ -25,7 +26,7 @@ class QueueMailerTest extends TestCase
     {
         $message = $this->mock(MessageContract::class);
 
-        $mockMailer = $this->mock(StdClass::class);
+        $mockMailer = $this->mock(stdClass::class);
         $mockMailer->shouldReceive('mail')
             ->once()
             ->with($message);
@@ -170,7 +171,10 @@ class QueueMailerTest extends TestCase
     {
         $mailer = new QueueMailer(
             $this->mock(Swift_Mailer::class),
-            $this->mock(QueueContract::class)
+            $this->mock(QueueContract::class),
+            new ArrayContainer([
+                'config' => ['viserio' => ['mail' => []]],
+            ])
         );
 
         return $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
@@ -181,6 +185,9 @@ class QueueMailerTest extends TestCase
         return [
             $this->mock(Swift_Mailer::class),
             $this->mock(QueueContract::class),
+            new ArrayContainer([
+                'config' => ['viserio' => ['mail' => []]],
+            ]),
         ];
     }
 }

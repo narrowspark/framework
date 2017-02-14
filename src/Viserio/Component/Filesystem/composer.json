@@ -39,10 +39,10 @@
         "container-interop/container-interop" : "^1.1",
         "league/flysystem"                    : "^1.0.27",
         "narrowspark/arr"                     : "^1.0",
-        "sandrokeil/interop-config"           : "^2.0",
         "symfony/filesystem"                  : "^3.1",
         "symfony/finder"                      : "^3.1",
         "viserio/contracts"                   : "self.version",
+        "viserio/options-resolver"            : "self.version",
         "viserio/support"                     : "self.version"
     },
     "require-dev": {
@@ -59,7 +59,7 @@
         "league/flysystem-ziparchive"         : "^1.0",
         "mikey179/vfsStream"                  : "^1.6",
         "narrowspark/testing-helper"          : "^2.0",
-        "phpunit/phpunit"                     : "~5.7",
+        "phpunit/phpunit"                     : "~5.7 || ^6.0",
         "viserio/cache"                       : "self.version",
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version"

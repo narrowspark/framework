@@ -88,6 +88,9 @@
         <testsuite name="Narrowspark Middleware Component Test Suite">
             <directory>./src/Viserio/Component/Middleware/Tests</directory>
         </testsuite>
+        <testsuite name="Narrowspark OptionsResolver Component Test Suite">
+            <directory>./src/Viserio/Component/OptionsResolver/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Pagination Component Test Suite">
             <directory>./src/Viserio/Component/Pagination/Tests</directory>
         </testsuite>

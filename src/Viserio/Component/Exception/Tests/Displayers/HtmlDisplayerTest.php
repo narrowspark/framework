@@ -3,7 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Displayers;
 
 use Exception;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -11,12 +14,13 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class HtmlDisplayerTest extends TestCase
 {
+    use MockeryTrait;
+
     public function testServerError()
     {
-        $file      = __DIR__ . '/../../Resources/error.html';
-        $displayer = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $file);
+        $displayer = $this->getDisplayer();
         $response  = $displayer->display(new Exception(), 'foo', 502, []);
-        $expected  = file_get_contents($file);
+        $expected  = file_get_contents(__DIR__ . '/../../Resources/error.html');
         $infos     = [
             'code'    => '502',
             'summary' => 'Houston, We Have A Problem.',
@@ -36,10 +40,9 @@ class HtmlDisplayerTest extends TestCase
 
     public function testClientError()
     {
-        $file      = __DIR__ . '/../../Resources/error.html';
-        $displayer = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $file);
+        $displayer = $this->getDisplayer();
         $response  = $displayer->display(new Exception(), 'bar', 404, []);
-        $expected  = file_get_contents($file);
+        $expected  = file_get_contents(__DIR__ . '/../../Resources/error.html');
         $infos     = [
             'code'    => '404',
             'summary' => 'Houston, We Have A Problem.',
@@ -59,12 +62,37 @@ class HtmlDisplayerTest extends TestCase
 
     public function testProperties()
     {
-        $file      = __DIR__ . '/../../Resources/error.html';
-        $displayer = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $file);
+        $displayer = $this->getDisplayer();
         $exception = new Exception();
 
         self::assertFalse($displayer->isVerbose());
         self::assertTrue($displayer->canDisplay($exception, $exception, 500));
         self::assertSame('text/html', $displayer->contentType());
+    }
+
+    private function getDisplayer()
+    {
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'exception' => [
+                    'template_path' => __DIR__ . '/../../Resources/error.html',
+                ],
+            ]);
+
+        return new HtmlDisplayer(
+            new ExceptionInfo(),
+            new ResponseFactory(),
+            new StreamFactory(),
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
-use StdClass;
+use stdClass;
 use Viserio\Component\Routing\Tests\Fixture\Controller;
 use Viserio\Component\Routing\VarExporter;
 
@@ -27,7 +27,7 @@ class VarExporterTest extends TestCase
            [[1, 2, 3], '[0 => 1,1 => 2,2 => 3,]'],
            [[1, '2', 3], '[0 => 1,1 => \'2\',2 => 3,]'],
            [['foo' => 1, [2, 3]], '[\'foo\' => 1,0 => [0 => 2,1 => 3,],]'],
-           [new StdClass(), '(object)[]'],
+           [new stdClass(), '(object)[]'],
            [(object) ['foo' => 'bar'], '(object)[\'foo\' => \'bar\']'],
            [new Controller(), 'unserialize(' . var_export(serialize(new Controller()), true) . ')'],
        ];

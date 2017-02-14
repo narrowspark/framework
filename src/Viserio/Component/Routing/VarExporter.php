@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use StdClass;
+use stdClass;
 
 class VarExporter
 {
@@ -49,7 +49,7 @@ class VarExporter
             $code .= ']';
 
             return $code;
-        } elseif (is_object($value) && $value instanceof StdClass) {
+        } elseif (is_object($value) && $value instanceof stdClass) {
             return '(object)' . self::export((array) $value);
         }
 

@@ -3,25 +3,25 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
 use Defuse\Crypto\Key;
-use Interop\Config\ProvidesDefaultOptions;
 use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
 use Narrowspark\Arr\Arr;
 use Viserio\Component\Contracts\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Support\AbstractConnectionManager;
 
-class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptions
+class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
 {
     use CacheManagerAwareTrait;
 
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'default' => 'local',
@@ -108,7 +108,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function getCacheConfig(string $name): array
     {
-        $cache = $this->config['cached'];
+        $cache = $this->options['cached'];
 
         if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
             throw new InvalidArgumentException(sprintf('Cache [%s] not configured.', $name));

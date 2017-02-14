@@ -14,6 +14,7 @@ use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\Providers\FoundationDataCollectorsServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
 class FoundationDataCollectorsServiceProviderTest extends TestCase
@@ -49,16 +50,20 @@ class FoundationDataCollectorsServiceProviderTest extends TestCase
         $container->instance(RouterContract::class, $router);
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ConfigServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new WebProfilerServiceProvider());
         $container->register(new FoundationDataCollectorsServiceProvider());
 
-        $container->get(RepositoryContract::class)->set('webprofiler', [
-            'collector' => [
-                'narrowspark' => true,
-                'viserio'     => [
-                    'http' => true,
+        $container->get(RepositoryContract::class)->set('viserio', [
+            'webprofiler' => [
+                'enable'    => true,
+                'collector' => [
+                    'narrowspark' => true,
+                    'viserio'     => [
+                        'http' => true,
+                    ],
+                    'files' => true,
                 ],
-                'files' => true,
             ],
         ])->set('path.base', '/');
 

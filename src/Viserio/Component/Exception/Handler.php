@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception;
 
-use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
@@ -14,11 +13,12 @@ use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
 use Viserio\Component\Exception\Filters\VerboseFilter;
 
-class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptions
+class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
     /**
      * Exception filters.
@@ -35,19 +35,9 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     protected $displayers = [];
 
     /**
-     * Create a new exception handler instance.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return ['default_displayer', 'env'];
     }
@@ -55,10 +45,10 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return array_merge(
-            parent::defaultOptions(),
+            parent::getDefaultOptions(),
             [
                 'displayers'        => [],
                 'default_displayer' => HtmlDisplayer::class,
@@ -121,7 +111,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
 
         $this->registerExceptionHandler();
 
-        if ($this->config['env'] !== 'testing') {
+        if ($this->options['env'] !== 'testing') {
             $this->registerShutdownHandler();
         }
     }
@@ -253,18 +243,18 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     ): DisplayerContract {
         $displayers = array_merge(
             $this->displayers,
-            $this->config['displayers']
+            $this->options['displayers']
         );
 
         if ($filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
             return $filtered[0];
         }
 
-        if (is_object($this->config['default_displayer'])) {
-            return $this->config['default_displayer'];
+        if (is_object($this->options['default_displayer'])) {
+            return $this->options['default_displayer'];
         }
 
-        return $this->container->get($this->config['default_displayer']);
+        return $this->container->get($this->options['default_displayer']);
     }
 
     /**
@@ -287,7 +277,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     ): array {
         $filters = array_merge(
             $this->filters,
-            $this->config['filters']
+            $this->options['filters']
         );
 
         foreach ($filters as $filter) {

@@ -20,12 +20,12 @@
     "require": {
         "php"                                : "^7.1",
         "narrowspark/arr"                    : "^2.1",
-        "sandrokeil/interop-config"          : "^2.0",
-        "viserio/cotracts"                   : "self.version"
+        "viserio/cotracts"                   : "self.version",
+        "viserio/options-resolver"           : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
-        "phpunit/phpunit"                    : "~5.7",
+        "phpunit/phpunit"                    : "~5.7 || ^6.0",
         "mikey179/vfsStream"                 : "^1.6",
         "narrowspark/testing-helper"         : "^2.0",
         "viserio/container"                  : "self.version",

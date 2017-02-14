@@ -29,14 +29,14 @@
     "require-dev": {
         "cache/array-adapter"                 : "^0.4",
         "narrowspark/testing-helper"          : "^1.5",
-        "phpunit/phpunit"                     : "~5.7",
+        "phpunit/phpunit"                     : "~5.7 || ^6.0",
         "http-interop/http-middleware"        : "^0.3",
         "viserio/cache"                       : "self.version",
-        "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version",
         "viserio/events"                      : "self.version",
-        "viserio/routing"                     : "self.version",
-        "viserio/http-factory"                : "self.version"
+        "viserio/http-factory"                : "self.version",
+        "viserio/options-resolver"            : "self.version",
+        "viserio/routing"                     : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -57,8 +57,9 @@
     "suggest": {
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "http-interop/http-middleware"        : "Required to use middleware (^0.3).",
-        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
-        "viserio/routing"                     : "Required to use the webprofiler assets controllers (self.version)."
+        "viserio/options-resolver"            : "Required to use service-provider (self.version).",
+        "viserio/routing"                     : "Required to use the webprofiler assets controllers (self.version).",
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {

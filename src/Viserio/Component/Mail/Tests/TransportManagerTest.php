@@ -6,7 +6,6 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Swift_MailTransport;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
@@ -39,33 +38,12 @@ class TransportManagerTest extends TestCase
 
         $manager = new TransportManager(new ArrayContainer([
             RepositoryContract::class => $config,
+        ]));
+        $manager->setContainer(new ArrayContainer([
             LoggerInterface::class    => $this->mock(LoggerInterface::class),
         ]));
 
         self::assertInstanceOf(LogTransport::class, $manager->getDriver('log'));
-    }
-
-    public function testMailTransport()
-    {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'mail' => [
-                    'drivers'   => [],
-                ],
-            ]);
-
-        $manager = new TransportManager(new ArrayContainer([
-            RepositoryContract::class => $config,
-        ]));
-
-        self::assertInstanceOf(Swift_MailTransport::class, $manager->getDriver('mail'));
     }
 
     public function testSendmailTransport()

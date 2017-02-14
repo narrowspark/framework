@@ -87,7 +87,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             }
         }
 
-        return $this->sessions = $sessions;
+        $this->sessions = $sessions;
     }
 
     /**

@@ -5,9 +5,6 @@ namespace Viserio\Component\Exception;
 use Error;
 use ErrorException;
 use Exception;
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\ProvidesDefaultOptions;
-use Interop\Config\RequiresConfig;
 use Interop\Container\ContainerInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
@@ -19,19 +16,21 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
+class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
-    use ConfigurationTrait;
     use ContainerAwareTrait;
+    use ConfigurationTrait;
     use LoggerAwareTrait;
 
     /**
@@ -40,13 +39,6 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
      * @var \Viserio\Component\Exception\ExceptionIdentifier
      */
     protected $exceptionIdentifier;
-
-    /**
-     * Handler config.
-     *
-     * @var array|\ArrayAccess
-     */
-    protected $config = [];
 
     /**
      * Exception transformers.
@@ -76,13 +68,13 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
             $this->logger = $this->container->get(LoggerInterface::class);
         }
 
-        $this->createConfiguration($container);
+        $this->configureOptions($this->container);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -90,7 +82,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
     /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             // A list of the exception types that should not be reported.
@@ -274,26 +266,6 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
     }
 
     /**
-     * Create handler configuration.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @see \Viserio\Component\Exception\ErrorHandler::options()
-     *
-     * @return void
-     */
-    protected function createConfiguration(ContainerInterface $container): void
-    {
-        if ($container->has(RepositoryContract::class)) {
-            $config = $container->get(RepositoryContract::class);
-        } else {
-            $config = $container->get('config');
-        }
-
-        $this->config = $this->options($config);
-    }
-
-    /**
      * Determine if the error type is fatal.
      *
      * @param int $type
@@ -383,7 +355,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
         $container    = $this->container;
         $transformers = array_merge(
             $this->transformers,
-            $this->config['transformers']
+            $this->options['transformers']
         );
 
         foreach ($transformers as $transformer) {
@@ -410,7 +382,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
      */
     protected function getLevel(Throwable $exception): string
     {
-        foreach ($this->config['levels'] as $class => $level) {
+        foreach ($this->options['levels'] as $class => $level) {
             if ($exception instanceof $class) {
                 return $level;
             }
@@ -430,7 +402,7 @@ class ErrorHandler implements RequiresConfig, ProvidesDefaultOptions
     {
         $dontReport = array_merge(
             $this->dontReport,
-            $this->config['dont_report']
+            $this->options['dont_report']
         );
 
         foreach ($dontReport as $type) {

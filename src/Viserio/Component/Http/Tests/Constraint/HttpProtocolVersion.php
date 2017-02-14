@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Constraint;
 
-use PHPUnit_Framework_Assert as Assert;
+use PHPUnit\Framework\Assert as Assert;
+use PHPUnit\Framework\Constraint\Constraint as PHPUnitConstraint;
 
 /**
  * Validate contain only the HTTP version number (e.g., "1.1", "1.0").
  */
-class HttpProtocolVersion extends \PHPUnit_Framework_Constraint
+class HttpProtocolVersion extends PHPUnitConstraint
 {
     /**
      * @var string[]

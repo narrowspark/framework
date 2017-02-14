@@ -15,12 +15,12 @@ class FilesServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Filesystem::class => [self::class, 'createFilesystem'],
-            'files'           => function (ContainerInterface $container) {
+            FilesystemContract::class => [self::class, 'createFilesystem'],
+            'files'                   => function (ContainerInterface $container) {
                 return $container->get(Filesystem::class);
             },
-            FilesystemContract::class => function (ContainerInterface $container) {
-                return $container->get(Filesystem::class);
+            Filesystem::class         => function (ContainerInterface $container) {
+                return $container->get(FilesystemContract::class);
             },
         ];
     }

@@ -42,8 +42,8 @@
         "cache/array-adapter"                 : "^0.4",
         "cache/chain-adapter"                 : "^0.4",
         "container-interop/container-interop" : "^1.1",
-        "sandrokeil/interop-config"           : "^2.0",
         "viserio/cotracts"                    : "self.version",
+        "viserio/options-resolver"            : "self.version",
         "viserio/support"                     : "self.version"
     },
     "require-dev": {
@@ -54,7 +54,7 @@
         "container-interop/service-provider"  : "^0.3",
         "micheh/psr7-cache"                   : "^0.5",
         "narrowspark/testing-helper"          : "^2.0",
-        "phpunit/phpunit"                     : "~5.7",
+        "phpunit/phpunit"                     : "~5.7 || ^6.0",
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version"
     },

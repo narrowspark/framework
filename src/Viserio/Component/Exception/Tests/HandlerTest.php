@@ -5,9 +5,10 @@ namespace Viserio\Component\Exception\Tests;
 use ErrorException;
 use Exception;
 use Interop\Container\ContainerInterface;
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -22,6 +23,7 @@ use Viserio\Component\Exception\Handler;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class HandlerTest extends TestCase
 {
@@ -37,10 +39,10 @@ class HandlerTest extends TestCase
 
         $info = $this->mock(ExceptionInfo::class);
 
-        $handler->addDisplayer(new HtmlDisplayer($info, new ResponseFactory(), new StreamFactory(), ''));
+        $handler->addDisplayer(new HtmlDisplayer($info, new ResponseFactory(), new StreamFactory(), $container));
         $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
         $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
-        $handler->addDisplayer(new WhoopsDisplayer($info));
+        $handler->addDisplayer(new WhoopsDisplayer());
 
         self::assertSame(3, count($handler->getDisplayers()));
     }
@@ -67,8 +69,8 @@ class HandlerTest extends TestCase
             ->andReturn($this->mock(LoggerInterface::class));
         $handler = new Handler($container);
 
-        $handler->addFilter(new VerboseFilter(true));
-        $handler->addFilter(new VerboseFilter(true));
+        $handler->addFilter(new VerboseFilter($container));
+        $handler->addFilter(new VerboseFilter($container));
 
         self::assertSame(1, count($handler->getFilters()));
     }
@@ -149,13 +151,27 @@ class HandlerTest extends TestCase
 
     private function getContainer()
     {
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->with('viserio')
+            ->andReturn([
+                'exception' => [
+                    'env'               => 'dev',
+                    'default_displayer' => HtmlDisplayer::class,
+                    'template_path'     => __DIR__ . '/../../Resources/error.html',
+                    'debug'             => false,
+                ],
+            ]);
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('has')
             ->with(RepositoryContract::class)
             ->andReturn(true);
         $container->shouldReceive('get')
             ->with(RepositoryContract::class)
-            ->andReturn(['viserio' => ['exception' => ['env' => 'dev', 'default_displayer' => HtmlDisplayer::class]]]);
+            ->andReturn($config);
         $container->shouldReceive('has')
             ->with(LoggerInterface::class)
             ->andReturn(true);
@@ -163,11 +179,20 @@ class HandlerTest extends TestCase
             ->with(ExceptionIdentifier::class)
             ->andReturn(new ExceptionIdentifier());
         $container->shouldReceive('get')
-            ->with(ResponseInterface::class)
-            ->andReturn($this->mock(ResponseInterface::class));
+            ->with(ResponseFactoryInterface::class)
+            ->andReturn($this->mock(ResponseFactoryInterface::class));
         $container->shouldReceive('get')
             ->with(ServerRequestInterface::class)
             ->andReturn($this->mock(ServerRequestInterface::class));
+        $container->shouldReceive('get')
+            ->with(StreamFactoryInterface::class)
+            ->andReturn($this->mock(StreamFactoryInterface::class));
+        $container->shouldReceive('get')
+            ->with(ExceptionInfo::class)
+            ->andReturn($this->mock(ExceptionInfo::class));
+        $container->shouldReceive('has')
+            ->with(OptionsResolver::class)
+            ->andReturn(false);
 
         return $container;
     }

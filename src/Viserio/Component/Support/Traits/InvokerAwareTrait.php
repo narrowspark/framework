@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Traits;
 
 use Interop\Container\ContainerInterface;
+use Invoker\InvokerInterface;
 use Viserio\Component\Support\Invoker;
 
 trait InvokerAwareTrait
@@ -17,11 +18,11 @@ trait InvokerAwareTrait
     /**
      * Set a Invoker instance.
      *
-     * @param \Viserio\Component\Support\Invoker $invoker
+     * @param \Invoker\InvokerInterface $invoker
      *
      * @return $this
      */
-    public function setInvoker(Invoker $invoker)
+    public function setInvoker(InvokerInterface $invoker)
     {
         $this->invoker = $invoker;
 
@@ -40,9 +41,9 @@ trait InvokerAwareTrait
     /**
      * Get configured invoker.
      *
-     * @return \Viserio\Component\Support\Invoker
+     * @return \Invoker\InvokerInterface
      */
-    protected function getInvoker(): Invoker
+    protected function getInvoker(): InvokerInterface
     {
         if ($this->invoker === null) {
             $this->invoker = new Invoker();

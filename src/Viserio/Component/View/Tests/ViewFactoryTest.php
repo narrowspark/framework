@@ -184,11 +184,6 @@ class ViewFactoryTest extends TestCase
         self::assertSame($engine, $view->getEngine());
     }
 
-    public function testRawStringsMayBeReturnedFromRenderEach()
-    {
-        self::assertEquals('foo', $this->getFactory()->renderEach('foo', [], 'item', 'raw|foo'));
-    }
-
     public function testEnvironmentAddsExtensionWithCustomResolver()
     {
         $factory  = $this->getFactory();

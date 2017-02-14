@@ -15,7 +15,7 @@ use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
-use Interop\Config\ProvidesDefaultOptions;
+use Interop\Container\ContainerInterface;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
@@ -25,16 +25,29 @@ use Psr\Log\LoggerAwareInterface;
 use Redis;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
 
-class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface, ProvidesDefaultOptions
+class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface, ProvidesDefaultOptionsContract
 {
     use LoggerAwareTrait;
 
     /**
+     * Create a new cache manager instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+
+        $this->container = $container;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function defaultOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'default' => 'array',
@@ -58,7 +71,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
 
         return new CachePoolChain(
             $resolvedPools,
-            $options ?? (array) $this->config['chain_options'] ?? []
+            $options ?? (array) $this->options['chain_options'] ?? []
         );
     }
 
@@ -68,7 +81,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     public function createDriver(array $config)
     {
         $driver    = parent::createDriver($config);
-        $namespace = $this->config['namespace'] ?? false;
+        $namespace = $this->options['namespace'] ?? false;
 
         if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
             $driver = $this->namespacedPool($driver, $namespace);

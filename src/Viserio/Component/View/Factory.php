@@ -11,7 +11,6 @@ use Viserio\Component\Contracts\View\EngineResolver as EngineResolverContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
-use Viserio\Component\Support\Str;
 use Viserio\Component\View\Traits\NormalizeNameTrait;
 
 class Factory implements FactoryContract
@@ -62,6 +61,7 @@ class Factory implements FactoryContract
         'php'   => 'php',
         'phtml' => 'php',
         'css'   => 'file',
+        'js'    => 'file',
     ];
 
     /**
@@ -176,16 +176,9 @@ class Factory implements FactoryContract
                 $data = ['key' => $key, $iterator => $value];
                 $result .= $this->create($view, $data)->render();
             }
-
-        // If there is no data in the array, we will render the contents of the empty
-        // view. Alternatively, the "empty view" could be a raw string that begins
-        // with "raw|" for convenience and to let this know that it is a string.
         } else {
-            if (Str::startsWith($empty, 'raw|')) {
-                $result = mb_substr($empty, 4);
-            } else {
-                $result = $this->create($empty)->render();
-            }
+            // If there is no data in the array, we will render the contents of the empty view.
+            $result = $this->create($empty)->render();
         }
 
         return $result;
@@ -203,9 +196,7 @@ class Factory implements FactoryContract
             throw new InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
         }
 
-        $engine = $this->extensions[$extension];
-
-        return $this->engines->resolve($engine);
+        return $this->engines->resolve($this->extensions[$extension]);
     }
 
     /**
@@ -370,7 +361,7 @@ class Factory implements FactoryContract
         $extensions = array_keys($this->extensions);
 
         return Arr::first($extensions, function ($key, $value) use ($path) {
-            return Str::endsWith($path, $value);
+            return $this->endsWith($path, $value);
         });
     }
 
@@ -385,8 +376,32 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\Component\View\View
      */
-    protected function getView(FactoryContract $factory, EngineContract $engine, string $view, array $fileInfo, $data = [])
-    {
+    protected function getView(
+        FactoryContract $factory,
+        EngineContract $engine,
+        string $view,
+        array $fileInfo,
+        $data = []
+    ) {
         return new View($factory, $engine, $view, $fileInfo, $data);
+    }
+
+    /**
+     * Determine if a given string ends with a given substring.
+     *
+     * @param string $haystack
+     * @param string $needle
+     *
+     * @return bool
+     */
+    private function endsWith(string $haystack, string $needle): bool
+    {
+        $length = mb_strlen($needle);
+
+        if ($length == 0) {
+            return true;
+        }
+
+        return mb_substr($haystack, -$length) === $needle;
     }
 }

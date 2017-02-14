@@ -3,32 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
-use Interop\Config\RequiresMandatoryOptions;
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptions
+abstract class AbstractManager implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use ContainerAwareTrait;
     use ConfigurationTrait;
-
-    /**
-     * Manager config.
-     *
-     * @var array|\ArrayAccess
-     */
-    protected $config = [];
-
-    /**
-     * The registered custom driver creators.
-     *
-     * @var array
-     */
-    protected $extensions = [];
 
     /**
      * The array of created "drivers".
@@ -38,15 +22,20 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
     protected $drivers = [];
 
     /**
+     * The registered custom driver creators.
+     *
+     * @var array
+     */
+    protected $extensions = [];
+
+    /**
      * Create a new manager instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($data)
     {
-        $this->container = $container;
-
-        $this->createConfiguration($container);
+        $this->configureOptions($data);
     }
 
     /**
@@ -65,7 +54,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', $this->getConfigName()];
     }
@@ -73,7 +62,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return ['drivers'];
     }
@@ -85,7 +74,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      */
     public function getConfig(): array
     {
-        return $this->config;
+        return $this->options;
     }
 
     /**
@@ -95,7 +84,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      */
     public function getDefaultDriver(): string
     {
-        return $this->config['default'];
+        return $this->options['default'];
     }
 
     /**
@@ -105,7 +94,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      */
     public function setDefaultDriver(string $name)
     {
-        $this->config['default'] = $name;
+        $this->options['default'] = $name;
     }
 
     /**
@@ -177,7 +166,7 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
     {
         $name = $name ?? $this->getDefaultDriver();
 
-        $drivers = $this->config['drivers'] ?? [];
+        $drivers = $this->options['drivers'] ?? [];
 
         if (isset($drivers[$name]) && is_array($drivers[$name])) {
             $config         = $drivers[$name];
@@ -230,24 +219,4 @@ abstract class AbstractManager implements RequiresConfig, RequiresMandatoryOptio
      * @return string
      */
     abstract protected function getConfigName(): string;
-
-    /**
-     * Create handler configuration.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @see \Viserio\Component\Exception\ErrorHandler::options()
-     *
-     * @return void
-     */
-    protected function createConfiguration(ContainerInterface $container): void
-    {
-        if ($container->has(RepositoryContract::class)) {
-            $config = $container->get(RepositoryContract::class);
-        } else {
-            $config = $container->get('config');
-        }
-
-        $this->config = $this->options($config);
-    }
 }

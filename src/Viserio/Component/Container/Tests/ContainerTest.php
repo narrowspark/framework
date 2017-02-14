@@ -5,7 +5,7 @@ namespace Viserio\Component\Container\Tests;
 use Mouf\Picotainer\Picotainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use StdClass;
+use stdClass;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubA;
 use Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubD;
@@ -47,7 +47,7 @@ class ContainerTest extends TestCase
         $this->services = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
 
         foreach (array_keys($this->services) as $id) {
-            $service     = new StdClass();
+            $service     = new stdClass();
             $service->id = $id;
 
             $this->services[$id] = $service;
@@ -83,7 +83,7 @@ class ContainerTest extends TestCase
     public function testSharedClosureResolution()
     {
         $container = $this->container;
-        $class     = new StdClass();
+        $class     = new stdClass();
 
         $container->singleton('class', function () use ($class) {
             return $class;
@@ -267,13 +267,13 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
         $container->bind('foo', function () {
-            $obj = new StdClass();
+            $obj = new stdClass();
             $obj->foo = 'bar';
 
             return $obj;
         });
 
-        $obj      = new StdClass();
+        $obj      = new stdClass();
         $obj->foo = 'foo';
 
         $container->instance('foo', $obj);
@@ -326,12 +326,12 @@ class ContainerTest extends TestCase
     public function testUnsetRemoveBoundInstances()
     {
         $container = new Container();
-        $container->instance('object', new StdClass());
+        $container->instance('object', new stdClass());
         unset($container['object']);
 
         self::assertFalse($container->has('object'));
 
-        $container->instance('object', new StdClass());
+        $container->instance('object', new stdClass());
         $container->forget('object');
 
         self::assertFalse($container->has('object'));
@@ -345,7 +345,7 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        self::assertFalse($container->has(new StdClass()));
+        self::assertFalse($container->has(new stdClass()));
     }
 
     /**
@@ -356,7 +356,7 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        self::assertFalse($container->get(new StdClass()));
+        self::assertFalse($container->get(new stdClass()));
     }
 
     /**
@@ -373,7 +373,7 @@ class ContainerTest extends TestCase
     public function testBoundInstanceAndAliasCheckViaArrayAccess()
     {
         $container = new Container();
-        $container->instance('object', new StdClass());
+        $container->instance('object', new stdClass());
         $container->alias('object', 'alias');
 
         self::assertTrue(isset($container['object']));
@@ -623,9 +623,9 @@ class ContainerTest extends TestCase
 
             return $obj;
         });
-        $this->assertFalse(ContainerLazyExtendFixture::$initialized);
+        self::assertFalse(ContainerLazyExtendFixture::$initialized);
         $container->make(ContainerLazyExtendFixture::class);
-        $this->assertTrue(ContainerLazyExtendFixture::$initialized);
+        self::assertTrue(ContainerLazyExtendFixture::$initialized);
     }
 
     public function testContextualBindingWorksForExistingInstancedBindings()
@@ -638,7 +638,7 @@ class ContainerTest extends TestCase
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerImplementationTwoFixture::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerImplementationTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -654,7 +654,7 @@ class ContainerTest extends TestCase
 
         $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -671,7 +671,7 @@ class ContainerTest extends TestCase
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectTwoFixture::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -688,7 +688,7 @@ class ContainerTest extends TestCase
         $container->instance('stub', new ContainerImplementationFixture());
         $container->alias('stub', ContainerContractFixtureInterface::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -705,7 +705,7 @@ class ContainerTest extends TestCase
         $container->bind('stub', ContainerImplementationFixture::class);
         $container->alias('stub', ContainerContractFixtureInterface::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -722,12 +722,12 @@ class ContainerTest extends TestCase
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectInstantiationsFixture::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerTestContextInjectInstantiationsFixture::class,
             $container->make(ContainerTestContextInjectTwoFixture::class)->impl
         );
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerImplementationFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
@@ -742,7 +742,7 @@ class ContainerTest extends TestCase
         $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
         $container->instance('ContainerTestContextInjectInstantiationsFixture', new ContainerTestContextInjectInstantiationsFixture());
 
-        $this->assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
+        self::assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
 
         $container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
@@ -753,6 +753,6 @@ class ContainerTest extends TestCase
         $container->make(ContainerTestContextInjectOneFixture::class);
         $container->make(ContainerTestContextInjectOneFixture::class);
 
-        $this->assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
+        self::assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
     }
 }

@@ -22,6 +22,8 @@ interface Monitor
      * Register an event listener for the exception occurred job event.
      *
      * @param mixed $callback
+     *
+     * @return void
      */
     public function exceptionOccurred($callback);
 }

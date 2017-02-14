@@ -29,7 +29,17 @@ class ExceptionServiceProviderTest extends TestCase
         $container->register(new ViewServiceProvider());
         $container->register(new FilesServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
-        $container->get(RepositoryContract::class)->setArray(['viserio' => ['exception' => ['env' => 'dev', 'default_displayer' => '']]]);
+        $container->get(RepositoryContract::class)->setArray(['viserio' => [
+                'exception' => [
+                    'env'               => 'dev',
+                    'debug'             => false,
+                    'default_displayer' => '',
+                ],
+                'view' => [
+                    'paths' => [],
+                ],
+            ],
+        ]);
 
         self::assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfo::class));
         self::assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
@@ -39,33 +49,5 @@ class ExceptionServiceProviderTest extends TestCase
         self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
         self::assertInstanceOf(CanDisplayFilter::class, $container->get(CanDisplayFilter::class));
         self::assertInstanceOf(Handler::class, $container->get(Handler::class));
-    }
-
-    public function testProviderWithoutConfigManager()
-    {
-        $container = new Container();
-        $container->register(new ExceptionServiceProvider());
-        $container->register(new ViewServiceProvider());
-        $container->register(new FilesServiceProvider());
-
-        $container->instance('options', [
-            'debug' => true,
-        ]);
-
-        self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
-    }
-
-    public function testProviderWithoutConfigManagerAndNamespace()
-    {
-        $container = new Container();
-        $container->register(new ExceptionServiceProvider());
-        $container->register(new ViewServiceProvider());
-        $container->register(new FilesServiceProvider());
-
-        $container->instance('viserio.exception.options', [
-            'debug' => true,
-        ]);
-
-        self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
     }
 }

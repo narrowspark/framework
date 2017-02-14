@@ -42,9 +42,13 @@ class WebProfilerMiddlewareTest extends TestCase
             $assets->getIcons()
         );
 
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
         $renderedContent = $assets->render() . $template->render();
 
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request = (new ServerRequestFactory())->createServerRequest($server);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);

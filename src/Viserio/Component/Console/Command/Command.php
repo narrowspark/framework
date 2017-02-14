@@ -16,11 +16,12 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Support\Arrayable;
-use Viserio\Component\Support\Invoker;
+use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 abstract class Command extends BaseCommand implements CompletionAwareInterface
 {
     use ContainerAwareTrait;
+    use InvokerAwareTrait;
 
     /**
      * The console command name.
@@ -77,13 +78,6 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @var string
      */
     protected $signature;
-
-    /**
-     * Invoker instance.
-     *
-     * @var \Viserio\Component\Support\Invoker
-     */
-    protected $invoker;
 
     /**
      * Create a new console command instance.
@@ -448,17 +442,6 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     }
 
     /**
-     * Set invoker.
-     *
-     * @param \Viserio\Component\Support\Invoker
-     * @param Invoker $invoker
-     */
-    public function setInvoker(Invoker $invoker)
-    {
-        $this->invoker = $invoker;
-    }
-
-    /**
      * Execute the console command.
      *
      * @param \Symfony\Component\Console\Input\InputInterface   $input
@@ -524,15 +507,5 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
         foreach ($this->getOptions() as $options) {
             call_user_func_array([$this, 'addOption'], $options);
         }
-    }
-
-    /**
-     * Get configured invoker.
-     *
-     * @return \Viserio\Component\Support\Invoker
-     */
-    protected function getInvoker(): Invoker
-    {
-        return $this->invoker;
     }
 }

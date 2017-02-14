@@ -9,10 +9,14 @@ use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\ExceptionInfo;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-class HtmlDisplayer implements DisplayerContract
+class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
+    use ConfigurationTrait;
     use ResponseFactoryAwareTrait;
     use StreamFactoryAwareTrait;
 
@@ -36,18 +40,37 @@ class HtmlDisplayer implements DisplayerContract
      * @param \Viserio\Component\Exception\ExceptionInfo     $info
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param string                                         $path
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
     public function __construct(
         ExceptionInfo $info,
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
-        string $path
+        $data
     ) {
         $this->info            = $info;
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
-        $this->path            = $path;
+
+        $this->configureOptions($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'exception'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'template_path' => __DIR__ . '/../Resources/error.html',
+        ];
     }
 
     /**
@@ -100,7 +123,7 @@ class HtmlDisplayer implements DisplayerContract
      */
     protected function render(array $info): string
     {
-        $content = file_get_contents($this->path);
+        $content = file_get_contents($this->options['template_path']);
 
         foreach ($info as $key => $val) {
             $content = str_replace("{{ $$key }}", $val, $content);

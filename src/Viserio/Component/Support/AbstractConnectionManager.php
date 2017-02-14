@@ -3,25 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use Interop\Config\ConfigurationTrait;
-use Interop\Config\RequiresConfig;
-use Interop\Config\RequiresMandatoryOptions;
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-abstract class AbstractConnectionManager implements RequiresConfig, RequiresMandatoryOptions
+abstract class AbstractConnectionManager implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use ContainerAwareTrait;
     use ConfigurationTrait;
-
-    /**
-     * Handler config.
-     *
-     * @var array|\ArrayAccess
-     */
-    protected $config = [];
 
     /**
      * The active connection instances.
@@ -38,15 +29,13 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     protected $extensions = [];
 
     /**
-     * Create a new manager instance.
+     * Create a new connection manager instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($data)
     {
-        $this->container = $container;
-
-        $this->createConfiguration($container);
+        $this->configureOptions($data);
     }
 
     /**
@@ -65,7 +54,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     /**
      * {@inheritdoc}
      */
-    public function dimensions(): iterable
+    public function getDimensions(): iterable
     {
         return ['viserio', $this->getConfigName()];
     }
@@ -73,7 +62,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     /**
      * {@inheritdoc}
      */
-    public function mandatoryOptions(): iterable
+    public function getMandatoryOptions(): iterable
     {
         return ['connections'];
     }
@@ -85,7 +74,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function getConfig(): array
     {
-        return $this->config;
+        return $this->options;
     }
 
     /**
@@ -143,7 +132,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function getDefaultConnection(): string
     {
-        return $this->config['default'];
+        return $this->options['default'];
     }
 
     /**
@@ -153,7 +142,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      */
     public function setDefaultConnection(string $name)
     {
-        $this->config['default'] = $name;
+        $this->options['default'] = $name;
     }
 
     /**
@@ -202,7 +191,7 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        $connections = $this->config['connections'];
+        $connections = $this->options['connections'];
 
         if (isset($connections[$name]) && is_array($connections[$name])) {
             $config         = $connections[$name];
@@ -255,24 +244,4 @@ abstract class AbstractConnectionManager implements RequiresConfig, RequiresMand
      * @return string
      */
     abstract protected function getConfigName(): string;
-
-    /**
-     * Create handler configuration.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @see \Viserio\Component\Exception\ErrorHandler::options()
-     *
-     * @return void
-     */
-    protected function createConfiguration(ContainerInterface $container): void
-    {
-        if ($container->has(RepositoryContract::class)) {
-            $config = $container->get(RepositoryContract::class);
-        } else {
-            $config = $container->get('config');
-        }
-
-        $this->config = $this->options($config);
-    }
 }

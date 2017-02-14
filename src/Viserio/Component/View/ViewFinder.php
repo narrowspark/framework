@@ -4,12 +4,16 @@ namespace Viserio\Component\View;
 
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class ViewFinder implements FinderContract
+class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
+    use ConfigurationTrait;
 
     /**
      * The filesystem instance.
@@ -44,23 +48,48 @@ class ViewFinder implements FinderContract
      *
      * @var array
      */
-    protected $extensions = [];
+    protected $extensions = [
+        'php',
+        'phtml',
+        'css',
+        'js',
+    ];
 
     /**
      * Create a new file view loader instance.
      *
      * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
-     * @param array                                              $paths
-     * @param null|array                                         $extensions
+     * @param \Interop\Container\ContainerInterface|iterable     $data
      */
-    public function __construct(FilesystemContract $files, array $paths, array $extensions = null)
+    public function __construct(FilesystemContract $files, $data)
     {
         $this->files = $files;
-        $this->paths = $paths;
 
-        if ($extensions !== null) {
-            $this->extensions = array_merge($this->extensions, $extensions);
+        $this->configureOptions($data);
+
+        $this->paths = $this->options['paths'];
+
+        if (isset($this->options['extensions']) && is_array($this->options['extensions'])) {
+            $this->extensions = array_merge($this->extensions, $this->options['extensions']);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'view'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return [
+            'paths',
+        ];
     }
 
     /**

@@ -8,7 +8,6 @@ use Swift_Mailer;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Contracts\Queue\Queue as QueueContract;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Mail\Mailer;
 use Viserio\Component\Mail\QueueMailer;
@@ -16,10 +15,6 @@ use Viserio\Component\Mail\TransportManager;
 
 class MailServiceProvider implements ServiceProvider
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.mail';
-
     /**
      * {@inheritdoc}
      */
@@ -61,15 +56,14 @@ class MailServiceProvider implements ServiceProvider
         if ($container->has(QueueContract::class)) {
             $mailer = new QueueMailer(
                 $container->get(Swift_Mailer::class),
-                $container->get(QueueContract::class)
+                $container->get(QueueContract::class),
+                $container
             );
-
-            $mailer->setContainer($container);
         } else {
-            $mailer = new Mailer(
-                $container->get(Swift_Mailer::class)
-            );
+            $mailer = new Mailer($container->get(Swift_Mailer::class), $container);
         }
+
+        $mailer->setContainer($container);
 
         if ($container->has(ViewFactoryContract::class)) {
             $mailer->setViewFactory($container->get(ViewFactoryContract::class));
@@ -77,21 +71,6 @@ class MailServiceProvider implements ServiceProvider
 
         if ($container->has(EventManagerContract::class)) {
             $mailer->setEventManager($container->get(EventManagerContract::class));
-        }
-
-        // If a "from" address is set, we will set it on the mailer so that all mail
-        // messages sent by the applications will utilize the same "from" address
-        // on each one, which makes the developer's life a lot more convenient.
-        $from = self::getConfig($container, 'from');
-
-        if (is_array($from) && isset($from['address'])) {
-            $mailer->alwaysFrom($from['address'], $from['name']);
-        }
-
-        $to = self::getConfig($container, 'to');
-
-        if (is_array($to) && isset($to['address'])) {
-            $mailer->alwaysTo($to['address'], $to['name']);
         }
 
         return $mailer;

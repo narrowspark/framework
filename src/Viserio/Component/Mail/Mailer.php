@@ -12,13 +12,16 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
-class Mailer implements MailerContract
+class Mailer implements MailerContract, RequiresComponentConfigContract
 {
     use ContainerAwareTrait;
+    use ConfigurationTrait;
     use InvokerAwareTrait;
     use EventsAwareTrait;
     use ViewAwareTrait;
@@ -54,11 +57,37 @@ class Mailer implements MailerContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer $swift
+     * @param \Swift_Mailer                                  $swiftMailer
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
-    public function __construct(Swift_Mailer $swift)
+    public function __construct(Swift_Mailer $swiftMailer, $data)
     {
-        $this->swift = $swift;
+        $this->configureOptions($data);
+
+        // If a "from" address is set, we will set it on the mailer so that all mail
+        // messages sent by the applications will utilize the same "from" address
+        // on each one, which makes the developer's life a lot more convenient.
+        $from = $this->options['from'] ?? null;
+
+        if (is_array($from) && isset($from['address'], $from['name'])) {
+            $this->alwaysFrom($from['address'], $from['name']);
+        }
+
+        $to = $this->options['to'] ?? null;
+
+        if (is_array($to) && isset($to['address'], $to['name'])) {
+            $this->alwaysTo($to['address'], $to['name']);
+        }
+
+        $this->swift = $swiftMailer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'mail'];
     }
 
     /**

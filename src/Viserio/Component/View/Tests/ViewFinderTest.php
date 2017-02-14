@@ -3,8 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Tests;
 
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;
@@ -74,6 +76,7 @@ class ViewFinderTest extends TestCase
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'Nested/foo.php');
         $path3 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.phtml');
         $path4 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.css');
+        $path5 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.js');
 
         $finder = $this->getFinder();
         $finder->addLocation($this->getPath() . '/' . 'Nested');
@@ -91,6 +94,11 @@ class ViewFinderTest extends TestCase
             ->shouldReceive('has')
             ->once()
             ->with($path4)
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('has')
+            ->once()
+            ->with($path5)
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
@@ -156,6 +164,7 @@ class ViewFinderTest extends TestCase
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'bar/bar/baz.php');
         $path3 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.phtml');
         $path4 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.css');
+        $path5 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.js');
 
         $finder = $this->getFinder();
         $finder->addNamespace(
@@ -183,6 +192,11 @@ class ViewFinderTest extends TestCase
             ->shouldReceive('has')
             ->once()
             ->with($path4)
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('has')
+            ->once()
+            ->with($path5)
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
@@ -225,6 +239,11 @@ class ViewFinderTest extends TestCase
             ->shouldReceive('has')
             ->once()
             ->with(self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.phtml'))
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('has')
+            ->once()
+            ->with(self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.js'))
             ->andReturn(false);
         $finder->find('foo');
     }
@@ -287,7 +306,7 @@ class ViewFinderTest extends TestCase
         $finder->addExtension('baz');
         $finder->addExtension('baz');
 
-        self::assertCount(4, $finder->getExtensions());
+        self::assertCount(5, $finder->getExtensions());
     }
 
     public function testPrependNamespace()
@@ -336,6 +355,25 @@ class ViewFinderTest extends TestCase
 
     protected function getFinder()
     {
-        return new ViewFinder($this->mock(Filesystem::class), [$this->getPath()], ['php', 'phtml', 'css']);
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'view' => [
+                    'paths'      => [$this->getPath()],
+                ],
+            ]);
+
+        return new ViewFinder(
+            $this->mock(Filesystem::class),
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
     }
 }

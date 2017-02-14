@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use StdClass;
+use stdClass;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
@@ -29,7 +29,7 @@ class ApplicationTest extends TestCase
     {
         $app = $this->getApplication();
 
-        $config = $this->mock(StdClass::class);
+        $config = $this->mock(stdClass::class);
         $config->shouldReceive('set')
             ->once()
             ->with('app.locale', 'foo');
@@ -40,14 +40,14 @@ class ApplicationTest extends TestCase
 
         $app->instance(RepositoryContract::class, $config);
 
-        $trans = $this->mock(StdClass::class);
+        $trans = $this->mock(stdClass::class);
         $trans->shouldReceive('setLocale')
             ->once()
             ->with('foo');
 
         $app->instance(TranslationManagerContract::class, $trans);
 
-        $events = $this->mock(StdClass::class);
+        $events = $this->mock(stdClass::class);
         $events->shouldReceive('trigger')
             ->once()
             ->with('locale.changed', $app, ['locale' => 'foo']);

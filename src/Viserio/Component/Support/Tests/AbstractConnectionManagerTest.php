@@ -188,9 +188,9 @@ class AbstractConnectionManagerTest extends TestCase
             ->with('viserio')
             ->andReturn([
                 'connection' => [
-                    'default'     => 'stdclass2',
+                    'default'     => 'stdClass2',
                     'connections' => [
-                        'stdclass2' => [
+                        'stdClass2' => [
                             'servers' => 'localhost',
                         ],
                     ],
@@ -200,15 +200,15 @@ class AbstractConnectionManagerTest extends TestCase
         $manager = new TestConnectionManager(new ArrayContainer([
             RepositoryContract::class => $config,
         ]));
-        $manager->extend('stdclass2', function ($options) {
+        $manager->extend('stdClass2', function ($options) {
             return new stdClass();
         });
 
-        self::assertTrue($manager->hasConnection('stdclass2'));
-        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdclass2'));
+        self::assertTrue($manager->hasConnection('stdClass2'));
+        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
 
-        $manager->reconnect('stdclass2');
+        $manager->reconnect('stdClass2');
 
-        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdclass2'));
+        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
     }
 }

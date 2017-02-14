@@ -5,7 +5,7 @@ namespace Viserio\Component\Exception\Tests\Filters;
 use Exception;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Displayers\JsonDisplayer;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
@@ -16,7 +16,7 @@ class CanDisplayFilterTest extends TestCase
 
     public function testFirstIsRemoved()
     {
-        $request   = $this->mock(RequestInterface::class);
+        $request   = $this->mock(ServerRequestInterface::class);
         $exception = new Exception();
 
         $html = $this->mock(HtmlDisplayer::class);
@@ -40,7 +40,7 @@ class CanDisplayFilterTest extends TestCase
 
     public function testNoChange()
     {
-        $request   = $this->mock(RequestInterface::class);
+        $request   = $this->mock(ServerRequestInterface::class);
         $exception = new Exception();
 
         $html = $this->mock(HtmlDisplayer::class);

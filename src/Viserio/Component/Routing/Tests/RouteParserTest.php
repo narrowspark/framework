@@ -3,8 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
-use Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException;
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\RouteParser;
@@ -140,14 +138,11 @@ class RouteParserTest extends TestCase
      *
      * @param mixed $uri
      * @param mixed $expectedExceptionType
+     *
+     * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException
      */
-    public function testInvalidRouteParsing($uri, $expectedExceptionType)
+    public function testInvalidRouteParsing($uri)
     {
-        $this->setExpectedExceptionRegExp(
-            $expectedExceptionType ?: RuntimeException::class,
-            '/.*/'
-        );
-
         (new RouteParser())->parse($uri, []);
     }
 
@@ -156,23 +151,18 @@ class RouteParserTest extends TestCase
         return [
             [
                 'abc',
-                InvalidRoutePatternException::class,
             ],
             [
                 '/test/{a/bc}',
-                InvalidRoutePatternException::class,
             ],
             [
                 '/test/{a{bc}',
-                InvalidRoutePatternException::class,
             ],
             [
                 '/test/{abc}}',
-                InvalidRoutePatternException::class,
             ],
             [
                 '/test/{a{bc}}',
-                InvalidRoutePatternException::class,
             ],
         ];
     }

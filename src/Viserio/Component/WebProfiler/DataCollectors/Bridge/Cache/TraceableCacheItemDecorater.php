@@ -222,7 +222,7 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
      * @param string $name
      * @param mixed  $argument
      *
-     * @return object
+     * @return anonymous//src/Viserio/Component/WebProfiler/DataCollectors/Bridge/Cache/TraceableCacheItemDecorater.php
      */
     private function start(string $name, $argument = null)
     {
