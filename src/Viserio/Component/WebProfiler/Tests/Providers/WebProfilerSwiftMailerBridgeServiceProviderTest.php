@@ -11,9 +11,9 @@ use Swift_SmtpTransport;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerSwiftMailerBridgeServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class WebProfilerSwiftMailerBridgeServiceProviderTest extends TestCase
 {

@@ -14,8 +14,8 @@ use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\Providers\FoundationDataCollectorsServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
 class FoundationDataCollectorsServiceProviderTest extends TestCase
 {
@@ -56,7 +56,7 @@ class FoundationDataCollectorsServiceProviderTest extends TestCase
 
         $container->get(RepositoryContract::class)->set('viserio', [
             'webprofiler' => [
-                'enable' => true,
+                'enable'    => true,
                 'collector' => [
                     'narrowspark' => true,
                     'viserio'     => [

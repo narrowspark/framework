@@ -10,10 +10,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDODecorater;
 use Viserio\Component\WebProfiler\Providers\WebProfilerPDOBridgeServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class WebProfilerPDOBridgeServiceProviderTest extends TestCase
 {
