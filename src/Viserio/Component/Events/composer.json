@@ -24,7 +24,7 @@
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
         "narrowspark/testing-helper"         : "^2.0",
-        "phpunit/phpunit"                    : "~5.7 || ^6.0",
+        "phpunit/phpunit"                    : "^6.0",
         "viserio/container"                  : "self.version",
         "viserio/http-factory"               : "self.version",
         "viserio/web-profiler"               : "self.version"

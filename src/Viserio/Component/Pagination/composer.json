@@ -28,7 +28,7 @@
         "container-interop/service-provider"  : "^0.3",
         "doctrine/dbal"                       : "^2.5",
         "narrowspark/testing-helper"          : "^1.5",
-        "phpunit/phpunit"                     : "~5.7 || ^6.0",
+        "phpunit/phpunit"                     : "^6.0",
         "viserio/http-factory"                : "self.version"
     },
     "autoload": {

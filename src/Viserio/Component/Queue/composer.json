@@ -32,7 +32,7 @@
     "require-dev": {
         "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^2.0",
-        "phpunit/phpunit"                                    : "~5.7 || ^6.0",
+        "phpunit/phpunit"                                    : "^6.0",
         "php-amqplib/php-amqplib"                            : "^2.6",
         "pda/pheanstalk"                                     : "^3.1",
         "viserio/connect"                                    : "self.version",
