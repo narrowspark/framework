@@ -57,7 +57,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                                   $swiftMailer
+     * @param \Swift_Mailer                                  $swiftMailer
      * @param \Interop\Container\ContainerInterface|iterable $data
      */
     public function __construct(Swift_Mailer $swiftMailer, $data)
