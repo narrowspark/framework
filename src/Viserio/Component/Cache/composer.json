@@ -54,7 +54,7 @@
         "container-interop/service-provider"  : "^0.3",
         "micheh/psr7-cache"                   : "^0.5",
         "narrowspark/testing-helper"          : "^2.0",
-        "phpunit/phpunit"                     : "~5.7 || ^6.0",
+        "phpunit/phpunit"                     : "^6.0",
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version"
     },

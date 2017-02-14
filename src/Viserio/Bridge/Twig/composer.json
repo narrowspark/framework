@@ -18,44 +18,44 @@
         }
     ],
     "require": {
-        "php"                                 : "^7.1",
-        "twig/twig"                           : "^2.0",
-        "viserio/contracts"                   : "self.version",
-        "viserio/view"                        : "self.version"
+        "php"                                : "^7.1",
+        "twig/twig"                          : "^2.0",
+        "viserio/contracts"                  : "self.version",
+        "viserio/view"                       : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"  : "^0.3",
-        "danielstjules/stringy"               : "^2.3",
-        "narrowspark/testing-helper"          : "^2.0",
-        "mockery/mockery"                     : "^0.9",
-        "phpunit/phpunit"                     : "~5.7 || ^6.0",
-        "symfony/var-dumper"                  : "^3.1",
-        "viserio/config"                      : "self.version",
-        "viserio/container"                   : "self.version",
-        "viserio/session"                     : "self.version",
-        "viserio/support"                     : "self.version",
-        "viserio/translation"                 : "self.version",
-        "viserio/web-profiler"                : "self.version"
+        "container-interop/service-provider" : "^0.3",
+        "danielstjules/stringy"              : "^2.3",
+        "narrowspark/testing-helper"         : "^2.0",
+        "mockery/mockery"                    : "^1.0",
+        "phpunit/phpunit"                    : "^6.0",
+        "symfony/var-dumper"                 : "^3.1",
+        "viserio/config"                     : "self.version",
+        "viserio/container"                  : "self.version",
+        "viserio/session"                    : "self.version",
+        "viserio/support"                    : "self.version",
+        "viserio/translation"                : "self.version",
+        "viserio/web-profiler"               : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Bridge\\Twig\\"         : ""
+            "Viserio\\Bridge\\Twig\\"        : ""
         },
-        "exclude-from-classmap"               : ["/Tests/"]
+        "exclude-from-classmap"              : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Bridge\\Twig\\Tests\\"  : "Tests/"
+            "Viserio\\Bridge\\Twig\\Tests\\" : "Tests/"
         }
     },
     "suggest": {
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider" : "Required to use service-provider (^0.3).",
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                      : "1.0-dev"
+            "dev-master"                     : "1.0-dev"
         }
     },
-    "minimum-stability"                       : "dev",
-    "prefer-stable"                           : true
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
 }
