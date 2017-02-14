@@ -92,7 +92,8 @@ PHP;
      * Compile the counter for the segments check.
      *
      * @param anonymous//src/Viserio/Component/Routing/TreeRouteCompiler.php$0 $code
-     * @param array                                                            $routeTree
+     * @param array $routeTree
+     * @param mixed $code
      */
     protected function compileRouteTree($code, array $routeTree)
     {

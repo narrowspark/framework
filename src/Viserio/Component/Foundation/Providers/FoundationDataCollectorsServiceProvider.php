@@ -15,7 +15,8 @@ use Viserio\Component\Foundation\DataCollectors\NarrowsparkDataCollector;
 use Viserio\Component\Foundation\DataCollectors\ViserioHttpDataCollector;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class FoundationDataCollectorsServiceProvider implements ServiceProvider,
+class FoundationDataCollectorsServiceProvider implements
+    ServiceProvider,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract,
     RequiresMandatoryOptionsContract

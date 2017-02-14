@@ -18,7 +18,8 @@ use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class TwigBridgeServiceProvider implements ServiceProvider,
+class TwigBridgeServiceProvider implements
+    ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {

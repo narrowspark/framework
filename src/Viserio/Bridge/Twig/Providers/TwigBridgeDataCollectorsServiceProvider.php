@@ -13,7 +13,8 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class TwigBridgeDataCollectorsServiceProvider implements ServiceProvider,
+class TwigBridgeDataCollectorsServiceProvider implements
+    ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {

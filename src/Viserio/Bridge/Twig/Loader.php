@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig;
 
 use InvalidArgumentException;
-use Twig_Source;
 use Twig_Error_Loader;
 use Twig_ExistsLoaderInterface;
 use Twig_LoaderInterface;
+use Twig_Source;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 

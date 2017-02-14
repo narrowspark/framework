@@ -6,7 +6,8 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
 
-abstract class AbstractBaseEngine implements EngineContract,
+abstract class AbstractBaseEngine implements
+    EngineContract,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
