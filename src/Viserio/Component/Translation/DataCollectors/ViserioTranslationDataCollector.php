@@ -81,27 +81,40 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
         ];
         $html = $this->createTabs([
             [
-                'name'    => 'Defined <span class="counter">' . $this->data['counted'][TranslatorContract::MESSAGE_DEFINED] . '</span>',
+                'name'    => 'Defined <span class="counter">' .
+                    $this->data['counted'][TranslatorContract::MESSAGE_DEFINED] .
+                    '</span>',
                 'content' => $this->createTable(
                     array_values($sortedMessages[TranslatorContract::MESSAGE_DEFINED]),
-                    'These messages are correctly translated into the given locale.',
-                    $tableHeaders
+                    [
+                        'name'    => 'These messages are correctly translated into the given locale.',
+                        'headers' => $tableHeaders,
+                    ]
                 ),
             ],
             [
-                'name'    => 'Fallback <span class="counter">' . $this->data['counted'][TranslatorContract::MESSAGE_EQUALS_FALLBACK] . '</span>',
+                'name'    => 'Fallback <span class="counter">' .
+                    $this->data['counted'][TranslatorContract::MESSAGE_EQUALS_FALLBACK] .
+                    '</span>',
                 'content' => $this->createTable(
                     array_values($sortedMessages[TranslatorContract::MESSAGE_EQUALS_FALLBACK]),
-                    'These messages are not available for the given locale but Symfony found them in the fallback locale catalog.',
-                    $tableHeaders
+                    [
+                        'name'    => 'These messages are not available for the given locale but Symfony found them in the fallback locale catalog.',
+                        'headers' => $tableHeaders,
+                    ]
                 ),
             ],
             [
-                'name'    => 'Missing <span class="counter">' . $this->data['counted'][TranslatorContract::MESSAGE_MISSING] . '</span>',
+                'name'    => 'Missing <span class="counter">' .
+                    $this->data['counted'][TranslatorContract::MESSAGE_MISSING] .
+                    '</span>',
                 'content' => $this->createTable(
                     array_values($sortedMessages[TranslatorContract::MESSAGE_MISSING]),
-                    'These messages are not available for the given locale and cannot be found in the fallback locales. <br> Add them to the translation catalogue to avoid Narrowspark outputting untranslated contents.',
-                    $tableHeaders
+                    [
+                        'name' => 'These messages are not available for the given locale and cannot be found in the fallback locales.' .
+                        ' <br> Add them to the translation catalogue to avoid Narrowspark outputting untranslated contents.',
+                        'headers' => $tableHeaders,
+                    ]
                 ),
             ],
         ]);

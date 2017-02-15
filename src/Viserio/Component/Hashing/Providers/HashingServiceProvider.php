@@ -5,14 +5,22 @@ namespace Viserio\Component\Hashing\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Hashing\Password as PasswordContract;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Component\Hashing\Password;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class HashingServiceProvider implements ServiceProvider
+class HashingServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.hashing';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -30,8 +38,42 @@ class HashingServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'hashing'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return ['key'];
+    }
+
     public static function createPassword(ContainerInterface $container): Password
     {
-        return new Password(self::getConfig($container, 'key', ''));
+        self::resolveOptions($container);
+
+        return new Password(self::$options['key']);
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

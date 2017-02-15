@@ -71,8 +71,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements MenuAwareC
     {
         return $this->createTable(
             $this->data['mails'],
-            null,
-            ['to', 'subject', 'headers']
+            ['headers' => ['to', 'subject', 'headers']]
         );
     }
 

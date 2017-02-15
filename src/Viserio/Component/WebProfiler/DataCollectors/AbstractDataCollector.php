@@ -225,18 +225,23 @@ abstract class AbstractDataCollector implements DataCollectorContract
     /**
      * Creates a table.
      *
-     * @param array       $data
-     * @param string|null $name
-     * @param array       $headers
+     * @param array $data
+     * @param array $settings
      */
-    protected function createTable(array $data, ?string $name = null, array $headers = ['Key', 'Value'])
+    protected function createTable(array $data, array $settings = [])
     {
-        $html = $name !== null ? '<h3>' . $name . '</h3>' : '';
+        $options = array_merge([
+            'name'      => null,
+            'headers'   => ['Key', 'Value'],
+            'vardumper' => true,
+        ], $settings);
+
+        $html = $options['name'] !== null ? '<h3>' . $options['name'] . '</h3>' : '';
 
         if (count($data) !== 0) {
             $html .= '<table class="row"><thead><tr>';
 
-            foreach ($headers as $header) {
+            foreach ((array) $options['headers'] as $header) {
                 $html .= '<th scope="col" class="' . $header . '">' . $header . '</th>';
             }
 
@@ -246,17 +251,17 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 if (is_string($key)) {
                     $html .= '<tr>';
                     $html .= '<th>' . $key . '</th>';
-                    $html .= '<td>' . $this->cloneVar($values) . '</td>';
+                    $html .= '<td>' . ($options['vardumper'] ? $this->cloneVar($values) : $values) . '</td>';
                     $html .= '</tr>';
                 } else {
                     $html .= '<tr>';
 
                     if (is_array($values)) {
                         foreach ($values as $key => $value) {
-                            $html .= '<td>' . $this->cloneVar($value) . '</td>';
+                            $html .= '<td>' . ($options['vardumper'] ? $this->cloneVar($value) : $value) . '</td>';
                         }
                     } else {
-                        $html .= '<td>' . $this->cloneVar($values) . '</td>';
+                        $html .= '<td>' . ($options['vardumper'] ? $this->cloneVar($values) : $values) . '</td>';
                     }
 
                     $html .= '</tr>';

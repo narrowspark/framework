@@ -6,15 +6,23 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Parsers\TaggableParser as TaggableParserContract;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\TaggableParser;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class ParsersServiceProvider implements ServiceProvider
+class ParsersServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.parsers';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -36,16 +44,52 @@ class ParsersServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'parsers'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'directories' => [],
+        ];
+    }
+
     public static function createFileLoader(ContainerInterface $container): FileLoader
     {
+        self::resolveOptions($container);
+
         return new FileLoader(
             $container->get(TaggableParser::class),
-            self::getConfig($container, 'directories', [])
+            self::$options['directories']
         );
     }
 
     public static function createTaggableParser(): TaggableParser
     {
         return new TaggableParser();
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

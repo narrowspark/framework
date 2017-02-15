@@ -77,7 +77,7 @@ class FoundationDataCollectorsServiceProvider implements
         $profiler = $container->get(WebProfilerContract::class);
 
         if (self::$options['collector']['narrowspark']) {
-            $profiler->addCollector(static::createNarrowsparkDataCollector());
+            $profiler->addCollector(static::createNarrowsparkDataCollector(), -100);
         }
 
         if (self::$options['collector']['viserio']['http']) {

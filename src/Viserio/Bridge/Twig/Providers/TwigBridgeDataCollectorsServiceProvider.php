@@ -4,10 +4,10 @@ namespace Viserio\Bridge\Twig\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Twig_Environment as TwigEnvironment;
 use Twig_Extension_Profiler;
 use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
-use Viserio\Bridge\Twig\TwigEnvironment;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
@@ -57,15 +57,16 @@ class TwigBridgeDataCollectorsServiceProvider implements
         ];
     }
 
-    public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
+    public static function createWebProfiler(ContainerInterface $container, callable $getPrevious): WebProfilerContract
     {
         self::resolveOptions($container);
 
-        $profiler = $container->get(WebProfilerContract::class);
+        $profiler = $getPrevious();
 
         if (self::$options['collector']['twig'] !== false) {
             $profiler->addCollector(new TwigDataCollector(
-                $container->get(Twig_Profiler_Profile::class)
+                $container->get(Twig_Profiler_Profile::class),
+                $container->get(TwigEnvironment::class)
             ));
         }
 
@@ -77,11 +78,11 @@ class TwigBridgeDataCollectorsServiceProvider implements
         return new Twig_Profiler_Profile();
     }
 
-    public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
+    public static function createTwigEnvironment(ContainerInterface $container, callable $getPrevious): TwigEnvironment
     {
         self::resolveOptions($container);
 
-        $twig = $container->get(TwigEnvironment::class);
+        $twig = $getPrevious();
 
         if (self::$options['collector']['twig'] !== false) {
             $twig->addExtension(new Twig_Extension_Profiler(

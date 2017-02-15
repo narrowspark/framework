@@ -25,15 +25,18 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     /**
      * Create a new engine instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Twig_Environment                              $twig
+     * @param \Interop\Container\ContainerInterface|iterable $data
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Twig_Environment $twig, $data)
     {
-        $this->container = $container;
+        if ($data instanceof ContainerInterface) {
+            $this->container = $data;
+        }
 
-        $this->configureOptions($this->container);
+        $this->configureOptions($data);
 
-        $this->twig = $this->container->get(Twig_Environment::class);
+        $this->twig = $twig;
     }
 
     /**
@@ -92,7 +95,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     {
         if (isset($config['extensions']) && is_array($config['extensions'])) {
             foreach ($config['extensions'] as $extension) {
-                if (is_string($extension) && $this->container->has($extension)) {
+                if ($this->container !== null && is_string($extension) && $this->container->has($extension)) {
                     $twig->addExtension($this->container->get($extension));
                 } elseif (is_object($extension)) {
                     $twig->addExtension($extension);

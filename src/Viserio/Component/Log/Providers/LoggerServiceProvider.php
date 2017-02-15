@@ -8,14 +8,22 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Log\Log;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Component\Log\Writer as MonologWriter;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class LoggerServiceProvider implements ServiceProvider
+class LoggerServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.log';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -42,14 +50,50 @@ class LoggerServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'log'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return [
+            'env',
+        ];
+    }
+
     public static function createLogger(ContainerInterface $container): MonologWriter
     {
-        $logger = new MonologWriter(new Logger(self::getConfig($container, 'env', 'production')));
+        self::resolveOptions($container);
+
+        $logger = new MonologWriter(new Logger(self::$options['env']));
 
         if ($container->has(EventManagerContract::class)) {
             $logger->setEventManager($container->get(EventManagerContract::class));
         }
 
         return $logger;
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

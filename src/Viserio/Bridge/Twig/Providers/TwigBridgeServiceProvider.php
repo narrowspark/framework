@@ -9,14 +9,26 @@ use Twig_LexerInterface;
 use Twig_Loader_Array;
 use Twig_Loader_Chain;
 use Twig_LoaderInterface;
+use Viserio\Bridge\Twig\Engine\TwigEngine;
+use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
+use Viserio\Bridge\Twig\Extensions\SessionExtension;
+use Viserio\Bridge\Twig\Extensions\StrExtension;
+use Viserio\Bridge\Twig\Extensions\TranslatorExtension;
+use Viserio\Bridge\Twig\Extensions\ValidatorExtension;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contracts\Validation\Validator as ValidatorContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Support\Str;
+use Viserio\Component\View\Engines\EngineResolver;
 
 class TwigBridgeServiceProvider implements
     ServiceProvider,
@@ -42,6 +54,8 @@ class TwigBridgeServiceProvider implements
             },
             TwigEnvironment::class      => [self::class, 'createTwigEnvironment'],
             FactoryContract::class      => [self::class, 'createViewFactory'],
+            EngineResolver::class       => [self::class, 'createEngineResolver'],
+            TwigEngine::class           => [self::class, 'createTwigEngine'],
         ];
     }
 
@@ -70,13 +84,29 @@ class TwigBridgeServiceProvider implements
         ];
     }
 
-    public static function createViewFactory(ContainerInterface $container): FactoryContract
+    public static function createTwigEngine(ContainerInterface $container): TwigEngine
     {
-        $view = $container->get(FactoryContract::class);
+        return new TwigEngine($container->get(TwigEnvironment::class), $container);
+    }
 
-        $view->addExtension('twig.html', 'twig');
+    public static function createViewFactory(ContainerInterface $container, callable $getPrevious): FactoryContract
+    {
+        $view = $getPrevious();
+
+        $view->addExtension('twig', 'twig');
 
         return $view;
+    }
+
+    public static function createEngineResolver(ContainerInterface $container, callable $getPrevious): EngineResolver
+    {
+        $engines = $getPrevious();
+
+        $engines->register('twig', function () use ($container) {
+            return $container->get(TwigEngine::class);
+        });
+
+        return $engines;
     }
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
@@ -97,6 +127,8 @@ class TwigBridgeServiceProvider implements
         if ($options['debug']) {
             $twig->addExtension(new DumpExtension());
         }
+
+        self::registerViserioTwigExtension($twig, $container);
 
         return $twig;
     }
@@ -134,6 +166,39 @@ class TwigBridgeServiceProvider implements
         }
 
         return new Twig_Loader_Chain($loaders);
+    }
+
+    /**
+     * Register viserio twig extension.
+     *
+     * @param \Twig_Environment                     $twig
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     *
+     * @codeCoverageIgnore
+     */
+    protected static function registerViserioTwigExtension(TwigEnvironment $twig, ContainerInterface $container): void
+    {
+        if ($container->has(TranslatorContract::class)) {
+            $twig->addExtension(new TranslatorExtension($container->get(TranslatorContract::class)));
+        }
+
+        if ($container->has(Str::class)) {
+            $twig->addExtension(new StrExtension());
+        }
+
+        if ($container->has(ValidatorContract::class)) {
+            $twig->addExtension(new ValidatorExtension($container->get(ValidatorContract::class)));
+        }
+
+        if ($container->has(StoreContract::class)) {
+            $twig->addExtension(new SessionExtension($container->get(StoreContract::class)));
+        }
+
+        if ($container->has(RepositoryContract::class)) {
+            $twig->addExtension(new ConfigExtension($container->get(RepositoryContract::class)));
+        }
     }
 
     /**

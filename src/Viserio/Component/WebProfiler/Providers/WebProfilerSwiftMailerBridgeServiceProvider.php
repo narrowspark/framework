@@ -20,9 +20,9 @@ class WebProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
+    public static function createWebProfiler(ContainerInterface $container, callable $getPrevious): WebProfilerContract
     {
-        $profiler = $container->get(WebProfilerContract::class);
+        $profiler = $getPrevious();
 
         $profiler->addCollector(new SwiftMailDataCollector(
             $container->get(Swift_Mailer::class)

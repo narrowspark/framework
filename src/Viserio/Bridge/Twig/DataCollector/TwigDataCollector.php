@@ -4,9 +4,11 @@ namespace Viserio\Bridge\Twig\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Twig_Environment;
 use Twig_Markup;
 use Twig_Profiler_Dumper_Html;
 use Twig_Profiler_Profile;
+use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
@@ -15,6 +17,7 @@ use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 class TwigDataCollector extends AbstractDataCollector implements
     MenuAwareContract,
     PanelAwareContract,
+    AssetAwareContract,
     TooltipAwareContract
 {
     /**
@@ -35,10 +38,12 @@ class TwigDataCollector extends AbstractDataCollector implements
      * Create new twig collector instance.
      *
      * @param \Twig_Profiler_Profile $profile
+     * @param \Twig_Environment      $twigEnvironment
      */
-    public function __construct(Twig_Profiler_Profile $profile)
+    public function __construct(Twig_Profiler_Profile $profile, Twig_Environment $twigEnvironment)
     {
-        $this->profile = $profile;
+        $this->profile         = $profile;
+        $this->twigEnvironment = $twigEnvironment;
     }
 
     /**
@@ -86,9 +91,9 @@ class TwigDataCollector extends AbstractDataCollector implements
     /**
      * Get counted templates.
      *
-     * @return int
+     * @return array
      */
-    public function getTemplates(): int
+    public function getTemplates(): array
     {
         return $this->getComputedData('templates');
     }
@@ -140,9 +145,48 @@ class TwigDataCollector extends AbstractDataCollector implements
     /**
      * {@inheritdoc}
      */
+    public function getAssets(): array
+    {
+        return [
+            'css' => __DIR__ . '/Resources/css/twig.css',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getPanel(): string
     {
-        return '';
+        $data     = [];
+        $twigHtml = $this->createMetrics(
+            [
+                'Template calls' => $this->getComputedData('template_count'),
+                'Block calls'    => $this->getComputedData('block_count'),
+                'Macro calls'    => $this->getComputedData('macro_count'),
+            ],
+            'Twig Metrics'
+        );
+
+        $twigHtml .= $this->createTable(
+            $this->getTemplates(),
+            [
+                'name'      => 'Rendered Templates',
+                'headers'   => ['Template Name', 'Render Count'],
+                'vardumper' => false,
+            ]
+        );
+
+        $twigHtml .= '<div class="twig-graph"><h3>Rendering Call Graph</h3>';
+        $twigHtml .= $this->getHtmlCallGraph();
+        $twigHtml .= '</div>';
+
+        $data[] = ['name' => 'Twig', 'content' => $twigHtml];
+        $data[] = ['name' => 'Twig Extensions', 'content' => $this->createTable(
+            array_keys($this->twigEnvironment->getExtensions()),
+            ['headers' => ['Extension'], 'vardumper' => false]
+        )];
+
+        return $this->createTabs($data);
     }
 
     /**
@@ -151,9 +195,9 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon'  => file_get_contents(__DIR__ . '/../Resources/icons/ic_view_quilt_white_24px.svg'),
+            'icon'  => file_get_contents(__DIR__ . '/Resources/icons/ic_view_quilt_white_24px.svg'),
             'label' => 'Twig',
-            'value' => $this->getComputedData('template_count'),
+            'value' => '',
         ];
     }
 
@@ -163,9 +207,9 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getTooltip(): string
     {
         return $this->createTooltipGroup([
-            'Profiler token'   => $this->getComputedData('template_count'),
-            'Application name' => $this->getComputedData('block_count'),
-            'Environment'      => $this->getComputedData('macro_count'),
+            'Template calls' => $this->getComputedData('template_count'),
+            'Block calls'    => $this->getComputedData('block_count'),
+            'Macro calls'    => $this->getComputedData('macro_count'),
         ]);
     }
 

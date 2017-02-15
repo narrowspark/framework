@@ -14,13 +14,21 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Bridge\Doctrine\Connection;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class DatabaseServiceProvider implements ServiceProvider
+class DatabaseServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.database';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -42,10 +50,28 @@ class DatabaseServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'doctrine'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return ['databases'];
+    }
+
     public static function createConnection(ContainerInterface $container): Connection
     {
+        self::resolveOptions($container);
+
         return DriverManager::getConnection(
-            self::parseConfig(self::getConfig($container, 'database', [])),
+            self::parseConfig(self::$options['database']),
             $container->get(Configuration::class),
             $container->get(EventManager::class)
         );
@@ -102,5 +128,21 @@ class DatabaseServiceProvider implements ServiceProvider
         $config['wrapperClass'] = $config['wrapperClass'] ?? Connection::class;
 
         return $config;
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

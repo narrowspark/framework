@@ -7,12 +7,21 @@ use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
 use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Component\StaticalProxy\AliasLoader;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class AliasLoaderServiceProvider implements ServiceProvider
+class AliasLoaderServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.staticalproxy';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -30,8 +39,44 @@ class AliasLoaderServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'staticalproxy'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'aliases' => [],
+        ];
+    }
+
     public static function createAliasLoader(ContainerInterface $container): AliasLoader
     {
-        return new AliasLoader(self::getConfig($container, 'aliases', []));
+        self::resolveOptions($container);
+
+        return new AliasLoader(self::$options['aliases']);
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

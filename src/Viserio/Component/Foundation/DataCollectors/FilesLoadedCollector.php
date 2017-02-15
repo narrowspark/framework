@@ -83,8 +83,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     {
         return $this->createTable(
             $this->included,
-            '',
-            ['Files']
+            ['headers' => ['Files']]
         );
     }
 
