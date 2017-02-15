@@ -2,9 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Providers;
 
+use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Twig_Lexer;
 use Twig_Environment;
+use Twig_Lexer;
 use Twig_Loader_Array;
 use Twig_Loader_Chain;
 use Twig_LoaderInterface;
@@ -16,8 +18,6 @@ use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
-use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 /**
  * @runTestsInSeparateProcesses
