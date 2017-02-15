@@ -63,7 +63,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
 
         $profiler = $getPrevious();
 
-        if (self::$options['collector']['twig'] !== false) {
+        if (self::$options['collector']['twig'] === true) {
             $profiler->addCollector(new TwigDataCollector(
                 $container->get(Twig_Profiler_Profile::class),
                 $container->get(TwigEnvironment::class)
@@ -84,7 +84,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
 
         $twig = $getPrevious();
 
-        if (self::$options['collector']['twig'] !== false) {
+        if (self::$options['collector']['twig'] === true) {
             $twig->addExtension(new Twig_Extension_Profiler(
                 $container->get(Twig_Profiler_Profile::class)
             ));

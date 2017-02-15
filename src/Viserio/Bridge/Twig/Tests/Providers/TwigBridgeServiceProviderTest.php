@@ -14,6 +14,7 @@ use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
+use Viserio\Bridge\Twig\Engine\TwigEngine;
 
 class TwigBridgeServiceProviderTest extends TestCase
 {
@@ -36,6 +37,7 @@ class TwigBridgeServiceProviderTest extends TestCase
                         'twig' => [
                             'options' => [
                                 'debug' => true,
+                                'cache' => '',
                             ],
                             'file_extension' => 'html',
                             'templates'      => [
@@ -50,6 +52,7 @@ class TwigBridgeServiceProviderTest extends TestCase
             ],
         ]);
 
+        self::assertInstanceOf(TwigEngine::class, $container->get(TwigEngine::class));
         self::assertInstanceOf(Twig_Loader_Chain::class, $container->get(TwigLoader::class));
         self::assertInstanceOf(Twig_Loader_Chain::class, $container->get(Twig_LoaderInterface::class));
         self::assertInstanceOf(Twig_Environment::class, $container->get(Twig_Environment::class));
