@@ -184,7 +184,7 @@ class TwigBridgeServiceProvider implements
             $twig->addExtension(new TranslatorExtension($container->get(TranslatorContract::class)));
         }
 
-        if ($container->has(Str::class)) {
+        if (class_exists(Str::class)) {
             $twig->addExtension(new StrExtension());
         }
 
