@@ -5,7 +5,7 @@ namespace Viserio\Bridge\Twig\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Twig_Environment as TwigEnvironment;
-use Twig_LexerInterface;
+use Twig_Lexer;
 use Twig_Loader_Array;
 use Twig_Loader_Chain;
 use Twig_LoaderInterface;
@@ -120,8 +120,8 @@ class TwigBridgeServiceProvider implements
             $options
         );
 
-        if ($container->has(Twig_LexerInterface::class)) {
-            $twig->setLexer($container->get(Twig_LexerInterface::class));
+        if ($container->has(Twig_Lexer::class)) {
+            $twig->setLexer($container->get(Twig_Lexer::class));
         }
 
         if ($options['debug']) {

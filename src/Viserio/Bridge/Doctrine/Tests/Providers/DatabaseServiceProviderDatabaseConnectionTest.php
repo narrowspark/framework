@@ -9,6 +9,9 @@ use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class DatabaseServiceProviderDatabaseConnectionTest extends TestCase
 {
     public function testDatabaseConnection()

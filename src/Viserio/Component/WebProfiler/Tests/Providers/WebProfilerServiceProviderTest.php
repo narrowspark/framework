@@ -17,6 +17,9 @@ use Viserio\Component\WebProfiler\AssetsRenderer;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 use Viserio\Component\WebProfiler\WebProfiler;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class WebProfilerServiceProviderTest extends TestCase
 {
     use MockeryTrait;

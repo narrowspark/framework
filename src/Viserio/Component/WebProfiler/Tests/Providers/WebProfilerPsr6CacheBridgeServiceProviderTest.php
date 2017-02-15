@@ -15,6 +15,9 @@ use Viserio\Component\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItem
 use Viserio\Component\WebProfiler\Providers\WebProfilerPsr6CacheBridgeServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class WebProfilerPsr6CacheBridgeServiceProviderTest extends TestCase
 {
     use MockeryTrait;

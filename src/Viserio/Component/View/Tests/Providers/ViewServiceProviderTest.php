@@ -13,6 +13,9 @@ use Viserio\Component\View\Factory;
 use Viserio\Component\View\Providers\ViewServiceProvider;
 use Viserio\Component\View\ViewFinder;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class ViewServiceProviderTest extends TestCase
 {
     use MockeryTrait;

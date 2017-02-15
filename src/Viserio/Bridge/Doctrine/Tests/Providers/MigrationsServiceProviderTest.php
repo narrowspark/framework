@@ -9,6 +9,9 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Support\Env;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class MigrationsServiceProviderTest extends TestCase
 {
     public function testProvider()

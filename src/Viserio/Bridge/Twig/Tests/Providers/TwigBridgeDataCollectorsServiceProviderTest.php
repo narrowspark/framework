@@ -18,6 +18,9 @@ use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class TwigBridgeDataCollectorsServiceProviderTest extends TestCase
 {
     use MockeryTrait;

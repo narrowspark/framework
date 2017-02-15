@@ -11,6 +11,9 @@ use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class DatabaseServiceProviderTest extends TestCase
 {
     public function testProvider()

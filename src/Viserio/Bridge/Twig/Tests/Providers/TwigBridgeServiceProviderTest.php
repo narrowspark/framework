@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
+use Twig_Lexer;
 use Twig_Environment;
 use Twig_Loader_Array;
 use Twig_Loader_Chain;
@@ -15,9 +16,26 @@ use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
+use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class TwigBridgeServiceProviderTest extends TestCase
 {
+    use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
     public function testProvider()
     {
         $container = new Container();
@@ -25,6 +43,7 @@ class TwigBridgeServiceProviderTest extends TestCase
         $container->register(new ViewServiceProvider());
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new TwigBridgeServiceProvider());
+        $container->instance(Twig_Lexer::class, $this->mock(Twig_Lexer::class));
 
         $container->instance('config', [
             'viserio' => [
