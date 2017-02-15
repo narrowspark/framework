@@ -6,18 +6,17 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
-use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
+use Twig_Environment;
+use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\Providers\TwigBridgeDataCollectorsServiceProvider;
 use Viserio\Bridge\Twig\Providers\TwigBridgeServiceProvider;
+use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
+use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
-use Twig_Profiler_Profile;
-use Twig_Environment;
+use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
 class TwigBridgeDataCollectorsServiceProviderTest extends TestCase
 {
@@ -70,7 +69,7 @@ class TwigBridgeDataCollectorsServiceProviderTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         ]);
 
         $profiler = $container->get(WebProfilerContract::class);
@@ -83,7 +82,6 @@ class TwigBridgeDataCollectorsServiceProviderTest extends TestCase
 
         self::assertInstanceOf(Twig_Profiler_Profile::class, $container->get(Twig_Profiler_Profile::class));
         self::assertInstanceOf(Twig_Environment::class, $container->get(Twig_Environment::class));
-
     }
 
     private function getRequest()
