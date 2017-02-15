@@ -15,9 +15,6 @@ use Viserio\Component\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDODecorate
 use Viserio\Component\WebProfiler\Providers\WebProfilerPDOBridgeServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
-/**
- * @runTestsInSeparateProcesses
- */
 class WebProfilerPDOBridgeServiceProviderTest extends TestCase
 {
     use MockeryTrait;

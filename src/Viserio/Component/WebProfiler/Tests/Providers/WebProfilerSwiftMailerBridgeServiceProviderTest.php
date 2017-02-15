@@ -15,9 +15,6 @@ use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerSwiftMailerBridgeServiceProvider;
 
-/**
- * @runTestsInSeparateProcesses
- */
 class WebProfilerSwiftMailerBridgeServiceProviderTest extends TestCase
 {
     use MockeryTrait;
