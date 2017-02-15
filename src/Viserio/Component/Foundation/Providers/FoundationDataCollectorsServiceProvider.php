@@ -68,17 +68,17 @@ class FoundationDataCollectorsServiceProvider implements
         ];
     }
 
-    public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
+    public static function createWebProfiler(ContainerInterface $container, callable $getPrevious): WebProfilerContract
     {
         self::resolveOptions($container);
 
-        $profiler = $container->get(WebProfilerContract::class);
+        $profiler = $getPrevious();
 
         if (self::$options['collector']['narrowspark']) {
             $profiler->addCollector(static::createNarrowsparkDataCollector(), -100);
         }
 
-        if (self::$options['collector']['viserio']['http']) {
+        if (self::$options['collector']['viserio_http']) {
             $profiler->addCollector(static::createViserioHttpDataCollector($container), 1);
         }
 

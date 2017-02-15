@@ -48,28 +48,27 @@ class FoundationDataCollectorsServiceProviderTest extends TestCase
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->instance(RouterContract::class, $router);
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ConfigServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new WebProfilerServiceProvider());
         $container->register(new FoundationDataCollectorsServiceProvider());
 
-        $container->get(RepositoryContract::class)->setArray([
-            'viserio' => [
-                'webprofiler' => [
-                    'enable'    => true,
-                    'collector' => [
-                        'narrowspark'  => true,
-                        'viserio_http' => true,
-                        'files'        => true,
-                    ],
+        $container->get(RepositoryContract::class)->set('viserio', [
+            'webprofiler' => [
+                'enable'    => true,
+                'collector' => [
+                    'narrowspark'  => true,
+                    'viserio_http' => true,
+                    'files'        => true,
                 ],
             ],
-        ])->set('path.base', '/');
-
-        static::assertInstanceOf(WebProfilerContract::class, $container->get(WebProfilerContract::class));
+        ]);
+        $container->get(RepositoryContract::class)->set('path.base', '/');
 
         $profiler = $container->get(WebProfilerContract::class);
+
+        static::assertInstanceOf(WebProfilerContract::class, $profiler);
 
         static::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
         static::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));

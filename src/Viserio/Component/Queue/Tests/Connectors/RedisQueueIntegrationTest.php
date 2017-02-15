@@ -55,7 +55,7 @@ class RedisQueueIntegrationTest extends TestCase
         $this->queue = new RedisQueue($this->redis);
         $this->queue->setContainer($this->mock(ContainerInterface::class));
 
-        $this->encrypter = new Encrypter(Key::createNewRandomKey());
+        $this->encrypter = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
 
         $this->queue->setEncrypter($this->encrypter);
     }

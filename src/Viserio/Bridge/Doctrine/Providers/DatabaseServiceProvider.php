@@ -15,13 +15,11 @@ use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Bridge\Doctrine\Connection;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class DatabaseServiceProvider implements
     ServiceProvider,
-    RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+    RequiresComponentConfigContract
 {
     /**
      * Resolved cached options.
@@ -58,20 +56,12 @@ class DatabaseServiceProvider implements
         return ['viserio', 'doctrine'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMandatoryOptions(): iterable
-    {
-        return ['databases'];
-    }
-
     public static function createConnection(ContainerInterface $container): Connection
     {
         self::resolveOptions($container);
 
         return DriverManager::getConnection(
-            self::parseConfig(self::$options['database']),
+            self::parseConfig(self::$options),
             $container->get(Configuration::class),
             $container->get(EventManager::class)
         );
