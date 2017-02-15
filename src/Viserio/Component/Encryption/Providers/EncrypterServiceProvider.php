@@ -59,9 +59,7 @@ class EncrypterServiceProvider implements
     {
         self::resolveOptions($container);
 
-        $encrypt = new Encrypter(
-            Key::loadFromAsciiSafeString(self::$options['key'])
-        );
+        $encrypt = new Encrypter(self::$options['key']);
 
         return $encrypt;
     }

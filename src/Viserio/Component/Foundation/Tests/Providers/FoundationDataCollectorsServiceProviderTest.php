@@ -54,17 +54,17 @@ class FoundationDataCollectorsServiceProviderTest extends TestCase
         $container->register(new WebProfilerServiceProvider());
         $container->register(new FoundationDataCollectorsServiceProvider());
 
-        $container->get(RepositoryContract::class)->set('viserio', [
-            'webprofiler' => [
-                'enable'    => true,
-                'collector' => [
-                    'narrowspark' => true,
-                    'viserio'     => [
-                        'http' => true,
+        $container->get(RepositoryContract::class)->setArray([
+            'viserio' => [
+                'webprofiler' => [
+                    'enable'    => true,
+                    'collector' => [
+                        'narrowspark' => true,
+                        'viserio_http' => true,
+                        'files' => true,
                     ],
-                    'files' => true,
                 ],
-            ],
+            ]
         ])->set('path.base', '/');
 
         static::assertInstanceOf(WebProfilerContract::class, $container->get(WebProfilerContract::class));

@@ -11,6 +11,7 @@ use Viserio\Component\Encryption\Providers\EncrypterServiceProvider;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\Session\Providers\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class SessionServiceProviderTest extends TestCase
 {
@@ -18,24 +19,28 @@ class SessionServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new EncrypterServiceProvider());
-        $container->register(new ConfigServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new SessionServiceProvider());
         $container->register(new FilesServiceProvider());
 
         $key = Key::createNewRandomKey();
 
-        $container->get('config')->set('encryption', [
-            'key' => $key->saveToAsciiSafeString(),
-        ]);
-        $container->get('config')->set('viserio.session', [
-            'default'  => 'local',
-            'drivers'  => [
-                'local' => [
-                    'path' => '',
+        $container->instance('config', [
+            'viserio' => [
+                'session' => [
+                    'default'  => 'local',
+                    'drivers'  => [
+                        'local' => [
+                            'path' => '',
+                        ],
+                    ],
+                    'lifetime' => 3000,
+                    'cookie'   => 'test',
                 ],
-            ],
-            'lifetime' => 3000,
-            'cookie'   => 'test',
+                'encryption' => [
+                    'key' => $key->saveToAsciiSafeString(),
+                ]
+            ]
         ]);
 
         self::assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));

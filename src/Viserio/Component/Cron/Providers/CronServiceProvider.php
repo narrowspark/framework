@@ -41,7 +41,7 @@ class CronServiceProvider implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio', 'encryption'];
+        return ['viserio', 'cron'];
     }
 
     /**

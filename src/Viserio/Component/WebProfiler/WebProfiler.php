@@ -393,7 +393,7 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
      * Five common HTTP status codes indicates a redirection beginning from 301.
      * 304 not modified and 305 use proxy are not redirects.
      *
-     * @see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection
+     * @link https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection
      *
      * @param \Psr\Http\Message\ResponseInterface $response
      *

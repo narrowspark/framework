@@ -9,43 +9,22 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Hashing\Password;
 use Viserio\Component\Hashing\Providers\HashingServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class HashingServiceProviderTest extends TestCase
 {
-    public function testProvider()
-    {
-        $container = new Container();
-        $container->register(new ConfigServiceProvider());
-        $container->register(new HashingServiceProvider());
-
-        $container->get(RepositoryContract::class)->set('hashing', [
-            'key' => Key::createNewRandomKey(),
-        ]);
-
-        self::assertInstanceOf(Password::class, $container->get(Password::class));
-        self::assertInstanceOf(Password::class, $container->get('password'));
-    }
-
     public function testProviderWithoutRepositoryContract()
     {
         $container = new Container();
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new HashingServiceProvider());
 
-        $container->instance('options', [
-            'key' => Key::createNewRandomKey(),
-        ]);
-
-        self::assertInstanceOf(Password::class, $container->get(Password::class));
-        self::assertInstanceOf(Password::class, $container->get('password'));
-    }
-
-    public function testProviderWithoutRepositoryContractAndNamespace()
-    {
-        $container = new Container();
-        $container->register(new HashingServiceProvider());
-
-        $container->instance('viserio.hashing.options', [
-            'key' => Key::createNewRandomKey(),
+        $container->instance('config', [
+            'viserio' => [
+                'hashing' => [
+                    'key' => Key::createNewRandomKey()->saveToAsciiSafeString(),
+                ]
+            ]
         ]);
 
         self::assertInstanceOf(Password::class, $container->get(Password::class));

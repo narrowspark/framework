@@ -47,8 +47,6 @@ class Statement
      * @return object|int|float|string|null|bool The return value of this method on
      *                                           success depends on the fetch mode.
      *                                           In all cases, FALSE is returned on failure.
-     *
-     * @see PDO::FETCH_* constants.
      */
     public function fetch(int $fetchMode = null)
     {
@@ -69,8 +67,6 @@ class Statement
      *                            defaulting to PDO::FETCH_BOTH.
      *
      * @return \Narrowspark\Collection\Collection
-     *
-     * @see PDO::FETCH_* constants.
      */
     public function fetchAll(int $fetchMode = null): Collection
     {

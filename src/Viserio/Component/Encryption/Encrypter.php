@@ -18,11 +18,11 @@ class Encrypter implements EncrypterContract
     /**
      * Create a new Encrypter instance.
      *
-     * @param \Defuse\Crypto\Key $key
+     * @param string $key
      */
-    public function __construct(Key $key)
+    public function __construct(string $key)
     {
-        $this->key = $key;
+        $this->key = Key::loadFromAsciiSafeString($key);
     }
 
     /**

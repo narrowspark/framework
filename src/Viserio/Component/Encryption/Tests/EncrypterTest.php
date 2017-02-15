@@ -10,7 +10,7 @@ class EncrypterTest extends TestCase
 {
     public function testCompareEncryptedValues()
     {
-        $e          = new Encrypter(Key::createNewRandomKey());
+        $e          = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
         $encrypted1 = $e->encrypt('foo');
         $encrypted2 = $e->encrypt('foo');
         $encrypted3 = $e->encrypt('bar');
@@ -21,7 +21,7 @@ class EncrypterTest extends TestCase
 
     public function testEncryptionAndDecrypt()
     {
-        $e = new Encrypter(Key::createNewRandomKey());
+        $e = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
 
         $encrypted = $e->encrypt('foo');
 

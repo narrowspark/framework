@@ -41,7 +41,7 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
         $this->files = new Filesystem();
         $this->files->createDirectory(__DIR__ . '/stubs');
 
-        $this->encrypter = new Encrypter(Key::createNewRandomKey());
+        $this->encrypter = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
     }
 
     public function tearDown()

@@ -61,11 +61,9 @@ class FoundationDataCollectorsServiceProvider implements
     {
         return [
             'collector' => [
-                'narrowspark' => false,
-                'files'       => false,
-                'viserio'     => [
-                    'http' => false,
-                ],
+                'narrowspark'  => false,
+                'files'        => false,
+                'viserio_http' => false,
             ],
         ];
     }

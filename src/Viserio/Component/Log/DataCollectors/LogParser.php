@@ -100,7 +100,7 @@ class LogParser
     /**
      * By Ain Tohvri (ain).
      *
-     * @see http://tekkie.flashbit.net/php/tail-functionality-in-php
+     * @link http://tekkie.flashbit.net/php/tail-functionality-in-php
      *
      * @param string $file
      * @param int    $lines

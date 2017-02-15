@@ -11,27 +11,32 @@ use Viserio\Bridge\Doctrine\Connection;
 use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class DatabaseServiceProviderTest extends TestCase
 {
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new ConfigServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new DatabaseServiceProvider());
 
-        $container->get('config')->set('database', [
-            'default'     => 'mysql',
-            'connections' => [
-                'mysql' => [
-                    'driver'        => 'pdo_mysql',
-                    'host'          => 'DB_HOST',
-                    'port'          => 'DB_PORT',
-                    'database'      => 'DB_DATABASE_NAME',
-                    'username'      => 'DB_DATABASE_USER',
-                    'password'      => 'DB_DATABASE_PASSWORD',
-                    'charset'       => 'DB_CHARSET', 'UTF8',
-                    'driverOptions' => [1002 => 'SET NAMES utf8'],
+        $container->instance('config', [
+            'viserio' => [
+                'doctrine' => [
+                    'default'     => 'mysql',
+                    'connections' => [
+                        'mysql' => [
+                            'driver'        => 'pdo_mysql',
+                            'host'          => 'DB_HOST',
+                            'port'          => 'DB_PORT',
+                            'database'      => 'DB_DATABASE_NAME',
+                            'username'      => 'DB_DATABASE_USER',
+                            'password'      => 'DB_DATABASE_PASSWORD',
+                            'charset'       => 'DB_CHARSET', 'UTF8',
+                            'driverOptions' => [1002 => 'SET NAMES utf8'],
+                        ],
+                    ],
                 ],
             ],
         ]);
@@ -45,76 +50,33 @@ class DatabaseServiceProviderTest extends TestCase
         self::assertTrue(is_array($container->get('database.commands')));
     }
 
-    public function testProviderWithoutConfigManager()
-    {
-        $container = new Container();
-        $container->register(new DatabaseServiceProvider());
-
-        $container->instance('options', [
-            'default'     => 'mysql',
-            'connections' => [
-                'mysql' => [
-                    'driver'        => 'pdo_mysql',
-                    'host'          => 'DB_HOST',
-                    'port'          => 'DB_PORT',
-                    'database'      => 'DB_DATABASE_NAME',
-                    'username'      => 'DB_DATABASE_USER',
-                    'password'      => 'DB_DATABASE_PASSWORD',
-                    'charset'       => 'DB_CHARSET', 'UTF8',
-                    'driverOptions' => [1002 => 'SET NAMES utf8'],
-                ],
-            ],
-        ]);
-
-        self::assertInstanceOf(Connection::class, $container->get(Connection::class));
-        self::assertInstanceOf(Connection::class, $container->get('db'));
-        self::assertInstanceOf(Connection::class, $container->get('database'));
-    }
-
-    public function testProviderWithoutConfigManagerAndNamespace()
-    {
-        $container = new Container();
-        $container->register(new DatabaseServiceProvider());
-
-        $container->instance('viserio.database.options', [
-            'default'     => 'sqlite',
-            'connections' => [
-                'mysql' => [
-                    'driver'        => 'pdo_mysql',
-                    'host'          => 'DB_HOST',
-                    'port'          => 'DB_PORT',
-                    'database'      => 'DB_DATABASE_NAME',
-                    'username'      => 'DB_DATABASE_USER',
-                    'password'      => 'DB_DATABASE_PASSWORD',
-                    'charset'       => 'DB_CHARSET', 'UTF8',
-                    'driverOptions' => [1002 => 'SET NAMES utf8'],
-                ],
-                'sqlite' => [
-                    'driver'   => 'pdo_sqlite',
-                    'username' => 'DB_DATABASE_USER',
-                    'database' => __DIR__ . '/../Stub/database.sqlite',
-                    'memory'   => true,
-                ],
-            ],
-        ]);
-
-        self::assertInstanceOf(Connection::class, $container->get(Connection::class));
-        self::assertInstanceOf(Connection::class, $container->get('db'));
-        self::assertInstanceOf(Connection::class, $container->get('database'));
-    }
-
     public function testDatabaseConnection()
     {
         $container = new Container();
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new DatabaseServiceProvider());
 
-        $container->instance('viserio.database.options', [
-            'default'     => 'sqlite',
-            'connections' => [
-                'sqlite' => [
-                    'driver'   => 'pdo_sqlite',
-                    'database' => __DIR__ . '/../Stub/database.sqlite',
-                    'memory'   => true,
+        $container->instance('config', [
+            'viserio' => [
+                'doctrine' => [
+                    'default'     => 'mysql',
+                    'connections' => [
+                        'mysql' => [
+                            'driver'        => 'pdo_mysql',
+                            'host'          => 'DB_HOST',
+                            'port'          => 'DB_PORT',
+                            'database'      => 'DB_DATABASE_NAME',
+                            'username'      => 'DB_DATABASE_USER',
+                            'password'      => 'DB_DATABASE_PASSWORD',
+                            'charset'       => 'DB_CHARSET', 'UTF8',
+                            'driverOptions' => [1002 => 'SET NAMES utf8'],
+                        ],
+                        'sqlite' => [
+                            'driver'   => 'pdo_sqlite',
+                            'database' => __DIR__ . '/../Stub/database.sqlite',
+                            'memory'   => true,
+                        ],
+                    ],
                 ],
             ],
         ]);

@@ -17,6 +17,7 @@ use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class Application extends Container implements ApplicationContract
 {
@@ -285,6 +286,7 @@ class Application extends Container implements ApplicationContract
      */
     protected function registerBaseServiceProviders()
     {
+        $this->register(new OptionsResolverServiceProvider());
         $this->register(new ParsersServiceProvider());
         $this->register(new ConfigServiceProvider());
 

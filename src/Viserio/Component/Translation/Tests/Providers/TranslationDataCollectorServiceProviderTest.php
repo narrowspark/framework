@@ -18,6 +18,7 @@ use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Providers\TranslationDataCollectorServiceProvider;
 use Viserio\Component\Translation\Translator;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class TranslationDataCollectorServiceProviderTest extends TestCase
 {
@@ -56,15 +57,19 @@ class TranslationDataCollectorServiceProviderTest extends TestCase
             $catalogue,
             $selector
         ));
-        $container->register(new ConfigServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new WebProfilerServiceProvider());
         $container->register(new TranslationDataCollectorServiceProvider());
 
-        $container->get(RepositoryContract::class)->set('webprofiler', [
-            'collector' => [
-                'translation' => true,
-            ],
+        $container->instance('config', [
+            'viserio' => [
+                'webprofiler' => [
+                    'collector' => [
+                        'translation' => true,
+                    ],
+                ]
+            ]
         ]);
 
         self::assertInstanceOf(WebProfilerContract::class, $container->get(WebProfilerContract::class));

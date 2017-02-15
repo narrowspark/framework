@@ -266,7 +266,7 @@ class Validator implements ValidatorContract
      *
      * @param string $rules
      *
-     * @return array<string|array>
+     * @return array
      */
     protected function parseStringRule(string $rules): array
     {

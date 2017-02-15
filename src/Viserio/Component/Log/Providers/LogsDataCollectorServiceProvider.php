@@ -80,7 +80,7 @@ class LogsDataCollectorServiceProvider implements
         if (self::$options['collector']['logs']) {
             $profiler->addCollector(new LogsDataCollector(
                 $container->get(LogParser::class),
-                self::$options['collector']['logs_storages']
+                self::$options['logs_storages']
             ));
         }
 

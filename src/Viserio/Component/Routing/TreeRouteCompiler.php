@@ -302,7 +302,7 @@ PHP;
     /**
      * The php code builder class.
      *
-     * @return anonymous//src/Viserio/Component/Routing/TreeRouteCompiler.php
+     * @return object
      */
     private function phpBuilder()
     {
