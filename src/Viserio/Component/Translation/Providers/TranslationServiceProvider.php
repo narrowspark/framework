@@ -75,15 +75,15 @@ class TranslationServiceProvider implements
 
         $manager->setLoader($container->get(FileLoader::class));
 
-        if (($locale = self::$options['locale']) !== null) {
+        if ($locale = self::$options['locale']) {
             $manager->setLocale($locale);
         }
 
-        if (($directories = self::$options['directories']) !== null) {
+        if ($directories = self::$options['directories']) {
             $manager->setDirectories($directories);
         }
 
-        if (($imports = self::$options['files']) !== null) {
+        if ($imports = self::$options['files']) {
             foreach ((array) $imports as $import) {
                 $manager->import($import);
             }
