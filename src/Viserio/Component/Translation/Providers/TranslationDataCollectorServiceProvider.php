@@ -4,12 +4,12 @@ namespace Viserio\Component\Translation\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Component\Translation\DataCollectors\ViserioTranslationDataCollector;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Translation\DataCollectors\ViserioTranslationDataCollector;
 
 class TranslationDataCollectorServiceProvider implements
     ServiceProvider,

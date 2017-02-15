@@ -5,10 +5,10 @@ namespace Viserio\Component\Cookie\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class CookieServiceProvider implements

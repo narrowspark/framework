@@ -5,9 +5,9 @@ namespace Viserio\Component\Hashing\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Hashing\Password as PasswordContract;
-use Viserio\Component\Hashing\Password;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Hashing\Password;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class HashingServiceProvider implements

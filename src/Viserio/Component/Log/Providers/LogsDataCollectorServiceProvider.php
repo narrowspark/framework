@@ -4,13 +4,12 @@ namespace Viserio\Component\Log\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Log\DataCollectors\LogParser;
-use Viserio\Component\Log\DataCollectors\LogsDataCollector;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\Log\DataCollectors\LogParser;
+use Viserio\Component\Log\DataCollectors\LogsDataCollector;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class LogsDataCollectorServiceProvider implements
@@ -32,7 +31,7 @@ class LogsDataCollectorServiceProvider implements
     public function getServices()
     {
         return [
-            LogParser::class         => [self::class, 'createLogParser'],
+            LogParser::class           => [self::class, 'createLogParser'],
             WebProfilerContract::class => [self::class, 'createWebProfiler'],
         ];
     }

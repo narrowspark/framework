@@ -4,12 +4,11 @@ namespace Viserio\Component\StaticalProxy\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
-use Viserio\Component\StaticalProxy\AliasLoader;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\StaticalProxy\AliasLoader;
 
 class AliasLoaderServiceProvider implements
     ServiceProvider,

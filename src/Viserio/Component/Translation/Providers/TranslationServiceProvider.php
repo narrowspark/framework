@@ -5,16 +5,15 @@ namespace Viserio\Component\Translation\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\TranslationManager;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class TranslationServiceProvider implements
     ServiceProvider,
@@ -59,9 +58,9 @@ class TranslationServiceProvider implements
     public function getDefaultOptions(): iterable
     {
         return [
-            'locale' => false,
+            'locale'      => false,
             'directories' => false,
-            'files' => false,
+            'files'       => false,
         ];
     }
 

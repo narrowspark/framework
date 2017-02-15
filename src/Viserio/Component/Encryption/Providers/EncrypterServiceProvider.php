@@ -6,9 +6,9 @@ use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class EncrypterServiceProvider implements

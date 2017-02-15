@@ -12,7 +12,6 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Doctrine\Connection;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
