@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\Cookie\Providers\CookieServiceProvider;

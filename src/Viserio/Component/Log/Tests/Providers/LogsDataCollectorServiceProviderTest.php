@@ -5,16 +5,14 @@ namespace Viserio\Component\Log\Tests\Providers;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Log\DataCollectors\LogParser;
+use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\Component\Log\DataCollectors\LogParser;
 use Viserio\Component\Log\Providers\LogsDataCollectorServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
-use Psr\Http\Message\ServerRequestInterface;
 
 class LogsDataCollectorServiceProviderTest extends TestCase
 {
@@ -42,13 +40,13 @@ class LogsDataCollectorServiceProviderTest extends TestCase
         $container->instance('config', [
             'viserio' => [
                 'webprofiler' => [
-                    'enable' => true,
+                    'enable'        => true,
                     'logs_storages' => [__DIR__],
-                    'collector' => [
+                    'collector'     => [
                         'logs' => true,
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ]);
 
         self::assertInstanceOf(LogParser::class, $container->get(LogParser::class));

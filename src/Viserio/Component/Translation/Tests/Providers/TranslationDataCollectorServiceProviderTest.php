@@ -6,19 +6,17 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Providers\TranslationDataCollectorServiceProvider;
 use Viserio\Component\Translation\Translator;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class TranslationDataCollectorServiceProviderTest extends TestCase
 {
@@ -68,8 +66,8 @@ class TranslationDataCollectorServiceProviderTest extends TestCase
                     'collector' => [
                         'translation' => true,
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
 
         self::assertInstanceOf(WebProfilerContract::class, $container->get(WebProfilerContract::class));

@@ -5,10 +5,9 @@ namespace Viserio\Bridge\Doctrine\Tests\Providers;
 use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
 use Viserio\Bridge\Doctrine\Providers\MigrationsServiceProvider;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Support\Env;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\Support\Env;
 
 class MigrationsServiceProviderTest extends TestCase
 {

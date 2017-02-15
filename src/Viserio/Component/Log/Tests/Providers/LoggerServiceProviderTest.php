@@ -6,9 +6,7 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Log\Log;
-use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\Log\Writer as MonologWriter;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
@@ -24,9 +22,9 @@ class LoggerServiceProviderTest extends TestCase
         $container->instance('config', [
             'viserio' => [
                 'log' => [
-                    'env' => 'dev'
+                    'env' => 'dev',
                 ],
-            ]
+            ],
         ]);
 
         self::assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));

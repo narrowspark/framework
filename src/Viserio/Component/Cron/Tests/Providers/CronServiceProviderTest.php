@@ -4,7 +4,6 @@ namespace Viserio\Component\Cron\Tests\Providers;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cache\Providers\CacheServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
@@ -33,7 +32,7 @@ class CronServiceProviderTest extends TestCase
                     'console'    => 'cerebro',
                     'mutex_path' => __DIR__ . '/..',
                     'path'       => __DIR__ . '..',
-                ]
+                ],
             ],
         ]);
 

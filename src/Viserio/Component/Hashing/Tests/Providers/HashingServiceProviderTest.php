@@ -4,9 +4,7 @@ namespace Viserio\Component\Hashing\Tests\Providers;
 
 use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Hashing\Password;
 use Viserio\Component\Hashing\Providers\HashingServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
@@ -23,8 +21,8 @@ class HashingServiceProviderTest extends TestCase
             'viserio' => [
                 'hashing' => [
                     'key' => Key::createNewRandomKey()->saveToAsciiSafeString(),
-                ]
-            ]
+                ],
+            ],
         ]);
 
         self::assertInstanceOf(Password::class, $container->get(Password::class));

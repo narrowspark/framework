@@ -4,14 +4,13 @@ namespace Viserio\Component\Session\Tests\Providers;
 
 use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Providers\EncrypterServiceProvider;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Session\Providers\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class SessionServiceProviderTest extends TestCase
 {
@@ -39,8 +38,8 @@ class SessionServiceProviderTest extends TestCase
                 ],
                 'encryption' => [
                     'key' => $key->saveToAsciiSafeString(),
-                ]
-            ]
+                ],
+            ],
         ]);
 
         self::assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));

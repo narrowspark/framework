@@ -5,10 +5,10 @@ namespace Viserio\Component\Parsers\Tests\Providers;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Parsers\TaggableParser;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ParsersServiceProviderTest extends TestCase
 {
@@ -21,7 +21,7 @@ class ParsersServiceProviderTest extends TestCase
         $container->instance('config', [
             'viserio' => [
                 'parsers' => [],
-            ]
+            ],
         ]);
 
         self::assertInstanceOf(FileLoader::class, $container->get(FileLoader::class));

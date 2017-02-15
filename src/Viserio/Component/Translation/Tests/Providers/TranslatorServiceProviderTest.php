@@ -7,13 +7,12 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Translation\Providers\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class TranslatorServiceProviderTest extends TestCase
 {
@@ -69,8 +68,8 @@ return [
                     'directories' => [
                         __DIR__,
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
 
         self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));

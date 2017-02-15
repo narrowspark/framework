@@ -3,11 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConsoleServiceProviderTest extends TestCase
@@ -22,7 +20,7 @@ class ConsoleServiceProviderTest extends TestCase
             'viserio' => [
                 'console' => [
                     'version' => '1',
-                ]
+                ],
             ],
         ]);
 
