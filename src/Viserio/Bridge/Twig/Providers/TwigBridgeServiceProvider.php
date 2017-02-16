@@ -188,10 +188,6 @@ class TwigBridgeServiceProvider implements
             $twig->addExtension(new StrExtension());
         }
 
-        if ($container->has(ValidatorContract::class)) {
-            $twig->addExtension(new ValidatorExtension($container->get(ValidatorContract::class)));
-        }
-
         if ($container->has(StoreContract::class)) {
             $twig->addExtension(new SessionExtension($container->get(StoreContract::class)));
         }

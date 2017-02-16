@@ -51,7 +51,6 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-        $this->data['profile'] = serialize($this->profile);
     }
 
     /**
@@ -61,19 +60,15 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function getProfile(): Twig_Profiler_Profile
     {
-        if ($this->profile === null) {
-            $this->profile = unserialize($this->data['profile']);
-        }
-
         return $this->profile;
     }
 
     /**
      * Get duration time.
      *
-     * @return int
+     * @return float
      */
-    public function getTime(): int
+    public function getTime(): float
     {
         return $this->getProfile()->getDuration() * 1000;
     }
@@ -122,6 +117,8 @@ class TwigDataCollector extends AbstractDataCollector implements
      * Get a html call graph.
      *
      * @return \Twig_Markup
+     *
+     * @codeCoverageIgnore
      */
     public function getHtmlCallGraph()
     {
@@ -144,6 +141,8 @@ class TwigDataCollector extends AbstractDataCollector implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getAssets(): array
     {
@@ -160,9 +159,10 @@ class TwigDataCollector extends AbstractDataCollector implements
         $data     = [];
         $twigHtml = $this->createMetrics(
             [
-                'Template calls' => $this->getComputedData('template_count'),
-                'Block calls'    => $this->getComputedData('block_count'),
-                'Macro calls'    => $this->getComputedData('macro_count'),
+                'Render time'    => $this->formatDuration($this->getTime()),
+                'Template calls' => $this->getTemplateCount(),
+                'Block calls'    => $this->getBlockCount(),
+                'Macro calls'    => $this->getMacroCount(),
             ],
             'Twig Metrics'
         );
