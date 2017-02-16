@@ -8,10 +8,9 @@ use Symfony\Component\Finder\Finder;
 use Twig_Environment;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-class LintCommand extends Command implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
+class LintCommand extends Command implements RequiresComponentConfigContract
 {
     use ConfigurationTrait;
 
@@ -34,23 +33,6 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Re
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getMandatoryOptions(): iterable
-    {
-        return [
-            'paths',
-            'engines' => [
-                'twig' => [
-                    'options' => [
-                        'debug',
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
      * Get a finder instance of Twig files in the specified directories.
      *
      * @param array $paths Paths to search for files in.
@@ -61,7 +43,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Re
     {
         $finder = (empty($this->finder)) ? Finder::create() : $this->finder;
 
-        return $finder->files()->in($paths)->name('*.' . $this->options['engines']['twig']['extension']);
+        return $finder->files()->in($paths)->name('*.' . $this->options['engines']['twig']['file_extension']);
     }
 
     /**
