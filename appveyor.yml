@@ -57,5 +57,5 @@ install:
 test_script:
   - cd c:\projects\narrowspark
   - SET X=0
-  - sh vendor/bin/phpunit -c phpunit.xml.dist -v
+  - sh vendor/bin/phpunit -c phpunit.xml.dist -v --exclude-group="appveyor"
   - exit %X%

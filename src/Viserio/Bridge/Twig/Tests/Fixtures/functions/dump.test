@@ -1,7 +1,7 @@
 --TEST--
 "dump" function
 --CONDITION--
-!extension_loaded('xdebug') || getenv('APPVEYOR') !== true && !extension_loaded('xdebug')
+!extension_loaded('xdebug')
 --TEMPLATE--
 {{ dump('foo') }}
 {{ dump('foo', 'bar') }}
