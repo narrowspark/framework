@@ -15,7 +15,6 @@ use Viserio\Bridge\Twig\Extensions\DumpExtension;
 use Viserio\Bridge\Twig\Extensions\SessionExtension;
 use Viserio\Bridge\Twig\Extensions\StrExtension;
 use Viserio\Bridge\Twig\Extensions\TranslatorExtension;
-use Viserio\Bridge\Twig\Extensions\ValidatorExtension;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
@@ -23,7 +22,6 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Contracts\Validation\Validator as ValidatorContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
