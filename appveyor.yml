@@ -45,6 +45,7 @@ install:
   - IF %PHP%==1 echo extension=php_curl.dll >> php.ini
   - IF %PHP%==1 echo curl.cainfo=c:\php\cacert.pem >> php.ini
   - IF %PHP%==1 appveyor DownloadFile https://getcomposer.org/download/1.3.0/composer.phar
+  - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
   - mkdir %APPDATA%\Composer
   - composer self-update --no-progress --ansi
   - composer global require hirak/prestissimo:dev-master --no-progress --ansi
