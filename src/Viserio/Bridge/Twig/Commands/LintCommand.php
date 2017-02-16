@@ -3,12 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Commands;
 
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Viserio\Component\Console\Command\Command;
-use Twig_Environment;
 use Symfony\Component\Finder\Finder;
+use Twig_Environment;
+use Viserio\Component\Console\Command\Command;
 
 class LintCommand extends Command
 {
@@ -33,7 +31,7 @@ class LintCommand extends Command
     {
         $finder = (empty($this->finder)) ? Finder::create() : $this->finder;
 
-        return $finder->files()->in($paths)->name('*.'.$this->laravel['twig.extension']);
+        return $finder->files()->in($paths)->name('*.' . $this->laravel['twig.extension']);
     }
 
     /**
@@ -47,7 +45,6 @@ class LintCommand extends Command
     {
         $this->finder = $finder;
     }
-
 
     /**
      * {@inheritdoc}
