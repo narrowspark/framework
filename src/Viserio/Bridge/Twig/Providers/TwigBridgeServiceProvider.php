@@ -46,9 +46,9 @@ class TwigBridgeServiceProvider implements
     public function getServices()
     {
         return [
-            TwigLoader::class           => [self::class, 'createTwigLoader'],
-            Twig_LoaderInterface::class => function (ContainerInterface $container) {
-                return $container->get(TwigLoader::class);
+            Twig_LoaderInterface::class           => [self::class, 'createTwigLoader'],
+            TwigLoader::class => function (ContainerInterface $container) {
+                return $container->get(Twig_LoaderInterface::class);
             },
             TwigEnvironment::class      => [self::class, 'createTwigEnvironment'],
             FactoryContract::class      => [self::class, 'createViewFactory'],
@@ -145,7 +145,6 @@ class TwigBridgeServiceProvider implements
         $loaders = [];
         $options = self::$options['engines']['twig'];
         $loader  = new TwigLoader(
-            $container->get(FilesystemContract::class),
             $container->get(FinderContract::class)
         );
 

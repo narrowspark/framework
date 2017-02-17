@@ -43,12 +43,11 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     /**
      * Create a new twig loader instance.
      *
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
-     * @param \Viserio\Component\Contracts\View\Finder           $finder
+     * @param \Viserio\Component\Contracts\View\Finder $finder
      */
-    public function __construct(FilesystemContract $files, FinderContract $finder)
+    public function __construct(FinderContract $finder)
     {
-        $this->files  = $files;
+        $this->files  = $finder->getFilesystem();
         $this->finder = $finder;
     }
 

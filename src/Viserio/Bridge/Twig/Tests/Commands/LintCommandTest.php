@@ -2,104 +2,137 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Commands;
 
+use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Application;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Viserio\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Viserio\Bridge\Twig\Commands\LintCommand;
+use Viserio\Bridge\Twig\Loader;
+use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\View\ViewFinder;
+use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 
-// class LintCommandTest extends TestCase
-// {
-//     private $files;
+class LintCommandTest extends TestCase
+{
+    use MockeryTrait;
 
-//     public function setUp()
-//     {
-//         $this->files = array();
-//     }
+    private $files;
+    public function setUp()
+    {
+        $this->files = array();
+    }
 
-//     public function tearDown()
-//     {
-//         foreach ($this->files as $file) {
-//             if (file_exists($file)) {
-//                 unlink($file);
-//             }
-//         }
-//     }
+    public function tearDown()
+    {
+        parent::tearDown();
 
-//     public function testLintCorrectFile()
-//     {
-//         $tester = $this->createCommandTester();
-//         $filename = $this->createFile('{{ foo }}');
-//         $ret = $tester->execute(array('filename' => array($filename)), array('verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false));
+        foreach ($this->files as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
 
-//         self::assertEquals(0, $ret, 'Returns 0 in case of success');
-//         self::assertContains('OK in', trim($tester->getDisplay()));
-//     }
+        $this->allowMockingNonExistentMethods(true);
 
-//     public function testLintIncorrectFile()
-//     {
-//         $tester = $this->createCommandTester();
-//         $filename = $this->createFile('{{ foo');
-//         $ret = $tester->execute(array('filename' => array($filename)), array('decorated' => false));
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
-//         self::assertEquals(1, $ret, 'Returns 1 in case of error');
-//         self::assertRegExp('/ERROR  in \S+ \(line /', trim($tester->getDisplay()));
-//     }
+    public function testLintCorrectFile()
+    {
+        $tester = $this->createCommandTester();
+        $filename = $this->createFile('{{ foo }}');
+        $ret = $tester->execute(array('filename' => array($filename)), array('verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false));
 
-//     /**
-//      * @expectedException \RuntimeException
-//      */
-//     public function testLintFileNotReadable()
-//     {
-//         $tester = $this->createCommandTester();
+        self::assertEquals(0, $ret, 'Returns 0 in case of success');
+        self::assertContains('OK in', trim($tester->getDisplay()));
+    }
 
-//         $filename = $this->createFile('');
+    public function testLintIncorrectFile()
+    {
+        $tester = $this->createCommandTester();
+        $filename = $this->createFile('{{ foo');
+        $ret = $tester->execute(array('filename' => array($filename)), array('decorated' => false));
 
-//         unlink($filename);
+        self::assertEquals(1, $ret, 'Returns 1 in case of error');
+        self::assertRegExp('/ERROR  in \S+ \(line /', trim($tester->getDisplay()));
+    }
 
-//         $ret = $tester->execute(array('filename' => array($filename)), array('decorated' => false));
-//     }
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testLintFileNotReadable()
+    {
+        $tester = $this->createCommandTester();
 
-//     public function testLintFileCompileTimeException()
-//     {
-//         $tester = $this->createCommandTester();
-//         $filename = $this->createFile("{{ 2|number_format(2, decimal_point='.', ',') }}");
-//         $ret = $tester->execute(array('filename' => array($filename)), array('decorated' => false));
+        $filename = $this->createFile('');
 
-//         self::assertEquals(1, $ret, 'Returns 1 in case of error');
-//         self::assertRegExp('/ERROR  in \S+ \(line /', trim($tester->getDisplay()));
-//     }
+        unlink($filename);
 
-//     /**
-//      * @return CommandTester
-//      */
-//     private function createCommandTester()
-//     {
-//         $twig = new Twig_Environment(new Twig_Loader_Filesystem());
+        $ret = $tester->execute(array('filename' => array($filename)), array('decorated' => false));
+    }
 
-//         $command = new LintCommand();
-//         $command->setTwigEnvironment($twig);
+    public function testLintFileCompileTimeException()
+    {
+        $tester = $this->createCommandTester();
+        $filename = $this->createFile("{{ 2|number_format(2, decimal_point='.', ',') }}");
+        $ret = $tester->execute(array('filename' => array($filename)), array('decorated' => false));
 
-//         $application = new Application();
-//         $application->add($command);
+        self::assertEquals(1, $ret, 'Returns 1 in case of error');
+        self::assertRegExp('/ERROR  in \S+ \(line /', trim($tester->getDisplay()));
+    }
 
-//         $command = $application->find('lint:twig');
+    /**
+     * @return CommandTester
+     */
+    private function createCommandTester()
+    {
+        $files  = $this->mock(FilesystemContract::class);
+        $config = [
+            'config' => [
+                'viserio' => [
+                    'view' => [
+                        'paths' => []
+                    ]
+                ]
+            ],
+        ];
+        $finder = new ViewFinder($files, $config);
+        $twig   = new Twig_Environment(new Loader($finder));
 
-//         return new CommandTester($command);
-//     }
+        $application = new Application(
+            new ArrayContainer(
+                array_merge(
+                    $config,
+                    [
+                        Twig_Environment::class => $twig,
+                        FinderContract::class => $finder,
+                    ]
+                )
+            ),
+            '1'
+        );
+        $application->add(new LintCommand());
 
-//     /**
-//      * @return string Path to the new file
-//      */
-//     private function createFile($content)
-//     {
-//         $filename = tempnam(sys_get_temp_dir(), 'sf-');
+        return new CommandTester($application->find('twig:lint'));
+    }
 
-//         file_put_contents($filename, $content);
+    /**
+     * @return string Path to the new file
+     */
+    private function createFile($content)
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'sf-');
 
-//         $this->files[] = $filename;
+        file_put_contents($filename, $content);
 
-//         return $filename;
-//     }
-// }
+        $this->files[] = $filename;
+
+        return $filename;
+    }
+}

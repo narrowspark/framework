@@ -32,8 +32,11 @@ class LoaderTest extends TestCase
             ->with('test.twig')
             ->andReturn(true);
         $finder = $this->mock(FinderContract::class);
+        $finder->shouldReceive('getFilesystem')
+            ->once()
+            ->andReturn($file);
 
-        $loader = new Loader($file, $finder);
+        $loader = new Loader($finder);
 
         self::assertTrue($loader->exists('test.twig'));
 
@@ -51,8 +54,11 @@ class LoaderTest extends TestCase
             ->once()
             ->with('test')
             ->andThrow(new InvalidArgumentException());
+        $finder->shouldReceive('getFilesystem')
+            ->once()
+            ->andReturn($file);
 
-        $loader = new Loader($file, $finder);
+        $loader = new Loader($finder);
 
         self::assertFalse($loader->exists('test.twig'));
     }
@@ -69,8 +75,11 @@ class LoaderTest extends TestCase
             ->with('test.twig')
             ->andReturn('test');
         $finder = $this->mock(FinderContract::class);
+        $finder->shouldReceive('getFilesystem')
+            ->once()
+            ->andReturn($file);
 
-        $loader = new Loader($file, $finder);
+        $loader = new Loader($finder);
         $source = $loader->getSourceContext('test.twig');
 
         self::assertSame('test.twig', $source->getName());
@@ -92,8 +101,11 @@ class LoaderTest extends TestCase
             ->with($path)
             ->andReturn($date);
         $finder = $this->mock(FinderContract::class);
+        $finder->shouldReceive('getFilesystem')
+            ->once()
+            ->andReturn($file);
 
-        $loader = new Loader($file, $finder);
+        $loader = new Loader($finder);
 
         self::assertTrue($loader->isFresh($path, $date));
     }
@@ -114,8 +126,11 @@ class LoaderTest extends TestCase
             ->once()
             ->with('test')
             ->andReturn(['path' => 'test.twig']);
+        $finder->shouldReceive('getFilesystem')
+            ->once()
+            ->andReturn($file);
 
-        $loader = new Loader($file, $finder);
+        $loader = new Loader($finder);
 
         self::assertSame('test.twig', $loader->findTemplate('test.twig'));
 
