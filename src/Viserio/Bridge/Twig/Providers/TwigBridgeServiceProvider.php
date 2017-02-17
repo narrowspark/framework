@@ -17,7 +17,6 @@ use Viserio\Bridge\Twig\Extensions\StrExtension;
 use Viserio\Bridge\Twig\Extensions\TranslatorExtension;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
@@ -47,7 +46,7 @@ class TwigBridgeServiceProvider implements
     {
         return [
             Twig_LoaderInterface::class           => [self::class, 'createTwigLoader'],
-            TwigLoader::class => function (ContainerInterface $container) {
+            TwigLoader::class                     => function (ContainerInterface $container) {
                 return $container->get(Twig_LoaderInterface::class);
             },
             TwigEnvironment::class      => [self::class, 'createTwigEnvironment'],

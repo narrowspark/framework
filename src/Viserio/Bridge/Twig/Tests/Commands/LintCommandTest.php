@@ -3,28 +3,28 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Commands;
 
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Narrowspark\TestingHelper\ArrayContainer;
-use Viserio\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig_Environment;
-use Twig_Loader_Filesystem;
 use Viserio\Bridge\Twig\Commands\LintCommand;
 use Viserio\Bridge\Twig\Loader;
+use Viserio\Component\Console\Application;
+use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\View\ViewFinder;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 
 class LintCommandTest extends TestCase
 {
     use MockeryTrait;
 
     private $files;
+
     public function setUp()
     {
-        $this->files = array();
+        $this->files = [];
     }
 
     public function tearDown()
@@ -45,9 +45,9 @@ class LintCommandTest extends TestCase
 
     public function testLintCorrectFile()
     {
-        $tester = $this->createCommandTester();
+        $tester   = $this->createCommandTester();
         $filename = $this->createFile('{{ foo }}');
-        $ret = $tester->execute(array('filename' => array($filename)), array('verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false));
+        $ret      = $tester->execute(['filename' => [$filename]], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
         self::assertEquals(0, $ret, 'Returns 0 in case of success');
         self::assertContains('OK in', trim($tester->getDisplay()));
@@ -55,9 +55,9 @@ class LintCommandTest extends TestCase
 
     public function testLintIncorrectFile()
     {
-        $tester = $this->createCommandTester();
+        $tester   = $this->createCommandTester();
         $filename = $this->createFile('{{ foo');
-        $ret = $tester->execute(array('filename' => array($filename)), array('decorated' => false));
+        $ret      = $tester->execute(['filename' => [$filename]], ['decorated' => false]);
 
         self::assertEquals(1, $ret, 'Returns 1 in case of error');
         self::assertRegExp('/ERROR  in \S+ \(line /', trim($tester->getDisplay()));
@@ -74,14 +74,14 @@ class LintCommandTest extends TestCase
 
         unlink($filename);
 
-        $ret = $tester->execute(array('filename' => array($filename)), array('decorated' => false));
+        $ret = $tester->execute(['filename' => [$filename]], ['decorated' => false]);
     }
 
     public function testLintFileCompileTimeException()
     {
-        $tester = $this->createCommandTester();
+        $tester   = $this->createCommandTester();
         $filename = $this->createFile("{{ 2|number_format(2, decimal_point='.', ',') }}");
-        $ret = $tester->execute(array('filename' => array($filename)), array('decorated' => false));
+        $ret      = $tester->execute(['filename' => [$filename]], ['decorated' => false]);
 
         self::assertEquals(1, $ret, 'Returns 1 in case of error');
         self::assertRegExp('/ERROR  in \S+ \(line /', trim($tester->getDisplay()));
@@ -97,9 +97,9 @@ class LintCommandTest extends TestCase
             'config' => [
                 'viserio' => [
                     'view' => [
-                        'paths' => []
-                    ]
-                ]
+                        'paths' => [],
+                    ],
+                ],
             ],
         ];
         $finder = new ViewFinder($files, $config);
@@ -111,7 +111,7 @@ class LintCommandTest extends TestCase
                     $config,
                     [
                         Twig_Environment::class => $twig,
-                        FinderContract::class => $finder,
+                        FinderContract::class   => $finder,
                     ]
                 )
             ),
@@ -124,6 +124,7 @@ class LintCommandTest extends TestCase
 
     /**
      * @return string Path to the new file
+     * @param  mixed  $content
      */
     private function createFile($content)
     {

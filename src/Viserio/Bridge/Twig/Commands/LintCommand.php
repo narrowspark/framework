@@ -2,21 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Commands;
 
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
 use Twig_Environment;
-use Twig_Error_Loader;
-use RuntimeException;
-use InvalidArgumentException;
-use Twig_LoaderInterface;
 use Twig_Error;
+use Twig_Error_Loader;
+use Twig_LoaderInterface;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LintCommand extends Command implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
@@ -77,7 +77,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
             // Read template in
             $template = '';
 
-            while (!feof(STDIN)) {
+            while (! feof(STDIN)) {
                 $template .= fread(STDIN, 1024);
             }
 
@@ -117,28 +117,28 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
         $paths  = $finder->getPaths();
         $hints  = $finder->getHints();
 
-        if (is_array($hints) && !empty($hints)) {
+        if (is_array($hints) && ! empty($hints)) {
             $paths = array_reduce($hints, function ($package, $paths) {
                 return array_merge($paths, $package);
             }, $paths);
         }
 
-        if (!empty($filename)) {
+        if (! empty($filename)) {
             $search[] = $filename;
         }
 
-        if (!empty($directories)) {
+        if (! empty($directories)) {
             $search_directories = [];
 
             foreach ($directories as $directory) {
                 foreach ($paths as $path) {
-                    if (is_dir($this->normalizeDirectorySeparator($path.'/'.$directory))) {
-                        $search_directories[] = $this->normalizeDirectorySeparator($path.'/'.$directory);
+                    if (is_dir($this->normalizeDirectorySeparator($path . '/' . $directory))) {
+                        $search_directories[] = $this->normalizeDirectorySeparator($path . '/' . $directory);
                     }
                 }
             }
 
-            if (!empty($search_directories)) {
+            if (! empty($search_directories)) {
                 // Get those files from the search directory
                 foreach ($this->getFinder($search_directories) as $file) {
                     $search[] = $file->getRealPath();
@@ -281,9 +281,9 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
 
         foreach ($details as $info) {
             if ($info['valid'] && $verbose) {
-                $file = ($info['file']) ? ' in '.$info['file'] : '';
-                $this->line('<info>OK</info>'.$file);
-            } elseif (!$info['valid']) {
+                $file = ($info['file']) ? ' in ' . $info['file'] : '';
+                $this->line('<info>OK</info>' . $file);
+            } elseif (! $info['valid']) {
                 $errors++;
                 $this->renderException($info);
             }
@@ -354,7 +354,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
         foreach ($lines as $no => $code) {
             $this->line(
                 sprintf(
-                    "%s %-6s %s",
+                    '%s %-6s %s',
                     $no == $line ? '<error>>></error>' : '  ',
                     $no,
                     $code
