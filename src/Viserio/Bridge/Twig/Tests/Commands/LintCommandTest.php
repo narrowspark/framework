@@ -120,8 +120,9 @@ class LintCommandTest extends TestCase
     }
 
     /**
+     * @param mixed $content
+     *
      * @return string Path to the new file
-     * @param  mixed  $content
      */
     private function createFile($content)
     {
