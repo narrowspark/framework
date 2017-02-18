@@ -47,9 +47,8 @@ class LintCommandTest extends TestCase
     {
         $tester   = $this->createCommandTester();
         $filename = $this->createFile('{{ foo }}');
-        $ret      = $tester->execute(['filename' => [$filename]], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
+        $ret      = $tester->execute(['filenames' => [$filename]], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        self::assertEquals(0, $ret, 'Returns 0 in case of success');
         self::assertContains('OK in', trim($tester->getDisplay()));
     }
 
@@ -57,9 +56,8 @@ class LintCommandTest extends TestCase
     {
         $tester   = $this->createCommandTester();
         $filename = $this->createFile('{{ foo');
-        $ret      = $tester->execute(['filename' => [$filename]], ['decorated' => false]);
+        $ret      = $tester->execute(['filenames' => [$filename]], ['decorated' => false]);
 
-        self::assertEquals(1, $ret, 'Returns 1 in case of error');
         self::assertRegExp('/ERROR  in \S+ \(line /', trim($tester->getDisplay()));
     }
 
@@ -74,16 +72,15 @@ class LintCommandTest extends TestCase
 
         unlink($filename);
 
-        $ret = $tester->execute(['filename' => [$filename]], ['decorated' => false]);
+        $ret = $tester->execute(['filenames' => [$filename]], ['decorated' => false]);
     }
 
     public function testLintFileCompileTimeException()
     {
         $tester   = $this->createCommandTester();
         $filename = $this->createFile("{{ 2|number_format(2, decimal_point='.', ',') }}");
-        $ret      = $tester->execute(['filename' => [$filename]], ['decorated' => false]);
+        $ret      = $tester->execute(['filenames' => [$filename]], ['decorated' => false]);
 
-        self::assertEquals(1, $ret, 'Returns 1 in case of error');
         self::assertRegExp('/ERROR  in \S+ \(line /', trim($tester->getDisplay()));
     }
 
@@ -102,7 +99,7 @@ class LintCommandTest extends TestCase
                 ],
             ],
         ];
-        $finder = new ViewFinder($files, $config);
+        $finder = new ViewFinder($files, new ArrayContainer($config));
         $twig   = new Twig_Environment(new Loader($finder));
 
         $application = new Application(

@@ -64,7 +64,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
 
         $this->configureOptions($container);
 
-        if ($container->has(Twig_Environment::class)) {
+        if (! $container->has(Twig_Environment::class)) {
             $this->error('The Twig environment needs to be set.');
 
             return 1;
@@ -84,7 +84,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
             return $this->display([$this->validate($template)], $format);
         }
 
-        $files   = $this->getFiles($this->argument('filename'), $this->option('file'), $this->option('directory'));
+        $files   = $this->getFiles($this->argument('filenames'), $this->option('files'), $this->option('directories'));
         $details = [];
 
         foreach ($files as $file) {
