@@ -160,8 +160,9 @@ class LintCommandTest extends TestCase
     }
 
     /**
+     * @param null|mixed $path
+     *
      * @return CommandTester
-     * @param  null|mixed    $path
      */
     private function createCommandTester($path = null)
     {
