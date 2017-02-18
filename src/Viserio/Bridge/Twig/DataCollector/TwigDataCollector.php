@@ -179,10 +179,10 @@ class TwigDataCollector extends AbstractDataCollector implements
         $twigHtml .= '<div class="twig-graph"><h3>Rendering Call Graph</h3>';
         $twigHtml .= $this->getHtmlCallGraph();
         $twigHtml .= '</div>';
-
-        $data[] = ['name' => 'Twig', 'content' => $twigHtml];
-        $data[] = ['name' => 'Twig Extensions', 'content' => $this->createTable(
-            array_keys($this->twigEnvironment->getExtensions()),
+        $extensions = $this->twigEnvironment->getExtensions();
+        $data[]     = ['name' => 'Twig <span class="counter">' . $this->getTemplateCount() . '</span>', 'content' => $twigHtml];
+        $data[]     = ['name' => 'Twig Extensions <span class="counter">' . count($extensions) . '</span>', 'content' => $this->createTable(
+            array_keys($extensions),
             ['headers' => ['Extension'], 'vardumper' => false]
         )];
 

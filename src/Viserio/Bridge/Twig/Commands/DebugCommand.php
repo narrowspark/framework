@@ -36,6 +36,8 @@ class DebugCommand extends Command
 
         if (! $container->has(Twig_Environment::class)) {
             $this->error('The Twig environment needs to be set.');
+
+            return;
         }
 
         $twig = $container->get(Twig_Environment::class);
@@ -54,6 +56,8 @@ class DebugCommand extends Command
             $data['tests'] = array_keys($data['tests']);
 
             $this->line(json_encode($data));
+
+            return 0;
         }
 
         $filter = $this->input->getArgument('filter');
@@ -77,6 +81,8 @@ class DebugCommand extends Command
 
             $this->output->listing($items);
         }
+
+        return 0;
     }
 
     /**

@@ -275,9 +275,9 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @param \Symfony\Component\Console\Input\InputInterface $input
      *
-     * @return string
+     * @return string|null
      */
-    protected function createCommandStartingEvent(InputInterface $input): string
+    protected function createCommandStartingEvent(InputInterface $input): ?string
     {
         $commandName = '';
 
@@ -298,13 +298,13 @@ class Application extends SymfonyConsole implements ApplicationContract
     /**
      * Create a command terminating event.
      *
-     * @param string                                          $commandName
+     * @param string|null                                     $commandName
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param int                                             $exitCode
      *
      * @return void
      */
-    protected function createCommandTerminatingEvent(string $commandName, InputInterface $input, int $exitCode): void
+    protected function createCommandTerminatingEvent(?string $commandName, InputInterface $input, int $exitCode): void
     {
         if ($this->events !== null) {
             $this->getEventManager()->trigger(new CommandTerminatingEvent(
