@@ -1,0 +1,10 @@
+--TEST--
+"trans" functions
+--TEMPLATE--
+{{ trans('test') }}
+{{ trans_choice('{0} There are no apples|{1} There is one apple', '1') }}
+--DATA--
+return array()
+--EXPECT--
+test
+There is one apple

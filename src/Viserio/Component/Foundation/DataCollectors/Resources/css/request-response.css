@@ -1,0 +1,20 @@
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-green .webprofiler-menu-label,
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-yellow .webprofiler-menu-label,
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-red .webprofiler-menu-label {
+    padding: 0 10px!important;
+    margin-right: 5px;
+}
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-green .webprofiler-menu-label {
+    background-color: #4F805D;
+}
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-yellow .webprofiler-menu-label {
+    background-color: #A46A1F;
+    color: #FFF;
+}
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-red .webprofiler-menu-label {
+    background-color: #B0413E;
+}
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu-position-left.webprofiler-menu-viserio-http-data-collector .webprofiler-menu-content {
+    padding-left: 0;
+    padding-right: 7px;
+}

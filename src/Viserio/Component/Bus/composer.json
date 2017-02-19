@@ -1,0 +1,68 @@
+{
+    "name"       : "viserio/bus",
+    "type"       : "library",
+    "description": "The Viserio Command Bus package.",
+    "keywords"   : [
+        "narrowspark",
+        "viserio",
+        "command",
+        "bus",
+        "command bus"
+    ],
+    "license"    : "MIT",
+    "homepage"   : "http://narrowspark.com",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                                : "^7.1",
+        "container-interop/container-interop"                : "^1.1",
+        "php-di/invoker"                                     : "^1.3",
+        "viserio/cotracts"                                   : "self.version",
+        "viserio/pipeline"                                   : "self.version",
+        "viserio/support"                                    : "self.version"
+    },
+    "require-dev": {
+        "container-interop/service-provider"                 : "^0.3",
+        "narrowspark/testing-helper"                         : "^2.0",
+        "phpunit/phpunit"                                    : "^6.0",
+        "viserio/container"                                  : "self.version",
+        "viserio/statical-proxy"                             : "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Bus\\"                                 : ""
+        },
+        "exclude-from-classmap"                              : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Bus\\Tests\\"                          : "Tests/"
+        }
+    },
+    "provide": {
+        "container-interop/container-interop-implementation" : "^1.1",
+        "psr/container-implementation"                       : "^1.0"
+    },
+    "suggest": {
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"                             : "Required to use the proxy instances (self.version).",
+        "viserio/queue"                                      : "Required to use queueing dispatcher (self.version)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                                     : "1.0-dev"
+        }
+    },
+    "minimum-stability"                                      : "dev",
+    "prefer-stable"                                          : true
+}

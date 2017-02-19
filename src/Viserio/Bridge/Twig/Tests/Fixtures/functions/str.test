@@ -1,0 +1,10 @@
+--TEST--
+"str" functions
+--TEMPLATE--
+{{ str_studly('test') }}
+{{ str_snake('testTEST') }}
+--DATA--
+return array()
+--EXPECT--
+Test
+test_t_e_s_t

@@ -1,0 +1,57 @@
+{
+    "name"       : "viserio/statical-proxy",
+    "type"       : "library",
+    "description": "The Viserio Statical Proxy package.",
+    "keywords"   : ["narrowspark", "viserio", "static", "facade", "static proxy", "static interface", "statical", "alias"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                 : "^7.1",
+        "container-interop/container-interop" : "^1.1",
+        "viserio/cotracts"                    : "self.version",
+        "viserio/support"                     : "self.version"
+    },
+    "require-dev": {
+        "container-interop/service-provider"  : "^0.3",
+        "narrowspark/testing-helper"          : "^2.0",
+        "phpunit/phpunit"                     : "^6.0",
+        "viserio/options-resolver"            : "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\StaticalProxy\\"        : ""
+        },
+        "exclude-from-classmap"               : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\StaticalProxy\\Tests\\" : "Tests/"
+        }
+    },
+    "provide": {
+        "psr/container-implementation"        : "^1.0"
+    },
+    "suggest": {
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "viserio/options-resolver"            : "Required to use service-provider (self.version)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                      : "1.0-dev"
+        }
+    },
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
+}

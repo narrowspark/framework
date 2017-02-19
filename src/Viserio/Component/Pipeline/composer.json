@@ -1,0 +1,60 @@
+{
+    "name"       : "viserio/pipeline",
+    "type"       : "library",
+    "description": "The Viserio Pipeline package.",
+    "keywords"   : ["narrowspark", "viserio", "pipeline"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                                : "^7.1",
+        "container-interop/container-interop"                : "^1.1",
+        "php-di/invoker"                                     : "^1.3",
+        "viserio/cotracts"                                   : "self.version",
+        "viserio/support"                                    : "self.version"
+    },
+    "require-dev": {
+        "container-interop/container-interop"                : "^1.1",
+        "container-interop/service-provider"                 : "^0.3",
+        "narrowspark/testing-helper"                         : "^2.0",
+        "phpunit/phpunit"                                    : "^6.0",
+        "viserio/container"                                  : "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Pipeline\\"                            : ""
+        },
+        "exclude-from-classmap"                              : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Pipeline\\Tests\\"                     : "Tests/"
+        }
+    },
+    "provide": {
+        "container-interop/container-interop-implementation" : "^1.1",
+        "psr/container-implementation"                       : "^1.0"
+    },
+    "suggest": {
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"                             : "Required to use the proxy instances (self.version)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                                     : "1.0-dev"
+        }
+    },
+    "minimum-stability"                                      : "dev",
+    "prefer-stable"                                          : true
+}

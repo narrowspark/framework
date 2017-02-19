@@ -1,0 +1,100 @@
+<?php
+declare(strict_types=1);
+namespace Viserio\Component\Foundation\Providers;
+
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Monolog\Handler\ErrorLogHandler;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Log\Log as LogContract;
+use Viserio\Component\Log\Writer;
+
+class ConfigureLoggingServiceProvider implements ServiceProvider
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getServices()
+    {
+        return [
+            Writer::class => [self::class, 'createConfiguredLogging'],
+        ];
+    }
+
+    public static function createConfiguredLogging(ContainerInterface $container)
+    {
+        $log = $container->get(Writer::class);
+
+        self::configureHandlers($container, $log);
+
+        return $log;
+    }
+
+    /**
+     * Configure the Monolog handlers for the application.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Contracts\Log\Log  $log
+     */
+    private static function configureHandlers(ContainerInterface $container, LogContract $log)
+    {
+        $config = $container->get(RepositoryContract::class);
+        $level  = $config->get('app.log_level', 'debug');
+
+        $method = 'configure' . ucfirst($config->get('app.log', 'single')) . 'Handler';
+
+        self::{$method}($container, $log, $level);
+    }
+
+    /**
+     * Configure the Monolog handlers for the application.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Contracts\Log\Log  $log
+     * @param string                                $level
+     */
+    private static function configureSingleHandler(ContainerInterface $container, LogContract $log, string $level)
+    {
+        $log->useFiles(
+            $container->get(RepositoryContract::class)->get('path.storage') . '/logs/narrowspark.log',
+            $level
+        );
+    }
+
+    /**
+     * Configure the Monolog handlers for the application.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Contracts\Log\Log  $log
+     * @param string                                $level
+     */
+    private static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level)
+    {
+        $config   = $container->get(RepositoryContract::class);
+        $maxFiles = $config->get('app.log_max_files', 5);
+
+        $log->useDailyFiles(
+            $container->get(RepositoryContract::class)->get('path.storage') . '/logs/narrowspark.log',
+            $maxFiles,
+            $level
+        );
+    }
+
+    /**
+     * Configure the Monolog handlers for the application.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Contracts\Log\Log  $log
+     * @param string                                $level
+     */
+    private static function configureErrorlogHandler(ContainerInterface $container, LogContract $log, string $level)
+    {
+        $log->getHandlerParser()->parseHandler(
+            new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, $level),
+            '',
+            '',
+            null,
+            'line'
+        );
+    }
+}

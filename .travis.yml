@@ -12,21 +12,23 @@ services:
 
 matrix:
   include:
-    - php: 7.0
-      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
-    # - php: 7.0
-    #   env: SETUP=basic HUMBUG=true
-    - php: 7.0
-      env: SETUP=stable
-    - php: 7.0
-      env: SETUP=lowest
     - php: 7.1
-      env: SETUP=basic
+      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true PHPUNIT=true
+    - php: 7.1
+      env: SETUP=lowest PHPUNIT=true
+    - php: 7.1
+      env: SETUP=basic PHPUNIT=true
+    - php: 7.1
+      env: SETUP=stable PHPUNIT=true
+    - php: 7.1
+      env: SETUP=basic PHPSTAN=true PHPUNIT=false
   allow_failures:
-    - env: SETUP=lowest
-      php: 7.0
+    - env: SETUP=lowest PHPUNIT=true
+      php: 7.1
+    - php: 7.1
+      env: SETUP=basic PHPSTAN=true PHPUNIT=false
     # - env: SETUP=basic HUMBUG=true
-    #   php: 7.0
+    #   php: 7.1
   fast_finish: true
 
 cache:
@@ -37,16 +39,11 @@ before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
   - ./build/travis/all.sh
-  - composer global require hirak/prestissimo # Now composer can install components parallel
-  - if [[ "$HUMBUG" = "true" ]]; then composer require humbug/humbug:1.0.0-alpha2; fi
-  - git config --global user.name travis-ci
-  - git config --global user.email travis@example.com
 
 install:
   - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
   - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
   - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
-
 before_script:
   - sleep 15
 
@@ -57,6 +54,7 @@ after_success:
   - ./build/travis/after_success.sh
 
 notifications:
+  email: false
   webhooks:
     urls:
       - https://webhooks.gitter.im/e/5886ad33ac123a7c06b0

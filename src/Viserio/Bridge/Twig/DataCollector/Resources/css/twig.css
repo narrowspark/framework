@@ -1,0 +1,20 @@
+.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph {
+    margin-top: 25px;
+}
+.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph pre {
+    font-size: 14px;
+    color: #2B2A28;
+    padding: 10px;
+    background-color: #fff;
+}
+.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph pre .status-success {
+    color: #4F805D;
+}
+.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph pre .status-warning {
+    background-color: #A46A1F;
+    color: #FFF;
+    padding: 0px 5px;
+}
+.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph pre .status-error {
+    color: #B0413E;
+}
