@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\HttpFactory;
 
 use Interop\Http\Factory\ServerRequestFactoryInterface;
+use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
-use InvalidArgumentException;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 use Viserio\Component\Http\Uri;
