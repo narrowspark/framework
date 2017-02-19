@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\HttpFactory\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Http\UploadedFile;
 use Viserio\Component\Http\Uri;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
