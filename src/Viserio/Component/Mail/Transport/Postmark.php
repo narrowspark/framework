@@ -173,8 +173,8 @@ class Postmark extends AbstractTransport
             $payload['Cc'] = implode(',', $this->convertEmailsArray($cc));
         }
 
-        if ($reply_to = $message->getReplyTo()) {
-            $payload['ReplyTo'] = implode(',', $this->convertEmailsArray($reply_to));
+        if ($replyTo = $message->getReplyTo()) {
+            $payload['ReplyTo'] = implode(',', $this->convertEmailsArray($replyTo));
         }
 
         if ($bcc = $message->getBcc()) {
