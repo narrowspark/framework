@@ -63,7 +63,7 @@ class LintCommandTest extends TestCase
      */
     public function testLintFilesFound()
     {
-        $tester = $this->createCommandTester(__DIR__ . '/../Engine');
+        $tester   = $this->createCommandTester(__DIR__ . '/../Engine');
         $ret      = $tester->execute([], ['decorated' => false]);
     }
 
