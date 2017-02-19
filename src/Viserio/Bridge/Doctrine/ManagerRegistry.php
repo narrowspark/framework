@@ -3,12 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine;
 
 use Doctrine\Common\Persistence\ManagerRegistry as BaseManagerRegistry;
-use Doctrine\Common\Persistence\Proxy;
-use Doctrine\ORM\ORMException;
-use InvalidArgumentException;
-use ReflectionClass;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Interop\Container\ContainerInterface;
+use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
 final class ManagerRegistry implements BaseManagerRegistry
 {
@@ -17,12 +13,12 @@ final class ManagerRegistry implements BaseManagerRegistry
     /**
      * @const
      */
-    const MANAGER_BINDING_PREFIX = 'doctrine.managers.';
+    public const MANAGER_BINDING_PREFIX = 'doctrine.managers.';
 
     /**
      * @const
      */
-    const CONNECTION_BINDING_PREFIX = 'doctrine.connections.';
+    public const CONNECTION_BINDING_PREFIX = 'doctrine.connections.';
 
     /**
      * @var string
