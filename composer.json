@@ -116,6 +116,7 @@
         "cache/session-handler"                              : "^0.2",
         "cache/void-adapter"                                 : "^0.3",
         "guzzlehttp/guzzle"                                  : "^6.0",
+        "http-interop/http-factory-tests"                    : "^0.2",
         "league/flysystem-aws-s3-v3"                         : "^1.0",
         "league/flysystem-cached-adapter"                    : "^1.0.3",
         "league/flysystem-dropbox"                           : "^1.0",

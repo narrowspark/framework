@@ -23,6 +23,7 @@
         "viserio/http"                      : "self.version"
     },
     "require-dev": {
+        "http-interop/http-factory-tests"   : "^0.2",
         "mockery/mockery"                   : "^1.0",
         "narrowspark/testing-helper"        : "^1.6",
         "phpunit/phpunit"                   : "^6.0"
