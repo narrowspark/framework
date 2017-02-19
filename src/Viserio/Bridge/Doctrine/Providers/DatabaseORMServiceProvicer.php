@@ -29,7 +29,7 @@ class DatabaseORMServiceProvicer implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.database.orm';
+    public const PACKAGE = 'viserio.database.orm';
 
     /**
      * {@inheritdoc}
@@ -38,7 +38,7 @@ class DatabaseORMServiceProvicer implements ServiceProvider
     {
         return [
             'database.orm.command.helper' => [self::class, 'createDatabaseCommandsHelpser'],
-            'database.orm.commands' => [self::class, 'createDatabaseCommands'],
+            'database.orm.commands'       => [self::class, 'createDatabaseCommands'],
         ];
     }
 
