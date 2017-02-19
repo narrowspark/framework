@@ -15,18 +15,15 @@ class BusServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Dispatcher::class         => [self::class, 'registerBusDispatcher'],
-            DispatcherContract::class => function (ContainerInterface $container) {
-                return $container->get(Dispatcher::class);
+            DispatcherContract::class => [self::class, 'registerBusDispatcher'],
+            Dispatcher::class         => function (ContainerInterface $container) {
+                return $container->get(DispatcherContract::class);
             },
         ];
     }
 
-    public static function registerBusDispatcher(ContainerInterface $container)
+    public static function registerBusDispatcher(ContainerInterface $container): DispatcherContract
     {
-        $bus = new Dispatcher($container);
-        $bus->setContainer($container);
-
-        return $bus;
+        return new Dispatcher($container);
     }
 }

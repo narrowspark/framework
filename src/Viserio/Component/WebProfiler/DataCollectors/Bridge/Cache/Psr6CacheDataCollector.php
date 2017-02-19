@@ -117,8 +117,10 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
 
             $html .= $this->createTable(
                 $calledCalls,
-                'Calls',
-                ['Method', 'Argument', 'Result', 'Time']
+                [
+                    'name'    => 'Calls',
+                    'headers' => ['Method', 'Argument', 'Result', 'Time'],
+                ]
             );
 
             $data[] = [

@@ -4,16 +4,26 @@ namespace Viserio\Component\Log\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Log\DataCollectors\LogParser;
 use Viserio\Component\Log\DataCollectors\LogsDataCollector;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class LogsDataCollectorServiceProvider implements ServiceProvider
+class LogsDataCollectorServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresMandatoryOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.webprofiler';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -21,8 +31,36 @@ class LogsDataCollectorServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            LogParser::class         => [self::class, 'createLogParser'],
-            LogsDataCollector::class => [self::class, 'createLogsDataCollector'],
+            LogParser::class           => [self::class, 'createLogParser'],
+            WebProfilerContract::class => [self::class, 'createWebProfiler'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'webprofiler'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return ['logs_storages'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'collector' => [
+                'logs' => false,
+            ],
         ];
     }
 
@@ -31,17 +69,37 @@ class LogsDataCollectorServiceProvider implements ServiceProvider
         return new LogParser();
     }
 
-    public static function createLogsDataCollector(ContainerInterface $container): LogsDataCollector
-    {
-        $default = '';
+    public static function createWebProfiler(
+        ContainerInterface $container,
+        callable $getPrevious
+    ): WebProfilerContract {
+        self::resolveOptions($container);
 
-        if ($container->has(RepositoryContract::class)) {
-            $default = $container->get(RepositoryContract::class)->get('path.storage') . '/logs/';
+        $profiler = $getPrevious();
+
+        if (self::$options['collector']['logs']) {
+            $profiler->addCollector(new LogsDataCollector(
+                $container->get(LogParser::class),
+                self::$options['logs_storages']
+            ));
         }
 
-        return new LogsDataCollector(
-            $container->get(LogParser::class),
-            self::getConfig($container, 'storages', $default)
-        );
+        return $profiler;
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

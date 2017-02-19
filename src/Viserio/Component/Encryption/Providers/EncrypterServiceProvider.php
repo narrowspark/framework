@@ -2,18 +2,25 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption\Providers;
 
-use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class EncrypterServiceProvider implements ServiceProvider
+class EncrypterServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.encryption';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -31,12 +38,44 @@ class EncrypterServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'encryption'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return ['key'];
+    }
+
     public static function createEncrypter(ContainerInterface $container): Encrypter
     {
-        $encrypt = new Encrypter(
-            Key::loadFromAsciiSafeString(self::getConfig($container, 'key', ''))
-        );
+        self::resolveOptions($container);
+
+        $encrypt = new Encrypter(self::$options['key']);
 
         return $encrypt;
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

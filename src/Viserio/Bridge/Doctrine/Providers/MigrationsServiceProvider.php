@@ -12,13 +12,21 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Doctrine\Connection;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class MigrationsServiceProvider implements ServiceProvider
+class MigrationsServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.database';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -30,9 +38,27 @@ class MigrationsServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'doctrine'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return ['migrations'];
+    }
+
     public static function createMigrationsCommands(ContainerInterface $container): array
     {
-        $config = self::getConfig($container, 'migrations', []);
+        self::resolveOptions($container);
+
+        $config = self::$options['migrations'];
 
         $doctrineConfig = new Configuration($container->get(Connection::class));
 
@@ -67,5 +93,21 @@ class MigrationsServiceProvider implements ServiceProvider
         }
 
         return $commands;
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

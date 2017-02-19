@@ -85,7 +85,7 @@ class Sanitizer
      * @param array $rules
      * @param array $data
      *
-     * @return
+     * @return array
      */
     protected function runGlobalSanitizers(array $rules, array $data): array
     {

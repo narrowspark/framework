@@ -101,7 +101,7 @@ class SessionManagerTest extends TestCase
                     RepositoryContract::class   => $config,
                 ])),
             ]),
-            new Encrypter(Key::createNewRandomKey())
+            new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString())
         );
     }
 }

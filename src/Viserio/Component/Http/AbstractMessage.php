@@ -346,7 +346,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Assert that the provided header values are valid.
      *
-     * @see http://tools.ietf.org/html/rfc7230#section-3.2
+     * @link http://tools.ietf.org/html/rfc7230#section-3.2
      *
      * @param string[] $values
      *
@@ -381,11 +381,11 @@ abstract class AbstractMessage implements MessageInterface
      * header-field = field-name ":" OWS field-value OWS
      * OWS          = *( SP / HTAB )
      *
+     * @link https://tools.ietf.org/html/rfc7230#section-3.2.4
+     *
      * @param string[] $values Header values
      *
      * @return string[] Trimmed header values
-     *
-     * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
      */
     private function trimHeaderValues(array $values): array
     {

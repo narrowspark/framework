@@ -54,8 +54,7 @@ class LogsDataCollector extends MessagesDataCollector implements PanelAwareContr
 
             $logs[str_replace('.log', '', $name)] = $this->createTable(
                 $this->logParser->parse($file),
-                null,
-                ['Type', 'Message']
+                ['headers' => ['Type', 'Message']]
             );
         }
 

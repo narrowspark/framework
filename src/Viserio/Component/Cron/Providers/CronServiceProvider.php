@@ -5,17 +5,25 @@ namespace Viserio\Component\Cron\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Commands\CronListCommand;
 use Viserio\Component\Cron\Commands\ForgetCommand;
 use Viserio\Component\Cron\Commands\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class CronServiceProvider implements ServiceProvider
+class CronServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.cron';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -28,12 +36,30 @@ class CronServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'cron'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return ['path', 'console'];
+    }
+
     public static function createSchedule(ContainerInterface $container): Schedule
     {
+        self::resolveOptions($container);
+
         $scheduler = new Schedule(
             $container->get(CacheItemPoolInterface::class),
-            self::getConfig($container, 'path'),
-            self::getConfig($container, 'console')
+            self::$options['path'],
+            self::$options['console']
         );
 
         $scheduler->setContainer($container);
@@ -48,5 +74,21 @@ class CronServiceProvider implements ServiceProvider
             new ForgetCommand($container->get(CacheItemPoolInterface::class)),
             new ScheduleRunCommand(),
         ];
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

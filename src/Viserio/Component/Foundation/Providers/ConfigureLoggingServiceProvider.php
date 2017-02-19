@@ -11,8 +11,6 @@ use Viserio\Component\Log\Writer;
 
 class ConfigureLoggingServiceProvider implements ServiceProvider
 {
-    public const PACKAGE = 'viserio.log.configured';
-
     /**
      * {@inheritdoc}
      */

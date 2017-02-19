@@ -178,52 +178,54 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 'name'    => 'Request',
                 'content' => $this->createTable(
                     $this->serverRequest->getQueryParams(),
-                    'Get Parameters'
+                    ['name' => 'Get Parameters']
                 ) . $this->createTable(
                     $this->serverRequest->getParsedBody() ?? [],
-                    'Post Parameters'
+                    ['name' => 'Post Parameters']
                 ) . $this->createTable(
                     $this->prepareRequestAttributes($this->serverRequest->getAttributes()),
-                    'Request Attributes'
+                    ['name' => 'Request Attributes']
                 ) . $this->createTable(
                     $this->splitOnAttributeDelimiter($this->serverRequest->getHeaderLine('Cookie')),
-                    'Cookies'
+                    ['name' => 'Cookies']
                 ) . $this->createTable(
-                    $this->serverRequest->getHeaders(),
-                    'Request Headers'
+                    $this->prepareRequestHeaders($this->serverRequest->getHeaders()),
+                    ['name' => 'Request Headers']
                 ) . $this->createTable(
                     $this->prepareServerParams($this->serverRequest->getServerParams()),
-                    'Server Parameters'
+                    ['name' => 'Server Parameters']
                 ),
             ],
             [
                 'name'    => 'Response',
                 'content' => $this->createTable(
                     $this->response->getHeaders(),
-                    'Response Headers',
                     [
-                        'key' => 'Header',
+                        'name'    => 'Response Headers',
+                        'headers' => [
+                            'key' => 'Header',
+                        ],
                     ]
                 ) . $this->createTable(
                     $this->serverRequest->getHeader('Set-Cookie'),
-                    'Cookies'
+                    ['name' => 'Cookies']
                 ),
             ],
             [
                 'name'    => 'Session',
                 'content' => $this->createTable(
                     $sessionMeta,
-                    'Session Metadata'
+                    ['name' => 'Session Metadata']
                 ) . $this->createTable(
                     $session !== null ? $session->getAll() : [],
-                    'Session Attributes'
+                    ['name' => 'Session Attributes']
                 ),
             ],
             [
                 'name'    => 'Flashes',
                 'content' => $this->createTable(
                     $session !== null ? $session->get('_flash') : [],
-                    'Flashes'
+                    ['name' => 'Flashes']
                 ),
             ],
         ]);
@@ -332,7 +334,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * [prepareRequestAttributes description].
+     * Prepare request attributes, check of route object.
      *
      * @param array $attributes
      *
@@ -358,6 +360,28 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         }
 
         return $preparedAttributes;
+    }
+
+    /**
+     * Prepare request headers.
+     *
+     * @param array $headers
+     *
+     * @return array
+     */
+    protected function prepareRequestHeaders(array $headers): array
+    {
+        $preparedHeaders = [];
+
+        foreach ($headers as $key => $value) {
+            if (count($value) === 1) {
+                $preparedHeaders[$key] = $value[0];
+            } else {
+                $preparedHeaders[$key] = $value;
+            }
+        }
+
+        return $preparedHeaders;
     }
 
     /**

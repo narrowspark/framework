@@ -28,7 +28,7 @@ class StoreTest extends TestCase
         parent::setUp();
 
         $reflection      = new ReflectionClass(Store::class);
-        $this->encrypter = new Encrypter(Key::createNewRandomKey());
+        $this->encrypter = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
 
         $this->session = $reflection->newInstanceArgs(
             [

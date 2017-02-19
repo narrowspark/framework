@@ -18,11 +18,11 @@ class Password implements PasswordContract
     /**
      * Create a new Password instance.
      *
-     * @param \Defuse\Crypto\Key $key
+     * @param string $key
      */
-    public function __construct(Key $key)
+    public function __construct(string $key)
     {
-        $this->key = $key;
+        $this->key = Key::loadFromAsciiSafeString($key);
     }
 
     /**
@@ -44,13 +44,13 @@ class Password implements PasswordContract
     /**
      * Key rotation method -- decrypt with your old key then re-encrypt with your new key.
      *
-     * @param string             $hashedValue
-     * @param \Defuse\Crypto\Key $newKey
+     * @param string $hashedValue
+     * @param string $newKey
      *
      * @return string
      */
-    public function shouldRecreate(string $hashedValue, Key $newKey): string
+    public function shouldRecreate(string $hashedValue, string $newKey): string
     {
-        return PasswordLock::rotateKey($hashedValue, $this->key, $newKey);
+        return PasswordLock::rotateKey($hashedValue, $this->key, Key::loadFromAsciiSafeString($newKey));
     }
 }

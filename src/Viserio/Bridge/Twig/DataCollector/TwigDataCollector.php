@@ -4,9 +4,11 @@ namespace Viserio\Bridge\Twig\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Twig_Environment;
 use Twig_Markup;
 use Twig_Profiler_Dumper_Html;
 use Twig_Profiler_Profile;
+use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
@@ -15,6 +17,7 @@ use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 class TwigDataCollector extends AbstractDataCollector implements
     MenuAwareContract,
     PanelAwareContract,
+    AssetAwareContract,
     TooltipAwareContract
 {
     /**
@@ -35,10 +38,12 @@ class TwigDataCollector extends AbstractDataCollector implements
      * Create new twig collector instance.
      *
      * @param \Twig_Profiler_Profile $profile
+     * @param \Twig_Environment      $twigEnvironment
      */
-    public function __construct(Twig_Profiler_Profile $profile)
+    public function __construct(Twig_Profiler_Profile $profile, Twig_Environment $twigEnvironment)
     {
-        $this->profile = $profile;
+        $this->profile         = $profile;
+        $this->twigEnvironment = $twigEnvironment;
     }
 
     /**
@@ -46,7 +51,6 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-        $this->data['profile'] = serialize($this->profile);
     }
 
     /**
@@ -56,19 +60,15 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function getProfile(): Twig_Profiler_Profile
     {
-        if ($this->profile === null) {
-            $this->profile = unserialize($this->data['profile']);
-        }
-
         return $this->profile;
     }
 
     /**
      * Get duration time.
      *
-     * @return int
+     * @return float
      */
-    public function getTime(): int
+    public function getTime(): float
     {
         return $this->getProfile()->getDuration() * 1000;
     }
@@ -86,9 +86,9 @@ class TwigDataCollector extends AbstractDataCollector implements
     /**
      * Get counted templates.
      *
-     * @return int
+     * @return array
      */
-    public function getTemplates(): int
+    public function getTemplates(): array
     {
         return $this->getComputedData('templates');
     }
@@ -117,6 +117,8 @@ class TwigDataCollector extends AbstractDataCollector implements
      * Get a html call graph.
      *
      * @return \Twig_Markup
+     *
+     * @codeCoverageIgnore
      */
     public function getHtmlCallGraph()
     {
@@ -139,10 +141,52 @@ class TwigDataCollector extends AbstractDataCollector implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getAssets(): array
+    {
+        return [
+            'css' => __DIR__ . '/Resources/css/twig.css',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getPanel(): string
     {
-        return '';
+        $data     = [];
+        $twigHtml = $this->createMetrics(
+            [
+                'Render time'    => $this->formatDuration($this->getTime()),
+                'Template calls' => $this->getTemplateCount(),
+                'Block calls'    => $this->getBlockCount(),
+                'Macro calls'    => $this->getMacroCount(),
+            ],
+            'Twig Metrics'
+        );
+
+        $twigHtml .= $this->createTable(
+            $this->getTemplates(),
+            [
+                'name'      => 'Rendered Templates',
+                'headers'   => ['Template Name', 'Render Count'],
+                'vardumper' => false,
+            ]
+        );
+
+        $twigHtml .= '<div class="twig-graph"><h3>Rendering Call Graph</h3>';
+        $twigHtml .= $this->getHtmlCallGraph();
+        $twigHtml .= '</div>';
+        $extensions = $this->twigEnvironment->getExtensions();
+        $data[]     = ['name' => 'Twig <span class="counter">' . $this->getTemplateCount() . '</span>', 'content' => $twigHtml];
+        $data[]     = ['name' => 'Twig Extensions <span class="counter">' . count($extensions) . '</span>', 'content' => $this->createTable(
+            array_keys($extensions),
+            ['headers' => ['Extension'], 'vardumper' => false]
+        )];
+
+        return $this->createTabs($data);
     }
 
     /**
@@ -151,9 +195,9 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon'  => file_get_contents(__DIR__ . '/../Resources/icons/ic_view_quilt_white_24px.svg'),
+            'icon'  => file_get_contents(__DIR__ . '/Resources/icons/ic_view_quilt_white_24px.svg'),
             'label' => 'Twig',
-            'value' => $this->getComputedData('template_count'),
+            'value' => '',
         ];
     }
 
@@ -163,9 +207,9 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getTooltip(): string
     {
         return $this->createTooltipGroup([
-            'Profiler token'   => $this->getComputedData('template_count'),
-            'Application name' => $this->getComputedData('block_count'),
-            'Environment'      => $this->getComputedData('macro_count'),
+            'Template calls' => $this->getComputedData('template_count'),
+            'Block calls'    => $this->getComputedData('block_count'),
+            'Macro calls'    => $this->getComputedData('macro_count'),
         ]);
     }
 

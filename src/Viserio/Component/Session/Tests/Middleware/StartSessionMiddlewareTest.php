@@ -84,7 +84,7 @@ class StartSessionMiddlewareTest extends TestCase
                 FilesystemContract::class => $this->files,
                 JarContract::class        => $this->mock(JarContract::class),
             ]),
-            new Encrypter(Key::createNewRandomKey())
+            new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString())
         );
 
         $middleware = new StartSessionMiddleware($manager);
@@ -133,7 +133,7 @@ class StartSessionMiddlewareTest extends TestCase
                 FilesystemContract::class => $this->files,
                 JarContract::class        => $jar,
             ]),
-            new Encrypter(Key::createNewRandomKey())
+            new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString())
         );
 
         $middleware = new StartSessionMiddleware($manager);

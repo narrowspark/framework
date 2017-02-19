@@ -1,7 +1,7 @@
 .webprofiler {
     bottom: 0;
     color: #EEE;
-    font: 11px Arial, sans-serif;
+    font: 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
     left: 0;
     margin: 0;
     padding: 0;
@@ -203,6 +203,9 @@
     position: relative;
     z-index: 9998;
 }
+.webprofiler .webprofiler-body pre {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
 .webprofiler .webprofiler-body pre.sf-dump,
 .webprofiler .webprofiler-body pre.sf-dump .sf-dump-num,
 .webprofiler .webprofiler-body pre.sf-dump .sf-dump-const,
@@ -334,7 +337,7 @@
 }
 .webprofiler .webprofiler-body .webprofiler-panel table tbody th,
 .webprofiler .webprofiler-body .webprofiler-panel table tbody td {
-    font-family: "Inconsolata", "Fira Mono", "Source Code Pro", Monaco, Consolas, "Lucida Console", monospace;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
     font-size: 13px;
     font-size-adjust: 0.5;
     border: 1px solid #E0E0E0;

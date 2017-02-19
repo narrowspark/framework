@@ -4,16 +4,24 @@ namespace Viserio\Component\Translation\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Translation\DataCollectors\ViserioTranslationDataCollector;
 
-class TranslationDataCollectorServiceProvider implements ServiceProvider
+class TranslationDataCollectorServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.webprofiler';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -25,17 +33,56 @@ class TranslationDataCollectorServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createWebProfiler(
-        ContainerInterface $container
-    ): WebProfilerContract {
-        $profiler = $container->get(WebProfilerContract::class);
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'webprofiler'];
+    }
 
-        if (self::getConfig($container, 'collector.translation', false)) {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'collector' => [
+                'translation' => false,
+            ],
+        ];
+    }
+
+    public static function createWebProfiler(
+        ContainerInterface $container,
+        callable $getPrevious
+    ): WebProfilerContract {
+        self::resolveOptions($container);
+
+        $profiler = $getPrevious();
+
+        if (self::$options['collector']['translation']) {
             $profiler->addCollector(new ViserioTranslationDataCollector(
                 $container->get(TranslatorContract::class)
             ));
         }
 
         return $profiler;
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

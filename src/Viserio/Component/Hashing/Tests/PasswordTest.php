@@ -12,7 +12,7 @@ class PasswordTest extends TestCase
 
     public function setUp()
     {
-        $this->password = new Password(Key::createNewRandomKey());
+        $this->password = new Password(Key::createNewRandomKey()->saveToAsciiSafeString());
     }
 
     public function testCreate()
@@ -35,9 +35,8 @@ class PasswordTest extends TestCase
 
     public function testShouldRecreate()
     {
-        $key  = Key::createNewRandomKey();
         $hash = $this->password->create('totally-insecure-but-lengthy-password');
 
-        self::assertNotSame($hash, $this->password->shouldRecreate($hash, $key));
+        self::assertNotSame($hash, $this->password->shouldRecreate($hash, Key::createNewRandomKey()->saveToAsciiSafeString()));
     }
 }

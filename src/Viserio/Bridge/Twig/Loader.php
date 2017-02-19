@@ -7,7 +7,7 @@ use Twig_Error_Loader;
 use Twig_ExistsLoaderInterface;
 use Twig_LoaderInterface;
 use Twig_Source;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 
 class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
@@ -43,12 +43,11 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     /**
      * Create a new twig loader instance.
      *
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
-     * @param \Viserio\Component\Contracts\View\Finder           $finder
+     * @param \Viserio\Component\Contracts\View\Finder $finder
      */
-    public function __construct(FilesystemContract $files, FinderContract $finder)
+    public function __construct(FinderContract $finder)
     {
-        $this->files  = $files;
+        $this->files  = $finder->getFilesystem();
         $this->finder = $finder;
     }
 
@@ -87,7 +86,13 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     {
         $template = $this->findTemplate($name);
 
-        return new Twig_Source($this->files->read($template), $name, $template);
+        try {
+            $source = $this->files->read($template);
+        } catch (FileNotFoundException $exception) {
+            throw new Twig_Error_Loader('Twig file "' . $exception->getMessage() . '" was not found.');
+        }
+
+        return new Twig_Source($source, $name, $template);
     }
 
     /**

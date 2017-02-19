@@ -36,7 +36,7 @@ final class HeaderSecurity
      * This method filters any values not allowed from the string, and is
      * lossy.
      *
-     * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
+     * @link http://en.wikipedia.org/wiki/HTTP_response_splitting
      *
      * @param string $value
      *
@@ -87,7 +87,7 @@ final class HeaderSecurity
      * tabs are allowed in values; header continuations MUST consist of
      * a single CRLF sequence followed by a space or horizontal tab.
      *
-     * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
+     * @link http://en.wikipedia.org/wiki/HTTP_response_splitting
      *
      * @param string $value
      *
@@ -137,7 +137,7 @@ final class HeaderSecurity
     /**
      * Assert whether or not a header name is valid.
      *
-     * @see http://tools.ietf.org/html/rfc7230#section-3.2
+     * @link http://tools.ietf.org/html/rfc7230#section-3.2
      *
      * @param mixed $name
      *

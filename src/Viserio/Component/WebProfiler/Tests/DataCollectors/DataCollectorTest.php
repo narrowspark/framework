@@ -25,8 +25,8 @@ class DataCollectorTest extends TestCase
         $defaultTable = file_get_contents(__DIR__ . '/../Fixture/View/default_table.html');
 
         static::assertSame(
-            $this->removeSymfonyVarDumper($defaultTable),
-            $this->removeSymfonyVarDumper($collector->getTableDefault())
+            $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $defaultTable)),
+            $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $collector->getTableDefault()))
         );
     }
 
@@ -36,8 +36,8 @@ class DataCollectorTest extends TestCase
         $defaultTable = file_get_contents(__DIR__ . '/../Fixture/View/array_table.html');
 
         static::assertSame(
-            $this->removeSymfonyVarDumper($defaultTable),
-            $this->removeSymfonyVarDumper($collector->getTableArray())
+            $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $defaultTable)),
+            $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $collector->getTableArray()))
         );
     }
 

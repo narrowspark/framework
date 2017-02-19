@@ -54,13 +54,15 @@ class TwigEngineTest extends TestCase
                 ],
             ]);
 
-        $engine = new TwigEngine(new ArrayContainer([
-            RepositoryContract::class       => $config,
-            Twig_Environment::class         => new Twig_Environment(
+        $engine = new TwigEngine(
+            new Twig_Environment(
                 new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-        ]));
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
 
         $template = $engine->get(['name' => 'twightml.twig.html']);
 
@@ -109,14 +111,16 @@ class TwigEngineTest extends TestCase
             ],
         ];
 
-        $engine = new TwigEngine(new ArrayContainer([
-            'config'                        => $config,
-            Twig_Environment::class         => new Twig_Environment(
+        $engine = new TwigEngine(
+            new Twig_Environment(
                 new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            ConfigExtension::class => new ConfigExtension($repository),
-        ]));
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+                ConfigExtension::class    => new ConfigExtension($repository),
+            ])
+        );
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
 
@@ -164,13 +168,15 @@ class TwigEngineTest extends TestCase
             ],
         ];
 
-        $engine = new TwigEngine(new ArrayContainer([
-            'config'                        => $config,
-            Twig_Environment::class         => new Twig_Environment(
+        $engine = new TwigEngine(
+            new Twig_Environment(
                 new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-        ]));
+            new ArrayContainer([
+                'config' => $config,
+            ])
+        );
 
         $engine->get([]);
     }

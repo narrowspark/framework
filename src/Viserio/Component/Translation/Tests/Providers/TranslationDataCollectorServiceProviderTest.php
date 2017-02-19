@@ -6,12 +6,11 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
@@ -56,14 +55,18 @@ class TranslationDataCollectorServiceProviderTest extends TestCase
             $catalogue,
             $selector
         ));
-        $container->register(new ConfigServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new WebProfilerServiceProvider());
         $container->register(new TranslationDataCollectorServiceProvider());
 
-        $container->get(RepositoryContract::class)->set('webprofiler', [
-            'collector' => [
-                'translation' => true,
+        $container->instance('config', [
+            'viserio' => [
+                'webprofiler' => [
+                    'collector' => [
+                        'translation' => true,
+                    ],
+                ],
             ],
         ]);
 

@@ -41,7 +41,7 @@ class OptionsResolverTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException
-     * @expectedExceptionMessage position is "doctrine"
+     * @expectedExceptionMessage Configuration must either be of type "array" or implement "\ArrayAccess". Configuration position is "doctrine".
      */
     public function testOptionsResolverThrowsInvalidArgumentExceptionIfConfigIsNotAnArray()
     {
@@ -61,7 +61,7 @@ class OptionsResolverTest extends TestCase
      * @dataProvider providerConfig
      *
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
-     * @expectedExceptionMessage The configuration "doctrine.connection" needs a config id.
+     * @expectedExceptionMessage The configuration "doctrine.connection" needs a config id in class "Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionContainerIdConfiguration".
      *
      * @param mixed $config
      */
@@ -72,7 +72,7 @@ class OptionsResolverTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration "doctrine.connection"
+     * @expectedExceptionMessage No options set for configuration "doctrine.connection" in class "Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionConfiguration".
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoVendorConfigIsAvailable()
     {
@@ -81,7 +81,7 @@ class OptionsResolverTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration "doctrine.connection"
+     * @expectedExceptionMessage No options set for configuration "doctrine.connection" in class "Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionConfiguration".
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoPackageOptionIsAvailable()
     {
@@ -90,7 +90,7 @@ class OptionsResolverTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration "doctrine.connection.orm_default"
+     * @expectedExceptionMessage No options set for configuration "doctrine.connection.orm_default" in class "Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionContainerIdConfiguration".
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoContainerIdOptionIsAvailable()
     {
@@ -103,7 +103,7 @@ class OptionsResolverTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration "one.two.three.four"
+     * @expectedExceptionMessage No options set for configuration "one.two.three.four" in class "Viserio\Component\OptionsResolver\Tests\Fixtures\FlexibleConfiguration".
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfDimensionIsNotAvailable()
     {
@@ -115,7 +115,7 @@ class OptionsResolverTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration "vendor"
+     * @expectedExceptionMessage No options set for configuration "vendor" in class "Viserio\Component\OptionsResolver\Tests\Fixtures\PackageDefaultAndMandatoryOptionsConfiguration".
      */
     public function testOptionsThrowsExceptionIfMandatoryOptionsWithDefaultOptionsSetAndNoConfigurationIsSet()
     {
@@ -127,7 +127,7 @@ class OptionsResolverTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException
-     * @expectedExceptionMessage Configuration must either be of
+     * @expectedExceptionMessage Configuration must either be of type "array" or implement "\ArrayAccess". Configuration position is "doctrine.connection".
      */
     public function testOptionsThrowsUnexpectedValueExceptionIfRetrievedOptionsNotAnArrayOrArrayAccess()
     {
@@ -328,7 +328,7 @@ class OptionsResolverTest extends TestCase
      * @dataProvider providerConfig
      *
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
-     * @expectedExceptionMessage Mandatory option "params"
+     * @expectedExceptionMessage Mandatory option "params" was not set for configuration "doctrine.connection".
      *
      * @param mixed $config
      */
@@ -347,7 +347,7 @@ class OptionsResolverTest extends TestCase
      * @dataProvider providerConfig
      *
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
-     * @expectedExceptionMessage Mandatory option "dbname"
+     * @expectedExceptionMessage Mandatory option "dbname" was not set for configuration "doctrine.connection".
      *
      * @param mixed $config
      */
@@ -398,7 +398,7 @@ class OptionsResolverTest extends TestCase
      * @dataProvider providerConfig
      *
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
-     * @expectedExceptionMessage Mandatory option "params"
+     * @expectedExceptionMessage Mandatory option "params" was not set for configuration "doctrine.connection".
      */
     public function testOptionsThrowsMandatoryOptionNotFoundExceptionIfOptionsAreEmpty(): void
     {

@@ -15,7 +15,7 @@ use Viserio\Bridge\Twig\TokenParsers\DumpTokenParser;
  *
  * Based on the Symfony Twig Bridge Dump Extension
  *
- * @see https://github.com/symfony/symfony/blob/2.6/src/Symfony/Bridge/Twig/Extension/DumpExtension.php
+ * @link https://github.com/symfony/symfony/blob/2.6/src/Symfony/Bridge/Twig/Extension/DumpExtension.php
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */

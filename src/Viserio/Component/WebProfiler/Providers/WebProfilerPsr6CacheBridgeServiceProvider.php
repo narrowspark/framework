@@ -27,9 +27,9 @@ class WebProfilerPsr6CacheBridgeServiceProvider implements ServiceProvider
         return new TraceableCacheItemDecorater($container->get(CacheItemPoolInterface::class));
     }
 
-    public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
+    public static function createWebProfiler(ContainerInterface $container, callable $getPrevious): WebProfilerContract
     {
-        $profiler = $container->get(WebProfilerContract::class);
+        $profiler = $getPrevious();
         $cache    = new Psr6CacheDataCollector();
 
         if ($container->has(CacheItemPoolInterface::class)) {

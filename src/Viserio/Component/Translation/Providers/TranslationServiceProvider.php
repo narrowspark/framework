@@ -5,19 +5,27 @@ namespace Viserio\Component\Translation\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\TranslationManager;
 
-class TranslationServiceProvider implements ServiceProvider
+class TranslationServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.translation';
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -36,8 +44,30 @@ class TranslationServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'translation'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'locale'      => false,
+            'directories' => false,
+            'files'       => false,
+        ];
+    }
+
     public static function createTranslationManager(ContainerInterface $container): TranslationManager
     {
+        self::resolveOptions($container);
+
         $manager = new TranslationManager(
             new PluralizationRules(),
             new MessageSelector()
@@ -45,15 +75,15 @@ class TranslationServiceProvider implements ServiceProvider
 
         $manager->setLoader($container->get(FileLoader::class));
 
-        if (($locale = self::getConfig($container, 'locale')) !== null) {
+        if ($locale = self::$options['locale']) {
             $manager->setLocale($locale);
         }
 
-        if (($directories = self::getConfig($container, 'directories')) !== null) {
+        if ($directories = self::$options['directories']) {
             $manager->setDirectories($directories);
         }
 
-        if (($imports = self::getConfig($container, 'files')) !== null) {
+        if ($imports = self::$options['files']) {
             foreach ((array) $imports as $import) {
                 $manager->import($import);
             }
@@ -69,5 +99,21 @@ class TranslationServiceProvider implements ServiceProvider
     public static function createTranslator(ContainerInterface $container): TranslatorContract
     {
         return $container->get(TranslationManager::class)->getTranslator();
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }

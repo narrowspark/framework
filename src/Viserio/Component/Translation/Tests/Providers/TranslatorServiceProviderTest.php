@@ -7,9 +7,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Translation\Providers\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;
@@ -58,46 +58,22 @@ return [
         $container->instance(PsrLoggerInterface::class, $this->mock(PsrLoggerInterface::class));
         $container->register(new TranslationServiceProvider());
         $container->register(new ParsersServiceProvider());
-        $container->register(new ConfigServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
 
-        $container->get('config')->set('translation', [
-            'locale'      => 'en',
-            'files'       => $this->file->url(),
-            'directories' => [
-                __DIR__,
+        $container->instance('config', [
+            'viserio' => [
+                'translation' => [
+                    'locale'      => 'en',
+                    'files'       => $this->file->url(),
+                    'directories' => [
+                        __DIR__,
+                    ],
+                ],
             ],
         ]);
 
         self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
         self::assertInstanceOf(TranslatorContract::class, $container->get('translator'));
         self::assertInstanceOf(TranslatorContract::class, $container->get(TranslatorContract::class));
-    }
-
-    public function testProviderWithoutConfigManager()
-    {
-        $container = new Container();
-        $container->register(new ParsersServiceProvider());
-        $container->register(new TranslationServiceProvider());
-
-        $container->instance('options', [
-            'locale' => 'en',
-            'files'  => $this->file->url(),
-        ]);
-
-        self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
-    }
-
-    public function testProviderWithoutConfigManagerAndNamespace()
-    {
-        $container = new Container();
-        $container->register(new ParsersServiceProvider());
-        $container->register(new TranslationServiceProvider());
-
-        $container->instance('viserio.translation.options', [
-            'locale' => 'en',
-            'files'  => $this->file->url(),
-        ]);
-
-        self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
     }
 }

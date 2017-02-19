@@ -7,14 +7,9 @@ use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class CacheServiceProvider implements ServiceProvider
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.cache';
-
     /**
      * {@inheritdoc}
      */
