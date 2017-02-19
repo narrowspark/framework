@@ -5,10 +5,10 @@ namespace Viserio\Component\Mail\Tests\Transport;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Swift_Message;
-use Viserio\Component\Mail\Transport\Log as LogTransport;
 use Psr\Log\LoggerInterface;
+use Swift_Message;
 use Swift_Mime_Message;
+use Viserio\Component\Mail\Transport\Log as LogTransport;
 
 class LogTransportTest extends TestCase
 {
