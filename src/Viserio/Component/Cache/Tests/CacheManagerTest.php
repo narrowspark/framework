@@ -6,7 +6,9 @@ use Cache\Adapter\Chain\CachePoolChain;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Void\VoidCachePool;
+use Cache\Encryption\EncryptedCachePool;
 use Cache\Namespaced\NamespacedCachePool;
+use Defuse\Crypto\Key;
 use League\Flysystem\Adapter\Local;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -53,6 +55,59 @@ class CacheManagerTest extends TestCase
         );
 
         self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
+    }
+
+    public function testEncryptedArrayPoolCall()
+    {
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'cache' => [
+                    'drivers'   => [],
+                    'key'       => Key::createNewRandomKey()->saveToAsciiSafeString(),
+                ],
+            ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
+
+        self::assertInstanceOf(EncryptedCachePool::class, $manager->getEncryptedDriver('array'));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage No encryption key found.
+     */
+    public function testEncryptedArrayPoolCallThrowException()
+    {
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'cache' => [
+                    'drivers' => [],
+                ],
+            ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
+
+        $manager->getEncryptedDriver('array');
     }
 
     public function testArrayPoolCallWithLog()
