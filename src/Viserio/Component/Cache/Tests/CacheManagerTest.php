@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Cache\Encryption\EncryptedCachePool;
+use Defuse\Crypto\Key;
 
 class CacheManagerTest extends TestCase
 {
@@ -53,6 +55,59 @@ class CacheManagerTest extends TestCase
         );
 
         self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
+    }
+
+    public function testEncryptedArrayPoolCall()
+    {
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'cache' => [
+                    'drivers'   => [],
+                    'key' => Key::createNewRandomKey()->saveToAsciiSafeString()
+                ],
+            ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
+
+        self::assertInstanceOf(EncryptedCachePool::class, $manager->getEncryptedDriver('array'));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage No encryption key found.
+     */
+    public function testEncryptedArrayPoolCallThrowException()
+    {
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'cache' => [
+                    'drivers' => [],
+                ],
+            ]);
+        $manager = new CacheManager(
+            new ArrayContainer([
+                RepositoryContract::class => $config,
+            ])
+        );
+
+        $manager->getEncryptedDriver('array');
     }
 
     public function testArrayPoolCallWithLog()

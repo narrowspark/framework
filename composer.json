@@ -111,6 +111,7 @@
     },
     "require-dev": {
         "aws/aws-sdk-php"                                    : "^3.18",
+        "cache/encryption-cache"                             : "^0.1",
         "cache/filesystem-adapter"                           : "^0.3",
         "cache/namespaced-cache"                             : "^0.1",
         "cache/session-handler"                              : "^0.2",
