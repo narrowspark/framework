@@ -3,10 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Commands;
 
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 class ScheduleRunCommand extends Command implements
