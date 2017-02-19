@@ -89,7 +89,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         try {
             $source = $this->files->read($template);
         } catch (FileNotFoundException $exception) {
-            throw new Twig_Error_Loader($exception->getMessage());
+            throw new Twig_Error_Loader('Twig file "' .$exception->getMessage() . '" was not found.');
         }
 
         return new Twig_Source($source, $name, $template);

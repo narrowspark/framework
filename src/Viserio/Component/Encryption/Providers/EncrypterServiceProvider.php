@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption\Providers;
 
-use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;

@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Twig\Loader;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
 
 class LoaderTest extends TestCase
 {
@@ -85,6 +86,38 @@ class LoaderTest extends TestCase
         self::assertSame('test.twig', $source->getName());
         self::assertSame('test', $source->getCode());
         self::assertSame('test.twig', $source->getPath());
+    }
+
+    /**
+     * @expectedException \Twig_Error_Loader
+     * @expectedExceptionMessage Twig file "test.twig" was not found.
+     */
+    public function testGetSourceContextFileNotFound()
+    {
+        $file = $this->mock(FilesystemContract::class);
+        $file->shouldReceive('has')
+            ->once()
+            ->with('test.twig')
+            ->andReturn(false);
+        $file->shouldReceive('read')
+            ->once()
+            ->with('test.twig')
+            ->andThrow(new FileNotFoundException('test.twig'));
+        $file->shouldReceive('getExtension')
+            ->once()
+            ->with('test.twig')
+            ->andReturn('twig');
+        $finder = $this->mock(FinderContract::class);
+        $finder->shouldReceive('getFilesystem')
+            ->once()
+            ->andReturn($file);
+        $finder->shouldReceive('find')
+            ->once()
+            ->andReturn(['path' => 'test.twig']);
+
+        $loader = new Loader($finder);
+
+        $loader->getSourceContext('test.twig');
     }
 
     public function testIsFresh()
