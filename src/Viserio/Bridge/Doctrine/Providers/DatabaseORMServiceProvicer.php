@@ -23,14 +23,9 @@ use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class DatabaseORMServiceProvicer implements ServiceProvider
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.database.orm';
-
     /**
      * {@inheritdoc}
      */
