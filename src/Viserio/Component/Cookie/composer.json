@@ -32,7 +32,8 @@
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version",
         "viserio/encrypter"                   : "self.version",
-        "viserio/http-factory"                : "self.version"
+        "viserio/http-factory"                : "self.version",
+        "viserio/options-resolver"            : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -52,7 +53,8 @@
     "suggest": {
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "viserio/encrypter"                   : "Required to use the EncryptCookies Middleware (self.version).",
-        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
+        "viserio/options-resolver"            : "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {

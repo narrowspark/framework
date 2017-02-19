@@ -33,7 +33,8 @@
         "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "^6.0",
         "viserio/cache"                       : "self.version",
-        "viserio/console"                     : "self.version"
+        "viserio/console"                     : "self.version",
+        "viserio/options-resolver"            : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -48,7 +49,9 @@
     },
     "suggest": {
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
-        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
+        "viserio/console"                     : "Required to use commands (self.version).",
+        "viserio/options-resolver"            : "Required to use service-provider and commands (self.version)."
     },
     "extra": {
         "branch-alias": {
