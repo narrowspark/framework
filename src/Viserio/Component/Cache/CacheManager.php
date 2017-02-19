@@ -13,8 +13,10 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
+use Cache\Encryption\EncryptedCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
+use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
@@ -23,13 +25,11 @@ use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
 use Psr\Log\LoggerAwareInterface;
 use Redis;
+use RuntimeException;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
-use Cache\Encryption\EncryptedCachePool;
-use Defuse\Crypto\Key;
-use RuntimeException;
 
 class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface, ProvidesDefaultOptionsContract
 {

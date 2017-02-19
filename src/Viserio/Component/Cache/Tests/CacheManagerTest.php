@@ -6,7 +6,9 @@ use Cache\Adapter\Chain\CachePoolChain;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Void\VoidCachePool;
+use Cache\Encryption\EncryptedCachePool;
 use Cache\Namespaced\NamespacedCachePool;
+use Defuse\Crypto\Key;
 use League\Flysystem\Adapter\Local;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -15,8 +17,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Cache\Encryption\EncryptedCachePool;
-use Defuse\Crypto\Key;
 
 class CacheManagerTest extends TestCase
 {
@@ -70,7 +70,7 @@ class CacheManagerTest extends TestCase
             ->andReturn([
                 'cache' => [
                     'drivers'   => [],
-                    'key' => Key::createNewRandomKey()->saveToAsciiSafeString()
+                    'key'       => Key::createNewRandomKey()->saveToAsciiSafeString(),
                 ],
             ]);
         $manager = new CacheManager(
