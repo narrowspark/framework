@@ -48,8 +48,8 @@ class LintCommandTest extends TestCase
         $file     = $this->normalizeDirectorySeparator(realpath(__DIR__ . '/../Fixtures/lintIncorrectFile.twig'));
 
         self::assertSame(
-            str_replace("\r\n", '', 'Fail in ' . $file . ' (line 1)>> 1      {{ foo>> Unclosed "variable".    2      0 Twig files have valid syntax and 1 contain errors.'),
-            str_replace("\r\n", '', $tester->getDisplay())
+            'Fail in ' . $file . ' (line 1)>> 1      {{ foo>> Unclosed "variable".    2      0 Twig files have valid syntax and 1 contain errors.',
+            preg_replace('/(\r\n|\n\r|\r)/', '', trim($tester->getDisplay()))
         );
     }
 
