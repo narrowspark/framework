@@ -48,20 +48,23 @@ class LintCommandTest extends TestCase
         $file     = $this->normalizeDirectorySeparator(realpath(__DIR__ . '/../Fixtures/lintIncorrectFile.twig'));
 
         self::assertSame(
-            'Fail in ' . $file . ' (line 1)>> 1      {{ foo>> Unclosed "variable".    2      0 Twig files have valid syntax and 1 contain errors.',
-            preg_replace('/(\r\n|\n\r|\r)/', '', trim($tester->getDisplay()))
+            preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim('Fail in ' . $file . ' (line 1)
+>> 1      {{ foo
+>> Unclosed "variable".
+    2
+      0 Twig files have valid syntax and 1 contain errors.')),
+            preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim($tester->getDisplay()))
         );
     }
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Directory name must not be empty.
+     * @expectedExceptionMessage No twig files found.
      */
-    public function testLintFileNotReadable()
+    public function testLintFilesFound()
     {
-        $tester = $this->createCommandTester('');
-
-        $tester->execute(['--files' => ['test']], ['decorated' => false]);
+        $tester = $this->createCommandTester(__DIR__ . '/../Engine');
+        $ret      = $tester->execute([], ['decorated' => false]);
     }
 
     public function testLint2FileWithFilesArgument()
@@ -171,7 +174,7 @@ class LintCommandTest extends TestCase
                 'viserio' => [
                     'view' => [
                         'paths' => [
-                            $path ?? __DIR__ . '/../Fixtures/',
+                            $path !== null ? $path : __DIR__ . '/../Fixtures/',
                         ],
                     ],
                 ],

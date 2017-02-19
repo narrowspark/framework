@@ -73,6 +73,11 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
         $files   = $this->getFiles($this->option('files'), $this->option('directories'));
         $details = [];
 
+        // If no files are found.
+        if (count($files) === 0) {
+            throw new RuntimeException('No twig files found.');
+        }
+
         foreach ($files as $file) {
             try {
                 $template = $container->get(Twig_LoaderInterface::class)->getSourceContext($file);
