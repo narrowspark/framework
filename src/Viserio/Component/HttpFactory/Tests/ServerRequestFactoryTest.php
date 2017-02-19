@@ -121,26 +121,6 @@ class ServerRequestFactoryTest extends TestCase
             'SCRIPT_NAME'          => '/doc/framwork.php',
             'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
         ];
-        $_COOKIE = [
-            'logged-in' => 'yes!',
-        ];
-        $_POST = [
-            'name'  => 'Narrowspark',
-            'email' => 'parrowspark@example.com',
-        ];
-        $_GET = [
-            'id'   => 10,
-            'user' => 'foo',
-        ];
-        $_FILES = [
-            'file' => [
-                'name'     => 'MyFile.txt',
-                'type'     => 'text/plain',
-                'tmp_name' => '/tmp/php/php1h4j1o',
-                'error'    => UPLOAD_ERR_OK,
-                'size'     => 123,
-            ],
-        ];
 
         $server = $this->factory->createServerRequest($_SERVER);
 
@@ -175,24 +155,9 @@ class ServerRequestFactoryTest extends TestCase
         );
         self::assertEquals('', (string) $server->getBody());
         self::assertEquals('1.0', $server->getProtocolVersion());
-        self::assertEquals($_COOKIE, $server->getCookieParams());
-        self::assertEquals($_POST, $server->getParsedBody());
-        self::assertEquals($_GET, $server->getQueryParams());
         self::assertEquals(
             new Uri('https://www.narrowspark.com/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
-
-        $expectedFiles = [
-            'file' => new UploadedFile(
-                '/tmp/php/php1h4j1o',
-                123,
-                UPLOAD_ERR_OK,
-                'MyFile.txt',
-                'text/plain'
-            ),
-        ];
-
-        self::assertEquals($expectedFiles, $server->getUploadedFiles());
     }
 }

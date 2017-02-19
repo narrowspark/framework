@@ -18,7 +18,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     public function createServerRequest(array $server, $method = null, $uri = null): ServerRequestInterface
     {
         $server  = $this->normalizeServer($server);
-        $method  = $method === null ? $server['REQUEST_METHOD'] : $method;
+        $method  = $method === null ? ($server['REQUEST_METHOD'] ?? 'GET') : $method;
         $headers = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
         $uri     = $uri !== null ? $uri : Uri::createFromServer($server);
 
