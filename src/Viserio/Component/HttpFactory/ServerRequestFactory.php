@@ -14,8 +14,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 {
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function createServerRequest(array $server, $method = null, $uri = null): ServerRequestInterface
     {
@@ -58,6 +56,8 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             return $server;
         }
 
+        // Can only be testet on a apache server
+        // @codeCoverageIgnoreStart
         $headers = apache_request_headers();
 
         if (isset($headers['Authorization'])) {
@@ -71,6 +71,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
             return $server;
         }
+        // @codeCoverageIgnoreStop
 
         return $server;
     }
