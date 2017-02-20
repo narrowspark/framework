@@ -24,11 +24,14 @@
         "doctrine/migrations"                    : "^1.4",
         "php-cache/doctrine-bridge"              : "^2.0",
         "narrowspark/collection"                 : "^0.1",
-        "ocramius/proxy-manager"                 : "^2.0"
+        "ocramius/proxy-manager"                 : "^2.0",
+        "viserio/pagination"                     : "self.version"
     },
     "require-dev": {
+        "cakephp/chronos"                        : "^1.0",
         "container-interop/service-provider"     : "^0.3",
         "doctrine/orm"                           : "^2.5",
+        "fzaninotto/faker"                       : "^1.6",
         "phpunit/phpunit"                        : "^6.0",
         "viserio/container"                      : "self.version"
     },
@@ -46,6 +49,7 @@
     "suggest": {
         "container-interop/service-provider"     : "Required to use service-provider (^0.3).",
         "viserio/statical-proxy"                 : "Required to use the proxy instances (self.version).",
+        "fzaninotto/faker"                       : "Required to use the testing factory (^1.6).",
     },
     "extra": {
         "branch-alias": {

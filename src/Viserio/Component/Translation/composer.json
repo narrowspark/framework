@@ -19,8 +19,7 @@
     ],
     "require": {
         "php"                                : "^7.1",
-        "viserio/contracts"                  : "self.version",
-        "viserio/filesystem"                 : "self.version"
+        "viserio/contracts"                  : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
@@ -28,6 +27,7 @@
         "narrowspark/testing-helper"         : "^2.0",
         "phpunit/phpunit"                    : "^6.0",
         "viserio/container"                  : "self.version",
+        "viserio/filesystem"                 : "self.version",
         "viserio/log"                        : "self.version",
         "viserio/parsers"                    : "self.version",
         "viserio/options-resolver"           : "self.version",
