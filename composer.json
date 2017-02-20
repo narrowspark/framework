@@ -52,7 +52,7 @@
         "mtdowling/cron-expression"           : "^1.1",
         "narrowspark/arr"                     : "^2.1",
         "narrowspark/collection"              : "^0.1",
-        "narrowspark/http-status"             : "^2.0",
+        "narrowspark/http-status"             : "^3.0",
         "ocramius/proxy-manager"              : "^2.1",
         "opis/closure"                        : "^2.2",
         "paragonie/password_lock"             : "^3.0",
