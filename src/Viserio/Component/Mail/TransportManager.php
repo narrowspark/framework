@@ -9,12 +9,12 @@ use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Mail\Transport\LogTransport;
 use Viserio\Component\Mail\Transport\MailgunTransport;
 use Viserio\Component\Mail\Transport\MandrillTransport;
 use Viserio\Component\Mail\Transport\SesTransport;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
-use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Support\AbstractManager;
 
 class TransportManager extends AbstractManager implements ProvidesDefaultOptionsContract
