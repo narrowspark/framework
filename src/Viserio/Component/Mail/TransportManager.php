@@ -9,11 +9,12 @@ use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Mail\Transport\Log as LogTransport;
-use Viserio\Component\Mail\Transport\Mailgun as MailgunTransport;
-use Viserio\Component\Mail\Transport\Mandrill as MandrillTransport;
-use Viserio\Component\Mail\Transport\Ses as SesTransport;
-use Viserio\Component\Mail\Transport\SparkPost as SparkPostTransport;
+use Viserio\Component\Mail\Transport\LogTransport;
+use Viserio\Component\Mail\Transport\MailgunTransport;
+use Viserio\Component\Mail\Transport\MandrillTransport;
+use Viserio\Component\Mail\Transport\SesTransport;
+use Viserio\Component\Mail\Transport\SparkPostTransport;
+use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Support\AbstractManager;
 
 class TransportManager extends AbstractManager implements ProvidesDefaultOptionsContract
@@ -24,18 +25,28 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
     public function getDefaultOptions(): iterable
     {
         return [
-            'default' => 'smtp',
+            'default' => 'local',
         ];
     }
 
     /**
      * Create an instance of the Log Swift Transport driver.
      *
-     * @return \Viserio\Component\Mail\Transport\Log
+     * @return \Viserio\Component\Mail\Transport\LogTransport
      */
     protected function createLogDriver(): LogTransport
     {
         return new LogTransport($this->getContainer()->get(LoggerInterface::class));
+    }
+
+    /**
+     * Create an instance of the Log Swift Transport driver.
+     *
+     * @return \Viserio\Component\Mail\Transport\ArrayTransport
+     */
+    protected function createLocalDriver(): ArrayTransport
+    {
+        return new ArrayTransport();
     }
 
     /**
@@ -90,7 +101,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Mail\Transport\Mailgun
+     * @return \Viserio\Component\Mail\Transport\MailgunTransport
      */
     protected function createMailgunDriver(array $config): MailgunTransport
     {
@@ -106,7 +117,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Mail\Transport\Mandrill
+     * @return \Viserio\Component\Mail\Transport\MandrillTransport
      */
     protected function createMandrillDriver(array $config): MandrillTransport
     {
@@ -121,7 +132,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Mail\Transport\SparkPost
+     * @return \Viserio\Component\Mail\Transport\SparkPostTransport
      */
     protected function createSparkPostDriver(array $config): SparkPostTransport
     {
@@ -137,7 +148,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Mail\Transport\Ses
+     * @return \Viserio\Component\Mail\Transport\SesTransport
      */
     protected function createSesDriver(array $config): SesTransport
     {

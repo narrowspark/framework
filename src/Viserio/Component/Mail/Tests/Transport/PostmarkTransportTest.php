@@ -6,7 +6,7 @@ use GuzzleHttp\Client as HttpClient;
 use PHPUnit\Framework\TestCase;
 use Swift_Attachment;
 use Swift_Message;
-use Viserio\Component\Mail\Transport\Postmark;
+use Viserio\Component\Mail\Transport\PostmarkTransport;
 
 class PostmarkTransportTest extends TestCase
 {
@@ -79,7 +79,7 @@ class PostmarkTransportTest extends TestCase
                 ])
            );
 
-        $transport = new Postmark($client, 'TESTING_SERVER');
+        $transport = new PostmarkTransport($client, 'TESTING_SERVER');
 
         $transport->send($message);
     }

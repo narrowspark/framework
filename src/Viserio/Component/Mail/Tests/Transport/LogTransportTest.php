@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Swift_Message;
 use Swift_Mime_Message;
-use Viserio\Component\Mail\Transport\Log as LogTransport;
+use Viserio\Component\Mail\Transport\LogTransport;
 
 class LogTransportTest extends TestCase
 {
