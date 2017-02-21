@@ -2,11 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Log\Tests\Traits;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
 class LoggerAwareTraitTest extends MockeryTestCase
 {

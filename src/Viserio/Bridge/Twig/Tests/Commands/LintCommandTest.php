@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Commands;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig_Environment;
@@ -17,7 +15,6 @@ use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
 class LintCommandTest extends MockeryTestCase
 {

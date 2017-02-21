@@ -8,8 +8,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Encryption\Encrypter;
@@ -19,7 +18,6 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Component\Session\SessionManager;
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
 class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 {

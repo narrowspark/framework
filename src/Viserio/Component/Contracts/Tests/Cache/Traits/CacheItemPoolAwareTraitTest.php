@@ -2,11 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Cache\Tests\Traits;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
 class CacheItemPoolAwareTraitTest extends MockeryTestCase
 {

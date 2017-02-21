@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron\Tests\Providers;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Cache\Providers\CacheServiceProvider;
 use Viserio\Component\Container\Container;
