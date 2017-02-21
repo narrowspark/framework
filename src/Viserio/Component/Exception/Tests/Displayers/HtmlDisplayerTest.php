@@ -4,18 +4,15 @@ namespace Viserio\Component\Exception\Tests\Displayers;
 
 use Exception;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class HtmlDisplayerTest extends TestCase
+class HtmlDisplayerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testServerError()
     {
         $displayer = $this->getDisplayer();

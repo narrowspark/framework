@@ -3,25 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Session\Fingerprint\ClientIpGenerator;
 
-class ClientIpGeneratorTest extends TestCase
+class ClientIpGeneratorTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGenerate()
     {
         $request = $this->mock(ServerRequestInterface::class);

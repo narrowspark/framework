@@ -3,25 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Tests\Http;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Support\Http\ClientIp;
 
-class ClientIpTest extends TestCase
+class ClientIpTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetIpAddress()
     {
         $request = $this->mock(ServerRequestInterface::class);

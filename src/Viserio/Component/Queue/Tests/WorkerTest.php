@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use RuntimeException;
 use stdClass;
 use Viserio\Component\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
@@ -12,20 +11,8 @@ use Viserio\Component\Contracts\Queue\Job as JobContract;
 use Viserio\Component\Queue\QueueManager;
 use Viserio\Component\Queue\Worker;
 
-class WorkerTest extends TestCase
+class WorkerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     // public function testJobIsPoppedOffQueueAndProcessed()
     // {
     //     $manager = $this->mock(QueueManager::class);

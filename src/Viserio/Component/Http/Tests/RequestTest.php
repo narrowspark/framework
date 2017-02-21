@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
@@ -14,12 +13,12 @@ use Viserio\Component\Http\Uri;
 
 class RequestTest extends AbstractMessageTest
 {
-    use MockeryTrait;
-
     private $mockUri;
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->mockUri = $this->mock(UriInterface::class)
             ->shouldReceive('getHost')
             ->andReturn('')

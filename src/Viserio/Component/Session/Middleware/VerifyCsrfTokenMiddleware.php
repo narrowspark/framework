@@ -3,15 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
 use Cake\Chronos\Chronos;
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Session\Exception\TokenMismatchException;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\SessionManager;
 
-class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
+class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 {
     /**
      * The session manager.
@@ -56,10 +56,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
     }
 
     /**
-     * {@inhertidoc}.
-     *
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * {@inheritdoc}
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {

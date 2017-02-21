@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Commands;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig_Environment;
 use Twig_LoaderInterface;
@@ -16,20 +14,8 @@ use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\View\ViewFinder;
 
-class DebugCommandTest extends TestCase
+class DebugCommandTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testThrowErrorIfTwigIsNotSet()
     {
         $config = [

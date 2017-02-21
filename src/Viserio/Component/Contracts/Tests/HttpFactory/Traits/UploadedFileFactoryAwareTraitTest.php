@@ -3,13 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\HttpFactory\Tests\Traits;
 
 use Interop\Http\Factory\UploadedFactoryInterface;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\UploadedFileFactoryAwareTrait;
 
-class UploadedFileFactoryAwareTraitTest extends TestCase
+class UploadedFileFactoryAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use UploadedFileFactoryAwareTrait;
 
     public function testSetAndGetUploadedFactory()

@@ -4,8 +4,7 @@ namespace Viserio\Component\View\Tests\Middleware;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
@@ -13,20 +12,8 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
 
-class ShareErrorsFromSessionMiddlewareTest extends TestCase
+class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testProcess()
     {
         $session = $this->mock(StoreContract::class);

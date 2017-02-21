@@ -70,7 +70,7 @@ class Response extends AbstractMessage implements ResponseInterface
     public function withStatus($code, $reasonPhrase = ''): ResponseInterface
     {
         $new               = clone $this;
-        $new->statusCode   = HttpStatus::filterStatusCode($code);
+        $new->statusCode   = HttpStatus::filterStatusCode((int) $code);
         $new->reasonPhrase = $reasonPhrase;
 
         return $new;

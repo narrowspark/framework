@@ -5,7 +5,7 @@ namespace Viserio\Component\Mail\Tests\Transport;
 use GuzzleHttp\Client as HttpClient;
 use PHPUnit\Framework\TestCase;
 use Swift_Message;
-use Viserio\Component\Mail\Transport\Mailgun as MailgunTransport;
+use Viserio\Component\Mail\Transport\MailgunTransport;
 
 class MailgunTest extends TestCase
 {

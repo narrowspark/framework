@@ -6,8 +6,7 @@ use ArrayIterator;
 use ArrayObject;
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
@@ -25,20 +24,8 @@ use Viserio\Component\OptionsResolver\Tests\Fixtures\PackageDefaultOptionsConfig
 use Viserio\Component\OptionsResolver\Tests\Fixtures\PlainConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\UniversalContainerIdConfiguration;
 
-class OptionsResolverTest extends TestCase
+class OptionsResolverTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     /**
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException
      * @expectedExceptionMessage Configuration must either be of type "array" or implement "\ArrayAccess". Configuration position is "doctrine".

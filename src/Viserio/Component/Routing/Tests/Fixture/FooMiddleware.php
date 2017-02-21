@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Fixture;
 
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class FooMiddleware implements ServerMiddlewareInterface
+class FooMiddleware implements MiddlewareInterface
 {
     public function process(
         ServerRequestInterface $request,

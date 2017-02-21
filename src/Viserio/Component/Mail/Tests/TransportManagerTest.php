@@ -3,23 +3,21 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Mail\Transport\Log as LogTransport;
-use Viserio\Component\Mail\Transport\Mailgun as MailgunTransport;
-use Viserio\Component\Mail\Transport\Mandrill as MandrillTransport;
-use Viserio\Component\Mail\Transport\Ses as SesTransport;
-use Viserio\Component\Mail\Transport\SparkPost as SparkPostTransport;
+use Viserio\Component\Mail\Transport\ArrayTransport;
+use Viserio\Component\Mail\Transport\LogTransport;
+use Viserio\Component\Mail\Transport\MailgunTransport;
+use Viserio\Component\Mail\Transport\MandrillTransport;
+use Viserio\Component\Mail\Transport\SesTransport;
+use Viserio\Component\Mail\Transport\SparkPostTransport;
 use Viserio\Component\Mail\TransportManager;
 
-class TransportManagerTest extends TestCase
+class TransportManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testLogTransporter()
     {
         $config = $this->mock(RepositoryContract::class);
@@ -210,5 +208,29 @@ class TransportManagerTest extends TestCase
         ]));
 
         self::assertInstanceOf(SesTransport::class, $manager->getDriver('ses'));
+    }
+
+    public function testArrayTransport()
+    {
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'mail' => [
+                    'drivers'=> [
+                    ],
+                ],
+            ]);
+
+        $manager = new TransportManager(new ArrayContainer([
+            RepositoryContract::class => $config,
+        ]));
+
+        self::assertInstanceOf(ArrayTransport::class, $manager->getDriver('local'));
     }
 }

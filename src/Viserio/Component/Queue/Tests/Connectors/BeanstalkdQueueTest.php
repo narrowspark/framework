@@ -4,28 +4,15 @@ namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Pheanstalk\Job;
 use Pheanstalk\Pheanstalk;
-use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connectors\BeanstalkdQueue;
 use Viserio\Component\Queue\Jobs\BeanstalkdJob;
 
-class BeanstalkdQueueTest extends TestCase
+class BeanstalkdQueueTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testPushProperlyPushesJobOntoBeanstalkd()
     {
         $encrypter = $this->mock(EncrypterContract::class);

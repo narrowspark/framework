@@ -3,13 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\HttpFactory\Tests\Traits;
 
 use Interop\Http\Factory\ServerRequestInterface;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\ServerRequestFactoryAwareTrait;
 
-class ServerRequestFactoryAwareTraitTest extends TestCase
+class ServerRequestFactoryAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use ServerRequestFactoryAwareTrait;
 
     public function testSetAndGetServerRequestFactory()

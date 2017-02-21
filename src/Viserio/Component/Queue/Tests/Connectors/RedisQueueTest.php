@@ -4,26 +4,13 @@ namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Cake\Chronos\Chronos;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connectors\RedisQueue;
 
-class RedisQueueTest extends TestCase
+class RedisQueueTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testDelayedPushWithDateTimeProperlyPushesJobOntoRedis()
     {
         $date      = Chronos::now();

@@ -3,25 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extensions;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
-class ConfigExtensionTest extends TestCase
+class ConfigExtensionTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetFunctions()
     {
         $config = $this->mock(RepositoryContract::class);

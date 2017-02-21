@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
 use Cake\Chronos\Chronos;
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
@@ -15,7 +15,7 @@ use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\SessionManager;
 
-class StartSessionMiddleware implements ServerMiddlewareInterface
+class StartSessionMiddleware implements MiddlewareInterface
 {
     /**
      * The session manager.
@@ -51,10 +51,7 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
     }
 
     /**
-     * {@inhertidoc}.
-     *
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * {@inheritdoc}
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {

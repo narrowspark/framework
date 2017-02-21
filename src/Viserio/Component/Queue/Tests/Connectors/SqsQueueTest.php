@@ -7,15 +7,12 @@ use Aws\Sqs\SqsClient;
 use Cake\Chronos\Chronos;
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Queue\Connectors\SqsQueue;
 use Viserio\Component\Queue\Jobs\SqsJob;
 
-class SqsQueueTest extends TestCase
+class SqsQueueTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     private $sqs;
     private $account;
     private $queueName;

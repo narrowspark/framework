@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Middleware;
 
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as CookieJar;
 use Viserio\Component\Cookie\ResponseCookies;
 
-class AddQueuedCookiesToResponseMiddleware implements ServerMiddlewareInterface
+class AddQueuedCookiesToResponseMiddleware implements MiddlewareInterface
 {
     /**
      * The cookie jar instance.

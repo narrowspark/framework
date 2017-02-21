@@ -5,7 +5,7 @@ namespace Viserio\Component\Mail\Transport;
 use GuzzleHttp\ClientInterface;
 use Swift_Mime_Message;
 
-class Mailgun extends AbstractTransport
+class MailgunTransport extends AbstractTransport
 {
     /**
      * Guzzle client instance.
@@ -117,7 +117,7 @@ class Mailgun extends AbstractTransport
      *
      * @return $this
      */
-    public function setDomain(string $domain): Mailgun
+    public function setDomain(string $domain): self
     {
         $this->url = 'https://api.mailgun.net/v3/' . $domain . '/messages.mime';
 

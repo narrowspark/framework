@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\DataCollector;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig_Environment;
@@ -13,20 +12,8 @@ use Twig_Loader_Array;
 use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 
-class TwigDataCollectorTest extends TestCase
+class TwigDataCollectorTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetMenuAndPosition()
     {
         $collect = $this->getTwigDataCollector();

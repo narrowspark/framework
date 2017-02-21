@@ -5,7 +5,7 @@ namespace Viserio\Component\Mail\Transport;
 use GuzzleHttp\ClientInterface;
 use Swift_Mime_Message;
 
-class SparkPost extends AbstractTransport
+class SparkPostTransport extends AbstractTransport
 {
     /**
      * Guzzle client instance.

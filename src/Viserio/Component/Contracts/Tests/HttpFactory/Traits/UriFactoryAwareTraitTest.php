@@ -3,13 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\HttpFactory\Tests\Traits;
 
 use Interop\Http\Factory\UriFactoryInterface;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\UriFactoryAwareTrait;
 
-class UriFactoryAwareTraitTest extends TestCase
+class UriFactoryAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use UriFactoryAwareTrait;
 
     public function testSetAndGetUriFactory()

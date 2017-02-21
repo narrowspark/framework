@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
-use Interop\Http\Middleware\DelegateInterface;
-use Psr\Http\Message\RequestInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Pipeline\Pipeline as BasePipeline;
 
 class Pipeline extends BasePipeline
@@ -92,7 +92,7 @@ class Pipeline extends BasePipeline
             /**
              * {@inheritdoc}
              */
-            public function process(RequestInterface $request)
+            public function process(ServerRequestInterface $request)
             {
                 return call_user_func($this->middleware, $request);
             }

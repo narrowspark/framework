@@ -4,28 +4,15 @@ namespace Viserio\Component\Cookie\Tests;
 
 use DateTime;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface as Response;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class ResponseCookiesTest extends TestCase
+class ResponseCookiesTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement Viserio\Component\Contracts\Cookie\Cookie
