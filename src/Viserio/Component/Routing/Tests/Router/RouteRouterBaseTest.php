@@ -4,18 +4,15 @@ namespace Viserio\Component\Routing\Tests\Router;
 
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionClass;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Routing\Router;
 
-abstract class RouteRouterBaseTest extends TestCase
+abstract class RouteRouterBaseTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     protected $router;
 
     public function setUp()
@@ -43,11 +40,6 @@ abstract class RouteRouterBaseTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
 
         $this->delTree(__DIR__ . '/../Cache/');
     }

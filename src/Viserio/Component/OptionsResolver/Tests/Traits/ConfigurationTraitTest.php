@@ -4,27 +4,14 @@ namespace Viserio\Component\OptionsResolver\Tests\Traits;
 
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ConfigurationTraitAndContainerAwareConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ConfigurationTraitAwareConfiguration;
 
-class ConfigurationTraitTest extends TestCase
+class ConfigurationTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testResolveOptionsResolverFromDataContainer()
     {
         $fixture       = new ConfigurationTraitAwareConfiguration();

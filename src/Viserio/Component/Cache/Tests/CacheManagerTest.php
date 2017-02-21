@@ -12,26 +12,13 @@ use Defuse\Crypto\Key;
 use League\Flysystem\Adapter\Local;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
-class CacheManagerTest extends TestCase
+class CacheManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testArrayPoolCall()
     {
         $config = $this->mock(RepositoryContract::class);

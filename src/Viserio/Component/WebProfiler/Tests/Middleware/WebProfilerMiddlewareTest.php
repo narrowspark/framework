@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Test\Middleware;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\WebProfiler\AssetsRenderer;
@@ -13,20 +11,8 @@ use Viserio\Component\WebProfiler\Middleware\WebProfilerMiddleware;
 use Viserio\Component\WebProfiler\TemplateManager;
 use Viserio\Component\WebProfiler\WebProfiler;
 
-class WebProfilerMiddlewareTest extends TestCase
+class WebProfilerMiddlewareTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testProcess()
     {
         $assets   = new AssetsRenderer();

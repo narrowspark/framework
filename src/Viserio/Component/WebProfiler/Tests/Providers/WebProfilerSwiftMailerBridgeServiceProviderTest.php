@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests\Providers;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_SmtpTransport;
@@ -15,20 +14,8 @@ use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerSwiftMailerBridgeServiceProvider;
 
-class WebProfilerSwiftMailerBridgeServiceProviderTest extends TestCase
+class WebProfilerSwiftMailerBridgeServiceProviderTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testProvider()
     {
         $container = new Container();

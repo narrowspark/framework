@@ -3,27 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\DataCollectors;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Foundation\Application;
 use Viserio\Component\Foundation\DataCollectors\NarrowsparkDataCollector;
 
-class NarrowsparkDataCollectorTest extends TestCase
+class NarrowsparkDataCollectorTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetMenuAndPosition()
     {
         $collect = new NarrowsparkDataCollector();

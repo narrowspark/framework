@@ -3,16 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Handler;
 
 use Cake\Chronos\Chronos;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 
-class CookieSessionHandlerTest extends TestCase
+class CookieSessionHandlerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * @var \Viserio\Component\Session\Handler\CookieSessionHandler
      */

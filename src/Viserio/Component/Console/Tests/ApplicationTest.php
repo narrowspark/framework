@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,10 +12,8 @@ use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 
-class ApplicationTest extends TestCase
+class ApplicationTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * @var Application
      */
@@ -25,6 +21,8 @@ class ApplicationTest extends TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $stdClass       = new stdClass();
         $stdClass->foo  = 'hello';
         $stdClass2      = new stdClass();
@@ -41,16 +39,6 @@ class ApplicationTest extends TestCase
         ]);
 
         $this->application = new Application($container, '1.0.0');
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testCerebroStartingEventIstriggered()

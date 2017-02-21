@@ -3,26 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests\DataCollectors\Bridge;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 use Viserio\Component\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 
-class SwiftMailDataCollectorTest extends TestCase
+class SwiftMailDataCollectorTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetMenu()
     {
         $collector = $this->getSwiftDataCollector();

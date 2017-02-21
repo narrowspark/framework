@@ -3,25 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extensions;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Extensions\TranslatorExtension;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
-class TranslatorExtensionTest extends TestCase
+class TranslatorExtensionTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetFunctions()
     {
         $extension = new TranslatorExtension($this->mock(TranslatorContract::class));

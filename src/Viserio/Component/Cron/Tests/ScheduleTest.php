@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
@@ -13,10 +12,8 @@ use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Cron\Tests\Fixture\ConsoleCerebroCommandFixture;
 use Viserio\Component\Cron\Tests\Fixture\DummyClassFixture;
 
-class ScheduleTest extends TestCase
+class ScheduleTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * Mocked CacheItemPoolInterface.
      *

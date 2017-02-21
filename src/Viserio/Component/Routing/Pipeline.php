@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
-use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\RequestInterface;
 use Viserio\Component\Pipeline\Pipeline as BasePipeline;
 

@@ -3,17 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Bus\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Bus\Dispatcher;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherBasicCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSetCommand;
 
-class DispatcherTest extends TestCase
+class DispatcherTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testBasicDispatchingOfCommandsToHandlers()
     {
         $container = new ArrayContainer();

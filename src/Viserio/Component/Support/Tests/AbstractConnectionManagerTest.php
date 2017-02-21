@@ -3,16 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Support\Tests\Fixture\TestConnectionManager;
 
-class AbstractConnectionManagerTest extends TestCase
+class AbstractConnectionManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Connection [fail] not supported.
