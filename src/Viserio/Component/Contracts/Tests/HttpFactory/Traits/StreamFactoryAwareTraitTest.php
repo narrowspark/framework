@@ -6,10 +6,10 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class StreamFactoryAwareTraitTest extends TestCase
+class StreamFactoryAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use StreamFactoryAwareTrait;
 
     public function testSetAndGetStreamFactory()

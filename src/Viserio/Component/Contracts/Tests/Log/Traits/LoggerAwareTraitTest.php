@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class LoggerAwareTraitTest extends TestCase
+class LoggerAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use LoggerAwareTrait;
 
     public function testGetAndSetLogger()

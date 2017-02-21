@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class TranslationAwareTraitTest extends TestCase
+class TranslationAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use TranslatorAwareTrait;
 
     public function testGetAndSetTranslator()

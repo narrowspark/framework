@@ -17,21 +17,11 @@ use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class LintCommandTest extends TestCase
+class LintCommandTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
 
     public function testLintCorrectFile()
     {

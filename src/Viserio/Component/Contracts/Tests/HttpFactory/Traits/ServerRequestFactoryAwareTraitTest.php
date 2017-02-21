@@ -6,10 +6,10 @@ use Interop\Http\Factory\ServerRequestInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\ServerRequestFactoryAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class ServerRequestFactoryAwareTraitTest extends TestCase
+class ServerRequestFactoryAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use ServerRequestFactoryAwareTrait;
 
     public function testSetAndGetServerRequestFactory()

@@ -15,21 +15,10 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\View\ViewFinder;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class DebugCommandTest extends TestCase
+class DebugCommandTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testThrowErrorIfTwigIsNotSet()
     {
         $config = [

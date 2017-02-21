@@ -12,8 +12,6 @@ use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class CronServiceProviderTest extends TestCase
 {
-    use MockeryTrait;
-
     public function testProvider()
     {
         $container = new Container();

@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Parsers\Traits\LoaderAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class LoaderAwareTraitTest extends TestCase
+class LoaderAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use LoaderAwareTrait;
 
     public function testGetAndSetLoader()

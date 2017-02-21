@@ -6,10 +6,10 @@ use Interop\Http\Factory\UploadedFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\UploadedFileFactoryAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class UploadedFileFactoryAwareTraitTest extends TestCase
+class UploadedFileFactoryAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use UploadedFileFactoryAwareTrait;
 
     public function testSetAndGetUploadedFactory()

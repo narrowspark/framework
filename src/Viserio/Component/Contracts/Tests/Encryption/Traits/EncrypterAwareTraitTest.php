@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Encryption\Encrypter;
 use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class EncrypterAwareTraitTest extends TestCase
+class EncrypterAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use EncrypterAwareTrait;
 
     public function testGetAndSetEncrypter()

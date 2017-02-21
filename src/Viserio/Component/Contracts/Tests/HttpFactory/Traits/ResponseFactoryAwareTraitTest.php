@@ -6,10 +6,10 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class ResponseFactoryAwareTraitTest extends TestCase
+class ResponseFactoryAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use ResponseFactoryAwareTrait;
 
     public function testSetAndGetResponseFactory()

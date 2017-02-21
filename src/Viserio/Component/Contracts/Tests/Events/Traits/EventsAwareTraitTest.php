@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class EventsAwareTraitTest extends TestCase
+class EventsAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use EventsAwareTrait;
 
     public function testGetAndsetEventManager()

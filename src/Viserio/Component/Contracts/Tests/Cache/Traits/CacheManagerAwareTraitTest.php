@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Cache\Manager;
 use Viserio\Component\Contracts\Cache\Traits\CacheManagerAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class CacheManagerAwareTraitTest extends TestCase
+class CacheManagerAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use CacheManagerAwareTrait;
 
     public function testGetAndSetCache()

@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class CacheItemPoolAwareTraitTest extends TestCase
+class CacheItemPoolAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use CacheItemPoolAwareTrait;
 
     public function testGetAndSetCache()

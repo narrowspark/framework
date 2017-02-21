@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Config\Traits\ConfigAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class ConfigAwareTraitTest extends TestCase
+class ConfigAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use ConfigAwareTrait;
 
     public function testGetAndSetConfig()

@@ -6,10 +6,10 @@ use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\UriFactoryAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class UriFactoryAwareTraitTest extends TestCase
+class UriFactoryAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use UriFactoryAwareTrait;
 
     public function testSetAndGetUriFactory()

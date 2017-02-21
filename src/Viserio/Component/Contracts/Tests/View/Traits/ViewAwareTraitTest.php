@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class ViewAwareTraitTest extends TestCase
+class ViewAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use ViewAwareTrait;
 
     public function testGetAndSetViewFactory()

@@ -19,11 +19,10 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Component\Session\SessionManager;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
-class VerifyCsrfTokenMiddlewareTest extends TestCase
+class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * @var \Viserio\Component\Filesystem\Filesystem
      */
@@ -50,11 +49,6 @@ class VerifyCsrfTokenMiddlewareTest extends TestCase
         $this->files = $this->manager = null;
 
         parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testSessionCsrfMiddlewareSetCookie()
