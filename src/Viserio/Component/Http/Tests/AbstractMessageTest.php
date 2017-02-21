@@ -2,17 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Tests\Constraint\HttpProtocolVersion;
 use Viserio\Component\Http\Tests\Constraint\Immutable;
 
-abstract class AbstractMessageTest extends TestCase
+abstract class AbstractMessageTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public $classToTest;
 
     // Test methods for default/empty instances

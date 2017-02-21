@@ -4,25 +4,14 @@ namespace Viserio\Component\WebProfiler\Tests\DataCollectors\Bridge\Cache;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
 use Viserio\Component\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 
-class Psr6CacheDataCollectorTest extends TestCase
+class Psr6CacheDataCollectorTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetMenu()
     {
         $collector = $this->getPsr6CacheDataCollector();

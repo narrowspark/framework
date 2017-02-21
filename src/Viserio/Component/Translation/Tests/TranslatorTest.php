@@ -2,22 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Translator;
 
-class TranslatorTest extends TestCase
+class TranslatorTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     private $translator;
 
     public function setUp()
     {
+        parent::setUp();
+
         $catalogue = new MessageCatalogue('en', [
             'messages' => [
                 'foo' => 'bar',

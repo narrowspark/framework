@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
@@ -17,10 +16,8 @@ use Viserio\Component\Mail\Transport\SesTransport;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
 use Viserio\Component\Mail\TransportManager;
 
-class TransportManagerTest extends TestCase
+class TransportManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testLogTransporter()
     {
         $config = $this->mock(RepositoryContract::class);

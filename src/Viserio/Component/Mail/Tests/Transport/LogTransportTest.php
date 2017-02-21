@@ -3,27 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_Message;
 use Swift_Mime_Message;
 use Viserio\Component\Mail\Transport\LogTransport;
 
-class LogTransportTest extends TestCase
+class LogTransportTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testSend()
     {
         $message = new Swift_Message('Foo subject', 'Bar body');

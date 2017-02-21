@@ -4,8 +4,7 @@ namespace Viserio\Component\Bus\Tests;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Bus\QueueingDispatcher;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherBasicCommand;
@@ -17,10 +16,8 @@ use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificQueueCommand;
 use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
 use Viserio\Component\Contracts\Queue\ShouldQueue as ShouldQueueContract;
 
-class QueueingDispatcherTest extends TestCase
+class QueueingDispatcherTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testDispatchNowShouldNeverQueue()
     {
         $container = new ArrayContainer();

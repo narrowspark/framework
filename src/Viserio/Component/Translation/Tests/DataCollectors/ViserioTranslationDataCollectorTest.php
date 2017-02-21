@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests\DataCollectors;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Translation\DataCollectors\ViserioTranslationDataCollector;
@@ -13,10 +12,8 @@ use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Translator;
 
-class ViserioTranslationDataCollectorTest extends TestCase
+class ViserioTranslationDataCollectorTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     private $translator;
 
     public function setUp()
@@ -42,16 +39,6 @@ class ViserioTranslationDataCollectorTest extends TestCase
             $catalogue,
             $selector
         );
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testGetMenu()

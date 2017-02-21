@@ -3,15 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Support\Tests\Fixture\TestManager;
 
-class AbstractManagerTest extends TestCase
+class AbstractManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testDriver()
     {
         $config = $this->mock(RepositoryContract::class);

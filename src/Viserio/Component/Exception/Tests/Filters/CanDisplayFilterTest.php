@@ -3,17 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Filters;
 
 use Exception;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Displayers\JsonDisplayer;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
 
-class CanDisplayFilterTest extends TestCase
+class CanDisplayFilterTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testFirstIsRemoved()
     {
         $request   = $this->mock(ServerRequestInterface::class);

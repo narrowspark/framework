@@ -6,17 +6,14 @@ use Defuse\Crypto\Key;
 use Exception;
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Queue\Connectors\RedisQueue;
 use Viserio\Component\Queue\Tests\Fixture\RedisQueueIntegrationJob;
 
-class RedisQueueIntegrationTest extends TestCase
+class RedisQueueIntegrationTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * @var \Predis\Client
      */

@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests\Providers;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
@@ -15,20 +14,8 @@ use Viserio\Component\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItem
 use Viserio\Component\WebProfiler\Providers\WebProfilerPsr6CacheBridgeServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
-class WebProfilerPsr6CacheBridgeServiceProviderTest extends TestCase
+class WebProfilerPsr6CacheBridgeServiceProviderTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testProvider()
     {
         $container = new Container();

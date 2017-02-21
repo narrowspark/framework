@@ -3,30 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
-class RequestCookiesTest extends TestCase
+class RequestCookiesTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        unset($_SERVER['SERVER_ADDR']);
-
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage The object [Viserio\Component\Cookie\SetCookie] must be an instance of \Viserio\Component\Cookie\Cookie

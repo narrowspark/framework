@@ -6,27 +6,14 @@ use Mockery as Mock;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Component\Log\Tests\Fixture\JsonableClass;
 use Viserio\Component\Log\Writer;
 
-class WriterTest extends TestCase
+class WriterTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetMonolog()
     {
         $writer = new Writer(new Logger('name'));

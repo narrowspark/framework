@@ -3,9 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests\Providers;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
@@ -14,10 +13,8 @@ use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Translation\Providers\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;
 
-class TranslatorServiceProviderTest extends TestCase
+class TranslatorServiceProviderTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory
      */
@@ -27,6 +24,8 @@ class TranslatorServiceProviderTest extends TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->root = vfsStream::setup();
         $this->file = vfsStream::newFile('temp.php')->withContent(
             '<?php

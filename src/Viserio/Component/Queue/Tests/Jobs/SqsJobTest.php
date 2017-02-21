@@ -5,15 +5,12 @@ namespace Viserio\Component\Queue\Tests\Jobs;
 use Aws\Sqs\SqsClient;
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Queue\Jobs\SqsJob;
 
-class SqsJobTest extends TestCase
+class SqsJobTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     private $queueUrl;
     private $mockedReceiptHandle;
 

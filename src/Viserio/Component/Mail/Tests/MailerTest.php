@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Swift_Mailer;
 use Swift_Mime_Message;
@@ -15,10 +14,8 @@ use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
 use Viserio\Component\Mail\Mailer;
 
-class MailerTest extends TestCase
+class MailerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testMailerSendSendsMessageWithProperViewContent()
     {
         unset($_SERVER['__mailer.test']);

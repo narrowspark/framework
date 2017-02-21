@@ -4,27 +4,14 @@ namespace Viserio\Bridge\Twig\Tests\Commands;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Bridge\Twig\Commands\CleanCommand;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class CleanCommandTest extends TestCase
+class CleanCommandTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testFailed()
     {
         $files = $this->mock(FilesystemContract::class);

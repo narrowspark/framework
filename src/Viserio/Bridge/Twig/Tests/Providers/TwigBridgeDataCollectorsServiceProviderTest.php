@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Providers;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig_Environment;
 use Twig_Profiler_Profile;
@@ -21,20 +20,8 @@ use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 /**
  * @runTestsInSeparateProcesses
  */
-class TwigBridgeDataCollectorsServiceProviderTest extends TestCase
+class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetServices()
     {
         $container = new Container();

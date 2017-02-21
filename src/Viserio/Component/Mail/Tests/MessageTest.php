@@ -2,16 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Message;
 use Swift_Mime_Message;
 use Viserio\Component\Mail\Message;
 
-class MessageTest extends TestCase
+class MessageTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * @var \Swift_Mime_Message
      */

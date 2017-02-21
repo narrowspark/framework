@@ -4,28 +4,15 @@ namespace Viserio\Component\Queue\Tests\Jobs;
 
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Pheanstalk\Job as PheanstalkJob;
 use Pheanstalk\Pheanstalk;
-use PHPUnit\Framework\TestCase;
 use stdClass;
 use Viserio\Component\Queue\Jobs\BeanstalkdJob;
 use Viserio\Component\Queue\Tests\Fixture\BeanstalkdJobTestFailed;
 
-class BeanstalkdJobTest extends TestCase
+class BeanstalkdJobTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testBuryProperlyBuryTheJobFromBeanstalkd()
     {
         $pheanstalk = $this->mock(Pheanstalk::class);

@@ -4,29 +4,16 @@ namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connectors\RabbitMQQueue;
 use Viserio\Component\Queue\Jobs\RabbitMQJob;
 
-class RabbitMQQueueTest extends TestCase
+class RabbitMQQueueTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testPushProperlyPushesJobOnToRabbitMQ()
     {
         $encrypter = $this->mock(EncrypterContract::class);

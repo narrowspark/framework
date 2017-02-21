@@ -3,11 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests\Middleware;
 
 use Defuse\Crypto\Key;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\Middleware\EncryptedCookiesMiddleware;
 use Viserio\Component\Cookie\RequestCookies;
@@ -17,20 +15,11 @@ use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
-class EncryptedCookiesMiddlewareTest extends TestCase
+class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function tearDown()
     {
         unset($_SERVER['SERVER_ADDR']);
-
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testEncryptedCookieRequest()
