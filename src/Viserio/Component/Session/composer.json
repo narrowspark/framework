@@ -36,7 +36,7 @@
         "mockery/mockery"                                    : "^1.0",
         "mikey179/vfsStream"                                 : "^1.6",
         "phpunit/phpunit"                                    : "^6.0",
-        "http-interop/http-middleware"                       : "^0.3",
+        "http-interop/http-middleware"                       : "^0.4",
         "viserio/cache"                                      : "self.version",
         "viserio/config"                                     : "self.version",
         "viserio/cookie"                                     : "self.version",
@@ -63,6 +63,7 @@
     "suggest": {
         "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "cache/session-handler"                              : "Required to use the CacheBasedSessionHandler (^0.2).",
+        "http-interop/http-middleware"                       : "Required to use middleware (^0.4).",
         "viserio/cookie"                                     : "Required to use the CookieSessionHandler (self.version).",
         "viserio/filesystem"                                 : "Required to use the FileSessionHandler (self.version).",
         "viserio/statical-proxy"                             : "Required to use the proxy instances (self.version)."
