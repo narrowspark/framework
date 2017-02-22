@@ -4,8 +4,7 @@ namespace Viserio\Component\Session\Tests;
 
 use Cake\Chronos\Chronos;
 use Defuse\Crypto\Key;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionClass;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -13,10 +12,8 @@ use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Component\Session\Store;
 
-class StoreTest extends TestCase
+class StoreTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public const SESSION_ID = 'cfdddff0a844531c4a985eae2806a8c761b754df';
 
     private $encrypter;

@@ -4,15 +4,12 @@ namespace Viserio\Component\Cron\Tests;
 
 use Cake\Chronos\Chronos;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cron\Cron;
 
-class CronTest extends TestCase
+class CronTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * The default configuration timezone.
      *
@@ -47,11 +44,6 @@ class CronTest extends TestCase
         Chronos::setTestNow(null);
 
         parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testBasicCronCompilation()

@@ -6,8 +6,7 @@ use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
@@ -18,10 +17,8 @@ use Viserio\Component\Exception\Filters\VerboseFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class VerboseFilterTest extends TestCase
+class VerboseFilterTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testDebugStaysOnTop()
     {
         $request    = $this->mock(ServerRequestInterface::class);

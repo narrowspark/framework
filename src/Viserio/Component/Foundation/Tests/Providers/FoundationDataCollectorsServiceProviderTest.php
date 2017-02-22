@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Providers;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
@@ -17,20 +16,8 @@ use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
-class FoundationDataCollectorsServiceProviderTest extends TestCase
+class FoundationDataCollectorsServiceProviderTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetServices()
     {
         $serverRequest = $this->mock(ServerRequestInterface::class);

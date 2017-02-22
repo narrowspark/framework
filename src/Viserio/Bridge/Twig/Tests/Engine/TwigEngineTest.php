@@ -4,8 +4,7 @@ namespace Viserio\Bridge\Twig\Tests\Engine;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
@@ -13,20 +12,8 @@ use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Bridge\Twig\Extensions\StrExtension;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
-class TwigEngineTest extends TestCase
+class TwigEngineTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGet()
     {
         $config = $this->mock(RepositoryContract::class);

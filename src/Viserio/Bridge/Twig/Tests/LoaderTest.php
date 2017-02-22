@@ -4,27 +4,14 @@ namespace Viserio\Bridge\Twig\Tests;
 
 use InvalidArgumentException;
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Loader;
 use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 
-class LoaderTest extends TestCase
+class LoaderTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testExists()
     {
         $file = $this->mock(FilesystemContract::class);

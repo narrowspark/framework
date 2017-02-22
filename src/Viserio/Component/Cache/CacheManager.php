@@ -13,8 +13,10 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
+use Cache\Encryption\EncryptedCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
+use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
@@ -23,6 +25,7 @@ use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
 use Psr\Log\LoggerAwareInterface;
 use Redis;
+use RuntimeException;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -50,8 +53,30 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     public function getDefaultOptions(): iterable
     {
         return [
-            'default' => 'array',
+            'default'   => 'array',
+            'namespace' => false,
+            'key'       => false,
         ];
+    }
+
+    /**
+     * Get a encrypted driver instance.
+     *
+     * @param string|null $driver
+     *
+     * @return \Cache\Encryption\EncryptedCachePool
+     */
+    public function getEncryptedDriver(string $driver = null): EncryptedCachePool
+    {
+        if (class_exists(EncryptedCachePool::class)) {
+            if ($this->options['key'] === false) {
+                throw new RuntimeException('No encryption key found.');
+            }
+
+            return new EncryptedCachePool($this->getDriver($driver), Key::loadFromAsciiSafeString($this->options['key']));
+        }
+
+        throw new RuntimeException('"Cache\Encryption\EncryptedCachePool" class not found.');
     }
 
     /**
@@ -81,7 +106,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     public function createDriver(array $config)
     {
         $driver    = parent::createDriver($config);
-        $namespace = $this->options['namespace'] ?? false;
+        $namespace = $this->options['namespace'];
 
         if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
             $driver = $this->namespacedPool($driver, $namespace);

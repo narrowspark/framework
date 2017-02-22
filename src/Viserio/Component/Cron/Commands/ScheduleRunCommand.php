@@ -3,11 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Commands;
 
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-class ScheduleRunCommand extends Command
+class ScheduleRunCommand extends Command implements
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
+    use ConfigurationTrait;
+
     /**
      * The console command name.
      *
@@ -25,12 +31,34 @@ class ScheduleRunCommand extends Command
     /**
      * {@inheritdoc}
      */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'cron'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return [
+            'env',
+            'maintenance',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function handle()
     {
         $container = $this->getContainer();
+
+        $this->configureOptions($container);
+
         $cronJobs  = $container->get(Schedule::class)->dueCronJobs(
-            $container->get(RepositoryContract::class)->get('app.env'),
-            $container->get(RepositoryContract::class)->get('app.maintenance')
+            $this->options['env'],
+            $this->options['maintenance']
         );
 
         $cronJobsRan = 0;

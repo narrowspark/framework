@@ -2,14 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\View\Tests\Traits;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 
-class ViewAwareTraitTest extends TestCase
+class ViewAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use ViewAwareTrait;
 
     public function testGetAndSetViewFactory()

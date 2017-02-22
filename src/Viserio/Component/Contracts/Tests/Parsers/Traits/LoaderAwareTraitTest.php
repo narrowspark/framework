@@ -2,14 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Parsers\Tests\Traits;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Parsers\Traits\LoaderAwareTrait;
 
-class LoaderAwareTraitTest extends TestCase
+class LoaderAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use LoaderAwareTrait;
 
     public function testGetAndSetLoader()

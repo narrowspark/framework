@@ -5,7 +5,7 @@ namespace Viserio\Component\Mail\Transport;
 use Psr\Log\LoggerInterface;
 use Swift_Mime_Message;
 
-class Log extends AbstractTransport
+class LogTransport extends AbstractTransport
 {
     /**
      * The Logger instance.

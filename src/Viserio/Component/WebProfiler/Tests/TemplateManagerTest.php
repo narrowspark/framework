@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
@@ -15,20 +14,8 @@ use Viserio\Component\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 use Viserio\Component\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\Component\WebProfiler\TemplateManager;
 
-class TemplateManagerTest extends TestCase
+class TemplateManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testEscape()
     {
         $original = "This is a <a href=''>Foo</a> test string";

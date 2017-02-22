@@ -2,18 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Pagination\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Component\Pagination\Adapters\ArrayAdapter;
 use Viserio\Component\Pagination\Adapters\NullAdapter;
 use Viserio\Component\Pagination\Paginator;
 
-class PaginatorTest extends TestCase
+class PaginatorTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testToJson()
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);

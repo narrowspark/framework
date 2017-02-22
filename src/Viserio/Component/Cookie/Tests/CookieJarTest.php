@@ -3,26 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests;
 
 use Cake\Chronos\Chronos;
-use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Component\Cookie\CookieJar;
 
-class CookieJarTest extends TestCase
+class CookieJarTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testCookiesAreCreatedWithProperOptions()
     {
         $cookie = $this->getCreator();

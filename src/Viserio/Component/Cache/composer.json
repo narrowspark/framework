@@ -48,6 +48,7 @@
     },
     "require-dev": {
         "cache/array-adapter"                 : "^0.4",
+        "cache/encryption-cache"              : "^0.1",
         "cache/filesystem-adapter"            : "^0.3",
         "cache/namespaced-cache"              : "^0.1",
         "cache/void-adapter"                  : "^0.3",
@@ -82,6 +83,7 @@
         "cache/apc-adapter"                   : "Required to use the Apc cache (^0.3).",
         "cache/apcu-adapter"                  : "Required to use the Apcu cache (^0.3).",
         "cache/array-adapter"                 : "Required to use the Array cache (^0.4)",
+        "cache/encryption-cache"              : "Required to use the Encryption cache (^0.1)",
         "cache/filesystem-adapter"            : "Required to use the Filesystem cache (^0.3).",
         "cache/memcache-adapter"              : "Required to use the Memcache cache (^0.3).",
         "cache/memcached-adapter"             : "Required to use the Memcached cache (^0.3).",

@@ -2,18 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Generator;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Routing\Generator\ChildrenNodeCollection;
 use Viserio\Component\Routing\Generator\MatchedRouteDataMap;
 use Viserio\Component\Routing\Generator\RouteTreeNode;
 use Viserio\Component\Routing\Matchers\AbstractMatcher;
 use Viserio\Component\Routing\Route;
 
-class RouteTreeNodeTest extends TestCase
+class RouteTreeNodeTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testMaintainsMatcherOrder()
     {
         $matcher1 = $this->mock(AbstractMatcher::class);

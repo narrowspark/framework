@@ -3,9 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
@@ -18,9 +17,8 @@ use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\TranslationManager;
 
-class TranslationManagerTest extends TestCase
+class TranslationManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     private $manager;
@@ -32,23 +30,13 @@ class TranslationManagerTest extends TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->root    = vfsStream::setup();
         $this->manager = new TranslationManager(
             new PluralizationRules(),
             new MessageSelector()
         );
-
-        parent::setUp();
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testSetAndGetDirectories()

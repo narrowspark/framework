@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extensions;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Twig_Test_IntegrationTestCase;
 use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
@@ -23,13 +22,9 @@ if (! class_exists('\PHPUnit_Framework_TestCase')) {
  */
 class ExtensionsIntegrationTest extends Twig_Test_IntegrationTestCase
 {
-    use MockeryTrait;
-
     public function tearDown()
     {
         parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
 
         // Verify Mockery expectations.
         Mock::close();
@@ -58,7 +53,7 @@ class ExtensionsIntegrationTest extends Twig_Test_IntegrationTestCase
 
     private function getSessionMock()
     {
-        $session = $this->mock(StoreContract::class);
+        $session = Mock::mock(StoreContract::class);
         $session->shouldReceive('get')
             ->with('test')
             ->andReturn('test');
@@ -73,7 +68,7 @@ class ExtensionsIntegrationTest extends Twig_Test_IntegrationTestCase
 
     private function getConfigMock()
     {
-        $config = $this->mock(RepositoryContract::class);
+        $config = Mock::mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->with('test')
             ->andReturn('test');
@@ -86,7 +81,7 @@ class ExtensionsIntegrationTest extends Twig_Test_IntegrationTestCase
 
     private function getTranslatorMock()
     {
-        $translator = $this->mock(TranslatorContract::class);
+        $translator = Mock::mock(TranslatorContract::class);
         $translator->shouldReceive('trans')
             ->with('test')
             ->andReturn('test');

@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests\Providers;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
@@ -18,20 +17,8 @@ use Viserio\Component\Translation\Providers\TranslationDataCollectorServiceProvi
 use Viserio\Component\Translation\Translator;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
-class TranslationDataCollectorServiceProviderTest extends TestCase
+class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testProvider()
     {
         $catalogue = new MessageCatalogue('en', [

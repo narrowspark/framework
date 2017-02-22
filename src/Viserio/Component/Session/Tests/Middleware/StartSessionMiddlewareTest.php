@@ -6,8 +6,7 @@ use Defuse\Crypto\Key;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
@@ -19,10 +18,8 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\SessionManager;
 
-class StartSessionMiddlewareTest extends TestCase
+class StartSessionMiddlewareTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * @var \Viserio\Component\Filesystem\Filesystem
      */
@@ -43,11 +40,6 @@ class StartSessionMiddlewareTest extends TestCase
         $this->files = null;
 
         parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testAddSessionToResponse()

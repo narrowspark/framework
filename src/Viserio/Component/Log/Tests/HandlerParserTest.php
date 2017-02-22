@@ -8,24 +8,11 @@ use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Processor\GitProcessor;
 use Monolog\Processor\PsrLogMessageProcessor;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Log\HandlerParser;
 
-class HandlerParserTest extends TestCase
+class HandlerParserTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetMonolog()
     {
         $handler = new HandlerParser($this->mock(Logger::class));

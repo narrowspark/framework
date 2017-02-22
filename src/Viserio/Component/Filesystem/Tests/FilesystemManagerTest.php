@@ -9,18 +9,15 @@ use League\Flysystem\AdapterInterface;
 use MongoClient;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Cache\Manager as CacheManager;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
 
-class FilesystemManagerTest extends TestCase
+class FilesystemManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testAwsS3ConnectorDriver()
     {
         $config = $this->mock(RepositoryContract::class);

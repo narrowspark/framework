@@ -3,30 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extensions;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Extensions\StrExtension;
 use Viserio\Component\Support\Str;
 
-class StrExtensionTest extends TestCase
+class StrExtensionTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     protected $customFilters = [
         'camel_case',
         'snake_case',
         'studly_case',
     ];
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
 
     public function testCallback()
     {

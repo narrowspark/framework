@@ -5,8 +5,7 @@ namespace Viserio\Component\Queue\Tests;
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Bus\QueueingDispatcher;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -16,20 +15,8 @@ use Viserio\Component\Queue\Connectors\RedisQueue;
 use Viserio\Component\Queue\Jobs\RedisJob;
 use Viserio\Component\Queue\Tests\Fixture\InteractsWithQueue;
 
-class CallQueuedHandlerTest extends TestCase
+class CallQueuedHandlerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testCall()
     {
         $command = serialize(new stdClass());

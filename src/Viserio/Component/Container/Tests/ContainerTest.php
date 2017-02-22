@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests;
 
 use Mouf\Picotainer\Picotainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubA;
@@ -26,10 +25,8 @@ use Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectTwoFixtu
 use Viserio\Component\Container\Tests\Fixture\ContainerTestNoConstructor;
 use Viserio\Component\Container\Tests\Fixture\FactoryClass;
 
-class ContainerTest extends TestCase
+class ContainerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * @var \Viserio\Component\Container\Container
      */
@@ -42,6 +39,8 @@ class ContainerTest extends TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->container = new Container();
 
         $this->services = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
