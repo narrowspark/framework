@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\HttpFactory;
 
 use Interop\Http\Factory\ServerRequestFactoryInterface;
-use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use Viserio\Component\Http\ServerRequest;
@@ -21,10 +20,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $method  = $method === null ? ($server['REQUEST_METHOD'] ?? 'GET') : $method;
         $headers = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
         $uri     = $uri !== null ? $uri : Uri::createFromServer($server);
-
-        if ($method === null) {
-            throw new InvalidArgumentException('Cannot determine HTTP method');
-        }
 
         $serverRequest = new ServerRequest(
             $uri,
