@@ -118,7 +118,7 @@ class TemplateManagerTest extends MockeryTestCase
         );
 
         static::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html')),
+            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html.php')),
             $this->removeId($template->render())
         );
     }
