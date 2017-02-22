@@ -70,7 +70,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
             return;
         }
 
-        $files   = $this->getFiles($this->option('files'), $this->option('directories'));
+        $files   = $this->getFiles((array) $this->option('files'), (array) $this->option('directories'));
         $details = [];
 
         // If no files are found.
@@ -267,7 +267,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
             case 'text':
                 return $this->displayText($details, $verbose);
             case 'json':
-                return $this->displayJson($details, $verbose);
+                return $this->displayJson($details);
             default:
                 throw new InvalidArgumentException(sprintf('The format "%s" is not supported.', $format));
         }

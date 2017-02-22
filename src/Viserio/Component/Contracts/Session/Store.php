@@ -297,4 +297,11 @@ interface Store extends JsonSerializable
      * @return string
      */
     public function getFingerprint(): string;
+
+    /**
+     * Get the CSRF token value.
+     *
+     * @return string
+     */
+    public function getToken(): string;
 }

@@ -28,6 +28,13 @@ class TwigDataCollector extends AbstractDataCollector implements
     private $profile;
 
     /**
+     * Twig environment.
+     *
+     * @var \Twig_Environment
+     */
+    private $twigEnvironment;
+
+    /**
      * Computed data.
      *
      * @var array
@@ -80,7 +87,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function getTemplateCount(): int
     {
-        return $this->getComputedData('template_count');
+        return (int) $this->getComputedData('template_count');
     }
 
     /**
@@ -100,7 +107,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function getBlockCount(): int
     {
-        return $this->getComputedData('block_count');
+        return (int) $this->getComputedData('block_count');
     }
 
     /**
@@ -110,7 +117,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function getMacroCount(): int
     {
-        return $this->getComputedData('macro_count');
+        return (int) $this->getComputedData('macro_count');
     }
 
     /**
@@ -218,7 +225,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      *
      * @param string $index
      *
-     * @return string|int
+     * @return mixed
      */
     private function getComputedData(string $index)
     {
