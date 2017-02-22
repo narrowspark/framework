@@ -19,8 +19,3 @@ fi
 
 # Install mongo-php-adapter
 composer require alcaeus/mongo-php-adapter
-
-if [[ "$PHPSTAN" = true ]]; then
-    # Install phpstan
-    composer require phpstan/phpstan
-fi
