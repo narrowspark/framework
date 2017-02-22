@@ -193,6 +193,7 @@ class ServerRequestFactoryTest extends TestCase
 
     /**
      * @dataProvider dataServer
+     *
      * @param mixed $server
      */
     public function testCreateServerRequest($server)
@@ -205,6 +206,7 @@ class ServerRequestFactoryTest extends TestCase
 
     /**
      * @dataProvider dataServer
+     *
      * @param mixed $server
      */
     public function testCreateServerRequestWithOverridenMethod($server)
@@ -217,6 +219,7 @@ class ServerRequestFactoryTest extends TestCase
 
     /**
      * @dataProvider dataServer
+     *
      * @param mixed $server
      */
     public function testCreateServerRequestWithOverridenUri($server)
@@ -229,6 +232,7 @@ class ServerRequestFactoryTest extends TestCase
 
     /**
      * @dataProvider dataServer
+     *
      * @param mixed $server
      */
     public function testCreateServerRequestWithUriObject($server)
