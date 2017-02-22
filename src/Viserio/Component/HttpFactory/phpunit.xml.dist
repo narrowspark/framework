@@ -25,21 +25,7 @@
         <testsuite name="Narrowspark HttpFactory Component Test Suite">
             <directory suffix="Test.php">./Tests/</directory>
         </testsuite>
-
-        <testsuite name="Integration tests">
-            <directory>./vendor/http-interop/http-factory-tests/test</directory>
-        </testsuite>
     </testsuites>
-
-     <php>
-        <!-- Fully qualified class names to your classes -->
-        <const name="REQUEST_FACTORY" value="Viserio\Component\HttpFactory\RequestFactory"/>
-        <const name="RESPONSE_FACTORY" value="Viserio\Component\HttpFactory\ResponseFactory"/>
-        <const name="SERVER_REQUEST_FACTORY" value="Viserio\Component\HttpFactory\ServerRequestFactory"/>
-        <const name="STREAM_FACTORY" value="Viserio\Component\HttpFactory\StreamFactory"/>
-        <const name="UPLOADED_FILE_FACTORY" value="Viserio\Component\HttpFactory\UploadedFileFactory"/>
-        <const name="URI_FACTORY" value="Viserio\Component\HttpFactory\UriFactory"/>
-    </php>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

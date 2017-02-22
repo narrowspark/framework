@@ -72,7 +72,7 @@ class TemplateManagerTest extends MockeryTestCase
         );
 
         static::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithcollector.html')),
+            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithcollector.html.php')),
             $this->removeId($template->render())
         );
     }
@@ -94,7 +94,7 @@ class TemplateManagerTest extends MockeryTestCase
         );
 
         static::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html')),
+            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html.php')),
             $this->removeId($template->render())
         );
     }
