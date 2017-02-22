@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\HttpFactory\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Http\UploadedFile;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Http\Uri;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
@@ -121,26 +121,6 @@ class ServerRequestFactoryTest extends TestCase
             'SCRIPT_NAME'          => '/doc/framwork.php',
             'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
         ];
-        $_COOKIE = [
-            'logged-in' => 'yes!',
-        ];
-        $_POST = [
-            'name'  => 'Narrowspark',
-            'email' => 'parrowspark@example.com',
-        ];
-        $_GET = [
-            'id'   => 10,
-            'user' => 'foo',
-        ];
-        $_FILES = [
-            'file' => [
-                'name'     => 'MyFile.txt',
-                'type'     => 'text/plain',
-                'tmp_name' => '/tmp/php/php1h4j1o',
-                'error'    => UPLOAD_ERR_OK,
-                'size'     => 123,
-            ],
-        ];
 
         $server = $this->factory->createServerRequest($_SERVER);
 
@@ -175,24 +155,134 @@ class ServerRequestFactoryTest extends TestCase
         );
         self::assertEquals('', (string) $server->getBody());
         self::assertEquals('1.0', $server->getProtocolVersion());
-        self::assertEquals($_COOKIE, $server->getCookieParams());
-        self::assertEquals($_POST, $server->getParsedBody());
-        self::assertEquals($_GET, $server->getQueryParams());
         self::assertEquals(
             new Uri('https://www.narrowspark.com/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
+    }
 
-        $expectedFiles = [
-            'file' => new UploadedFile(
-                '/tmp/php/php1h4j1o',
-                123,
-                UPLOAD_ERR_OK,
-                'MyFile.txt',
-                'text/plain'
-            ),
+    public function dataMethods()
+    {
+        return [
+            ['GET'],
+            ['POST'],
+            ['PUT'],
+            ['DELETE'],
+            ['OPTIONS'],
+            ['HEAD'],
         ];
+    }
 
-        self::assertEquals($expectedFiles, $server->getUploadedFiles());
+    public function dataServer()
+    {
+        $data = [];
+
+        foreach ($this->dataMethods() as $methodData) {
+            $data[] = [
+                [
+                    'REQUEST_METHOD' => $methodData[0],
+                    'REQUEST_URI'    => '/test?foo=1&bar=true',
+                    'QUERY_STRING'   => 'foo=1&bar=true',
+                    'HTTP_HOST'      => 'example.org',
+                ],
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * @dataProvider dataServer
+     * @param mixed $server
+     */
+    public function testCreateServerRequest($server)
+    {
+        $method  = $server['REQUEST_METHOD'];
+        $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
+        $request = $this->factory->createServerRequest($server);
+        $this->assertServerRequest($request, $method, $uri);
+    }
+
+    /**
+     * @dataProvider dataServer
+     * @param mixed $server
+     */
+    public function testCreateServerRequestWithOverridenMethod($server)
+    {
+        $method  = 'OPTIONS';
+        $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
+        $request = $this->factory->createServerRequest($server, $method);
+        $this->assertServerRequest($request, $method, $uri);
+    }
+
+    /**
+     * @dataProvider dataServer
+     * @param mixed $server
+     */
+    public function testCreateServerRequestWithOverridenUri($server)
+    {
+        $method  = $server['REQUEST_METHOD'];
+        $uri     = 'https://example.com/foobar?bar=2&foo=false';
+        $request = $this->factory->createServerRequest($server, null, $uri);
+        $this->assertServerRequest($request, $method, $uri);
+    }
+
+    /**
+     * @dataProvider dataServer
+     * @param mixed $server
+     */
+    public function testCreateServerRequestWithUriObject($server)
+    {
+        $method  = $server['REQUEST_METHOD'];
+        $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
+        $request = $this->factory->createServerRequest([], $method, new Uri($uri));
+        $this->assertServerRequest($request, $method, $uri);
+    }
+
+    /**
+     * @backupGlobals enabled
+     */
+    public function testCreateServerRequestDoesNotReadServerSuperglobal()
+    {
+        $_SERVER      = ['HTTP_X_FOO' => 'bar'];
+        $request      = $this->factory->createServerRequest([], 'POST', 'http://example.org/test');
+        $serverParams = $request->getServerParams();
+        $this->assertNotEquals($_SERVER, $serverParams);
+        $this->assertArrayNotHasKey('HTTP_X_FOO', $serverParams);
+    }
+
+    public function testCreateServerRequestDoesNotReadCookieSuperglobal()
+    {
+        $_COOKIE = ['foo' => 'bar'];
+        $request = $this->factory->createServerRequest([], 'POST', 'http://example.org/test');
+        $this->assertEmpty($request->getCookieParams());
+    }
+
+    public function testCreateServerRequestDoesNotReadGetSuperglobal()
+    {
+        $_GET    = ['foo' => 'bar'];
+        $request = $this->factory->createServerRequest([], 'POST', 'http://example.org/test');
+        $this->assertEmpty($request->getQueryParams());
+    }
+
+    public function testCreateServerRequestDoesNotReadFilesSuperglobal()
+    {
+        $_FILES  = [['name' => 'foobar.dat', 'type' => 'application/octet-stream', 'tmp_name' => '/tmp/php45sd3f', 'error' => UPLOAD_ERR_OK, 'size' => 4]];
+        $request = $this->factory->createServerRequest([], 'POST', 'http://example.org/test');
+        $this->assertEmpty($request->getUploadedFiles());
+    }
+
+    public function testCreateServerRequestDoesNotReadPostSuperglobal()
+    {
+        $_POST   = ['foo' => 'bar'];
+        $request = $this->factory->createServerRequest(['CONTENT_TYPE' => 'application/x-www-form-urlencoded'], 'POST', 'http://example.org/test');
+        $this->assertEmpty($request->getParsedBody());
+    }
+
+    protected function assertServerRequest($request, $method, $uri)
+    {
+        $this->assertInstanceOf(ServerRequestInterface::class, $request);
+        $this->assertSame($method, $request->getMethod());
+        $this->assertSame($uri, (string) $request->getUri());
     }
 }

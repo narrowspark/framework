@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\HttpFactory;
 
 use Interop\Http\Factory\ServerRequestFactoryInterface;
+use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 use Viserio\Component\Http\Uri;
-use Viserio\Component\Http\Util;
 
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
@@ -17,25 +17,25 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     public function createServerRequest(array $server, $method = null, $uri = null): ServerRequestInterface
     {
-        $server        = $this->normalizeServer($server);
-        $requestMethod = $method ?? $server['REQUEST_METHOD'] ?? 'GET';
-        $headers       = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
-        $uri           = $uri ?? Uri::createFromServer($server);
+        $server  = $this->normalizeServer($server);
+        $method  = $method === null ? ($server['REQUEST_METHOD'] ?? 'GET') : $method;
+        $headers = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
+        $uri     = $uri !== null ? $uri : Uri::createFromServer($server);
+
+        if ($method === null) {
+            throw new InvalidArgumentException('Cannot determine HTTP method');
+        }
 
         $serverRequest = new ServerRequest(
             $uri,
-            $requestMethod,
+            $method,
             $headers,
             new LazyOpenStream('php://input', 'r+'),
             $this->marshalProtocolVersion($server),
             $server
         );
 
-        return $serverRequest
-            ->withCookieParams($_COOKIE)
-            ->withQueryParams($_GET)
-            ->withParsedBody($_POST)
-            ->withUploadedFiles(Util::normalizeFiles($_FILES));
+        return $serverRequest;
     }
 
     /**
