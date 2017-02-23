@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\Foundation;
 
 use Closure;
+use Viserio\Component\Contracts\Container\Container;
 
-interface Application
+interface Application extends Container
 {
     /**
      * Get the version number of the application.

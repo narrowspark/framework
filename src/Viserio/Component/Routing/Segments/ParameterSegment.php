@@ -9,11 +9,15 @@ use Viserio\Component\Routing\Matchers\RegexMatcher;
 class ParameterSegment implements RouteSegmentContract
 {
     /**
-     * @var string[]
+     * Segments names.
+     *
+     * @var array
      */
     protected $names;
 
     /**
+     * A regex string.
+     *
      * @var string
      */
     protected $regex;

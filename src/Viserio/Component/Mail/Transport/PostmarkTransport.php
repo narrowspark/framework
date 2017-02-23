@@ -11,6 +11,7 @@ use Swift_Mime_Headers_ParameterizedHeader;
 use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
 use Swift_Mime_Message;
+use Swift_Mime_MimeEntity;
 
 class PostmarkTransport extends AbstractTransport
 {

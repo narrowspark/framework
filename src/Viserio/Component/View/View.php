@@ -18,7 +18,7 @@ class View implements ArrayAccess, ViewContract
     /**
      * The view factory instance.
      *
-     * @var \Viserio\Component\View\Factory
+     * @var \Viserio\Component\Contracts\View\Factory
      */
     protected $factory;
 

@@ -236,12 +236,12 @@ class Message implements MessageContract
     /**
      * Prepare and attach the given attachment.
      *
-     * @param \Swift_Attachment $attachment
+     * @param \Swift_Mime_Attachment $attachment
      * @param array             $options
      *
      * @return $this
      */
-    protected function prepAttachment(Swift_Attachment $attachment, array $options = []): MessageContract
+    protected function prepAttachment(Swift_Mime_Attachment $attachment, array $options = []): MessageContract
     {
         // First we will check for a MIME type on the message, which instructs the
         // mail client on what type of attachment the file is so that it may be

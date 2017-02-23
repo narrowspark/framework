@@ -15,6 +15,13 @@ class LogsDataCollector extends MessagesDataCollector implements PanelAwareContr
     protected $logParser;
 
     /**
+     * All places for log files.
+     *
+     * @var array
+     */
+    protected $storages = [];
+
+    /**
      * Create a new logs data collector instance.
      *
      * @param \Viserio\Component\Log\DataCollectors\LogParser $logParser

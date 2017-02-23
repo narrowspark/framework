@@ -8,6 +8,7 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Routing\AbstractController;
 use Viserio\Component\WebProfiler\WebProfiler;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AssetController extends AbstractController
 {
@@ -35,13 +36,13 @@ class AssetController extends AbstractController
     /**
      * Create a new AssetController instance.
      *
-     * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequest
-     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
-     * @param \Interop\Http\Factory\StreamFactoryInterface        $streamFactory
-     * @param \Viserio\Component\WebProfiler\WebProfiler          $webprofiler
+     * @param \IPsr\Http\Message\ServerRequestInterface      $serverRequest
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
+     * @param \Viserio\Component\WebProfiler\WebProfiler     $webprofiler
      */
     public function __construct(
-        ServerRequestFactoryInterface $serverRequest,
+        ServerRequestInterface $serverRequest,
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
         WebProfiler $webprofiler

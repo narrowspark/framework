@@ -25,8 +25,8 @@ class ResolverTest extends TestCase
     {
         $resolver = new Resolver('pattern', 'translation');
 
-        self::assertFalse($resolver->resolve('other_pattern'));
-        self::assertFalse($resolver->resolve('pattern'));
+        self::assertFalse((bool) $resolver->resolve('other_pattern'));
+        self::assertFalse((bool) $resolver->resolve('pattern'));
     }
 
     public function testMatches()

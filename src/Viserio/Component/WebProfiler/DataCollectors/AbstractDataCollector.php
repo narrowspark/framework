@@ -25,7 +25,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
     /**
      * Configured VarCloner instance.
      *
-     * @var \Symfony\Component\VarDumper\Cloner\ClonerInterface
+     * @var \Symfony\Component\VarDumper\Cloner\AbstractCloner
      */
     private static $cloner;
 
@@ -364,7 +364,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      *
      * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
      */
-    private static function getCloner()
+    private static function getCloner(): AbstractCloner
     {
         if (! self::$cloner) {
             self::$cloner = new VarCloner();

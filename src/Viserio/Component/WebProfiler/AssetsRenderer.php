@@ -4,6 +4,7 @@ namespace Viserio\Component\WebProfiler;
 
 use Viserio\Component\Contracts\Support\Renderable as RenderableContract;
 use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
+use Viserio\Component\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -233,6 +234,7 @@ class AssetsRenderer implements RenderableContract
         // finds assets provided by collectors
         foreach ($this->webprofiler->getCollectors() as $collector) {
             if ($collector instanceof AssetAwareContract &&
+                $collector instanceof DataCollectorContract&&
                 ! in_array($collector->getName(), $this->ignoredCollectors)
             ) {
                 $additionalAssets[] = $collector->getAssets();

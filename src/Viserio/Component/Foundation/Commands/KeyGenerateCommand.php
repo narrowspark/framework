@@ -63,7 +63,7 @@ class KeyGenerateCommand extends Command
             return false;
         }
 
-        $env = $this->config->get('path.env');
+        $env = $config->get('path.env');
 
         file_put_contents($env, str_replace(
             'APP_KEY=' . $currentKey,

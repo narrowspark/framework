@@ -44,7 +44,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Default fallback for all languages.
      *
-     * @var MessageCatalogueContract
+     * @var \Viserio\Component\Contracts\Translation\MessageCatalogue
      */
     protected $defaultFallback;
 
@@ -187,7 +187,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return $this
      */
-    public function setDefaultFallback(MessageCatalogueContract $fallback): TranslationManager
+    public function setDefaultFallback(MessageCatalogueContract $fallback): self
     {
         $this->defaultFallback = $fallback;
 
@@ -214,7 +214,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return $this
      */
-    public function setLanguageFallback(string $lang, MessageCatalogueContract $fallback)
+    public function setLanguageFallback(string $lang, MessageCatalogueContract $fallback): self
     {
         $this->langFallback[$lang] = $fallback;
 
@@ -228,7 +228,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return \Viserio\Component\Contracts\Translation\MessageCatalogue|null
      */
-    public function getLanguageFallback(string $lang): ?self
+    public function getLanguageFallback(string $lang): ?MessageCatalogueContract
     {
         if (isset($this->langFallback[$lang])) {
             return $this->langFallback[$lang];

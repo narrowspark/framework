@@ -14,10 +14,15 @@ parameters:
         - '#Undefined variable: $class#'
         - '#Undefined variable: $router#'
         - '#Undefined variable: $__env#'
+        - '# Call to an undefined static method Respect\\Validation\\Validator#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
+        - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\LazyOpenStream::#'
+        - '# Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::#'
         # We only mock this dependency, and never really require it:
         - '#Call to an undefined method GuzzleHttp\\ClientInterface::post#'
         - '#Call to an undefined method Aws\\Ses\\SesClient::sendRawEmail#'
+        - '#Class MongoClient not found#'
+        - '#Catched class MongoConnectionException not found#'
         # Mock dependencies
         - '#Mockery\\MockInterface#'
         - '#PHPUnit_Framework_MockObject_MockObject#'

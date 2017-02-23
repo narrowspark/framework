@@ -14,11 +14,7 @@ class TaggableParser extends Parser implements TaggableParserContract
     private $taggedKey;
 
     /**
-     * Set tag key.
-     *
-     * @param string $key
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setTag(string $key): self
     {

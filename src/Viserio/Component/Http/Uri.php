@@ -18,16 +18,16 @@ class Uri extends HttpUri implements UriInterface
     {
         $components = self::getParser()(self::filterString($uri));
 
-        $this->scheme    = $this->formatScheme($components['scheme']);
-        $this->user_info = $this->formatUserInfo($components['user'], $components['pass']);
-        $this->host      = $this->formatHost($components['host']);
-        $this->port      = $this->formatPort($components['port']);
-        $this->authority = $this->setAuthority();
-        $this->path      = $this->filterPath($components['path']);
-        $this->query     = $this->formatQueryAndFragment($components['query']);
-        $this->fragment  = $this->formatQueryAndFragment($components['fragment']);
-
-        $this->assertValidState();
+        parent::__construct(
+            $components['scheme'],
+            $components['user'],
+            $components['pass'],
+            $components['host'],
+            $components['port'],
+            $components['path'],
+            $components['query'],
+            $components['fragment']
+        );
     }
 
     /**

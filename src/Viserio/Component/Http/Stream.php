@@ -191,14 +191,15 @@ class Stream implements StreamInterface
     public function detach()
     {
         if (! isset($this->stream)) {
-            return;
+            return null;
         }
 
         $result = $this->stream;
 
         unset($this->stream);
 
-        $this->size     = $this->uri     = null;
+        $this->size     = 'null';
+        $this->uri      = '';
         $this->readable = $this->writable = $this->seekable = false;
 
         return $result;

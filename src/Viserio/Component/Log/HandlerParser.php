@@ -156,7 +156,7 @@ class HandlerParser
     /**
      * Parse the formatter into a Monolog constant.
      *
-     * @param string|object $formatter
+     * @param \Monolog\Formatter\FormatterInterface|string $formatter
      *
      * @throws \InvalidArgumentException
      *
@@ -164,7 +164,7 @@ class HandlerParser
      */
     protected function parseFormatter($formatter): FormatterInterface
     {
-        if (is_object($formatter)) {
+        if (is_object($formatter) && $formatter instanceof FormatterInterface) {
             return $formatter;
         }
 

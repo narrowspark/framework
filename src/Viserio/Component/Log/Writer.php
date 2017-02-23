@@ -89,7 +89,13 @@ class Writer implements LogContract
     }
 
     /**
-     * {@inheritdoc}
+     * Logs with an arbitrary level.
+     *
+     * @param mixed $level
+     * @param mixed $message
+     * @param array $context
+     *
+     * @return void
      */
     public function log($level, $message, array $context = []): void
     {
