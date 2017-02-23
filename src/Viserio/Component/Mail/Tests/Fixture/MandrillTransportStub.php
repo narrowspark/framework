@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests\Fixture;
 
-use Viserio\Component\Mail\Transport\Mandrill;
+use Viserio\Component\Mail\Transport\MandrillTransport;
 
-class MandrillTransportStub extends Mandrill
+class MandrillTransportStub extends MandrillTransport
 {
     protected $client;
 

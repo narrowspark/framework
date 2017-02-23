@@ -19,7 +19,6 @@
     ],
     "require": {
         "php"                                 : "^7.1",
-        "container-interop/container-interop" : "^1.1",
         "php-di/invoker"                      : "^1.3",
         "narrowspark/arr"                     : "^1.1",
         "swiftmailer/swiftmailer"             : "^5.4",
@@ -57,6 +56,7 @@
     },
     "suggest": {
         "aws/aws-sdk-php"                     : "Required to use the SES mail driver (^3.0).",
+        "container-interop/container-interop" : "Required to use the invoker in mailer (^1.1).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "guzzlehttp/guzzle"                   : "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
         "opis/closure"                        : "Required to be able to serialize closures (^2.2.1).",

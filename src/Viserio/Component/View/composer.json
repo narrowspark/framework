@@ -31,7 +31,7 @@
         "mockery/mockery"                     : "^1.0",
         "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "^6.0",
-        "http-interop/http-middleware"        : "^0.3",
+        "http-interop/http-middleware"        : "^0.4",
         "viserio/config"                      : "self.version",
         "viserio/http-factory"                : "self.version"
     },
@@ -51,6 +51,7 @@
     },
     "suggest": {
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "http-interop/http-middleware"        : "Required to use middleware (^0.4).",
         "viserio/http-factory"                : "Required to use the proxie View::createResponseView (^0.3)."
     },
     "extra": {

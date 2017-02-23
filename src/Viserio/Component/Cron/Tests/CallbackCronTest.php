@@ -2,16 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cron\CallbackCron;
 
-class CallbackCronTest extends TestCase
+class CallbackCronTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     /**
      * Mocked CacheItemPoolInterface.
      *

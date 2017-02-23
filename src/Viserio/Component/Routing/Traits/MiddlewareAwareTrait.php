@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
-use Interop\Http\Middleware\ServerMiddlewareInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use LogicException;
 
 trait MiddlewareAwareTrait
@@ -60,7 +60,7 @@ trait MiddlewareAwareTrait
     }
 
     /**
-     * Check a middleware class if \Interop\Http\Middleware\ServerMiddlewareInterface is implemented.
+     * Check a middleware class if \Interop\Http\ServerMiddleware\MiddlewareInterface is implemented.
      *
      * @param string $middleware
      *
@@ -68,10 +68,10 @@ trait MiddlewareAwareTrait
      */
     private function checkMiddlewareClass(string $middleware)
     {
-        if (! in_array(ServerMiddlewareInterface::class, class_implements($middleware))) {
+        if (! in_array(MiddlewareInterface::class, class_implements($middleware))) {
             throw new LogicException(
                 sprintf(
-                    '\Interop\Http\Middleware\ServerMiddlewareInterface is not implemented in [%s]',
+                    '\Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [%s]',
                     $middleware
                 )
             );

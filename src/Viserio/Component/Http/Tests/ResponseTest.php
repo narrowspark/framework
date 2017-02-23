@@ -12,6 +12,8 @@ class ResponseTest extends AbstractMessageTest
 {
     public function setUP()
     {
+        parent::setUp();
+
         $this->classToTest = new Response();
     }
 

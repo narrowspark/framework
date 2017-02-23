@@ -2,30 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests\Middleware;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\Cookie\Middleware\AddQueuedCookiesToResponseMiddleware;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
-class AddQueuedCookiesToResponseMiddlewareTest extends TestCase
+class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function tearDown()
     {
         unset($_SERVER['SERVER_ADDR']);
-
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testAddQueuedCookiesToResponseMiddleware()

@@ -3,27 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Log\Tests\DataCollectors;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Log\DataCollectors\LogParser;
 use Viserio\Component\Log\DataCollectors\LogsDataCollector;
 
-class LogsDataCollectorTest extends TestCase
+class LogsDataCollectorTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testAddMessageAndLog()
     {
         $collector = new LogsDataCollector(new LogParser(), [__DIR__ . '/../Fixture/']);

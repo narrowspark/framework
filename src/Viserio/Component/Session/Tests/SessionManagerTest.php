@@ -5,8 +5,7 @@ namespace Viserio\Component\Session\Tests;
 use Defuse\Crypto\Key;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
@@ -16,20 +15,13 @@ use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Session\SessionManager;
 
-class SessionManagerTest extends TestCase
+class SessionManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function tearDown()
     {
         $this->manager = null;
 
         parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testCookieStore()

@@ -44,7 +44,7 @@
         "filp/whoops"                         : "^2.0",
         "fzaninotto/faker"                    : "^1.6",
         "http-interop/http-factory"           : "^0.2",
-        "http-interop/http-middleware"        : "^0.3",
+        "http-interop/http-middleware"        : "^0.4",
         "league/flysystem"                    : "^1.0",
         "league/uri-parser"                   : "^1.0",
         "league/uri-schemes"                  : "^1.0",

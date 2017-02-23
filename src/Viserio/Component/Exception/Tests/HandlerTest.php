@@ -7,8 +7,7 @@ use Exception;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -25,10 +24,8 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class HandlerTest extends TestCase
+class HandlerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testAddAndGetDisplayer()
     {
         $container = $this->getContainer();

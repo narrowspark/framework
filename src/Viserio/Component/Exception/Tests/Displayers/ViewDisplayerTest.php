@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Displayers;
 
 use Exception;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\View\Factory;
 use Viserio\Component\Contracts\View\View;
 use Viserio\Component\Exception\Displayers\ViewDisplayer;
@@ -12,10 +11,8 @@ use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class ViewDisplayerTest extends TestCase
+class ViewDisplayerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testError()
     {
         $factory = $this->mock(Factory::class);

@@ -3,13 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\HttpFactory\Tests\Traits;
 
 use Interop\Http\Factory\StreamFactoryInterface;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 
-class StreamFactoryAwareTraitTest extends TestCase
+class StreamFactoryAwareTraitTest extends MockeryTestCase
 {
-    use MockeryTrait;
     use StreamFactoryAwareTrait;
 
     public function testSetAndGetStreamFactory()

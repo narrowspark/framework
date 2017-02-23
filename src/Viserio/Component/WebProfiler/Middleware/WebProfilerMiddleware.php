@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Middleware;
 
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
-class WebProfilerMiddleware implements ServerMiddlewareInterface
+class WebProfilerMiddleware implements MiddlewareInterface
 {
     /**
      * The webprofiler instance.
@@ -28,10 +28,7 @@ class WebProfilerMiddleware implements ServerMiddlewareInterface
     }
 
     /**
-     * {@inhertidoc}.
-     *
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * {@inheritdoc}
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {

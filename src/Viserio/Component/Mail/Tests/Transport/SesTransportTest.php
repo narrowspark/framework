@@ -6,7 +6,7 @@ use Aws\Ses\SesClient;
 use PHPUnit\Framework\TestCase;
 use Swift_Message;
 use Viserio\Component\Mail\Tests\Transport\Fixture\SendRawEmailMock;
-use Viserio\Component\Mail\Transport\Ses as SesTransport;
+use Viserio\Component\Mail\Transport\SesTransport;
 use Viserio\Component\Support\Str;
 
 class SesTransportTest extends TestCase

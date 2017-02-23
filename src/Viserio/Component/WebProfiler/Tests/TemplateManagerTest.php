@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests;
 
 use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
@@ -15,20 +14,8 @@ use Viserio\Component\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 use Viserio\Component\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\Component\WebProfiler\TemplateManager;
 
-class TemplateManagerTest extends TestCase
+class TemplateManagerTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testEscape()
     {
         $original = "This is a <a href=''>Foo</a> test string";
@@ -84,8 +71,10 @@ class TemplateManagerTest extends TestCase
             $assets->getIcons()
         );
 
+        require_once __DIR__ . '/Fixture/View/profilewithcollector.html.php';
+
         static::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithcollector.html')),
+            $this->removeId($text),
             $this->removeId($template->render())
         );
     }
@@ -107,7 +96,7 @@ class TemplateManagerTest extends TestCase
         );
 
         static::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html')),
+            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html.php')),
             $this->removeId($template->render())
         );
     }
@@ -131,7 +120,7 @@ class TemplateManagerTest extends TestCase
         );
 
         static::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html')),
+            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html.php')),
             $this->removeId($template->render())
         );
     }

@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
@@ -11,10 +10,8 @@ use Viserio\Component\Contracts\Translation\TranslationManager as TranslationMan
 use Viserio\Component\Foundation\Application;
 use Viserio\Component\Foundation\Bootstrap\DetectEnvironment;
 
-class ApplicationTest extends TestCase
+class ApplicationTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
     public function testBootstrap()
     {
         $app = $this->getApplication();

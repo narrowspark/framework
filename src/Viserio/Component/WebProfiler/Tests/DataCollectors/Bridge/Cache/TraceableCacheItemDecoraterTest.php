@@ -3,25 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests\DataCollectors\Bridge\Cache;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
-use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 
-class TraceableCacheItemDecoraterTest extends TestCase
+class TraceableCacheItemDecoraterTest extends MockeryTestCase
 {
-    use MockeryTrait;
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
-    }
-
     public function testGetItemMiss()
     {
         $pool = $this->createCachePool();
