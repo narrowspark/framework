@@ -11,7 +11,6 @@ interface TaggableParser extends Parser
      */
     public const TAG_DELIMITER = '::';
 
-
     /**
      * Set tag key.
      *

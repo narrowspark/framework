@@ -237,7 +237,7 @@ class Message implements MessageContract
      * Prepare and attach the given attachment.
      *
      * @param \Swift_Mime_Attachment $attachment
-     * @param array             $options
+     * @param array                  $options
      *
      * @return $this
      */

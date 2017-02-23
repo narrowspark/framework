@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\TaggableParser;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
