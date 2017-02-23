@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
+use BadMethodCallException;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 
 abstract class AbstractController

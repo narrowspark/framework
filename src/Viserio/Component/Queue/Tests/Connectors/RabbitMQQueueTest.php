@@ -126,7 +126,7 @@ class RabbitMQQueueTest extends MockeryTestCase
 
     public function testPopProperlyPopsJobOffOfBeanstalkd()
     {
-        $job = $this->mock(Job::class);
+        $job = $this->mock(RabbitMQJob::class);
 
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');

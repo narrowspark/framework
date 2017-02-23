@@ -24,7 +24,7 @@ class TranslationManagerTest extends MockeryTestCase
     private $manager;
 
     /**
-     * @var org\bovigo\vfs\vfsStreamDirectory
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 

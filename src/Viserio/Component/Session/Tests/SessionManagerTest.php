@@ -17,6 +17,8 @@ use Viserio\Component\Session\SessionManager;
 
 class SessionManagerTest extends MockeryTestCase
 {
+    private $manager;
+
     public function tearDown()
     {
         $this->manager = null;

@@ -27,7 +27,6 @@ class QueueServiceProvider implements ServiceProvider
     public static function createQueueManager(ContainerInterface $container): QueueManager
     {
         return new QueueManager(
-            $container->get(RepositoryContract::class),
             $container,
             $container->get(EncrypterContract::class)
         );

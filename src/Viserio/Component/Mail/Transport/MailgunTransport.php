@@ -93,7 +93,7 @@ class MailgunTransport extends AbstractTransport
      *
      * @codeCoverageIgnore
      */
-    public function setKey(string $key): Mailgun
+    public function setKey(string $key): self
     {
         $this->key = $key;
 
@@ -135,7 +135,7 @@ class MailgunTransport extends AbstractTransport
      */
     protected function getTo(Swift_Mime_Message $message): string
     {
-        return $this->formatAddress((array) $message->getTo());
+        return $this->formatAddress($message->getTo());
     }
 
     /**
@@ -147,7 +147,7 @@ class MailgunTransport extends AbstractTransport
      */
     protected function getCc(Swift_Mime_Message $message): string
     {
-        return $this->formatAddress((array) $message->getCc());
+        return $this->formatAddress($message->getCc());
     }
 
     /**
@@ -159,7 +159,7 @@ class MailgunTransport extends AbstractTransport
      */
     protected function getBcc(Swift_Mime_Message $message): string
     {
-        return $this->formatAddress((array) $message->getBcc());
+        return $this->formatAddress($message->getBcc());
     }
 
     /**

@@ -11,7 +11,7 @@ interface Dumper
      *
      * @throws \Viserio\Component\Contracts\Parsers\Exception\DumpException If dumping fails on some formats
      *
-     * @return string|false
+     * @return string
      */
-    public function dump(array $data);
+    public function dump(array $data): string;
 }

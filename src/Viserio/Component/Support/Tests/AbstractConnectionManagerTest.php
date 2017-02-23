@@ -53,7 +53,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         ]));
 
         self::assertTrue($manager->getConnection());
-        self::assertTrue(is_array($manager->getConnections('class')));
+        self::assertTrue(is_array($manager->getConnections()));
     }
 
     public function testExtend()

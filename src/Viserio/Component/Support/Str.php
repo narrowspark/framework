@@ -36,7 +36,7 @@ class Str
      *
      * @throws \BadMethodCallException
      *
-     * @return Stringy
+     * @return mixed
      */
     public static function __callStatic($name, $arguments)
     {

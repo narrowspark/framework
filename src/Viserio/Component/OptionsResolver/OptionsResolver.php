@@ -44,7 +44,7 @@ class OptionsResolver extends AbstractOptionsResolver
         // get configuration for provided dimensions
         $config = $this->getConfigurationDimensions($dimensions, $config, $configClass, $configId);
 
-        if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
+        if ((array) $config !== $config && ! $config instanceof ArrayAccess && $configClass instanceof RequiresComponentConfigIdContract) {
             throw new UnexpectedValueException($configClass->getDimensions());
         }
 

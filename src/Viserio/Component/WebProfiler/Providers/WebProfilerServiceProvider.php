@@ -20,6 +20,7 @@ use Viserio\Component\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\Component\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\Component\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\Component\WebProfiler\WebProfiler;
+use Psr\Cache\CacheItemPoolInterface;
 
 class WebProfilerServiceProvider implements
     ServiceProvider,

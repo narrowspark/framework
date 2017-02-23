@@ -39,7 +39,7 @@ class TOMLTest extends TestCase
             "
         )->at($this->root);
 
-        $parsed = $this->parser->parse($this->file->read($file->url()));
+        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);

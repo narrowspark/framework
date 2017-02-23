@@ -13,7 +13,7 @@ class FileLoaderTest extends TestCase
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * @var org\bovigo\vfs\vfsStreamDirectory
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 

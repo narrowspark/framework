@@ -46,7 +46,6 @@ class Parser implements ParserContract
     ];
 
     private $supportedFileFormats = [
-        'csv',
         'ini',
         'json',
         'php',
@@ -57,10 +56,8 @@ class Parser implements ParserContract
     ];
 
     private $supportedParsers = [
-        'csv'       => Csv::class,
         'ini'       => INI::class,
         'json'      => JSON::class,
-        'msgpack'   => MSGPack::class,
         'php'       => PHP::class,
         'po'        => Po::class,
         'querystr'  => QueryStr::class,

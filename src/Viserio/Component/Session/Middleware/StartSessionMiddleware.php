@@ -34,7 +34,7 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Manager default driver config.
      *
-     * @var array|\ArrayAccess
+     * @var array
      */
     protected $config = [];
 

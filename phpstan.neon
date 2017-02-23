@@ -1,2 +1,23 @@
 includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
+
+parameters:
+    ignoreErrors:
+        - '#callable of class Twig_Function constructor#'
+        - '#callable of class Twig_Filter constructor#'
+        - '#callable of method Invoker\\InvokerInterface::call#'
+        - '#Call to an undefined method Predis\\Client::#'
+        - '#Call to an undefined method Pheanstalk\\Pheanstalk::shouldReceive#'
+        - '#Call to an undefined method Swift_Mime_Message::shouldReceive#'
+        # Magic
+        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FacadeStub#'
+        - '#Undefined variable: $class#'
+        - '#Undefined variable: $router#'
+        - '#Undefined variable: $__env#'
+        - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
+        # We only mock this dependency, and never really require it:
+        - '#Call to an undefined method GuzzleHttp\\ClientInterface::post#'
+        - '#Call to an undefined method Aws\\Ses\\SesClient::sendRawEmail#'
+        # Mock dependencies
+        - '#Mockery\\MockInterface#'
+        - '#PHPUnit_Framework_MockObject_MockObject#'

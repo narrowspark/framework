@@ -93,7 +93,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return $this
      */
-    public function setDirectories(array $directories): TranslationManager
+    public function setDirectories(array $directories): self
     {
         foreach ($directories as $directory) {
             $this->addDirectory($directory);
@@ -119,7 +119,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return $this
      */
-    public function addDirectory(string $directory): TranslationManager
+    public function addDirectory(string $directory): self
     {
         if (! in_array($directory, $this->directories)) {
             $this->directories[] = self::normalizeDirectorySeparator($directory);
@@ -137,7 +137,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return $this
      */
-    public function import(string $file): TranslationManager
+    public function import(string $file): self
     {
         $loader = $this->getLoader();
         $loader->setDirectories($this->directories);
@@ -160,7 +160,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return $this
      */
-    public function addMessageCatalogue(MessageCatalogueContract $messageCatalogue): TranslationManager
+    public function addMessageCatalogue(MessageCatalogueContract $messageCatalogue): self
     {
         $locale = $messageCatalogue->getLocale();
 
@@ -227,9 +227,9 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @param string $lang
      *
-     * @return MessageCatalogueContract|null
+     * @return \Viserio\Component\Contracts\Translation\MessageCatalogue|null
      */
-    public function getLanguageFallback(string $lang)
+    public function getLanguageFallback(string $lang): ?self
     {
         if (isset($this->langFallback[$lang])) {
             return $this->langFallback[$lang];
@@ -253,7 +253,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return $this
      */
-    public function setLocale(string $locale): TranslationManager
+    public function setLocale(string $locale): self
     {
         self::assertValidLocale($locale);
 
@@ -265,7 +265,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Returns the pluralization instance.
      *
-     * @return \Viserio\Component\Translation\PluralizationRules
+     * @return \Viserio\Component\Contracts\Translation\PluralizationRules
      */
     public function getPluralization(): PluralizationRulesContract
     {
@@ -281,7 +281,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return \Viserio\Component\Contracts\Translation\Translator
      */
-    public function getTranslator(string $locale = null): TranslatorContract
+    public function getTranslator(string $locale = null): self
     {
         $lang = $locale ?? $this->locale;
 

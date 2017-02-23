@@ -81,7 +81,7 @@ class RouteTreeNode
     /**
      * Get actual route content.
      *
-     * @return \Viserio\Component\Routing\Generator\ChildrenNodeCollection|\Viserio\Component\Routing\Generator\MatchedRouteDataMap
+     * @return \Viserio\Component\Contracts\Routing\NodeContents
      */
     public function getContents()
     {

@@ -94,7 +94,7 @@ class Store implements StoreContract
     /**
      * All fingerprint generators.
      *
-     * @var Fingerprintcontract[]
+     * @var array
      */
     private $fingerprintGenerators = [];
 
@@ -115,9 +115,9 @@ class Store implements StoreContract
     /**
      * Create a new session instance.
      *
-     * @param string                 $name
-     * @param SessionHandlerContract $handler
-     * @param EncrypterContract      $encrypter
+     * @param string                                            $name
+     * @param \SessionHandlerInterface                          $handler
+     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
     {

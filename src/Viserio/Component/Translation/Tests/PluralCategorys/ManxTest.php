@@ -64,6 +64,8 @@ class ManxTest extends TestCase
 
     protected function intToString($int)
     {
+        $actual = '';
+
         switch ($int) {
             case 0:
                 $actual = 'one';

@@ -5,6 +5,7 @@ namespace Viserio\Component\Mail;
 use Swift_Attachment;
 use Swift_Image;
 use Swift_Mime_Message;
+use Swift_Mime_Attachment;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 
 class Message implements MessageContract
@@ -212,9 +213,9 @@ class Message implements MessageContract
      *
      * @param string $file
      *
-     * @return \Swift_Attachment
+     * @return \Swift_Mime_Attachment
      */
-    protected function createAttachmentFromPath(string $file): Swift_Attachment
+    protected function createAttachmentFromPath(string $file): Swift_Mime_Attachment
     {
         return Swift_Attachment::fromPath($file);
     }
@@ -225,9 +226,9 @@ class Message implements MessageContract
      * @param string $data
      * @param string $name
      *
-     * @return \Swift_Attachment
+     * @return \Swift_Mime_Attachment
      */
-    protected function createAttachmentFromData(string $data, string $name): Swift_Attachment
+    protected function createAttachmentFromData(string $data, string $name): Swift_Mime_Attachment
     {
         return Swift_Attachment::newInstance($data, $name);
     }

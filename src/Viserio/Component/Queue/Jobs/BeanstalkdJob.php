@@ -95,7 +95,7 @@ class BeanstalkdJob extends AbstractJob
      */
     public function getJobId(): string
     {
-        return $this->job->getId();
+        return (string) $this->job->getId();
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Viserio\Component\Mail\Transport;
 
 use Psr\Log\LoggerInterface;
 use Swift_Mime_Message;
+use Swift_Mime_MimeEntity;
 
 class LogTransport extends AbstractTransport
 {
@@ -41,11 +42,11 @@ class LogTransport extends AbstractTransport
     /**
      * Get a loggable string out of a Swiftmailer entity.
      *
-     * @param \Swift_Mime_Message $entity
+     * @param \Swift_Mime_MimeEntity $entity
      *
      * @return string
      */
-    protected function getMimeEntityString(Swift_Mime_Message $entity): string
+    protected function getMimeEntityString(Swift_Mime_MimeEntity $entity): string
     {
         $string = (string) $entity->getHeaders() . PHP_EOL . $entity->getBody();
 
