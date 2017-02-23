@@ -1,0 +1,53 @@
+{
+    "name"       : "viserio/bridge/doctrine/fluent",
+    "type"       : "library",
+    "description": "The Viserio Doctrine bridge.",
+    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations", "bridge"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                            : "^7.1",
+        "doctrine/orm"                                   : "^2.6",
+        "doctrine/inflector"                             : "^1.1",
+        "ext-pdo"                                        : "*"
+    },
+    "require-dev": {
+        "container-interop/service-provider"             : "^0.3",
+        "phpunit/phpunit"                                : "^6.0",
+        "viserio/container"                              : "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Bridge\\Doctrine\\Fluent\\"        : ""
+        },
+        "exclude-from-classmap"                          : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Bridge\\Doctrine\\Fluent\\Tests\\" : "Tests/"
+        }
+    },
+    "suggest": {
+        "container-interop/service-provider"             : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"                         : "Required to use the proxy instances (self.version)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                                 : "1.0-dev"
+        }
+    },
+    "minimum-stability"                                  : "dev",
+    "prefer-stable"                                      : true
+}

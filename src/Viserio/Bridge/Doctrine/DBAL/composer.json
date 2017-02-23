@@ -19,31 +19,25 @@
     ],
     "require": {
         "php"                                    : "^7.1",
-        "ext-pdo"                                : "*",
         "doctrine/dbal"                          : "^2.5",
-        "doctrine/migrations"                    : "^1.4",
+        "ext-pdo"                                : "*",
         "php-cache/doctrine-bridge"              : "^2.0",
-        "narrowspark/collection"                 : "^0.1",
-        "ocramius/proxy-manager"                 : "^2.0",
-        "viserio/pagination"                     : "self.version"
+        "narrowspark/collection"                 : "^0.1"
     },
     "require-dev": {
-        "cakephp/chronos"                        : "^1.0",
         "container-interop/service-provider"     : "^0.3",
-        "doctrine/orm"                           : "^2.5",
-        "fzaninotto/faker"                       : "^1.6",
         "phpunit/phpunit"                        : "^6.0",
         "viserio/container"                      : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Bridge\\Doctrine\\"        : ""
+            "Viserio\\Bridge\\Doctrine\\DBAL\\"        : ""
         },
         "exclude-from-classmap"                  : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Bridge\\Doctrine\\Tests\\" : "Tests/"
+            "Viserio\\Bridge\\Doctrine\\DBAL\\Tests\\" : "Tests/"
         }
     },
     "suggest": {
