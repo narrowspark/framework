@@ -4,8 +4,8 @@ namespace Viserio\Component\Mail;
 
 use Swift_Attachment;
 use Swift_Image;
-use Swift_Mime_Message;
 use Swift_Mime_Attachment;
+use Swift_Mime_Message;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 
 class Message implements MessageContract
