@@ -2,7 +2,7 @@
     "name"       : "viserio/bridge/doctrine/orm",
     "type"       : "library",
     "description": "The Viserio Doctrine bridge.",
-    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations", "bridge"],
+    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "orm", "bridge"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -19,10 +19,10 @@
     ],
     "require": {
         "php"                                         : "^7.1",
-        "ext-pdo"                                     : "*",
         "doctrine/orm"                                : "^2.6",
-        "php-cache/doctrine-bridge"                   : "^2.0",
+        "ext-pdo"                                     : "*",
         "ocramius/proxy-manager"                      : "^2.0",
+        "php-cache/doctrine-bridge"                   : "^2.0",
         "viserio/pagination"                          : "self.version"
     },
     "require-dev": {

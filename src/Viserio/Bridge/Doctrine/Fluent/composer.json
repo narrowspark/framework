@@ -19,8 +19,8 @@
     ],
     "require": {
         "php"                                            : "^7.1",
-        "doctrine/orm"                                   : "^2.6",
         "doctrine/inflector"                             : "^1.1",
+        "doctrine/orm"                                   : "^2.6",
         "ext-pdo"                                        : "*"
     },
     "require-dev": {

@@ -1,8 +1,8 @@
 {
-    "name"       : "viserio/bridge/doctrine",
+    "name"       : "viserio/bridge/doctrine/dbal",
     "type"       : "library",
     "description": "The Viserio Doctrine bridge.",
-    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations", "bridge"],
+    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "dbal", "bridge"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -18,22 +18,21 @@
         }
     ],
     "require": {
-        "php"                                    : "^7.1",
-        "doctrine/dbal"                          : "^2.5",
-        "ext-pdo"                                : "*",
-        "php-cache/doctrine-bridge"              : "^2.0",
-        "narrowspark/collection"                 : "^0.1"
+        "php"                                          : "^7.1",
+        "doctrine/dbal"                                : "^2.5",
+        "ext-pdo"                                      : "*",
+        "narrowspark/collection"                       : "^0.1"
     },
     "require-dev": {
-        "container-interop/service-provider"     : "^0.3",
-        "phpunit/phpunit"                        : "^6.0",
-        "viserio/container"                      : "self.version"
+        "container-interop/service-provider"           : "^0.3",
+        "phpunit/phpunit"                              : "^6.0",
+        "viserio/container"                            : "self.version"
     },
     "autoload": {
         "psr-4": {
             "Viserio\\Bridge\\Doctrine\\DBAL\\"        : ""
         },
-        "exclude-from-classmap"                  : ["/Tests/"]
+        "exclude-from-classmap"                        : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
@@ -41,15 +40,14 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider"     : "Required to use service-provider (^0.3).",
-        "viserio/statical-proxy"                 : "Required to use the proxy instances (self.version).",
-        "fzaninotto/faker"                       : "Required to use the testing factory (^1.6).",
+        "container-interop/service-provider"           : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"                       : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                         : "1.0-dev"
+            "dev-master"                               : "1.0-dev"
         }
     },
-    "minimum-stability"                          : "dev",
-    "prefer-stable"                              : true
+    "minimum-stability"                                : "dev",
+    "prefer-stable"                                    : true
 }

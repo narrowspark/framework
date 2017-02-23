@@ -19,8 +19,8 @@
     ],
     "require": {
         "php"                                               : "^7.1",
-        "ext-pdo"                                           : "*",
-        "doctrine/migrations"                               : "^1.4"
+        "doctrine/migrations"                               : "^1.4",
+        "ext-pdo"                                           : "*"
     },
     "require-dev": {
         "container-interop/service-provider"                : "^0.3",

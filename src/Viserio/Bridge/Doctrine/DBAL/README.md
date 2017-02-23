@@ -1,4 +1,4 @@
-# Viserio Doctrine package
+# Viserio Doctrine DBAL package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 

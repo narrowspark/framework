@@ -2,7 +2,7 @@
     "name"       : "viserio/bridge/doctrine/testing",
     "type"       : "library",
     "description": "The Viserio Doctrine bridge.",
-    "keywords"   : ["narrowspark", "viserio", "testing", "doctrine", "bridge"],
+    "keywords"   : ["narrowspark", "viserio", "database", "testing", "doctrine", "bridge"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
