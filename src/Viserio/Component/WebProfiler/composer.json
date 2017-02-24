@@ -30,7 +30,7 @@
         "cache/array-adapter"                : "^0.4",
         "narrowspark/testing-helper"         : "^1.5",
         "phpunit/phpunit"                    : "^6.0",
-        "http-interop/http-middleware"       : "^0.3",
+        "http-interop/http-middleware"       : "^0.4",
         "viserio/cache"                      : "self.version",
         "viserio/container"                  : "self.version",
         "viserio/events"                     : "self.version",
@@ -56,7 +56,7 @@
     },
     "suggest": {
         "container-interop/service-provider" : "Required to use service-provider (^0.3).",
-        "http-interop/http-middleware"       : "Required to use middleware (^0.3).",
+        "http-interop/http-middleware"       : "Required to use middleware (^0.4).",
         "viserio/options-resolver"           : "Required to use service-provider (self.version).",
         "viserio/routing"                    : "Required to use the webprofiler assets controllers (self.version).",
         "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."

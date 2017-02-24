@@ -82,7 +82,7 @@ class Uri extends HttpUri implements UriInterface
             ->withPort(self::$supported_schemes[$scheme] ?? null)
             ->withUserInfo($user, $pass)
             ->withPath($path)
-            ->withQuery($query ?? '');
+            ->withQuery($query !== null ? $query : '');
     }
 
     /**

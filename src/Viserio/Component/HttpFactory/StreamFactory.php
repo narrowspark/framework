@@ -26,12 +26,9 @@ final class StreamFactory implements StreamFactoryInterface
      */
     public function createStreamFromFile($file, $mode = 'r'): StreamInterface
     {
-        $stream = fopen('php://temp', $mode);
+        $resource = fopen($file, $mode);
 
-        fwrite($stream, $file);
-        fseek($stream, 0);
-
-        return new Stream($stream);
+        return new Stream($resource);
     }
 
     /**

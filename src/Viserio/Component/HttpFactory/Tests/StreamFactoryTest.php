@@ -4,7 +4,6 @@ namespace Viserio\Component\HttpFactory\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Http\Stream;
 use Viserio\Component\HttpFactory\StreamFactory;
 
 class StreamFactoryTest extends TestCase
@@ -18,50 +17,48 @@ class StreamFactoryTest extends TestCase
 
     public function testCreateStream()
     {
-        $resource = tmpfile();
+        $string = 'would you like some crumpets?';
+        $stream = $this->factory->createStream($string);
+        $this->assertStream($stream, $string);
+    }
+
+    public function testCreateStreamFromFile()
+    {
+        $string   = 'would you like some crumpets?';
+        $filename = $this->createTemporaryFile();
+        file_put_contents($filename, $string);
+        $stream = $this->factory->createStreamFromFile($filename);
+        $this->assertStream($stream, $string);
+    }
+
+    public function testCreateStreamFromResource()
+    {
+        $string   = 'would you like some crumpets?';
+        $resource = $this->createTemporaryResource($string);
         $stream   = $this->factory->createStreamFromResource($resource);
-        self::assertStream($stream, '');
+        $this->assertStream($stream, $string);
     }
 
-    public function testKeepsPositionOfResource()
+    protected function assertStream($stream, $content)
     {
-        $resource = fopen(__FILE__, 'r');
-        fseek($resource, 10);
-
-        $stream = $this->factory->createStreamFromResource($resource);
-
-        self::assertEquals(10, $stream->tell());
-
-        $stream->close();
+        $this->assertInstanceOf(StreamInterface::class, $stream);
+        $this->assertSame($content, (string) $stream);
     }
 
-    public function testCreatesWithFactory()
+    protected function createTemporaryFile()
     {
-        $stream = $this->factory->createStream('foo');
-
-        self::assertInstanceOf(Stream::class, $stream);
-        self::assertEquals('foo', $stream->getContents());
-
-        $stream->close();
+        return tempnam(sys_get_temp_dir(), uniqid());
     }
 
-    public function testFactoryCreatesFromEmptyString()
+    protected function createTemporaryResource($content = null)
     {
-        self::assertInstanceOf(Stream::class, $this->factory->createStream(''));
-    }
+        $file     = $this->createTemporaryFile();
+        $resource = fopen($file, 'r+');
+        if ($content) {
+            fwrite($resource, $content);
+            rewind($resource);
+        }
 
-    public function testFactoryCreatesFromResource()
-    {
-        $resource = fopen(__FILE__, 'r');
-        $stream   = $this->factory->createStreamFromResource($resource);
-
-        self::assertInstanceOf(Stream::class, $stream);
-        self::assertSame(file_get_contents(__FILE__), (string) $stream);
-    }
-
-    private function assertStream($stream, $content)
-    {
-        self::assertInstanceOf(StreamInterface::class, $stream);
-        self::assertSame($content, (string) $stream);
+        return $resource;
     }
 }
