@@ -10,9 +10,9 @@ use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogue
 use Viserio\Component\Contracts\Translation\MessageSelector as MessageSelectorContract;
 use Viserio\Component\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
 class TranslationManager implements TranslationManagerContract, LoggerAwareInterface
 {

@@ -85,8 +85,8 @@ abstract class AbstractTransport implements Swift_Transport
      */
     protected function numberOfRecipients(Swift_Mime_Message $message): int
     {
-        $to = is_null($message->getTo()) ? [] : $message->getTo();
-        $cc = is_null($message->getCc()) ? [] : $message->getCc();
+        $to  = is_null($message->getTo()) ? [] : $message->getTo();
+        $cc  = is_null($message->getCc()) ? [] : $message->getCc();
         $bcc = is_null($message->getBcc()) ? [] : $message->getBcc();
 
         return count(array_merge($to, $cc, $bcc));

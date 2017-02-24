@@ -6,13 +6,13 @@ use Symfony\Component\VarDumper\Caster\Caster;
 use Symfony\Component\VarDumper\Caster\ClassStub;
 use Symfony\Component\VarDumper\Caster\LinkStub;
 use Symfony\Component\VarDumper\Caster\StubCaster;
+use Symfony\Component\VarDumper\Cloner\AbstractCloner;
 use Symfony\Component\VarDumper\Cloner\Stub;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Viserio\Component\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Component\Support\Debug\HtmlDumper;
 use Viserio\Component\Support\Str;
 use Viserio\Component\WebProfiler\Util\HtmlDumperOutput;
-use Symfony\Component\VarDumper\Cloner\AbstractCloner;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {
