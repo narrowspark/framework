@@ -16,7 +16,7 @@ class EncryptionWrapperTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Filesystem\FilesystemAdapter
+     * @var \Viserio\Component\Filesystem\Encryption\EncryptionWrapper
      */
     private $adapter;
 
@@ -107,7 +107,7 @@ class EncryptionWrapperTest extends TestCase
      */
     public function testRead()
     {
-        self::assertFalse($this->adapter->read('dont.txt'));
+        $this->adapter->read('dont.txt');
     }
 
     /**
@@ -115,7 +115,7 @@ class EncryptionWrapperTest extends TestCase
      */
     public function testReadStream()
     {
-        self::assertFalse($this->adapter->readStream('dont.txt'));
+        $this->adapter->readStream('dont.txt');
     }
 
     private function delTree($dir)

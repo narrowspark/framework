@@ -8,8 +8,12 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\Contracts\Support\Manager as ManagerContract;
 
-abstract class AbstractManager implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
+abstract class AbstractManager implements
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract,
+    ManagerContract
 {
     use ContainerAwareTrait;
     use ConfigurationTrait;

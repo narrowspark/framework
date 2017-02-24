@@ -8,8 +8,12 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\Contracts\Support\ConnectionManager as ConnectionManagerContract;
 
-abstract class AbstractConnectionManager implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
+abstract class AbstractConnectionManager implements
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract,
+    ConnectionManagerContract
 {
     use ContainerAwareTrait;
     use ConfigurationTrait;
