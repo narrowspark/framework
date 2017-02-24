@@ -7,8 +7,8 @@ use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Contracts\Support\Manager as ManagerContract;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 abstract class AbstractManager implements
     RequiresComponentConfigContract,
