@@ -2,6 +2,8 @@ includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
 
 parameters:
+    excludes_analyse:
+        - %currentWorkingDirectory%/*/*/Tests/*/Fixture/*
     ignoreErrors:
         - '#callable of class Twig_Function constructor#'
         - '#callable of class Twig_Filter constructor#'
@@ -12,9 +14,9 @@ parameters:
         - '#Function allheaders not found#'
         # Magic
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FacadeStub#'
-        - '#Undefined variable: $class#'
-        - '#Undefined variable: $router#'
-        - '#Undefined variable: $__env#'
+        - '#Undefined variable: \$class#'
+        - '#Undefined variable: \$router#'
+        - '#Undefined variable: \$__env#'
         - '#Call to an undefined static method Respect\\Validation\\Validator#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\LazyOpenStream::#'
