@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Commands;
 
+use Defuse\Crypto\Key;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Defuse\Crypto\Key;
 
 class KeyGenerateCommand extends Command
 {
