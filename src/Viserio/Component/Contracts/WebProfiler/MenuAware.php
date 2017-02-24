@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\WebProfiler;
 
-interface MenuAware
+interface MenuAware extends DataCollector
 {
     /**
      * Returns infos for a tab.
