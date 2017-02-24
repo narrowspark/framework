@@ -16,7 +16,6 @@ use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
-use Viserio\Component\WebProfiler\Util\TemplateHelper;
 
 class ViserioHttpDataCollector extends AbstractDataCollector implements
     MenuAwareContract,
@@ -274,7 +273,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             unset($result['uses']);
         } elseif (isset($action['uses']) && $action['uses'] instanceof Closure) {
             $reflector      = new ReflectionFunction($action['uses']);
-            $result['uses'] = TemplateHelper::dump($result['uses']);
+            $result['uses'] = $this->cloneVar($result['uses']);
         }
 
         if (isset($reflector)) {

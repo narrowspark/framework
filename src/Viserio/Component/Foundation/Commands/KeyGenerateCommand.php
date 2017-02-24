@@ -5,6 +5,7 @@ namespace Viserio\Component\Foundation\Commands;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Defuse\Crypto\Key;
 
 class KeyGenerateCommand extends Command
 {

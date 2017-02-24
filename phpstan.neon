@@ -9,6 +9,7 @@ parameters:
         - '#Call to an undefined method Predis\\Client::#'
         - '#Call to an undefined method Pheanstalk\\Pheanstalk::shouldReceive#'
         - '#Call to an undefined method Swift_Mime_Message::shouldReceive#'
+        - '#Function allheaders not found#'
         # Magic
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FacadeStub#'
         - '#Undefined variable: $class#'
@@ -21,6 +22,7 @@ parameters:
         # We only mock this dependency, and never really require it:
         - '#Call to an undefined method GuzzleHttp\\ClientInterface::post#'
         - '#Call to an undefined method Aws\\Ses\\SesClient::sendRawEmail#'
+        # Only if Mongo is not used.
         - '#Class MongoClient not found#'
         - '#Catched class MongoConnectionException not found#'
         # Mock dependencies
