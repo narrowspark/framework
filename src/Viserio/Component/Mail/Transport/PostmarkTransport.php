@@ -133,6 +133,8 @@ class PostmarkTransport extends AbstractTransport
                 return $part;
             }
         }
+
+        return null;
     }
 
     /**

@@ -135,7 +135,7 @@ class MailgunTransport extends AbstractTransport
      */
     protected function getTo(Swift_Mime_Message $message): string
     {
-        return $this->formatAddress($message->getTo());
+        return $this->formatAddress(is_null($message->getTo()) ? [] : $message->getTo());
     }
 
     /**
@@ -147,7 +147,7 @@ class MailgunTransport extends AbstractTransport
      */
     protected function getCc(Swift_Mime_Message $message): string
     {
-        return $this->formatAddress($message->getCc());
+        return $this->formatAddress(is_null($message->getCc()) ? [] : $message->getCc());
     }
 
     /**
@@ -159,7 +159,7 @@ class MailgunTransport extends AbstractTransport
      */
     protected function getBcc(Swift_Mime_Message $message): string
     {
-        return $this->formatAddress($message->getBcc());
+        return $this->formatAddress(is_null($message->getBcc()) ? [] : $message->getBcc());
     }
 
     /**

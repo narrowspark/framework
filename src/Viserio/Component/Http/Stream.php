@@ -211,7 +211,7 @@ class Stream implements StreamInterface
     public function getSize(): ?int
     {
         if ($this->size !== null) {
-            return $this->size;
+            return (int) $this->size;
         }
 
         if (! isset($this->stream)) {
@@ -228,7 +228,7 @@ class Stream implements StreamInterface
         if (isset($stats['size'])) {
             $this->size = $stats['size'];
 
-            return $this->size;
+            return (int) $this->size;
         }
     }
 

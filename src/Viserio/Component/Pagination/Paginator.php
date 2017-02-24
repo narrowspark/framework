@@ -89,6 +89,8 @@ class Paginator extends AbstractPaginator
         if ($this->hasMorePages()) {
             return $this->getUrl($this->getCurrentPage() + 1);
         }
+
+        return null;
     }
 
     /**

@@ -12,6 +12,7 @@ use Viserio\Component\Contracts\WebProfiler\DataCollector as DataCollectorContra
 use Viserio\Component\Support\Debug\HtmlDumper;
 use Viserio\Component\Support\Str;
 use Viserio\Component\WebProfiler\Util\HtmlDumperOutput;
+use Symfony\Component\VarDumper\Cloner\AbstractCloner;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {

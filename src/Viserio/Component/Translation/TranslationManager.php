@@ -12,6 +12,7 @@ use Viserio\Component\Contracts\Translation\PluralizationRules as PluralizationR
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
+use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
 class TranslationManager implements TranslationManagerContract, LoggerAwareInterface
 {
@@ -233,6 +234,8 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
         if (isset($this->langFallback[$lang])) {
             return $this->langFallback[$lang];
         }
+
+        return null;
     }
 
     /**
@@ -280,7 +283,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @return \Viserio\Component\Contracts\Translation\Translator
      */
-    public function getTranslator(string $locale = null): self
+    public function getTranslator(string $locale = null): TranslatorContract
     {
         $lang = $locale ?? $this->locale;
 
