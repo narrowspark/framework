@@ -71,8 +71,10 @@ class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
+        require_once(__DIR__ . '/Fixture/View/profilewithcollector.html.php');
+
         static::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithcollector.html')),
+            $this->removeId($text),
             $this->removeId($template->render())
         );
     }
