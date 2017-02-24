@@ -58,7 +58,7 @@ class PostmarkTransportTest extends TestCase
                         'Subject'  => 'Is alive!',
                         'HtmlBody' => '<q>Narrowspark</q>',
                         'Headers'  => [
-                            ['Name' => 'Message-ID', 'Value' => '<' . $headers->get('Message-ID') . '>'],
+                            ['Name' => 'Message-ID', 'Value' => '<' . $headers->get('Message-ID')->getId() . '>'],
                             ['Name' => 'X-PM-KeepID', 'Value' => 'true'],
                             ['Name' => 'X-Priority', 'Value' => '1 (Highest)'],
                         ],

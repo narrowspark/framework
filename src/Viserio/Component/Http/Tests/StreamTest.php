@@ -175,7 +175,7 @@ class StreamTest extends TestCase
         self::assertFalse($stream->isSeekable());
         self::assertFalse($stream->isReadable());
         self::assertFalse($stream->isWritable());
-        self::assertNull($stream->getSize());
+        self::assertSame(0, $stream->getSize());
         self::assertEmpty($stream->getMetadata());
     }
 
