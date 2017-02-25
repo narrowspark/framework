@@ -147,13 +147,15 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function getVerbosity($level = null): int
     {
-        if (isset($this->verbosityMap[$level])) {
-            return $this->verbosityMap[$level];
-        } elseif (! is_int($level)) {
+        if ($level === null) {
             return $this->verbosity;
         }
 
-        return $level;
+        if (isset($this->verbosityMap[$level])) {
+            return $this->verbosityMap[$level];
+        }
+
+        return (int) $level;
     }
 
     /**

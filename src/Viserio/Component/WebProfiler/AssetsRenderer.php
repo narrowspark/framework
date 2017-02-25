@@ -59,7 +59,7 @@ class AssetsRenderer implements RenderableContract
     protected $webprofiler;
 
     /**
-     * [$rootPath description].
+     * Root path to the resources.
      *
      * @var string
      */

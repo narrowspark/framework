@@ -55,6 +55,8 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
+        $session = null;
+
         // If a session driver has been configured, we will need to start the session
         // so that the data is ready.
         if ($this->isSessionConfigured()) {

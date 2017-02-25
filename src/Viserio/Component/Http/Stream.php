@@ -110,7 +110,7 @@ class Stream implements StreamInterface
         $this->stream = $stream;
 
         if (isset($options['size'])) {
-            $this->size = $options['size'];
+            $this->size = (int) $options['size'];
         }
 
         $this->meta = isset($options['metadata'])
@@ -226,7 +226,7 @@ class Stream implements StreamInterface
         $stats = fstat($this->stream);
 
         if (isset($stats['size'])) {
-            $this->size = $stats['size'];
+            $this->size = (int) $stats['size'];
 
             return (int) $this->size;
         }

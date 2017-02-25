@@ -3,30 +3,69 @@ includes:
 
 parameters:
     excludes_analyse:
-        - %currentWorkingDirectory%/*/*/Tests/*/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Bridge/*/Tests/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Component/*/Tests/Fixture/*
+        # Needs https://github.com/narrowspark/framework/issues/394
+        - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
     ignoreErrors:
+        # They are array callables
         - '#callable of class Twig_Function constructor#'
         - '#callable of class Twig_Filter constructor#'
         - '#callable of method Invoker\\InvokerInterface::call#'
-        - '#Call to an undefined method Predis\\Client::#'
-        - '#Call to an undefined method Pheanstalk\\Pheanstalk::shouldReceive#'
+
+        # Magic functions, call and static call
         - '#Call to an undefined method Swift_Mime_Message::shouldReceive#'
-        - '#Function allheaders not found#'
-        # Magic
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FacadeStub#'
+        - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
+        - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
+        - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
+        - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\MacroTest::#'
+        - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Fixture\\MacroTest::#'
+        - '#Access to an undefined property Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::\$protectedVariable#'
+        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionFacadeStub::arg#'
+        - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
+        - '#Function allheaders not found#'
+        - '#Call to an undefined static method Respect\\Validation\\Validator#'
+        - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
+        - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\Command\\ClosureCommandTest::comment#'
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Container\\Container::needs#'
+        - '#Call to an undefined method Viserio\\Component\\Log\\Writer::getName#'
+        - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
+        - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
+        - '#Cannot call method getTarget#'
+        - '#Cannot call method getName#'
+
+        # Required file variables
         - '#Undefined variable: \$class#'
         - '#Undefined variable: \$router#'
         - '#Undefined variable: \$__env#'
-        - '#Call to an undefined static method Respect\\Validation\\Validator#'
-        - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
+        - '#Undefined variable: \$text#'
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\LazyOpenStream::#'
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::#'
+
+        # Not call parent constructors
+        - '#Viserio\\Component\\Console\\Command\\Command::\__construct does not call parent constructor#'
+
         # We only mock this dependency, and never really require it:
         - '#Call to an undefined method GuzzleHttp\\ClientInterface::post#'
         - '#Call to an undefined method Aws\\Ses\\SesClient::sendRawEmail#'
+
         # Only if Mongo is not used.
         - '#Class MongoClient not found#'
         - '#Catched class MongoConnectionException not found#'
+
         # Mock dependencies
         - '#Mockery\\MockInterface#'
         - '#PHPUnit_Framework_MockObject_MockObject#'
+        - '#org\\bovigo\\vfs\\vfsStream#'
+
+        # Tests
+        - '\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource, true given#'
+        - '#Call to an undefined method Viserio\\Component\\Http\\AbstractMessage::withUri#'
+        - '\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
+        - '#\$callback of class Viserio\\Component\\Cron\\CallbackCron constructor expects#'
+        - '#Access to an undefined property Viserio\\Component\\Events\\Tests\\EventTest::\$event#'
+
+        # Is wrong
+        - '#Property Viserio\\Component\\Cookie\\AbstractCookie::\$maxAge#'
+        - '#Method Viserio\\Component\\Cron\\CallbackCron::getSummaryForDisplay#'

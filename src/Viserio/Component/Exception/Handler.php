@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception;
 
+use Exception;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
@@ -17,6 +18,8 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
 use Viserio\Component\Exception\Filters\VerboseFilter;
+use Viserio\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
@@ -202,14 +205,14 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * Create a response for the given exception.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $exception
+     * @param \Exception                               $exception
      * @param \Throwable                               $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getResponse(
         ServerRequestInterface $request,
-        Throwable $exception,
+        Exception $exception,
         Throwable $transformed
     ): ResponseInterface {
         $id          = $this->exceptionIdentifier->identify($exception);

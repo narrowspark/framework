@@ -19,7 +19,7 @@ class RequestCookies extends AbstractCookieCollector
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof Cookie)) {
                 throw new RuntimeException(sprintf(
-                    'The object [%s] must be an instance of \Viserio\Component\Cookie\Cookie',
+                    'The object [%s] must be an instance of "\Viserio\Component\Cookie\Cookie".',
                     get_class($cookie)
                 ));
             }
@@ -35,7 +35,7 @@ class RequestCookies extends AbstractCookieCollector
      *
      * @return self
      */
-    public static function fromRequest(ServerRequestInterface $request): RequestCookies
+    public static function fromRequest(ServerRequestInterface $request): self
     {
         return new static(self::listFromCookieString($request->getHeaderLine('Cookie')));
     }

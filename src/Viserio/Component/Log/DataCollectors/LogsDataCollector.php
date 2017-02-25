@@ -55,6 +55,8 @@ class LogsDataCollector extends MessagesDataCollector implements PanelAwareContr
         $logs = [];
 
         foreach ($this->data['messages'] as $file) {
+            $name = '';
+
             foreach ($this->storages as $storage) {
                 $name = $this->stripBasePath($storage, $file);
             }

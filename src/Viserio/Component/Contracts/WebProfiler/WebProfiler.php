@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\WebProfiler;
 
 use Viserio\Component\Contracts\WebProfiler\DataCollector as DataCollectorContract;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 interface WebProfiler
 {
@@ -17,6 +19,19 @@ interface WebProfiler
      * @return $this
      */
     public function addCollector(DataCollectorContract $collector, int $priority = 100): WebProfiler;
+
+    /**
+     * Modify the response and inject the debugbar.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function modifyResponse(
+        ServerRequestInterface $serverRequest,
+        ResponseInterface $response
+    ): ResponseInterface;
 
     /**
      * Checks if a data collector has been added.

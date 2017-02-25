@@ -18,7 +18,7 @@ interface QueueingFactory extends Factory
      *
      * @return void
      */
-    public function unqueue(string $name);
+    public function unqueue(string $name): void;
 
     /**
      * Determine if a cookie has been queued.
@@ -35,9 +35,9 @@ interface QueueingFactory extends Factory
      * @param string     $key
      * @param mixed|null $default
      *
-     * @return CookieContract|null
+     * @return \Viserio\Component\Contracts\Cookie\Cookie|null
      */
-    public function queued(string $key, $default = null);
+    public function queued(string $key, $default = null): ?Cookie;
 
     /**
      * Get the cookies which have been queued for the next request.

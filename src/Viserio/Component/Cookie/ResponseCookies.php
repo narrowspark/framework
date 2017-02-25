@@ -35,9 +35,9 @@ class ResponseCookies extends AbstractCookieCollector
      *
      * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return $this
+     * @return self
      */
-    public static function fromResponse(ResponseInterface $response)
+    public static function fromResponse(ResponseInterface $response): self
     {
         return new static(array_map(function ($setCookieString) {
             return self::fromStringCookie($setCookieString);

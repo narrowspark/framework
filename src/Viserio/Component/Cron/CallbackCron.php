@@ -26,8 +26,8 @@ class CallbackCron extends Cron
     /**
      * Create a new callback cron instance.
      *
-     * @param string|callable                   $callback
      * @param \Psr\Cache\CacheItemPoolInterface $cache
+     * @param string|callable                   $callback
      * @param array                             $parameters
      *
      * @throws \InvalidArgumentException
@@ -40,8 +40,9 @@ class CallbackCron extends Cron
             );
         }
 
+        parent::__construct($cache, '');
+
         $this->callback   = $callback;
-        $this->cache      = $cache;
         $this->parameters = $parameters;
     }
 
@@ -78,7 +79,7 @@ class CallbackCron extends Cron
      *
      * @throws \LogicException
      *
-     * @return $this
+     * @return \Viserio\Component\Contracts\Cron\Cron
      */
     public function withoutOverlapping(): CronContract
     {

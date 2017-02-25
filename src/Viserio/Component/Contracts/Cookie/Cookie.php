@@ -183,7 +183,7 @@ interface Cookie
     /**
      * Gets the SameSite attribute.
      *
-     * @return string|null
+     * @return string|bool|null
      */
     public function getSameSite();
 

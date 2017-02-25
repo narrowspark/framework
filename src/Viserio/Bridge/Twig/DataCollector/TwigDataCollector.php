@@ -9,13 +9,11 @@ use Twig_Markup;
 use Twig_Profiler_Dumper_Html;
 use Twig_Profiler_Profile;
 use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class TwigDataCollector extends AbstractDataCollector implements
-    MenuAwareContract,
     PanelAwareContract,
     AssetAwareContract,
     TooltipAwareContract

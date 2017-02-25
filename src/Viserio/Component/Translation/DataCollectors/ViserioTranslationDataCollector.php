@@ -6,13 +6,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class ViserioTranslationDataCollector extends AbstractDataCollector implements
-    MenuAwareContract,
     TooltipAwareContract,
     PanelAwareContract
 {
