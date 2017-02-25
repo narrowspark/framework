@@ -30,7 +30,7 @@ abstract class AbstractCookieCollector
      *
      * @param string $name
      *
-     * @return \Viserio\Component\Cookie\Cookie|Viserio\Component\Cookie\SetCookie|null
+     * @return \Viserio\Component\Cookie\Cookie|\Viserio\Component\Cookie\SetCookie|null
      */
     public function get(string $name)
     {
@@ -54,7 +54,7 @@ abstract class AbstractCookieCollector
     /**
      * Add a request cookie to the stack.
      *
-     * @param \Viserio\Component\Cookie\Cookie|Viserio\Component\Cookie\SetCookie $cookie
+     * @param \Viserio\Component\Cookie\Cookie|\Viserio\Component\Cookie\SetCookie $cookie
      *
      * @throws \RuntimeException
      *

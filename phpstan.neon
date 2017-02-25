@@ -44,7 +44,7 @@ parameters:
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::#'
 
         # Not call parent constructors
-        - '#Viserio\\Component\\Console\\Command\\Command::\__construct does not call parent constructor#'
+        - '#Viserio\\Component\\Console\\Command\\Command::__construct#'
 
         # We only mock this dependency, and never really require it:
         - '#Call to an undefined method GuzzleHttp\\ClientInterface::post#'
@@ -70,3 +70,11 @@ parameters:
         # Is wrong
         - '#Property Viserio\\Component\\Cookie\\AbstractCookie::\$maxAge#'
         - '#Method Viserio\\Component\\Cron\\CallbackCron::getSummaryForDisplay#'
+        #Throwable is the base class for all erros
+        - '#expects Throwable#'
+        #spliceIntoPosition returns cron class
+        - '#should return \$this but returns \$this->spliceIntoPosition#'
+        #Is a protected method
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Cron\\Cron::spliceIntoPosition#'
+        #Returns a clone class
+        - '#Method Viserio\\Component\\Cookie\\AbstractCookieCollector::forget#'
