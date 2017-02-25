@@ -51,6 +51,7 @@ parameters:
         - '#Call to an undefined method Aws\\Ses\\SesClient::sendRawEmail#'
 
         # Only if Mongo is not used.
+        - '#Class Mongo not found#'
         - '#Class MongoClient not found#'
         - '#Catched class MongoConnectionException not found#'
 
@@ -60,9 +61,9 @@ parameters:
         - '#org\\bovigo\\vfs\\vfsStream#'
 
         # Tests
-        - '\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource, true given#'
+        - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource, true given#'
         - '#Call to an undefined method Viserio\\Component\\Http\\AbstractMessage::withUri#'
-        - '\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
+        - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
         - '#\$callback of class Viserio\\Component\\Cron\\CallbackCron constructor expects#'
         - '#Access to an undefined property Viserio\\Component\\Events\\Tests\\EventTest::\$event#'
 
