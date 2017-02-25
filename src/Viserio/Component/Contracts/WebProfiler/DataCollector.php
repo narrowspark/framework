@@ -27,7 +27,7 @@ interface DataCollector
      *  - icon
      *  - label
      *  - value
-     *  - class
+     *  - class.
      *
      * @return array
      */

@@ -4,5 +4,4 @@ namespace Viserio\Component\WebProfiler\DataCollectors\Bridge\PDO;
 
 class TracedStatement
 {
-
 }

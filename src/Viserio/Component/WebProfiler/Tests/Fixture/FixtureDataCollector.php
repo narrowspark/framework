@@ -73,18 +73,15 @@ class FixtureDataCollector extends AbstractDataCollector
         ]);
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function getMenu(): array
     {
-
         return [
             'icon'  => '',
             'label' => '',
             'value' => '',
         ];
     }
-
 }

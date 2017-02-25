@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\DataCollectors\Bridge\PDO;
 
 use PDO;
-use TracedStatement;
 use PDOException;
+use TracedStatement;
 
 class TraceablePDODecorater extends PDO
 {
@@ -150,37 +150,44 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * Returns the accumulated execution time of statements
+     * Returns the accumulated execution time of statements.
      *
      * @return int
      */
     public function getAccumulatedStatementsDuration(): int
     {
-        return array_reduce($this->executedStatements, function ($v, $s) { return $v + $s->getDuration(); });
+        return array_reduce($this->executedStatements, function ($v, $s) {
+            return $v + $s->getDuration();
+        });
     }
 
     /**
-     * Returns the peak memory usage while performing statements
+     * Returns the peak memory usage while performing statements.
      *
      * @return int
      */
     public function getMemoryUsage(): int
     {
-        return array_reduce($this->executedStatements, function ($v, $s) { return $v + $s->getMemoryUsage(); });
+        return array_reduce($this->executedStatements, function ($v, $s) {
+            return $v + $s->getMemoryUsage();
+        });
     }
 
     /**
-     * Returns the peak memory usage while performing statements
+     * Returns the peak memory usage while performing statements.
      *
      * @return int
      */
     public function getPeakMemoryUsage(): int
     {
-        return array_reduce($this->executedStatements, function ($v, $s) { $m = $s->getEndMemory(); return $m > $v ? $m : $v; });
+        return array_reduce($this->executedStatements, function ($v, $s) {
+            $m = $s->getEndMemory();
+            return $m > $v ? $m : $v;
+        });
     }
 
     /**
-     * Returns the list of executed statements as TracedStatement objects
+     * Returns the list of executed statements as TracedStatement objects.
      *
      * @return array
      */
@@ -190,22 +197,24 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * Returns the list of failed statements
+     * Returns the list of failed statements.
      *
      * @return array
      */
     public function getFailedExecutedStatements(): array
     {
-        return array_filter($this->executedStatements, function ($s) { return !$s->isSuccess(); });
+        return array_filter($this->executedStatements, function ($s) {
+            return ! $s->isSuccess();
+        });
     }
 
     /**
      * Profiles a call to a PDO method.
      *
-     * @param  string $method
-     * @param  string $sql
-     * @param  array  $args
-
+     * @param string $method
+     * @param string $sql
+     * @param array  $args
+     *
      * @return mixed
      */
     protected function profileCall(string $method, string $sql, array $args)
@@ -216,14 +225,14 @@ class TraceablePDODecorater extends PDO
         $ex = null;
 
         try {
-            $result = call_user_func_array(array($this->pdo, $method), $args);
+            $result = call_user_func_array([$this->pdo, $method], $args);
         } catch (PDOException $e) {
             $ex = $e;
         }
 
         if ($this->pdo->getAttribute(PDO::ATTR_ERRMODE) !== PDO::ERRMODE_EXCEPTION && $result === false) {
             $error = $this->pdo->errorInfo();
-            $ex = new PDOException($error[2], $error[0]);
+            $ex    = new PDOException($error[2], $error[0]);
         }
 
         $trace->end($ex);

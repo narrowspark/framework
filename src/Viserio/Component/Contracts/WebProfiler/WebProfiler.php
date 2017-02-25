@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\WebProfiler;
 
-use Viserio\Component\Contracts\WebProfiler\DataCollector as DataCollectorContract;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 
 interface WebProfiler
 {
