@@ -119,7 +119,7 @@ parameters:
         - '#Viserio\\Component\\WebProfiler\\DataCollectors\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
 
         # Ignore missing container property for ConfigurationTrait
-        - '#Access to an undefined property Viserio\\Component\\Exception\\Displayers\\HtmlDisplayer::$container#'
-        - '#Access to an undefined property Viserio\\Component\\Exception\\Filters\\VerboseFilter::$container#'
-        - '#Access to an undefined property Viserio\\Component\\Exception\\Filters\\VerboseFilter::$container#'
-        - '#Access to an undefined property Viserio\\Component\\View\\ViewFinder::$container#'
+        - '#Access to an undefined property Viserio\\Component\\Exception\\Displayers\\HtmlDisplayer::\$container#'
+        - '#Access to an undefined property Viserio\\Component\\Exception\\Filters\\VerboseFilter::\$container#'
+        - '#Access to an undefined property Viserio\\Component\\OptionsResolver\\Tests\\Fixtures\\ConfigurationTraitAwareConfiguration::\$container#'
+        - '#Access to an undefined property Viserio\\Component\\View\\ViewFinder::\$container#'
