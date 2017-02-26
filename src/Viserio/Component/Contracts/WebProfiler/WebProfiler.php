@@ -84,8 +84,10 @@ interface WebProfiler
      * Set a url generator instance.
      *
      * @param \Viserio\Component\Contracts\Routing\UrlGenerator $urlGenerator
+     *
+     * @return $this
      */
-    public function setUrlGenerator(UrlGeneratorContract $urlGenerator);
+    public function setUrlGenerator(UrlGeneratorContract $urlGenerator): self;
 
     /**
      * Get a url generator instance.

@@ -15,7 +15,7 @@ class ContainerAwareTraitTest extends TestCase
     {
         $this->setContainer(new ArrayContainer());
 
-        self::assertInstanceOf(ContainerInterface::class, $this->getcontainer());
+        self::assertInstanceOf(ContainerInterface::class, $this->getContainer());
     }
 
     /**
@@ -24,6 +24,6 @@ class ContainerAwareTraitTest extends TestCase
      */
     public function testGetContainerThrowExceptionIfContainerIsNotSet()
     {
-        $this->getcontainer();
+        $this->getContainer();
     }
 }

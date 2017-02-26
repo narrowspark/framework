@@ -285,6 +285,13 @@ interface Router
     public function setMiddlewarePriorities(array $middlewarePriorities);
 
     /**
+     * Add a list of middlewares.
+     *
+     * @param array $middlewares
+     */
+    public function addMiddlewares(array $middlewares): void;
+
+    /**
      * Get the currently dispatched route instance.
      *
      * @return \Viserio\Component\Contracts\Routing\Route|null
@@ -306,4 +313,29 @@ interface Router
      * @return \Viserio\Component\Contracts\Routing\RouteCollection
      */
     public function getRoutes(): RouteCollection;
+
+    /**
+     * Set the cache path for compiled routes.
+     *
+     * @param string $path
+     *
+     * @return \Viserio\Component\Contracts\Routing\Router
+     */
+    public function setCachePath(string $path): Router;
+
+    /**
+     * Get the cache path for the compiled routes.
+     *
+     * @return string
+     */
+    public function getCachePath(): string;
+
+    /**
+     * Refresh cache file on development.
+     *
+     * @param bool $refreshCache
+     *
+     * @return \Viserio\Component\Contracts\Routing\Router
+     */
+    public function refreshCache(bool $refreshCache): Router;
 }

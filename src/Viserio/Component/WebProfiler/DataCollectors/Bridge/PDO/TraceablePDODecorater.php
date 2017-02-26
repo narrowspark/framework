@@ -4,7 +4,6 @@ namespace Viserio\Component\WebProfiler\DataCollectors\Bridge\PDO;
 
 use PDO;
 use PDOException;
-use TracedStatement;
 
 class TraceablePDODecorater extends PDO
 {
@@ -223,7 +222,8 @@ class TraceablePDODecorater extends PDO
         $trace = new TracedStatement($sql);
         $trace->start();
 
-        $ex = null;
+        $ex     = null;
+        $result = null;
 
         try {
             $result = call_user_func_array([$this->pdo, $method], $args);

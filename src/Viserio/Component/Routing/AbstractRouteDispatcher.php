@@ -78,7 +78,7 @@ abstract class AbstractRouteDispatcher
      *
      * @param array $middlewares
      */
-    public function addMiddlewares(array $middlewares)
+    public function addMiddlewares(array $middlewares): void
     {
         $this->middlewares = $middlewares;
     }
@@ -93,7 +93,7 @@ abstract class AbstractRouteDispatcher
      *
      * @codeCoverageIgnore
      */
-    public function setMiddlewareGroup(string $name, array $middleware)
+    public function setMiddlewareGroup(string $name, array $middleware): self
     {
         $this->middlewareGroups[$name] = $middleware;
 
@@ -109,7 +109,7 @@ abstract class AbstractRouteDispatcher
      *
      * @codeCoverageIgnore
      */
-    public function setMiddlewarePriorities(array $middlewarePriorities)
+    public function setMiddlewarePriorities(array $middlewarePriorities): self
     {
         $this->middlewarePriority = $middlewarePriorities;
 

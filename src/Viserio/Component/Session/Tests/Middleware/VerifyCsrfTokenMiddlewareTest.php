@@ -27,7 +27,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     private $files;
 
     /**
-     * @var \Viserio\Component\Encryption\Encrypter
+     * @var \Viserio\Component\Encryption\Encrypter|null
      */
     private $encrypter;
 
@@ -44,7 +44,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     public function tearDown()
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
-        $this->files = $this->manager = null;
+        $this->files = $this->encrypter = null;
 
         parent::tearDown();
     }

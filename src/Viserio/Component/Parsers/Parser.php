@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
+use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
@@ -90,17 +91,21 @@ class Parser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        if (! $payload) {
+        if ($payload === '') {
             return [];
         }
 
         $format = $this->getFormat($payload);
 
         if ($format !== 'php') {
-            $payload = self::normalizeDirectorySeparator($payload);
+            $fileName = self::normalizeDirectorySeparator($payload);
 
-            if (is_file($payload)) {
-                $payload = file_get_contents($payload);
+            if (is_file($fileName)) {
+                $payload  = file_get_contents($fileName);
+            }
+
+            if ($payload === false) {
+                throw new RuntimeException(sprintf('A error occurred during reading "%s"', $fileName));
             }
         }
 
