@@ -21,7 +21,7 @@ class RackspaceConnectorTest extends TestCase
                 'region'    => 'LON',
                 'username'  => 'your-username',
                 'apiKey'    => 'your-api-key',
-                'container' => 'your-container',
+                'container' => null,
             ]);
         } catch (CurlException $e) {
             $this->markTestSkipped('No internet connection');
@@ -40,7 +40,7 @@ class RackspaceConnectorTest extends TestCase
             'region'    => 'LON',
             'username'  => 'your-username',
             'apiKey'    => 'your-api-key',
-            'container' => 'your-container',
+            'container' => null,
         ]);
     }
 
@@ -56,7 +56,7 @@ class RackspaceConnectorTest extends TestCase
             'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
             'username'  => 'your-username',
             'apiKey'    => 'your-api-key',
-            'container' => 'your-container',
+            'container' => null,
         ]);
     }
 
@@ -72,7 +72,7 @@ class RackspaceConnectorTest extends TestCase
             'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
             'region'    => 'LON',
             'apiKey'    => 'your-api-key',
-            'container' => 'your-container',
+            'container' => null,
         ]);
     }
 
@@ -88,7 +88,7 @@ class RackspaceConnectorTest extends TestCase
             'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
             'region'    => 'LON',
             'username'  => 'your-username',
-            'container' => 'your-container',
+            'container' => null,
         ]);
     }
 
@@ -109,6 +109,23 @@ class RackspaceConnectorTest extends TestCase
     }
 
     /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage OpenCloud\ObjectStore\Service::getContainer" expects only stdClass or null.
+     */
+    public function testConnectWithWrongContainer()
+    {
+        $connector = new RackspaceConnector();
+
+        $connector->connect([
+            'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+            'region'    => 'LON',
+            'username'  => 'your-username',
+            'apiKey'    => 'your-api-key',
+            'container' => 'test',
+        ]);
+    }
+
+    /**
      * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
      */
     public function testConnectWithInternal()
@@ -121,7 +138,7 @@ class RackspaceConnectorTest extends TestCase
                 'region'    => 'LON',
                 'username'  => 'your-username',
                 'apiKey'    => 'your-api-key',
-                'container' => 'your-container',
+                'container' => null,
                 'internal'  => true,
             ]);
         } catch (CurlException $e) {
@@ -142,7 +159,7 @@ class RackspaceConnectorTest extends TestCase
                 'region'    => 'LON',
                 'username'  => 'your-username',
                 'apiKey'    => 'your-api-key',
-                'container' => 'your-container',
+                'container' => null,
                 'internal'  => false,
             ]);
         } catch (CurlException $e) {

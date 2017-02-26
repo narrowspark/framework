@@ -4,7 +4,6 @@ namespace Viserio\Component\Log;
 
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
-use Monolog\Processor\PsrLogMessageProcessor;
 use Psr\Log\LoggerTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Log\Log as LogContract;
@@ -21,21 +20,18 @@ class Writer implements LogContract
     /**
      * The handler parser instance.
      *
-     * @var HandlerParser
+     * @var \Viserio\Component\Log\HandlerParser
      */
     protected $handlerParser;
 
     /**
      * Create a new log writer instance.
      *
-     * @param \Monolog\Logger $monolog
+     * @param \Viserio\Component\Log\HandlerParser $handlerParser
      */
-    public function __construct(MonologLogger $monolog)
+    public function __construct(HandlerParser $handlerParser)
     {
-        // PSR 3 log message formatting for all handlers
-        $monolog->pushProcessor(new PsrLogMessageProcessor());
-
-        $this->handlerParser = new HandlerParser($monolog);
+        $this->handlerParser = $handlerParser;
     }
 
     /**
@@ -80,7 +76,7 @@ class Writer implements LogContract
         $formatter = null
     ) {
         $this->handlerParser->parseHandler(
-            new RotatingFileHandler($path, $days, $this->parseLevel($level)),
+            new RotatingFileHandler($path, $days, self::parseLevel($level)),
             '',
             '',
             $processor,
@@ -123,18 +119,6 @@ class Writer implements LogContract
     public function getMonolog(): MonologLogger
     {
         return $this->handlerParser->getMonolog();
-    }
-
-    /**
-     * Get the handler parser instance.
-     *
-     * @return \Viserio\Component\Log\HandlerParser
-     *
-     * @codeCoverageIgnore
-     */
-    public function getHandlerParser(): HandlerParser
-    {
-        return $this->handlerParser;
     }
 
     /**

@@ -182,6 +182,7 @@ class TraceablePDODecorater extends PDO
     {
         return array_reduce($this->executedStatements, function ($v, $s) {
             $m = $s->getEndMemory();
+
             return $m > $v ? $m : $v;
         });
     }

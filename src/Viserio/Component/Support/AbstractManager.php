@@ -72,9 +72,7 @@ abstract class AbstractManager implements
     }
 
     /**
-     * Get manager config.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getConfig(): array
     {
@@ -82,9 +80,7 @@ abstract class AbstractManager implements
     }
 
     /**
-     * Get the default driver name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getDefaultDriver(): string
     {
@@ -92,23 +88,17 @@ abstract class AbstractManager implements
     }
 
     /**
-     * Set the default driver name.
-     *
-     * @param string $name
+     * {@inheritdoc}
      */
-    public function setDefaultDriver(string $name)
+    public function setDefaultDriver(string $name): void
     {
         $this->options['default'] = $name;
     }
 
     /**
-     * Get a driver instance.
-     *
-     * @param string|null $driver
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function getDriver(string $driver = null)
+    public function getDriver(?string $driver = null)
     {
         $driver = $driver ?? $this->getDefaultDriver();
 
@@ -125,20 +115,15 @@ abstract class AbstractManager implements
     }
 
     /**
-     * Register a custom driver creator Closure.
-     *
-     * @param string   $driver
-     * @param \Closure $callback
+     * {@inheritdoc}
      */
-    public function extend(string $driver, Closure $callback)
+    public function extend(string $driver, Closure $callback): void
     {
         $this->extensions[$driver] = $callback->bindTo($this, $this);
     }
 
     /**
-     * Get all of the created "drivers".
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getDrivers(): array
     {
@@ -146,11 +131,7 @@ abstract class AbstractManager implements
     }
 
     /**
-     * Check if the given driver is supported.
-     *
-     * @param string $driver
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasDriver(string $driver): bool
     {
@@ -160,11 +141,7 @@ abstract class AbstractManager implements
     }
 
     /**
-     * Get the configuration for a driver.
-     *
-     * @param string $name
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getDriverConfig(string $name): array
     {
@@ -183,13 +160,7 @@ abstract class AbstractManager implements
     }
 
     /**
-     * Make a new driver instance.
-     *
-     * @param array $config
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function createDriver(array $config)
     {

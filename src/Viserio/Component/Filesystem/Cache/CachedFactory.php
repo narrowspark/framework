@@ -71,7 +71,7 @@ class CachedFactory
         if (($cache = $this->cacheManager) !== null) {
             if ($cache->hasDriver($cacheConfig['driver'])) {
                 return new Psr6Cache(
-                    $cache->driver($cacheConfig['driver']),
+                    $cache->getDriver($cacheConfig['driver']),
                     $cacheConfig['key'],
                     $cacheConfig['expire']
                 );

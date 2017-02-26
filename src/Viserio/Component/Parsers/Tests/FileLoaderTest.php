@@ -18,7 +18,7 @@ class FileLoaderTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Filesystem\FileLoader
+     * @var \Viserio\Component\Parsers\FileLoader
      */
     private $fileloader;
 

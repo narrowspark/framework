@@ -9,22 +9,41 @@ use Viserio\Component\Http\Util;
 
 class PumpStream implements StreamInterface
 {
-    /** @var callable */
+    /**
+     * The size of the stream if known.
+     *
+     * @var null|int
+     */
+    protected $size;
+    /**
+     * Source of the stream data.
+     *
+     * @var callable|null
+     */
     private $source;
 
-    /** @var int */
-    private $size;
-
-    /** @var int|false */
+    /**
+     *@var int
+     */
     private $tellPos = 0;
 
-    /** @var array */
+    /**
+     * Stream metadata.
+     *
+     * @var array
+     */
     private $metadata;
 
-    /** @var BufferStream */
+    /**
+     * Buffer stream instance.
+     *
+     * @var \Viserio\Component\Http\Stream\BufferStream
+     */
     private $buffer;
 
     /**
+     * Create a new pump stream instance.
+     *
      * @param callable $source  Source of the stream data. The callable MAY
      *                          accept an integer argument used to control the
      *                          amount of data to return. The callable MUST
@@ -67,7 +86,7 @@ class PumpStream implements StreamInterface
      */
     public function detach()
     {
-        $this->tellPos = false;
+        $this->tellPos = 0;
         $this->source  = null;
     }
 

@@ -126,9 +126,9 @@ class QueueMailer extends Mailer implements QueueMailerContract
      *
      * @param \Closure|string $callback
      *
-     * @return string
+     * @return \Closure|\Opis\Closure\SerializableClosure
      */
-    protected function buildQueueCallable($callback): string
+    protected function buildQueueCallable($callback)
     {
         if (! $callback instanceof Closure) {
             return $callback;

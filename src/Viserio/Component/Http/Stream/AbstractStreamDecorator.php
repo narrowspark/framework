@@ -16,7 +16,9 @@ abstract class AbstractStreamDecorator implements StreamInterface
     protected $stream;
 
     /**
-     * @param StreamInterface $stream Stream to decorate
+     * Create a new stream instance.
+     *
+     * @param \Psr\Http\Message\StreamInterface $stream
      */
     public function __construct(StreamInterface $stream)
     {

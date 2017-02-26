@@ -6,6 +6,8 @@ use InvalidArgumentException;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use Narrowspark\Arr\Arr;
 use OpenCloud\Rackspace;
+use RuntimeException;
+use stdClass;
 
 class RackspaceConnector extends AbstractConnector
 {
@@ -53,7 +55,12 @@ class RackspaceConnector extends AbstractConnector
 
         $urlType = Arr::get($auth, 'internal', false) ? 'internalURL' : 'publicURL';
 
-        return $client->objectStoreService('cloudFiles', $auth['region'], $urlType)->getContainer($auth['container']);
+        if ($auth['container'] instanceof stdClass || $auth['container'] === null) {
+            return $client->objectStoreService('cloudFiles', $auth['region'], $urlType)
+                ->getContainer($auth['container']);
+        }
+
+        throw new RuntimeException('"OpenCloud\ObjectStore\Service::getContainer" expects only stdClass or null.');
     }
 
     /**

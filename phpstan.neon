@@ -3,10 +3,12 @@ includes:
 
 parameters:
     excludes_analyse:
-        - %currentWorkingDirectory%/src/Viserio/Bridge/*/Tests/Fixture/*
-        - %currentWorkingDirectory%/src/Viserio/Component/*/Tests/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Bridge/**/Tests/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Component/**/Tests/Fixture/*
         # Needs https://github.com/narrowspark/framework/issues/394
         - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
+        # Use all classes of php-cache
+        - %currentWorkingDirectory%/src/Viserio/Component/Cache/*
     ignoreErrors:
         # They are array callables
         - '#callable of class Twig_Function constructor#'
@@ -34,12 +36,14 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
         - '#Cannot call method getTarget#'
         - '#Cannot call method getName#'
+        - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::getProtectedStatic#'
+        - '#Swift_#'
 
         # Required file variables
         - '#Undefined variable: \$class#'
-        - '#Undefined variable: \$router#'
-        - '#Undefined variable: \$__env#'
         - '#Undefined variable: \$text#'
+
+        # Used for lazy loding
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\LazyOpenStream::#'
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::#'
 
@@ -66,15 +70,36 @@ parameters:
         - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
         - '#\$callback of class Viserio\\Component\\Cron\\CallbackCron constructor expects#'
         - '#Access to an undefined property Viserio\\Component\\Events\\Tests\\EventTest::\$event#'
+        - '#\$resource of static method League\\Flysystem\\Util::getStreamSize#'
 
         # Is wrong
         - '#Property Viserio\\Component\\Cookie\\AbstractCookie::\$maxAge#'
         - '#Method Viserio\\Component\\Cron\\CallbackCron::getSummaryForDisplay#'
-        #Throwable is the base class for all erros
+        - '#Call to an undefined method SessionHandlerInterface::setRequest#'
+        - '#\$code of class Twig_Source constructor expects string#'
+        - '#\$contents of method League\\Flysystem\\AdapterInterface#'
+
+        # A if check exists
+        - '#\$contents of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::encryptString#'
+        - '#\$contents of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptString#'
+        - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
+        - '#Call to an undefined method League\\Flysystem\\AdapterInterface::getUrl#'
+        - '#Call to an undefined method League\\Flysystem\\AdapterInterface::applyPathPrefix#'
+        - '#Method Viserio\\Component\\Filesystem\\FilesystemAdapter::has#'
+        - '#\$values of method Viserio\\Component\\Http\\AbstractMessage::assertValidHeaderValue#'
+        - '#\$values of method Viserio\\Component\\Http\\AbstractMessage::trimHeaderValues#'
+        - '#\$array values of method Viserio\\Component\\Http\\AbstractMessage::arrayContainsOnlyStrings#'
+        - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
+
+        # Throwable is the base class for all erros on php7
         - '#expects Throwable#'
-        #spliceIntoPosition returns cron class
+        - '#Throwable given#'
+
+        # spliceIntoPosition returns cron class
         - '#should return \$this but returns \$this->spliceIntoPosition#'
-        #Is a protected method
+
+        # Is a protected method
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Cron\\Cron::spliceIntoPosition#'
-        #Returns a clone class
+
+        # Returns a clone class
         - '#Method Viserio\\Component\\Cookie\\AbstractCookieCollector::forget#'

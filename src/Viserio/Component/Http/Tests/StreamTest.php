@@ -175,7 +175,7 @@ class StreamTest extends TestCase
         self::assertFalse($stream->isSeekable());
         self::assertFalse($stream->isReadable());
         self::assertFalse($stream->isWritable());
-        self::assertSame(0, $stream->getSize());
+        self::assertNull($stream->getSize());
         self::assertEmpty($stream->getMetadata());
     }
 
@@ -247,6 +247,7 @@ class StreamTest extends TestCase
         $stream->close();
     }
 }
+
 namespace Viserio\Component\Http;
 
 use Viserio\Component\Http\Tests\StreamTest;

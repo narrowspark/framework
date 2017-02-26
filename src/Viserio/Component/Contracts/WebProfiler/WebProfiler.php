@@ -4,10 +4,41 @@ namespace Viserio\Component\Contracts\WebProfiler;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 
 interface WebProfiler
 {
+    /**
+     * Disables the profiler.
+     *
+     * @return void
+     */
+    public function disable(): void;
+
+    /**
+     * Enables the profiler.
+     *
+     * @return void
+     */
+    public function enable(): void;
+
+    /**
+     * Set the webprofiler template path.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function setTemplate(string $path): self;
+
+    /**
+     * Get the webprofiler template path.
+     *
+     * @return string
+     */
+    public function getTemplate(): string;
+
     /**
      * Adds a data collector.
      *
@@ -19,19 +50,6 @@ interface WebProfiler
      * @return $this
      */
     public function addCollector(DataCollectorContract $collector, int $priority = 100): WebProfiler;
-
-    /**
-     * Modify the response and inject the debugbar.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function modifyResponse(
-        ServerRequestInterface $serverRequest,
-        ResponseInterface $response
-    ): ResponseInterface;
 
     /**
      * Checks if a data collector has been added.
@@ -48,4 +66,31 @@ interface WebProfiler
      * @return array
      */
     public function getCollectors(): array;
+
+    /**
+     * Modify the response and inject the debugbar.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function modifyResponse(
+        ServerRequestInterface $serverRequest,
+        ResponseInterface $response
+    ): ResponseInterface;
+
+    /**
+     * Set a url generator instance.
+     *
+     * @param \Viserio\Component\Contracts\Routing\UrlGenerator $urlGenerator
+     */
+    public function setUrlGenerator(UrlGeneratorContract $urlGenerator);
+
+    /**
+     * Get a url generator instance.
+     *
+     * @return \Viserio\Component\Contracts\Routing\UrlGenerator|null
+     */
+    public function getUrlGenerator(): ?UrlGeneratorContract;
 }

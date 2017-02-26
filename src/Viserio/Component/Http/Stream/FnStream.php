@@ -18,15 +18,21 @@ class FnStream implements StreamInterface
      *
      * @var array
      */
-    public const SLOTS = ['__toString', 'close', 'detach', 'rewind',
+    private const SLOTS = ['__toString', 'close', 'detach', 'rewind',
         'getSize', 'tell', 'eof', 'isSeekable', 'seek', 'isWritable', 'write',
         'isReadable', 'read', 'getContents', 'getMetadata', ];
 
-    /** @var array */
+    /**
+     * Hash of method name to a callable.
+     *
+     * @var array
+     */
     private $methods;
 
     /**
-     * @param array $methods hash of method name to a callable
+     * Create a new fn stream instance.
+     *
+     * @param array $methods
      */
     public function __construct(array $methods)
     {
@@ -95,7 +101,7 @@ class FnStream implements StreamInterface
      */
     public function close()
     {
-        return call_user_func($this->_fn_close);
+        call_user_func($this->_fn_close);
     }
 
     /**

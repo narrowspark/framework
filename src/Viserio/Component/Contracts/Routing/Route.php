@@ -199,7 +199,7 @@ interface Route
     /**
      * The regular expression requirements.
      *
-     * @return \Viserio\Component\Contracts\Routing\RouteMatcher[]
+     * @return array
      */
     public function getSegments(): array;
 

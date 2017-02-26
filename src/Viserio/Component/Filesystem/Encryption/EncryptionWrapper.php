@@ -198,7 +198,7 @@ class EncryptionWrapper
     {
         $out = fopen('php://memory', 'r+b');
 
-        if ($resource !== false) {
+        if ($resource != false) {
             File::decryptResource($resource, $out, $this->key);
         } else {
             $out = '';
