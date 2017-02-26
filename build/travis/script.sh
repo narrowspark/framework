@@ -11,9 +11,9 @@ bash -e <<TRY
     fi
 
     if [[ "$PHPUNIT" = true && "$CHECK_CS" = true && "$SEND_COVERAGE" = true ]]; then
-        vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-text="php://stdout" --coverage-clover=coverage.xml;
+        ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-text="php://stdout" --coverage-clover=coverage.xml;
     elif [[ "$PHPUNIT" = true ]]; then
-        vendor/bin/phpunit -c phpunit.xml.dist --verbose;
+        ./vendor/bin/phpunit -c phpunit.xml.dist --verbose;
     fi
 
     if [[ "$HUMBUG" = true ]]; then vendor/bin/humbug; fi

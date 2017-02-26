@@ -6,6 +6,7 @@ if [[ "$SEND_COVERAGE" = false ]]; then
 fi
 
 echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 # Install mongodb

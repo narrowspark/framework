@@ -56,17 +56,12 @@ parameters:
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\LazyOpenStream::#'
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::#'
 
-        # Not call parent constructors
+        # No need to call the parent constructor
         - '#Viserio\\Component\\Console\\Command\\Command::__construct#'
 
         # We only mock this dependency, and never really require it:
         - '#Call to an undefined method GuzzleHttp\\ClientInterface::post#'
         - '#Call to an undefined method Aws\\Ses\\SesClient::sendRawEmail#'
-
-        # Only if Mongo is not used.
-        - '#Class Mongo not found#'
-        - '#Class MongoClient not found#'
-        - '#Catched class MongoConnectionException not found#'
 
         # Mock dependencies
         - '#Mockery\\MockInterface#'
@@ -122,3 +117,9 @@ parameters:
 
         # Wrapper
         - '#Viserio\\Component\\WebProfiler\\DataCollectors\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
+
+        # Ignore missing container property for ConfigurationTrait
+        - '#Access to an undefined property Viserio\\Component\\Exception\\Displayers\\HtmlDisplayer::$container#'
+        - '#Access to an undefined property Viserio\\Component\\Exception\\Filters\\VerboseFilter::$container#'
+        - '#Access to an undefined property Viserio\\Component\\Exception\\Filters\\VerboseFilter::$container#'
+        - '#Access to an undefined property Viserio\\Component\\View\\ViewFinder::$container#'

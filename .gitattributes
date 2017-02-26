@@ -1,8 +1,8 @@
 * text=auto
 *.php text eol=lf
 
-src/Viserio/Bridge/*/Tests    export-ignore
-src/Viserio/Component/*/Tests export-ignore
+src/Viserio/Bridge/**/Tests    export-ignore
+src/Viserio/Component/**/Tests export-ignore
 
 .styleci.yml        export-ignore
 .php_cs             export-ignore
