@@ -299,7 +299,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Check all header values and header name.
      *
-     * @param string          $header
+     * @param string       $header
      * @param string|array $value
      *
      * @return array

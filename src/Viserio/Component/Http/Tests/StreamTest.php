@@ -247,7 +247,6 @@ class StreamTest extends TestCase
         $stream->close();
     }
 }
-
 namespace Viserio\Component\Http;
 
 use Viserio\Component\Http\Tests\StreamTest;
