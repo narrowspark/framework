@@ -160,10 +160,10 @@ class AssetsRenderer implements RenderableContract
     public function render(): string
     {
         if (($urlGenerator = $this->webprofiler->getUrlGenerator()) !== null) {
-            $cssRoute = $urlGenerator->route('webprofiler.assets.css', [
+            $cssRoute = $urlGenerator->generate('webprofiler.assets.css', [
                 'v' => $this->getModifiedTime('css'),
             ]);
-            $jsRoute = $urlGenerator->route('webprofiler.assets.js', [
+            $jsRoute = $urlGenerator->generate('webprofiler.assets.js', [
                 'v' => $this->getModifiedTime('js'),
             ]);
 

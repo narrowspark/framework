@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Generator;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Routing\Generator\ChildrenNodeCollection;
-use Viserio\Component\Routing\Generator\MatchedRouteDataMap;
-use Viserio\Component\Routing\Generator\RouteTreeNode;
+use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
+use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
+use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 use Viserio\Component\Routing\Matchers\AbstractMatcher;
 use Viserio\Component\Routing\Route;
 
@@ -100,7 +100,7 @@ class RouteTreeNodeTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Cannot construct Viserio\Component\Routing\Generator\RouteTreeNode: matchers must not be empty.
+     * @expectedExceptionMessage Cannot construct Viserio\Component\Routing\TreeGenerator\RouteTreeNode: matchers must not be empty.
      */
     public function testThrowsExceptionForEmptyMatchers()
     {

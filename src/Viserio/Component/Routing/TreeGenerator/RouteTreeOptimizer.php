@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Generator;
+namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
-use Viserio\Component\Routing\Generator\Optimizer\MatcherOptimizer;
+use Viserio\Component\Routing\TreeGenerator\Optimizer\MatcherOptimizer;
 
-class RouteTreeOptimizer
+final class RouteTreeOptimizer
 {
     /**
      * Optimizes the supplied route tree.
@@ -26,11 +26,13 @@ class RouteTreeOptimizer
     }
 
     /**
-     * @param \Viserio\Component\Routing\Generator\ChildrenNodeCollection $nodes
+     * Optimize child node collection.
      *
-     * @return \Viserio\Component\Routing\Generator\ChildrenNodeCollection
+     * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection $nodes
+     *
+     * @return \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection
      */
-    protected function optimizeNodes(ChildrenNodeCollection $nodes): ChildrenNodeCollection
+    private function optimizeNodes(ChildrenNodeCollection $nodes): ChildrenNodeCollection
     {
         $optimizedNodes = [];
 
@@ -45,13 +47,13 @@ class RouteTreeOptimizer
     }
 
     /**
-     * [optimizeNode description].
+     * Optimize node collection.
      *
      * @param RouteTreeNode $node
      *
      * @return RouteTreeNode
      */
-    protected function optimizeNode(RouteTreeNode $node): RouteTreeNode
+    private function optimizeNode(RouteTreeNode $node): RouteTreeNode
     {
         $matchers = $node->getMatchers();
         $contents = $node->getContents();
@@ -73,11 +75,13 @@ class RouteTreeOptimizer
     }
 
     /**
-     * @param \Viserio\Component\Routing\Generator\ChildrenNodeCollection $nodeCollection
+     * Move matched common node to the parent node.
      *
-     * @return \Viserio\Component\Routing\Generator\ChildrenNodeCollection
+     * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection $nodeCollection
+     *
+     * @return \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection
      */
-    protected function moveCommonMatchersToParentNode(ChildrenNodeCollection $nodeCollection): ChildrenNodeCollection
+    private function moveCommonMatchersToParentNode(ChildrenNodeCollection $nodeCollection): ChildrenNodeCollection
     {
         $nodes = $nodeCollection->getChildren();
 
@@ -105,12 +109,14 @@ class RouteTreeOptimizer
     }
 
     /**
-     * @param \Viserio\Component\Routing\Generator\RouteTreeNode $node1
-     * @param \Viserio\Component\Routing\Generator\RouteTreeNode $node2
+     * Extract parent nodes from route tree nood.
      *
-     * @return \Viserio\Component\Routing\Generator\RouteTreeNode|void
+     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node1
+     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node2
+     *
+     * @return \Viserio\Component\Routing\TreeGenerator\RouteTreeNode|void
      */
-    protected function extractCommonParentNode(RouteTreeNode $node1, RouteTreeNode $node2)
+    private function extractCommonParentNode(RouteTreeNode $node1, RouteTreeNode $node2)
     {
         $matcherCompare = function (SegmentMatcherContract $matcher, SegmentMatcherContract $matcher2) {
             return strcmp($matcher->getHash(), $matcher2->getHash());

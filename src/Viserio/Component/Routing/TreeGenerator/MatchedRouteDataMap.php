@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Generator;
+namespace Viserio\Component\Routing\TreeGenerator;
 
-use Viserio\Component\Contracts\Routing\NodeContents as NodeContentsContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 
-class MatchedRouteDataMap implements NodeContentsContract
+class MatchedRouteDataMap
 {
     /**
      * @var array

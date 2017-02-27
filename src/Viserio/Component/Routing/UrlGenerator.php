@@ -53,20 +53,12 @@ class UrlGenerator implements UrlGeneratorContract
     }
 
     /**
-     * Get the URL to a named route.
-     *
-     * @param string $name
-     * @param array  $parameters
-     * @param bool   $absolute
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function route(string $name, array $parameters = [], bool $absolute = true): string
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         if (! is_null($route = $this->routes->getByName($name))) {
-            return $this->toRoute($route, $parameters, $absolute);
+            return $this->toRoute($route, $parameters, $referenceType);
         }
 
         throw new InvalidArgumentException(sprintf('Route [%s] not defined.', $name));
@@ -77,13 +69,13 @@ class UrlGenerator implements UrlGeneratorContract
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
      * @param array                                      $parameters
-     * @param bool                                       $absolute
+     * @param int                                        $referenceType
      *
      * @throws \Viserio\Component\Routing\Exceptions\UrlGenerationException
      *
      * @return string
      */
-    protected function toRoute(RouteContract $route, array $parameters, bool $absolute): string
+    protected function toRoute(RouteContract $route, array $parameters, int $referenceType): string
     {
         $uri = $this->uriFactory->createUri($route->getUri());
 
@@ -99,7 +91,7 @@ class UrlGenerator implements UrlGeneratorContract
             $uri = $uri->withQuery($key . '=' . $value);
         }
 
-        if ($absolute) {
+        if ($referenceType === 0) {
             return (string) $uri;
         }
 
