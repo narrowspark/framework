@@ -15,17 +15,30 @@ use RuntimeException;
  */
 class BufferStream implements StreamInterface
 {
+    /**
+     * High water mark.
+     *
+     * @var int
+     */
     private $hwm;
+
+    /**
+     * Buffer size.
+     *
+     * @var string
+     */
     private $buffer = '';
 
     /**
+     * Create a new buffer stream instance.
+     *
      * @param int $hwm High water mark, representing the preferred maximum
      *                 buffer size. If the size of the buffer exceeds the high
      *                 water mark, then calls to write will continue to succeed
      *                 but will return false to inform writers to slow down
      *                 until the buffer has been drained by reading from it.
      */
-    public function __construct($hwm = 16384)
+    public function __construct(int $hwm = 16384)
     {
         $this->hwm = $hwm;
     }

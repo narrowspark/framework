@@ -8,7 +8,7 @@ use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
-use Viserio\Component\Contracts\Queue\Queue as QueueContract;
+use Viserio\Component\Contracts\Queue\QueueConnector as QueueContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\Mail\Mailer;

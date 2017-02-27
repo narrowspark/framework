@@ -11,7 +11,7 @@ use Viserio\Component\Parsers\TaggableParser;
 class RepositoryTest extends TestCase
 {
     /**
-     * @var org\bovigo\vfs\vfsStreamDirectory
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 

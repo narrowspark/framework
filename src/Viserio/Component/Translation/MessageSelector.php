@@ -55,7 +55,7 @@ class MessageSelector implements MessageSelectorContract
             }
         }
 
-        $position = $this->pluralization->get($number, $locale);
+        $position = $this->pluralization->get((int) $number, $locale);
 
         if (! isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard

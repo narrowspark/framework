@@ -74,7 +74,7 @@ class CachedFactoryTest extends MockeryTestCase
             ->once()
             ->with('array')
             ->andReturn(true);
-        $cacheManager->shouldReceive('driver')
+        $cacheManager->shouldReceive('getDriver')
             ->once()
             ->andReturn(new ArrayCachePool());
 

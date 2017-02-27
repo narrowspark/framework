@@ -11,18 +11,24 @@ use Viserio\Component\Http\Util;
 class LazyOpenStream implements StreamInterface
 {
     /**
+     * File name which should be lazily open.
+     *
      * @var string
      */
     private $filename;
 
     /**
+     * fopen mode to use when opening the stream.
+     *
      * @var string
      */
     private $mode;
 
     /**
-     * @param string $filename File to lazily open
-     * @param string $mode     fopen mode to use when opening the stream
+     * Create a new lazy open stream instance.
+     *
+     * @param string $filename
+     * @param string $mode
      */
     public function __construct(string $filename, string $mode)
     {

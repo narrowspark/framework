@@ -2,14 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception;
 
+use Exception;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
+use Viserio\Component\Console\Application as ConsoleApplication;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
@@ -202,14 +205,14 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * Create a response for the given exception.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $exception
+     * @param \Exception                               $exception
      * @param \Throwable                               $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getResponse(
         ServerRequestInterface $request,
-        Throwable $exception,
+        Exception $exception,
         Throwable $transformed
     ): ResponseInterface {
         $id          = $this->exceptionIdentifier->identify($exception);

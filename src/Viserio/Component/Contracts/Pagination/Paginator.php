@@ -19,9 +19,16 @@ interface Paginator
      * @param int $start
      * @param int $end
      *
-     * @return string
+     * @return array
      */
-    public function getUrlRange(int $start, int $end): string;
+    public function getUrlRange(int $start, int $end): array;
+
+    /**
+     * Get the URL for the next page.
+     *
+     * @return string|null
+     */
+    public function getNextPageUrl(): ?string;
 
     /**
      * Get the URL for a given page number.

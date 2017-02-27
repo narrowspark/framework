@@ -4,13 +4,10 @@ namespace Viserio\Component\Foundation\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 
-class FilesLoadedCollector extends AbstractDataCollector implements
-    MenuAwareContract,
-    PanelAwareContract
+class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareContract
 {
     /**
      * All compiled and included files.

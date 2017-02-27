@@ -7,25 +7,25 @@ use Opis\Closure\SerializableClosure;
 use Swift_Mailer;
 use Viserio\Component\Contracts\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Component\Contracts\Queue\Job as JobContract;
-use Viserio\Component\Contracts\Queue\Queue as QueueContract;
+use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
 
 class QueueMailer extends Mailer implements QueueMailerContract
 {
     /**
      * Queue instance.
      *
-     * @var \Viserio\Component\Contracts\Queue\Queue
+     * @var \Viserio\Component\Contracts\Queue\QueueConnector
      */
     protected $queue;
 
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                                  $swiftMailer
-     * @param \Viserio\Component\Contracts\Queue\Queue       $queue
-     * @param \Interop\Container\ContainerInterface|iterable $data
+     * @param \Swift_Mailer                                     $swiftMailer
+     * @param \Viserio\Component\Contracts\Queue\QueueConnector $queue
+     * @param \Interop\Container\ContainerInterface|iterable    $data
      */
-    public function __construct(Swift_Mailer $swiftMailer, QueueContract $queue, $data)
+    public function __construct(Swift_Mailer $swiftMailer, QueueConnectorContract $queue, $data)
     {
         parent::__construct($swiftMailer, $data);
 
@@ -37,7 +37,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
      *
      * @codeCoverageIgnore
      */
-    public function setQueue(QueueContract $queue): QueueMailerContract
+    public function setQueue(QueueConnectorContract $queue): QueueMailerContract
     {
         $this->queue = $queue;
 
@@ -49,7 +49,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
      *
      * @codeCoverageIgnore
      */
-    public function getQueue(): QueueContract
+    public function getQueue(): QueueConnectorContract
     {
         return $this->queue;
     }
@@ -126,9 +126,9 @@ class QueueMailer extends Mailer implements QueueMailerContract
      *
      * @param \Closure|string $callback
      *
-     * @return string
+     * @return \Closure|\Opis\Closure\SerializableClosure|string
      */
-    protected function buildQueueCallable($callback): string
+    protected function buildQueueCallable($callback)
     {
         if (! $callback instanceof Closure) {
             return $callback;

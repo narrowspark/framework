@@ -688,8 +688,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     /**
      * Format a class binding.
      *
-     * @param string|closure|object $implementation
-     * @param \ReflectionClass      $parameterClass
+     * @param \Closure|string|object $implementation
+     * @param \ReflectionClass       $parameterClass
      *
      * @return \Closure|object
      */

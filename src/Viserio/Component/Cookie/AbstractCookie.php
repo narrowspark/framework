@@ -52,14 +52,9 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected $httpOnly;
 
     /**
-     * @var bool|string
+     * @var string|bool|null
      */
     protected $sameSite;
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function __toString();
 
     /**
      * {@inheritdoc}

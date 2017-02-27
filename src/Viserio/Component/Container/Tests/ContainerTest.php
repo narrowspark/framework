@@ -462,7 +462,7 @@ class ContainerTest extends MockeryTestCase
     {
         $container = new Container();
 
-        $container->when(ContainerTestNotResolvable::class)
+        $container->when('Viserio\Component\Container\Tests\ContainerTestNotResolvable')
             ->needs(ContainerConcreteFixture::class)
             ->give(100);
         $instance = $container->make(ContainerInjectVariableFixture::class);

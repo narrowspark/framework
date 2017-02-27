@@ -77,7 +77,7 @@ class MandrillTransport extends AbstractTransport
      *
      * @codeCoverageIgnore
      */
-    public function setKey(string $key): Mandrill
+    public function setKey(string $key): self
     {
         $this->key = $key;
 

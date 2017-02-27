@@ -16,7 +16,7 @@ use Viserio\Component\Translation\TranslationManager;
 class TranslatorServiceProviderTest extends MockeryTestCase
 {
     /**
-     * @var org\bovigo\vfs\vfsStreamDirectory
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 

@@ -121,7 +121,7 @@ class DebugCommand extends Command
      * @param string $type
      * @param object $entity
      *
-     * @return null|string|array
+     * @return mixed
      */
     private function getMetadata(string $type, $entity)
     {

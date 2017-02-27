@@ -67,11 +67,23 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * {@inheritdoc}
+     * Check whether a file exists.
+     *
+     * @param string $path
+     *
+     * @return bool
      */
     public function has(string $path): bool
     {
-        return $this->driver->has($path);
+        $has = $this->driver->has($path);
+
+        if ($has === null) {
+            return false;
+        } elseif (is_array($has)) {
+            return $has['path'] !== '';
+        }
+
+        return $has;
     }
 
     /**
@@ -218,8 +230,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             throw new FileNotFoundException($originFile);
         }
 
-        $orginal = $this->driver->applyPathPrefix($originFile);
-        $target  = $this->driver->applyPathPrefix($targetFile);
+        if (method_exists($this->driver, 'applyPathPrefix')) {
+            $orginal = $this->driver->applyPathPrefix($originFile);
+            $target  = $this->driver->applyPathPrefix($targetFile);
+        } else {
+            $orginal = $originFile;
+            $target  = $targetFile;
+        }
 
         // https://bugs.php.net/bug.php?id=64634
         if (@fopen($orginal, 'r') === false) {
@@ -554,7 +571,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     private function parseVisibility(string $visibility = null)
     {
         if ($visibility === null) {
-            return;
+            return null;
         }
 
         switch ($visibility) {

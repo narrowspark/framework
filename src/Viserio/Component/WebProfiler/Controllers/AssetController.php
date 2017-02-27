@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Controllers;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Routing\AbstractController;
 use Viserio\Component\WebProfiler\WebProfiler;
 
@@ -35,13 +35,13 @@ class AssetController extends AbstractController
     /**
      * Create a new AssetController instance.
      *
-     * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequest
-     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
-     * @param \Interop\Http\Factory\StreamFactoryInterface        $streamFactory
-     * @param \Viserio\Component\WebProfiler\WebProfiler          $webprofiler
+     * @param \IPsr\Http\Message\ServerRequestInterface      $serverRequest
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
+     * @param \Viserio\Component\WebProfiler\WebProfiler     $webprofiler
      */
     public function __construct(
-        ServerRequestFactoryInterface $serverRequest,
+        ServerRequestInterface $serverRequest,
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
         WebProfiler $webprofiler

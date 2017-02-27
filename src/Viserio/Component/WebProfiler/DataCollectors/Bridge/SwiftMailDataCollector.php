@@ -6,11 +6,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_Plugins_MessageLogger;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 
-class SwiftMailDataCollector extends AbstractDataCollector implements MenuAwareContract, PanelAwareContract
+class SwiftMailDataCollector extends AbstractDataCollector implements PanelAwareContract
 {
     /**
      * Swift_Plugins_MessageLogger instance.

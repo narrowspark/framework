@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\WebProfiler;
 
-interface PanelAware
+interface PanelAware extends DataCollector
 {
     /**
-     * @ToDo
+     * Returns all data in a panel window.
      *
      * @return string
      */

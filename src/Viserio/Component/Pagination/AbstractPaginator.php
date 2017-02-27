@@ -106,13 +106,13 @@ abstract class AbstractPaginator implements
      */
     public function __toString()
     {
-        return (string) $this->render();
+        return $this->render();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getUrlRange(int $start, int $end): string
+    public function getUrlRange(int $start, int $end): array
     {
         $urls = [];
 

@@ -677,7 +677,7 @@ class Cron implements CronContract
      * @param int        $position
      * @param int|string $value
      *
-     * @return $this
+     * @return \Viserio\Component\Contracts\Cron\Cron
      */
     protected function spliceIntoPosition(int $position, $value): CronContract
     {

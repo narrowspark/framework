@@ -28,6 +28,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Handler\ZendMonitorHandler;
 use Monolog\Logger as MonologLogger;
+use Monolog\Processor\PsrLogMessageProcessor;
 use RuntimeException;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 
@@ -88,6 +89,9 @@ class HandlerParser
      */
     public function __construct(MonologLogger $monolog)
     {
+        // PSR 3 log message formatting for all handlers
+        $monolog->pushProcessor(new PsrLogMessageProcessor());
+
         $this->monolog = $monolog;
     }
 
@@ -156,7 +160,7 @@ class HandlerParser
     /**
      * Parse the formatter into a Monolog constant.
      *
-     * @param string|object $formatter
+     * @param \Monolog\Formatter\FormatterInterface|string $formatter
      *
      * @throws \InvalidArgumentException
      *
@@ -164,7 +168,7 @@ class HandlerParser
      */
     protected function parseFormatter($formatter): FormatterInterface
     {
-        if (is_object($formatter)) {
+        if (is_object($formatter) && $formatter instanceof FormatterInterface) {
             return $formatter;
         }
 
@@ -241,7 +245,7 @@ class HandlerParser
         if (is_object($handler) && $handler instanceof HandlerInterface) {
             return $handler;
         } elseif (is_string($handler) && isset($this->handler[$handler])) {
-            return new $this->handler[$handler]($path, $this->parseLevel($level));
+            return new $this->handler[$handler]($path, self::parseLevel($level));
         }
 
         throw new RuntimeException(

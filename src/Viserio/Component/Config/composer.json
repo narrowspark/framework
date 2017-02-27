@@ -20,8 +20,7 @@
     "require": {
         "php"                                : "^7.1",
         "narrowspark/arr"                    : "^2.1",
-        "viserio/cotracts"                   : "self.version",
-        "viserio/options-resolver"           : "self.version"
+        "viserio/cotracts"                   : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
@@ -44,6 +43,7 @@
     },
     "suggest": {
         "container-interop/service-provider" : "Required to use service-provider (^0.3).",
+        "viserio/parsers"                    : "Required to import yaml, php, ini config files (self.version).",
         "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."
     },
     "extra": {

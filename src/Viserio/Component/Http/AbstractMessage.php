@@ -41,6 +41,8 @@ abstract class AbstractMessage implements MessageInterface
     protected $headerNames = [];
 
     /**
+     * A stream instance.
+     *
      * @var \Psr\Http\Message\StreamInterface
      */
     protected $stream;
@@ -297,10 +299,10 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Check all header values and header name.
      *
-     * @param string          $header
-     * @param string|string[] $value
+     * @param string       $header
+     * @param string|array $value
      *
-     * @return string[]
+     * @return array
      */
     private function checkHeaderData(string $header, $value): array
     {
@@ -315,6 +317,7 @@ abstract class AbstractMessage implements MessageInterface
         }
 
         HeaderSecurity::assertValidName(trim($header));
+
         $this->assertValidHeaderValue($value);
 
         $value = $this->trimHeaderValues($value);
@@ -325,7 +328,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Test that an array contains only strings.
      *
-     * @param string[] $array
+     * @param array $array
      *
      * @return bool
      */
@@ -348,7 +351,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @link http://tools.ietf.org/html/rfc7230#section-3.2
      *
-     * @param string[] $values
+     * @param array $values
      *
      * @throws InvalidArgumentException
      */
@@ -362,7 +365,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param array $values
      *
-     * @return string[]
+     * @return array
      */
     private function filterHeaderValue(array $values): array
     {
@@ -383,9 +386,9 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @link https://tools.ietf.org/html/rfc7230#section-3.2.4
      *
-     * @param string[] $values Header values
+     * @param array $values Header values
      *
-     * @return string[] Trimmed header values
+     * @return array Trimmed header values
      */
     private function trimHeaderValues(array $values): array
     {

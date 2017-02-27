@@ -94,7 +94,7 @@ class CookieJar implements JarContract
     /**
      * {@inheritdoc}
      */
-    public function queued(string $key, $default = null)
+    public function queued(string $key, $default = null): ?CookieContract
     {
         return Arr::get($this->queued, $key, $default);
     }
@@ -116,7 +116,7 @@ class CookieJar implements JarContract
     /**
      * {@inheritdoc}
      */
-    public function unqueue(string $name)
+    public function unqueue(string $name): void
     {
         unset($this->queued[$name]);
     }

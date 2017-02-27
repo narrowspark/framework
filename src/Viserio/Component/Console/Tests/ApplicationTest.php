@@ -296,8 +296,8 @@ class ApplicationTest extends MockeryTestCase
     }
 
     /**
-     * @param string $command
-     * @param string $expected
+     * @param string     $command
+     * @param string|int $expected
      */
     private function assertOutputIs($command, $expected)
     {

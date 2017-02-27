@@ -5,13 +5,11 @@ namespace Viserio\Component\WebProfiler\DataCollectors;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 
 class AjaxRequestsDataCollector extends AbstractDataCollector implements
     AssetAwareContract,
-    TooltipAwareContract,
-    MenuAwareContract
+    TooltipAwareContract
 {
     /**
      * {@inheritdoc}

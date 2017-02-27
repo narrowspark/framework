@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\WebProfiler;
 
-interface AssetAware
+interface AssetAware extends DataCollector
 {
     /**
      * Returns an array with the following keys:

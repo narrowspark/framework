@@ -106,6 +106,13 @@ interface Route
     public function setAction(array $action): Route;
 
     /**
+     * Get route identifier.
+     *
+     * @return string
+     */
+    public function getIdentifier(): string;
+
+    /**
      * Add a prefix to the route URI.
      *
      * @param string $prefix
@@ -192,7 +199,7 @@ interface Route
     /**
      * The regular expression requirements.
      *
-     * @return \Viserio\Component\Contracts\Routing\RouteMatcher[]
+     * @return array
      */
     public function getSegments(): array;
 

@@ -1,0 +1,125 @@
+includes:
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+
+parameters:
+    autoload_directories:
+        - %currentWorkingDirectory%/src/Viserio
+
+    excludes_analyse:
+        - %currentWorkingDirectory%/src/Viserio/Bridge/**/Tests/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Component/**/Tests/Fixture/*
+        # Use all classes of php-cache
+        - %currentWorkingDirectory%/src/Viserio/Component/Cache/*
+
+        # Needs https://github.com/narrowspark/framework/issues/394
+        - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
+
+        # Needs https://github.com/narrowspark/framework/issues/476
+        - %currentWorkingDirectory%/src/Viserio/Component/Routing/*
+
+    ignoreErrors:
+        # They are array callables
+        - '#callable of class Twig_Function constructor#'
+        - '#callable of class Twig_Filter constructor#'
+        - '#callable of method Invoker\\InvokerInterface::call#'
+
+        # Magic functions, call and static call
+        - '#Call to an undefined method Swift_Mime_Message::shouldReceive#'
+        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FacadeStub#'
+        - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
+        - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
+        - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
+        - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\MacroTest::#'
+        - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Fixture\\MacroTest::#'
+        - '#Access to an undefined property Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::\$protectedVariable#'
+        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionFacadeStub::arg#'
+        - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
+        - '#Function allheaders not found#'
+        - '#Call to an undefined static method Respect\\Validation\\Validator#'
+        - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
+        - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\Command\\ClosureCommandTest::comment#'
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Container\\Container::needs#'
+        - '#Call to an undefined method Viserio\\Component\\Log\\Writer::getName#'
+        - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
+        - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
+        - '#Cannot call method getTarget#'
+        - '#Cannot call method getName#'
+        - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::getProtectedStatic#'
+        - '#Swift_#'
+        - '#Call to an undefined method Viserio\\Component\\Mail\\Message::setBody#'
+
+        # Required file variables
+        - '#Undefined variable: \$class#'
+        - '#Undefined variable: \$text#'
+
+        # Used for lazy loding
+        - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\LazyOpenStream::#'
+        - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::#'
+
+        # No need to call the parent constructor
+        - '#Viserio\\Component\\Console\\Command\\Command::__construct#'
+
+        # We only mock this dependency, and never really require it:
+        - '#Call to an undefined method GuzzleHttp\\ClientInterface::post#'
+        - '#Call to an undefined method Aws\\Ses\\SesClient::sendRawEmail#'
+
+        # Mock dependencies
+        - '#Mockery\\MockInterface#'
+        - '#PHPUnit_Framework_MockObject_MockObject#'
+        - '#org\\bovigo\\vfs\\vfsStream#'
+
+        # Tests
+        - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource, true given#'
+        - '#Call to an undefined method Viserio\\Component\\Http\\AbstractMessage::withUri#'
+        - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
+        - '#\$callback of class Viserio\\Component\\Cron\\CallbackCron constructor expects#'
+        - '#Access to an undefined property Viserio\\Component\\Events\\Tests\\EventTest::\$event#'
+        - '#\$resource of static method League\\Flysystem\\Util::getStreamSize#'
+        - '#\$view of method Viserio\\Component\\Mail\\Mailer::send#'
+        - '#\$callback of method Viserio\\Component\\Mail\\Mailer::send#'
+
+        # Is wrong
+        - '#Property Viserio\\Component\\Cookie\\AbstractCookie::\$maxAge#'
+        - '#Method Viserio\\Component\\Cron\\CallbackCron::getSummaryForDisplay#'
+        - '#Call to an undefined method SessionHandlerInterface::setRequest#'
+        - '#\$code of class Twig_Source constructor expects string#'
+        - '#\$contents of method League\\Flysystem\\AdapterInterface#'
+        - "#Casting to mixed[] something that's already mixed[]#"
+
+        # if check exists
+        - '#\$contents of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::encryptString#'
+        - '#\$contents of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptString#'
+        - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
+        - '#Call to an undefined method League\\Flysystem\\AdapterInterface::getUrl#'
+        - '#Call to an undefined method League\\Flysystem\\AdapterInterface::applyPathPrefix#'
+        - '#Method Viserio\\Component\\Filesystem\\FilesystemAdapter::has#'
+        - '#\$values of method Viserio\\Component\\Http\\AbstractMessage::assertValidHeaderValue#'
+        - '#\$values of method Viserio\\Component\\Http\\AbstractMessage::trimHeaderValues#'
+        - '#\$array of method Viserio\\Component\\Http\\AbstractMessage::arrayContainsOnlyStrings#'
+        - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
+        - '#\$abstract of method Viserio\\Component\\Contracts\\Container\\Container::make#'
+        - '#\$payload of method Viserio\\Component\\Contracts\\Parsers\\Parser::parse#'
+        - '#\$payload of method Viserio\\Component\\Parsers\\Formats\\INI::parse#'
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
+
+        # Throwable is the base class for all erros on php7
+        - '#expects Throwable#'
+        - '#Throwable given#'
+
+        # spliceIntoPosition returns cron class
+        - '#should return \$this but returns \$this->spliceIntoPosition#'
+
+        # Is a protected method
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Cron\\Cron::spliceIntoPosition#'
+
+        # Returns a clone class
+        - '#Method Viserio\\Component\\Cookie\\AbstractCookieCollector::forget#'
+
+        # Wrapper
+        - '#Viserio\\Component\\WebProfiler\\DataCollectors\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
+
+        # Ignore missing container property for ConfigurationTrait
+        - '#Access to an undefined property Viserio\\Component\\Exception\\Displayers\\HtmlDisplayer::\$container#'
+        - '#Access to an undefined property Viserio\\Component\\Exception\\Filters\\VerboseFilter::\$container#'
+        - '#Access to an undefined property Viserio\\Component\\OptionsResolver\\Tests\\Fixtures\\ConfigurationTraitAwareConfiguration::\$container#'
+        - '#Access to an undefined property Viserio\\Component\\View\\ViewFinder::\$container#'

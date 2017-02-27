@@ -3,25 +3,25 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\Mail;
 
 use Viserio\Component\Contracts\Queue\Job as JobContract;
-use Viserio\Component\Contracts\Queue\Queue as QueueContract;
+use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
 
 interface QueueMailer extends Mailer
 {
     /**
      * Set the queue manager instance.
      *
-     * @param \Viserio\Component\Contracts\Queue\Queue $queue
+     * @param \Viserio\Component\Contracts\Queue\QueueConnector $queue
      *
      * @return $this
      */
-    public function setQueue(QueueContract $queue): QueueMailer;
+    public function setQueue(QueueConnectorContract $queue): QueueMailer;
 
     /**
      * Get the queue manager instance.
      *
-     * @return \Viserio\Component\Contracts\Queue\Queue
+     * @return \Viserio\Component\Contracts\Queue\QueueConnector
      */
-    public function getQueue(): QueueContract;
+    public function getQueue(): QueueConnectorContract;
 
     /**
      * Queue a new e-mail message for sending.

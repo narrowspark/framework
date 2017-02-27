@@ -66,8 +66,8 @@ Command Cancelled!
     }
 
     /**
-     * @param string $command
-     * @param string $expected
+     * @param string      $command
+     * @param string|null $expected
      */
     private function assertOutputIs(string $command, $expected)
     {

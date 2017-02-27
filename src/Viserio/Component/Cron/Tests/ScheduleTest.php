@@ -89,8 +89,9 @@ class ScheduleTest extends MockeryTestCase
                 new DummyClassFixture($schedule)
             ),
         ]);
+        $finder = (new PhpExecutableFinder())->find(false);
 
-        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
+        $binary = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
 
         if (getenv('TRAVIS')) {
             $cron = new Cron($this->cache, $binary . ' \'cerebro\' foo:bar --force');
@@ -100,7 +101,7 @@ class ScheduleTest extends MockeryTestCase
 
         $cron->setContainer($container)->setPath(__DIR__);
 
-        $schedule->setContainer($container, 'cerebro');
+        $schedule->setContainer($container);
 
         $schedule->command(ConsoleCerebroCommandFixture::class, ['--force']);
 

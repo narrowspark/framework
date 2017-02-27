@@ -21,7 +21,7 @@ use Viserio\Component\Session\SessionManager;
 class StartSessionMiddlewareTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Filesystem\Filesystem
+     * @var \Viserio\Component\Filesystem\Filesystem|null
      */
     private $files;
 

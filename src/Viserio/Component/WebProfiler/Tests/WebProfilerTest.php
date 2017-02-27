@@ -21,7 +21,7 @@ class WebProfilerTest extends MockeryTestCase
 
         $profiler->setUrlGenerator($this->mock(UrlGeneratorContract::class));
 
-        static::assertInstanceof(UrlGeneratorContract::class, $profiler->getUrlGenerator());
+        static::assertInstanceOf(UrlGeneratorContract::class, $profiler->getUrlGenerator());
     }
 
     public function testSetAndGetTemplate()

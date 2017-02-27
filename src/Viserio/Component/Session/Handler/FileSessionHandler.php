@@ -71,7 +71,7 @@ class FileSessionHandler implements SessionHandlerInterface
             if (strtotime($this->files->getTimestamp($path)) >=
                 Chronos::now()->subMinutes($this->lifetime)->getTimestamp()
             ) {
-                return $this->files->read($path);
+                return (string) $this->files->read($path);
             }
         }
 

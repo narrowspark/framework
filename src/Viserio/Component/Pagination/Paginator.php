@@ -33,6 +33,13 @@ class Paginator extends AbstractPaginator
     protected $presenter = 'simple';
 
     /**
+     * Determine if there are more items in the data source.
+     *
+     * @return bool
+     */
+    protected $hasMore;
+
+    /**
      * Create a new paginator.
      *
      * @param \Viserio\Component\Contracts\Pagination\Adapter $adapter
@@ -75,15 +82,15 @@ class Paginator extends AbstractPaginator
     }
 
     /**
-     * Get the URL for the next page.
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
-    public function getNextPageUrl()
+    public function getNextPageUrl(): ?string
     {
         if ($this->hasMorePages()) {
             return $this->getUrl($this->getCurrentPage() + 1);
         }
+
+        return null;
     }
 
     /**
@@ -92,7 +99,7 @@ class Paginator extends AbstractPaginator
     public function render(string $view = null): string
     {
         if ($this->views !== null && ! isset($this->presenters[$view])) {
-            return $this->getViewFactory()->create($view, ['paginator' => $this]);
+            return (string) $this->getViewFactory()->create($view, ['paginator' => $this]);
         } elseif (isset($this->presenters[$view])) {
             return (new $this->presenters[$view]($this))->render();
         }
@@ -165,7 +172,7 @@ class Paginator extends AbstractPaginator
     {
         $currentPage = $this->resolveCurrentPage();
 
-        return $this->isValidPageNumber($currentPage) ? (int) $currentPage : 1;
+        return $this->isValidPageNumber($currentPage) ? $currentPage : 1;
     }
 
     /**

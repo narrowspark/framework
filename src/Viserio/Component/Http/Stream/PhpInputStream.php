@@ -8,16 +8,22 @@ use Viserio\Component\Http\Util;
 class PhpInputStream extends AbstractStreamDecorator
 {
     /**
+     * Cached content-.
+     *
      * @var string
      */
     private $cache = '';
 
     /**
+     * True or false if eof is reached.
+     *
      * @var bool
      */
     private $reachedEof = false;
 
     /**
+     * Create a new php input stream instance.
+     *
      * @param string|resource $stream
      */
     public function __construct($stream = 'php://input')
@@ -26,7 +32,7 @@ class PhpInputStream extends AbstractStreamDecorator
             $stream = Util::tryFopen($stream, 'r');
         }
 
-        $this->stream = new Stream($stream);
+        parent::__construct(new Stream($stream));
     }
 
     /**

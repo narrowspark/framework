@@ -9,13 +9,11 @@ use Twig_Markup;
 use Twig_Profiler_Dumper_Html;
 use Twig_Profiler_Profile;
 use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class TwigDataCollector extends AbstractDataCollector implements
-    MenuAwareContract,
     PanelAwareContract,
     AssetAwareContract,
     TooltipAwareContract
@@ -26,6 +24,13 @@ class TwigDataCollector extends AbstractDataCollector implements
      * @var \Twig_Profiler_Profile
      */
     private $profile;
+
+    /**
+     * Twig environment.
+     *
+     * @var \Twig_Environment
+     */
+    private $twigEnvironment;
 
     /**
      * Computed data.
@@ -80,7 +85,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function getTemplateCount(): int
     {
-        return $this->getComputedData('template_count');
+        return (int) $this->getComputedData('template_count');
     }
 
     /**
@@ -100,7 +105,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function getBlockCount(): int
     {
-        return $this->getComputedData('block_count');
+        return (int) $this->getComputedData('block_count');
     }
 
     /**
@@ -110,7 +115,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function getMacroCount(): int
     {
-        return $this->getComputedData('macro_count');
+        return (int) $this->getComputedData('macro_count');
     }
 
     /**
@@ -218,7 +223,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      *
      * @param string $index
      *
-     * @return string|int
+     * @return mixed
      */
     private function getComputedData(string $index)
     {

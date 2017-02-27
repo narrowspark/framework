@@ -108,7 +108,7 @@ class RouteTreeOptimizer
      * @param \Viserio\Component\Routing\Generator\RouteTreeNode $node1
      * @param \Viserio\Component\Routing\Generator\RouteTreeNode $node2
      *
-     * @return \Viserio\Component\Routing\Generator\RouteTreeNode|null
+     * @return \Viserio\Component\Routing\Generator\RouteTreeNode|void
      */
     protected function extractCommonParentNode(RouteTreeNode $node1, RouteTreeNode $node2)
     {

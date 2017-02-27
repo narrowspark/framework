@@ -5,9 +5,8 @@ namespace Viserio\Component\WebProfiler\DataCollectors;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 
-class TimeDataCollector extends AbstractDataCollector implements MenuAwareContract
+class TimeDataCollector extends AbstractDataCollector
 {
     /**
      * The request start time.

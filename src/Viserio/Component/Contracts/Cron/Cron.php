@@ -185,7 +185,7 @@ interface Cron
     /**
      * Set the days of the week the command should run on.
      *
-     * @param array|dynamic $days
+     * @param array|string|int $days
      *
      * @return $this
      */

@@ -15,7 +15,7 @@ class HandlerParserTest extends MockeryTestCase
 {
     public function testGetMonolog()
     {
-        $handler = new HandlerParser($this->mock(Logger::class));
+        $handler = new HandlerParser($this->getMonologger());
 
         self::assertInstanceOf(Logger::class, $handler->getMonolog());
     }
@@ -25,7 +25,7 @@ class HandlerParserTest extends MockeryTestCase
      */
     public function testParseHandlerToThrowExceptionForLog()
     {
-        $handler = new HandlerParser($this->mock(Logger::class));
+        $handler = new HandlerParser($this->getMonologger());
 
         self::assertInstanceOf(
             HandlerInterface::class,
@@ -38,7 +38,7 @@ class HandlerParserTest extends MockeryTestCase
      */
     public function testParseHandlerToThrowExceptionForHandler()
     {
-        $handler = new HandlerParser($this->mock(Logger::class));
+        $handler = new HandlerParser($this->getMonologger());
 
         $handler->parseHandler('dontexist', '', 'debug');
     }
@@ -48,14 +48,14 @@ class HandlerParserTest extends MockeryTestCase
      */
     public function testParseHandlerToThrowExceptionForHandlerWithObject()
     {
-        $handler = new HandlerParser($this->mock(Logger::class));
+        $handler = new HandlerParser($this->getMonologger());
 
         $handler->parseHandler($handler, '', 'debug');
     }
 
     public function testParseHandler()
     {
-        $logger = $this->mock(Logger::class);
+        $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')
             ->once()
             ->andReturn(HandlerInterface::class);
@@ -66,7 +66,7 @@ class HandlerParserTest extends MockeryTestCase
 
     public function testParseHandlerWithProcessors()
     {
-        $logger = $this->mock(Logger::class);
+        $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')
             ->once()
             ->andReturn(HandlerInterface::class);
@@ -89,7 +89,7 @@ class HandlerParserTest extends MockeryTestCase
 
     public function testParseHandlerWithProcessor()
     {
-        $logger = $this->mock(Logger::class);
+        $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')
             ->once()
             ->andReturn(HandlerInterface::class);
@@ -109,7 +109,7 @@ class HandlerParserTest extends MockeryTestCase
 
     public function testParseHandlerWithObjectFormatter()
     {
-        $logger = $this->mock(Logger::class);
+        $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')
             ->once()
             ->andReturn(HandlerInterface::class);
@@ -133,7 +133,7 @@ class HandlerParserTest extends MockeryTestCase
      */
     public function testParseHandlerWithFormatterTothrowException()
     {
-        $logger  = $this->mock(Logger::class);
+        $logger  = $this->getMonologger();
         $handler = $this->mock(HandlerInterface::class);
 
         $parser = new HandlerParser($logger);
@@ -153,7 +153,7 @@ class HandlerParserTest extends MockeryTestCase
      */
     public function testParseHandlerWithFormatterWithDataProvider($formatter)
     {
-        $logger = $this->mock(Logger::class);
+        $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')
             ->once()
             ->andReturn(HandlerInterface::class);
@@ -184,5 +184,14 @@ class HandlerParserTest extends MockeryTestCase
             ['chrome'],
             ['gelf'],
         ];
+    }
+
+    private function getMonologger()
+    {
+        $logger = $this->mock(Logger::class);
+        $logger->shouldReceive('pushProcessor')
+            ->once();
+
+        return $logger;
     }
 }

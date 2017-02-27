@@ -12,7 +12,7 @@ trait ParseLevelTrait
      *
      * @var array
      */
-    protected $levels = [
+    protected static $levels = [
         'debug'     => MonologLogger::DEBUG,
         'info'      => MonologLogger::INFO,
         'notice'    => MonologLogger::NOTICE,
@@ -32,10 +32,10 @@ trait ParseLevelTrait
      *
      * @return int
      */
-    public function parseLevel(string $level): int
+    public static function parseLevel(string $level): int
     {
-        if (isset($this->levels[$level])) {
-            return $this->levels[$level];
+        if (isset(self::$levels[$level])) {
+            return self::$levels[$level];
         }
 
         throw new InvalidArgumentException('Invalid log level.');

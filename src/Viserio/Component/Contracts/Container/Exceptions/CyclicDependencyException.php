@@ -22,7 +22,8 @@ class CyclicDependencyException extends Exception implements InteropContainerExc
      */
     public function __construct(string $class, array $buildStack)
     {
-        $this->message    = sprintf('Circular reference found while resolving [%s].', $class);
+        parent::__construct(sprintf('Circular reference found while resolving [%s].', $class));
+
         $this->buildStack = $buildStack;
     }
 

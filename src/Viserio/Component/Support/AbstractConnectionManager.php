@@ -7,9 +7,13 @@ use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\Support\ConnectionManager as ConnectionManagerContract;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-abstract class AbstractConnectionManager implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
+abstract class AbstractConnectionManager implements
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract,
+    ConnectionManagerContract
 {
     use ContainerAwareTrait;
     use ConfigurationTrait;
@@ -68,9 +72,7 @@ abstract class AbstractConnectionManager implements RequiresComponentConfigContr
     }
 
     /**
-     * Get manager config.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getConfig(): array
     {
@@ -78,13 +80,9 @@ abstract class AbstractConnectionManager implements RequiresComponentConfigContr
     }
 
     /**
-     * Get a connection instance.
-     *
-     * @param string|null $name
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function getConnection(string $name = null)
+    public function getConnection(?string $name = null)
     {
         $name = $name ?? $this->getDefaultConnection();
 
@@ -98,11 +96,7 @@ abstract class AbstractConnectionManager implements RequiresComponentConfigContr
     }
 
     /**
-     * Reconnect to the given connection.
-     *
-     * @param string|null $name
-     *
-     * @return object
+     * {@inheritdoc}
      */
     public function reconnect(string $name = null)
     {
@@ -114,11 +108,9 @@ abstract class AbstractConnectionManager implements RequiresComponentConfigContr
     }
 
     /**
-     * Disconnect from the given connection.
-     *
-     * @param string|null $name
+     * {@inheritdoc}
      */
-    public function disconnect(string $name = null)
+    public function disconnect(string $name = null): void
     {
         $name = $name ?? $this->getDefaultConnection();
 
@@ -126,9 +118,7 @@ abstract class AbstractConnectionManager implements RequiresComponentConfigContr
     }
 
     /**
-     * Get the default connection name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getDefaultConnection(): string
     {
@@ -136,30 +126,23 @@ abstract class AbstractConnectionManager implements RequiresComponentConfigContr
     }
 
     /**
-     * Set the default connection name.
-     *
-     * @param string $name
+     * {@inheritdoc}
      */
-    public function setDefaultConnection(string $name)
+    public function setDefaultConnection(string $name): void
     {
         $this->options['default'] = $name;
     }
 
     /**
-     * Register a custom connection creator.
-     *
-     * @param string   $driver
-     * @param \Closure $callback
+     * {@inheritdoc}
      */
-    public function extend(string $driver, Closure $callback)
+    public function extend(string $driver, Closure $callback): void
     {
         $this->extensions[$driver] = $callback->bindTo($this, $this);
     }
 
     /**
-     * Return all of the created connections.
-     *
-     * @return object[]
+     * {@inheritdoc}
      */
     public function getConnections(): array
     {
@@ -167,11 +150,7 @@ abstract class AbstractConnectionManager implements RequiresComponentConfigContr
     }
 
     /**
-     * Check if the given connect is supported.
-     *
-     * @param string $connect
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasConnection(string $connect): bool
     {
@@ -181,11 +160,7 @@ abstract class AbstractConnectionManager implements RequiresComponentConfigContr
     }
 
     /**
-     * Get the configuration for a connection.
-     *
-     * @param string $name
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getConnectionConfig(string $name): array
     {
@@ -204,13 +179,7 @@ abstract class AbstractConnectionManager implements RequiresComponentConfigContr
     }
 
     /**
-     * Make the connection instance.
-     *
-     * @param array $config
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function createConnection(array $config)
     {

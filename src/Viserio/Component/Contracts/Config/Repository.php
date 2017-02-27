@@ -7,6 +7,16 @@ use ArrayAccess;
 interface Repository extends ArrayAccess
 {
     /**
+     * Import configuation from file and can be grouped together.
+     *
+     * @param string      $file
+     * @param string|null $group
+     *
+     * @return $this
+     */
+    public function import(string $file, string $group = null): Repository;
+
+    /**
      * Setting configuration values, using
      * either simple or nested keys.
      *

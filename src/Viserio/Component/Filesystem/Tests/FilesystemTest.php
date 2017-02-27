@@ -18,7 +18,7 @@ class FilesystemTest extends TestCase
     private $root;
 
     /**
-     * @var Viserio\Filesystem\Filesystem
+     * @var \Viserio\Component\Filesystem\Filesystem
      */
     private $files;
 

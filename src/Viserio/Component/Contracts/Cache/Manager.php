@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\Cache;
 
 use Cache\Adapter\Chain\CachePoolChain;
+use Viserio\Component\Contracts\Support\Manager as BaseManager;
 
-interface Manager
+interface Manager extends BaseManager
 {
     /**
      *  Chain multiple PSR-6 Cache pools together for performance.

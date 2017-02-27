@@ -247,7 +247,7 @@ class FilesystemManagerTest extends MockeryTestCase
                             'region'    => 'LON',
                             'username'  => 'your-username',
                             'apiKey'    => 'your-api-key',
-                            'container' => 'your-container',
+                            'container' => null,
                         ],
                     ],
                 ],

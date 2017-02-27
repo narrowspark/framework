@@ -17,7 +17,7 @@ class RegexMatcher extends AbstractMatcher
     /**
      * A group of paramters keys.
      *
-     * @var int[]
+     * @var array
      */
     protected $parameterKeyGroupMap;
 

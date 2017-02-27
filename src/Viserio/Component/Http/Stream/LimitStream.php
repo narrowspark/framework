@@ -7,13 +7,23 @@ use RuntimeException;
 
 class LimitStream extends AbstractStreamDecorator
 {
-    /** @var int Offset to start reading from */
+    /**
+     * Offset to start reading from.
+     *
+     * @var int
+     */
     private $offset;
 
-    /** @var int Limit the number of bytes that can be read */
+    /**
+     * Limit the number of bytes that can be read.
+     *
+     * @var int
+     */
     private $limit;
 
     /**
+     * Create a new limit stream instance.
+     *
      * @param StreamInterface $stream Stream to wrap
      * @param int             $limit  Total number of bytes to allow to be read
      *                                from the stream. Pass -1 for no limit.
@@ -22,10 +32,11 @@ class LimitStream extends AbstractStreamDecorator
      */
     public function __construct(
         StreamInterface $stream,
-        $limit = -1,
-        $offset = 0
+        int $limit = -1,
+        ?int $offset = 0
     ) {
-        $this->stream = $stream;
+        parent::__construct($stream);
+
         $this->setLimit($limit);
         $this->setOffset($offset);
     }
@@ -49,13 +60,14 @@ class LimitStream extends AbstractStreamDecorator
     }
 
     /**
-     * Returns the size of the limited subset of data
+     * Returns the size of the limited subset of data.
+     *
      * {@inheritdoc}
      */
     public function getSize()
     {
-        if (null === ($length = $this->stream->getSize())) {
-            return;
+        if (($length = $this->stream->getSize()) === null) {
+            return null;
         } elseif ($this->limit == -1) {
             return $length - $this->offset;
         }
@@ -64,14 +76,15 @@ class LimitStream extends AbstractStreamDecorator
     }
 
     /**
-     * Allow for a bounded seek on the read limited stream
+     * Allow for a bounded seek on the read limited stream.
+     *
      * {@inheritdoc}
      */
     public function seek($offset, $whence = SEEK_SET)
     {
         if ($whence !== SEEK_SET || $offset < 0) {
             throw new RuntimeException(sprintf(
-                'Cannot seek to offset % with whence %s',
+                'Cannot seek to offset %s with whence %s',
                 $offset,
                 $whence
             ));
@@ -87,7 +100,8 @@ class LimitStream extends AbstractStreamDecorator
     }
 
     /**
-     * Give a relative tell()
+     * Give a relative tell().
+     *
      * {@inheritdoc}
      */
     public function tell()
@@ -101,8 +115,10 @@ class LimitStream extends AbstractStreamDecorator
      * @param int $offset Offset to seek to and begin byte limiting from
      *
      * @throws \RuntimeException if the stream cannot be seeked
+     *
+     * @return void
      */
-    public function setOffset($offset)
+    public function setOffset(int $offset): void
     {
         $current = $this->stream->tell();
 
@@ -111,7 +127,7 @@ class LimitStream extends AbstractStreamDecorator
             if ($this->stream->isSeekable()) {
                 $this->stream->seek($offset);
             } elseif ($current > $offset) {
-                throw new RuntimeException("Could not seek to stream offset $offset");
+                throw new RuntimeException(sprintf('Could not seek to stream offset %s', $offset));
             } else {
                 $this->stream->read($offset - $current);
             }
@@ -126,8 +142,10 @@ class LimitStream extends AbstractStreamDecorator
      *
      * @param int $limit Number of bytes to allow to be read from the stream.
      *                   Use -1 for no limit.
+     *
+     * @return void
      */
-    public function setLimit($limit)
+    public function setLimit(int $limit): void
     {
         $this->limit = $limit;
     }

@@ -7,7 +7,7 @@ use Interop\Container\ServiceProvider;
 use Swift_Mailer;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
-use Viserio\Component\Contracts\Queue\Queue as QueueContract;
+use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Mail\Mailer;
 use Viserio\Component\Mail\QueueMailer;
@@ -53,10 +53,10 @@ class MailServiceProvider implements ServiceProvider
 
     public static function createMailer(ContainerInterface $container): MailerContract
     {
-        if ($container->has(QueueContract::class)) {
+        if ($container->has(QueueConnectorContract::class)) {
             $mailer = new QueueMailer(
                 $container->get(Swift_Mailer::class),
-                $container->get(QueueContract::class),
+                $container->get(QueueConnectorContract::class),
                 $container
             );
         } else {

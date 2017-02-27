@@ -11,7 +11,7 @@ use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
-use Viserio\Component\Contracts\Queue\Queue as QueueContract;
+use Viserio\Component\Contracts\Queue\QueueConnector as QueueContract;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
 use Viserio\Component\Mail\QueueMailer;

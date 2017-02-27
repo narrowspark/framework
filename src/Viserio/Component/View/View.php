@@ -18,7 +18,7 @@ class View implements ArrayAccess, ViewContract
     /**
      * The view factory instance.
      *
-     * @var \Viserio\Component\View\Factory
+     * @var \Viserio\Component\Contracts\View\Factory
      */
     protected $factory;
 
@@ -53,13 +53,13 @@ class View implements ArrayAccess, ViewContract
     /**
      * Create a new view instance.
      *
-     * @param \Viserio\Component\View\Factory                      $factory
+     * @param \Viserio\Component\Contracts\View\Factory            $factory
      * @param \Viserio\Component\Contracts\View\Engine             $engine
      * @param string                                               $view
      * @param array                                                $fileInfo
      * @param array|\Viserio\Component\Contracts\Support\Arrayable $data
      */
-    public function __construct(Factory $factory, EngineContract $engine, string $view, array $fileInfo, $data = [])
+    public function __construct(FactoryContract $factory, EngineContract $engine, string $view, array $fileInfo, $data = [])
     {
         $this->view     = $view;
         $this->fileInfo = $fileInfo;
@@ -112,9 +112,9 @@ class View implements ArrayAccess, ViewContract
      *
      * @throws \BadMethodCallException
      *
-     * @return \Viserio\Component\View\View
+     * @return \Viserio\Component\Contracts\View\View
      */
-    public function __call(string $method, array $parameters): ViewContract
+    public function __call(string $method, array $parameters)
     {
         if (Str::startsWith($method, 'with')) {
             return $this->with(Str::snake(mb_substr($method, 4)), $parameters[0]);
