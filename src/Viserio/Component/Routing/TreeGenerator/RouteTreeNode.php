@@ -94,7 +94,7 @@ final class RouteTreeNode
     /**
      * Update RouteTreeNode class.
      *
-     * @param array                                             $matchers
+     * @param array                                                                                                                        $matchers
      * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection|\Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $contents
      *
      * @throws \RuntimeException

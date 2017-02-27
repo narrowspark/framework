@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Generator;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Routing\Matchers\AbstractMatcher;
+use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
 use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
-use Viserio\Component\Routing\Matchers\AbstractMatcher;
-use Viserio\Component\Routing\Route;
 
 class RouteTreeNodeTest extends MockeryTestCase
 {
