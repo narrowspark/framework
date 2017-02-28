@@ -44,11 +44,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     }
 
     /**
-     * Set the cache path for compiled routes.
-     *
-     * @param string $path
-     *
-     * @return \Viserio\Component\Contracts\Routing\Router
+     * {@inheritdoc}
      */
     public function setCachePath(string $path): RouterContract
     {
@@ -58,11 +54,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     }
 
     /**
-     * Get the cache path for the compiled routes.
-     *
-     * @return string
-     *
-     * @codeCoverageIgnore
+     * {@inheritdoc}
      */
     public function getCachePath(): string
     {
@@ -70,11 +62,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     }
 
     /**
-     * Refresh cache file on development.
-     *
-     * @param bool $refreshCache
-     *
-     * @return \Viserio\Component\Contracts\Routing\Router
+     * {@inheritdoc}
      */
     public function refreshCache(bool $refreshCache): RouterContract
     {
@@ -401,8 +389,10 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      * Add the necessary where clauses to the route based on its initial registration.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
+     *
+     * @return void
      */
-    protected function addWhereClausesToRoute(RouteContract $route)
+    protected function addWhereClausesToRoute(RouteContract $route): void
     {
         $where  = $route->getAction()['where'] ?? [];
         $patern = array_merge($this->patterns, $where);
@@ -416,8 +406,10 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      * Merge the group stack with the controller action.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
+     *
+     * @return void
      */
-    protected function mergeGroupAttributesIntoRoute(RouteContract $route)
+    protected function mergeGroupAttributesIntoRoute(RouteContract $route): void
     {
         $action = $this->mergeWithLastGroup($route->getAction());
 
@@ -516,7 +508,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      *
      * @return string|null
      */
-    protected function formatUsesPrefix(array $new, array $old)
+    protected function formatUsesPrefix(array $new, array $old): ?string
     {
         if (isset($new['namespace'])) {
             if (mb_strpos($new['namespace'], '\\') === 0) {
@@ -539,7 +531,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      *
      * @return string|null
      */
-    protected function formatGroupPrefix(array $new, array $old)
+    protected function formatGroupPrefix(array $new, array $old): ?string
     {
         $oldPrefix = $old['prefix'] ?? null;
 
@@ -558,7 +550,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      *
      * @return string|null
      */
-    protected function formatGroupSuffix(array $new, array $old)
+    protected function formatGroupSuffix(array $new, array $old): ?string
     {
         $oldSuffix = $old['suffix'] ?? null;
 
@@ -573,8 +565,10 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      * Update the group stack with the given attributes.
      *
      * @param array $attributes
+     *
+     * @return void
      */
-    protected function updateGroupStack(array $attributes)
+    protected function updateGroupStack(array $attributes): void
     {
         if (! empty($this->groupStack)) {
             $attributes = $this->mergeGroup($attributes, end($this->groupStack));

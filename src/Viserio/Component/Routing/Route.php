@@ -135,11 +135,13 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getDomain()
+    public function getDomain(): ?string
     {
         if (isset($this->action['domain'])) {
             return str_replace(['http://', 'https://'], '', $this->action['domain']);
         }
+
+        return null;
     }
 
     /**
@@ -153,7 +155,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->action['as'] ?? null;
     }
@@ -289,7 +291,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getSuffix()
+    public function getSuffix(): ?string
     {
         return $this->action['suffix'] ?? null;
     }
@@ -339,7 +341,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function forgetParameter(string $name)
+    public function forgetParameter(string $name): void
     {
         $this->parameters;
 

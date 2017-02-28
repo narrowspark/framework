@@ -79,10 +79,10 @@ class AssetsRendererTest extends MockeryTestCase
     public function testRenderWithUrlGenerator()
     {
         $generator = $this->mock(UrlGenerator::class);
-        $generator->shouldReceive('route')
+        $generator->shouldReceive('generate')
             ->once()
             ->andReturn('path_css');
-        $generator->shouldReceive('route')
+        $generator->shouldReceive('generate')
             ->once()
             ->andReturn('path_js');
         $profiler = $this->mock(WebProfilerContract::class);

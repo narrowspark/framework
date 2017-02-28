@@ -77,6 +77,8 @@ abstract class AbstractRouteDispatcher
      * Add a list of middlewares.
      *
      * @param array $middlewares
+     *
+     * @return void
      */
     public function addMiddlewares(array $middlewares): void
     {
@@ -89,15 +91,13 @@ abstract class AbstractRouteDispatcher
      * @param string $name
      * @param array  $middleware
      *
-     * @return $this
+     * @return void
      *
      * @codeCoverageIgnore
      */
-    public function setMiddlewareGroup(string $name, array $middleware): self
+    public function setMiddlewareGroup(string $name, array $middleware): void
     {
         $this->middlewareGroups[$name] = $middleware;
-
-        return $this;
     }
 
     /**
@@ -105,15 +105,13 @@ abstract class AbstractRouteDispatcher
      *
      * @param array $middlewarePriorities
      *
-     * @return $this
+     * @return void
      *
      * @codeCoverageIgnore
      */
-    public function setMiddlewarePriorities(array $middlewarePriorities): self
+    public function setMiddlewarePriorities(array $middlewarePriorities): void
     {
         $this->middlewarePriority = $middlewarePriorities;
-
-        return $this;
     }
 
     /**
@@ -148,7 +146,6 @@ abstract class AbstractRouteDispatcher
      *
      * @throws \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
      * @throws \Narrowspark\HttpStatus\Exception\NotFoundException
-     * @throws \Narrowspark\HttpStatus\Exception\InternalServerErrorException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -231,12 +228,38 @@ abstract class AbstractRouteDispatcher
         }
 
         if (! file_exists($this->path)) {
+            $this->createCacheFolder($this->path);
+
             $routerCompiler = new TreeRouteCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
 
             file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()), LOCK_EX);
         }
 
         return require $this->path;
+    }
+
+    /**
+     * Make a nested path, creating directories down the path recursion.
+     *
+     * @param string $path
+     *
+     * @return bool
+     */
+    private function createCacheFolder(string $path): bool
+    {
+        $dir = pathinfo($path , PATHINFO_DIRNAME);
+
+        if (is_dir($dir)) {
+            return true;
+        }
+
+        if ($this->createCacheFolder($dir)) {
+            if (mkdir($dir)) {
+                chmod($dir , 0777);
+
+                return true;
+            }
+        }
     }
 
     /**
