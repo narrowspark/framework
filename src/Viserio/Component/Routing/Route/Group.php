@@ -9,8 +9,9 @@ class Group
     /**
      * Merge route groups into a new array.
      *
-     * @param  array $new
-     * @param  array $old
+     * @param array $new
+     * @param array $old
+     *
      * @return array
      */
     public static function merge(array $new, array $old): array

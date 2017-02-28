@@ -11,8 +11,9 @@ class Action
     /**
      * Parse the given action into an array.
      *
-     * @param  string $uri
-     * @param  mixed  $action
+     * @param string $uri
+     * @param mixed  $action
+     *
      * @return array
      */
     public static function parse(string $uri, $action): array
@@ -55,7 +56,8 @@ class Action
     /**
      * Get an action for a route that has no action.
      *
-     * @param  string $uri
+     * @param string $uri
+     *
      * @return array
      */
     protected static function missingAction(string $uri): array
