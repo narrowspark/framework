@@ -3,9 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
-use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
-use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\VarExporter;
 

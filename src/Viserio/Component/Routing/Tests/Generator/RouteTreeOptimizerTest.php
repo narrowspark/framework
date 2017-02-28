@@ -12,8 +12,8 @@ use Viserio\Component\Routing\Matchers\RegexMatcher;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
 use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
-use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
+use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 
 class RouteTreeOptimizerTest extends MockeryTestCase
 {

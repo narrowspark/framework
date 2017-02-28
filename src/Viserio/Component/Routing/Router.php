@@ -10,9 +10,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
-use Viserio\Component\Routing\Route\Collection as RouteCollection;
 
 class Router extends AbstractRouteDispatcher implements RouterContract
 {
