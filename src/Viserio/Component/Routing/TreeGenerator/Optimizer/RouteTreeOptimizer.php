@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\TreeGenerator;
+namespace Viserio\Component\Routing\TreeGenerator\Optimizer;
 
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
-use Viserio\Component\Routing\TreeGenerator\Optimizer\MatcherOptimizer;
+use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
+use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 
 final class RouteTreeOptimizer
 {
@@ -49,9 +50,9 @@ final class RouteTreeOptimizer
     /**
      * Optimize node collection.
      *
-     * @param RouteTreeNode $node
+     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node
      *
-     * @return RouteTreeNode
+     * @return \Viserio\Component\Routing\TreeGenerator\RouteTreeNode
      */
     private function optimizeNode(RouteTreeNode $node): RouteTreeNode
     {

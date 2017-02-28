@@ -14,7 +14,8 @@ use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
-use Viserio\Component\Routing\TreeGenerator\RouteTreeOptimizer;
+use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
+use Viserio\Component\Routing\TreeGenerator\RouteTreeCompiler;
 
 abstract class AbstractRouteDispatcher
 {
@@ -25,7 +26,7 @@ abstract class AbstractRouteDispatcher
     /**
      * The route collection instance.
      *
-     * @var \Viserio\Component\Routing\RouteCollection
+     * @var \Viserio\Component\Routing\Route\Collection
      */
     protected $routes;
 
@@ -230,7 +231,7 @@ abstract class AbstractRouteDispatcher
         if (! file_exists($this->path)) {
             $this->createCacheFolder($this->path);
 
-            $routerCompiler = new TreeRouteCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
+            $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
 
             file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()), LOCK_EX);
         }

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing;
+namespace Viserio\Component\Routing\Route;
 
 use Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException;
 use Viserio\Component\Contracts\Routing\Pattern;

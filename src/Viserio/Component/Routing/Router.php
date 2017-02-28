@@ -12,6 +12,7 @@ use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContra
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
+use Viserio\Component\Routing\Route\Collection as RouteCollection;
 
 class Router extends AbstractRouteDispatcher implements RouterContract
 {

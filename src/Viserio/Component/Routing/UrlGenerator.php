@@ -9,6 +9,7 @@ use Psr\Http\Message\UriInterface;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Support\Traits\MacroableTrait;
+use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract
 
 class UrlGenerator implements UrlGeneratorContract
 {
@@ -17,7 +18,7 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * The route collection.
      *
-     * @var \Viserio\Component\Routing\RouteCollection
+     * @var \Viserio\Component\Contracts\Routing\RouteCollection
      */
     protected $routes;
 
@@ -38,12 +39,12 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Create a new URL Generator instance.
      *
-     * @param \Viserio\Component\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
-     * @param \Interop\Http\Factory\UriFactoryInterface  $uriFactory
+     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
+     * @param \Psr\Http\Message\ServerRequestInterface             $request
+     * @param \Interop\Http\Factory\UriFactoryInterface            $uriFactory
      */
     public function __construct(
-        RouteCollection $routes,
+        RouteCollectionContract $routes,
         ServerRequestInterface $request,
         UriFactoryInterface $uriFactory
     ) {
