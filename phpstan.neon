@@ -82,7 +82,9 @@ parameters:
         - '#\$code of class Twig_Source constructor expects string#'
         - '#\$contents of method League\\Flysystem\\AdapterInterface#'
         - "#Casting to mixed[] something that's already mixed[]#"
-        - '#$array of static method Narrowspark\\Arr\\Arr::#'
+        - '#\$array of static method Narrowspark\\Arr\\Arr::#'
+        - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeOptimizer::optimizeNodes#'
+        - '#\$nodes of method Viserio\\Component\\Routing\\TreeRouteCompiler::compileSegmentNodes#'
 
         # if check exists
         - '#\$contents of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::encryptString#'
@@ -101,6 +103,7 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
         - '#Method Viserio\\Component\\Routing\\Route::parseAction#'
         - '#Method Viserio\\Component\\Routing\\Router::convertToControllerAction#'
+        - 'Property Viserio\\Component\\Routing\\Segments\\ParameterSegment::\$names'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'

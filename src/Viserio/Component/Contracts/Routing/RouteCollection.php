@@ -40,7 +40,7 @@ interface RouteCollection
      *
      * @return \Viserio\Component\Contracts\Routing\Route|null
      */
-    public function getByName(string $name);
+    public function getByName(string $name): ?Route;
 
     /**
      * Get a route instance by its controller action.
@@ -49,7 +49,7 @@ interface RouteCollection
      *
      * @return \Viserio\Component\Contracts\Routing\Route|null
      */
-    public function getByAction(string $action);
+    public function getByAction(string $action): ?Route;
 
     /**
      * Get all of the routes in the collection.

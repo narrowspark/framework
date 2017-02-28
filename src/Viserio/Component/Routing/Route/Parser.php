@@ -8,7 +8,7 @@ use Viserio\Component\Contracts\Routing\RouteParser as RouteParserContract;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\Segments\ParameterSegment;
 
-class RouteParser implements RouteParserContract
+class Parser implements RouteParserContract
 {
     /**
      * {@inheritdoc}
