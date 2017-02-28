@@ -239,30 +239,6 @@ abstract class AbstractRouteDispatcher
     }
 
     /**
-     * Make a nested path, creating directories down the path recursion.
-     *
-     * @param string $path
-     *
-     * @return bool
-     */
-    private function createCacheFolder(string $path): bool
-    {
-        $dir = pathinfo($path , PATHINFO_DIRNAME);
-
-        if (is_dir($dir)) {
-            return true;
-        }
-
-        if ($this->createCacheFolder($dir)) {
-            if (mkdir($dir)) {
-                chmod($dir , 0777);
-
-                return true;
-            }
-        }
-    }
-
-    /**
      * Run the given route within a Stack "onion" instance.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
@@ -368,5 +344,29 @@ abstract class AbstractRouteDispatcher
         }
 
         return $results;
+    }
+
+    /**
+     * Make a nested path, creating directories down the path recursion.
+     *
+     * @param string $path
+     *
+     * @return bool
+     */
+    private function createCacheFolder(string $path): bool
+    {
+        $dir = pathinfo($path, PATHINFO_DIRNAME);
+
+        if (is_dir($dir)) {
+            return true;
+        }
+
+        if ($this->createCacheFolder($dir)) {
+            if (mkdir($dir)) {
+                chmod($dir, 0777);
+
+                return true;
+            }
+        }
     }
 }
