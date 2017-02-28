@@ -4,5 +4,4 @@ namespace Viserio\Component\Routing\Middleware;
 
 class Middleware
 {
-
 }

@@ -17,7 +17,7 @@ class ParameterBinder
     /**
      * Create a new Route parameter binder instance.
      *
-     * @param  \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contracts\Routing\Route $route
      */
     public function __construct(RouteContract $route)
     {
@@ -28,7 +28,7 @@ class ParameterBinder
      * Get the parameters for the route.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-
+     *
      * @return array
      */
     public function getParameters(ServerRequestInterface $request): array
