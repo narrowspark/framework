@@ -59,7 +59,6 @@
         "php-di/invoker"                                     : "^1.3",
         "respect/validation"                                 : "^1.1",
         "schnittstabil/csrf-tokenservice"                    : "^2.0",
-        "stecman/symfony-console-completion"                 : "^0.6",
         "symfony/console"                                    : "^3.1",
         "symfony/debug"                                      : "^3.1",
         "symfony/finder"                                     : "^3.1",
