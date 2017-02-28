@@ -128,6 +128,7 @@
         "mouf/picotainer"                                    : "^1.0",
         "narrowspark/php-cs-fixer-config"                    : "^2.2",
         "narrowspark/testing-helper"                         : "^3.0",
+        "nikic/fast-route"                                   : "^1.2",
         "mockery/mockery"                                    : "1.0.0-alpha1",
         "phpunit/phpunit"                                    : "^6.0",
         "phpbench/phpbench"                                  : "^0.12",
@@ -139,6 +140,7 @@
         "spatie/array-to-xml"                                : "^2.1",
         "twig/twig"                                          : "^2.0",
         "sepia/po-parser"                                    : "^4.2",
+        "symfony/routing"                                    : "^3.1",
         "symfony/yaml"                                       : "^3.1",
         "yosymfony/toml"                                     : "^0.3"
     },
