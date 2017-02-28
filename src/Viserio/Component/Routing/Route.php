@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Routing\Route\Action;
+use Viserio\Component\Routing\Route\Action as RouteAction;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
@@ -87,7 +87,7 @@ class Route implements RouteContract
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
         $this->httpMethods = array_map('strtoupper', (array) $methods);
-        $this->action      = Action::parse($uri, $action);
+        $this->action      = RouteAction::parse($uri, $action);
 
         if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
             $this->httpMethods[] = 'HEAD';

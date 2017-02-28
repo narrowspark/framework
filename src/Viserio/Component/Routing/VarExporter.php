@@ -4,7 +4,7 @@ namespace Viserio\Component\Routing;
 
 use stdClass;
 
-class VarExporter
+final class VarExporter
 {
     /**
      * Private constructor; non-instantiable.

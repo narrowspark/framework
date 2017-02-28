@@ -112,7 +112,7 @@ class RegexMatcher extends AbstractMatcher
         parent::mergeParameterKeys($matcher);
 
         if (! method_exists($matcher, 'getParameterKeyGroupMap')) {
-            throw new RuntimeException(sprintf('%s::getParameterKeyGroupMap is needed.', get_class($this)));
+            throw new RuntimeException(sprintf('%s::getParameterKeyGroupMap is needed for this function.', get_class($this)));
         }
 
         $this->parameterKeyGroupMap += $matcher->getParameterKeyGroupMap();
