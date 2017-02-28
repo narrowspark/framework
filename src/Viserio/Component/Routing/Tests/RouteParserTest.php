@@ -19,9 +19,7 @@ class RouteParserTest extends TestCase
      */
     public function testRouteParser($pattern, array $conditions, array $expectedSegments)
     {
-        $parser = new RouteParser();
-
-        self::assertEquals($expectedSegments, $parser->parse($pattern, $conditions));
+        self::assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
     }
 
     public function routeParsingProvider()
@@ -143,7 +141,7 @@ class RouteParserTest extends TestCase
      */
     public function testInvalidRouteParsing($uri)
     {
-        (new RouteParser())->parse($uri, []);
+        RouteParser::parse($uri, []);
     }
 
     public function invalidParsingProvider()

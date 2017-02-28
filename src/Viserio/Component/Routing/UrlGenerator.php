@@ -7,9 +7,9 @@ use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Support\Traits\MacroableTrait;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract
 
 class UrlGenerator implements UrlGeneratorContract
 {

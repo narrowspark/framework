@@ -8,12 +8,12 @@ use Viserio\Component\Contracts\Routing\RouteParser as RouteParserContract;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\Segments\ParameterSegment;
 
-class Parser implements RouteParserContract
+final class Parser implements RouteParserContract
 {
     /**
      * {@inheritdoc}
      */
-    public function parse(string $route, array $conditions): array
+    public static function parse(string $route, array $conditions): array
     {
         if (mb_strlen($route) > 1 && $route[0] !== '/') {
             throw new InvalidRoutePatternException(sprintf(
@@ -30,10 +30,10 @@ class Parser implements RouteParserContract
         array_shift($patternSegments);
 
         foreach ($patternSegments as $key => $patternSegment) {
-            if ($this->matchRouteParameters($route, $patternSegment, $conditions, $matches, $names)) {
+            if (self::matchRouteParameters($route, $patternSegment, $conditions, $matches, $names)) {
                 $segments[] = new ParameterSegment(
                     $names,
-                    $this->generateRegex($matches, $conditions)
+                    self::generateRegex($matches, $conditions)
                 );
             } else {
                 $segments[] = new StaticMatcher($patternSegment);
@@ -54,7 +54,7 @@ class Parser implements RouteParserContract
      *
      * @return bool
      */
-    protected function matchRouteParameters(
+    private static function matchRouteParameters(
         string $route,
         string $patternSegment,
         array &$conditions,
@@ -127,7 +127,7 @@ class Parser implements RouteParserContract
      *
      * @return string
      */
-    protected function generateRegex(array $matches, array $parameterPatterns): string
+    private static function generateRegex(array $matches, array $parameterPatterns): string
     {
         $regex = '/^';
         foreach ($matches as $match) {

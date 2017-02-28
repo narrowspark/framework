@@ -37,49 +37,6 @@ class RouterTest extends MockeryTestCase
         $this->delTree(__DIR__ . '/../Cache/');
     }
 
-    public function testGroupMerging()
-    {
-        $old = ['prefix' => 'foo/bar/'];
-        self::assertEquals(
-            ['prefix' => 'foo/bar/baz', 'suffix' => null, 'namespace' => null, 'where' => []],
-            $this->router->mergeGroup(['prefix' => 'baz'], $old)
-        );
-
-        $old = ['suffix' => '.bar'];
-        self::assertEquals(
-            ['prefix' => null, 'suffix' => '.foo.bar', 'namespace' => null, 'where' => []],
-            $this->router->mergeGroup(['suffix' => '.foo'], $old)
-        );
-
-        $old = ['domain' => 'foo'];
-        self::assertEquals(
-            ['domain' => 'baz', 'prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => []],
-            $this->router->mergeGroup(['domain' => 'baz'], $old)
-        );
-
-        $old = ['as' => 'foo.'];
-        self::assertEquals(
-            ['as' => 'foo.bar', 'prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => []],
-            $this->router->mergeGroup(['as' => 'bar'], $old)
-        );
-
-        $old = ['where' => ['var1' => 'foo', 'var2' => 'bar']];
-        self::assertEquals(
-            ['prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => [
-                'var1' => 'foo', 'var2' => 'baz', 'var3' => 'qux',
-            ]],
-            $this->router->mergeGroup(['where' => ['var2' => 'baz', 'var3' => 'qux']], $old)
-        );
-
-        $old = [];
-        self::assertEquals(
-            ['prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => [
-                'var1' => 'foo', 'var2' => 'bar',
-            ]],
-            $this->router->mergeGroup(['where' => ['var1' => 'foo', 'var2' => 'bar']], $old)
-        );
-    }
-
     public function testMergingControllerUses()
     {
         $router = $this->router;

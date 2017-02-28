@@ -183,13 +183,6 @@ interface Route
     public function getParameters(): array;
 
     /**
-     * Determine if the route has parameters.
-     *
-     * @return bool
-     */
-    public function hasParameters(): bool;
-
-    /**
      * Unset a parameter on the route if it is set.
      *
      * @param string $name

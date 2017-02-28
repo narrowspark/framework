@@ -203,16 +203,6 @@ interface Router
     public function mergeWithLastGroup(array $new): array;
 
     /**
-     * Merge the given group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return array
-     */
-    public function mergeGroup(array $new, array $old): array;
-
-    /**
      * Get the suffix from the last group on the stack.
      *
      * @return string

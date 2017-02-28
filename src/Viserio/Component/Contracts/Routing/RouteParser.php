@@ -25,5 +25,5 @@ interface RouteParser
      *
      * @return \Viserio\Component\Contracts\Routing\RouteSegment[]
      */
-    public function parse(string $route, array $conditions): array;
+    public static function parse(string $route, array $conditions): array;
 }

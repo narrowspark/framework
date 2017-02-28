@@ -4,13 +4,13 @@ namespace Viserio\Component\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
-use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
+use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
@@ -239,32 +239,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function mergeWithLastGroup(array $new): array
     {
-        return $this->mergeGroup($new, end($this->groupStack));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function mergeGroup(array $new, array $old): array
-    {
-        $new['namespace'] = $this->formatUsesPrefix($new, $old);
-        $new['prefix']    = $this->formatGroupPrefix($new, $old);
-        $new['suffix']    = $this->formatGroupSuffix($new, $old);
-
-        if (isset($new['domain'])) {
-            unset($old['domain']);
-        }
-
-        $new['where'] = array_merge(
-            isset($old['where']) ? $old['where'] : [],
-            isset($new['where']) ? $new['where'] : []
-        );
-
-        if (isset($old['as'])) {
-            $new['as'] = $old['as'] . ($new['as'] ?? '');
-        }
-
-        return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'suffix', 'where', 'as']), $new);
+        return RouteGroup::merge($new, end($this->groupStack));
     }
 
     /**
@@ -447,7 +422,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
         }
 
         if (! empty($this->groupStack)) {
-            $action['uses'] = $this->prependGroupUses($action['uses']);
+            $action['uses'] = $this->prependGroupNamespace($action['uses']);
         }
 
         $action['controller'] = $action['uses'];
@@ -462,11 +437,13 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      *
      * @return string
      */
-    protected function prependGroupUses(string $uses): string
+    protected function prependGroupNamespace(string $uses): string
     {
         $group = end($this->groupStack);
 
-        return isset($group['namespace']) && mb_strpos($uses, '\\') !== 0 ? $group['namespace'] . '\\' . $uses : $uses;
+        return isset($group['namespace']) && mb_strpos($uses, '\\') !== 0 ?
+            $group['namespace'] . '\\' . $uses :
+            $uses;
     }
 
     /**
@@ -502,67 +479,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     }
 
     /**
-     * Format the uses prefix for the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return string|null
-     */
-    protected function formatUsesPrefix(array $new, array $old): ?string
-    {
-        if (isset($new['namespace'])) {
-            if (mb_strpos($new['namespace'], '\\') === 0) {
-                return trim($new['namespace'], '\\');
-            }
-
-            return isset($old['namespace']) ?
-                trim($old['namespace'], '\\') . '\\' . trim($new['namespace'], '\\') :
-                trim($new['namespace'], '\\');
-        }
-
-        return $old['namespace'] ?? null;
-    }
-
-    /**
-     * Format the prefix for the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return string|null
-     */
-    protected function formatGroupPrefix(array $new, array $old): ?string
-    {
-        $oldPrefix = $old['prefix'] ?? null;
-
-        if (isset($new['prefix'])) {
-            return trim($oldPrefix, '/') . '/' . trim($new['prefix'], '/');
-        }
-
-        return $oldPrefix;
-    }
-
-    /**
-     * Format the suffix for the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return string|null
-     */
-    protected function formatGroupSuffix(array $new, array $old): ?string
-    {
-        $oldSuffix = $old['suffix'] ?? null;
-
-        if (isset($new['suffix'])) {
-            return trim($new['suffix']) . trim($oldSuffix);
-        }
-
-        return $oldSuffix;
-    }
-
-    /**
      * Update the group stack with the given attributes.
      *
      * @param array $attributes
@@ -572,7 +488,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     protected function updateGroupStack(array $attributes): void
     {
         if (! empty($this->groupStack)) {
-            $attributes = $this->mergeGroup($attributes, end($this->groupStack));
+            $attributes = RouteGroup::merge($attributes, end($this->groupStack));
         }
 
         $this->groupStack[] = $attributes;
