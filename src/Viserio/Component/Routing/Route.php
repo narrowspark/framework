@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Routing\Route\Action as RouteAction;
-use Viserio\Component\Routing\Route\ParameterBinder as RouteParameterBinder;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
@@ -379,7 +378,6 @@ class Route implements RouteContract
     public function run(ServerRequestInterface $request): ResponseInterface
     {
         $this->serverRequest = $request;
-        $this->parameters    = (new RouteParameterBinder($this))->getParameters($this->serverRequest);
 
         if ($this->isControllerAction()) {
             return $this->getController()->{$this->getControllerMethod()}();

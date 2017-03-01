@@ -24,6 +24,7 @@ class ViewEngineResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Engine [foo] not found.
      */
     public function testResolverThrowsExceptionOnUnknownEngine()
     {

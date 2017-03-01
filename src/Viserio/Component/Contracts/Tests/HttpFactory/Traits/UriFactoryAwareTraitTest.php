@@ -19,7 +19,7 @@ class UriFactoryAwareTraitTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing \Interop\Http\Factory\UriFactoryInterface is not set up.
+     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\UriFactoryInterface] is not set up.
      */
     public function testGetUriFactoryThrowExceptionIfEventsDispatcherIsNotSet()
     {

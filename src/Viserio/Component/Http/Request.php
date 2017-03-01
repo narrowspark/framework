@@ -248,7 +248,7 @@ class Request extends AbstractMessage implements RequestInterface
         }
 
         throw new InvalidArgumentException(
-            'Invalid URI provided; must be null, a string, or a Psr\Http\Message\UriInterface instance.'
+            'Invalid URI provided; must be null, a string, or a [\Psr\Http\Message\UriInterface] instance.'
         );
     }
 }

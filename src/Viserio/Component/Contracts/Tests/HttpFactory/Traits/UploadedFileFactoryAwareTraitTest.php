@@ -19,7 +19,7 @@ class UploadedFileFactoryAwareTraitTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing \Interop\Http\Factory\UploadedFileFactoryInterface is not set up.
+     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\UploadedFileFactoryInterface] is not set up.
      */
     public function testGetUploadedFileFactoryThrowExceptionIfEventsDispatcherIsNotSet()
     {

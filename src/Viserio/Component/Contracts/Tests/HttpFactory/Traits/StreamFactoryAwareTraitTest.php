@@ -19,7 +19,7 @@ class StreamFactoryAwareTraitTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing \Interop\Http\Factory\StreamFactoryInterface is not set up.
+     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\StreamFactoryInterface] is not set up.
      */
     public function testGetStreamFactoryThrowExceptionIfEventsDispatcherIsNotSet()
     {

@@ -300,14 +300,14 @@ abstract class AbstractRouteDispatcher
         $routeMiddlewares = $route->gatherMiddleware();
 
         Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {
-            $middlewares[] = MiddlewareName::resolve($name, $this->middleware, $this->middlewareGroups);
+            $middlewares[] = MiddlewareName::resolve($name, $this->middlewares, $this->middlewareGroups);
         });
 
         if (count($routeMiddlewares['without_middlewares']) !== 0) {
             $withoutMiddlewares = [];
 
             Arr::map($routeMiddlewares['without_middlewares'], function ($name) use (&$withoutMiddlewares) {
-                $withoutMiddlewares[] = MiddlewareName::resolve($name, $this->middleware, $this->middlewareGroups);
+                $withoutMiddlewares[] = MiddlewareName::resolve($name, $this->middlewares, $this->middlewareGroups);
             });
 
             $middlewares = array_diff($middlewares, $withoutMiddlewares);
@@ -341,5 +341,7 @@ abstract class AbstractRouteDispatcher
                 return true;
             }
         }
+
+        return false;
     }
 }

@@ -6,7 +6,7 @@ use Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException;
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\Contracts\Routing\RouteParser as RouteParserContract;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
-use Viserio\Component\Routing\Segments\ParameterSegment;
+use Viserio\Component\Routing\Matchers\ParameterMatcher;
 
 final class Parser implements RouteParserContract
 {
@@ -31,7 +31,7 @@ final class Parser implements RouteParserContract
 
         foreach ($patternSegments as $key => $patternSegment) {
             if (self::matchRouteParameters($route, $patternSegment, $conditions, $matches, $names)) {
-                $segments[] = new ParameterSegment(
+                $segments[] = new ParameterMatcher(
                     $names,
                     self::generateRegex($matches, $conditions)
                 );

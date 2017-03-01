@@ -102,7 +102,7 @@ class LintCommandTest extends MockeryTestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The format "test" is not supported.
+     * @expectedExceptionMessage The format [test] is not supported.
      */
     public function testThrowExceptionOnWrongFormat()
     {

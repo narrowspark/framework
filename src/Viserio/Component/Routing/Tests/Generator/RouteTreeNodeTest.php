@@ -100,7 +100,7 @@ class RouteTreeNodeTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Cannot construct Viserio\Component\Routing\TreeGenerator\RouteTreeNode: matchers must not be empty.
+     * @expectedExceptionMessage Cannot construct [Viserio\Component\Routing\TreeGenerator\RouteTreeNode], matchers must not be empty.
      */
     public function testThrowsExceptionForEmptyMatchers()
     {

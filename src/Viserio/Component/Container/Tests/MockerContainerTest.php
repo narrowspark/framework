@@ -67,7 +67,7 @@ class MockerContainerTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot mock a non-existent service: "test.new_service"
+     * @expectedExceptionMessage Cannot mock a non-existent service: [test.new_service]
      */
     public function testThatServiceCannotBeMockedIfItDoesNotExist()
     {

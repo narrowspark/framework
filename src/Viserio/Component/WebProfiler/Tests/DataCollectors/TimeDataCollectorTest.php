@@ -80,7 +80,7 @@ class TimeDataCollectorTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Failed stopping measure "dontexist" because it hasn't been started.
+     * @expectedExceptionMessage Failed stopping measure [dontexist] because it hasn't been started.
      */
     public function testStopMeasureThrowsException()
     {

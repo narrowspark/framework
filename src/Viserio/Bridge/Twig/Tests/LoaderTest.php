@@ -77,7 +77,7 @@ class LoaderTest extends MockeryTestCase
 
     /**
      * @expectedException \Twig_Error_Loader
-     * @expectedExceptionMessage Twig file "test.twig" was not found.
+     * @expectedExceptionMessage Twig file [test.twig] was not found.
      */
     public function testGetSourceContextFileNotFound()
     {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteSegment as RouteSegmentContract;
+use Viserio\Component\Routing\Matchers\ParameterMatcher;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 
 final class RouteTreeBuilder
@@ -106,7 +106,7 @@ final class RouteTreeBuilder
      */
     private function getMatcher($firstSegment, array &$parameterIndexNameMap): SegmentMatcherContract
     {
-        if ($firstSegment instanceof RouteSegmentContract) {
+        if ($firstSegment instanceof ParameterMatcher) {
             return $firstSegment->getMatcher($parameterIndexNameMap);
         }
 

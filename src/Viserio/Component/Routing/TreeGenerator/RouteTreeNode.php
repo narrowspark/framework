@@ -32,7 +32,7 @@ final class RouteTreeNode
     public function __construct(array $matchers, $contents)
     {
         if (empty($matchers)) {
-            throw new RuntimeException(sprintf('Cannot construct %s: matchers must not be empty.', __CLASS__));
+            throw new RuntimeException(sprintf('Cannot construct [%s], matchers must not be empty.', __CLASS__));
         }
 
         $this->checkForNodeClass($contents);
