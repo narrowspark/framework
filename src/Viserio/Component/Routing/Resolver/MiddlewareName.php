@@ -2,16 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Resolver;
 
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-
 class MiddlewareName
 {
     /**
      * Resolve the middleware name to a class name(s).
      *
-     * @param  string  $name
-     * @param  array  $map
-     * @param  array  $middlewareGroups
+     * @param string $name
+     * @param array  $map
+     * @param array  $middlewareGroups
      *
      * @return string|array
      */

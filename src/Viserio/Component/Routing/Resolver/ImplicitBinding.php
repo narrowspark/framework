@@ -11,6 +11,5 @@ class ImplicitBinding implements ImplicitBindingContract
      */
     public function resolve(Route $route): Route
     {
-
     }
 }
