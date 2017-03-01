@@ -47,34 +47,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function setCachePath(string $path): RouterContract
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCachePath(): string
-    {
-        return $this->path;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function refreshCache(bool $refreshCache): RouterContract
-    {
-        $this->refreshCache = $refreshCache;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $uri, $action = null): RouteContract
     {
         return $this->addRoute(['GET', 'HEAD'], $uri, $action);

@@ -16,6 +16,7 @@ use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeCompiler;
+use Viserio\Component\Routing\Resolver\MiddlewareName;
 
 abstract class AbstractRouteDispatcher
 {
@@ -138,6 +139,35 @@ abstract class AbstractRouteDispatcher
     {
         return $this->middlewares;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCachePath(string $path): RouterContract
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCachePath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function refreshCache(bool $refreshCache): RouterContract
+    {
+        $this->refreshCache = $refreshCache;
+
+        return $this;
+    }
+
 
     /**
      * Match and dispatch a route matching the given http method and
@@ -273,14 +303,14 @@ abstract class AbstractRouteDispatcher
         $routeMiddlewares = $route->gatherMiddleware();
 
         Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {
-            $middlewares[] = $this->resolveMiddlewareClassName($name);
+            $middlewares[] = MiddlewareName::resolve($name, $this->middleware, $this->middlewareGroups);
         });
 
         if (count($routeMiddlewares['without_middlewares']) !== 0) {
             $withoutMiddlewares = [];
 
             Arr::map($routeMiddlewares['without_middlewares'], function ($name) use (&$withoutMiddlewares) {
-                $withoutMiddlewares[] = $this->resolveMiddlewareClassName($name);
+                $withoutMiddlewares[] = MiddlewareName::resolve($name, $this->middleware, $this->middlewareGroups);
             });
 
             $middlewares = array_diff($middlewares, $withoutMiddlewares);
@@ -290,61 +320,6 @@ abstract class AbstractRouteDispatcher
             $this->middlewarePriority,
             array_values(Arr::flatten($middlewares))
         ))->getAll();
-    }
-
-    /**
-     * Resolve the middleware name to a class name(s) preserving passed parameters.
-     *
-     * @param string $name
-     *
-     * @return string|array
-     */
-    protected function resolveMiddlewareClassName(string $name)
-    {
-        $map = $this->middlewares;
-
-        if (isset($this->middlewareGroups[$name])) {
-            return $this->parseMiddlewareGroup($name);
-        }
-
-        return $map[$name] ?? $name;
-    }
-
-    /**
-     * Parse the middleware group and format it for usage.
-     *
-     * @param string $name
-     *
-     * @return array
-     */
-    protected function parseMiddlewareGroup(string $name): array
-    {
-        $results = [];
-
-        foreach ($this->middlewareGroups[$name] as $middleware) {
-            // If the middleware is another middleware group we will pull in the group and
-            // merge its middleware into the results. This allows groups to conveniently
-            // reference other groups without needing to repeat all their middlewares.
-            if (isset($this->middlewareGroups[$middleware])) {
-                $results = array_merge(
-                    $results,
-                    $this->parseMiddlewareGroup($middleware)
-                );
-
-                continue;
-            }
-
-            // If this middleware is actually a route middleware, we will extract the full
-            // class name out of the middleware list now. Then we'll add the parameters
-            // back onto this class' name so the pipeline will properly extract them.
-            if (isset($this->middlewares[$middleware])) {
-                $middleware = $this->middlewares[$middleware];
-            }
-
-            $results[] = $middleware;
-        }
-
-        return $results;
     }
 
     /**
