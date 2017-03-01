@@ -53,10 +53,10 @@ trait MiddlewareAwareTrait
         foreach ($this->middlewares as $key => $value) {
             if ($value === $middleware || $key === $middleware) {
                 unset($this->middlewares[$key]);
-
-                return $this;
             }
         }
+
+        return $this;
     }
 
     /**
