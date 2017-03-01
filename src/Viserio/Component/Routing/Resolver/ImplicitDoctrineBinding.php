@@ -2,11 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Resolver;
 
-use ReflectionMethod;
-use ReflectionFunction;
-use Closure;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityNotFoundException;
+use ReflectionFunction;
+use ReflectionMethod;
 use Viserio\Component\Contracts\Routing\ImplicitBinding as ImplicitBindingContract;
 use Viserio\Component\Contracts\Routing\Registrar as RegistrarContract;
 
@@ -27,8 +26,6 @@ class ImplicitDoctrineBinding implements ImplicitBindingContract
     protected $registry;
 
     /**
-     *
-     *
      * @param \Viserio\Component\Contracts\Routing\Registrar $router
      * @param \Doctrine\Common\Persistence\ManagerRegistry   $registry
      */

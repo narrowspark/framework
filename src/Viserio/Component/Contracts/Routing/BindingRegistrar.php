@@ -9,8 +9,8 @@ interface BindingRegistrar
     /**
      * Add a new route parameter binder.
      *
-     * @param  string  $key
-     * @param  string|callable  $binder
+     * @param string          $key
+     * @param string|callable $binder
      *
      * @return void
      */
