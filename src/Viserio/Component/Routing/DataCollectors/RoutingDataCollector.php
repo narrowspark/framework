@@ -64,7 +64,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
             $withoutMiddlewares = array_values($middlewares['without_middlewares']);
 
             $routeData = [
-                0 => count($route->getMethods()) > 1 ? implode(' | ', $route->getMethods()) : $route->getMethods(),
+                0 => implode(' | ', $route->getMethods()),
                 2 => $route->getUri(),
                 3 => $route->getName() ?? '',
                 4 => $route->getActionName(),
