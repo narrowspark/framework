@@ -4,13 +4,12 @@ namespace Viserio\Component\Routing\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Routing\Router;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Routing\DataCollectors\RoutingDataCollector;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
 
 class RoutingDataCollectorServiceProvider implements
     ServiceProvider,

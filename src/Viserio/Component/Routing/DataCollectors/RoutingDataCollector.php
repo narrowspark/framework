@@ -4,9 +4,9 @@ namespace Viserio\Component\Routing\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
-use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
+use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class RoutingDataCollector extends AbstractDataCollector implements PanelAwareContract
 {
@@ -33,7 +33,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
         $this->data = [
-            'routes' => $this->routes->getRoutes(),
+            'routes'  => $this->routes->getRoutes(),
             'counted' => count($this->routes->getRoutes()),
         ];
     }
@@ -56,7 +56,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     public function getPanel(): string
     {
         $headers = [0 => 'Methods', 2 => 'Path', 3 => 'Name', 4 => 'Action', 5 => 'With Middleware', 6 => 'Without Middleware'];
-        $data = [];
+        $data    = [];
 
         foreach ($this->data['routes'] as $route) {
             $middlewares        = $route->gatherMiddleware();
@@ -89,7 +89,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
         return $this->createTable(
             $data,
             [
-                'headers' => $headers,
+                'headers'   => $headers,
                 'vardumper' => false,
             ]
         );
