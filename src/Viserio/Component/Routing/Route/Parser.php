@@ -5,8 +5,8 @@ namespace Viserio\Component\Routing\Route;
 use Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException;
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\Contracts\Routing\RouteParser as RouteParserContract;
-use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\Matchers\ParameterMatcher;
+use Viserio\Component\Routing\Matchers\StaticMatcher;
 
 final class Parser implements RouteParserContract
 {

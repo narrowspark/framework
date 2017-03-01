@@ -4,9 +4,9 @@ namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Routing\Matchers\ParameterMatcher;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
-use Viserio\Component\Routing\Matchers\ParameterMatcher;
 
 class RouteParserTest extends TestCase
 {

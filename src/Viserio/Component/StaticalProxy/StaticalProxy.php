@@ -70,7 +70,7 @@ class StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        throw new BadMethodCallException(sprintf("The [%s] method must be implemented by a subclass.", __METHOD__));
+        throw new BadMethodCallException(sprintf('The [%s] method must be implemented by a subclass.', __METHOD__));
     }
 
     /**

@@ -4,8 +4,8 @@ namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Matchers\ParameterMatcher;
+use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Tests\Fixture\Controller;
 
 class RouteTest extends TestCase

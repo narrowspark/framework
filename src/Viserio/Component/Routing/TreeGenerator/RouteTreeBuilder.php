@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Routing\Matchers\ParameterMatcher;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Routing\Matchers\ParameterMatcher;
 
 final class RouteTreeBuilder
 {

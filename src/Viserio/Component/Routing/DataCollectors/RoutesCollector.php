@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 
-class AjaxRequestsDataCollector extends AbstractDataCollector implements AssetAwareContract
+class RoutesCollector extends AbstractDataCollector implements AssetAwareContract
 {
     /**
      * {@inheritdoc}
