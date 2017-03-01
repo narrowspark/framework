@@ -24,7 +24,7 @@ class MockContainer extends Container
         $id        = array_shift($arguments);
 
         if (! $this->has($id)) {
-            throw new InvalidArgumentException(sprintf('Cannot mock a non-existent service: "%s"', $id));
+            throw new InvalidArgumentException(sprintf('Cannot mock a non-existent service: [%s]', $id));
         }
 
         if (! isset($this->mockedServices['mock::' . $id])) {

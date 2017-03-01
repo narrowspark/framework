@@ -124,7 +124,7 @@ interface Router
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
-    public function match($methods, $uri, $action = null): Route;
+    public function match($methods, string $uri, $action = null): Route;
 
     /**
      * Set a global where pattern on all routes.
@@ -309,9 +309,9 @@ interface Router
      *
      * @param string $path
      *
-     * @return \Viserio\Component\Contracts\Routing\Router
+     * @return void
      */
-    public function setCachePath(string $path): Router;
+    public function setCachePath(string $path): void;
 
     /**
      * Get the cache path for the compiled routes.
@@ -325,7 +325,7 @@ interface Router
      *
      * @param bool $refreshCache
      *
-     * @return \Viserio\Component\Contracts\Routing\Router
+     * @return void
      */
-    public function refreshCache(bool $refreshCache): Router;
+    public function refreshCache(bool $refreshCache): void;
 }

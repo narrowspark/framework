@@ -164,7 +164,7 @@ class TimeDataCollector extends AbstractDataCollector
 
         if (! $this->hasStartedMeasure($name)) {
             throw new RuntimeException(sprintf(
-                'Failed stopping measure "%s" because it hasn\'t been started.',
+                'Failed stopping measure [%s] because it hasn\'t been started.',
                 $name
             ));
         }

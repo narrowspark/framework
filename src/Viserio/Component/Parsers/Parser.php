@@ -105,7 +105,7 @@ class Parser implements ParserContract
             }
 
             if ($payload === false) {
-                throw new RuntimeException(sprintf('A error occurred during reading "%s"', $fileName));
+                throw new RuntimeException(sprintf('A error occurred during reading [%s]', $fileName));
             }
         }
 

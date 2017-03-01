@@ -37,7 +37,7 @@ class OptionsResolver extends AbstractOptionsResolver
             $dimensions[] = $configId;
         } elseif ($configId !== null) {
             throw new InvalidArgumentException(
-                sprintf('The factory "%s" does not support multiple instances.', get_class($this->configClass))
+                sprintf('The factory [%s] does not support multiple instances.', get_class($this->configClass))
             );
         }
 

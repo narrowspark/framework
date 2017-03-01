@@ -111,7 +111,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function match($methods, $uri, $action = null): RouteContract
+    public function match($methods, string $uri, $action = null): RouteContract
     {
         return $this->addRoute(array_map('strtoupper', (array) $methods), $uri, $action);
     }

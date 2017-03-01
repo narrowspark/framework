@@ -207,7 +207,7 @@ class Request extends AbstractMessage implements RequestInterface
 
         if (! isset(static::$validMethods[$method])) {
             throw new InvalidArgumentException(sprintf(
-                'Unsupported HTTP method "%s".',
+                'Unsupported HTTP method [%s].',
                 $method
             ));
         }
