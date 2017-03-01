@@ -17,6 +17,7 @@ use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeCompiler;
+use Viserio\Component\Routing\Events\RouteMatchedEvent;
 
 abstract class AbstractRouteDispatcher
 {
@@ -143,11 +144,9 @@ abstract class AbstractRouteDispatcher
     /**
      * {@inheritdoc}
      */
-    public function setCachePath(string $path): RouterContract
+    public function setCachePath(string $path): void
     {
         $this->path = $path;
-
-        return $this;
     }
 
     /**
@@ -161,11 +160,9 @@ abstract class AbstractRouteDispatcher
     /**
      * {@inheritdoc}
      */
-    public function refreshCache(bool $refreshCache): RouterContract
+    public function refreshCache(bool $refreshCache): void
     {
         $this->refreshCache = $refreshCache;
-
-        return $this;
     }
 
     /**
@@ -237,9 +234,10 @@ abstract class AbstractRouteDispatcher
 
         if ($this->events !== null) {
             $this->getEventManager()->trigger(
-                'route.matched',
-                $this,
-                ['route' => $route, 'server_request' => $serverRequest]
+                new RouteMatchedEvent(
+                    $this,
+                    ['route' => $route, 'server_request' => $serverRequest]
+                )
             );
         }
 
