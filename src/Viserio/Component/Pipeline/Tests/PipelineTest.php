@@ -76,6 +76,22 @@ class PipelineTest extends TestCase
         self::assertEquals('data', $result);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Class [Controller] is not being managed by the container.
+     */
+    public function testPipelineViaContainerToThrowException()
+    {
+        (new Pipeline())
+            ->setContainer($this->container)
+            ->send('data')
+            ->through('Controller')
+            ->via('differentMethod')
+            ->then(function ($piped) {
+                return $piped;
+            });
+    }
+
     public function testPipelineViaObject()
     {
         $result = (new Pipeline())

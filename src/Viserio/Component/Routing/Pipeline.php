@@ -47,7 +47,7 @@ class Pipeline extends BasePipeline
         } elseif ($this->container instanceof ContainerContract) {
             $class = $this->container->make($name);
         } else {
-            throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.'), $name);
+            throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.', $name));
         }
 
         return $this->getInvoker()->call(

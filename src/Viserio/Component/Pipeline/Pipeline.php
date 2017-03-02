@@ -93,7 +93,7 @@ class Pipeline implements PipelineContract
                     return $stage($traveler, $stack);
                 // Otherwise we'll resolve the stages out of the container and call it with
                 // the appropriate method and arguments, returning the results back out.
-                } elseif ($this->container && ! is_object($stage)) {
+                } elseif ($this->container && ! is_object($stage) && is_string($stage)) {
                     return $this->sliceThroughContainer($traveler, $stack, $stage);
                 } elseif (is_array($stage)) {
                     $reflectionClass = new ReflectionClass(array_shift($stage));
@@ -165,7 +165,7 @@ class Pipeline implements PipelineContract
         if ($this->container->has($name)) {
             $class = $this->container->get($name);
         } else {
-            throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.'), $name);
+            throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.', $name));
         }
 
         return $this->getInvoker()->call(
