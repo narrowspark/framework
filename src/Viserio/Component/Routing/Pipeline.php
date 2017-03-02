@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
-use RuntimeException;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Pipeline\Pipeline as BasePipeline;
+use RuntimeException;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
+use Viserio\Component\Pipeline\Pipeline as BasePipeline;
 
 class Pipeline extends BasePipeline
 {
