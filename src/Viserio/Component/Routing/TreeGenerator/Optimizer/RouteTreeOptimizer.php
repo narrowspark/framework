@@ -115,9 +115,9 @@ final class RouteTreeOptimizer
      * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node1
      * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node2
      *
-     * @return \Viserio\Component\Routing\TreeGenerator\RouteTreeNode|void
+     * @return \Viserio\Component\Routing\TreeGenerator\RouteTreeNode|null
      */
-    private function extractCommonParentNode(RouteTreeNode $node1, RouteTreeNode $node2)
+    private function extractCommonParentNode(RouteTreeNode $node1, RouteTreeNode $node2): ?RouteTreeNode
     {
         $matcherCompare = function (SegmentMatcherContract $matcher, SegmentMatcherContract $matcher2) {
             return strcmp($matcher->getHash(), $matcher2->getHash());
@@ -126,7 +126,7 @@ final class RouteTreeOptimizer
         $commonMatchers = array_uintersect_assoc($node1->getMatchers(), $node2->getMatchers(), $matcherCompare);
 
         if (empty($commonMatchers)) {
-            return;
+            return null;
         }
 
         $children = [];

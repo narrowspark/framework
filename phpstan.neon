@@ -82,8 +82,6 @@ parameters:
         - '#\$code of class Twig_Source constructor expects string#'
         - '#\$contents of method League\\Flysystem\\AdapterInterface#'
         - "#Casting to mixed[] something that's already mixed[]#"
-        - '#\$array of static method Narrowspark\\Arr\\Arr::#'
-        - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeOptimizer::optimizeNodes#'
 
         # if check exists
         - '#\$contents of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::encryptString#'
@@ -100,8 +98,13 @@ parameters:
         - '#\$payload of method Viserio\\Component\\Contracts\\Parsers\\Parser::parse#'
         - '#\$payload of method Viserio\\Component\\Parsers\\Formats\\INI::parse#'
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
-        - '#Method Viserio\\Component\\Routing\\Route::parseAction#'
         - '#Method Viserio\\Component\\Routing\\Router::convertToControllerAction#'
+        - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeCompiler::compileSegmentNodes#'
+        - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
+        - '#Call to an undefined method Interop\\Container\\ContainerInterface::make#'
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
+        - '#Property Viserio\\Component\\Routing\\Matchers\\ParameterMatcher::\$names#'
+        - '#Property Viserio\\Component\\Routing\\Matchers\\RegexMatcher::\$parameterKeyGroupMap#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'
