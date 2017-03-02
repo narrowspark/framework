@@ -364,7 +364,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         }
 
         throw new NotFoundException(
-            sprintf('Abstract (%s) is not being managed by the container', $id)
+            sprintf('Abstract [%s] is not being managed by the container.', $id)
         );
     }
 

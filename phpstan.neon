@@ -84,7 +84,6 @@ parameters:
         - "#Casting to mixed[] something that's already mixed[]#"
         - '#\$array of static method Narrowspark\\Arr\\Arr::#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeOptimizer::optimizeNodes#'
-        - '#\$nodes of method Viserio\\Component\\Routing\\TreeRouteCompiler::compileSegmentNodes#'
 
         # if check exists
         - '#\$contents of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::encryptString#'

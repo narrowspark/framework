@@ -3,23 +3,21 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
+use RuntimeException;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Pipeline\Pipeline as BasePipeline;
+use Viserio\Component\Contracts\Container\Container as ContainerContract;
 
 class Pipeline extends BasePipeline
 {
     /**
-     * The method to call on each stage.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $method = 'process';
 
     /**
-     * Get a Closure that represents a slice of the application onion.
-     *
-     * @return \Closure
+     * {@inheritdoc}
      */
     protected function getSlice(): Closure
     {
@@ -35,33 +33,30 @@ class Pipeline extends BasePipeline
     }
 
     /**
-     * Resolve from container.
-     *
-     * @param mixed  $traveler
-     * @param mixed  $stack
-     * @param string $stage
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
         list($name, $parameters) = $this->parseStageString($stage);
         $parameters              = array_merge([$traveler, $stack], $parameters);
 
+        $class = null;
+
         if ($this->container->has($name)) {
-            return $this->getInvoker()->call(
-                [
-                    $this->container->get($name),
-                    $this->method,
-                ],
-                $parameters
-            );
+            $class = $this->container->get($name);
+        } elseif ($this->container instanceof ContainerContract) {
+            $class = $this->container->make($name);
+        } else {
+            throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.'), $name);
         }
 
-        // Check if container has a make function.
-        if (method_exists($this->container, 'make')) {
-            return call_user_func_array([$this->container->make($name), $this->method], $parameters);
-        }
+        return $this->getInvoker()->call(
+            [
+                $class,
+                $this->method,
+            ],
+            $parameters
+        );
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Viserio\Component\Pipeline;
 
 use Closure;
 use ReflectionClass;
+use RuntimeException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
@@ -150,22 +151,29 @@ class Pipeline implements PipelineContract
      * @param mixed  $stack
      * @param string $stage
      *
+     * @throws \RuntimeException
+     *
      * @return mixed
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
         list($name, $parameters) = $this->parseStageString($stage);
+        $parameters              = array_merge([$traveler, $stack], $parameters);
+
+        $class = null;
 
         if ($this->container->has($name)) {
-            $merge = array_merge([$traveler, $stack], $parameters);
-
-            return $this->getInvoker()->call(
-                [
-                    $this->container->get($name),
-                    $this->method,
-                ],
-                $merge
-            );
+            $class = $this->container->get($name);
+        } else {
+            throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.'), $name);
         }
+
+        return $this->getInvoker()->call(
+            [
+                $class,
+                $this->method,
+            ],
+            $parameters
+        );
     }
 }
