@@ -9,9 +9,9 @@ use Viserio\Component\Routing\Matchers\StaticMatcher;
 
 final class Parser
 {
-    protected const STATIC_PART = 0;
+    private const STATIC_PART = 0;
 
-    protected const PARAMETER_PART = 1;
+    private const PARAMETER_PART = 1;
 
     /**
      * Parses the supplied route pattern into an array of route segments.
