@@ -4,14 +4,31 @@ namespace Viserio\Component\Routing\Route;
 
 use Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException;
 use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Contracts\Routing\RouteParser as RouteParserContract;
 use Viserio\Component\Routing\Matchers\ParameterMatcher;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 
-final class Parser implements RouteParserContract
+final class Parser
 {
+    protected const STATIC_PART = 0;
+
+    protected const PARAMETER_PART = 1;
+
     /**
-     * {@inheritdoc}
+     * Parses the supplied route pattern into an array of route segments.
+     *
+     * Example: 'user/{id}/create'
+     * Should return: [
+     *     \Viserio\Component\Routing\Matchers\StaticMatcher{ $value => 'user' },
+     *     \Viserio\Component\Routing\Matchers\ParameterMatcher{ $name => 'id', $match => '[0-9]+' },
+     *     \Viserio\Component\Routing\Matchers\StaticMatcher{ $value => 'create' },
+     * ]
+     *
+     * @param string   $route
+     * @param string[] $conditions
+     *
+     * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
+     *
+     * @return array
      */
     public static function parse(string $route, array $conditions): array
     {

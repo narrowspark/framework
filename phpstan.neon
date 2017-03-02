@@ -102,7 +102,6 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
         - '#Method Viserio\\Component\\Routing\\Route::parseAction#'
         - '#Method Viserio\\Component\\Routing\\Router::convertToControllerAction#'
-        - 'Property Viserio\\Component\\Routing\\Segments\\ParameterSegment::\$names'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'
