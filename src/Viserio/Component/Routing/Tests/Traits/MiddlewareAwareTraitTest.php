@@ -21,6 +21,13 @@ class MiddlewareAwareTraitTest extends TestCase
         self::assertSame([], $this->middlewares);
     }
 
+    public function testAliasWithoutMiddleware()
+    {
+        $this->aliasMiddleware('foo', FooMiddleware::class);
+
+        self::assertSame(['foo' => FooMiddleware::class], $this->middlewares);
+    }
+
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessage \Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [Viserio\Component\Routing\Tests\Traits\MiddlewareAwareTraitTest].
