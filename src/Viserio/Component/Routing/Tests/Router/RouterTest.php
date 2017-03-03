@@ -295,7 +295,7 @@ class RouterTest extends MockeryTestCase
 
     private function delTree($dir)
     {
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return;
         }
 
