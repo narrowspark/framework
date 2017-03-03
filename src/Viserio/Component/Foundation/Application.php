@@ -262,6 +262,18 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
+     * Determine if we are running in the console.
+     *
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function runningInConsole(): bool
+    {
+        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
+    }
+
+    /**
      * Bind the installation paths to the config.
      *
      * @param array $paths
