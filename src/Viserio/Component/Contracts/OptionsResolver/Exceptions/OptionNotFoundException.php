@@ -44,9 +44,9 @@ class OptionNotFoundException extends OutOfBoundsException
             $configId === null &&
             count($dimensions) === count($position)
         ) {
-            $message = sprintf('The configuration "%s" needs a config id in class "' . get_class($factory) . '".', rtrim(implode('.', $position), '.'));
+            $message = sprintf('The configuration [%s] needs a config id in class [%s].', rtrim(implode('.', $position), '.'), get_class($factory));
         } else {
-            $message = sprintf('No options set for configuration "%s" in class "' . get_class($factory) . '".', rtrim(implode('.', $position), '.'));
+            $message = sprintf('No options set for configuration [%s] in class [%s].', rtrim(implode('.', $position), '.'), get_class($factory));
         }
 
         parent::__construct(

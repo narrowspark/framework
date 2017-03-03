@@ -15,7 +15,7 @@ use Viserio\Component\Foundation\DataCollectors\NarrowsparkDataCollector;
 use Viserio\Component\Foundation\DataCollectors\ViserioHttpDataCollector;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class FoundationDataCollectorsServiceProvider implements
+class FoundationDataCollectorServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract,
@@ -48,6 +48,8 @@ class FoundationDataCollectorsServiceProvider implements
 
     /**
      * {@inheritdoc}
+     *
+     * @ToDo file path
      */
     public function getMandatoryOptions(): iterable
     {

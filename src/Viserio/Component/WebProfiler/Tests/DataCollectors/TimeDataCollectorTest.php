@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests\DataCollectors;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -80,7 +79,7 @@ class TimeDataCollectorTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Failed stopping measure "dontexist" because it hasn't been started.
+     * @expectedExceptionMessage Failed stopping measure [dontexist] because it hasn't been started.
      */
     public function testStopMeasureThrowsException()
     {

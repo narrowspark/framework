@@ -38,7 +38,7 @@ abstract class AbstractMatcher implements SegmentMatcherContract
         if ($matcher->getHash() !== $this->getHash()) {
             throw new RuntimeException(
                 sprintf(
-                    'Cannot merge parameters: matchers must be equivalent, \'%s\' expected, \'%s\' given.',
+                    'Cannot merge parameters: matchers must be equivalent, [%s] expected, [%s] given.',
                     $matcher->getHash(),
                     $this->getHash()
                 )

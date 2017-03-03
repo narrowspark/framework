@@ -5,15 +5,15 @@ namespace Viserio\Component\Routing\Tests\Generator;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
-use Viserio\Component\Routing\Generator\ChildrenNodeCollection;
-use Viserio\Component\Routing\Generator\MatchedRouteDataMap;
-use Viserio\Component\Routing\Generator\RouteTreeNode;
-use Viserio\Component\Routing\Generator\RouteTreeOptimizer;
 use Viserio\Component\Routing\Matchers\AnyMatcher;
 use Viserio\Component\Routing\Matchers\CompoundMatcher;
 use Viserio\Component\Routing\Matchers\ExpressionMatcher;
 use Viserio\Component\Routing\Matchers\RegexMatcher;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
+use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
+use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
+use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
+use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 
 class RouteTreeOptimizerTest extends MockeryTestCase
 {

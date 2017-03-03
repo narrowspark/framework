@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Commands;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;

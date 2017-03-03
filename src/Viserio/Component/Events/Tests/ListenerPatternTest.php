@@ -22,14 +22,14 @@ class ListenerPatternTest extends TestCase
         foreach ($expectedMatches as $eventName) {
             self::assertTrue(
                 $pattern->test($eventName),
-                sprintf('Pattern "%s" should match event "%s"', $eventPattern, $eventName)
+                sprintf('Pattern [%s] should match event [%s]', $eventPattern, $eventName)
             );
         }
 
         foreach ($expectedMisses as $eventName) {
             self::assertFalse(
                 $pattern->test($eventName),
-                sprintf('Pattern "%s" should not match event "%s"', $eventPattern, $eventName)
+                sprintf('Pattern [%s] should not match event [%s]', $eventPattern, $eventName)
             );
         }
     }

@@ -4,7 +4,7 @@ namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Routing\Route;
-use Viserio\Component\Routing\RouteCollection;
+use Viserio\Component\Routing\Route\Collection as RouteCollection;
 
 class RouteCollectionTest extends TestCase
 {

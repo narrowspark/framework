@@ -228,8 +228,10 @@ abstract class AbstractDataCollector implements DataCollectorContract
      *
      * @param array $data
      * @param array $settings
+     *
+     * @return string
      */
-    protected function createTable(array $data, array $settings = [])
+    protected function createTable(array $data, array $settings = []): string
     {
         $options = array_merge([
             'name'      => null,

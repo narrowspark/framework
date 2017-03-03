@@ -99,7 +99,7 @@ class ProfileTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Collector "dont" does not exist.
+     * @expectedExceptionMessage Collector [dont] does not exist.
      */
     public function testGetCollectorTothrowException()
     {

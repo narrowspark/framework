@@ -82,7 +82,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
             try {
                 $template = $container->get(Twig_LoaderInterface::class)->getSourceContext($file);
             } catch (Twig_Error_Loader $exception) {
-                throw new RuntimeException(sprintf('File or directory "%s" is not readable', $file));
+                throw new RuntimeException(sprintf('File or directory [%s] is not readable', $file));
             }
 
             $details[] = $this->validate($template, $file);
@@ -269,7 +269,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
             case 'json':
                 return $this->displayJson($details);
             default:
-                throw new InvalidArgumentException(sprintf('The format "%s" is not supported.', $format));
+                throw new InvalidArgumentException(sprintf('The format [%s] is not supported.', $format));
         }
     }
 

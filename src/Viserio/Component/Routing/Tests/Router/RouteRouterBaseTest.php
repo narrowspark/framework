@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionClass;
 use Viserio\Component\Events\EventManager;
@@ -22,10 +21,6 @@ abstract class RouteRouterBaseTest extends MockeryTestCase
         $cachefolder = __DIR__ . '/../Cache/';
         $name        = (new ReflectionClass($this))->getShortName();
         $container   = $this->mock(ContainerInterface::class);
-
-        if (! is_dir($cachefolder)) {
-            mkdir($cachefolder);
-        }
 
         $router    = new Router($container);
         $router->setCachePath($cachefolder . $name . '.cache');

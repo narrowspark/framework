@@ -4,7 +4,6 @@ namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Exception;
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Opis\Closure\SerializableClosure;
 use stdClass;

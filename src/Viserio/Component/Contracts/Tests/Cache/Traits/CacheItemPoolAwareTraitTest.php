@@ -19,7 +19,7 @@ class CacheItemPoolAwareTraitTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing \Psr\Cache\CacheItemPoolInterface is not set up.
+     * @expectedExceptionMessage Instance implementing [\Psr\Cache\CacheItemPoolInterface] is not set up.
      */
     public function testGetCacheItemPoolThrowExceptionIfCacheItemPoolIsNotSet()
     {

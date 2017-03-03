@@ -279,11 +279,13 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
-        if ($middleware = $this->getMiddlewares($route)) {
+        $middlewares = $route->gatherMiddleware();
+
+        if ($middleware = $this->getMiddlewares($middlewares)) {
             $result['middlewares'] = $middleware;
         }
 
-        if ($middleware = $this->getWithoutMiddlewares($route)) {
+        if ($middleware = $this->getWithoutMiddlewares($middlewares)) {
             $result['without_middlewares'] = $middleware;
         }
 
@@ -293,13 +295,13 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     /**
      * Get middleware.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param array $middlewares
      *
      * @return string
      */
-    protected function getMiddlewares(RouteContract $route): string
+    protected function getMiddlewares(array $middlewares): string
     {
-        $middleware = array_keys($route->gatherMiddleware()['middlewares']);
+        $middleware = array_keys($middlewares['middlewares']);
 
         return implode(', ', $middleware);
     }
@@ -307,13 +309,13 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     /**
      * Get without middleware.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param array $middlewares
      *
      * @return string
      */
-    protected function getWithoutMiddlewares(RouteContract $route): string
+    protected function getWithoutMiddlewares(array $middlewares): string
     {
-        $middleware = array_keys($route->gatherMiddleware()['without_middlewares']);
+        $middleware = array_keys($middlewares['without_middlewares']);
 
         return implode(', ', $middleware);
     }

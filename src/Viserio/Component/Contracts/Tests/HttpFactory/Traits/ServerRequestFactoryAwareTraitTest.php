@@ -19,7 +19,7 @@ class ServerRequestFactoryAwareTraitTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing \Interop\Http\Factory\ServerRequestFactoryInterface is not set up.
+     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\ServerRequestFactoryInterface] is not set up.
      */
     public function testGetServerRequestThrowExceptionIfEventsDispatcherIsNotSet()
     {

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matchers;
 
+use RuntimeException;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Routing\VarExporter;
 
@@ -109,6 +110,10 @@ class RegexMatcher extends AbstractMatcher
     public function mergeParameterKeys(SegmentMatcherContract $matcher)
     {
         parent::mergeParameterKeys($matcher);
+
+        if (! method_exists($matcher, 'getParameterKeyGroupMap')) {
+            throw new RuntimeException(sprintf('%s::getParameterKeyGroupMap is needed for this function.', get_class($this)));
+        }
 
         $this->parameterKeyGroupMap += $matcher->getParameterKeyGroupMap();
     }

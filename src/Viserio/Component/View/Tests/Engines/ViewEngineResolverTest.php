@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Tests\Engines;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
 use Viserio\Component\View\Engines\EngineResolver;
@@ -24,6 +23,7 @@ class ViewEngineResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Engine [foo] not found.
      */
     public function testResolverThrowsExceptionOnUnknownEngine()
     {

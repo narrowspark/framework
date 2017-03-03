@@ -1,19 +1,36 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing;
+namespace Viserio\Component\Routing\Route;
 
 use Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException;
 use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Contracts\Routing\RouteParser as RouteParserContract;
+use Viserio\Component\Routing\Matchers\ParameterMatcher;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
-use Viserio\Component\Routing\Segments\ParameterSegment;
 
-class RouteParser implements RouteParserContract
+final class Parser
 {
+    private const STATIC_PART = 0;
+
+    private const PARAMETER_PART = 1;
+
     /**
-     * {@inheritdoc}
+     * Parses the supplied route pattern into an array of route segments.
+     *
+     * Example: 'user/{id}/create'
+     * Should return: [
+     *     \Viserio\Component\Routing\Matchers\StaticMatcher{ $value => 'user' },
+     *     \Viserio\Component\Routing\Matchers\ParameterMatcher{ $name => 'id', $match => '[0-9]+' },
+     *     \Viserio\Component\Routing\Matchers\StaticMatcher{ $value => 'create' },
+     * ]
+     *
+     * @param string   $route
+     * @param string[] $conditions
+     *
+     * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
+     *
+     * @return array
      */
-    public function parse(string $route, array $conditions): array
+    public static function parse(string $route, array $conditions): array
     {
         if (mb_strlen($route) > 1 && $route[0] !== '/') {
             throw new InvalidRoutePatternException(sprintf(
@@ -30,10 +47,10 @@ class RouteParser implements RouteParserContract
         array_shift($patternSegments);
 
         foreach ($patternSegments as $key => $patternSegment) {
-            if ($this->matchRouteParameters($route, $patternSegment, $conditions, $matches, $names)) {
-                $segments[] = new ParameterSegment(
+            if (self::matchRouteParameters($route, $patternSegment, $conditions, $matches, $names)) {
+                $segments[] = new ParameterMatcher(
                     $names,
-                    $this->generateRegex($matches, $conditions)
+                    self::generateRegex($matches, $conditions)
                 );
             } else {
                 $segments[] = new StaticMatcher($patternSegment);
@@ -54,7 +71,7 @@ class RouteParser implements RouteParserContract
      *
      * @return bool
      */
-    protected function matchRouteParameters(
+    private static function matchRouteParameters(
         string $route,
         string $patternSegment,
         array &$conditions,
@@ -127,7 +144,7 @@ class RouteParser implements RouteParserContract
      *
      * @return string
      */
-    protected function generateRegex(array $matches, array $parameterPatterns): string
+    private static function generateRegex(array $matches, array $parameterPatterns): string
     {
         $regex = '/^';
         foreach ($matches as $match) {

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface;

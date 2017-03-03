@@ -1,57 +1,50 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Providers;
+namespace Viserio\Component\Routing\Tests\Providers;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Component\Foundation\Providers\FoundationDataCollectorsServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\Routing\Providers\RoutingDataCollectorServiceProvider;
 use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
-class FoundationDataCollectorsServiceProviderTest extends MockeryTestCase
+class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
 {
     public function testGetServices()
     {
-        $serverRequest = $this->mock(ServerRequestInterface::class);
-        $route         = $this->mock(RouteContract::class);
-        $route->shouldReceive('getServerRequest')
-            ->once()
-            ->andReturn($serverRequest);
+        $routes = $this->mock(RouteCollectionContract::class);
         $router = $this->mock(RouterContract::class);
+        $router->shouldReceive('getRoutes')
+            ->once()
+            ->andReturn($routes);
         $router->shouldReceive('group')
             ->once();
-        $router->shouldReceive('getCurrentRoute')
-            ->once()
-            ->andReturn($route);
 
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->instance(RouterContract::class, $router);
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
-        $container->register(new ConfigServiceProvider());
         $container->register(new WebProfilerServiceProvider());
-        $container->register(new FoundationDataCollectorsServiceProvider());
+        $container->register(new RoutingDataCollectorServiceProvider());
 
-        $container->get(RepositoryContract::class)->set('viserio', [
-            'webprofiler' => [
-                'enable'    => true,
-                'collector' => [
-                    'narrowspark'  => true,
-                    'viserio_http' => true,
-                    'files'        => true,
+        $container->instance('config',
+            [
+                'viserio' => [
+                    'webprofiler' => [
+                        'enable'    => true,
+                        'collector' => [
+                            'routes'  => true,
+                        ],
+                    ],
                 ],
-            ],
-        ]);
-        $container->get(RepositoryContract::class)->set('path.base', '/');
+            ]
+        );
 
         $profiler = $container->get(WebProfilerContract::class);
 
@@ -59,9 +52,7 @@ class FoundationDataCollectorsServiceProviderTest extends MockeryTestCase
 
         static::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
         static::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));
-        static::assertTrue(array_key_exists('narrowspark', $profiler->getCollectors()));
-        static::assertTrue(array_key_exists('viserio-http-data-collector', $profiler->getCollectors()));
-        static::assertTrue(array_key_exists('files-loaded-collector', $profiler->getCollectors()));
+        static::assertTrue(array_key_exists('routing-data-collector', $profiler->getCollectors()));
     }
 
     private function getRequest()

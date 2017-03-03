@@ -241,7 +241,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         // https://bugs.php.net/bug.php?id=64634
         if (@fopen($orginal, 'r') === false) {
             throw new ViserioIOException(sprintf(
-                'Failed to copy "%s" to "%s" because source file could not be opened for reading.',
+                'Failed to copy [%s] to [%s] because source file could not be opened for reading.',
                 $orginal,
                 $target
             ), 0, null, $orginal);
@@ -250,7 +250,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
         if (@fopen($target, 'w', false, stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
             throw new ViserioIOException(sprintf(
-                'Failed to copy "%s" to "%s" because target file could not be opened for writing.',
+                'Failed to copy [%s] to [%s] because target file could not be opened for writing.',
                 $orginal,
                 $target
             ), 0, null, $orginal);
@@ -260,7 +260,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         if (! is_file($target)) {
             throw new ViserioIOException(sprintf(
-                'Failed to copy "%s" to "%s".',
+                'Failed to copy [%s] to [%s].',
                 $originFile,
                 $target
             ), 0, null, $originFile);

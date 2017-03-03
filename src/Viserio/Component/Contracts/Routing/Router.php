@@ -124,7 +124,7 @@ interface Router
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
-    public function match($methods, $uri, $action = null): Route;
+    public function match($methods, string $uri, $action = null): Route;
 
     /**
      * Set a global where pattern on all routes.
@@ -163,15 +163,6 @@ interface Router
     public function setParameter(string $parameterName, string $expression): Router;
 
     /**
-     * Defines the supplied parameter name to be globally associated with the expression.
-     *
-     * @param string[] $parameterPatternMap
-     *
-     * @return $this
-     */
-    public function addParameters(array $parameterPatternMap): Router;
-
-    /**
      * Removes the global expression associated with the supplied parameter name.
      *
      * @param string $name
@@ -201,16 +192,6 @@ interface Router
      * @return array
      */
     public function mergeWithLastGroup(array $new): array;
-
-    /**
-     * Merge the given group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return array
-     */
-    public function mergeGroup(array $new, array $old): array;
 
     /**
      * Get the suffix from the last group on the stack.
@@ -319,9 +300,9 @@ interface Router
      *
      * @param string $path
      *
-     * @return \Viserio\Component\Contracts\Routing\Router
+     * @return void
      */
-    public function setCachePath(string $path): Router;
+    public function setCachePath(string $path): void;
 
     /**
      * Get the cache path for the compiled routes.
@@ -335,7 +316,7 @@ interface Router
      *
      * @param bool $refreshCache
      *
-     * @return \Viserio\Component\Contracts\Routing\Router
+     * @return void
      */
-    public function refreshCache(bool $refreshCache): Router;
+    public function refreshCache(bool $refreshCache): void;
 }

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Support\Arrayable;
 use Viserio\Component\Contracts\Support\Renderable;

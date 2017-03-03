@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Session\Fingerprint\ClientIpGenerator;

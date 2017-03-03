@@ -12,9 +12,11 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Routing\Generator\RouteTreeBuilder;
-use Viserio\Component\Routing\Generator\RouteTreeOptimizer;
+use Viserio\Component\Routing\Events\RouteMatchedEvent;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
+use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
+use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
+use Viserio\Component\Routing\TreeGenerator\RouteTreeCompiler;
 
 abstract class AbstractRouteDispatcher
 {
@@ -25,7 +27,7 @@ abstract class AbstractRouteDispatcher
     /**
      * The route collection instance.
      *
-     * @var \Viserio\Component\Routing\RouteCollection
+     * @var \Viserio\Component\Routing\Route\Collection
      */
     protected $routes;
 
@@ -77,6 +79,8 @@ abstract class AbstractRouteDispatcher
      * Add a list of middlewares.
      *
      * @param array $middlewares
+     *
+     * @return void
      */
     public function addMiddlewares(array $middlewares): void
     {
@@ -89,15 +93,13 @@ abstract class AbstractRouteDispatcher
      * @param string $name
      * @param array  $middleware
      *
-     * @return $this
+     * @return void
      *
      * @codeCoverageIgnore
      */
-    public function setMiddlewareGroup(string $name, array $middleware): self
+    public function setMiddlewareGroup(string $name, array $middleware): void
     {
         $this->middlewareGroups[$name] = $middleware;
-
-        return $this;
     }
 
     /**
@@ -105,15 +107,13 @@ abstract class AbstractRouteDispatcher
      *
      * @param array $middlewarePriorities
      *
-     * @return $this
+     * @return void
      *
      * @codeCoverageIgnore
      */
-    public function setMiddlewarePriorities(array $middlewarePriorities): self
+    public function setMiddlewarePriorities(array $middlewarePriorities): void
     {
         $this->middlewarePriority = $middlewarePriorities;
-
-        return $this;
     }
 
     /**
@@ -141,6 +141,32 @@ abstract class AbstractRouteDispatcher
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setCachePath(string $path): void
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getCachePath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function refreshCache(bool $refreshCache): void
+    {
+        $this->refreshCache = $refreshCache;
+    }
+
+    /**
      * Match and dispatch a route matching the given http method and
      * uri, retruning an execution chain.
      *
@@ -148,7 +174,6 @@ abstract class AbstractRouteDispatcher
      *
      * @throws \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
      * @throws \Narrowspark\HttpStatus\Exception\NotFoundException
-     * @throws \Narrowspark\HttpStatus\Exception\InternalServerErrorException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -210,9 +235,10 @@ abstract class AbstractRouteDispatcher
 
         if ($this->events !== null) {
             $this->getEventManager()->trigger(
-                'route.matched',
-                $this,
-                ['route' => $route, 'server_request' => $serverRequest]
+                new RouteMatchedEvent(
+                    $this,
+                    ['route' => $route, 'server_request' => $serverRequest]
+                )
             );
         }
 
@@ -228,12 +254,12 @@ abstract class AbstractRouteDispatcher
     {
         if ($this->refreshCache && file_exists($this->path)) {
             @unlink($this->path);
-        }
+        } else {
+            $this->createCacheFolder($this->path);
 
-        if (! file_exists($this->path)) {
-            $routerCompiler = new TreeRouteCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
+            $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
 
-            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()), LOCK_EX);
+            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()));
         }
 
         return require $this->path;
@@ -273,14 +299,14 @@ abstract class AbstractRouteDispatcher
         $routeMiddlewares = $route->gatherMiddleware();
 
         Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {
-            $middlewares[] = $this->resolveMiddlewareClassName($name);
+            $middlewares[] = MiddlewareNameResolver::resolve($name, $this->middlewares, $this->middlewareGroups);
         });
 
         if (count($routeMiddlewares['without_middlewares']) !== 0) {
             $withoutMiddlewares = [];
 
             Arr::map($routeMiddlewares['without_middlewares'], function ($name) use (&$withoutMiddlewares) {
-                $withoutMiddlewares[] = $this->resolveMiddlewareClassName($name);
+                $withoutMiddlewares[] = MiddlewareNameResolver::resolve($name, $this->middlewares, $this->middlewareGroups);
             });
 
             $middlewares = array_diff($middlewares, $withoutMiddlewares);
@@ -293,57 +319,28 @@ abstract class AbstractRouteDispatcher
     }
 
     /**
-     * Resolve the middleware name to a class name(s) preserving passed parameters.
+     * Make a nested path, creating directories down the path recursion.
      *
-     * @param string $name
+     * @param string $path
      *
-     * @return string|array
+     * @return bool
      */
-    protected function resolveMiddlewareClassName(string $name)
+    private function createCacheFolder(string $path): bool
     {
-        $map = $this->middlewares;
+        $dir = pathinfo($path, PATHINFO_DIRNAME);
 
-        if (isset($this->middlewareGroups[$name])) {
-            return $this->parseMiddlewareGroup($name);
+        if (is_dir($dir)) {
+            return true;
         }
 
-        return $map[$name] ?? $name;
-    }
+        if ($this->createCacheFolder($dir)) {
+            if (mkdir($dir)) {
+                chmod($dir, 0777);
 
-    /**
-     * Parse the middleware group and format it for usage.
-     *
-     * @param string $name
-     *
-     * @return array
-     */
-    protected function parseMiddlewareGroup(string $name): array
-    {
-        $results = [];
-
-        foreach ($this->middlewareGroups[$name] as $middleware) {
-            // If the middleware is another middleware group we will pull in the group and
-            // merge its middleware into the results. This allows groups to conveniently
-            // reference other groups without needing to repeat all their middlewares.
-            if (isset($this->middlewareGroups[$middleware])) {
-                $results = array_merge(
-                    $results,
-                    $this->parseMiddlewareGroup($middleware)
-                );
-
-                continue;
+                return true;
             }
-
-            // If this middleware is actually a route middleware, we will extract the full
-            // class name out of the middleware list now. Then we'll add the parameters
-            // back onto this class' name so the pipeline will properly extract them.
-            if (isset($this->middlewares[$middleware])) {
-                $middleware = $this->middlewares[$middleware];
-            }
-
-            $results[] = $middleware;
         }
 
-        return $results;
+        return false;
     }
 }

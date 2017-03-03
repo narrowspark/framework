@@ -165,7 +165,7 @@ class MessageCatalogue implements MessageCatalogueContract
     {
         if ($catalogue->getLocale() !== $this->locale) {
             throw new LogicException(sprintf(
-                'Cannot add a catalogue for locale "%s" as the current locale for this catalogue is "%s"',
+                'Cannot add a catalogue for locale [%s] as the current locale for this catalogue is [%s]',
                 $catalogue->getLocale(),
                 $this->locale
             ));
@@ -187,7 +187,7 @@ class MessageCatalogue implements MessageCatalogueContract
         do {
             if ($circular->getLocale() === $catalogue->getLocale()) {
                 throw new LogicException(sprintf(
-                    'Circular reference detected when adding a fallback catalogue for locale "%s".',
+                    'Circular reference detected when adding a fallback catalogue for locale [%s].',
                     $catalogue->getLocale()
                 ));
             }

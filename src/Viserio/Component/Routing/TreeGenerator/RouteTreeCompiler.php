@@ -1,34 +1,32 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing;
+namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Routing\Generator\ChildrenNodeCollection;
-use Viserio\Component\Routing\Generator\MatchedRouteDataMap;
-use Viserio\Component\Routing\Generator\RouteTreeBuilder;
-use Viserio\Component\Routing\Generator\RouteTreeOptimizer;
+use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
+use Viserio\Component\Routing\VarExporter;
 
-class TreeRouteCompiler
+class RouteTreeCompiler
 {
     /**
      * RouteTreeBuilder instance.
      *
-     * @var \Viserio\Component\Routing\Generator\RouteTreeBuilder
+     * @var \Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder
      */
     protected $treeBuilder;
 
     /**
      * RouteTreeOptimizer instance.
      *
-     * @var \Viserio\Component\Routing\Generator\RouteTreeOptimizer
+     * @var \Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer
      */
     protected $treeOptimizer;
 
     /**
      * Create a new tree route compailer instance.
      *
-     * @param \Viserio\Component\Routing\Generator\RouteTreeBuilder   $treeBuilder
-     * @param \Viserio\Component\Routing\Generator\RouteTreeOptimizer $treeOptimizer
+     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder             $treeBuilder
+     * @param \Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer $treeOptimizer
      */
     public function __construct(RouteTreeBuilder $treeBuilder, RouteTreeOptimizer $treeOptimizer)
     {

@@ -207,7 +207,7 @@ class Request extends AbstractMessage implements RequestInterface
 
         if (! isset(static::$validMethods[$method])) {
             throw new InvalidArgumentException(sprintf(
-                'Unsupported HTTP method "%s".',
+                'Unsupported HTTP method [%s].',
                 $method
             ));
         }
@@ -248,7 +248,7 @@ class Request extends AbstractMessage implements RequestInterface
         }
 
         throw new InvalidArgumentException(
-            'Invalid URI provided; must be null, a string, or a Psr\Http\Message\UriInterface instance.'
+            'Invalid URI provided; must be null, a string, or a [\Psr\Http\Message\UriInterface] instance.'
         );
     }
 }

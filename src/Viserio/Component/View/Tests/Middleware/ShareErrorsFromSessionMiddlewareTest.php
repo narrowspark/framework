@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Tests\Middleware;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;

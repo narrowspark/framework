@@ -14,9 +14,6 @@ parameters:
         # Needs https://github.com/narrowspark/framework/issues/394
         - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
 
-        # Needs https://github.com/narrowspark/framework/issues/476
-        - %currentWorkingDirectory%/src/Viserio/Component/Routing/*
-
     ignoreErrors:
         # They are array callables
         - '#callable of class Twig_Function constructor#'
@@ -101,6 +98,13 @@ parameters:
         - '#\$payload of method Viserio\\Component\\Contracts\\Parsers\\Parser::parse#'
         - '#\$payload of method Viserio\\Component\\Parsers\\Formats\\INI::parse#'
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
+        - '#Method Viserio\\Component\\Routing\\Router::convertToControllerAction#'
+        - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeCompiler::compileSegmentNodes#'
+        - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
+        - '#Call to an undefined method Interop\\Container\\ContainerInterface::make#'
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
+        - '#Property Viserio\\Component\\Routing\\Matchers\\ParameterMatcher::\$names#'
+        - '#Property Viserio\\Component\\Routing\\Matchers\\RegexMatcher::\$parameterKeyGroupMap#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'

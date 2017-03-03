@@ -360,7 +360,7 @@ class ContainerTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Container\Exceptions\NotFoundException
-     * @expectedExceptionMessage Abstract (test) is not being managed by the container
+     * @expectedExceptionMessage Abstract [test] is not being managed by the container.
      */
     public function testGetToThrowExceptionOnNotFoundId()
     {

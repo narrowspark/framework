@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests\DataCollectors\Bridge\Cache;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

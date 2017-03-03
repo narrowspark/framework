@@ -60,7 +60,7 @@ class RackspaceConnector extends AbstractConnector
                 ->getContainer($auth['container']);
         }
 
-        throw new RuntimeException('"OpenCloud\ObjectStore\Service::getContainer" expects only stdClass or null.');
+        throw new RuntimeException('[OpenCloud\ObjectStore\Service::getContainer] expects only stdClass or null.');
     }
 
     /**

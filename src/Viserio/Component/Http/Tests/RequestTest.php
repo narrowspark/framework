@@ -318,7 +318,7 @@ class RequestTest extends AbstractMessageTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unsupported HTTP method "FOO".
+     * @expectedExceptionMessage Unsupported HTTP method [FOO].
      */
     public function testWithNotValidMethodRequest()
     {
@@ -402,7 +402,7 @@ class RequestTest extends AbstractMessageTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid URI provided; must be null, a string, or a Psr\Http\Message\UriInterface instance.
+     * @expectedExceptionMessage Invalid URI provided; must be null, a string, or a [\Psr\Http\Message\UriInterface] instance.
      */
     public function testRequestToThrowException()
     {

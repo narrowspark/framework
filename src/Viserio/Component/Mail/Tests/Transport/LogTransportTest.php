@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests\Transport;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_Message;

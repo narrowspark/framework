@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -17,12 +16,6 @@ class RouterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $cachefolder = __DIR__ . '/../Cache/';
-
-        if (! is_dir($cachefolder)) {
-            mkdir($cachefolder);
-        }
-
         $router = new Router($this->mock(ContainerInterface::class));
         $router->setCachePath(__DIR__ . '/../Cache/RouterTest.cache');
         $router->refreshCache(true);
@@ -35,49 +28,6 @@ class RouterTest extends MockeryTestCase
         parent::tearDown();
 
         $this->delTree(__DIR__ . '/../Cache/');
-    }
-
-    public function testGroupMerging()
-    {
-        $old = ['prefix' => 'foo/bar/'];
-        self::assertEquals(
-            ['prefix' => 'foo/bar/baz', 'suffix' => null, 'namespace' => null, 'where' => []],
-            $this->router->mergeGroup(['prefix' => 'baz'], $old)
-        );
-
-        $old = ['suffix' => '.bar'];
-        self::assertEquals(
-            ['prefix' => null, 'suffix' => '.foo.bar', 'namespace' => null, 'where' => []],
-            $this->router->mergeGroup(['suffix' => '.foo'], $old)
-        );
-
-        $old = ['domain' => 'foo'];
-        self::assertEquals(
-            ['domain' => 'baz', 'prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => []],
-            $this->router->mergeGroup(['domain' => 'baz'], $old)
-        );
-
-        $old = ['as' => 'foo.'];
-        self::assertEquals(
-            ['as' => 'foo.bar', 'prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => []],
-            $this->router->mergeGroup(['as' => 'bar'], $old)
-        );
-
-        $old = ['where' => ['var1' => 'foo', 'var2' => 'bar']];
-        self::assertEquals(
-            ['prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => [
-                'var1' => 'foo', 'var2' => 'baz', 'var3' => 'qux',
-            ]],
-            $this->router->mergeGroup(['where' => ['var2' => 'baz', 'var3' => 'qux']], $old)
-        );
-
-        $old = [];
-        self::assertEquals(
-            ['prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => [
-                'var1' => 'foo', 'var2' => 'bar',
-            ]],
-            $this->router->mergeGroup(['where' => ['var1' => 'foo', 'var2' => 'bar']], $old)
-        );
     }
 
     public function testMergingControllerUses()
@@ -339,6 +289,10 @@ class RouterTest extends MockeryTestCase
 
     private function delTree($dir)
     {
+        if (! is_dir($dir)) {
+            return;
+        }
+
         $files = array_diff(scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {

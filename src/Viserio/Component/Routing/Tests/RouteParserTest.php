@@ -4,9 +4,9 @@ namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Routing\Matchers\ParameterMatcher;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
-use Viserio\Component\Routing\RouteParser;
-use Viserio\Component\Routing\Segments\ParameterSegment;
+use Viserio\Component\Routing\Route\Parser as RouteParser;
 
 class RouteParserTest extends TestCase
 {
@@ -19,9 +19,7 @@ class RouteParserTest extends TestCase
      */
     public function testRouteParser($pattern, array $conditions, array $expectedSegments)
     {
-        $parser = new RouteParser();
-
-        self::assertEquals($expectedSegments, $parser->parse($pattern, $conditions));
+        self::assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
     }
 
     public function routeParsingProvider()
@@ -57,77 +55,77 @@ class RouteParserTest extends TestCase
             [
                 '/{parameter}',
                 [],
-                [new ParameterSegment('parameter', '/^(' . Pattern::ANY . ')$/')],
+                [new ParameterMatcher('parameter', '/^(' . Pattern::ANY . ')$/')],
             ],
             [
                 '/{param}',
                 ['param' => Pattern::ALPHA_NUM],
-                [new ParameterSegment('param', '/^(' . Pattern::ALPHA_NUM . ')$/')],
+                [new ParameterMatcher('param', '/^(' . Pattern::ALPHA_NUM . ')$/')],
             ],
             [
                 '/user/{id}/profile/{type}',
                 ['id' => Pattern::DIGITS, 'type' => Pattern::ALPHA_LOWER],
                 [
                     new StaticMatcher('user'),
-                    new ParameterSegment('id', '/^(' . Pattern::DIGITS . ')$/'),
+                    new ParameterMatcher('id', '/^(' . Pattern::DIGITS . ')$/'),
                     new StaticMatcher('profile'),
-                    new ParameterSegment('type', '/^(' . Pattern::ALPHA_LOWER . ')$/'),
+                    new ParameterMatcher('type', '/^(' . Pattern::ALPHA_LOWER . ')$/'),
                 ],
             ],
             [
                 '/prefix{param}',
                 ['param' => Pattern::ALPHA_NUM],
-                [new ParameterSegment(['param'], '/^prefix(' . Pattern::ALPHA_NUM . ')$/')],
+                [new ParameterMatcher(['param'], '/^prefix(' . Pattern::ALPHA_NUM . ')$/')],
             ],
             [
                 '/{param}suffix',
                 ['param' => Pattern::ALPHA_NUM],
-                [new ParameterSegment(['param'], '/^(' . Pattern::ALPHA_NUM . ')suffix$/')],
+                [new ParameterMatcher(['param'], '/^(' . Pattern::ALPHA_NUM . ')suffix$/')],
             ],
             [
                 '/abc{param1}:{param2}',
                 ['param1' => Pattern::ANY, 'param2' => Pattern::ALPHA],
-                [new ParameterSegment(['param1', 'param2'], '/^abc(' . Pattern::ANY . ')\:(' . Pattern::ALPHA . ')$/')],
+                [new ParameterMatcher(['param1', 'param2'], '/^abc(' . Pattern::ANY . ')\:(' . Pattern::ALPHA . ')$/')],
             ],
             [
                 '/shop/{category}:{product}/buy/quantity:{quantity}',
                 ['category' => Pattern::ALPHA, 'product' => Pattern::ALPHA, 'quantity' => Pattern::DIGITS],
                 [
                     new StaticMatcher('shop'),
-                    new ParameterSegment(['category', 'product'], '/^(' . Pattern::ALPHA . ')\:(' . Pattern::ALPHA . ')$/'),
+                    new ParameterMatcher(['category', 'product'], '/^(' . Pattern::ALPHA . ')\:(' . Pattern::ALPHA . ')$/'),
                     new StaticMatcher('buy'),
-                    new ParameterSegment(['quantity'], '/^quantity\:(' . Pattern::DIGITS . ')$/'),
+                    new ParameterMatcher(['quantity'], '/^quantity\:(' . Pattern::DIGITS . ')$/'),
                 ],
             ],
             [
                 '/{param:[0-9]+}',
                 [],
-                [new ParameterSegment(['param'], '/^([0-9]+)$/')],
+                [new ParameterMatcher(['param'], '/^([0-9]+)$/')],
             ],
             [
                 '/{param:[\:]+}',
                 [],
-                [new ParameterSegment(['param'], '/^([\:]+)$/')],
+                [new ParameterMatcher(['param'], '/^([\:]+)$/')],
             ],
             [
                 // Inline regexps take precedence
                 '/{param:[a-z]+}',
                 ['param' => Pattern::ALPHA_UPPER],
-                [new ParameterSegment(['param'], '/^([a-z]+)$/')],
+                [new ParameterMatcher(['param'], '/^([a-z]+)$/')],
             ],
             [
                 '/abc{param1:.+}:{param2:.+}',
                 [],
-                [new ParameterSegment(['param1', 'param2'], '/^abc(.+)\:(.+)$/')],
+                [new ParameterMatcher(['param1', 'param2'], '/^abc(.+)\:(.+)$/')],
             ],
             [
                 '/shop/{category:[\w]+}:{product:[\w]+}/buy/quantity:{quantity:[0-9]+}',
                 [],
                 [
                     new StaticMatcher('shop'),
-                    new ParameterSegment(['category', 'product'], '/^([\w]+)\:([\w]+)$/'),
+                    new ParameterMatcher(['category', 'product'], '/^([\w]+)\:([\w]+)$/'),
                     new StaticMatcher('buy'),
-                    new ParameterSegment(['quantity'], '/^quantity\:([0-9]+)$/'),
+                    new ParameterMatcher(['quantity'], '/^quantity\:([0-9]+)$/'),
                 ],
             ],
         ];
@@ -143,7 +141,7 @@ class RouteParserTest extends TestCase
      */
     public function testInvalidRouteParsing($uri)
     {
-        (new RouteParser())->parse($uri, []);
+        RouteParser::parse($uri, []);
     }
 
     public function invalidParsingProvider()

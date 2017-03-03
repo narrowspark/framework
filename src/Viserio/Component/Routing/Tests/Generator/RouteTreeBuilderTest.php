@@ -5,13 +5,13 @@ namespace Viserio\Component\Routing\Tests\Generator;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Routing\Generator\ChildrenNodeCollection;
-use Viserio\Component\Routing\Generator\MatchedRouteDataMap;
-use Viserio\Component\Routing\Generator\RouteTreeBuilder;
-use Viserio\Component\Routing\Generator\RouteTreeNode;
 use Viserio\Component\Routing\Matchers\RegexMatcher;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\Route;
+use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
+use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
+use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
+use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 
 class RouteTreeBuilderTest extends TestCase
 {

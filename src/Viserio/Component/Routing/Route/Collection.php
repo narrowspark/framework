@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing;
+namespace Viserio\Component\Routing\Route;
 
 use RuntimeException;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 
-class RouteCollection implements RouteCollectionContract
+class Collection implements RouteCollectionContract
 {
     /**
      * An flattened array of all of the routes.
@@ -66,7 +66,7 @@ class RouteCollection implements RouteCollectionContract
     /**
      * {@inheritdoc}
      */
-    public function getByName(string $name)
+    public function getByName(string $name): ?RouteContract
     {
         return isset($this->nameList[$name]) ? $this->nameList[$name] : null;
     }
@@ -74,7 +74,7 @@ class RouteCollection implements RouteCollectionContract
     /**
      * {@inheritdoc}
      */
-    public function getByAction(string $action)
+    public function getByAction(string $action): ?RouteContract
     {
         return isset($this->actionList[$action]) ? $this->actionList[$action] : null;
     }
@@ -93,8 +93,10 @@ class RouteCollection implements RouteCollectionContract
      * Add the route to any look-up tables if necessary.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
+     *
+     * @return void
      */
-    protected function addLookups(RouteContract $route)
+    protected function addLookups(RouteContract $route): void
     {
         // If the route has a name, we will add it to the name look-up table so that we
         // will quickly be able to find any route associate with a name and not have

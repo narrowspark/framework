@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
