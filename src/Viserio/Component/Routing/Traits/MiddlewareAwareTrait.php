@@ -71,7 +71,7 @@ trait MiddlewareAwareTrait
         if (! in_array(MiddlewareInterface::class, class_implements($middleware))) {
             throw new LogicException(
                 sprintf(
-                    '\Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [%s]',
+                    '\Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [%s].',
                     $middleware
                 )
             );
