@@ -163,15 +163,6 @@ interface Router
     public function setParameter(string $parameterName, string $expression): Router;
 
     /**
-     * Defines the supplied parameter name to be globally associated with the expression.
-     *
-     * @param string[] $parameterPatternMap
-     *
-     * @return $this
-     */
-    public function addParameters(array $parameterPatternMap): Router;
-
-    /**
      * Removes the global expression associated with the supplied parameter name.
      *
      * @param string $name

@@ -39,16 +39,17 @@ class Pipeline extends BasePipeline
     {
         list($name, $parameters) = $this->parseStageString($stage);
         $parameters              = array_merge([$traveler, $stack], $parameters);
-
-        $class = null;
+        $class                   = null;
 
         if ($this->container->has($name)) {
             $class = $this->container->get($name);
+        // @codeCoverageIgnoreStart
         } elseif ($this->container instanceof ContainerContract) {
             $class = $this->container->make($name);
         } else {
             throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.', $name));
         }
+        // @codeCoverageIgnoreStop
 
         return $this->getInvoker()->call(
             [

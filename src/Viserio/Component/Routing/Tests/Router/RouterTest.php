@@ -16,12 +16,6 @@ class RouterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $cachefolder = __DIR__ . '/../Cache';
-
-        // if (! is_dir($cachefolder)) {
-        //     mkdir($cachefolder);
-        // }
-
         $router = new Router($this->mock(ContainerInterface::class));
         $router->setCachePath(__DIR__ . '/../Cache/RouterTest.cache');
         $router->refreshCache(true);

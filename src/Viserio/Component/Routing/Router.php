@@ -160,16 +160,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     */
-    public function addParameters(array $parameterPatternMap): RouterContract
-    {
-        $this->globalParameterConditions += $parameterPatternMap;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
      *
      * @codeCoverageIgnore
      */
