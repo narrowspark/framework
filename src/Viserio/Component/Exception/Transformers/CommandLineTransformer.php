@@ -14,7 +14,7 @@ class CommandLineTransformer implements TransformerContract
      */
     public function transform(Throwable $exception): Throwable
     {
-        if (php_sapi_name() === 'cli') {
+        if (php_sapi_name() === 'cli' || php_sapi_name() == 'phpdbg') {
             if ($exception instanceof ErrorException) {
                 return $this->handleErrors($exception);
             }

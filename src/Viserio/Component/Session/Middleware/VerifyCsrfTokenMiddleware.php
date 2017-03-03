@@ -91,6 +91,16 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     }
 
     /**
+     * Determine if we are running in the console.
+     *
+     * @return bool
+     */
+    public function runningInConsole(): bool
+    {
+        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
+    }
+
+    /**
      * Determine if the request has a URI that should pass through CSRF verification.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
