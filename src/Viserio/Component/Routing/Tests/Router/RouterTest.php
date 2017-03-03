@@ -16,11 +16,11 @@ class RouterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $cachefolder = __DIR__ . '/../Cache/';
+        $cachefolder = __DIR__ . '/../Cache';
 
-        if (! is_dir($cachefolder)) {
-            mkdir($cachefolder);
-        }
+        // if (! is_dir($cachefolder)) {
+        //     mkdir($cachefolder);
+        // }
 
         $router = new Router($this->mock(ContainerInterface::class));
         $router->setCachePath(__DIR__ . '/../Cache/RouterTest.cache');
@@ -295,6 +295,10 @@ class RouterTest extends MockeryTestCase
 
     private function delTree($dir)
     {
+        if (!is_dir($dir)) {
+            return;
+        }
+
         $files = array_diff(scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {

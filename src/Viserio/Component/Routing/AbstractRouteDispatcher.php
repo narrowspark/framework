@@ -254,14 +254,12 @@ abstract class AbstractRouteDispatcher
     {
         if ($this->refreshCache && file_exists($this->path)) {
             @unlink($this->path);
-        }
-
-        if (! file_exists($this->path)) {
+        } else {
             $this->createCacheFolder($this->path);
 
             $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
 
-            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()), LOCK_EX);
+            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()));
         }
 
         return require $this->path;
