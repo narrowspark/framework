@@ -13,7 +13,6 @@ use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Events\RouteMatchedEvent;
-use Viserio\Component\Routing\MiddlewareNameResolver;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;

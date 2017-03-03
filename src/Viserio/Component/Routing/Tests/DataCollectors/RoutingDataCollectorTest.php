@@ -3,17 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\DataCollectors;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Routing\DataCollectors\RoutingDataCollector;
 use Viserio\Component\Routing\Route;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 class RoutingDataCollectorTest extends MockeryTestCase
 {
     public function testCollect()
     {
-        $route = new Route('GET', '/test', ['domain' => 'test.com']);
+        $route  = new Route('GET', '/test', ['domain' => 'test.com']);
         $routes = $this->mock(RouteCollectionContract::class);
         $routes->shouldReceive('getRoutes')
             ->twice()
@@ -28,7 +28,7 @@ class RoutingDataCollectorTest extends MockeryTestCase
         $data = $collector->getData();
 
         self::assertSame([
-            'routes' => [$route],
+            'routes'  => [$route],
             'counted' => 1,
         ], $data);
     }
