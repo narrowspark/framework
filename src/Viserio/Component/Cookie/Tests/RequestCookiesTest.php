@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Component\Cookie\Cookie;

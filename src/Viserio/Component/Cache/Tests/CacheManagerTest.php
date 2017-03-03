@@ -10,7 +10,6 @@ use Cache\Encryption\EncryptedCachePool;
 use Cache\Namespaced\NamespacedCachePool;
 use Defuse\Crypto\Key;
 use League\Flysystem\Adapter\Local;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extensions;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;

@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;

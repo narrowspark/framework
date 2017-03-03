@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Defuse\Crypto\Key;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;

@@ -13,7 +13,7 @@ use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Events\RouteMatchedEvent;
-use Viserio\Component\Routing\Resolver\MiddlewareName;
+use Viserio\Component\Routing\MiddlewareNameResolver;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
@@ -151,6 +151,8 @@ abstract class AbstractRouteDispatcher
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getCachePath(): string
     {
@@ -300,14 +302,14 @@ abstract class AbstractRouteDispatcher
         $routeMiddlewares = $route->gatherMiddleware();
 
         Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {
-            $middlewares[] = MiddlewareName::resolve($name, $this->middlewares, $this->middlewareGroups);
+            $middlewares[] = MiddlewareNameResolver::resolve($name, $this->middlewares, $this->middlewareGroups);
         });
 
         if (count($routeMiddlewares['without_middlewares']) !== 0) {
             $withoutMiddlewares = [];
 
             Arr::map($routeMiddlewares['without_middlewares'], function ($name) use (&$withoutMiddlewares) {
-                $withoutMiddlewares[] = MiddlewareName::resolve($name, $this->middlewares, $this->middlewareGroups);
+                $withoutMiddlewares[] = MiddlewareNameResolver::resolve($name, $this->middlewares, $this->middlewareGroups);
             });
 
             $middlewares = array_diff($middlewares, $withoutMiddlewares);

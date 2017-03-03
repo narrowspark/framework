@@ -65,6 +65,8 @@ class Pipeline extends BasePipeline
      * @param callable $middleware
      *
      * @return object
+     *
+     * @codeCoverageIgnore
      */
     private function getDelegateMiddleware(callable $middleware)
     {

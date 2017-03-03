@@ -5,7 +5,6 @@ namespace Viserio\Component\OptionsResolver\Tests;
 use ArrayIterator;
 use ArrayObject;
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;

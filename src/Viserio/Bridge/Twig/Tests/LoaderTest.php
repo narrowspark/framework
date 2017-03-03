@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests;
 
 use InvalidArgumentException;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Loader;
 use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;

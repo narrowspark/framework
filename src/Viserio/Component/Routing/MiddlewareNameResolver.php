@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Resolver;
+namespace Viserio\Component\Routing;
 
-class MiddlewareName
+class MiddlewareNameResolver
 {
     /**
      * Resolve the middleware name to a class name(s).

@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Tests;
 
 use Cake\Chronos\Chronos;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cron\Cron;

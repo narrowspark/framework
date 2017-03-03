@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\View\Engine;
 use Viserio\Component\Contracts\View\Finder;

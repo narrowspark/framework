@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests\Providers;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
@@ -46,9 +45,6 @@ return [
         parent::tearDown();
 
         $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testProvider()

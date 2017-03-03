@@ -5,7 +5,6 @@ namespace Viserio\Component\Queue\Tests\Connectors;
 use Defuse\Crypto\Key;
 use Exception;
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;
 use Viserio\Component\Encryption\Encrypter;
@@ -64,9 +63,6 @@ class RedisQueueIntegrationTest extends MockeryTestCase
         parent::tearDown();
 
         $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testExpiredJobsArePopped()

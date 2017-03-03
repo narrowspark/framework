@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Tests;
 
-use Mockery as Mock;
 use Monolog\Formatter\ChromePHPFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
