@@ -240,11 +240,11 @@ class Request extends AbstractMessage implements RequestInterface
         }
 
         if (is_string($uri)) {
-            return new Uri($uri);
+            return Uri::createFromString($uri);
         }
 
         if ($uri === null) {
-            return new Uri();
+            return Uri::createFromString('');
         }
 
         throw new InvalidArgumentException(

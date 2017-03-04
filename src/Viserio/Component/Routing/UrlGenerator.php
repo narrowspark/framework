@@ -58,7 +58,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        if (! is_null($route = $this->routes->getByName($name))) {
+        if (($route = $this->routes->getByName($name)) !== null) {
             return $this->toRoute($route, $parameters, $referenceType);
         }
 
@@ -92,7 +92,7 @@ class UrlGenerator implements UrlGeneratorContract
             $uri = $uri->withQuery($key . '=' . $value);
         }
 
-        if ($referenceType === 0) {
+        if ($referenceType === self::ABSOLUTE_URL) {
             return (string) $uri;
         }
 
@@ -114,14 +114,10 @@ class UrlGenerator implements UrlGeneratorContract
     {
         $requestUri = $this->request->getUri();
         $secure     = $requestUri->getScheme();
-        $port       = (int) $requestUri->getPort();
+        $port       = $requestUri->getPort();
 
-        if (($secure === 'https' && $port === 443) || ($secure !== 'https' && $port === 80)) {
-            return $uri;
-        }
-
-        $uri = $uri->withScheme('https');
-        $uri = $uri->withPort(443);
+        $uri = $uri->withScheme($requestUri->getScheme());
+        $uri = $uri->withPort($requestUri->getPort());
 
         return $uri;
     }
