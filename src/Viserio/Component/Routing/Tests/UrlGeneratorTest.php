@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Routing\Route\Collection as RouteCollection;
-use Viserio\Component\Routing\Route;
-use Viserio\Component\Routing\UrlGenerator;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\UriFactory;
+use Viserio\Component\Routing\Route;
+use Viserio\Component\Routing\Route\Collection as RouteCollection;
+use Viserio\Component\Routing\UrlGenerator;
 
 class UrlGeneratorTest extends MockeryTestCase
 {
@@ -25,7 +25,7 @@ class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
 
-        $url = $this->getGenerator($routes, array('HTTPS' => 'on'))->generate('testing', array(), UrlGeneratorContract::ABSOLUTE_URL);
+        $url = $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
         $this->assertEquals('https://localhost/testing', $url);
     }
@@ -34,7 +34,7 @@ class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
 
-        $url = $this->getGenerator($routes, array('SERVER_PORT' => 8080))->generate('testing', array(), UrlGeneratorContract::ABSOLUTE_URL);
+        $url = $this->getGenerator($routes, ['SERVER_PORT' => 8080])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
         $this->assertEquals('http://localhost:8080/testing', $url);
     }
@@ -43,7 +43,7 @@ class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
 
-        $url = $this->getGenerator($routes, array('HTTPS' => 'on', 'SERVER_PORT' => 8080))->generate('testing', array(), UrlGeneratorContract::ABSOLUTE_URL);
+        $url = $this->getGenerator($routes, ['HTTPS' => 'on', 'SERVER_PORT' => 8080])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
         $this->assertEquals('https://localhost:8080/testing', $url);
     }
@@ -52,7 +52,7 @@ class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
 
-        $url = $this->getGenerator($routes)->generate('testing', array(), UrlGeneratorContract::ABSOLUTE_PATH);
+        $url = $this->getGenerator($routes)->generate('testing', [], UrlGeneratorContract::ABSOLUTE_PATH);
 
         $this->assertEquals('/testing', $url);
     }
@@ -78,11 +78,11 @@ class UrlGeneratorTest extends MockeryTestCase
     protected function getGenerator(RouteCollection $routes, array $serverVar = [])
     {
         $server =  [
-            'PHP_SELF' => '',
+            'PHP_SELF'    => '',
             'REQUEST_URI' => '',
             'SERVER_ADDR' => '127.0.0.1',
-            'HTTPS' => '',
-            'HTTP_HOST' => 'localhost',
+            'HTTPS'       => '',
+            'HTTP_HOST'   => 'localhost',
         ];
 
         $server = array_merge($server, $serverVar);

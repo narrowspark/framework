@@ -91,6 +91,16 @@ class Collection implements Countable, RouteCollectionContract
     }
 
     /**
+     * Count the number of items in the collection.
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->allRoutes);
+    }
+
+    /**
      * Add the route to any look-up tables if necessary.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
@@ -114,15 +124,5 @@ class Collection implements Countable, RouteCollectionContract
         if (isset($action['controller'])) {
             $this->actionList[trim($action['controller'], '\\')] = $route;
         }
-    }
-
-    /**
-     * Count the number of items in the collection.
-     *
-     * @return int
-     */
-    public function count(): int
-    {
-        return count($this->allRoutes);
     }
 }
