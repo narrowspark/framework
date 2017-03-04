@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Interop\Http\Factory\UriFactoryInterface;
-use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use Viserio\Component\Contracts\Routing\Exceptions\RouteNotFoundException;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
@@ -14,6 +14,13 @@ use Viserio\Component\Support\Traits\MacroableTrait;
 class UrlGenerator implements UrlGeneratorContract
 {
     use MacroableTrait;
+
+    /**
+     * The named parameter defaults.
+     *
+     * @var array
+     */
+    public $defaultParameters = [];
 
     /**
      * The route collection.
@@ -62,7 +69,7 @@ class UrlGenerator implements UrlGeneratorContract
             return $this->toRoute($route, $parameters, $referenceType);
         }
 
-        throw new InvalidArgumentException(sprintf('Route [%s] not defined.', $name));
+        throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route [%s] as such route does not exist.', $name));
     }
 
     /**
