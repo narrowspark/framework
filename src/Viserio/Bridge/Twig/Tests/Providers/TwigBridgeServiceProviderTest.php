@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Providers;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig_Environment;
 use Twig_Lexer;

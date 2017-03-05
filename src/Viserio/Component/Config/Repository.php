@@ -34,13 +34,7 @@ class Repository implements RepositoryContract, IteratorAggregate
     protected $data = [];
 
     /**
-     * Import configuation from file.
-     * Can be grouped together.
-     *
-     * @param string      $file
-     * @param string|null $group
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function import(string $file, string $group = null): RepositoryContract
     {

@@ -71,7 +71,7 @@ class StaticalProxyTest extends MockeryTestCase
 
     /**
      * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage The Viserio\Component\StaticalProxy\StaticalProxy::getInstanceIdentifier method must be implemented by a subclass.
+     * @expectedExceptionMessage The [Viserio\Component\StaticalProxy\StaticalProxy::getInstanceIdentifier] method must be implemented by a subclass.
      */
     public function testGetInstanceIdentifier()
     {

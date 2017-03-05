@@ -13,12 +13,12 @@ class FileLoaderTest extends TestCase
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * @var org\bovigo\vfs\vfsStreamDirectory
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 
     /**
-     * @var \Viserio\Component\Filesystem\FileLoader
+     * @var \Viserio\Component\Parsers\FileLoader
      */
     private $fileloader;
 

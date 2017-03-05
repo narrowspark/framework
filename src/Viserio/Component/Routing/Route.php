@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Interop\Container\Exception\NotFoundException;
-use LogicException;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use UnexpectedValueException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Routing\Route\Action as RouteAction;
+use Viserio\Component\Routing\Route\Parser as RouteParser;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
@@ -87,7 +87,7 @@ class Route implements RouteContract
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
         $this->httpMethods = array_map('strtoupper', (array) $methods);
-        $this->action      = $this->parseAction($action);
+        $this->action      = RouteAction::parse($uri, $action);
 
         if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
             $this->httpMethods[] = 'HEAD';
@@ -135,11 +135,13 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getDomain()
+    public function getDomain(): ?string
     {
         if (isset($this->action['domain'])) {
             return str_replace(['http://', 'https://'], '', $this->action['domain']);
         }
+
+        return null;
     }
 
     /**
@@ -153,7 +155,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->action['as'] ?? null;
     }
@@ -289,7 +291,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getSuffix()
+    public function getSuffix(): ?string
     {
         return $this->action['suffix'] ?? null;
     }
@@ -331,15 +333,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function hasParameters(): bool
-    {
-        return isset($this->parameters);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function forgetParameter(string $name)
+    public function forgetParameter(string $name): void
     {
         $this->parameters;
 
@@ -351,7 +345,7 @@ class Route implements RouteContract
      */
     public function getSegments(): array
     {
-        return (new RouteParser())->parse($this->uri, $this->wheres);
+        return RouteParser::parse($this->uri, $this->wheres);
     }
 
     /**
@@ -393,54 +387,6 @@ class Route implements RouteContract
             $this->action['uses'],
             [$request, $this->parameters]
         );
-    }
-
-    /**
-     * Parse the route action into a standard array.
-     *
-     * @param callable|array|null $action
-     *
-     * @throws \UnexpectedValueException
-     *
-     * @return array
-     */
-    protected function parseAction($action): array
-    {
-        // If no action is passed in right away, we assume the user will make use of
-        // fluent routing. In that case, we set a default closure, to be executed
-        // if the user never explicitly sets an action to handle the given uri.
-        if (is_null($action)) {
-            return ['uses' => function () {
-                throw new LogicException(sprintf('Route for [%s] has no action.', $this->uri));
-            }];
-        }
-
-        // If the action is already a Closure instance, we will just set that instance
-        // as the "uses" property.
-        if (is_callable($action)) {
-            return ['uses' => $action];
-        }
-
-        // If no "uses" property has been set, we will dig through the array to find a
-        // Closure instance within this list. We will set the first Closure we come across.
-        if (! isset($action['uses'])) {
-            $action['uses'] = Arr::first($action, function ($key, $value) {
-                return is_callable($value) && is_numeric($key);
-            });
-        }
-
-        if (is_string($action['uses']) && mb_strpos($action['uses'], '@') === false) {
-            if (! method_exists($action, '__invoke')) {
-                throw new UnexpectedValueException(sprintf(
-                    'Invalid route action: [%s]',
-                    $action['uses']
-                ));
-            }
-
-            $action['uses'] = $action . '@__invoke';
-        }
-
-        return $action;
     }
 
     /**

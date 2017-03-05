@@ -19,7 +19,7 @@ interface Route
      *
      * @return string|null
      */
-    public function getDomain();
+    public function getDomain(): ?string;
 
     /**
      * Get the URI that the route responds to.
@@ -33,7 +33,7 @@ interface Route
      *
      * @return string|null
      */
-    public function getName();
+    public function getName(): ?string;
 
     /**
      * Add or change the route name.
@@ -106,6 +106,13 @@ interface Route
     public function setAction(array $action): Route;
 
     /**
+     * Get route identifier.
+     *
+     * @return string
+     */
+    public function getIdentifier(): string;
+
+    /**
      * Add a prefix to the route URI.
      *
      * @param string $prefix
@@ -135,7 +142,7 @@ interface Route
      *
      * @return string|null
      */
-    public function getSuffix();
+    public function getSuffix(): ?string;
 
     /**
      * Set a parameter to the given value.
@@ -176,23 +183,18 @@ interface Route
     public function getParameters(): array;
 
     /**
-     * Determine if the route has parameters.
-     *
-     * @return bool
-     */
-    public function hasParameters(): bool;
-
-    /**
      * Unset a parameter on the route if it is set.
      *
      * @param string $name
+     *
+     * @return void
      */
     public function forgetParameter(string $name);
 
     /**
      * The regular expression requirements.
      *
-     * @return \Viserio\Component\Contracts\Routing\RouteMatcher[]
+     * @return array
      */
     public function getSegments(): array;
 

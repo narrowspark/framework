@@ -4,10 +4,9 @@ namespace Viserio\Component\WebProfiler\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 
-class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareContract, MenuAwareContract
+class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareContract
 {
     /**
      * Collected data.

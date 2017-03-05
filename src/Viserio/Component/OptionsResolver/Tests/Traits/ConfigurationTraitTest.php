@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Traits;
 
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;

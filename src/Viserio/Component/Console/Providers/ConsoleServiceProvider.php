@@ -4,7 +4,6 @@ namespace Viserio\Component\Console\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
@@ -83,9 +82,6 @@ class ConsoleServiceProvider implements
             self::$options['version'],
             self::$options['name']
         );
-
-        // Add auto-complete for Symfony Console application
-        $console->add(new CompletionCommand());
 
         return $console;
     }

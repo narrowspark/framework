@@ -124,7 +124,7 @@ interface Router
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
-    public function match($methods, $uri, $action = null): Route;
+    public function match($methods, string $uri, $action = null): Route;
 
     /**
      * Set a global where pattern on all routes.
@@ -163,15 +163,6 @@ interface Router
     public function setParameter(string $parameterName, string $expression): Router;
 
     /**
-     * Defines the supplied parameter name to be globally associated with the expression.
-     *
-     * @param string[] $parameterPatternMap
-     *
-     * @return $this
-     */
-    public function addParameters(array $parameterPatternMap): Router;
-
-    /**
      * Removes the global expression associated with the supplied parameter name.
      *
      * @param string $name
@@ -201,16 +192,6 @@ interface Router
      * @return array
      */
     public function mergeWithLastGroup(array $new): array;
-
-    /**
-     * Merge the given group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return array
-     */
-    public function mergeGroup(array $new, array $old): array;
 
     /**
      * Get the suffix from the last group on the stack.
@@ -285,6 +266,13 @@ interface Router
     public function setMiddlewarePriorities(array $middlewarePriorities);
 
     /**
+     * Add a list of middlewares.
+     *
+     * @param array $middlewares
+     */
+    public function addMiddlewares(array $middlewares): void;
+
+    /**
      * Get the currently dispatched route instance.
      *
      * @return \Viserio\Component\Contracts\Routing\Route|null
@@ -306,4 +294,29 @@ interface Router
      * @return \Viserio\Component\Contracts\Routing\RouteCollection
      */
     public function getRoutes(): RouteCollection;
+
+    /**
+     * Set the cache path for compiled routes.
+     *
+     * @param string $path
+     *
+     * @return void
+     */
+    public function setCachePath(string $path): void;
+
+    /**
+     * Get the cache path for the compiled routes.
+     *
+     * @return string
+     */
+    public function getCachePath(): string;
+
+    /**
+     * Refresh cache file on development.
+     *
+     * @param bool $refreshCache
+     *
+     * @return void
+     */
+    public function refreshCache(bool $refreshCache): void;
 }

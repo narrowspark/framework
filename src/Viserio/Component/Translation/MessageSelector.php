@@ -55,7 +55,7 @@ class MessageSelector implements MessageSelectorContract
             }
         }
 
-        $position = $this->pluralization->get($number, $locale);
+        $position = $this->pluralization->get((int) $number, $locale);
 
         if (! isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard
@@ -66,7 +66,7 @@ class MessageSelector implements MessageSelectorContract
 
             throw new InvalidArgumentException(
                 sprintf(
-                    'Unable to choose a translation for "%s" with locale "%s" for value "%d".' .
+                    'Unable to choose a translation for [%s] with locale [%s] for value "%d".' .
                     ' Double check that this translation has the correct plural options' .
                     '(e.g. "There is one apple|There are %%count%% apples").',
                     $message,

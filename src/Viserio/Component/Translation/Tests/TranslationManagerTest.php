@@ -2,14 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\TaggableParser;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -24,7 +22,7 @@ class TranslationManagerTest extends MockeryTestCase
     private $manager;
 
     /**
-     * @var org\bovigo\vfs\vfsStreamDirectory
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 
@@ -208,9 +206,7 @@ declare(strict_types=1); return [
     protected function getFileLoader()
     {
         return new FileLoader(
-            new TaggableParser(
-                new Filesystem()
-            ),
+            new TaggableParser(),
             [
                 $this->root->url(),
             ]

@@ -21,7 +21,7 @@ class ResponseCookies extends AbstractCookieCollector
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof CookieContract)) {
                 throw new RuntimeException(sprintf(
-                    'The object [%s] must implement Viserio\Component\Contracts\Cookie\Cookie',
+                    'The object [%s] must implement [Viserio\Component\Contracts\Cookie\Cookie].',
                     get_class($cookie)
                 ));
             }
@@ -35,9 +35,9 @@ class ResponseCookies extends AbstractCookieCollector
      *
      * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return $this
+     * @return self
      */
-    public static function fromResponse(ResponseInterface $response)
+    public static function fromResponse(ResponseInterface $response): self
     {
         return new static(array_map(function ($setCookieString) {
             return self::fromStringCookie($setCookieString);

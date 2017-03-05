@@ -2,11 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests\Transport;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_Message;
-use Swift_Mime_Message;
+use Swift_Mime_MimeEntity;
 use Viserio\Component\Mail\Transport\LogTransport;
 
 class LogTransportTest extends MockeryTestCase
@@ -30,11 +29,11 @@ class LogTransportTest extends MockeryTestCase
     /**
      * Get a loggable string out of a Swiftmailer entity.
      *
-     * @param \Swift_Mime_Message $entity
+     * @param \Swift_Mime_MimeEntity $entity
      *
      * @return string
      */
-    protected function getMimeEntityString(Swift_Mime_Message $entity): string
+    protected function getMimeEntityString(Swift_Mime_MimeEntity $entity): string
     {
         $string = (string) $entity->getHeaders() . PHP_EOL . $entity->getBody();
 

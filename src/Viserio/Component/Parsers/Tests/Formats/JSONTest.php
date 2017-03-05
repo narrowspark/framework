@@ -45,7 +45,7 @@ class JSONTest extends TestCase
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($this->file->read($file->url()));
+        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);

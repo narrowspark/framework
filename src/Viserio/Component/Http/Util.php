@@ -37,7 +37,7 @@ class Util
 
         set_error_handler(function () use ($filename, $mode, &$ex) {
             $ex = new RuntimeException(sprintf(
-                'Unable to open %s using mode %s: %s',
+                'Unable to open [%s] using mode %s: %s',
                 $filename,
                 $mode,
                 func_get_args()[1]

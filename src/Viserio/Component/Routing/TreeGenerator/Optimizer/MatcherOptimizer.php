@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Generator\Optimizer;
+namespace Viserio\Component\Routing\TreeGenerator\Optimizer;
 
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;

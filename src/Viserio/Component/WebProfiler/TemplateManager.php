@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler;
 
 use Viserio\Component\Contracts\Support\Renderable as RenderableContract;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 
@@ -123,19 +122,17 @@ class TemplateManager implements RenderableContract
         ];
 
         foreach ($this->collectors as $name => $collector) {
-            if ($collector instanceof MenuAwareContract) {
-                if ($collector instanceof TooltipAwareContract) {
-                    $data['menus'][$collector->getName()] = [
-                        'menu'     => $collector->getMenu(),
-                        'tooltip'  => $collector->getTooltip(),
-                        'position' => $collector->getMenuPosition(),
-                    ];
-                } else {
-                    $data['menus'][$collector->getName()] = [
-                        'menu'     => $collector->getMenu(),
-                        'position' => $collector->getMenuPosition(),
-                    ];
-                }
+            if ($collector instanceof TooltipAwareContract) {
+                $data['menus'][$collector->getName()] = [
+                    'menu'     => $collector->getMenu(),
+                    'tooltip'  => $collector->getTooltip(),
+                    'position' => $collector->getMenuPosition(),
+                ];
+            } else {
+                $data['menus'][$collector->getName()] = [
+                    'menu'     => $collector->getMenu(),
+                    'position' => $collector->getMenuPosition(),
+                ];
             }
 
             if ($collector instanceof PanelAwareContract) {

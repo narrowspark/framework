@@ -45,6 +45,6 @@ class CronListCommand extends Command
 
         $table->setRows($rows);
 
-        $table->render($this->getOutput());
+        $table->render();
     }
 }

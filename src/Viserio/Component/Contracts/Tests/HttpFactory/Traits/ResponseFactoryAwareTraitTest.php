@@ -19,7 +19,7 @@ class ResponseFactoryAwareTraitTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing \Interop\Http\Factory\ResponseFactoryInterface is not set up.
+     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\ResponseFactoryInterface] is not set up.
      */
     public function testGetResponseFactoryThrowExceptionIfEventsDispatcherIsNotSet()
     {

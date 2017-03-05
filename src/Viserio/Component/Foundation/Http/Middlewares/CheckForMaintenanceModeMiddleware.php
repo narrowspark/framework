@@ -7,6 +7,7 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Foundation\Http\Exceptions\MaintenanceModeException;
 
 class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
 {
@@ -28,10 +29,7 @@ class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
     }
 
     /**
-     * {@inhertidoc}.
-     *
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * {@inheritdoc}
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {

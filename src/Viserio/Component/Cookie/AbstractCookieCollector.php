@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
+use RuntimeException;
+
 abstract class AbstractCookieCollector
 {
     /**
@@ -28,12 +30,12 @@ abstract class AbstractCookieCollector
      *
      * @param string $name
      *
-     * @return \Viserio\Component\Contracts\Cookie\Cookie|null
+     * @return \Viserio\Component\Cookie\Cookie|\Viserio\Component\Contracts\Cookie\Cookie|null
      */
     public function get(string $name)
     {
         if (! $this->has($name)) {
-            return;
+            return null;
         }
 
         return $this->cookies[$name];
@@ -52,16 +54,25 @@ abstract class AbstractCookieCollector
     /**
      * Add a request cookie to the stack.
      *
-     * @param \Viserio\Component\Contracts\Cookie\Cookie|\Viserio\Component\Cookie\Cookie $cookie
+     * @param \Viserio\Component\Cookie\Cookie|\Viserio\Component\Contracts\Cookie\Cookie $cookie
+     *
+     * @throws \RuntimeException
      *
      * @return $this
      */
-    public function add($cookie)
+    public function add($cookie): self
     {
-        $clone                              = clone $this;
-        $clone->cookies[$cookie->getName()] = $cookie;
+        if ($cookie instanceof Cookie || $cookie instanceof SetCookie) {
+            $clone                              = clone $this;
+            $clone->cookies[$cookie->getName()] = $cookie;
 
-        return $clone;
+            return $clone;
+        }
+
+        throw new RuntimeException(sprintf(
+            'The object [%s] must be an instance of "\Viserio\Component\Cookie\Cookie" or "\Viserio\Component\Contracts\Cookie\Cookie".',
+            get_class($cookie)
+        ));
     }
 
     /**
@@ -71,7 +82,7 @@ abstract class AbstractCookieCollector
      *
      * @return $this
      */
-    public function forget(string $name)
+    public function forget(string $name): self
     {
         $clone = clone $this;
 

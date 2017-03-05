@@ -87,7 +87,7 @@ class LogParser
      */
     protected function populateEntries(array $heading, int $key): array
     {
-        foreach ($this->levels as $level => $monologLevel) {
+        foreach (self::$levels as $level => $monologLevel) {
             if (mb_strpos(mb_strtolower($heading[$key]), mb_strtolower('.' . $level)) !== false) {
                 return [
                     $level,

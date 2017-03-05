@@ -14,11 +14,9 @@ class TaggableParser extends Parser implements TaggableParserContract
     private $taggedKey;
 
     /**
-     * Set tag key.
-     *
-     * @param string $key
+     * {@inheritdoc}
      */
-    public function setTag(string $key)
+    public function setTag(string $key): TaggableParserContract
     {
         $this->taggedKey = $key;
 
@@ -31,6 +29,7 @@ class TaggableParser extends Parser implements TaggableParserContract
     public function parse(string $payload): array
     {
         if (! $this->taggedKey) {
+            /* @var $method self */
             return parent::parse($payload);
         }
 

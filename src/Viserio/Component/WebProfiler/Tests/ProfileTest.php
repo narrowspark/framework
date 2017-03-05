@@ -87,7 +87,7 @@ class ProfileTest extends TestCase
             $collector,
         ]);
 
-        static::assertInstanceof(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));
+        static::assertInstanceOf(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));
         static::assertTrue($profile->hasCollector('php-info-data-collector'));
         static::assertEquals(
             [
@@ -99,7 +99,7 @@ class ProfileTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Collector "dont" does not exist.
+     * @expectedExceptionMessage Collector [dont] does not exist.
      */
     public function testGetCollectorTothrowException()
     {

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests\Providers;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;

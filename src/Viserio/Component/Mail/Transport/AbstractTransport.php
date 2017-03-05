@@ -62,8 +62,10 @@ abstract class AbstractTransport implements Swift_Transport
      * Iterate through registered plugins and execute plugins' methods.
      *
      * @param \Swift_Mime_Message $message
+     *
+     * @return void
      */
-    protected function beforeSendPerformed(Swift_Mime_Message $message)
+    protected function beforeSendPerformed(Swift_Mime_Message $message): void
     {
         $event = new Swift_Events_SendEvent($this, $message);
 
@@ -83,19 +85,21 @@ abstract class AbstractTransport implements Swift_Transport
      */
     protected function numberOfRecipients(Swift_Mime_Message $message): int
     {
-        return count(array_merge(
-            (array) $message->getTo(),
-            (array) $message->getCc(),
-            (array) $message->getBcc()
-        ));
+        $to  = is_null($message->getTo()) ? [] : $message->getTo();
+        $cc  = is_null($message->getCc()) ? [] : $message->getCc();
+        $bcc = is_null($message->getBcc()) ? [] : $message->getBcc();
+
+        return count(array_merge($to, $cc, $bcc));
     }
 
     /**
      * Iterate through registered plugins and execute plugins' methods.
      *
      * @param \Swift_Mime_Message $message
+     *
+     * @return void
      */
-    protected function sendPerformed(Swift_Mime_Message $message)
+    protected function sendPerformed(Swift_Mime_Message $message): void
     {
         $event = new Swift_Events_SendEvent($this, $message);
 

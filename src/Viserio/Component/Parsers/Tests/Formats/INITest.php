@@ -10,7 +10,7 @@ use Viserio\Component\Parsers\Formats\INI;
 class INITest extends TestCase
 {
     /**
-     * @var org\bovigo\vfs\vfsStreamDirectory
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 

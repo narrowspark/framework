@@ -25,8 +25,6 @@ matrix:
   allow_failures:
     - env: SETUP=lowest PHPUNIT=true
       php: 7.1
-    - php: 7.1
-      env: SETUP=basic PHPSTAN=true PHPUNIT=false
     # - env: SETUP=basic HUMBUG=true
     #   php: 7.1
   fast_finish: true

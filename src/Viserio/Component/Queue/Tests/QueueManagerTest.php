@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
@@ -20,9 +19,6 @@ use Viserio\Component\Queue\Tests\Fixture\TestQueue;
 //         parent::tearDown();
 
 //         $this->allowMockingNonExistentMethods(true);
-
-//         // Verify Mockery expectations.
-//         Mock::close();
 //     }
 
     // public function testConnection()

@@ -97,11 +97,9 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Set a url generator instance.
-     *
-     * @param \Viserio\Component\Contracts\Routing\UrlGenerator $urlGenerator
+     * {@inheritdoc}
      */
-    public function setUrlGenerator(UrlGeneratorContract $urlGenerator)
+    public function setUrlGenerator(UrlGeneratorContract $urlGenerator): WebProfilerContract
     {
         $this->urlGenerator = $urlGenerator;
 
@@ -109,9 +107,7 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Get a url generator instance.
-     *
-     * @return \Viserio\Component\Contracts\Routing\UrlGenerator|null
+     * {@inheritdoc}
      */
     public function getUrlGenerator(): ?UrlGeneratorContract
     {
@@ -143,14 +139,7 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Adds a data collector.
-     *
-     * @param \Viserio\Component\Contracts\WebProfiler\DataCollector $collector
-     * @param int                                                    $priority
-     *
-     * @throws \RuntimeException
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function addCollector(DataCollectorContract $collector, int $priority = 100): WebProfilerContract
     {
@@ -167,11 +156,7 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Checks if a data collector has been added.
-     *
-     * @param string $name
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasCollector(string $name): bool
     {
@@ -179,9 +164,7 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Returns an array of all data collectors.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getCollectors(): array
     {
@@ -189,12 +172,7 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Modify the response and inject the debugbar.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * {@inheritdoc}
      */
     public function modifyResponse(
         ServerRequestInterface $serverRequest,

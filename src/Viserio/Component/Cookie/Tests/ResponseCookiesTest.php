@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests;
 
 use DateTime;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface as Response;
 use Viserio\Component\Cookie\Cookie;
@@ -15,7 +14,7 @@ class ResponseCookiesTest extends MockeryTestCase
 {
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement Viserio\Component\Contracts\Cookie\Cookie
+     * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement [Viserio\Component\Contracts\Cookie\Cookie].
      */
     public function testRequestCookiesToThrowException()
     {

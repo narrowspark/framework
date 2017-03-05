@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\HttpFactory\Tests\Traits;
 
-use Interop\Http\Factory\UploadedFactoryInterface;
+use Interop\Http\Factory\UploadedFileFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\HttpFactory\Traits\UploadedFileFactoryAwareTrait;
 
@@ -10,19 +10,19 @@ class UploadedFileFactoryAwareTraitTest extends MockeryTestCase
 {
     use UploadedFileFactoryAwareTrait;
 
-    public function testSetAndGetUploadedFactory()
+    public function testSetAndGetUploadedFileFactory()
     {
-        $this->setUploadedFactory($this->mock(UploadedFactoryInterface::class));
+        $this->setUploadedFileFactory($this->mock(UploadedFileFactoryInterface::class));
 
-        static::assertInstanceOf(UploadedFactoryInterface::class, $this->getUploadedFactory());
+        static::assertInstanceOf(UploadedFileFactoryInterface::class, $this->getUploadedFileFactory());
     }
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing \Interop\Http\Factory\UploadedFactoryInterface is not set up.
+     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\UploadedFileFactoryInterface] is not set up.
      */
-    public function testGetUploadedFactoryThrowExceptionIfEventsDispatcherIsNotSet()
+    public function testGetUploadedFileFactoryThrowExceptionIfEventsDispatcherIsNotSet()
     {
-        $this->getUploadedFactory();
+        $this->getUploadedFileFactory();
     }
 }

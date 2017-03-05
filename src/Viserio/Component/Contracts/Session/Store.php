@@ -213,7 +213,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function ageFlashData();
+    public function ageFlashData(): void;
 
     /**
      * Flash a key / value pair to the session.
@@ -223,7 +223,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function flash(string $key, $value);
+    public function flash(string $key, $value): void;
 
     /**
      * Flash a key / value pair to the session
@@ -234,14 +234,14 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function now(string $key, $value);
+    public function now(string $key, $value): void;
 
     /**
      * Reflash all of the session flash data.
      *
      * @return void
      */
-    public function reflash();
+    public function reflash(): void;
 
     /**
      * Reflash a subset of the current flash data.
@@ -250,7 +250,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function keep($keys = null);
+    public function keep($keys = null): void;
 
     /**
      * Add a new Fingerprint generator.
@@ -297,4 +297,27 @@ interface Store extends JsonSerializable
      * @return string
      */
     public function getFingerprint(): string;
+
+    /**
+     * Get the CSRF token value.
+     *
+     * @return string
+     */
+    public function getToken(): string;
+
+    /**
+     * Set the "previous" URL in the session.
+     *
+     * @param string $url
+     *
+     * @return void
+     */
+    public function setPreviousUrl(string $url): void;
+
+    /**
+     * Get the previous URL from the session.
+     *
+     * @return string|null
+     */
+    public function getPreviousUrl(): ?string;
 }

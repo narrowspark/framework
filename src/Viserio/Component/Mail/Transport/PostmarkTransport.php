@@ -11,6 +11,7 @@ use Swift_Mime_Headers_ParameterizedHeader;
 use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
 use Swift_Mime_Message;
+use Swift_Mime_MimeEntity;
 
 class PostmarkTransport extends AbstractTransport
 {
@@ -85,7 +86,7 @@ class PostmarkTransport extends AbstractTransport
      *
      * @codeCoverageIgnore
      */
-    public function setServerToken(string $serverToken): Postmark
+    public function setServerToken(string $serverToken): self
     {
         $this->serverToken = $serverToken;
 
@@ -118,12 +119,12 @@ class PostmarkTransport extends AbstractTransport
      * Excludes parts of type \Swift_Mime_Attachment as those
      * are handled later.
      *
-     * @param Swift_Mime_Message $message
-     * @param string             $mimeType
+     * @param \Swift_Mime_Message $message
+     * @param string              $mimeType
      *
      * @return \Swift_Mime_MimeEntity|null
      */
-    protected function getMIMEPart(Swift_Mime_Message $message, $mimeType)
+    protected function getMIMEPart(Swift_Mime_Message $message, $mimeType): ?Swift_Mime_MimeEntity
     {
         foreach ($message->getChildren() as $part) {
             if (mb_strpos($part->getContentType(), $mimeType) === 0 &&
@@ -132,12 +133,14 @@ class PostmarkTransport extends AbstractTransport
                 return $part;
             }
         }
+
+        return null;
     }
 
     /**
      * Convert a Swift Mime Message to a Postmark Payload.
      *
-     * @param Swift_Mime_Message $message
+     * @param \Swift_Mime_Message $message
      *
      * @return array
      */
@@ -158,8 +161,8 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Applies the recipients of the message into the API Payload.
      *
-     * @param array              $payload
-     * @param Swift_Mime_Message $message
+     * @param array               $payload
+     * @param \Swift_Mime_Message $message
      *
      * @return array
      */
@@ -188,8 +191,8 @@ class PostmarkTransport extends AbstractTransport
      * Applies the message parts and attachments
      * into the API Payload.
      *
-     * @param array              $payload
-     * @param Swift_Mime_Message $message
+     * @param array               $payload
+     * @param \Swift_Mime_Message $message
      *
      * @return array
      */
@@ -244,8 +247,8 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Applies the headers into the API Payload.
      *
-     * @param array              $payload
-     * @param Swift_Mime_Message $message
+     * @param array               $payload
+     * @param \Swift_Mime_Message $message
      *
      * @return array
      */

@@ -75,7 +75,7 @@ class AwsS3Connector extends AbstractConnector
      */
     protected function getAdapter($client, array $config): AdapterInterface
     {
-        return new AwsS3v3($client, $config['bucket'], $config['prefix'], $config['options']);
+        return new AwsS3v3($client, $config['bucket'], $config['prefix'], (array) $config['options']);
     }
 
     /**

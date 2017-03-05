@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 $text = '
 <div id="webprofiler" data-token class="webprofiler">
  <a class title="Show WebProfiler" tabindex="-1">

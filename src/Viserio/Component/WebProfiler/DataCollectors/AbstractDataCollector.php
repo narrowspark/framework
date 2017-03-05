@@ -6,6 +6,7 @@ use Symfony\Component\VarDumper\Caster\Caster;
 use Symfony\Component\VarDumper\Caster\ClassStub;
 use Symfony\Component\VarDumper\Caster\LinkStub;
 use Symfony\Component\VarDumper\Caster\StubCaster;
+use Symfony\Component\VarDumper\Cloner\AbstractCloner;
 use Symfony\Component\VarDumper\Cloner\Stub;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Viserio\Component\Contracts\WebProfiler\DataCollector as DataCollectorContract;
@@ -25,7 +26,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
     /**
      * Configured VarCloner instance.
      *
-     * @var \Symfony\Component\VarDumper\Cloner\ClonerInterface
+     * @var \Symfony\Component\VarDumper\Cloner\AbstractCloner
      */
     private static $cloner;
 
@@ -227,8 +228,10 @@ abstract class AbstractDataCollector implements DataCollectorContract
      *
      * @param array $data
      * @param array $settings
+     *
+     * @return string
      */
-    protected function createTable(array $data, array $settings = [])
+    protected function createTable(array $data, array $settings = []): string
     {
         $options = array_merge([
             'name'      => null,
@@ -364,7 +367,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      *
      * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
      */
-    private static function getCloner()
+    private static function getCloner(): AbstractCloner
     {
         if (! self::$cloner) {
             self::$cloner = new VarCloner();

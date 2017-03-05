@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests;
 
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;

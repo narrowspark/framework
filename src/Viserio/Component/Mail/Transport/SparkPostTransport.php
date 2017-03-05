@@ -95,7 +95,7 @@ class SparkPostTransport extends AbstractTransport
      *
      * @codeCoverageIgnore
      */
-    public function setKey(string $key): SparkPost
+    public function setKey(string $key): self
     {
         $this->key = $key;
 
@@ -123,7 +123,7 @@ class SparkPostTransport extends AbstractTransport
      *
      * @codeCoverageIgnore
      */
-    public function setOptions(array $options): SparkPost
+    public function setOptions(array $options): self
     {
         $this->options = $options;
 

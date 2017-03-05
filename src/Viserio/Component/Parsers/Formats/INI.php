@@ -52,7 +52,7 @@ class INI implements FormatContract, DumperContract
         foreach ($array as $key => $value) {
             if (is_array($value) || is_object($value)) {
                 $key               = $section . '.' . $key;
-                $subsections[$key] = (array) $value;
+                $subsections[$key] = is_array($value) ? $value : (array) $value;
             } else {
                 $output .= str_replace('=', '_', $key) . '=';
 

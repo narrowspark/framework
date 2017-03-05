@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Cake\Chronos\Chronos;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;

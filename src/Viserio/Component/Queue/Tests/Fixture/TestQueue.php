@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Fixture;
 
+use Exception;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 

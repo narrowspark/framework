@@ -21,7 +21,7 @@ class CachedFactory
     /**
      * Instance of CacheManager.
      *
-     * @var \Viserio\Component\Contracts\Cache\Manager
+     * @var \Viserio\Component\Contracts\Cache\Manager|null
      */
     protected $cacheManager;
 
@@ -29,7 +29,7 @@ class CachedFactory
      * Create a new cached factory instance.
      *
      * @param \Viserio\Component\Filesystem\FilesystemManager $manager
-     * @param null|CacheManagerContract                       $cacheManager
+     * @param \Viserio\Component\Contracts\Cache\Manager|null $cacheManager
      */
     public function __construct(FilesystemManager $manager, CacheManagerContract $cacheManager = null)
     {
@@ -71,7 +71,7 @@ class CachedFactory
         if (($cache = $this->cacheManager) !== null) {
             if ($cache->hasDriver($cacheConfig['driver'])) {
                 return new Psr6Cache(
-                    $cache->driver($cacheConfig['driver']),
+                    $cache->getDriver($cacheConfig['driver']),
                     $cacheConfig['key'],
                     $cacheConfig['expire']
                 );

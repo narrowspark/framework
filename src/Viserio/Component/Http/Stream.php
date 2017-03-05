@@ -110,7 +110,7 @@ class Stream implements StreamInterface
         $this->stream = $stream;
 
         if (isset($options['size'])) {
-            $this->size = $options['size'];
+            $this->size = (int) $options['size'];
         }
 
         $this->meta = isset($options['metadata'])
@@ -191,14 +191,15 @@ class Stream implements StreamInterface
     public function detach()
     {
         if (! isset($this->stream)) {
-            return;
+            return null;
         }
 
         $result = $this->stream;
 
         unset($this->stream);
 
-        $this->size     = $this->uri     = null;
+        $this->size     = null;
+        $this->uri      = '';
         $this->readable = $this->writable = $this->seekable = false;
 
         return $result;
@@ -210,7 +211,7 @@ class Stream implements StreamInterface
     public function getSize(): ?int
     {
         if ($this->size !== null) {
-            return $this->size;
+            return (int) $this->size;
         }
 
         if (! isset($this->stream)) {
@@ -225,9 +226,9 @@ class Stream implements StreamInterface
         $stats = fstat($this->stream);
 
         if (isset($stats['size'])) {
-            $this->size = $stats['size'];
+            $this->size = (int) $stats['size'];
 
-            return $this->size;
+            return (int) $this->size;
         }
     }
 

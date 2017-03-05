@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Defuse\Crypto\Key;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,6 +16,8 @@ use Viserio\Component\Session\SessionManager;
 
 class SessionManagerTest extends MockeryTestCase
 {
+    private $manager;
+
     public function tearDown()
     {
         $this->manager = null;

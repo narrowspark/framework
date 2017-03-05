@@ -4,6 +4,7 @@ namespace Viserio\Bridge\Doctrine\Providers;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\Connection as DoctrineConnection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\Console\Command\ImportCommand;
@@ -56,7 +57,7 @@ class DatabaseServiceProvider implements
         return ['viserio', 'doctrine'];
     }
 
-    public static function createConnection(ContainerInterface $container): Connection
+    public static function createConnection(ContainerInterface $container): DoctrineConnection
     {
         self::resolveOptions($container);
 

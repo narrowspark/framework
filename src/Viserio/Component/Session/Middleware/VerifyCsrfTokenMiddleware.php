@@ -30,7 +30,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     /**
      * Manager default driver config.
      *
-     * @var array|\ArrayAccess
+     * @var array
      */
     protected $config = [];
 
@@ -40,6 +40,13 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      * @var array
      */
     protected $except = [];
+
+    /**
+     * Enviroment.
+     *
+     * @var string
+     */
+    protected $env;
 
     /**
      * Create a new session middleware.

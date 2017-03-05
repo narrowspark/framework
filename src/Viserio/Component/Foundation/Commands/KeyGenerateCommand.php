@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Commands;
 
+use Defuse\Crypto\Key;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
@@ -63,7 +64,7 @@ class KeyGenerateCommand extends Command
             return false;
         }
 
-        $env = $this->config->get('path.env');
+        $env = $config->get('path.env');
 
         file_put_contents($env, str_replace(
             'APP_KEY=' . $currentKey,

@@ -1,19 +1,21 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Segments;
+namespace Viserio\Component\Routing\Matchers;
 
-use Viserio\Component\Contracts\Routing\RouteSegment as RouteSegmentContract;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
-use Viserio\Component\Routing\Matchers\RegexMatcher;
 
-class ParameterSegment implements RouteSegmentContract
+class ParameterMatcher
 {
     /**
-     * @var string[]
+     * Segments names.
+     *
+     * @var array
      */
     protected $names;
 
     /**
+     * A regex string.
+     *
      * @var string
      */
     protected $regex;
@@ -31,7 +33,11 @@ class ParameterSegment implements RouteSegmentContract
     }
 
     /**
-     * {@inheritdoc}
+     * Returns an equivalent segment matcher and adds the parameters to the map.
+     *
+     * @param array $parameterIndexNameMap
+     *
+     * @return \Viserio\Component\Contracts\Routing\SegmentMatcher
      */
     public function getMatcher(array &$parameterIndexNameMap): SegmentMatcherContract
     {

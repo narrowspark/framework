@@ -53,10 +53,10 @@ trait MiddlewareAwareTrait
         foreach ($this->middlewares as $key => $value) {
             if ($value === $middleware || $key === $middleware) {
                 unset($this->middlewares[$key]);
-
-                return $this;
             }
         }
+
+        return $this;
     }
 
     /**
@@ -71,7 +71,7 @@ trait MiddlewareAwareTrait
         if (! in_array(MiddlewareInterface::class, class_implements($middleware))) {
             throw new LogicException(
                 sprintf(
-                    '\Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [%s]',
+                    '\Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [%s].',
                     $middleware
                 )
             );

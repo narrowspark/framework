@@ -476,7 +476,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      *
      * @return int|null
      */
-    private function parseVisibility(string $path, string $visibility = null)
+    private function parseVisibility(string $path, string $visibility = null): ?int
     {
         $type = '';
 
@@ -487,7 +487,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         }
 
         if ($visibility === null || $type === '') {
-            return;
+            return null;
         }
 
         switch ($visibility) {

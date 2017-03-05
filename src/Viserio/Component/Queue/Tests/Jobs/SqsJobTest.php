@@ -4,7 +4,6 @@ namespace Viserio\Component\Queue\Tests\Jobs;
 
 use Aws\Sqs\SqsClient;
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Queue\Jobs\SqsJob;
@@ -29,9 +28,6 @@ class SqsJobTest extends MockeryTestCase
         parent::tearDown();
 
         $this->allowMockingNonExistentMethods(true);
-
-        // Verify Mockery expectations.
-        Mock::close();
     }
 
     public function testFireProperlyCallsTheJobHandler()

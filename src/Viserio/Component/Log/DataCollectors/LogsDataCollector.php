@@ -15,6 +15,13 @@ class LogsDataCollector extends MessagesDataCollector implements PanelAwareContr
     protected $logParser;
 
     /**
+     * All places for log files.
+     *
+     * @var array
+     */
+    protected $storages = [];
+
+    /**
      * Create a new logs data collector instance.
      *
      * @param \Viserio\Component\Log\DataCollectors\LogParser $logParser
@@ -48,6 +55,8 @@ class LogsDataCollector extends MessagesDataCollector implements PanelAwareContr
         $logs = [];
 
         foreach ($this->data['messages'] as $file) {
+            $name = '';
+
             foreach ($this->storages as $storage) {
                 $name = $this->stripBasePath($storage, $file);
             }

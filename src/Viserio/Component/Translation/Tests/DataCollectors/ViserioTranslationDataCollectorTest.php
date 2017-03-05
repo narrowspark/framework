@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests\DataCollectors;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

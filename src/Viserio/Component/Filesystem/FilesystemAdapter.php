@@ -67,11 +67,23 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * {@inheritdoc}
+     * Check whether a file exists.
+     *
+     * @param string $path
+     *
+     * @return bool
      */
     public function has(string $path): bool
     {
-        return $this->driver->has($path);
+        $has = $this->driver->has($path);
+
+        if ($has === null) {
+            return false;
+        } elseif (is_array($has)) {
+            return $has['path'] !== '';
+        }
+
+        return $has;
     }
 
     /**
@@ -218,13 +230,18 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             throw new FileNotFoundException($originFile);
         }
 
-        $orginal = $this->driver->applyPathPrefix($originFile);
-        $target  = $this->driver->applyPathPrefix($targetFile);
+        if (method_exists($this->driver, 'applyPathPrefix')) {
+            $orginal = $this->driver->applyPathPrefix($originFile);
+            $target  = $this->driver->applyPathPrefix($targetFile);
+        } else {
+            $orginal = $originFile;
+            $target  = $targetFile;
+        }
 
         // https://bugs.php.net/bug.php?id=64634
         if (@fopen($orginal, 'r') === false) {
             throw new ViserioIOException(sprintf(
-                'Failed to copy "%s" to "%s" because source file could not be opened for reading.',
+                'Failed to copy [%s] to [%s] because source file could not be opened for reading.',
                 $orginal,
                 $target
             ), 0, null, $orginal);
@@ -233,7 +250,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
         if (@fopen($target, 'w', false, stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
             throw new ViserioIOException(sprintf(
-                'Failed to copy "%s" to "%s" because target file could not be opened for writing.',
+                'Failed to copy [%s] to [%s] because target file could not be opened for writing.',
                 $orginal,
                 $target
             ), 0, null, $orginal);
@@ -243,7 +260,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         if (! is_file($target)) {
             throw new ViserioIOException(sprintf(
-                'Failed to copy "%s" to "%s".',
+                'Failed to copy [%s] to [%s].',
                 $originFile,
                 $target
             ), 0, null, $originFile);
@@ -554,7 +571,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     private function parseVisibility(string $visibility = null)
     {
         if ($visibility === null) {
-            return;
+            return null;
         }
 
         switch ($visibility) {

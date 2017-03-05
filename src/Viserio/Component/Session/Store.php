@@ -94,7 +94,7 @@ class Store implements StoreContract
     /**
      * All fingerprint generators.
      *
-     * @var Fingerprintcontract[]
+     * @var array
      */
     private $fingerprintGenerators = [];
 
@@ -115,9 +115,9 @@ class Store implements StoreContract
     /**
      * Create a new session instance.
      *
-     * @param string                 $name
-     * @param SessionHandlerContract $handler
-     * @param EncrypterContract      $encrypter
+     * @param string                                            $name
+     * @param \SessionHandlerInterface                          $handler
+     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
     {
@@ -370,7 +370,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function ageFlashData()
+    public function ageFlashData(): void
     {
         foreach ($this->get('_flash.old', []) as $old) {
             $this->remove($old);
@@ -384,7 +384,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function flash(string $key, $value)
+    public function flash(string $key, $value): void
     {
         $this->set($key, $value);
 
@@ -396,7 +396,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function now(string $key, $value)
+    public function now(string $key, $value): void
     {
         $this->set($key, $value);
 
@@ -406,7 +406,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function reflash()
+    public function reflash(): void
     {
         $this->mergeNewFlashes($this->get('_flash.old', []));
 
@@ -416,7 +416,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function keep($keys = null)
+    public function keep($keys = null): void
     {
         $keys = is_array($keys) ? $keys : func_get_args();
 
@@ -497,28 +497,26 @@ class Store implements StoreContract
 
     /**
      * Regenerate the CSRF token value.
+     *
+     * @return void
      */
-    public function regenerateToken()
+    public function regenerateToken(): void
     {
         $this->set('_token', bin2hex(Str::random(40)));
     }
 
     /**
-     * Get the previous URL from the session.
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
-    public function getPreviousUrl()
+    public function getPreviousUrl(): ?string
     {
         return $this->get('_previous.url');
     }
 
     /**
-     * Set the "previous" URL in the session.
-     *
-     * @param string $url
+     * {@inheritdoc}
      */
-    public function setPreviousUrl($url)
+    public function setPreviousUrl(string $url): void
     {
         $this->set('_previous.url', $url);
     }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\DataCollectors\Bridge\PDO;
 
 use PDO;
+use PDOException;
 
 class TraceablePDODecorater extends PDO
 {
@@ -14,7 +15,7 @@ class TraceablePDODecorater extends PDO
     protected $pdo;
 
     /**
-     * [$executedStatements description].
+     * All executed statements.
      *
      * @var array
      */
@@ -32,7 +33,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
+     * {@inheritdoc}
      */
     public function beginTransaction()
     {
@@ -40,7 +41,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
+     * {@inheritdoc}
      */
     public function commit()
     {
@@ -48,7 +49,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
+     * {@inheritdoc}
      */
     public function errorCode()
     {
@@ -56,7 +57,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
+     * {@inheritdoc}
      */
     public function errorInfo()
     {
@@ -64,7 +65,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
+     * {@inheritdoc}
      *
      * @param mixed $statement
      */
@@ -74,9 +75,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
-     *
-     * @param mixed $attribute
+     * {@inheritdoc}
      */
     public function getAttribute($attribute)
     {
@@ -84,7 +83,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
+     * {@inheritdoc}
      */
     public function inTransaction()
     {
@@ -92,9 +91,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
-     *
-     * @param null|mixed $name
+     * {@inheritdoc}
      */
     public function lastInsertId($name = null)
     {
@@ -102,10 +99,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
-     *
-     * @param mixed $statement
-     * @param mixed $driver_options
+     * {@inheritdoc}
      */
     public function prepare($statement, $driver_options = [])
     {
@@ -113,9 +107,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
-     *
-     * @param mixed $statement
+     * {@inheritdoc}
      */
     public function query($statement)
     {
@@ -123,10 +115,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
-     *
-     * @param mixed $string
-     * @param mixed $parameter_type
+     * {@inheritdoc}
      */
     public function quote($string, $parameter_type = PDO::PARAM_STR)
     {
@@ -134,7 +123,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
+     * {@inheritdoc}
      */
     public function rollBack()
     {
@@ -142,13 +131,119 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}.
-     *
-     * @param mixed $attribute
-     * @param mixed $value
+     * {@inheritdoc}
      */
     public function setAttribute($attribute, $value)
     {
         return $this->pdo->setAttribute($attribute, $value);
+    }
+
+    /**
+     * Adds an executed TracedStatement.
+     *
+     * @param \Viserio\Component\WebProfiler\DataCollectors\Bridge\PDO\TracedStatement $stmt
+     */
+    public function addExecutedStatement(TracedStatement $stmt)
+    {
+        $this->executedStatements[] = $stmt;
+    }
+
+    /**
+     * Returns the accumulated execution time of statements.
+     *
+     * @return int
+     */
+    public function getAccumulatedStatementsDuration(): int
+    {
+        return array_reduce($this->executedStatements, function ($v, $s) {
+            return $v + $s->getDuration();
+        });
+    }
+
+    /**
+     * Returns the peak memory usage while performing statements.
+     *
+     * @return int
+     */
+    public function getMemoryUsage(): int
+    {
+        return array_reduce($this->executedStatements, function ($v, $s) {
+            return $v + $s->getMemoryUsage();
+        });
+    }
+
+    /**
+     * Returns the peak memory usage while performing statements.
+     *
+     * @return int
+     */
+    public function getPeakMemoryUsage(): int
+    {
+        return array_reduce($this->executedStatements, function ($v, $s) {
+            $m = $s->getEndMemory();
+
+            return $m > $v ? $m : $v;
+        });
+    }
+
+    /**
+     * Returns the list of executed statements as TracedStatement objects.
+     *
+     * @return array
+     */
+    public function getExecutedStatements(): array
+    {
+        return $this->executedStatements;
+    }
+
+    /**
+     * Returns the list of failed statements.
+     *
+     * @return array
+     */
+    public function getFailedExecutedStatements(): array
+    {
+        return array_filter($this->executedStatements, function ($s) {
+            return ! $s->isSuccess();
+        });
+    }
+
+    /**
+     * Profiles a call to a PDO method.
+     *
+     * @param string $method
+     * @param string $sql
+     * @param array  $args
+     *
+     * @return mixed
+     */
+    protected function profileCall(string $method, string $sql, array $args)
+    {
+        $trace = new TracedStatement($sql);
+        $trace->start();
+
+        $ex     = null;
+        $result = null;
+
+        try {
+            $result = call_user_func_array([$this->pdo, $method], $args);
+        } catch (PDOException $e) {
+            $ex = $e;
+        }
+
+        if ($this->pdo->getAttribute(PDO::ATTR_ERRMODE) !== PDO::ERRMODE_EXCEPTION && $result === false) {
+            $error = $this->pdo->errorInfo();
+            $ex    = new PDOException($error[2], $error[0]);
+        }
+
+        $trace->end($ex);
+
+        $this->addExecutedStatement($trace);
+
+        if ($this->pdo->getAttribute(PDO::ATTR_ERRMODE) === PDO::ERRMODE_EXCEPTION && $ex !== null) {
+            throw $ex;
+        }
+
+        return $result;
     }
 }

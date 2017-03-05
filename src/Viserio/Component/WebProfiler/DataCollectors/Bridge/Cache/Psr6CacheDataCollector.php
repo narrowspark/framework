@@ -5,7 +5,6 @@ namespace Viserio\Component\WebProfiler\DataCollectors\Bridge\Cache;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
-use Viserio\Component\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
@@ -16,7 +15,6 @@ use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
  * @link https://github.com/php-cache/cache-bundle/blob/master/src/DataCollector/CacheDataCollector.php
  */
 class Psr6CacheDataCollector extends AbstractDataCollector implements
-    MenuAwareContract,
     TooltipAwareContract,
     PanelAwareContract
 {

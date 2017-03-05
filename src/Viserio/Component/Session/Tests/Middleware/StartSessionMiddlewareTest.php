@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Defuse\Crypto\Key;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -21,7 +20,7 @@ use Viserio\Component\Session\SessionManager;
 class StartSessionMiddlewareTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Filesystem\Filesystem
+     * @var \Viserio\Component\Filesystem\Filesystem|null
      */
     private $files;
 

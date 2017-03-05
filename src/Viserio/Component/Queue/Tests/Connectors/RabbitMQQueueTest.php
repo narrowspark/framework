@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -126,7 +125,7 @@ class RabbitMQQueueTest extends MockeryTestCase
 
     public function testPopProperlyPopsJobOffOfBeanstalkd()
     {
-        $job = $this->mock(Job::class);
+        $job = $this->mock(RabbitMQJob::class);
 
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');

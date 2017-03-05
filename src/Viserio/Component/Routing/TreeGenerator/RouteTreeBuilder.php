@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Generator;
+namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteSegment as RouteSegmentContract;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Routing\Matchers\ParameterMatcher;
 
-class RouteTreeBuilder
+final class RouteTreeBuilder
 {
     /**
      * Creates a route tree from the supplied routes.
@@ -60,13 +60,13 @@ class RouteTreeBuilder
     /**
      * Adds a route to the node tree.
      *
-     * @param \Viserio\Component\Routing\Generator\RouteTreeNode $node
-     * @param \Viserio\Component\Contracts\Routing\Route         $route
-     * @param array                                              $segments
-     * @param int                                                $segmentDepth
-     * @param array                                              $parameterIndexNameMap
+     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node
+     * @param \Viserio\Component\Contracts\Routing\Route             $route
+     * @param array                                                  $segments
+     * @param int                                                    $segmentDepth
+     * @param array                                                  $parameterIndexNameMap
      */
-    protected function addRouteToNode(
+    private function addRouteToNode(
         RouteTreeNode $node,
         RouteContract $route,
         array $segments,
@@ -106,7 +106,7 @@ class RouteTreeBuilder
      */
     private function getMatcher($firstSegment, array &$parameterIndexNameMap): SegmentMatcherContract
     {
-        if ($firstSegment instanceof RouteSegmentContract) {
+        if ($firstSegment instanceof ParameterMatcher) {
             return $firstSegment->getMatcher($parameterIndexNameMap);
         }
 

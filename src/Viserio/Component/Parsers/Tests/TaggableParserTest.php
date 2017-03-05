@@ -16,7 +16,7 @@ class TaggableParserTest extends TestCase
     /**
      * @var \Viserio\Component\Parsers\TaggableParser
      */
-    private $format;
+    private $parser;
 
     public function setUp()
     {

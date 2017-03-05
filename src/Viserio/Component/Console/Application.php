@@ -241,7 +241,7 @@ class Application extends SymfonyConsole implements ApplicationContract
     {
         $finder = (new PhpExecutableFinder())->find(false);
 
-        return ProcessUtils::escapeArgument($finder ?? '');
+        return ProcessUtils::escapeArgument($finder === false ? '' : $finder);
     }
 
     /**

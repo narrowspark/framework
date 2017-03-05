@@ -158,7 +158,7 @@ class UtilTest extends TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Unable to open /path/to/does/not/exist using mode r
+     * @expectedExceptionMessage Unable to open [/path/to/does/not/exist] using mode r
      */
     public function testThrowsExceptionNotWarning()
     {

@@ -34,7 +34,7 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Manager default driver config.
      *
-     * @var array|\ArrayAccess
+     * @var array
      */
     protected $config = [];
 
@@ -55,6 +55,8 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
+        $session = null;
+
         // If a session driver has been configured, we will need to start the session
         // so that the data is ready.
         if ($this->isSessionConfigured()) {

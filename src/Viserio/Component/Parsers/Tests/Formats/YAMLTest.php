@@ -43,7 +43,7 @@ linting: true
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($this->file->read($file->url()));
+        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
@@ -62,6 +62,6 @@ collection:
             '
         )->at($this->root);
 
-        $this->parser->parse($this->file->read($file->url()));
+        $this->parser->parse((string) $this->file->read($file->url()));
     }
 }

@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
-use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
-use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
@@ -18,7 +16,7 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Support\Arrayable;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
-abstract class Command extends BaseCommand implements CompletionAwareInterface
+abstract class Command extends BaseCommand
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
@@ -147,13 +145,15 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function getVerbosity($level = null): int
     {
-        if (isset($this->verbosityMap[$level])) {
-            return $this->verbosityMap[$level];
-        } elseif (! is_int($level)) {
+        if ($level === null) {
             return $this->verbosity;
         }
 
-        return $level;
+        if (isset($this->verbosityMap[$level])) {
+            return $this->verbosityMap[$level];
+        }
+
+        return (int) $level;
     }
 
     /**
@@ -230,24 +230,6 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     public function hasOption(string $key): bool
     {
         return $this->input->hasParameterOption('--' . $key);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function completeOptionValues($optionName, CompletionContext $context)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function completeArgumentValues($argumentName, CompletionContext $context)
-    {
     }
 
     /**

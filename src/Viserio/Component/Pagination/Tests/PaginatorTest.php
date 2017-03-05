@@ -26,7 +26,7 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->isJson($pagi->toJson());
+        self::assertJson($pagi->toJson());
     }
 
     public function testJsonSerialize()

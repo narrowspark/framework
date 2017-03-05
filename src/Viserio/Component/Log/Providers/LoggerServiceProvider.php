@@ -10,6 +10,7 @@ use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Log\Log;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer as MonologWriter;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
@@ -32,6 +33,7 @@ class LoggerServiceProvider implements
     {
         return [
             MonologWriter::class => [self::class, 'createLogger'],
+            HandlerParser::class => [self::class, 'createHandlerParser'],
             'logger'             => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
@@ -68,11 +70,16 @@ class LoggerServiceProvider implements
         ];
     }
 
-    public static function createLogger(ContainerInterface $container): MonologWriter
+    public static function createHandlerParser(ContainerInterface $container): HandlerParser
     {
         self::resolveOptions($container);
 
-        $logger = new MonologWriter(new Logger(self::$options['env']));
+        return new HandlerParser(new Logger(self::$options['env']));
+    }
+
+    public static function createLogger(ContainerInterface $container): MonologWriter
+    {
+        $logger = new MonologWriter($container->get(HandlerParser::class));
 
         if ($container->has(EventManagerContract::class)) {
             $logger->setEventManager($container->get(EventManagerContract::class));

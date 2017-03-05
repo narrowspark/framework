@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests;
 
 use InvalidArgumentException;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Loader;
 use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
@@ -77,7 +76,7 @@ class LoaderTest extends MockeryTestCase
 
     /**
      * @expectedException \Twig_Error_Loader
-     * @expectedExceptionMessage Twig file "test.twig" was not found.
+     * @expectedExceptionMessage Twig file [test.twig] was not found.
      */
     public function testGetSourceContextFileNotFound()
     {

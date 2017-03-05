@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebProfiler\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Routing\UrlGenerator;
@@ -79,10 +78,10 @@ class AssetsRendererTest extends MockeryTestCase
     public function testRenderWithUrlGenerator()
     {
         $generator = $this->mock(UrlGenerator::class);
-        $generator->shouldReceive('route')
+        $generator->shouldReceive('generate')
             ->once()
             ->andReturn('path_css');
-        $generator->shouldReceive('route')
+        $generator->shouldReceive('generate')
             ->once()
             ->andReturn('path_js');
         $profiler = $this->mock(WebProfilerContract::class);

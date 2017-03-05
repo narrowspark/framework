@@ -13,7 +13,7 @@ class ZipConnector implements ConnectorContract
     /**
      * Establish an adapter connection.
      *
-     * @param string[] $config
+     * @param array $config
      *
      * @return \League\Flysystem\ZipArchive\ZipArchiveAdapter
      */
@@ -27,11 +27,11 @@ class ZipConnector implements ConnectorContract
     /**
      * Get the configuration.
      *
-     * @param string[] $config
+     * @param array $config
      *
      * @throws \InvalidArgumentException
      *
-     * @return string[]
+     * @return array
      */
     protected function getConfig(array $config): array
     {

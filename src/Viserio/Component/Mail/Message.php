@@ -4,6 +4,7 @@ namespace Viserio\Component\Mail;
 
 use Swift_Attachment;
 use Swift_Image;
+use Swift_Mime_Attachment;
 use Swift_Mime_Message;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 
@@ -212,9 +213,9 @@ class Message implements MessageContract
      *
      * @param string $file
      *
-     * @return \Swift_Attachment
+     * @return \Swift_Mime_Attachment
      */
-    protected function createAttachmentFromPath(string $file): Swift_Attachment
+    protected function createAttachmentFromPath(string $file): Swift_Mime_Attachment
     {
         return Swift_Attachment::fromPath($file);
     }
@@ -225,9 +226,9 @@ class Message implements MessageContract
      * @param string $data
      * @param string $name
      *
-     * @return \Swift_Attachment
+     * @return \Swift_Mime_Attachment
      */
-    protected function createAttachmentFromData(string $data, string $name): Swift_Attachment
+    protected function createAttachmentFromData(string $data, string $name): Swift_Mime_Attachment
     {
         return Swift_Attachment::newInstance($data, $name);
     }
@@ -235,12 +236,12 @@ class Message implements MessageContract
     /**
      * Prepare and attach the given attachment.
      *
-     * @param \Swift_Attachment $attachment
-     * @param array             $options
+     * @param \Swift_Mime_Attachment $attachment
+     * @param array                  $options
      *
      * @return $this
      */
-    protected function prepAttachment(Swift_Attachment $attachment, array $options = []): MessageContract
+    protected function prepAttachment(Swift_Mime_Attachment $attachment, array $options = []): MessageContract
     {
         // First we will check for a MIME type on the message, which instructs the
         // mail client on what type of attachment the file is so that it may be

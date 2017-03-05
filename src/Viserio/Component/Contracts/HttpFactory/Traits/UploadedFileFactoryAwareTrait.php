@@ -2,26 +2,26 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\HttpFactory\Traits;
 
-use Interop\Http\Factory\UploadedFactoryInterface;
+use Interop\Http\Factory\UploadedFileFactoryInterface;
 use RuntimeException;
 
 trait UploadedFileFactoryAwareTrait
 {
     /**
-     * A UploadedFactory instance.
+     * A UploadedFileFactory instance.
      *
-     * @var \Interop\Http\Factory\UploadedFactoryInterface
+     * @var \Interop\Http\Factory\UploadedFileFactoryInterface
      */
     protected $uploaded;
 
     /**
-     * Set a UploadedFactory instance.
+     * Set a UploadedFileFactory instance.
      *
-     * @param \Interop\Http\Factory\UploadedFactoryInterface $uploaded
+     * @param \Interop\Http\Factory\UploadedFileFactoryInterface $uploaded
      *
      * @return $this
      */
-    public function setUploadedFactory(UploadedFactoryInterface $uploaded)
+    public function setUploadedFileFactory(UploadedFileFactoryInterface $uploaded)
     {
         $this->uploaded = $uploaded;
 
@@ -29,16 +29,16 @@ trait UploadedFileFactoryAwareTrait
     }
 
     /**
-     * Get the UploadedFactory instance.
+     * Get the UploadedFileFactory instance.
      *
      * @throws \RuntimeException
      *
-     * @return \Interop\Http\Factory\UploadedFactoryInterface
+     * @return \Interop\Http\Factory\UploadedFileFactoryInterface
      */
-    public function getUploadedFactory(): UploadedFactoryInterface
+    public function getUploadedFileFactory(): UploadedFileFactoryInterface
     {
         if (! $this->uploaded) {
-            throw new RuntimeException('Instance implementing \Interop\Http\Factory\UploadedFactoryInterface is not set up.');
+            throw new RuntimeException('Instance implementing [\Interop\Http\Factory\UploadedFileFactoryInterface] is not set up.');
         }
 
         return $this->uploaded;

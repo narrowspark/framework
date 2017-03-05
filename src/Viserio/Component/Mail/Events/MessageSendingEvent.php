@@ -11,7 +11,7 @@ class MessageSendingEvent implements EventContract
     use EventTrait;
 
     /**
-     * Create a new cerebro starting event.
+     * Create a new message sending event.
      *
      * @param \Viserio\Component\Contracts\Mail\Mailer $mailer
      * @param array                                    $param

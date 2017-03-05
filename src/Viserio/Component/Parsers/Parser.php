@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
+use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
-use Viserio\Component\Parsers\Formats\Csv;
 use Viserio\Component\Parsers\Formats\INI;
 use Viserio\Component\Parsers\Formats\JSON;
-use Viserio\Component\Parsers\Formats\MSGPack;
 use Viserio\Component\Parsers\Formats\PHP;
 use Viserio\Component\Parsers\Formats\Po;
 use Viserio\Component\Parsers\Formats\QueryStr;
@@ -46,7 +45,6 @@ class Parser implements ParserContract
     ];
 
     private $supportedFileFormats = [
-        'csv',
         'ini',
         'json',
         'php',
@@ -57,10 +55,8 @@ class Parser implements ParserContract
     ];
 
     private $supportedParsers = [
-        'csv'       => Csv::class,
         'ini'       => INI::class,
         'json'      => JSON::class,
-        'msgpack'   => MSGPack::class,
         'php'       => PHP::class,
         'po'        => Po::class,
         'querystr'  => QueryStr::class,
@@ -95,17 +91,21 @@ class Parser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        if (! $payload) {
+        if ($payload === '') {
             return [];
         }
 
         $format = $this->getFormat($payload);
 
         if ($format !== 'php') {
-            $payload = self::normalizeDirectorySeparator($payload);
+            $fileName = self::normalizeDirectorySeparator($payload);
 
-            if (is_file($payload)) {
-                $payload = file_get_contents($payload);
+            if (is_file($fileName)) {
+                $payload  = file_get_contents($fileName);
+            }
+
+            if ($payload === false) {
+                throw new RuntimeException(sprintf('A error occurred during reading [%s]', $fileName));
             }
         }
 
