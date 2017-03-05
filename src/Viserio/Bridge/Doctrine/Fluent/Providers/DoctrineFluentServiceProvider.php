@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Fluent\Providers;
 
+use Doctrine\DBAL\Configuration;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Doctrine\DBAL\Configuration;
+use LaravelDoctrine\Fluent\FluentDriver;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use LaravelDoctrine\Fluent\FluentDriver;
 
 class DoctrineFluentServiceProvider implements ServiceProvider, RequiresComponentConfigContract
 {
@@ -17,7 +17,7 @@ class DoctrineFluentServiceProvider implements ServiceProvider, RequiresComponen
     public function getServices()
     {
         return [
-            FluentDriver::class => [self::class, 'createFluentDriver'],
+            FluentDriver::class  => [self::class, 'createFluentDriver'],
             Configuration::class => [self::class, 'createConfiguration'],
         ];
     }
