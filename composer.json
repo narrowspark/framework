@@ -129,6 +129,7 @@
         "league/flysystem-webdav"             : "^1.0",
         "league/flysystem-vfs"                : "^1.0",
         "league/flysystem-ziparchive"         : "^1.0",
+        "laravel-doctrine/fluent"             : "^1.1",
         "mikey179/vfsStream"                  : "^1.6",
         "mouf/picotainer"                     : "^1.0",
         "narrowspark/php-cs-fixer-config"     : "^2.2",

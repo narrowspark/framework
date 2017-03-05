@@ -19,12 +19,11 @@
     ],
     "require": {
         "php"                                            : "^7.1",
-        "doctrine/inflector"                             : "^1.1",
-        "doctrine/orm"                                   : "^2.6",
-        "ext-pdo"                                        : "*"
+        "container-interop/service-provider"             : "^0.3",
+        "laravel-doctrine/fluent"                        : "^1.1",
+        "viserio/options-resolver"                       : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"             : "^0.3",
         "phpunit/phpunit"                                : "^6.0",
         "viserio/container"                              : "self.version"
     },
@@ -32,6 +31,9 @@
         "psr-4": {
             "Viserio\\Bridge\\Doctrine\\Fluent\\"        : ""
         },
+        "files": [
+            "ClassAliases.php"
+        ],
         "exclude-from-classmap"                          : ["/Tests/"]
     },
     "autoload-dev": {
@@ -40,7 +42,6 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider"             : "Required to use service-provider (^0.3).",
         "viserio/statical-proxy"                         : "Required to use the proxy instances (self.version)."
     },
     "extra": {

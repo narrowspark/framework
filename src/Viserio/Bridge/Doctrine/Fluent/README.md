@@ -21,7 +21,7 @@ Thank you for considering contributing to the Narrowspark framework! The contrib
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/bridge/doctrine
+composer require viserio/bridge/doctrine/fluent
 ```
 
 ## Official Documentation
