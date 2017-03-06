@@ -24,7 +24,7 @@ trait InteractsWithEntities
         Assert::assertNotNull(
             $entity,
             sprintf(
-                "A [%s] entity was not found by id: %s",
+                'A [%s] entity was not found by id: %s',
                 $class,
                 print_r($id, true)
             )
@@ -48,7 +48,7 @@ trait InteractsWithEntities
         Assert::assertNull(
             $this->entityManager()->find($class, $id),
             sprintf(
-                "A [%s] entity was found by id: %s",
+                'A [%s] entity was found by id: %s',
                 $class,
                 print_r($id, true)
             )
@@ -73,7 +73,7 @@ trait InteractsWithEntities
         Assert::assertNotEmpty(
             $entities,
             sprintf(
-                "No [%s] entities were found with the given criteria: %s",
+                'No [%s] entities were found with the given criteria: %s',
                 $class,
                 print_r($criteria, true)
             )
