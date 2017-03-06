@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\DBAL\Tests\Providers;
 
 use Narrowspark\Collection\Collection;
 use PHPUnit\Framework\TestCase;
-use Viserio\Bridge\Doctrine\Connection;
-use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
+use Viserio\Bridge\Doctrine\DBAL\Connection;
+use Viserio\Bridge\Doctrine\DBAL\Providers\DoctrineDBALServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
@@ -18,7 +18,7 @@ class DatabaseServiceProviderDatabaseConnectionTest extends TestCase
     {
         $container = new Container();
         $container->register(new OptionsResolverServiceProvider());
-        $container->register(new DatabaseServiceProvider());
+        $container->register(new DoctrineDBALServiceProvider());
 
         $container->instance('config', [
             'viserio' => [

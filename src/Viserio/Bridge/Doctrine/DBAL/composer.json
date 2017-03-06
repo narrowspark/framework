@@ -1,5 +1,5 @@
 {
-    "name"       : "viserio/bridge/doctrine/dbal",
+    "name"       : "viserio/bridge-doctrine-dbal",
     "type"       : "library",
     "description": "The Viserio Doctrine bridge.",
     "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "dbal", "bridge"],

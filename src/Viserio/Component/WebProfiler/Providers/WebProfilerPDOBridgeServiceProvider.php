@@ -25,21 +25,29 @@ class WebProfilerPDOBridgeServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createTraceablePDODecorater(ContainerInterface $container, callable $getPrevious): TraceablePDODecorater
+    public static function createTraceablePDODecorater(ContainerInterface $container, ?callable $getPrevious = null): ?TraceablePDODecorater
     {
-        $pdo = $getPrevious();
+        if ($getPrevious !== null) {
+            $pdo = $getPrevious();
 
-        return new TraceablePDODecorater($pdo);
+            return new TraceablePDODecorater($pdo);
+        }
+
+        return null;
     }
 
-    public static function createWebProfiler(ContainerInterface $container, callable $getPrevious): WebProfilerContract
+    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
-        $profiler = $getPrevious();
+        if ($getPrevious !== null) {
+            $profiler = $getPrevious();
 
-        $profiler->addCollector(new PDODataCollector(
-            $container->get(TraceablePDODecorater::class)
-        ));
+            $profiler->addCollector(new PDODataCollector(
+                $container->get(TraceablePDODecorater::class)
+            ));
 
-        return $profiler;
+            return $profiler;
+        }
+
+        return null;
     }
 }

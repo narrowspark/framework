@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Providers;
+namespace Viserio\Bridge\Doctrine\DBAL\Providers;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
@@ -14,11 +14,11 @@ use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
-use Viserio\Bridge\Doctrine\Connection;
+use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class DatabaseServiceProvider implements
+class DoctrineDBALServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract
 {

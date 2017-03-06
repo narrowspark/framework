@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Fluent\Providers;
 
-use Doctrine\DBAL\Configuration;
+use Doctrine\ORM\Configuration;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use LaravelDoctrine\Fluent\FluentDriver;
@@ -11,6 +11,13 @@ use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class DoctrineFluentServiceProvider implements ServiceProvider, RequiresComponentConfigContract
 {
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
+
     /**
      * {@inheritdoc}
      */
@@ -32,17 +39,23 @@ class DoctrineFluentServiceProvider implements ServiceProvider, RequiresComponen
 
     public static function createFluentDriver(ContainerInterface $container): FluentDriver
     {
-        self::resolveOptions(container);
+        self::resolveOptions($container);
 
         return new FluentDriver(self::$options['mappings'] ?? []);
     }
 
-    public static function createConfiguration(ContainerInterface $container, callable $getPrevious): Configuration
-    {
-        $config = $getPrevious();
-        $config->setMetadataDriverImpl($fluent);
+    public static function createConfiguration(
+        ContainerInterface $container,
+        ?callable $getPrevious = null
+    ): ?Configuration {
+        if ($getPrevious !== null) {
+            $config = $getPrevious();
+            $config->setMetadataDriverImpl($fluent);
 
-        return $config;
+            return $config;
+        }
+
+        return null;
     }
 
     /**

@@ -82,7 +82,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
             try {
                 $template = $container->get(Twig_LoaderInterface::class)->getSourceContext($file);
             } catch (Twig_Error_Loader $exception) {
-                throw new RuntimeException(sprintf('File or directory [%s] is not readable', $file));
+                throw new RuntimeException(sprintf('File or directory [%s] is not reaDBALe', $file));
             }
 
             $details[] = $this->validate($template, $file);

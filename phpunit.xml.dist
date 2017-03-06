@@ -24,8 +24,20 @@
     </php>
 
     <testsuites>
-        <testsuite name="Narrowspark Doctrine Bridge Test Suite">
-            <directory>./src/Viserio/Bridge/Doctrine/Tests</directory>
+        <testsuite name="Narrowspark Bridge Doctrine DBAL Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/DBAL/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Bridge Doctrine Fluent Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/Fluent/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Bridge Doctrine Migration Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/Migration/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Bridge Doctrine ORM Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/ORM/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Bridge Doctrine Testing Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/Testing/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Twig Bridge Test Suite">
             <directory>./src/Viserio/Bridge/Twig/Tests</directory>

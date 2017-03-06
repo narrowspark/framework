@@ -23,7 +23,7 @@ class SimpleFixtureServiceProvider implements ServiceProvider
         return 'value';
     }
 
-    public static function getPrevious(ContainerInterface $container, callable $getPrevious = null)
+    public static function getPrevious(ContainerInterface $container, ?callable $getPrevious = null)
     {
         return $getPrevious;
     }

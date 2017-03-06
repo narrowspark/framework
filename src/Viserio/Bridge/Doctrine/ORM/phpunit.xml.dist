@@ -22,7 +22,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Narrowspark Bridge Doctrine Test Suite">
+        <testsuite name="Narrowspark Bridge Doctrine ORM Test Suite">
             <directory suffix="Test.php">./Tests/</directory>
         </testsuite>
     </testsuites>

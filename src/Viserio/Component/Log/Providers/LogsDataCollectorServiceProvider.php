@@ -71,20 +71,24 @@ class LogsDataCollectorServiceProvider implements
 
     public static function createWebProfiler(
         ContainerInterface $container,
-        callable $getPrevious
-    ): WebProfilerContract {
-        self::resolveOptions($container);
+        ?callable $getPrevious = null
+    ): ?WebProfilerContract {
+        if (condition) {
+            self::resolveOptions($container);
 
-        $profiler = $getPrevious();
+            $profiler = $getPrevious();
 
-        if (self::$options['collector']['logs']) {
-            $profiler->addCollector(new LogsDataCollector(
-                $container->get(LogParser::class),
-                self::$options['logs_storages']
-            ));
+            if (self::$options['collector']['logs']) {
+                $profiler->addCollector(new LogsDataCollector(
+                    $container->get(LogParser::class),
+                    self::$options['logs_storages']
+                ));
+            }
+
+            return $profiler;
         }
 
-        return $profiler;
+        return null;
     }
 
     /**

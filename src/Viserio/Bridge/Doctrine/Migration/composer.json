@@ -1,5 +1,5 @@
 {
-    "name"       : "viserio/bridge/doctrine/migration",
+    "name"       : "viserio/bridge-doctrine-migration",
     "type"       : "library",
     "description": "The Viserio Doctrine bridge.",
     "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations", "bridge"],

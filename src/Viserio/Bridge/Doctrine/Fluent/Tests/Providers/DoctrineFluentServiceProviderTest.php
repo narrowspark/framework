@@ -1,30 +1,32 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\DBAL\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\Fluent\Tests\Providers;
 
-use Doctrine\Common\EventManager;
-use Doctrine\DBAL\Configuration;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Helper\HelperSet;
-use Viserio\Bridge\Doctrine\DBAL\Connection;
-use Viserio\Bridge\Doctrine\DBAL\Providers\DoctrineDBALServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use LaravelDoctrine\Fluent\FluentDriver;
+use Doctrine\ORM\Configuration;
+use Viserio\Bridge\Doctrine\DBAL\Providers\DoctrineDBALServiceProvider;
+use Viserio\Bridge\Doctrine\Fluent\Providers\DoctrineFluentServiceProvider;
 
-/**
- * @runTestsInSeparateProcesses
- */
-class DatabaseServiceProviderTest extends TestCase
+class DoctrineFluentServiceProviderTest extends TestCase
 {
     public function testProvider()
     {
         $container = new Container();
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new DoctrineDBALServiceProvider());
+        $container->register(new DoctrineFluentServiceProvider());
 
         $container->instance('config', [
             'viserio' => [
                 'doctrine' => [
+                    'fluent' => [
+                        'mappings' => [
+
+                        ]
+                    ],
                     'default'     => 'mysql',
                     'connections' => [
                         'mysql' => [
@@ -42,12 +44,7 @@ class DatabaseServiceProviderTest extends TestCase
             ],
         ]);
 
-        self::assertInstanceOf(Configuration::class, $container->get(Configuration::class));
-        self::assertInstanceOf(EventManager::class, $container->get(EventManager::class));
-        self::assertInstanceOf(Connection::class, $container->get(Connection::class));
-        self::assertInstanceOf(Connection::class, $container->get('db'));
-        self::assertInstanceOf(Connection::class, $container->get('database'));
-        self::assertInstanceOf(HelperSet::class, $container->get('database.command.helper'));
-        self::assertTrue(is_array($container->get('database.commands')));
+        self::assertInstanceOf(FluentDriver::class, $container->get(FluentDriver::class));
+        self::assertNull($container->get(Configuration::class));
     }
 }
