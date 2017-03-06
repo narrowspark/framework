@@ -4,8 +4,8 @@ namespace Viserio\Bridge\Doctrine\Testing;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Faker\Generator as Faker;
-use Narrowspark\Collection\Collection;
 use InvalidArgumentException;
+use Narrowspark\Collection\Collection;
 
 class FactoryBuilder
 {
@@ -139,7 +139,7 @@ class FactoryBuilder
      */
     protected function makeInstance(array $attributes = [])
     {
-        if (!isset($this->definitions[$this->class][$this->name])) {
+        if (! isset($this->definitions[$this->class][$this->name])) {
             throw new InvalidArgumentException("Unable to locate factory with name [{$this->name}].");
         }
 
