@@ -150,7 +150,8 @@
     },
     "autoload": {
         "files": [
-            "src/Viserio/helpers.php"
+            "src/Viserio/helpers.php",
+            "src/Viserio/Bridge/Doctrine/Fluent/ClassAliases.php"
         ],
         "psr-4": {
             "Viserio\\Component\\"            : "src/Viserio/Component/",

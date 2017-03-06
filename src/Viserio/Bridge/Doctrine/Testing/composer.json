@@ -20,6 +20,7 @@
     "require": {
         "php"                                             : "^7.1",
         "fzaninotto/faker"                                : "^1.6",
+        "narrowspark/collection"                          : "^0.1"
     },
     "require-dev": {
         "container-interop/service-provider"              : "^0.3",
