@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Fluent\Tests\Providers;
 
-use PHPUnit\Framework\TestCase;
-use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use LaravelDoctrine\Fluent\FluentDriver;
 use Doctrine\ORM\Configuration;
+use LaravelDoctrine\Fluent\FluentDriver;
+use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Doctrine\DBAL\Providers\DoctrineDBALServiceProvider;
 use Viserio\Bridge\Doctrine\Fluent\Providers\DoctrineFluentServiceProvider;
+use Viserio\Component\Container\Container;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class DoctrineFluentServiceProviderTest extends TestCase
 {
@@ -25,7 +25,7 @@ class DoctrineFluentServiceProviderTest extends TestCase
                     'fluent' => [
                         'mappings' => [
 
-                        ]
+                        ],
                     ],
                     'default'     => 'mysql',
                     'connections' => [
