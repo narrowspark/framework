@@ -73,7 +73,7 @@ class LogsDataCollectorServiceProvider implements
         ContainerInterface $container,
         ?callable $getPrevious = null
     ): ?WebProfilerContract {
-        if (condition) {
+        if ($getPrevious !== null) {
             self::resolveOptions($container);
 
             $profiler = $getPrevious();

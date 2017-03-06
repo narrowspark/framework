@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\Migration\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
-use Viserio\Bridge\Doctrine\Providers\MigrationsServiceProvider;
+use Viserio\Bridge\Doctrine\DBAL\Providers\DoctrineDBALServiceProvider;
+use Viserio\Bridge\Doctrine\Migration\Providers\MigrationsServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Support\Env;
@@ -18,7 +18,7 @@ class MigrationsServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new OptionsResolverServiceProvider());
-        $container->register(new DatabaseServiceProvider());
+        $container->register(new DoctrineDBALServiceProvider());
         $container->register(new MigrationsServiceProvider());
 
         $container->instance('config', [

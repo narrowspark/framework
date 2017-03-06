@@ -71,7 +71,7 @@ class TranslationDataCollectorServiceProvider implements
             return $profiler;
         }
 
-        return null
+        return null;
     }
 
     /**

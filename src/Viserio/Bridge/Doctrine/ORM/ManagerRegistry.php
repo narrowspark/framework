@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine;
+namespace Viserio\Bridge\Doctrine\ORM;
 
 use Doctrine\Common\Persistence\ManagerRegistry as BaseManagerRegistry;
 use Interop\Container\ContainerInterface;
