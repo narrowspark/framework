@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM;
 
-use Viserio\Bridge\Doctrine\ORM\AbstractTable;
-
 class FailedJobTable extends AbstractTable
 {
     /**
@@ -27,7 +25,7 @@ class FailedJobTable extends AbstractTable
     protected function indices()
     {
         return [
-            $this->index('pk', ['id'], true, true)
+            $this->index('pk', ['id'], true, true),
         ];
     }
 }

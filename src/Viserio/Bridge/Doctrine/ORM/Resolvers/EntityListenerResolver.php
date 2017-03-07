@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Resolvers;
 
-use InvalidArgumentException;
-use Interop\Container\ContainerInterface;
 use Doctrine\ORM\Mapping\EntityListenerResolver as ResolverContract;
+use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
 class EntityListenerResolver implements ResolverContract
@@ -35,6 +35,7 @@ class EntityListenerResolver implements ResolverContract
     {
         if ($className) {
             unset($this->instances[$className = trim($className, '\\')]);
+
             return;
         }
 
@@ -58,7 +59,7 @@ class EntityListenerResolver implements ResolverContract
      */
     public function register($object)
     {
-        if (!is_object($object)) {
+        if (! is_object($object)) {
             throw new InvalidArgumentException(sprintf('An object was expected, but got "%s".', gettype($object)));
         }
 

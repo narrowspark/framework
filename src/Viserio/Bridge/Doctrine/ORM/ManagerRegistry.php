@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM;
 
 use Doctrine\Common\Persistence\ManagerRegistry as BaseManagerRegistry;
-use Interop\Container\ContainerInterface;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Doctrine\Common\Persistence\Proxy;
 use Doctrine\ORM\ORMException;
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use ReflectionClass;
+use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
 final class ManagerRegistry implements BaseManagerRegistry
 {
@@ -127,7 +127,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     {
         $name = $name ?: $this->getDefaultManagerName();
 
-        if (!$this->managerExists($name)) {
+        if (! $this->managerExists($name)) {
             throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
         }
 
@@ -181,7 +181,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     {
         $name = $name ?: $this->getDefaultManagerName();
 
-        if (!$this->managerExists($name)) {
+        if (! $this->managerExists($name)) {
             throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
         }
 
@@ -195,8 +195,7 @@ final class ManagerRegistry implements BaseManagerRegistry
             $this->getConnectionBindingName($this->connections[$name])
         );
 
-        unset($this->managersMap[$name]);
-        unset($this->connectionsMap[$name]);
+        unset($this->managersMap[$name], $this->connectionsMap[$name]);
     }
 
     /**
@@ -228,7 +227,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     public function getManagerForClass($class): ?ObjectManager
     {
         // Check for namespace alias
-        if (strpos($class, ':') !== false) {
+        if (mb_strpos($class, ':') !== false) {
             list($namespaceAlias, $simpleClassName) = explode(':', $class, 2);
             $class                                  = $this->getAliasNamespace($namespaceAlias) . '\\' . $simpleClassName;
         }
@@ -242,7 +241,7 @@ final class ManagerRegistry implements BaseManagerRegistry
         foreach ($this->getManagerNames() as $name) {
             $manager = $this->getManager($name);
 
-            if (!$manager->getMetadataFactory()->isTransient($class)) {
+            if (! $manager->getMetadataFactory()->isTransient($class)) {
                 foreach ($manager->getMetadataFactory()->getAllMetadata() as $metadata) {
                     if ($metadata->getName() === $class) {
                         return $manager;
@@ -304,7 +303,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     {
         $name = $name ?: $this->getDefaultConnectionName();
 
-        if (!$this->hasConnection($name)) {
+        if (! $this->hasConnection($name)) {
             throw new InvalidArgumentException(sprintf('Doctrine Connection named "%s" does not exist.', $name));
         }
 

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Proxies;
 
-use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Bridge\Doctrine\ORM\DoctrineManager;
+use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Doctrine extends StaticalProxy
 {

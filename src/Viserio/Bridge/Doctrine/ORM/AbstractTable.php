@@ -43,9 +43,9 @@ abstract class AbstractTable
     /**
      * Create a new table column.
      *
-     * @param  string $name
-     * @param  string $type
-     * @param  bool   $autoincrement
+     * @param string $name
+     * @param string $type
+     * @param bool   $autoincrement
      *
      * @return \Doctrine\DBAL\Schema\Column
      */
@@ -58,12 +58,10 @@ abstract class AbstractTable
     }
 
     /**
-     *
-     *
-     * @param  string $name
-     * @param  array  $columns
-     * @param  bool   $unique
-     * @param  bool   $primary
+     * @param string $name
+     * @param array  $columns
+     * @param bool   $unique
+     * @param bool   $primary
      *
      * @return \Doctrine\DBAL\Schema\Index
      */
@@ -77,15 +75,11 @@ abstract class AbstractTable
     }
 
     /**
-     *
-     *
      * @return \Doctrine\DBAL\Schema\Column[]
      */
     abstract protected function columns(): array;
 
     /**
-     *
-     *
      * @return \Doctrine\DBAL\Schema\Index[]
      */
     abstract protected function indices(): array;
