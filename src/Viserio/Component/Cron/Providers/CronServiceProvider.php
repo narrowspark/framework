@@ -5,6 +5,7 @@ namespace Viserio\Component\Cron\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
+use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Commands\CronListCommand;
@@ -12,7 +13,6 @@ use Viserio\Component\Cron\Commands\ForgetCommand;
 use Viserio\Component\Cron\Commands\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 
 class CronServiceProvider implements
     ServiceProvider,
