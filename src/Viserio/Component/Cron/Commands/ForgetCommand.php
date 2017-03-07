@@ -13,7 +13,7 @@ class ForgetCommand extends Command
      *
      * @var string
      */
-    protected $name = 'cache:forget';
+    protected $name = 'cron:forget';
 
     /**
      * The console command description.

@@ -340,7 +340,5 @@ class Application extends Container implements ApplicationContract
         $config = $this->get(RepositoryContract::class);
 
         $config->set('patch.cached.config', $config->get('path.storage') . '/framework/cache/config.php');
-
-        $config->set('patch.cached.commands', $config->get('path.storage') . '/framework/cache/commands.php');
     }
 }
