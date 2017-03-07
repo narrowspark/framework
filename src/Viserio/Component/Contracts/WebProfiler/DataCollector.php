@@ -15,7 +15,7 @@ interface DataCollector
      *
      * @return void
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void;
 
     /**
      * Returns the unique name of the collector.
