@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Providers;
 
-use Interop\Container\ServiceProvider;
 use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Foundation\Commands\DownCommand;
 use Viserio\Component\Foundation\Commands\KeyGenerateCommand;

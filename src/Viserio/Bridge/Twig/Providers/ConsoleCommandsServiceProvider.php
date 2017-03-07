@@ -4,11 +4,10 @@ namespace Viserio\Bridge\Twig\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Psr\Cache\CacheItemPoolInterface;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Bridge\Twig\Commands\CleanCommand;
 use Viserio\Bridge\Twig\Commands\DebugCommand;
 use Viserio\Bridge\Twig\Commands\LintCommand;
+use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {

@@ -3,15 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Container\Container;
 use Viserio\Component\Cache\Providers\CacheServiceProvider;
-use Viserio\Component\Cron\Providers\ConsoleCommandsServiceProvider;
+use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
+use Viserio\Component\Container\Container;
 use Viserio\Component\Cron\Commands\CronListCommand;
 use Viserio\Component\Cron\Commands\ForgetCommand;
 use Viserio\Component\Cron\Commands\ScheduleRunCommand;
+use Viserio\Component\Cron\Providers\ConsoleCommandsServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Console\Application;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
@@ -36,7 +36,7 @@ class ConsoleCommandsServiceProviderTest extends TestCase
             ],
         ]);
 
-        $console = $container->get(Application::class);
+        $console  = $container->get(Application::class);
         $commands = $console->all();
 
         self::assertInstanceof(CronListCommand::class, $commands['cron:list']);
