@@ -5,58 +5,70 @@ namespace Viserio\Bridge\Doctrine\ORM;
 use Doctrine\Common\Persistence\ManagerRegistry as BaseManagerRegistry;
 use Interop\Container\ContainerInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Doctrine\Common\Persistence\Proxy;
+use Doctrine\ORM\ORMException;
+use InvalidArgumentException;
+use ReflectionClass;
 
 final class ManagerRegistry implements BaseManagerRegistry
 {
     use ContainerAwareTrait;
 
-    /**
-     * @const
-     */
     public const MANAGER_BINDING_PREFIX = 'doctrine.managers.';
 
-    /**
-     * @const
-     */
     public const CONNECTION_BINDING_PREFIX = 'doctrine.connections.';
 
     /**
+     * The default name for manager.
+     *
      * @var string
      */
     protected $defaultManager = 'default';
 
     /**
+     * The default name for connection.
+     *
      * @var string
      */
     protected $defaultConnection = 'default';
 
     /**
+     * A EntityManagerFactory instance.
+     *
      * @var \Viserio\Bridge\Doctrine\EntityManagerFactory
      */
     protected $factory;
 
     /**
+     * A list of all managers.
+     *
      * @var array
      */
     protected $managers = [];
 
     /**
+     * A list of all connections.
+     *
      * @var array
      */
     protected $connections = [];
 
     /**
+     * Mapping of managers.
+     *
      * @var array
      */
     protected $managersMap = [];
 
     /**
+     * Mapping of connections.
+     *
      * @var array
      */
     protected $connectionsMap = [];
 
     /**
-     * Create a new manager registry.
+     * Create a new manager registry instance.
      *
      * @param \Interop\Container\ContainerInterface         $container
      * @param \Viserio\Bridge\Doctrine\EntityManagerFactory $factory
@@ -65,5 +77,305 @@ final class ManagerRegistry implements BaseManagerRegistry
     {
         $this->container = $container;
         $this->factory   = $factory;
+    }
+
+    /**
+     * Set a default manager.
+     *
+     * @param string $defaultManager
+     *
+     * @return void
+     */
+    public function setDefaultManager(string $defaultManager): void
+    {
+        $this->defaultManager = $defaultManager;
+    }
+
+    /**
+     * Add a new manager instance.
+     *
+     * @param       $manager
+     * @param array $settings
+     */
+    public function addManager($manager, array $settings = [])
+    {
+        $this->container->singleton($this->getManagerBindingName($manager), function () use ($settings) {
+            return $this->factory->create($settings);
+        });
+
+        $this->managers[$manager] = $manager;
+
+        $this->addConnection($manager, $settings);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultManagerName(): string
+    {
+        if (isset($this->managers[$this->defaultManager])) {
+            return $this->defaultManager;
+        }
+
+        return head($this->managers);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getManager($name = null): ObjectManager
+    {
+        $name = $name ?: $this->getDefaultManagerName();
+
+        if (!$this->managerExists($name)) {
+            throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
+        }
+
+        if (isset($this->managersMap[$name])) {
+            return $this->managersMap[$name];
+        }
+
+        return $this->managersMap[$name] = $this->getService(
+            $this->getManagerBindingName($this->managers[$name])
+        );
+    }
+
+    /**
+     * Check if a manager exists.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasManager(string $name): bool
+    {
+        return isset($this->managers[$name]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getManagerNames(): array
+    {
+        return $this->managers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getManagers(): array
+    {
+        $managers = [];
+
+        foreach ($this->getManagerNames() as $name) {
+            $managers[$name] = $this->getManager($name);
+        }
+
+        return $managers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resetManager($name = null): ObjectManager
+    {
+        $name = $name ?: $this->getDefaultManagerName();
+
+        if (!$this->managerExists($name)) {
+            throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
+        }
+
+        // force the creation of a new document manager
+        // if the current one is closed
+        $this->resetService(
+            $this->getManagerBindingName($this->managers[$name])
+        );
+
+        $this->resetService(
+            $this->getConnectionBindingName($this->connections[$name])
+        );
+
+        unset($this->managersMap[$name]);
+        unset($this->connectionsMap[$name]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliasNamespace($alias): string
+    {
+        foreach ($this->getManagerNames() as $name) {
+            try {
+                return $this->getManager($name)->getConfiguration()->getEntityNamespace($alias);
+            } catch (ORMException $e) {
+            }
+        }
+
+        throw ORMException::unknownEntityNamespace($alias);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRepository($persistentObject, $persistentManagerName = null): ObjectRepository
+    {
+        return $this->getManager($persistentManagerName)->getRepository($persistentObject);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getManagerForClass($class): ?ObjectManager
+    {
+        // Check for namespace alias
+        if (strpos($class, ':') !== false) {
+            list($namespaceAlias, $simpleClassName) = explode(':', $class, 2);
+            $class                                  = $this->getAliasNamespace($namespaceAlias) . '\\' . $simpleClassName;
+        }
+
+        $proxyClass = new ReflectionClass($class);
+
+        if ($proxyClass->implementsInterface(Proxy::class)) {
+            $class = $proxyClass->getParentClass()->getName();
+        }
+
+        foreach ($this->getManagerNames() as $name) {
+            $manager = $this->getManager($name);
+
+            if (!$manager->getMetadataFactory()->isTransient($class)) {
+                foreach ($manager->getMetadataFactory()->getAllMetadata() as $metadata) {
+                    if ($metadata->getName() === $class) {
+                        return $manager;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Set a default connection.
+     *
+     * @param string $defaultConnection
+     */
+    public function setDefaultConnection(string $defaultConnection)
+    {
+        $this->defaultConnection = $defaultConnection;
+    }
+
+    /**
+     * Add a new connection.
+     *
+     * @param string|object $connection
+     * @param array         $settings
+     *
+     * @return void
+     */
+    public function addConnection($connection, array $settings = []): void
+    {
+        $this->container->singleton($this->getConnectionBindingName($connection), function () use ($connection) {
+            return $this->getManager($connection)->getConnection();
+        });
+
+        $this->connections[$connection] = $connection;
+    }
+
+    /**
+     * Gets the default connection name.
+     *
+     * @return string The default connection name.
+     */
+    public function getDefaultConnectionName(): string
+    {
+        if (isset($this->connections[$this->defaultConnection])) {
+            return $this->defaultConnection;
+        }
+
+        return reset($this->connections);
+    }
+
+    /**
+     * Gets the named connection.
+     *
+     * @param string $name The connection name (null for the default one).
+     *
+     * @return object
+     */
+    public function getConnection(string $name = null)
+    {
+        $name = $name ?: $this->getDefaultConnectionName();
+
+        if (!$this->hasConnection($name)) {
+            throw new InvalidArgumentException(sprintf('Doctrine Connection named "%s" does not exist.', $name));
+        }
+
+        if (isset($this->connectionsMap[$name])) {
+            return $this->connectionsMap[$name];
+        }
+
+        return $this->connectionsMap[$name] = $this->getService(
+            $this->getConnectionBindingName($this->connections[$name])
+        );
+    }
+
+    /**
+     * Check if a connection exists.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasConnection(string $name): bool
+    {
+        return isset($this->connections[$name]);
+    }
+
+    /**
+     * Gets an array of all registered connections.
+     *
+     * @return array An array of Connection instances.
+     */
+    public function getConnections(): array
+    {
+        $connections = [];
+
+        foreach ($this->getConnectionNames() as $name) {
+            $connections[$name] = $this->getConnection($name);
+        }
+
+        return $connections;
+    }
+
+    /**
+     * Gets all connection names.
+     *
+     * @return array An array of connection names.
+     */
+    public function getConnectionNames(): array
+    {
+        return $this->connections;
+    }
+
+    /**
+     * Prefix a manager name.
+     *
+     * @param string $manager
+     *
+     * @return string
+     */
+    protected function getManagerBindingName(string $manager): string
+    {
+        return self::MANAGER_BINDING_PREFIX . $manager;
+    }
+
+    /**
+     * Prefix a connection name.
+     *
+     * @param $connection
+     *
+     * @return string
+     */
+    protected function getConnectionBindingName(string $connection): string
+    {
+        return self::CONNECTION_BINDING_PREFIX . $connection;
     }
 }

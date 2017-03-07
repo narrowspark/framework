@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Proxies;
+namespace Viserio\Bridge\Doctrine\ORM\Proxies;
 
 use Viserio\Component\StaticalProxy\StaticalProxy;
+use Doctrine\ORM\EntityManagerInterface;
 
-class DB extends StaticalProxy
+class EntityManager extends StaticalProxy
 {
     /**
      * {@inheritdoc}
@@ -13,6 +14,6 @@ class DB extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return 'db';
+        return EntityManagerInterface::class;
     }
 }

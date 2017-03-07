@@ -44,10 +44,8 @@ class DoctrineFluentServiceProvider implements ServiceProvider, RequiresComponen
         return new FluentDriver(self::$options['mappings'] ?? []);
     }
 
-    public static function createConfiguration(
-        ContainerInterface $container,
-        ?callable $getPrevious = null
-    ): ?Configuration {
+    public static function createConfiguration(ContainerInterface $container, ?callable $getPrevious = null): ?Configuration
+    {
         if ($getPrevious !== null) {
             $config = $getPrevious();
             $config->setMetadataDriverImpl($fluent);

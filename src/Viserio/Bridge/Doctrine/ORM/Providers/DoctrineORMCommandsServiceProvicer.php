@@ -24,7 +24,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
 
-class DatabaseORMServiceProvicer implements ServiceProvider
+class DoctrineORMCommandsServiceProvicer implements ServiceProvider
 {
     /**
      * {@inheritdoc}
