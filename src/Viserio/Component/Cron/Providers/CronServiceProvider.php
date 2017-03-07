@@ -12,6 +12,7 @@ use Viserio\Component\Cron\Commands\ForgetCommand;
 use Viserio\Component\Cron\Commands\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 
 class CronServiceProvider implements
     ServiceProvider,
@@ -31,8 +32,8 @@ class CronServiceProvider implements
     public function getServices()
     {
         return [
-            Schedule::class => [self::class, 'createSchedule'],
-            'cron.commands' => [self::class, 'createCronCommands'],
+            Schedule::class            => [self::class, 'createSchedule'],
+            ApplicationContract::class => [self::class, 'createConsoleCommands'],
         ];
     }
 
@@ -67,13 +68,21 @@ class CronServiceProvider implements
         return $scheduler;
     }
 
-    public static function createCronCommands(ContainerInterface $container): array
+    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
     {
-        return [
-            new CronListCommand(),
-            new ForgetCommand($container->get(CacheItemPoolInterface::class)),
-            new ScheduleRunCommand(),
-        ];
+        if ($getPrevious !== null) {
+            $console = $getPrevious();
+
+            $console->addCommands([
+                new CronListCommand(),
+                new ForgetCommand($container->get(CacheItemPoolInterface::class)),
+                new ScheduleRunCommand(),
+            ]);
+
+            return $console;
+        }
+
+        return null;
     }
 
     /**
