@@ -1,14 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Providers;
+namespace Viserio\Bridge\Twig\Providers;
 
+use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
-use Viserio\Component\Foundation\Commands\DownCommand;
-use Viserio\Component\Foundation\Commands\KeyGenerateCommand;
-use Viserio\Component\Foundation\Commands\UpCommand;
+use Viserio\Bridge\Twig\Commands\CleanCommand;
+use Viserio\Bridge\Twig\Commands\DebugCommand;
+use Viserio\Bridge\Twig\Commands\LintCommand;
 
-class CommandsServiceProvider implements ServiceProvider
+class ConsoleCommandsServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
@@ -26,9 +28,9 @@ class CommandsServiceProvider implements ServiceProvider
             $console = $getPrevious();
 
             $console->addCommands([
-                // new DownCommand(),
-                new UpCommand(),
-                // new KeyGenerateCommand(),
+                new CleanCommand(),
+                new DebugCommand(),
+                new LintCommand(),
             ]);
 
             return $console;

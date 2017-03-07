@@ -5,12 +5,8 @@ namespace Viserio\Component\Cron\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Cron\Commands\CronListCommand;
-use Viserio\Component\Cron\Commands\ForgetCommand;
-use Viserio\Component\Cron\Commands\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
@@ -32,8 +28,7 @@ class CronServiceProvider implements
     public function getServices()
     {
         return [
-            Schedule::class            => [self::class, 'createSchedule'],
-            ApplicationContract::class => [self::class, 'createConsoleCommands'],
+            Schedule::class => [self::class, 'createSchedule'],
         ];
     }
 
@@ -66,23 +61,6 @@ class CronServiceProvider implements
         $scheduler->setContainer($container);
 
         return $scheduler;
-    }
-
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
-    {
-        if ($getPrevious !== null) {
-            $console = $getPrevious();
-
-            $console->addCommands([
-                new CronListCommand(),
-                new ForgetCommand($container->get(CacheItemPoolInterface::class)),
-                new ScheduleRunCommand(),
-            ]);
-
-            return $console;
-        }
-
-        return null;
     }
 
     /**
