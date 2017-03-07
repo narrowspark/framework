@@ -7,9 +7,6 @@ use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Cron\Commands\CronListCommand;
-use Viserio\Component\Cron\Commands\ForgetCommand;
-use Viserio\Component\Cron\Commands\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
@@ -32,7 +29,6 @@ class CronServiceProvider implements
     {
         return [
             Schedule::class => [self::class, 'createSchedule'],
-            'cron.commands' => [self::class, 'createCronCommands'],
         ];
     }
 
@@ -65,15 +61,6 @@ class CronServiceProvider implements
         $scheduler->setContainer($container);
 
         return $scheduler;
-    }
-
-    public static function createCronCommands(ContainerInterface $container): array
-    {
-        return [
-            new CronListCommand(),
-            new ForgetCommand($container->get(CacheItemPoolInterface::class)),
-            new ScheduleRunCommand(),
-        ];
     }
 
     /**

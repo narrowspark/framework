@@ -34,6 +34,5 @@ class CronServiceProviderTest extends TestCase
         ]);
 
         self::assertInstanceOf(Schedule::class, $container->get(Schedule::class));
-        self::assertTrue(is_array($container->get('cron.commands')));
     }
 }
