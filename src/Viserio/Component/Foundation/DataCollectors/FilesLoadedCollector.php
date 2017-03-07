@@ -43,7 +43,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareCo
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         // Get the files included on load.
         $included = [];

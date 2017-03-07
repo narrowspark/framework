@@ -12,8 +12,10 @@ interface DataCollector
      *
      * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return void
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response);
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
 
     /**
      * Returns the unique name of the collector.

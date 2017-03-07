@@ -127,7 +127,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     {
         $name = $name ?: $this->getDefaultManagerName();
 
-        if (! $this->managerExists($name)) {
+        if (! $this->hasManager($name)) {
             throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
         }
 
@@ -181,7 +181,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     {
         $name = $name ?: $this->getDefaultManagerName();
 
-        if (! $this->managerExists($name)) {
+        if (! $this->hasManager($name)) {
             throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
         }
 
@@ -255,8 +255,10 @@ final class ManagerRegistry implements BaseManagerRegistry
      * Set a default connection.
      *
      * @param string $defaultConnection
+     *
+     * @return void
      */
-    public function setDefaultConnection(string $defaultConnection)
+    public function setDefaultConnection(string $defaultConnection): void
     {
         $this->defaultConnection = $defaultConnection;
     }
@@ -279,9 +281,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     }
 
     /**
-     * Gets the default connection name.
-     *
-     * @return string the default connection name
+     * {@inheritdoc}
      */
     public function getDefaultConnectionName(): string
     {
@@ -293,11 +293,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     }
 
     /**
-     * Gets the named connection.
-     *
-     * @param string $name the connection name (null for the default one)
-     *
-     * @return object
+     * {@inheritdoc}
      */
     public function getConnection($name = null)
     {
@@ -329,15 +325,13 @@ final class ManagerRegistry implements BaseManagerRegistry
     }
 
     /**
-     * Gets an array of all registered connections.
-     *
-     * @return array an array of Connection instances
+     * {@inheritdoc}
      */
     public function getConnections(): array
     {
         $connections = [];
 
-        foreach ($this->getConnectionNames() as $name) {
+        foreach ($this->connections as $name) {
             $connections[$name] = $this->getConnection($name);
         }
 
@@ -345,9 +339,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     }
 
     /**
-     * Gets all connection names.
-     *
-     * @return array an array of connection names
+     * {@inheritdoc}
      */
     public function getConnectionNames(): array
     {
@@ -376,5 +368,13 @@ final class ManagerRegistry implements BaseManagerRegistry
     protected function getConnectionBindingName(string $connection): string
     {
         return self::CONNECTION_BINDING_PREFIX . $connection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getService($name)
+    {
+        return $this->container->get($name);
     }
 }

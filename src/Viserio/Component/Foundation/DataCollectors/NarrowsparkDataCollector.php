@@ -21,7 +21,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         parent::collect($serverRequest, $response);
 
