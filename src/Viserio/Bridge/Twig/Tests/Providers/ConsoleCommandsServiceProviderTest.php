@@ -32,8 +32,8 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceof(CleanCommand::class, $commands['twig:clean']);
-        self::assertInstanceof(DebugCommand::class, $commands['twig:debug']);
-        self::assertInstanceof(LintCommand::class, $commands['twig:lint']);
+        self::assertInstanceOf(CleanCommand::class, $commands['twig:clean']);
+        self::assertInstanceOf(DebugCommand::class, $commands['twig:debug']);
+        self::assertInstanceOf(LintCommand::class, $commands['twig:lint']);
     }
 }

@@ -30,8 +30,8 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceof(UpCommand::class, $commands['up']);
-        // self::assertInstanceof(DownCommand::class, $commands['down']);
-        // self::assertInstanceof(KeyGenerateCommand::class, $commands['cron:list']);
+        self::assertInstanceOf(UpCommand::class, $commands['up']);
+        // self::assertInstanceOf(DownCommand::class, $commands['down']);
+        // self::assertInstanceOf(KeyGenerateCommand::class, $commands['cron:list']);
     }
 }
