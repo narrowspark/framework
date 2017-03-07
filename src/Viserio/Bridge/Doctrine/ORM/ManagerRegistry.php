@@ -299,7 +299,7 @@ final class ManagerRegistry implements BaseManagerRegistry
      *
      * @return object
      */
-    public function getConnection(string $name = null)
+    public function getConnection($name = null)
     {
         $name = $name ?: $this->getDefaultConnectionName();
 

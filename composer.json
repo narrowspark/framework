@@ -107,6 +107,7 @@
     },
     "require-dev": {
         "aws/aws-sdk-php"                     : "^3.18",
+        "cache/psr-6-doctrine-bridge"         : "^2.0",
         "cache/encryption-cache"              : "^0.1",
         "cache/filesystem-adapter"            : "^0.3",
         "cache/namespaced-cache"              : "^0.1",

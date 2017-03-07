@@ -22,10 +22,9 @@
         "doctrine/orm"                                : "^2.6",
         "ext-pdo"                                     : "*",
         "ocramius/proxy-manager"                      : "^2.0",
-        "php-cache/doctrine-bridge"                   : "^2.0",
+        "cache/psr-6-doctrine-bridge"                 : "^2.0",
         "symfony/serializer"                          : "^3.1",
-        "viserio/contracts"                           : "self.version",
-        "viserio/pagination"                          : "self.version"
+        "viserio/contracts"                           : "self.version"
     },
     "require-dev": {
         "cakephp/chronos"                             : "^1.0",
