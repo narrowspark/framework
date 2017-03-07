@@ -21,15 +21,15 @@
         "php"                                         : "^7.1",
         "doctrine/orm"                                : "^2.6",
         "ext-pdo"                                     : "*",
-        "ocramius/proxy-manager"                      : "^2.0",
+        "ocramius/proxy-manager"                      : "^2.1",
         "cache/psr-6-doctrine-bridge"                 : "^2.0",
-        "symfony/serializer"                          : "^3.1",
         "viserio/contracts"                           : "self.version"
     },
     "require-dev": {
         "cakephp/chronos"                             : "^1.0",
         "container-interop/service-provider"          : "^0.3",
         "phpunit/phpunit"                             : "^6.0",
+        "symfony/serializer"                          : "^3.1",
         "viserio/console"                             : "self.version",
         "viserio/contracts"                           : "self.version",
         "viserio/pagination"                          : "self.version"
