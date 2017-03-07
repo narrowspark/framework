@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Database\Providers;
 
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand;
 use Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand;
 use Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand;
@@ -24,7 +25,6 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
-use Doctrine\ORM\EntityManagerInterface;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {
