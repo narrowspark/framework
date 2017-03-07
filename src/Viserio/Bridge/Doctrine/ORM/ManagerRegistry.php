@@ -281,7 +281,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     /**
      * Gets the default connection name.
      *
-     * @return string The default connection name.
+     * @return string the default connection name
      */
     public function getDefaultConnectionName(): string
     {
@@ -295,7 +295,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     /**
      * Gets the named connection.
      *
-     * @param string $name The connection name (null for the default one).
+     * @param string $name the connection name (null for the default one)
      *
      * @return object
      */
@@ -331,7 +331,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     /**
      * Gets an array of all registered connections.
      *
-     * @return array An array of Connection instances.
+     * @return array an array of Connection instances
      */
     public function getConnections(): array
     {
@@ -347,7 +347,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     /**
      * Gets all connection names.
      *
-     * @return array An array of connection names.
+     * @return array an array of connection names
      */
     public function getConnectionNames(): array
     {

@@ -24,7 +24,6 @@ class DoctrineFluentServiceProviderTest extends TestCase
                 'doctrine' => [
                     'fluent' => [
                         'mappings' => [
-
                         ],
                     ],
                     'default'     => 'mysql',

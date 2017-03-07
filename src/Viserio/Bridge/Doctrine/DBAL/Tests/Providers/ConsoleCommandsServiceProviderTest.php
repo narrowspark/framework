@@ -1,28 +1,33 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Migration\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\DBAL\Tests\Providers;
 
+use Doctrine\DBAL\Tools\Console\Command\ImportCommand;
+use Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand;
+use Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
 use PHPUnit\Framework\TestCase;
+use Viserio\Bridge\Doctrine\DBAL\Providers\ConsoleCommandsServiceProvider;
 use Viserio\Bridge\Doctrine\DBAL\Providers\DoctrineDBALServiceProvider;
-use Viserio\Bridge\Doctrine\Migration\Providers\MigrationsServiceProvider;
+use Viserio\Component\Console\Application;
+use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Support\Env;
 
-/**
- * @runTestsInSeparateProcesses
- */
-class MigrationsServiceProviderTest extends TestCase
+class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testGetServices()
     {
         $container = new Container();
+        $container->register(new ConsoleServiceProvider());
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new DoctrineDBALServiceProvider());
-        $container->register(new MigrationsServiceProvider());
+        $container->register(new ConsoleCommandsServiceProvider());
 
         $container->instance('config', [
             'viserio' => [
+                'console' => [
+                    'version' => '1',
+                ],
                 'doctrine' => [
                     'default'     => 'mysql',
                     'connections' => [
@@ -37,16 +42,15 @@ class MigrationsServiceProviderTest extends TestCase
                             'driverOptions' => [1002 => 'SET NAMES utf8'],
                         ],
                     ],
-                    'migrations' => [
-                        'path'       => Env::get('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
-                        'namespace'  => 'Database\\Migrations',
-                        'name'       => 'migration',
-                        'table_name' => 'migration',
-                    ],
                 ],
             ],
         ]);
 
-        self::assertTrue(is_array($container->get('migrations.commands')));
+        $console  = $container->get(Application::class);
+        $commands = $console->all();
+
+        self::assertInstanceOf(ImportCommand::class, $commands['dbal:import']);
+        self::assertInstanceOf(ReservedWordsCommand::class, $commands['dbal:reserved-words']);
+        self::assertInstanceOf(RunSqlCommand::class, $commands['dbal:run-sql']);
     }
 }

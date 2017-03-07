@@ -12,11 +12,12 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
+use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class MigrationsServiceProvider implements
+class ConsoleCommandsServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
@@ -34,7 +35,7 @@ class MigrationsServiceProvider implements
     public function getServices()
     {
         return [
-            'migrations.commands' => [self::class, 'createMigrationsCommands'],
+            ApplicationContract::class => [self::class, 'createConsoleCommands'],
         ];
     }
 
@@ -54,7 +55,20 @@ class MigrationsServiceProvider implements
         return ['migrations'];
     }
 
-    public static function createMigrationsCommands(ContainerInterface $container): array
+    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
+    {
+        if ($getPrevious !== null) {
+            $console = $getPrevious();
+
+            $console->addCommands(self::createMigrationsCommands($container));
+
+            return $console;
+        }
+
+        return null;
+    }
+
+    private static function createMigrationsCommands(ContainerInterface $container): array
     {
         self::resolveOptions($container);
 

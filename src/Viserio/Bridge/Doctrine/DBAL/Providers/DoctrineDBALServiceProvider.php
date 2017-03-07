@@ -7,13 +7,8 @@ use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection as DoctrineConnection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Tools\Console\Command\ImportCommand;
-use Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand;
-use Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
-use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
@@ -44,8 +39,6 @@ class DoctrineDBALServiceProvider implements
             'database' => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
-            'database.command.helper' => [self::class, 'createDatabaseCommandsHelpser'],
-            'database.commands'       => [self::class, 'createDatabaseCommands'],
         ];
     }
 
@@ -76,22 +69,6 @@ class DoctrineDBALServiceProvider implements
     public static function createEventManager(): EventManager
     {
         return new EventManager();
-    }
-
-    public static function createDatabaseCommands(): array
-    {
-        return [
-            new RunSqlCommand(),
-            new ImportCommand(),
-            new ReservedWordsCommand(),
-        ];
-    }
-
-    public static function createDatabaseCommandsHelpser(ContainerInterface $container): HelperSet
-    {
-        return new HelperSet([
-            'db' => new ConnectionHelper($container->get(Connection::class)),
-        ]);
     }
 
     private static function parseConfig(array $config): array
