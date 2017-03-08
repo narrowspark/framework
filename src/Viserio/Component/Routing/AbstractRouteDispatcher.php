@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use Closure;
 use Narrowspark\Arr\Arr;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
@@ -181,10 +180,10 @@ abstract class AbstractRouteDispatcher
     {
         $tempFile = null;
 
-        if ($this->refreshCache === false && !file_exists($this->path)) {
+        if ($this->refreshCache === false && ! file_exists($this->path)) {
             $this->createCacheFolder($this->path);
             $this->generateRouterFile($this->path);
-        } elseif ($this->refreshCache === true && !file_exists($this->path)) {
+        } elseif ($this->refreshCache === true && ! file_exists($this->path)) {
             $tempFile = $this->getTempDir() . '/php_narrowspark_tmpfile.tmp';
 
             $this->generateRouterFile($tempFile);
@@ -224,7 +223,7 @@ abstract class AbstractRouteDispatcher
     {
         if (function_exists('sys_get_temp_dir')) {
             return sys_get_temp_dir();
-        } elseif ( ($tmp = getenv('TMP')) || ($tmp = getenv('TEMP')) || ($tmp = getenv('TMPDIR')) ) {
+        } elseif (($tmp = getenv('TMP')) || ($tmp = getenv('TEMP')) || ($tmp = getenv('TMPDIR'))) {
             return realpath($tmp);
         }
 
@@ -282,7 +281,7 @@ abstract class AbstractRouteDispatcher
     protected function generateRouterFile(string $path): void
     {
         $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
-        $closure = $routerCompiler->compile($this->routes->getRoutes());
+        $closure        = $routerCompiler->compile($this->routes->getRoutes());
 
         file_put_contents($path, $closure);
     }
