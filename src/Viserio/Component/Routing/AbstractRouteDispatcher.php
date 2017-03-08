@@ -178,18 +178,17 @@ abstract class AbstractRouteDispatcher
      */
     protected function dispatchToRoute(ServerRequestInterface $request): ResponseInterface
     {
-        $tempFile = null;
-
-        if ($this->refreshCache === false && ! file_exists($this->path)) {
+        if ($this->refreshCache === false) {
             $this->createCacheFolder($this->path);
-            $this->generateRouterFile($this->path);
-        } elseif ($this->refreshCache === true && ! file_exists($this->path)) {
-            $tempFile = $this->getTempDir() . '/php_narrowspark_tmpfile.tmp';
-
-            $this->generateRouterFile($tempFile);
+        } else {
+            $this->path = $this->getTempDir() . '/php_narrowspark_cache_file.tmp';
         }
 
-        $router = require $tempFile ?? $this->path;
+        if (! file_exists($this->path) || $this->refreshCache === true) {
+            $this->generateRouterFile();
+        }
+
+        $router = require $this->path;
         $match  = $router(
             $request->getMethod(),
            '/' . ltrim($request->getUri()->getPath(), '/')
@@ -274,16 +273,14 @@ abstract class AbstractRouteDispatcher
     /**
      * Generates a router file with all routes.
      *
-     * @param string $path
-     *
      * @return void
      */
-    protected function generateRouterFile(string $path): void
+    protected function generateRouterFile(): void
     {
         $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
         $closure        = $routerCompiler->compile($this->routes->getRoutes());
 
-        file_put_contents($path, $closure);
+        file_put_contents($this->path, $closure);
     }
 
     /**
