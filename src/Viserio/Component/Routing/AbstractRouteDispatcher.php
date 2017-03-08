@@ -179,7 +179,18 @@ abstract class AbstractRouteDispatcher
      */
     protected function dispatchToRoute(ServerRequestInterface $request): ResponseInterface
     {
-        $router = $this->generateRouterFile();
+        $tempFile = null;
+
+        if ($this->refreshCache === false && !file_exists($this->path)) {
+            $this->createCacheFolder($this->path);
+            $this->generateRouterFile($this->path);
+        } elseif ($this->refreshCache === true && !file_exists($this->path)) {
+            $tempFile = $this->getTempDir() . '/php_narrowspark_tmpfile.tmp';
+
+            $this->generateRouterFile($tempFile);
+        }
+
+        $router = require $tempFile ?? $this->path;
         $match  = $router(
             $request->getMethod(),
            '/' . ltrim($request->getUri()->getPath(), '/')
@@ -202,6 +213,22 @@ abstract class AbstractRouteDispatcher
             '404 Not Found: Requested route [/%s]',
             $requestPath
         ));
+    }
+
+    /**
+     * The path to the temp directory.
+     *
+     * @return string
+     */
+    protected function getTempDir(): string
+    {
+        if (function_exists('sys_get_temp_dir')) {
+            return sys_get_temp_dir();
+        } elseif ( ($tmp = getenv('TMP')) || ($tmp = getenv('TEMP')) || ($tmp = getenv('TMPDIR')) ) {
+            return realpath($tmp);
+        }
+
+        return '/tmp';
     }
 
     /**
@@ -248,21 +275,16 @@ abstract class AbstractRouteDispatcher
     /**
      * Generates a router file with all routes.
      *
-     * @return \Closure
+     * @param string $path
+     *
+     * @return void
      */
-    protected function generateRouterFile(): Closure
+    protected function generateRouterFile(string $path): void
     {
-        if ($this->refreshCache && file_exists($this->path)) {
-            @unlink($this->path);
-        } else {
-            $this->createCacheFolder($this->path);
+        $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
+        $closure = $routerCompiler->compile($this->routes->getRoutes());
 
-            $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
-
-            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()));
-        }
-
-        return require $this->path;
+        file_put_contents($path, $closure);
     }
 
     /**
