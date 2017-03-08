@@ -19,6 +19,8 @@ class Request extends AbstractMessage implements RequestInterface
         'CONNECT'  => true,
         'PATCH'    => true,
         'PROPFIND' => true,
+        'LINK'     => true,
+        'UNLINK'   => true,
     ];
 
     /**
