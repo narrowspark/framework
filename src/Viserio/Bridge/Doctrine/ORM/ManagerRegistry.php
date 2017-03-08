@@ -96,8 +96,10 @@ final class ManagerRegistry implements BaseManagerRegistry
      *
      * @param       $manager
      * @param array $settings
+     *
+     * @return void
      */
-    public function addManager($manager, array $settings = [])
+    public function addManager($manager, array $settings = []): void
     {
         $this->container->singleton($this->getManagerBindingName($manager), function () use ($settings) {
             return $this->factory->create($settings);
