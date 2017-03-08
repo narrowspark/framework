@@ -312,7 +312,7 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
      */
     private function runningInConsole(): bool
     {
-        return mb_substr(PHP_SAPI, 0, 3) === 'cgi';
+        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
     }
 
     /**
