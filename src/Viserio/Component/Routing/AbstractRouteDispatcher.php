@@ -16,12 +16,14 @@ use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeCompiler;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 abstract class AbstractRouteDispatcher
 {
     use ContainerAwareTrait;
     use EventsAwareTrait;
     use MiddlewareAwareTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * The route collection instance.
@@ -144,7 +146,7 @@ abstract class AbstractRouteDispatcher
      */
     public function setCachePath(string $path): void
     {
-        $this->path = $path;
+        $this->path = self::normalizeDirectorySeparator($path);
     }
 
     /**
@@ -178,13 +180,8 @@ abstract class AbstractRouteDispatcher
      */
     protected function dispatchToRoute(ServerRequestInterface $request): ResponseInterface
     {
-        if ($this->refreshCache === false) {
-            $this->createCacheFolder($this->path);
-        } else {
-            $this->path = $this->getTempDir() . '/php_narrowspark_cache_file.tmp';
-        }
-
         if (! file_exists($this->path) || $this->refreshCache === true) {
+            $this->createCacheFolder($this->path);
             $this->generateRouterFile();
         }
 
@@ -211,22 +208,6 @@ abstract class AbstractRouteDispatcher
             '404 Not Found: Requested route [/%s]',
             $requestPath
         ));
-    }
-
-    /**
-     * The path to the temp directory.
-     *
-     * @return string
-     */
-    protected function getTempDir(): string
-    {
-        if (function_exists('sys_get_temp_dir')) {
-            return sys_get_temp_dir();
-        } elseif (($tmp = getenv('TMP')) || ($tmp = getenv('TEMP')) || ($tmp = getenv('TMPDIR'))) {
-            return realpath($tmp);
-        }
-
-        return '/tmp';
     }
 
     /**
@@ -280,7 +261,7 @@ abstract class AbstractRouteDispatcher
         $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
         $closure        = $routerCompiler->compile($this->routes->getRoutes());
 
-        file_put_contents($this->path, $closure);
+        file_put_contents($this->path, $closure, LOCK_EX);
     }
 
     /**
