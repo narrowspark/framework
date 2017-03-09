@@ -2,17 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM;
 
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Cache\Cache;
-use Doctrine\ORM\Cache\DefaultCacheFactory;
-use Doctrine\ORM\Configuration;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Tools\Setup;
 use Interop\Container\ContainerInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
 
 class EntityManagerFactory
 {
