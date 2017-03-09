@@ -128,7 +128,7 @@ class ExpressionParser
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        if ($needle != '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+        if ($needle != '' && mb_substr($haystack, 0, mb_strlen($needle)) === (string) $needle) {
             return true;
         }
 
@@ -145,7 +145,7 @@ class ExpressionParser
      */
     private static function endsWith(string $haystack, string $needles): bool
     {
-        if (substr($haystack, -strlen($needle)) === (string) $needle) {
+        if (mb_substr($haystack, -mb_strlen($needle)) === (string) $needle) {
             return true;
         }
 
