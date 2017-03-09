@@ -9,7 +9,7 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\WebProfiler\AssetsRenderer;
 use Viserio\Component\WebProfiler\Middleware\WebProfilerMiddleware;
 use Viserio\Component\WebProfiler\TemplateManager;
-use Viserio\Component\WebProfiler\WebProfiler;
+use Viserio\Component\WebProfiler\Tests\Fixture\WebProfilerTester as WebProfiler;
 
 class WebProfilerMiddlewareTest extends MockeryTestCase
 {

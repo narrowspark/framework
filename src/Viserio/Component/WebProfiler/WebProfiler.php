@@ -249,6 +249,18 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
     }
 
     /**
+     * Determine if we are running in the console.
+     *
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    protected function runningInConsole(): bool
+    {
+        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
+    }
+
+    /**
      * Collect data and create a new profile and save it.
      *
      * @param string                                   $token
@@ -305,14 +317,6 @@ class WebProfiler implements WebProfilerContract, LoggerAwareInterface
         );
 
         return $assets->render() . $template->render();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    private function runningInConsole(): bool
-    {
-        return mb_substr(PHP_SAPI, 0, 3) === 'cgi';
     }
 
     /**
