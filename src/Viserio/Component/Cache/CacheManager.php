@@ -148,7 +148,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     }
 
     /**
-     * Create an instance of the Apcu cache driver.
+     * Create an instance of the Array cache driver.
      *
      * @param array $config
      *
