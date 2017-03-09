@@ -10,6 +10,13 @@ services:
   - mongodb
   - redis-server
 
+addons:
+  apt:
+    sources:
+      - mongodb-3.2-precise
+    packages:
+      - mongodb-org-server
+
 matrix:
   include:
     - php: 7.1
