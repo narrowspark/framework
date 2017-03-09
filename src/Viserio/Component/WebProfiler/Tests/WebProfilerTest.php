@@ -10,7 +10,7 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\WebProfiler\AssetsRenderer;
 use Viserio\Component\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\Component\WebProfiler\TemplateManager;
-use Viserio\Component\WebProfiler\WebProfiler;
+use Viserio\Component\WebProfiler\Tests\Fixture\WebProfilerTester as WebProfiler;
 
 class WebProfilerTest extends MockeryTestCase
 {
