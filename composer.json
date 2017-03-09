@@ -157,8 +157,7 @@
         "psr-4": {
             "Viserio\\Component\\"            : "src/Viserio/Component/",
             "Viserio\\Bridge\\Doctrine\\"     : "src/Viserio/Bridge/Doctrine/",
-            "Viserio\\Bridge\\Twig\\"         : "src/Viserio/Bridge/Twig/",
-            "Narrowspark\\"                   : "benchmarks/"
+            "Viserio\\Bridge\\Twig\\"         : "src/Viserio/Bridge/Twig/"
         },
         "exclude-from-classmap"               : [
             "src/Viserio/Component/**/Tests/",
@@ -166,6 +165,11 @@
             "src/Viserio/Bridge/**/**/Tests/",
             "benchmarks/"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Narrowspark\\"                   : "benchmarks/"
+        }
     },
     "config": {
         "sort-packages"                       : true
