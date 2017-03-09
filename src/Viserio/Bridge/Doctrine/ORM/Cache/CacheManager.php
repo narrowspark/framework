@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Cache;
 
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\ApcuCache;
+use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\CouchbaseCache;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
