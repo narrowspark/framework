@@ -5,7 +5,6 @@ namespace Viserio\Component\Console\Command;
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contracts\Console\Exceptions\InvalidCommandExpression;
-use Viserio\Component\Support\Str;
 
 class ExpressionParser
 {
@@ -29,7 +28,7 @@ class ExpressionParser
         $options   = [];
 
         foreach ($tokens as $token) {
-            if (Str::startsWith($token, '--')) {
+            if (self::startsWith($token, '--')) {
                 throw new InvalidCommandExpression('An option must be enclosed by brackets: [--option]');
             }
 
@@ -56,7 +55,7 @@ class ExpressionParser
      */
     protected function isOption(string $token): bool
     {
-        return Str::startsWith($token, '[-');
+        return self::startsWith($token, '[-');
     }
 
     /**
@@ -68,13 +67,13 @@ class ExpressionParser
      */
     protected function parseArgument(string $token): InputArgument
     {
-        if (Str::endsWith($token, ']*')) {
+        if (self::endsWith($token, ']*')) {
             $mode = InputArgument::IS_ARRAY;
             $name = trim($token, '[]*');
-        } elseif (Str::endsWith($token, '*')) {
+        } elseif (self::endsWith($token, '*')) {
             $mode = InputArgument::IS_ARRAY | InputArgument::REQUIRED;
             $name = trim($token, '*');
-        } elseif (Str::startsWith($token, '[')) {
+        } elseif (self::startsWith($token, '[')) {
             $mode = InputArgument::OPTIONAL;
             $name = trim($token, '[]');
         } else {
@@ -106,10 +105,10 @@ class ExpressionParser
 
         $name = ltrim($token, '-');
 
-        if (Str::endsWith($token, '=]*')) {
+        if (self::endsWith($token, '=]*')) {
             $mode = InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY;
             $name = mb_substr($name, 0, -3);
-        } elseif (Str::endsWith($token, '=')) {
+        } elseif (self::endsWith($token, '=')) {
             $mode = InputOption::VALUE_REQUIRED;
             $name = rtrim($name, '=');
         } else {
@@ -117,5 +116,39 @@ class ExpressionParser
         }
 
         return new InputOption($name, $shortcut, $mode);
+    }
+
+    /**
+     * Determine if a given string starts with a given substring.
+     *
+     * @param string $haystack
+     * @param string $needles
+     *
+     * @return bool
+     */
+    private static function startsWith(string $haystack, string $needle): bool
+    {
+        if ($needle != '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if a given string ends with a given substring.
+     *
+     * @param string $haystack
+     * @param string $needles
+     *
+     * @return bool
+     */
+    private static function endsWith(string $haystack, string $needles): bool
+    {
+        if (substr($haystack, -strlen($needle)) === (string) $needle) {
+            return true;
+        }
+
+        return false;
     }
 }
