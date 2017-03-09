@@ -4,5 +4,4 @@ namespace Viserio\Bridge\Doctrine\ORM\Configuration\MetaData;
 
 class MetaDataManager
 {
-
 }
