@@ -127,7 +127,7 @@ final class ManagerRegistry implements BaseManagerRegistry
      */
     public function getManager($name = null): ObjectManager
     {
-        $name = $name ?: $this->getDefaultManagerName();
+        $name = $name ?? $this->getDefaultManagerName();
 
         if (! $this->hasManager($name)) {
             throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
@@ -181,7 +181,7 @@ final class ManagerRegistry implements BaseManagerRegistry
      */
     public function resetManager($name = null): ObjectManager
     {
-        $name = $name ?: $this->getDefaultManagerName();
+        $name = $name ?? $this->getDefaultManagerName();
 
         if (! $this->hasManager($name)) {
             throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
@@ -299,7 +299,7 @@ final class ManagerRegistry implements BaseManagerRegistry
      */
     public function getConnection($name = null)
     {
-        $name = $name ?: $this->getDefaultConnectionName();
+        $name = $name ?? $this->getDefaultConnectionName();
 
         if (! $this->hasConnection($name)) {
             throw new InvalidArgumentException(sprintf('Doctrine Connection named "%s" does not exist.', $name));

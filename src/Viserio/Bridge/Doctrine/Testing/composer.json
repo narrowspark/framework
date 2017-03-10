@@ -19,6 +19,7 @@
     ],
     "require": {
         "php"                                             : "^7.1",
+        "doctrine/common"                                 : "^2.7",
         "fzaninotto/faker"                                : "^1.6",
         "narrowspark/collection"                          : "^0.1"
     },
