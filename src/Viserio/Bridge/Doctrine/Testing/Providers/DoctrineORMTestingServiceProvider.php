@@ -16,7 +16,7 @@ class DoctrineORMTestingServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            EntityFactory::class => [self::class, 'createEntityFactory'],
+            EntityFactory::class  => [self::class, 'createEntityFactory'],
             FakerGenerator::class => [self::class, 'createFakerGenerator'],
         ];
     }

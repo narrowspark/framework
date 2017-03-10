@@ -2,12 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Providers;
 
-use Interop\Container\ServiceProvider;
+use Doctrine\Common\Persistence\ManagerRegistry as DoctrineManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Doctrine\ORM\ManagerRegistry;
-use Doctrine\Common\Persistence\ManagerRegistry as DoctrineManagerRegistry;
-use Doctrine\Common\Proxy\Autoloader;
 
 class DoctrineORMServiceProvicer implements ServiceProvider
 {
