@@ -2,16 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM;
 
-use Doctrine\ORM\Configuration;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Setup;
 use Interop\Container\ContainerInterface;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
 use Viserio\Bridge\Doctrine\ORM\Configuration\MetaData\MetaDataManager;
+use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
+use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 class EntityManagerFactory
