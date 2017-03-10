@@ -59,4 +59,5 @@ class EntityManagerFactory
         $this->container = $container;
 
         $this->configureOptions($this->container);
+    }
 }
