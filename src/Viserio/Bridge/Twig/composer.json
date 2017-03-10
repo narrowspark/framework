@@ -1,5 +1,5 @@
 {
-    "name"       : "viserio/bridge/twig",
+    "name"       : "viserio/bridge-twig",
     "type"       : "library",
     "description": "The Viserio Twig bridge.",
     "keywords"   : ["narrowspark", "viserio", "twig", "bridge"],

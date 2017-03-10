@@ -185,7 +185,7 @@
         "league/flysystem-ziparchive"                        : "Required to use the Flysystem ZipArchive adapter (^1.0).",
         "pda/pheanstalk"                                     : "Required to use the Beanstalk queue driver (^3.0).",
         "predis/predis"                                      : "Required to use the Redis cache and Queue drivers (^1.0).",
-        "twig/twig"                                          : "Required to use the Twig view adapter (^2.0).",
+        "twig/twig"                                          : "Required to use the Twig bridge (^2.0).",
         "spatie/array-to-xml"                                : "Required to use the XML dump (^2.1.1).",
         "yosymfony/toml"                                     : "Required to use the TOML parser (^0.3).",
         "symfony/yaml"                                       : "Required to use the Yaml parser (^3.1)."
