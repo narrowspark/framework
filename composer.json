@@ -54,7 +54,6 @@
         "narrowspark/http-status"                            : "^3.0",
         "mtdowling/cron-expression"                          : "^1.1",
         "opis/closure"                                       : "^2.2",
-        "ocramius/proxy-manager"                             : "^2.1",
         "paragonie/password_lock"                            : "^3.0",
         "php-di/invoker"                                     : "^1.3",
         "respect/validation"                                 : "^1.1",
