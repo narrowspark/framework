@@ -19,8 +19,7 @@
     ],
     "require": {
         "php"                                : "^7.1",
-        "viserio/contracts"                  : "self.version",
-        "viserio/filesystem"                 : "self.version"
+        "viserio/contracts"                  : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
