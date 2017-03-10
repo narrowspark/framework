@@ -8,9 +8,9 @@ use Viserio\Bridge\Doctrine\ORM\Configuration\MetaData\MetaDataManager;
 use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 class EntityManagerFactory implements
     RequiresComponentConfigContract,
