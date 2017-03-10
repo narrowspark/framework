@@ -10,7 +10,7 @@ class PhpInfoDataCollector extends AbstractDataCollector
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $this->data = [
             'php_version'      => PHP_VERSION,

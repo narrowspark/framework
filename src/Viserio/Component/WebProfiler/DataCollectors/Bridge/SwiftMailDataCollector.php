@@ -33,7 +33,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements PanelAware
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $mails = [];
 

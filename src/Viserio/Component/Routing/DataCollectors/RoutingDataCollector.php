@@ -30,7 +30,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $this->data = [
             'routes'  => $this->routes->getRoutes(),

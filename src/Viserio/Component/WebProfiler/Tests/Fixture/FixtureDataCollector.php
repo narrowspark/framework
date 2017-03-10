@@ -11,7 +11,7 @@ class FixtureDataCollector extends AbstractDataCollector
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
     }
 

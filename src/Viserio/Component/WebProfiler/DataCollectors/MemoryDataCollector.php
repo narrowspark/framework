@@ -29,7 +29,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $this->updateMemoryUsage();
     }

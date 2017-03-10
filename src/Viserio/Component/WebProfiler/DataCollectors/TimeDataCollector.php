@@ -57,7 +57,7 @@ class TimeDataCollector extends AbstractDataCollector
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $this->requestEndTime = microtime(true);
 
