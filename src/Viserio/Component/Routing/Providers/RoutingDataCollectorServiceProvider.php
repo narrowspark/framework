@@ -53,21 +53,25 @@ class RoutingDataCollectorServiceProvider implements
         ];
     }
 
-    public static function createWebProfiler(ContainerInterface $container, callable $getPrevious): WebProfilerContract
+    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
-        self::resolveOptions($container);
+        if ($getPrevious !== null) {
+            self::resolveOptions($container);
 
-        $profiler = $getPrevious();
+            $profiler = $getPrevious();
 
-        if (self::$options['collector']['routes']) {
-            $profiler->addCollector(
-                new RoutingDataCollector(
-                    $container->get(RouterContract::class)->getRoutes()
-                )
-            );
+            if (self::$options['collector']['routes']) {
+                $profiler->addCollector(
+                    new RoutingDataCollector(
+                        $container->get(RouterContract::class)->getRoutes()
+                    )
+                );
+            }
+
+            return $profiler;
         }
 
-        return $profiler;
+        return null;
     }
 
     /**

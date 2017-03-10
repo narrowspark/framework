@@ -69,22 +69,24 @@ class LogsDataCollectorServiceProvider implements
         return new LogParser();
     }
 
-    public static function createWebProfiler(
-        ContainerInterface $container,
-        callable $getPrevious
-    ): WebProfilerContract {
-        self::resolveOptions($container);
+    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
+    {
+        if ($getPrevious !== null) {
+            self::resolveOptions($container);
 
-        $profiler = $getPrevious();
+            $profiler = $getPrevious();
 
-        if (self::$options['collector']['logs']) {
-            $profiler->addCollector(new LogsDataCollector(
-                $container->get(LogParser::class),
-                self::$options['logs_storages']
-            ));
+            if (self::$options['collector']['logs']) {
+                $profiler->addCollector(new LogsDataCollector(
+                    $container->get(LogParser::class),
+                    self::$options['logs_storages']
+                ));
+            }
+
+            return $profiler;
         }
 
-        return $profiler;
+        return null;
     }
 
     /**

@@ -57,7 +57,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
         ];
     }
 
-    public static function createWebProfiler(ContainerInterface $container, callable $getPrevious): WebProfilerContract
+    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): WebProfilerContract
     {
         self::resolveOptions($container);
 
@@ -78,7 +78,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
         return new Twig_Profiler_Profile();
     }
 
-    public static function createTwigEnvironment(ContainerInterface $container, callable $getPrevious): TwigEnvironment
+    public static function createTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): TwigEnvironment
     {
         self::resolveOptions($container);
 

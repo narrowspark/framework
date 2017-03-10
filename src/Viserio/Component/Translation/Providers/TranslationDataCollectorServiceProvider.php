@@ -53,21 +53,23 @@ class TranslationDataCollectorServiceProvider implements
         ];
     }
 
-    public static function createWebProfiler(
-        ContainerInterface $container,
-        callable $getPrevious
-    ): WebProfilerContract {
-        self::resolveOptions($container);
+    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
+    {
+        if ($getPrevious !== null) {
+            self::resolveOptions($container);
 
-        $profiler = $getPrevious();
+            $profiler = $getPrevious();
 
-        if (self::$options['collector']['translation']) {
-            $profiler->addCollector(new ViserioTranslationDataCollector(
-                $container->get(TranslatorContract::class)
-            ));
+            if (self::$options['collector']['translation']) {
+                $profiler->addCollector(new ViserioTranslationDataCollector(
+                    $container->get(TranslatorContract::class)
+                ));
+            }
+
+            return $profiler;
         }
 
-        return $profiler;
+        return null;
     }
 
     /**

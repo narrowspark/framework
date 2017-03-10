@@ -70,25 +70,29 @@ class FoundationDataCollectorServiceProvider implements
         ];
     }
 
-    public static function createWebProfiler(ContainerInterface $container, callable $getPrevious): WebProfilerContract
+    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
-        self::resolveOptions($container);
+        if ($getPrevious !== null) {
+            self::resolveOptions($container);
 
-        $profiler = $getPrevious();
+            $profiler = $getPrevious();
 
-        if (self::$options['collector']['narrowspark']) {
-            $profiler->addCollector(static::createNarrowsparkDataCollector(), -100);
+            if (self::$options['collector']['narrowspark']) {
+                $profiler->addCollector(static::createNarrowsparkDataCollector(), -100);
+            }
+
+            if (self::$options['collector']['viserio_http']) {
+                $profiler->addCollector(static::createViserioHttpDataCollector($container), 1);
+            }
+
+            if (self::$options['collector']['files']) {
+                $profiler->addCollector(self::createFilesLoadedCollector($container));
+            }
+
+            return $profiler;
         }
 
-        if (self::$options['collector']['viserio_http']) {
-            $profiler->addCollector(static::createViserioHttpDataCollector($container), 1);
-        }
-
-        if (self::$options['collector']['files']) {
-            $profiler->addCollector(self::createFilesLoadedCollector($container));
-        }
-
-        return $profiler;
+        return null;
     }
 
     private static function createNarrowsparkDataCollector(): NarrowsparkDataCollector
