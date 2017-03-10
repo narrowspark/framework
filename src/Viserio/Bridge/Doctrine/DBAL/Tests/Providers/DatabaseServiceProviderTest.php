@@ -47,6 +47,5 @@ class DatabaseServiceProviderTest extends TestCase
         self::assertInstanceOf(Connection::class, $container->get(Connection::class));
         self::assertInstanceOf(Connection::class, $container->get('db'));
         self::assertInstanceOf(Connection::class, $container->get('database'));
-        self::assertInstanceOf(HelperSet::class, $container->get('database.command.helper'));
     }
 }
