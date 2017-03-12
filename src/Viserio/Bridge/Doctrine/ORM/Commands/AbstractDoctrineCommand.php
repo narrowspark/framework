@@ -2,17 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Commands;
 
-use LogicException;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Sharding\PoolingShardConnection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\EntityGenerator;
+use LogicException;
 use Viserio\Component\Console\Command\Command;
 
-abstract class DoctrineCommand extends Command
+abstract class AbstractDoctrineCommand extends Command
 {
     /**
-     * get a doctrine entity generator
+     * get a doctrine entity generator.
      *
      * @return \Doctrine\ORM\Tools\EntityGenerator
      */
@@ -42,7 +42,7 @@ abstract class DoctrineCommand extends Command
         $manager = $this->getContainer()->get('doctrine')->getManager($name);
 
         if ($shardId) {
-            if (!$manager->getConnection() instanceof PoolingShardConnection) {
+            if (! $manager->getConnection() instanceof PoolingShardConnection) {
                 throw new LogicException(sprintf("Connection of EntityManager '%s' must implement shards configuration.", $name));
             }
 
