@@ -7,7 +7,7 @@ class FailedJobTable extends AbstractTable
     /**
      * {@inheritdoc}
      */
-    protected function columns(): array
+    protected function getColumns(): array
     {
         return [
             $this->column('id', 'integer', true),
@@ -22,7 +22,7 @@ class FailedJobTable extends AbstractTable
     /**
      * {@inheritdoc}
      */
-    protected function indices(): array
+    protected function getIndices(): array
     {
         return [
             $this->index('pk', ['id'], true, true),

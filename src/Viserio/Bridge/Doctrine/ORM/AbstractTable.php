@@ -35,8 +35,8 @@ abstract class AbstractTable
     {
         return new Table(
             $this->table,
-            $this->columns(),
-            $this->indices()
+            $this->getColumns(),
+            $this->getIndices()
         );
     }
 
@@ -49,7 +49,7 @@ abstract class AbstractTable
      *
      * @return \Doctrine\DBAL\Schema\Column
      */
-    protected function column(string $name, string $type, bool $autoincrement = false): Column
+    protected function createColumn(string $name, string $type, bool $autoincrement = false): Column
     {
         $column = new Column($name, Type::getType($type));
         $column->setAutoincrement($autoincrement);
@@ -77,10 +77,10 @@ abstract class AbstractTable
     /**
      * @return \Doctrine\DBAL\Schema\Column[]
      */
-    abstract protected function columns(): array;
+    abstract protected function getColumns(): array;
 
     /**
      * @return \Doctrine\DBAL\Schema\Index[]
      */
-    abstract protected function indices(): array;
+    abstract protected function getIndices(): array;
 }

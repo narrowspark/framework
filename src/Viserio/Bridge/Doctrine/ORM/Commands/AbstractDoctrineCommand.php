@@ -12,7 +12,7 @@ use Viserio\Component\Console\Command\Command;
 abstract class AbstractDoctrineCommand extends Command
 {
     /**
-     * get a doctrine entity generator.
+     * Get a doctrine entity generator.
      *
      * @return \Doctrine\ORM\Tools\EntityGenerator
      */

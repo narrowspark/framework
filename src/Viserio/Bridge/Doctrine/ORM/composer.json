@@ -33,6 +33,7 @@
         "container-interop/service-provider"          : "^0.3",
         "phpunit/phpunit"                             : "^6.0",
         "symfony/serializer"                          : "^3.1",
+        "viserio/bridge-doctrine-fluent"              : "self.version",
         "viserio/console"                             : "self.version",
         "viserio/pagination"                          : "self.version"
     },
