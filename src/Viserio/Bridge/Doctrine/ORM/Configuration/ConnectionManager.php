@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Configuration;
 
-use Viserio\Component\Support\AbstractConnectionManager;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Support\AbstractConnectionManager;
 
 class ConnectionManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
 {
@@ -129,7 +129,6 @@ class ConnectionManager extends AbstractConnectionManager implements ProvidesDef
             'prefix'      => $config['prefix'],
         ];
     }
-
 
     /**
      * {@inheritdoc}

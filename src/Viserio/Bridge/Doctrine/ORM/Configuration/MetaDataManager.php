@@ -2,19 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Configuration;
 
+use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\ORM\Mapping\Driver\XmlDriver;
-use Doctrine\ORM\Mapping\Driver\YamlDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
+use Doctrine\ORM\Mapping\Driver\XmlDriver;
+use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use LaravelDoctrine\Fluent\Builders\Builder;
 use LaravelDoctrine\Fluent\FluentDriver;
-use Viserio\Component\Support\AbstractManager;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Support\AbstractManager;
 
 class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsContract
 {
@@ -25,12 +25,12 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
     {
         return [
             'default' => 'annotations',
-            'fluent' => [
+            'fluent'  => [
                 'mappings' => [],
             ],
             'annotation' => [
                 'simple' => false,
-                'paths' => [],
+                'paths'  => [],
             ],
         ];
     }
