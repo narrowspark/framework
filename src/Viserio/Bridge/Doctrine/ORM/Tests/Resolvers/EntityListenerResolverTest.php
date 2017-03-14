@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Tests\Resolvers;
 
+use Doctrine\ORM\Mapping\EntityListenerResolver as ResolverContract;
+use Interop\Container\ContainerInterface;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
-use Interop\Container\ContainerInterface;
-use Doctrine\ORM\Mapping\EntityListenerResolver as ResolverContract;
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
 class EntityListenerResolverTest extends MockeryTestCase
 {
@@ -112,7 +112,7 @@ class EntityListenerResolverTest extends MockeryTestCase
 
         $resolvedObject = $resolver->resolve(get_class($object));
 
-        $this->assertSame($object, $resolvedObject, "Resolver should not use container when directly registering");
+        $this->assertSame($object, $resolvedObject, 'Resolver should not use container when directly registering');
     }
 
     /**

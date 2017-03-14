@@ -19,10 +19,10 @@ use Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand;
 // use Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand;
 // use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Container\Container;
-use Viserio\Component\Console\Providers\ConsoleServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Bridge\Doctrine\ORM\Providers\ConsoleCommandsServiceProvider;
+use Viserio\Component\Console\Providers\ConsoleServiceProvider;
+use Viserio\Component\Container\Container;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends MockeryTestCase
 {

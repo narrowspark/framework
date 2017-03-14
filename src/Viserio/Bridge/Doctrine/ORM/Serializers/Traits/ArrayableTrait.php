@@ -15,10 +15,10 @@ trait ArrayableTrait
     {
         $serializer = new Serializer(
             [
-                new GetSetMethodNormalizer
+                new GetSetMethodNormalizer(),
             ],
             [
-            'array' => new ArrayEncoder,
+            'array' => new ArrayEncoder(),
             ]
         );
 

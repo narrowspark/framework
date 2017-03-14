@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Tests\Serializers;
 
-use Viserio\Bridge\Doctrine\ORM\Serializers\ArrayEncoder;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use PHPUnit\Framework\TestCase;
+use Viserio\Bridge\Doctrine\ORM\Serializers\ArrayEncoder;
 use Viserio\Bridge\Doctrine\ORM\Tests\Fixtures\ArrayableEntityFixture;
 
 class ArrayEncoderTest extends TestCase
@@ -17,7 +17,7 @@ class ArrayEncoderTest extends TestCase
         $this->assertEquals(
             [
                 'id'   => 'IDVALUE',
-                'name' => 'NAMEVALUE'
+                'name' => 'NAMEVALUE',
             ],
             $array
         );
@@ -28,7 +28,7 @@ class ArrayEncoderTest extends TestCase
         $this->assertEquals(
             [
                 'id'   => 'IDVALUE',
-                'name' => 'NAMEVALUE'
+                'name' => 'NAMEVALUE',
             ],
             (new ArrayableEntityFixture())->toArray()
         );
@@ -36,8 +36,8 @@ class ArrayEncoderTest extends TestCase
 
     private function serialize($entity)
     {
-        $serializer = new Serializer([new GetSetMethodNormalizer], [
-            'array' => new ArrayEncoder,
+        $serializer = new Serializer([new GetSetMethodNormalizer()], [
+            'array' => new ArrayEncoder(),
         ]);
 
         return $serializer->serialize($entity, 'array');
