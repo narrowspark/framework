@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Tests\Configuration;
 
-use Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager;
+use Cache\Bridge\Doctrine\DoctrineCacheBridge;
 use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
-use Cache\Bridge\Doctrine\DoctrineCacheBridge;
+use Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager;
 
 class CacheManagerTest extends TestCase
 {
@@ -20,9 +20,9 @@ class CacheManagerTest extends TestCase
                                 'drivers'   => [],
                                 'namespace' => false,
                             ],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ])
         );
 
