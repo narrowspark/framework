@@ -17,9 +17,9 @@ trait InteractsWithEntities
      *
      * @return object
      */
-    public function entityExists(string $class, $id)
+    public static function entityExists(string $class, $id)
     {
-        $entity = $this->entityManager()->find($class, $id);
+        $entity = self::entityManager()->find($class, $id);
 
         Assert::assertNotNull(
             $entity,
@@ -43,10 +43,10 @@ trait InteractsWithEntities
      *
      * @return void
      */
-    public function entityDoesNotExist(string $class, $id): void
+    public static function entityDoesNotExist(string $class, $id): void
     {
         Assert::assertNull(
-            $this->entityManager()->find($class, $id),
+            self::entityManager()->find($class, $id),
             sprintf(
                 'A [%s] entity was found by id: %s',
                 $class,
@@ -66,9 +66,9 @@ trait InteractsWithEntities
      *
      * @return object[]
      */
-    public function entitiesMatch(string $class, array $criteria, ?int $count = null): array
+    public static function entitiesMatch(string $class, array $criteria, ?int $count = null): array
     {
-        $entities = $this->entityManager()->getRepository($class)->findBy($criteria);
+        $entities = self::entityManager()->getRepository($class)->findBy($criteria);
 
         Assert::assertNotEmpty(
             $entities,
@@ -106,10 +106,10 @@ trait InteractsWithEntities
      *
      * @return void
      */
-    public function noEntitiesMatch(string $class, array $criteria): void
+    public static function noEntitiesMatch(string $class, array $criteria): void
     {
         Assert::assertEmpty(
-            $this->entityManager()->getRepository($class)->findBy($criteria),
+            self::entityManager()->getRepository($class)->findBy($criteria),
             "Some [$class] entities were found with the given criteria: " . print_r($criteria, true)
         );
     }
@@ -119,5 +119,5 @@ trait InteractsWithEntities
      *
      * @return \Doctrine\ORM\EntityManager
      */
-    abstract protected function entityManager(): EntityManager;
+    abstract protected static function entityManager(): EntityManager;
 }

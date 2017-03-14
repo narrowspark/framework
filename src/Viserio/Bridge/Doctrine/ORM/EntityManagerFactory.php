@@ -9,12 +9,12 @@ use Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager;
 use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-class EntityManagerFactory implements
-    RequiresComponentConfigContract,
+final class EntityManagerFactory implements
+    RequiresComponentConfigIdContract,
     RequiresMandatoryOptionsContract
 {
     use ContainerAwareTrait;
@@ -69,8 +69,6 @@ class EntityManagerFactory implements
         $this->connection = $connection;
         $this->cache      = $cache;
         $this->resolver   = $resolver;
-
-        $this->configureOptions($this->container);
     }
 
     /**
@@ -86,6 +84,16 @@ class EntityManagerFactory implements
      */
     public function getMandatoryOptions(): iterable
     {
-        return ['connections'];
+        return ['connections', 'managers'];
+    }
+
+    /**
+     * @param array $settings
+     *
+     * @return EntityManagerInterface
+     */
+    public function create(string $id)
+    {
+        $this->configureOptions($this->container, $id);
     }
 }

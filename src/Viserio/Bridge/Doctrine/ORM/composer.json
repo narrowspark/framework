@@ -19,7 +19,7 @@
     ],
     "require": {
         "php"                                         : "^7.1",
-        "cache/psr-6-doctrine-bridge"                 : "^2.2",
+        "cache/psr-6-doctrine-bridge"                 : "^3.0",
         "doctrine/orm"                                : "^2.6",
         "ext-pdo"                                     : "*",
         "ocramius/proxy-manager"                      : "^2.1",
@@ -31,6 +31,7 @@
     "require-dev": {
         "cakephp/chronos"                             : "^1.0",
         "container-interop/service-provider"          : "^0.3",
+        "narrowspark/testing-helper"                  : "^2.0",
         "phpunit/phpunit"                             : "^6.0",
         "symfony/serializer"                          : "^3.1",
         "viserio/bridge-doctrine-fluent"              : "self.version",

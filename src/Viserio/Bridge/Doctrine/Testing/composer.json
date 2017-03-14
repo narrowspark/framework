@@ -25,6 +25,7 @@
     },
     "require-dev": {
         "container-interop/service-provider"              : "^0.3",
+        "doctrine/orm"                                    : "^2.5",
         "phpunit/phpunit"                                 : "^6.0",
         "viserio/container"                               : "self.version"
     },
