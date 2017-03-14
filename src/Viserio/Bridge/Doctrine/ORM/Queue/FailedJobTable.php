@@ -10,12 +10,12 @@ class FailedJobTable extends AbstractTable
     protected function getColumns(): array
     {
         return [
-            $this->column('id', 'integer', true),
-            $this->column('connection', 'string'),
-            $this->column('queue', 'string'),
-            $this->column('payload', 'text'),
-            $this->column('failed_at', 'datetime'),
-            $this->column('exception', 'text')->setNotnull(false),
+            $this->createColumn('id', 'integer', true),
+            $this->createColumn('connection', 'string'),
+            $this->createColumn('queue', 'string'),
+            $this->createColumn('payload', 'text'),
+            $this->createColumn('failed_at', 'datetime'),
+            $this->createColumn('exception', 'text')->setNotnull(false),
         ];
     }
 
