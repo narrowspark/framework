@@ -27,6 +27,9 @@
         <testsuite name="Narrowspark Bridge Doctrine DBAL Test Suite">
             <directory>./src/Viserio/Bridge/Doctrine/DBAL/Tests</directory>
         </testsuite>
+        <testsuite name="Narrowspark Bridge Doctrine Extensions Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/Extensions/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Bridge Doctrine Fluent Test Suite">
             <directory>./src/Viserio/Bridge/Doctrine/Fluent/Tests</directory>
         </testsuite>
@@ -39,6 +42,7 @@
         <testsuite name="Narrowspark Bridge Doctrine Testing Test Suite">
             <directory>./src/Viserio/Bridge/Doctrine/Testing/Tests</directory>
         </testsuite>
+
         <testsuite name="Narrowspark Twig Bridge Test Suite">
             <directory>./src/Viserio/Bridge/Twig/Tests</directory>
         </testsuite>
