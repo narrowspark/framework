@@ -24,8 +24,10 @@ class ManagerRegistryTest extends MockeryTestCase
      */
     protected $registry;
 
-    protected function setUp()
+    public function setUp()
     {
+        parent::setUp();
+
         $this->container = $this->mock(ContainerInterface::class);
         $this->factory   = $this->mock(EntityManagerFactory::class);
 
@@ -33,5 +35,14 @@ class ManagerRegistryTest extends MockeryTestCase
             $this->container,
             $this->factory
         );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Doctrine Connection named [non-existing] does not exist.
+     */
+    public function test_cannot_non_existing_connection()
+    {
+        $this->registry->getConnection('non-existing');
     }
 }

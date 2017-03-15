@@ -136,7 +136,7 @@ final class ManagerRegistry implements BaseManagerRegistry
         $name = $name ?? $this->getDefaultManagerName();
 
         if (! $this->hasManager($name)) {
-            throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
+            throw new InvalidArgumentException(sprintf('Doctrine Manager named [%s] does not exist.', $name));
         }
 
         if (isset($this->managersMap[$name])) {
@@ -190,7 +190,7 @@ final class ManagerRegistry implements BaseManagerRegistry
         $name = $name ?? $this->getDefaultManagerName();
 
         if (! $this->hasManager($name)) {
-            throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
+            throw new InvalidArgumentException(sprintf('Doctrine Manager named [%s] does not exist.', $name));
         }
 
         // force the creation of a new document manager
@@ -308,7 +308,7 @@ final class ManagerRegistry implements BaseManagerRegistry
         $name = $name ?? $this->getDefaultConnectionName();
 
         if (! $this->hasConnection($name)) {
-            throw new InvalidArgumentException(sprintf('Doctrine Connection named "%s" does not exist.', $name));
+            throw new InvalidArgumentException(sprintf('Doctrine Connection named [%s] does not exist.', $name));
         }
 
         if (isset($this->connectionsMap[$name])) {

@@ -33,7 +33,6 @@
         "ext-fileinfo"                        : "*",
         "ext-openssl"                         : "*",
         "cache/array-adapter"                 : "^0.4",
-        "cache/chain-adapter"                 : "^0.4",
         "cakephp/chronos"                     : "^1.0",
         "container-interop/container-interop" : "^1.1",
         "container-interop/service-provider"  : "^0.3",
@@ -106,7 +105,6 @@
     "require-dev": {
         "aws/aws-sdk-php"                     : "^3.18",
         "cache/psr-6-doctrine-bridge"         : "^3.0",
-        "cache/encryption-cache"              : "^0.1",
         "cache/filesystem-adapter"            : "^0.3",
         "cache/namespaced-cache"              : "^0.1",
         "cache/session-handler"               : "^0.2",

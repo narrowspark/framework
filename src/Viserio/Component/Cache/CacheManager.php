@@ -55,49 +55,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
         return [
             'default'   => 'array',
             'namespace' => false,
-            'key'       => false,
         ];
-    }
-
-    /**
-     * Get a encrypted driver instance.
-     *
-     * @param string|null $driver
-     *
-     * @return \Cache\Encryption\EncryptedCachePool
-     */
-    public function getEncryptedDriver(string $driver = null): EncryptedCachePool
-    {
-        if (class_exists(EncryptedCachePool::class)) {
-            if ($this->options['key'] === false) {
-                throw new RuntimeException('No encryption key found.');
-            }
-
-            return new EncryptedCachePool($this->getDriver($driver), Key::loadFromAsciiSafeString($this->options['key']));
-        }
-
-        throw new RuntimeException('"Cache\Encryption\EncryptedCachePool" class not found.');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function chain(array $pools, ?array $options = null): CachePoolChain
-    {
-        $resolvedPools = [];
-
-        foreach ($pools as $pool) {
-            if (is_string($pool)) {
-                $resolvedPools[] = $this->getDriver($pool);
-            } else {
-                $resolvedPools[] = $pool;
-            }
-        }
-
-        return new CachePoolChain(
-            $resolvedPools,
-            $options ?? (array) $this->options['chain_options'] ?? []
-        );
     }
 
     /**

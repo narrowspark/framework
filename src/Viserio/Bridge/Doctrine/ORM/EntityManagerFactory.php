@@ -12,7 +12,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as Req
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
-final class EntityManagerFactory implements
+class EntityManagerFactory implements
     RequiresComponentConfigIdContract,
     RequiresMandatoryOptionsContract
 {
