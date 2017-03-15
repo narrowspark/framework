@@ -4,10 +4,9 @@ namespace Viserio\Bridge\Doctrine\ORM;
 
 use Doctrine\ORM\Tools\Setup;
 use Interop\Container\ContainerInterface;
-use Viserio\Bridge\Doctrine\ORM\Configuration\ConnectionManager;
+use Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager;
 use Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager;
 use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
-use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
@@ -26,12 +25,7 @@ final class EntityManagerFactory implements
     protected $meta;
 
     /**
-     * @var \Viserio\Bridge\Doctrine\ORM\Configuration\ConnectionManager
-     */
-    protected $connection;
-
-    /**
-     * @var \Viserio\Component\Contracts\Cache\Manager
+     * @var \Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager
      */
     protected $cache;
 
@@ -52,21 +46,19 @@ final class EntityManagerFactory implements
      * @param \Doctrine\ORM\Tools\Setup                                     $setup
      * @param \Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager    $meta
      * @param \Viserio\Bridge\Doctrine\ORM\Configuration\ConnectionManager  $connection
-     * @param \Viserio\Component\Contracts\Cache\Manager                    $cache
+     * @param \Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager       $cache
      * @param \Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver $resolver
      */
     public function __construct(
         ContainerInterface $container,
         Setup $setup,
         MetaDataManager $meta,
-        ConnectionManager $connection,
-        CacheManagerContract $cache,
+        CacheManager $cache,
         EntityListenerResolver $resolver
     ) {
         $this->container  = $container;
         $this->setup      = $setup;
         $this->meta       = $meta;
-        $this->connection = $connection;
         $this->cache      = $cache;
         $this->resolver   = $resolver;
     }
