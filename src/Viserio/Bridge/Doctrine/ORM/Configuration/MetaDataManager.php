@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Configuration;
 
+use Doctrine\ORM\Configuration;
 use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
@@ -25,12 +26,14 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
     {
         return [
             'default' => 'annotations',
-            'fluent'  => [
-                'mappings' => [],
-            ],
-            'annotation' => [
-                'simple' => false,
-                'paths'  => [],
+            'drivers' => [
+                'fluent'  => [
+                    'mappings' => [],
+                ],
+                'annotations' => [
+                    'simple' => false,
+                    'paths'  => [],
+                ],
             ],
         ];
     }
@@ -52,9 +55,9 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      */
     protected function createAnnotationsDriver(array $config): AnnotationDriver
     {
-        $config = new Configuration();
+        $configuration = new Configuration();
 
-        return $config->newDefaultAnnotationDriver(
+        return $configuration->newDefaultAnnotationDriver(
             $config['paths'],
             $config['simple']
         );
@@ -97,7 +100,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      *
      * @return \Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver
      */
-    protected function createSimplifiedyamlDriver(array $config): SimplifiedYamlDriver
+    protected function createSimplifiedYamlDriver(array $config): SimplifiedYamlDriver
     {
         return new SimplifiedYamlDriver(
             $config['paths'],

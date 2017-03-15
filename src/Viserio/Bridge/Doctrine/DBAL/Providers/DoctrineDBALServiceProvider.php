@@ -30,15 +30,18 @@ class DoctrineDBALServiceProvider implements
     public function getServices()
     {
         return [
-            Connection::class    => [self::class, 'createConnection'],
-            Configuration::class => [self::class, 'createConfiguration'],
-            EventManager::class  => [self::class, 'createEventManager'],
-            'db'                 => function (ContainerInterface $container) {
+            Connection::class         => [self::class, 'createConnection'],
+            DoctrineConnection::class => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
-            'database' => function (ContainerInterface $container) {
+            'db'                      => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
+            'database'                => function (ContainerInterface $container) {
+                return $container->get(Connection::class);
+            },
+            Configuration::class      => [self::class, 'createConfiguration'],
+            EventManager::class       => [self::class, 'createEventManager'],
         ];
     }
 
@@ -50,6 +53,13 @@ class DoctrineDBALServiceProvider implements
         return ['viserio', 'doctrine'];
     }
 
+    /**
+     * Create a new doctrine connection.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Doctrine\DBAL\Connection
+     */
     public static function createConnection(ContainerInterface $container): DoctrineConnection
     {
         self::resolveOptions($container);
@@ -61,16 +71,31 @@ class DoctrineDBALServiceProvider implements
         );
     }
 
+    /**
+     * Create a new doctrine configuration.
+     *
+     * @return \Doctrine\DBAL\Configuration
+     */
     public static function createConfiguration(): Configuration
     {
         return new Configuration();
     }
 
+    /**
+     * Create a new doctrine event manager.
+     *
+     * @return \Doctrine\Common\EventManager
+     */
     public static function createEventManager(): EventManager
     {
         return new EventManager();
     }
 
+    /**
+     * Map our config style to doctrine config.
+     *
+     * @return array
+     */
     private static function parseConfig(array $config): array
     {
         $connections = $config['connections'][$config['default']];

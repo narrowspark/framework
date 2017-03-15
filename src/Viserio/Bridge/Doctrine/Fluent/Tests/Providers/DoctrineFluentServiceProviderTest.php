@@ -15,6 +15,8 @@ class DoctrineFluentServiceProviderTest extends TestCase
     public function testProvider()
     {
         $container = new Container();
+
+        $container->instance(Configuration::class, new Configuration());
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new DoctrineDBALServiceProvider());
         $container->register(new DoctrineFluentServiceProvider());
@@ -44,6 +46,6 @@ class DoctrineFluentServiceProviderTest extends TestCase
         ]);
 
         self::assertInstanceOf(FluentDriver::class, $container->get(FluentDriver::class));
-        self::assertNull($container->get(Configuration::class));
+        self::assertInstanceOf(FluentDriver::class, $container->get(Configuration::class)->getMetadataDriverImpl());
     }
 }

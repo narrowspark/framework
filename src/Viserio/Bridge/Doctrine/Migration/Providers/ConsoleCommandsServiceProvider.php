@@ -55,6 +55,14 @@ class ConsoleCommandsServiceProvider implements
         return ['migrations'];
     }
 
+    /**
+     * Extend viserio console with new commands.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Viserio\Component\Contracts\Console\Application
+     */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
     {
         if ($getPrevious !== null) {
@@ -68,6 +76,13 @@ class ConsoleCommandsServiceProvider implements
         return null;
     }
 
+    /**
+     * Create and configure migrations commands.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return array
+     */
     private static function createMigrationsCommands(ContainerInterface $container): array
     {
         self::resolveOptions($container);

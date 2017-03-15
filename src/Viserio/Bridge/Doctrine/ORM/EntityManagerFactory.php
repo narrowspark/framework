@@ -96,4 +96,28 @@ final class EntityManagerFactory implements
     {
         $this->configureOptions($this->container, $id);
     }
+
+    /**
+     * Map our config style to the dortrine config style.
+     *
+     * @param array $configs
+     *
+     * @return array
+     */
+    private static function mapConnectionKey(array $configs): array
+    {
+        $mapList = [
+            'dbname' => 'database',
+            'user' => 'username',
+        ];
+
+        foreach ($mapList as $newKey => $oldKey) {
+            if ($configs[$oldKey]) {
+                $arr[$newKey] = $arr[$oldKey];
+                unset($arr[$oldKey]);
+            }
+        }
+
+        return $configs;
+    }
 }

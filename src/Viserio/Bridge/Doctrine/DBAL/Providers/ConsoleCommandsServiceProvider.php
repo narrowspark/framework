@@ -24,6 +24,14 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * Extend viserio console with new commands.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Viserio\Component\Contracts\Console\Application
+     */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
     {
         if ($getPrevious !== null) {

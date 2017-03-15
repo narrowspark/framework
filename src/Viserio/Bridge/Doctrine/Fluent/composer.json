@@ -25,7 +25,7 @@
     },
     "require-dev": {
         "phpunit/phpunit"                                : "^6.0",
-        "viserio/bridge-doctrine-dbal"                   : "self.version",
+        "doctrine/orm"                                   : "self.version",
         "viserio/container"                              : "self.version"
     },
     "autoload": {

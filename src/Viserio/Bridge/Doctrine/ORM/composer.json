@@ -24,6 +24,7 @@
         "ext-pdo"                                     : "*",
         "ocramius/proxy-manager"                      : "^2.1",
         "viserio/cache"                               : "self.version",
+        "viserio/bridge-doctrine-dbal"                : "self.version",
         "viserio/contracts"                           : "self.version",
         "viserio/options-resolver"                    : "self.version",
         "viserio/support"                             : "self.version"

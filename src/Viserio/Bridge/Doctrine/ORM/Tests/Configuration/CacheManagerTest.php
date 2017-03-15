@@ -27,5 +27,6 @@ class CacheManagerTest extends TestCase
         );
 
         self::assertInstanceOf(DoctrineCacheBridge::class, $manager->getDriver('array'));
+        self::assertInstanceOf(DoctrineCacheBridge::class, $manager->getDriver());
     }
 }

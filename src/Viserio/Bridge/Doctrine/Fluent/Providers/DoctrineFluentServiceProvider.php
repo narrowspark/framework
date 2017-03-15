@@ -8,8 +8,12 @@ use Interop\Container\ServiceProvider;
 use LaravelDoctrine\Fluent\FluentDriver;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
-class DoctrineFluentServiceProvider implements ServiceProvider, RequiresComponentConfigContract
+class DoctrineFluentServiceProvider implements
+    ServiceProvider,
+    ProvidesDefaultOptionsContract,
+    RequiresComponentConfigContract
 {
     /**
      * Resolved cached options.
@@ -17,6 +21,16 @@ class DoctrineFluentServiceProvider implements ServiceProvider, RequiresComponen
      * @var array
      */
     private static $options;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'mappings' => [],
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -37,18 +51,33 @@ class DoctrineFluentServiceProvider implements ServiceProvider, RequiresComponen
         return ['viserio', 'doctrine', 'fluent'];
     }
 
+    /**
+     * Create a new fluent driver.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \LaravelDoctrine\Fluent\FluentDriver
+     */
     public static function createFluentDriver(ContainerInterface $container): FluentDriver
     {
         self::resolveOptions($container);
 
-        return new FluentDriver(self::$options['mappings'] ?? []);
+        return new FluentDriver(self::$options['mappings']);
     }
 
+    /**
+     * Extend doctrine configuration.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Doctrine\ORM\Configuration
+     */
     public static function createConfiguration(ContainerInterface $container, ?callable $getPrevious = null): ?Configuration
     {
         if ($getPrevious !== null) {
             $config = $getPrevious();
-            $config->setMetadataDriverImpl($fluent);
+            $config->setMetadataDriverImpl($container->get(FluentDriver::class));
 
             return $config;
         }
