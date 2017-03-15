@@ -2,11 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cache\Tests;
 
-use Cache\Adapter\Chain\CachePoolChain;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
-use Cache\Adapter\Void\VoidCachePool;
-use Cache\Encryption\EncryptedCachePool;
 use Cache\Namespaced\NamespacedCachePool;
 use Defuse\Crypto\Key;
 use League\Flysystem\Adapter\Local;
