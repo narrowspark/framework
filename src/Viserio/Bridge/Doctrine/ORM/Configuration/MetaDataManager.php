@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Configuration;
 
-use Doctrine\ORM\Configuration;
 use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;

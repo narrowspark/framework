@@ -108,7 +108,7 @@ final class EntityManagerFactory implements
     {
         $mapList = [
             'dbname' => 'database',
-            'user' => 'username',
+            'user'   => 'username',
         ];
 
         foreach ($mapList as $newKey => $oldKey) {

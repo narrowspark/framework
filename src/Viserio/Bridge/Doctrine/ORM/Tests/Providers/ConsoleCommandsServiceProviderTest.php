@@ -2,13 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Tests\Providers;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand;
 use Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand;
 use Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand;
 use Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand;
 use Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand;
 use Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand;
-use Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand;
 use Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand;
 use Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand;
 use Doctrine\ORM\Tools\Console\Command\InfoCommand;
@@ -20,12 +21,10 @@ use Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand;
 use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Doctrine\ORM\Providers\ConsoleCommandsServiceProvider;
+use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Console\Application;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\DBAL\Connection;
 
 class ConsoleCommandsServiceProviderTest extends MockeryTestCase
 {

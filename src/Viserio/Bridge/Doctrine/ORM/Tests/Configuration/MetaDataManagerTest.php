@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Tests\Configuration;
 
+use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
+use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
-use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
-use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
-use PHPUnit\Framework\TestCase;
 use LaravelDoctrine\Fluent\FluentDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
+use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager;
 
 class MetaDataManagerTest extends TestCase
@@ -26,7 +26,7 @@ class MetaDataManagerTest extends TestCase
                             ],
                         ],
                     ],
-                ]
+                ],
             ]
         );
 
@@ -45,13 +45,13 @@ class MetaDataManagerTest extends TestCase
                             'drivers' => [
                                 'xml' => [
                                     'paths' => [
-                                        __DIR__
-                                    ]
-                                ]
+                                        __DIR__,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                ]
+                ],
             ]
         );
 
@@ -69,13 +69,13 @@ class MetaDataManagerTest extends TestCase
                             'drivers' => [
                                 'yaml' => [
                                     'paths' => [
-                                        __DIR__
-                                    ]
-                                ]
+                                        __DIR__,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                ]
+                ],
             ]
         );
 
@@ -93,13 +93,13 @@ class MetaDataManagerTest extends TestCase
                             'drivers' => [
                                 'simplified_yaml' => [
                                     'paths' => [
-                                        __DIR__
-                                    ]
-                                ]
+                                        __DIR__,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                ]
+                ],
             ]
         );
 
@@ -117,13 +117,13 @@ class MetaDataManagerTest extends TestCase
                             'drivers' => [
                                 'simplified_xml' => [
                                     'paths' => [
-                                        __DIR__
-                                    ]
-                                ]
+                                        __DIR__,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                ]
+                ],
             ]
         );
 
@@ -141,13 +141,13 @@ class MetaDataManagerTest extends TestCase
                             'drivers' => [
                                 'static_php' => [
                                     'paths' => [
-                                        __DIR__
-                                    ]
-                                ]
+                                        __DIR__,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                ]
+                ],
             ]
         );
 
@@ -165,13 +165,13 @@ class MetaDataManagerTest extends TestCase
                             'drivers' => [
                                 'php' => [
                                     'paths' => [
-                                        __DIR__
-                                    ]
-                                ]
+                                        __DIR__,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                ]
+                ],
             ]
         );
 
@@ -189,13 +189,13 @@ class MetaDataManagerTest extends TestCase
                             'drivers' => [
                                 'fluent' => [
                                     'paths' => [
-                                        __DIR__
-                                    ]
-                                ]
+                                        __DIR__,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                ]
+                ],
             ]
         );
 

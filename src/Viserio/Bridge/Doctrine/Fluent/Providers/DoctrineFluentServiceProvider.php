@@ -6,9 +6,9 @@ use Doctrine\ORM\Configuration;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use LaravelDoctrine\Fluent\FluentDriver;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
 class DoctrineFluentServiceProvider implements
     ServiceProvider,
