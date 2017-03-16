@@ -46,7 +46,7 @@ class Factory implements ArrayAccess
             throw new RuntimeException(sprintf('[%s] is not a directory.', $pathToFactories));
         }
 
-        foreach (Finder::create()->files()->in($pathToFactories) as $file) {
+        foreach (Finder::create()->files()->name('*.php')->in($pathToFactories) as $file) {
             require $file->getRealPath();
         }
     }
