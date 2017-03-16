@@ -48,7 +48,6 @@ install:
   - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
   - mkdir %APPDATA%\Composer
   - composer self-update --no-progress --ansi
-  - composer global require hirak/prestissimo:dev-master --no-progress --ansi
   - composer require alcaeus/mongo-php-adapter
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd c:\projects\narrowspark
