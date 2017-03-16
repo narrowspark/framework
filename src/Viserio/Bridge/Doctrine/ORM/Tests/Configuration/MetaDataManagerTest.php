@@ -34,171 +34,34 @@ class MetaDataManagerTest extends TestCase
         self::assertInstanceOf(AnnotationDriver::class, $manager->getDriver('annotations'));
     }
 
-    public function testGetDriverWithXml()
+    /**
+     * @dataProvider metaDriverProvider
+     */
+    public function testMetaDataDriver(array $config, $driverClass, $driverName)
     {
         $manager = new MetaDataManager(
             [
                 'viserio' => [
                     'doctrine' => [
-                        'metadata' => [
-                            'default' => 'xml',
-                            'drivers' => [
-                                'xml' => [
-                                    'paths' => [
-                                        __DIR__,
-                                    ],
-                                ],
-                            ],
-                        ],
+                        'metadata' => $config,
                     ],
                 ],
             ]
         );
 
-        self::assertInstanceOf(XmlDriver::class, $manager->getDriver('xml'));
+        self::assertInstanceOf($driverClass, $manager->getDriver($driverName));
     }
 
-    public function testGetDriverWithYaml()
+    public function metaDriverProvider()
     {
-        $manager = new MetaDataManager(
-            [
-                'viserio' => [
-                    'doctrine' => [
-                        'metadata' => [
-                            'default' => 'yaml',
-                            'drivers' => [
-                                'yaml' => [
-                                    'paths' => [
-                                        __DIR__,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ]
-        );
-
-        self::assertInstanceOf(YamlDriver::class, $manager->getDriver('yaml'));
-    }
-
-    public function testGetDriverWithSimplifiedYaml()
-    {
-        $manager = new MetaDataManager(
-            [
-                'viserio' => [
-                    'doctrine' => [
-                        'metadata' => [
-                            'default' => 'simplified_yaml',
-                            'drivers' => [
-                                'simplified_yaml' => [
-                                    'paths' => [
-                                        __DIR__,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ]
-        );
-
-        self::assertInstanceOf(SimplifiedYamlDriver::class, $manager->getDriver('simplified_yaml'));
-    }
-
-    public function testGetDriverWithSimplifiedXml()
-    {
-        $manager = new MetaDataManager(
-            [
-                'viserio' => [
-                    'doctrine' => [
-                        'metadata' => [
-                            'default' => 'simplified_xml',
-                            'drivers' => [
-                                'simplified_xml' => [
-                                    'paths' => [
-                                        __DIR__,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ]
-        );
-
-        self::assertInstanceOf(SimplifiedXmlDriver::class, $manager->getDriver('simplified_xml'));
-    }
-
-    public function testGetDriverWithStaticPHP()
-    {
-        $manager = new MetaDataManager(
-            [
-                'viserio' => [
-                    'doctrine' => [
-                        'metadata' => [
-                            'default' => 'static_php',
-                            'drivers' => [
-                                'static_php' => [
-                                    'paths' => [
-                                        __DIR__,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ]
-        );
-
-        self::assertInstanceOf(StaticPHPDriver::class, $manager->getDriver('static_php'));
-    }
-
-    public function testGetDriverWithPHP()
-    {
-        $manager = new MetaDataManager(
-            [
-                'viserio' => [
-                    'doctrine' => [
-                        'metadata' => [
-                            'default' => 'php',
-                            'drivers' => [
-                                'php' => [
-                                    'paths' => [
-                                        __DIR__,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ]
-        );
-
-        self::assertInstanceOf(PHPDriver::class, $manager->getDriver('php'));
-    }
-
-    public function testGetDriverWithFluent()
-    {
-        $manager = new MetaDataManager(
-            [
-                'viserio' => [
-                    'doctrine' => [
-                        'metadata' => [
-                            'default' => 'fluent',
-                            'drivers' => [
-                                'fluent' => [
-                                    'paths' => [
-                                        __DIR__,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ]
-        );
-
-        self::assertInstanceOf(FluentDriver::class, $manager->getDriver('fluent'));
+        return [
+            [['default' => 'xml', 'drivers' => ['xml' => ['paths' => [__DIR__,],],],], XmlDriver::class, 'xml'],
+            [['default' => 'yaml', 'drivers' => ['yaml' => ['paths' => [__DIR__,],],],], YamlDriver::class, 'yaml'],
+            [['default' => 'simplified_yaml', 'drivers' => ['simplified_yaml' => ['paths' => [__DIR__,],],],], SimplifiedYamlDriver::class, 'simplified_yaml'],
+            [['default' => 'simplified_xml', 'drivers' => ['simplified_xml' => ['paths' => [__DIR__,],],],], SimplifiedXmlDriver::class, 'simplified_xml'],
+            [['default' => 'static_php', 'drivers' => ['static_php' => ['paths' => [__DIR__,],],],], StaticPHPDriver::class, 'static_php'],
+            [['default' => 'php', 'drivers' => ['php' => ['paths' => [__DIR__,],],],], PHPDriver::class, 'php'],
+            [['default' => 'fluent', 'drivers' => ['fluent' => ['paths' => [__DIR__,],],],], FluentDriver::class, 'fluent'],
+        ];
     }
 }

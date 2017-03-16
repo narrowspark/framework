@@ -15,12 +15,12 @@ final class ManagerRegistry implements BaseManagerRegistry
     use ContainerAwareTrait;
 
     /**
-     * @const
+     * @var string MANAGER_BINDING_PREFIX
      */
     public const MANAGER_BINDING_PREFIX = 'doctrine.managers.';
 
     /**
-     * @const
+     * @var string CONNECTION_BINDING_PREFIX
      */
     public const CONNECTION_BINDING_PREFIX = 'doctrine.connections.';
 
