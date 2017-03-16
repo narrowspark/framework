@@ -40,34 +40,6 @@ class CacheManagerTest extends MockeryTestCase
         self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No encryption key found.
-     */
-    public function testEncryptedArrayPoolCallThrowException()
-    {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'cache' => [
-                    'drivers' => [],
-                ],
-            ]);
-        $manager = new CacheManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
-
-        $manager->getEncryptedDriver('array');
-    }
-
     public function testArrayPoolCallWithLog()
     {
         $config = $this->mock(RepositoryContract::class);
