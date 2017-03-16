@@ -6,5 +6,4 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 
 class FactoryTest extends MockeryTestCase
 {
-
 }
