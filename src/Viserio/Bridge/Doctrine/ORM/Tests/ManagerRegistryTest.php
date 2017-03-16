@@ -41,7 +41,7 @@ class ManagerRegistryTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Doctrine Connection named [non-existing] does not exist.
      */
-    public function test_cannot_non_existing_connection()
+    public function testCannotNonExistingConnection()
     {
         $this->registry->getConnection('non-existing');
     }

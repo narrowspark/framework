@@ -6,7 +6,7 @@ namespace Viserio\Bridge\Doctrine\ORM\Tests\Providers;
 // use Viserio\Component\Container\Container;
 // use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
-// class DatabaseServiceProviderTest extends TestCase
+// class DoctrineORMServiceProviderTest extends TestCase
 // {
 //     public function testProvider()
 //     {
