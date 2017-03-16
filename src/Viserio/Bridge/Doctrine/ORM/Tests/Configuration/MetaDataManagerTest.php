@@ -36,6 +36,8 @@ class MetaDataManagerTest extends TestCase
 
     /**
      * @dataProvider metaDriverProvider
+     * @param mixed $driverClass
+     * @param mixed $driverName
      */
     public function testMetaDataDriver(array $config, $driverClass, $driverName)
     {
@@ -55,13 +57,13 @@ class MetaDataManagerTest extends TestCase
     public function metaDriverProvider()
     {
         return [
-            [['default' => 'xml', 'drivers' => ['xml' => ['paths' => [__DIR__,],],],], XmlDriver::class, 'xml'],
-            [['default' => 'yaml', 'drivers' => ['yaml' => ['paths' => [__DIR__,],],],], YamlDriver::class, 'yaml'],
-            [['default' => 'simplified_yaml', 'drivers' => ['simplified_yaml' => ['paths' => [__DIR__,],],],], SimplifiedYamlDriver::class, 'simplified_yaml'],
-            [['default' => 'simplified_xml', 'drivers' => ['simplified_xml' => ['paths' => [__DIR__,],],],], SimplifiedXmlDriver::class, 'simplified_xml'],
-            [['default' => 'static_php', 'drivers' => ['static_php' => ['paths' => [__DIR__,],],],], StaticPHPDriver::class, 'static_php'],
-            [['default' => 'php', 'drivers' => ['php' => ['paths' => [__DIR__,],],],], PHPDriver::class, 'php'],
-            [['default' => 'fluent', 'drivers' => ['fluent' => ['paths' => [__DIR__,],],],], FluentDriver::class, 'fluent'],
+            [['default' => 'xml', 'drivers' => ['xml' => ['paths' => [__DIR__]]]], XmlDriver::class, 'xml'],
+            [['default' => 'yaml', 'drivers' => ['yaml' => ['paths' => [__DIR__]]]], YamlDriver::class, 'yaml'],
+            [['default' => 'simplified_yaml', 'drivers' => ['simplified_yaml' => ['paths' => [__DIR__]]]], SimplifiedYamlDriver::class, 'simplified_yaml'],
+            [['default' => 'simplified_xml', 'drivers' => ['simplified_xml' => ['paths' => [__DIR__]]]], SimplifiedXmlDriver::class, 'simplified_xml'],
+            [['default' => 'static_php', 'drivers' => ['static_php' => ['paths' => [__DIR__]]]], StaticPHPDriver::class, 'static_php'],
+            [['default' => 'php', 'drivers' => ['php' => ['paths' => [__DIR__]]]], PHPDriver::class, 'php'],
+            [['default' => 'fluent', 'drivers' => ['fluent' => ['paths' => [__DIR__]]]], FluentDriver::class, 'fluent'],
         ];
     }
 }
