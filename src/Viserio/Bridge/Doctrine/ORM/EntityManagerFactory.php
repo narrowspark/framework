@@ -2,21 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM;
 
-use InvalidArgumentException;
-use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\Configuration;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Setup;
 use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
 use Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager;
 use Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager;
 use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
 class EntityManagerFactory implements
     RequiresComponentConfigIdContract,
@@ -85,7 +85,7 @@ class EntityManagerFactory implements
     {
         return [
             'logger' => false,
-            'cache' => [
+            'cache'  => [
                 'default' => 'array',
             ],
             'proxies' => [
@@ -93,12 +93,12 @@ class EntityManagerFactory implements
                 'namespace'     => false,
             ],
             'second_level_cache' => false,
-            'repository' => EntityRepository::class,
-            'dql'   => [
+            'repository'         => EntityRepository::class,
+            'dql'                => [
                 'datetime_functions' => [],
                 'numeric_functions'  => [],
                 'string_functions'   => [],
-            ]
+            ],
         ];
     }
 
@@ -160,48 +160,6 @@ class EntityManagerFactory implements
             $logger = $this->container->get($loggerClass);
             $logger->register($em, $configuration);
         }
-    }
-
-    /**
-     * @param EntityManagerInterface $manager
-     */
-    private function registerListener(EntityManagerInterface $manager)
-    {
-        if (is_array($listener)) {
-            foreach ($listener as $individualListener) {
-                $this->registerListener($event, $individualListener, $manager);
-            }
-            return;
-        }
-
-        try {
-            $resolvedListener = $this->container->make($listener);
-        } catch (ReflectionException $e) {
-            throw new InvalidArgumentException(
-                "Listener {$listener} could not be resolved: {$e->getMessage()}",
-                0,
-                $e
-            );
-        }
-
-        $manager->getEventManager()->addEventListener($event, $resolvedListener);
-    }
-
-    /**
-     * Set a metadata driver to doctrine.
-     *
-     * @param \Doctrine\ORM\Configuration $configuration
-     *
-     * @return \Doctrine\ORM\Configuration
-     */
-    private function setMetadataDriver(Configuration $configuration): Configuration
-    {
-        $metadata = $this->meta->getDriver($this->options['metadata']['default']);
-
-        $configuration->setMetadataDriverImpl($metadata['driver']);
-        $configuration->setClassMetadataFactoryName($metadata['meta_factory']);
-
-        return $configuration;
     }
 
     /**
@@ -295,14 +253,57 @@ class EntityManagerFactory implements
     protected function decorateManager(EntityManagerInterface $manager): EntityManagerInterface
     {
         if ($decorator = $this->options['decorator']) {
-            if (!class_exists($decorator)) {
-                throw new InvalidArgumentException(sprintf("EntityManagerDecorator [%s] does not exist", $decorator));
+            if (! class_exists($decorator)) {
+                throw new InvalidArgumentException(sprintf('EntityManagerDecorator [%s] does not exist', $decorator));
             }
 
             $manager = new $decorator($manager);
         }
 
         return $manager;
+    }
+
+    /**
+     * @param EntityManagerInterface $manager
+     */
+    private function registerListener(EntityManagerInterface $manager)
+    {
+        if (is_array($listener)) {
+            foreach ($listener as $individualListener) {
+                $this->registerListener($event, $individualListener, $manager);
+            }
+
+            return;
+        }
+
+        try {
+            $resolvedListener = $this->container->make($listener);
+        } catch (ReflectionException $e) {
+            throw new InvalidArgumentException(
+                "Listener {$listener} could not be resolved: {$e->getMessage()}",
+                0,
+                $e
+            );
+        }
+
+        $manager->getEventManager()->addEventListener($event, $resolvedListener);
+    }
+
+    /**
+     * Set a metadata driver to doctrine.
+     *
+     * @param \Doctrine\ORM\Configuration $configuration
+     *
+     * @return \Doctrine\ORM\Configuration
+     */
+    private function setMetadataDriver(Configuration $configuration): Configuration
+    {
+        $metadata = $this->meta->getDriver($this->options['metadata']['default']);
+
+        $configuration->setMetadataDriverImpl($metadata['driver']);
+        $configuration->setClassMetadataFactoryName($metadata['meta_factory']);
+
+        return $configuration;
     }
 
     /**

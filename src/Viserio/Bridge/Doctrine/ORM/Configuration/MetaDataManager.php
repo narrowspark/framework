@@ -2,19 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Configuration;
 
-use Doctrine\ORM\Mapping\ClassMetadataFactory;
-use LaravelDoctrine\Fluent\Extensions\ExtensibleClassMetadataFactory;
 use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use LaravelDoctrine\Fluent\Builders\Builder;
+use LaravelDoctrine\Fluent\Extensions\ExtensibleClassMetadataFactory;
 use LaravelDoctrine\Fluent\FluentDriver;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
@@ -64,7 +63,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
                 $config['paths'],
                 $config['simple']
             ),
-            'meta_factory' => ClassMetadataFactory::class
+            'meta_factory' => ClassMetadataFactory::class,
         ];
     }
 
@@ -82,7 +81,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
                 $config['paths'],
                 $config['extension'] ?? XmlDriver::DEFAULT_FILE_EXTENSION
             ),
-            'meta_factory' => ClassMetadataFactory::class
+            'meta_factory' => ClassMetadataFactory::class,
         ];
     }
 
@@ -100,7 +99,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
                 $config['paths'],
                 $config['extension'] ?? YamlDriver::DEFAULT_FILE_EXTENSION
             ),
-            'meta_factory' => ClassMetadataFactory::class
+            'meta_factory' => ClassMetadataFactory::class,
         ];
     }
 
@@ -118,7 +117,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
                 $config['paths'],
                 $config['extension'] ?? SimplifiedYamlDriver::DEFAULT_FILE_EXTENSION
             ),
-            'meta_factory' => ClassMetadataFactory::class
+            'meta_factory' => ClassMetadataFactory::class,
         ];
     }
 
@@ -136,7 +135,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
                 $config['paths'],
                 $config['extension'] ?? SimplifiedXmlDriver::DEFAULT_FILE_EXTENSION
             ),
-            'meta_factory' => ClassMetadataFactory::class
+            'meta_factory' => ClassMetadataFactory::class,
         ];
     }
 
@@ -150,8 +149,8 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
     protected function createStaticPhpDriver(array $config): array
     {
         return [
-            'driver' => new StaticPHPDriver($config['paths']),
-            'meta_factory' => ClassMetadataFactory::class
+            'driver'       => new StaticPHPDriver($config['paths']),
+            'meta_factory' => ClassMetadataFactory::class,
         ];
     }
 
@@ -165,8 +164,8 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
     protected function createPhpDriver(array $config): array
     {
         return [
-            'driver' => new PHPDriver($config['paths']),
-            'meta_factory' => ClassMetadataFactory::class
+            'driver'       => new PHPDriver($config['paths']),
+            'meta_factory' => ClassMetadataFactory::class,
         ];
     }
 
@@ -186,8 +185,8 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
         });
 
         return [
-            'driver' => $driver,
-            'meta_factory' => ExtensibleClassMetadataFactory::class
+            'driver'       => $driver,
+            'meta_factory' => ExtensibleClassMetadataFactory::class,
         ];
     }
 
