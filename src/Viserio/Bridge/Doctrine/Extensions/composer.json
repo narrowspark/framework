@@ -22,6 +22,7 @@
         "doctrine/common"                                    : "^2.7"
     },
     "require-dev": {
+        "cakephp/chronos"                                    : "^1.0",
         "container-interop/service-provider"                 : "^0.3",
         "beberlei/DoctrineExtensions"                        : "^1.0",
         "gedmo/doctrine-extensions"                          : "^2.4",

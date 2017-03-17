@@ -2,7 +2,7 @@
     "name"       : "viserio/doctrine-orm-bridge",
     "type"       : "library",
     "description": "The Viserio Doctrine ORM bridge.",
-    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "orm", "bridge"],
+    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "orm", "bridge", "fluent"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -30,12 +30,11 @@
         "viserio/support"                             : "self.version"
     },
     "require-dev": {
-        "cakephp/chronos"                             : "^1.0",
         "container-interop/service-provider"          : "^0.3",
+        "laravel-doctrine/fluent"                     : "^1.1",
         "narrowspark/testing-helper"                  : "^2.0",
         "phpunit/phpunit"                             : "^6.0",
         "symfony/serializer"                          : "^3.1",
-        "viserio/bridge-doctrine-fluent"              : "self.version",
         "viserio/console"                             : "self.version",
         "viserio/pagination"                          : "self.version"
     },
