@@ -36,6 +36,7 @@ class MetaDataManagerTest extends TestCase
 
     /**
      * @dataProvider metaDriverProvider
+     *
      * @param mixed $driverClass
      * @param mixed $driverName
      */
