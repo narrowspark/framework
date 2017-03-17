@@ -1,7 +1,7 @@
 {
-    "name"       : "viserio/bridge-doctrine-dbal",
+    "name"       : "viserio/doctrine-dbal-bridge",
     "type"       : "library",
-    "description": "The Viserio Doctrine bridge.",
+    "description": "The Viserio Doctrine DBAL bridge.",
     "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "dbal", "bridge"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",

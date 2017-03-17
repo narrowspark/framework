@@ -1,7 +1,7 @@
 {
-    "name"       : "viserio/bridge-doctrine-orm",
+    "name"       : "viserio/doctrine-orm-bridge",
     "type"       : "library",
-    "description": "The Viserio Doctrine bridge.",
+    "description": "The Viserio Doctrine ORM bridge.",
     "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "orm", "bridge"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
@@ -43,6 +43,7 @@
         "psr-4": {
             "Viserio\\Bridge\\Doctrine\\ORM\\"        : ""
         },
+        "files"                                       : ["ClassAliases.php"],
         "exclude-from-classmap"                       : ["/Tests/"]
     },
     "autoload-dev": {

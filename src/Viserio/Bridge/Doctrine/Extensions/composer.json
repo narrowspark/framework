@@ -1,5 +1,5 @@
 {
-    "name"       : "viserio/bridge-doctrine-extensions",
+    "name"       : "viserio/doctrine-extensions-bridge",
     "type"       : "library",
     "description": "The Viserio Doctrine Extensions bridge.",
     "keywords"   : ["narrowspark", "viserio", "extensions", "doctrine", "bridge", "gedmo", "beberlei", "data mapper"],
