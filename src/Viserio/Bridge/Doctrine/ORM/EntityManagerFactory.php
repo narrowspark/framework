@@ -2,7 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM;
 
+use InvalidArgumentException;
 use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Interop\Container\ContainerInterface;
 use Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager;
 use Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager;
@@ -11,10 +16,12 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
 class EntityManagerFactory implements
     RequiresComponentConfigIdContract,
-    RequiresMandatoryOptionsContract
+    RequiresMandatoryOptionsContract,
+    ProvidesDefaultOptionsContract
 {
     use ContainerAwareTrait;
     use ConfigurationTrait;
@@ -68,7 +75,31 @@ class EntityManagerFactory implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio', 'doctrine'];
+        return ['viserio', 'doctrine', 'orm'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'logger' => false,
+            'cache' => [
+                'default' => 'array',
+            ],
+            'proxies' => [
+                'auto_generate' => false,
+                'namespace'     => false,
+            ],
+            'second_level_cache' => false,
+            'repository' => EntityRepository::class,
+            'dql'   => [
+                'datetime_functions' => [],
+                'numeric_functions'  => [],
+                'string_functions'   => [],
+            ]
+        ];
     }
 
     /**
@@ -76,17 +107,202 @@ class EntityManagerFactory implements
      */
     public function getMandatoryOptions(): iterable
     {
-        return ['connections', 'managers'];
+        return [
+            'connections',
+            'proxies' => [
+                'path',
+            ],
+        ];
     }
 
     /**
-     * @param array $settings
+     * @param string $id
      *
-     * @return EntityManagerInterface
+     * @return \Doctrine\ORM\EntityManagerInterface
      */
-    public function create(string $id)
+    public function create(string $id): EntityManagerInterface
     {
         $this->configureOptions($this->container, $id);
+
+        $configuration = $this->setup->createConfiguration(
+            $this->options['env'] === 'develop',
+            $this->options['proxies']['path'],
+            $this->cache->getDriver($this->options['cache']['default'])
+        );
+
+        $configuration = $this->setMetadataDriver($configuration);
+        $configuration = $this->configureCustomFunctions($configuration);
+        $configuration = $this->configureFirstLevelCacheSettings($configuration);
+        $configuration = $this->configureProxies($configuration);
+
+        $configuration->setDefaultRepositoryClassName($this->options['repository']);
+        $configuration->setEntityListenerResolver($this->resolver);
+
+        $manager = EntityManager::create(
+            [/*TODO*/],
+            $configuration
+        );
+
+        $this->registerLogger($manager, $configuration);
+
+        return $manager;
+    }
+
+    /**
+     * Register a logger.
+     *
+     * @param \Doctrine\ORM\EntityManagerInterface $em
+     * @param \Doctrine\ORM\Configuration          $configuration
+     */
+    protected function registerLogger(EntityManagerInterface $em, Configuration $configuration)
+    {
+        if (($loggerClass = $this->options['logger']) !== false) {
+            $logger = $this->container->get($loggerClass);
+            $logger->register($em, $configuration);
+        }
+    }
+
+    /**
+     * @param EntityManagerInterface $manager
+     */
+    private function registerListener(EntityManagerInterface $manager)
+    {
+        if (is_array($listener)) {
+            foreach ($listener as $individualListener) {
+                $this->registerListener($event, $individualListener, $manager);
+            }
+            return;
+        }
+
+        try {
+            $resolvedListener = $this->container->make($listener);
+        } catch (ReflectionException $e) {
+            throw new InvalidArgumentException(
+                "Listener {$listener} could not be resolved: {$e->getMessage()}",
+                0,
+                $e
+            );
+        }
+
+        $manager->getEventManager()->addEventListener($event, $resolvedListener);
+    }
+
+    /**
+     * Set a metadata driver to doctrine.
+     *
+     * @param \Doctrine\ORM\Configuration $configuration
+     *
+     * @return \Doctrine\ORM\Configuration
+     */
+    private function setMetadataDriver(Configuration $configuration): Configuration
+    {
+        $metadata = $this->meta->getDriver($this->options['metadata']['default']);
+
+        $configuration->setMetadataDriverImpl($metadata['driver']);
+        $configuration->setClassMetadataFactoryName($metadata['meta_factory']);
+
+        return $configuration;
+    }
+
+    /**
+     * Configure custom functions.
+     *
+     * @param \Doctrine\ORM\Configuration $configuration
+     *
+     * @return \Doctrine\ORM\Configuration
+     */
+    protected function configureCustomFunctions(Configuration $configuration): Configuration
+    {
+        $configuration->setCustomDatetimeFunctions($this->options['dql']['datetime_functions']);
+        $configuration->setCustomNumericFunctions($this->options['dql']['numeric_functions']);
+        $configuration->setCustomStringFunctions($this->options['dql']['string_functions']);
+
+        return $configuration;
+    }
+
+    /**
+     * Configure first level cache.
+     *
+     * @param \Doctrine\ORM\Configuration $configuration
+     *
+     * @return \Doctrine\ORM\Configuration
+     */
+    protected function configureFirstLevelCacheSettings(Configuration $configuration): Configuration
+    {
+        $configuration->setQueryCacheImpl($this->options['query_cache_driver']);
+        $configuration->setResultCacheImpl($this->options['result_cache_driver']);
+        $configuration->setMetadataCacheImpl($this->options['metadata_cache_driver']);
+
+        $configuration = $this->setSecondLevelCaching($configuration);
+
+        return $configuration;
+    }
+
+    /**
+     * Configure second level cache.
+     *
+     * @param \Doctrine\ORM\Configuration $configuration
+     *
+     * @return \Doctrine\ORM\Configuration
+     */
+    protected function setSecondLevelCaching(Configuration $configuration): Configuration
+    {
+        $secondCacheSetting = $this->options['second_level_cache'];
+
+        if (is_array($secondCacheSetting)) {
+            $configuration->setSecondLevelCacheEnabled();
+
+            $cacheConfig = $configuration->getSecondLevelCacheConfiguration();
+            // $cacheConfig->setCacheLogger($logger);
+            $cacheConfig->setCacheFactory(
+                new DefaultCacheFactory(
+                    $cacheConfig->getRegionsConfiguration(),
+                    $this->cache->getDriver($secondCacheSetting['region_cache_driver'] ?? null)
+                )
+            );
+        }
+
+        return $configuration;
+    }
+
+    /**
+     * Configure proxies.
+     *
+     * @param \Doctrine\ORM\Configuration $configuration
+     *
+     * @return \Doctrine\ORM\Configuration
+     */
+    protected function configureProxies(Configuration $configuration): Configuration
+    {
+        $configuration->setProxyDir(
+           $this->options['proxies']['path']
+        );
+
+        $configuration->setAutoGenerateProxyClasses(
+            $this->options['proxies']['auto_generate']
+        );
+
+        if ($namespace = $this->options['proxies']['namespace']) {
+            $configuration->setProxyNamespace($namespace);
+        }
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityManagerInterface $manager
+     *
+     * @return \Doctrine\ORM\EntityManagerInterface
+     */
+    protected function decorateManager(EntityManagerInterface $manager): EntityManagerInterface
+    {
+        if ($decorator = $this->options['decorator']) {
+            if (!class_exists($decorator)) {
+                throw new InvalidArgumentException(sprintf("EntityManagerDecorator [%s] does not exist", $decorator));
+            }
+
+            $manager = new $decorator($manager);
+        }
+
+        return $manager;
     }
 
     /**

@@ -150,7 +150,7 @@
     "autoload": {
         "files": [
             "src/Viserio/helpers.php",
-            "src/Viserio/Bridge/Doctrine/Fluent/ClassAliases.php"
+            "src/Viserio/Bridge/Doctrine/ORM/alias.php"
         ],
         "psr-4": {
             "Viserio\\Component\\"            : "src/Viserio/Component/",

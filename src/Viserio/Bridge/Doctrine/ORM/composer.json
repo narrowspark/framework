@@ -42,7 +42,7 @@
         "psr-4": {
             "Viserio\\Bridge\\Doctrine\\ORM\\"        : ""
         },
-        "files"                                       : ["ClassAliases.php"],
+        "files"                                       : ["alias.php"],
         "exclude-from-classmap"                       : ["/Tests/"]
     },
     "autoload-dev": {

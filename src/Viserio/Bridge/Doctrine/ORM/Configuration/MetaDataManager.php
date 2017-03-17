@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\ORM\Configuration;
 
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use LaravelDoctrine\Fluent\Extensions\ExtensibleClassMetadataFactory;
 use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
 use Doctrine\ORM\Configuration;
@@ -53,14 +55,17 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      *
      * @return \Doctrine\ORM\Mapping\Driver\AnnotationDriver
      */
-    protected function createAnnotationsDriver(array $config): AnnotationDriver
+    protected function createAnnotationsDriver(array $config): array
     {
         $configuration = new Configuration();
 
-        return $configuration->newDefaultAnnotationDriver(
-            $config['paths'],
-            $config['simple']
-        );
+        return [
+            'driver' => $configuration->newDefaultAnnotationDriver(
+                $config['paths'],
+                $config['simple']
+            ),
+            'meta_factory' => ClassMetadataFactory::class
+        ];
     }
 
     /**
@@ -70,12 +75,15 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      *
      * @return \Doctrine\ORM\Mapping\Driver\XmlDriver
      */
-    protected function createXmlDriver(array $config): XmlDriver
+    protected function createXmlDriver(array $config): array
     {
-        return new XmlDriver(
-            $config['paths'],
-            $config['extension'] ?? XmlDriver::DEFAULT_FILE_EXTENSION
-        );
+        return [
+            'driver' => new XmlDriver(
+                $config['paths'],
+                $config['extension'] ?? XmlDriver::DEFAULT_FILE_EXTENSION
+            ),
+            'meta_factory' => ClassMetadataFactory::class
+        ];
     }
 
     /**
@@ -85,12 +93,15 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      *
      * @return \Doctrine\ORM\Mapping\Driver\YamlDriver
      */
-    protected function createYamlDriver(array $config): YamlDriver
+    protected function createYamlDriver(array $config): array
     {
-        return new YamlDriver(
-            $config['paths'],
-            $config['extension'] ?? YamlDriver::DEFAULT_FILE_EXTENSION
-        );
+        return [
+            'driver' => new YamlDriver(
+                $config['paths'],
+                $config['extension'] ?? YamlDriver::DEFAULT_FILE_EXTENSION
+            ),
+            'meta_factory' => ClassMetadataFactory::class
+        ];
     }
 
     /**
@@ -100,12 +111,15 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      *
      * @return \Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver
      */
-    protected function createSimplifiedYamlDriver(array $config): SimplifiedYamlDriver
+    protected function createSimplifiedYamlDriver(array $config): array
     {
-        return new SimplifiedYamlDriver(
-            $config['paths'],
-            $config['extension'] ?? SimplifiedYamlDriver::DEFAULT_FILE_EXTENSION
-        );
+        return [
+            'driver' => new SimplifiedYamlDriver(
+                $config['paths'],
+                $config['extension'] ?? SimplifiedYamlDriver::DEFAULT_FILE_EXTENSION
+            ),
+            'meta_factory' => ClassMetadataFactory::class
+        ];
     }
 
     /**
@@ -115,12 +129,15 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      *
      * @return \Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver
      */
-    protected function createSimplifiedXmlDriver(array $config): SimplifiedXmlDriver
+    protected function createSimplifiedXmlDriver(array $config): array
     {
-        return new SimplifiedXmlDriver(
-            $config['paths'],
-            $config['extension'] ?? SimplifiedXmlDriver::DEFAULT_FILE_EXTENSION
-        );
+        return [
+            'driver' => new SimplifiedXmlDriver(
+                $config['paths'],
+                $config['extension'] ?? SimplifiedXmlDriver::DEFAULT_FILE_EXTENSION
+            ),
+            'meta_factory' => ClassMetadataFactory::class
+        ];
     }
 
     /**
@@ -130,9 +147,12 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      *
      * @return \Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver
      */
-    protected function createStaticPhpDriver(array $config): StaticPHPDriver
+    protected function createStaticPhpDriver(array $config): array
     {
-        return new StaticPHPDriver($config['paths']);
+        return [
+            'driver' => new StaticPHPDriver($config['paths']),
+            'meta_factory' => ClassMetadataFactory::class
+        ];
     }
 
     /**
@@ -142,9 +162,12 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      *
      * @return \Doctrine\Common\Persistence\Mapping\Driver\PHPDriver
      */
-    protected function createPhpDriver(array $config): PHPDriver
+    protected function createPhpDriver(array $config): array
     {
-        return new PHPDriver($config['paths']);
+        return [
+            'driver' => new PHPDriver($config['paths']),
+            'meta_factory' => ClassMetadataFactory::class
+        ];
     }
 
     /**
@@ -154,7 +177,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
      *
      * @return \LaravelDoctrine\Fluent\FluentDriver
      */
-    protected function createFluentDriver(array $config): FluentDriver
+    protected function createFluentDriver(array $config): array
     {
         $driver = new FluentDriver($config['mappings']);
 
@@ -162,7 +185,10 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
             return new Builder(new ClassMetadataBuilder($meta));
         });
 
-        return $driver;
+        return [
+            'driver' => $driver,
+            'meta_factory' => ExtensibleClassMetadataFactory::class
+        ];
     }
 
     /**

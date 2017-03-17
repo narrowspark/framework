@@ -30,9 +30,6 @@
         <testsuite name="Narrowspark Bridge Doctrine Extensions Test Suite">
             <directory>./src/Viserio/Bridge/Doctrine/Extensions/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Bridge Doctrine Fluent Test Suite">
-            <directory>./src/Viserio/Bridge/Doctrine/Fluent/Tests</directory>
-        </testsuite>
         <testsuite name="Narrowspark Bridge Doctrine Migration Test Suite">
             <directory>./src/Viserio/Bridge/Doctrine/Migration/Tests</directory>
         </testsuite>
