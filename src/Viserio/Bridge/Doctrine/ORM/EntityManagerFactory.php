@@ -27,27 +27,35 @@ class EntityManagerFactory implements
     use ConfigurationTrait;
 
     /**
+     * A MetaDataManager instance.
+     *
      * @var \Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager
      */
     protected $meta;
 
     /**
+     * A CacheManager instance.
+     *
      * @var \Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager
      */
     protected $cache;
 
     /**
+     * A Doctrine Setup instance.
+     *
      * @var \Doctrine\ORM\Tools\Setup
      */
     protected $setup;
 
     /**
+     * A EntityListenerResolver instance.
+     *
      * @var \Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver
      */
     protected $resolver;
 
     /**
-     * Create a new manager registry instance.
+     * Create a new entity manager factory instance.
      *
      * @param \Interop\Container\ContainerInterface                         $container
      * @param \Doctrine\ORM\Tools\Setup                                     $setup
@@ -91,8 +99,9 @@ class EntityManagerFactory implements
             'events' => [
                 'listners' => false,
                 'subscribers' => false,
-            ]
+            ],
             'proxies' => [
+                # Auto generate mode possible values are: "NEVER", "ALWAYS", "FILE_NOT_EXISTS", "FILE_OUTDATED", "EVAL"
                 'auto_generate' => false,
                 'namespace'     => false,
             ],
@@ -104,6 +113,7 @@ class EntityManagerFactory implements
                 'string_functions'   => [],
             ],
             'filters' => false,
+            'mapping_types' => [],
         ];
     }
 
@@ -113,7 +123,9 @@ class EntityManagerFactory implements
     public function getMandatoryOptions(): iterable
     {
         return [
-            'connections',
+            'connections' => [
+                'default'
+            ],
             'proxies' => [
                 'path',
             ],
@@ -121,6 +133,8 @@ class EntityManagerFactory implements
     }
 
     /**
+     * Create a new entity manager.
+     *
      * @param string $id
      *
      * @return \Doctrine\ORM\EntityManagerInterface
@@ -142,9 +156,15 @@ class EntityManagerFactory implements
 
         $configuration->setDefaultRepositoryClassName($this->options['repository']);
         $configuration->setEntityListenerResolver($this->resolver);
+        $connection = new ConnectionFactory($this->options['']);
 
         $manager = EntityManager::create(
-            [/*TODO*/],
+            $connection->createConnection(
+                $this->mapConnectionKey($this->options['connections']['default']),
+                $configuration,
+                null,
+                $this->options['mapping_types']
+            ),
             $configuration
         );
 
