@@ -327,6 +327,7 @@ class RequestTest extends AbstractMessageTest
 
     /**
      * @dataProvider customRequestMethods
+     *
      * @param mixed $method
      */
     public function testAllowsCustomRequestMethodsThatFollowSpec($method)
