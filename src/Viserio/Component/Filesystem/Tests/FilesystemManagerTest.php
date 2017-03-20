@@ -6,8 +6,6 @@ use Defuse\Crypto\Key;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;
-use MongoClient;
-use MongoConnectionException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Cache\Manager as CacheManager;
@@ -124,47 +122,6 @@ class FilesystemManagerTest extends MockeryTestCase
             FilesystemAdapter::class,
             $manager->getConnection('ftp')
         );
-    }
-
-    public function testGridFSConnectorDriver()
-    {
-        if (! class_exists(MongoClient::class)) {
-            $this->markTestSkipped('The MongoClient class does not exist');
-        }
-
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'filesystem' => [
-                    'connections'   => [
-                        'gridfs' => [
-                            'server'   => 'mongodb://localhost:27017',
-                            'database' => 'your-database',
-                        ],
-                    ],
-                ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
-
-        try {
-            self::assertInstanceOf(
-                FilesystemAdapter::class,
-                $manager->getConnection('gridfs')
-            );
-        } catch (MongoConnectionException $e) {
-            $this->markTestSkipped('No mongo serer running');
-        }
     }
 
     public function testLocalConnectorDriver()

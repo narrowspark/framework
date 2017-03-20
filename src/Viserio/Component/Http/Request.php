@@ -8,21 +8,6 @@ use Psr\Http\Message\UriInterface;
 
 class Request extends AbstractMessage implements RequestInterface
 {
-    protected static $validMethods = [
-        'OPTIONS'  => true,
-        'GET'      => true,
-        'HEAD'     => true,
-        'POST'     => true,
-        'PUT'      => true,
-        'DELETE'   => true,
-        'TRACE'    => true,
-        'CONNECT'  => true,
-        'PATCH'    => true,
-        'PROPFIND' => true,
-        'LINK'     => true,
-        'UNLINK'   => true,
-    ];
-
     /**
      * The request method.
      *
@@ -207,7 +192,7 @@ class Request extends AbstractMessage implements RequestInterface
 
         $method = mb_strtoupper($method);
 
-        if (! isset(static::$validMethods[$method])) {
+        if (! preg_match("/^[!#$%&'*+.^_`|~0-9a-z-]+$/i", $method)) {
             throw new InvalidArgumentException(sprintf(
                 'Unsupported HTTP method [%s].',
                 $method
