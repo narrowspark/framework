@@ -88,6 +88,10 @@ class EntityManagerFactory implements
             'cache'  => [
                 'default' => 'array',
             ],
+            'events' => [
+                'listners' => false,
+                'subscribers' => false,
+            ]
             'proxies' => [
                 'auto_generate' => false,
                 'namespace'     => false,
@@ -99,6 +103,7 @@ class EntityManagerFactory implements
                 'numeric_functions'  => [],
                 'string_functions'   => [],
             ],
+            'filters' => false,
         ];
     }
 
@@ -144,6 +149,9 @@ class EntityManagerFactory implements
         );
 
         $this->registerLogger($manager, $configuration);
+        $this->registerListeners($manager);
+        $this->registerSubscribers($manager);
+        $this->registerFilters($configuration, $manager);
 
         return $manager;
     }
@@ -187,9 +195,11 @@ class EntityManagerFactory implements
      */
     protected function configureFirstLevelCacheSettings(Configuration $configuration): Configuration
     {
-        $configuration->setQueryCacheImpl($this->options['query_cache_driver']);
-        $configuration->setResultCacheImpl($this->options['result_cache_driver']);
-        $configuration->setMetadataCacheImpl($this->options['metadata_cache_driver']);
+        $cache = $this->cache;
+
+        $configuration->setQueryCacheImpl($cache->getDriver($this->options['query_cache_driver']));
+        $configuration->setResultCacheImpl($cache->getDriver($this->options['result_cache_driver']));
+        $configuration->setMetadataCacheImpl($cache->getDriver($this->options['metadata_cache_driver']));
 
         $configuration = $this->setSecondLevelCaching($configuration);
 
@@ -246,6 +256,8 @@ class EntityManagerFactory implements
     }
 
     /**
+     * Decorate a entity manager.
+     *
      * @param \Doctrine\ORM\EntityManagerInterface $manager
      *
      * @return \Doctrine\ORM\EntityManagerInterface
@@ -264,29 +276,48 @@ class EntityManagerFactory implements
     }
 
     /**
-     * @param EntityManagerInterface $manager
+     * Register event listeners.
+     *
+     * @param \Doctrine\ORM\EntityManagerInterface $manager
+     *
+     * @return void
      */
-    private function registerListener(EntityManagerInterface $manager)
+    protected function registerListeners(EntityManagerInterface $manager): void
     {
-        if (is_array($listener)) {
-            foreach ($listener as $individualListener) {
-                $this->registerListener($event, $individualListener, $manager);
+        $eventManager = $manager->getEventManager();
+
+        if ($listeners = $this->options['events']['listeners'] !== false) {
+            foreach ($listeners as $event => $listener) {
+                if (is_array($listener)) {
+                    foreach ($listener as $individualListener) {
+                        $resolvedListener = $this->container->get($listener);
+
+                        $eventManager->addEventListener($event, $resolvedListener);
+                    }
+                } else {
+                    $resolvedListener = $this->container->get($listener);
+
+                    $eventManager->addEventListener($event, $resolvedListener);
+                }
             }
-
-            return;
         }
+    }
 
-        try {
-            $resolvedListener = $this->container->make($listener);
-        } catch (ReflectionException $e) {
-            throw new InvalidArgumentException(
-                "Listener {$listener} could not be resolved: {$e->getMessage()}",
-                0,
-                $e
-            );
+    /**
+     * Register event subscribers.
+     *
+     * @param \Doctrine\ORM\EntityManagerInterface $manager
+     *
+     * @return void
+     */
+    protected function registerSubscribers(EntityManagerInterface $manager): void
+    {
+        if ($subscribers = $settings['events']['subscribers'] !== false) {
+            foreach ($subscribers as $subscriber) {
+                $resolvedSubscriber = $this->container->get($subscriber);
+                $manager->getEventManager()->addEventSubscriber($resolvedSubscriber);
+            }
         }
-
-        $manager->getEventManager()->addEventListener($event, $resolvedListener);
     }
 
     /**
@@ -296,7 +327,7 @@ class EntityManagerFactory implements
      *
      * @return \Doctrine\ORM\Configuration
      */
-    private function setMetadataDriver(Configuration $configuration): Configuration
+    protected function setMetadataDriver(Configuration $configuration): Configuration
     {
         $metadata = $this->meta->getDriver($this->options['metadata']['default']);
 
@@ -304,6 +335,22 @@ class EntityManagerFactory implements
         $configuration->setClassMetadataFactoryName($metadata['meta_factory']);
 
         return $configuration;
+    }
+
+    /**
+     * Register filters.
+     *
+     * @param \Doctrine\ORM\Configuration          $configuration
+     * @param \Doctrine\ORM\EntityManagerInterface $manager
+     */
+    protected function registerFilters(Configuration $configuration, EntityManagerInterface $manager): void
+    {
+        if ($filters = $this->options['filters'] !== false) {
+            foreach ($filters as $name => $filter) {
+                $configuration->addFilter($name, $filter);
+                $manager->getFilters()->enable($name);
+            }
+        }
     }
 
     /**
