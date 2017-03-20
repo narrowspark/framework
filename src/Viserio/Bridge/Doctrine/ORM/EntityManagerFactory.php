@@ -97,11 +97,11 @@ class EntityManagerFactory implements
                 'default' => 'array',
             ],
             'events' => [
-                'listners' => false,
+                'listners'    => false,
                 'subscribers' => false,
             ],
             'proxies' => [
-                # Auto generate mode possible values are: "NEVER", "ALWAYS", "FILE_NOT_EXISTS", "FILE_OUTDATED", "EVAL"
+                // Auto generate mode possible values are: "NEVER", "ALWAYS", "FILE_NOT_EXISTS", "FILE_OUTDATED", "EVAL"
                 'auto_generate' => false,
                 'namespace'     => false,
             ],
@@ -112,7 +112,7 @@ class EntityManagerFactory implements
                 'numeric_functions'  => [],
                 'string_functions'   => [],
             ],
-            'filters' => false,
+            'filters'       => false,
             'mapping_types' => [],
         ];
     }
@@ -124,7 +124,7 @@ class EntityManagerFactory implements
     {
         return [
             'connections' => [
-                'default'
+                'default',
             ],
             'proxies' => [
                 'path',
