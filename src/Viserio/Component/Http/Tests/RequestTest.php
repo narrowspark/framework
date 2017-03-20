@@ -325,6 +325,33 @@ class RequestTest extends AbstractMessageTest
         new Request('/', 'BOGUS METHOD');
     }
 
+    /**
+     * @dataProvider customRequestMethods
+     */
+    public function testAllowsCustomRequestMethodsThatFollowSpec($method)
+    {
+        $request = new Request(null, $method);
+        $this->assertSame($method, $request->getMethod());
+    }
+
+    public function customRequestMethods()
+    {
+        return[
+            /* WebDAV methods */
+            'TRACE'     => ['TRACE'],
+            'PROPFIND'  => ['PROPFIND'],
+            'PROPPATCH' => ['PROPPATCH'],
+            'MKCOL'     => ['MKCOL'],
+            'COPY'      => ['COPY'],
+            'MOVE'      => ['MOVE'],
+            'LOCK'      => ['LOCK'],
+            'UNLOCK'    => ['UNLOCK'],
+            'UNLOCK'    => ['UNLOCK'],
+            /* Arbitrary methods */
+            '#!ALPHA-1234&%' => ['#!ALPHA-1234&%'],
+        ];
+    }
+
     public function testCanConstructWithBody()
     {
         $request = new Request('/', 'GET', [], 'baz');
