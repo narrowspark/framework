@@ -318,11 +318,11 @@ class RequestTest extends AbstractMessageTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unsupported HTTP method [FOO].
+     * @expectedExceptionMessage Unsupported HTTP method [BOGUS METHOD].
      */
     public function testWithNotValidMethodRequest()
     {
-        new Request('/', 'foo');
+        new Request('/', 'BOGUS METHOD');
     }
 
     public function testCanConstructWithBody()
