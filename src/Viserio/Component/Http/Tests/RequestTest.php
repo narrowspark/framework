@@ -19,14 +19,16 @@ class RequestTest extends AbstractMessageTest
     {
         parent::setUp();
 
-        $this->mockUri = $this->mock(UriInterface::class)
-            ->shouldReceive('getHost')
-            ->andReturn('')
-            ->shouldReceive('getPath')
-            ->andReturn('')
-            ->shouldReceive('getQuery')
-            ->andReturn('')
-            ->getMock();
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->andReturn('');
+        $uri->shouldReceive('getPath')
+            ->andReturn('');
+        $uri->shouldReceive('getQuery')
+            ->andReturn('');
+
+        $this->mockUri = $uri;
+
         $this->classToTest = new Request($this->mockUri);
     }
 
