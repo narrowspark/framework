@@ -6,8 +6,6 @@ use Defuse\Crypto\Key;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;
-use MongoClient;
-use MongoConnectionException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Cache\Manager as CacheManager;
