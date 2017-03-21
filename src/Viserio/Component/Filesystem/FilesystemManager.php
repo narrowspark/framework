@@ -171,16 +171,6 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     }
 
     /**
-     * Create an instance of the Gridfs connection.
-     *
-     * @param array $config
-     */
-    protected function createGridfsConnection(array $config)
-    {
-        return (new Adapters\GridFSConnector())->connect($config);
-    }
-
-    /**
      * Create an instance of the Local connection.
      *
      * @param array $config
