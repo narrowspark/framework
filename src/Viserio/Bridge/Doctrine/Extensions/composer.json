@@ -22,10 +22,11 @@
         "doctrine/common"                                    : "^2.7"
     },
     "require-dev": {
+        "beberlei/DoctrineExtensions"                        : "^1.0",
         "cakephp/chronos"                                    : "^1.0",
         "container-interop/service-provider"                 : "^0.3",
-        "beberlei/DoctrineExtensions"                        : "^1.0",
         "gedmo/doctrine-extensions"                          : "^2.4",
+        "laravel-doctrine/fluent"                            : "^1.1",
         "phpunit/phpunit"                                    : "^6.0",
         "viserio/container"                                  : "self.version"
     },
