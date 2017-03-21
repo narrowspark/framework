@@ -110,6 +110,7 @@
         "cache/session-handler"               : "^0.2",
         "cache/void-adapter"                  : "^0.3",
         "doctrine/dbal"                       : "^2.5",
+        "doctrine/data-fixtures"              : "^1.2",
         "doctrine/migrations"                 : "^1.4",
         "doctrine/orm"                        : "^2.5",
         "ext-pdo"                             : "*",
