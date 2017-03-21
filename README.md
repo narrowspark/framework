@@ -1,15 +1,36 @@
-## Narrowspark Framework (Kernel)
+<p align="center"><a href="https://narrowspark.com" target="_blank">
+    <img src="">
+</a></p>
+<p align="center">
+    <a href="https://github.com/narrowspark/framework/releases"><img src="https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square"></a>
+    <a href="https://php.net/"><img src="https://img.shields.io/badge/php-%5E7.1.0-8892BF.svg?style=flat-square"></a>
+    <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
+</p>
 
-[![Author](http://img.shields.io/badge/author-@anolilab-blue.svg?style=flat-square)](https://twitter.com/anolilab)
-[![Source Code](http://img.shields.io/badge/source-narrowspark/narrowspark-blue.svg?style=flat-square)](https://github.com/narrowspark/narrowspark)
-[![Latest Version](https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square)](https://github.com/narrowspark/framework/releases)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%5E7.1.0-8892BF.svg?style=flat-square)](https://php.net/)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+> **Note:** This repository contains the core code of the Narrowspark framework. If you want to build an application using Narrowspark, visit the main [Narrowspark repository][2].
 
-## Chat Room on Gitter
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/narrowspark/framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[Narrowspark][1] is a **PHP framework** for web applications and a set of reusable
+**PHP components** with expressive, elegant syntax. Narrowspark attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
 
-> **Note:** This repository contains the core code of the Narrowspark framework. If you want to build an application using Narrowspark 1, visit the main [Narrowspark repository](https://github.com/narrowspark/narrowspark).
+* Powerful dependency injection container.
+* Multiple back-ends for session and cache storage.
+
+Installation
+------------
+
+Documentation
+-------------
+
+Documentation for the entire framework can be found on the [Narrowspark website][1].
+
+Community
+------------
+
+* Get Narrowspark support on Stack Overflow, [Gitter][3], etc.
+* Follow us on [GitHub][4].
+
+Status
+------------
 
 ## Master
 
@@ -25,20 +46,24 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/5559f479c0f259745500008b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5559f479c0f259745500008b)
 [![codecov](https://codecov.io/gh/narrowspark/framework/branch/develop/graph/badge.svg)](https://codecov.io/gh/narrowspark/framework)
 
-## Official Documentation
+Contributing
+------------
 
-Documentation for the entire framework can be found on the [Narrowspark website](http://narrowspark.de).
-
-## [Contributing](CONTRIBUTING.md)
-
-If you would like to help take a look at the [list of issues](http://github.com/narrowspark/framework/issues).
-
-## Authors
-
-Daniel Bannert - <d.bannert@anolilab.de> - <http://www.anolilab.de><br />
+If you would like to help take a look at the [list of issues](http://github.com/narrowspark/framework/issues) and check our [Contributing](CONTRIBUTING.md) guild.
 
 > **Note:** Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
 
-### License
+Security Vulnerabilities
+---------------
+
+If you discover a security vulnerability within Narrowspark, please send an e-mail to Daniel Bannert at d.bannert@anolilab.de. All security vulnerabilities will be promptly addressed.
+
+License
+---------------
 
 The Narrowspark framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+[1]: https://narrowspark.com
+[2]: https://github.com/narrowspark/narrowspark
+[3]: https://gitter.im/narrowspark/framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+[4]: https://github.com/narrowspark
