@@ -106,14 +106,12 @@ class ExtensionsServiceProvider implements
                 $chain,
                 $chain->getReader()
             );
-
-            return;
+        } else {
+            DoctrineExtensions::registerAbstractMappingIntoDriverChainORM(
+                $chain,
+                $chain->getReader()
+            );
         }
-
-        DoctrineExtensions::registerAbstractMappingIntoDriverChainORM(
-            $chain,
-            $chain->getReader()
-        );
     }
 
     /**
@@ -123,7 +121,7 @@ class ExtensionsServiceProvider implements
      *
      * @return bool
      */
-    private static function hasFluentDriver(MappingDriverChain $chain)
+    private static function hasFluentDriver(MappingDriverChain $chain): bool
     {
         foreach ($chain->getDrivers() as $driver) {
             if ($driver instanceof FluentDriver) {
@@ -138,16 +136,16 @@ class ExtensionsServiceProvider implements
      * Register gedmo for fluent.
      *
      * @param \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $chain
+     *
+     * @return void
      */
     private static function registerGedmoForFluent(MappingDriverChain $chain): void
     {
         if (self::needsAllMappings()) {
             GedmoExtensions::registerAll($chain);
-
-            return;
+        } else {
+            GedmoExtensions::registerAbstract($chain);
         }
-
-        GedmoExtensions::registerAbstract($chain);
     }
 
     /**
