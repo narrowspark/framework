@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use Closure;
 use Narrowspark\Arr\Arr;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
@@ -17,12 +16,14 @@ use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeCompiler;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 abstract class AbstractRouteDispatcher
 {
     use ContainerAwareTrait;
     use EventsAwareTrait;
     use MiddlewareAwareTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * The route collection instance.
@@ -145,7 +146,7 @@ abstract class AbstractRouteDispatcher
      */
     public function setCachePath(string $path): void
     {
-        $this->path = $path;
+        $this->path = self::normalizeDirectorySeparator($path);
     }
 
     /**
@@ -179,7 +180,12 @@ abstract class AbstractRouteDispatcher
      */
     protected function dispatchToRoute(ServerRequestInterface $request): ResponseInterface
     {
-        $router = $this->generateRouterFile();
+        if (! file_exists($this->path) || $this->refreshCache === true) {
+            $this->createCacheFolder($this->path);
+            $this->generateRouterFile();
+        }
+
+        $router = require $this->path;
         $match  = $router(
             $request->getMethod(),
            '/' . ltrim($request->getUri()->getPath(), '/')
@@ -248,21 +254,14 @@ abstract class AbstractRouteDispatcher
     /**
      * Generates a router file with all routes.
      *
-     * @return \Closure
+     * @return void
      */
-    protected function generateRouterFile(): Closure
+    protected function generateRouterFile(): void
     {
-        if ($this->refreshCache && file_exists($this->path)) {
-            @unlink($this->path);
-        } else {
-            $this->createCacheFolder($this->path);
+        $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
+        $closure        = $routerCompiler->compile($this->routes->getRoutes());
 
-            $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
-
-            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()));
-        }
-
-        return require $this->path;
+        file_put_contents($this->path, $closure, LOCK_EX);
     }
 
     /**

@@ -1,5 +1,5 @@
 {
-    "name"       : "viserio/bridge/twig",
+    "name"       : "viserio/bridge-twig",
     "type"       : "library",
     "description": "The Viserio Twig bridge.",
     "keywords"   : ["narrowspark", "viserio", "twig", "bridge"],
@@ -25,7 +25,7 @@
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
-        "danielstjules/stringy"              : "^2.3",
+        "danielstjules/stringy"              : "^3.0",
         "narrowspark/testing-helper"         : "^2.0",
         "mockery/mockery"                    : "^1.0",
         "phpunit/phpunit"                    : "^6.0",

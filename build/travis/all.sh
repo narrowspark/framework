@@ -10,13 +10,8 @@ echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php
 echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 # Install mongodb
-pecl -q install mongodb
-
-composer global require hirak/prestissimo # Now composer can install components parallel
+pecl install -f mongodb-1.1.2
 
 if [[ "$HUMBUG" = true ]]; then
     composer require humbug/humbug:1.0.0-alpha2;
 fi
-
-# Install mongo-php-adapter
-composer require alcaeus/mongo-php-adapter

@@ -19,14 +19,16 @@ class RequestTest extends AbstractMessageTest
     {
         parent::setUp();
 
-        $this->mockUri = $this->mock(UriInterface::class)
-            ->shouldReceive('getHost')
-            ->andReturn('')
-            ->shouldReceive('getPath')
-            ->andReturn('')
-            ->shouldReceive('getQuery')
-            ->andReturn('')
-            ->getMock();
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->andReturn('');
+        $uri->shouldReceive('getPath')
+            ->andReturn('');
+        $uri->shouldReceive('getQuery')
+            ->andReturn('');
+
+        $this->mockUri = $uri;
+
         $this->classToTest = new Request($this->mockUri);
     }
 
@@ -318,11 +320,40 @@ class RequestTest extends AbstractMessageTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unsupported HTTP method [FOO].
+     * @expectedExceptionMessage Unsupported HTTP method [BOGUS METHOD].
      */
     public function testWithNotValidMethodRequest()
     {
-        new Request('/', 'foo');
+        new Request('/', 'BOGUS METHOD');
+    }
+
+    /**
+     * @dataProvider customRequestMethods
+     *
+     * @param mixed $method
+     */
+    public function testAllowsCustomRequestMethodsThatFollowSpec($method)
+    {
+        $request = new Request(null, $method);
+        $this->assertSame($method, $request->getMethod());
+    }
+
+    public function customRequestMethods()
+    {
+        return[
+            /* WebDAV methods */
+            'TRACE'     => ['TRACE'],
+            'PROPFIND'  => ['PROPFIND'],
+            'PROPPATCH' => ['PROPPATCH'],
+            'MKCOL'     => ['MKCOL'],
+            'COPY'      => ['COPY'],
+            'MOVE'      => ['MOVE'],
+            'LOCK'      => ['LOCK'],
+            'UNLOCK'    => ['UNLOCK'],
+            'UNLOCK'    => ['UNLOCK'],
+            /* Arbitrary methods */
+            '#!ALPHA-1234&%' => ['#!ALPHA-1234&%'],
+        ];
     }
 
     public function testCanConstructWithBody()

@@ -86,24 +86,32 @@ class TwigBridgeServiceProvider implements
         return new TwigEngine($container->get(TwigEnvironment::class), $container);
     }
 
-    public static function createViewFactory(ContainerInterface $container, callable $getPrevious): FactoryContract
+    public static function createViewFactory(ContainerInterface $container, ?callable $getPrevious = null): ?FactoryContract
     {
-        $view = $getPrevious();
+        if ($getPrevious !== null) {
+            $view = $getPrevious();
 
-        $view->addExtension('twig', 'twig');
+            $view->addExtension('twig', 'twig');
 
-        return $view;
+            return $view;
+        }
+
+        return null;
     }
 
-    public static function createEngineResolver(ContainerInterface $container, callable $getPrevious): EngineResolver
+    public static function createEngineResolver(ContainerInterface $container, ?callable $getPrevious = null): ?EngineResolver
     {
-        $engines = $getPrevious();
+        if ($getPrevious !== null) {
+            $engines = $getPrevious();
 
-        $engines->register('twig', function () use ($container) {
-            return $container->get(TwigEngine::class);
-        });
+            $engines->register('twig', function () use ($container) {
+                return $container->get(TwigEngine::class);
+            });
 
-        return $engines;
+            return $engines;
+        }
+
+        return null;
     }
 
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment

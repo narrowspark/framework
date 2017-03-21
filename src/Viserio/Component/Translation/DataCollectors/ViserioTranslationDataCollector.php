@@ -29,7 +29,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $messages = $this->sanitizeCollectedMessages($this->translator->getCollectedMessages());
 

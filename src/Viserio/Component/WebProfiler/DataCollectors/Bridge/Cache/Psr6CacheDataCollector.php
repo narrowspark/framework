@@ -38,7 +38,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $empty = [
             'calls'      => [],
