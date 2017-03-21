@@ -4,5 +4,4 @@ namespace Viserio\Bridge\Doctrine\Testing\Commands;
 
 class LoadDataFixturesDoctrineCommand
 {
-
 }

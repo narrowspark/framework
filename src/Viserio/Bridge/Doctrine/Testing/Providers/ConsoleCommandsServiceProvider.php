@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Testing\Providers;
 
-use Viserio\Bridge\Doctrine\Testing\Commands\LoadDataFixturesDoctrineCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Viserio\Bridge\Doctrine\Testing\Commands\LoadDataFixturesDoctrineCommand;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
