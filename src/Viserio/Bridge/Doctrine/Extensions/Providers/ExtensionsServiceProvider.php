@@ -5,12 +5,12 @@ namespace Viserio\Bridge\Doctrine\Migration\Providers;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Gedmo\DoctrineExtensions;
-use LaravelDoctrine\Fluent\Extensions\GedmoExtensions;
-use LaravelDoctrine\Fluent\FluentDriver;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use LaravelDoctrine\Fluent\Extensions\GedmoExtensions;
+use LaravelDoctrine\Fluent\FluentDriver;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class ExtensionsServiceProvider implements
@@ -68,7 +68,6 @@ class ExtensionsServiceProvider implements
 
             $events = $getPrevious();
 
-
             return $events;
         }
 
@@ -115,8 +114,6 @@ class ExtensionsServiceProvider implements
             $chain,
             $chain->getReader()
         );
-
-        return;
     }
 
     /**
@@ -151,8 +148,6 @@ class ExtensionsServiceProvider implements
         }
 
         GedmoExtensions::registerAbstract($chain);
-
-        return;
     }
 
     /**
