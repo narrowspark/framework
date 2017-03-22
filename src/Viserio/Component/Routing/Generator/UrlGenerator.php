@@ -3,15 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Generator;
 
 use Interop\Http\Factory\UriFactoryInterface;
+use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Narrowspark\Arr\Arr;
 use Viserio\Component\Contracts\Routing\Exceptions\RouteNotFoundException;
+use Viserio\Component\Contracts\Routing\Exceptions\UrlGenerationException;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Support\Traits\MacroableTrait;
-use Viserio\Component\Contracts\Routing\Exceptions\UrlGenerationException;
 
 class UrlGenerator implements UrlGeneratorContract
 {
@@ -45,7 +45,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected $uriFactory;
 
-     /**
+    /**
      * This array defines the characters (besides alphanumeric ones) that will not be percent-encoded in the path segment of the generated URL.
      *
      * PHP's rawurlencode() encodes all chars except "a-zA-Z0-9-._~" according to RFC 3986. But we want to allow some chars
@@ -220,9 +220,9 @@ class UrlGenerator implements UrlGeneratorContract
         return preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
             if (isset($parameters[$m[1]])) {
                 return Arr::pull($parameters, $m[1]);
-            } else {
-                return $m[0];
             }
+
+            return $m[0];
         }, $path);
     }
 
@@ -245,13 +245,13 @@ class UrlGenerator implements UrlGeneratorContract
 
         $uri .= $this->getRouteQueryString($parameters);
 
-        return is_null($fragment) ? $uri : $uri."#{$fragment}";
+        return is_null($fragment) ? $uri : $uri . "#{$fragment}";
     }
 
     /**
      * Get the query string for a given route.
      *
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return string
      */
@@ -272,18 +272,18 @@ class UrlGenerator implements UrlGeneratorContract
         // parameters that are in the array and add them to the query string or we
         // will make the initial query string if it wasn't started with strings.
         if (count($keyed) < count($parameters)) {
-            $query .= '&'.implode(
+            $query .= '&' . implode(
                 '&', $this->getNumericParameters($parameters)
             );
         }
 
-        return '?'.trim($query, '&');
+        return '?' . trim($query, '&');
     }
 
     /**
      * Get the string parameters from a given list.
      *
-     * @param  array  $parameters
+     * @param array $parameters
      *
      * @return array
      */
@@ -295,7 +295,7 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Get the numeric parameters from a given list.
      *
-     * @param  array  $parameters
+     * @param array $parameters
      *
      * @return array
      */
