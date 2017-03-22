@@ -12,10 +12,12 @@ use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Support\Traits\MacroableTrait;
+use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 
 class UrlGenerator implements UrlGeneratorContract
 {
     use MacroableTrait;
+    use LoggerAwareTrait;
 
     /**
      * The named parameter defaults.
