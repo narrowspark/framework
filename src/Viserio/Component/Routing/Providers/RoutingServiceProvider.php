@@ -9,8 +9,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Component\Routing\Router;
 use Viserio\Component\Routing\Generator\UrlGenerator;
+use Viserio\Component\Routing\Router;
 
 class RoutingServiceProvider implements ServiceProvider
 {
