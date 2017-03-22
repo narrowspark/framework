@@ -8,6 +8,7 @@ interface UrlGenerator
      * Generates an absolute URL, e.g. "http://example.com/dir/file".
      */
     public const ABSOLUTE_URL = 0;
+
     /**
      * Generates an absolute path, e.g. "/dir/file".
      */

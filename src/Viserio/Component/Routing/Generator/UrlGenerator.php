@@ -63,7 +63,7 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * {@inheritdoc}
      */
-    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_URL): string
     {
         if (($route = $this->routes->getByName($name)) !== null) {
             return $this->toRoute($route, $parameters, $referenceType);
@@ -93,7 +93,7 @@ class UrlGenerator implements UrlGeneratorContract
             $uri = $uri->withHost($this->request->getUri()->getHost());
         }
 
-        $uri = $this->addPortAndSchemeToUri($uri);
+        $uri = $this->addPortAndSchemeToUri($uri, $route);
 
         foreach ($parameters as $key => $value) {
             $uri = $uri->withQuery($key . '=' . $value);
@@ -113,18 +113,27 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Add the port and scheme to the uri if necessary.
      *
-     * @param \Psr\Http\Message\UriInterface $uri
+     * @param \Psr\Http\Message\UriInterface             $uri
+     * @param \Viserio\Component\Contracts\Routing\Route $route
      *
      * @return \Psr\Http\Message\UriInterface
      */
-    protected function addPortAndSchemeToUri(UriInterface $uri): UriInterface
+    protected function addPortAndSchemeToUri(UriInterface $uri, RouteContract $route): UriInterface
     {
-        $requestUri = $this->request->getUri();
-        $secure     = $requestUri->getScheme();
-        $port       = $requestUri->getPort();
+        if ($route->isHttpOnly()) {
+            $secure = 'http';
+            $port   = 80;
+        } elseif($route->isHttpsOnly()) {
+            $secure = 'https';
+            $port   = 443;
+        } else {
+            $requestUri = $this->request->getUri();
+            $secure     = $requestUri->getScheme();
+            $port       = $requestUri->getPort();
+        }
 
-        $uri = $uri->withScheme($requestUri->getScheme());
-        $uri = $uri->withPort($requestUri->getPort());
+        $uri = $uri->withScheme($secure);
+        $uri = $uri->withPort($port);
 
         return $uri;
     }
