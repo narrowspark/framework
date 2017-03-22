@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing;
+namespace Viserio\Component\Routing\Generator;
 
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -87,7 +87,7 @@ class UrlGenerator implements UrlGeneratorContract
     {
         $uri = $this->uriFactory->createUri($route->getUri());
 
-        if (($domain = $route->getDomain()) !== null) {
+        if (($domain = $route->getHost()) !== null) {
             $uri = $uri->withHost($domain);
         } else {
             $uri = $uri->withHost($this->request->getUri()->getHost());

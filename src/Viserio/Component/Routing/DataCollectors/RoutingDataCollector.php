@@ -72,7 +72,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
                 6 => implode(', ', $withoutMiddlewares),
             ];
 
-            if ($route->getDomain() !== null) {
+            if ($route->getHost() !== null) {
                 $routeData[1] = 'Domain';
             }
 

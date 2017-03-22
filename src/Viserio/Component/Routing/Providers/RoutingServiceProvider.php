@@ -10,7 +10,7 @@ use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Routing\Router;
-use Viserio\Component\Routing\UrlGenerator;
+use Viserio\Component\Routing\Generator\UrlGenerator;
 
 class RoutingServiceProvider implements ServiceProvider
 {

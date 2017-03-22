@@ -15,11 +15,11 @@ interface Route
     public function getServerRequest(): ServerRequestInterface;
 
     /**
-     * Get the domain defined for the route.
+     * Get the host defined for the route.
      *
      * @return string|null
      */
-    public function getDomain(): ?string;
+    public function getHost(): ?string;
 
     /**
      * Get the URI that the route responds to.

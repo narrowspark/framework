@@ -35,7 +35,7 @@ class Collection implements Countable, RouteCollectionContract
      */
     public function add(RouteContract $route): RouteContract
     {
-        $domainAndUri = $route->getDomain() . $route->getUri();
+        $domainAndUri = $route->getHost() . $route->getUri();
 
         $this->allRoutes[implode($route->getMethods(), '|') . $domainAndUri] = $route;
 

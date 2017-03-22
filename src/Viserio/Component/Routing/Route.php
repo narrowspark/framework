@@ -121,7 +121,7 @@ class Route implements RouteContract
      */
     public function getIdentifier(): string
     {
-        return implode($this->httpMethods, '|') . $this->getDomain() . $this->uri;
+        return implode($this->httpMethods, '|') . $this->getHost() . $this->uri;
     }
 
     /**
@@ -135,10 +135,10 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getDomain(): ?string
+    public function getHost(): ?string
     {
-        if (isset($this->action['domain'])) {
-            return str_replace(['http://', 'https://'], '', $this->action['domain']);
+        if (isset($this->action['host'])) {
+            return str_replace(['http://', 'https://'], '', $this->action['host']);
         }
 
         return null;

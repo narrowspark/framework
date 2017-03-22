@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Tests;
+namespace Viserio\Component\Routing\Tests\Generator;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
@@ -8,7 +8,7 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
-use Viserio\Component\Routing\UrlGenerator;
+use Viserio\Component\Routing\Generator\UrlGenerator;
 
 class UrlGeneratorTest extends MockeryTestCase
 {
