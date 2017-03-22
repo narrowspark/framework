@@ -123,7 +123,7 @@ class UrlGenerator implements UrlGeneratorContract
         if ($route->isHttpOnly()) {
             $secure = 'http';
             $port   = 80;
-        } elseif($route->isHttpsOnly()) {
+        } elseif ($route->isHttpsOnly()) {
             $secure = 'https';
             $port   = 443;
         } else {
