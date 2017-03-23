@@ -136,8 +136,8 @@ class UrlGenerator implements UrlGeneratorContract
             return '';
         }
 
-        $sourceDirs = explode('/', isset($basePath[0]) && '/' === $basePath[0] ? substr($basePath, 1) : $basePath);
-        $targetDirs = explode('/', isset($targetPath[0]) && '/' === $targetPath[0] ? substr($targetPath, 1) : $targetPath);
+        $sourceDirs = explode('/', isset($basePath[0]) && '/' === $basePath[0] ? mb_substr($basePath, 1) : $basePath);
+        $targetDirs = explode('/', isset($targetPath[0]) && '/' === $targetPath[0] ? mb_substr($targetPath, 1) : $targetPath);
 
         array_pop($sourceDirs);
 
@@ -152,14 +152,14 @@ class UrlGenerator implements UrlGeneratorContract
         }
 
         $targetDirs[] = $targetFile;
-        $path = str_repeat('../', count($sourceDirs)).implode('/', $targetDirs);
+        $path         = str_repeat('../', count($sourceDirs)) . implode('/', $targetDirs);
 
         // A reference to the same base directory or an empty subdirectory must be prefixed with "./".
         // This also applies to a segment with a colon character (e.g., "file:colon") that cannot be used
         // as the first segment of a relative-path reference, as it would be mistaken for a scheme name
         // (see http://tools.ietf.org/html/rfc3986#section-4.2).
         return '' === $path || '/' === $path[0]
-            || false !== ($colonPos = strpos($path, ':')) && ($colonPos < ($slashPos = strpos($path, '/')) || false === $slashPos)
+            || false !== ($colonPos = mb_strpos($path, ':')) && ($colonPos < ($slashPos = mb_strpos($path, '/')) || false === $slashPos)
             ? "./$path" : $path;
     }
 
@@ -178,8 +178,8 @@ class UrlGenerator implements UrlGeneratorContract
     {
         $parameters = array_replace($route->getParameters(), $parameters);
 
-        $parameters = array_filter($parameters, function($value) {
-            return !empty($value);
+        $parameters = array_filter($parameters, function ($value) {
+            return ! empty($value);
         });
 
         // First we will construct the entire URI including the root and query string. Once it
@@ -209,9 +209,9 @@ class UrlGenerator implements UrlGeneratorContract
         }
 
         $requiredSchemes = false;
-        $requestScheme = $this->request->getUri()->getScheme();
+        $requestScheme   = $this->request->getUri()->getScheme();
 
-        if($route->isHttpOnly()) {
+        if ($route->isHttpOnly()) {
             $requiredSchemes = $requestScheme !== 'http';
         } elseif ($route->isHttpsOnly()) {
             $requiredSchemes = $requestScheme !== 'https';
@@ -245,10 +245,10 @@ class UrlGenerator implements UrlGeneratorContract
     {
         $path = strtr($path, ['/../' => '/%2E%2E/', '/./' => '/%2E/']);
 
-        if ('/..' === substr($path, -3)) {
-            $path = substr($path, 0, -2).'%2E%2E';
-        } elseif ('/.' === substr($path, -2)) {
-            $path = substr($path, 0, -1).'%2E';
+        if ('/..' === mb_substr($path, -3)) {
+            $path = mb_substr($path, 0, -2) . '%2E%2E';
+        } elseif ('/.' === mb_substr($path, -2)) {
+            $path = mb_substr($path, 0, -1) . '%2E';
         }
 
         return $path;
@@ -316,7 +316,7 @@ class UrlGenerator implements UrlGeneratorContract
     protected function replaceNamedParameters(string $path, array &$parameters): string
     {
         return preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
-            if (isset($parameters[$m[1]]) && !empty($parameters[$m[1]])) {
+            if (isset($parameters[$m[1]]) && ! empty($parameters[$m[1]])) {
                 return Arr::pull($parameters, $m[1]);
             }
 
@@ -385,7 +385,7 @@ class UrlGenerator implements UrlGeneratorContract
 
         // "/" and "?" can be left decoded for better user experience, see
         // http://tools.ietf.org/html/rfc3986#section-3.4
-        return '?' . trim(strtr($query, array('%2F' => '/')), '&');
+        return '?' . trim(strtr($query, ['%2F' => '/']), '&');
     }
 
     /**
