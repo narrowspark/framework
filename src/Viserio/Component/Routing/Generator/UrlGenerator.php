@@ -229,7 +229,7 @@ class UrlGenerator implements UrlGeneratorContract
             return (string) $uri;
         }
 
-        return '/' . self::getRelativePath('//' . $uri->getDomain() . '/', (string) $uri);
+        return '/' . self::getRelativePath('//' . $uri->getHost() . '/', (string) $uri);
     }
 
     /**
