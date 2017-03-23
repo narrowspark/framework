@@ -202,7 +202,7 @@ class UrlGenerator implements UrlGeneratorContract
 
         $uri = $this->uriFactory->createUri('/' . ltrim($path, '/'));
 
-        if (($host = $route->getHost()) !== null) {
+        if (($host = $route->getDomain()) !== null) {
             $uri = $uri->withHost($host);
         } else {
             $uri = $uri->withHost($this->request->getUri()->getHost());
@@ -229,7 +229,7 @@ class UrlGenerator implements UrlGeneratorContract
             return (string) $uri;
         }
 
-        return '/' . self::getRelativePath('//' . $uri->getHost() . '/', (string) $uri);
+        return '/' . self::getRelativePath('//' . $uri->getDomain() . '/', (string) $uri);
     }
 
     /**

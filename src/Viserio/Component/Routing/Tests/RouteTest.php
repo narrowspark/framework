@@ -25,19 +25,19 @@ class RouteTest extends TestCase
         self::assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
     }
 
-    public function testgetHost()
+    public function testGetDomain()
     {
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
-        self::assertSame('test.com', $route->getHost());
+        self::assertSame('test.com', $route->getDomain());
 
         $route = new Route('GET', '/test', ['domain' => 'http://test.com']);
 
-        self::assertSame('test.com', $route->getHost());
+        self::assertSame('test.com', $route->getDomain());
 
         $route = new Route('GET', '/test', ['domain' => 'https://test.com']);
 
-        self::assertSame('test.com', $route->getHost());
+        self::assertSame('test.com', $route->getDomain());
     }
 
     public function testGetAndSetUri()
@@ -125,7 +125,7 @@ class RouteTest extends TestCase
             'controller' => 'routeController',
         ]);
 
-        self::assertSame('test.com', $route->getHost());
+        self::assertSame('test.com', $route->getDomain());
         self::assertTrue(is_array($route->getAction()));
         self::assertSame('routeController', $route->getActionName());
 

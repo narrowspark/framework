@@ -10,7 +10,7 @@ use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Routing\Router;
-use Viserio\Component\Routing\UrlGenerator;
+use Viserio\Component\Routing\Generator\UrlGenerator;
 
 class RoutingServiceProviderTest extends MockeryTestCase
 {
