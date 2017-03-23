@@ -196,7 +196,7 @@ class UrlGenerator implements UrlGeneratorContract
 
         // Once we have ensured that there are no missing parameters in the URI we will encode
         // the URI and prepare it for returning to the developer.
-        $path = strtr(rawurlencode((string) $path), self::$dontEncode);
+        $path = strtr(rawurlencode($path), self::$dontEncode);
 
         $path = $this->replacePathSegments($path);
 
