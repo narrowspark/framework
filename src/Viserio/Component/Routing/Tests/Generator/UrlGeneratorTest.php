@@ -75,18 +75,20 @@ class UrlGeneratorTest extends MockeryTestCase
         $this->assertEquals('/testing/bar', $url);
     }
 
-    public function testRelativeUrlWithNullParameter()
-    {
-        $routes = $this->getRoutes((new Route('GET', '/testing.{format}', ['as' => 'testing']))->setParameter('format', null));
-
-        $url = $this->getGenerator($routes)->generate('testing', []);
-
-        $this->assertEquals('/testing', $url);
-    }
-
     /**
      * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\RouteNotFoundException
      * @expectedExceptionMessage Unable to generate a URL for the named route [test] as such route does not exist.
+     */
+    public function testThrowExceptionOnNotFoundRoute()
+    {
+        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' => 'testing']));
+
+        $this->getGenerator($routes)->generate('test');
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\UrlGenerationException
+     * @expectedExceptionMessage Missing required parameters for [Route: testing] [URI: /testing/{foo}/bar].
      */
     public function testRelativeUrlWithNullParameterButNotOptional()
     {
@@ -94,28 +96,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         // This must raise an exception because the default requirement for "foo" is "[^/]+" which is not met with these params.
         // Generating path "/testing//bar" would be wrong as matching this route would fail.
-        $this->getGenerator($routes)->generate('test', []);
-    }
-
-    public function testRelativeUrlWithOptionalZeroParameter()
-    {
-        $routes = $this->getRoutes(new Route('GET', '/testing/{page}', ['as' =>'testing']));
-
-        $url = $this->getGenerator($routes)->generate('testing', ['page' => 0]);
-
-        $this->assertEquals('/testing/0', $url);
-    }
-
-    public function testNotPassedOptionalParameterInBetween()
-    {
-        $route = new Route('GET', '/{slug}/{page}', ['as' => 'testing']);
-        $route->setParameter('slug', 'index');
-        $route->setParameter('page', 0);
-
-        $routes = $this->getRoutes($route);
-
-        $this->assertSame('/index/1', $this->getGenerator($routes)->generate('testing', ['page' => 1]));
-        $this->assertSame('/', $this->getGenerator($routes)->generate('testing'));
+        $this->getGenerator($routes)->generate('testing');
     }
 
     public function testRelativeUrlWithExtraParameters()
@@ -156,18 +137,6 @@ class UrlGeneratorTest extends MockeryTestCase
         $this->getGenerator($routes)->generate('test', [], UrlGeneratorContract::ABSOLUTE_URL);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\InvalidParameterException
-     */
-    public function testRequiredParamAndEmptyPassed()
-    {
-        $route = new Route('GET', '/{slug}', ['as' => 'testing']);
-        $route->setParameter('slug', '.+');
-        $routes = $this->getRoutes($route);
-
-        $this->getGenerator($routes)->generate('testing', ['slug' => '']);
-    }
-
     public function testSchemeRequirementDoesNothingIfSameCurrentScheme()
     {
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'testing', 'http']));
@@ -195,7 +164,7 @@ class UrlGeneratorTest extends MockeryTestCase
         $routes = $this->getRoutes(new Route('GET', '//path-and-not-domain', ['as' => 'testing']));
 
         // this must not generate '//path-and-not-domain' because that would be a network path
-        $this->assertSame('/path-and-not-domain', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing', []));
+        $this->assertSame('/path-and-not-domain', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
     }
 
     protected function getGenerator(RouteCollection $routes, array $serverVar = [])

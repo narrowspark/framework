@@ -111,6 +111,59 @@ class UrlGenerator implements UrlGeneratorContract
     }
 
     /**
+     * Returns the target path as relative reference from the base path.
+     *
+     * Only the URIs path component (no schema, host etc.) is relevant and must be given, starting with a slash.
+     * Both paths must be absolute and not contain relative parts.
+     * Relative URLs from one resource to another are useful when generating self-contained downloadable document archives.
+     * Furthermore, they can be used to reduce the link size in documents.
+     *
+     * Example target paths, given a base path of "/a/b/c/d":
+     * - "/a/b/c/d"     -> ""
+     * - "/a/b/c/"      -> "./"
+     * - "/a/b/"        -> "../"
+     * - "/a/b/c/other" -> "other"
+     * - "/a/x/y"       -> "../../x/y"
+     *
+     * @param string $basePath   The base path
+     * @param string $targetPath The target path
+     *
+     * @return string The relative target path
+     */
+    public static function getRelativePath(string $basePath, string $targetPath): string
+    {
+        if ($basePath === $targetPath) {
+            return '';
+        }
+
+        $sourceDirs = explode('/', isset($basePath[0]) && '/' === $basePath[0] ? substr($basePath, 1) : $basePath);
+        $targetDirs = explode('/', isset($targetPath[0]) && '/' === $targetPath[0] ? substr($targetPath, 1) : $targetPath);
+
+        array_pop($sourceDirs);
+
+        $targetFile = array_pop($targetDirs);
+
+        foreach ($sourceDirs as $i => $dir) {
+            if (isset($targetDirs[$i]) && $dir === $targetDirs[$i]) {
+                unset($sourceDirs[$i], $targetDirs[$i]);
+            } else {
+                break;
+            }
+        }
+
+        $targetDirs[] = $targetFile;
+        $path = str_repeat('../', count($sourceDirs)).implode('/', $targetDirs);
+
+        // A reference to the same base directory or an empty subdirectory must be prefixed with "./".
+        // This also applies to a segment with a colon character (e.g., "file:colon") that cannot be used
+        // as the first segment of a relative-path reference, as it would be mistaken for a scheme name
+        // (see http://tools.ietf.org/html/rfc3986#section-4.2).
+        return '' === $path || '/' === $path[0]
+            || false !== ($colonPos = strpos($path, ':')) && ($colonPos < ($slashPos = strpos($path, '/')) || false === $slashPos)
+            ? "./$path" : $path;
+    }
+
+    /**
      * Get the URL for a given route instance.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
@@ -123,6 +176,12 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function toRoute(RouteContract $route, array $parameters, int $referenceType): string
     {
+        $parameters = array_replace($route->getParameters(), $parameters);
+
+        $parameters = array_filter($parameters, function($value) {
+            return !empty($value);
+        });
+
         // First we will construct the entire URI including the root and query string. Once it
         // has been constructed, we'll make sure we don't have any missing parameters or we
         // will need to throw the exception to let the developers know one was not given.
@@ -139,25 +198,60 @@ class UrlGenerator implements UrlGeneratorContract
         // the URI and prepare it for returning to the developer.
         $path = strtr(rawurlencode((string) $path), self::$dontEncode);
 
+        $path = $this->replacePathSegments($path);
+
         $uri = $this->uriFactory->createUri('/' . ltrim($path, '/'));
 
-        if (($domain = $route->getHost()) !== null) {
-            $uri = $uri->withHost($domain);
+        if (($host = $route->getHost()) !== null) {
+            $uri = $uri->withHost($host);
         } else {
             $uri = $uri->withHost($this->request->getUri()->getHost());
         }
 
-        $uri = $this->addPortAndSchemeToUri($uri, $route);
+        $requiredSchemes = false;
+        $requestScheme = $this->request->getUri()->getScheme();
 
-        if ($referenceType === self::ABSOLUTE_URL) {
+        if($route->isHttpOnly()) {
+            $requiredSchemes = $requestScheme !== 'http';
+        } elseif ($route->isHttpsOnly()) {
+            $requiredSchemes = $requestScheme !== 'https';
+        }
+
+        if ($referenceType === self::ABSOLUTE_URL || $requiredSchemes || $referenceType === self::NETWORK_PATH) {
+            $uri = $this->addPortAndSchemeToUri($uri, $route);
+        }
+
+        if ($referenceType === self::ABSOLUTE_URL || $requiredSchemes) {
+            return (string) $uri;
+        } elseif ($referenceType === self::NETWORK_PATH) {
+            $uri = $uri->withScheme('');
+
             return (string) $uri;
         }
 
-        return '/' . ltrim(str_replace(
-            $uri->getScheme() . '://' . $uri->getHost(),
-            '',
-            (string) $uri
-        ), '/');
+        return '/' . self::getRelativePath('//' . $uri->getHost() . '/', (string) $uri);
+    }
+
+    /**
+     * The path segments "." and ".." are interpreted as relative reference when resolving a URI;
+     * see http://tools.ietf.org/html/rfc3986#section-3.3 so we need to encode them as they are not used for this purpose here
+     * otherwise we would generate a URI that, when followed by a user agent (e.g. browser), does not match this route.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function replacePathSegments(string $path): string
+    {
+        $path = strtr($path, ['/../' => '/%2E%2E/', '/./' => '/%2E/']);
+
+        if ('/..' === substr($path, -3)) {
+            $path = substr($path, 0, -2).'%2E%2E';
+        } elseif ('/.' === substr($path, -2)) {
+            $path = substr($path, 0, -1).'%2E';
+        }
+
+        return $path;
     }
 
     /**
@@ -201,9 +295,11 @@ class UrlGenerator implements UrlGeneratorContract
         $path = $this->replaceNamedParameters($path, $parameters);
 
         $path = preg_replace_callback('/\{.*?\}/', function ($match) use (&$parameters) {
-            return (empty($parameters) && ! (mb_substr($match[0], -mb_strlen('?}')) === '?}'))
-                        ? $match[0]
-                        : array_shift($parameters);
+            if (empty($parameters) && ! (mb_substr($match[0], -mb_strlen('?}')) === '?}')) {
+                return $match[0];
+            }
+
+            return array_shift($parameters);
         }, $path);
 
         return trim(preg_replace('/\{.*?\?\}/', '', $path), '/');
@@ -220,7 +316,7 @@ class UrlGenerator implements UrlGeneratorContract
     protected function replaceNamedParameters(string $path, array &$parameters): string
     {
         return preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
-            if (isset($parameters[$m[1]])) {
+            if (isset($parameters[$m[1]]) && !empty($parameters[$m[1]])) {
                 return Arr::pull($parameters, $m[1]);
             }
 
@@ -247,7 +343,11 @@ class UrlGenerator implements UrlGeneratorContract
 
         $uri .= $this->getRouteQueryString($parameters);
 
-        return is_null($fragment) ? $uri : $uri . "#{$fragment}";
+        if (is_null($fragment)) {
+            return $uri;
+        }
+
+        return $uri . '#' . strtr(rawurlencode($fragment), ['%2F' => '/', '%3F' => '?']);
     }
 
     /**
@@ -262,12 +362,15 @@ class UrlGenerator implements UrlGeneratorContract
         // First we will get all of the string parameters that are remaining after we
         // have replaced the route wildcards. We'll then build a query string from
         // these string parameters then use it as a starting point for the rest.
-        if (count($parameters) == 0) {
+        if (count($parameters) == 0 || in_array(null, $parameters, true)) {
             return '';
         }
 
         $query = http_build_query(
-            $keyed = $this->getStringParameters($parameters)
+            $keyed = $this->getStringParameters($parameters),
+            '',
+            '&',
+            PHP_QUERY_RFC3986
         );
 
         // Lastly, if there are still parameters remaining, we will fetch the numeric
@@ -275,11 +378,14 @@ class UrlGenerator implements UrlGeneratorContract
         // will make the initial query string if it wasn't started with strings.
         if (count($keyed) < count($parameters)) {
             $query .= '&' . implode(
-                '&', $this->getNumericParameters($parameters)
+                '&',
+                $this->getNumericParameters($parameters)
             );
         }
 
-        return '?' . trim($query, '&');
+        // "/" and "?" can be left decoded for better user experience, see
+        // http://tools.ietf.org/html/rfc3986#section-3.4
+        return '?' . trim(strtr($query, array('%2F' => '/')), '&');
     }
 
     /**
