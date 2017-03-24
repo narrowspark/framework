@@ -174,7 +174,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        self::assertEquals('/category/foo', $this->getGenerator($routes)->generate('testing', array('slug1' => 'foo')));
+        self::assertEquals('/category/foo', $this->getGenerator($routes)->generate('testing', ['slug1' => 'foo']));
     }
 
     public function testWithAnIntegerAsADefaultValue()
@@ -184,7 +184,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        self::assertEquals('/foo', $this->getGenerator($routes)->generate('testing', array('default' => 'foo')));
+        self::assertEquals('/foo', $this->getGenerator($routes)->generate('testing', ['default' => 'foo']));
     }
 
     public function testNullForOptionalParameterIsIgnored()
@@ -194,7 +194,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        self::assertEquals('/test', $this->getGenerator($routes)->generate('testing', array('default' => null)));
+        self::assertEquals('/test', $this->getGenerator($routes)->generate('testing', ['default' => null]));
     }
 
     public function testWithRouteDomain()
@@ -213,23 +213,23 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        self::assertSame('/test?page=2', $this->getGenerator($routes)->generate('testing', array('page' => 2)));
-        self::assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', array('page' => 3)));
-        self::assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', array('page' => '3')));
+        self::assertSame('/test?page=2', $this->getGenerator($routes)->generate('testing', ['page' => 2]));
+        self::assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', ['page' => 3]));
+        self::assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', ['page' => '3']));
         self::assertSame('/test?page=1', $this->getGenerator($routes)->generate('testing'));
     }
 
     public function testArrayQueryParamSameAsDefault()
     {
         $route = new Route('GET', '/test', ['as' => 'testing']);
-        $route->setParameter('array', array('foo', 'bar'));
+        $route->setParameter('array', ['foo', 'bar']);
 
         $routes = $this->getRoutes($route);
 
-        self::assertSame('/test?array%5B0%5D=bar&array%5B1%5D=foo', $this->getGenerator($routes)->generate('testing', array('array' => array('bar', 'foo'))));
-        self::assertSame('/test?array%5Ba%5D=foo&array%5Bb%5D=bar', $this->getGenerator($routes)->generate('testing', array('array' => array('a' => 'foo', 'b' => 'bar'))));
-        self::assertSame('/test?array%5B0%5D=foo&array%5B1%5D=bar', $this->getGenerator($routes)->generate('testing', array('array' => array('foo', 'bar'))));
-        self::assertSame('/test?array%5B1%5D=bar&array%5B0%5D=foo', $this->getGenerator($routes)->generate('testing', array('array' => array(1 => 'bar', 0 => 'foo'))));
+        self::assertSame('/test?array%5B0%5D=bar&array%5B1%5D=foo', $this->getGenerator($routes)->generate('testing', ['array' => ['bar', 'foo']]));
+        self::assertSame('/test?array%5Ba%5D=foo&array%5Bb%5D=bar', $this->getGenerator($routes)->generate('testing', ['array' => ['a' => 'foo', 'b' => 'bar']]));
+        self::assertSame('/test?array%5B0%5D=foo&array%5B1%5D=bar', $this->getGenerator($routes)->generate('testing', ['array' => ['foo', 'bar']]));
+        self::assertSame('/test?array%5B1%5D=bar&array%5B0%5D=foo', $this->getGenerator($routes)->generate('testing', ['array' => [1 => 'bar', 0 => 'foo']]));
         self::assertSame('/test?array%5B0%5D=foo&array%5B1%5D=bar', $this->getGenerator($routes)->generate('testing'));
     }
 
@@ -281,15 +281,18 @@ class UrlGeneratorTest extends MockeryTestCase
         $route = new Route('GET', '/get{what}', ['as' => 'test']);
         $route->setParameter('what', 'All');
 
-        $routes = $this->getRoutes($route);
+        $routes    = $this->getRoutes($route);
         $generator = $this->getGenerator($routes);
 
         self::assertSame('/getAll', $generator->generate('test'));
-        self::assertSame('/getSites', $generator->generate('test', array('what' => 'Sites')));
+        self::assertSame('/getSites', $generator->generate('test', ['what' => 'Sites']));
     }
 
     /**
      * @dataProvider provideRelativePaths
+     * @param mixed $sourcePath
+     * @param mixed $targetPath
+     * @param mixed $expectedPath
      */
     public function testGetRelativePath($sourcePath, $targetPath, $expectedPath)
     {
@@ -298,108 +301,108 @@ class UrlGeneratorTest extends MockeryTestCase
 
     public function provideRelativePaths()
     {
-        return array(
-            array(
+        return [
+            [
                 '/same/dir/',
                 '/same/dir/',
                 '',
-            ),
-            array(
+            ],
+            [
                 '/same/file',
                 '/same/file',
                 '',
-            ),
-            array(
+            ],
+            [
                 '/',
                 '/file',
                 'file',
-            ),
-            array(
+            ],
+            [
                 '/',
                 '/dir/file',
                 'dir/file',
-            ),
-            array(
+            ],
+            [
                 '/dir/file.html',
                 '/dir/different-file.html',
                 'different-file.html',
-            ),
-            array(
+            ],
+            [
                 '/same/dir/extra-file',
                 '/same/dir/',
                 './',
-            ),
-            array(
+            ],
+            [
                 '/parent/dir/',
                 '/parent/',
                 '../',
-            ),
-            array(
+            ],
+            [
                 '/parent/dir/extra-file',
                 '/parent/',
                 '../',
-            ),
-            array(
+            ],
+            [
                 '/a/b/',
                 '/x/y/z/',
                 '../../x/y/z/',
-            ),
-            array(
+            ],
+            [
                 '/a/b/c/d/e',
                 '/a/c/d',
                 '../../../c/d',
-            ),
-            array(
+            ],
+            [
                 '/a/b/c//',
                 '/a/b/c/',
                 '../',
-            ),
-            array(
+            ],
+            [
                 '/a/b/c/',
                 '/a/b/c//',
                 './/',
-            ),
-            array(
+            ],
+            [
                 '/root/a/b/c/',
                 '/root/x/b/c/',
                 '../../../x/b/c/',
-            ),
-            array(
+            ],
+            [
                 '/a/b/c/d/',
                 '/a',
                 '../../../../a',
-            ),
-            array(
+            ],
+            [
                 '/special-chars/sp%20ce/1€/mäh/e=mc²',
                 '/special-chars/sp%20ce/1€/<µ>/e=mc²',
                 '../<µ>/e=mc²',
-            ),
-            array(
+            ],
+            [
                 'not-rooted',
                 'dir/file',
                 'dir/file',
-            ),
-            array(
+            ],
+            [
                 '//dir/',
                 '',
                 '../../',
-            ),
-            array(
+            ],
+            [
                 '/dir/',
                 '/dir/file:with-colon',
                 './file:with-colon',
-            ),
-            array(
+            ],
+            [
                 '/dir/',
                 '/dir/subdir/file:with-colon',
                 'subdir/file:with-colon',
-            ),
-            array(
+            ],
+            [
                 '/dir/',
                 '/dir/:subdir/',
                 './:subdir/',
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getGenerator(RouteCollection $routes, array $serverVar = [])
