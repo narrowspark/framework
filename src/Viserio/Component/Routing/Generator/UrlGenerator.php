@@ -6,7 +6,6 @@ use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\Routing\Exceptions\RouteNotFoundException;
 use Viserio\Component\Contracts\Routing\Exceptions\UrlGenerationException;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
@@ -17,7 +16,6 @@ use Viserio\Component\Support\Traits\MacroableTrait;
 class UrlGenerator implements UrlGeneratorContract
 {
     use MacroableTrait;
-    use LoggerAwareTrait;
 
     /**
      * The named parameter defaults.
@@ -178,9 +176,9 @@ class UrlGenerator implements UrlGeneratorContract
     {
         $parameters = array_replace($route->getParameters(), $parameters);
 
-        $parameters = array_filter($parameters, function ($value) {
-            return ! empty($value);
-        });
+        // $parameters = array_filter($parameters, function ($value) {
+        //     return ! empty($value);
+        // });
 
         // First we will construct the entire URI including the root and query string. Once it
         // has been constructed, we'll make sure we don't have any missing parameters or we

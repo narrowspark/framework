@@ -18,7 +18,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertEquals('http://localhost/testing', $url);
+        self::assertEquals('http://localhost/testing', $url);
     }
 
     public function testAbsoluteSecureUrlWithPort443()
@@ -27,7 +27,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertEquals('https://localhost/testing', $url);
+        self::assertEquals('https://localhost/testing', $url);
     }
 
     public function testAbsoluteUrlWithNonStandardPort()
@@ -36,7 +36,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes, ['SERVER_PORT' => 8080])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertEquals('http://localhost:8080/testing', $url);
+        self::assertEquals('http://localhost:8080/testing', $url);
     }
 
     public function testAbsoluteSecureUrlWithNonStandardPort()
@@ -45,7 +45,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes, ['HTTPS' => 'on', 'SERVER_PORT' => 8080])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertEquals('https://localhost:8080/testing', $url);
+        self::assertEquals('https://localhost:8080/testing', $url);
     }
 
     public function testRelativeUrlWithoutParameters()
@@ -54,7 +54,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', []);
 
-        $this->assertEquals('/testing', $url);
+        self::assertEquals('/testing', $url);
     }
 
     public function testRelativeUrlWithParameter()
@@ -63,7 +63,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['param1' => 'bar']);
 
-        $this->assertEquals('/testing/bar', $url);
+        self::assertEquals('/testing/bar', $url);
     }
 
     public function testRelativeUrlWithQueries()
@@ -72,7 +72,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['param1' => 'bar']);
 
-        $this->assertEquals('/testing/bar', $url);
+        self::assertEquals('/testing/bar', $url);
     }
 
     /**
@@ -90,9 +90,9 @@ class UrlGeneratorTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\UrlGenerationException
      * @expectedExceptionMessage Missing required parameters for [Route: testing] [URI: /testing/{foo}/bar].
      */
-    public function testRelativeUrlWithNullParameterButNotOptional()
+    public function testRelativeUrlWithNotOptionalParameter()
     {
-        $routes = $this->getRoutes((new Route('GET', '/testing/{foo}/bar', ['as' => 'testing']))->setParameter('foo', null));
+        $routes = $this->getRoutes((new Route('GET', '/testing/{foo}/bar', ['as' => 'testing'])));
 
         // This must raise an exception because the default requirement for "foo" is "[^/]+" which is not met with these params.
         // Generating path "/testing//bar" would be wrong as matching this route would fail.
@@ -105,7 +105,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['foo' => 'bar']);
 
-        $this->assertEquals('/testing?foo=bar', $url);
+        self::assertEquals('/testing?foo=bar', $url);
     }
 
     public function testAbsoluteUrlWithExtraParameters()
@@ -114,7 +114,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['foo' => 'bar'], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertEquals('http://localhost/testing?foo=bar', $url);
+        self::assertEquals('http://localhost/testing?foo=bar', $url);
     }
 
     public function testUrlWithNullExtraParameters()
@@ -123,7 +123,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['foo' => null], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertEquals('http://localhost/testing', $url);
+        self::assertEquals('http://localhost/testing', $url);
     }
 
     /**
@@ -141,22 +141,22 @@ class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'testing', 'http']));
 
-        $this->assertEquals('/', $this->getGenerator($routes)->generate('testing'));
+        self::assertEquals('/', $this->getGenerator($routes)->generate('testing'));
 
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'testing', 'https']));
 
-        $this->assertEquals('/', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
+        self::assertEquals('/', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
     }
 
     public function testSchemeRequirementForcesAbsoluteUrl()
     {
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'testing', 'https']));
 
-        $this->assertEquals('https://localhost/', $this->getGenerator($routes)->generate('testing'));
+        self::assertEquals('https://localhost/', $this->getGenerator($routes)->generate('testing'));
 
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'testing', 'http']));
 
-        $this->assertEquals('http://localhost/', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
+        self::assertEquals('http://localhost/', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
     }
 
     public function testPathWithTwoStartingSlashes()
@@ -164,7 +164,242 @@ class UrlGeneratorTest extends MockeryTestCase
         $routes = $this->getRoutes(new Route('GET', '//path-and-not-domain', ['as' => 'testing']));
 
         // this must not generate '//path-and-not-domain' because that would be a network path
-        $this->assertSame('/path-and-not-domain', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
+        self::assertSame('/path-and-not-domain', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
+    }
+
+    public function testNoTrailingSlashForMultipleOptionalParameters()
+    {
+        $route = new Route('GET', '/category/{slug1}/{slug2}/{slug3}', ['as' => 'testing']);
+        $route->setParameter('slug2', null)->setParameter('slug3', null);
+
+        $routes = $this->getRoutes($route);
+
+        self::assertEquals('/category/foo', $this->getGenerator($routes)->generate('testing', array('slug1' => 'foo')));
+    }
+
+    public function testWithAnIntegerAsADefaultValue()
+    {
+        $route = new Route('GET', '/{default}', ['as' => 'testing']);
+        $route->setParameter('default', 0);
+
+        $routes = $this->getRoutes($route);
+
+        self::assertEquals('/foo', $this->getGenerator($routes)->generate('testing', array('default' => 'foo')));
+    }
+
+    public function testNullForOptionalParameterIsIgnored()
+    {
+        $route = new Route('GET', '/test/{default}', ['as' => 'testing']);
+        $route->setParameter('default', 0);
+
+        $routes = $this->getRoutes($route);
+
+        self::assertEquals('/test', $this->getGenerator($routes)->generate('testing', array('default' => null)));
+    }
+
+    public function testWithRouteDomain()
+    {
+        $route = new Route('GET', '/foo', ['as' => 'testing', 'domain' => 'test.de', 'https']);
+
+        $routes = $this->getRoutes($route);
+
+        self::assertEquals('https://test.de/foo', $this->getGenerator($routes)->generate('testing'));
+    }
+
+    public function testQueryParamSameAsDefault()
+    {
+        $route = new Route('GET', '/test', ['as' => 'testing']);
+        $route->setParameter('page', 1);
+
+        $routes = $this->getRoutes($route);
+
+        self::assertSame('/test?page=2', $this->getGenerator($routes)->generate('testing', array('page' => 2)));
+        self::assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', array('page' => 3)));
+        self::assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', array('page' => '3')));
+        self::assertSame('/test?page=1', $this->getGenerator($routes)->generate('testing'));
+    }
+
+    public function testArrayQueryParamSameAsDefault()
+    {
+        $route = new Route('GET', '/test', ['as' => 'testing']);
+        $route->setParameter('array', array('foo', 'bar'));
+
+        $routes = $this->getRoutes($route);
+
+        self::assertSame('/test?array%5B0%5D=bar&array%5B1%5D=foo', $this->getGenerator($routes)->generate('testing', array('array' => array('bar', 'foo'))));
+        self::assertSame('/test?array%5Ba%5D=foo&array%5Bb%5D=bar', $this->getGenerator($routes)->generate('testing', array('array' => array('a' => 'foo', 'b' => 'bar'))));
+        self::assertSame('/test?array%5B0%5D=foo&array%5B1%5D=bar', $this->getGenerator($routes)->generate('testing', array('array' => array('foo', 'bar'))));
+        self::assertSame('/test?array%5B1%5D=bar&array%5B0%5D=foo', $this->getGenerator($routes)->generate('testing', array('array' => array(1 => 'bar', 0 => 'foo'))));
+        self::assertSame('/test?array%5B0%5D=foo&array%5B1%5D=bar', $this->getGenerator($routes)->generate('testing'));
+    }
+
+    public function testGenerateWithSpecialRouteName()
+    {
+        $routes = $this->getRoutes(new Route('GET', '/bar', ['as' => '$péß^a|']));
+
+        self::assertSame('/bar', $this->getGenerator($routes)->generate('$péß^a|'));
+    }
+
+    // public function testUrlEncoding()
+    // {
+    //     $expectedPath = '/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
+    //         .'/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
+    //         .'?query=%40%3A%5B%5D/%28%29%2A%27%22%20%2B%2C%3B-._~%26%24%3C%3E%7C%7B%7D%25%5C%5E%60%21%3Ffoo%3Dbar%23id';
+
+    //     // This tests the encoding of reserved characters that are used for delimiting of URI components (defined in RFC 3986)
+    //     // and other special ASCII chars. These chars are tested as static text path, variable path and query param.
+    //     $chars = '@:[]/()*\'" +,;-._~&$<>|{}%\\^`!?foo=bar#id';
+
+    //     $route = new Route('GET', '/'.$chars.'/{varpath}', ['as' => 'testing']);
+    //     $route->setParameter('varpath', '.+');
+
+    //     $routes = $this->getRoutes($route);
+
+    //     self::assertSame($expectedPath, $this->getGenerator($routes)->generate('testing', array(
+    //         'varpath' => $chars,
+    //         'query' => $chars,
+    //     )));
+    // }
+
+    public function testEncodingOfRelativePathSegments()
+    {
+        $routes = $this->getRoutes(new Route('GET', '/dir/../dir/..', ['as' => 'test']));
+
+        self::assertSame('/dir/%2E%2E/dir/%2E%2E', $this->getGenerator($routes)->generate('test'));
+
+        $routes = $this->getRoutes(new Route('GET', '/dir/./dir/.', ['as' => 'test']));
+
+        self::assertSame('/dir/%2E/dir/%2E', $this->getGenerator($routes)->generate('test'));
+
+        $routes = $this->getRoutes(new Route('GET', '/a./.a/a../..a/...', ['as' => 'test']));
+
+        self::assertSame('/a./.a/a../..a/...', $this->getGenerator($routes)->generate('test'));
+    }
+
+    public function testVariableWithNoRealSeparator()
+    {
+        $route = new Route('GET', '/get{what}', ['as' => 'test']);
+        $route->setParameter('what', 'All');
+
+        $routes = $this->getRoutes($route);
+        $generator = $this->getGenerator($routes);
+
+        self::assertSame('/getAll', $generator->generate('test'));
+        self::assertSame('/getSites', $generator->generate('test', array('what' => 'Sites')));
+    }
+
+    /**
+     * @dataProvider provideRelativePaths
+     */
+    public function testGetRelativePath($sourcePath, $targetPath, $expectedPath)
+    {
+        self::assertSame($expectedPath, UrlGenerator::getRelativePath($sourcePath, $targetPath));
+    }
+
+    public function provideRelativePaths()
+    {
+        return array(
+            array(
+                '/same/dir/',
+                '/same/dir/',
+                '',
+            ),
+            array(
+                '/same/file',
+                '/same/file',
+                '',
+            ),
+            array(
+                '/',
+                '/file',
+                'file',
+            ),
+            array(
+                '/',
+                '/dir/file',
+                'dir/file',
+            ),
+            array(
+                '/dir/file.html',
+                '/dir/different-file.html',
+                'different-file.html',
+            ),
+            array(
+                '/same/dir/extra-file',
+                '/same/dir/',
+                './',
+            ),
+            array(
+                '/parent/dir/',
+                '/parent/',
+                '../',
+            ),
+            array(
+                '/parent/dir/extra-file',
+                '/parent/',
+                '../',
+            ),
+            array(
+                '/a/b/',
+                '/x/y/z/',
+                '../../x/y/z/',
+            ),
+            array(
+                '/a/b/c/d/e',
+                '/a/c/d',
+                '../../../c/d',
+            ),
+            array(
+                '/a/b/c//',
+                '/a/b/c/',
+                '../',
+            ),
+            array(
+                '/a/b/c/',
+                '/a/b/c//',
+                './/',
+            ),
+            array(
+                '/root/a/b/c/',
+                '/root/x/b/c/',
+                '../../../x/b/c/',
+            ),
+            array(
+                '/a/b/c/d/',
+                '/a',
+                '../../../../a',
+            ),
+            array(
+                '/special-chars/sp%20ce/1€/mäh/e=mc²',
+                '/special-chars/sp%20ce/1€/<µ>/e=mc²',
+                '../<µ>/e=mc²',
+            ),
+            array(
+                'not-rooted',
+                'dir/file',
+                'dir/file',
+            ),
+            array(
+                '//dir/',
+                '',
+                '../../',
+            ),
+            array(
+                '/dir/',
+                '/dir/file:with-colon',
+                './file:with-colon',
+            ),
+            array(
+                '/dir/',
+                '/dir/subdir/file:with-colon',
+                'subdir/file:with-colon',
+            ),
+            array(
+                '/dir/',
+                '/dir/:subdir/',
+                './:subdir/',
+            ),
+        );
     }
 
     protected function getGenerator(RouteCollection $routes, array $serverVar = [])
