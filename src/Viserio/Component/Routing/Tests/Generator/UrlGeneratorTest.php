@@ -406,17 +406,6 @@ class UrlGeneratorTest extends MockeryTestCase
         ];
     }
 
-    public function testHostIsCaseInsensitive()
-    {
-        $route = new Route('GET', '/', ['as' => 'test', 'domain' => 'EN.FooBar.com']);
-
-        $routes = $this->getRoutes($route);
-
-        $generator = $this->getGenerator($routes);
-
-        self::assertSame('//en.foobar.com/', $generator->generate('test', [], UrlGeneratorContract::NETWORK_PATH));
-    }
-
     public function testGenerateNetworkPath()
     {
         $routes = $this->getRoutes(new Route('GET', '/{name}', ['as' => 'test', 'domain' => 'fr.example.com', 'http']));
