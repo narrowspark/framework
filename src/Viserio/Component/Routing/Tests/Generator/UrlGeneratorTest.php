@@ -290,6 +290,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     /**
      * @dataProvider provideRelativePaths
+     *
      * @param mixed $sourcePath
      * @param mixed $targetPath
      * @param mixed $expectedPath
@@ -422,25 +423,25 @@ class UrlGeneratorTest extends MockeryTestCase
 
         self::assertSame(
             '//fr.example.com/Narrow',
-            $this->getGenerator($routes)->generate('test', array('name' => 'Narrow'), UrlGeneratorContract::NETWORK_PATH),
+            $this->getGenerator($routes)->generate('test', ['name' => 'Narrow'], UrlGeneratorContract::NETWORK_PATH),
             'network path with different host'
         );
 
         self::assertSame(
             '//fr.example.com/Narrow?query=string',
-            $this->getGenerator($routes)->generate('test', array('name' => 'Narrow', 'query' => 'string'), UrlGeneratorContract::NETWORK_PATH),
+            $this->getGenerator($routes)->generate('test', ['name' => 'Narrow', 'query' => 'string'], UrlGeneratorContract::NETWORK_PATH),
             'network path although host same as context'
         );
 
         self::assertSame(
             'http://fr.example.com/Narrow',
-            $this->getGenerator($routes, array('HTTPS' => 'on'))->generate('test', array('name' => 'Narrow'), UrlGeneratorContract::NETWORK_PATH),
+            $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('test', ['name' => 'Narrow'], UrlGeneratorContract::NETWORK_PATH),
             'absolute URL because scheme requirement does not match route scheme'
         );
 
         self::assertSame(
             'http://fr.example.com/Narrow',
-            $this->getGenerator($routes)->generate('test', array('name' => 'Narrow'), UrlGeneratorContract::ABSOLUTE_URL),
+            $this->getGenerator($routes)->generate('test', ['name' => 'Narrow'], UrlGeneratorContract::ABSOLUTE_URL),
             'absolute URL with same scheme because it is requested'
         );
     }
