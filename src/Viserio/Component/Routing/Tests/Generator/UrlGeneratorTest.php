@@ -77,7 +77,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\RouteNotFoundException
-     * @expectedExceptionMessage Unable to generate a URL for the named route [test] as such route does not exist.
+     * @expectedExceptionMessage Unable to generate a URL for the named/action route [test] as such route does not exist.
      */
     public function testThrowExceptionOnNotFoundRoute()
     {
@@ -128,7 +128,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\RouteNotFoundException
-     * @expectedExceptionMessage Unable to generate a URL for the named route [test] as such route does not exist.
+     * @expectedExceptionMessage Unable to generate a URL for the named/action route [test] as such route does not exist.
      */
     public function testGenerateWithoutRoutes()
     {
@@ -239,27 +239,6 @@ class UrlGeneratorTest extends MockeryTestCase
 
         self::assertSame('/bar', $this->getGenerator($routes)->generate('$péß^a|'));
     }
-
-    // public function testUrlEncoding()
-    // {
-    //     $expectedPath = '/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
-    //         .'/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
-    //         .'?query=%40%3A%5B%5D/%28%29%2A%27%22%20%2B%2C%3B-._~%26%24%3C%3E%7C%7B%7D%25%5C%5E%60%21%3Ffoo%3Dbar%23id';
-
-    //     // This tests the encoding of reserved characters that are used for delimiting of URI components (defined in RFC 3986)
-    //     // and other special ASCII chars. These chars are tested as static text path, variable path and query param.
-    //     $chars = '@:[]/()*\'" +,;-._~&$<>|{}%\\^`!?foo=bar#id';
-
-    //     $route = new Route('GET', '/'.$chars.'/{varpath}', ['as' => 'testing']);
-    //     $route->setParameter('varpath', '.+');
-
-    //     $routes = $this->getRoutes($route);
-
-    //     self::assertSame($expectedPath, $this->getGenerator($routes)->generate('testing', array(
-    //         'varpath' => $chars,
-    //         'query' => $chars,
-    //     )));
-    // }
 
     public function testEncodingOfRelativePathSegments()
     {

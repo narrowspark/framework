@@ -97,18 +97,6 @@ class UrlGenerator implements UrlGeneratorContract
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
-    {
-        if (($route = $this->routes->getByName($name)) !== null) {
-            return $this->toRoute($route, $parameters, $referenceType);
-        }
-
-        throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route [%s] as such route does not exist.', $name));
-    }
-
-    /**
      * Returns the target path as relative reference from the base path.
      *
      * Only the URIs path component (no schema, host etc.) is relevant and must be given, starting with a slash.
@@ -162,6 +150,20 @@ class UrlGenerator implements UrlGeneratorContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
+    {
+        $routes = $this->routes;
+
+        if (($route = $routes->getByName($name)) !== null || ($route = $routes->getByAction($name)) !== null) {
+            return $this->toRoute($route, $parameters, $referenceType);
+        }
+
+        throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named/action route [%s] as such route does not exist.', $name));
+    }
+
+    /**
      * Get the URL for a given route instance.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
@@ -176,10 +178,6 @@ class UrlGenerator implements UrlGeneratorContract
     {
         $parameters = array_replace($route->getParameters(), $parameters);
 
-        // $parameters = array_filter($parameters, function ($value) {
-        //     return ! empty($value);
-        // });
-
         // First we will construct the entire URI including the root and query string. Once it
         // has been constructed, we'll make sure we don't have any missing parameters or we
         // will need to throw the exception to let the developers know one was not given.
@@ -188,15 +186,17 @@ class UrlGenerator implements UrlGeneratorContract
             $parameters
         );
 
-        if (preg_match('/\{.*?\}/', $path)) {
+        preg_match("/\{(.*?)\}/", $path, $matches);
+
+        if (isset($matches[1]) && $matches[1] !== '') {
             throw new UrlGenerationException($route);
         }
+
+        $path = $this->replacePathSegments($path);
 
         // Once we have ensured that there are no missing parameters in the URI we will encode
         // the URI and prepare it for returning to the developer.
         $path = strtr(rawurlencode($path), self::$dontEncode);
-
-        $path = $this->replacePathSegments($path);
 
         $uri = $this->uriFactory->createUri('/' . ltrim($path, '/'));
 
