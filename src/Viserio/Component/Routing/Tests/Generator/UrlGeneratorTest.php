@@ -405,6 +405,46 @@ class UrlGeneratorTest extends MockeryTestCase
         ];
     }
 
+    public function testHostIsCaseInsensitive()
+    {
+        $route = new Route('GET', '/', ['as' => 'test', 'domain' => 'EN.FooBar.com']);
+
+        $routes = $this->getRoutes($route);
+
+        $generator = $this->getGenerator($routes);
+
+        self::assertSame('//en.foobar.com/', $generator->generate('test', [], UrlGeneratorContract::NETWORK_PATH));
+    }
+
+    public function testGenerateNetworkPath()
+    {
+        $routes = $this->getRoutes(new Route('GET', '/{name}', ['as' => 'test', 'domain' => 'fr.example.com', 'http']));
+
+        self::assertSame(
+            '//fr.example.com/Narrow',
+            $this->getGenerator($routes)->generate('test', array('name' => 'Narrow'), UrlGeneratorContract::NETWORK_PATH),
+            'network path with different host'
+        );
+
+        self::assertSame(
+            '//fr.example.com/Narrow?query=string',
+            $this->getGenerator($routes)->generate('test', array('name' => 'Narrow', 'query' => 'string'), UrlGeneratorContract::NETWORK_PATH),
+            'network path although host same as context'
+        );
+
+        self::assertSame(
+            'http://fr.example.com/Narrow',
+            $this->getGenerator($routes, array('HTTPS' => 'on'))->generate('test', array('name' => 'Narrow'), UrlGeneratorContract::NETWORK_PATH),
+            'absolute URL because scheme requirement does not match route scheme'
+        );
+
+        self::assertSame(
+            'http://fr.example.com/Narrow',
+            $this->getGenerator($routes)->generate('test', array('name' => 'Narrow'), UrlGeneratorContract::ABSOLUTE_URL),
+            'absolute URL with same scheme because it is requested'
+        );
+    }
+
     protected function getGenerator(RouteCollection $routes, array $serverVar = [])
     {
         $server =  [
