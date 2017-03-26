@@ -59,7 +59,7 @@ interface Route
      *
      * @return $this
      */
-    public function where($name, string $expression = null): Route;
+    public function where($name, ?string $expression = null): Route;
 
     /**
      * Get all middleware, including the ones from the controller.

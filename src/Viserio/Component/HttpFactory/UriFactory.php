@@ -15,6 +15,6 @@ final class UriFactory implements UriFactoryInterface
      */
     public function createUri($uri = ''): UriInterface
     {
-        return new Uri($uri);
+        return Uri::createFromString($uri);
     }
 }

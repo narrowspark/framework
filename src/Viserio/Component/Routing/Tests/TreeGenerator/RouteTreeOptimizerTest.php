@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Tests\Generator;
+namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Routing\Pattern;

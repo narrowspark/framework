@@ -7,6 +7,7 @@ use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\Routing\Matchers\ParameterMatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Tests\Fixture\Controller;
+use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 
 class RouteTest extends TestCase
 {
@@ -20,7 +21,7 @@ class RouteTest extends TestCase
 
         self::assertSame(['PUT'], $route->getMethods());
 
-        $route = new Route(['GET', 'POST'], '/test', ['uses' => Controller::class . '@string']);
+        $route = new Route(['GET', 'POST'], '/test', ['controller' => InvokableActionFixture::class]);
 
         self::assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
     }

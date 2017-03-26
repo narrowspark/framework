@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
+use Countable;
 use RuntimeException;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 
-class Collection implements RouteCollectionContract
+class Collection implements Countable, RouteCollectionContract
 {
     /**
      * An flattened array of all of the routes.
@@ -68,7 +69,7 @@ class Collection implements RouteCollectionContract
      */
     public function getByName(string $name): ?RouteContract
     {
-        return isset($this->nameList[$name]) ? $this->nameList[$name] : null;
+        return $this->nameList[$name] ?? null;
     }
 
     /**
@@ -76,7 +77,7 @@ class Collection implements RouteCollectionContract
      */
     public function getByAction(string $action): ?RouteContract
     {
-        return isset($this->actionList[$action]) ? $this->actionList[$action] : null;
+        return $this->actionList[$action] ?? null;
     }
 
     /**
@@ -87,6 +88,16 @@ class Collection implements RouteCollectionContract
     public function getRoutes(): array
     {
         return array_values($this->allRoutes);
+    }
+
+    /**
+     * Count the number of items in the collection.
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->allRoutes);
     }
 
     /**

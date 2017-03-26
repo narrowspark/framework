@@ -19,7 +19,7 @@ class RedirectResponseTest extends TestCase
 
     public function testConstructorAcceptsUriInstanceAndProduces302ResponseWithLocationHeader()
     {
-        $uri      = new Uri('https://example.com:10082/foo/bar');
+        $uri      = Uri::createFromString('https://example.com:10082/foo/bar');
         $response = new RedirectResponse($uri);
 
         self::assertEquals(302, $response->getStatusCode());

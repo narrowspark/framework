@@ -4,7 +4,9 @@ namespace Viserio\Component\Routing\Tests\Router;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use stdClass;
 use Viserio\Component\HttpFactory\ResponseFactory;
+use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Router;
 
@@ -28,6 +30,20 @@ class RouterTest extends MockeryTestCase
         parent::tearDown();
 
         $this->delTree(__DIR__ . '/../Cache/');
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testRouterInvalidRouteAction()
+    {
+        $router    = new Router($this->mock(ContainerInterface::class));
+        $router->setCachePath(__DIR__ . '/invalid.cache');
+
+        $router->get('/invalid', ['uses' => stdClass::class]);
+        $router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($_SERVER, 'GET', 'invalid')
+        );
     }
 
     public function testMergingControllerUses()
