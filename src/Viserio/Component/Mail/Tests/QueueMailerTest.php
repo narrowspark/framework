@@ -8,6 +8,7 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Swift_Mailer;
+use Swift_Message;
 use Swift_Mime_Message;
 use Swift_Transport;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
@@ -158,6 +159,8 @@ class QueueMailerTest extends MockeryTestCase
         $swift->shouldReceive('getTransport')
             ->once()
             ->andReturn($transport);
+        $swift->shouldReceive('createMessage')
+            ->andReturn(new Swift_Message());
 
         $mailer->setSwiftMailer($swift);
 
@@ -166,8 +169,12 @@ class QueueMailerTest extends MockeryTestCase
 
     protected function getMailer()
     {
+        $swift = $this->mock(Swift_Mailer::class);
+        $swift->shouldReceive('createMessage')
+            ->andReturn(new Swift_Message());
+
         $mailer = new QueueMailer(
-            $this->mock(Swift_Mailer::class),
+            $swift,
             $this->mock(QueueContract::class),
             new ArrayContainer([
                 'config' => ['viserio' => ['mail' => []]],

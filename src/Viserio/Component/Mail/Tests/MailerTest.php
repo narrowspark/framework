@@ -5,6 +5,7 @@ namespace Viserio\Component\Mail\Tests;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
+use Swift_Message;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
@@ -307,8 +308,11 @@ class MailerTest extends MockeryTestCase
      */
     public function testMailerToThrowExceptionOnCallbackWithContainer()
     {
+        $swift = $this->mock(Swift_Mailer::class);
+        $swift->shouldReceive('createMessage')
+            ->andReturn(new Swift_Message());
         $mailer = new Mailer(
-            $this->mock(Swift_Mailer::class),
+            $swift,
             ['viserio' => ['mail' => []]]
         );
         $mailer->setContainer(new ArrayContainer([]));
@@ -322,8 +326,11 @@ class MailerTest extends MockeryTestCase
      */
     public function testMailerToThrowExceptionOnCallback()
     {
+        $swift = $this->mock(Swift_Mailer::class);
+        $swift->shouldReceive('createMessage')
+            ->andReturn(new Swift_Message());
         $mailer = new Mailer(
-            $this->mock(Swift_Mailer::class),
+            $swift,
             ['viserio' => ['mail' => []]]
         );
 
@@ -339,6 +346,8 @@ class MailerTest extends MockeryTestCase
         $swift->shouldReceive('getTransport')
             ->once()
             ->andReturn($transport);
+        $swift->shouldReceive('createMessage')
+            ->andReturn(new Swift_Message());
 
         $mailer->setSwiftMailer($swift);
 
