@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
-use stdClass;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use stdClass;
 use Viserio\Component\HttpFactory\ResponseFactory;
+use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Router;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class RouterTest extends MockeryTestCase
 {
