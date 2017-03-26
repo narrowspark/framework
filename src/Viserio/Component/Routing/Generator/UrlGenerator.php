@@ -176,6 +176,42 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function toRoute(RouteContract $route, array $parameters, int $referenceType): string
     {
+        $path = $this->prepareRoutePath($route, $parameters);
+        $uri  = $this->uriFactory->createUri('/' . ltrim($path, '/'));
+
+        if (($host = $route->getDomain()) !== null) {
+            $uri = $uri->withHost($host);
+        } else {
+            $uri = $uri->withHost($this->request->getUri()->getHost());
+        }
+
+        $requiredSchemes = $this->isSchemeRequired($route);
+
+        if ($referenceType === self::ABSOLUTE_URL || $requiredSchemes || $referenceType === self::NETWORK_PATH) {
+            $uri = $this->addPortAndSchemeToUri($uri, $route);
+        }
+
+        if ($referenceType === self::ABSOLUTE_URL || $requiredSchemes) {
+            return (string) $uri;
+        } elseif ($referenceType === self::NETWORK_PATH) {
+            $uri = $uri->withScheme('');
+
+            return (string) $uri;
+        }
+
+        return '/' . self::getRelativePath('//' . $uri->getHost() . '/', (string) $uri);
+    }
+
+    /**
+     * Prepare route patch with all parameters and encode the path.
+     *
+     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param array                                      $parameters
+     *
+     * @return string
+     */
+    protected function prepareRoutePath(RouteContract $route, array $parameters): string
+    {
         $parameters = array_replace($route->getParameters(), $parameters);
 
         // First we will construct the entire URI including the root and query string. Once it
@@ -196,16 +232,18 @@ class UrlGenerator implements UrlGeneratorContract
 
         // Once we have ensured that there are no missing parameters in the URI we will encode
         // the URI and prepare it for returning to the developer.
-        $path = strtr(rawurlencode($path), self::$dontEncode);
+        return strtr(rawurlencode($path), self::$dontEncode);
+    }
 
-        $uri = $this->uriFactory->createUri('/' . ltrim($path, '/'));
-
-        if (($host = $route->getDomain()) !== null) {
-            $uri = $uri->withHost($host);
-        } else {
-            $uri = $uri->withHost($this->request->getUri()->getHost());
-        }
-
+    /**
+     * Check if a scheme is required.
+     *
+     * @param \Viserio\Component\Contracts\Routing\Route $route
+     *
+     * @return bool
+     */
+    protected function isSchemeRequired(RouteContract $route): bool
+    {
         $requiredSchemes = false;
         $requestScheme   = $this->request->getUri()->getScheme();
 
@@ -215,19 +253,7 @@ class UrlGenerator implements UrlGeneratorContract
             $requiredSchemes = $requestScheme !== 'https';
         }
 
-        if ($referenceType === self::ABSOLUTE_URL || $requiredSchemes || $referenceType === self::NETWORK_PATH) {
-            $uri = $this->addPortAndSchemeToUri($uri, $route);
-        }
-
-        if ($referenceType === self::ABSOLUTE_URL || $requiredSchemes) {
-            return (string) $uri;
-        } elseif ($referenceType === self::NETWORK_PATH) {
-            $uri = $uri->withScheme('');
-
-            return (string) $uri;
-        }
-
-        return '/' . self::getRelativePath('//' . $uri->getHost() . '/', (string) $uri);
+        return $requiredSchemes;
     }
 
     /**

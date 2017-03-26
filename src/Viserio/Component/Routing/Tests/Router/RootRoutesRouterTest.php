@@ -9,6 +9,7 @@ use Viserio\Component\Routing\Tests\Fixture\ControllerClosureMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\RouteTestClosureMiddlewareController;
+use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 
 class RootRoutesRouterTest extends RouteRouterBaseTest
 {
@@ -19,6 +20,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
             ['GET', '', 'Hello'],
             ['GET', '/', 'Hello'],
             ['GET', '/middleware', 'caught'],
+            ['GET', '/invoke', 'Hallo'],
             ['GET', '/middleware2', 'caught'],
             ['GET', '/foo/bar/åαф', 'Hello'],
             ['GET', '/middleware3', 'index-foo-middleware-controller-closure'],
@@ -140,6 +142,15 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
             'middlewares'         => FooMiddleware::class,
             'without_middlewares' => FooMiddleware::class,
         ])->setParameter('name', 'middleware4');
+
+        $router->getContainer()->shouldReceive('has')
+            ->with(InvokableActionFixture::class)
+            ->andReturn(true);
+        $router->getContainer()->shouldReceive('get')
+            ->with(InvokableActionFixture::class)
+            ->andReturn(new InvokableActionFixture());
+
+        $router->get('/invoke', ['uses' => InvokableActionFixture::class]);
 
         $router->group(['prefix' => 'all/'], __DIR__ . '/../Fixture/routes.php');
         $router->group(['prefix' => 'noslash'], __DIR__ . '/../Fixture/routes.php');

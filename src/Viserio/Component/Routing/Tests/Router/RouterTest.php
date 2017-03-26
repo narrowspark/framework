@@ -30,6 +30,21 @@ class RouterTest extends MockeryTestCase
         $this->delTree(__DIR__ . '/../Cache/');
     }
 
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testRouterInvalidRouteAction()
+    {
+        $router    = new Router($this->mock(ContainerInterface::class));
+        $router->setCachePath(__DIR__ . '/invalid.cache');
+
+        $router->get('/invalid', ['uses' => InvalidActionFixture::class]);
+        $router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($_SERVER, 'GET', 'invalid'),
+            (new ResponseFactory())->createResponse()
+        );
+    }
+
     public function testMergingControllerUses()
     {
         $router = $this->router;

@@ -414,6 +414,22 @@ class UrlGeneratorTest extends MockeryTestCase
         );
     }
 
+    public function testFindRouteOnAction()
+    {
+        $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'test', 'controller' => 'Home@index']));
+
+        self::assertSame('/', $this->getGenerator($routes)->generate('Home@index'));
+    }
+
+    public function testFragmentUrl()
+    {
+        $routes = $this->getRoutes(new Route('GET', '/index#test', ['as' => 'test',]));
+
+        self::assertSame('/index#test', $this->getGenerator($routes)->generate('test'));
+        self::assertSame('/index?baz=foo#test', $this->getGenerator($routes)->generate('test', ['baz' => 'foo']));
+        self::assertSame('/index?baz=%C3%A5%CE%B1%D1%84#test', $this->getGenerator($routes)->generate('test', ['baz' => 'åαф']));
+    }
+
     protected function getGenerator(RouteCollection $routes, array $serverVar = [])
     {
         $server =  [

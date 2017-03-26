@@ -36,7 +36,7 @@ abstract class RouteRouterBaseTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        $this->delTree(__DIR__ . '/../Cache/');
+        $this->delTree(__DIR__ . '/../Cache');
     }
 
     /**
@@ -65,7 +65,7 @@ abstract class RouteRouterBaseTest extends MockeryTestCase
         $files = array_diff(scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+            is_dir("$dir/$file") ? $this->delTree("$dir/$file") : unlink("$dir/$file");
         }
 
         return rmdir($dir);
