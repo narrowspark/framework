@@ -2,11 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use stdClass;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Router;
+use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class RouterTest extends MockeryTestCase
 {
@@ -38,10 +40,9 @@ class RouterTest extends MockeryTestCase
         $router    = new Router($this->mock(ContainerInterface::class));
         $router->setCachePath(__DIR__ . '/invalid.cache');
 
-        $router->get('/invalid', ['uses' => InvalidActionFixture::class]);
+        $router->get('/invalid', ['uses' => stdClass::class]);
         $router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($_SERVER, 'GET', 'invalid'),
-            (new ResponseFactory())->createResponse()
+            (new ServerRequestFactory())->createServerRequest($_SERVER, 'GET', 'invalid')
         );
     }
 

@@ -41,8 +41,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
     public function testRouter404($httpMethod, $uri)
     {
         $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($_SERVER, $httpMethod, $uri),
-            (new ResponseFactory())->createResponse()
+            (new ServerRequestFactory())->createServerRequest($_SERVER, $httpMethod, $uri)
         );
     }
 
