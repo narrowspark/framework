@@ -19,17 +19,17 @@ class ConsoleExceptionEvent implements EventContract
     private $exception;
 
     /**
-     * Create a new command exception event.
+     * Create a new command event.
      *
-     * @param \Viserio\Component\Contracts\Console\Application $application
-     * @param array                                            $params
+     * @param \Symfony\Component\Console\Command\Command $command
+     * @param array                                      $params
      *
      * @codeCoverageIgnore
      */
-    public function __construct(ApplicationContract $application, array $params)
+    public function __construct(Command $command, array $params)
     {
         $this->name       = 'command.exception';
-        $this->target     = $application;
+        $this->target     = $command;
         $this->parameters = $params;
     }
 

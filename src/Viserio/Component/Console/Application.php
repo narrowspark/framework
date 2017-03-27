@@ -29,6 +29,7 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
+use Symfony\Component\Console\Input\InputAwareInterface;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -327,9 +328,11 @@ class Application extends SymfonyConsole implements ApplicationContract
             ['command_name' => $command->getName(), 'input' => $input, 'output' => $output]
         ));
 
+        $exitCode = 0;
+
         if ($event->commandShouldRun()) {
             try {
-                $e        = null;
+                $e = $x = null;
                 $exitCode = $command->run($input, $output);
             } catch (Throwable $x) {
                 $e = new FatalThrowableError($x);
