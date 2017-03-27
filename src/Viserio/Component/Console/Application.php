@@ -9,9 +9,12 @@ use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputAwareInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -20,17 +23,14 @@ use Symfony\Component\Process\ProcessUtils;
 use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
 use Viserio\Component\Console\Command\ExpressionParser as Parser;
-use Viserio\Component\Console\Events\ConsoleTerminateEvent;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleErrorEvent;
+use Viserio\Component\Console\Events\ConsoleTerminateEvent;
 use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -310,7 +310,7 @@ class Application extends SymfonyConsole implements ApplicationContract
 
             if ($event->isErrorHandled()) {
                 $orginalException = null;
-                $exitCode = 0;
+                $exitCode         = 0;
             } else {
                 $exitCode = $event->getError()->getCode();
             }
