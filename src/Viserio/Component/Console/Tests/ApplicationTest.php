@@ -41,19 +41,6 @@ class ApplicationTest extends MockeryTestCase
         $this->application = new Application($container, '1.0.0');
     }
 
-    public function testCerebroStartingEventIstriggered()
-    {
-        $events = $this->mock(EventManagerContract::class);
-        $events->shouldReceive('trigger')
-            ->once();
-
-        $container = new ArrayContainer([
-            EventManagerContract::class => $events,
-        ]);
-
-        $this->application = new Application($container, '1.0.0');
-    }
-
     public function testAllowsToDefineViserioCommand()
     {
         $command = $this->application->add(new ViserioCommand());

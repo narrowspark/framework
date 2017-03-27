@@ -111,7 +111,6 @@ class Application extends SymfonyConsole implements ApplicationContract
 
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
-        $this->createCerebroEvent($container);
 
         parent::__construct($name, $version);
 
@@ -507,21 +506,6 @@ class Application extends SymfonyConsole implements ApplicationContract
     {
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
-        }
-    }
-
-    /**
-     * Creating a cerebro starting event.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private function createCerebroEvent(ContainerContract $container): void
-    {
-        if ($container->has(EventManagerContract::class)) {
-            $this->events = $container->get(EventManagerContract::class);
-            $this->events->trigger(new CerebroStartingEvent($this));
         }
     }
 }
