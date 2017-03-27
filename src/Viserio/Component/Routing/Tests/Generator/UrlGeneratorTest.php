@@ -426,8 +426,14 @@ class UrlGeneratorTest extends MockeryTestCase
         $routes = $this->getRoutes(new Route('GET', '/index#test', ['as' => 'test']));
 
         self::assertSame('/index#test', $this->getGenerator($routes)->generate('test'));
+        self::assertSame('/index?1#test', $this->getGenerator($routes)->generate('test', [1]));
         self::assertSame('/index?baz=foo#test', $this->getGenerator($routes)->generate('test', ['baz' => 'foo']));
         self::assertSame('/index?baz=%C3%A5%CE%B1%D1%84#test', $this->getGenerator($routes)->generate('test', ['baz' => 'åαф']));
+
+        // Do not escape valid characters
+        $routes = $this->getRoutes(new Route('GET', '/index#?', ['as' => 'test']));
+
+        self::assertSame('/index#?', $this->getGenerator($routes)->generate('test'));
     }
 
     protected function getGenerator(RouteCollection $routes, array $serverVar = [])
