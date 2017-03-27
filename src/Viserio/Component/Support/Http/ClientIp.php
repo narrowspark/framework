@@ -26,7 +26,7 @@ class ClientIp
     /**
      * Returns client IP address.
      *
-     * @return string iP address
+     * @return string
      */
     public function getIpAddress(): string
     {
@@ -53,7 +53,7 @@ class ClientIp
     /**
      * Attempt to get the IP address for a proxied client.
      *
-     * @see http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10#section-5.2
+     * @link http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10#section-5.2
      *
      * @return string|null
      */
@@ -80,5 +80,9 @@ class ClientIp
         if ($ip = filter_var($ips[0], FILTER_VALIDATE_IP)) {
             return $ip;
         }
+
+        // @codeCoverageIgnoreStart
+        return null;
+        // @codeCoverageIgnoreEnd
     }
 }

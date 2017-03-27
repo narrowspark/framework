@@ -278,11 +278,11 @@ class Application extends SymfonyConsole implements ApplicationContract
         putenv('LINES=' . $this->terminal->getHeight());
         putenv('COLUMNS=' . $this->terminal->getWidth());
 
-        if (null === $input) {
+        if ($input === null) {
             $input = new ArgvInput();
         }
 
-        if (null === $output) {
+        if ($output === null) {
             $output = new ConsoleOutput();
         }
 
@@ -484,8 +484,10 @@ class Application extends SymfonyConsole implements ApplicationContract
 
     /**
      * Bootstrap the console application.
+     *
+     * @return void
      */
-    protected function bootstrap()
+    protected function bootstrap(): void
     {
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
