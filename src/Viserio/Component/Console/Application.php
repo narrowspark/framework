@@ -9,6 +9,7 @@ use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
+use Symfony\Component\Console\Input\InputAwareInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,7 +30,6 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
-use Symfony\Component\Console\Input\InputAwareInterface;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -332,7 +332,7 @@ class Application extends SymfonyConsole implements ApplicationContract
 
         if ($event->commandShouldRun()) {
             try {
-                $e = $x = null;
+                $e        = $x        = null;
                 $exitCode = $command->run($input, $output);
             } catch (Throwable $x) {
                 $e = new FatalThrowableError($x);
