@@ -2,26 +2,26 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Tests;
 
+use Error;
+use LogicException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use stdClass;
-use LogicException;
 use RuntimeException;
+use stdClass;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Tester\ApplicationTester;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Console\Events\ConsoleCommandEvent;
+use Viserio\Component\Console\Events\ConsoleErrorEvent;
+use Viserio\Component\Console\Events\ConsoleTerminateEvent;
 use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Symfony\Component\Console\Tester\ApplicationTester;
 use Viserio\Component\Events\EventManager;
-use Viserio\Component\Console\Events\ConsoleErrorEvent;
-use Viserio\Component\Console\Events\ConsoleTerminateEvent;
-use Viserio\Component\Console\Events\ConsoleCommandEvent;
-use Symfony\Component\Console\Exception\CommandNotFoundException;
-use Symfony\Component\Console\Input\InputOption;
-use Error;
 
 class ApplicationTest extends MockeryTestCase
 {
@@ -297,7 +297,7 @@ class ApplicationTest extends MockeryTestCase
         $this->application->setEventManager($eventManager);
 
         $tester = new ApplicationTester($this->application);
-        $tester->run(array('command' => 'unknown'));
+        $tester->run(['command' => 'unknown']);
 
         self::assertContains('silenced command not found', $tester->getDisplay());
         self::assertEquals(0, $tester->getStatusCode());
@@ -312,9 +312,9 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'foo'));
+        $tester->run(['command' => 'foo']);
 
-        self::assertEquals('before.foo.after.'.PHP_EOL, $tester->getDisplay());
+        self::assertEquals('before.foo.after.' . PHP_EOL, $tester->getDisplay());
     }
 
     public function testRunDispatchesAllEventsWithError()
@@ -327,7 +327,7 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'dym'));
+        $tester->run(['command' => 'dym']);
 
         $this->assertContains('before.dym.error.after.', $tester->getDisplay(), 'The PHP Error did not dispached events');
     }
@@ -342,7 +342,7 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'dus'));
+        $tester->run(['command' => 'dus']);
 
         $this->assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
     }
@@ -355,8 +355,8 @@ class ApplicationTest extends MockeryTestCase
             $output->write('foo.');
         });
 
-        $tester = new ApplicationTester($application);
-        $exitCode = $tester->run(array('command' => 'foo'));
+        $tester   = new ApplicationTester($application);
+        $exitCode = $tester->run(['command' => 'foo']);
 
         $this->assertContains('before.after.', $tester->getDisplay());
         $this->assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $exitCode);
@@ -365,8 +365,8 @@ class ApplicationTest extends MockeryTestCase
     public function testRunWithDispatcherAccessingInputOptions()
     {
         $noInteractionValue = null;
-        $quietValue = null;
-        $dispatcher = $this->getDispatcher();
+        $quietValue         = null;
+        $dispatcher         = $this->getDispatcher();
         $dispatcher->attach('console.command', function (ConsoleCommandEvent $event) use (&$noInteractionValue, &$quietValue) {
             $input = $event->getInput();
             $noInteractionValue = $input->getOption('no-interaction');
@@ -380,7 +380,7 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'foo', '--no-interaction' => true));
+        $tester->run(['command' => 'foo', '--no-interaction' => true]);
 
         $this->assertTrue($noInteractionValue);
         $this->assertFalse($quietValue);
@@ -400,7 +400,7 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'foo'));
+        $tester->run(['command' => 'foo']);
     }
 
     public function testRunDispatchesAllEventsWithException()
@@ -413,7 +413,7 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'foo'));
+        $tester->run(['command' => 'foo']);
 
         self::assertContains('before.foo.error.after.', $tester->getDisplay());
     }
@@ -440,7 +440,7 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'foo', '--extra' => 'some test value'));
+        $tester->run(['command' => 'foo', '--extra' => 'some test value']);
 
         self::assertEquals('some test value', $extraValue);
     }
@@ -459,7 +459,7 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'foo'));
+        $tester->run(['command' => 'foo']);
 
         self::assertContains('before.error.after.', $tester->getDisplay());
     }
@@ -482,12 +482,11 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'foo'));
+        $tester->run(['command' => 'foo']);
 
         self::assertContains('before.error.silenced.after.', $tester->getDisplay());
         self::assertEquals(0, $tester->getStatusCode());
     }
-
 
     /**
      * Fixture method.
@@ -514,7 +513,7 @@ class ApplicationTest extends MockeryTestCase
         $dispatcher->attach('console.terminate', function (ConsoleTerminateEvent $event) use ($skipCommand) {
             $event->getOutput()->writeln('after.');
 
-            if (!$skipCommand) {
+            if (! $skipCommand) {
                 $event->setExitCode(113);
             }
         });
