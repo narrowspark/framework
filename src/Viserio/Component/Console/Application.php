@@ -7,6 +7,7 @@ use Interop\Container\ContainerInterface as ContainerContract;
 use Invoker\Exception\InvocationException;
 use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
+use Symfony\Component\Console\Terminal;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\InputAwareInterface;
@@ -23,13 +24,14 @@ use Viserio\Component\Console\Events\CerebroStartingEvent;
 use Viserio\Component\Console\Events\CommandStartingEvent;
 use Viserio\Component\Console\Events\CommandTerminatingEvent;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
-use Viserio\Component\Console\Events\ConsoleExceptionEvent;
+use Viserio\Component\Console\Events\ConsoleErrorEvent;
 use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
+use Viserio\Component\Console\ConsoleEvents;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -79,6 +81,15 @@ class Application extends SymfonyConsole implements ApplicationContract
     protected static $bootstrappers = [];
 
     /**
+     * Invoker instance.
+     *
+     * @var \Viserio\Component\Support\Invoker
+     */
+    protected $terminal;
+
+    protected $runningCommand;
+
+    /**
      * Create a new Cerebro console application.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -98,6 +109,7 @@ class Application extends SymfonyConsole implements ApplicationContract
         $this->version          = $version;
         $this->container        = $container;
         $this->expressionParser = new Parser();
+        $this->terminal         = new Terminal();
 
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
@@ -267,20 +279,75 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        if ($this->events !== null) {
-            $commandName = '';
+        putenv('LINES=' . $this->terminal->getHeight());
+        putenv('COLUMNS=' . $this->terminal->getWidth());
 
-            if ($input !== null) {
-                $commandName = $this->getCommandName($input);
-            }
-
-            $this->getEventManager()->trigger(new CommandStartingEvent(
-                $this,
-                ['command_name' => $commandName, 'input' => $input, 'output' => $output]
-            ));
+        if (null === $input) {
+            $input = new ArgvInput();
         }
 
-        return parent::run($input, $output);
+        if (null === $output) {
+            $output = new ConsoleOutput();
+        }
+
+        $this->configureIO($input, $output);
+
+        try {
+            $e = null;
+            $exitCode = $this->doRun($input, $output);
+        } catch (Throwable $e) {
+            $exception = new FatalThrowableError($e);
+        }
+
+        if (null !== $e && null !== $this->events) {
+            $event = new ConsoleErrorEvent($this->runningCommand, $input, $output, $e, $e->getCode());
+
+            $this->events->trigger(ConsoleEvents::ERROR, $event);
+
+            $e = $event->getError();
+
+            if ($event->isErrorHandled()) {
+                $e = null;
+                $exitCode = 0;
+            } else {
+                $exitCode = $e->getCode();
+            }
+
+            $this->events->trigger(new ConsoleTerminateEvent($this->runningCommand, $input, $output, $exitCode));
+        }
+
+        if (null !== $e) {
+            if (!$this->areExceptionsCaught()) {
+                throw $e;
+            }
+
+            if ($output instanceof ConsoleOutputInterface) {
+                $this->renderException($exception, $output->getErrorOutput());
+            } else {
+                $this->renderException($exception, $output);
+            }
+
+            $exitCode = $e->getCode();
+
+            if (is_numeric($exitCode)) {
+                $exitCode = (int) $exitCode;
+                if (0 === $exitCode) {
+                    $exitCode = 1;
+                }
+            } else {
+                $exitCode = 1;
+            }
+        }
+
+        if ($this->isAutoExitEnabled()) {
+            if ($exitCode > 255) {
+                $exitCode = 255;
+            }
+
+            exit($exitCode);
+        }
+
+        return $exitCode;
     }
 
     /**
@@ -335,28 +402,7 @@ class Application extends SymfonyConsole implements ApplicationContract
                 $e        = $x        = null;
                 $exitCode = $command->run($input, $output);
             } catch (Throwable $x) {
-                $e = new FatalThrowableError($x);
-            }
-
-            if (null !== $e) {
-                $this->getEventManager()->trigger($event = new ConsoleExceptionEvent(
-                    $command,
-                    [
-                        'command_name' => $command->getName(),
-                        'input'        => $input,
-                        'output'       => $output,
-                        'exception'    => $e,
-                        'exit_code'    => $e->getCode(),
-                    ]
-                ));
-
-                if ($event->getException() !== $e) {
-                    $x = $e = $event->getException();
-                }
-
-                $this->createTerminatingCommandEvent($command, $input, $output, $e->getCode());
-
-                throw $x;
+                throw new FatalThrowableError($x);
             }
         } else {
             $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;

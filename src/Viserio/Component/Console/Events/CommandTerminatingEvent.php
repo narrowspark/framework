@@ -3,13 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Events;
 
 use Symfony\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Events\Traits\EventTrait;
+use Viserio\Component\Console\ConsoleEvents;
 
-class CommandTerminatingEvent implements EventContract
+class CommandTerminatingEvent extends ConsoleEvent
 {
-    use EventTrait;
-
     /**
      * The exit code of the command.
      *
@@ -27,7 +24,7 @@ class CommandTerminatingEvent implements EventContract
      */
     public function __construct(Command $command, array $params)
     {
-        $this->name       = 'command.terminating';
+        $this->name       = ConsoleEvents::TERMINATE;
         $this->target     = $command;
         $this->parameters = $params;
     }
