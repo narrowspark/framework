@@ -7,13 +7,13 @@ use Interop\Container\ContainerInterface as ContainerContract;
 use Invoker\Exception\InvocationException;
 use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
-use Symfony\Component\Console\Terminal;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\InputAwareInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Terminal;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
@@ -21,7 +21,6 @@ use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
 use Viserio\Component\Console\Command\ExpressionParser as Parser;
 use Viserio\Component\Console\Events\CerebroStartingEvent;
-use Viserio\Component\Console\Events\CommandStartingEvent;
 use Viserio\Component\Console\Events\CommandTerminatingEvent;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleErrorEvent;
@@ -31,7 +30,6 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
-use Viserio\Component\Console\ConsoleEvents;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -293,7 +291,7 @@ class Application extends SymfonyConsole implements ApplicationContract
         $this->configureIO($input, $output);
 
         try {
-            $e = null;
+            $e        = null;
             $exitCode = $this->doRun($input, $output);
         } catch (Throwable $e) {
             $exception = new FatalThrowableError($e);
@@ -307,7 +305,7 @@ class Application extends SymfonyConsole implements ApplicationContract
             $e = $event->getError();
 
             if ($event->isErrorHandled()) {
-                $e = null;
+                $e        = null;
                 $exitCode = 0;
             } else {
                 $exitCode = $e->getCode();
@@ -317,7 +315,7 @@ class Application extends SymfonyConsole implements ApplicationContract
         }
 
         if (null !== $e) {
-            if (!$this->areExceptionsCaught()) {
+            if (! $this->areExceptionsCaught()) {
                 throw $e;
             }
 
