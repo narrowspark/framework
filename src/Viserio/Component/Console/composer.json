@@ -30,6 +30,7 @@
         "narrowspark/testing-helper"          : "^1.6",
         "phpunit/phpunit"                     : "^6.0",
         "viserio/container"                   : "self.version",
+        "viserio/events"                      : "self.version",
         "viserio/options-resolver"            : "self.version"
     },
     "autoload": {

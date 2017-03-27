@@ -86,8 +86,6 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     protected $terminal;
 
-    protected $runningCommand;
-
     /**
      * Create a new Cerebro console application.
      *
@@ -298,8 +296,11 @@ class Application extends SymfonyConsole implements ApplicationContract
         }
 
         if ($orginalException !== null && $this->events !== null) {
+            // the command name MUST be the first element of the input
+            $command = $this->find($this->getCommandName($input));
+
             $event = new ConsoleErrorEvent(
-                $this->runningCommand,
+                $command,
                 $input,
                 $output,
                 $orginalException,
@@ -315,7 +316,7 @@ class Application extends SymfonyConsole implements ApplicationContract
                 $exitCode = $event->getError()->getCode();
             }
 
-            $this->events->trigger(new ConsoleTerminateEvent($this->runningCommand, $input, $output, $exitCode));
+            $this->events->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
         }
 
         if ($orginalException !== null) {
@@ -411,7 +412,7 @@ class Application extends SymfonyConsole implements ApplicationContract
             $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
         }
 
-        $this->events->trigger($event = new ConsoleTerminateEvent($this->runningCommand, $input, $output, $exitCode));
+        $this->events->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
 
         return $event->getExitCode();
     }

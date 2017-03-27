@@ -19,7 +19,7 @@ abstract class ConsoleEvent implements EventContract
      */
     public function getCommand(): ?Command
     {
-        return $this->parameters['command'];
+        return $this->target;
     }
 
     /**
