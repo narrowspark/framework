@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Events;
 
 use Symfony\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\Events\Event as EventContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
@@ -14,7 +13,7 @@ class ConsoleCommandEvent implements EventContract
     /**
      * The return code for skipped commands, this will also be passed into the terminate event.
      */
-    const RETURN_CODE_DISABLED = 113;
+    public const RETURN_CODE_DISABLED = 113;
 
     /**
      * Indicates if the command should be run or skipped.

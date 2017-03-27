@@ -3,32 +3,32 @@ declare(strict_types=1);
 namespace Viserio\Component\Console;
 
 use Closure;
-use Throwable;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Invoker\Exception\InvocationException;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
+use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
 use Viserio\Component\Console\Command\ExpressionParser as Parser;
 use Viserio\Component\Console\Events\CerebroStartingEvent;
 use Viserio\Component\Console\Events\CommandStartingEvent;
 use Viserio\Component\Console\Events\CommandTerminatingEvent;
-use Viserio\Component\Console\Events\ConsoleExceptionEvent;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
+use Viserio\Component\Console\Events\ConsoleExceptionEvent;
 use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
-use Symfony\Component\Console\Exception\ExceptionInterface;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -329,7 +329,7 @@ class Application extends SymfonyConsole implements ApplicationContract
 
         if ($event->commandShouldRun()) {
             try {
-                $e = null;
+                $e        = null;
                 $exitCode = $command->run($input, $output);
             } catch (Throwable $x) {
                 $e = new FatalThrowableError($x);
@@ -343,7 +343,7 @@ class Application extends SymfonyConsole implements ApplicationContract
                         'input'        => $input,
                         'output'       => $output,
                         'exception'    => $e,
-                        'exit_code'    => $e->getCode()
+                        'exit_code'    => $e->getCode(),
                     ]
                 ));
 
