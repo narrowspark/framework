@@ -98,7 +98,7 @@ class ApplicationTest extends MockeryTestCase
     {
         $event = $this->mock(EventManagerContract::class);
         $event->shouldReceive('trigger')
-            ->twice();
+            ->times(3);
 
         $this->application->setEventManager($event);
 
@@ -242,7 +242,7 @@ class ApplicationTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Symfony\Component\Debug\Exception\FatalThrowableError
      * @expectedExceptionMessage Impossible to call the 'greet' command: Unable to invoke the callable because no value was given for parameter 1 ($fbo)
      */
     public function testItShouldThrowIfAParameterCannotBeResolved()

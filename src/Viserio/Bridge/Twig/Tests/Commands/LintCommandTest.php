@@ -25,7 +25,7 @@ class LintCommandTest extends MockeryTestCase
         $tester   = $this->createCommandTester();
         $ret      = $tester->execute(['--files' => ['lintCorrectFile']], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        self::assertContains('OK in', trim($tester->getDisplay()));
+        self::assertContains('OK in', trim($tester->getDisplay(true)));
     }
 
     public function testLintIncorrectFile()
@@ -40,7 +40,7 @@ class LintCommandTest extends MockeryTestCase
 >> Unclosed "variable".
     2
       0 Twig files have valid syntax and 1 contain errors.')),
-            preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim($tester->getDisplay()))
+            preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim($tester->getDisplay(true)))
         );
     }
 
@@ -59,7 +59,7 @@ class LintCommandTest extends MockeryTestCase
         $tester   = $this->createCommandTester();
         $ret      = $tester->execute(['--files' => ['lintCorrectFile', 'lintCorrectFile2']], ['decorated' => false]);
 
-        self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay()));
+        self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay(true)));
     }
 
     public function testLintFileInSubDir()
@@ -67,7 +67,7 @@ class LintCommandTest extends MockeryTestCase
         $tester   = $this->createCommandTester();
         $ret      = $tester->execute(['--directories' => ['twig']], ['decorated' => false]);
 
-        self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay()));
+        self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileName()
@@ -75,7 +75,7 @@ class LintCommandTest extends MockeryTestCase
         $tester   = $this->createCommandTester();
         $ret      = $tester->execute(['--directories' => ['twig'], '--files' => ['test']], ['decorated' => false]);
 
-        self::assertSame('All 1 Twig files contain valid syntax.', trim($tester->getDisplay()));
+        self::assertSame('All 1 Twig files contain valid syntax.', trim($tester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileNameAndJson()
@@ -89,7 +89,7 @@ class LintCommandTest extends MockeryTestCase
         "file": "' . $file . '",
         "valid": true
     }
-]', trim($tester->getDisplay()));
+]', trim($tester->getDisplay(true)));
     }
 
     public function testLint()
@@ -97,7 +97,7 @@ class LintCommandTest extends MockeryTestCase
         $tester   = $this->createCommandTester(__DIR__ . '/../Fixtures/twig');
         $ret      = $tester->execute([], ['decorated' => false]);
 
-        self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay()));
+        self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay(true)));
     }
 
     /**
@@ -146,7 +146,7 @@ class LintCommandTest extends MockeryTestCase
 
         $tester->execute([], ['decorated' => false]);
 
-        self::assertSame('The Twig environment needs to be set.', trim($tester->getDisplay()));
+        self::assertSame('The Twig environment needs to be set.', trim($tester->getDisplay(true)));
     }
 
     /**

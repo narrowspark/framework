@@ -3,8 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Console;
 
 use Closure;
+use Throwable;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Invoker\Exception\InvocationException;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -18,12 +20,15 @@ use Viserio\Component\Console\Command\ExpressionParser as Parser;
 use Viserio\Component\Console\Events\CerebroStartingEvent;
 use Viserio\Component\Console\Events\CommandStartingEvent;
 use Viserio\Component\Console\Events\CommandTerminatingEvent;
+use Viserio\Component\Console\Events\ConsoleExceptionEvent;
+use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -261,57 +266,126 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        $commandName = $this->createCommandStartingEvent($input);
-
-        $exitCode = parent::run($input, $output);
-
-        $this->createCommandTerminatingEvent($commandName, $input, $exitCode);
-
-        return $exitCode;
-    }
-
-    /**
-     * Create a command starting event.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     *
-     * @return string|null
-     */
-    protected function createCommandStartingEvent(InputInterface $input): ?string
-    {
-        $commandName = '';
-
         if ($this->events !== null) {
-            if ($input instanceof InputInterface) {
+            $commandName = '';
+
+            if ($input !== null) {
                 $commandName = $this->getCommandName($input);
             }
 
             $this->getEventManager()->trigger(new CommandStartingEvent(
                 $this,
-                ['command_name' => $commandName, 'input' => $input]
+                ['command_name' => $commandName, 'input' => $input, 'output' => $output]
             ));
         }
 
-        return $commandName;
+        return parent::run($input, $output);
+    }
+
+    /**
+     * Runs the current command.
+     *
+     * If an event dispatcher has been attached to the application,
+     * events are also dispatched during the life-cycle of the command.
+     *
+     * @param \Symfony\Component\Console\Command\Command        $command
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return int 0 if everything went fine, or an error code
+     */
+    protected function doRunCommand(SymfonyCommand $command, InputInterface $input, OutputInterface $output): int
+    {
+        foreach ($command->getHelperSet() as $helper) {
+            if ($helper instanceof InputAwareInterface) {
+                $helper->setInput($input);
+            }
+        }
+
+        if ($this->events === null) {
+            try {
+                return $command->run($input, $output);
+            } catch (Throwable $e) {
+                throw new FatalThrowableError($e);
+            }
+        }
+
+        // bind before the console.command event, so the listeners have access to input options/arguments
+        try {
+            $command->mergeApplicationDefinition();
+            $input->bind($command->getDefinition());
+        } catch (ExceptionInterface $e) {
+            // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
+        }
+
+        // don't bind the input again as it would override any input argument/option set from the command event in
+        // addition to being useless
+        $command->setInputBound(true);
+
+        $this->getEventManager()->trigger($event = new ConsoleCommandEvent(
+            $command,
+            ['command_name' => $command->getName(), 'input' => $input, 'output' => $output]
+        ));
+
+        if ($event->commandShouldRun()) {
+            try {
+                $e = null;
+                $exitCode = $command->run($input, $output);
+            } catch (Throwable $x) {
+                $e = new FatalThrowableError($x);
+            }
+
+            if (null !== $e) {
+                $this->getEventManager()->trigger($event = new ConsoleExceptionEvent(
+                    $command,
+                    [
+                        'command_name' => $command->getName(),
+                        'input'        => $input,
+                        'output'       => $output,
+                        'exception'    => $e,
+                        'exit_code'    => $e->getCode()
+                    ]
+                ));
+
+                if ($event->getException() !== $e) {
+                    $x = $e = $event->getException();
+                }
+
+                $this->createTerminatingCommandEvent($command, $input, $output, $e->getCode());
+
+                throw $x;
+            }
+        } else {
+            $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
+        }
+
+        $event = $this->createTerminatingCommandEvent($command, $input, $output, $exitCode);
+
+        return $event->getExitCode();
     }
 
     /**
      * Create a command terminating event.
      *
-     * @param string|null                                     $commandName
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param int                                             $exitCode
+     * @param \Symfony\Component\Console\Command\Command        $command
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param int                                               $exitCode
      *
-     * @return void
+     * @return \Viserio\Component\Console\Events\CommandTerminatingEvent
      */
-    protected function createCommandTerminatingEvent(?string $commandName, InputInterface $input, int $exitCode): void
-    {
-        if ($this->events !== null) {
-            $this->getEventManager()->trigger(new CommandTerminatingEvent(
-                $this,
-                ['command_name' => $commandName, 'input' => $input, 'exit_code' => $exitCode]
-            ));
-        }
+    protected function createTerminatingCommandEvent(
+        $command,
+        InputInterface $input,
+        OutputInterface $output,
+        int $exitCode
+    ): CommandTerminatingEvent {
+        $this->getEventManager()->trigger($event = new CommandTerminatingEvent(
+            $command,
+            ['command_name' => $command->getName(), 'input' => $input, 'output' => $output, 'exit_code' => $exitCode]
+        ));
+
+        return $event;
     }
 
     /**
