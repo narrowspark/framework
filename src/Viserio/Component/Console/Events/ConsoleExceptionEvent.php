@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Events;
 
 use Throwable;
+use Symfony\Component\Console\Command\Command;
 use Viserio\Component\Contracts\Events\Event as EventContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
