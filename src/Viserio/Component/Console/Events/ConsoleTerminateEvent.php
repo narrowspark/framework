@@ -3,30 +3,42 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Events;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\ConsoleEvents;
 
-class CommandTerminatingEvent extends ConsoleEvent
+class ConsoleTerminateEvent extends ConsoleEvent
 {
     /**
      * The exit code of the command.
      *
-     * @var int
+     * @var int|null
      */
     private $exitCode;
 
     /**
-     * Create a new command terminating event.
+     * Create a new console terminate event.
      *
-     * @param \Symfony\Component\Console\Command\Command $command
-     * @param array                                      $params
+     * @param \Symfony\Component\Console\Command\Command|null   $command
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param int                                               $exitCode
      *
      * @codeCoverageIgnore
      */
-    public function __construct(Command $command, array $params)
-    {
+    public function __construct(
+        ?Command $command,
+        InputInterface $input,
+        OutputInterface $output,
+        int $exitCode
+    ) {
         $this->name       = ConsoleEvents::TERMINATE;
         $this->target     = $command;
-        $this->parameters = $params;
+        $this->parameters = [
+            'input'     => $input,
+            'output'    => $output,
+            'exit_code' => $exitCode,
+        ];
     }
 
     /**

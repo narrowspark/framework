@@ -20,7 +20,7 @@ use Symfony\Component\Process\ProcessUtils;
 use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
 use Viserio\Component\Console\Command\ExpressionParser as Parser;
-use Viserio\Component\Console\Events\CommandTerminatingEvent;
+use Viserio\Component\Console\Events\ConsoleTerminateEvent;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleErrorEvent;
 use Viserio\Component\Console\Input\InputOption;
@@ -28,6 +28,9 @@ use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -79,7 +82,7 @@ class Application extends SymfonyConsole implements ApplicationContract
     /**
      * Invoker instance.
      *
-     * @var \Viserio\Component\Support\Invoker
+     * @var \Symfony\Component\Console\Terminal
      */
     protected $terminal;
 
@@ -286,34 +289,38 @@ class Application extends SymfonyConsole implements ApplicationContract
         }
 
         $this->configureIO($input, $output);
+        $exitCode = $orginalException = $exception = null;
 
         try {
-            $e        = null;
             $exitCode = $this->doRun($input, $output);
-        } catch (Throwable $e) {
-            $exception = new FatalThrowableError($e);
+        } catch (Throwable $orginalException) {
+            $exception = new FatalThrowableError($orginalException);
         }
 
-        if (null !== $e && null !== $this->events) {
-            $event = new ConsoleErrorEvent($this->runningCommand, $input, $output, $e, $e->getCode());
+        if ($orginalException !== null && $this->events !== null) {
+            $event = new ConsoleErrorEvent(
+                $this->runningCommand,
+                $input,
+                $output,
+                $orginalException,
+                $orginalException->getCode()
+            );
 
-            $this->events->trigger(ConsoleEvents::ERROR, $event);
-
-            $e = $event->getError();
+            $this->events->trigger($event);
 
             if ($event->isErrorHandled()) {
-                $e        = null;
+                $orginalException = null;
                 $exitCode = 0;
             } else {
-                $exitCode = $e->getCode();
+                $exitCode = $event->getError()->getCode();
             }
 
             $this->events->trigger(new ConsoleTerminateEvent($this->runningCommand, $input, $output, $exitCode));
         }
 
-        if (null !== $e) {
+        if ($orginalException !== null) {
             if (! $this->areExceptionsCaught()) {
-                throw $e;
+                throw $orginalException;
             }
 
             if ($output instanceof ConsoleOutputInterface) {
@@ -322,11 +329,12 @@ class Application extends SymfonyConsole implements ApplicationContract
                 $this->renderException($exception, $output);
             }
 
-            $exitCode = $e->getCode();
+            $exitCode = $orginalException->getCode();
 
             if (is_numeric($exitCode)) {
                 $exitCode = (int) $exitCode;
-                if (0 === $exitCode) {
+
+                if ($exitCode === 0) {
                     $exitCode = 1;
                 }
             } else {
@@ -403,33 +411,9 @@ class Application extends SymfonyConsole implements ApplicationContract
             $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
         }
 
-        $event = $this->createTerminatingCommandEvent($command, $input, $output, $exitCode);
+        $this->events->trigger($event = new ConsoleTerminateEvent($this->runningCommand, $input, $output, $exitCode));
 
         return $event->getExitCode();
-    }
-
-    /**
-     * Create a command terminating event.
-     *
-     * @param \Symfony\Component\Console\Command\Command        $command
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param int                                               $exitCode
-     *
-     * @return \Viserio\Component\Console\Events\CommandTerminatingEvent
-     */
-    protected function createTerminatingCommandEvent(
-        $command,
-        InputInterface $input,
-        OutputInterface $output,
-        int $exitCode
-    ): CommandTerminatingEvent {
-        $this->getEventManager()->trigger($event = new CommandTerminatingEvent(
-            $command,
-            ['command_name' => $command->getName(), 'input' => $input, 'output' => $output, 'exit_code' => $exitCode]
-        ));
-
-        return $event;
     }
 
     /**

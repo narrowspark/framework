@@ -18,7 +18,14 @@ class ConsoleErrorEvent extends ConsoleEvent
     private $error;
 
     /**
-     * Create a new command event.
+     * Is error handled.
+     *
+     * @var bool
+     */
+    private $handled = false;
+
+    /**
+     * Create a new console error event.
      *
      * @param \Symfony\Component\Console\Command\Command|null   $command
      * @param \Symfony\Component\Console\Input\InputInterface   $input
@@ -52,7 +59,7 @@ class ConsoleErrorEvent extends ConsoleEvent
      */
     public function getError(): Throwable
     {
-        return $this->exception ?? $this->parameters['error'];
+        return $this->error ?? $this->parameters['error'];
     }
 
     /**

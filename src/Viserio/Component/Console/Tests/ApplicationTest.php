@@ -85,7 +85,7 @@ class ApplicationTest extends MockeryTestCase
     {
         $event = $this->mock(EventManagerContract::class);
         $event->shouldReceive('trigger')
-            ->times(2);
+            ->twice();
 
         $this->application->setEventManager($event);
 
