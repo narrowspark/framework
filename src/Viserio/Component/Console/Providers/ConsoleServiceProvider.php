@@ -7,11 +7,11 @@ use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 
 class ConsoleServiceProvider implements
     ServiceProvider,
