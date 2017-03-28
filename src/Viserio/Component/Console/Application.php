@@ -287,15 +287,15 @@ class Application extends SymfonyConsole implements ApplicationContract
         }
 
         $this->configureIO($input, $output);
-        $exitCode = $orginalException = $exception = null;
+        $exitCode = $changeableException = $exception = null;
 
         try {
             $exitCode = $this->doRun($input, $output);
-        } catch (Throwable $orginalException) {
-            $exception = new FatalThrowableError($orginalException);
+        } catch (Throwable $changeableException) {
+            $exception = new FatalThrowableError($changeableException);
         }
 
-        if ($orginalException !== null && $this->events !== null) {
+        if ($changeableException !== null && $this->events !== null) {
             // the command name MUST be the first element of the input
             $command = $this->find($this->getCommandName($input));
 
@@ -303,25 +303,27 @@ class Application extends SymfonyConsole implements ApplicationContract
                 $command,
                 $input,
                 $output,
-                $orginalException,
-                $orginalException->getCode()
+                $changeableException,
+                $changeableException->getCode()
             );
 
             $this->events->trigger($event);
 
+            $changeableException = $event->getError();
+
             if ($event->isErrorHandled()) {
-                $orginalException = null;
+                $changeableException = null;
                 $exitCode         = 0;
             } else {
-                $exitCode = $event->getError()->getCode();
+                $exitCode = $changeableException->getCode();
             }
 
             $this->events->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
         }
 
-        if ($orginalException !== null) {
+        if ($changeableException !== null) {
             if (! $this->areExceptionsCaught()) {
-                throw $orginalException;
+                throw $changeableException;
             }
 
             if ($output instanceof ConsoleOutputInterface) {
@@ -330,7 +332,7 @@ class Application extends SymfonyConsole implements ApplicationContract
                 $this->renderException($exception, $output);
             }
 
-            $exitCode = $orginalException->getCode();
+            $exitCode = $changeableException->getCode();
 
             if (is_numeric($exitCode)) {
                 $exitCode = (int) $exitCode;
@@ -394,10 +396,7 @@ class Application extends SymfonyConsole implements ApplicationContract
         // addition to being useless
         $command->setInputBound(true);
 
-        $this->getEventManager()->trigger($event = new ConsoleCommandEvent(
-            $command,
-            ['command_name' => $command->getName(), 'input' => $input, 'output' => $output]
-        ));
+        $this->getEventManager()->trigger($event = new ConsoleCommandEvent($command, $input, $output));
 
         $exitCode = 0;
 

@@ -22,6 +22,7 @@ use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
+use Viserio\Component\Console\ConsoleEvents;
 
 class ApplicationTest extends MockeryTestCase
 {
@@ -286,7 +287,7 @@ class ApplicationTest extends MockeryTestCase
     public function testConsoleErrorEventIsTriggeredOnCommandNotFound()
     {
         $eventManager = new EventManager();
-        $eventManager->attach('console.error', function (ConsoleErrorEvent $event) {
+        $eventManager->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event) {
             self::assertNull($event->getCommand());
             self::assertInstanceOf(CommandNotFoundException::class, $event->getError());
 
@@ -336,8 +337,10 @@ class ApplicationTest extends MockeryTestCase
     {
         $application = $this->application;
         $application->setEventManager($this->getDispatcher());
+
         $application->register('dus')->setCode(function (InputInterface $input, OutputInterface $output) {
             $output->write('dus.');
+
             throw new Error('duserr');
         });
 
@@ -367,7 +370,7 @@ class ApplicationTest extends MockeryTestCase
         $noInteractionValue = null;
         $quietValue         = null;
         $dispatcher         = $this->getDispatcher();
-        $dispatcher->attach('console.command', function (ConsoleCommandEvent $event) use (&$noInteractionValue, &$quietValue) {
+        $dispatcher->attach(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) use (&$noInteractionValue, &$quietValue) {
             $input = $event->getInput();
             $noInteractionValue = $input->getOption('no-interaction');
             $quietValue = $input->getOption('quiet');
@@ -387,7 +390,7 @@ class ApplicationTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException        \LogicException
+     * @expectedException \LogicException
      * @expectedExceptionMessage error
      */
     public function testRunWithExceptionAndDispatcher()
@@ -423,7 +426,7 @@ class ApplicationTest extends MockeryTestCase
         $extraValue = null;
         $dispatcher = $this->getDispatcher();
 
-        $dispatcher->attach('console.command', function (ConsoleCommandEvent $event) use (&$extraValue) {
+        $dispatcher->attach(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) use (&$extraValue) {
             $definition = $event->getCommand()->getDefinition();
             $input = $event->getInput();
 
@@ -448,7 +451,7 @@ class ApplicationTest extends MockeryTestCase
     public function testRunDispatchesAllEventsWithExceptionInListener()
     {
         $dispatcher = $this->getDispatcher();
-        $dispatcher->attach('console.command', function () {
+        $dispatcher->attach(ConsoleEvents::COMMAND, function () {
             throw new RuntimeException('foo');
         });
 
@@ -467,11 +470,11 @@ class ApplicationTest extends MockeryTestCase
     public function testRunAllowsErrorListenersToSilenceTheException()
     {
         $dispatcher = $this->getDispatcher();
-        $dispatcher->attach('console.error', function (ConsoleErrorEvent $event) {
+        $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event) {
             $event->getOutput()->write('silenced.');
             $event->markErrorAsHandled();
         });
-        $dispatcher->attach('console.command', function () {
+        $dispatcher->attach(ConsoleEvents::COMMAND, function () {
             throw new RuntimeException('foo');
         });
 
@@ -502,7 +505,7 @@ class ApplicationTest extends MockeryTestCase
     {
         $dispatcher = new EventManager();
 
-        $dispatcher->attach('console.command', function (ConsoleCommandEvent $event) use ($skipCommand) {
+        $dispatcher->attach(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) use ($skipCommand) {
             $event->getOutput()->write('before.');
 
             if ($skipCommand) {
@@ -510,7 +513,7 @@ class ApplicationTest extends MockeryTestCase
             }
         });
 
-        $dispatcher->attach('console.terminate', function (ConsoleTerminateEvent $event) use ($skipCommand) {
+        $dispatcher->attach(ConsoleEvents::TERMINATE, function (ConsoleTerminateEvent $event) use ($skipCommand) {
             $event->getOutput()->writeln('after.');
 
             if (! $skipCommand) {
@@ -518,7 +521,7 @@ class ApplicationTest extends MockeryTestCase
             }
         });
 
-        $dispatcher->attach('console.error', function (ConsoleErrorEvent $event) {
+        $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event) {
             $event->getOutput()->write('error.');
             $event->setError(new LogicException('error.', $event->getExitCode(), $event->getError()));
         });
