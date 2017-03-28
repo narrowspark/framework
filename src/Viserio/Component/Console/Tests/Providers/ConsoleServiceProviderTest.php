@@ -7,6 +7,8 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\Events\Providers\EventsServiceProvider;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 
 class ConsoleServiceProviderTest extends TestCase
 {
@@ -14,6 +16,7 @@ class ConsoleServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new OptionsResolverServiceProvider());
+        $container->register(new EventsServiceProvider());
         $container->register(new ConsoleServiceProvider());
 
         $container->instance('config', [
@@ -29,5 +32,6 @@ class ConsoleServiceProviderTest extends TestCase
         self::assertInstanceOf(Application::class, $console);
         self::assertSame('1', $console->getVersion());
         self::assertSame('Cerebro', $console->getName());
+        self::assertInstanceOf(EventManagerContract::class, $console->getEventManager());
     }
 }

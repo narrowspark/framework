@@ -11,6 +11,7 @@ use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as Provid
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 
 class ConsoleServiceProvider implements
     ServiceProvider,
@@ -73,7 +74,7 @@ class ConsoleServiceProvider implements
         ];
     }
 
-    public static function createCerebro(ContainerInterface $container): Application
+    public static function createCerebro(ContainerInterface $container): ApplicationContract
     {
         self::resolveOptions($container);
 
@@ -82,6 +83,10 @@ class ConsoleServiceProvider implements
             self::$options['version'],
             self::$options['name']
         );
+
+        if ($container->has(EventManagerContract::class)) {
+            $console->setEventManager($container->get(EventManagerContract::class));
+        }
 
         return $console;
     }
