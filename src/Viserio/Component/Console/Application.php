@@ -313,7 +313,7 @@ class Application extends SymfonyConsole implements ApplicationContract
 
             if ($event->isErrorHandled()) {
                 $changeableException = null;
-                $exitCode         = 0;
+                $exitCode            = 0;
             } else {
                 $exitCode = $changeableException->getCode();
             }

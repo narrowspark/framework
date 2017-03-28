@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleErrorEvent;
 use Viserio\Component\Console\Events\ConsoleTerminateEvent;
@@ -22,7 +23,6 @@ use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
-use Viserio\Component\Console\ConsoleEvents;
 
 class ApplicationTest extends MockeryTestCase
 {
