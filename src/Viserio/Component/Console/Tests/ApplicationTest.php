@@ -3,15 +3,18 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Tests;
 
 use Error;
+use Exception;
 use LogicException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use RuntimeException;
 use stdClass;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Viserio\Component\Console\Application;
@@ -27,7 +30,7 @@ use Viserio\Component\Events\EventManager;
 class ApplicationTest extends MockeryTestCase
 {
     /**
-     * @var Application
+     * @var \Viserio\Component\Console\Application
      */
     private $application;
 
@@ -322,21 +325,43 @@ class ApplicationTest extends MockeryTestCase
     {
         $application = $this->application;
         $application->setEventManager($this->getDispatcher());
+        $application->setCatchExceptions(true);
+
         $application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output) {
             $output->write('dym.');
+
             throw new Error('dymerr');
         });
 
         $tester = new ApplicationTester($application);
         $tester->run(['command' => 'dym']);
 
-        $this->assertContains('before.dym.error.after.', $tester->getDisplay(), 'The PHP Error did not dispached events');
+        self::assertContains('before.dym.error.after.', $tester->getDisplay(), 'The PHP Error did not dispached events');
+    }
+
+    public function testRunWithErrorCatchExceptionsFailingStatusCode()
+    {
+        $application = $this->application;
+        $application->setEventManager($this->getDispatcher());
+        $application->setCatchExceptions(true);
+
+        $application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('dym.');
+
+            throw new Error('dymerr');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'dym']);
+
+        self::assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
     }
 
     public function testRunWithErrorFailingStatusCode()
     {
         $application = $this->application;
         $application->setEventManager($this->getDispatcher());
+        $application->setCatchExceptions(true);
 
         $application->register('dus')->setCode(function (InputInterface $input, OutputInterface $output) {
             $output->write('dus.');
@@ -347,13 +372,15 @@ class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($application);
         $tester->run(['command' => 'dus']);
 
-        $this->assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
+        self::assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
     }
 
     public function testRunWithDispatcherSkippingCommand()
     {
         $application = $this->application;
         $application->setEventManager($this->getDispatcher(true));
+        $application->setCatchExceptions(true);
+
         $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
             $output->write('foo.');
         });
@@ -361,8 +388,8 @@ class ApplicationTest extends MockeryTestCase
         $tester   = new ApplicationTester($application);
         $exitCode = $tester->run(['command' => 'foo']);
 
-        $this->assertContains('before.after.', $tester->getDisplay());
-        $this->assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $exitCode);
+        self::assertContains('before.after.', $tester->getDisplay());
+        self::assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $exitCode);
     }
 
     public function testRunWithDispatcherAccessingInputOptions()
@@ -378,6 +405,8 @@ class ApplicationTest extends MockeryTestCase
 
         $application = $this->application;
         $application->setEventManager($dispatcher);
+        $application->setCatchExceptions(true);
+
         $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
             $output->write('foo.');
         });
@@ -385,8 +414,8 @@ class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($application);
         $tester->run(['command' => 'foo', '--no-interaction' => true]);
 
-        $this->assertTrue($noInteractionValue);
-        $this->assertFalse($quietValue);
+        self::assertTrue($noInteractionValue);
+        self::assertFalse($quietValue);
     }
 
     /**
@@ -397,7 +426,7 @@ class ApplicationTest extends MockeryTestCase
     {
         $application = $this->application;
         $application->setEventManager($this->getDispatcher());
-        $application->setCatchExceptions(false);
+
         $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
             throw new RuntimeException('foo');
         });
@@ -410,6 +439,8 @@ class ApplicationTest extends MockeryTestCase
     {
         $application = $this->application;
         $application->setEventManager($this->getDispatcher());
+        $application->setCatchExceptions(true);
+
         $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
             $output->write('foo.');
             throw new RuntimeException('foo');
@@ -457,6 +488,8 @@ class ApplicationTest extends MockeryTestCase
 
         $application = $this->application;
         $application->setEventManager($dispatcher);
+        $application->setCatchExceptions(true);
+
         $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
             $output->write('foo.');
         });
@@ -489,6 +522,21 @@ class ApplicationTest extends MockeryTestCase
 
         self::assertContains('before.error.silenced.after.', $tester->getDisplay());
         self::assertEquals(0, $tester->getStatusCode());
+    }
+
+    public function testRunReturnsIntegerExitCode()
+    {
+        $exception = new Exception('', 4);
+
+        $application = $this->getMockBuilder(Application::class)->setConstructorArgs([new ArrayContainer([]), '1'])->setMethods(['doRun'])->getMock();
+        $application->setCatchExceptions(true);
+        $application->expects($this->once())
+            ->method('doRun')
+            ->will($this->throwException($exception));
+
+        $exitCode = $application->run(new ArrayInput([]), new NullOutput());
+
+        $this->assertSame(4, $exitCode, '->run() returns integer exit code extracted from raised exception');
     }
 
     /**

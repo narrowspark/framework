@@ -32,8 +32,6 @@ class ConsoleErrorEvent extends ConsoleEvent
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Throwable                                        $error
      * @param int                                               $exitCode
-     *
-     * @codeCoverageIgnore
      */
     public function __construct(
         ?Command $command,
@@ -68,6 +66,7 @@ class ConsoleErrorEvent extends ConsoleEvent
      * This exception will be thrown if no response is set in the event.
      *
      * @param \Throwable $exception The thrown exception
+     * @param Throwable  $error
      *
      * @return void
      */

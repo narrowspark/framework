@@ -27,8 +27,6 @@ class ConsoleCommandEvent extends ConsoleEvent
      * @param \Symfony\Component\Console\Command\Command        $command
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @codeCoverageIgnore
      */
     public function __construct(Command $command, InputInterface $input, OutputInterface $output)
     {

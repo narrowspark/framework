@@ -121,7 +121,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @param \Symfony\Component\Console\Command\Command $command
      *
-     * @return null|\Symfony\Component\Console\Command\Command
+     * @return null|\Symfony\Component\Console\Command\Command|\Viserio\Component\Console\Command\Command
      */
     public function add(SymfonyCommand $command): ?SymfonyCommand
     {
@@ -296,8 +296,11 @@ class Application extends SymfonyConsole implements ApplicationContract
         }
 
         if ($changeableException !== null && $this->events !== null) {
-            // the command name MUST be the first element of the input
-            $command = $this->find($this->getCommandName($input));
+            $command = null;
+
+            if ($this->has($commandName = $this->getCommandName($input))) {
+                $command = $this->find($commandName);
+            }
 
             $event = new ConsoleErrorEvent(
                 $command,
@@ -485,6 +488,8 @@ class Application extends SymfonyConsole implements ApplicationContract
      * Bootstrap the console application.
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     protected function bootstrap(): void
     {
