@@ -2,20 +2,35 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Tests;
 
+use Error;
+use Exception;
+use LogicException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use RuntimeException;
 use stdClass;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Tester\ApplicationTester;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Console\ConsoleEvents;
+use Viserio\Component\Console\Events\ConsoleCommandEvent;
+use Viserio\Component\Console\Events\ConsoleErrorEvent;
+use Viserio\Component\Console\Events\ConsoleTerminateEvent;
 use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Events\EventManager;
 
 class ApplicationTest extends MockeryTestCase
 {
     /**
-     * @var Application
+     * @var \Viserio\Component\Console\Application
      */
     private $application;
 
@@ -36,19 +51,6 @@ class ApplicationTest extends MockeryTestCase
             'param'             => 'bob',
             'stdClass2'         => $stdClass2,
             'command.arr.greet' => [$this, 'foo'],
-        ]);
-
-        $this->application = new Application($container, '1.0.0');
-    }
-
-    public function testCerebroStartingEventIstriggered()
-    {
-        $events = $this->mock(EventManagerContract::class);
-        $events->shouldReceive('trigger')
-            ->once();
-
-        $container = new ArrayContainer([
-            EventManagerContract::class => $events,
         ]);
 
         $this->application = new Application($container, '1.0.0');
@@ -242,7 +244,7 @@ class ApplicationTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Symfony\Component\Debug\Exception\FatalThrowableError
      * @expectedExceptionMessage Impossible to call the 'greet' command: Unable to invoke the callable because no value was given for parameter 1 ($fbo)
      */
     public function testItShouldThrowIfAParameterCannotBeResolved()
@@ -274,7 +276,7 @@ class ApplicationTest extends MockeryTestCase
         self::assertSame($this->application, $whatIsThis);
     }
 
-    public function testItCanRunasASingleCommandApplication()
+    public function testItCanRunASingleCommandApplication()
     {
         $this->application->command('run', function (OutputInterface $output) {
             $output->write('hello');
@@ -282,7 +284,259 @@ class ApplicationTest extends MockeryTestCase
 
         $this->application->setDefaultCommand('run');
 
-        self::assertOutputIs('', 'hello');
+        self::assertOutputIs('run', 'hello');
+    }
+
+    public function testConsoleErrorEventIsTriggeredOnCommandNotFound()
+    {
+        $eventManager = new EventManager();
+        $eventManager->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event) {
+            self::assertNull($event->getCommand());
+            self::assertInstanceOf(CommandNotFoundException::class, $event->getError());
+
+            $event->getOutput()->write('silenced command not found');
+            $event->markErrorAsHandled();
+        });
+
+        $this->application->setEventManager($eventManager);
+
+        $tester = new ApplicationTester($this->application);
+        $tester->run(['command' => 'unknown']);
+
+        self::assertContains('silenced command not found', $tester->getDisplay());
+        self::assertEquals(0, $tester->getStatusCode());
+    }
+
+    public function testRunWithDispatcher()
+    {
+        $application = $this->application;
+        $application->setEventManager($this->getDispatcher());
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('foo.');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'foo']);
+
+        self::assertEquals('before.foo.after.' . PHP_EOL, $tester->getDisplay());
+    }
+
+    public function testRunDispatchesAllEventsWithError()
+    {
+        $application = $this->application;
+        $application->setEventManager($this->getDispatcher());
+        $application->setCatchExceptions(true);
+
+        $application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('dym.');
+
+            throw new Error('dymerr');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'dym']);
+
+        self::assertContains('before.dym.error.after.', $tester->getDisplay(), 'The PHP Error did not dispached events');
+    }
+
+    public function testRunWithErrorCatchExceptionsFailingStatusCode()
+    {
+        $application = $this->application;
+        $application->setEventManager($this->getDispatcher());
+        $application->setCatchExceptions(true);
+
+        $application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('dym.');
+
+            throw new Error('dymerr');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'dym']);
+
+        self::assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
+    }
+
+    public function testRunWithErrorFailingStatusCode()
+    {
+        $application = $this->application;
+        $application->setEventManager($this->getDispatcher());
+        $application->setCatchExceptions(true);
+
+        $application->register('dus')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('dus.');
+
+            throw new Error('duserr');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'dus']);
+
+        self::assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
+    }
+
+    public function testRunWithDispatcherSkippingCommand()
+    {
+        $application = $this->application;
+        $application->setEventManager($this->getDispatcher(true));
+        $application->setCatchExceptions(true);
+
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('foo.');
+        });
+
+        $tester   = new ApplicationTester($application);
+        $exitCode = $tester->run(['command' => 'foo']);
+
+        self::assertContains('before.after.', $tester->getDisplay());
+        self::assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $exitCode);
+    }
+
+    public function testRunWithDispatcherAccessingInputOptions()
+    {
+        $noInteractionValue = false;
+        $quietValue         = true;
+        $dispatcher         = $this->getDispatcher();
+        $dispatcher->attach(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) use (&$noInteractionValue, &$quietValue) {
+            $input = $event->getInput();
+            $noInteractionValue = $input->getOption('no-interaction');
+            $quietValue = $input->getOption('quiet');
+        });
+
+        $application = $this->application;
+        $application->setEventManager($dispatcher);
+        $application->setCatchExceptions(true);
+
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('foo.');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'foo', '--no-interaction' => true]);
+
+        self::assertTrue($noInteractionValue);
+        self::assertFalse($quietValue);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage error
+     */
+    public function testRunWithExceptionAndDispatcher()
+    {
+        $application = $this->application;
+        $application->setEventManager($this->getDispatcher());
+
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            throw new RuntimeException('foo');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'foo']);
+    }
+
+    public function testRunDispatchesAllEventsWithException()
+    {
+        $application = $this->application;
+        $application->setEventManager($this->getDispatcher());
+        $application->setCatchExceptions(true);
+
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('foo.');
+            throw new RuntimeException('foo');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'foo']);
+
+        self::assertContains('before.foo.error.after.', $tester->getDisplay());
+    }
+
+    public function testRunWithDispatcherAddingInputOptions()
+    {
+        $extraValue = null;
+        $dispatcher = $this->getDispatcher();
+
+        $dispatcher->attach(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) use (&$extraValue) {
+            $definition = $event->getCommand()->getDefinition();
+            $input = $event->getInput();
+
+            $definition->addOption(new InputOption('extra', null, InputOption::VALUE_REQUIRED));
+            $input->bind($definition);
+
+            $extraValue = $input->getOption('extra');
+        });
+
+        $application = $this->application;
+        $application->setEventManager($dispatcher);
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('foo.');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'foo', '--extra' => 'some test value']);
+
+        self::assertEquals('some test value', $extraValue);
+    }
+
+    public function testRunDispatchesAllEventsWithExceptionInListener()
+    {
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->attach(ConsoleEvents::COMMAND, function () {
+            throw new RuntimeException('foo');
+        });
+
+        $application = $this->application;
+        $application->setEventManager($dispatcher);
+        $application->setCatchExceptions(true);
+
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('foo.');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'foo']);
+
+        self::assertContains('before.error.after.', $tester->getDisplay());
+    }
+
+    public function testRunAllowsErrorListenersToSilenceTheException()
+    {
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event) {
+            $event->getOutput()->write('silenced.');
+            $event->markErrorAsHandled();
+        });
+        $dispatcher->attach(ConsoleEvents::COMMAND, function () {
+            throw new RuntimeException('foo');
+        });
+
+        $application = $this->application;
+        $application->setEventManager($dispatcher);
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('foo.');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'foo']);
+
+        self::assertContains('before.error.silenced.after.', $tester->getDisplay());
+        self::assertEquals(0, $tester->getStatusCode());
+    }
+
+    public function testRunReturnsIntegerExitCode()
+    {
+        $exception = new Exception('', 4);
+
+        $application = $this->getMockBuilder(Application::class)->setConstructorArgs([new ArrayContainer([]), '1'])->setMethods(['doRun'])->getMock();
+        $application->setCatchExceptions(true);
+        $application->expects($this->once())
+            ->method('doRun')
+            ->will($this->throwException($exception));
+
+        $exitCode = $application->run(new ArrayInput([]), new NullOutput());
+
+        $this->assertSame(4, $exitCode, '->run() returns integer exit code extracted from raised exception');
     }
 
     /**
@@ -293,6 +547,34 @@ class ApplicationTest extends MockeryTestCase
     public function foo(OutputInterface $output)
     {
         $output->write('hello');
+    }
+
+    protected function getDispatcher($skipCommand = false)
+    {
+        $dispatcher = new EventManager();
+
+        $dispatcher->attach(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) use ($skipCommand) {
+            $event->getOutput()->write('before.');
+
+            if ($skipCommand) {
+                $event->disableCommand();
+            }
+        });
+
+        $dispatcher->attach(ConsoleEvents::TERMINATE, function (ConsoleTerminateEvent $event) use ($skipCommand) {
+            $event->getOutput()->writeln('after.');
+
+            if (! $skipCommand) {
+                $event->setExitCode(113);
+            }
+        });
+
+        $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event) {
+            $event->getOutput()->write('error.');
+            $event->setError(new LogicException('error.', $event->getExitCode(), $event->getError()));
+        });
+
+        return $dispatcher;
     }
 
     /**

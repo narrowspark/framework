@@ -8,20 +8,27 @@ use Invoker\Exception\InvocationException;
 use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Exception\ExceptionInterface;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputAwareInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Terminal;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
+use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
 use Viserio\Component\Console\Command\ExpressionParser as Parser;
-use Viserio\Component\Console\Events\CerebroStartingEvent;
-use Viserio\Component\Console\Events\CommandStartingEvent;
-use Viserio\Component\Console\Events\CommandTerminatingEvent;
+use Viserio\Component\Console\Events\ConsoleCommandEvent;
+use Viserio\Component\Console\Events\ConsoleErrorEvent;
+use Viserio\Component\Console\Events\ConsoleTerminateEvent;
 use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
 
@@ -73,6 +80,13 @@ class Application extends SymfonyConsole implements ApplicationContract
     protected static $bootstrappers = [];
 
     /**
+     * Invoker instance.
+     *
+     * @var \Symfony\Component\Console\Terminal
+     */
+    protected $terminal;
+
+    /**
      * Create a new Cerebro console application.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -92,10 +106,10 @@ class Application extends SymfonyConsole implements ApplicationContract
         $this->version          = $version;
         $this->container        = $container;
         $this->expressionParser = new Parser();
+        $this->terminal         = new Terminal();
 
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
-        $this->createCerebroEvent($container);
 
         parent::__construct($name, $version);
 
@@ -107,7 +121,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @param \Symfony\Component\Console\Command\Command $command
      *
-     * @return null|\Symfony\Component\Console\Command\Command
+     * @return null|\Symfony\Component\Console\Command\Command|\Viserio\Component\Console\Command\Command
      */
     public function add(SymfonyCommand $command): ?SymfonyCommand
     {
@@ -261,57 +275,148 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        $commandName = $this->createCommandStartingEvent($input);
+        putenv('LINES=' . $this->terminal->getHeight());
+        putenv('COLUMNS=' . $this->terminal->getWidth());
 
-        $exitCode = parent::run($input, $output);
+        if ($input === null) {
+            $input = new ArgvInput();
+        }
 
-        $this->createCommandTerminatingEvent($commandName, $input, $exitCode);
+        if ($output === null) {
+            $output = new ConsoleOutput();
+        }
+
+        $this->configureIO($input, $output);
+        $exitCode = $changeableException = $exception = null;
+
+        try {
+            $exitCode = $this->doRun($input, $output);
+        } catch (Throwable $changeableException) {
+            $exception = new FatalThrowableError($changeableException);
+        }
+
+        if ($changeableException !== null && $this->events !== null) {
+            $command = null;
+
+            if ($this->has($commandName = $this->getCommandName($input))) {
+                $command = $this->find($commandName);
+            }
+
+            $event = new ConsoleErrorEvent(
+                $command,
+                $input,
+                $output,
+                $changeableException,
+                $changeableException->getCode()
+            );
+
+            $this->events->trigger($event);
+
+            $changeableException = $event->getError();
+
+            if ($event->isErrorHandled()) {
+                $changeableException = null;
+                $exitCode            = 0;
+            } else {
+                $exitCode = $changeableException->getCode();
+            }
+
+            $this->events->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        }
+
+        if ($changeableException !== null) {
+            if (! $this->areExceptionsCaught()) {
+                throw $changeableException;
+            }
+
+            if ($output instanceof ConsoleOutputInterface) {
+                $this->renderException($exception, $output->getErrorOutput());
+            } else {
+                $this->renderException($exception, $output);
+            }
+
+            $exitCode = $changeableException->getCode();
+
+            if (is_numeric($exitCode)) {
+                $exitCode = (int) $exitCode;
+
+                if ($exitCode === 0) {
+                    $exitCode = 1;
+                }
+            } else {
+                $exitCode = 1;
+            }
+        }
+
+        if ($this->isAutoExitEnabled()) {
+            if ($exitCode > 255) {
+                $exitCode = 255;
+            }
+
+            exit($exitCode);
+        }
 
         return $exitCode;
     }
 
     /**
-     * Create a command starting event.
+     * Runs the current command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * If an event dispatcher has been attached to the application,
+     * events are also dispatched during the life-cycle of the command.
      *
-     * @return string|null
+     * @param \Symfony\Component\Console\Command\Command        $command
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return int 0 if everything went fine, or an error code
      */
-    protected function createCommandStartingEvent(InputInterface $input): ?string
+    protected function doRunCommand(SymfonyCommand $command, InputInterface $input, OutputInterface $output): int
     {
-        $commandName = '';
-
-        if ($this->events !== null) {
-            if ($input instanceof InputInterface) {
-                $commandName = $this->getCommandName($input);
+        foreach ($command->getHelperSet() as $helper) {
+            if ($helper instanceof InputAwareInterface) {
+                $helper->setInput($input);
             }
-
-            $this->getEventManager()->trigger(new CommandStartingEvent(
-                $this,
-                ['command_name' => $commandName, 'input' => $input]
-            ));
         }
 
-        return $commandName;
-    }
-
-    /**
-     * Create a command terminating event.
-     *
-     * @param string|null                                     $commandName
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param int                                             $exitCode
-     *
-     * @return void
-     */
-    protected function createCommandTerminatingEvent(?string $commandName, InputInterface $input, int $exitCode): void
-    {
-        if ($this->events !== null) {
-            $this->getEventManager()->trigger(new CommandTerminatingEvent(
-                $this,
-                ['command_name' => $commandName, 'input' => $input, 'exit_code' => $exitCode]
-            ));
+        if ($this->events === null) {
+            try {
+                return $command->run($input, $output);
+            } catch (Throwable $e) {
+                throw new FatalThrowableError($e);
+            }
         }
+
+        // bind before the console.command event, so the listeners have access to input options/arguments
+        try {
+            $command->mergeApplicationDefinition();
+            $input->bind($command->getDefinition());
+        } catch (ExceptionInterface $e) {
+            // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
+        }
+
+        // don't bind the input again as it would override any input argument/option set from the command event in
+        // addition to being useless
+        $command->setInputBound(true);
+
+        $this->getEventManager()->trigger($event = new ConsoleCommandEvent($command, $input, $output));
+
+        $exitCode = 0;
+
+        if ($event->commandShouldRun()) {
+            try {
+                $e        = $x        = null;
+                $exitCode = $command->run($input, $output);
+            } catch (Throwable $x) {
+                throw new FatalThrowableError($x);
+            }
+        } else {
+            $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
+        }
+
+        $this->events->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+
+        return $event->getExitCode();
     }
 
     /**
@@ -381,26 +486,15 @@ class Application extends SymfonyConsole implements ApplicationContract
 
     /**
      * Bootstrap the console application.
+     *
+     * @return void
+     *
+     * @codeCoverageIgnore
      */
-    protected function bootstrap()
+    protected function bootstrap(): void
     {
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
-        }
-    }
-
-    /**
-     * Creating a cerebro starting event.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private function createCerebroEvent(ContainerContract $container): void
-    {
-        if ($container->has(EventManagerContract::class)) {
-            $this->events = $container->get(EventManagerContract::class);
-            $this->events->trigger(new CerebroStartingEvent($this));
         }
     }
 }

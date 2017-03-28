@@ -45,7 +45,7 @@ class CleanCommandTest extends MockeryTestCase
         $tester = new CommandTester($command);
         $tester->execute([]);
 
-        $output = $tester->getDisplay();
+        $output = $tester->getDisplay(true);
 
         self::assertContains('Twig cache failed to be cleaned.', $output);
     }
@@ -83,7 +83,7 @@ class CleanCommandTest extends MockeryTestCase
         $tester = new CommandTester($command);
         $tester->execute([]);
 
-        $output = $tester->getDisplay();
+        $output = $tester->getDisplay(true);
 
         self::assertContains('Twig cache cleaned.', $output);
     }
