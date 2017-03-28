@@ -394,8 +394,8 @@ class ApplicationTest extends MockeryTestCase
 
     public function testRunWithDispatcherAccessingInputOptions()
     {
-        $noInteractionValue = null;
-        $quietValue         = null;
+        $noInteractionValue = false;
+        $quietValue         = true;
         $dispatcher         = $this->getDispatcher();
         $dispatcher->attach(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) use (&$noInteractionValue, &$quietValue) {
             $input = $event->getInput();
