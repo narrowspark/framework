@@ -30,7 +30,7 @@ class VarDumperFormatter implements FormatterInterface
     public function format(array $record): array
     {
         $record['context'] = $this->cloner->cloneVar($record['context']);
-        $record['extra'] = $this->cloner->cloneVar($record['extra']);
+        $record['extra']   = $this->cloner->cloneVar($record['extra']);
 
         return $record;
     }

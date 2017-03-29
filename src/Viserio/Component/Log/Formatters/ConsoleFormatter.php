@@ -28,19 +28,19 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
  */
 class ConsoleFormatter implements FormatterInterface
 {
-    const SIMPLE_FORMAT = "%datetime% %start_tag%%level_name%%end_tag% <comment>[%channel%]</> %message%%context%%extra%\n";
-    const SIMPLE_DATE = 'H:i:s';
+    public const SIMPLE_FORMAT = "%datetime% %start_tag%%level_name%%end_tag% <comment>[%channel%]</> %message%%context%%extra%\n";
+    public const SIMPLE_DATE   = 'H:i:s';
 
-    private static $levelColorMap = array(
-        Logger::DEBUG => 'fg=white',
-        Logger::INFO => 'fg=green',
-        Logger::NOTICE => 'fg=blue',
-        Logger::WARNING => 'fg=cyan',
-        Logger::ERROR => 'fg=yellow',
-        Logger::CRITICAL => 'fg=red',
-        Logger::ALERT => 'fg=red',
+    private static $levelColorMap = [
+        Logger::DEBUG     => 'fg=white',
+        Logger::INFO      => 'fg=green',
+        Logger::NOTICE    => 'fg=blue',
+        Logger::WARNING   => 'fg=cyan',
+        Logger::ERROR     => 'fg=yellow',
+        Logger::CRITICAL  => 'fg=red',
+        Logger::ALERT     => 'fg=red',
         Logger::EMERGENCY => 'fg=white;bg=red',
-    );
+    ];
 
     private $options;
     private $cloner;
@@ -55,28 +55,30 @@ class ConsoleFormatter implements FormatterInterface
      *   * date_format: The format of the outputted date string;
      *   * colors: If true, the log string contains ANSI code to add color;
      *   * multiline: If false, "context" and "extra" are dumped on one line.
+     *
+     * @param mixed $options
      */
     public function __construct($options = [])
     {
-        $this->options = array_replace(array(
-            'format' => self::SIMPLE_FORMAT,
+        $this->options = array_replace([
+            'format'      => self::SIMPLE_FORMAT,
             'date_format' => self::SIMPLE_DATE,
-            'colors' => true,
-            'multiline' => false,
-        ), $options);
+            'colors'      => true,
+            'multiline'   => false,
+        ], $options);
 
         if (class_exists(VarCloner::class)) {
             $this->cloner = new VarCloner();
-            $this->cloner->addCasters(array(
-                '*' => array($this, 'castObject'),
-            ));
+            $this->cloner->addCasters([
+                '*' => [$this, 'castObject'],
+            ]);
 
             $this->outputBuffer = fopen('php://memory', 'r+b');
 
             if ($this->options['multiline']) {
                 $output = $this->outputBuffer;
             } else {
-                $output = array($this, 'echoLine');
+                $output = [$this, 'echoLine'];
             }
 
             $this->dumper = new CliDumper($output, null, CliDumper::DUMP_LIGHT_ARRAY | CliDumper::DUMP_COMMA_SEPARATOR);
@@ -113,22 +115,26 @@ class ConsoleFormatter implements FormatterInterface
         $context .= $this->dumpData($record['context']);
         $extra .= $this->dumpData($record['extra']);
 
-        $formatted = strtr($this->options['format'], array(
-            '%datetime%' => $record['datetime']->format($this->options['date_format']),
-            '%start_tag%' => sprintf('<%s>', $levelColor),
+        $formatted = strtr($this->options['format'], [
+            '%datetime%'   => $record['datetime']->format($this->options['date_format']),
+            '%start_tag%'  => sprintf('<%s>', $levelColor),
             '%level_name%' => sprintf('%-9s', $record['level_name']),
-            '%end_tag%' => '</>',
-            '%channel%' => $record['channel'],
-            '%message%' => $this->replacePlaceHolder($record)['message'],
-            '%context%' => $context,
-            '%extra%' => $extra,
-        ));
+            '%end_tag%'    => '</>',
+            '%channel%'    => $record['channel'],
+            '%message%'    => $this->replacePlaceHolder($record)['message'],
+            '%context%'    => $context,
+            '%extra%'      => $extra,
+        ]);
 
         return $formatted;
     }
 
     /**
      * @internal
+     *
+     * @param mixed $line
+     * @param mixed $depth
+     * @param mixed $indentPad
      */
     public function echoLine($line, $depth, $indentPad): void
     {
@@ -139,6 +145,9 @@ class ConsoleFormatter implements FormatterInterface
 
     /**
      * @internal
+     *
+     * @param mixed $v
+     * @param mixed $isNested
      */
     public function castObject($v, array $a, Stub $s, $isNested): array
     {
@@ -146,9 +155,9 @@ class ConsoleFormatter implements FormatterInterface
             return $a;
         }
 
-        if ($isNested && !$v instanceof DateTimeInterface) {
+        if ($isNested && ! $v instanceof DateTimeInterface) {
             $s->cut = -1;
-            $a = array();
+            $a      = [];
         }
 
         return $a;
@@ -165,19 +174,19 @@ class ConsoleFormatter implements FormatterInterface
     {
         $message = $record['message'];
 
-        if (strpos($message, '{') === false) {
+        if (mb_strpos($message, '{') === false) {
             return $record;
         }
 
         $context = $record['context'];
 
-        $replacements = array();
+        $replacements = [];
 
         foreach ($context as $k => $v) {
             // Remove quotes added by the dumper around string.
-            $v = trim($this->dumpData($v, false), '"');
-            $v = OutputFormatter::escape($v);
-            $replacements['{'.$k.'}'] = sprintf('<comment>%s</>', $v);
+            $v                        = trim($this->dumpData($v, false), '"');
+            $v                        = OutputFormatter::escape($v);
+            $replacements['{' . $k . '}'] = sprintf('<comment>%s</>', $v);
         }
 
         $record['message'] = strtr($message, $replacements);
@@ -205,7 +214,7 @@ class ConsoleFormatter implements FormatterInterface
             $this->dumper->setColors($colors);
         }
 
-        if (!$data instanceof Data) {
+        if (! $data instanceof Data) {
             $data = $this->cloner->cloneVar($data);
         }
 
