@@ -6,6 +6,7 @@
     <br>
     <a href="https://github.com/narrowspark/framework/releases"><img src="https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square"></a>
     <a href="https://php.net/"><img src="https://img.shields.io/badge/php-%5E7.1.0-8892BF.svg?style=flat-square"></a>
+    <a href="https://codecov.io/gh/narrowspark/framework"><img src="https://img.shields.io/codecov/c/github/narrowspark/framework/master.svg?style=flat-square"></a>
     <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
 </p>
 
@@ -34,22 +35,15 @@ Community
 * Get Narrowspark support on Stack Overflow, [Gitter][3], etc.
 * Follow us on [GitHub][4].
 
-Status
+Branch Status
 ------------
 
-## Master
-
-[![Build Status](https://api.travis-ci.org/narrowspark/framework.svg?branch=master&style=flat-square)](https://travis-ci.org/narrowspark/framework)
-[![Build Status Windows](https://ci.appveyor.com/api/projects/status/github/narrowspark/framework?branch=master&svg=true)](https://ci.appveyor.com/project/prisis/framework/branch/master)
-[![Dependency Status](https://www.versioneye.com/user/projects/5559f43153da1f2ba400042c/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5559f43153da1f2ba400042c)
-[![codecov](https://codecov.io/gh/narrowspark/framework/branch/master/graph/badge.svg)](https://codecov.io/gh/narrowspark/framework)
-
-## Develop
-
-[![Build Status](https://travis-ci.org/narrowspark/framework.svg?branch=develop&style=flat-square)](https://travis-ci.org/narrowspark/framework)
-[![Build Status Windows](https://ci.appveyor.com/api/projects/status/github/narrowspark/framework?branch=develop&svg=true)](https://ci.appveyor.com/project/prisis/framework/branch/develop)
-[![Dependency Status](https://www.versioneye.com/user/projects/5559f479c0f259745500008b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5559f479c0f259745500008b)
-[![codecov](https://codecov.io/gh/narrowspark/framework/branch/develop/graph/badge.svg)](https://codecov.io/gh/narrowspark/framework)
+|     Master    |    Develop    |
+| ------------- | ------------- |
+| [![Build Status](https://api.travis-ci.org/narrowspark/framework.svg?branch=master&style=flat-square)](https://travis-ci.org/narrowspark/framework) | [![Build Status](https://travis-ci.org/narrowspark/framework.svg?branch=develop&style=flat-square)](https://travis-ci.org/narrowspark/framework) | [![Build Status Windows](https://ci.appveyor.com/api/projects/status/github/narrowspark/framework?branch=develop&svg=true)](https://ci.appveyor.com/project/prisis/framework/branch/develop)
+| [![Build Status Windows](https://ci.appveyor.com/api/projects/status/github/narrowspark/framework?branch=master&svg=true)](https://ci.appveyor.com/project/prisis/framework/branch/master) | [![Build Status Windows](https://ci.appveyor.com/api/projects/status/github/narrowspark/framework?branch=develop&svg=true)](https://ci.appveyor.com/project/prisis/framework/branch/develop)
+| [![Dependency Status](https://www.versioneye.com/user/projects/5559f43153da1f2ba400042c/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5559f43153da1f2ba400042c) | [![Dependency Status](https://www.versioneye.com/user/projects/5559f479c0f259745500008b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5559f479c0f259745500008b)
+| [![codecov](https://codecov.io/gh/narrowspark/framework/branch/master/graph/badge.svg)](https://codecov.io/gh/narrowspark/framework) | [![codecov](https://codecov.io/gh/narrowspark/framework/branch/develop/graph/badge.svg?style=flat-square)](https://codecov.io/gh/narrowspark/framework)
 
 Contributing
 ------------
