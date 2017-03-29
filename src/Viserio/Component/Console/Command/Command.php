@@ -458,6 +458,8 @@ abstract class Command extends BaseCommand
 
     /**
      * Configure the console command using a fluent definition.
+     *
+     * @return void
      */
     protected function configureUsingFluentDefinition()
     {
@@ -476,6 +478,8 @@ abstract class Command extends BaseCommand
 
     /**
      * Specify the arguments and options on the command.
+     *
+     * @return void
      */
     protected function specifyParameters()
     {
