@@ -30,6 +30,7 @@ use Monolog\Handler\ZendMonitorHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use RuntimeException;
+use Viserio\Component\Log\Handlers\ConsoleHandler;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 
 class HandlerParser
@@ -49,21 +50,22 @@ class HandlerParser
      * @var array
      */
     protected $handler = [
-        'stream'      => StreamHandler::class,
         'amqp'        => AmqpHandler::class,
-        'gelf'        => GelfHandler::class,
+        'console'     => ConsoleHandler::class,
         'cube'        => CubeHandler::class,
-        'raven'       => RavenHandler::class,
-        'zendMonitor' => ZendMonitorHandler::class,
+        'gelf'        => GelfHandler::class,
         'newRelic'    => NewRelicHandler::class,
+        'raven'       => RavenHandler::class,
+        'stream'      => StreamHandler::class,
+        'zendMonitor' => ZendMonitorHandler::class,
         //Log
         'errorLog'  => ErrorLogHandler::class,
         'loggly'    => LogglyHandler::class,
         'syslogUdp' => SyslogUdpHandler::class,
         //Browser
         'browser'   => BrowserConsoleHandler::class,
-        'firePHP'   => FirePHPHandler::class,
         'chromePHP' => ChromePHPHandler::class,
+        'firePHP'   => FirePHPHandler::class,
     ];
 
     /**

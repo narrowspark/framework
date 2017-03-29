@@ -31,6 +31,11 @@ class ConsoleFormatter implements FormatterInterface
     public const SIMPLE_FORMAT = "%datetime% %start_tag%%level_name%%end_tag% <comment>[%channel%]</> %message%%context%%extra%\n";
     public const SIMPLE_DATE   = 'H:i:s';
 
+    /**
+     * Mapper for monolog level to color level.
+     *
+     * @var array
+     */
     private static $levelColorMap = [
         Logger::DEBUG     => 'fg=white',
         Logger::INFO      => 'fg=green',
@@ -42,13 +47,36 @@ class ConsoleFormatter implements FormatterInterface
         Logger::EMERGENCY => 'fg=white;bg=red',
     ];
 
+    /**
+     * Console formatter configuaration.
+     *
+     * @var array
+     */
     private $options;
-    private $cloner;
+
+    /**
+     * Stream data.
+     *
+     * @var mixed
+     */
     private $outputBuffer;
+
+    /**
+     * Configured VarCloner instance.
+     *
+     * @var \Symfony\Component\VarDumper\Cloner\VarCloner
+     */
+    private $cloner;
+
+    /**
+     * CliDumper instance.
+     *
+     * @var \Symfony\Component\VarDumper\Dumper\CliDumper
+     */
     private $dumper;
 
     /**
-     * Constructor.
+     * Create a new console formatter instance.
      *
      * Available options:
      *   * format: The format of the outputted log string. The following placeholders are supported: %datetime%, %start_tag%, %level_name%, %end_tag%, %channel%, %message%, %context%, %extra%;
@@ -56,9 +84,9 @@ class ConsoleFormatter implements FormatterInterface
      *   * colors: If true, the log string contains ANSI code to add color;
      *   * multiline: If false, "context" and "extra" are dumped on one line.
      *
-     * @param mixed $options
+     * @param array $options
      */
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->options = array_replace([
             'format'      => self::SIMPLE_FORMAT,
@@ -81,14 +109,17 @@ class ConsoleFormatter implements FormatterInterface
                 $output = [$this, 'echoLine'];
             }
 
-            $this->dumper = new CliDumper($output, null, CliDumper::DUMP_LIGHT_ARRAY | CliDumper::DUMP_COMMA_SEPARATOR);
+            // Exits on VarDumper version >=3.3
+            $commaSeparator = defined(CliDumper::class . '::DUMP_COMMA_SEPARATOR') ? CliDumper::DUMP_COMMA_SEPARATOR : 4;
+
+            $this->dumper = new CliDumper($output, null, CliDumper::DUMP_LIGHT_ARRAY | $commaSeparator);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function formatBatch(array $records): array
+    public function formatBatch(array $records)
     {
         foreach ($records as $key => $record) {
             $records[$key] = $this->format($record);
@@ -100,10 +131,9 @@ class ConsoleFormatter implements FormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function format(array $record): array
+    public function format(array $record)
     {
-        $record = $this->replacePlaceHolder($record);
-
+        $record     = $this->replacePlaceHolder($record);
         $levelColor = self::$levelColorMap[$record['level']];
 
         if ($this->options['multiline']) {
@@ -113,7 +143,7 @@ class ConsoleFormatter implements FormatterInterface
         }
 
         $context .= $this->dumpData($record['context']);
-        $extra .= $this->dumpData($record['extra']);
+        $extra   .= $this->dumpData($record['extra']);
 
         $formatted = strtr($this->options['format'], [
             '%datetime%'   => $record['datetime']->format($this->options['date_format']),
@@ -135,6 +165,8 @@ class ConsoleFormatter implements FormatterInterface
      * @param mixed $line
      * @param mixed $depth
      * @param mixed $indentPad
+     *
+     * @return void
      */
     public function echoLine($line, $depth, $indentPad): void
     {
@@ -146,21 +178,23 @@ class ConsoleFormatter implements FormatterInterface
     /**
      * @internal
      *
-     * @param mixed $v
-     * @param mixed $isNested
+     * @param mixed                                    $v
+     * @param array                                    $a
+     * @param \Symfony\Component\VarDumper\Cloner\Stub $s
+     * @param mixed                                    $isNested
      */
-    public function castObject($v, array $a, Stub $s, $isNested): array
+    public function castObject($v, array $array, Stub $s, $isNested): array
     {
         if ($this->options['multiline']) {
-            return $a;
+            return $array;
         }
 
         if ($isNested && ! $v instanceof DateTimeInterface) {
             $s->cut = -1;
-            $a      = [];
+            $array  = [];
         }
 
-        return $a;
+        return $array;
     }
 
     /**

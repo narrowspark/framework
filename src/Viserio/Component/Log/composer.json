@@ -28,7 +28,9 @@
         "phpunit/phpunit"                     : "^6.0",
         "symfony/var-dumper"                  : "^3.2",
         "viserio/config"                      : "self.version",
+        "viserio/console"                     : "self.version",
         "viserio/container"                   : "self.version",
+        "viserio/events"                      : "self.version",
         "viserio/options-resolver"            : "self.version",
         "viserio/web-profiler"                : "self.version"
     },

@@ -15,7 +15,7 @@ class VarDumperFormatter implements FormatterInterface
     private $cloner;
 
     /**
-     * Create a new template manager instance.
+     * Create a new var dump formatter instance.
      *
      * @param Symfony\Component\VarDumper\Cloner\VarCloner $cloner
      */
@@ -27,7 +27,7 @@ class VarDumperFormatter implements FormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function format(array $record): array
+    public function format(array $record)
     {
         $record['context'] = $this->cloner->cloneVar($record['context']);
         $record['extra']   = $this->cloner->cloneVar($record['extra']);
@@ -38,7 +38,7 @@ class VarDumperFormatter implements FormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function formatBatch(array $records): array
+    public function formatBatch(array $records)
     {
         foreach ($records as $k => $record) {
             $record[$k] = $this->format($record);
