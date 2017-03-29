@@ -20,7 +20,8 @@
     "require": {
         "php"                                 : "^7.1",
         "monolog/monolog"                     : "^1.17",
-        "viserio/cotracts"                    : "self.version"
+        "viserio/cotracts"                    : "self.version",
+        "symfony/var-dumper"                  : "^3.2"
     },
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",

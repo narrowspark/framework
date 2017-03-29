@@ -27,7 +27,7 @@
         "mockery/mockery"                                    : "^1.0",
         "php-di/invoker"                                     : "^2.0",
         "phpunit/phpunit"                                    : "^6.0",
-        "symfony/var-dumper"                                 : "^3.1",
+        "symfony/var-dumper"                                 : "^3.2",
         "viserio/config"                                     : "self.version"
     },
     "autoload": {
@@ -49,7 +49,7 @@
         "danielstjules/stringy"                              : "Required to use the Stringy Class in Str (^3.0).",
         "php-di/invoker"                                     : "Required to use the Invoker Class (^1.3).",
         "viserio/options-resolver"                           : "Required to use the AbstractConnectionManager and AbstractManager Class (self.version).",
-        "symfony/var-dumper"                                 : "Improves the Dumper::dump() (^3.1)."
+        "symfony/var-dumper"                                 : "Improves the Dumper::dump() (^3.2)."
     },
     "extra": {
         "branch-alias": {

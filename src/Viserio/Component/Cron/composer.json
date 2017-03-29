@@ -24,7 +24,7 @@
         "php-di/invoker"                      : "^2.0",
         "psr/cache"                           : "^1.0",
         "psr/container-implementation"        : "^1.0",
-        "symfony/process"                     : "^3.1",
+        "symfony/process"                     : "^3.2",
         "viserio/cotracts"                    : "self.version",
         "viserio/support"                     : "self.version"
     },
