@@ -54,7 +54,9 @@ class ConsoleHandlerTest extends TestCase
 
         $handler = new ConsoleHandler($output, true, $map);
 
-        self::assertSame($isHandling, $handler->isHandling(['level' => $level]),
+        self::assertSame(
+            $isHandling,
+            $handler->isHandling(['level' => $level]),
             '->isHandling returns correct value depending on console verbosity and log level'
         );
 
@@ -125,10 +127,12 @@ class ConsoleHandlerTest extends TestCase
 
         $handler = new ConsoleHandler($output);
 
-        self::assertFalse($handler->isHandling(['level' => Logger::NOTICE]),
+        self::assertFalse(
+            $handler->isHandling(['level' => Logger::NOTICE]),
             'when verbosity is set to quiet, the handler does not handle the log'
         );
-        self::assertTrue($handler->isHandling(['level' => Logger::NOTICE]),
+        self::assertTrue(
+            $handler->isHandling(['level' => Logger::NOTICE]),
             'since the verbosity of the output increased externally, the handler is now handling the log'
         );
     }
@@ -137,7 +141,9 @@ class ConsoleHandlerTest extends TestCase
     {
         $handler = new ConsoleHandler();
 
-        self::assertInstanceOf(ConsoleFormatter::class, $handler->getFormatter(),
+        self::assertInstanceOf(
+            ConsoleFormatter::class,
+            $handler->getFormatter(),
             '-getFormatter returns ConsoleFormatter by default'
         );
     }
