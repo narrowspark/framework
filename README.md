@@ -1,7 +1,9 @@
-<p align="center"><a href="https://narrowspark.com" target="_blank">
-    <img src="">
-</a></p>
 <p align="center">
+    <a href="https://narrowspark.com" target="_blank">
+        <img src="http://narrowspark.com/narrowspark-with-name.svg">
+    </a>
+    <br>
+    <br>
     <a href="https://github.com/narrowspark/framework/releases"><img src="https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square"></a>
     <a href="https://php.net/"><img src="https://img.shields.io/badge/php-%5E7.1.0-8892BF.svg?style=flat-square"></a>
     <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
@@ -14,14 +16,17 @@
 
 * Powerful dependency injection container.
 * Multiple back-ends for session and cache storage.
+* A powerful console "cerebro" based on [Symfony Console][5]
+* Simple, fast routing engine.
 
-Installation
-------------
+Narrowspark is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+
 
 Documentation
 -------------
 
-Documentation for the entire framework can be found on the [Narrowspark website][1].
+The [Narrowspark documentation][6] is thorough, complete, and makes it a breeze to get started learning the framework.
+You need more informations take a look on [Narrowspark website][1].
 
 Community
 ------------
@@ -67,3 +72,5 @@ The Narrowspark framework is open-sourced software licensed under the [MIT licen
 [2]: https://github.com/narrowspark/narrowspark
 [3]: https://gitter.im/narrowspark/framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 [4]: https://github.com/narrowspark
+[5]: https://symfony.com/doc/current/components/console.html
+[6]: https://narrowspark.com/docs
