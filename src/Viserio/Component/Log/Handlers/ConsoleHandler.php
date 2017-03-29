@@ -13,12 +13,11 @@ namespace Viserio\Component\Log\Handlers;
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
-use Viserio\Component\Log\Formatters\ConsoleFormatter;
-use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleTerminateEvent;
+use Viserio\Component\Log\Formatters\ConsoleFormatter;
 
 /**
  * Writes logs to the console output depending on its verbosity setting.
@@ -47,13 +46,13 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * @var array
      */
-    private $verbosityLevelMap = array(
-        OutputInterface::VERBOSITY_QUIET => Logger::ERROR,
-        OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
-        OutputInterface::VERBOSITY_VERBOSE => Logger::NOTICE,
+    private $verbosityLevelMap = [
+        OutputInterface::VERBOSITY_QUIET        => Logger::ERROR,
+        OutputInterface::VERBOSITY_NORMAL       => Logger::WARNING,
+        OutputInterface::VERBOSITY_VERBOSE      => Logger::NOTICE,
         OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
-        OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
-    );
+        OutputInterface::VERBOSITY_DEBUG        => Logger::DEBUG,
+    ];
 
     /**
      * Constructor.
@@ -64,7 +63,7 @@ class ConsoleHandler extends AbstractProcessingHandler
      * @param array                $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
      *                                                level (leave empty to use the default mapping)
      */
-    public function __construct(OutputInterface $output = null, $bubble = true, array $verbosityLevelMap = array())
+    public function __construct(OutputInterface $output = null, $bubble = true, array $verbosityLevelMap = [])
     {
         parent::__construct(Logger::DEBUG, $bubble);
         $this->output = $output;
@@ -152,14 +151,14 @@ class ConsoleHandler extends AbstractProcessingHandler
      */
     protected function getDefaultFormatter()
     {
-        if (!$this->output) {
+        if (! $this->output) {
             return new ConsoleFormatter();
         }
 
-        return new ConsoleFormatter(array(
-            'colors' => $this->output->isDecorated(),
+        return new ConsoleFormatter([
+            'colors'    => $this->output->isDecorated(),
             'multiline' => OutputInterface::VERBOSITY_DEBUG <= $this->output->getVerbosity(),
-        ));
+        ]);
     }
 
     /**

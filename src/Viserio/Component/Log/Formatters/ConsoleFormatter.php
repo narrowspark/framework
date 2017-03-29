@@ -143,7 +143,7 @@ class ConsoleFormatter implements FormatterInterface
         }
 
         $context .= $this->dumpData($record['context']);
-        $extra   .= $this->dumpData($record['extra']);
+        $extra .= $this->dumpData($record['extra']);
 
         $formatted = strtr($this->options['format'], [
             '%datetime%'   => $record['datetime']->format($this->options['date_format']),
@@ -218,8 +218,8 @@ class ConsoleFormatter implements FormatterInterface
 
         foreach ($context as $k => $v) {
             // Remove quotes added by the dumper around string.
-            $v                        = trim($this->dumpData($v, false), '"');
-            $v                        = OutputFormatter::escape($v);
+            $v                            = trim($this->dumpData($v, false), '"');
+            $v                            = OutputFormatter::escape($v);
             $replacements['{' . $k . '}'] = sprintf('<comment>%s</>', $v);
         }
 
