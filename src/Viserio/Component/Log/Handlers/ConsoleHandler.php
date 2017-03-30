@@ -17,7 +17,10 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleTerminateEvent;
+use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Log\Formatters\ConsoleFormatter;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Console\ConsoleEvents;
 
 /**
  * Writes logs to the console output depending on its verbosity setting.
@@ -38,12 +41,18 @@ use Viserio\Component\Log\Formatters\ConsoleFormatter;
  */
 class ConsoleHandler extends AbstractProcessingHandler
 {
+    use EventsAwareTrait;
+
     /**
-     * @var OutputInterface|null
+     * A output instance.
+     *
+     * @var \Symfony\Component\Console\Output\OutputInterface|null
      */
     private $output;
 
     /**
+     * A verbosity level to monolog level mapper.
+     *
      * @var array
      */
     private $verbosityLevelMap = [
@@ -66,9 +75,10 @@ class ConsoleHandler extends AbstractProcessingHandler
     public function __construct(OutputInterface $output = null, $bubble = true, array $verbosityLevelMap = [])
     {
         parent::__construct(Logger::DEBUG, $bubble);
+
         $this->output = $output;
 
-        if ($verbosityLevelMap) {
+        if (count($verbosityLevelMap) !== 0) {
             $this->verbosityLevelMap = $verbosityLevelMap;
         }
     }
@@ -112,29 +122,39 @@ class ConsoleHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Before a command is executed, the handler gets activated and the console output
-     * is set in order to know where to write the logs.
+     * Register needed events to event manager.
      *
-     * @param ConsoleCommandEvent $event
-     */
-    public function onCommand(ConsoleCommandEvent $event)
-    {
-        $output = $event->getOutput();
-        if ($output instanceof ConsoleOutputInterface) {
-            $output = $output->getErrorOutput();
-        }
-
-        $this->setOutput($output);
-    }
-
-    /**
-     * After a command has been executed, it disables the output.
+     * @param \Viserio\Component\Contracts\Events\EventManager
      *
-     * @param ConsoleTerminateEvent $event
+     * @return void
      */
-    public function onTerminate(ConsoleTerminateEvent $event)
+    public function registerEvents(EventManagerContract $eventManager): void
     {
-        $this->close();
+        // Before a command is executed, the handler gets activated and the console output
+        // is set in order to know where to write the logs.
+        $eventManager->attach(
+            ConsoleEvents::COMMAND,
+            function (ConsoleCommandEvent $event) {
+                $output = $event->getOutput();
+
+                if ($output instanceof ConsoleOutputInterface) {
+                    $output = $output->getErrorOutput();
+                }
+
+                $this->setOutput($output);
+            },
+            255
+        );
+
+        // After a command has been executed, it disables the output.
+        $eventManager->attach(
+            ConsoleEvents::TERMINATE,
+            function (ConsoleTerminateEvent $event)
+            {
+                $this->close();
+            },
+            -255
+        );
     }
 
     /**
@@ -173,6 +193,7 @@ class ConsoleHandler extends AbstractProcessingHandler
         }
 
         $verbosity = $this->output->getVerbosity();
+
         if (isset($this->verbosityLevelMap[$verbosity])) {
             $this->setLevel($this->verbosityLevelMap[$verbosity]);
         } else {

@@ -64,11 +64,24 @@ class LogsDataCollectorServiceProvider implements
         ];
     }
 
-    public static function createLogParser(ContainerInterface $container): LogParser
+    /**
+     * Create a handler parser.
+     *
+     * @return \Viserio\Component\Log\DataCollectors\LogParser
+     */
+    public static function createLogParser(): LogParser
     {
         return new LogParser();
     }
 
+    /**
+     * Extend viserio profiler with data collector.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Viserio\Component\Contracts\WebProfiler\WebProfiler
+     */
     public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
         if ($getPrevious !== null) {
@@ -85,8 +98,9 @@ class LogsDataCollectorServiceProvider implements
 
             return $profiler;
         }
-
+        // @codeCoverageIgnoreStart
         return null;
+        // @codeCoverageIgnoreEnd
     }
 
     /**

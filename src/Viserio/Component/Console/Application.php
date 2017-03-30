@@ -27,12 +27,11 @@ use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleErrorEvent;
 use Viserio\Component\Console\Events\ConsoleTerminateEvent;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
 
-class Application extends SymfonyConsole implements ApplicationContract
+class Application extends SymfonyConsole
 {
     use ContainerAwareTrait;
     use EventsAwareTrait;

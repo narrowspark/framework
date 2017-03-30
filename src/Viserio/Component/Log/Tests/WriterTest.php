@@ -12,6 +12,8 @@ use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Component\Log\Tests\Fixture\JsonableClass;
 use Viserio\Component\Log\Writer;
+use Viserio\Component\Contracts\Log\Log as LogContract;
+use Viserio\Component\Log\Events\MessageLoggedEvent;
 
 class WriterTest extends MockeryTestCase
 {
@@ -216,13 +218,11 @@ class WriterTest extends MockeryTestCase
     {
         $events = new EventManager();
         $events->attach(
-            'viserio.log',
+            LogContract::MESSAGE,
             function ($event) {
-                $param = $event->getParams();
-
-                $_SERVER['__log.level'] = $param['level'];
-                $_SERVER['__log.message'] = $param['message'];
-                $_SERVER['__log.context'] = $param['context'];
+                $_SERVER['__log.level'] = $event->getLevel();
+                $_SERVER['__log.message'] = $event->getMessage();
+                $_SERVER['__log.context'] = $event->getContext();
             }
         );
         $monolog = $this->mock(Logger::class);

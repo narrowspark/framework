@@ -174,39 +174,41 @@ class ConsoleHandlerTest extends TestCase
         self::assertTrue($handler->handle($infoRecord), 'The handler finished handling the log as bubble is false.');
     }
 
-    // public function testLogsFromListeners()
-    // {
-    //     $output = new BufferedOutput();
-    //     $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+    public function testLogsFromListeners()
+    {
+        $output = new BufferedOutput();
+        $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
 
-    //     $handler = new ConsoleHandler(null, false);
+        $handler = new ConsoleHandler(null, false);
 
-    //     $logger = new Logger('app');
-    //     $logger->pushHandler($handler);
+        $logger = new Logger('app');
+        $logger->pushHandler($handler);
 
-    //     $dispatcher = new EventManager();
-    //     $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger) {
-    //         $logger->addInfo('Before command message.');
-    //     });
-    //     $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger) {
-    //         $logger->addInfo('Before terminate message.');
-    //     });
+        $dispatcher = new EventManager();
+        $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger) {
+            $logger->addInfo('Before command message.');
+        });
+        $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger) {
+            $logger->addInfo('Before terminate message.');
+        });
 
-    //     // $dispatcher->addSubscriber($handler);
+        $handler->registerEvents($dispatcher);
 
-    //     $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger) {
-    //         $logger->addInfo('After command message.');
-    //     });
-    //     $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger) {
-    //         $logger->addInfo('After terminate message.');
-    //     });
+        $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger) {
+            $logger->addInfo('After command message.');
+        });
+        $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger) {
+            $logger->addInfo('After terminate message.');
+        });
 
-    //     $dispatcher->trigger(new ConsoleCommandEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output));
-    //     self::assertContains('Before command message.', $out = $output->fetch());
-    //     self::assertContains('After command message.', $out);
+        $dispatcher->trigger(new ConsoleCommandEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output));
 
-    //     $dispatcher->trigger(new ConsoleTerminateEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output, 0));
-    //     self::assertContains('Before terminate message.', $out = $output->fetch());
-    //     self::assertContains('After terminate message.', $out);
-    // }
+        self::assertContains('Before command message.', $out = $output->fetch());
+        self::assertContains('After command message.', $out);
+
+        $dispatcher->trigger(new ConsoleTerminateEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output, 0));
+
+        self::assertContains('Before terminate message.', $out = $output->fetch());
+        self::assertContains('After terminate message.', $out);
+    }
 }

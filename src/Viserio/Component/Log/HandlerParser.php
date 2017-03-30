@@ -30,7 +30,6 @@ use Monolog\Handler\ZendMonitorHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use RuntimeException;
-use Viserio\Component\Log\Handlers\ConsoleHandler;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 
 class HandlerParser
@@ -51,7 +50,6 @@ class HandlerParser
      */
     protected $handler = [
         'amqp'        => AmqpHandler::class,
-        'console'     => ConsoleHandler::class,
         'cube'        => CubeHandler::class,
         'gelf'        => GelfHandler::class,
         'newRelic'    => NewRelicHandler::class,
