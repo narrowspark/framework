@@ -95,10 +95,12 @@ class ConsoleFormatter implements FormatterInterface
             'multiline'   => false,
         ], $options);
 
+        $casterClass = $this->castObjectClass();
+
         if (class_exists(VarCloner::class)) {
             $this->cloner = new VarCloner();
             $this->cloner->addCasters([
-                '*' => [$this->castObjectClass(), 'castObject'],
+                '*' => [$casterClass, 'castObject'],
             ]);
 
             $this->outputBuffer = fopen('php://memory', 'r+b');
