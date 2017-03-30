@@ -5,7 +5,7 @@ namespace Viserio\Component\Cron\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
+use Viserio\Component\Console\Application;
 use Viserio\Component\Cron\Commands\CronListCommand;
 use Viserio\Component\Cron\Commands\ForgetCommand;
 use Viserio\Component\Cron\Commands\ScheduleRunCommand;
@@ -18,11 +18,11 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            ApplicationContract::class => [self::class, 'createConsoleCommands'],
+            Application::class => [self::class, 'createConsoleCommands'],
         ];
     }
 
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
+    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
         if ($getPrevious !== null) {
             $console = $getPrevious();

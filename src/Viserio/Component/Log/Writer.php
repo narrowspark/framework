@@ -9,6 +9,7 @@ use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Contracts\Support\Arrayable;
 use Viserio\Component\Contracts\Support\Jsonable;
+use Viserio\Component\Log\Events\MessageLoggedEvent;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 
 class Writer implements LogContract
@@ -102,9 +103,7 @@ class Writer implements LogContract
             // log listeners. These are useful for building profilers or other tools
             // that aggregate all of the log messages for a given "request" cycle.
             $this->getEventManager()->trigger(
-                'viserio.log',
-                $this,
-                compact('level', 'message', 'context')
+                new MessageLoggedEvent($this, $level, $message, $context)
             );
         }
 
