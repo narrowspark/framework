@@ -77,7 +77,7 @@ class StartSessionMiddleware implements MiddlewareInterface
         if ($this->isSessionConfigured()) {
             $this->storeCurrentUrl($request, $session);
 
-            $response = $this->addCookieToResponse($response, $session);
+            $response = $this->addCookieToResponse($request, $response, $session);
 
             $session->save();
         }
@@ -162,12 +162,13 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Add the session cookie to the application response.
      *
+     * @param \Psr\Http\Message\ServerRequestInterface   $request
      * @param \Psr\Http\Message\ResponseInterface        $response
      * @param \Viserio\Component\Contracts\Session\Store $session
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function addCookieToResponse(ResponseInterface $response, StoreContract $session): ResponseInterface
+    protected function addCookieToResponse(ServerRequestInterface $request, ResponseInterface $response, StoreContract $session): ResponseInterface
     {
         if ($session->getHandler() instanceof CookieSessionHandler) {
             $session->save();
@@ -183,7 +184,7 @@ class StartSessionMiddleware implements MiddlewareInterface
             $this->getCookieExpirationDate($config),
             $config['path'] ?? '/',
             $config['domain'] ?? null,
-            $config['secure'] ?? false,
+            $config['secure'] ?? ($request->getUri()->getScheme() === 'https'),
             $config['http_only'] ?? false,
             $config['same_site'] ?? false
         );
