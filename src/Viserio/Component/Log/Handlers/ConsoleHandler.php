@@ -15,12 +15,12 @@ use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleTerminateEvent;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Log\Formatters\ConsoleFormatter;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Console\ConsoleEvents;
 
 /**
  * Writes logs to the console output depending on its verbosity setting.
@@ -149,8 +149,7 @@ class ConsoleHandler extends AbstractProcessingHandler
         // After a command has been executed, it disables the output.
         $eventManager->attach(
             ConsoleEvents::TERMINATE,
-            function (ConsoleTerminateEvent $event)
-            {
+            function (ConsoleTerminateEvent $event) {
                 $this->close();
             },
             -255

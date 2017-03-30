@@ -7,13 +7,12 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Component\Log\Tests\Fixture\JsonableClass;
 use Viserio\Component\Log\Writer;
-use Viserio\Component\Contracts\Log\Log as LogContract;
-use Viserio\Component\Log\Events\MessageLoggedEvent;
 
 class WriterTest extends MockeryTestCase
 {

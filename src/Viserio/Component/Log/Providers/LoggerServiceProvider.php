@@ -13,8 +13,6 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer as MonologWriter;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Console\ConsoleEvents;
-use Viserio\Component\Log\Handlers\ConsoleHandler;
 
 class LoggerServiceProvider implements
     ServiceProvider,
@@ -36,7 +34,7 @@ class LoggerServiceProvider implements
         return [
             MonologWriter::class => [self::class, 'createLogger'],
             HandlerParser::class => [self::class, 'createHandlerParser'],
-            'log' => function (ContainerInterface $container) {
+            'log'                => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
             'logger'             => function (ContainerInterface $container) {

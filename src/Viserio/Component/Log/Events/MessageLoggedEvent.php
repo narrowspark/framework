@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Log\Events;
 
 use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Events\Traits\EventTrait;
 use Viserio\Component\Contracts\Log\Log as LogContract;
+use Viserio\Component\Events\Traits\EventTrait;
 
 class MessageLoggedEvent implements EventContract
 {

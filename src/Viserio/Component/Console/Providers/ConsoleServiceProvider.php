@@ -31,7 +31,7 @@ class ConsoleServiceProvider implements
     public function getServices()
     {
         return [
-            Application::class => [self::class, 'createCerebro'],
+            Application::class         => [self::class, 'createCerebro'],
             SymfonyConsole::class      => function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
