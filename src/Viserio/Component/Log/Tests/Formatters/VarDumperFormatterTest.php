@@ -2,17 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Monolog\Logger;
 use DateTimeImmutable;
-use Monolog\Formatter\FormatterInterface;
-use Viserio\Component\Log\Formatters\VarDumperFormatter;
+use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Viserio\Component\Log\Formatters\VarDumperFormatter;
+
 class VarDumperFormatterTest extends TestCase
 {
     public function testFormat()
     {
-        $cloner = new VarCloner();
+        $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
 
         self::assertEquals(
@@ -23,7 +23,7 @@ class VarDumperFormatterTest extends TestCase
 
     public function testFormatBatch()
     {
-        $cloner = new VarCloner();
+        $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
 
         self::assertEquals(
@@ -33,22 +33,30 @@ class VarDumperFormatterTest extends TestCase
     }
 
     /**
+     * @param mixed $level
+     * @param mixed $message
+     * @param mixed $context
+     * @param mixed $extra
+     *
      * @return array Record
      */
     protected function getRecord($level = Logger::WARNING, $message = 'test', $context = [], $extra = [])
     {
         return [
-            'message' => $message,
-            'context' => $context,
-            'level' => $level,
+            'message'    => $message,
+            'context'    => $context,
+            'level'      => $level,
             'level_name' => Logger::getLevelName($level),
-            'channel' => 'test',
-            'datetime' => new DateTimeImmutable('now'),
-            'extra' => $extra,
+            'channel'    => 'test',
+            'datetime'   => new DateTimeImmutable('now'),
+            'extra'      => $extra,
         ];
     }
 
     /**
+     * @param mixed $context
+     * @param mixed $extra
+     *
      * @return array
      */
     protected function getMultipleRecords($context = [], $extra = [])
