@@ -70,7 +70,7 @@ class ConsoleServiceProvider implements
         ];
     }
 
-    public static function createCerebro(ContainerInterface $container): ApplicationContract
+    public static function createCerebro(ContainerInterface $container): Application
     {
         self::resolveOptions($container);
 
