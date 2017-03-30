@@ -84,7 +84,7 @@ parameters:
         - "#Casting to mixed[] something that's already mixed[]#"
 
         # Only supported in var-dumper v3.3
-        - "#Access to undefined constant Symfony\\Component\\VarDumper\\Dumper\\CliDumper::DUMP_COMMA_SEPARATOR#"
+        - "#Access to undefined constant Symfony\\Component\\VarDumper\\Dumper\\CliDumper#"
 
         # if check exists
         - '#\$contents of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::encryptString#'
