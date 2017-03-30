@@ -23,7 +23,6 @@ use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
 use Psr\Log\LoggerAwareInterface;
 use Redis;
-use RuntimeException;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;

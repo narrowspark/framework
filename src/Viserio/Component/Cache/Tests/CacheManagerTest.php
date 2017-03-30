@@ -4,10 +4,7 @@ namespace Viserio\Component\Cache\Tests;
 
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
-use Cache\Adapter\Void\VoidCachePool;
-use Cache\Encryption\EncryptedCachePool;
 use Cache\Namespaced\NamespacedCachePool;
-use Defuse\Crypto\Key;
 use League\Flysystem\Adapter\Local;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
