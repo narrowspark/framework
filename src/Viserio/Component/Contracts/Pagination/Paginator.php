@@ -7,11 +7,11 @@ interface Paginator
     /**
      * Render the paginator using the given view.
      *
-     * @param \Viserio\Component\Contracts\Pagination\Presenter|string|null $view
+     * @param string|null $view
      *
      * @return string
      */
-    public function render(string $view = null): string;
+    public function render(?string $view = null): string;
 
     /**
      * Create a range of pagination URLs.
