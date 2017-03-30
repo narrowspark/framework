@@ -185,11 +185,11 @@ class ConsoleFormatter implements FormatterInterface
     private function castObjectClass()
     {
         return new class($this->options) {
-           /**
-            * Console formatter configuaration.
-            *
-            * @var array
-            */
+            /**
+             * Console formatter configuaration.
+             *
+             * @var array
+             */
             private $options;
 
             public function __construct(array $options)

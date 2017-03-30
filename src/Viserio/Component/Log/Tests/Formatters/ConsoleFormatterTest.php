@@ -5,7 +5,6 @@ namespace Viserio\Component\Log\Tests;
 use DateTime;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Viserio\Component\Log\Formatters\ConsoleFormatter;
 
 class ConsoleFormatterTest extends TestCase
