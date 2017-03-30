@@ -7,7 +7,7 @@ use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Twig\Commands\CleanCommand;
 use Viserio\Bridge\Twig\Commands\DebugCommand;
 use Viserio\Bridge\Twig\Commands\LintCommand;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
+use Viserio\Component\Console\Application;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {
@@ -17,11 +17,19 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            ApplicationContract::class => [self::class, 'createConsoleCommands'],
+            Application::class => [self::class, 'createConsoleCommands'],
         ];
     }
 
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
+    /**
+     * Extend viserio console with commands.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Viserio\Component\Console\Application
+     */
+    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
         if ($getPrevious !== null) {
             $console = $getPrevious();
@@ -34,7 +42,8 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
 
             return $console;
         }
-
+        // @codeCoverageIgnoreStart
         return null;
+        // @codeCoverageIgnoreEnd
     }
 }
