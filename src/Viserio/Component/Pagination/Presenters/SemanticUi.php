@@ -15,7 +15,7 @@ class SemanticUi implements PresenterContract
     protected $paginator;
 
     /**
-     * Create a new Bootstrap 4 presenter.
+     * Create a new semantic-ui presenter.
      *
      * @param \Viserio\Component\Contracts\Pagination\Paginator $paginator
      */
