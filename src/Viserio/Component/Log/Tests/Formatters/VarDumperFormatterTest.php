@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Tests;
 
-use DateTimeImmutable;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
@@ -48,7 +47,7 @@ class VarDumperFormatterTest extends TestCase
             'level'      => $level,
             'level_name' => Logger::getLevelName($level),
             'channel'    => 'test',
-            'datetime'   => new DateTimeImmutable('now'),
+            'datetime'   => 'now',
             'extra'      => $extra,
         ];
     }
