@@ -98,7 +98,7 @@ class ConsoleFormatter implements FormatterInterface
         if (class_exists(VarCloner::class)) {
             $this->cloner = new VarCloner();
             $this->cloner->addCasters([
-                '*' => [$this, 'castObject'],
+                '*' => [$this->castObjectClass(), 'castObject'],
             ]);
 
             $this->outputBuffer = fopen('php://memory', 'r+b');
@@ -109,7 +109,7 @@ class ConsoleFormatter implements FormatterInterface
                 $output = [$this, 'echoLine'];
             }
 
-            // Exits on VarDumper version >=3.3
+            // Exits from VarDumper version >=3.3
             $commaSeparator = defined(CliDumper::class . '::DUMP_COMMA_SEPARATOR') ? CliDumper::DUMP_COMMA_SEPARATOR : 4;
 
             $this->dumper = new CliDumper($output, null, CliDumper::DUMP_LIGHT_ARRAY | $commaSeparator);
@@ -176,25 +176,49 @@ class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * @internal
+     * Return a anonymous class with castObject function.
      *
-     * @param mixed                                    $v
-     * @param array                                    $a
-     * @param \Symfony\Component\VarDumper\Cloner\Stub $s
-     * @param mixed                                    $isNested
+     * @return object
+     *
+     * @codeCoverageIgnore
      */
-    public function castObject($v, array $array, Stub $s, $isNested): array
+    private function castObjectClass()
     {
-        if ($this->options['multiline']) {
-            return $array;
-        }
+        return new class($this->options) {
+           /**
+            * Console formatter configuaration.
+            *
+            * @var array
+            */
+            private $options;
 
-        if ($isNested && ! $v instanceof DateTimeInterface) {
-            $s->cut = -1;
-            $array  = [];
-        }
+            public function __construct(array $options)
+            {
+                $this->options = $options;
+            }
 
-        return $array;
+            /**
+             * @param mixed                                    $v
+             * @param array                                    $a
+             * @param \Symfony\Component\VarDumper\Cloner\Stub $s
+             * @param mixed                                    $isNested
+             *
+             * @return array
+             */
+            public function castObject($v, array $array, Stub $s, $isNested): array
+            {
+                if ($this->options['multiline']) {
+                    return $array;
+                }
+
+                if ($isNested && ! $v instanceof DateTimeInterface) {
+                    $s->cut = -1;
+                    $array  = [];
+                }
+
+                return $array;
+            }
+        };
     }
 
     /**
