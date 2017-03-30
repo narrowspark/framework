@@ -40,8 +40,8 @@ class VarDumperFormatter implements FormatterInterface
      */
     public function formatBatch(array $records)
     {
-        foreach ($records as $k => $record) {
-            $record[$k] = $this->format($record);
+        foreach ($records as $key => $record) {
+            $records[$key] = $this->format($record);
         }
 
         return $records;
