@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cache\Tests;
 
-use Cache\Adapter\Chain\CachePoolChain;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Void\VoidCachePool;
@@ -41,59 +40,6 @@ class CacheManagerTest extends MockeryTestCase
         );
 
         self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
-    }
-
-    public function testEncryptedArrayPoolCall()
-    {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'cache' => [
-                    'drivers'   => [],
-                    'key'       => Key::createNewRandomKey()->saveToAsciiSafeString(),
-                ],
-            ]);
-        $manager = new CacheManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
-
-        self::assertInstanceOf(EncryptedCachePool::class, $manager->getEncryptedDriver('array'));
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No encryption key found.
-     */
-    public function testEncryptedArrayPoolCallThrowException()
-    {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'cache' => [
-                    'drivers' => [],
-                ],
-            ]);
-        $manager = new CacheManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
-
-        $manager->getEncryptedDriver('array');
     }
 
     public function testArrayPoolCallWithLog()
@@ -174,35 +120,6 @@ class CacheManagerTest extends MockeryTestCase
         );
 
         self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
-    }
-
-    public function testChain()
-    {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'cache' => [
-                    'default'       => 'null',
-                    'drivers'       => [],
-                    'namespace'     => 'viserio',
-                    'chain_options' => [],
-                ],
-            ]);
-        $manager = new CacheManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
-
-        $chain = $manager->chain(['array', 'null', new VoidCachePool()]);
-
-        self::assertInstanceOf(CachePoolChain::class, $chain);
     }
 
     public function testFilesystem()

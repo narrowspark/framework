@@ -4,7 +4,6 @@ namespace Viserio\Component\Cache;
 
 use Cache\Adapter\Apc\ApcCachePool;
 use Cache\Adapter\Apcu\ApcuCachePool;
-use Cache\Adapter\Chain\CachePoolChain;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\Memcache\MemcacheCachePool;
 use Cache\Adapter\Memcached\MemcachedCachePool;
@@ -13,7 +12,6 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
-use Cache\Encryption\EncryptedCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
 use Defuse\Crypto\Key;
@@ -57,47 +55,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
             'namespace' => false,
             'key'       => false,
         ];
-    }
-
-    /**
-     * Get a encrypted driver instance.
-     *
-     * @param string|null $driver
-     *
-     * @return \Cache\Encryption\EncryptedCachePool
-     */
-    public function getEncryptedDriver(string $driver = null): EncryptedCachePool
-    {
-        if (class_exists(EncryptedCachePool::class)) {
-            if ($this->options['key'] === false) {
-                throw new RuntimeException('No encryption key found.');
-            }
-
-            return new EncryptedCachePool($this->getDriver($driver), Key::loadFromAsciiSafeString($this->options['key']));
-        }
-
-        throw new RuntimeException('"Cache\Encryption\EncryptedCachePool" class not found.');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function chain(array $pools, ?array $options = null): CachePoolChain
-    {
-        $resolvedPools = [];
-
-        foreach ($pools as $pool) {
-            if (is_string($pool)) {
-                $resolvedPools[] = $this->getDriver($pool);
-            } else {
-                $resolvedPools[] = $pool;
-            }
-        }
-
-        return new CachePoolChain(
-            $resolvedPools,
-            $options ?? (array) $this->options['chain_options'] ?? []
-        );
     }
 
     /**

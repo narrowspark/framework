@@ -40,7 +40,6 @@
     "require": {
         "php"                                 : "^7.1",
         "cache/array-adapter"                 : "^0.4",
-        "cache/chain-adapter"                 : "^0.4",
         "container-interop/container-interop" : "^1.1",
         "viserio/cotracts"                    : "self.version",
         "viserio/options-resolver"            : "self.version",
@@ -48,7 +47,6 @@
     },
     "require-dev": {
         "cache/array-adapter"                 : "^0.4",
-        "cache/encryption-cache"              : "^0.1",
         "cache/filesystem-adapter"            : "^0.3",
         "cache/namespaced-cache"              : "^0.1",
         "cache/void-adapter"                  : "^0.3",
