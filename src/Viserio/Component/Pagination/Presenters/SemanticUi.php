@@ -36,9 +36,9 @@ class SemanticUi implements PresenterContract
 
             // Previous Page Link
             if ($paginator->onFirstPage()) {
-                $pagination .= '<a class="icon item disabled"> <i class="left chevron icon"></i> </a>';
+                $pagination .= '<a class="icon item disabled"><i class="left chevron icon"></i></a>';
             } else {
-                $pagination .= '<a class="icon item" href="' . $paginator->getPreviousPageUrl() . '" rel="prev"> <i class="left chevron icon"></i> </a>';
+                $pagination .= '<a class="icon item" href="' . $paginator->getPreviousPageUrl() . '" rel="prev"><i class="left chevron icon"></i></a>';
             }
 
             if (method_exists($paginator, 'getElements')) {
@@ -47,9 +47,9 @@ class SemanticUi implements PresenterContract
 
             // Next Page Link
             if ($paginator->hasMorePages()) {
-                $pagination .= '<a class="icon item" href="' . $paginator->getNextPageUrl() . '" rel="next"> <i class="right chevron icon"></i> </a>';
+                $pagination .= '<a class="icon item" href="' . $paginator->getNextPageUrl() . '" rel="next"><i class="right chevron icon"></i></a>';
             } else {
-                $pagination .= '<a class="icon item disabled"> <i class="right chevron icon"></i> </a>';
+                $pagination .= '<a class="icon item disabled"><i class="right chevron icon"></i></a>';
             }
 
             $pagination .= '</div>';
