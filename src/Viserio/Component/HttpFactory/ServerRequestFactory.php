@@ -16,6 +16,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     public function createServerRequest($method, $uri): ServerRequestInterface
     {
+        return $this->buildServerRequest([], [], $method, $uri);
     }
 
     /**
@@ -23,16 +24,26 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     public function createServerRequestFromArray(array $server): ServerRequestInterface
     {
+        $server  = $this->normalizeServer($server);
+        $headers = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
+        $method  = $server['REQUEST_METHOD'] ?? 'GET';
+
+        return $this->buildServerRequest($server, $headers, $method, Uri::createFromServer($server));
     }
 
-    protected function buildServerRequest(array $server, ?string $method = null, $uri = null)
+    /**
+     * Build a server request from given datas.
+     *
+     * @param array                                 $server
+     * @param array                                 $headers
+     * @param string                                $method
+     * @param \Psr\Http\Message\UriInterface|string $uri
+     *
+     * @return \Psr\Http\Message\ServerRequestInterface
+     */
+    protected function buildServerRequest(array $server, array $headers, string $method, $uri = null): ServerRequestInterface
     {
-        $server  = $this->normalizeServer($server);
-        $method  = $method === null ? ($server['REQUEST_METHOD'] ?? 'GET') : $method;
-        $headers = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
-        $uri     = $uri !== null ? $uri : Uri::createFromServer($server);
-
-        $serverRequest = new ServerRequest(
+        return new ServerRequest(
             $uri,
             $method,
             $headers,
@@ -40,8 +51,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $this->marshalProtocolVersion($server),
             $server
         );
-
-        return $serverRequest;
     }
 
     /**

@@ -29,7 +29,7 @@ class RequestCookiesTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request = (new ServerRequestFactory())->createServerRequest($server);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $cookies = RequestCookies::fromRequest($request);
         $cookies = $cookies->add($cookie);
         $cookies = $cookies->add($cookie2);

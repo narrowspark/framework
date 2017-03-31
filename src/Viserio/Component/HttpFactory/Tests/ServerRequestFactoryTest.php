@@ -84,7 +84,7 @@ class ServerRequestFactoryTest extends TestCase
      */
     public function testGetUriFromGlobals($expected, $serverParams)
     {
-        $serverRequest = $this->factory->createServerRequest($serverParams);
+        $serverRequest = $this->factory->createServerRequestFromArray($serverParams);
 
         self::assertEquals(Uri::createFromString($expected), $serverRequest->getUri());
     }
@@ -122,7 +122,7 @@ class ServerRequestFactoryTest extends TestCase
             'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
         ];
 
-        $server = $this->factory->createServerRequest($_SERVER);
+        $server = $this->factory->createServerRequestFromArray($_SERVER);
 
         self::assertEquals('POST', $server->getMethod());
         self::assertEquals([
@@ -196,11 +196,11 @@ class ServerRequestFactoryTest extends TestCase
      *
      * @param mixed $server
      */
-    public function testCreateServerRequest($server)
+    public function testcreateServerRequestFromArray($server)
     {
         $method  = $server['REQUEST_METHOD'];
         $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
-        $request = $this->factory->createServerRequest($server);
+        $request = $this->factory->createServerRequestFromArray($server);
         $this->assertServerRequest($request, $method, $uri);
     }
 
@@ -213,7 +213,7 @@ class ServerRequestFactoryTest extends TestCase
     {
         $method  = 'OPTIONS';
         $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
-        $request = $this->factory->createServerRequest($server, $method);
+        $request = $this->factory->createServerRequestFromArray($server, $method);
         $this->assertServerRequest($request, $method, $uri);
     }
 
@@ -226,7 +226,7 @@ class ServerRequestFactoryTest extends TestCase
     {
         $method  = $server['REQUEST_METHOD'];
         $uri     = 'https://example.com/foobar?bar=2&foo=false';
-        $request = $this->factory->createServerRequest($server, null, $uri);
+        $request = $this->factory->createServerRequestFromArray($server, null, $uri);
         $this->assertServerRequest($request, $method, $uri);
     }
 
@@ -239,7 +239,7 @@ class ServerRequestFactoryTest extends TestCase
     {
         $method  = $server['REQUEST_METHOD'];
         $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
-        $request = $this->factory->createServerRequest([], $method, Uri::createFromString($uri));
+        $request = $this->factory->createServerRequestFromArray([], $method, Uri::createFromString($uri));
         $this->assertServerRequest($request, $method, $uri);
     }
 
@@ -249,7 +249,7 @@ class ServerRequestFactoryTest extends TestCase
     public function testCreateServerRequestDoesNotReadServerSuperglobal()
     {
         $_SERVER      = ['HTTP_X_FOO' => 'bar'];
-        $request      = $this->factory->createServerRequest([], 'POST', 'http://example.org/test');
+        $request      = $this->factory->createServerRequestFromArray([], 'POST', 'http://example.org/test');
         $serverParams = $request->getServerParams();
         $this->assertNotEquals($_SERVER, $serverParams);
         $this->assertArrayNotHasKey('HTTP_X_FOO', $serverParams);
@@ -258,28 +258,28 @@ class ServerRequestFactoryTest extends TestCase
     public function testCreateServerRequestDoesNotReadCookieSuperglobal()
     {
         $_COOKIE = ['foo' => 'bar'];
-        $request = $this->factory->createServerRequest([], 'POST', 'http://example.org/test');
+        $request = $this->factory->createServerRequestFromArray([], 'POST', 'http://example.org/test');
         $this->assertEmpty($request->getCookieParams());
     }
 
     public function testCreateServerRequestDoesNotReadGetSuperglobal()
     {
         $_GET    = ['foo' => 'bar'];
-        $request = $this->factory->createServerRequest([], 'POST', 'http://example.org/test');
+        $request = $this->factory->createServerRequestFromArray([], 'POST', 'http://example.org/test');
         $this->assertEmpty($request->getQueryParams());
     }
 
     public function testCreateServerRequestDoesNotReadFilesSuperglobal()
     {
         $_FILES  = [['name' => 'foobar.dat', 'type' => 'application/octet-stream', 'tmp_name' => '/tmp/php45sd3f', 'error' => UPLOAD_ERR_OK, 'size' => 4]];
-        $request = $this->factory->createServerRequest([], 'POST', 'http://example.org/test');
+        $request = $this->factory->createServerRequestFromArray([], 'POST', 'http://example.org/test');
         $this->assertEmpty($request->getUploadedFiles());
     }
 
     public function testCreateServerRequestDoesNotReadPostSuperglobal()
     {
         $_POST   = ['foo' => 'bar'];
-        $request = $this->factory->createServerRequest(['CONTENT_TYPE' => 'application/x-www-form-urlencoded'], 'POST', 'http://example.org/test');
+        $request = $this->factory->createServerRequestFromArray(['CONTENT_TYPE' => 'application/x-www-form-urlencoded'], 'POST', 'http://example.org/test');
         $this->assertEmpty($request->getParsedBody());
     }
 

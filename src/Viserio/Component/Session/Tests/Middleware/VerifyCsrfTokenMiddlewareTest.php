@@ -82,7 +82,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ]);
         $manager = $this->getSessionManager($config);
 
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
         $request = $request->withMethod('PUT');
 
         $dispatcher = new Dispatcher(
@@ -139,7 +139,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ]);
         $manager = $this->getSessionManager($config);
 
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
         $request = $request->withMethod('PUT');
 
         $dispatcher = new Dispatcher(
@@ -196,7 +196,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ]);
         $manager = $this->getSessionManager($config);
 
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
         $request = $request->withMethod('PUT');
 
         $dispatcher = new Dispatcher(
@@ -259,7 +259,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ]);
         $manager = $this->getSessionManager($config);
 
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
         $request = $request->withMethod('PUT');
 
         $dispatcher = new Dispatcher(

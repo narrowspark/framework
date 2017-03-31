@@ -32,7 +32,7 @@ class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request = (new ServerRequestFactory())->createServerRequest($server);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $request = $request->withAttribute('session', $session);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {

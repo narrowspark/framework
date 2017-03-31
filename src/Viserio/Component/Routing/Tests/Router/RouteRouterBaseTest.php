@@ -49,7 +49,7 @@ abstract class RouteRouterBaseTest extends MockeryTestCase
     public function testRouter($httpMethod, $uri, $expectedResult, $status = 200)
     {
         $actualResult = $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($_SERVER, $httpMethod, $uri)
+            (new ServerRequestFactory())->createServerRequestFromArray($_SERVER, $httpMethod, $uri)
         );
 
         self::assertEquals($expectedResult, (string) $actualResult->getBody());
