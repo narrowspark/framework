@@ -24,9 +24,9 @@ final class StreamFactory implements StreamFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createStreamFromFile($file, $mode = 'r'): StreamInterface
+    public function createStreamFromFile($filename, $mode = 'r'): StreamInterface
     {
-        $resource = fopen($file, $mode);
+        $resource = fopen($filename, $mode);
 
         return new Stream($resource);
     }

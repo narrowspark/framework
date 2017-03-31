@@ -42,7 +42,7 @@
         "doctrine/migrations"                                : "^1.4",
         "egulias/email-validator"                            : "^2.1",
         "filp/whoops"                                        : "^2.0",
-        "http-interop/http-factory"                          : "^0.2",
+        "http-interop/http-factory"                          : "^0.3",
         "http-interop/http-middleware"                       : "^0.4",
         "league/flysystem"                                   : "^1.0",
         "league/uri"                                         : "^5.0",

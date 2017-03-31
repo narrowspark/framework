@@ -14,7 +14,19 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createServerRequest(array $server, $method = null, $uri = null): ServerRequestInterface
+    public function createServerRequest($method, $uri): ServerRequestInterface
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createServerRequestFromArray(array $server): ServerRequestInterface
+    {
+    }
+
+    protected function buildServerRequest(array $server, ?string $method = null, $uri = null)
     {
         $server  = $this->normalizeServer($server);
         $method  = $method === null ? ($server['REQUEST_METHOD'] ?? 'GET') : $method;

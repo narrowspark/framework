@@ -20,7 +20,7 @@
     "require": {
         "php"                                 : "^7.1",
         "container-interop/container-interop" : "^1.0",
-        "http-interop/http-factory"           : "^0.2",
+        "http-interop/http-factory"           : "^0.3",
         "http-interop/http-middleware"        : "^0.4",
         "narrowspark/arr"                     : "^1.1",
         "narrowspark/http-status"             : "^2.0",
