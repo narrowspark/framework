@@ -16,7 +16,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     public function createServerRequest($method, $uri): ServerRequestInterface
     {
-
     }
 
     /**
