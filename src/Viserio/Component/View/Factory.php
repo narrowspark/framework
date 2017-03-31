@@ -62,7 +62,7 @@ class Factory implements FactoryContract
         'phtml' => 'php',
         'css'   => 'file',
         'js'    => 'file',
-        'md'    => 'markdown'
+        'md'    => 'markdown',
     ];
 
     /**

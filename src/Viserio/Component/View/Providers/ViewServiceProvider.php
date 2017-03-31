@@ -2,19 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Providers;
 
-use Parsedown;
-use ParsedownExtra;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Parsedown;
+use ParsedownExtra;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\View\Engines\EngineResolver;
 use Viserio\Component\View\Engines\FileEngine;
+use Viserio\Component\View\Engines\MarkdownEngine;
 use Viserio\Component\View\Engines\PhpEngine;
 use Viserio\Component\View\Factory;
 use Viserio\Component\View\ViewFinder;
-use Viserio\Component\View\Engines\MarkdownEngine;
 
 class ViewServiceProvider implements ServiceProvider
 {
