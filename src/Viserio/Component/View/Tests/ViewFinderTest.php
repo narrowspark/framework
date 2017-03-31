@@ -64,6 +64,7 @@ class ViewFinderTest extends MockeryTestCase
         $path3 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.phtml');
         $path4 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.css');
         $path5 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.js');
+        $path6 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.md');
 
         $finder = $this->getFinder();
         $finder->addLocation($this->getPath() . '/' . 'Nested');
@@ -86,6 +87,11 @@ class ViewFinderTest extends MockeryTestCase
             ->shouldReceive('has')
             ->once()
             ->with($path5)
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('has')
+            ->once()
+            ->with($path6)
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
@@ -152,6 +158,7 @@ class ViewFinderTest extends MockeryTestCase
         $path3 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.phtml');
         $path4 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.css');
         $path5 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.js');
+        $path6 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.md');
 
         $finder = $this->getFinder();
         $finder->addNamespace(
@@ -184,6 +191,11 @@ class ViewFinderTest extends MockeryTestCase
             ->shouldReceive('has')
             ->once()
             ->with($path5)
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('has')
+            ->once()
+            ->with($path6)
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
@@ -231,6 +243,11 @@ class ViewFinderTest extends MockeryTestCase
             ->shouldReceive('has')
             ->once()
             ->with(self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.js'))
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('has')
+            ->once()
+            ->with(self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.md'))
             ->andReturn(false);
         $finder->find('foo');
     }
@@ -293,7 +310,7 @@ class ViewFinderTest extends MockeryTestCase
         $finder->addExtension('baz');
         $finder->addExtension('baz');
 
-        self::assertCount(5, $finder->getExtensions());
+        self::assertCount(6, $finder->getExtensions());
     }
 
     public function testPrependNamespace()

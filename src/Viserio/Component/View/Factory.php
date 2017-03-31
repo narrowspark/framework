@@ -62,6 +62,7 @@ class Factory implements FactoryContract
         'phtml' => 'php',
         'css'   => 'file',
         'js'    => 'file',
+        'md'    => 'markdown',
     ];
 
     /**
@@ -72,7 +73,7 @@ class Factory implements FactoryContract
     protected $shared = [];
 
     /**
-     * Constructor.
+     * Create a new factory instance.
      *
      * @param \Viserio\Component\Contracts\View\EngineResolver $engines
      * @param \Viserio\Component\Contracts\View\Finder         $finder
