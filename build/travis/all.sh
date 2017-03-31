@@ -11,7 +11,3 @@ echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/e
 
 # Install mongodb
 pecl install -f mongodb-1.1.2
-
-if [[ "$HUMBUG" = true ]]; then
-    composer require humbug/humbug:1.0.0-alpha2;
-fi
