@@ -31,7 +31,7 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
     public function testRouter404($httpMethod, $uri)
     {
         $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequestFromArray($_SERVER, $httpMethod, $uri)
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
     }
 
@@ -67,7 +67,7 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
     public function testRouter405($httpMethod, $uri)
     {
         $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequestFromArray($_SERVER, $httpMethod, $uri),
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
             (new ResponseFactory())->createResponse()
         );
     }

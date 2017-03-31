@@ -42,7 +42,7 @@ class RouterTest extends MockeryTestCase
 
         $router->get('/invalid', ['uses' => stdClass::class]);
         $router->dispatch(
-            (new ServerRequestFactory())->createServerRequestFromArray($_SERVER, 'GET', 'invalid')
+            (new ServerRequestFactory())->createServerRequest('GET', 'invalid')
         );
     }
 
