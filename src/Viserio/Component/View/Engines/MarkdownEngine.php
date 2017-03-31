@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Engines;
 
 use Parsedown;
+use ParsedownExtra;
+use RuntimeException;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
 
 class MarkdownEngine implements EngineContract
@@ -17,10 +19,26 @@ class MarkdownEngine implements EngineContract
     /**
      * Create a new markdown engine instance.
      *
-     * @param \Parsedown|\ParsedownExtra
+     * @param \Parsedown|\ParsedownExtra|null
+     *
+     * @throws \RuntimeException
      */
-    public function __construct(Parsedown $markdown)
+    public function __construct(?Parsedown $markdown = null)
     {
+        // @codeCoverageIgnoreStart
+        if ($markdown === null) {
+            if (class_exists(ParsedownExtra::class)) {
+                $markdown =  new ParsedownExtra();
+            } elseif (class_exists(Parsedown::class)) {
+                $markdown = new Parsedown();
+            }
+        }
+
+        if ($markdown === null) {
+            throw new RuntimeException('[\ParsedownExtra] or [\Parsedown] class not found.');
+        }
+        // @codeCoverageIgnoreEnd
+
         $this->markdown = $markdown;
     }
 

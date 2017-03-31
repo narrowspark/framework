@@ -116,16 +116,16 @@ class ViewServiceProvider implements ServiceProvider
      */
     protected static function registerMarkdownEngine(EngineResolver $engines, ContainerInterface $container): void
     {
-        if ($container->has(Parsedown::class) || $container->has(ParsedownExtra::class)) {
-            if ($container->has(ParsedownExtra::class)) {
-                $markdown = $container->get(ParsedownExtra::class);
-            } else {
-                $markdown = $container->get(Parsedown::class);
-            }
+        $markdown = null;
 
-            $engines->register('md', function () use ($markdown) {
-                return new MarkdownEngine($markdown);
-            });
+        if ($container->has(ParsedownExtra::class)) {
+            $markdown = $container->get(ParsedownExtra::class);
+        } elseif ($container->has(Parsedown::class)) {
+            $markdown = $container->get(Parsedown::class);
         }
+
+        $engines->register('md', function () use ($markdown) {
+            return new MarkdownEngine($markdown);
+        });
     }
 }
