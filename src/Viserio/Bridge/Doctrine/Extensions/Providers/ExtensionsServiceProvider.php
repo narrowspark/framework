@@ -31,7 +31,7 @@ class ExtensionsServiceProvider implements
     public function getServices()
     {
         return [
-            ApplicationContract::class => [self::class, 'registerExtensions'],
+            Application::class => [self::class, 'registerExtensions'],
         ];
     }
 
@@ -59,9 +59,9 @@ class ExtensionsServiceProvider implements
      * @param \Interop\Container\ContainerInterface $container
      * @param null|callable                         $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\Console\Application
+     * @return null|\Viserio\Component\Console\Application
      */
-    public static function registerExtensions(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
+    public static function registerExtensions(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
         if ($getPrevious !== null) {
             self::resolveOptions($container);

@@ -12,7 +12,7 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
+use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
@@ -35,7 +35,7 @@ class ConsoleCommandsServiceProvider implements
     public function getServices()
     {
         return [
-            ApplicationContract::class => [self::class, 'createConsoleCommands'],
+            Application::class => [self::class, 'createConsoleCommands'],
         ];
     }
 
@@ -61,9 +61,9 @@ class ConsoleCommandsServiceProvider implements
      * @param \Interop\Container\ContainerInterface $container
      * @param null|callable                         $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\Console\Application
+     * @return null|\Viserio\Component\Console\Application
      */
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
+    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
         if ($getPrevious !== null) {
             $console = $getPrevious();

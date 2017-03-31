@@ -24,7 +24,7 @@ use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
+use Viserio\Component\Console\Application;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {
@@ -34,11 +34,11 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            ApplicationContract::class => [self::class, 'createConsoleCommands'],
+            Application::class => [self::class, 'createConsoleCommands'],
         ];
     }
 
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?ApplicationContract
+    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
         if ($getPrevious !== null) {
             $console = $getPrevious();
