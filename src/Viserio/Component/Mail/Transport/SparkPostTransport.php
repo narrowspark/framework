@@ -4,6 +4,7 @@ namespace Viserio\Component\Mail\Transport;
 
 use GuzzleHttp\ClientInterface;
 use Swift_Mime_Message;
+use GuzzleHttp\Psr7\Response;
 
 class SparkPostTransport extends AbstractTransport
 {
@@ -139,13 +140,21 @@ class SparkPostTransport extends AbstractTransport
      *
      * @param \GuzzleHttp\Psr7\Response $response
      *
-     * @return string
+     * @return string|null
      */
-    protected function getTransmissionId(Response $response): string
+    protected function getTransmissionId(Response $response): ?string
     {
-        $result = json_decode($response->getBody()->getContents());
+        $object = json_decode($response->getBody()->getContents());
 
-        return object_get($result, 'results.id');
+        foreach (['results', 'id'] as $segment) {
+            if (! is_object($object) || ! isset($object->{$segment})) {
+                return null;
+            }
+
+            $object = $object->{$segment};
+        }
+
+        return $object;
     }
 
     /**
