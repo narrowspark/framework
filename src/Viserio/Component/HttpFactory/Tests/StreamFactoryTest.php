@@ -19,7 +19,7 @@ class StreamFactoryTest extends TestCase
     {
         $string = 'would you like some crumpets?';
         $stream = $this->factory->createStream($string);
-        $this->assertStream($stream, $string);
+        self::assertStream($stream, $string);
     }
 
     public function testCreateStreamFromFile()
@@ -28,7 +28,7 @@ class StreamFactoryTest extends TestCase
         $filename = $this->createTemporaryFile();
         file_put_contents($filename, $string);
         $stream = $this->factory->createStreamFromFile($filename);
-        $this->assertStream($stream, $string);
+        self::assertStream($stream, $string);
     }
 
     public function testCreateStreamFromResource()
@@ -36,13 +36,13 @@ class StreamFactoryTest extends TestCase
         $string   = 'would you like some crumpets?';
         $resource = $this->createTemporaryResource($string);
         $stream   = $this->factory->createStreamFromResource($resource);
-        $this->assertStream($stream, $string);
+        self::assertStream($stream, $string);
     }
 
     protected function assertStream($stream, $content)
     {
-        $this->assertInstanceOf(StreamInterface::class, $stream);
-        $this->assertSame($content, (string) $stream);
+        self::assertInstanceOf(StreamInterface::class, $stream);
+        self::assertSame($content, (string) $stream);
     }
 
     protected function createTemporaryFile()
