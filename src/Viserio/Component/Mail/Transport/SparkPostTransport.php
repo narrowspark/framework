@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
 use GuzzleHttp\ClientInterface;
-use Swift_Mime_Message;
 use GuzzleHttp\Psr7\Response;
+use Swift_Mime_Message;
 
 class SparkPostTransport extends AbstractTransport
 {
