@@ -53,6 +53,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         'phtml',
         'css',
         'js',
+        'md',
     ];
 
     /**

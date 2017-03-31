@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Providers;
 
+use Parsedown;
+use ParsedownExtra;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
@@ -12,6 +14,7 @@ use Viserio\Component\View\Engines\FileEngine;
 use Viserio\Component\View\Engines\PhpEngine;
 use Viserio\Component\View\Factory;
 use Viserio\Component\View\ViewFinder;
+use Viserio\Component\View\Engines\MarkdownEngine;
 
 class ViewServiceProvider implements ServiceProvider
 {
@@ -49,7 +52,7 @@ class ViewServiceProvider implements ServiceProvider
         // Next we will register the various engines with the engines so that the
         // environment can resolve the engines it needs for various views based
         // on the extension of view files. We call a method for each engines.
-        foreach (['file', 'php'] as $engineClass) {
+        foreach (['file', 'php', 'markdown'] as $engineClass) {
             self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
@@ -78,8 +81,10 @@ class ViewServiceProvider implements ServiceProvider
      *
      * @param \Viserio\Component\View\Engines\EngineResolver $engines
      * @param \Interop\Container\ContainerInterface          $container
+     *
+     * @return void
      */
-    protected static function registerPhpEngine(EngineResolver $engines, ContainerInterface $container)
+    protected static function registerPhpEngine(EngineResolver $engines, ContainerInterface $container): void
     {
         $engines->register('php', function () {
             return new PhpEngine();
@@ -91,11 +96,36 @@ class ViewServiceProvider implements ServiceProvider
      *
      * @param \Viserio\Component\View\Engines\EngineResolver $engines
      * @param \Interop\Container\ContainerInterface          $container
+     *
+     * @return void
      */
-    protected static function registerFileEngine(EngineResolver $engines, ContainerInterface $container)
+    protected static function registerFileEngine(EngineResolver $engines, ContainerInterface $container): void
     {
         $engines->register('file', function () {
             return new FileEngine();
         });
+    }
+
+    /**
+     * Register the Markdown engine implementation.
+     *
+     * @param \Viserio\Component\View\Engines\EngineResolver $engines
+     * @param \Interop\Container\ContainerInterface          $container
+     *
+     * @return void
+     */
+    protected static function registerMarkdownEngine(EngineResolver $engines, ContainerInterface $container): void
+    {
+        if ($container->has(Parsedown::class) || $container->has(ParsedownExtra::class)) {
+            if ($container->has(ParsedownExtra::class)) {
+                $markdown = $container->get(ParsedownExtra::class);
+            } else {
+                $markdown = $container->get(Parsedown::class);
+            }
+
+            $engines->register('md', function () use ($markdown) {
+                return new MarkdownEngine($markdown);
+            });
+        }
     }
 }
