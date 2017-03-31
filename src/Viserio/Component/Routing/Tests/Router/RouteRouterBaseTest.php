@@ -6,7 +6,6 @@ use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionClass;
 use Viserio\Component\Events\EventManager;
-use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Routing\Router;
 
@@ -36,7 +35,7 @@ abstract class RouteRouterBaseTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        $this->delTree(__DIR__ . '/../Cache/');
+        $this->delTree(__DIR__ . '/../Cache');
     }
 
     /**
@@ -50,8 +49,7 @@ abstract class RouteRouterBaseTest extends MockeryTestCase
     public function testRouter($httpMethod, $uri, $expectedResult, $status = 200)
     {
         $actualResult = $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($_SERVER, $httpMethod, $uri),
-            (new ResponseFactory())->createResponse()
+            (new ServerRequestFactory())->createServerRequest($_SERVER, $httpMethod, $uri)
         );
 
         self::assertEquals($expectedResult, (string) $actualResult->getBody());
@@ -65,7 +63,7 @@ abstract class RouteRouterBaseTest extends MockeryTestCase
         $files = array_diff(scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+            is_dir("$dir/$file") ? $this->delTree("$dir/$file") : unlink("$dir/$file");
         }
 
         return rmdir($dir);

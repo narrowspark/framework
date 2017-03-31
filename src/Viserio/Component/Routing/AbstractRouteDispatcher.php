@@ -340,6 +340,8 @@ abstract class AbstractRouteDispatcher
             }
         }
 
+        // @codeCoverageIgnoreStart
         return false;
+        // @codeCoverageIgnoreEnd
     }
 }

@@ -42,7 +42,7 @@ class ServerRequestFactoryTest extends TestCase
             'REMOTE_PORT'          => '5390',
             'SCRIPT_FILENAME'      => '/path/to/this/script.php',
             'SERVER_ADMIN'         => 'webmaster@narrowspark.com',
-            'SERVER_PORT'          => '80',
+            'SERVER_PORT'          => 80,
             'SERVER_SIGNATURE'     => 'Version signature: 5.124',
             'SCRIPT_NAME'          => '/doc/framwork.php',
             'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
@@ -59,7 +59,7 @@ class ServerRequestFactoryTest extends TestCase
             ],
             'Secure request' => [
                 'https://www.narrowspark.com/doc/framwork.php?id=10&user=foo',
-                array_merge($server, ['HTTPS' => 'on', 'SERVER_PORT' => '443']),
+                array_merge($server, ['HTTPS' => 'on', 'SERVER_PORT' => 443]),
             ],
             'No HTTPS param' => [
                 'http://www.narrowspark.com/doc/framwork.php?id=10&user=foo',
@@ -86,7 +86,7 @@ class ServerRequestFactoryTest extends TestCase
     {
         $serverRequest = $this->factory->createServerRequest($serverParams);
 
-        self::assertEquals(new Uri($expected), $serverRequest->getUri());
+        self::assertEquals(Uri::createFromString($expected), $serverRequest->getUri());
     }
 
     public function testFromGlobals()
@@ -116,7 +116,7 @@ class ServerRequestFactoryTest extends TestCase
             'REMOTE_PORT'          => '5390',
             'SCRIPT_FILENAME'      => '/path/to/this/script.php',
             'SERVER_ADMIN'         => 'webmaster@narrowspark.com',
-            'SERVER_PORT'          => '80',
+            'SERVER_PORT'          => 80,
             'SERVER_SIGNATURE'     => 'Version signature: 5.123',
             'SCRIPT_NAME'          => '/doc/framwork.php',
             'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
@@ -156,7 +156,7 @@ class ServerRequestFactoryTest extends TestCase
         self::assertEquals('', (string) $server->getBody());
         self::assertEquals('1.0', $server->getProtocolVersion());
         self::assertEquals(
-            new Uri('https://www.narrowspark.com/doc/framwork.php?id=10&user=foo'),
+            Uri::createFromString('https://www.narrowspark.com:80/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
     }
@@ -239,7 +239,7 @@ class ServerRequestFactoryTest extends TestCase
     {
         $method  = $server['REQUEST_METHOD'];
         $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
-        $request = $this->factory->createServerRequest([], $method, new Uri($uri));
+        $request = $this->factory->createServerRequest([], $method, Uri::createFromString($uri));
         $this->assertServerRequest($request, $method, $uri);
     }
 

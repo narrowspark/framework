@@ -82,6 +82,10 @@ parameters:
         - '#\$code of class Twig_Source constructor expects string#'
         - '#\$contents of method League\\Flysystem\\AdapterInterface#'
         - "#Casting to mixed[] something that's already mixed[]#"
+        - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
+
+        # DUMP_COMMA_SEPARATOR constant only supported from var-dumper v3.3
+        - "#DUMP_COMMA_SEPARATOR#"
 
         # if check exists
         - '#\$contents of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::encryptString#'

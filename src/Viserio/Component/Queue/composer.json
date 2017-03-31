@@ -23,7 +23,7 @@
         "container-interop/container-interop": "^1.1",
         "narrowspark/arr"                    : "^1.1",
         "opis/closure"                       : "^2.2.1",
-        "symfony/process"                    : "^3.1",
+        "symfony/process"                    : "^3.2",
         "viserio/cotracts"                   : "self.version",
         "viserio/console"                    : "self.version",
         "viserio/encryption"                 : "self.version",

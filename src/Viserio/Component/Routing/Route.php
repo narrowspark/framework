@@ -181,7 +181,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function where($name, string $expression = null): RouteContract
+    public function where($name, ?string $expression = null): RouteContract
     {
         foreach ($this->parseWhere($name, $expression) as $name => $expression) {
             $this->wheres[$name] = $expression;
@@ -393,11 +393,11 @@ class Route implements RouteContract
      * Parse arguments to the where method into an array.
      *
      * @param array|string $name
-     * @param string       $expression
+     * @param string|null  $expression
      *
      * @return array
      */
-    protected function parseWhere($name, string $expression): array
+    protected function parseWhere($name, ?string $expression): array
     {
         if (is_string($name)) {
             return [$name => $expression];

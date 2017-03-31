@@ -4,6 +4,7 @@ namespace Viserio\Component\Mail\Tests\Fixture;
 
 use Mockery;
 use Swift_Mailer;
+use Swift_Message;
 use Swift_Mime_Message;
 use Swift_Transport;
 
@@ -22,5 +23,10 @@ class FailingSwiftMailerStub extends Swift_Mailer
         $transport->shouldReceive('stop');
 
         return $transport;
+    }
+
+    public function createMessage($service = 'message')
+    {
+        return new Swift_Message();
     }
 }

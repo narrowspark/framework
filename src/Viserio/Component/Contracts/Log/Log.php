@@ -7,6 +7,17 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
 interface Log extends PsrLoggerInterface
 {
     /**
+     * The COMMAND event allows you to attach listeners before any command is
+     * executed by the console. It also allows you to modify the command, input and output
+     * before they are handled to the command.
+     *
+     * @Event("Viserio\Component\Console\Event\ConsoleCommandEvent")
+     *
+     * @var string
+     */
+    public const MESSAGE = 'log.message';
+
+    /**
      * Register a file log handler.
      *
      * @param string      $path

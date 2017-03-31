@@ -34,19 +34,19 @@ class LoggerServiceProvider implements
         return [
             MonologWriter::class => [self::class, 'createLogger'],
             HandlerParser::class => [self::class, 'createHandlerParser'],
+            'log'                => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
             'logger'             => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
-            'log' => function (ContainerInterface $container) {
+            Log::class => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
             Logger::class => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
             LoggerInterface::class => function (ContainerInterface $container) {
-                return $container->get(MonologWriter::class);
-            },
-            Log::class => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
         ];
@@ -70,6 +70,13 @@ class LoggerServiceProvider implements
         ];
     }
 
+    /**
+     * Create a handler parser.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Log\HandlerParser
+     */
     public static function createHandlerParser(ContainerInterface $container): HandlerParser
     {
         self::resolveOptions($container);
@@ -77,6 +84,13 @@ class LoggerServiceProvider implements
         return new HandlerParser(new Logger(self::$options['env']));
     }
 
+    /**
+     * Create a monolog writer.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Log\Writer
+     */
     public static function createLogger(ContainerInterface $container): MonologWriter
     {
         $logger = new MonologWriter($container->get(HandlerParser::class));

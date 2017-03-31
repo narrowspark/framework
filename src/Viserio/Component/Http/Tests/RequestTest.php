@@ -303,7 +303,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testRequestUriMayBeUri()
     {
-        $uri     = new Uri('/');
+        $uri     = Uri::createFromString('/');
         $request = new Request($uri, 'GET');
 
         self::assertSame($uri, $request->getUri());
@@ -399,7 +399,7 @@ class RequestTest extends AbstractMessageTest
         $request1 = new Request('/', 'GET');
         $uri1     = $request1->getUri();
 
-        $uri2     = new Uri('http://www.example.com');
+        $uri2     = Uri::createFromString('http://www.example.com');
         $request2 = $request1->withUri($uri2);
 
         self::assertNotSame($request1, $request2);
@@ -505,7 +505,7 @@ class RequestTest extends AbstractMessageTest
 
         self::assertEquals(['Host' => ['a.com']], $request->getHeaders());
 
-        $request2 = $request->withUri(new Uri('http://www.foo.com/bar'), true);
+        $request2 = $request->withUri(Uri::createFromString('http://www.foo.com/bar'), true);
 
         self::assertEquals('a.com', $request2->getHeaderLine('Host'));
     }
@@ -516,7 +516,7 @@ class RequestTest extends AbstractMessageTest
 
         self::assertEquals(['Host' => ['foo.com']], $request->getHeaders());
 
-        $request2 = $request->withUri(new Uri('http://www.baz.com/bar'));
+        $request2 = $request->withUri(Uri::createFromString('http://www.baz.com/bar'));
 
         self::assertEquals('www.baz.com', $request2->getHeaderLine('Host'));
     }
@@ -542,7 +542,7 @@ class RequestTest extends AbstractMessageTest
     public function testAddsPortToHeaderAndReplacePreviousPort()
     {
         $request = new Request('http://foo.com:8124/bar', 'GET');
-        $request = $request->withUri(new Uri('http://foo.com:8125/bar'));
+        $request = $request->withUri(Uri::createFromString('http://foo.com:8125/bar'));
 
         self::assertEquals('foo.com:8125', $request->getHeaderLine('host'));
     }

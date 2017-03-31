@@ -7,6 +7,7 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
@@ -216,13 +217,11 @@ class WriterTest extends MockeryTestCase
     {
         $events = new EventManager();
         $events->attach(
-            'viserio.log',
+            LogContract::MESSAGE,
             function ($event) {
-                $param = $event->getParams();
-
-                $_SERVER['__log.level'] = $param['level'];
-                $_SERVER['__log.message'] = $param['message'];
-                $_SERVER['__log.context'] = $param['context'];
+                $_SERVER['__log.level'] = $event->getLevel();
+                $_SERVER['__log.message'] = $event->getMessage();
+                $_SERVER['__log.context'] = $event->getContext();
             }
         );
         $monolog = $this->mock(Logger::class);

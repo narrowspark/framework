@@ -4,7 +4,7 @@ namespace Viserio\Component\WebProfiler\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Component\Routing\UrlGenerator;
+use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\WebProfiler\AssetsRenderer;
 use Viserio\Component\WebProfiler\DataCollectors\AjaxRequestsDataCollector;

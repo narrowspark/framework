@@ -5,9 +5,11 @@ namespace Viserio\Component\Pagination;
 use Narrowspark\Collection\Collection;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Pagination\Adapter as AdapterContract;
+use Viserio\Component\Contracts\Pagination\Presenter as PresenterContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Pagination\Presenters\Bootstrap4;
 use Viserio\Component\Pagination\Presenters\Foundation6;
+use Viserio\Component\Pagination\Presenters\SemanticUi;
 use Viserio\Component\Pagination\Presenters\SimplePagination;
 
 class Paginator extends AbstractPaginator
@@ -22,6 +24,7 @@ class Paginator extends AbstractPaginator
     protected $presenters = [
         'bootstrap4'  => Bootstrap4::class,
         'foundation6' => Foundation6::class,
+        'sematicui'   => SemanticUi::class,
         'simple'      => SimplePagination::class,
     ];
 
@@ -37,7 +40,7 @@ class Paginator extends AbstractPaginator
      *
      * @return bool
      */
-    protected $hasMore;
+    protected $hasMore = false;
 
     /**
      * Create a new paginator.
@@ -58,13 +61,28 @@ class Paginator extends AbstractPaginator
     }
 
     /**
+     * Add a new presenter.
+     *
+     * @param string                                            $key
+     * @param \Viserio\Component\Contracts\Pagination\Presenter $presenter
+     *
+     * @return $this
+     */
+    public function addPresenter(string $key, PresenterContract $presenter): self
+    {
+        $this->presenter[$key] = $presenter;
+
+        return $this;
+    }
+
+    /**
      * Set a default presenter.
      *
      * @param string $presenter
      *
      * @return $this
      */
-    public function setDefaultPresenter(string $presenter): Paginator
+    public function setDefaultPresenter(string $presenter): self
     {
         $this->presenter = $presenter;
 
@@ -96,7 +114,7 @@ class Paginator extends AbstractPaginator
     /**
      * {@inheritdoc}
      */
-    public function render(string $view = null): string
+    public function render(?string $view = null): string
     {
         if ($this->views !== null && ! isset($this->presenters[$view])) {
             return (string) $this->getViewFactory()->create($view, ['paginator' => $this]);
@@ -148,7 +166,7 @@ class Paginator extends AbstractPaginator
      *
      * @codeCoverageIgnore
      */
-    public function hasMorePagesWhen(bool $value = true): Paginator
+    public function hasMorePagesWhen(bool $value = true): self
     {
         $this->hasMore = $value;
 
@@ -177,8 +195,10 @@ class Paginator extends AbstractPaginator
 
     /**
      * Check for more pages. The last item will be sliced off.
+     *
+     * @return void
      */
-    protected function checkForMorePages()
+    protected function checkForMorePages(): void
     {
         $this->hasMore = count($this->items) > ($this->itemCountPerPage);
 

@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\Console\Application as ApplicationContract;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
@@ -31,18 +31,15 @@ class ConsoleServiceProvider implements
     public function getServices()
     {
         return [
-            ApplicationContract::class => [self::class, 'createCerebro'],
-            Application::class         => function (ContainerInterface $container) {
-                return $container->get(ApplicationContract::class);
-            },
+            Application::class         => [self::class, 'createCerebro'],
             SymfonyConsole::class      => function (ContainerInterface $container) {
-                return $container->get(ApplicationContract::class);
+                return $container->get(Application::class);
             },
             'console' => function (ContainerInterface $container) {
-                return $container->get(ApplicationContract::class);
+                return $container->get(Application::class);
             },
             'cerebro' => function (ContainerInterface $container) {
-                return $container->get(ApplicationContract::class);
+                return $container->get(Application::class);
             },
         ];
     }
@@ -82,6 +79,10 @@ class ConsoleServiceProvider implements
             self::$options['version'],
             self::$options['name']
         );
+
+        if ($container->has(EventManagerContract::class)) {
+            $console->setEventManager($container->get(EventManagerContract::class));
+        }
 
         return $console;
     }

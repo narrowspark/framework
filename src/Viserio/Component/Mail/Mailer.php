@@ -6,7 +6,6 @@ use Closure;
 use InvalidArgumentException;
 use Narrowspark\Arr\Arr;
 use Swift_Mailer;
-use Swift_Message;
 use Swift_Mime_Message;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
@@ -269,7 +268,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     protected function createMessage(): MessageContract
     {
-        $message = new Message(new Swift_Message());
+        $message = new Message($this->swift->createMessage('message'));
 
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
