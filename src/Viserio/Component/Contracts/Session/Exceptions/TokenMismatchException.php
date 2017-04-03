@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Contracts\Session\Exception;
+namespace Viserio\Component\Contracts\Session\Exceptions;
 
 use Exception;
 

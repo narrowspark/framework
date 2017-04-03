@@ -79,7 +79,12 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         );
 
         $middleware = new StartSessionMiddleware($manager);
-        $request    = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
+
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
+        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);
@@ -128,7 +133,12 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         );
 
         $middleware = new StartSessionMiddleware($manager);
-        $request    = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
+
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
+        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             self::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));

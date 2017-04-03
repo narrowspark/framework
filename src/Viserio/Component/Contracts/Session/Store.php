@@ -36,7 +36,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function setId(string $id);
+    public function setId(string $id): void;
 
     /**
      * Returns the session ID.
@@ -52,14 +52,14 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function setName(string $name);
+    public function setName(string $name): void;
 
     /**
      * Returns the session name.
      *
      * @return string the session name
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Invalidates the current session.
@@ -90,7 +90,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function save();
+    public function save(): void;
 
     /**
      * Checks if an attribute is defined.
@@ -119,7 +119,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function set(string $name, $value);
+    public function set(string $name, $value): void;
 
     /**
      * Push a value onto a session array.
@@ -129,7 +129,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function push(string $key, $value);
+    public function push(string $key, $value): void;
 
     /**
      * Removes an attribute.
@@ -152,7 +152,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function clear();
+    public function clear(): void;
 
     /**
      * Checks if the session was started.
@@ -168,7 +168,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function setIdRequestsLimit(int $limit);
+    public function setIdRequestsLimit(int $limit): void;
 
     /**
      * Shows the counted request for session.
@@ -185,7 +185,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function setIdLiveTime(int $ttl);
+    public function setIdLiveTime(int $ttl): void;
 
     /**
      * Gets last trace timestamp.
@@ -259,7 +259,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function addFingerprintGenerator(Fingerprint $fingerprintGenerator);
+    public function addFingerprintGenerator(Fingerprint $fingerprintGenerator): void;
 
     /**
      * Get the session handler instance.
