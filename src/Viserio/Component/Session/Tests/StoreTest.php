@@ -160,17 +160,23 @@ class StoreTest extends MockeryTestCase
         self::assertEquals(1, $session->getRequestsCount());
     }
 
-    public function testStartMethodUnsetsAllValues()
+    /**
+     * @expectedException \Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException
+     * @expectedExceptionMessage The session is not started.
+     */
+    public function testSetMethodToThrowException()
     {
         $session = $this->session;
         $session->set('foo', 'bar');
-        $session->set('foo2', 'bar');
-        $session->set('foo3', 'bar');
+    }
 
-        // generates new token
+    public function testSetAndGetPreviousUrl()
+    {
+        $session = $this->session;
         $session->start();
+        $session->setPreviousUrl('/test');
 
-        self::assertEquals(1, count($session->getAll()));
+        self::assertSame('/test', $session->getPreviousUrl());
     }
 
     public function testStartMethodResetsLastTraceAndFirstTrace()
@@ -235,6 +241,7 @@ class StoreTest extends MockeryTestCase
     public function testRemove()
     {
         $session = $this->session;
+        $session->start();
         $session->set('foo', 'bar');
 
         $pulled = $session->remove('foo');
@@ -246,6 +253,7 @@ class StoreTest extends MockeryTestCase
     public function testClear()
     {
         $session = $this->session;
+        $session->start();
         $session->set('foo', 'bar');
         $session->clear();
 
@@ -321,6 +329,7 @@ class StoreTest extends MockeryTestCase
     public function testDataFlashing()
     {
         $session = $this->session;
+        $session->start();
         $session->flash('foo', 'bar');
         $session->flash('bar', 0);
 
@@ -343,6 +352,7 @@ class StoreTest extends MockeryTestCase
     public function testDataFlashingNow()
     {
         $session = $this->session;
+        $session->start();
         $session->now('foo', 'bar');
         $session->now('bar', 0);
 
@@ -359,6 +369,7 @@ class StoreTest extends MockeryTestCase
     public function testDataMergeNewFlashes()
     {
         $session = $this->session;
+        $session->start();
         $session->flash('foo', 'bar');
         $session->set('fu', 'baz');
         $session->set('_flash.old', ['qu']);
@@ -377,6 +388,7 @@ class StoreTest extends MockeryTestCase
     public function testReflash()
     {
         $session = $this->session;
+        $session->start();
         $session->flash('foo', 'bar');
         $session->set('_flash.old', ['foo']);
         $session->reflash();
@@ -388,6 +400,7 @@ class StoreTest extends MockeryTestCase
     public function testReflashWithNow()
     {
         $session = $this->session;
+        $session->start();
         $session->now('foo', 'bar');
         $session->reflash();
 

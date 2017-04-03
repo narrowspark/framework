@@ -12,6 +12,7 @@ use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Support\Str;
+use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
 
 class Store implements StoreContract
 {
@@ -134,14 +135,16 @@ class Store implements StoreContract
      */
     public function start(): bool
     {
+        $this->started = true;
+
         $this->id     = $this->generateSessionId();
         $this->values = [];
 
-        $this->firstTrace = $this->timestamp();
+        $this->firstTrace = $this->getTimestamp();
         $this->updateLastTrace();
 
         $this->requestsCount     = 1;
-        $this->regenerationTrace = $this->timestamp();
+        $this->regenerationTrace = $this->getTimestamp();
 
         $this->fingerprint = $this->generateFingerprint();
 
@@ -149,7 +152,7 @@ class Store implements StoreContract
             $this->regenerateToken();
         }
 
-        return $this->started = true;
+        return $this->started;
     }
 
     /**
@@ -210,7 +213,7 @@ class Store implements StoreContract
 
         $this->id = $this->generateSessionId();
 
-        $this->regenerationTrace = $this->timestamp();
+        $this->regenerationTrace = $this->getTimestamp();
 
         return true;
     }
@@ -255,6 +258,8 @@ class Store implements StoreContract
      */
     public function has(string $name): bool
     {
+        $this->checkIfSessionHasStarted();
+
         return Arr::has($this->values, $name);
     }
 
@@ -263,6 +268,8 @@ class Store implements StoreContract
      */
     public function get(string $name, $default = null)
     {
+        $this->checkIfSessionHasStarted();
+
         return Arr::get($this->values, $name, $default);
     }
 
@@ -271,6 +278,8 @@ class Store implements StoreContract
      */
     public function set(string $name, $value): void
     {
+        $this->checkIfSessionHasStarted();
+
         $this->values = Arr::set($this->values, $name, $value);
     }
 
@@ -535,7 +544,7 @@ class Store implements StoreContract
      */
     protected function updateLastTrace(): void
     {
-        $this->lastTrace = $this->timestamp();
+        $this->lastTrace = $this->getTimestamp();
     }
 
     /**
@@ -546,6 +555,20 @@ class Store implements StoreContract
     protected function generateSessionId(): string
     {
         return hash('ripemd160', uniqid(Str::random(23), true) . Str::random(25) . microtime(true));
+    }
+
+    /**
+     * Check if session has already started.
+     *
+     * @throws \Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException
+     *
+     * @return void
+     */
+    protected function checkIfSessionHasStarted(): void
+    {
+        if (!$this->isStarted()) {
+            throw new SessionNotStartedException('The session is not started.');
+        }
     }
 
     /**
@@ -586,7 +609,7 @@ class Store implements StoreContract
         }
 
         if ($this->idTtl && $this->regenerationTrace) {
-            return $this->regenerationTrace + $this->idTtl < $this->timestamp();
+            return $this->regenerationTrace + $this->idTtl < $this->getTimestamp();
         }
 
         return false;
@@ -678,7 +701,7 @@ class Store implements StoreContract
      *
      * @return int
      */
-    private function timestamp(): int
+    private function getTimestamp(): int
     {
         return (new DateTimeImmutable())->getTimestamp();
     }

@@ -82,7 +82,12 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ]);
         $manager = $this->getSessionManager($config);
 
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
+
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $request = $request->withMethod('PUT');
 
         $dispatcher = new Dispatcher(
@@ -139,7 +144,12 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ]);
         $manager = $this->getSessionManager($config);
 
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
+
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
+        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $request = $request->withMethod('PUT');
 
         $dispatcher = new Dispatcher(
@@ -196,7 +206,12 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ]);
         $manager = $this->getSessionManager($config);
 
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
+
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
+        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $request = $request->withMethod('PUT');
 
         $dispatcher = new Dispatcher(
@@ -223,7 +238,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Session\Exception\TokenMismatchException
+     * @expectedException \Viserio\Component\Contracts\Session\Exceptions\TokenMismatchException
      */
     public function testSessionCsrfMiddlewareToThrowException()
     {
@@ -259,7 +274,12 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ]);
         $manager = $this->getSessionManager($config);
 
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($_SERVER);
+
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+        unset($server['PHP_SELF']);
+
+        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $request = $request->withMethod('PUT');
 
         $dispatcher = new Dispatcher(
