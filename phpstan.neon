@@ -15,6 +15,10 @@ parameters:
         - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
 
     ignoreErrors:
+        # PHPSTAN brocken
+        -'#Internal error: Argument 1 passed to PHPStan\\Broker\\Broker::hasClass#'
+        - '#Internal error: Too few arguments to function Viserio\\Component\\Foundation\\Application::__construct#'
+
         # They are array callables
         - '#callable of class Twig_Function constructor#'
         - '#callable of class Twig_Filter constructor#'

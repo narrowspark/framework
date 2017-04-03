@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Commands;
+namespace Viserio\Component\Foundation\Console\Commands;
 
 use Defuse\Crypto\Key;
 use Viserio\Component\Console\Command\Command;

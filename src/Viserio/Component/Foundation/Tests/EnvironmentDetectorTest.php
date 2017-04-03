@@ -30,6 +30,7 @@ class EnvironmentDetectorTest extends TestCase
         $result = $this->env->detect(function () {
             return 'foobar';
         }, ['--env=local']);
+
         self::assertEquals('local', $result);
     }
 

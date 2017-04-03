@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Commands;
+namespace Viserio\Component\Foundation\Console\Commands;
 
 use Cake\Chronos\Chronos;
 use Viserio\Component\Console\Command\Command;

@@ -14,9 +14,9 @@ use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Component\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
+use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\Router;
@@ -89,7 +89,7 @@ class Kernel implements TerminableContract, KernelContract
      */
     protected $bootstrappers = [
         LoadConfiguration::class,
-        DetectEnvironment::class,
+        LoadEnvironmentVariables::class,
         HandleExceptions::class,
         LoadServiceProvider::class,
     ];

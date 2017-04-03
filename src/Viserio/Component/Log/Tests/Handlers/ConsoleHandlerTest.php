@@ -44,6 +44,7 @@ class ConsoleHandlerTest extends TestCase
      * @param mixed $verbosity
      * @param mixed $level
      * @param mixed $isHandling
+     * @param array $map
      */
     public function testVerbosityMapping($verbosity, $level, $isHandling, array $map = [])
     {

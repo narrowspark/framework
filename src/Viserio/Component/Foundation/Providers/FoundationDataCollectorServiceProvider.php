@@ -70,6 +70,14 @@ class FoundationDataCollectorServiceProvider implements
         ];
     }
 
+    /**
+     * Extend viserio profiler with data collector.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Viserio\Component\Contracts\WebProfiler\WebProfiler
+     */
     public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
         if ($getPrevious !== null) {

@@ -204,6 +204,7 @@ class ConsoleFormatter implements FormatterInterface
              * @param array                                    $a
              * @param \Symfony\Component\VarDumper\Cloner\Stub $s
              * @param mixed                                    $isNested
+             * @param array                                    $array
              *
              * @return array
              */

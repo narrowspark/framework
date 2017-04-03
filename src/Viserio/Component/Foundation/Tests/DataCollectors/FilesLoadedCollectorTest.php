@@ -30,7 +30,7 @@ class FilesLoadedCollectorTest extends MockeryTestCase
             $this->mock(ServerRequestInterface::class),
             $this->mock(ResponseInterface::class)
         );
-
+        //TODO change test
         static::assertTrue(is_string($collector->getPanel()));
     }
 }

@@ -5,9 +5,9 @@ namespace Viserio\Component\Foundation\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Foundation\Commands\DownCommand;
-use Viserio\Component\Foundation\Commands\KeyGenerateCommand;
-use Viserio\Component\Foundation\Commands\UpCommand;
+use Viserio\Component\Foundation\Console\Commands\DownCommand;
+use Viserio\Component\Foundation\Console\Commands\KeyGenerateCommand;
+use Viserio\Component\Foundation\Console\Commands\UpCommand;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {
@@ -21,6 +21,14 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * Extend viserio console with commands.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Viserio\Component\Console\Application
+     */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
         if ($getPrevious !== null) {

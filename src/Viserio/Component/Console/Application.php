@@ -10,9 +10,11 @@ use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputAwareInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -179,6 +181,38 @@ class Application extends SymfonyConsole
     }
 
     /**
+     * Run an console command by name.
+     *
+     * @param string                                                 $command
+     * @param array                                                  $parameters
+     * @param null|\Symfony\Component\Console\Output\OutputInterface $outputBuffer
+     *
+     * @return int
+     */
+    public function call(string $command, array $parameters = [], ?OutputInterface $outputBuffer = null): int
+    {
+        $this->lastOutput = $outputBuffer ?: new BufferedOutput();
+
+        $this->setCatchExceptions(false);
+
+        $result = $this->run(new ArrayInput($parameters), $this->lastOutput);
+
+        $this->setCatchExceptions(true);
+
+        return $result;
+    }
+
+    /**
+     * Get the output for the last run command.
+     *
+     * @return string
+     */
+    public function output(): string
+    {
+        return $this->lastOutput ? $this->lastOutput->fetch() : '';
+    }
+
+    /**
      * Define default values for the arguments of the command.
      *
      * @param string $commandName      name of the command
@@ -267,6 +301,18 @@ class Application extends SymfonyConsole
     public static function cerebroBinary(): string
     {
         return defined('CEREBRO_BINARY') ? ProcessUtils::escapeArgument(CEREBRO_BINARY) : 'cerebro';
+    }
+
+    /**
+     * Format the given command as a fully-qualified executable command.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function formatCommandString(string $string): string
+    {
+        return sprintf('%s %s %s', static::phpBinary(), static::cerebroBinary(), $string);
     }
 
     /**
@@ -394,17 +440,14 @@ class Application extends SymfonyConsole
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
 
-        // don't bind the input again as it would override any input argument/option set from the command event in
-        // addition to being useless
-        $command->setInputBound(true);
-
         $this->getEventManager()->trigger($event = new ConsoleCommandEvent($command, $input, $output));
 
         $exitCode = 0;
 
         if ($event->commandShouldRun()) {
+            $e = $x = null;
+
             try {
-                $e        = $x        = null;
                 $exitCode = $command->run($input, $output);
             } catch (Throwable $x) {
                 throw new FatalThrowableError($x);
