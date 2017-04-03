@@ -448,7 +448,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
         $newServer = array_merge($server, $serverVar);
 
-        return new UrlGenerator($routes, (new ServerRequestFactory())->createServerRequest($newServer), new UriFactory());
+        return new UrlGenerator($routes, (new ServerRequestFactory())->createServerRequestFromArray($newServer), new UriFactory());
     }
 
     protected function getRoutes(Route $route)

@@ -14,14 +14,36 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createServerRequest(array $server, $method = null, $uri = null): ServerRequestInterface
+    public function createServerRequest($method, $uri): ServerRequestInterface
+    {
+        return $this->buildServerRequest([], [], $method, $uri);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createServerRequestFromArray(array $server): ServerRequestInterface
     {
         $server  = $this->normalizeServer($server);
-        $method  = $method === null ? ($server['REQUEST_METHOD'] ?? 'GET') : $method;
         $headers = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
-        $uri     = $uri !== null ? $uri : Uri::createFromServer($server);
+        $method  = $server['REQUEST_METHOD'] ?? 'GET';
 
-        $serverRequest = new ServerRequest(
+        return $this->buildServerRequest($server, $headers, $method, Uri::createFromServer($server));
+    }
+
+    /**
+     * Build a server request from given datas.
+     *
+     * @param array                                 $server
+     * @param array                                 $headers
+     * @param string                                $method
+     * @param \Psr\Http\Message\UriInterface|string $uri
+     *
+     * @return \Psr\Http\Message\ServerRequestInterface
+     */
+    protected function buildServerRequest(array $server, array $headers, string $method, $uri = null): ServerRequestInterface
+    {
+        return new ServerRequest(
             $uri,
             $method,
             $headers,
@@ -29,8 +51,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $this->marshalProtocolVersion($server),
             $server
         );
-
-        return $serverRequest;
     }
 
     /**

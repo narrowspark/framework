@@ -19,7 +19,7 @@
     ],
     "require": {
         "php"                               : "^7.1",
-        "http-interop/http-factory"         : "^0.2",
+        "http-interop/http-factory"         : "^0.3",
         "viserio/http"                      : "self.version"
     },
     "require-dev": {

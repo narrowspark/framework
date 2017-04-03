@@ -34,7 +34,7 @@ class WebProfilerMiddlewareTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        $request = (new ServerRequestFactory())->createServerRequest($server);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);

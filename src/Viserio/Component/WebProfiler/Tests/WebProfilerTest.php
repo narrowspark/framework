@@ -78,7 +78,7 @@ class WebProfilerTest extends MockeryTestCase
         $response = (new ResponseFactory())->createResponse(200);
 
         $response = $profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequest($server),
+            (new ServerRequestFactory())->createServerRequestFromArray($server),
             $response
         );
 
@@ -115,7 +115,7 @@ class WebProfilerTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $response = $profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequest($server),
+            (new ServerRequestFactory())->createServerRequestFromArray($server),
             $response
         );
 
@@ -147,7 +147,7 @@ class WebProfilerTest extends MockeryTestCase
         $orginalResponse = (new ResponseFactory())->createResponse(200);
 
         $response = $profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequest($server),
+            (new ServerRequestFactory())->createServerRequestFromArray($server),
             $orginalResponse
         );
 

@@ -28,7 +28,7 @@ class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request = (new ServerRequestFactory())->createServerRequest($server);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);

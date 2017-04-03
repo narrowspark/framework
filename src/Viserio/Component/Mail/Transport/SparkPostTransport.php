@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\Response;
 use Swift_Mime_Message;
 
 class SparkPostTransport extends AbstractTransport
@@ -69,7 +70,11 @@ class SparkPostTransport extends AbstractTransport
             $options['json']['options'] = $this->options;
         }
 
-        $this->client->post('https://api.sparkpost.com/api/v1/transmissions', $options);
+        $response = $this->client->post('https://api.sparkpost.com/api/v1/transmissions', $options);
+
+        $message->getHeaders()->addTextHeader('X-SparkPost-Transmission-ID', $this->getTransmissionId($response));
+
+        $this->sendPerformed($message);
 
         return $this->numberOfRecipients($message);
     }
@@ -131,6 +136,28 @@ class SparkPostTransport extends AbstractTransport
     }
 
     /**
+     * Get the transmission ID from the response.
+     *
+     * @param \GuzzleHttp\Psr7\Response $response
+     *
+     * @return string|null
+     */
+    protected function getTransmissionId(Response $response): ?string
+    {
+        $object = json_decode($response->getBody()->getContents());
+
+        foreach (['results', 'id'] as $segment) {
+            if (! is_object($object) || ! isset($object->{$segment})) {
+                return null;
+            }
+
+            $object = $object->{$segment};
+        }
+
+        return $object;
+    }
+
+    /**
      * Get all the addresses this message should be sent to.
      *
      * Note that SparkPost still respects CC, BCC headers in raw message itself.
@@ -141,23 +168,19 @@ class SparkPostTransport extends AbstractTransport
      */
     protected function getRecipients(Swift_Mime_Message $message): array
     {
-        $to = [];
+        $recipients = [];
 
-        if ($message->getTo()) {
-            $to = array_merge($to, array_keys($message->getTo()));
+        foreach ((array) $message->getTo() as $email => $name) {
+            $recipients[] = ['address' => compact('name', 'email')];
         }
 
-        if ($message->getCc()) {
-            $to = array_merge($to, array_keys($message->getCc()));
+        foreach ((array) $message->getCc() as $email => $name) {
+            $recipients[] = ['address' => compact('name', 'email')];
         }
 
-        if ($message->getBcc()) {
-            $to = array_merge($to, array_keys($message->getBcc()));
+        foreach ((array) $message->getBcc() as $email => $name) {
+            $recipients[] = ['address' => compact('name', 'email')];
         }
-
-        $recipients = array_map(function ($address) {
-            return compact('address');
-        }, $to);
 
         return $recipients;
     }

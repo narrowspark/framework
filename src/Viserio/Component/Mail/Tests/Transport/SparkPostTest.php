@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
@@ -39,10 +40,16 @@ class SparkPostTest extends TestCase
                         'json' => [
                             'recipients' => [
                                 [
-                                    'address' => 'me@example.com',
+                                    'address' => [
+                                        'name'  => null,
+                                        'email' => 'me@example.com',
+                                    ],
                                 ],
                                 [
-                                    'address' => 'you@example.com',
+                                    'address' => [
+                                        'name'  => null,
+                                        'email' => 'you@example.com',
+                                    ],
                                 ],
                             ],
                             'content' => [
@@ -51,7 +58,8 @@ class SparkPostTest extends TestCase
                         ],
                     ]
                 )
-            );
+            )
+            ->willReturn(new Response());
 
         $transport->send($message);
     }

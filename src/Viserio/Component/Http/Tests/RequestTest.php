@@ -335,7 +335,7 @@ class RequestTest extends AbstractMessageTest
     public function testAllowsCustomRequestMethodsThatFollowSpec($method)
     {
         $request = new Request(null, $method);
-        $this->assertSame($method, $request->getMethod());
+        self::assertSame($method, $request->getMethod());
     }
 
     public function customRequestMethods()

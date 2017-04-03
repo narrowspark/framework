@@ -536,7 +536,7 @@ class ApplicationTest extends MockeryTestCase
 
         $exitCode = $application->run(new ArrayInput([]), new NullOutput());
 
-        $this->assertSame(4, $exitCode, '->run() returns integer exit code extracted from raised exception');
+        self::assertSame(4, $exitCode, '->run() returns integer exit code extracted from raised exception');
     }
 
     /**
