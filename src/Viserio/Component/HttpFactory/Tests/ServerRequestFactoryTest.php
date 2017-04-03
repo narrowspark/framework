@@ -201,32 +201,7 @@ class ServerRequestFactoryTest extends TestCase
         $method  = $server['REQUEST_METHOD'];
         $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
         $request = $this->factory->createServerRequestFromArray($server);
-        self::assertServerRequest($request, $method, $uri);
-    }
 
-    /**
-     * @dataProvider dataServer
-     *
-     * @param mixed $server
-     */
-    public function testCreateServerRequestWithOverridenMethod($server)
-    {
-        $method  = 'OPTIONS';
-        $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
-        $request = $this->factory->createServerRequestFromArray($server, $method);
-        self::assertServerRequest($request, $method, $uri);
-    }
-
-    /**
-     * @dataProvider dataServer
-     *
-     * @param mixed $server
-     */
-    public function testCreateServerRequestWithOverridenUri($server)
-    {
-        $method  = $server['REQUEST_METHOD'];
-        $uri     = 'https://example.com/foobar?bar=2&foo=false';
-        $request = $this->factory->createServerRequestFromArray($server, null, $uri);
         self::assertServerRequest($request, $method, $uri);
     }
 
@@ -252,6 +227,7 @@ class ServerRequestFactoryTest extends TestCase
         $_SERVER      = ['HTTP_X_FOO' => 'bar'];
         $request      = $this->factory->createServerRequest('POST', 'http://example.org/test');
         $serverParams = $request->getServerParams();
+
         self::assertNotEquals($_SERVER, $serverParams);
         self::assertArrayNotHasKey('HTTP_X_FOO', $serverParams);
     }
@@ -260,6 +236,7 @@ class ServerRequestFactoryTest extends TestCase
     {
         $_COOKIE = ['foo' => 'bar'];
         $request = $this->factory->createServerRequest('POST', 'http://example.org/test');
+
         self::assertEmpty($request->getCookieParams());
     }
 
@@ -267,6 +244,7 @@ class ServerRequestFactoryTest extends TestCase
     {
         $_GET    = ['foo' => 'bar'];
         $request = $this->factory->createServerRequest('POST', 'http://example.org/test');
+
         self::assertEmpty($request->getQueryParams());
     }
 
@@ -274,6 +252,7 @@ class ServerRequestFactoryTest extends TestCase
     {
         $_FILES  = [['name' => 'foobar.dat', 'type' => 'application/octet-stream', 'tmp_name' => '/tmp/php45sd3f', 'error' => UPLOAD_ERR_OK, 'size' => 4]];
         $request = $this->factory->createServerRequest('POST', 'http://example.org/test');
+
         self::assertEmpty($request->getUploadedFiles());
     }
 
@@ -281,6 +260,7 @@ class ServerRequestFactoryTest extends TestCase
     {
         $_POST   = ['foo' => 'bar'];
         $request = $this->factory->createServerRequest('POST', 'http://example.org/test');
+
         self::assertEmpty($request->getParsedBody());
     }
 
