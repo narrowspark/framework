@@ -257,8 +257,20 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         try {
             return $this->swift->send($message, $this->failedRecipients);
         } finally {
-            $this->swift->getTransport()->stop();
+            $this->forceReconnection();
         }
+    }
+
+    /**
+     * Force the transport to re-connect.
+     *
+     * This will prevent errors in daemon queue situations.
+     *
+     * @return void
+     */
+    protected function forceReconnection()
+    {
+        $this->swift->getTransport()->stop();
     }
 
     /**

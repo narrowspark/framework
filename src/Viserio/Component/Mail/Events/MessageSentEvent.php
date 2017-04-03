@@ -6,12 +6,12 @@ use Viserio\Component\Contracts\Events\Event as EventContract;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
-class MessageSendingEvent implements EventContract
+class MessageSentEvent implements EventContract
 {
     use EventTrait;
 
     /**
-     * Create a new message sending event.
+     * Create a new message sent event.
      *
      * @param \Viserio\Component\Contracts\Mail\Mailer $mailer
      * @param array                                    $param
