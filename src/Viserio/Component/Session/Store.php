@@ -7,6 +7,8 @@ use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
+use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
 use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
@@ -14,6 +16,8 @@ use Viserio\Component\Support\Str;
 
 class Store implements StoreContract
 {
+    use EncrypterAwareTrait;
+
     /**
      * The session ID.
      *
@@ -131,14 +135,16 @@ class Store implements StoreContract
      */
     public function start(): bool
     {
+        $this->started = true;
+
         $this->id     = $this->generateSessionId();
         $this->values = [];
 
-        $this->firstTrace = $this->timestamp();
+        $this->firstTrace = $this->getTimestamp();
         $this->updateLastTrace();
 
         $this->requestsCount     = 1;
-        $this->regenerationTrace = $this->timestamp();
+        $this->regenerationTrace = $this->getTimestamp();
 
         $this->fingerprint = $this->generateFingerprint();
 
@@ -146,7 +152,7 @@ class Store implements StoreContract
             $this->regenerateToken();
         }
 
-        return $this->started = true;
+        return $this->started;
     }
 
     /**
@@ -169,7 +175,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function setId(string $id)
+    public function setId(string $id): void
     {
         if (! $this->isValidId($id)) {
             $id = $this->generateSessionId();
@@ -207,7 +213,7 @@ class Store implements StoreContract
 
         $this->id = $this->generateSessionId();
 
-        $this->regenerationTrace = $this->timestamp();
+        $this->regenerationTrace = $this->getTimestamp();
 
         return true;
     }
@@ -215,7 +221,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -223,7 +229,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -231,7 +237,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function save()
+    public function save(): void
     {
         if ($this->started) {
             if ($this->shouldRegenerateId()) {
@@ -252,6 +258,8 @@ class Store implements StoreContract
      */
     public function has(string $name): bool
     {
+        $this->checkIfSessionHasStarted();
+
         return Arr::has($this->values, $name);
     }
 
@@ -260,21 +268,25 @@ class Store implements StoreContract
      */
     public function get(string $name, $default = null)
     {
+        $this->checkIfSessionHasStarted();
+
         return Arr::get($this->values, $name, $default);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function set(string $name, $value)
+    public function set(string $name, $value): void
     {
+        $this->checkIfSessionHasStarted();
+
         $this->values = Arr::set($this->values, $name, $value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function push(string $key, $value)
+    public function push(string $key, $value): void
     {
         $array = $this->get($key, []);
 
@@ -306,7 +318,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): void
     {
         $this->values = [];
     }
@@ -322,7 +334,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function setIdRequestsLimit(int $limit)
+    public function setIdRequestsLimit(int $limit): void
     {
         $this->idRequestsLimit = $limit;
     }
@@ -338,7 +350,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function setIdLiveTime(int $ttl)
+    public function setIdLiveTime(int $ttl): void
     {
         $this->idTtl = $ttl;
     }
@@ -428,7 +440,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function addFingerprintGenerator(FingerprintContract $fingerprintGenerator)
+    public function addFingerprintGenerator(FingerprintContract $fingerprintGenerator): void
     {
         $this->fingerprintGenerators[] = $fingerprintGenerator;
     }
@@ -457,14 +469,6 @@ class Store implements StoreContract
         if ($this->handlerNeedsRequest()) {
             $this->handler->setRequest($request);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEncrypter(): EncrypterContract
-    {
-        return $this->encrypter;
     }
 
     /**
@@ -535,10 +539,12 @@ class Store implements StoreContract
 
     /**
      * Updates last trace timestamp.
+     *
+     * @return void
      */
-    protected function updateLastTrace()
+    protected function updateLastTrace(): void
     {
-        $this->lastTrace = $this->timestamp();
+        $this->lastTrace = $this->getTimestamp();
     }
 
     /**
@@ -552,11 +558,27 @@ class Store implements StoreContract
     }
 
     /**
+     * Check if session has already started.
+     *
+     * @throws \Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException
+     *
+     * @return void
+     */
+    protected function checkIfSessionHasStarted(): void
+    {
+        if (! $this->isStarted()) {
+            throw new SessionNotStartedException('The session is not started.');
+        }
+    }
+
+    /**
      * Merge new flash keys into the new flash array.
      *
      * @param array $keys
+     *
+     * @return void
      */
-    private function mergeNewFlashes(array $keys)
+    private function mergeNewFlashes(array $keys): void
     {
         $values = array_unique(array_merge($this->get('_flash.new', []), $keys));
 
@@ -567,8 +589,10 @@ class Store implements StoreContract
      * Remove the given keys from the old flash data.
      *
      * @param array $keys
+     *
+     * @return void
      */
-    private function removeFromOldFlashData(array $keys)
+    private function removeFromOldFlashData(array $keys): void
     {
         $this->set('_flash.old', array_diff($this->get('_flash.old', []), $keys));
     }
@@ -585,7 +609,7 @@ class Store implements StoreContract
         }
 
         if ($this->idTtl && $this->regenerationTrace) {
-            return $this->regenerationTrace + $this->idTtl < $this->timestamp();
+            return $this->regenerationTrace + $this->idTtl < $this->getTimestamp();
         }
 
         return false;
@@ -635,8 +659,10 @@ class Store implements StoreContract
 
     /**
      * Write values to handler.
+     *
+     * @return void
      */
-    private function writeToHandler()
+    private function writeToHandler(): void
     {
         $values = $this->values;
 
@@ -675,7 +701,7 @@ class Store implements StoreContract
      *
      * @return int
      */
-    private function timestamp(): int
+    private function getTimestamp(): int
     {
         return (new DateTimeImmutable())->getTimestamp();
     }
