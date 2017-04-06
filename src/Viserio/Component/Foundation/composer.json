@@ -31,6 +31,7 @@
         "viserio/routing"                  : "self.version"
     },
     "require-dev": {
+        "cakephp/chronos"                  : "^1.0",
         "narrowspark/testing-helper"       : "^2.0",
         "phpunit/phpunit"                  : "^5.7",
         "viserio/console"                  : "self.version",
@@ -57,6 +58,7 @@
         }
     },
     "suggest": {
+        "cakephp/chronos"                  : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0)",
         "viserio/statical-proxy"           : "Required to use statical-proxy bootstrapper (self.version).",
     },
     "minimum-stability"                    : "dev",
