@@ -127,7 +127,7 @@ class ExpressionParserTest extends TestCase
                 new InputArgument('argument', InputArgument::OPTIONAL, '', 'defaultArgumentValue'),
             ],
             'options'   => [
-                new InputOption('option', null, InputOption::VALUE_OPTIONAL, '', 'defaultOptionValue')
+                new InputOption('option', null, InputOption::VALUE_OPTIONAL, '', 'defaultOptionValue'),
             ],
         ]);
     }
@@ -140,7 +140,7 @@ class ExpressionParserTest extends TestCase
                 new InputArgument('argument', InputArgument::OPTIONAL, 'The option description.', 'defaultArgumentValue'),
             ],
             'options'   => [
-                new InputOption('option', null, InputOption::VALUE_OPTIONAL, 'The option description.', 'defaultOptionValue')
+                new InputOption('option', null, InputOption::VALUE_OPTIONAL, 'The option description.', 'defaultOptionValue'),
             ],
         ]);
     }

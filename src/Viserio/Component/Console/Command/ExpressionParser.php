@@ -96,7 +96,7 @@ class ExpressionParser
             $mode = InputArgument::IS_ARRAY;
 
             if (preg_match('/\[(.+)\=\*(.+)\]*/', $token, $matches)) {
-                $token = $matches[1];
+                $token   = $matches[1];
                 $default = $matches[2];
             }
 
@@ -108,7 +108,7 @@ class ExpressionParser
             $mode = InputArgument::OPTIONAL;
 
             if (preg_match('/\[(.+)\=(.+)\]/', $token, $matches)) {
-                $token = $matches[1];
+                $token   = $matches[1];
                 $default = $matches[2];
             }
 
@@ -140,7 +140,7 @@ class ExpressionParser
             $shortcut = null;
         }
 
-        $name   = ltrim($token, '-');
+        $name    = ltrim($token, '-');
         $default = null;
 
         if (self::endsWith($token, '=]*')) {
@@ -150,12 +150,12 @@ class ExpressionParser
             $mode = InputOption::VALUE_REQUIRED;
             $name = rtrim($name, '=');
         } elseif (preg_match('/(.+)\=\*(.+)/', $name, $matches)) {
-            $mode = InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY;
-            $name = $matches[1];
+            $mode    = InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY;
+            $name    = $matches[1];
             $default = $matches[2];
         } elseif (preg_match('/(.+)\=(.+)/', $name, $matches)) {
-            $mode = InputOption::VALUE_OPTIONAL;
-            $name = $matches[1];
+            $mode    = InputOption::VALUE_OPTIONAL;
+            $name    = $matches[1];
             $default = $matches[2];
         } else {
             $mode = InputOption::VALUE_NONE;
@@ -168,7 +168,7 @@ class ExpressionParser
      * Parse the token into its token and description segments.
      *
      * @param string $token
-
+     *
      * @return array
      */
     protected static function extractDescription(string $token): array
