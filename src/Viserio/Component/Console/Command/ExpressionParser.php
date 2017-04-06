@@ -15,13 +15,14 @@ class ExpressionParser
      */
     public function parse(string $expression): array
     {
-        $tokens = explode(' ', $expression);
-        $tokens = array_map('trim', $tokens);
-        $tokens = array_values(array_filter($tokens));
+        preg_match_all('/^[^\s]*\s|\[\s*(.*?)\]/', $expression, $tokens);
 
-        if (count($tokens) === 0) {
+        if (count($tokens[0]) === 0) {
             throw new InvalidCommandExpression('The expression was empty');
         }
+
+        $tokens = array_map('trim', $tokens[0]);
+        $tokens = array_values(array_filter($tokens));
 
         $name      = array_shift($tokens);
         $arguments = [];
@@ -33,9 +34,9 @@ class ExpressionParser
             }
 
             if ($this->isOption($token)) {
-                $options[] = $this->parseOption($token);
+                $options[] = self::parseOption($token);
             } else {
-                $arguments[] = $this->parseArgument($token);
+                $arguments[] = self::parseArgument($token);
             }
         }
 
@@ -44,6 +45,26 @@ class ExpressionParser
             'arguments' => $arguments,
             'options'   => $options,
         ];
+    }
+
+    /**
+     * Extract the name of the command from the expression.
+     *
+     * @param string $expression
+     *
+     * @return string
+     */
+    protected static function getName(string $expression): string
+    {
+        if (trim($expression) === '') {
+            throw new InvalidCommandExpression('Console command definition is empty.');
+        }
+
+        if (! preg_match('/[^\s]+/', $expression, $matches)) {
+            throw new InvalidCommandExpression('Unable to determine command name from signature.');
+        }
+
+        return $matches[0];
     }
 
     /**
@@ -65,23 +86,39 @@ class ExpressionParser
      *
      * @return \Viserio\Component\Console\Input\InputArgument
      */
-    protected function parseArgument(string $token): InputArgument
+    protected static function parseArgument(string $token): InputArgument
     {
+        list($token, $description) = static::extractDescription($token);
+
+        $default = null;
+
         if (self::endsWith($token, ']*')) {
             $mode = InputArgument::IS_ARRAY;
+
+            if (preg_match('/\[(.+)\=\*(.+)\]*/', $token, $matches)) {
+                $token = $matches[1];
+                $default = $matches[2];
+            }
+
             $name = trim($token, '[]*');
         } elseif (self::endsWith($token, '*')) {
             $mode = InputArgument::IS_ARRAY | InputArgument::REQUIRED;
             $name = trim($token, '*');
         } elseif (self::startsWith($token, '[')) {
             $mode = InputArgument::OPTIONAL;
+
+            if (preg_match('/\[(.+)\=(.+)\]/', $token, $matches)) {
+                $token = $matches[1];
+                $default = $matches[2];
+            }
+
             $name = trim($token, '[]');
         } else {
             $mode = InputArgument::REQUIRED;
             $name = $token;
         }
 
-        return new InputArgument($name, $mode);
+        return new InputArgument($name, $mode, $description, $default);
     }
 
     /**
@@ -91,9 +128,9 @@ class ExpressionParser
      *
      * @return \Viserio\Component\Console\Input\InputOption
      */
-    protected function parseOption(string $token): InputOption
+    protected static function parseOption(string $token): InputOption
     {
-        $token = trim($token, '[]');
+        list($token, $description) = static::extractDescription(trim($token, '[]'));
 
         // Shortcut [-y|--yell]
         if (mb_strpos($token, '|') !== false) {
@@ -103,7 +140,8 @@ class ExpressionParser
             $shortcut = null;
         }
 
-        $name = ltrim($token, '-');
+        $name   = ltrim($token, '-');
+        $default = null;
 
         if (self::endsWith($token, '=]*')) {
             $mode = InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY;
@@ -111,11 +149,33 @@ class ExpressionParser
         } elseif (self::endsWith($token, '=')) {
             $mode = InputOption::VALUE_REQUIRED;
             $name = rtrim($name, '=');
+        } elseif (preg_match('/(.+)\=\*(.+)/', $name, $matches)) {
+            $mode = InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY;
+            $name = $matches[1];
+            $default = $matches[2];
+        } elseif (preg_match('/(.+)\=(.+)/', $name, $matches)) {
+            $mode = InputOption::VALUE_OPTIONAL;
+            $name = $matches[1];
+            $default = $matches[2];
         } else {
             $mode = InputOption::VALUE_NONE;
         }
 
-        return new InputOption($name, $shortcut, $mode);
+        return new InputOption($name, $shortcut, $mode, $description, $default);
+    }
+
+    /**
+     * Parse the token into its token and description segments.
+     *
+     * @param string $token
+
+     * @return array
+     */
+    protected static function extractDescription(string $token): array
+    {
+        preg_match('/(.*)\s:(\s+.*(?<!]))(.*)/', trim($token), $parts);
+
+        return count($parts) === 4 ? [$parts[1] . $parts[3], trim($parts[2])] : [$token, ''];
     }
 
     /**
