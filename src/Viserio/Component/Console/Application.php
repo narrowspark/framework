@@ -99,10 +99,6 @@ class Application extends SymfonyConsole
         string $version,
         string $name = 'Cerebro'
     ) {
-        if (! defined('CEREBRO_BINARY')) {
-            define('CEREBRO_BINARY', 'cerebro');
-        }
-
         $this->name             = $name;
         $this->version          = $version;
         $this->container        = $container;

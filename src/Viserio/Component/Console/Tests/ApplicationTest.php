@@ -543,7 +543,7 @@ class ApplicationTest extends MockeryTestCase
 
     public function testCerebroBinary()
     {
-        self::assertSame(ProcessUtils::escapeArgument(CEREBRO_BINARY), Application::cerebroBinary());
+        self::assertSame('cerebro', Application::cerebroBinary());
     }
 
     public function testPhpBinary()
@@ -559,7 +559,7 @@ class ApplicationTest extends MockeryTestCase
         $finder = (new PhpExecutableFinder())->find(false);
         $php    = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
 
-        self::assertSame($php . ' ' . ProcessUtils::escapeArgument(CEREBRO_BINARY) . ' command.greet', Application::formatCommandString('command.greet'));
+        self::assertSame($php . ' cerebro' . ' command.greet', Application::formatCommandString('command.greet'));
     }
 
     /**
