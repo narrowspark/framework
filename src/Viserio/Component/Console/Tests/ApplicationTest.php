@@ -26,6 +26,8 @@ use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\ProcessUtils;
 
 class ApplicationTest extends MockeryTestCase
 {
@@ -537,6 +539,27 @@ class ApplicationTest extends MockeryTestCase
         $exitCode = $application->run(new ArrayInput([]), new NullOutput());
 
         self::assertSame(4, $exitCode, '->run() returns integer exit code extracted from raised exception');
+    }
+
+    public function testCerebroBinary()
+    {
+        self::assertSame(ProcessUtils::escapeArgument(CEREBRO_BINARY), Application::cerebroBinary());
+    }
+
+    public function testPhpBinary()
+    {
+        $finder = (new PhpExecutableFinder())->find(false);
+        $php = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+
+        self::assertSame($php, Application::phpBinary());
+    }
+
+    public function testFormatCommandString()
+    {
+        $finder = (new PhpExecutableFinder())->find(false);
+        $php = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+
+        self::assertSame($php . ' ' . ProcessUtils::escapeArgument(CEREBRO_BINARY) . ' command.greet', Application::formatCommandString('command.greet'));
     }
 
     /**

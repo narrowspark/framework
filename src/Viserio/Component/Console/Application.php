@@ -281,8 +281,6 @@ class Application extends SymfonyConsole
      * The PHP executable.
      *
      * @return string
-     *
-     * @codeCoverageIgnore
      */
     public static function phpBinary(): string
     {
@@ -295,8 +293,6 @@ class Application extends SymfonyConsole
      * The Cerebro executable.
      *
      * @return string
-     *
-     * @codeCoverageIgnore
      */
     public static function cerebroBinary(): string
     {
