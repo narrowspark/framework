@@ -17,6 +17,8 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\ApplicationTester;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
@@ -26,8 +28,6 @@ use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
-use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\ProcessUtils;
 
 class ApplicationTest extends MockeryTestCase
 {
@@ -549,7 +549,7 @@ class ApplicationTest extends MockeryTestCase
     public function testPhpBinary()
     {
         $finder = (new PhpExecutableFinder())->find(false);
-        $php = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+        $php    = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
 
         self::assertSame($php, Application::phpBinary());
     }
@@ -557,7 +557,7 @@ class ApplicationTest extends MockeryTestCase
     public function testFormatCommandString()
     {
         $finder = (new PhpExecutableFinder())->find(false);
-        $php = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+        $php    = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
 
         self::assertSame($php . ' ' . ProcessUtils::escapeArgument(CEREBRO_BINARY) . ' command.greet', Application::formatCommandString('command.greet'));
     }
