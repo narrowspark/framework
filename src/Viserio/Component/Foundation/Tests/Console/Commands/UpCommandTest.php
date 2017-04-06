@@ -12,10 +12,10 @@ class UpCommandTest extends MockeryTestCase
 {
     public function testCommand()
     {
-        $path = __DIR__ . '/../../Fixtures';
+        $path      = __DIR__ . '/../../Fixtures';
         $framework = $path . '/framework';
 
-        if (!is_dir($framework)) {
+        if (! is_dir($framework)) {
             mkdir($framework);
         }
 
