@@ -19,6 +19,8 @@ matrix:
     - php: 7.1
       env: SETUP=basic SEND_COVERAGE=true PHPUNIT=true
     - php: 7.1
+      env: SETUP=basic PHPSTAN=true
+    - php: 7.1
       env: SETUP=basic PHPUNIT=true
     - php: 7.1
       env: SETUP=stable PHPUNIT=true
