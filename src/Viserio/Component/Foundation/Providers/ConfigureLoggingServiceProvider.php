@@ -5,14 +5,13 @@ namespace Viserio\Component\Foundation\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Handler\ErrorLogHandler;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Log\Log as LogContract;
-use Viserio\Component\Log\HandlerParser;
-use Viserio\Component\Log\Traits\ParseLevelTrait;
-use Viserio\Component\Log\Writer;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Log\HandlerParser;
+use Viserio\Component\Log\Traits\ParseLevelTrait;
+use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class ConfigureLoggingServiceProvider implements
@@ -55,8 +54,8 @@ class ConfigureLoggingServiceProvider implements
     {
         return [
             'path' => [
-                'storage'
-            ]
+                'storage',
+            ],
         ];
     }
 
@@ -67,13 +66,12 @@ class ConfigureLoggingServiceProvider implements
     {
         return [
             'log' => [
-                'handler' => 'single',
-                'level' => 'debug',
+                'handler'   => 'single',
+                'level'     => 'debug',
                 'max_files' => 5,
-            ]
+            ],
         ];
     }
-
 
     /**
      * Extend viserio log writer.

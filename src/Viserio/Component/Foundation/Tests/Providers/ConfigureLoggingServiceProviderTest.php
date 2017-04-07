@@ -3,19 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Providers;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Console\Application;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
+use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Log\HandlerParser;
-use Monolog\Handler\ErrorLogHandler;
 
 class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 {
-   /**
-    * @runInSeparateProcess
-    */
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetServicesWithSingle()
     {
         $container = new Container();
@@ -32,7 +30,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
             'viserio' => [
                 'app' => [
                     'path' => [
-                        'storage' => ''
+                        'storage' => '',
                     ],
                 ],
             ],
@@ -43,9 +41,9 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         static::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
-   /**
-    * @runInSeparateProcess
-    */
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetServicesWithDaily()
     {
         $container = new Container();
@@ -64,7 +62,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
                         'handler' => 'daily',
                     ],
                     'path' => [
-                        'storage' => ''
+                        'storage' => '',
                     ],
                 ],
             ],
@@ -75,15 +73,15 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         static::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
-   /**
-    * @runInSeparateProcess
-    */
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetServicesWithErrorlog()
     {
         $container = new Container();
         $container->register(new OptionsResolverServiceProvider());
 
-        $writer = $this->mock(Writer::class);
+        $writer  = $this->mock(Writer::class);
         $handler = $this->mock(HandlerParser::class);
         $handler->shouldReceive('parseHandler')
             ->once();
@@ -97,7 +95,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
                         'handler' => 'errorlog',
                     ],
                     'path' => [
-                        'storage' => ''
+                        'storage' => '',
                     ],
                 ],
             ],
