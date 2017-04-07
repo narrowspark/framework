@@ -160,7 +160,7 @@ class ExpressionParserTest extends TestCase
 
     public function testParserRegex()
     {
-       self::assertParsesTo('greet test optional? foo-bar baz-foo=* [-y|--yell=hello] [argument=test]* names=* test= [argument_desc=test : description]', [
+        self::assertParsesTo('greet test optional? foo-bar baz-foo=* [-y|--yell=hello] [argument=test]* names=* test= [argument_desc=test : description]', [
             'name'      => 'greet',
             'arguments' => [
                 new InputArgument('test', InputArgument::REQUIRED),

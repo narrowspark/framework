@@ -62,7 +62,6 @@ class UploadedFileTest extends TestCase
         new UploadedFile($stream, 0, 9999);
     }
 
-
     public function testGetStreamReturnsOriginalStreamObject()
     {
         $stream = new Stream(fopen('php://temp', 'r'));
