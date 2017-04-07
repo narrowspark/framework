@@ -15,15 +15,13 @@ class ExpressionParser
      */
     public function parse(string $expression): array
     {
-        preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|\s[[:word:]]+(?=(.*?)\s))/', $expression, $matches);
+        preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:word:]]+\=\*|[[:word:]]+\=|[[:word:]]+|-+[[:word:]]+)/', $expression, $matches);
 
-        $tokens = $matches[0];
-
-        if (count($tokens) === 0 || trim($expression) === '') {
-            throw new InvalidCommandExpression('The expression was empty');
+        if (trim($expression) === '') {
+            throw new InvalidCommandExpression('The expression was empty.');
         }
 
-        $tokens    = array_values(array_filter(array_map('trim', $tokens)));
+        $tokens    = array_values(array_filter(array_map('trim', $matches[0])));
         $name      = array_shift($tokens);
         $arguments = [];
         $options   = [];
@@ -68,33 +66,20 @@ class ExpressionParser
      */
     protected static function parseArgument(string $token): InputArgument
     {
-        var_dump($token, self::endsWith($token, '=*'));
         list($token, $description) = static::extractDescription($token);
 
         switch (true) {
             case self::endsWith($token, '=*]'):
-            var_dump('1');
-
                 return new InputArgument(trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
             case self::endsWith($token, '=*'):
-            var_dump('2');
-
-                return new InputArgument(trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description, $default);
+                return new InputArgument(trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
             case preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
-            var_dump('3');
-
                 return new InputArgument($matches[1], InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description, $matches[2]);
             case preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
-            var_dump('4');
-
                 return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
             case self::startsWith($token, '[') && self::endsWith($token, ']'):
-            var_dump('5');
-
                 return new InputArgument(trim($token, '[]'), InputArgument::OPTIONAL, $description);
             default:
-            var_dump('6');
-
                 return new InputArgument($token, InputArgument::REQUIRED, $description);
         }
     }
@@ -121,25 +106,18 @@ class ExpressionParser
         $name    = ltrim($token, '-');
         $default = null;
 
-        if (self::endsWith($token, '=*]')) {
-            $mode = InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY;
-            $name = mb_substr($name, 0, -3);
-        } elseif (self::endsWith($token, '=')) {
-            $mode = InputOption::VALUE_REQUIRED;
-            $name = rtrim($name, '=');
-        } elseif (preg_match('/(.+)\=\*(.+)/', $name, $matches)) {
-            $mode    = InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY;
-            $name    = $matches[1];
-            $default = $matches[2];
-        } elseif (preg_match('/(.+)\=(.+)/', $name, $matches)) {
-            $mode    = InputOption::VALUE_OPTIONAL;
-            $name    = $matches[1];
-            $default = $matches[2];
-        } else {
-            $mode = InputOption::VALUE_NONE;
+        switch (true) {
+            case self::endsWith($token, '=*'):
+                return new InputOption(rtrim($name, '=*'), $shortcut, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, $description);
+            case self::endsWith($token, '='):
+                return new InputOption(rtrim($name, '='), $shortcut, InputOption::VALUE_REQUIRED, $description);
+            case preg_match('/(.+)\=\*(.+)/', $token, $matches):
+                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, $matches[2]);
+            case preg_match('/(.+)\=(.+)/', $token, $matches):
+                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
+            default:
+                return new InputOption($token, $shortcut, InputOption::VALUE_NONE, $description);
         }
-
-        return new InputOption($name, $shortcut, $mode, $description, $default);
     }
 
     /**

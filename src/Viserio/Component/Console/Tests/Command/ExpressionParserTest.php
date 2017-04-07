@@ -157,7 +157,7 @@ class ExpressionParserTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Console\Exceptions\InvalidCommandExpression
-     * @expectedExceptionMessage The expression was empty
+     * @expectedExceptionMessage The expression was empty.
      */
     public function testProvidesAnErrorMessageOnEmpty()
     {
@@ -165,7 +165,11 @@ class ExpressionParserTest extends TestCase
         $parser->parse('');
     }
 
-    public function assertParsesTo($expression, $expected)
+    /**
+     * @param string $expression
+     * @param array $expected
+     */
+    protected static function assertParsesTo(string $expression, array $expected = [])
     {
         $parser = new ExpressionParser();
 
