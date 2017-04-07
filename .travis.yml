@@ -19,14 +19,21 @@ matrix:
     - php: 7.1
       env: SETUP=basic SEND_COVERAGE=true PHPUNIT=true
     - php: 7.1
-      env: SETUP=lowest PHPUNIT=true
+      env: SETUP=basic PHPSTAN=true
     - php: 7.1
       env: SETUP=basic PHPUNIT=true
     - php: 7.1
       env: SETUP=stable PHPUNIT=true
     - php: 7.1
-      env: SETUP=basic PHPSTAN=true PHPUNIT=false
+      env: SETUP=lowest PHPUNIT=true
+    - php: nightly
+      env: SETUP=basic PHPUNIT=true
+    - php: nightly
+      env: SETUP=stable PHPUNIT=true
+    - php: nightly
+      env: SETUP=lowest PHPUNIT=true
   allow_failures:
+    - php: nightly
     - env: SETUP=lowest PHPUNIT=true
       php: 7.1
   fast_finish: true

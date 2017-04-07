@@ -15,15 +15,14 @@ class ExpressionParser
      */
     public function parse(string $expression): array
     {
-        preg_match_all('/^[^\s]*\s|\[\s*(.*?)\]/', $expression, $tokens);
+        preg_match_all('/^[^\s]*|\[\s*(.*?)\]|\s[[:word:]]+/', $expression, $matches);
 
-        if (count($tokens[0]) === 0) {
+        $tokens = $matches[0];
+        if (count($tokens) === 0 || trim($expression) === '') {
             throw new InvalidCommandExpression('The expression was empty');
         }
 
-        $tokens = array_map('trim', $tokens[0]);
-        $tokens = array_values(array_filter($tokens));
-
+        $tokens    = array_values(array_filter(array_map('trim', $tokens)));
         $name      = array_shift($tokens);
         $arguments = [];
         $options   = [];
@@ -33,7 +32,7 @@ class ExpressionParser
                 throw new InvalidCommandExpression('An option must be enclosed by brackets: [--option]');
             }
 
-            if ($this->isOption($token)) {
+            if (self::isOption($token)) {
                 $options[] = self::parseOption($token);
             } else {
                 $arguments[] = self::parseArgument($token);
@@ -48,33 +47,13 @@ class ExpressionParser
     }
 
     /**
-     * Extract the name of the command from the expression.
-     *
-     * @param string $expression
-     *
-     * @return string
-     */
-    protected static function getName(string $expression): string
-    {
-        if (trim($expression) === '') {
-            throw new InvalidCommandExpression('Console command definition is empty.');
-        }
-
-        if (! preg_match('/[^\s]+/', $expression, $matches)) {
-            throw new InvalidCommandExpression('Unable to determine command name from signature.');
-        }
-
-        return $matches[0];
-    }
-
-    /**
      * Check if token is a option.
      *
      * @param string $token
      *
      * @return bool
      */
-    protected function isOption(string $token): bool
+    protected static function isOption(string $token): bool
     {
         return self::startsWith($token, '[-');
     }
@@ -88,37 +67,29 @@ class ExpressionParser
      */
     protected static function parseArgument(string $token): InputArgument
     {
+        var_dump($token, self::endsWith($token, '=*'));
         list($token, $description) = static::extractDescription($token);
 
-        $default = null;
-
-        if (self::endsWith($token, ']*')) {
-            $mode = InputArgument::IS_ARRAY;
-
-            if (preg_match('/\[(.+)\=\*(.+)\]*/', $token, $matches)) {
-                $token   = $matches[1];
-                $default = $matches[2];
-            }
-
-            $name = trim($token, '[]*');
-        } elseif (self::endsWith($token, '*')) {
-            $mode = InputArgument::IS_ARRAY | InputArgument::REQUIRED;
-            $name = trim($token, '*');
-        } elseif (self::startsWith($token, '[')) {
-            $mode = InputArgument::OPTIONAL;
-
-            if (preg_match('/\[(.+)\=(.+)\]/', $token, $matches)) {
-                $token   = $matches[1];
-                $default = $matches[2];
-            }
-
-            $name = trim($token, '[]');
-        } else {
-            $mode = InputArgument::REQUIRED;
-            $name = $token;
+        switch (true) {
+            case self::endsWith($token, '=*]'):
+            var_dump('1');
+                return new InputArgument(trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
+            case self::endsWith($token, '=*'):
+            var_dump('2');
+                return new InputArgument(trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description, $default);
+            case preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
+            var_dump('3');
+                return new InputArgument($matches[1], InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description, $matches[2]);
+            case preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
+            var_dump('4');
+                return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
+            case self::startsWith($token, '[') && self::endsWith($token, ']'):
+            var_dump('5');
+                return new InputArgument(trim($token, '[]'), InputArgument::OPTIONAL, $description);
+            default:
+            var_dump('6');
+                return new InputArgument($token, InputArgument::REQUIRED, $description);
         }
-
-        return new InputArgument($name, $mode, $description, $default);
     }
 
     /**
@@ -143,7 +114,7 @@ class ExpressionParser
         $name    = ltrim($token, '-');
         $default = null;
 
-        if (self::endsWith($token, '=]*')) {
+        if (self::endsWith($token, '=*]')) {
             $mode = InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY;
             $name = mb_substr($name, 0, -3);
         } elseif (self::endsWith($token, '=')) {

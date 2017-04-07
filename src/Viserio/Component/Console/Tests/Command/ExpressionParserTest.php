@@ -53,7 +53,7 @@ class ExpressionParserTest extends TestCase
 
     public function testParsesArrayArguments()
     {
-        self::assertParsesTo('greet [names]*', [
+        self::assertParsesTo('greet [names=*]', [
             'name'      => 'greet',
             'arguments' => [
                 new InputArgument('names', InputArgument::IS_ARRAY),
@@ -64,7 +64,7 @@ class ExpressionParserTest extends TestCase
 
     public function testParsesArrayArgumentsWithAtLeastOneValue()
     {
-        self::assertParsesTo('greet names*', [
+        self::assertParsesTo('greet names=*', [
             'name'      => 'greet',
             'arguments' => [
                 new InputArgument('names', InputArgument::IS_ARRAY | InputArgument::REQUIRED),
@@ -97,7 +97,7 @@ class ExpressionParserTest extends TestCase
 
     public function testParsesOptionsWithMultipleValues()
     {
-        self::assertParsesTo('greet [--name=]*', [
+        self::assertParsesTo('greet [--name=*]', [
             'name'      => 'greet',
             'arguments' => [],
             'options'   => [
@@ -108,7 +108,7 @@ class ExpressionParserTest extends TestCase
 
     public function testParsesOptionsWithShortcuts()
     {
-        self::assertParsesTo('greet [-y|--yell] [-it|--iterations=] [-n|--name=]*', [
+        self::assertParsesTo('greet [-y|--yell] [-it|--iterations=] [-n|--name=*]', [
             'name'      => 'greet',
             'arguments' => [],
             'options'   => [
