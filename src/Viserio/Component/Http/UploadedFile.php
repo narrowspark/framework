@@ -244,9 +244,13 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Set the fill the right variable.
+     *
+     * @param mixed $streamOrFile
+     *
+     * @return void
      */
-    private function setStreamOrFile($streamOrFile)
+    private function setStreamOrFile($streamOrFile): void
     {
         if (is_string($streamOrFile)) {
             $this->file = $streamOrFile;
@@ -254,26 +258,20 @@ class UploadedFile implements UploadedFileInterface
             $this->stream = new Stream($streamOrFile);
         } elseif ($streamOrFile instanceof StreamInterface) {
             $this->stream = $streamOrFile;
+        } else {
+            throw new InvalidArgumentException('Invalid stream or file provided for UploadedFile');
         }
-
-        throw new InvalidArgumentException('Invalid stream or file provided for UploadedFile');
     }
 
     /**
      * Check if error is a int or a array, then set it.
      *
-     * @param mixed $error
+     * @param int $error
      *
      * @return void
      */
-    private function setError($error): void
+    private function setError(int $error): void
     {
-        if (! is_int($error)) {
-            throw new InvalidArgumentException(
-                'Upload file error status must be an integer'
-            );
-        }
-
         if (! in_array($error, self::ERRORS)) {
             throw new InvalidArgumentException(
                 'Invalid error status for UploadedFile'
@@ -286,7 +284,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Check if is a string or is empty.
      *
-     * @param string $param
+     * @param mixed $param
      *
      * @return bool
      */

@@ -145,6 +145,39 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
+    public function testArrayValueParsing()
+    {
+        self::assertParsesTo('command:name [argument=*test,test2] [--option=*doptionValue, test]', [
+            'name'      => 'command:name',
+            'arguments' => [
+                new InputArgument('argument', InputArgument::IS_ARRAY, '', ['test', 'test2']),
+            ],
+            'options'   => [
+                new InputOption('option', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, '', ['doptionValue', 'test']),
+            ],
+        ]);
+    }
+
+    public function testParserRegex()
+    {
+       self::assertParsesTo('greet test optional? foo-bar baz-foo=* [-y|--yell=hello] [argument=test]* names=* test= [argument_desc=test : description]', [
+            'name'      => 'greet',
+            'arguments' => [
+                new InputArgument('test', InputArgument::REQUIRED),
+                new InputArgument('optional', InputArgument::OPTIONAL),
+                new InputArgument('foo-bar', InputArgument::REQUIRED),
+                new InputArgument('baz-foo', InputArgument::IS_ARRAY | InputArgument::REQUIRED),
+                new InputArgument('argument', InputArgument::OPTIONAL, '', 'test'),
+                new InputArgument('names', InputArgument::IS_ARRAY | InputArgument::REQUIRED),
+                new InputArgument('test', InputArgument::REQUIRED),
+                new InputArgument('argument_desc', InputArgument::OPTIONAL, 'description', 'test'),
+            ],
+            'options'   => [
+                new InputOption('yell', 'y', InputOption::VALUE_OPTIONAL, '', 'hello'),
+            ],
+        ]);
+    }
+
     /**
      * @expectedException \Viserio\Component\Contracts\Console\Exceptions\InvalidCommandExpression
      * @expectedExceptionMessage An option must be enclosed by brackets: [--option]

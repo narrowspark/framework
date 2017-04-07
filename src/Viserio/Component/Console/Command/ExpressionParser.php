@@ -15,7 +15,7 @@ class ExpressionParser
      */
     public function parse(string $expression): array
     {
-        preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:word:]]+\=\*|[[:word:]]+\=|[[:word:]]+|-+[[:word:]]+)/', $expression, $matches);
+        preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
 
         if (trim($expression) === '') {
             throw new InvalidCommandExpression('The expression was empty.');
@@ -73,8 +73,10 @@ class ExpressionParser
                 return new InputArgument(trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
             case self::endsWith($token, '=*'):
                 return new InputArgument(trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
+            case self::endsWith($token, '?'):
+                return new InputArgument(trim($token, '?'), InputArgument::OPTIONAL, $description);
             case preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
-                return new InputArgument($matches[1], InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description, $matches[2]);
+                return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
             case preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
                 return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
             case self::startsWith($token, '[') && self::endsWith($token, ']'):
@@ -112,7 +114,7 @@ class ExpressionParser
             case self::endsWith($token, '='):
                 return new InputOption(rtrim($name, '='), $shortcut, InputOption::VALUE_REQUIRED, $description);
             case preg_match('/(.+)\=\*(.+)/', $token, $matches):
-                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, $matches[2]);
+                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
             case preg_match('/(.+)\=(.+)/', $token, $matches):
                 return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
             default:

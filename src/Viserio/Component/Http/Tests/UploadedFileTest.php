@@ -43,6 +43,7 @@ class UploadedFileTest extends TestCase
      * @dataProvider invalidStreams
      *
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid stream or file provided for UploadedFile
      *
      * @param mixed $streamOrFile
      */
@@ -50,6 +51,17 @@ class UploadedFileTest extends TestCase
     {
         new UploadedFile($streamOrFile, 0, UPLOAD_ERR_OK);
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid error status for UploadedFile
+     */
+    public function testRaisesExceptionOnInvalidError()
+    {
+        $stream = new Stream(fopen('php://temp', 'r'));
+        new UploadedFile($stream, 0, 9999);
+    }
+
 
     public function testGetStreamReturnsOriginalStreamObject()
     {

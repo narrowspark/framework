@@ -156,7 +156,7 @@ class ApplicationTest extends MockeryTestCase
 
     public function testItShouldRunACommandWitMultipleOptions()
     {
-        $this->application->command('greet [-d|--dir=]*', function ($dir, OutputInterface $output) {
+        $this->application->command('greet [-d|--dir=*]', function ($dir, OutputInterface $output) {
             $output->write('[' . implode(', ', $dir) . ']');
         });
 
