@@ -11,7 +11,7 @@ class DownCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $signature = 'down [--message] [--retry=]';
+    protected $signature = 'down [--message= : The message for the maintenance mode.] [--retry= : The number of seconds after which the request may be retried.]';
 
     /**
      * {@inheritdoc}
@@ -52,23 +52,10 @@ class DownCommand extends Command
      *
      * @return int|null
      */
-    protected function getRetryTime()
+    protected function getRetryTime(): ?int
     {
         $retry = $this->option('retry');
 
         return is_numeric($retry) && $retry > 0 ? (int) $retry : null;
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions(): array
-    {
-        return [
-            'message' => 'The message for the maintenance mode.',
-            'retry'   => 'The number of seconds after which the request may be retried.',
-        ];
     }
 }

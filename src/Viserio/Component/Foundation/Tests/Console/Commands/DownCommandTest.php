@@ -21,6 +21,7 @@ class DownCommandTest extends MockeryTestCase
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
+            ->once()
             ->with('path.storage')
             ->andReturn($path);
 
@@ -32,7 +33,7 @@ class DownCommandTest extends MockeryTestCase
         $command->setContainer($container);
 
         $tester = new CommandTester($command);
-        $tester->execute([]);
+        $tester->execute(['--message' => 'test', '--retry' => 1]);
 
         $output = $tester->getDisplay(true);
 
@@ -41,8 +42,8 @@ class DownCommandTest extends MockeryTestCase
         $data = json_decode(file_get_contents($framework . '/down'), true);
 
         self::assertTrue(is_int($data['time']));
-        // self::assertSame('', $data['message']);
-        // self::assertSame('', $data['retry']);
+        self::assertSame('test', $data['message']);
+        self::assertSame(1, $data['retry']);
 
         if (is_file($framework . '/down')) {
             @unlink($framework . '/down');

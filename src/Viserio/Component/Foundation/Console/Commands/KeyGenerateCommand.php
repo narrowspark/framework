@@ -16,14 +16,12 @@ class KeyGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'key:generate
-        [--show=Display the key instead of modifying files]
-        [--force=Force the operation to run when in production]';
+    protected $signature = 'key:generate [--show= : Display the key instead of modifying files] [--force= : Force the operation to run when in production]';
 
     /**
      * {@inheritdoc}
      */
-    protected $description = 'Set the encryption key';
+    protected $description = 'Set the encryption key.';
 
     /**
      * {@inheritdoc}
@@ -36,14 +34,16 @@ class KeyGenerateCommand extends Command
             return $this->line('<comment>' . $key . '</comment>');
         }
 
+        $config = $this->getContainer()->get(RepositoryContract::class);
+
         // Next, we will replace the application key in the environment file so it is
-        // automatically setup for this developer. This key gets generated using a
-        // secure random byte generator and is later base64 encoded for storage.
-        if (! $this->setKeyInEnvironmentFile($key)) {
+        // automatically setup for this developer. This key gets generated using
+        // https://github.com/defuse/php-encryption
+        if (! $this->setKeyInEnvironmentFile($config, $key)) {
             return;
         }
 
-        $this->getContainer()->get(RepositoryContract::class)->set('app.key', $key);
+        $config->set('app.key', $key);
 
         $this->info("Application key [$key] set successfully.");
     }
@@ -51,14 +51,14 @@ class KeyGenerateCommand extends Command
     /**
      * Set the application key in the environment file.
      *
-     * @param string $key
+     * @param \Viserio\Component\Contracts\Config\Repository $config
+     * @param string                                         $key
      *
      * @return bool
      */
-    protected function setKeyInEnvironmentFile(string $key): bool
+    protected function setKeyInEnvironmentFile(RepositoryContract $config, string $key): bool
     {
-        $config     = $this->getContainer()->get(RepositoryContract::class);
-        $currentKey = $config->get('app.key');
+        $currentKey = $config->get('app.key', '');
 
         if (mb_strlen($currentKey) !== 0 && (! $this->confirmToProceed())) {
             return false;

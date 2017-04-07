@@ -35,9 +35,9 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
             $console = $getPrevious();
 
             $console->addCommands([
-                // new DownCommand(),
+                new DownCommand(),
                 new UpCommand(),
-                // new KeyGenerateCommand(),
+                new KeyGenerateCommand(),
             ]);
 
             return $console;

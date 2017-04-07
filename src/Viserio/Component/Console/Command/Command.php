@@ -470,7 +470,6 @@ abstract class Command extends BaseCommand
         foreach ($arr['arguments'] as $argument) {
             $this->getDefinition()->addArgument($argument);
         }
-
         foreach ($arr['options'] as $option) {
             $this->getDefinition()->addOption($option);
         }
