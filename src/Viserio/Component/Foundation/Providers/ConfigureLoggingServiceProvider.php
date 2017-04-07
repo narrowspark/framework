@@ -10,10 +10,25 @@ use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Log\Writer;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class ConfigureLoggingServiceProvider implements ServiceProvider
+class ConfigureLoggingServiceProvider implements
+    ServiceProvider,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresMandatoryOptionsContract
 {
     use ParseLevelTrait;
+
+    /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    private static $options;
 
     /**
      * {@inheritdoc}
@@ -21,9 +36,44 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Writer::class => [self::class, 'createConfiguredLogging'],
+            Writer::class => [self::class, 'createConfiguredWriter'],
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'app'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return [
+            'path' => [
+                'storage'
+            ]
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'log' => [
+                'handler' => 'single',
+                'level' => 'debug',
+                'max_files' => 5,
+            ]
+        ];
+    }
+
 
     /**
      * Extend viserio log writer.
@@ -33,11 +83,12 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      *
      * @return null|\VViserio\Component\Log\Writer
      */
-    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?Writer
+    public static function createConfiguredWriter(ContainerInterface $container, ?callable $getPrevious = null): ?Writer
     {
         if ($getPrevious !== null) {
             $log = $getPrevious();
 
+            self::resolveOptions($container);
             self::configureHandlers($container, $log);
 
             return $log;
@@ -57,12 +108,9 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      */
     private static function configureHandlers(ContainerInterface $container, LogContract $log): void
     {
-        $config = $container->get(RepositoryContract::class);
-        $level  = $config->get('app.log_level', 'debug');
+        $method = 'configure' . ucfirst(self::$options['log']['handler']) . 'Handler';
 
-        $method = 'configure' . ucfirst($config->get('app.log', 'single')) . 'Handler';
-
-        self::{$method}($container, $log, $level);
+        self::{$method}($container, $log, self::$options['log']['level']);
     }
 
     /**
@@ -77,7 +125,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
     private static function configureSingleHandler(ContainerInterface $container, LogContract $log, string $level): void
     {
         $log->useFiles(
-            $container->get(RepositoryContract::class)->get('path.storage') . '/logs/narrowspark.log',
+            self::$options['path']['storage'] . '/logs/narrowspark.log',
             $level
         );
     }
@@ -93,12 +141,9 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      */
     private static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level): void
     {
-        $config   = $container->get(RepositoryContract::class);
-        $maxFiles = $config->get('app.log_max_files', 5);
-
         $log->useDailyFiles(
-            $config->get('path.storage') . '/logs/narrowspark.log',
-            $maxFiles,
+            self::$options['path']['storage'] . '/logs/narrowspark.log',
+            self::$options['log']['max_files'],
             $level
         );
     }
@@ -121,5 +166,21 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
             null,
             'line'
         );
+    }
+
+    /**
+     * Resolve component options.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return void
+     */
+    private static function resolveOptions(ContainerInterface $container): void
+    {
+        if (self::$options === null) {
+            self::$options = $container->get(OptionsResolver::class)
+                ->configure(new static(), $container)
+                ->resolve();
+        }
     }
 }
