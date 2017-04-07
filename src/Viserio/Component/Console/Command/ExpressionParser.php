@@ -73,21 +73,27 @@ class ExpressionParser
         switch (true) {
             case self::endsWith($token, '=*]'):
             var_dump('1');
+
                 return new InputArgument(trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
             case self::endsWith($token, '=*'):
             var_dump('2');
+
                 return new InputArgument(trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description, $default);
             case preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
             var_dump('3');
+
                 return new InputArgument($matches[1], InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description, $matches[2]);
             case preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
             var_dump('4');
+
                 return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
             case self::startsWith($token, '[') && self::endsWith($token, ']'):
             var_dump('5');
+
                 return new InputArgument(trim($token, '[]'), InputArgument::OPTIONAL, $description);
             default:
             var_dump('6');
+
                 return new InputArgument($token, InputArgument::REQUIRED, $description);
         }
     }
