@@ -14,7 +14,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
     {
         $file = __DIR__ . '/../../Fixtures/.env.key';
 
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             file_put_contents($file, 'APP_KEY=');
         }
 
@@ -89,7 +89,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             RepositoryContract::class => $config,
-            'env' => 'production'
+            'env'                     => 'production',
         ]);
 
         $command = new class() extends KeyGenerateCommand {
