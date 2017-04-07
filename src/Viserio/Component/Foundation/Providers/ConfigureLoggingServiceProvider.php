@@ -25,13 +25,26 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createConfiguredLogging(ContainerInterface $container)
+    /**
+     * Extend viserio log writer.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\VViserio\Component\Log\Writer
+     */
+    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?Writer
     {
-        $log = $container->get(Writer::class);
+        if ($getPrevious !== null) {
+            $log = $getPrevious();
 
-        self::configureHandlers($container, $log);
+            self::configureHandlers($container, $log);
 
-        return $log;
+            return $log;
+        }
+        // @codeCoverageIgnoreStart
+        return null;
+        // @codeCoverageIgnoreEnd
     }
 
     /**

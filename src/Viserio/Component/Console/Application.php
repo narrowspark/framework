@@ -191,7 +191,7 @@ class Application extends SymfonyConsole
 
         $this->setCatchExceptions(false);
 
-        $result = $this->run(new ArrayInput($parameters), $this->lastOutput);
+        $result = $this->run(new ArrayInput(array_unshift($parameters, $command)), $this->lastOutput);
 
         $this->setCatchExceptions(true);
 

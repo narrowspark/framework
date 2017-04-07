@@ -16,6 +16,7 @@ use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\Console\Kernel;
+use Viserio\Component\Console\Command\ClosureCommand;
 
 class KernelTest extends MockeryTestCase
 {
@@ -167,7 +168,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame('test', $kernel->getOutput());
     }
 
-    public function testCall()
+    public function testCommandCall()
     {
         $app = $this->mock(ApplicationContract::class);
 
@@ -178,9 +179,10 @@ class KernelTest extends MockeryTestCase
             ->never();
         $cerebro->shouldReceive('renderException')
             ->never();
-        $cerebro->shouldReceive('output')
+        $cerebro->shouldReceive('call')
             ->once()
-            ->andReturn('test');
+            ->with('foo', [], null)
+            ->andReturn(0);
 
         $app->shouldReceive('get')
             ->once()
@@ -189,7 +191,18 @@ class KernelTest extends MockeryTestCase
 
         $kernel = new Kernel($app);
 
-        self::assertSame('test', $kernel->getOutput());
+        self::assertSame(0, $kernel->call('foo'));
+    }
+
+    public function testCommand()
+    {
+        $app      = $this->mock(ApplicationContract::class);
+        $function = function() {return 'true';};
+        $command  = new ClosureCommand('foo', $function);
+
+        $kernel = new Kernel($app);
+
+        self::assertEquals($command, $kernel->command('foo', $function));
     }
 
     private function getBootstrap($app)

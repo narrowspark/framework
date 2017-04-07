@@ -42,7 +42,8 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
 
             return $console;
         }
-
+        // @codeCoverageIgnoreStart
         return null;
+        // @codeCoverageIgnoreEnd
     }
 }

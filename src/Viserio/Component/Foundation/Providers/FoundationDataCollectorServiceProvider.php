@@ -99,8 +99,9 @@ class FoundationDataCollectorServiceProvider implements
 
             return $profiler;
         }
-
+        // @codeCoverageIgnoreStart
         return null;
+        // @codeCoverageIgnoreEnd
     }
 
     private static function createNarrowsparkDataCollector(): NarrowsparkDataCollector

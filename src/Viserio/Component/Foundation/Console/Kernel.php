@@ -241,7 +241,9 @@ class Kernel implements KernelContract, TerminableContract
             $console = $this->app->get(Cerebro::class);
 
             foreach ($this->commands as $command) {
+                // @codeCoverageIgnoreStart
                 $console->add($this->app->make($command));
+                // @codeCoverageIgnoreEnd
             }
 
             return $this->console = $console;
