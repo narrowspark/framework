@@ -167,7 +167,7 @@ class ExpressionParserTest extends TestCase
 
     /**
      * @param string $expression
-     * @param array $expected
+     * @param array  $expected
      */
     protected static function assertParsesTo(string $expression, array $expected = [])
     {
