@@ -6,6 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Component\Console\Application as Cerebro;
+use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
@@ -16,7 +17,6 @@ use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\Console\Kernel;
-use Viserio\Component\Console\Command\ClosureCommand;
 
 class KernelTest extends MockeryTestCase
 {
@@ -197,7 +197,9 @@ class KernelTest extends MockeryTestCase
     public function testCommand()
     {
         $app      = $this->mock(ApplicationContract::class);
-        $function = function() {return 'true';};
+        $function = function () {
+            return 'true';
+        };
         $command  = new ClosureCommand('foo', $function);
 
         $kernel = new Kernel($app);
