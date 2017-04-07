@@ -15,9 +15,10 @@ class ExpressionParser
      */
     public function parse(string $expression): array
     {
-        preg_match_all('/^[^\s]*|\[\s*(.*?)\]|\s[[:word:]]+/', $expression, $matches);
+        preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|\s[[:word:]]+(?=(.*?)\s))/', $expression, $matches);
 
         $tokens = $matches[0];
+
         if (count($tokens) === 0 || trim($expression) === '') {
             throw new InvalidCommandExpression('The expression was empty');
         }
