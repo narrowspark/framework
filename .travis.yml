@@ -24,6 +24,10 @@ matrix:
       env: SETUP=stable PHPUNIT=true
     - php: 7.1
       env: SETUP=lowest PHPUNIT=true
+      # PHPSTAN
+    - php: 7.1
+      env: SETUP=basic PHPSTAN=true
+      # Nightly
     - php: nightly
       env: SETUP=basic PHPUNIT=true
     - php: nightly
