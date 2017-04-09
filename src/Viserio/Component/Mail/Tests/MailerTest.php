@@ -274,7 +274,7 @@ class MailerTest extends MockeryTestCase
         $mailer->setEventManager($event);
 
         $message->shouldReceive('getSwiftMessage')
-            ->once()
+            ->twice()
             ->andReturn($mimeMessage);
 
         $mailer->getSwiftMailer()->shouldReceive('send')
