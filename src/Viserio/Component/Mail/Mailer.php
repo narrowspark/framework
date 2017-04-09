@@ -14,6 +14,7 @@ use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
+use Viserio\Component\Mail\Events\MessageSentEvent;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
