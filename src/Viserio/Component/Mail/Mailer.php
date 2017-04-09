@@ -257,7 +257,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     protected function sendSwiftMessage(Swift_Mime_Message $message): int
     {
         if ($this->events !== null) {
-            $this->events->trigger(new MessageSendingEvent($this, ['message' => $message]));
+            $this->events->trigger(new MessageSendingEvent($this, $message));
         }
 
         try {
