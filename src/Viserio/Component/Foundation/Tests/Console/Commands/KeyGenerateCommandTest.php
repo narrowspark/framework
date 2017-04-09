@@ -42,7 +42,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertRegexp("/Application key \[(.*)\] set successfully/", $output);
+        self::assertRegExp("/Application key \[(.*)\] set successfully/", $output);
 
         @unlink($file);
     }
