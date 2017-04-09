@@ -4,19 +4,19 @@ namespace Viserio\Component\Foundation\Tests\Http;
 
 use Exception;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Contracts\Routing\Router as  RouterContract;
-use Viserio\Component\Foundation\Http\Kernel;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Component\Foundation\Http\Kernel;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
 
@@ -41,11 +41,7 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with('test', ['web']);
 
-        $kernel = new class(
-            $this->mock(ApplicationContract::class),
-            $router,
-            $this->mock(EventManagerContract::class)
-        ) extends Kernel {
+        $kernel = new class($this->mock(ApplicationContract::class), $router, $this->mock(EventManagerContract::class)) extends Kernel {
             /**
              * The application's middleware stack.
              *
@@ -54,21 +50,21 @@ class KernelTest extends MockeryTestCase
             public $middlewares = [];
 
             /**
-            * The application's route without a middleware.
-            *
-            * @var array
-            */
+             * The application's route without a middleware.
+             *
+             * @var array
+             */
             protected $routeWithoutMiddlewares = [
-                'test'
+                'test',
             ];
 
             /**
-            * The application's route middleware groups.
-            *
-            * @var array
-            */
+             * The application's route middleware groups.
+             *
+             * @var array
+             */
             protected $middlewareGroups = [
-                'test' => ['web']
+                'test' => ['web'],
             ];
         };
 
@@ -86,11 +82,7 @@ class KernelTest extends MockeryTestCase
         $router->shouldReceive('addMiddlewares')
             ->once();
 
-        $kernel = new class(
-            $this->mock(ApplicationContract::class),
-            $router,
-            $this->mock(EventManagerContract::class)
-        ) extends Kernel {
+        $kernel = new class($this->mock(ApplicationContract::class), $router, $this->mock(EventManagerContract::class)) extends Kernel {
             /**
              * The application's middleware stack.
              *
@@ -199,7 +191,7 @@ class KernelTest extends MockeryTestCase
     public function testHandleWithException()
     {
         $exception = new Exception();
-        $response = $this->mock(ResponseInterface::class);
+        $response  = $this->mock(ResponseInterface::class);
 
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('withAddedHeader')
@@ -286,7 +278,7 @@ class KernelTest extends MockeryTestCase
 
     public function testTerminate()
     {
-        $response = $this->mock(ResponseInterface::class);
+        $response      = $this->mock(ResponseInterface::class);
         $serverRequest = $this->mock(ServerRequestInterface::class);
 
         $handler = $this->mock(HandlerContract::class);

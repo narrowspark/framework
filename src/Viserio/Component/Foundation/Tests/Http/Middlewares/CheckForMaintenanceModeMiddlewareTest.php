@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Http\Middlewares;
 
 use Interop\Http\ServerMiddleware\DelegateInterface;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Psr\Http\Message\ResponseInterface;
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Foundation\Http\Middlewares\CheckForMaintenanceModeMiddleware;
 
 class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
@@ -56,4 +56,3 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
         $middleware->process($server, $delegate);
     }
 }
-

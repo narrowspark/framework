@@ -5,6 +5,7 @@ namespace Viserio\Component\Foundation\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\SyslogHandler;
 use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -13,7 +14,6 @@ use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use Monolog\Handler\SyslogHandler;
 
 class ConfigureLoggingServiceProvider implements
     ServiceProvider,
@@ -66,8 +66,8 @@ class ConfigureLoggingServiceProvider implements
     public function getDefaultOptions(): iterable
     {
         return [
-            'name' =>'Narrowspark',
-            'log' => [
+            'name' => 'Narrowspark',
+            'log'  => [
                 'handler'   => 'single',
                 'level'     => 'debug',
                 'max_files' => 5,
