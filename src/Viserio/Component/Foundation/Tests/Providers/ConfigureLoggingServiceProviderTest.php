@@ -105,4 +105,37 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         static::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testGetServicesWithSyslog()
+    {
+        $container = new Container();
+        $container->register(new OptionsResolverServiceProvider());
+
+        $writer  = $this->mock(Writer::class);
+        $handler = $this->mock(HandlerParser::class);
+        $handler->shouldReceive('parseHandler')
+            ->once();
+
+        $container->instance(Writer::class, $writer);
+        $container->instance(HandlerParser::class, $handler);
+        $container->instance('config', [
+            'viserio' => [
+                'app' => [
+                    'log' => [
+                        'handler' => 'syslog',
+                    ],
+                    'path' => [
+                        'storage' => '',
+                    ],
+                ],
+            ],
+        ]);
+
+        $container->register(new ConfigureLoggingServiceProvider());
+
+        static::assertInstanceOf(Writer::class, $container->get(Writer::class));
+    }
 }

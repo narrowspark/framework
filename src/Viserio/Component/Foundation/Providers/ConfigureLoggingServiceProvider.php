@@ -13,6 +13,7 @@ use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Monolog\Handler\SyslogHandler;
 
 class ConfigureLoggingServiceProvider implements
     ServiceProvider,
@@ -65,6 +66,7 @@ class ConfigureLoggingServiceProvider implements
     public function getDefaultOptions(): iterable
     {
         return [
+            'name' =>'Narrowspark',
             'log' => [
                 'handler'   => 'single',
                 'level'     => 'debug',
@@ -159,6 +161,26 @@ class ConfigureLoggingServiceProvider implements
     {
         $container->get(HandlerParser::class)->parseHandler(
             new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, self::parseLevel($level)),
+            '',
+            '',
+            null,
+            'line'
+        );
+    }
+
+    /**
+     * Configure the Monolog handlers for the application.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Contracts\Log\Log  $log
+     * @param string                                $level
+     *
+     * @return void
+     */
+    private static function configureSyslogHandler(ContainerInterface $container, LogContract $log, string $level): void
+    {
+        $container->get(HandlerParser::class)->parseHandler(
+            new SyslogHandler(self::$options['name'], LOG_USER, self::parseLevel($level)),
             '',
             '',
             null,
