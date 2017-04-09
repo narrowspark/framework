@@ -18,6 +18,10 @@ use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
+use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
+use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
+use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
+use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
@@ -167,7 +171,7 @@ class Kernel implements TerminableContract, KernelContract
 
         StaticalProxy::clearResolvedInstance('request');
 
-        $this->events->trigger(self::REQUEST, $this, ['server_request' => $serverRequest]);
+        $this->events->trigger(new KernelRequestEvent($this, $serverRequest));
 
         $this->bootstrap();
 
@@ -184,14 +188,7 @@ class Kernel implements TerminableContract, KernelContract
      */
     public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-        $this->events->trigger(
-            self::TERMINATE,
-            $this,
-            [
-                'server_request' => $serverRequest,
-                'response'       => $response,
-            ]
-        );
+        $this->events->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
 
         $this->app->get(HandlerContract::class)->unregister();
     }
@@ -226,27 +223,13 @@ class Kernel implements TerminableContract, KernelContract
                 );
             }
 
-            $this->events->trigger(
-                self::RESPONSE,
-                $this,
-                [
-                    'server_request' => $serverRequest,
-                    'response'       => $response,
-                ]
-            );
+            $this->events->trigger(new KernelResponseEvent($this, $serverRequest, $response));
         } catch (Throwable $exception) {
             $this->reportException($exception);
 
             $response = $this->renderException($serverRequest, $exception);
 
-            $this->events->trigger(
-                self::EXCEPTION,
-                $this,
-                [
-                    'server_request' => $serverRequest,
-                    'response'       => $response,
-                ]
-            );
+            $this->events->trigger(new KernelExceptionEvent($this, $serverRequest, $response));
         }
 
         return $response;

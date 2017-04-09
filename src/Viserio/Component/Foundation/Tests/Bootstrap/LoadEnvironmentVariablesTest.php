@@ -9,12 +9,38 @@ use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
 class LoadEnvironmentVariablesTest extends MockeryTestCase
 {
+    public function testDontLoadIfCached()
+    {
+        $bootstraper = new LoadEnvironmentVariables();
+
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('patch.cached.config')
+            ->andReturn(__DIR__ . '/../Fixtures/Config/app.php');
+
+        $app = $this->mock(ApplicationContract::class);
+        $app->shouldReceive('get')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn($config);
+        $app->shouldReceive('environmentFile')
+            ->never()
+            ->andReturn('.env');
+        $app->shouldReceive('environmentPath')
+            ->never()
+            ->andReturn('');
+
+        $bootstraper->bootstrap($app);
+    }
+
     public function testBootstrap()
     {
         $bootstraper = new LoadEnvironmentVariables();
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
+            ->once()
             ->with('patch.cached.config')
             ->andReturn('');
 

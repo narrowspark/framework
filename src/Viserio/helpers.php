@@ -24,14 +24,15 @@ if (! function_exists('dd')) {
      * Dump the passed variables and end the script.
      *
      * @param mixed
+     * @param ... $args
      *
      * @return void
      */
-    function dd(): void
+    function dd(...$args): void
     {
-        array_map(function ($x) {
+        foreach ($args as $x) {
             (new Dumper())->dump($x);
-        }, func_get_args());
+        }
 
         die(1);
     }
