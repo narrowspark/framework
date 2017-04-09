@@ -148,7 +148,13 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
             $message->bcc($this->to['address'], $this->to['name'], true);
         }
 
-        return $this->sendSwiftMessage($message->getSwiftMessage());
+        $status = $this->sendSwiftMessage($message->getSwiftMessage());
+
+        if ($this->events !== null) {
+            $this->events->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $status));
+        }
+
+        $return;
     }
 
     /**
@@ -257,8 +263,20 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         try {
             return $this->swift->send($message, $this->failedRecipients);
         } finally {
-            $this->swift->getTransport()->stop();
+            $this->forceReconnection();
         }
+    }
+
+    /**
+     * Force the transport to re-connect.
+     *
+     * This will prevent errors in daemon queue situations.
+     *
+     * @return void
+     */
+    protected function forceReconnection()
+    {
+        $this->swift->getTransport()->stop();
     }
 
     /**
