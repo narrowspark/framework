@@ -148,7 +148,13 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
             $message->bcc($this->to['address'], $this->to['name'], true);
         }
 
-        return $this->sendSwiftMessage($message->getSwiftMessage());
+        $status = $this->sendSwiftMessage($message->getSwiftMessage());
+
+        if ($this->events !== null) {
+            $this->events->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $status));
+        }
+
+        $return;
     }
 
     /**
