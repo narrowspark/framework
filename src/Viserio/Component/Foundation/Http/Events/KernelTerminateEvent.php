@@ -15,11 +15,11 @@ class KernelTerminateEvent implements EventContract
     /**
      * Create a new kernel terminate event.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
-     * @param \Psr\Http\Message\ServerRequestInterface       $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface            $response
+     * @param \Viserio\Component\Contracts\Foundation\Terminable $kernel
+     * @param \Psr\Http\Message\ServerRequestInterface           $serverRequest
+     * @param \Psr\Http\Message\ResponseInterface                $response
      */
-    public function __construct(KernelContract $kernel, ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function __construct(TerminableContract $kernel, ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
         $this->name       = TerminableContract::TERMINATE;
         $this->target     = $kernel;
