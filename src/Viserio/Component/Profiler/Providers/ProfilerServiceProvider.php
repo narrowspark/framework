@@ -11,9 +11,9 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollectors\AjaxRequestsDataCollector;
@@ -43,8 +43,8 @@ class ProfilerServiceProvider implements
         return [
             RouterContract::class      => [self::class, 'registerProfilerAssetsControllers'],
             AssetsRenderer::class      => [self::class, 'createAssetsRenderer'],
-            ProfilerContract::class => [self::class, 'createProfiler'],
-            Profiler::class         => function (ContainerInterface $container) {
+            ProfilerContract::class    => [self::class, 'createProfiler'],
+            Profiler::class            => function (ContainerInterface $container) {
                 return $container->get(ProfilerContract::class);
             },
         ];

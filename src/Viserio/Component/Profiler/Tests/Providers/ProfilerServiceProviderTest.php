@@ -5,15 +5,15 @@ namespace Viserio\Component\Profiler\Tests\Providers;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Profiler\AssetsRenderer;
-use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 use Viserio\Component\Profiler\Profiler;
+use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
+use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 
 class ProfilerServiceProviderTest extends MockeryTestCase
 {

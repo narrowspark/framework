@@ -33,7 +33,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
         return [
             Twig_Profiler_Profile::class => [self::class, 'createTwigProfilerProfile'],
             TwigEnvironment::class       => [self::class, 'createTwigEnvironment'],
-            ProfilerContract::class   => [self::class, 'createProfiler'],
+            ProfilerContract::class      => [self::class, 'createProfiler'],
         ];
     }
 

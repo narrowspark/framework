@@ -6,8 +6,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Foundation\Application;
-use Viserio\Component\Support\Env;
 use Viserio\Component\Profiler\DataCollectors\PhpInfoDataCollector;
+use Viserio\Component\Support\Env;
 
 class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAwareContract
 {

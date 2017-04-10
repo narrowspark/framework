@@ -18,7 +18,7 @@ class ProfilerPsr6CacheBridgeServiceProvider implements ServiceProvider
     {
         return [
             CacheItemPoolInterface::class => [self::class, 'createCacheItemPoolDecorater'],
-            ProfilerContract::class    => [self::class, 'createProfiler'],
+            ProfilerContract::class       => [self::class, 'createProfiler'],
         ];
     }
 

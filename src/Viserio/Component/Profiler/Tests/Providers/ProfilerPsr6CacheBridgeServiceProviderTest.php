@@ -13,7 +13,7 @@ use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDec
 use Viserio\Component\Profiler\Providers\ProfilerPsr6CacheBridgeServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
-class Profiler6CacheBridgeServiceProviderTest extends MockeryTestCase
+class ProfilerPsr6CacheBridgeServiceProviderTest extends MockeryTestCase
 {
     public function testProvider()
     {

@@ -13,8 +13,8 @@ use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\View\Providers\ViewServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
+use Viserio\Component\View\Providers\ViewServiceProvider;
 
 /**
  * @runTestsInSeparateProcesses

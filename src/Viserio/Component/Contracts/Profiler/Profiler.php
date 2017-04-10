@@ -4,8 +4,8 @@ namespace Viserio\Component\Contracts\Profiler;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
+use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 
 interface Profiler
 {
@@ -43,7 +43,7 @@ interface Profiler
      * Adds a data collector.
      *
      * @param \Viserio\Component\Contracts\Profiler\DataCollector $collector
-     * @param int                                                    $priority
+     * @param int                                                 $priority
      *
      * @throws \RuntimeException
      *

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 use Viserio\Component\Profiler\TemplateManager;
 
 if (! isset($token, $menus, $icons, $panels)) {
@@ -22,8 +22,8 @@ if (! isset($token, $menus, $icons, $panels)) {
                     $tooltip = true;
                 }
 
-                $data = isset($panels[$name]) ? 'data-panel-target-id="profiler-panel-' . TemplateManager::escape($name) . '"' : '';
-                $hasPanels = isset($panels[$name]) ? ' profiler-menu-has-panel' : '';
+                $data       = isset($panels[$name]) ? 'data-panel-target-id="profiler-panel-' . TemplateManager::escape($name) . '"' : '';
+                $hasPanels  = isset($panels[$name]) ? ' profiler-menu-has-panel' : '';
                 $hasTooltip = $tooltip ? ' profiler-menu-has-tooltip' : '';
                 $cssClasses = isset($menu['menu']['class']) ? ' ' . $menu['menu']['class'] : '';
             ?>

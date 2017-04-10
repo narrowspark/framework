@@ -5,16 +5,16 @@ namespace Viserio\Component\Translation\Tests\Providers;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Providers\TranslationDataCollectorServiceProvider;
 use Viserio\Component\Translation\Translator;
-use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
 class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
 {

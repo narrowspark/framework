@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler;
 
-use Viserio\Component\Contracts\Support\Renderable as RenderableContract;
 use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contracts\Support\Renderable as RenderableContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class AssetsRenderer implements RenderableContract

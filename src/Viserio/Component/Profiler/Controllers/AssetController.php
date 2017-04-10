@@ -6,8 +6,8 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Routing\AbstractController;
 use Viserio\Component\Profiler\Profiler;
+use Viserio\Component\Routing\AbstractController;
 
 class AssetController extends AbstractController
 {
@@ -38,7 +38,7 @@ class AssetController extends AbstractController
      * @param \IPsr\Http\Message\ServerRequestInterface      $serverRequest
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param \Viserio\Component\Profiler\Profiler     $Profiler
+     * @param \Viserio\Component\Profiler\Profiler           $Profiler
      */
     public function __construct(
         ServerRequestInterface $serverRequest,
@@ -48,7 +48,7 @@ class AssetController extends AbstractController
     ) {
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
-        $this->Profiler     = $Profiler;
+        $this->Profiler        = $Profiler;
 
         if ($session = $serverRequest->getAttribute('session')) {
             $session->reflash();

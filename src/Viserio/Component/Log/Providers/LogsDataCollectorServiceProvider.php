@@ -32,7 +32,7 @@ class LogsDataCollectorServiceProvider implements
     {
         return [
             LogParser::class           => [self::class, 'createLogParser'],
-            ProfilerContract::class => [self::class, 'createProfiler'],
+            ProfilerContract::class    => [self::class, 'createProfiler'],
         ];
     }
 

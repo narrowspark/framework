@@ -4,8 +4,8 @@ namespace Viserio\Component\Routing\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
 
 class RoutingDataCollector extends AbstractDataCollector implements PanelAwareContract

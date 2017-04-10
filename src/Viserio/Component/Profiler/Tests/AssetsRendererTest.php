@@ -4,10 +4,10 @@ namespace Viserio\Component\Profiler\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Routing\Generator\UrlGenerator;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollectors\AjaxRequestsDataCollector;
+use Viserio\Component\Routing\Generator\UrlGenerator;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class AssetsRendererTest extends MockeryTestCase
 {
