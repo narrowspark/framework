@@ -6,7 +6,7 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Routing\AbstractController;
-use Viserio\Component\Profiler\Profiler;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 
 class OpenHandlerController extends AbstractController
 {
@@ -27,25 +27,25 @@ class OpenHandlerController extends AbstractController
     /**
      * Profilerstance.
      *
-     * @var \Viserio\Component\Profiler\Profiler
+     * @var \Viserio\Component\Contracts\Profiler\Profiler
      */
-    protected $Profiler
+    protected $profiler;
 
     /**
-     * [__construct description].
+     * Create a new OpenHandler Controller instance.
      *
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param \Viserio\Component\Profiler\Profiler     $Profiler
+     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
      */
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
-        ProfilerroProfiler
+        ProfilerContract $profiler
     ) {
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
-        $this->Profiler  = $ProfilerContract
+        $this->profiler  = $profiler;
     }
 
     /**

@@ -6,7 +6,7 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Profiler\Profiler;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Routing\AbstractController;
 
 class AssetController extends AbstractController
@@ -28,7 +28,7 @@ class AssetController extends AbstractController
     /**
      * Profiler instance.
      *
-     * @var \Viserio\Component\Profiler\Profiler
+     * @var \Viserio\Component\Contracts\Profiler\Profiler
      */
     protected $Profiler;
 
@@ -38,13 +38,13 @@ class AssetController extends AbstractController
      * @param \IPsr\Http\Message\ServerRequestInterface      $serverRequest
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param \Viserio\Component\Profiler\Profiler           $Profiler
+     * @param \Viserio\Component\Contracts\Profiler\Profiler $Profiler
      */
     public function __construct(
         ServerRequestInterface $serverRequest,
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
-        Profiler $Profiler
+        ProfilerContract $Profiler
     ) {
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;

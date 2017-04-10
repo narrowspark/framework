@@ -35,10 +35,10 @@ if (! isset($token, $menus, $icons, $panels)) {
                     </span>
                     <?php endif; ?>
                     <span class="profiler-menu-label">
-                        <?php echo TemplateManager::escape($menu['menu']['label']) ?>
+                        <?php echo TemplateManager::escape((string) $menu['menu']['label']) ?>
                     </span>
                     <span class="profiler-menu-value">
-                        <?php echo TemplateManager::escape($menu['menu']['value']) ?>
+                        <?php echo TemplateManager::escape((string) $menu['menu']['value']) ?>
                     </span>
                 </div>
                 <?php if ($tooltip): ?>
