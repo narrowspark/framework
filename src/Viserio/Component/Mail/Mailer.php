@@ -14,6 +14,7 @@ use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
+use Viserio\Component\Mail\Events\MessageSentEvent;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
@@ -148,13 +149,13 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
             $message->bcc($this->to['address'], $this->to['name'], true);
         }
 
-        $status = $this->sendSwiftMessage($message->getSwiftMessage());
+        $recipients = $this->sendSwiftMessage($message->getSwiftMessage());
 
         if ($this->events !== null) {
-            $this->events->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $status));
+            $this->events->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $recipients));
         }
 
-        $return;
+        return $recipients;
     }
 
     /**
@@ -257,7 +258,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     protected function sendSwiftMessage(Swift_Mime_Message $message): int
     {
         if ($this->events !== null) {
-            $this->events->trigger(new MessageSendingEvent($this, ['message' => $message]));
+            $this->events->trigger(new MessageSendingEvent($this, $message));
         }
 
         try {

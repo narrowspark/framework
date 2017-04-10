@@ -296,7 +296,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function registerExceptionHandler(): void
     {
-        if (PHP_SAPI !== 'cli') {
+        if (php_sapi_name() != 'cli' || php_sapi_name() != 'phpdbg') {
             ini_set('display_errors', '0');
         } elseif (! ini_get('log_errors') || ini_get('error_log')) {
             // CLI - display errors only if they're not already logged to STDERR

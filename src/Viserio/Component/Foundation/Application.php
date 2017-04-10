@@ -3,16 +3,18 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
 use Closure;
+use Narrowspark\HttpEmitter\EmitterInterface;
+use Narrowspark\HttpEmitter\SapiEmitter;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
-use Viserio\Component\Contracts\Foundation\Emitter as EmitterContract;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Translation\TranslationManager;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
-use Viserio\Component\Foundation\Http\Emitter;
+use Viserio\Component\Foundation\Events\BootstrappedEvent;
+use Viserio\Component\Foundation\Events\BootstrappingEvent;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
@@ -26,7 +28,14 @@ class Application extends Container implements ApplicationContract
      *
      * @var string
      */
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.0.0-DEV';
+
+    /**
+     * The Viserio framework version id.
+     *
+     * @var int
+     */
+    public const VERSION_ID  = 10000;
 
     /**
      * The environment file to load during bootstrapping.
@@ -48,13 +57,6 @@ class Application extends Container implements ApplicationContract
      * @var bool
      */
     protected $hasBeenBootstrapped = false;
-
-    /**
-     * A custom callback used to configure Monolog.
-     *
-     * @var callable|null
-     */
-    protected $monologConfigurator;
 
     /**
      * Create a new application instance.
@@ -100,22 +102,16 @@ class Application extends Container implements ApplicationContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrapWith(array $bootstrappers)
+    public function bootstrapWith(array $bootstrappers): void
     {
         $this->hasBeenBootstrapped = true;
 
         foreach ($bootstrappers as $bootstrapper) {
-            $this->get(EventManagerContract::class)->trigger(
-                'bootstrapping.' . str_replace('\\', '', $bootstrapper),
-                $this
-            );
+            $this->get(EventManagerContract::class)->trigger(new BootstrappingEvent($bootstrapper, $this));
 
             $this->make($bootstrapper)->bootstrap($this);
 
-            $this->get(EventManagerContract::class)->trigger(
-                'bootstrapped.' . str_replace('\\', '', $bootstrapper),
-                $this
-            );
+            $this->get(EventManagerContract::class)->trigger(new BootstrappedEvent($bootstrapper, $this));
         }
     }
 
@@ -282,7 +278,7 @@ class Application extends Container implements ApplicationContract
      *
      * @return $this
      */
-    protected function bindInstallPaths(array $paths)
+    protected function bindInstallPaths(array $paths): self
     {
         // Each path key is prefixed with path
         // so that they have the consistent naming convention.
@@ -295,8 +291,10 @@ class Application extends Container implements ApplicationContract
 
     /**
      * Register all of the base service providers.
+     *
+     * @return void
      */
-    protected function registerBaseServiceProviders()
+    protected function registerBaseServiceProviders(): void
     {
         $this->register(new OptionsResolverServiceProvider());
         $this->register(new ParsersServiceProvider());
@@ -313,8 +311,10 @@ class Application extends Container implements ApplicationContract
 
     /**
      * Register the basic bindings into the container.
+     *
+     * @return void
      */
-    protected function registerBaseBindings()
+    protected function registerBaseBindings(): void
     {
         $app = $this;
 
@@ -326,16 +326,16 @@ class Application extends Container implements ApplicationContract
         $this->alias(ApplicationContract::class, 'app');
 
         $this->singleton(Container::class, $this);
-
-        $this->singleton(EmitterContract::class, Emitter::class);
-
         $this->singleton(EnvironmentDetector::class, EnvironmentDetector::class);
+        $this->singleton(EmitterInterface::class, SapiEmitter::class);
     }
 
     /**
      * Bind needed cache paths to our config manager.
+     *
+     * @return void
      */
-    protected function registerCacheFilePaths()
+    protected function registerCacheFilePaths(): void
     {
         $config = $this->get(RepositoryContract::class);
 

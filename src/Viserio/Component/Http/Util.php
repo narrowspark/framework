@@ -7,7 +7,7 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use RuntimeException;
 
-class Util
+final class Util
 {
     /**
      * Private constructor; non-instantiable.

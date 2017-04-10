@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Commands;
+namespace Viserio\Component\Foundation\Console\Commands;
 
 use Cake\Chronos\Chronos;
 use Viserio\Component\Console\Command\Command;
@@ -11,8 +11,7 @@ class DownCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $signature = 'down [--message="The message for the maintenance mode."]
-            [--retry="The number of seconds after which the request may be retried."]';
+    protected $signature = 'down [--message= : The message for the maintenance mode.] [--retry= : The number of seconds after which the request may be retried.]';
 
     /**
      * {@inheritdoc}
@@ -53,7 +52,7 @@ class DownCommand extends Command
      *
      * @return int|null
      */
-    protected function getRetryTime()
+    protected function getRetryTime(): ?int
     {
         $retry = $this->option('retry');
 

@@ -15,14 +15,13 @@ class ExpressionParser
      */
     public function parse(string $expression): array
     {
-        $tokens = explode(' ', $expression);
-        $tokens = array_map('trim', $tokens);
-        $tokens = array_values(array_filter($tokens));
+        preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
 
-        if (count($tokens) === 0) {
-            throw new InvalidCommandExpression('The expression was empty');
+        if (trim($expression) === '') {
+            throw new InvalidCommandExpression('The expression was empty.');
         }
 
+        $tokens    = array_values(array_filter(array_map('trim', $matches[0])));
         $name      = array_shift($tokens);
         $arguments = [];
         $options   = [];
@@ -32,10 +31,10 @@ class ExpressionParser
                 throw new InvalidCommandExpression('An option must be enclosed by brackets: [--option]');
             }
 
-            if ($this->isOption($token)) {
-                $options[] = $this->parseOption($token);
+            if (self::isOption($token)) {
+                $options[] = self::parseOption($token);
             } else {
-                $arguments[] = $this->parseArgument($token);
+                $arguments[] = self::parseArgument($token);
             }
         }
 
@@ -53,7 +52,7 @@ class ExpressionParser
      *
      * @return bool
      */
-    protected function isOption(string $token): bool
+    protected static function isOption(string $token): bool
     {
         return self::startsWith($token, '[-');
     }
@@ -65,23 +64,26 @@ class ExpressionParser
      *
      * @return \Viserio\Component\Console\Input\InputArgument
      */
-    protected function parseArgument(string $token): InputArgument
+    protected static function parseArgument(string $token): InputArgument
     {
-        if (self::endsWith($token, ']*')) {
-            $mode = InputArgument::IS_ARRAY;
-            $name = trim($token, '[]*');
-        } elseif (self::endsWith($token, '*')) {
-            $mode = InputArgument::IS_ARRAY | InputArgument::REQUIRED;
-            $name = trim($token, '*');
-        } elseif (self::startsWith($token, '[')) {
-            $mode = InputArgument::OPTIONAL;
-            $name = trim($token, '[]');
-        } else {
-            $mode = InputArgument::REQUIRED;
-            $name = $token;
-        }
+        list($token, $description) = static::extractDescription($token);
 
-        return new InputArgument($name, $mode);
+        switch (true) {
+            case self::endsWith($token, '=*]'):
+                return new InputArgument(trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
+            case self::endsWith($token, '=*'):
+                return new InputArgument(trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
+            case self::endsWith($token, '?'):
+                return new InputArgument(trim($token, '?'), InputArgument::OPTIONAL, $description);
+            case preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
+                return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
+            case preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
+                return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
+            case self::startsWith($token, '[') && self::endsWith($token, ']'):
+                return new InputArgument(trim($token, '[]'), InputArgument::OPTIONAL, $description);
+            default:
+                return new InputArgument($token, InputArgument::REQUIRED, $description);
+        }
     }
 
     /**
@@ -91,9 +93,9 @@ class ExpressionParser
      *
      * @return \Viserio\Component\Console\Input\InputOption
      */
-    protected function parseOption(string $token): InputOption
+    protected static function parseOption(string $token): InputOption
     {
-        $token = trim($token, '[]');
+        list($token, $description) = static::extractDescription(trim($token, '[]'));
 
         // Shortcut [-y|--yell]
         if (mb_strpos($token, '|') !== false) {
@@ -103,19 +105,35 @@ class ExpressionParser
             $shortcut = null;
         }
 
-        $name = ltrim($token, '-');
+        $name    = ltrim($token, '-');
+        $default = null;
 
-        if (self::endsWith($token, '=]*')) {
-            $mode = InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY;
-            $name = mb_substr($name, 0, -3);
-        } elseif (self::endsWith($token, '=')) {
-            $mode = InputOption::VALUE_REQUIRED;
-            $name = rtrim($name, '=');
-        } else {
-            $mode = InputOption::VALUE_NONE;
+        switch (true) {
+            case self::endsWith($token, '=*'):
+                return new InputOption(rtrim($name, '=*'), $shortcut, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, $description);
+            case self::endsWith($token, '='):
+                return new InputOption(rtrim($name, '='), $shortcut, InputOption::VALUE_REQUIRED, $description);
+            case preg_match('/(.+)\=\*(.+)/', $token, $matches):
+                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
+            case preg_match('/(.+)\=(.+)/', $token, $matches):
+                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
+            default:
+                return new InputOption($token, $shortcut, InputOption::VALUE_NONE, $description);
         }
+    }
 
-        return new InputOption($name, $shortcut, $mode);
+    /**
+     * Parse the token into its token and description segments.
+     *
+     * @param string $token
+     *
+     * @return array
+     */
+    protected static function extractDescription(string $token): array
+    {
+        preg_match('/(.*)\s:(\s+.*(?<!]))(.*)/', trim($token), $parts);
+
+        return count($parts) === 4 ? [$parts[1] . $parts[3], trim($parts[2])] : [$token, ''];
     }
 
     /**

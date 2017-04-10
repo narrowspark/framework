@@ -8,7 +8,7 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Foundation\Application;
-use Viserio\Component\Foundation\Bootstrap\DetectEnvironment;
+use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
 class ApplicationTest extends MockeryTestCase
 {
@@ -16,7 +16,7 @@ class ApplicationTest extends MockeryTestCase
     {
         $app = $this->getApplication();
         $app->bootstrapWith([
-            DetectEnvironment::class,
+            LoadEnvironmentVariables::class,
         ]);
 
         self::assertTrue($app->hasBeenBootstrapped());

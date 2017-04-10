@@ -8,6 +8,8 @@ interface Bootstrap
      * Bootstrap the given application.
      *
      * @param \Viserio\Component\Contracts\Foundation\Application $app
+     *
+     * @return void
      */
-    public function bootstrap(Application $app);
+    public function bootstrap(Application $app): void;
 }

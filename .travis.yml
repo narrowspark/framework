@@ -17,20 +17,27 @@ addons:
 matrix:
   include:
     - php: 7.1
-      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true PHPUNIT=true
-    - php: 7.1
-      env: SETUP=lowest PHPUNIT=true
+      env: SETUP=basic SEND_COVERAGE=true PHPUNIT=true
     - php: 7.1
       env: SETUP=basic PHPUNIT=true
     - php: 7.1
       env: SETUP=stable PHPUNIT=true
     - php: 7.1
-      env: SETUP=basic PHPSTAN=true PHPUNIT=false
+      env: SETUP=lowest PHPUNIT=true
+      # PHPSTAN
+    - php: 7.1
+      env: SETUP=basic PHPSTAN=true
+      # Nightly
+    - php: nightly
+      env: SETUP=basic PHPUNIT=true
+    - php: nightly
+      env: SETUP=stable PHPUNIT=true
+    - php: nightly
+      env: SETUP=lowest PHPUNIT=true
   allow_failures:
+    - php: nightly
     - env: SETUP=lowest PHPUNIT=true
       php: 7.1
-    # - env: SETUP=basic HUMBUG=true
-    #   php: 7.1
   fast_finish: true
 
 cache:
@@ -46,6 +53,7 @@ install:
   - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
   - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
   - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
+
 before_script:
   - sleep 15
 

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests;
 
+use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
@@ -13,6 +14,8 @@ use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
+use Viserio\Component\Mail\Events\MessageSendingEvent;
+use Viserio\Component\Mail\Events\MessageSentEvent;
 use Viserio\Component\Mail\Mailer;
 
 class MailerTest extends MockeryTestCase
@@ -269,12 +272,16 @@ class MailerTest extends MockeryTestCase
         $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
         $event->shouldReceive('trigger')
-            ->twice();
+            ->once()
+            ->with(Mock::type(MessageSendingEvent::class));
+        $event->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(MessageSentEvent::class));
 
         $mailer->setEventManager($event);
 
         $message->shouldReceive('getSwiftMessage')
-            ->once()
+            ->twice()
             ->andReturn($mimeMessage);
 
         $mailer->getSwiftMailer()->shouldReceive('send')

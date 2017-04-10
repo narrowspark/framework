@@ -55,6 +55,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareCo
             ) {
                 continue;
             }
+
             $included[] = $this->stripBasePath($file);
         }
 

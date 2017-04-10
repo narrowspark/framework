@@ -25,6 +25,14 @@ class WebProfilerPDOBridgeServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * Extend PDO with our TraceablePDODecorater.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Viserio\Component\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDODecorater
+     */
     public static function createTraceablePDODecorater(ContainerInterface $container, ?callable $getPrevious = null): ?TraceablePDODecorater
     {
         if ($getPrevious !== null) {
@@ -36,6 +44,14 @@ class WebProfilerPDOBridgeServiceProvider implements ServiceProvider
         return null;
     }
 
+    /**
+     * Extend viserio profiler with data collector.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Viserio\Component\Contracts\WebProfiler\WebProfiler
+     */
     public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
         if ($getPrevious !== null) {

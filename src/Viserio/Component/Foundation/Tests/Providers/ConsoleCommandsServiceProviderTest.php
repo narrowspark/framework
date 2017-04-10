@@ -6,16 +6,18 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Foundation\Commands\DownCommand;
-use Viserio\Component\Foundation\Commands\KeyGenerateCommand;
-use Viserio\Component\Foundation\Commands\UpCommand;
+use Viserio\Component\Foundation\Console\Commands\DownCommand;
+use Viserio\Component\Foundation\Console\Commands\KeyGenerateCommand;
+use Viserio\Component\Foundation\Console\Commands\UpCommand;
 use Viserio\Component\Foundation\Providers\ConsoleCommandsServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
     public function testGetServices()
     {
         $container = new Container();
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ConsoleServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
 
@@ -31,7 +33,7 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $commands = $console->all();
 
         self::assertInstanceOf(UpCommand::class, $commands['up']);
-        // self::assertInstanceOf(DownCommand::class, $commands['down']);
-        // self::assertInstanceOf(KeyGenerateCommand::class, $commands['cron:list']);
+        self::assertInstanceOf(DownCommand::class, $commands['down']);
+        self::assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
     }
 }

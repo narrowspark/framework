@@ -36,7 +36,7 @@ class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
         if ($this->config->get('app.maintenance', false)) {
             $data = json_decode(file_get_contents($this->config->get('path.storage') . '/framework/down'), true);
 
-            throw new MaintenanceModeException($data['time'], $data['retry'], $data['message']);
+            throw new MaintenanceModeException((int) $data['time'], (int) $data['retry'], $data['message']);
         }
 
         return $delegate->process($request);

@@ -6,11 +6,6 @@ use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class App extends StaticalProxy
 {
-    public static function make($key)
-    {
-        return self::$container[$key];
-    }
-
     /**
      * {@inheritdoc}
      *

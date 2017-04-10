@@ -17,7 +17,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @var int[]
      */
-    public const ERRORS = [
+    protected const ERRORS = [
         UPLOAD_ERR_OK,
         UPLOAD_ERR_INI_SIZE,
         UPLOAD_ERR_FORM_SIZE,
@@ -92,6 +92,22 @@ class UploadedFile implements UploadedFileInterface
      * @var string|null
      */
     protected $clientFilename;
+
+    /**
+     * Help textes for upload error.
+     *
+     * @var array
+     */
+    private static $errorMessages = [
+        UPLOAD_ERR_OK         => 'There is no error, the file uploaded with success.',
+        UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+        UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
+        UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded.',
+        UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
+        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
+        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+        UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.',
+    ];
 
     /**
      * Create a new uploadedfile instance.
@@ -228,9 +244,13 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Set the fill the right variable.
+     *
+     * @param mixed $streamOrFile
+     *
+     * @return void
      */
-    private function setStreamOrFile($streamOrFile)
+    private function setStreamOrFile($streamOrFile): void
     {
         if (is_string($streamOrFile)) {
             $this->file = $streamOrFile;
@@ -239,25 +259,19 @@ class UploadedFile implements UploadedFileInterface
         } elseif ($streamOrFile instanceof StreamInterface) {
             $this->stream = $streamOrFile;
         } else {
-            throw new InvalidArgumentException(
-                'Invalid stream or file provided for UploadedFile'
-            );
+            throw new InvalidArgumentException('Invalid stream or file provided for UploadedFile');
         }
     }
 
     /**
      * Check if error is a int or a array, then set it.
      *
-     * @param mixed $error
+     * @param int $error
+     *
+     * @return void
      */
-    private function setError($error)
+    private function setError(int $error): void
     {
-        if (! is_int($error)) {
-            throw new InvalidArgumentException(
-                'Upload file error status must be an integer'
-            );
-        }
-
         if (! in_array($error, self::ERRORS)) {
             throw new InvalidArgumentException(
                 'Invalid error status for UploadedFile'
@@ -270,7 +284,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Check if is a string or is empty.
      *
-     * @param string $param
+     * @param mixed $param
      *
      * @return bool
      */
@@ -293,11 +307,13 @@ class UploadedFile implements UploadedFileInterface
      * Validate retrieve stream.
      *
      * @throws \RuntimeException if is moved or not ok
+     *
+     * @return void
      */
-    private function validateActive()
+    private function validateActive(): void
     {
-        if (false === $this->isOk()) {
-            throw new RuntimeException('Cannot retrieve stream due to upload error');
+        if ($this->isOk() === false) {
+            throw new RuntimeException('Cannot retrieve stream due to upload error: ' . self::$errorMessages[$this->error]);
         }
 
         if ($this->isMoved()) {

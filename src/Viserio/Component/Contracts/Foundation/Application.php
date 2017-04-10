@@ -18,8 +18,10 @@ interface Application extends Container
      * Run the given array of bootstrap classes.
      *
      * @param array $bootstrappers
+     *
+     * @return void
      */
-    public function bootstrapWith(array $bootstrappers);
+    public function bootstrapWith(array $bootstrappers): void;
 
     /**
      * Determine if the application has been bootstrapped before.

@@ -62,17 +62,14 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * {@inheritdoc}
+     * Set the application environment from command-line arguments.
+     *
+     * @param \Closure $callback
+     * @param array    $args
+     *
+     * @return string
      */
-    protected function detectWebEnvironment(Closure $callback)
-    {
-        return call_user_func($callback);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function detectConsoleEnvironment(Closure $callback, array $args)
+    protected function detectConsoleEnvironment(Closure $callback, array $args): string
     {
         // First we will check if an environment argument was passed via console arguments
         // and if it was that automatically overrides as the environment. Otherwise, we
@@ -86,6 +83,18 @@ class EnvironmentDetector implements EnvironmentContract
         }
 
         return $this->detectWebEnvironment($callback);
+    }
+
+    /**
+     * Set the application environment for a web request.
+     *
+     * @param \Closure $callback
+     *
+     * @return string
+     */
+    protected function detectWebEnvironment(Closure $callback): string
+    {
+        return call_user_func($callback);
     }
 
     /**

@@ -17,6 +17,8 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\ApplicationTester;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
@@ -154,7 +156,7 @@ class ApplicationTest extends MockeryTestCase
 
     public function testItShouldRunACommandWitMultipleOptions()
     {
-        $this->application->command('greet [-d|--dir=]*', function ($dir, OutputInterface $output) {
+        $this->application->command('greet [-d|--dir=*]', function ($dir, OutputInterface $output) {
             $output->write('[' . implode(', ', $dir) . ']');
         });
 
@@ -537,6 +539,27 @@ class ApplicationTest extends MockeryTestCase
         $exitCode = $application->run(new ArrayInput([]), new NullOutput());
 
         self::assertSame(4, $exitCode, '->run() returns integer exit code extracted from raised exception');
+    }
+
+    public function testCerebroBinary()
+    {
+        self::assertSame('cerebro', Application::cerebroBinary());
+    }
+
+    public function testPhpBinary()
+    {
+        $finder = (new PhpExecutableFinder())->find(false);
+        $php    = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+
+        self::assertSame($php, Application::phpBinary());
+    }
+
+    public function testFormatCommandString()
+    {
+        $finder = (new PhpExecutableFinder())->find(false);
+        $php    = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+
+        self::assertSame($php . ' cerebro' . ' command.greet', Application::formatCommandString('command.greet'));
     }
 
     /**
