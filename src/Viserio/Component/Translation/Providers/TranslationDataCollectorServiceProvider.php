@@ -38,7 +38,7 @@ class TranslationDataCollectorServiceProvider implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio', 'Profiler'];
+        return ['viserio', 'profiler'];
     }
 
     /**
