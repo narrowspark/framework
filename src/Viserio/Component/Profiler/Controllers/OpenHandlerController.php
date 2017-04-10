@@ -5,8 +5,8 @@ namespace Viserio\Component\Profiler\Controllers;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Component\Routing\AbstractController;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Routing\AbstractController;
 
 class OpenHandlerController extends AbstractController
 {
@@ -45,7 +45,7 @@ class OpenHandlerController extends AbstractController
     ) {
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
-        $this->profiler  = $profiler;
+        $this->profiler        = $profiler;
     }
 
     /**
