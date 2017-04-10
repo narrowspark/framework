@@ -12,11 +12,11 @@ use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Viserio\Component\Contracts\Profiler\AssetsRenderer as AssetsRendererContract;
 use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Support\Http\ClientIp;
-use Viserio\Component\Contracts\Profiler\AssetsRenderer as AssetsRendererContract;
 
 class Profiler implements ProfilerContract, LoggerAwareInterface
 {
