@@ -404,7 +404,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function register(ServiceProvider $provider, array $parameters = []): ContainerContract
     {
-        $entries = $provider->getServices();
+        $entries   = $provider->getServices();
         $container = $this;
 
         foreach ($entries as $key => $callable) {
