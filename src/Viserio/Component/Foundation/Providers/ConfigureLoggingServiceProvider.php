@@ -14,6 +14,7 @@ use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class ConfigureLoggingServiceProvider implements
     ServiceProvider,
@@ -28,7 +29,7 @@ class ConfigureLoggingServiceProvider implements
      *
      * @var array
      */
-    private static $options;
+    private static $options = [];
 
     /**
      * {@inheritdoc}
@@ -54,9 +55,7 @@ class ConfigureLoggingServiceProvider implements
     public function getMandatoryOptions(): iterable
     {
         return [
-            'path' => [
-                'storage',
-            ],
+            'name',
         ];
     }
 
@@ -66,7 +65,6 @@ class ConfigureLoggingServiceProvider implements
     public function getDefaultOptions(): iterable
     {
         return [
-            'name' => 'Narrowspark',
             'log'  => [
                 'handler'   => 'single',
                 'level'     => 'debug',
@@ -125,7 +123,7 @@ class ConfigureLoggingServiceProvider implements
     private static function configureSingleHandler(ContainerInterface $container, LogContract $log, string $level): void
     {
         $log->useFiles(
-            self::$options['path']['storage'] . '/logs/narrowspark.log',
+            $container->get(RepositoryContract::class)->get('path.storage') . '/logs/narrowspark.log',
             $level
         );
     }
@@ -142,7 +140,7 @@ class ConfigureLoggingServiceProvider implements
     private static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level): void
     {
         $log->useDailyFiles(
-            self::$options['path']['storage'] . '/logs/narrowspark.log',
+            $container->get(RepositoryContract::class)->get('path.storage') . '/logs/narrowspark.log',
             self::$options['log']['max_files'],
             $level
         );
@@ -197,7 +195,7 @@ class ConfigureLoggingServiceProvider implements
      */
     private static function resolveOptions(ContainerInterface $container): void
     {
-        if (self::$options === null) {
+        if (count(self::$options) === 0) {
             self::$options = $container->get(OptionsResolver::class)
                 ->configure(new static(), $container)
                 ->resolve();

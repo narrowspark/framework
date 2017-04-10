@@ -37,8 +37,9 @@ class ProfilerPsr6CacheBridgeServiceProvider implements ServiceProvider
      */
     public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
-        if ($getPrevious !== null) {
-            $profiler = $getPrevious();
+        $profiler = $getPrevious();
+
+        if ($profiler !== null) {
             $cache    = new Psr6CacheDataCollector();
 
             if ($container->has(CacheItemPoolInterface::class)) {
@@ -50,6 +51,6 @@ class ProfilerPsr6CacheBridgeServiceProvider implements ServiceProvider
             return $profiler;
         }
 
-        return null;
+        return $profiler;
     }
 }

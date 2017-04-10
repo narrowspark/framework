@@ -83,7 +83,7 @@ class Application extends Container implements ApplicationContract
 
         $config = $this->get(RepositoryContract::class);
         $config->set(
-            'app.maintenance',
+            'viserio.app.maintenance',
             file_exists($config->get('path.storage') . '/framework/down'),
             false
         );
@@ -128,7 +128,7 @@ class Application extends Container implements ApplicationContract
      */
     public function getLocale(): string
     {
-        return $this->get(RepositoryContract::class)->get('app.locale');
+        return $this->get(RepositoryContract::class)->get('viserio.app.locale');
     }
 
     /**
@@ -136,7 +136,7 @@ class Application extends Container implements ApplicationContract
      */
     public function setLocale(string $locale): ApplicationContract
     {
-        $this->get(RepositoryContract::class)->set('app.locale', $locale);
+        $this->get(RepositoryContract::class)->set('viserio.app.locale', $locale);
 
         if ($this->has(TranslationManager::class)) {
             $this->get(TranslationManager::class)->setLocale($locale);
@@ -160,7 +160,7 @@ class Application extends Container implements ApplicationContract
      */
     public function getFallbackLocale(): string
     {
-        return $this->get(RepositoryContract::class)->get('app.fallback_locale');
+        return $this->get(RepositoryContract::class)->get('viserio.app.fallback_locale');
     }
 
     /**
@@ -168,7 +168,7 @@ class Application extends Container implements ApplicationContract
      */
     public function hasLocale(string $locale): bool
     {
-        return in_array($locale, $this->get(RepositoryContract::class)->get('app.locales'));
+        return in_array($locale, $this->get(RepositoryContract::class)->get('viserio.app.locales'));
     }
 
     /**
@@ -331,7 +331,7 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Bind needed cache paths to our config manager.
+     * Set needed cache paths to our config manager.
      *
      * @return void
      */

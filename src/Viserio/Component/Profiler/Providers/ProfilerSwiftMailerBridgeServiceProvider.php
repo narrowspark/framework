@@ -30,9 +30,9 @@ class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
      */
     public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
-        if ($getPrevious !== null) {
-            $profiler = $getPrevious();
+        $profiler = $getPrevious();
 
+        if ($profiler !== null) {
             $profiler->addCollector(new SwiftMailDataCollector(
                 $container->get(Swift_Mailer::class)
             ));
@@ -40,6 +40,6 @@ class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
             return $profiler;
         }
 
-        return null;
+        return $profiler;
     }
 }
