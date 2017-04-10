@@ -35,7 +35,7 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 
         $container->instance('config', [
             'viserio' => [
-                'Profiler' => [
+                'profiler' => [
                     'enable'    => true,
                     'collector' => [
                         'twig'  => true,
