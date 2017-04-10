@@ -18,6 +18,8 @@ use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
+use Viserio\Component\Foundation\Events\BootstrappingEvent;
+use Viserio\Component\Foundation\Events\BootstrappedEvent;
 
 class Application extends Container implements ApplicationContract
 {
@@ -26,7 +28,14 @@ class Application extends Container implements ApplicationContract
      *
      * @var string
      */
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.0.0-DEV';
+
+    /**
+     * The Viserio framework version id.
+     *
+     * @var int
+     */
+    public const VERSION_ID  = 10000;
 
     /**
      * The environment file to load during bootstrapping.
@@ -48,13 +57,6 @@ class Application extends Container implements ApplicationContract
      * @var bool
      */
     protected $hasBeenBootstrapped = false;
-
-    /**
-     * A custom callback used to configure Monolog.
-     *
-     * @var callable|null
-     */
-    protected $monologConfigurator;
 
     /**
      * Create a new application instance.
@@ -105,17 +107,11 @@ class Application extends Container implements ApplicationContract
         $this->hasBeenBootstrapped = true;
 
         foreach ($bootstrappers as $bootstrapper) {
-            $this->get(EventManagerContract::class)->trigger(
-                'bootstrapping.' . str_replace('\\', '', $bootstrapper),
-                $this
-            );
+            $this->get(EventManagerContract::class)->trigger(new BootstrappingEvent($bootstrapper, $this));
 
             $this->make($bootstrapper)->bootstrap($this);
 
-            $this->get(EventManagerContract::class)->trigger(
-                'bootstrapped.' . str_replace('\\', '', $bootstrapper),
-                $this
-            );
+            $this->get(EventManagerContract::class)->trigger(new BootstrappedEvent($bootstrapper, $this));
         }
     }
 

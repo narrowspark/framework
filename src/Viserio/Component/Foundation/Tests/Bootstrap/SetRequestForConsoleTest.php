@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
+use Mockery as Mock;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -9,6 +10,8 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Foundation\Application;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
+use Viserio\Component\Foundation\Events\BootstrappingEvent;
+use Viserio\Component\Foundation\Events\BootstrappedEvent;
 
 class SetRequestForConsoleTest extends MockeryTestCase
 {
@@ -47,7 +50,11 @@ class SetRequestForConsoleTest extends MockeryTestCase
 
         $events = $this->mock(EventManagerContract::class);
         $events->shouldReceive('trigger')
-            ->twice();
+            ->once()
+            ->with(Mock::type(BootstrappingEvent::class));
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(BootstrappedEvent::class));
         $app->instance(EventManagerContract::class, $events);
 
         $app->bootstrapWith([SetRequestForConsole::class]);
