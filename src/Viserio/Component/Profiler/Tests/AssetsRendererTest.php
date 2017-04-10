@@ -46,7 +46,7 @@ class AssetsRendererTest extends MockeryTestCase
         ];
         $jsAssets = [
             __DIR__ . '/js/zepto.min.js',
-            __DIR__ . '/js/Profiler.js',
+            __DIR__ . '/js/profiler.js',
         ];
 
         static::assertSame($cssAssets, $assets->getAssets('css'));
@@ -68,7 +68,7 @@ class AssetsRendererTest extends MockeryTestCase
             str_replace('Tests', 'DataCollectors', __DIR__) . '/../Resources/css/ajax-requests.css',
         ];
         $jsAssets = [
-            __DIR__ . '/js/Profiler.js',
+            __DIR__ . '/js/profiler.js',
             str_replace('Tests', 'DataCollectors', __DIR__) . '/../Resources/js/ajaxHandler.js',
         ];
 

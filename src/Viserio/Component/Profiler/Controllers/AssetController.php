@@ -30,7 +30,7 @@ class AssetController extends AbstractController
      *
      * @var \Viserio\Component\Contracts\Profiler\Profiler
      */
-    protected $Profiler;
+    protected $profiler;
 
     /**
      * Create a new AssetController instance.
@@ -38,17 +38,17 @@ class AssetController extends AbstractController
      * @param \IPsr\Http\Message\ServerRequestInterface      $serverRequest
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param \Viserio\Component\Contracts\Profiler\Profiler $Profiler
+     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
      */
     public function __construct(
         ServerRequestInterface $serverRequest,
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
-        ProfilerContract $Profiler
+        ProfilerContract $profiler
     ) {
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
-        $this->Profiler        = $Profiler;
+        $this->Profiler        = $profiler;
 
         if ($session = $serverRequest->getAttribute('session')) {
             $session->reflash();

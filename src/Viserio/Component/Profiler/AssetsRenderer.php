@@ -28,7 +28,7 @@ class AssetsRenderer implements RenderableContract
      */
     protected $jsFiles = [
         'js/zepto.min.js',
-        'js/Profiler.js',
+        'js/profiler.js',
     ];
 
     /**
@@ -52,11 +52,11 @@ class AssetsRenderer implements RenderableContract
     ];
 
     /**
-     * The Profiler instance.
+     * The profiler instance.
      *
      * @var \Viserio\Component\Contracts\Profiler\Profiler
      */
-    protected $Profiler;
+    protected $profiler;
 
     /**
      * Root path to the resources.
@@ -94,13 +94,13 @@ class AssetsRenderer implements RenderableContract
     /**
      * Set the Profiler.
      *
-     * @param \Viserio\Component\Contracts\Profiler\Profiler $Profiler
+     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
      *
      * @return $this
      */
-    public function setProfiler(ProfilerContract $Profiler): self
+    public function setProfiler(ProfilerContract $profiler): self
     {
-        $this->Profiler = $Profiler;
+        $this->profiler = $profiler;
 
         return $this;
     }
@@ -159,11 +159,11 @@ class AssetsRenderer implements RenderableContract
      */
     public function render(): string
     {
-        if (($urlGenerator = $this->Profiler->getUrlGenerator()) !== null) {
-            $cssRoute = $urlGenerator->generate('Profiler.assets.css', [
+        if (($urlGenerator = $this->profiler->getUrlGenerator()) !== null) {
+            $cssRoute = $urlGenerator->generate('profiler.assets.css', [
                 'v' => $this->getModifiedTime('css'),
             ]);
-            $jsRoute = $urlGenerator->generate('Profiler.assets.js', [
+            $jsRoute = $urlGenerator->generate('profiler.assets.js', [
                 'v' => $this->getModifiedTime('js'),
             ]);
 
@@ -231,7 +231,7 @@ class AssetsRenderer implements RenderableContract
         $additionalAssets = [];
 
         // finds assets provided by collectors
-        foreach ($this->Profiler->getCollectors() as $collector) {
+        foreach ($this->profiler->getCollectors() as $collector) {
             if ($collector instanceof AssetAwareContract &&
                 ! in_array($collector->getName(), $this->ignoredCollectors)
             ) {

@@ -20,7 +20,7 @@ class ProfilerMiddleware implements MiddlewareInterface
     /**
      * Create a new middleware instance.
      *
-     * @param \Viserio\Component\Contracts\Profiler\Profiler $Profiler
+     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
      */
     public function __construct(ProfilerContract $profiler)
     {
