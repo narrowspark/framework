@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
-use Mockery as Mock;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Foundation\Application;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
-use Viserio\Component\Foundation\Events\BootstrappingEvent;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
+use Viserio\Component\Foundation\Events\BootstrappingEvent;
 
 class SetRequestForConsoleTest extends MockeryTestCase
 {

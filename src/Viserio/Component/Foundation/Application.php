@@ -13,13 +13,13 @@ use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Translation\TranslationManager;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
+use Viserio\Component\Foundation\Events\BootstrappedEvent;
+use Viserio\Component\Foundation\Events\BootstrappingEvent;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
-use Viserio\Component\Foundation\Events\BootstrappingEvent;
-use Viserio\Component\Foundation\Events\BootstrappedEvent;
 
 class Application extends Container implements ApplicationContract
 {
