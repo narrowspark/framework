@@ -124,8 +124,8 @@
         <testsuite name="Narrowspark View Component Test Suite">
             <directory>./src/Viserio/Component/View/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark WebProfiler Component Test Suite">
-            <directory>./src/Viserio/Component/WebProfiler/Tests</directory>
+        <testsuite name="Narrowspark Profiler Component Test Suite">
+            <directory>./src/Viserio/Component/Profiler/Tests</directory>
         </testsuite>
     </testsuites>
 

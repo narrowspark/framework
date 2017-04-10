@@ -8,10 +8,10 @@ use Twig_Environment;
 use Twig_Markup;
 use Twig_Profiler_Dumper_Html;
 use Twig_Profiler_Profile;
-use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
+use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
 
 class TwigDataCollector extends AbstractDataCollector implements
     PanelAwareContract,

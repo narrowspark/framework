@@ -11,10 +11,10 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
+use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
 
 class ViserioHttpDataCollector extends AbstractDataCollector implements
     TooltipAwareContract,

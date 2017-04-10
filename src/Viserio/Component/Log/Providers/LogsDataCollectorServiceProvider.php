@@ -7,7 +7,7 @@ use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Log\DataCollectors\LogParser;
 use Viserio\Component\Log\DataCollectors\LogsDataCollector;
 use Viserio\Component\OptionsResolver\OptionsResolver;
@@ -32,7 +32,7 @@ class LogsDataCollectorServiceProvider implements
     {
         return [
             LogParser::class           => [self::class, 'createLogParser'],
-            WebProfilerContract::class => [self::class, 'createWebProfiler'],
+            ProfilerContract::class => [self::class, 'createProfiler'],
         ];
     }
 
@@ -41,7 +41,7 @@ class LogsDataCollectorServiceProvider implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio', 'webprofiler'];
+        return ['viserio', 'Profiler'];
     }
 
     /**
@@ -80,9 +80,9 @@ class LogsDataCollectorServiceProvider implements
      * @param \Interop\Container\ContainerInterface $container
      * @param null|callable                         $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\WebProfiler\WebProfiler
+     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */
-    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
+    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
         if ($getPrevious !== null) {
             self::resolveOptions($container);

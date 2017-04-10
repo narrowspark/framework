@@ -13,7 +13,7 @@ use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
@@ -215,9 +215,9 @@ class Kernel implements TerminableContract, KernelContract
         try {
             $response = $this->sendRequestThroughRouter($serverRequest);
 
-            if ($this->app->has(WebProfilerContract::class)) {
-                // Modify the response to add the webprofiler
-                $response = $this->app->get(WebProfilerContract::class)->modifyResponse(
+            if ($this->app->has(ProfilerContract::class)) {
+                // Modify the response to add the Profiler
+                $response = $this->app->get(ProfilerContract::class)->modifyResponse(
                     $serverRequest,
                     $response
                 );

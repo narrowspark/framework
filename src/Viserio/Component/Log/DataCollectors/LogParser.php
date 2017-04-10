@@ -10,6 +10,8 @@ class LogParser
 
     /**
      * The max size of a log file.
+     *
+     * @var int
      */
     public const MAX_FILE_SIZE = 52428800;
 

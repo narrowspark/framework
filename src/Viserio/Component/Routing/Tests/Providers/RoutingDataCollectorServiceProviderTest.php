@@ -7,11 +7,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingDataCollectorServiceProvider;
-use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
 class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
 {
@@ -30,13 +30,13 @@ class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
         $container->instance(RouterContract::class, $router);
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
-        $container->register(new WebProfilerServiceProvider());
+        $container->register(new ProfilerServiceProvider());
         $container->register(new RoutingDataCollectorServiceProvider());
 
         $container->instance('config',
             [
                 'viserio' => [
-                    'webprofiler' => [
+                    'Profiler' => [
                         'enable'    => true,
                         'collector' => [
                             'routes'  => true,
@@ -46,9 +46,9 @@ class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
             ]
         );
 
-        $profiler = $container->get(WebProfilerContract::class);
+        $profiler = $container->get(ProfilerContract::class);
 
-        static::assertInstanceOf(WebProfilerContract::class, $profiler);
+        static::assertInstanceOf(ProfilerContract::class, $profiler);
 
         static::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
         static::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));

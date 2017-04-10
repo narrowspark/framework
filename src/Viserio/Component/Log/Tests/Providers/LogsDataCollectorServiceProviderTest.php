@@ -5,12 +5,12 @@ namespace Viserio\Component\Log\Tests\Providers;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\Log\DataCollectors\LogParser;
 use Viserio\Component\Log\Providers\LogsDataCollectorServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
 class LogsDataCollectorServiceProviderTest extends MockeryTestCase
 {
@@ -20,12 +20,12 @@ class LogsDataCollectorServiceProviderTest extends MockeryTestCase
         $container->register(new OptionsResolverServiceProvider());
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->register(new HttpFactoryServiceProvider());
-        $container->register(new WebProfilerServiceProvider());
+        $container->register(new ProfilerServiceProvider());
         $container->register(new LogsDataCollectorServiceProvider());
 
         $container->instance('config', [
             'viserio' => [
-                'webprofiler' => [
+                'Profiler' => [
                     'enable'        => true,
                     'logs_storages' => [__DIR__],
                     'collector'     => [
@@ -36,7 +36,7 @@ class LogsDataCollectorServiceProviderTest extends MockeryTestCase
         ]);
 
         self::assertInstanceOf(LogParser::class, $container->get(LogParser::class));
-        self::assertInstanceOf(WebProfilerContract::class, $container->get(WebProfilerContract::class));
+        self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
     private function getRequest()

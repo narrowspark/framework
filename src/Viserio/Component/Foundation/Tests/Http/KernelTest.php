@@ -11,7 +11,7 @@ use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Contracts\Routing\Router as  RouterContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\Contracts\Profiler\Profiler as Profilertract;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
@@ -128,7 +128,7 @@ class KernelTest extends MockeryTestCase
         $events->shouldReceive('trigger')
             ->twice();
 
-        $profiler = $this->mock(WebProfilerContract::class);
+        $profiler = $this->mock(Profilertract::class);
         $profiler->shouldReceive('modifyResponse')
             ->once()
             ->with($serverRequest, $response)
@@ -169,11 +169,11 @@ class KernelTest extends MockeryTestCase
             ->andReturn($config);
         $app->shouldReceive('has')
             ->once()
-            ->with(WebProfilerContract::class)
+            ->with(Profilertract::class)
             ->andReturn(true);
         $app->shouldReceive('get')
             ->once()
-            ->with(WebProfilerContract::class)
+            ->with(Profilertract::class)
             ->andReturn($profiler);
         $app->shouldReceive('instance')
             ->once()

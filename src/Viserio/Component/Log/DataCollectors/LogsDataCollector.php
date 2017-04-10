@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\DataCollectors;
 
-use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Component\WebProfiler\DataCollectors\MessagesDataCollector;
+use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Profiler\DataCollectors\MessagesDataCollector;
 
 class LogsDataCollector extends MessagesDataCollector implements PanelAwareContract
 {
