@@ -40,6 +40,13 @@ interface Profiler
     public function getTemplate(): string;
 
     /**
+     * Returns a AssetsRenderer for this instance.
+     *
+     * @return \Viserio\Component\Contracts\Profiler\AssetsRenderer
+     */
+    public function getAssetsRenderer(): AssetsRenderer;
+
+    /**
      * Adds a data collector.
      *
      * @param \Viserio\Component\Contracts\Profiler\DataCollector $collector

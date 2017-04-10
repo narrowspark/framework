@@ -129,7 +129,7 @@ parameters:
         - '#Method Viserio\\Component\\Cookie\\AbstractCookieCollector::forget#'
 
         # Wrapper
-        - '#Viserio\\Component\\WebProfiler\\DataCollectors\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
+        - '#Viserio\\Component\\Profiler\\DataCollectors\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
 
         # Ignore missing container property for ConfigurationTrait
         - '#Access to an undefined property Viserio\\Component\\Exception\\Displayers\\HtmlDisplayer::\$container#'

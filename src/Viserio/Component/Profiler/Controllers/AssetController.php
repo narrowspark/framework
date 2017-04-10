@@ -48,7 +48,7 @@ class AssetController extends AbstractController
     ) {
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
-        $this->Profiler        = $profiler;
+        $this->profiler        = $profiler;
 
         if ($session = $serverRequest->getAttribute('session')) {
             $session->reflash();

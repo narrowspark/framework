@@ -4,10 +4,10 @@ namespace Viserio\Component\Profiler;
 
 use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contracts\Support\Renderable as RenderableContract;
+use Viserio\Component\Contracts\Profiler\AssetsRenderer as AssetsRendererContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class AssetsRenderer implements RenderableContract
+class AssetsRenderer implements AssetsRendererContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -92,13 +92,9 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Set the Profiler.
-     *
-     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function setProfiler(ProfilerContract $profiler): self
+    public function setProfiler(ProfilerContract $profiler): AssetsRendererContract
     {
         $this->profiler = $profiler;
 
@@ -106,14 +102,9 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Add icon to list.
-     *
-     * @param string $name
-     * @param string $path
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function setIcon(string $name, string $path): self
+    public function setIcon(string $name, string $path): AssetsRendererContract
     {
         $this->icons[$name] = self::normalizePath($path . '/' . $name);
 
@@ -121,9 +112,7 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Get all registered icons.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getIcons(): array
     {
@@ -131,13 +120,9 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Ignores widgets provided by a collector.
-     *
-     * @param string $name
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function setIgnoredCollector(string $name)
+    public function setIgnoredCollector(string $name): AssetsRendererContract
     {
         $this->ignoredCollectors[] = $name;
 
@@ -145,9 +130,7 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Returns the list of ignored collectors.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getIgnoredCollectors(): array
     {
@@ -183,11 +166,7 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Return assets as a string.
-     *
-     * @param string $type 'js' or 'css'
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function dumpAssetsToString(string $type): string
     {
@@ -202,11 +181,7 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Returns the list of asset files.
-     *
-     * @param string|null $type Only return css or js files
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getAssets(?string $type = null): array
     {

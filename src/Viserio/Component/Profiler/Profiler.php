@@ -16,6 +16,7 @@ use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Support\Http\ClientIp;
+use Viserio\Component\Contracts\Profiler\AssetsRenderer as AssetsRendererContract;
 
 class Profiler implements ProfilerContract, LoggerAwareInterface
 {
@@ -46,9 +47,9 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     protected $urlGenerator;
 
     /**
-     * Url generator instance.
+     * Assets renderer instance.
      *
-     * @var \Viserio\Component\Profiler\AssetsRenderer
+     * @var \Viserio\Component\Contracts\Profiler\AssetsRenderer
      */
     protected $assetsRenderer;
 
@@ -69,9 +70,9 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     /**
      * Create new Profiler instance.
      *
-     * @param \Viserio\Component\Profiler\AssetsRenderer $assetsRenderer
+     * @param \Viserio\Component\Contracts\Profiler\AssetsRenderer $assetsRenderer
      */
-    public function __construct(AssetsRenderer $assetsRenderer)
+    public function __construct(AssetsRendererContract $assetsRenderer)
     {
         $this->assetsRenderer = $assetsRenderer->setProfiler($this);
     }
@@ -208,9 +209,9 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     /**
      * Returns a AssetsRenderer for this instance.
      *
-     * @return \Viserio\Component\Profiler\AssetsRenderer
+     * @return \Viserio\Component\Contracts\Profiler\AssetsRenderer
      */
-    public function getAssetsRenderer(): AssetsRenderer
+    public function getAssetsRenderer(): AssetsRendererContract
     {
         return $this->assetsRenderer;
     }
