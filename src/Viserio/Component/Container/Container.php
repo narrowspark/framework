@@ -405,19 +405,18 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     public function register(ServiceProvider $provider, array $parameters = []): ContainerContract
     {
         $entries = $provider->getServices();
+        $container = $this;
 
         foreach ($entries as $key => $callable) {
             if ($this->has($key)) {
                 // Extend a previous entry
-                $this->extend($key, function ($previous, ContainerInterface $container) use ($callable) {
-                    $getPrevious = function () use ($previous) {
+                $this->extend($key, function ($previous) use ($container, $callable) {
+                    return $callable($container, function () use ($previous) {
                         return $previous;
-                    };
-
-                    return $callable($container, $getPrevious);
+                    });
                 });
             } else {
-                $this->singleton($key, function (ContainerInterface $container) use ($callable) {
+                $this->singleton($key, function () use ($container, $callable) {
                     return $callable($container, null);
                 });
             }

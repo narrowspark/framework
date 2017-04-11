@@ -23,7 +23,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
      *
      * @var array
      */
-    private static $options;
+    private static $options = [];
 
     /**
      * {@inheritdoc}
@@ -57,40 +57,69 @@ class TwigBridgeDataCollectorsServiceProvider implements
         ];
     }
 
-    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): WebProfilerContract
+    /**
+     * Extend viserio profiler with data collector.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Viserio\Component\Contracts\WebProfiler\WebProfiler
+     */
+    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfiler
     {
-        self::resolveOptions($container);
+        if ($getPrevious !== null) {
+            self::resolveOptions($container);
 
-        $profiler = $getPrevious();
+            $profiler = $getPrevious();
 
-        if (self::$options['collector']['twig'] === true) {
-            $profiler->addCollector(new TwigDataCollector(
-                $container->get(Twig_Profiler_Profile::class),
-                $container->get(TwigEnvironment::class)
-            ));
+            if (self::$options['collector']['twig'] === true) {
+                $profiler->addCollector(new TwigDataCollector(
+                    $container->get(Twig_Profiler_Profile::class),
+                    $container->get(TwigEnvironment::class)
+                ));
+            }
+
+            return $profiler;
         }
 
-        return $profiler;
+        return null;
     }
 
+    /**
+     * Create a new Twig_Profiler_Profile instance.
+     *
+     * @return \Twig_Profiler_Profile
+     */
     public static function createTwigProfilerProfile(): Twig_Profiler_Profile
     {
         return new Twig_Profiler_Profile();
     }
 
-    public static function createTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): TwigEnvironment
+    /**
+     * Wrap Twig_Environment.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Twig_Environment
+     */
+    public static function createTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
     {
-        self::resolveOptions($container);
+        if ($getPrevious !== null) {
+            self::resolveOptions($container);
 
-        $twig = $getPrevious();
+            $twig = $getPrevious();
 
-        if (self::$options['collector']['twig'] === true) {
-            $twig->addExtension(new Twig_Extension_Profiler(
-                $container->get(Twig_Profiler_Profile::class)
-            ));
+            if (self::$options['collector']['twig'] === true) {
+                $twig->addExtension(new Twig_Extension_Profiler(
+                    $container->get(Twig_Profiler_Profile::class)
+                ));
+            }
+
+            return $twig;
         }
 
-        return $twig;
+        return null;
     }
 
     /**
@@ -102,7 +131,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
      */
     private static function resolveOptions(ContainerInterface $container): void
     {
-        if (self::$options === null) {
+        if (count(self::$options) === 0) {
             self::$options = $container->get(OptionsResolver::class)
                 ->configure(new static(), $container)
                 ->resolve();

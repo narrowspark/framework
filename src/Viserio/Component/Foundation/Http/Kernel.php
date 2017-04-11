@@ -216,11 +216,15 @@ class Kernel implements TerminableContract, KernelContract
             $response = $this->sendRequestThroughRouter($serverRequest);
 
             if ($this->app->has(WebProfilerContract::class)) {
-                // Modify the response to add the webprofiler
-                $response = $this->app->get(WebProfilerContract::class)->modifyResponse(
-                    $serverRequest,
-                    $response
-                );
+                $profiler = $this->app->get(WebProfilerContract::class);
+
+                if ($profiler !== null) {
+                    // Modify the response to add the Profiler
+                    $response = $profiler->modifyResponse(
+                        $serverRequest,
+                        $response
+                    );
+                }
             }
 
             $this->events->trigger(new KernelResponseEvent($this, $serverRequest, $response));

@@ -21,7 +21,7 @@ class RoutingDataCollectorServiceProvider implements
      *
      * @var array
      */
-    private static $options;
+    private static $options = [];
 
     /**
      * {@inheritdoc}
@@ -63,10 +63,10 @@ class RoutingDataCollectorServiceProvider implements
      */
     public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
-        if ($getPrevious !== null) {
-            self::resolveOptions($container);
+        $profiler = $getPrevious();
 
-            $profiler = $getPrevious();
+        if ($profiler !== null) {
+            self::resolveOptions($container);
 
             if (self::$options['collector']['routes']) {
                 $profiler->addCollector(
@@ -79,7 +79,7 @@ class RoutingDataCollectorServiceProvider implements
             return $profiler;
         }
         // @codeCoverageIgnoreStart
-        return null;
+        return $profiler;
         // @codeCoverageIgnoreEnd
     }
 
@@ -92,7 +92,7 @@ class RoutingDataCollectorServiceProvider implements
      */
     private static function resolveOptions(ContainerInterface $container): void
     {
-        if (self::$options === null) {
+        if (count(self::$options) === 0) {
             self::$options = $container->get(OptionsResolver::class)
                 ->configure(new static(), $container)
                 ->resolve();

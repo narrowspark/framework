@@ -26,7 +26,7 @@ class FoundationDataCollectorServiceProvider implements
      *
      * @var array
      */
-    private static $options;
+    private static $options = [];
 
     /**
      * {@inheritdoc}
@@ -80,10 +80,10 @@ class FoundationDataCollectorServiceProvider implements
      */
     public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
-        if ($getPrevious !== null) {
-            self::resolveOptions($container);
+        $profiler = $getPrevious();
 
-            $profiler = $getPrevious();
+        if ($profiler !== null) {
+            self::resolveOptions($container);
 
             if (self::$options['collector']['narrowspark']) {
                 $profiler->addCollector(static::createNarrowsparkDataCollector(), -100);
@@ -100,7 +100,7 @@ class FoundationDataCollectorServiceProvider implements
             return $profiler;
         }
         // @codeCoverageIgnoreStart
-        return null;
+        return $profiler;
         // @codeCoverageIgnoreEnd
     }
 
@@ -133,7 +133,7 @@ class FoundationDataCollectorServiceProvider implements
      */
     private static function resolveOptions(ContainerInterface $container): void
     {
-        if (self::$options === null) {
+        if (count(self::$options) === 0) {
             self::$options = $container->get(OptionsResolver::class)
                 ->configure(new static(), $container)
                 ->resolve();

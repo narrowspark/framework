@@ -13,7 +13,7 @@ class LoadServiceProvider implements BootstrapContract
      */
     public function bootstrap(ApplicationContract $app): void
     {
-        $providers = $app->get(RepositoryContract::class)->get('app.serviceproviders', []);
+        $providers = $app->get(RepositoryContract::class)->get('viserio.app.serviceproviders', []);
 
         if (count($providers) > 0) {
             foreach ($providers as $provider) {

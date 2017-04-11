@@ -8,6 +8,11 @@ use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\Config\Repository;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\SyslogHandler;
+use Mockery as Mock;
 
 class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 {
@@ -26,15 +31,11 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->instance(Writer::class, $writer);
 
-        $container->instance('config', [
-            'viserio' => [
-                'app' => [
-                    'path' => [
-                        'storage' => '',
-                    ],
-                ],
-            ],
-        ]);
+        $config = new Repository();
+        $config->set('path.storage', '');
+        $config->set('viserio.app.name', 'Narrowspark');
+
+        $container->instance(RepositoryContract::class, $config);
 
         $container->register(new ConfigureLoggingServiceProvider());
 
@@ -55,18 +56,13 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
             ->with('/logs/narrowspark.log', 5, 'debug');
 
         $container->instance(Writer::class, $writer);
-        $container->instance('config', [
-            'viserio' => [
-                'app' => [
-                    'log' => [
-                        'handler' => 'daily',
-                    ],
-                    'path' => [
-                        'storage' => '',
-                    ],
-                ],
-            ],
-        ]);
+
+        $config = new Repository();
+        $config->set('path.storage', '');
+        $config->set('viserio.app.log.handler', 'daily');
+        $config->set('viserio.app.name', 'Narrowspark');
+
+        $container->instance(RepositoryContract::class, $config);
 
         $container->register(new ConfigureLoggingServiceProvider());
 
@@ -84,22 +80,24 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $writer  = $this->mock(Writer::class);
         $handler = $this->mock(HandlerParser::class);
         $handler->shouldReceive('parseHandler')
-            ->once();
+            ->once()
+            ->with(
+                Mock::type(ErrorLogHandler::class),
+                '',
+                '',
+                null,
+                'line'
+            );
 
         $container->instance(Writer::class, $writer);
         $container->instance(HandlerParser::class, $handler);
-        $container->instance('config', [
-            'viserio' => [
-                'app' => [
-                    'log' => [
-                        'handler' => 'errorlog',
-                    ],
-                    'path' => [
-                        'storage' => '',
-                    ],
-                ],
-            ],
-        ]);
+
+        $config = new Repository();
+        $config->set('path.storage', '');
+        $config->set('viserio.app.log.handler', 'errorlog');
+        $config->set('viserio.app.name', 'Narrowspark');
+
+        $container->instance(RepositoryContract::class, $config);
 
         $container->register(new ConfigureLoggingServiceProvider());
 
@@ -117,22 +115,24 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $writer  = $this->mock(Writer::class);
         $handler = $this->mock(HandlerParser::class);
         $handler->shouldReceive('parseHandler')
-            ->once();
+            ->once()
+            ->with(
+                Mock::type(SyslogHandler::class),
+                '',
+                '',
+                null,
+                'line'
+            );
 
         $container->instance(Writer::class, $writer);
         $container->instance(HandlerParser::class, $handler);
-        $container->instance('config', [
-            'viserio' => [
-                'app' => [
-                    'log' => [
-                        'handler' => 'syslog',
-                    ],
-                    'path' => [
-                        'storage' => '',
-                    ],
-                ],
-            ],
-        ]);
+
+        $config = new Repository();
+        $config->set('path.storage', '');
+        $config->set('viserio.app.log.handler', 'syslog');
+        $config->set('viserio.app.name', 'Narrowspark');
+
+        $container->instance(RepositoryContract::class, $config);
 
         $container->register(new ConfigureLoggingServiceProvider());
 

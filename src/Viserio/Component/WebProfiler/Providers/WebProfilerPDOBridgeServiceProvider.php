@@ -54,9 +54,9 @@ class WebProfilerPDOBridgeServiceProvider implements ServiceProvider
      */
     public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
-        if ($getPrevious !== null) {
-            $profiler = $getPrevious();
+        $profiler = $getPrevious();
 
+        if ($profiler !== null) {
             $profiler->addCollector(new PDODataCollector(
                 $container->get(TraceablePDODecorater::class)
             ));
@@ -64,6 +64,6 @@ class WebProfilerPDOBridgeServiceProvider implements ServiceProvider
             return $profiler;
         }
 
-        return null;
+        return $profiler;
     }
 }

@@ -37,7 +37,7 @@ class SetRequestForConsole implements BootstrapContract
              */
             public static function createRequest(ContainerInterface $container): ServerRequestInterface
             {
-                $url = $container->get(RepositoryContract::class)->get('app.url', 'http://localhost');
+                $url = $container->get(RepositoryContract::class)->get('viserio.app.url', 'http://localhost');
 
                 return $container->get(ServerRequestFactoryInterface::class)->createServerRequest('GET', $url);
             }

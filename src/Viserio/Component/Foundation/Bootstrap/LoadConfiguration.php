@@ -33,10 +33,10 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
         }
 
         $app->detectEnvironment(function () use ($config) {
-            return $config->get('app.env', 'production');
+            return $config->get('viserio.app.env', 'production');
         });
 
-        date_default_timezone_set($config->get('app.timezone', 'UTC'));
+        date_default_timezone_set($config->get('viserio.app.timezone', 'UTC'));
 
         mb_internal_encoding('UTF-8');
     }
