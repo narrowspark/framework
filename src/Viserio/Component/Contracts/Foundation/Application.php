@@ -8,13 +8,6 @@ use Viserio\Component\Contracts\Container\Container;
 interface Application extends Container
 {
     /**
-     * Get the version number of the application.
-     *
-     * @return string
-     */
-    public function getVersion(): string;
-
-    /**
      * Run the given array of bootstrap classes.
      *
      * @param array $bootstrappers

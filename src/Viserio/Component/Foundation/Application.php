@@ -23,27 +23,6 @@ use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 class Application extends Container implements ApplicationContract
 {
     /**
-     * The viserio framework version.
-     *
-     * @var string
-     */
-    public const VERSION = '1.0.0-DEV';
-
-    /**
-     * The viserio framework version id.
-     *
-     * @var int
-     */
-    public const VERSION_ID  = 10000;
-
-    /**
-     * The viserio framework extra version.
-     *
-     * @var string
-     */
-    public const EXTRA_VERSION = 'DEV';
-
-    /**
      * The environment file to load during bootstrapping.
      *
      * @var string
@@ -68,21 +47,13 @@ class Application extends Container implements ApplicationContract
      * Create a new application instance.
      *
      * Let's start make magic!
-     *
-     * @param array $paths
      */
-    public function __construct(array $paths)
+    public function __construct()
     {
         parent::__construct();
 
         $this->registerBaseServiceProviders();
 
-        /*
-         * Here we are binding the paths configured in paths.php to the app. You
-         * should not be changing these here. If you need to change these you
-         * may do so within the paths.php file and they will be bound here.
-         */
-        $this->bindInstallPaths($paths);
         $this->registerCacheFilePaths();
 
         $this->registerBaseBindings();
@@ -93,16 +64,6 @@ class Application extends Container implements ApplicationContract
             file_exists($config->get('path.storage') . '/framework/down'),
             false
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getVersion(): string
-    {
-        return self::VERSION;
     }
 
     /**
@@ -273,6 +234,51 @@ class Application extends Container implements ApplicationContract
     public function runningInConsole(): bool
     {
         return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
+    }
+
+    /**
+     * Get the path to the application "app" directory.
+     *
+     * @param string $path Optionally, a path to append to the app path
+     *
+     * @return string
+     */
+    public function path($path = '')
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'app'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+
+    /**
+     * Get the path to the bootstrap directory.
+     *
+     * @param string $path Optionally, a path to append to the bootstrap path
+     * @return string
+     */
+    public function bootstrapPath($path = '')
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'bootstrap'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+
+    /**
+     * Get the path to the application configuration files.
+     *
+     * @param string $path Optionally, a path to append to the config path
+     * @return string
+     */
+    public function configPath($path = '')
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'config'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+
+    /**
+     * Get the path to the database directory.
+     *
+     * @param string $path Optionally, a path to append to the database path
+     * @return string
+     */
+    public function databasePath($path = '')
+    {
+        return ($this->databasePath ?: $this->basePath.DIRECTORY_SEPARATOR.'database').($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 
     /**

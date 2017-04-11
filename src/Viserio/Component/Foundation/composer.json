@@ -19,7 +19,6 @@
     ],
     "require": {
         "php"                              : "^7.1",
-        "narrowspark/http-emitter"         : "^0.1",
         "viserio/config"                   : "self.version",
         "viserio/container"                : "self.version",
         "viserio/contracts"                : "self.version",

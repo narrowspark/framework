@@ -9,11 +9,6 @@ use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
@@ -30,13 +25,9 @@ use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
+use Viserio\Component\Foundation\AbstractKernel;
 
-class Kernel implements
-    TerminableContract,
-    KernelContract,
-    RequiresComponentConfigContract,
-    ProvidesDefaultOptionsContract,
-    RequiresMandatoryOptionsContract
+class Kernel extends AbstractKernel
 {
     use EventsAwareTrait;
 
@@ -133,39 +124,6 @@ class Kernel implements
         }
 
         $this->router = $router;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDimensions(): iterable
-    {
-        return ['viserio', 'app'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMandatoryOptions(): iterable
-    {
-        return [
-            'routing' => [
-                'path',
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions(): iterable
-    {
-        return [
-            'env'         => 'production',
-            'middlewares' => [
-                'skip' => false,
-            ],
-        ];
     }
 
     /**
