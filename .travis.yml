@@ -27,6 +27,9 @@ matrix:
       # PHPSTAN
     - php: 7.1
       env: SETUP=basic PHPSTAN=true
+      # PSALM
+    - php: 7.1
+      env: SETUP=basic PSALM=true
       # Nightly
     - php: nightly
       env: SETUP=basic PHPUNIT=true

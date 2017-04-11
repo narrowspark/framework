@@ -10,6 +10,10 @@ bash -e <<TRY
         ./vendor/bin/phpstan analyse -c phpstan.neon -l 5 src/Viserio
     fi
 
+    if [[ "$PSALM" = true ]]; then
+        ./vendor/bin/psalm
+    fi
+
     if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
         ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
     elif [[ "$PHPUNIT" = true ]]; then
