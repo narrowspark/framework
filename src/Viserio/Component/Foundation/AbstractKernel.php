@@ -113,7 +113,7 @@ abstract class AbstractKernel implements
     {
         if ($this->projectDir === null) {
             $reflection = new ReflectionObject($this);
-            $dir = $rootDir = dirname($reflection->getFileName());
+            $dir        = $rootDir        = dirname($reflection->getFileName());
 
             while (! file_exists($dir . '/composer.json')) {
                 if (dirname($dir) === $dir) {
