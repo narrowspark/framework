@@ -197,7 +197,7 @@ class Application extends Container implements ApplicationContract
      */
     public function detectEnvironment(Closure $callback): string
     {
-        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
+        $args = $_SERVER['argv'] ?? null;
 
         $this->instance('env', $this->get(EnvironmentDetector::class)->detect($callback, $args));
 
@@ -234,54 +234,6 @@ class Application extends Container implements ApplicationContract
     public function runningInConsole(): bool
     {
         return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
-    }
-
-    /**
-     * Get the path to the application "app" directory.
-     *
-     * @param string $path Optionally, a path to append to the app path
-     *
-     * @return string
-     */
-    public function path($path = '')
-    {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'app' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
-    }
-
-    /**
-     * Get the path to the bootstrap directory.
-     *
-     * @param string $path Optionally, a path to append to the bootstrap path
-     *
-     * @return string
-     */
-    public function bootstrapPath($path = '')
-    {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'bootstrap' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
-    }
-
-    /**
-     * Get the path to the application configuration files.
-     *
-     * @param string $path Optionally, a path to append to the config path
-     *
-     * @return string
-     */
-    public function configPath($path = '')
-    {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'config' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
-    }
-
-    /**
-     * Get the path to the database directory.
-     *
-     * @param string $path Optionally, a path to append to the database path
-     *
-     * @return string
-     */
-    public function databasePath($path = '')
-    {
-        return ($this->databasePath ?: $this->basePath . DIRECTORY_SEPARATOR . 'database') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**

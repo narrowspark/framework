@@ -9,6 +9,7 @@ use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 abstract class AbstractKernel implements
     KernelContract,
@@ -17,6 +18,8 @@ abstract class AbstractKernel implements
     ProvidesDefaultOptionsContract,
     RequiresMandatoryOptionsContract
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * The kernel version.
      *
@@ -127,5 +130,61 @@ abstract class AbstractKernel implements
         }
 
         return $this->projectDir;
+    }
+
+    /**
+     * Get the path to the application "app" directory.
+     *
+     * @param string $path Optionally, a path to append to the app path
+     *
+     * @return string
+     */
+    public function getAppPath($path = ''): string
+    {
+        return $this->normalizeDirectorySeparator(
+            $this->getProjectDir() . '/app' . ($path ? '/' . $path : $path)
+        );
+    }
+
+    /**
+     * Get the path to the bootstrap directory.
+     *
+     * @param string $path Optionally, a path to append to the bootstrap path
+     *
+     * @return string
+     */
+    public function getBootstrapPath($path = '')
+    {
+        return $this->normalizeDirectorySeparator(
+            $this->getProjectDir() . '/bootstrap' . ($path ? '/' . $path : $path)
+        );
+    }
+
+    /**
+     * Get the path to the application configuration files.
+     *
+     * @param string $path Optionally, a path to append to the config path
+     *
+     * @return string
+     */
+    public function getConfigPath($path = '')
+    {
+        return $this->normalizeDirectorySeparator(
+            $this->getProjectDir() . '/config' . ($path ? '/' . $path : $path)
+        );
+    }
+
+    /**
+     * Get the path to the database directory.
+     *
+     * @param string $path Optionally, a path to append to the database path
+     *
+     * @return string
+     */
+    public function getDatabasePath($path = '')
+    {
+        return $this->normalizeDirectorySeparator(
+            ($this->databasePath ?: $this->getProjectDir() . '/database') . ($path ? '/' . $path : $path)
+        );
     }
 }
