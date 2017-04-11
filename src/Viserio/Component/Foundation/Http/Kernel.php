@@ -5,13 +5,15 @@ namespace Viserio\Component\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
@@ -22,15 +24,12 @@ use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class Kernel implements
     TerminableContract,
@@ -151,7 +150,7 @@ class Kernel implements
     {
         return [
             'routing' => [
-                'path'
+                'path',
             ],
         ];
     }
@@ -315,7 +314,7 @@ class Kernel implements
      */
     protected function sendRequestThroughRouter(ServerRequestInterface $request): ResponseInterface
     {
-        $router = $this->router;
+        $router  = $this->router;
         $options = $this->app->get(OptionsResolver::class)->configure($this, $this->app)->resolve();
 
         $router->setCachePath($options['routing']['path']);

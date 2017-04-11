@@ -2,17 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Providers;
 
+use Mockery as Mock;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\SyslogHandler;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Config\Repository;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Config\Repository;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Monolog\Handler\ErrorLogHandler;
-use Monolog\Handler\SyslogHandler;
-use Mockery as Mock;
 
 class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 {

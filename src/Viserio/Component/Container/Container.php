@@ -14,6 +14,7 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionClass;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
@@ -21,7 +22,6 @@ use Viserio\Component\Contracts\Container\Exceptions\ContainerException;
 use Viserio\Component\Contracts\Container\Exceptions\NotFoundException;
 use Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException;
 use Viserio\Component\Contracts\Container\Types as TypesContract;
-use Psr\Container\ContainerInterface as PsrContainerInterface;
 
 class Container extends ContainerResolver implements ArrayAccess, ContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
@@ -406,7 +406,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function register(ServiceProvider $provider, array $parameters = []): ContainerContract
     {
-        $entries = $provider->getServices();
+        $entries   = $provider->getServices();
         $container = $this;
 
         foreach ($entries as $key => $callable) {
