@@ -276,13 +276,13 @@ class Kernel implements TerminableContract, KernelContract
         $router = $this->router;
         $config = $this->app->get(RepositoryContract::class);
 
-        $router->setCachePath($config->get('routing.path'));
-        $router->refreshCache($config->get('app.env', 'production') !== 'production');
+        $router->setCachePath($config->get('viserio.routing.path'));
+        $router->refreshCache($config->get('viserio.app.env', 'production') !== 'production');
 
         return (new Pipeline())
             ->setContainer($this->app)
             ->send($request)
-            ->through($config->get('app.skip_middlewares', false) ? [] : $this->middlewares)
+            ->through($config->get('viserio.app.skip_middlewares', false) ? [] : $this->middlewares)
             ->then(function ($request) use ($router) {
                 $this->app->instance(ServerRequestInterface::class, $request);
 

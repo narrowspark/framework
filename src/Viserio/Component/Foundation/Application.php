@@ -15,6 +15,7 @@ use Viserio\Component\Contracts\Translation\TranslationManager;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
 use Viserio\Component\Foundation\Events\BootstrappingEvent;
+use Viserio\Component\Foundation\Events\LocaleChangedEvent;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
@@ -142,7 +143,7 @@ class Application extends Container implements ApplicationContract
             $this->get(TranslationManager::class)->setLocale($locale);
         }
 
-        $this->get(EventManagerContract::class)->trigger('locale.changed', $this, ['locale' => $locale]);
+        $this->get(EventManagerContract::class)->trigger(new LocaleChangedEvent($this, $locale));
 
         return $this;
     }
