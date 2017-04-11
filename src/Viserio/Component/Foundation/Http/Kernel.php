@@ -27,8 +27,17 @@ use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class Kernel implements TerminableContract, KernelContract
+class Kernel implements
+    TerminableContract,
+    KernelContract,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresMandatoryOptionsContract
 {
     use EventsAwareTrait;
 
@@ -125,6 +134,39 @@ class Kernel implements TerminableContract, KernelContract
         }
 
         $this->router = $router;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'app'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return [
+            'routing' => [
+                'path'
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'env'         => 'production',
+            'middlewares' => [
+                'skip' => false,
+            ],
+        ];
     }
 
     /**
@@ -274,15 +316,15 @@ class Kernel implements TerminableContract, KernelContract
     protected function sendRequestThroughRouter(ServerRequestInterface $request): ResponseInterface
     {
         $router = $this->router;
-        $config = $this->app->get(RepositoryContract::class);
+        $options = $this->app->get(OptionsResolver::class)->configure($this, $this->app)->resolve();
 
-        $router->setCachePath($config->get('viserio.routing.path'));
-        $router->refreshCache($config->get('viserio.app.env', 'production') !== 'production');
+        $router->setCachePath($options['routing']['path']);
+        $router->refreshCache($options['env'] !== 'production');
 
         return (new Pipeline())
             ->setContainer($this->app)
             ->send($request)
-            ->through($config->get('viserio.app.skip_middlewares', false) ? [] : $this->middlewares)
+            ->through($options['middlewares']['skip'] ? [] : $this->middlewares)
             ->then(function ($request) use ($router) {
                 $this->app->instance(ServerRequestInterface::class, $request);
 

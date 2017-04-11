@@ -3,8 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
 use Closure;
-use Narrowspark\HttpEmitter\EmitterInterface;
-use Narrowspark\HttpEmitter\SapiEmitter;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
@@ -25,18 +23,25 @@ use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 class Application extends Container implements ApplicationContract
 {
     /**
-     * The Viserio framework version.
+     * The viserio framework version.
      *
      * @var string
      */
     public const VERSION = '1.0.0-DEV';
 
     /**
-     * The Viserio framework version id.
+     * The viserio framework version id.
      *
      * @var int
      */
     public const VERSION_ID  = 10000;
+
+    /**
+     * The viserio framework extra version.
+     *
+     * @var string
+     */
+    public const EXTRA_VERSION = 'DEV';
 
     /**
      * The environment file to load during bootstrapping.
@@ -328,7 +333,6 @@ class Application extends Container implements ApplicationContract
 
         $this->singleton(Container::class, $this);
         $this->singleton(EnvironmentDetector::class, EnvironmentDetector::class);
-        $this->singleton(EmitterInterface::class, SapiEmitter::class);
     }
 
     /**
