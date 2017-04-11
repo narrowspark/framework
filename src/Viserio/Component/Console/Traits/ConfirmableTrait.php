@@ -90,8 +90,8 @@ trait ConfirmableTrait
 
             if ($container->has('env')) {
                 return $container->get('env') == 'production';
-            } elseif ($container->has('app.env')) {
-                return $container->get('app.env') == 'production';
+            } elseif ($container->has('viserio.app.env')) {
+                return $container->get('viserio.app.env') == 'production';
             }
 
             return true;

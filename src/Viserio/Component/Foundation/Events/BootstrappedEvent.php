@@ -18,7 +18,7 @@ class BootstrappedEvent implements EventContract
      */
     public function __construct(string $name, ApplicationContract $app)
     {
-        $this->name       = 'bootstrapped.' . str_replace('\\', '', $name);
-        $this->target     = $app;
+        $this->name   = 'bootstrapped.' . str_replace('\\', '', $name);
+        $this->target = $app;
     }
 }

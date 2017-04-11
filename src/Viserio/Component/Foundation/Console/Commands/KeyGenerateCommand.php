@@ -43,7 +43,7 @@ class KeyGenerateCommand extends Command
             return;
         }
 
-        $config->set('app.key', $key);
+        $config->set('viserio.app.key', $key);
 
         $this->info("Application key [$key] set successfully.");
     }
@@ -58,7 +58,7 @@ class KeyGenerateCommand extends Command
      */
     protected function setKeyInEnvironmentFile(RepositoryContract $config, string $key): bool
     {
-        $currentKey = $config->get('app.key', '');
+        $currentKey = $config->get('viserio.app.key', '');
 
         if (mb_strlen($currentKey) !== 0 && (! $this->confirmToProceed())) {
             return false;

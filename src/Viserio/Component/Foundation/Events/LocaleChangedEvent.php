@@ -6,19 +6,21 @@ use Viserio\Component\Contracts\Events\Event as EventContract;
 use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
-class BootstrappingEvent implements EventContract
+class LocaleChangedEvent implements EventContract
 {
     use EventTrait;
 
     /**
-     * Create a new bootstrapping event.
+     * Create a new bootstrapped event.
      *
      * @param string                                              $name
      * @param \Viserio\Component\Contracts\Foundation\Application $app
+     * @param string                                              $locale
      */
-    public function __construct(string $name, ApplicationContract $app)
+    public function __construct(string $name, ApplicationContract $app, string $locale)
     {
-        $this->name   = 'bootstrapping.' . str_replace('\\', '', $name);
+        $this->name   = 'locale.changed';
         $this->target = $app;
+        $this->param  = ['locale' => $locale];
     }
 }
