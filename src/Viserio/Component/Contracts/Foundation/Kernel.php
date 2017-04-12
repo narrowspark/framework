@@ -2,59 +2,118 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Foundation;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Closure;
+use Viserio\Component\Contracts\Container\Container;
 
 interface Kernel
 {
     /**
-     * The REQUEST event occurs at the very beginning of request
-     * dispatching.
+     * Run the given array of bootstrap classes.
      *
-     * This event allows you to create a response for a request before any
-     * other code in the framework is executed.
+     * @param array $bootstrappers
      *
-     * @var string
+     * @return void
      */
-    public const REQUEST = 'kernel.request';
+    public function bootstrapWith(array $bootstrappers): void;
 
     /**
-     * The EXCEPTION event occurs when an uncaught exception appears.
+     * Determine if the application has been bootstrapped before.
      *
-     * This event allows you to create a response for a thrown exception or
-     * to modify the thrown exception.
-     *
-     * @var string
+     * @return bool
      */
-    public const EXCEPTION = 'kernel.exception';
+    public function hasBeenBootstrapped(): bool;
 
     /**
-     * The RESPONSE event occurs once a response was created for
-     * replying to a request.
+     * Get the current application locale.
      *
-     * This event allows you to modify or replace the response that will be
-     * replied.
-     *
-     * @var string
+     * @return string
      */
-    public const RESPONSE = 'kernel.response';
+    public function getLocale(): string;
 
     /**
-     * The FINISH_REQUEST event occurs when a response was generated for a request.
+     * Set the current application locale.
      *
-     * This event allows you to reset the global and environmental state of
-     * the application, when it was changed during the request.
+     * @param string $locale
      *
-     * @var string
+     * @return $this
      */
-    public const FINISH_REQUEST = 'kernel.finish_request';
+    public function setLocale(string $locale): Application;
 
     /**
-     * Handle an incoming HTTP request.
+     * Determine if application locale is the given locale.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param string $locale
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return bool
      */
-    public function handle(ServerRequestInterface $serverRequest): ResponseInterface;
+    public function isLocale(string $locale): bool;
+
+    /**
+     * Get the application fallback locale.
+     *
+     * @return string
+     */
+    public function getFallbackLocale(): string;
+
+    /**
+     * Get the path to the environment file directory.
+     *
+     * @return string
+     */
+    public function getEnvironmentPath(): string;
+
+    /**
+     * Set the directory for the environment file.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function useEnvironmentPath(string $path): Application;
+
+    /**
+     * Set the environment file to be loaded during bootstrapping.
+     *
+     * @param string $file
+     *
+     * @return $this
+     */
+    public function loadEnvironmentFrom(string $file): Application;
+
+    /**
+     * Get the environment file the application is using.
+     *
+     * @return string
+     */
+    public function getEnvironmentFile(): string;
+
+    /**
+     * Get the fully qualified path to the environment file.
+     *
+     * @return string
+     */
+    public function getEnvironmentFilePath(): string;
+
+    /**
+     * Detect the application's current environment.
+     *
+     * @param \Closure $callback
+     *
+     * @return string
+     */
+    public function detectEnvironment(Closure $callback): string;
+
+    /**
+     * Determine if application is in local environment.
+     *
+     * @return bool
+     */
+    public function isLocal(): bool;
+
+    /**
+     * Determine if we are running unit tests.
+     *
+     * @return bool
+     */
+    public function runningUnitTests(): bool;
 }

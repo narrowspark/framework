@@ -2,21 +2,35 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
+use Closure;
 use ReflectionObject;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contracts\Translation\TranslationManager;
+use Viserio\Component\Foundation\Events\BootstrappedEvent;
+use Viserio\Component\Foundation\Events\BootstrappingEvent;
+use Viserio\Component\Foundation\Events\LocaleChangedEvent;
+use Viserio\Component\Config\Providers\ConfigServiceProvider;
+use Viserio\Component\Log\Providers\LoggerServiceProvider;
+use Viserio\Component\Events\Providers\EventsServiceProvider;
+use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
+use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 
 abstract class AbstractKernel implements
+    HttpKernelContract,
     KernelContract,
     TerminableContract,
-    RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract,
-    RequiresMandatoryOptionsContract
+    RequiresComponentConfigContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -46,7 +60,7 @@ abstract class AbstractKernel implements
      *
      * @var bool
      */
-    protected $hasBeenBootstrapped = false;
+    private $hasBeenBootstrapped = false;
 
     /**
      * Project path.
@@ -56,11 +70,31 @@ abstract class AbstractKernel implements
     private $projectDir;
 
     /**
-     * Constructor.
+     * The environment file to load during bootstrapping.
+     *
+     * @var string
+     */
+    private $environmentFile = '.env';
+
+    /**
+     * The custom environment path defined by the developer.
+     *
+     * @var string
+     */
+    private $environmentPath;
+
+    /**
+     * Create a new application instance.
+     *
+     * Let's start make magic!
      */
     public function __construct()
     {
         $this->projectDir = $this->getProjectDir();
+
+        $this->registerBaseServiceProviders();
+
+        $this->registerBaseBindings();
     }
 
     /**
@@ -74,22 +108,9 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
-    {
-        return [
-            'routing' => [
-                'path',
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions(): iterable
     {
         return [
-            'env'            => 'production',
             'middlewares'    => [
                 'skip' => false,
             ],
@@ -175,9 +196,17 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
+    public function getFallbackLocale(): string
+    {
+        return $this->options['fallback_locale'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isLocal(): bool
     {
-        return $this->options['env'] == 'local';
+        return $this->get(RepositoryContract::class)->get('viserio.app.env') == 'local';
     }
 
     /**
@@ -185,7 +214,7 @@ abstract class AbstractKernel implements
      */
     public function runningUnitTests(): bool
     {
-        return $this->options['env'] == 'testing';
+        return $this->get(RepositoryContract::class)->get('viserio.app.env') == 'testing';
     }
 
     /**
@@ -205,7 +234,7 @@ abstract class AbstractKernel implements
      */
     public function isDownForMaintenance(): bool
     {
-        return file_exists($this->storagePath() . '/framework/down');
+        return file_exists($this->storagePath('framework/down'));
     }
 
     /**
@@ -243,7 +272,7 @@ abstract class AbstractKernel implements
     public function getAppPath(string $path = ''): string
     {
         return $this->normalizeDirectorySeparator(
-            $this->getProjectDir() . '/app' . ($path ? '/' . $path : $path)
+            $this->projectDir . '/app' . ($path ? '/' . $path : $path)
         );
     }
 
@@ -257,7 +286,7 @@ abstract class AbstractKernel implements
     public function getBootstrapPath(string $path = ''): string
     {
         return $this->normalizeDirectorySeparator(
-            $this->getProjectDir() . '/bootstrap' . ($path ? '/' . $path : $path)
+            $this->projectDir . '/bootstrap' . ($path ? '/' . $path : $path)
         );
     }
 
@@ -275,7 +304,7 @@ abstract class AbstractKernel implements
     public function getConfigPath(string $path = ''): string
     {
         return $this->normalizeDirectorySeparator(
-            $this->getProjectDir() . '/config' . ($path ? '/' . $path : $path)
+            $this->projectDir . '/config' . ($path ? '/' . $path : $path)
         );
     }
 
@@ -293,7 +322,7 @@ abstract class AbstractKernel implements
     public function getDatabasePath(string $path = ''): string
     {
         return $this->normalizeDirectorySeparator(
-            ($this->databasePath ?: $this->getProjectDir() . '/database') . ($path ? '/' . $path : $path)
+            $this->projectDir . '/database' . ($path ? '/' . $path : $path)
         );
     }
 
@@ -311,7 +340,7 @@ abstract class AbstractKernel implements
     public function getPublicPath(string $path = ''): string
     {
         return $this->normalizeDirectorySeparator(
-            $this->getProjectDir() . '/public' . ($path ? '/' . $path : $path)
+            $this->projectDir . '/public' . ($path ? '/' . $path : $path)
         );
     }
 
@@ -328,7 +357,7 @@ abstract class AbstractKernel implements
     public function getStoragePath(string $path = ''): string
     {
         return $this->normalizeDirectorySeparator(
-            ($this->storagePath ?: $this->getProjectDir() . '/storage') . ($path ? '/' . $path : $path)
+            ($this->storagePath ?: $this->projectDir . '/storage') . ($path ? '/' . $path : $path)
         );
     }
 
@@ -342,7 +371,7 @@ abstract class AbstractKernel implements
     public function getResourcePath(string $path = ''): string
     {
         return $this->normalizeDirectorySeparator(
-            $this->getProjectDir() . '/resources' . ($path ? '/' . $path : $path)
+            $this->projectDir . '/resources' . ($path ? '/' . $path : $path)
         );
     }
 
@@ -358,6 +387,93 @@ abstract class AbstractKernel implements
     public function getLangPath(): string
     {
         return $this->getResourcePath('lang');
+    }
+
+    /**
+     * Get the path to the routes files.
+     *
+     * This path is used by the routes loader to load the application
+     * routes files. In general, you should'nt need to change this
+     * value; however, you can theoretically change the path from here.
+     *
+     * @param string $path Optionally, a path to append to the routes path
+     *
+     * @return string
+     */
+    public function getRoutesPath(string $path = ''): string
+    {
+        return $this->normalizeDirectorySeparator(
+            $this->projectDir . '/routes' . ($path ? '/' . $path : $path)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function useEnvironmentPath(string $path): ApplicationContract
+    {
+        $this->environmentPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadEnvironmentFrom(string $file): ApplicationContract
+    {
+        $this->environmentFile = $file;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEnvironmentPath(): string
+    {
+        return $this->normalizeDirectorySeparator(
+            $this->environmentPath ?: $this->projectDir
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function environmentFile(): string
+    {
+        return $this->environmentFile ?: '.env';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function environmentFilePath(): string
+    {
+        return $this->normalizeDirectorySeparator(
+            $this->environmentPath() . '/' . $this->environmentFile()
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function detectEnvironment(Closure $callback): string
+    {
+        $args = $_SERVER['argv'] ?? null;
+        $env  = $this->get(EnvironmentDetector::class)->detect($callback, $args);
+
+        $this->get(RepositoryContract::class)->set('viserio.app.env', $env);
+
+        return $env;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEnvironmentFile(): string
+    {
+        return $this->environmentFile ?: '.env';
     }
 
     /**
@@ -387,11 +503,11 @@ abstract class AbstractKernel implements
      */
     protected function registerBaseBindings(): void
     {
-        $app = $this;
+        $kernel = $this;
 
         $this->singleton(EnvironmentDetector::class, EnvironmentDetector::class);
-        $this->singleton(KernelContract::class, function () use ($app) {
-            return $app;
+        $this->singleton(KernelContract::class, function () use ($kernel) {
+            return $kernel;
         });
 
         $this->alias(KernelContract::class, self::class);
