@@ -9,11 +9,10 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Translation\TranslationManager;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
@@ -28,11 +27,10 @@ use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 abstract class AbstractKernel implements
-    HttpKernelContract,
     KernelContract,
-    TerminableContract,
     ProvidesDefaultOptionsContract,
-    RequiresComponentConfigContract
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
     use ConfigurationTrait;
@@ -114,6 +112,15 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
+    public function getMandatoryOptions(): iterable
+    {
+        return ['name', 'env'];
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function getDefaultOptions(): iterable
     {
         return [
@@ -179,8 +186,6 @@ abstract class AbstractKernel implements
         $this->registerBaseServiceProviders();
 
         $this->registerBaseBindings();
-
-        $this->configureOptions($this->getContainer());
 
         $this->booted = true;
     }

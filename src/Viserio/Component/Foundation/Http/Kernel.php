@@ -25,6 +25,7 @@ use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class Kernel extends AbstractKernel implements HttpKernelContract
 {
@@ -91,11 +92,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract
             return;
         }
 
-        $this->initializeContainer();
-
-        $this->registerBaseServiceProviders();
-
-        $this->registerBaseBindings();
+        parent::boot();
 
         $router = $this->getContainer()->get(RouterContract::class);
 
@@ -164,6 +161,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract
 
         $this->bootstrap();
 
+        $this->configureOptions($container);
+
         $response = $this->handleRequest($serverRequest);
 
         // stop PHP sending a Content-Type automatically
@@ -212,7 +211,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract
         try {
             $response = $this->sendRequestThroughRouter($serverRequest);
 
-            if ($this->has(WebProfilerContract::class)) {
+            if ($container->has(WebProfilerContract::class)) {
                 $profiler = $container->get(WebProfilerContract::class);
 
                 if ($profiler !== null) {
@@ -272,15 +271,14 @@ class Kernel extends AbstractKernel implements HttpKernelContract
     {
         $container = $this->getContainer();
         $router    = $container->get(RouterContract::class);
-        $options   = $container->get(OptionsResolver::class)->configure($this, $this)->resolve();
 
-        $router->setCachePath($options['routing']['path']);
-        $router->refreshCache($options['env'] !== 'production');
+        $router->setCachePath($container->get(RepositoryContract::class)->get('viserio.routing.path'));
+        $router->refreshCache($this->options['env'] !== 'production');
 
         return (new Pipeline())
-            ->setContainer($this)
+            ->setContainer($container)
             ->send($request)
-            ->through($options['middlewares']['skip'] ? [] : $this->middlewares)
+            ->through($this->options['middlewares']['skip'] ? [] : $this->middlewares)
             ->then(function ($request) use ($router, $container) {
                 $container->instance(ServerRequestInterface::class, $request);
 
