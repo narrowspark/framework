@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\Foundation;
 
 use Closure;
-use Viserio\Component\Contracts\Container\Container;
 
 interface Kernel
 {
