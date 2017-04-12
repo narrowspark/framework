@@ -117,7 +117,6 @@ abstract class AbstractKernel implements
         return ['name', 'env'];
     }
 
-
     /**
      * {@inheritdoc}
      */

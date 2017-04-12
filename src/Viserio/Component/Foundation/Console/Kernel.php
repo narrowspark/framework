@@ -8,21 +8,21 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
+use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
+use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
+use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
-use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Console\Providers\ConsoleServiceProvider;
-use Viserio\Component\Console\Application;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
 {

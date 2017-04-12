@@ -5,6 +5,7 @@ namespace Viserio\Component\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
@@ -19,13 +20,11 @@ use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class Kernel extends AbstractKernel implements HttpKernelContract
 {
