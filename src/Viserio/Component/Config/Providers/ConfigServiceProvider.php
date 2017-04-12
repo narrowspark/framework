@@ -6,6 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 
 class ConfigServiceProvider implements ServiceProvider
 {
@@ -25,8 +26,14 @@ class ConfigServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createRepository(): RepositoryContract
+    public static function createRepository($container): RepositoryContract
     {
-        return new Repository();
+        $config = new Repository();
+
+        if ($container->has(LoaderContract::class)) {
+            $config->setLoader($container->get(LoaderContract::class));
+        }
+
+        return $config;
     }
 }

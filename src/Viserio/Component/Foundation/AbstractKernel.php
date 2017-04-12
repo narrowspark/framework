@@ -7,6 +7,7 @@ use ReflectionObject;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
+use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
@@ -24,6 +25,8 @@ use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Interop\Container\ContainerInterface;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 abstract class AbstractKernel implements
     HttpKernelContract,
@@ -33,6 +36,7 @@ abstract class AbstractKernel implements
     RequiresComponentConfigContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
+    use ConfigurationTrait;
 
     /**
      * The kernel version.
@@ -60,28 +64,35 @@ abstract class AbstractKernel implements
      *
      * @var bool
      */
-    private $hasBeenBootstrapped = false;
+    protected $hasBeenBootstrapped = false;
+
+    /**
+     * Indicates if the application has "booted".
+     *
+     * @var bool
+     */
+    protected $booted = false;
 
     /**
      * Project path.
      *
      * @var string
      */
-    private $projectDir;
+    protected $projectDir;
 
     /**
      * The environment file to load during bootstrapping.
      *
      * @var string
      */
-    private $environmentFile = '.env';
+    protected $environmentFile = '.env';
 
     /**
      * The custom environment path defined by the developer.
      *
      * @var string
      */
-    private $environmentPath;
+    protected $environmentPath;
 
     /**
      * Create a new application instance.
@@ -91,10 +102,6 @@ abstract class AbstractKernel implements
     public function __construct()
     {
         $this->projectDir = $this->getProjectDir();
-
-        $this->registerBaseServiceProviders();
-
-        $this->registerBaseBindings();
     }
 
     /**
@@ -120,20 +127,6 @@ abstract class AbstractKernel implements
     }
 
     /**
-     * Set a container instance.
-     *
-     * @param \Viserio\Component\Contracts\Container\Container $container
-     *
-     * @return $this
-     */
-    public function setContainer(ContainerContract $container): self
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
      * Get the container instance.
      *
      * @throws \RuntimeException
@@ -150,15 +143,17 @@ abstract class AbstractKernel implements
      */
     public function bootstrapWith(array $bootstrappers): void
     {
-        $this->hasBeenBootstrapped = true;
+        $container = $this->getContainer();
 
         foreach ($bootstrappers as $bootstrapper) {
-            $this->get(EventManagerContract::class)->trigger(new BootstrappingEvent($bootstrapper, $this));
+            $container->get(EventManagerContract::class)->trigger(new BootstrappingEvent($bootstrapper, $this));
 
-            $this->make($bootstrapper)->bootstrap($this);
+            $container->make($bootstrapper)->bootstrap($this);
 
-            $this->get(EventManagerContract::class)->trigger(new BootstrappedEvent($bootstrapper, $this));
+            $container->get(EventManagerContract::class)->trigger(new BootstrappedEvent($bootstrapper, $this));
         }
+
+        $this->hasBeenBootstrapped = true;
     }
 
     /**
@@ -167,6 +162,38 @@ abstract class AbstractKernel implements
     public function hasBeenBootstrapped(): bool
     {
         return $this->hasBeenBootstrapped;
+    }
+
+    /**
+     * Boots the current kernel.
+     *
+     * @return void
+     */
+    public function boot(): void
+    {
+        if ($this->booted) {
+            return;
+        }
+
+        $this->initializeContainer();
+
+        $this->registerBaseServiceProviders();
+
+        $this->registerBaseBindings();
+
+        $this->configureOptions($this->getContainer());
+
+        $this->booted = true;
+    }
+
+    /**
+     * Determine if the application has booted.
+     *
+     * @return bool
+     */
+    public function isBooted(): bool
+    {
+        return $this->booted;
     }
 
     /**
@@ -180,15 +207,17 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function setLocale(string $locale): self
+    public function setLocale(string $locale): parent
     {
-        $this->get(RepositoryContract::class)->set('viserio.app.locale', $locale);
+        $container = $this->getContainer();
+
+        $container->get(RepositoryContract::class)->set('viserio.app.locale', $locale);
 
         if ($this->has(TranslationManager::class)) {
-            $this->get(TranslationManager::class)->setLocale($locale);
+            $container->get(TranslationManager::class)->setLocale($locale);
         }
 
-        $this->get(EventManagerContract::class)->trigger(new LocaleChangedEvent($this, $locale));
+        $container->get(EventManagerContract::class)->trigger(new LocaleChangedEvent($this, $locale));
 
         return $this;
     }
@@ -206,7 +235,7 @@ abstract class AbstractKernel implements
      */
     public function isLocal(): bool
     {
-        return $this->get(RepositoryContract::class)->get('viserio.app.env') == 'local';
+        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.env') == 'local';
     }
 
     /**
@@ -214,7 +243,7 @@ abstract class AbstractKernel implements
      */
     public function runningUnitTests(): bool
     {
-        return $this->get(RepositoryContract::class)->get('viserio.app.env') == 'testing';
+        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.env') == 'testing';
     }
 
     /**
@@ -273,20 +302,6 @@ abstract class AbstractKernel implements
     {
         return $this->normalizeDirectorySeparator(
             $this->projectDir . '/app' . ($path ? '/' . $path : $path)
-        );
-    }
-
-    /**
-     * Get the path to the bootstrap directory.
-     *
-     * @param string $path Optionally, a path to append to the bootstrap path
-     *
-     * @return string
-     */
-    public function getBootstrapPath(string $path = ''): string
-    {
-        return $this->normalizeDirectorySeparator(
-            $this->projectDir . '/bootstrap' . ($path ? '/' . $path : $path)
         );
     }
 
@@ -357,7 +372,7 @@ abstract class AbstractKernel implements
     public function getStoragePath(string $path = ''): string
     {
         return $this->normalizeDirectorySeparator(
-            ($this->storagePath ?: $this->projectDir . '/storage') . ($path ? '/' . $path : $path)
+            $this->projectDir . '/storage' . ($path ? '/' . $path : $path)
         );
     }
 
@@ -440,7 +455,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function environmentFile(): string
+    public function getEnvironmentFile(): string
     {
         return $this->environmentFile ?: '.env';
     }
@@ -448,7 +463,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function environmentFilePath(): string
+    public function getEnvironmentFilePath(): string
     {
         return $this->normalizeDirectorySeparator(
             $this->environmentPath() . '/' . $this->environmentFile()
@@ -460,20 +475,13 @@ abstract class AbstractKernel implements
      */
     public function detectEnvironment(Closure $callback): string
     {
-        $args = $_SERVER['argv'] ?? null;
-        $env  = $this->get(EnvironmentDetector::class)->detect($callback, $args);
+        $args      = $_SERVER['argv'] ?? null;
+        $container = $this->getContainer();
+        $env       = $container->get(EnvironmentDetector::class)->detect($callback, $args);
 
-        $this->get(RepositoryContract::class)->set('viserio.app.env', $env);
+        $container->get(RepositoryContract::class)->set('viserio.app.env', $env);
 
         return $env;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEnvironmentFile(): string
-    {
-        return $this->environmentFile ?: '.env';
     }
 
     /**
@@ -483,17 +491,15 @@ abstract class AbstractKernel implements
      */
     protected function registerBaseServiceProviders(): void
     {
-        $this->register(new EventsServiceProvider());
-        $this->register(new OptionsResolverServiceProvider());
-        $this->register(new ParsersServiceProvider());
-        $this->register(new ConfigServiceProvider());
+        $container = $this->getContainer();
 
-        // $config = $this->get(RepositoryContract::class);
-        // $config->setLoader($this->get(LoaderContract::class));
-
-        $this->register(new LoggerServiceProvider());
-        $this->register(new ConfigureLoggingServiceProvider());
-        $this->register(new RoutingServiceProvider());
+        $container->register(new ParsersServiceProvider());
+        $container->register(new EventsServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
+        $container->register(new ConfigServiceProvider());
+        $container->register(new LoggerServiceProvider());
+        $container->register(new ConfigureLoggingServiceProvider());
+        $container->register(new RoutingServiceProvider());
     }
 
     /**
@@ -503,14 +509,25 @@ abstract class AbstractKernel implements
      */
     protected function registerBaseBindings(): void
     {
-        $kernel = $this;
+        $kernel    = $this;
+        $container = $this->getContainer();
 
-        $this->singleton(EnvironmentDetector::class, EnvironmentDetector::class);
-        $this->singleton(KernelContract::class, function () use ($kernel) {
+        $container->singleton(EnvironmentDetector::class, EnvironmentDetector::class);
+        $container->singleton(KernelContract::class, function () use ($kernel) {
             return $kernel;
         });
 
-        $this->alias(KernelContract::class, self::class);
-        $this->alias(KernelContract::class, 'kernel');
+        $container->alias(KernelContract::class, self::class);
+        $container->alias(KernelContract::class, 'kernel');
+    }
+
+    /**
+     * Initializes the service container.
+     *
+     * @return void
+     */
+    protected function initializeContainer(): void
+    {
+        $this->container = new Container();
     }
 }

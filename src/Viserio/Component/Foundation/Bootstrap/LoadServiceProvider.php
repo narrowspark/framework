@@ -11,13 +11,14 @@ class LoadServiceProvider implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $app): void
+    public function bootstrap(KernelContract $kernel): void
     {
-        $providers = $app->get(RepositoryContract::class)->get('viserio.app.serviceproviders', []);
+        $container = $kernel->getContainer();
+        $providers = $container->get(RepositoryContract::class)->get('viserio.app.serviceproviders', []);
 
         if (count($providers) > 0) {
             foreach ($providers as $provider) {
-                $app->register($app->make($provider));
+                $container->register($container->make($provider));
             }
         }
     }

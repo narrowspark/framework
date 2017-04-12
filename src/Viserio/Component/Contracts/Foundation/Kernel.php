@@ -36,16 +36,7 @@ interface Kernel
      *
      * @return $this
      */
-    public function setLocale(string $locale): Application;
-
-    /**
-     * Determine if application locale is the given locale.
-     *
-     * @param string $locale
-     *
-     * @return bool
-     */
-    public function isLocale(string $locale): bool;
+    public function setLocale(string $locale): self;
 
     /**
      * Get the application fallback locale.
@@ -68,7 +59,7 @@ interface Kernel
      *
      * @return $this
      */
-    public function useEnvironmentPath(string $path): Application;
+    public function useEnvironmentPath(string $path): self;
 
     /**
      * Set the environment file to be loaded during bootstrapping.
@@ -77,7 +68,7 @@ interface Kernel
      *
      * @return $this
      */
-    public function loadEnvironmentFrom(string $file): Application;
+    public function loadEnvironmentFrom(string $file): self;
 
     /**
      * Get the environment file the application is using.
@@ -87,13 +78,6 @@ interface Kernel
     public function getEnvironmentFile(): string;
 
     /**
-     * Get the fully qualified path to the environment file.
-     *
-     * @return string
-     */
-    public function getEnvironmentFilePath(): string;
-
-    /**
      * Detect the application's current environment.
      *
      * @param \Closure $callback
@@ -101,13 +85,6 @@ interface Kernel
      * @return string
      */
     public function detectEnvironment(Closure $callback): string;
-
-    /**
-     * Determine if application is in local environment.
-     *
-     * @return bool
-     */
-    public function isLocal(): bool;
 
     /**
      * Determine if we are running unit tests.

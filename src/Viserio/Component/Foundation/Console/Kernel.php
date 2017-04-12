@@ -10,10 +10,9 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
-use Viserio\Component\Contracts\Console\Kernel as KernelContract;
+use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
@@ -22,15 +21,8 @@ use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 
-class Kernel implements KernelContract, TerminableContract
+class Kernel implements ConsoleKernelContract, TerminableContract
 {
-    /**
-     * The application implementation.
-     *
-     * @var \Viserio\Component\Contracts\Foundation\Kernel
-     */
-    protected $app;
-
     /**
      * The cerebro application instance.
      *
@@ -67,16 +59,14 @@ class Kernel implements KernelContract, TerminableContract
 
     /**
      * Create a new console kernel instance.
-     *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
      */
-    public function __construct(KernelContract $app)
+    public function __construct()
     {
         if (! defined('CEREBRO_BINARY')) {
             define('CEREBRO_BINARY', 'cerebro');
         }
 
-        $this->app = $app;
+        parent::__construct();
     }
 
     /**
@@ -110,7 +100,7 @@ class Kernel implements KernelContract, TerminableContract
      */
     public function terminate(InputInterface $input, int $status)
     {
-        $this->app->get(HandlerContract::class)->unregister();
+        $this->get(HandlerContract::class)->unregister();
     }
 
     /**
@@ -156,8 +146,8 @@ class Kernel implements KernelContract, TerminableContract
      */
     public function bootstrap(): void
     {
-        if (! $this->app->hasBeenBootstrapped()) {
-            $this->app->bootstrapWith($this->bootstrappers);
+        if (! $this->hasBeenBootstrapped()) {
+            $this->bootstrapWith($this->bootstrappers);
         }
     }
 
@@ -224,9 +214,9 @@ class Kernel implements KernelContract, TerminableContract
     protected function defineConsoleSchedule(): void
     {
         if (class_exists(CronServiceProvider::class)) {
-            $this->app->register(new CronServiceProvider());
+            $this->register(new CronServiceProvider());
 
-            $this->getSchedule($this->app->get(Schedule::class));
+            $this->getSchedule($this->get(Schedule::class));
         }
     }
 
@@ -238,11 +228,11 @@ class Kernel implements KernelContract, TerminableContract
     protected function getConsole(): Cerebro
     {
         if (is_null($this->console)) {
-            $console = $this->app->get(Cerebro::class);
+            $console = $this->get(Cerebro::class);
 
             foreach ($this->commands as $command) {
                 // @codeCoverageIgnoreStart
-                $console->add($this->app->make($command));
+                $console->add($this->make($command));
                 // @codeCoverageIgnoreEnd
             }
 
@@ -273,7 +263,7 @@ class Kernel implements KernelContract, TerminableContract
      */
     protected function reportException(Throwable $exception): void
     {
-        $this->app->get(HandlerContract::class)->report($exception);
+        $this->get(HandlerContract::class)->report($exception);
     }
 
     /**

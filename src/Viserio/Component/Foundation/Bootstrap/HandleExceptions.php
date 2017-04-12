@@ -12,12 +12,12 @@ class HandleExceptions extends AbstractLoadFiles implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $app): void
+    public function bootstrap(KernelContract $kernel): void
     {
-        $app->register(new ExceptionServiceProvider());
+        $contaienr = $kernel->getContainer();
 
-        $handler = $app->get(HandlerContract::class);
+        $contaienr->register(new ExceptionServiceProvider());
 
-        $handler->register();
+        $contaienr->get(HandlerContract::class)->register();
     }
 }

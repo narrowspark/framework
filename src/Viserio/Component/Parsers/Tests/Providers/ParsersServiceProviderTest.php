@@ -15,14 +15,7 @@ class ParsersServiceProviderTest extends TestCase
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ParsersServiceProvider());
-
-        $container->instance('config', [
-            'viserio' => [
-                'parsers' => [],
-            ],
-        ]);
 
         self::assertInstanceOf(FileLoader::class, $container->get(FileLoader::class));
         self::assertInstanceOf(FileLoader::class, $container->get(LoaderContract::class));

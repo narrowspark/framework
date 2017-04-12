@@ -15,9 +15,9 @@ class SetRequestForConsole implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $app): void
+    public function bootstrap(KernelContract $kernel): void
     {
-        $app->register(new class() implements ServiceProvider {
+        $kernel->getContainer()->register(new class() implements ServiceProvider {
             /**
              * {@inheritdoc}
              */

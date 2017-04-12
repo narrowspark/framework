@@ -41,8 +41,7 @@
         "sepia/po-parser"                     : "^4.2",
         "symfony/yaml"                        : "^3.2",
         "yosymfony/toml"                      : "^0.3",
-        "viserio/container"                   : "self.version",
-        "viserio/options-resolver"            : "self.version"
+        "viserio/container"                   : "self.version"
     },
     "provide": {
         "psr/http-message"                    : "^1.0",
@@ -66,7 +65,6 @@
         "spatie/array-to-xml"                 : "Required to use the XML dump (^2.1.1).",
         "yosymfony/toml"                      : "Required to use the TOML parser (^0.3).",
         "vlucas/phpdotenv"                    : "Required to use the .env parser (^2.3).",
-        "viserio/options-resolver"            : "Required to use service-provider (self.version).",
         "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },
     "extra": {

@@ -17,7 +17,7 @@ class LoadEnvironmentVariables implements BootstrapContract
      */
     public function bootstrap(KernelContract $kernel): void
     {
-        if (file_exists($kernel->get(RepositoryContract::class)->get('patch.cached.config'))) {
+        if (file_exists($kernel->getStoragePath('config.cache'))) {
             return;
         }
 
@@ -38,14 +38,14 @@ class LoadEnvironmentVariables implements BootstrapContract
      */
     protected function checkForSpecificEnvironmentFile(KernelContract $kernel): void
     {
-        $input = new ArgvInput();
 
-        if (php_sapi_name() == 'cli' && $input->hasParameterOption('--env')) {
+        if (php_sapi_name() == 'cli' && ($input = new ArgvInput())->hasParameterOption('--env')) {
             $this->setEnvironmentFilePath(
                 $kernel,
                 $kernel->getEnvironmentFile() . '.' . $input->getParameterOption('--env')
             );
         }
+
 
         $env = Env::get('APP_ENV');
 

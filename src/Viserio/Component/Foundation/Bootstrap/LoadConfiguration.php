@@ -11,14 +11,14 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $app): void
+    public function bootstrap(KernelContract $kernel): void
     {
         $loadedFromCache = false;
-        $config          = $app->get(RepositoryContract::class);
+        $config          = $kernel->getContainer()->get(RepositoryContract::class);
 
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.
-        if (file_exists($cached = $config->get('patch.cached.config'))) {
+        if (file_exists($cached = $kernel->getStoragePath('config.cache'))) {
             $items = require $cached;
 
             $config->setArray($items);
@@ -29,10 +29,10 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the config manager.
         if (! $loadedFromCache) {
-            $this->loadConfigurationFiles($app, $config);
+            $this->loadConfigurationFiles($kernel, $config);
         }
 
-        $app->detectEnvironment(function () use ($config) {
+        $kernel->detectEnvironment(function () use ($config) {
             return $config->get('viserio.app.env', 'production');
         });
 

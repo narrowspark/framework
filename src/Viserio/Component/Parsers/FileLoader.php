@@ -23,7 +23,7 @@ class FileLoader implements LoaderContract
      *
      * @var array
      */
-    protected $directories;
+    protected $directories = [];
 
     /**
      * A cache of whether namespaces and groups exists.
@@ -36,12 +36,10 @@ class FileLoader implements LoaderContract
      * Create a new fileloader.
      *
      * @param \Viserio\Component\Contracts\Parsers\TaggableParser $parser
-     * @param array                                               $directories
      */
-    public function __construct(TaggableParserContract $parser, array $directories = [])
+    public function __construct(TaggableParserContract $parser)
     {
-        $this->parser      = $parser;
-        $this->directories = $directories;
+        $this->parser = $parser;
     }
 
     /**

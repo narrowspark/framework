@@ -13,12 +13,14 @@ class RegisterStaticalProxys implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $app): void
+    public function bootstrap(KernelContract $kernel): void
     {
+        $container = $kernel->getContainer();
+
         StaticalProxy::clearResolvedInstances();
 
-        StaticalProxy::setContainer($app);
+        StaticalProxy::setContainer($container);
 
-        (new AliasLoader($app->get(RepositoryContract::class)->get('viserio.app.aliases', [])))->register();
+        (new AliasLoader($container->get(RepositoryContract::class)->get('viserio.app.aliases', [])))->register();
     }
 }

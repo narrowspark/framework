@@ -12,18 +12,8 @@ use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\TaggableParser;
 
-class ParsersServiceProvider implements
-    ServiceProvider,
-    RequiresComponentConfigContract,
-    ProvidesDefaultOptionsContract
+class ParsersServiceProvider implements ServiceProvider
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
-
     /**
      * {@inheritdoc}
      */
@@ -45,51 +35,22 @@ class ParsersServiceProvider implements
     }
 
     /**
-     * {@inheritdoc}
+     * Create a file loader.
+     *
+     * @return \Viserio\Component\Contracts\Parsers\Loader
      */
-    public function getDimensions(): iterable
+    public static function createFileLoader(ContainerInterface $container): LoaderContract
     {
-        return ['viserio', 'parsers'];
+        return new FileLoader($container->get(TaggableParser::class));
     }
 
     /**
-     * {@inheritdoc}
+     * Create a taggable parser.
+     *
+     * @return \Viserio\Component\Contracts\Parsers\TaggableParser
      */
-    public function getDefaultOptions(): iterable
-    {
-        return [
-            'directories' => [],
-        ];
-    }
-
-    public static function createFileLoader(ContainerInterface $container): FileLoader
-    {
-        self::resolveOptions($container);
-
-        return new FileLoader(
-            $container->get(TaggableParser::class),
-            self::$options['directories']
-        );
-    }
-
-    public static function createTaggableParser(): TaggableParser
+    public static function createTaggableParser(): TaggableParserContract
     {
         return new TaggableParser();
-    }
-
-    /**
-     * Resolve component options.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private static function resolveOptions(ContainerInterface $container): void
-    {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
     }
 }
