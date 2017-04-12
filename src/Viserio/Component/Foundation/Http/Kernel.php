@@ -100,9 +100,9 @@ class Kernel extends AbstractKernel
     /**
      * Create a new HTTP kernel instance.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
-     * @param \Viserio\Component\Contracts\Routing\Router         $router
-     * @param \Viserio\Component\Contracts\Events\EventManager    $events
+     * @param \Viserio\Component\Contracts\Foundation\Kernel   $app
+     * @param \Viserio\Component\Contracts\Routing\Router      $router
+     * @param \Viserio\Component\Contracts\Events\EventManager $events
      */
     public function __construct(
         KernelContract $app,

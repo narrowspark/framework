@@ -7,7 +7,6 @@ use stdClass;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Foundation\Kernel;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
 class ApplicationTest extends MockeryTestCase

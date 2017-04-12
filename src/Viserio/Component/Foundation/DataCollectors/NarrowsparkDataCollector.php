@@ -5,7 +5,6 @@ namespace Viserio\Component\Foundation\DataCollectors;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Foundation\Kernel;
 use Viserio\Component\Support\Env;
 use Viserio\Component\WebProfiler\DataCollectors\PhpInfoDataCollector;
 

@@ -13,7 +13,7 @@ class BootstrappedEvent implements EventContract
     /**
      * Create a new bootstrapped event.
      *
-     * @param string                                              $name
+     * @param string                                         $name
      * @param \Viserio\Component\Contracts\Foundation\Kernel $app
      */
     public function __construct(string $name, KernelContract $app)

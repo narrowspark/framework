@@ -5,7 +5,6 @@ namespace Viserio\Component\Foundation\Tests\DataCollectors;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Foundation\Kernel;
 use Viserio\Component\Foundation\DataCollectors\NarrowsparkDataCollector;
 
 class NarrowsparkDataCollectorTest extends MockeryTestCase

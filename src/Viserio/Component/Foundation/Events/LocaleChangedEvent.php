@@ -13,9 +13,9 @@ class LocaleChangedEvent implements EventContract
     /**
      * Create a new bootstrapped event.
      *
-     * @param string                                              $name
+     * @param string                                         $name
      * @param \Viserio\Component\Contracts\Foundation\Kernel $app
-     * @param string                                              $locale
+     * @param string                                         $locale
      */
     public function __construct(string $name, KernelContract $app, string $locale)
     {
