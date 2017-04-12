@@ -4,11 +4,11 @@ namespace Viserio\Component\Contracts\Parsers\Tests\Traits;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Component\Contracts\Parsers\Traits\LoaderAwareTrait;
+use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
 
 class LoaderAwareTraitTest extends MockeryTestCase
 {
-    use LoaderAwareTrait;
+    use ParserAwareTrait;
 
     public function testGetAndSetLoader()
     {

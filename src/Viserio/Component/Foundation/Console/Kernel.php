@@ -13,7 +13,7 @@ use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Contracts\Console\Kernel as KernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
@@ -27,7 +27,7 @@ class Kernel implements KernelContract, TerminableContract
     /**
      * The application implementation.
      *
-     * @var \Viserio\Component\Contracts\Foundation\Application
+     * @var \Viserio\Component\Contracts\Foundation\Kernel
      */
     protected $app;
 
@@ -68,9 +68,9 @@ class Kernel implements KernelContract, TerminableContract
     /**
      * Create a new console kernel instance.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Application $app
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
      */
-    public function __construct(ApplicationContract $app)
+    public function __construct(KernelContract $app)
     {
         if (! defined('CEREBRO_BINARY')) {
             define('CEREBRO_BINARY', 'cerebro');

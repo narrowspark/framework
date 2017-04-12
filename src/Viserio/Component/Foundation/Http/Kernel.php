@@ -8,7 +8,7 @@ use Throwable;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\AbstractKernel;
@@ -34,7 +34,7 @@ class Kernel extends AbstractKernel
     /**
      * The application implementation.
      *
-     * @var \Viserio\Component\Contracts\Foundation\Application
+     * @var \Viserio\Component\Contracts\Foundation\Kernel
      */
     protected $app;
 
@@ -100,12 +100,12 @@ class Kernel extends AbstractKernel
     /**
      * Create a new HTTP kernel instance.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Application $app
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
      * @param \Viserio\Component\Contracts\Routing\Router         $router
      * @param \Viserio\Component\Contracts\Events\EventManager    $events
      */
     public function __construct(
-        ApplicationContract $app,
+        KernelContract $app,
         RouterContract $router,
         EventManagerContract $events
     ) {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Events;
 
 use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
 class LocaleChangedEvent implements EventContract
@@ -14,10 +14,10 @@ class LocaleChangedEvent implements EventContract
      * Create a new bootstrapped event.
      *
      * @param string                                              $name
-     * @param \Viserio\Component\Contracts\Foundation\Application $app
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
      * @param string                                              $locale
      */
-    public function __construct(string $name, ApplicationContract $app, string $locale)
+    public function __construct(string $name, KernelContract $app, string $locale)
     {
         $this->name   = 'locale.changed';
         $this->target = $app;

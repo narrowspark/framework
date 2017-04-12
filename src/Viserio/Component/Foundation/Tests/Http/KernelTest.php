@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Routing\Router as  RouterContract;
 use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
@@ -41,7 +41,7 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with('test', ['web']);
 
-        $kernel = new class($this->mock(ApplicationContract::class), $router, $this->mock(EventManagerContract::class)) extends Kernel {
+        $kernel = new class($this->mock(KernelContract::class), $router, $this->mock(EventManagerContract::class)) extends Kernel {
             /**
              * The application's middleware stack.
              *
@@ -82,7 +82,7 @@ class KernelTest extends MockeryTestCase
         $router->shouldReceive('addMiddlewares')
             ->once();
 
-        $kernel = new class($this->mock(ApplicationContract::class), $router, $this->mock(EventManagerContract::class)) extends Kernel {
+        $kernel = new class($this->mock(KernelContract::class), $router, $this->mock(EventManagerContract::class)) extends Kernel {
             /**
              * The application's middleware stack.
              *
@@ -148,7 +148,7 @@ class KernelTest extends MockeryTestCase
             ->with('app.skip_middlewares', false)
             ->andReturn(false);
 
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
         $app->shouldReceive('instance')
             ->once()
             ->with(ServerRequestInterface::class, $serverRequest);
@@ -240,7 +240,7 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with($serverRequest, $exception);
 
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
         $app->shouldReceive('instance')
             ->once()
             ->with(ServerRequestInterface::class, $serverRequest);
@@ -296,7 +296,7 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with([]);
 
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
         $app->shouldReceive('get')
             ->once()
             ->with(HandlerContract::class)

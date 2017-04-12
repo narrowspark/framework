@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
@@ -22,7 +22,7 @@ class KernelTest extends MockeryTestCase
 {
     public function testHandle()
     {
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
 
         $this->getBootstrap($app);
         $app->shouldReceive('register')
@@ -64,7 +64,7 @@ class KernelTest extends MockeryTestCase
 
     public function testHandleWithException()
     {
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
 
         $this->getBootstrap($app);
         $app->shouldReceive('register')
@@ -103,7 +103,7 @@ class KernelTest extends MockeryTestCase
 
     public function testTerminate()
     {
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
 
         $handler = $this->mock(HandlerContract::class);
         $handler->shouldReceive('unregister')
@@ -120,7 +120,7 @@ class KernelTest extends MockeryTestCase
 
     public function testGetAll()
     {
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
 
         $this->getBootstrap($app);
 
@@ -145,7 +145,7 @@ class KernelTest extends MockeryTestCase
 
     public function testGetOutput()
     {
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
 
         $this->getBootstrap($app);
 
@@ -170,7 +170,7 @@ class KernelTest extends MockeryTestCase
 
     public function testCommandCall()
     {
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
 
         $this->getBootstrap($app);
 
@@ -196,7 +196,7 @@ class KernelTest extends MockeryTestCase
 
     public function testCommand()
     {
-        $app      = $this->mock(ApplicationContract::class);
+        $app      = $this->mock(KernelContract::class);
         $function = function () {
             return 'true';
         };

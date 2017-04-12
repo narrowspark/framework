@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 
 class LoadConfigurationTest extends MockeryTestCase
@@ -29,7 +29,7 @@ class LoadConfigurationTest extends MockeryTestCase
             ->with('app.timezone', 'UTC')
             ->andReturn('UTC');
 
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
         $app->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)
@@ -62,7 +62,7 @@ class LoadConfigurationTest extends MockeryTestCase
             ->with('app.timezone', 'UTC')
             ->andReturn('UTC');
 
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
         $app->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)

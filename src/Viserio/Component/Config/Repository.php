@@ -6,11 +6,11 @@ use ArrayIterator;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Parsers\Traits\LoaderAwareTrait;
+use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
 
 class Repository implements RepositoryContract, IteratorAggregate
 {
-    use LoaderAwareTrait;
+    use ParserAwareTrait;
 
     /**
      * Config folder path.

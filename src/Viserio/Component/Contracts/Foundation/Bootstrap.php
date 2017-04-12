@@ -5,11 +5,11 @@ namespace Viserio\Component\Contracts\Foundation;
 interface Bootstrap
 {
     /**
-     * Bootstrap the given application.
+     * Bootstrap the given kernel.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Application $app
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
      *
      * @return void
      */
-    public function bootstrap(Application $app): void;
+    public function bootstrap(Kernel $app): void;
 }

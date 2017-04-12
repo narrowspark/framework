@@ -7,7 +7,7 @@ use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 
 class SetRequestForConsole implements BootstrapContract
@@ -15,7 +15,7 @@ class SetRequestForConsole implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(ApplicationContract $app): void
+    public function bootstrap(KernelContract $app): void
     {
         $app->register(new class() implements ServiceProvider {
             /**

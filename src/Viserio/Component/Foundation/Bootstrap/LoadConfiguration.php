@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
@@ -11,7 +11,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(ApplicationContract $app): void
+    public function bootstrap(KernelContract $app): void
     {
         $loadedFromCache = false;
         $config          = $app->get(RepositoryContract::class);
@@ -44,10 +44,10 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     /**
      * Load the configuration items from all of the files.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Application $app
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
      * @param \Viserio\Component\Contracts\Config\Repository      $config
      */
-    protected function loadConfigurationFiles(ApplicationContract $kernel, RepositoryContract $config)
+    protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config)
     {
         foreach ($this->getFiles($kernel->getConfigPath()) as $key => $path) {
             $config->import($path);

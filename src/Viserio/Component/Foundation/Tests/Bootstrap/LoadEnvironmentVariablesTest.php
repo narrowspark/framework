@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
 class LoadEnvironmentVariablesTest extends MockeryTestCase
@@ -19,7 +19,7 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
             ->with('patch.cached.config')
             ->andReturn(__DIR__ . '/../Fixtures/Config/app.php');
 
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
         $app->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)
@@ -44,7 +44,7 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
             ->with('patch.cached.config')
             ->andReturn('');
 
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
         $app->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)
@@ -70,7 +70,7 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
             ->with('patch.cached.config')
             ->andReturn('');
 
-        $app = $this->mock(ApplicationContract::class);
+        $app = $this->mock(KernelContract::class);
         $app->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)

@@ -410,7 +410,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function useEnvironmentPath(string $path): ApplicationContract
+    public function useEnvironmentPath(string $path): KernelContract
     {
         $this->environmentPath = $path;
 
@@ -420,7 +420,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function loadEnvironmentFrom(string $file): ApplicationContract
+    public function loadEnvironmentFrom(string $file): KernelContract
     {
         $this->environmentFile = $file;
 
@@ -483,14 +483,14 @@ abstract class AbstractKernel implements
      */
     protected function registerBaseServiceProviders(): void
     {
+        $this->register(new EventsServiceProvider());
         $this->register(new OptionsResolverServiceProvider());
         $this->register(new ParsersServiceProvider());
         $this->register(new ConfigServiceProvider());
 
-        $config = $this->get(RepositoryContract::class);
-        $config->setLoader($this->get(LoaderContract::class));
+        // $config = $this->get(RepositoryContract::class);
+        // $config->setLoader($this->get(LoaderContract::class));
 
-        $this->register(new EventsServiceProvider());
         $this->register(new LoggerServiceProvider());
         $this->register(new ConfigureLoggingServiceProvider());
         $this->register(new RoutingServiceProvider());
