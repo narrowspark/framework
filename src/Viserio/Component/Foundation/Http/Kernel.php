@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
@@ -158,7 +157,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract
 
         // Passes the request to the container
         $container->instance(ServerRequestInterface::class, $serverRequest);
-
 
         StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
 

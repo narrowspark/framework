@@ -5,7 +5,6 @@ namespace Viserio\Component\Foundation\Bootstrap;
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
 use Symfony\Component\Console\Input\ArgvInput;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Support\Env;
@@ -38,14 +37,12 @@ class LoadEnvironmentVariables implements BootstrapContract
      */
     protected function checkForSpecificEnvironmentFile(KernelContract $kernel): void
     {
-
         if (php_sapi_name() == 'cli' && ($input = new ArgvInput())->hasParameterOption('--env')) {
             $this->setEnvironmentFilePath(
                 $kernel,
                 $kernel->getEnvironmentFile() . '.' . $input->getParameterOption('--env')
             );
         }
-
 
         $env = Env::get('APP_ENV');
 

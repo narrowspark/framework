@@ -5,9 +5,9 @@ namespace Viserio\Component\Foundation;
 use Closure;
 use ReflectionObject;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
+use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
@@ -22,11 +22,10 @@ use Viserio\Component\Foundation\Events\LocaleChangedEvent;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Interop\Container\ContainerInterface;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 abstract class AbstractKernel implements
     HttpKernelContract,
