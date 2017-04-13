@@ -205,11 +205,6 @@ declare(strict_types=1); return [
 
     protected function getFileLoader()
     {
-        return new FileLoader(
-            new TaggableParser(),
-            [
-                $this->root->url(),
-            ]
-        );
+        return (new FileLoader(new TaggableParser()))->addDirectory($this->root->url());
     }
 }

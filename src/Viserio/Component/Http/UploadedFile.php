@@ -315,7 +315,7 @@ class UploadedFile implements UploadedFileInterface
         if ($this->isOk() === false) {
             throw new RuntimeException(sprintf(
                 'Cannot retrieve stream due to upload error: %s',
-                self::$errorMessages[$this->error] ?? sprintf('UPLOAD_ERR %s', $this->error)
+                self::$errorMessages[$this->error]
             ));
         }
 

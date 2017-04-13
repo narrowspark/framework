@@ -6,7 +6,7 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Foundation\Http\Middlewares\CheckForMaintenanceModeMiddleware;
 
 class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
@@ -14,10 +14,9 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
     public function testProcess()
     {
         $server = $this->mock(ServerRequestInterface::class);
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $config = $this->mock(HttpKernelContract::class);
+        $config->shouldReceive('isDownForMaintenance')
             ->once()
-            ->with('app.maintenance', false)
             ->andReturn(false);
         $delegate = $this->mock(DelegateInterface::class);
         $delegate->shouldReceive('process')
@@ -40,18 +39,17 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
     public function testProcessWithMaintenance()
     {
         $server = $this->mock(ServerRequestInterface::class);
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $kernel = $this->mock(HttpKernelContract::class);
+        $kernel->shouldReceive('isDownForMaintenance')
             ->once()
-            ->with('app.maintenance', false)
             ->andReturn(true);
-        $config->shouldReceive('get')
+        $kernel->shouldReceive('storagePath')
             ->once()
-            ->with('path.storage')
-            ->andReturn(__DIR__ . '/../../Fixtures/Middleware');
+            ->with('framework/down')
+            ->andReturn(__DIR__ . '/../../Fixtures/Middleware/framework/down');
         $delegate = $this->mock(DelegateInterface::class);
 
-        $middleware = new CheckForMaintenanceModeMiddleware($config);
+        $middleware = new CheckForMaintenanceModeMiddleware($kernel);
 
         $middleware->process($server, $delegate);
     }

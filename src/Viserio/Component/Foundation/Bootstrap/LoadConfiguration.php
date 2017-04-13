@@ -46,6 +46,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
      *
      * @param \Viserio\Component\Contracts\Foundation\Kernel $app
      * @param \Viserio\Component\Contracts\Config\Repository $config
+     * @param KernelContract                                 $kernel
      */
     protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config)
     {

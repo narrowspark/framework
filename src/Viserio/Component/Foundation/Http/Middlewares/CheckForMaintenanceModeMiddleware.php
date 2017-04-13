@@ -6,26 +6,26 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Foundation\Http\Exceptions\MaintenanceModeException;
 
 class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
 {
     /**
-     * The config implementation.
+     * The http kernel implementation.
      *
-     * @var \Viserio\Component\Contracts\Config\Repository
+     * @var \Viserio\Component\Contracts\Foundation\HttpKernel
      */
-    protected $config;
+    protected $kernel;
 
     /**
      * Create a new maintenance check middleware instance.
      *
-     * @param \Viserio\Component\Contracts\Config\Repository $config
+     * @param \Viserio\Component\Contracts\Foundation\HttpKernel $kernel
      */
-    public function __construct(RepositoryContract $config)
+    public function __construct(HttpKernelContract $kernel)
     {
-        $this->config = $config;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -33,8 +33,8 @@ class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-        if ($this->config->get('app.maintenance', false)) {
-            $data = json_decode(file_get_contents($this->config->get('path.storage') . '/framework/down'), true);
+        if ($this->kernel->isDownForMaintenance()) {
+            $data = json_decode(file_get_contents($this->kernel->storagePath('framework/down')), true);
 
             throw new MaintenanceModeException((int) $data['time'], (int) $data['retry'], $data['message']);
         }

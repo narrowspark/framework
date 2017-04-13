@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
@@ -13,50 +12,36 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
     {
         $bootstraper = new LoadEnvironmentVariables();
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('patch.cached.config')
+            ->with('config.cache')
             ->andReturn(__DIR__ . '/../Fixtures/Config/app.php');
+        $kernel->shouldReceive('getEnvironmentFile')
+            ->never();
+        $kernel->shouldReceive('getEnvironmentPath')
+            ->never();
 
-        $app = $this->mock(KernelContract::class);
-        $app->shouldReceive('get')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn($config);
-        $app->shouldReceive('environmentFile')
-            ->never()
-            ->andReturn('.env');
-        $app->shouldReceive('environmentPath')
-            ->never()
-            ->andReturn('');
-
-        $bootstraper->bootstrap($app);
+        $bootstraper->bootstrap($kernel);
     }
 
     public function testBootstrap()
     {
         $bootstraper = new LoadEnvironmentVariables();
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('patch.cached.config')
+            ->with('config.cache')
             ->andReturn('');
-
-        $app = $this->mock(KernelContract::class);
-        $app->shouldReceive('get')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn($config);
-        $app->shouldReceive('environmentFile')
+        $kernel->shouldReceive('getEnvironmentFile')
             ->once()
             ->andReturn('.env');
-        $app->shouldReceive('environmentPath')
+        $kernel->shouldReceive('getEnvironmentPath')
             ->once()
             ->andReturn('');
 
-        $bootstraper->bootstrap($app);
+        $bootstraper->bootstrap($kernel);
     }
 
     public function testBootstrapWithAppEnv()
@@ -65,27 +50,22 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
 
         $bootstraper = new LoadEnvironmentVariables();
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->with('patch.cached.config')
-            ->andReturn('');
-
-        $app = $this->mock(KernelContract::class);
-        $app->shouldReceive('get')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn($config);
-        $app->shouldReceive('environmentPath')
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getEnvironmentPath')
             ->twice()
             ->andReturn(__DIR__ . '/../Fixtures/');
-        $app->shouldReceive('environmentFile')
+        $kernel->shouldReceive('getEnvironmentFile')
             ->twice()
             ->andReturn('.env');
-        $app->shouldReceive('loadEnvironmentFrom')
+        $kernel->shouldReceive('loadEnvironmentFrom')
             ->once()
             ->with('.env.production');
+        $kernel->shouldReceive('getStoragePath')
+            ->once()
+            ->with('config.cache')
+            ->andReturn('');
 
-        $bootstraper->bootstrap($app);
+        $bootstraper->bootstrap($kernel);
 
         // remove APP_ENV
         putenv('APP_ENV=');

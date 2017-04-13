@@ -31,9 +31,11 @@ class TwigBridgeDataCollectorsServiceProvider implements
     public function getServices()
     {
         return [
-            Twig_Profiler_Profile::class => [self::class, 'createTwigProfilerProfile'],
+            Twig_Profiler_Profile::class => function (): Twig_Profiler_Profile {
+                return new Twig_Profiler_Profile();
+            },
             TwigEnvironment::class       => [self::class, 'createTwigEnvironment'],
-            WebProfilerContract::class   => [self::class, 'createWebProfiler'],
+            WebProfilerContract::class   => [self::class, 'createProfiler'],
         ];
     }
 
@@ -65,7 +67,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
      *
      * @return null|\Viserio\Component\Contracts\WebProfiler\WebProfiler
      */
-    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfiler
+    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
         if ($getPrevious !== null) {
             self::resolveOptions($container);
@@ -83,16 +85,6 @@ class TwigBridgeDataCollectorsServiceProvider implements
         }
 
         return null;
-    }
-
-    /**
-     * Create a new Twig_Profiler_Profile instance.
-     *
-     * @return \Twig_Profiler_Profile
-     */
-    public static function createTwigProfilerProfile(): Twig_Profiler_Profile
-    {
-        return new Twig_Profiler_Profile();
     }
 
     /**

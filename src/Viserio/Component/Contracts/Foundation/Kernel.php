@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\Foundation;
 
 use Closure;
+use Viserio\Component\Contracts\Container\Container as ContainerContract;
 
 interface Kernel
 {
@@ -23,6 +24,15 @@ interface Kernel
     public function hasBeenBootstrapped(): bool;
 
     /**
+     * Get the container instance.
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Viserio\Component\Contracts\Container\Container
+     */
+    public function getContainer(): ContainerContract;
+
+    /**
      * Get the current application locale.
      *
      * @return string
@@ -36,7 +46,7 @@ interface Kernel
      *
      * @return $this
      */
-    public function setLocale(string $locale): self;
+    public function setLocale(string $locale): Kernel;
 
     /**
      * Get the application fallback locale.
@@ -59,7 +69,7 @@ interface Kernel
      *
      * @return $this
      */
-    public function useEnvironmentPath(string $path): self;
+    public function useEnvironmentPath(string $path): Kernel;
 
     /**
      * Set the environment file to be loaded during bootstrapping.
@@ -68,7 +78,7 @@ interface Kernel
      *
      * @return $this
      */
-    public function loadEnvironmentFrom(string $file): self;
+    public function loadEnvironmentFrom(string $file): Kernel;
 
     /**
      * Get the environment file the application is using.

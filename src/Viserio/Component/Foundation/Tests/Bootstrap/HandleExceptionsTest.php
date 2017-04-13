@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Exception\Providers\ExceptionServiceProvider;
@@ -17,15 +18,20 @@ class HandleExceptionsTest extends MockeryTestCase
         $handler->shouldReceive('register')
             ->once();
 
-        $app = $this->mock(KernelContract::class);
-        $app->shouldReceive('register')
+        $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('register')
             ->once()
             ->with(ExceptionServiceProvider::class);
-        $app->shouldReceive('get')
+        $container->shouldReceive('get')
             ->once()
             ->with(HandlerContract::class)
             ->andReturn($handler);
 
-        $bootstraper->bootstrap($app);
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getContainer')
+            ->once()
+            ->andReturn($container);
+
+        $bootstraper->bootstrap($kernel);
     }
 }

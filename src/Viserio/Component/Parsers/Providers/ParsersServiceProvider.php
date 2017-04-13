@@ -34,6 +34,8 @@ class ParsersServiceProvider implements ServiceProvider
     /**
      * Create a file loader.
      *
+     * @param ContainerInterface $container
+     *
      * @return \Viserio\Component\Contracts\Parsers\Loader
      */
     public static function createFileLoader(ContainerInterface $container): LoaderContract

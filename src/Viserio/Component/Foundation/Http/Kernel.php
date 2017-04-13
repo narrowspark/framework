@@ -188,6 +188,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract
 
     /**
      * Bootstrap the application for HTTP requests.
+     *
+     * @return void
      */
     public function bootstrap(): void
     {

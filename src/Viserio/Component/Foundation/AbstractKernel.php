@@ -57,6 +57,13 @@ abstract class AbstractKernel implements
     public const EXTRA_VERSION = 'DEV';
 
     /**
+     * Container instance.
+     *
+     * @var \Viserio\Component\Contracts\Container\Container
+     */
+    protected $container;
+
+    /**
      * Indicates if the application has been bootstrapped before.
      *
      * @var bool
@@ -202,27 +209,27 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getLocale(): string
-    {
-        return $this->options['locale'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setLocale(string $locale): parent
+    public function setLocale(string $locale): KernelContract
     {
         $container = $this->getContainer();
 
         $container->get(RepositoryContract::class)->set('viserio.app.locale', $locale);
 
-        if ($this->has(TranslationManager::class)) {
+        if ($container->has(TranslationManager::class)) {
             $container->get(TranslationManager::class)->setLocale($locale);
         }
 
         $container->get(EventManagerContract::class)->trigger(new LocaleChangedEvent($this, $locale));
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocale(): string
+    {
+        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.locale');
     }
 
     /**
@@ -520,7 +527,6 @@ abstract class AbstractKernel implements
             return $kernel;
         });
 
-        $container->alias(KernelContract::class, self::class);
         $container->alias(KernelContract::class, 'kernel');
     }
 

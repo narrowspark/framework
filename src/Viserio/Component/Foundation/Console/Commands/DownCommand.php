@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\Console\Commands;
 
 use Cake\Chronos\Chronos;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 
 class DownCommand extends Command
 {
@@ -23,10 +23,10 @@ class DownCommand extends Command
      */
     public function handle()
     {
-        $config = $this->container->get(RepositoryContract::class);
+        $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
         file_put_contents(
-            $config->get('path.storage') . '/framework/down',
+            $kernel->storagePath('framework/down'),
             json_encode($this->getDownPayload(), JSON_PRETTY_PRINT)
         );
 
