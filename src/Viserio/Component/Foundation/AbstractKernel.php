@@ -9,10 +9,8 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Translation\TranslationManager;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
@@ -21,19 +19,13 @@ use Viserio\Component\Foundation\Events\LocaleChangedEvent;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-abstract class AbstractKernel implements
-    KernelContract,
-    ProvidesDefaultOptionsContract,
-    RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+abstract class AbstractKernel implements KernelContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
-    use ConfigurationTrait;
 
     /**
      * The kernel version.
@@ -109,36 +101,6 @@ abstract class AbstractKernel implements
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getDimensions(): iterable
-    {
-        return ['viserio', 'app'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMandatoryOptions(): iterable
-    {
-        return ['name', 'env'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions(): iterable
-    {
-        return [
-            'middlewares'    => [
-                'skip' => false,
-            ],
-            'locale'         => 'en',
-            'fallback_locale'=> 'en',
-        ];
-    }
-
-    /**
      * Get the container instance.
      *
      * @throws \RuntimeException
@@ -156,13 +118,14 @@ abstract class AbstractKernel implements
     public function bootstrapWith(array $bootstrappers): void
     {
         $container = $this->getContainer();
+        $events    = $container->get(EventManagerContract::class);
 
         foreach ($bootstrappers as $bootstrapper) {
-            $container->get(EventManagerContract::class)->trigger(new BootstrappingEvent($bootstrapper, $this));
+            $events->trigger(new BootstrappingEvent($bootstrapper, $this));
 
             $container->make($bootstrapper)->bootstrap($this);
 
-            $container->get(EventManagerContract::class)->trigger(new BootstrappedEvent($bootstrapper, $this));
+            $events->trigger(new BootstrappedEvent($bootstrapper, $this));
         }
 
         $this->hasBeenBootstrapped = true;
@@ -229,7 +192,7 @@ abstract class AbstractKernel implements
      */
     public function getLocale(): string
     {
-        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.locale');
+        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.locale', 'en');
     }
 
     /**
@@ -237,7 +200,7 @@ abstract class AbstractKernel implements
      */
     public function getFallbackLocale(): string
     {
-        return $this->options['fallback_locale'];
+        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.fallback_locale', 'en');
     }
 
     /**
@@ -273,7 +236,7 @@ abstract class AbstractKernel implements
      */
     public function isDownForMaintenance(): bool
     {
-        return file_exists($this->storagePath('framework/down'));
+        return file_exists($this->getStoragePath('framework/down'));
     }
 
     /**
@@ -476,7 +439,7 @@ abstract class AbstractKernel implements
     public function getEnvironmentFilePath(): string
     {
         return $this->normalizeDirectorySeparator(
-            $this->environmentPath() . '/' . $this->environmentFile()
+            $this->getEnvironmentPath() . '/' . $this->getEnvironmentFile()
         );
     }
 
@@ -522,12 +485,14 @@ abstract class AbstractKernel implements
         $kernel    = $this;
         $container = $this->getContainer();
 
-        $container->singleton(EnvironmentDetector::class, EnvironmentDetector::class);
+        $container->singleton(EnvironmentContract::class, EnvironmentDetector::class);
         $container->singleton(KernelContract::class, function () use ($kernel) {
             return $kernel;
         });
 
+        $container->alias(KernelContract::class, self::class);
         $container->alias(KernelContract::class, 'kernel');
+        $container->alias(EnvironmentDetector::class, EnvironmentContract::class);
     }
 
     /**

@@ -9,8 +9,8 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
+use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
@@ -26,7 +26,7 @@ use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
 
-class Kernel extends AbstractKernel implements HttpKernelContract
+class Kernel extends AbstractKernel implements HttpKernelContract, TerminableContract
 {
     /**
      * The application's middleware stack.
@@ -155,14 +155,13 @@ class Kernel extends AbstractKernel implements HttpKernelContract
         $container->instance(ServerRequestInterface::class, $serverRequest);
 
         StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
+        $evetns = $container->get(EventManagerContract::class);
 
-        $container->get(EventManagerContract::class)->trigger(new KernelRequestEvent($this, $serverRequest));
+        $evetns->trigger(new KernelRequestEvent($this, $serverRequest));
 
         $this->bootstrap();
 
-        $this->configureOptions($container);
-
-        $response = $this->handleRequest($serverRequest);
+        $response = $this->handleRequest($serverRequest, $evetns);
 
         // stop PHP sending a Content-Type automatically
         ini_set('default_mimetype', '');
@@ -173,7 +172,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract
     /**
      * {@inheritdoc}
      */
-    public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         if ($this->booted) {
             return;
@@ -201,36 +200,23 @@ class Kernel extends AbstractKernel implements HttpKernelContract
     /**
      * Convert request into response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param \Psr\Http\Message\ServerRequestInterface         $serverRequest
+     * @param \Viserio\Component\Contracts\Events\EventManager $events
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function handleRequest(ServerRequestInterface $serverRequest): ResponseInterface
+    protected function handleRequest(ServerRequestInterface $serverRequest, EventManagerContract $events): ResponseInterface
     {
-        $container = $this->getContainer();
-
         try {
             $response = $this->sendRequestThroughRouter($serverRequest);
 
-            if ($container->has(WebProfilerContract::class)) {
-                $profiler = $container->get(WebProfilerContract::class);
-
-                if ($profiler !== null) {
-                    // Modify the response to add the Profiler
-                    $response = $profiler->modifyResponse(
-                        $serverRequest,
-                        $response
-                    );
-                }
-            }
-
-            $container->get(EventManagerContract::class)->trigger(new KernelResponseEvent($this, $serverRequest, $response));
+            $events->trigger(new KernelResponseEvent($this, $serverRequest, $response));
         } catch (Throwable $exception) {
             $this->reportException($exception);
 
             $response = $this->renderException($serverRequest, $exception);
 
-            $container->get(EventManagerContract::class)->trigger(new KernelExceptionEvent($this, $serverRequest, $response));
+            $events->trigger(new KernelExceptionEvent($this, $serverRequest, $response));
         }
 
         return $response;
@@ -272,14 +258,15 @@ class Kernel extends AbstractKernel implements HttpKernelContract
     {
         $container = $this->getContainer();
         $router    = $container->get(RouterContract::class);
+        $config    = $container->get(RepositoryContract::class);
 
-        $router->setCachePath($container->get(RepositoryContract::class)->get('viserio.routing.path'));
-        $router->refreshCache($this->options['env'] !== 'production');
+        $router->setCachePath($config->get('viserio.routing.path'));
+        $router->refreshCache($config->get('viserio.app.env', 'production') !== 'production');
 
         return (new Pipeline())
             ->setContainer($container)
             ->send($request)
-            ->through($this->options['middlewares']['skip'] ? [] : $this->middlewares)
+            ->through($config->get('viserio.app.skip_middlewares', false) ? [] : $this->middlewares)
             ->then(function ($request) use ($router, $container) {
                 $container->instance(ServerRequestInterface::class, $request);
 

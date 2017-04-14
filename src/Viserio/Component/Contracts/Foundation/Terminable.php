@@ -23,6 +23,8 @@ interface Terminable
      *
      * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return void
      */
-    public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response);
+    public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response): void;
 }

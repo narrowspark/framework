@@ -20,11 +20,11 @@ class MarkdownEngine implements EngineContract
      * Create a new markdown engine instance.
      *
      * @param \Parsedown|\ParsedownExtra|null
-     * @param ?Parsedown $markdown
+     * @param null|Parsedown $markdown
      *
      * @throws \RuntimeException
      */
-    public function __construct(?Parsedown $markdown = null)
+    public function __construct(Parsedown $markdown = null)
     {
         // @codeCoverageIgnoreStart
         if ($markdown === null) {

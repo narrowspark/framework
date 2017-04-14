@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
-use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
@@ -77,8 +76,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function handle(InputInterface $input, OutputInterface $output = null): int
     {
-        $this->boot();
-
         try {
             $this->bootstrap();
 
@@ -103,9 +100,9 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     /**
      * {@inheritdoc}
      */
-    public function terminate(InputInterface $input, int $status)
+    public function terminate(InputInterface $input, int $status): void
     {
-        if ($this->booted) {
+        if (! $this->booted) {
             return;
         }
 
@@ -120,20 +117,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $this->bootstrap();
 
         return $this->getConsole()->all();
-    }
-
-    /**
-     * Set the console application instance.
-     *
-     * @param \Viserio\Component\Console\Application $console
-     *
-     * @return void
-     *
-     * @codeCoverageIgnore
-     */
-    public function setConsole(Cerebro $console): void
-    {
-        $this->console = $console;
     }
 
     /**
@@ -155,6 +138,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function bootstrap(): void
     {
+        $this->boot();
+
         if (! $this->hasBeenBootstrapped()) {
             $this->bootstrapWith($this->bootstrappers);
         }
@@ -166,11 +151,11 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      * @param \Symfony\Component\Console\Command\Command $command
      *
      * @return void
-     *
-     * @codeCoverageIgnore
      */
     public function registerCommand(SymfonyCommand $command): void
     {
+        $this->bootstrap();
+
         $this->getConsole()->add($command);
     }
 
@@ -243,27 +228,13 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $console   = $container->get(Cerebro::class);
 
             foreach ($this->commands as $command) {
-                // @codeCoverageIgnoreStart
                 $console->add($container->make($command));
-                // @codeCoverageIgnoreEnd
             }
 
             return $this->console = $console;
         }
 
         return $this->console;
-    }
-
-    /**
-     * Get the bootstrap classes for the application.
-     *
-     * @return array
-     *
-     * @codeCoverageIgnore
-     */
-    protected function getBootstrappers(): array
-    {
-        return $this->bootstrappers;
     }
 
     /**
@@ -321,7 +292,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
         $container->alias(ConsoleKernelContract::class, self::class);
         $container->alias(ConsoleKernelContract::class, 'console_kernel');
-        $container->alias(Application::class, self::class);
+        $container->alias(Cerebro::class, self::class);
     }
 
     /**
