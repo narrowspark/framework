@@ -19,16 +19,13 @@ use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Routing\Router as  RouterContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
-use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
-use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\EnvironmentDetector;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
 use Viserio\Component\Foundation\Events\BootstrappingEvent;
+use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
-use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
@@ -36,8 +33,6 @@ use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
-use Viserio\Component\Session\Middleware\StartSessionMiddleware;
-use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
 
 class KernelTest extends MockeryTestCase
 {
