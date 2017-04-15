@@ -174,7 +174,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        if ($this->booted) {
+        if ($this->booted === false) {
             return;
         }
 
@@ -260,7 +260,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $router    = $container->get(RouterContract::class);
         $config    = $container->get(RepositoryContract::class);
 
-        $router->setCachePath($config->get('viserio.routing.path'));
+        $router->setCachePath($this->getStoragePath('routes'));
         $router->refreshCache($config->get('viserio.app.env', 'production') !== 'production');
 
         return (new Pipeline())

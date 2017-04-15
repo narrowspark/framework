@@ -17,7 +17,9 @@ class KernelTest extends MockeryTestCase
 {
     public function testKernelBootstrap()
     {
-        $kernel = $this->getKernel();
+        $container = new Container();
+
+        $kernel = $this->getKernel($container);
 
         $kernel->boot();
 
@@ -38,7 +40,7 @@ class KernelTest extends MockeryTestCase
             ->with('viserio.app.locale', 'foo');
         $config->shouldReceive('get')
             ->once()
-            ->with('viserio.app.locale')
+            ->with('viserio.app.locale', 'en')
             ->andReturn('foo');
 
         $container->instance(RepositoryContract::class, $config);

@@ -28,6 +28,8 @@ use Viserio\Component\Foundation\Events\BootstrappedEvent;
 use Viserio\Component\Foundation\Events\BootstrappingEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
+use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
+use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\Providers\LoggerServiceProvider;
@@ -77,7 +79,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame(['test_2', 'test_1', 'test_3'], $kernel->middlewares);
     }
 
-    public function testaHandle()
+    public function testHandle()
     {
         $response = $this->mock(ResponseInterface::class);
 
@@ -93,10 +95,6 @@ class KernelTest extends MockeryTestCase
             ->with(ServerRequestInterface::class, $serverRequest);
 
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('viserio.routing.path')
-            ->andReturn('');
         $config->shouldReceive('get')
             ->once()
             ->with('viserio.app.env', 'production')
@@ -133,6 +131,7 @@ class KernelTest extends MockeryTestCase
         $container->shouldReceive('instance')
             ->once()
             ->with(ServerRequestInterface::class, $serverRequest);
+
         $loader = $this->mock(LoadServiceProvider::class);
         $loader->shouldReceive('bootstrap')
             ->once();
@@ -152,7 +151,7 @@ class KernelTest extends MockeryTestCase
             ->once();
         $router->shouldReceive('setCachePath')
             ->once()
-            ->with('');
+            ->with('/storage/routes');
         $router->shouldReceive('refreshCache')
             ->once()
             ->with(true);
@@ -172,6 +171,8 @@ class KernelTest extends MockeryTestCase
 
     public function testHandleWithException()
     {
+        $container = $this->mock(ContainerContract::class);
+
         $exception = new Exception();
         $response  = $this->mock(ResponseInterface::class);
 
@@ -188,7 +189,7 @@ class KernelTest extends MockeryTestCase
             ->once();
         $router->shouldReceive('setCachePath')
             ->once()
-            ->with('');
+            ->with('/storage/routes');
         $router->shouldReceive('refreshCache')
             ->once()
             ->with(true);
@@ -197,23 +198,26 @@ class KernelTest extends MockeryTestCase
             ->with($serverRequest)
             ->andThrow($exception);
 
-        $events = $this->mock(EventManagerContract::class);
-        $events->shouldReceive('trigger')
-            ->twice();
+        $container->shouldReceive('get')
+            ->twice()
+            ->with(RouterContract::class)
+            ->andReturn($router);
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
-            ->with('routing.path')
-            ->andReturn('');
-        $config->shouldReceive('get')
-            ->once()
-            ->with('app.env', 'production')
+            ->with('viserio.app.env', 'production')
             ->andReturn(true);
         $config->shouldReceive('get')
             ->once()
-            ->with('app.skip_middlewares', false)
+            ->with('viserio.app.skip_middlewares', false)
             ->andReturn(false);
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn($config);
+
         $handler = $this->mock(HandlerContract::class);
         $handler->shouldReceive('report')
             ->once()
@@ -222,38 +226,46 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with($serverRequest, $exception);
 
-        $container = $this->mock(KernelContract::class);
-        $container->shouldReceive('instance')
-            ->once()
-            ->with(ServerRequestInterface::class, $serverRequest);
-        $container->shouldReceive('hasBeenBootstrapped')
-            ->once()
-            ->andReturn(false);
-        $container->shouldReceive('bootstrapWith')
-            ->once()
-            ->with([
-                LoadConfiguration::class,
-                LoadEnvironmentVariables::class,
-                HandleExceptions::class,
-                LoadServiceProvider::class,
-            ]);
-        $container->shouldReceive('get')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn($config);
         $container->shouldReceive('get')
             ->twice()
             ->with(HandlerContract::class)
             ->andReturn($handler);
-        $container->shouldReceive('instance')
+
+        $events = $this->mock(EventManagerContract::class);
+        $events->shouldReceive('trigger')
             ->once()
+            ->with(Mock::type(KernelRequestEvent::class));
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(KernelExceptionEvent::class));
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(BootstrappedEvent::class));
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(BootstrappingEvent::class));
+
+        $container->shouldReceive('get')
+            ->twice()
+            ->with(EventManagerContract::class)
+            ->andReturn($events);
+
+        $loader = $this->mock(LoadServiceProvider::class);
+        $loader->shouldReceive('bootstrap')
+            ->once();
+        $container->shouldReceive('make')
+            ->once()
+            ->with(LoadServiceProvider::class)
+            ->andReturn($loader);
+
+        $container->shouldReceive('instance')
+            ->twice()
             ->with(ServerRequestInterface::class, $serverRequest);
 
-        $kernel = new Kernel(
-            $container,
-            $router,
-            $events
-        );
+        $this->getBootstrap($container);
+        $this->registerBaseProvider($container);
+
+        $kernel = $this->getKernel($container);
 
         self::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
@@ -263,22 +275,16 @@ class KernelTest extends MockeryTestCase
         $response      = $this->mock(ResponseInterface::class);
         $serverRequest = $this->mock(ServerRequestInterface::class);
 
+        $container = $this->mock(ContainerContract::class);
+
+        $kernel = $this->getKernel($container);
+
+        $kernel->terminate($serverRequest, $response);
+
         $handler = $this->mock(HandlerContract::class);
         $handler->shouldReceive('unregister')
             ->once();
 
-        $router = $this->mock(RouterContract::class);
-        $router->shouldReceive('setMiddlewarePriorities')
-            ->once()
-            ->with([
-                StartSessionMiddleware::class,
-                ShareErrorsFromSessionMiddleware::class,
-            ]);
-        $router->shouldReceive('addMiddlewares')
-            ->once()
-            ->with([]);
-
-        $container = $this->mock(KernelContract::class);
         $container->shouldReceive('get')
             ->once()
             ->with(HandlerContract::class)
@@ -286,13 +292,30 @@ class KernelTest extends MockeryTestCase
 
         $events = $this->mock(EventManagerContract::class);
         $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(KernelTerminateEvent::class));
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(EventManagerContract::class)
+            ->andReturn($events);
+
+        $router = $this->mock(RouterContract::class);
+        $router->shouldReceive('setMiddlewarePriorities')
+            ->once();
+        $router->shouldReceive('addMiddlewares')
             ->once();
 
-        $kernel = new Kernel(
-            $container,
-            $router,
-            $events
-        );
+        $container->shouldReceive('get')
+            ->once()
+            ->with(RouterContract::class)
+            ->andReturn($router);
+
+        $this->getBootstrap($container);
+        $this->registerBaseProvider($container);
+
+        $kernel->terminate($serverRequest, $response);
+        $kernel->boot();
 
         $kernel->terminate($serverRequest, $response);
     }
