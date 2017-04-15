@@ -18,8 +18,8 @@ class LocaleChangedEvent implements EventContract
      */
     public function __construct(KernelContract $app, string $locale)
     {
-        $this->name   = 'locale.changed';
-        $this->target = $app;
-        $this->param  = ['locale' => $locale];
+        $this->name       = 'locale.changed';
+        $this->target     = $app;
+        $this->parameters = ['locale' => $locale];
     }
 }

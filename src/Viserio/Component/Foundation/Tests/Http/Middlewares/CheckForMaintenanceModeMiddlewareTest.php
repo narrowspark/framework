@@ -43,7 +43,7 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
         $kernel->shouldReceive('isDownForMaintenance')
             ->once()
             ->andReturn(true);
-        $kernel->shouldReceive('storagePath')
+        $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('framework/down')
             ->andReturn(__DIR__ . '/../../Fixtures/Middleware/framework/down');

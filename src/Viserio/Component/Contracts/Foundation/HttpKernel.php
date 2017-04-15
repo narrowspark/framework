@@ -5,7 +5,7 @@ namespace Viserio\Component\Contracts\Foundation;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-interface HttpKernel
+interface HttpKernel extends Kernel
 {
     /**
      * The REQUEST event occurs at the very beginning of request

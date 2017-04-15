@@ -101,11 +101,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Get the container instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Viserio\Component\Contracts\Container\Container
+     * {@inheritdoc}
      */
     public function getContainer(): ContainerContract
     {
@@ -140,9 +136,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Boots the current kernel.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function boot(): void
     {
@@ -160,9 +154,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Determine if the application has booted.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isBooted(): bool
     {
@@ -220,9 +212,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Determine if we are running in the console.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function runningInConsole(): bool
     {
@@ -230,9 +220,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Determine if the application is currently down for maintenance.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isDownForMaintenance(): bool
     {
@@ -240,9 +228,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Gets the application root dir (path of the project's composer file).
-     *
-     * @return string The project root dir
+     * {@inheritdoc}
      */
     public function getProjectDir(): string
     {
@@ -265,11 +251,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Get the path to the application "app" directory.
-     *
-     * @param string $path Optionally, a path to append to the app path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getAppPath(string $path = ''): string
     {
@@ -279,15 +261,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Get the path to the application configuration files.
-     *
-     * This path is used by the configuration loader to load the application
-     * configuration files. In general, you should'nt need to change this
-     * value; however, you can theoretically change the path from here.
-     *
-     * @param string $path Optionally, a path to append to the config path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getConfigPath(string $path = ''): string
     {
@@ -297,15 +271,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Get the path to the database directory.
-     *
-     * This path is used by the migration generator and migration runner to
-     * know where to place your fresh database migration classes. You're
-     * free to modify the path but you probably will not ever need to.
-     *
-     * @param string $path Optionally, a path to append to the database path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getDatabasePath(string $path = ''): string
     {
@@ -315,15 +281,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Get the path to the public / web directory.
-     *
-     * The public path contains the assets for your web application, such as
-     * your JavaScript and CSS files, and also contains the primary entry
-     * point for web requests into these applications from the outside.
-     *
-     * @param string $path Optionally, a path to append to the public path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getPublicPath(string $path = ''): string
     {
@@ -333,14 +291,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Get the path to the storage directory.
-     *
-     * The storage path is used by Narrowspark to store cached views, logs
-     * and other pieces of information.
-     *
-     * @param string $path Optionally, a path to append to the storage path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getStoragePath(string $path = ''): string
     {
@@ -350,11 +301,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Get the path to the resources directory.
-     *
-     * @param string $path Optionally, a path to append to the resources path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getResourcePath(string $path = ''): string
     {
@@ -364,13 +311,7 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Get the path to the language files.
-     *
-     * This path is used by the language file loader to load your application
-     * language files. The purpose of these files is to store your strings
-     * that are translated into other languages for views, e-mails, etc.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLangPath(): string
     {
@@ -378,20 +319,12 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * Get the path to the routes files.
-     *
-     * This path is used by the routes loader to load the application
-     * routes files. In general, you should'nt need to change this
-     * value; however, you can theoretically change the path from here.
-     *
-     * @param string $path Optionally, a path to append to the routes path
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getRoutesPath(string $path = ''): string
+    public function getRoutesPath(): string
     {
         return $this->normalizeDirectorySeparator(
-            $this->projectDir . '/routes' . ($path ? '/' . $path : $path)
+            $this->projectDir . '/routes'
         );
     }
 

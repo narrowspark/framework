@@ -23,7 +23,7 @@ class RepositoryTest extends TestCase
     public function setUp()
     {
         $this->root       = vfsStream::setup();
-        $this->fileloader = new FileLoader(new TaggableParser(), []);
+        $this->fileloader = new FileLoader(new TaggableParser());
     }
 
     public function testConstructorInjection()

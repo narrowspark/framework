@@ -10,14 +10,14 @@ use Viserio\Component\Support\Str as ViserioStr;
 class StrExtension extends Twig_Extension
 {
     /**
-     * @var string|object
+     * @var array|callback
      */
     protected $callback = ViserioStr::class;
 
     /**
      * Return the string object callback.
      *
-     * @return string|object
+     * @return array|callback
      */
     public function getCallback()
     {
@@ -27,8 +27,7 @@ class StrExtension extends Twig_Extension
     /**
      * Set a new string callback.
      *
-     * @param string|object
-     * @param mixed $callback
+     * @param array|callback $callback
      *
      * @return void
      */
