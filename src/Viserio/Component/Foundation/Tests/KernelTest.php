@@ -5,16 +5,16 @@ namespace Viserio\Component\Foundation\Tests;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
-use Viserio\Component\Foundation\Events\LocaleChangedEvent;
-use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Foundation\EnvironmentDetector;
+use Viserio\Component\Foundation\Events\LocaleChangedEvent;
 
 class KernelTest extends MockeryTestCase
 {
@@ -232,7 +232,7 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        self::assertSame('prod', $kernel->detectEnvironment(function() {
+        self::assertSame('prod', $kernel->detectEnvironment(function () {
             return 'prod';
         }));
     }
