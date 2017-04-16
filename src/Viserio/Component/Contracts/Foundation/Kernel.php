@@ -81,14 +81,14 @@ interface Kernel
      *
      * @return bool
      */
-    public function runningUnitTests(): bool;
+    public function isRunningUnitTests(): bool;
 
     /**
      * Determine if we are running in the console.
      *
      * @return bool
      */
-    public function runningInConsole(): bool;
+    public function isRunningInConsole(): bool;
 
     /**
      * Determine if the application is currently down for maintenance.

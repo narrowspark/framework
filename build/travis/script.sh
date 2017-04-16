@@ -19,5 +19,3 @@ TRY
 if [ $? -ne 0 ]; then
   exit 1
 fi
-
-if [[ "$PSALM" = true ]]; then ./vendor/bin/psalm -c psalm.xml --find-dead-code; fi

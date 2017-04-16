@@ -206,7 +206,7 @@ abstract class AbstractKernel implements KernelContract
     /**
      * {@inheritdoc}
      */
-    public function runningUnitTests(): bool
+    public function isRunningUnitTests(): bool
     {
         return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.env') == 'testing';
     }
@@ -214,7 +214,7 @@ abstract class AbstractKernel implements KernelContract
     /**
      * {@inheritdoc}
      */
-    public function runningInConsole(): bool
+    public function isRunningInConsole(): bool
     {
         return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
     }
@@ -383,7 +383,7 @@ abstract class AbstractKernel implements KernelContract
     {
         $args      = $_SERVER['argv'] ?? null;
         $container = $this->getContainer();
-        $env       = $container->get(EnvironmentDetector::class)->detect($callback, $args);
+        $env       = $container->get(EnvironmentContract::class)->detect($callback, $args);
 
         $container->get(RepositoryContract::class)->set('viserio.app.env', $env);
 
