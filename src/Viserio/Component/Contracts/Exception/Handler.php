@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Exception;
 
-use Throwable;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
 interface Handler extends ExceptionHandlerContract

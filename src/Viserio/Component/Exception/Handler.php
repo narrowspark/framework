@@ -9,6 +9,7 @@ use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
@@ -20,7 +21,6 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
 use Viserio\Component\Exception\Filters\VerboseFilter;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
