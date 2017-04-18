@@ -8,7 +8,6 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;

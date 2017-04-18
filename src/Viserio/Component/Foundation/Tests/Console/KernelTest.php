@@ -7,7 +7,6 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;

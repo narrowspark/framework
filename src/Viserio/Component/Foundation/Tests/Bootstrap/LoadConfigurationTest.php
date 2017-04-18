@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
-use Mockery;
 
 class LoadConfigurationTest extends MockeryTestCase
 {
