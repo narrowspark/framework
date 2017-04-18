@@ -137,7 +137,9 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @var string $name
+     * @var string
+     *
+     * @param mixed $name
      *
      * @throws \RuntimeException|\BadMethodCallException
      *

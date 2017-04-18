@@ -12,7 +12,7 @@ class ExceptionHandler implements ExceptionHandlerContract
 {
     public function __construct()
     {
-        # code...
+        // code...
     }
 
     /**
@@ -20,7 +20,6 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     public function report(Throwable $exception): void
     {
-
     }
 
     /**
@@ -28,7 +27,6 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     public function render(ServerRequestInterface $request, Throwable $exception): ResponseInterface
     {
-
     }
 
     /**
@@ -36,6 +34,5 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     public function renderForConsole(OutputInterface $output, Throwable $exception): void
     {
-
     }
 }
