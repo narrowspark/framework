@@ -125,9 +125,9 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      *
      * @param \Throwable $exception
      *
-     * @return void|null
+     * @return void
      */
-    public function report(Throwable $exception)
+    public function report(Throwable $exception): void
     {
         if ($this->shouldntReport($exception)) {
             return;

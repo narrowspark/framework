@@ -2,11 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Exception;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
+use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
-interface Handler
+interface Handler extends ExceptionHandlerContract
 {
     /**
      * Add the displayer instance.
@@ -53,14 +52,4 @@ interface Handler
      * @return void
      */
     public function unregister(): void;
-
-    /**
-     * Render an exception into a response.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $exception
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function render(ServerRequestInterface $request, Throwable $exception): ResponseInterface;
 }

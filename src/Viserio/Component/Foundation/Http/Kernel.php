@@ -6,8 +6,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
@@ -156,13 +156,13 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
         StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
 
-        $evetns = $container->get(EventManagerContract::class);
+        $events = $container->get(EventManagerContract::class);
 
-        $evetns->trigger(new KernelRequestEvent($this, $serverRequest));
+        $events->trigger(new KernelRequestEvent($this, $serverRequest));
 
         $this->bootstrap();
 
-        $response = $this->handleRequest($serverRequest, $evetns);
+        $response = $this->handleRequest($serverRequest, $events);
 
         // stop PHP sending a Content-Type automatically
         ini_set('default_mimetype', '');
@@ -182,8 +182,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $container = $this->getContainer();
 
         $container->get(EventManagerContract::class)->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
-
-        $container->get(HandlerContract::class)->unregister();
     }
 
     /**
@@ -230,7 +228,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     protected function reportException(Throwable $exception)
     {
-        $this->getContainer()->get(HandlerContract::class)->report($exception);
+        $this->getContainer()->get(ExceptionHandlerContract::class)->report($exception);
     }
 
     /**
@@ -245,7 +243,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         ServerRequestInterface $request,
         Throwable $exception
     ): ResponseInterface {
-        return $this->getContainer()->get(HandlerContract::class)->render($request, $exception);
+        return $this->getContainer()->get(ExceptionHandlerContract::class)->render($request, $exception);
     }
 
     /**

@@ -20,6 +20,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
 use Viserio\Component\Exception\Filters\VerboseFilter;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
@@ -169,6 +170,13 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
             $exception,
             $this->getTransformed($exception)
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function renderForConsole(OutputInterface $output, Throwable $exception): void
+    {
     }
 
     /**

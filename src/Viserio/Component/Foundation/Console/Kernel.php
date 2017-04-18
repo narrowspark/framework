@@ -13,7 +13,7 @@ use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
@@ -105,10 +105,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         if ($this->booted === false) {
             return;
         }
-
-        $container = $this->getContainer();
-
-        $container->get(HandlerContract::class)->unregister();
     }
 
     /**
@@ -248,7 +244,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function reportException(Throwable $exception): void
     {
-        $this->getContainer()->get(HandlerContract::class)->report($exception);
+        $this->getContainer()->get(ExceptionHandlerContract::class)->report($exception);
     }
 
     /**
@@ -261,7 +257,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function renderException($output, Throwable $exception): void
     {
-        $this->getConsole()->renderException($exception, $output);
+        $this->getContainer()->get(ExceptionHandlerContract::class)->renderForConsole($exception, $output);
     }
 
     /**
