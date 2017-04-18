@@ -6,10 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Parsers\FileLoader;
+use Viserio\Component\Parsers\GroupParser;
+use Viserio\Component\Parsers\Parser;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Parsers\TaggableParser;
-use Viserio\Component\Parsers\Parser;
-use Viserio\Component\Parsers\GroupParser;
 
 class ParsersServiceProviderTest extends TestCase
 {

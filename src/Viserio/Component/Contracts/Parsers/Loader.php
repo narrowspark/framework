@@ -32,10 +32,10 @@ interface Loader
     /**
      * Load the given file path.
      *
-     * @param string      $file
-     * @param array|null  $options
+     * @param string     $file
+     * @param array|null $options
      *
-     * @throws \RuntimeException                                              If wrong options are given.
+     * @throws \RuntimeException                                               If wrong options are given.
      * @throws \Viserio\Component\Contracts\Parsers\Exception\LoadingException
      *
      * @return array

@@ -77,7 +77,7 @@ class FileLoader implements LoaderContract
         // Determine if the given file exists.
         $path = $this->exists($file);
 
-        $parser = $options === null ? new Parser() : new $this->parsers[key($options)];
+        $parser = $options === null ? new Parser() : new $this->parsers[key($options)]();
 
         if (($tag = $options['tag'] ?? null) !== null) {
             $parser->setTag($tag);

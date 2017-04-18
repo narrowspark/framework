@@ -5,7 +5,6 @@ namespace Viserio\Component\Parsers\Formats;
 use DOMException;
 use RuntimeException;
 use Spatie\ArrayToXml\ArrayToXml;
-use Throwable;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\DumpException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;

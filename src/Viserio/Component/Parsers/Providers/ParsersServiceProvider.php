@@ -5,11 +5,10 @@ namespace Viserio\Component\Parsers\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Component\Contracts\Parsers\TaggableParser as TaggableParserContract;
 use Viserio\Component\Parsers\FileLoader;
-use Viserio\Component\Parsers\TaggableParser;
 use Viserio\Component\Parsers\GroupParser;
 use Viserio\Component\Parsers\Parser;
+use Viserio\Component\Parsers\TaggableParser;
 
 class ParsersServiceProvider implements ServiceProvider
 {

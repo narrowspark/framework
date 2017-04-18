@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Config;
 
 use ArrayIterator;
-use RuntimeException;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
+use RuntimeException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
 

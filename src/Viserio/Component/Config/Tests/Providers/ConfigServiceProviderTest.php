@@ -7,8 +7,8 @@ use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Component\Parsers\FileLoader;
 
 class ConfigServiceProviderTest extends TestCase
 {
