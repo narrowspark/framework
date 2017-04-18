@@ -75,32 +75,12 @@ interface Container extends ContainerInterface
     public function forget(string $abstract);
 
     /**
-     * Resolve the given type from the container.
-     *
-     * @param string $abstract
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function make(string $abstract, array $parameters = []);
-
-    /**
      * "Extend" an abstract type in the container.
      *
      * @param string   $binding
      * @param \Closure $closure
      */
     public function extend(string $binding, Closure $closure);
-
-    /**
-     * Intercept the resolve call to add some features.
-     *
-     * @param mixed $abstract
-     * @param array $parameters
-     *
-     * @return mixed
-     */
-    public function resolve($abstract, array $parameters = []);
 
     /**
      * Resolve a bound type from container.

@@ -16,12 +16,11 @@ use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
 use Viserio\Component\Foundation\Events\BootstrappingEvent;
 use Viserio\Component\Foundation\Events\LocaleChangedEvent;
-use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
-use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 
 abstract class AbstractKernel implements KernelContract
 {
@@ -119,7 +118,13 @@ abstract class AbstractKernel implements KernelContract
         foreach ($bootstrappers as $bootstrapper) {
             $events->trigger(new BootstrappingEvent($bootstrapper, $this));
 
-            $container->make($bootstrapper)->bootstrap($this);
+            if ($container instanceof FactoryContract) {
+                $bootstrapperClass = $container->resolve($bootstrapper);
+            } else {
+                $bootstrapperClass = $container->get($bootstrapper);
+            }
+
+            $bootstrapperClass->bootstrap($this);
 
             $events->trigger(new BootstrappedEvent($bootstrapper, $this));
         }
@@ -403,8 +408,6 @@ abstract class AbstractKernel implements KernelContract
         $container->register(new EventsServiceProvider());
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new ConfigServiceProvider());
-        $container->register(new LoggerServiceProvider());
-        $container->register(new ConfigureLoggingServiceProvider());
         $container->register(new RoutingServiceProvider());
     }
 

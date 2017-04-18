@@ -230,7 +230,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $console   = $container->get(Cerebro::class);
 
             foreach ($this->commands as $command) {
-                $console->add($container->make($command));
+                $console->add($container->resolve($command));
             }
 
             return $this->console = $console;

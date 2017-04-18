@@ -128,12 +128,21 @@ class Stream implements StreamInterface
 
     /**
      * Closes the stream when the destructed.
+     *
+     * @return void
      */
     public function __destruct()
     {
         $this->close();
     }
 
+    /**
+     * @var string $name
+     *
+     * @throws \RuntimeException|\BadMethodCallException
+     *
+     * @return void
+     */
     public function __get($name)
     {
         if ($name == 'stream') {
@@ -149,9 +158,11 @@ class Stream implements StreamInterface
     public function __toString()
     {
         try {
-            $this->seek(0);
+            if ($this->isSeekable()) {
+                $this->rewind();
+            }
 
-            return (string) stream_get_contents($this->stream);
+            return $this->getContents();
         } catch (Throwable $exception) {
             return '';
         }

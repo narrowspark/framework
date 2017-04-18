@@ -11,7 +11,7 @@ interface Handler
     /**
      * Add the displayer instance.
      *
-     * @param Displayer $displayer
+     * @param \Viserio\Component\Contracts\Exception\Displayer $displayer
      *
      * @return $this
      */
@@ -27,7 +27,7 @@ interface Handler
     /**
      * Add the filter instance.
      *
-     * @param Filter $filter
+     * @param \Viserio\Component\Contracts\Exception\Filter $filter
      *
      * @return $this
      */
@@ -42,13 +42,17 @@ interface Handler
 
     /**
      * Register the exception / Error handlers for the application.
+     *
+     * @return void
      */
-    public function register();
+    public function register(): void;
 
     /**
      * Unregister the PHP error handler.
+     *
+     * @return void
      */
-    public function unregister();
+    public function unregister(): void;
 
     /**
      * Render an exception into a response.

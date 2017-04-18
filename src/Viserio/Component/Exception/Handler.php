@@ -102,7 +102,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function register(): void
     {
         error_reporting(E_ALL);
 
@@ -122,7 +122,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function unregister()
+    public function unregister(): void
     {
         restore_error_handler();
     }

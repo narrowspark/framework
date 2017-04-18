@@ -109,7 +109,7 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(HandlerContract::class)
             ->andReturn($handler);
-        $container->shouldReceive('make')
+        $container->shouldReceive('resolve')
             ->never();
 
         $cerebro = $this->mock(Cerebro::class);
@@ -301,7 +301,7 @@ class KernelTest extends MockeryTestCase
         $setRequestForConsole->shouldReceive('bootstrap')
             ->once();
 
-        $container->shouldReceive('make')
+        $container->shouldReceive('resolve')
             ->once()
             ->with(SetRequestForConsole::class)
             ->andReturn($setRequestForConsole);

@@ -130,7 +130,7 @@ class KernelTest extends MockeryTestCase
         $loader = $this->mock(LoadServiceProvider::class);
         $loader->shouldReceive('bootstrap')
             ->once();
-        $container->shouldReceive('make')
+        $container->shouldReceive('resolve')
             ->once()
             ->with(LoadServiceProvider::class)
             ->andReturn($loader);
@@ -248,7 +248,7 @@ class KernelTest extends MockeryTestCase
         $loader = $this->mock(LoadServiceProvider::class);
         $loader->shouldReceive('bootstrap')
             ->once();
-        $container->shouldReceive('make')
+        $container->shouldReceive('resolve')
             ->once()
             ->with(LoadServiceProvider::class)
             ->andReturn($loader);

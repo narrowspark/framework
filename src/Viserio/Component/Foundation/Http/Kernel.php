@@ -155,6 +155,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $container->instance(ServerRequestInterface::class, $serverRequest);
 
         StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
+
         $evetns = $container->get(EventManagerContract::class);
 
         $evetns->trigger(new KernelRequestEvent($this, $serverRequest));

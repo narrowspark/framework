@@ -28,7 +28,7 @@ class LoadServiceProviderTest extends MockeryTestCase
             ->once()
             ->with(RepositoryContract::class)
             ->andReturn($config);
-        $container->shouldReceive('make')
+        $container->shouldReceive('resolve')
             ->once()
             ->with(ConfigureLoggingServiceProvider::class)
             ->andReturn($provider);

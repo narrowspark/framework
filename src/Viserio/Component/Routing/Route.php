@@ -12,6 +12,7 @@ use Viserio\Component\Routing\Route\Action as RouteAction;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 
 class Route implements RouteContract
 {
@@ -361,8 +362,8 @@ class Route implements RouteContract
             try {
                 $this->controller = $container->get($class);
             } catch (NotFoundException $exception) {
-                if (method_exists($container, 'make')) {
-                    $this->controller = $container->make($class);
+                if ($container instanceof FactoryContract) {
+                    $this->controller = $container->resolve($class);
                 } else {
                     throw new $exception();
                 }

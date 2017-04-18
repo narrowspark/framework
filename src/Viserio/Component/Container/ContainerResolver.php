@@ -9,8 +9,9 @@ use ReflectionMethod;
 use ReflectionParameter;
 use Viserio\Component\Contracts\Container\Exceptions\BindingResolutionException;
 use Viserio\Component\Contracts\Container\Exceptions\CyclicDependencyException;
+use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 
-class ContainerResolver
+class ContainerResolver implements FactoryContract
 {
     /**
      * The stack of concretions currently being built.
@@ -20,28 +21,21 @@ class ContainerResolver
     protected $buildStack = [];
 
     /**
-     * Resolve a closure, function, method or a class.
-     *
-     * @param string|array $subject
-     * @param array        $parameters
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function resolve($subject, array $parameters = [])
+    public function resolve(string $name, array $parameters = [])
     {
-        if ($this->isClass($subject)) {
-            return $this->resolveClass($subject, $parameters);
-        } elseif ($this->isMethod($subject)) {
-            return $this->resolveMethod($subject, $parameters);
-        } elseif ($this->isFunction($subject)) {
-            return $this->resolveFunction($subject, $parameters);
+        if ($this->isClass($name)) {
+            return $this->resolveClass($name, $parameters);
+        } elseif ($this->isMethod($name)) {
+            return $this->resolveMethod($name, $parameters);
+        } elseif ($this->isFunction($name)) {
+            return $this->resolveFunction($name, $parameters);
         }
-
-        $subject = is_object($subject) ? get_class($subject) : $subject;
 
         throw new BindingResolutionException(sprintf(
             '[%s] is not resolvable. Build stack : [%s]',
-            $subject,
+            $name,
             implode(', ', $this->buildStack)
         ));
     }
@@ -231,7 +225,7 @@ class ContainerResolver
      */
     protected function isClass($value): bool
     {
-        return is_string($value) && class_exists($value);
+        return class_exists($value);
     }
 
     /**
@@ -259,7 +253,7 @@ class ContainerResolver
     }
 
     /**
-     * Merge some dynamicly resolved parameters whith some others provided parameters by the user.
+     * Merge some dynamically resolved parameters with some others provided parameters by the user.
      *
      * @param array $rootParameters
      * @param array $parameters

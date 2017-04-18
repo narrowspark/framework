@@ -156,14 +156,6 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     /**
      * {@inheritdoc}
      */
-    public function make(string $abstract, array $parameters = [])
-    {
-        return $this->resolve($abstract, $parameters);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function extend(string $abstract, Closure $closure)
     {
         $this->extendAbstract($abstract, $closure);
@@ -204,10 +196,10 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     /**
      * {@inheritdoc}
      */
-    public function resolve($abstract, array $parameters = [])
+    public function resolve(string $name, array $parameters = [])
     {
-        if (is_string($abstract) && isset($this->contextualParameters[$abstract])) {
-            $contextualParameters = $this->contextualParameters[$abstract];
+        if (is_string($name) && isset($this->contextualParameters[$name])) {
+            $contextualParameters = $this->contextualParameters[$name];
 
             foreach ($contextualParameters as $key => $value) {
                 if ($value instanceof Closure) {
@@ -218,11 +210,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             $parameters = array_replace($contextualParameters, $parameters);
         }
 
-        if ($this->has($abstract)) {
-            return $this->resolveBound($abstract, $parameters);
+        if ($this->has($name)) {
+            return $this->resolveBound($name, $parameters);
         }
 
-        return $this->resolveNonBound($abstract, $parameters);
+        return $this->resolveNonBound($name, $parameters);
     }
 
     /**
@@ -701,7 +693,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         }
 
         return function (ContainerContract $container) use ($implementation) {
-            return $container->make($implementation);
+            return $container->resolve($implementation);
         };
     }
 }
