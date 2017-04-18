@@ -314,9 +314,6 @@ class KernelTest extends MockeryTestCase
         $container->shouldReceive('alias')
             ->once()
             ->with(KernelContract::class, 'kernel');
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(EnvironmentDetector::class, EnvironmentContract::class);
         $container->shouldReceive('singleton')
             ->once()
             ->with(HttpKernelContract::class, Mock::type(Closure::class));
@@ -339,9 +336,6 @@ class KernelTest extends MockeryTestCase
         $container->shouldReceive('register')
             ->once()
             ->with(Mock::type(OptionsResolverServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(ConfigServiceProvider::class));
         $container->shouldReceive('register')
             ->once()
             ->with(Mock::type(RoutingServiceProvider::class));

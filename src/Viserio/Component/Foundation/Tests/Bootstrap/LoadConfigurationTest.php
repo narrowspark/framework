@@ -7,6 +7,8 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
+use Viserio\Component\Config\Providers\ConfigServiceProvider;
+use Mockery;
 
 class LoadConfigurationTest extends MockeryTestCase
 {
@@ -23,6 +25,9 @@ class LoadConfigurationTest extends MockeryTestCase
             ->andReturn('UTC');
 
         $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('register')
+            ->once()
+            ->with(Mockery::type(ConfigServiceProvider::class));
         $container->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)
@@ -61,6 +66,9 @@ class LoadConfigurationTest extends MockeryTestCase
             ->andReturn('UTC');
 
         $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('register')
+            ->once()
+            ->with(Mockery::type(ConfigServiceProvider::class));
         $container->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)
