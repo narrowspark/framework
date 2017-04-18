@@ -8,11 +8,13 @@ use Monolog\Handler\SyslogHandler;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 {
@@ -26,16 +28,18 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $writer = $this->mock(Writer::class);
         $writer->shouldReceive('useFiles')
-            ->once()
-            ->with('/logs/narrowspark.log', 'debug');
+            ->once();
 
         $container->instance(Writer::class, $writer);
 
         $config = new Repository();
-        $config->set('path.storage', '');
         $config->set('viserio.app.name', 'Narrowspark');
 
         $container->instance(RepositoryContract::class, $config);
+
+        $kernel = new class() extends AbstractKernel {};
+
+        $container->instance(KernelContract::class, $kernel);
 
         $container->register(new ConfigureLoggingServiceProvider());
 
@@ -52,17 +56,19 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $writer = $this->mock(Writer::class);
         $writer->shouldReceive('useDailyFiles')
-            ->once()
-            ->with('/logs/narrowspark.log', 5, 'debug');
+            ->once();
 
         $container->instance(Writer::class, $writer);
 
         $config = new Repository();
-        $config->set('path.storage', '');
         $config->set('viserio.app.log.handler', 'daily');
         $config->set('viserio.app.name', 'Narrowspark');
 
         $container->instance(RepositoryContract::class, $config);
+
+        $kernel = new class() extends AbstractKernel {};
+
+        $container->instance(KernelContract::class, $kernel);
 
         $container->register(new ConfigureLoggingServiceProvider());
 
@@ -93,11 +99,14 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $container->instance(HandlerParser::class, $handler);
 
         $config = new Repository();
-        $config->set('path.storage', '');
         $config->set('viserio.app.log.handler', 'errorlog');
         $config->set('viserio.app.name', 'Narrowspark');
 
         $container->instance(RepositoryContract::class, $config);
+
+        $kernel = new class() extends AbstractKernel {};
+
+        $container->instance(KernelContract::class, $kernel);
 
         $container->register(new ConfigureLoggingServiceProvider());
 
@@ -128,11 +137,14 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $container->instance(HandlerParser::class, $handler);
 
         $config = new Repository();
-        $config->set('path.storage', '');
         $config->set('viserio.app.log.handler', 'syslog');
         $config->set('viserio.app.name', 'Narrowspark');
 
         $container->instance(RepositoryContract::class, $config);
+
+        $kernel = new class() extends AbstractKernel {};
+
+        $container->instance(KernelContract::class, $kernel);
 
         $container->register(new ConfigureLoggingServiceProvider());
 

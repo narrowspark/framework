@@ -5,6 +5,7 @@ namespace Viserio\Component\Foundation\Bootstrap;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Config\Providers\ConfigServiceProvider;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
 {
@@ -14,7 +15,11 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     public function bootstrap(KernelContract $kernel): void
     {
         $loadedFromCache = false;
-        $config          = $kernel->getContainer()->get(RepositoryContract::class);
+        $container       = $kernel->getContainer();
+
+        $container->register(new ConfigServiceProvider());
+
+        $config = $container->get(RepositoryContract::class);
 
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.

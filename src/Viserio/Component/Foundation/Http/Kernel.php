@@ -13,7 +13,6 @@ use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
-use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
@@ -74,7 +73,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      * @var array
      */
     protected $bootstrappers = [
-        LoadConfiguration::class,
         LoadEnvironmentVariables::class,
         HandleExceptions::class,
         LoadServiceProvider::class,

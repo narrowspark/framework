@@ -15,7 +15,7 @@ use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
@@ -55,13 +55,13 @@ class KernelTest extends MockeryTestCase
             ->with(Schedule::class)
             ->andReturn($this->mock(Schedule::class));
 
-        $handler = $this->mock(HandlerContract::class);
+        $handler = $this->mock(ExceptionHandlerContract::class);
         $handler->shouldReceive('report')
             ->never();
 
         $container->shouldReceive('get')
             ->never()
-            ->with(HandlerContract::class)
+            ->with(ExceptionHandlerContract::class)
             ->andReturn($handler);
 
         $cerebro = $this->mock(Cerebro::class);
@@ -101,13 +101,15 @@ class KernelTest extends MockeryTestCase
             ->with(Schedule::class)
             ->andReturn($this->mock(Schedule::class));
 
-        $handler = $this->mock(HandlerContract::class);
+        $handler = $this->mock(ExceptionHandlerContract::class);
         $handler->shouldReceive('report')
+            ->once();
+        $handler->shouldReceive('renderForConsole')
             ->once();
 
         $container->shouldReceive('get')
-            ->once()
-            ->with(HandlerContract::class)
+            ->twice()
+            ->with(ExceptionHandlerContract::class)
             ->andReturn($handler);
         $container->shouldReceive('resolve')
             ->never();
@@ -115,8 +117,6 @@ class KernelTest extends MockeryTestCase
         $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('add')
             ->never();
-        $cerebro->shouldReceive('renderException')
-            ->once();
 
         $container->shouldReceive('get')
             ->once()
@@ -133,15 +133,6 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
         $kernel->terminate(new ArgvInput(), 0);
-
-        $handler = $this->mock(HandlerContract::class);
-        $handler->shouldReceive('unregister')
-            ->once();
-
-        $container->shouldReceive('get')
-            ->once()
-            ->with(HandlerContract::class)
-            ->andReturn($handler);
 
         $container->shouldReceive('singleton')
             ->once()
@@ -351,9 +342,6 @@ class KernelTest extends MockeryTestCase
     {
         $container->shouldReceive('register')
             ->once()
-            ->with(Mock::type(ParsersServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
             ->with(Mock::type(EventsServiceProvider::class));
         $container->shouldReceive('register')
             ->once()
@@ -361,12 +349,6 @@ class KernelTest extends MockeryTestCase
         $container->shouldReceive('register')
             ->once()
             ->with(Mock::type(ConfigServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(LoggerServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(ConfigureLoggingServiceProvider::class));
         $container->shouldReceive('register')
             ->once()
             ->with(Mock::type(RoutingServiceProvider::class));

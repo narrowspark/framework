@@ -6,6 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
+use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Exception\Displayers\HtmlDisplayer;
@@ -26,9 +27,12 @@ class ExceptionServiceProvider implements ServiceProvider
     {
         return [
             ExceptionInfo::class    => [self::class, 'createExceptionInfo'],
-            Handler::class          => [self::class, 'createExceptionHandler'],
-            HandlerContract::class  => function (ContainerInterface $container) {
-                return $container->get(Handler::class);
+            HandlerContract::class          => [self::class, 'createExceptionHandler'],
+            Handler::class  => function (ContainerInterface $container) {
+                return $container->get(HandlerContract::class);
+            },
+            ExceptionHandlerContract::class  => function (ContainerInterface $container) {
+                return $container->get(HandlerContract::class);
             },
             HtmlDisplayer::class    => [self::class, 'createHtmlDisplayer'],
             JsonDisplayer::class    => [self::class, 'createJsonDisplayer'],

@@ -4,7 +4,6 @@ namespace Viserio\Component\Foundation;
 
 use Closure;
 use ReflectionObject;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
@@ -398,7 +397,6 @@ abstract class AbstractKernel implements KernelContract
 
         $container->register(new EventsServiceProvider());
         $container->register(new OptionsResolverServiceProvider());
-        $container->register(new ConfigServiceProvider());
         $container->register(new RoutingServiceProvider());
     }
 
@@ -419,7 +417,6 @@ abstract class AbstractKernel implements KernelContract
 
         $container->alias(KernelContract::class, self::class);
         $container->alias(KernelContract::class, 'kernel');
-        $container->alias(EnvironmentDetector::class, EnvironmentContract::class);
     }
 
     /**

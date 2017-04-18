@@ -12,7 +12,7 @@ use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
@@ -213,7 +213,7 @@ class KernelTest extends MockeryTestCase
             ->with(RepositoryContract::class)
             ->andReturn($config);
 
-        $handler = $this->mock(HandlerContract::class);
+        $handler = $this->mock(ExceptionHandlerContract::class);
         $handler->shouldReceive('report')
             ->once()
             ->with($exception);
@@ -223,7 +223,7 @@ class KernelTest extends MockeryTestCase
 
         $container->shouldReceive('get')
             ->twice()
-            ->with(HandlerContract::class)
+            ->with(ExceptionHandlerContract::class)
             ->andReturn($handler);
 
         $events = $this->mock(EventManagerContract::class);
@@ -275,15 +275,6 @@ class KernelTest extends MockeryTestCase
         $kernel = $this->getKernel($container);
 
         $kernel->terminate($serverRequest, $response);
-
-        $handler = $this->mock(HandlerContract::class);
-        $handler->shouldReceive('unregister')
-            ->once();
-
-        $container->shouldReceive('get')
-            ->once()
-            ->with(HandlerContract::class)
-            ->andReturn($handler);
 
         $events = $this->mock(EventManagerContract::class);
         $events->shouldReceive('trigger')
@@ -347,9 +338,6 @@ class KernelTest extends MockeryTestCase
     {
         $container->shouldReceive('register')
             ->once()
-            ->with(Mock::type(ParsersServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
             ->with(Mock::type(EventsServiceProvider::class));
         $container->shouldReceive('register')
             ->once()
@@ -357,12 +345,6 @@ class KernelTest extends MockeryTestCase
         $container->shouldReceive('register')
             ->once()
             ->with(Mock::type(ConfigServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(LoggerServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(ConfigureLoggingServiceProvider::class));
         $container->shouldReceive('register')
             ->once()
             ->with(Mock::type(RoutingServiceProvider::class));
