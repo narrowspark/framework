@@ -15,7 +15,9 @@ class EventsServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            EventManagerContract::class => [self::class, 'createEventEventManager'],
+            EventManagerContract::class => function (): EventManager {
+                return new EventManager();
+            },
             EventManager::class         => function (ContainerInterface $container) {
                 return $container->get(EventManagerContract::class);
             },
@@ -23,10 +25,5 @@ class EventsServiceProvider implements ServiceProvider
                 return $container->get(EventManagerContract::class);
             },
         ];
-    }
-
-    public static function createEventEventManager(): EventManager
-    {
-        return new EventManager();
     }
 }

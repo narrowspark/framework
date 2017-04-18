@@ -6,6 +6,7 @@ use Closure;
 use ReflectionObject;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\Events\Event as EventContract;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Container\Factory as FactoryContract;
@@ -118,13 +119,7 @@ abstract class AbstractKernel implements KernelContract
         foreach ($bootstrappers as $bootstrapper) {
             $events->trigger(new BootstrappingEvent($bootstrapper, $this));
 
-            if ($container instanceof FactoryContract) {
-                $bootstrapperClass = $container->resolve($bootstrapper);
-            } else {
-                $bootstrapperClass = $container->get($bootstrapper);
-            }
-
-            $bootstrapperClass->bootstrap($this);
+            $container->resolve($bootstrapper)->bootstrap($this);
 
             $events->trigger(new BootstrappedEvent($bootstrapper, $this));
         }
@@ -404,7 +399,6 @@ abstract class AbstractKernel implements KernelContract
     {
         $container = $this->getContainer();
 
-        $container->register(new ParsersServiceProvider());
         $container->register(new EventsServiceProvider());
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new ConfigServiceProvider());

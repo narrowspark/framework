@@ -7,14 +7,17 @@ use ArrayAccess;
 interface Repository extends ArrayAccess
 {
     /**
-     * Import configuation from file and can be grouped together.
+     * Import configuation from file.
      *
      * @param string      $file
-     * @param string|null $group
+     * @param array|null  $options Supports tag or group
+     *
+     * @throws \RuntimeException                                             If the php file is not found.
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\ParseException
      *
      * @return $this
      */
-    public function import(string $file, string $group = null): Repository;
+    public function import(string $file, array $options = null): Repository;
 
     /**
      * Setting configuration values, using

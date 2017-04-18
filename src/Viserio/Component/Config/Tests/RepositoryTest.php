@@ -81,26 +81,36 @@ class RepositoryTest extends TestCase
         self::assertTrue($config->has('c'));
     }
 
-    public function testImportWithGroup()
+    public function testImportWithAPhpFile()
     {
         $config = new Repository();
         $config->setLoader($this->fileloader);
 
-        $file = vfsStream::newFile('temp.json')->withContent(
-            '
-{
-    "a":1,
-    "b":2,
-    "c":3
-}
+        $file = vfsStream::newFile('temp.php')->withContent(
+            '<?php
+return [
+    "a" => 1,
+    "b" => 2,
+    "c" => 3,
+];
             '
         )->at($this->root);
 
-        $config->import($file->url(), 'test');
+        $config->import($file->url());
 
-        self::assertTrue($config->has('test::a'));
-        self::assertSame(2, $config->get('test::b'));
-        self::assertTrue($config->has('test::c'));
+        self::assertTrue($config->has('a'));
+        self::assertTrue($config->has('b'));
+        self::assertTrue($config->has('c'));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage File [test.php] not found.
+     */
+    public function testImportWithAPhpFileThrowsException()
+    {
+        $config = new Repository();
+        $config->import('test.php');
     }
 
     public function testGet()

@@ -196,10 +196,10 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     /**
      * {@inheritdoc}
      */
-    public function resolve(string $name, array $parameters = [])
+    public function resolve($subject, array $parameters = [])
     {
-        if (is_string($name) && isset($this->contextualParameters[$name])) {
-            $contextualParameters = $this->contextualParameters[$name];
+        if (is_string($subject) && isset($this->contextualParameters[$subject])) {
+            $contextualParameters = $this->contextualParameters[$subject];
 
             foreach ($contextualParameters as $key => $value) {
                 if ($value instanceof Closure) {
@@ -210,11 +210,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             $parameters = array_replace($contextualParameters, $parameters);
         }
 
-        if ($this->has($name)) {
-            return $this->resolveBound($name, $parameters);
+        if ($this->has($subject)) {
+            return $this->resolveBound($subject, $parameters);
         }
 
-        return $this->resolveNonBound($name, $parameters);
+        return $this->resolveNonBound($subject, $parameters);
     }
 
     /**

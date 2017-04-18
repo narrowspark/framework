@@ -23,19 +23,21 @@ class ContainerResolver implements FactoryContract
     /**
      * {@inheritdoc}
      */
-    public function resolve(string $name, array $parameters = [])
+    public function resolve($subject, array $parameters = [])
     {
-        if ($this->isClass($name)) {
-            return $this->resolveClass($name, $parameters);
-        } elseif ($this->isMethod($name)) {
-            return $this->resolveMethod($name, $parameters);
-        } elseif ($this->isFunction($name)) {
-            return $this->resolveFunction($name, $parameters);
+        if ($this->isClass($subject)) {
+            return $this->resolveClass($subject, $parameters);
+        } elseif ($this->isMethod($subject)) {
+            return $this->resolveMethod($subject, $parameters);
+        } elseif ($this->isFunction($subject)) {
+            return $this->resolveFunction($subject, $parameters);
         }
+
+        $subject = is_object($subject) ? get_class($subject) : $subject;
 
         throw new BindingResolutionException(sprintf(
             '[%s] is not resolvable. Build stack : [%s]',
-            $name,
+            $subject,
             implode(', ', $this->buildStack)
         ));
     }
@@ -225,7 +227,7 @@ class ContainerResolver implements FactoryContract
      */
     protected function isClass($value): bool
     {
-        return class_exists($value);
+        return is_string($value) && class_exists($value);
     }
 
     /**

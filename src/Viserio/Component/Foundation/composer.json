@@ -24,44 +24,43 @@
         "psr/log"                             : "^1.0",
         "viserio/config"                      : "self.version",
         "viserio/contracts"                   : "self.version",
+        "viserio/container"                   : "self.version",
         "viserio/events"                      : "self.version",
         "viserio/options-resolver"            : "self.version",
-        "viserio/parsers"                     : "self.version",
         "viserio/routing"                     : "self.version"
     },
     "require-dev": {
-        "cakephp/chronos"                  : "^1.0",
-        "narrowspark/testing-helper"       : "^2.0",
-        "phpunit/phpunit"                  : "^5.7",
-        "viserio/console"                  : "self.version",
-        "viserio/container"                : "self.version",
-        "viserio/exception"                : "self.version",
-        "viserio/log"                      : "self.version"
+        "cakephp/chronos"                     : "^1.0",
+        "narrowspark/testing-helper"          : "^2.0",
+        "phpunit/phpunit"                     : "^5.7",
+        "viserio/console"                     : "self.version",
+        "viserio/exception"                   : "self.version",
+        "viserio/log"                         : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Foundation\\"        : ""
+            "Viserio\\Foundation\\"           : ""
         },
-        "exclude-from-classmap"            : ["/Tests/"]
+        "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Foundation\\Tests\\" : "Tests/"
+            "Viserio\\Foundation\\Tests\\"    : "Tests/"
         }
     },
     "provide": {
-        "psr/container-implementation"     : "^1.0",
-        "psr/http-message-implementation"  : "^1.0"
+        "psr/container-implementation"        : "^1.0",
+        "psr/http-message-implementation"     : "^1.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                   : "1.0-dev"
+            "dev-master"                      : "1.0-dev"
         }
     },
     "suggest": {
-        "cakephp/chronos"                  : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0)",
-        "viserio/statical-proxy"           : "Required to use statical-proxy bootstrapper (self.version).",
+        "cakephp/chronos"                     : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0)",
+        "viserio/statical-proxy"              : "Required to use statical-proxy bootstrapper (self.version)."
     },
-    "minimum-stability"                    : "dev",
-    "prefer-stable"                        : true
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }

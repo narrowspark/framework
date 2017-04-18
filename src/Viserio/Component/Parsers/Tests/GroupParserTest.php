@@ -4,9 +4,9 @@ namespace Viserio\Component\Parsers\Tests;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Parsers\TaggableParser;
+use Viserio\Component\Parsers\GroupParser;
 
-class TaggableParserTest extends TestCase
+class GroupParserTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -14,14 +14,14 @@ class TaggableParserTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Parsers\TaggableParser
+     * @var \Viserio\Component\Parsers\GroupParser
      */
     private $parser;
 
     public function setUp()
     {
         $this->root   = vfsStream::setup();
-        $this->parser = new TaggableParser();
+        $this->parser = new GroupParser();
     }
 
     public function testParse()
@@ -52,9 +52,9 @@ class TaggableParserTest extends TestCase
             '
         )->at($this->root);
 
-        $parsed = $this->parser->setTag('foo')->parse($file->url());
+        $parsed = $this->parser->setGroup('foo')->parse($file->url());
 
         self::assertTrue(is_array($parsed));
-        self::assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
+        self::assertSame(['foo' => ['a' => 1, 'e' => 5]], $parsed);
     }
 }

@@ -17,9 +17,11 @@ class JSON implements FormatContract, DumperContract
         $json = json_decode(trim($payload), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new ParseException(
-                ['message' => $this->getJsonError(json_last_error())]
-            );
+            throw new ParseException([
+                'message' => json_last_error_msg(),
+                'type'    => json_last_error(),
+                'file'    => $payload,
+            ]);
         }
 
         return $json;
@@ -47,25 +49,5 @@ class JSON implements FormatContract, DumperContract
         $json = preg_replace('/\{\s+\}/', '{}', $json);
 
         return $json;
-    }
-
-    /**
-     * Reporting all json erros.
-     *
-     * @param int $code all json errors
-     *
-     * @return string
-     */
-    private function getJsonError(int $code): string
-    {
-        $errorMessages = [
-            JSON_ERROR_DEPTH          => 'The maximum stack depth has been exceeded',
-            JSON_ERROR_STATE_MISMATCH => 'Invalid or malformed JSON',
-            JSON_ERROR_CTRL_CHAR      => 'Control character error, possibly incorrectly encoded',
-            JSON_ERROR_SYNTAX         => 'Syntax error',
-            JSON_ERROR_UTF8           => 'Malformed UTF-8 characters, possibly incorrectly encoded',
-        ];
-
-        return isset($errorMessages[$code]) ? $errorMessages[$code] : 'Unknown error';
     }
 }

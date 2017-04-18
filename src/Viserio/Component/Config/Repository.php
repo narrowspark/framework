@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Config;
 
 use ArrayIterator;
+use RuntimeException;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
@@ -36,9 +37,17 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function import(string $file, string $group = null): RepositoryContract
+    public function import(string $file, array $options = null): RepositoryContract
     {
-        $config = $this->getLoader()->load($file, $group);
+        if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
+            if (! file_exists($file)) {
+                throw new RuntimeException(sprintf('File [%s] not found.', $file));
+            }
+
+            $config = (array) require $file;
+        } else {
+            $config = $this->getLoader()->load($file, $options);
+        }
 
         $this->setArray($config);
 

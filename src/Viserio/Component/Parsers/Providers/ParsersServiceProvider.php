@@ -8,6 +8,8 @@ use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Parsers\TaggableParser as TaggableParserContract;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\TaggableParser;
+use Viserio\Component\Parsers\GroupParser;
+use Viserio\Component\Parsers\Parser;
 
 class ParsersServiceProvider implements ServiceProvider
 {
@@ -17,39 +19,24 @@ class ParsersServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            LoaderContract::class => [self::class, 'createFileLoader'],
+            LoaderContract::class => function (ContainerInterface $container): FileLoader {
+                return new FileLoader();
+            },
             FileLoader::class     => function (ContainerInterface $container) {
                 return $container->get(LoaderContract::class);
             },
-            TaggableParserContract::class => [self::class, 'createTaggableParser'],
-            TaggableParser::class         => function (ContainerInterface $container) {
-                return $container->get(TaggableParserContract::class);
+            TaggableParser::class => function (ContainerInterface $container): TaggableParser {
+                return new TaggableParser();
             },
-            'parser' => function (ContainerInterface $container) {
-                return $container->get(TaggableParserContract::class);
+            GroupParser::class    => function (ContainerInterface $container): GroupParser {
+                return new GroupParser();
+            },
+            Parser::class         => function (ContainerInterface $container): Parser {
+                return new Parser();
+            },
+            'parser'              => function (ContainerInterface $container) {
+                return $container->get(Parser::class);
             },
         ];
-    }
-
-    /**
-     * Create a file loader.
-     *
-     * @param ContainerInterface $container
-     *
-     * @return \Viserio\Component\Contracts\Parsers\Loader
-     */
-    public static function createFileLoader(ContainerInterface $container): LoaderContract
-    {
-        return new FileLoader($container->get(TaggableParser::class));
-    }
-
-    /**
-     * Create a taggable parser.
-     *
-     * @return \Viserio\Component\Contracts\Parsers\TaggableParser
-     */
-    public static function createTaggableParser(): TaggableParserContract
-    {
-        return new TaggableParser();
     }
 }
