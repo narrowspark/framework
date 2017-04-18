@@ -8,13 +8,13 @@ use Monolog\Handler\SyslogHandler;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 {
@@ -37,7 +37,8 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->instance(RepositoryContract::class, $config);
 
-        $kernel = new class() extends AbstractKernel {};
+        $kernel = new class() extends AbstractKernel {
+        };
 
         $container->instance(KernelContract::class, $kernel);
 
@@ -66,7 +67,8 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->instance(RepositoryContract::class, $config);
 
-        $kernel = new class() extends AbstractKernel {};
+        $kernel = new class() extends AbstractKernel {
+        };
 
         $container->instance(KernelContract::class, $kernel);
 
@@ -104,7 +106,8 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->instance(RepositoryContract::class, $config);
 
-        $kernel = new class() extends AbstractKernel {};
+        $kernel = new class() extends AbstractKernel {
+        };
 
         $container->instance(KernelContract::class, $kernel);
 
@@ -142,7 +145,8 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->instance(RepositoryContract::class, $config);
 
-        $kernel = new class() extends AbstractKernel {};
+        $kernel = new class() extends AbstractKernel {
+        };
 
         $container->instance(KernelContract::class, $kernel);
 

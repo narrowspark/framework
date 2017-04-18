@@ -26,9 +26,9 @@ class ExceptionServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            ExceptionInfo::class    => [self::class, 'createExceptionInfo'],
+            ExceptionInfo::class            => [self::class, 'createExceptionInfo'],
             HandlerContract::class          => [self::class, 'createExceptionHandler'],
-            Handler::class  => function (ContainerInterface $container) {
+            Handler::class                  => function (ContainerInterface $container) {
                 return $container->get(HandlerContract::class);
             },
             ExceptionHandlerContract::class  => function (ContainerInterface $container) {

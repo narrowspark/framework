@@ -11,8 +11,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
@@ -28,10 +28,7 @@ use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
-use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
-use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 
 class KernelTest extends MockeryTestCase

@@ -14,8 +14,8 @@ use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
@@ -27,10 +27,7 @@ use Viserio\Component\Foundation\Console\Kernel;
 use Viserio\Component\Foundation\EnvironmentDetector;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
 use Viserio\Component\Foundation\Events\BootstrappingEvent;
-use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
-use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 
 class KernelTest extends MockeryTestCase
