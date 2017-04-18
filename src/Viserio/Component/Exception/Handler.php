@@ -43,7 +43,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function getMandatoryOptions(): iterable
     {
-        return ['default_displayer', 'env'];
+        return ['env'];
     }
 
     /**
