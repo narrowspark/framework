@@ -135,7 +135,7 @@ abstract class AbstractKernel implements
     {
         return [
             'app' => [
-                'env'
+                'env',
             ],
         ];
     }
