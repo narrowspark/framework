@@ -5,7 +5,6 @@ namespace Viserio\Component\Parsers\Tests;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parsers\FileLoader;
-use Viserio\Component\Parsers\TaggableParser;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoaderTest extends TestCase
