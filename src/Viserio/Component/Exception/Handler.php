@@ -142,8 +142,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
 
         if (PHP_SAPI === 'cli') {
             if ($container->has(ConsoleApplication::class)) {
-                $container->get(ConsoleApplication::class)
-                    ->renderException($transformed, new ConsoleOutput());
+                $container->get(ConsoleApplication::class)->renderException($transformed, new ConsoleOutput());
             } else {
                 throw $transformed;
             }
@@ -204,6 +203,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
 
             $response = $container->get(ResponseFactoryInterface::class)->createResponse();
             $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
+            $response = $response->withHeader('Content-Type', 'text/plain');
         }
 
         return $response;
