@@ -33,43 +33,6 @@ interface Kernel
     public function hasBeenBootstrapped(): bool;
 
     /**
-     * Boots the current kernel.
-     *
-     * @return void
-     */
-    public function boot(): void;
-
-    /**
-     * Determine if the application has booted.
-     *
-     * @return bool
-     */
-    public function isBooted(): bool;
-
-    /**
-     * Set the current application locale.
-     *
-     * @param string $locale
-     *
-     * @return $this
-     */
-    public function setLocale(string $locale): Kernel;
-
-    /**
-     * Get the current application locale.
-     *
-     * @return string
-     */
-    public function getLocale(): string;
-
-    /**
-     * Get the application fallback locale.
-     *
-     * @return string
-     */
-    public function getFallbackLocale(): string;
-
-    /**
      * Determine if application is in local environment.
      *
      * @return bool

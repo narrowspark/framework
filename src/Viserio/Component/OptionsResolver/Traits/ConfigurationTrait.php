@@ -10,7 +10,7 @@ trait ConfigurationTrait
     /**
      * Config array.
      *
-     * @var array|\ArrayAccess
+     * @var \ArrayAccess|array
      */
     protected $options;
 

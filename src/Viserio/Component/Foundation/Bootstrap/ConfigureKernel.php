@@ -4,10 +4,9 @@ namespace Viserio\Component\Foundation\Bootstrap;
 
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
-use Viserio\Component\Log\Providers\LoggerServiceProvider;
+use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class HandleLogger implements BootstrapContract
+class ConfigureKernel implements BootstrapContract
 {
     /**
      * {@inheritdoc}
@@ -15,8 +14,8 @@ class HandleLogger implements BootstrapContract
     public function bootstrap(KernelContract $kernel): void
     {
         $container = $kernel->getContainer();
+        $resolver  = $container->get(OptionsResolver::class);
 
-        $container->register(new LoggerServiceProvider());
-        $container->register(new ConfigureLoggingServiceProvider());
+        $kernel->setConfiguration($resolver->configure($kernel, $container)->resolve());
     }
 }

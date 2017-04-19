@@ -18,8 +18,15 @@ use Viserio\Component\Foundation\Events\LocaleChangedEvent;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
-abstract class AbstractKernel implements KernelContract
+abstract class AbstractKernel implements
+    KernelContract,
+    ProvidesDefaultOptionsContract,
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -59,13 +66,6 @@ abstract class AbstractKernel implements KernelContract
     protected $hasBeenBootstrapped = false;
 
     /**
-     * Indicates if the application has "booted".
-     *
-     * @var bool
-     */
-    protected $booted = false;
-
-    /**
      * Project path.
      *
      * @var string
@@ -87,6 +87,13 @@ abstract class AbstractKernel implements KernelContract
     protected $environmentPath;
 
     /**
+     * Config array.
+     *
+     * @var \ArrayAccess|array
+     */
+    protected $options = [];
+
+    /**
      * Create a new application instance.
      *
      * Let's start make magic!
@@ -94,6 +101,39 @@ abstract class AbstractKernel implements KernelContract
     public function __construct()
     {
         $this->projectDir = $this->getProjectDir();
+
+        $this->initializeContainer();
+
+        $this->registerBaseServiceProviders();
+
+        $this->registerBaseBindings();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'locale'          => 'en',
+            'fallback_locale' => 'en',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDimensions(): iterable
+    {
+        return ['viserio', 'app'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return ['env'];
     }
 
     /**
@@ -102,6 +142,22 @@ abstract class AbstractKernel implements KernelContract
     public function getContainer(): ContainerContract
     {
         return $this->container;
+    }
+
+    public function setConfiguration(array $config)
+    {
+        $this->options = $config;
+    }
+
+    public function getConfiguration(): array
+    {
+        $container = $this->getContainer();
+
+        if ($container->has(RepositoryContract::class)) {
+            return (array) $container->get(RepositoryContract::class);
+        }
+
+        return $this->options;
     }
 
     /**
@@ -132,64 +188,11 @@ abstract class AbstractKernel implements KernelContract
     }
 
     /**
-     * {@inheritdoc}
+     * Bootstrap the kernel.
+     *
+     * @return void
      */
-    public function boot(): void
-    {
-        if ($this->booted) {
-            return;
-        }
-
-        $this->initializeContainer();
-
-        $this->registerBaseServiceProviders();
-
-        $this->registerBaseBindings();
-
-        $this->booted = true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isBooted(): bool
-    {
-        return $this->booted;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setLocale(string $locale): KernelContract
-    {
-        $container = $this->getContainer();
-
-        $container->get(RepositoryContract::class)->set('viserio.app.locale', $locale);
-
-        if ($container->has(TranslationManager::class)) {
-            $container->get(TranslationManager::class)->setLocale($locale);
-        }
-
-        $container->get(EventManagerContract::class)->trigger(new LocaleChangedEvent($this, $locale));
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLocale(): string
-    {
-        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.locale', 'en');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFallbackLocale(): string
-    {
-        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.fallback_locale', 'en');
-    }
+    abstract public function bootstrap(): void;
 
     /**
      * {@inheritdoc}

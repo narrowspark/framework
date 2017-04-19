@@ -24,69 +24,12 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $kernel->boot();
-
-        // dont do a second call
-        $kernel->boot();
-
         $kernel->bootstrapWith([
             LoadEnvironmentVariables::class,
         ]);
 
         self::assertTrue($kernel->hasBeenBootstrapped());
         self::assertTrue($kernel->isBooted());
-    }
-
-    public function testSetLocaleSetsLocaleAndFiresLocaleChangedEvent()
-    {
-        $container = new Container();
-
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('set')
-            ->once()
-            ->with('viserio.app.locale', 'foo');
-        $config->shouldReceive('get')
-            ->once()
-            ->with('viserio.app.locale', 'en')
-            ->andReturn('foo');
-
-        $container->instance(RepositoryContract::class, $config);
-
-        $trans = $this->mock(TranslationManagerContract::class);
-        $trans->shouldReceive('setLocale')
-            ->once()
-            ->with('foo');
-
-        $container->instance(TranslationManagerContract::class, $trans);
-
-        $events = $this->mock(EventManagerContract::class);
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(LocaleChangedEvent::class));
-
-        $container->instance(EventManagerContract::class, $events);
-
-        $kernel = $this->getKernel($container);
-
-        self::assertInstanceOf(KernelContract::class, $kernel->setLocale('foo'));
-        self::assertSame('foo', $kernel->getLocale());
-    }
-
-    public function testGetFallbackLocale()
-    {
-        $container = new Container();
-
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('viserio.app.fallback_locale', 'en')
-            ->andReturn('en');
-
-        $container->instance(RepositoryContract::class, $config);
-
-        $kernel = $this->getKernel($container);
-
-        self::assertSame('en', $kernel->getFallbackLocale());
     }
 
     public function testIsLocal()
@@ -246,6 +189,10 @@ class KernelTest extends MockeryTestCase
             }
 
             protected function initializeContainer(): void
+            {
+            }
+
+            public function bootstrap(): void
             {
             }
         };

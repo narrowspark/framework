@@ -19,7 +19,6 @@ use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
-use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
@@ -53,7 +52,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     protected $bootstrappers = [
         LoadEnvironmentVariables::class,
         HandleExceptions::class,
-        LoadServiceProvider::class,
         SetRequestForConsole::class,
     ];
 
@@ -100,7 +98,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function terminate(InputInterface $input, int $status): void
     {
-        if ($this->booted === false) {
+        if ($this->hasBeenBootstrapped === false) {
             return;
         }
 
@@ -130,14 +128,12 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
-     * Bootstrap the application for console commands.
+     * Bootstrap the kernel for console commands.
      *
      * @return void
      */
     public function bootstrap(): void
     {
-        $this->boot();
-
         if (! $this->hasBeenBootstrapped()) {
             $this->bootstrapWith($this->bootstrappers);
         }
@@ -224,6 +220,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         if (is_null($this->console)) {
             $container = $this->getContainer();
             $console   = $container->get(Cerebro::class);
+
+            $console->setVersion(self::VERSION);
 
             foreach ($this->commands as $command) {
                 $console->add($container->resolve($command));

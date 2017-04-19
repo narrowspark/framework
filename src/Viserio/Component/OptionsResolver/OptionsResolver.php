@@ -68,7 +68,9 @@ class OptionsResolver extends AbstractOptionsResolver
      */
     protected function resolveConfiguration($data)
     {
-        if ($data instanceof ContainerInterface) {
+        if (is_iterable($data)) {
+            return $data;
+        } elseif ($data instanceof ContainerInterface) {
             if ($data->has(RepositoryContract::class)) {
                 return $data->get(RepositoryContract::class);
             } elseif ($data->has('config')) {
@@ -76,8 +78,6 @@ class OptionsResolver extends AbstractOptionsResolver
             } elseif ($data->has('options')) {
                 return $data->get('options');
             }
-        } elseif (is_iterable($data)) {
-            return $data;
         }
 
         throw new RuntimeException('No configuration found.');

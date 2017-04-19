@@ -61,11 +61,14 @@ class KernelTest extends MockeryTestCase
             ->andReturn($handler);
 
         $cerebro = $this->mock(Cerebro::class);
-        $cerebro->shouldReceive('add')
-            ->never();
+        $cerebro->shouldReceive('setVersion')
+            ->once()
+            ->with(AbstractKernel::VERSION);
         $cerebro->shouldReceive('run')
             ->once()
             ->andReturn(0);
+        $cerebro->shouldReceive('add')
+            ->never();
         $cerebro->shouldReceive('renderException')
             ->never();
 
@@ -111,6 +114,9 @@ class KernelTest extends MockeryTestCase
             ->never();
 
         $cerebro = $this->mock(Cerebro::class);
+        $cerebro->shouldReceive('setVersion')
+            ->once()
+            ->with(AbstractKernel::VERSION);
         $cerebro->shouldReceive('add')
             ->never();
 
@@ -158,7 +164,7 @@ class KernelTest extends MockeryTestCase
         $this->registerBaseProvider($container);
 
         $kernel = $this->getKernel($container);
-        $kernel->boot();
+
         $kernel->terminate(new ArgvInput(), 0);
     }
 
@@ -170,6 +176,9 @@ class KernelTest extends MockeryTestCase
         $this->registerBaseProvider($container);
 
         $cerebro = $this->mock(Cerebro::class);
+        $cerebro->shouldReceive('setVersion')
+            ->once()
+            ->with(AbstractKernel::VERSION);
         $cerebro->shouldReceive('add')
             ->never();
         $cerebro->shouldReceive('renderException')
@@ -196,6 +205,9 @@ class KernelTest extends MockeryTestCase
         $this->registerBaseProvider($container);
 
         $cerebro = $this->mock(Cerebro::class);
+        $cerebro->shouldReceive('setVersion')
+            ->once()
+            ->with(AbstractKernel::VERSION);
         $cerebro->shouldReceive('add')
             ->never();
         $cerebro->shouldReceive('renderException')
@@ -222,6 +234,9 @@ class KernelTest extends MockeryTestCase
         $this->registerBaseProvider($container);
 
         $cerebro = $this->mock(Cerebro::class);
+        $cerebro->shouldReceive('setVersion')
+            ->once()
+            ->with(AbstractKernel::VERSION);
         $cerebro->shouldReceive('add')
             ->never();
         $cerebro->shouldReceive('renderException')
@@ -266,6 +281,9 @@ class KernelTest extends MockeryTestCase
         $this->registerBaseProvider($container);
 
         $cerebro = $this->mock(Cerebro::class);
+        $cerebro->shouldReceive('setVersion')
+            ->once()
+            ->with(AbstractKernel::VERSION);
         $cerebro->shouldReceive('add')
             ->once()
             ->with($command);

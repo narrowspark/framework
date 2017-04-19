@@ -21,8 +21,12 @@ class SetRequestForConsoleTest extends MockeryTestCase
             protected function registerBaseServiceProviders(): void
             {
             }
+
+            public function bootstrap(): void
+            {
+            }
         };
-        $kernel->boot();
+
         $container = $kernel->getContainer();
 
         $config = $this->mock(RepositoryContract::class);

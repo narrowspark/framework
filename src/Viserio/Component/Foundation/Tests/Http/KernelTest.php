@@ -297,9 +297,6 @@ class KernelTest extends MockeryTestCase
         $this->registerBaseProvider($container);
 
         $kernel->terminate($serverRequest, $response);
-        $kernel->boot();
-
-        $kernel->terminate($serverRequest, $response);
     }
 
     private function getBootstrap($container)

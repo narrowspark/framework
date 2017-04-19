@@ -12,9 +12,9 @@ use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\AbstractKernel;
+use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
-use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
@@ -73,23 +73,17 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      * @var array
      */
     protected $bootstrappers = [
+        ConfigureKernel::class,
         LoadEnvironmentVariables::class,
         HandleExceptions::class,
-        LoadServiceProvider::class,
     ];
 
     /**
-     * Boots the current kernel.
-     *
-     * @return void
+     * Create a new http kernel instance.
      */
-    public function boot(): void
+    public function __construct()
     {
-        if ($this->booted) {
-            return;
-        }
-
-        parent::boot();
+        parent::__construct();
 
         $router = $this->getContainer()->get(RouterContract::class);
 
@@ -103,8 +97,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         foreach ($this->middlewareGroups as $key => $middleware) {
             $router->setMiddlewareGroup($key, $middleware);
         }
-
-        $this->booted = true;
     }
 
     /**
@@ -144,15 +136,15 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function handle(ServerRequestInterface $serverRequest): ResponseInterface
     {
-        $this->boot();
-
         $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) ob_get_level());
         $container     = $this->getContainer();
 
         // Passes the request to the container
         $container->instance(ServerRequestInterface::class, $serverRequest);
 
-        StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
+        if (class_exists(StaticalProxy::class)) {
+            StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
+        }
 
         $events = $container->get(EventManagerContract::class);
 
@@ -162,7 +154,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
         $response = $this->handleRequest($serverRequest, $events);
 
-        // stop PHP sending a Content-Type automatically
+        // Stop PHP sending a Content-Type automatically.
         ini_set('default_mimetype', '');
 
         return $response;
@@ -173,7 +165,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        if ($this->booted === false) {
+        if ($this->hasBeenBootstrapped === false) {
             return;
         }
 
@@ -183,7 +175,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     }
 
     /**
-     * Bootstrap the application for HTTP requests.
+     * Bootstrap the kernel for HTTP requests.
      *
      * @return void
      */
