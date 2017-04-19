@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
 use ErrorException;
-use Throwable;
 use Symfony\Component\Debug\Exception\FatalErrorException;
+use Throwable;
+use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Exception\Providers\ExceptionServiceProvider;
-use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
 class HandleExceptions extends AbstractLoadFiles implements BootstrapContract
 {
@@ -44,7 +44,7 @@ class HandleExceptions extends AbstractLoadFiles implements BootstrapContract
      * the HTTP and Console kernels. But, fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param \Throwable  $exception
+     * @param \Throwable $exception
      *
      * @return void
      */
@@ -65,7 +65,7 @@ class HandleExceptions extends AbstractLoadFiles implements BootstrapContract
      *
      * @return void
      */
-    public function handleError(int $level, string $message, string$file = '', int $line = 0, array $context = []): void
+    public function handleError(int $level, string $message, string $file = '', int $line = 0, array $context = []): void
     {
         if (error_reporting() & $level) {
             throw new ErrorException($message, 0, $level, $file, $line);
@@ -107,7 +107,8 @@ class HandleExceptions extends AbstractLoadFiles implements BootstrapContract
     /**
      * Determine if the error type is fatal.
      *
-     * @param  int  $type
+     * @param int $type
+     *
      * @return bool
      */
     protected function isFatal($type)
