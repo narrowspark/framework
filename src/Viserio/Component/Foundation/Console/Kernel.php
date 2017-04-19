@@ -103,6 +103,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         if ($this->booted === false) {
             return;
         }
+
+        restore_error_handler();
     }
 
     /**
