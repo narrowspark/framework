@@ -92,7 +92,7 @@ abstract class AbstractKernel implements
     protected $options = [];
 
     /**
-     * Create a new application instance.
+     * Create a new kernel instance.
      *
      * Let's start make magic!
      */
@@ -110,20 +110,22 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public function getDimensions(): iterable
     {
-        return [
-            'locale'          => 'en',
-            'fallback_locale' => 'en',
-        ];
+        return ['viserio'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public function getDefaultOptions(): iterable
     {
-        return ['viserio', 'app'];
+        return [
+            'app' => [
+                'locale'          => 'en',
+                'fallback_locale' => 'en',
+            ],
+        ];
     }
 
     /**
@@ -131,7 +133,11 @@ abstract class AbstractKernel implements
      */
     public function getMandatoryOptions(): iterable
     {
-        return ['env'];
+        return [
+            'app' => [
+                'env'
+            ],
+        ];
     }
 
     /**
@@ -142,12 +148,12 @@ abstract class AbstractKernel implements
         return $this->container;
     }
 
-    public function setConfiguration(array $config)
+    public function setConfigurations(array $config)
     {
         $this->options = $config;
     }
 
-    public function getConfiguration(): array
+    public function getConfigurations(): array
     {
         $container = $this->getContainer();
 

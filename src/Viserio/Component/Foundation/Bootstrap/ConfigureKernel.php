@@ -16,6 +16,6 @@ class ConfigureKernel implements BootstrapContract
         $container = $kernel->getContainer();
         $resolver  = $container->get(OptionsResolver::class);
 
-        $kernel->setConfiguration($resolver->configure($kernel, $container)->resolve());
+        $kernel->setConfigurations($resolver->configure($kernel, $container)->resolve());
     }
 }
