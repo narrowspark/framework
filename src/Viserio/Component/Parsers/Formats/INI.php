@@ -16,9 +16,7 @@ class INI implements FormatContract, DumperContract
         $ini = @parse_ini_string($payload, true);
 
         if (! $ini) {
-            throw new ParseException([
-                'message' => error_get_last(),
-            ]);
+            throw new ParseException(error_get_last());
         }
 
         return $ini;
