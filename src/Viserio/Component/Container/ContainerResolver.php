@@ -108,7 +108,7 @@ class ContainerResolver implements FactoryContract
     /**
      * Resolve a closure / function.
      *
-     * @param string|\Closure $function
+     * @param string|callable $function
      * @param array           $parameters
      *
      * @return mixed

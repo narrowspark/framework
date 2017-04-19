@@ -10,6 +10,7 @@ use Viserio\Component\Http\Stream\NoSeekStream;
 class StreamTest extends TestCase
 {
     public static $isFreadError = false;
+    private $tmpnam;
 
     /**
      * @expectedException \InvalidArgumentException

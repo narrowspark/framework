@@ -22,6 +22,7 @@ use Viserio\Component\Contracts\Container\Exceptions\ContainerException;
 use Viserio\Component\Contracts\Container\Exceptions\NotFoundException;
 use Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException;
 use Viserio\Component\Contracts\Container\Types as TypesContract;
+use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 
 class Container extends ContainerResolver implements ArrayAccess, ContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
@@ -98,6 +99,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         $this->instance(ContainerContract::class, $this);
         $this->instance(ContainerInterface::class, $this);
         $this->instance(PsrContainerInterface::class, $this);
+        $this->instance(FactoryContract::class, $this);
     }
 
     /**

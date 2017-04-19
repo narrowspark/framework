@@ -7,9 +7,9 @@ use ArrayAccess;
 interface Repository extends ArrayAccess
 {
     /**
-     * Import configuation from file.
+     * Import configuration from file.
      *
-     * @param string     $file
+     * @param string     $filepath
      * @param array|null $options Supports tag or group
      *
      * @throws \RuntimeException                                             If the php file is not found.
@@ -17,7 +17,7 @@ interface Repository extends ArrayAccess
      *
      * @return $this
      */
-    public function import(string $file, array $options = null): Repository;
+    public function import(string $filepath, array $options = null): Repository;
 
     /**
      * Setting configuration values, using

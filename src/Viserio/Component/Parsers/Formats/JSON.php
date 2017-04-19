@@ -39,9 +39,7 @@ class JSON implements FormatContract, DumperContract
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             // @codeCoverageIgnoreStart
-            $jsonError = $this->getJsonError(json_last_error());
-
-            throw new DumpException('JSON dumping failed: ' . $jsonError);
+            throw new DumpException(sprintf('JSON dumping failed: %s', json_last_error_msg()));
             // @codeCoverageIgnoreEnd
         }
 
