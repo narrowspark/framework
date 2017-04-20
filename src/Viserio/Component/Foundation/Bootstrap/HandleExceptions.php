@@ -2,10 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
-use ErrorException;
-use Symfony\Component\Debug\Exception\FatalErrorException;
-use Throwable;
-use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
