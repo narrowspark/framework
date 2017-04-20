@@ -12,7 +12,7 @@ class ConfigureKernelTest extends MockeryTestCase
     public function testBootstrap()
     {
         $bootstraper = new ConfigureKernel();
-        $container = $this->mock(ContainerContract::class);
+        $container   = $this->mock(ContainerContract::class);
 
         $kernel = $this->mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
