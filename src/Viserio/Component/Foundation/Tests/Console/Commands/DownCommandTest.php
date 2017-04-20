@@ -5,28 +5,28 @@ namespace Viserio\Component\Foundation\Tests\Console\Commands;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Commands\DownCommand;
 
 class DownCommandTest extends MockeryTestCase
 {
     public function testCommand()
     {
-        $path      = __DIR__ . '/../../Fixtures';
-        $framework = $path . '/framework';
+        $framework = __DIR__ . '/../../Fixtures/framework';
+        $down      = $framework . '/down';
 
         if (! is_dir($framework)) {
             mkdir($framework);
         }
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
+        $kernel = $this->mock(ConsoleKernelContract::class);
+        $kernel->shouldReceive('storagePath')
             ->once()
-            ->with('path.storage')
-            ->andReturn($path);
+            ->with('framework/down')
+            ->andReturn($down);
 
         $container = new ArrayContainer([
-            RepositoryContract::class => $config,
+            ConsoleKernelContract::class => $kernel,
         ]);
 
         $command = new DownCommand();
@@ -39,14 +39,14 @@ class DownCommandTest extends MockeryTestCase
 
         self::assertEquals("Application is now in maintenance mode.\n", $output);
 
-        $data = json_decode(file_get_contents($framework . '/down'), true);
+        $data = json_decode(file_get_contents($down), true);
 
         self::assertTrue(is_int($data['time']));
         self::assertSame('test', $data['message']);
         self::assertSame(1, $data['retry']);
 
-        if (is_file($framework . '/down')) {
-            @unlink($framework . '/down');
+        if (is_file($down)) {
+            @unlink($down);
         }
 
         if (is_dir($framework)) {

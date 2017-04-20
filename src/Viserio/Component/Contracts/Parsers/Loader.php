@@ -32,14 +32,15 @@ interface Loader
     /**
      * Load the given file path.
      *
-     * @param string      $file
-     * @param string|null $tag
+     * @param string     $file
+     * @param array|null $options
      *
+     * @throws \RuntimeException                                               if wrong options are given
      * @throws \Viserio\Component\Contracts\Parsers\Exception\LoadingException
      *
      * @return array
      */
-    public function load(string $file, string $tag = null): array;
+    public function load(string $file, array $options = null): array;
 
     /**
      * Determine if the given file exists.

@@ -2,8 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Providers;
 
+use Mockery as Mock;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\SyslogHandler;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Config\Repository;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer;
@@ -21,20 +28,22 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $writer = $this->mock(Writer::class);
         $writer->shouldReceive('useFiles')
-            ->once()
-            ->with('/logs/narrowspark.log', 'debug');
+            ->once();
 
         $container->instance(Writer::class, $writer);
 
-        $container->instance('config', [
-            'viserio' => [
-                'app' => [
-                    'path' => [
-                        'storage' => '',
-                    ],
-                ],
-            ],
-        ]);
+        $config = new Repository();
+        $config->set('viserio.app.name', 'Narrowspark');
+
+        $container->instance(RepositoryContract::class, $config);
+
+        $kernel = new class() extends AbstractKernel {
+            public function bootstrap(): void
+            {
+            }
+        };
+
+        $container->instance(KernelContract::class, $kernel);
 
         $container->register(new ConfigureLoggingServiceProvider());
 
@@ -51,22 +60,23 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $writer = $this->mock(Writer::class);
         $writer->shouldReceive('useDailyFiles')
-            ->once()
-            ->with('/logs/narrowspark.log', 5, 'debug');
+            ->once();
 
         $container->instance(Writer::class, $writer);
-        $container->instance('config', [
-            'viserio' => [
-                'app' => [
-                    'log' => [
-                        'handler' => 'daily',
-                    ],
-                    'path' => [
-                        'storage' => '',
-                    ],
-                ],
-            ],
-        ]);
+
+        $config = new Repository();
+        $config->set('viserio.app.log.handler', 'daily');
+        $config->set('viserio.app.name', 'Narrowspark');
+
+        $container->instance(RepositoryContract::class, $config);
+
+        $kernel = new class() extends AbstractKernel {
+            public function bootstrap(): void
+            {
+            }
+        };
+
+        $container->instance(KernelContract::class, $kernel);
 
         $container->register(new ConfigureLoggingServiceProvider());
 
@@ -84,22 +94,31 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $writer  = $this->mock(Writer::class);
         $handler = $this->mock(HandlerParser::class);
         $handler->shouldReceive('parseHandler')
-            ->once();
+            ->once()
+            ->with(
+                Mock::type(ErrorLogHandler::class),
+                '',
+                '',
+                null,
+                'line'
+            );
 
         $container->instance(Writer::class, $writer);
         $container->instance(HandlerParser::class, $handler);
-        $container->instance('config', [
-            'viserio' => [
-                'app' => [
-                    'log' => [
-                        'handler' => 'errorlog',
-                    ],
-                    'path' => [
-                        'storage' => '',
-                    ],
-                ],
-            ],
-        ]);
+
+        $config = new Repository();
+        $config->set('viserio.app.log.handler', 'errorlog');
+        $config->set('viserio.app.name', 'Narrowspark');
+
+        $container->instance(RepositoryContract::class, $config);
+
+        $kernel = new class() extends AbstractKernel {
+            public function bootstrap(): void
+            {
+            }
+        };
+
+        $container->instance(KernelContract::class, $kernel);
 
         $container->register(new ConfigureLoggingServiceProvider());
 
@@ -117,22 +136,31 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $writer  = $this->mock(Writer::class);
         $handler = $this->mock(HandlerParser::class);
         $handler->shouldReceive('parseHandler')
-            ->once();
+            ->once()
+            ->with(
+                Mock::type(SyslogHandler::class),
+                '',
+                '',
+                null,
+                'line'
+            );
 
         $container->instance(Writer::class, $writer);
         $container->instance(HandlerParser::class, $handler);
-        $container->instance('config', [
-            'viserio' => [
-                'app' => [
-                    'log' => [
-                        'handler' => 'syslog',
-                    ],
-                    'path' => [
-                        'storage' => '',
-                    ],
-                ],
-            ],
-        ]);
+
+        $config = new Repository();
+        $config->set('viserio.app.log.handler', 'syslog');
+        $config->set('viserio.app.name', 'Narrowspark');
+
+        $container->instance(RepositoryContract::class, $config);
+
+        $kernel = new class() extends AbstractKernel {
+            public function bootstrap(): void
+            {
+            }
+        };
+
+        $container->instance(KernelContract::class, $kernel);
 
         $container->register(new ConfigureLoggingServiceProvider());
 

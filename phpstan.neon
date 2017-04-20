@@ -17,8 +17,6 @@ parameters:
     ignoreErrors:
         # Anonymous class not working in phpstan
         - '#Internal error: Argument 1 passed to PHPStan\\Broker\\Broker::hasClass#'
-        - '#Internal error: Too few arguments to function Viserio\\Component\\Foundation\\Application::__construct#'
-        - '#Internal error: Too few arguments to function Viserio\\Component\\Foundation\\Http\\Kernel::__construct#'
 
         # They are array callables
         - '#callable of class Twig_Function constructor#'
@@ -88,6 +86,7 @@ parameters:
         - '#\$contents of method League\\Flysystem\\AdapterInterface#'
         - "#Casting to mixed[] something that's already mixed[]#"
         - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
+        - '#Call to a member function register\(\) on null#'
 
         # DUMP_COMMA_SEPARATOR constant only supported from var-dumper v3.3
         - "#DUMP_COMMA_SEPARATOR#"
@@ -103,14 +102,11 @@ parameters:
         - '#\$values of method Viserio\\Component\\Http\\AbstractMessage::trimHeaderValues#'
         - '#\$array of method Viserio\\Component\\Http\\AbstractMessage::arrayContainsOnlyStrings#'
         - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
-        - '#\$abstract of method Viserio\\Component\\Contracts\\Container\\Container::make#'
-        - '#\$payload of method Viserio\\Component\\Contracts\\Parsers\\Parser::parse#'
         - '#\$payload of method Viserio\\Component\\Parsers\\Formats\\INI::parse#'
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
         - '#Method Viserio\\Component\\Routing\\Router::convertToControllerAction#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeCompiler::compileSegmentNodes#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
-        - '#Call to an undefined method Interop\\Container\\ContainerInterface::make#'
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
         - '#Property Viserio\\Component\\Routing\\Matchers\\ParameterMatcher::\$names#'
         - '#Property Viserio\\Component\\Routing\\Matchers\\RegexMatcher::\$parameterKeyGroupMap#'

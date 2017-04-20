@@ -5,7 +5,6 @@ namespace Viserio\Component\Parsers\Tests;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parsers\FileLoader;
-use Viserio\Component\Parsers\TaggableParser;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoaderTest extends TestCase
@@ -25,7 +24,7 @@ class FileLoaderTest extends TestCase
     public function setUp()
     {
         $this->root       = vfsStream::setup();
-        $this->fileloader = new FileLoader(new TaggableParser(), []);
+        $this->fileloader = new FileLoader();
     }
 
     public function testLoad()
@@ -47,7 +46,7 @@ class FileLoaderTest extends TestCase
         self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
     }
 
-    public function testLoadwithGroup()
+    public function testLoadWithTagOption()
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
@@ -61,9 +60,39 @@ class FileLoaderTest extends TestCase
             '
         )->at($this->root);
 
-        $data = $this->fileloader->load($file->url(), 'Test');
+        $data = $this->fileloader->load($file->url(), ['tag' => 'Test']);
 
         self::assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
+    }
+
+    public function testLoadWithGroupOption()
+    {
+        $file = vfsStream::newFile('temp.json')->withContent(
+            '
+{
+    "a":1,
+    "b":2,
+    "c":3,
+    "d":4,
+    "e":5
+}
+            '
+        )->at($this->root);
+
+        $data = $this->fileloader->load($file->url(), ['group' => 'test']);
+
+        self::assertSame(['test' => ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]], $data);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Only the options "tag" or "group" is supported.
+     */
+    public function testLoadWithWrongOption()
+    {
+        $file = vfsStream::newFile('temp.json')->withContent('')->at($this->root);
+
+        $data = $this->fileloader->load($file->url(), ['foo' => 'Test']);
     }
 
     public function testExistsWithCache()
@@ -108,11 +137,6 @@ class FileLoaderTest extends TestCase
         $exist = $this->fileloader->exists('temp.json');
 
         self::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
-    }
-
-    public function testGetParser()
-    {
-        self::assertInstanceOf(TaggableParser::class, $this->fileloader->getParser());
     }
 
     public function testGetSetAndAddDirectories()

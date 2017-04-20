@@ -5,7 +5,6 @@ namespace Viserio\Component\Parsers\Formats;
 use DOMException;
 use RuntimeException;
 use Spatie\ArrayToXml\ArrayToXml;
-use Throwable;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\DumpException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
@@ -18,18 +17,28 @@ class XML implements FormatContract, DumperContract
      */
     public function parse(string $payload): array
     {
-        try {
-            $data = simplexml_load_string($payload, 'SimpleXMLElement', LIBXML_NOCDATA);
-            $data = json_decode(json_encode((array) $data), true); // Work around to accept xml input
-            $data = str_replace(':{}', ':null', $data);
-            $data = str_replace(':[]', ':null', $data);
+        libxml_use_internal_errors(true);
 
-            return $data;
-        } catch (Throwable $exception) {
+        $data = simplexml_load_string($payload, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        if ($data === false) {
+            $errors      = libxml_get_errors();
+            $latestError = array_pop($errors);
+
             throw new ParseException([
-                'message' => 'Failed To Parse XML',
+                'message' => $latestError->message,
+                'type'    => $latestError->level,
+                'code'    => $latestError->code,
+                'file'    => $latestError->file,
+                'line'    => $latestError->line,
             ]);
         }
+
+        $data = json_decode(json_encode((array) $data), true); // Work around to accept xml input
+        $data = str_replace(':{}', ':null', $data);
+        $data = str_replace(':[]', ':null', $data);
+
+        return $data;
     }
 
     /**

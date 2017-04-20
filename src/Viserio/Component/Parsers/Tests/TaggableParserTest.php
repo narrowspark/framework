@@ -24,7 +24,24 @@ class TaggableParserTest extends TestCase
         $this->parser = new TaggableParser();
     }
 
-    public function testParseGroup()
+    public function testParse()
+    {
+        $file = vfsStream::newFile('temp.json')->withContent(
+            '
+{
+    "a":1,
+    "e":5
+}
+            '
+        )->at($this->root);
+
+        $parsed = $this->parser->parse($file->url());
+
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['a' => 1, 'e' => 5], $parsed);
+    }
+
+    public function testParseTag()
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '

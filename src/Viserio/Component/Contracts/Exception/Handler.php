@@ -2,16 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Exception;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Throwable;
+use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
-interface Handler
+interface Handler extends ExceptionHandlerContract
 {
     /**
      * Add the displayer instance.
      *
-     * @param Displayer $displayer
+     * @param \Viserio\Component\Contracts\Exception\Displayer $displayer
      *
      * @return $this
      */
@@ -27,7 +25,7 @@ interface Handler
     /**
      * Add the filter instance.
      *
-     * @param Filter $filter
+     * @param \Viserio\Component\Contracts\Exception\Filter $filter
      *
      * @return $this
      */
@@ -42,21 +40,15 @@ interface Handler
 
     /**
      * Register the exception / Error handlers for the application.
+     *
+     * @return void
      */
-    public function register();
+    public function register(): void;
 
     /**
      * Unregister the PHP error handler.
-     */
-    public function unregister();
-
-    /**
-     * Render an exception into a response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $exception
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return void
      */
-    public function render(ServerRequestInterface $request, Throwable $exception): ResponseInterface;
+    public function unregister(): void;
 }

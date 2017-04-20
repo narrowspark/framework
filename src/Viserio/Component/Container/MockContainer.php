@@ -16,19 +16,20 @@ class MockContainer extends Container
      * Takes an id of the service as the first argument.
      * Any other arguments are passed to the Mockery factory.
      *
+     * @param array $args
+     *
      * @return \Mockery
      */
-    public function mock()
+    public function mock(...$args)
     {
-        $arguments = func_get_args();
-        $id        = array_shift($arguments);
+        $id = array_shift($args);
 
         if (! $this->has($id)) {
             throw new InvalidArgumentException(sprintf('Cannot mock a non-existent service: [%s]', $id));
         }
 
         if (! isset($this->mockedServices['mock::' . $id])) {
-            $this->mockedServices['mock::' . $id] = call_user_func_array([Mockery::class, 'mock'], $arguments);
+            $this->mockedServices['mock::' . $id] = call_user_func_array([Mockery::class, 'mock'], $args);
         }
 
         return $this->mockedServices['mock::' . $id];
@@ -39,7 +40,7 @@ class MockContainer extends Container
      *
      * @param string $id
      */
-    public function unmock($id)
+    public function unmock(string $id)
     {
         unset($this->mockedServices['mock::' . $id]);
     }

@@ -21,7 +21,7 @@ class TranslationDataCollectorServiceProvider implements
      *
      * @var array
      */
-    private static $options;
+    private static $options = [];
 
     /**
      * {@inheritdoc}
@@ -63,10 +63,10 @@ class TranslationDataCollectorServiceProvider implements
      */
     public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
     {
-        if ($getPrevious !== null) {
-            self::resolveOptions($container);
+        $profiler = $getPrevious();
 
-            $profiler = $getPrevious();
+        if ($profiler !== null) {
+            self::resolveOptions($container);
 
             if (self::$options['collector']['translation']) {
                 $profiler->addCollector(new ViserioTranslationDataCollector(
@@ -77,7 +77,7 @@ class TranslationDataCollectorServiceProvider implements
             return $profiler;
         }
 
-        return null;
+        return $profiler;
     }
 
     /**
@@ -89,7 +89,7 @@ class TranslationDataCollectorServiceProvider implements
      */
     private static function resolveOptions(ContainerInterface $container): void
     {
-        if (self::$options === null) {
+        if (count(self::$options) === 0) {
             self::$options = $container->get(OptionsResolver::class)
                 ->configure(new static(), $container)
                 ->resolve();

@@ -61,6 +61,8 @@ class CallbackCron extends Cron
             $this->cache->save($item);
         }
 
+        $this->callBeforeCallbacks();
+
         try {
             $response = $this->getInvoker()->call($this->callback, $this->parameters);
         } finally {

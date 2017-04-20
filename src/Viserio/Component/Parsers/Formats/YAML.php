@@ -29,12 +29,11 @@ class YAML implements FormatContract, DumperContract
     public function parse(string $payload): array
     {
         try {
-            return SymfonyYaml::parse(
-                trim(preg_replace('/\t+/', '', $payload))
-            );
+            return SymfonyYaml::parse(trim(preg_replace('/\t+/', '', $payload)));
         } catch (YamlParseException $exception) {
             throw new ParseException([
-                'message' => $exception->getMessage(),
+                'message'   => $exception->getMessage(),
+                'exception' => $exception,
             ]);
         }
     }

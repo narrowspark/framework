@@ -5,7 +5,7 @@ namespace Viserio\Component\Foundation\DataCollectors;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Foundation\Application;
+use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Support\Env;
 use Viserio\Component\WebProfiler\DataCollectors\PhpInfoDataCollector;
 
@@ -52,7 +52,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         return [
             'icon'  => 'ic_narrowspark_white_24px.svg',
             'label' => '',
-            'value' => Application::VERSION,
+            'value' => AbstractKernel::VERSION,
         ];
     }
 
@@ -93,7 +93,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
             'PHP SAPI' => php_sapi_name(),
         ]);
 
-        $version = Application::VERSION;
+        $version = AbstractKernel::VERSION;
 
         $tooltip .= $this->createTooltipGroup([
             'Resources' => '<a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a>',

@@ -5,7 +5,7 @@ namespace Viserio\Component\Contracts\Parsers\Traits;
 use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 
-trait LoaderAwareTrait
+trait ParserAwareTrait
 {
     /**
      * loader instance.

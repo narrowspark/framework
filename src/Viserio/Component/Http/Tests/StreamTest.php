@@ -10,6 +10,7 @@ use Viserio\Component\Http\Stream\NoSeekStream;
 class StreamTest extends TestCase
 {
     public static $isFreadError = false;
+    private $tmpnam;
 
     /**
      * @expectedException \InvalidArgumentException
@@ -245,6 +246,25 @@ class StreamTest extends TestCase
         self::$isFreadError = false;
 
         $stream->close();
+    }
+
+    public function testCanReadContentFromNotSeekableResource()
+    {
+        $this->tmpnam = tempnam(sys_get_temp_dir(), 'diac');
+
+        file_put_contents($this->tmpnam, 'FOO BAR');
+
+        $resource = fopen($this->tmpnam, 'r');
+        $stream   = $this->getMockBuilder(Stream::class)
+            ->setConstructorArgs([$resource])
+            ->setMethods(['isSeekable'])
+            ->getMock();
+
+        $stream->expects($this->any())
+            ->method('isSeekable')
+            ->will($this->returnValue(false));
+
+        $this->assertEquals('FOO BAR', $stream->__toString());
     }
 }
 namespace Viserio\Component\Http;

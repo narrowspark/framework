@@ -6,7 +6,7 @@ use Closure;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
+use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 use Viserio\Component\Pipeline\Pipeline as BasePipeline;
 
 class Pipeline extends BasePipeline
@@ -44,8 +44,8 @@ class Pipeline extends BasePipeline
         if ($this->container->has($name)) {
             $class = $this->container->get($name);
         // @codeCoverageIgnoreStart
-        } elseif ($this->container instanceof ContainerContract) {
-            $class = $this->container->make($name);
+        } elseif ($this->container instanceof FactoryContract) {
+            $class = $this->container->resolve($name);
         } else {
             throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.', $name));
         }

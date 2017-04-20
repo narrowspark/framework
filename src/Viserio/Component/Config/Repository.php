@@ -5,12 +5,13 @@ namespace Viserio\Component\Config;
 use ArrayIterator;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
+use RuntimeException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Parsers\Traits\LoaderAwareTrait;
+use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
 
 class Repository implements RepositoryContract, IteratorAggregate
 {
-    use LoaderAwareTrait;
+    use ParserAwareTrait;
 
     /**
      * Config folder path.
@@ -36,9 +37,17 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function import(string $file, string $group = null): RepositoryContract
+    public function import(string $filepath, array $options = null): RepositoryContract
     {
-        $config = $this->getLoader()->load($file, $group);
+        if (pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
+            if (! file_exists($filepath)) {
+                throw new RuntimeException(sprintf('File [%s] not found.', $filepath));
+            }
+
+            $config = (array) require $filepath;
+        } else {
+            $config = $this->getLoader()->load($filepath, $options);
+        }
 
         $this->setArray($config);
 

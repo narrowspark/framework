@@ -24,7 +24,7 @@ class DumpNode extends Twig_Node
      * @param int            $lineno
      * @param string|null    $tag
      */
-    public function __construct(string $varPrefix, ?Twig_Node $values = null, int $lineno, ?string $tag = null)
+    public function __construct(string $varPrefix, ?Twig_Node $values = null, int $lineno = 0, ?string $tag = null)
     {
         $nodes = [];
 

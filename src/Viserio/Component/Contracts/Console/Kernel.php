@@ -4,8 +4,9 @@ namespace Viserio\Component\Contracts\Console;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Component\Contracts\Foundation\Kernel as BaseKernel;
 
-interface Kernel
+interface Kernel extends BaseKernel
 {
     /**
      * Handle an incoming console command.

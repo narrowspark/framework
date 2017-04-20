@@ -19,14 +19,6 @@ class ContainerResolver
      */
     protected $buildStack = [];
 
-    /**
-     * Resolve a closure, function, method or a class.
-     *
-     * @param string|array $subject
-     * @param array        $parameters
-     *
-     * @return mixed
-     */
     public function resolve($subject, array $parameters = [])
     {
         if ($this->isClass($subject)) {
@@ -112,7 +104,7 @@ class ContainerResolver
     /**
      * Resolve a closure / function.
      *
-     * @param string|\Closure $function
+     * @param string|callable $function
      * @param array           $parameters
      *
      * @return mixed
@@ -259,7 +251,7 @@ class ContainerResolver
     }
 
     /**
-     * Merge some dynamicly resolved parameters whith some others provided parameters by the user.
+     * Merge some dynamically resolved parameters with some others provided parameters by the user.
      *
      * @param array $rootParameters
      * @param array $parameters

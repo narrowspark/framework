@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
+use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\LoadingException;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Component\Contracts\Parsers\TaggableParser as TaggableParserContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoader implements LoaderContract
@@ -12,18 +12,21 @@ class FileLoader implements LoaderContract
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * The parser instance.
+     * Pparsers list.
      *
-     * @var \Viserio\Component\Contracts\Parsers\TaggableParser
+     * @var array
      */
-    protected $parser;
+    protected $parsers = [
+        'group' => GroupParser::class,
+        'tag'   => TaggableParser::class,
+    ];
 
     /**
      * All directories to look for a file.
      *
      * @var array
      */
-    protected $directories;
+    protected $directories = [];
 
     /**
      * A cache of whether namespaces and groups exists.
@@ -31,28 +34,6 @@ class FileLoader implements LoaderContract
      * @var array
      */
     protected $exists = [];
-
-    /**
-     * Create a new fileloader.
-     *
-     * @param \Viserio\Component\Contracts\Parsers\TaggableParser $parser
-     * @param array                                               $directories
-     */
-    public function __construct(TaggableParserContract $parser, array $directories = [])
-    {
-        $this->parser      = $parser;
-        $this->directories = $directories;
-    }
-
-    /**
-     * Get parser.
-     *
-     * @return \Viserio\Component\Contracts\Parsers\TaggableParser
-     */
-    public function getParser(): TaggableParserContract
-    {
-        return $this->parser;
-    }
 
     /**
      * {@inheritdoc}
@@ -89,15 +70,19 @@ class FileLoader implements LoaderContract
     /**
      * {@inheritdoc}
      */
-    public function load(string $file, string $tag = null): array
+    public function load(string $file, array $options = null): array
     {
+        $this->checkOption($options);
+
         // Determine if the given file exists.
         $path = $this->exists($file);
 
-        $parser = $this->parser;
+        $parser = $options === null ? new Parser() : new $this->parsers[key($options)]();
 
-        if ($tag !== null) {
+        if (($tag = $options['tag'] ?? null) !== null) {
             $parser->setTag($tag);
+        } elseif (($group = $options['group'] ?? null) !== null) {
+            $parser->setGroup($group);
         }
 
         // Set the right Parser for data and return data array
@@ -150,5 +135,27 @@ class FileLoader implements LoaderContract
         }
 
         return '';
+    }
+
+    /**
+     * Check if the right option are given.
+     *
+     * @param arra|null $options
+     *
+     * @throws \RuntimeException
+     *
+     * @return void
+     */
+    protected function checkOption(?array $options): void
+    {
+        if (isset($options['tag'])) {
+            return;
+        } elseif (isset($options['group'])) {
+            return;
+        }
+
+        if ($options !== null) {
+            throw new RuntimeException('Only the options "tag" or "group" is supported.');
+        }
     }
 }

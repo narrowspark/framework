@@ -26,7 +26,7 @@ class MigrationsServiceProvider implements
      *
      * @var array
      */
-    private static $options;
+    private static $options = [];
 
     /**
      * {@inheritdoc}
@@ -104,7 +104,7 @@ class MigrationsServiceProvider implements
      */
     private static function resolveOptions(ContainerInterface $container): void
     {
-        if (self::$options === null) {
+        if (count(self::$options) === 0) {
             self::$options = $container->get(OptionsResolver::class)
                 ->configure(new static(), $container)
                 ->resolve();

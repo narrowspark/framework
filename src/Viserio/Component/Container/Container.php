@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container;
 
-use ArrayAccess;
 use Closure;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
@@ -14,15 +13,17 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionClass;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
 use Viserio\Component\Contracts\Container\Exceptions\ContainerException;
 use Viserio\Component\Contracts\Container\Exceptions\NotFoundException;
 use Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException;
+use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 use Viserio\Component\Contracts\Container\Types as TypesContract;
 
-class Container extends ContainerResolver implements ArrayAccess, ContainerContract, InvokerInterface, ContextualBindingBuilderContract
+class Container extends ContainerResolver implements ContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
     /**
      * The container's bindings.
@@ -96,6 +97,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         $this->instance(Container::class, $this);
         $this->instance(ContainerContract::class, $this);
         $this->instance(ContainerInterface::class, $this);
+        $this->instance(PsrContainerInterface::class, $this);
+        $this->instance(FactoryContract::class, $this);
     }
 
     /**
@@ -154,14 +157,6 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     /**
      * {@inheritdoc}
      */
-    public function make(string $abstract, array $parameters = [])
-    {
-        return $this->resolve($abstract, $parameters);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function extend(string $abstract, Closure $closure)
     {
         $this->extendAbstract($abstract, $closure);
@@ -202,10 +197,10 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     /**
      * {@inheritdoc}
      */
-    public function resolve($abstract, array $parameters = [])
+    public function resolve($subject, array $parameters = [])
     {
-        if (is_string($abstract) && isset($this->contextualParameters[$abstract])) {
-            $contextualParameters = $this->contextualParameters[$abstract];
+        if (is_string($subject) && isset($this->contextualParameters[$subject])) {
+            $contextualParameters = $this->contextualParameters[$subject];
 
             foreach ($contextualParameters as $key => $value) {
                 if ($value instanceof Closure) {
@@ -216,11 +211,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             $parameters = array_replace($contextualParameters, $parameters);
         }
 
-        if ($this->has($abstract)) {
-            return $this->resolveBound($abstract, $parameters);
+        if ($this->has($subject)) {
+            return $this->resolveBound($subject, $parameters);
         }
 
-        return $this->resolveNonBound($abstract, $parameters);
+        return $this->resolveNonBound($subject, $parameters);
     }
 
     /**
@@ -404,20 +399,19 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function register(ServiceProvider $provider, array $parameters = []): ContainerContract
     {
-        $entries = $provider->getServices();
+        $entries   = $provider->getServices();
+        $container = $this;
 
         foreach ($entries as $key => $callable) {
             if ($this->has($key)) {
                 // Extend a previous entry
-                $this->extend($key, function ($previous, ContainerInterface $container) use ($callable) {
-                    $getPrevious = function () use ($previous) {
+                $this->extend($key, function ($previous) use ($container, $callable) {
+                    return $callable($container, function () use ($previous) {
                         return $previous;
-                    };
-
-                    return $callable($container, $getPrevious);
+                    });
                 });
             } else {
-                $this->singleton($key, function (ContainerInterface $container) use ($callable) {
+                $this->singleton($key, function () use ($container, $callable) {
                     return $callable($container, null);
                 });
             }
@@ -700,7 +694,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         }
 
         return function (ContainerContract $container) use ($implementation) {
-            return $container->make($implementation);
+            return $container->resolve($implementation);
         };
     }
 }

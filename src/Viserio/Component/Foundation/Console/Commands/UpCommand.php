@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console\Commands;
 
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 
 class UpCommand extends Command
 {
@@ -22,9 +22,9 @@ class UpCommand extends Command
      */
     public function handle()
     {
-        $config = $this->container->get(RepositoryContract::class);
+        $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
-        @unlink($config->get('path.storage') . '/framework/down');
+        @unlink($kernel->storagePath('framework/down'));
 
         $this->info('Application is now live.');
     }
