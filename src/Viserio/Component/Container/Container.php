@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container;
 
-use ArrayAccess;
 use Closure;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;

@@ -19,9 +19,6 @@ class ContainerResolver
      */
     protected $buildStack = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve($subject, array $parameters = [])
     {
         if ($this->isClass($subject)) {
