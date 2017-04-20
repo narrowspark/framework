@@ -12,9 +12,9 @@ interface Kernel
      *
      * @throws \RuntimeException
      *
-     * @return \Viserio\Component\Contracts\Container\Container
+     * @return \Viserio\Component\Contracts\Container\Container|null
      */
-    public function getContainer(): ContainerContract;
+    public function getContainer(): ?ContainerContract;
 
     /**
      * Set the kernel configuration.
@@ -31,6 +31,13 @@ interface Kernel
      * @return array
      */
     public function getConfigurations(): array;
+
+    /**
+     * Bootstrap the kernel.
+     *
+     * @return void
+     */
+    public function bootstrap(): void;
 
     /**
      * Run the given array of bootstrap classes.

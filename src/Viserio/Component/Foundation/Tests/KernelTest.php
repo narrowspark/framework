@@ -192,7 +192,7 @@ class KernelTest extends MockeryTestCase
         }));
     }
 
-    protected function getKernel($container = null)
+    protected function getKernel($container)
     {
         return new class($container) extends AbstractKernel {
             public function __construct($container)
