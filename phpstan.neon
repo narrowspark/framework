@@ -86,6 +86,7 @@ parameters:
         - '#\$contents of method League\\Flysystem\\AdapterInterface#'
         - "#Casting to mixed[] something that's already mixed[]#"
         - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
+        - '#Call to a member function register\(\) on null#'
 
         # DUMP_COMMA_SEPARATOR constant only supported from var-dumper v3.3
         - "#DUMP_COMMA_SEPARATOR#"
