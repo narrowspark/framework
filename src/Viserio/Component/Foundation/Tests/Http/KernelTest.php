@@ -19,6 +19,7 @@ use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
+use Viserio\Component\Foundation\Http\Events\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Kernel;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
@@ -82,6 +83,9 @@ class KernelTest extends MockeryTestCase
         $events->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelRequestEvent::class));
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(KernelFinishRequestEvent::class));
         $events->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelResponseEvent::class));
@@ -178,6 +182,9 @@ class KernelTest extends MockeryTestCase
         $events->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelRequestEvent::class));
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(KernelFinishRequestEvent::class));
         $events->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelExceptionEvent::class));

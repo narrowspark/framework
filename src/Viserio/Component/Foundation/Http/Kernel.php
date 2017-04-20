@@ -15,6 +15,7 @@ use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
+use Viserio\Component\Foundation\Http\Events\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
@@ -137,6 +138,9 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     {
         $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) ob_get_level());
         $container     = $this->getContainer();
+        $events        = $container->get(EventManagerContract::class);
+
+        $events->trigger(new KernelRequestEvent($this, $serverRequest));
 
         // Passes the request to the container
         $container->instance(ServerRequestInterface::class, $serverRequest);
@@ -144,10 +148,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         if (class_exists(StaticalProxy::class)) {
             StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
         }
-
-        $events = $container->get(EventManagerContract::class);
-
-        $events->trigger(new KernelRequestEvent($this, $serverRequest));
 
         $this->bootstrap();
 
@@ -196,6 +196,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     protected function handleRequest(ServerRequestInterface $serverRequest, EventManagerContract $events): ResponseInterface
     {
         try {
+            $events->trigger(new KernelFinishRequestEvent($this, $serverRequest));
+
             $response = $this->sendRequestThroughRouter($serverRequest);
 
             $events->trigger(new KernelResponseEvent($this, $serverRequest, $response));

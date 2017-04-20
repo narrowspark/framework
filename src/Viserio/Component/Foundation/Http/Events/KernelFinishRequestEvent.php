@@ -17,12 +17,11 @@ class KernelFinishRequestEvent implements EventContract
      *
      * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
      * @param \Psr\Http\Message\ServerRequestInterface       $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface            $response
      */
-    public function __construct(HttpKernelContract $kernel, ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function __construct(HttpKernelContract $kernel, ServerRequestInterface $serverRequest)
     {
         $this->name       = HttpKernelContract::FINISH_REQUEST;
         $this->target     = $kernel;
-        $this->parameters = ['server_request' => $serverRequest, 'response' => $response];
+        $this->parameters = ['server_request' => $serverRequest];
     }
 }

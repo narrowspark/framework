@@ -72,14 +72,13 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function getDefaultOptions(): iterable
     {
-        $parentOptions = parent::getDefaultOptions();
-        $options       = [
+        $options = [
             'app' => [
                 'url' => 'http://localhost',
             ],
         ];
 
-        return array_merge($parentOptions, $options);
+        return array_merge(parent::getDefaultOptions(), $options);
     }
 
     /**
@@ -232,7 +231,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function getConsole(): Cerebro
     {
-        if (is_null($this->console)) {
+        if ($this->console === null) {
             $container = $this->getContainer();
             $console   = $container->get(Cerebro::class);
 
