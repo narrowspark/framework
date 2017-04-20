@@ -9,9 +9,8 @@ use ReflectionMethod;
 use ReflectionParameter;
 use Viserio\Component\Contracts\Container\Exceptions\BindingResolutionException;
 use Viserio\Component\Contracts\Container\Exceptions\CyclicDependencyException;
-use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 
-class ContainerResolver implements FactoryContract
+class ContainerResolver
 {
     /**
      * The stack of concretions currently being built.

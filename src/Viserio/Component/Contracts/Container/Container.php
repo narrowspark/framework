@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\Container;
 
 use Closure;
+use ArrayAccess;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 
-interface Container extends ContainerInterface
+interface Container extends ContainerInterface, Factory, ArrayAccess
 {
     /**
      * Alias a type to a different name.

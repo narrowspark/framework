@@ -24,7 +24,7 @@ use Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyExcep
 use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 use Viserio\Component\Contracts\Container\Types as TypesContract;
 
-class Container extends ContainerResolver implements ArrayAccess, ContainerContract, InvokerInterface, ContextualBindingBuilderContract
+class Container extends ContainerResolver implements ContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
     /**
      * The container's bindings.
