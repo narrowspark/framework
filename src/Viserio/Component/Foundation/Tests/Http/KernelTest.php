@@ -2,24 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Http;
 
-use Closure;
 use Exception;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
-use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Routing\Router as  RouterContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
-use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\Component\Foundation\EnvironmentDetector;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
 use Viserio\Component\Foundation\Events\BootstrappingEvent;
 use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;

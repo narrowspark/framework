@@ -2,32 +2,24 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Console;
 
-use Closure;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
-use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\Console\Kernel;
-use Viserio\Component\Foundation\EnvironmentDetector;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
 use Viserio\Component\Foundation\Events\BootstrappingEvent;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 
 class KernelTest extends MockeryTestCase
 {
@@ -129,7 +121,7 @@ class KernelTest extends MockeryTestCase
 
     public function testTerminate()
     {
-        $argv = new ArgvInput();
+        $argv      = new ArgvInput();
         $container = $this->mock(ContainerContract::class);
 
         $this->getBootstrap($container);
@@ -141,7 +133,7 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(Schedule::class)
             ->andReturn($this->mock(Schedule::class));
-               $cerebro = $this->mock(Cerebro::class);
+        $cerebro = $this->mock(Cerebro::class);
 
         $cerebro->shouldReceive('setVersion')
             ->once()

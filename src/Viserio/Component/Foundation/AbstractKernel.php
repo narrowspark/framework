@@ -17,9 +17,9 @@ use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
 use Viserio\Component\Foundation\Events\BootstrappingEvent;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 abstract class AbstractKernel implements
     KernelContract,

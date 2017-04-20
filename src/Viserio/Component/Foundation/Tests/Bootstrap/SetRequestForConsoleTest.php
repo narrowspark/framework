@@ -6,7 +6,6 @@ use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
@@ -30,9 +29,9 @@ class SetRequestForConsoleTest extends MockeryTestCase
             'viserio' => [
                 'app' => [
                     'env' => 'prod',
-                    'url' => 'http://localhost'
-                ]
-            ]
+                    'url' => 'http://localhost',
+                ],
+            ],
         ]);
 
         $container = $kernel->getContainer();
