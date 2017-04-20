@@ -2,22 +2,23 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 
 class LoadServiceProvider implements BootstrapContract
 {
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(ApplicationContract $app): void
+    public function bootstrap(KernelContract $kernel): void
     {
-        $providers = $app->get(RepositoryContract::class)->get('viserio.app.serviceproviders', []);
+        $container = $kernel->getContainer();
+        $config    = $kernel->getKernelConfigurations();
+        $providers = $config['app']['serviceproviders'];
 
         if (count($providers) > 0) {
             foreach ($providers as $provider) {
-                $app->register($app->make($provider));
+                $container->register($container->resolve($provider));
             }
         }
     }

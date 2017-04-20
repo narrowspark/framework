@@ -2,59 +2,230 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Foundation;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Closure;
+use Viserio\Component\Contracts\Container\Container as ContainerContract;
 
 interface Kernel
 {
     /**
-     * The REQUEST event occurs at the very beginning of request
-     * dispatching.
+     * Get the container instance.
      *
-     * This event allows you to create a response for a request before any
-     * other code in the framework is executed.
+     * @throws \RuntimeException
      *
-     * @var string
+     * @return \Viserio\Component\Contracts\Container\Container|null
      */
-    public const REQUEST = 'kernel.request';
+    public function getContainer(): ?ContainerContract;
 
     /**
-     * The EXCEPTION event occurs when an uncaught exception appears.
+     * Set the kernel configuration.
      *
-     * This event allows you to create a response for a thrown exception or
-     * to modify the thrown exception.
+     * @param \Interop\Container\ContainerInterface|iterable $data
      *
-     * @var string
+     * @return void
      */
-    public const EXCEPTION = 'kernel.exception';
+    public function setKernelConfigurations($data): void;
 
     /**
-     * The RESPONSE event occurs once a response was created for
-     * replying to a request.
+     * Get the kernel configuration.
      *
-     * This event allows you to modify or replace the response that will be
-     * replied.
-     *
-     * @var string
+     * @return array
      */
-    public const RESPONSE = 'kernel.response';
+    public function getKernelConfigurations(): array;
 
     /**
-     * The FINISH_REQUEST event occurs when a response was generated for a request.
+     * Bootstrap the kernel.
      *
-     * This event allows you to reset the global and environmental state of
-     * the application, when it was changed during the request.
-     *
-     * @var string
+     * @return void
      */
-    public const FINISH_REQUEST = 'kernel.finish_request';
+    public function bootstrap(): void;
 
     /**
-     * Handle an incoming HTTP request.
+     * Run the given array of bootstrap classes.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param array $bootstrappers
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return void
      */
-    public function handle(ServerRequestInterface $serverRequest): ResponseInterface;
+    public function bootstrapWith(array $bootstrappers): void;
+
+    /**
+     * Determine if the application has been bootstrapped before.
+     *
+     * @return bool
+     */
+    public function hasBeenBootstrapped(): bool;
+
+    /**
+     * Determine if application is in local environment.
+     *
+     * @return bool
+     */
+    public function isLocal(): bool;
+
+    /**
+     * Determine if we are running unit tests.
+     *
+     * @return bool
+     */
+    public function isRunningUnitTests(): bool;
+
+    /**
+     * Determine if we are running in the console.
+     *
+     * @return bool
+     */
+    public function isRunningInConsole(): bool;
+
+    /**
+     * Determine if the application is currently down for maintenance.
+     *
+     * @return bool
+     */
+    public function isDownForMaintenance(): bool;
+
+    /**
+     * Gets the application root dir (path of the project's composer file).
+     *
+     * @return string The project root dir
+     */
+    public function getProjectDir(): string;
+
+    /**
+     * Get the path to the application "app" directory.
+     *
+     * @param string $path Optionally, a path to append to the app path
+     *
+     * @return string
+     */
+    public function getAppPath(string $path = ''): string;
+
+    /**
+     * Get the path to the application configuration files.
+     *
+     * This path is used by the configuration loader to load the application
+     * configuration files. In general, you should'nt need to change this
+     * value; however, you can theoretically change the path from here.
+     *
+     * @param string $path Optionally, a path to append to the config path
+     *
+     * @return string
+     */
+    public function getConfigPath(string $path = ''): string;
+
+    /**
+     * Get the path to the database directory.
+     *
+     * This path is used by the migration generator and migration runner to
+     * know where to place your fresh database migration classes. You're
+     * free to modify the path but you probably will not ever need to.
+     *
+     * @param string $path Optionally, a path to append to the database path
+     *
+     * @return string
+     */
+    public function getDatabasePath(string $path = ''): string;
+
+    /**
+     * Get the path to the public / web directory.
+     *
+     * The public path contains the assets for your web application, such as
+     * your JavaScript and CSS files, and also contains the primary entry
+     * point for web requests into these applications from the outside.
+     *
+     * @param string $path Optionally, a path to append to the public path
+     *
+     * @return string
+     */
+    public function getPublicPath(string $path = ''): string;
+
+    /**
+     * Get the path to the storage directory.
+     *
+     * The storage path is used by Narrowspark to store cached views, logs
+     * and other pieces of information.
+     *
+     * @param string $path Optionally, a path to append to the storage path
+     *
+     * @return string
+     */
+    public function getStoragePath(string $path = ''): string;
+
+    /**
+     * Get the path to the resources directory.
+     *
+     * @param string $path Optionally, a path to append to the resources path
+     *
+     * @return string
+     */
+    public function getResourcePath(string $path = ''): string;
+
+    /**
+     * Get the path to the language files.
+     *
+     * This path is used by the language file loader to load your application
+     * language files. The purpose of these files is to store your strings
+     * that are translated into other languages for views, e-mails, etc.
+     *
+     * @return string
+     */
+    public function getLangPath(): string;
+
+    /**
+     * Get the path to the routes files.
+     *
+     * This path is used by the routes loader to load the application
+     * routes files. In general, you should'nt need to change this
+     * value; however, you can theoretically change the path from here.
+     *
+     * @return string
+     */
+    public function getRoutesPath(): string;
+
+    /**
+     * Set the directory for the environment file.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function useEnvironmentPath(string $path): Kernel;
+
+    /**
+     * Set the environment file to be loaded during bootstrapping.
+     *
+     * @param string $file
+     *
+     * @return $this
+     */
+    public function loadEnvironmentFrom(string $file): Kernel;
+
+    /**
+     * Get the path to the environment file directory.
+     *
+     * @return string
+     */
+    public function getEnvironmentPath(): string;
+
+    /**
+     * Get the environment file the application is using.
+     *
+     * @return string
+     */
+    public function getEnvironmentFile(): string;
+
+    /**
+     * Get the fully qualified path to the environment file.
+     *
+     * @return string
+     */
+    public function getEnvironmentFilePath(): string;
+
+    /**
+     * Detect the application's current environment.
+     *
+     * @param \Closure $callback
+     *
+     * @return string
+     */
+    public function detectEnvironment(Closure $callback): string;
 }

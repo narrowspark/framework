@@ -5,9 +5,8 @@ namespace Viserio\Component\Foundation\Bootstrap;
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
 use Symfony\Component\Console\Input\ArgvInput;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Support\Env;
 
 class LoadEnvironmentVariables implements BootstrapContract
@@ -15,16 +14,16 @@ class LoadEnvironmentVariables implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(ApplicationContract $app): void
+    public function bootstrap(KernelContract $kernel): void
     {
-        if (file_exists($app->get(RepositoryContract::class)->get('patch.cached.config'))) {
+        if (file_exists($kernel->getStoragePath('config.cache'))) {
             return;
         }
 
-        $this->checkForSpecificEnvironmentFile($app);
+        $this->checkForSpecificEnvironmentFile($kernel);
 
         try {
-            (new Dotenv($app->environmentPath(), $app->environmentFile()))->load();
+            (new Dotenv($kernel->getEnvironmentPath(), $kernel->getEnvironmentFile()))->load();
         } catch (InvalidPathException $exception) {
         }
     }
@@ -32,18 +31,16 @@ class LoadEnvironmentVariables implements BootstrapContract
     /**
      * Detect if a custom environment file matching the APP_ENV exists.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Application $app
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
      *
      * @return void
      */
-    protected function checkForSpecificEnvironmentFile(ApplicationContract $app): void
+    protected function checkForSpecificEnvironmentFile(KernelContract $kernel): void
     {
-        $input = new ArgvInput();
-
-        if (php_sapi_name() == 'cli' && $input->hasParameterOption('--env')) {
+        if (php_sapi_name() == 'cli' && ($input = new ArgvInput())->hasParameterOption('--env')) {
             $this->setEnvironmentFilePath(
-                $app,
-                $app->environmentFile() . '.' . $input->getParameterOption('--env')
+                $kernel,
+                $kernel->getEnvironmentFile() . '.' . $input->getParameterOption('--env')
             );
         }
 
@@ -54,23 +51,23 @@ class LoadEnvironmentVariables implements BootstrapContract
         }
 
         $this->setEnvironmentFilePath(
-            $app,
-            $app->environmentFile() . '.' . $env
+            $kernel,
+            $kernel->getEnvironmentFile() . '.' . $env
         );
     }
 
     /**
      * Load a custom environment file.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Application $app
-     * @param string                                              $file
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
+     * @param string                                         $file
      *
      * @return void
      */
-    protected function setEnvironmentFilePath(ApplicationContract $app, string $file): void
+    protected function setEnvironmentFilePath(KernelContract $kernel, string $file): void
     {
-        if (file_exists($app->environmentPath() . '/' . $file)) {
-            $app->loadEnvironmentFrom($file);
+        if (file_exists($kernel->getEnvironmentPath() . '/' . $file)) {
+            $kernel->loadEnvironmentFrom($file);
         }
     }
 }

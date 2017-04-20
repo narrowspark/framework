@@ -3,9 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
 use Closure;
-use Narrowspark\Arr\Arr;
 use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
-use Viserio\Component\Support\Str;
 
 class EnvironmentDetector implements EnvironmentContract
 {
@@ -58,7 +56,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function runningInConsole(): bool
     {
-        return mb_substr(PHP_SAPI, 0, 3) === 'cgi';
+        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
     }
 
     /**
@@ -104,10 +102,35 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return string|null
      */
-    protected function getEnvironmentArgument(array $args)
+    protected function getEnvironmentArgument(array $args): ?string
     {
-        return Arr::first($args, function ($k, $v) {
-            return Str::startsWith($v, '--env');
-        });
+        $callback = function ($k, $v) {
+            return self::startsWith($v, '--env');
+        };
+
+        foreach ($args as $key => $value) {
+            if ($callback($key, $value)) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Determine if a given string starts with a given substring.
+     *
+     * @param string $haystack
+     * @param string $needle
+     *
+     * @return bool
+     */
+    private static function startsWith(string $haystack, string $needle): bool
+    {
+        if ($needle != '' && mb_substr($haystack, 0, mb_strlen($needle)) === $needle) {
+            return true;
+        }
+
+        return false;
     }
 }

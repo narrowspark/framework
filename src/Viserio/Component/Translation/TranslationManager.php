@@ -5,7 +5,7 @@ namespace Viserio\Component\Translation;
 use Psr\Log\LoggerAwareInterface;
 use RuntimeException;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Viserio\Component\Contracts\Parsers\Traits\LoaderAwareTrait;
+use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\MessageSelector as MessageSelectorContract;
 use Viserio\Component\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
@@ -17,7 +17,7 @@ use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 class TranslationManager implements TranslationManagerContract, LoggerAwareInterface
 {
     use ValidateLocaleTrait;
-    use LoaderAwareTrait;
+    use ParserAwareTrait;
     use LoggerAwareTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 

@@ -2,9 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Container\Container as ContainerContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 
 class LoadConfigurationTest extends MockeryTestCase
@@ -13,64 +16,78 @@ class LoadConfigurationTest extends MockeryTestCase
     {
         $bootstraper = new LoadConfiguration();
         $config      = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('patch.cached.config')
-            ->andReturn('');
-        $config->shouldReceive('get')
-            ->once()
-            ->with('path.config')
-            ->andReturn(__DIR__ . '/../Fixtures/Config/');
         $config->shouldReceive('import')
             ->once()
             ->with(realpath(__DIR__ . '/../Fixtures/Config/app.php'));
         $config->shouldReceive('get')
             ->once()
-            ->with('app.timezone', 'UTC')
+            ->with('viserio.app.timezone', 'UTC')
             ->andReturn('UTC');
 
-        $app = $this->mock(ApplicationContract::class);
-        $app->shouldReceive('get')
+        $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('register')
+            ->once()
+            ->with(Mockery::type(ConfigServiceProvider::class));
+        $container->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)
             ->andReturn($config);
-        $app->shouldReceive('detectEnvironment')
+
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getContainer')
+            ->once()
+            ->andReturn($container);
+        $kernel->shouldReceive('detectEnvironment')
             ->once()
             ->andReturn('production');
+        $kernel->shouldReceive('getStoragePath')
+            ->once()
+            ->with('config.cache')
+            ->andReturn('');
+        $kernel->shouldReceive('getConfigPath')
+            ->once()
+            ->andReturn(realpath(__DIR__ . '/../Fixtures/Config'));
 
-        $bootstraper->bootstrap($app);
+        $bootstraper->bootstrap($kernel);
     }
 
     public function testBootstrapWithCachedData()
     {
         $bootstraper = new LoadConfiguration();
         $config      = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('patch.cached.config')
-            ->andReturn(__DIR__ . '/../Fixtures/Config/app.php');
         $config->shouldReceive('setArray')
             ->once()
             ->with([]);
-        $config->shouldReceive('get')
-            ->never()
-            ->with('path.config');
         $config->shouldReceive('import')
             ->never();
         $config->shouldReceive('get')
             ->once()
-            ->with('app.timezone', 'UTC')
+            ->with('viserio.app.timezone', 'UTC')
             ->andReturn('UTC');
 
-        $app = $this->mock(ApplicationContract::class);
-        $app->shouldReceive('get')
+        $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('register')
+            ->once()
+            ->with(Mockery::type(ConfigServiceProvider::class));
+        $container->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)
             ->andReturn($config);
-        $app->shouldReceive('detectEnvironment')
+
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getContainer')
+            ->once()
+            ->andReturn($container);
+        $kernel->shouldReceive('detectEnvironment')
             ->once()
             ->andReturn('production');
+        $kernel->shouldReceive('getStoragePath')
+            ->once()
+            ->with('config.cache')
+            ->andReturn(__DIR__ . '/../Fixtures/Config/app.php');
+        $kernel->shouldReceive('getConfigPath')
+            ->never();
 
-        $bootstraper->bootstrap($app);
+        $bootstraper->bootstrap($kernel);
     }
 }

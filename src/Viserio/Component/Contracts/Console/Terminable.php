@@ -11,6 +11,8 @@ interface Terminable
      *
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param int                                             $status
+     *
+     * @return void
      */
-    public function terminate(InputInterface $input, int $status);
+    public function terminate(InputInterface $input, int $status): void;
 }

@@ -5,20 +5,17 @@ namespace Viserio\Component\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Foundation\AbstractKernel;
+use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
-use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
-use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
+use Viserio\Component\Foundation\Http\Events\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
@@ -28,24 +25,8 @@ use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
 
-class Kernel implements TerminableContract, KernelContract
+class Kernel extends AbstractKernel implements HttpKernelContract, TerminableContract
 {
-    use EventsAwareTrait;
-
-    /**
-     * The application implementation.
-     *
-     * @var \Viserio\Component\Contracts\Foundation\Application
-     */
-    protected $app;
-
-    /**
-     * The router instance.
-     *
-     * @var \Viserio\Component\Contracts\Routing\Router
-     */
-    protected $router;
-
     /**
      * The application's middleware stack.
      *
@@ -92,26 +73,19 @@ class Kernel implements TerminableContract, KernelContract
      * @var array
      */
     protected $bootstrappers = [
-        LoadConfiguration::class,
+        ConfigureKernel::class,
         LoadEnvironmentVariables::class,
         HandleExceptions::class,
-        LoadServiceProvider::class,
     ];
 
     /**
-     * Create a new HTTP kernel instance.
-     *
-     * @param \Viserio\Component\Contracts\Foundation\Application $app
-     * @param \Viserio\Component\Contracts\Routing\Router         $router
-     * @param \Viserio\Component\Contracts\Events\EventManager    $events
+     * Create a new http kernel instance.
      */
-    public function __construct(
-        ApplicationContract $app,
-        RouterContract $router,
-        EventManagerContract $events
-    ) {
-        $this->app    = $app;
-        $this->events = $events;
+    public function __construct()
+    {
+        parent::__construct();
+
+        $router = $this->getContainer()->get(RouterContract::class);
 
         $router->setMiddlewarePriorities($this->middlewarePriority);
         $router->addMiddlewares($this->routeMiddlewares);
@@ -123,8 +97,6 @@ class Kernel implements TerminableContract, KernelContract
         foreach ($this->middlewareGroups as $key => $middleware) {
             $router->setMiddlewareGroup($key, $middleware);
         }
-
-        $this->router = $router;
     }
 
     /**
@@ -165,19 +137,23 @@ class Kernel implements TerminableContract, KernelContract
     public function handle(ServerRequestInterface $serverRequest): ResponseInterface
     {
         $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) ob_get_level());
+        $container     = $this->getContainer();
+        $events        = $container->get(EventManagerContract::class);
+
+        $events->trigger(new KernelRequestEvent($this, $serverRequest));
 
         // Passes the request to the container
-        $this->app->instance(ServerRequestInterface::class, $serverRequest);
+        $container->instance(ServerRequestInterface::class, $serverRequest);
 
-        StaticalProxy::clearResolvedInstance('request');
-
-        $this->events->trigger(new KernelRequestEvent($this, $serverRequest));
+        if (class_exists(StaticalProxy::class)) {
+            StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
+        }
 
         $this->bootstrap();
 
-        $response = $this->handleRequest($serverRequest);
+        $response = $this->handleRequest($serverRequest, $events);
 
-        // stop PHP sending a Content-Type automatically
+        // Stop PHP sending a Content-Type automatically.
         ini_set('default_mimetype', '');
 
         return $response;
@@ -186,54 +162,51 @@ class Kernel implements TerminableContract, KernelContract
     /**
      * {@inheritdoc}
      */
-    public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        $this->events->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
+        if (! $this->hasBeenBootstrapped()) {
+            return;
+        }
 
-        $this->app->get(HandlerContract::class)->unregister();
+        $this->getContainer()->get(EventManagerContract::class)->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
+
+        restore_error_handler();
     }
 
     /**
-     * Bootstrap the application for HTTP requests.
+     * Bootstrap the kernel for HTTP requests.
+     *
+     * @return void
      */
-    public function bootstrap()
+    public function bootstrap(): void
     {
-        if (! $this->app->hasBeenBootstrapped()) {
-            $this->app->bootstrapWith($this->bootstrappers);
+        if (! $this->hasBeenBootstrapped()) {
+            $this->bootstrapWith($this->bootstrappers);
         }
     }
 
     /**
      * Convert request into response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param \Psr\Http\Message\ServerRequestInterface         $serverRequest
+     * @param \Viserio\Component\Contracts\Events\EventManager $events
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function handleRequest(ServerRequestInterface $serverRequest): ResponseInterface
+    protected function handleRequest(ServerRequestInterface $serverRequest, EventManagerContract $events): ResponseInterface
     {
         try {
+            $events->trigger(new KernelFinishRequestEvent($this, $serverRequest));
+
             $response = $this->sendRequestThroughRouter($serverRequest);
 
-            if ($this->app->has(ProfilerContract::class)) {
-                $profiler = $this->app->get(ProfilerContract::class);
-
-                if ($profiler !== null) {
-                    // Modify the response to add the Profiler
-                    $response = $profiler->modifyResponse(
-                        $serverRequest,
-                        $response
-                    );
-                }
-            }
-
-            $this->events->trigger(new KernelResponseEvent($this, $serverRequest, $response));
+            $events->trigger(new KernelResponseEvent($this, $serverRequest, $response));
         } catch (Throwable $exception) {
             $this->reportException($exception);
 
             $response = $this->renderException($serverRequest, $exception);
 
-            $this->events->trigger(new KernelExceptionEvent($this, $serverRequest, $response));
+            $events->trigger(new KernelExceptionEvent($this, $serverRequest, $response));
         }
 
         return $response;
@@ -246,7 +219,7 @@ class Kernel implements TerminableContract, KernelContract
      */
     protected function reportException(Throwable $exception)
     {
-        $this->app->get(HandlerContract::class)->report($exception);
+        $this->getContainer()->get(ExceptionHandlerContract::class)->report($exception);
     }
 
     /**
@@ -261,7 +234,7 @@ class Kernel implements TerminableContract, KernelContract
         ServerRequestInterface $request,
         Throwable $exception
     ): ResponseInterface {
-        return $this->app->get(HandlerContract::class)->render($request, $exception);
+        return $this->getContainer()->get(ExceptionHandlerContract::class)->render($request, $exception);
     }
 
     /**
@@ -273,20 +246,40 @@ class Kernel implements TerminableContract, KernelContract
      */
     protected function sendRequestThroughRouter(ServerRequestInterface $request): ResponseInterface
     {
-        $router = $this->router;
-        $config = $this->app->get(RepositoryContract::class);
+        $container = $this->getContainer();
+        $router    = $container->get(RouterContract::class);
 
-        $router->setCachePath($config->get('viserio.routing.path'));
-        $router->refreshCache($config->get('viserio.app.env', 'production') !== 'production');
+        $router->setCachePath($this->getStoragePath('routes'));
+        $router->refreshCache($this->options['app']['env'] !== 'production');
 
         return (new Pipeline())
-            ->setContainer($this->app)
+            ->setContainer($container)
             ->send($request)
-            ->through($config->get('viserio.app.skip_middlewares', false) ? [] : $this->middlewares)
-            ->then(function ($request) use ($router) {
-                $this->app->instance(ServerRequestInterface::class, $request);
+            ->through($this->options['app']['skip_middlewares'] ? [] : $this->middlewares)
+            ->then(function ($request) use ($router, $container) {
+                $container->instance(ServerRequestInterface::class, $request);
 
                 return $router->dispatch($request);
             });
+    }
+
+    /**
+     * Register the basic bindings into the container.
+     *
+     * @return void
+     */
+    protected function registerBaseBindings(): void
+    {
+        parent::registerBaseBindings();
+
+        $kernel    = $this;
+        $container = $this->getContainer();
+
+        $container->singleton(HttpKernelContract::class, function () use ($kernel) {
+            return $kernel;
+        });
+
+        $container->alias(HttpKernelContract::class, self::class);
+        $container->alias(HttpKernelContract::class, 'http_kernel');
     }
 }

@@ -313,7 +313,10 @@ class UploadedFile implements UploadedFileInterface
     private function validateActive(): void
     {
         if ($this->isOk() === false) {
-            throw new RuntimeException('Cannot retrieve stream due to upload error: ' . self::$errorMessages[$this->error]);
+            throw new RuntimeException(sprintf(
+                'Cannot retrieve stream due to upload error: %s',
+                self::$errorMessages[$this->error]
+            ));
         }
 
         if ($this->isMoved()) {

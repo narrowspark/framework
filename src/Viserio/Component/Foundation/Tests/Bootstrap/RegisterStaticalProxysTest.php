@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Component\Contracts\Container\Container as ContainerContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxys;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 
@@ -16,18 +16,16 @@ class RegisterStaticalProxysTest extends MockeryTestCase
 
         $bootstraper = new RegisterStaticalProxys();
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('app.aliases', [])
-            ->andReturn([ConfigureLoggingServiceProvider::class]);
+        $container = $this->mock(ContainerContract::class);
 
-        $app = $this->mock(ApplicationContract::class);
-        $app->shouldReceive('get')
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getContainer')
             ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn($config);
+            ->andReturn($container);
+        $kernel->shouldReceive('getKernelConfigurations')
+            ->once()
+            ->andReturn(['app' => ['aliases' => ['test' => RegisterStaticalProxys::class]]]);
 
-        $bootstraper->bootstrap($app);
+        $bootstraper->bootstrap($kernel);
     }
 }

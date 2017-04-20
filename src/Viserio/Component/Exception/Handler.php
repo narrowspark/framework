@@ -8,7 +8,9 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
@@ -42,7 +44,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function getMandatoryOptions(): iterable
     {
-        return ['default_displayer', 'env'];
+        return ['env'];
     }
 
     /**
@@ -102,7 +104,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function register(): void
     {
         error_reporting(E_ALL);
 
@@ -122,7 +124,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function unregister()
+    public function unregister(): void
     {
         restore_error_handler();
     }
@@ -141,8 +143,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
 
         if (PHP_SAPI === 'cli') {
             if ($container->has(ConsoleApplication::class)) {
-                $container->get(ConsoleApplication::class)
-                    ->renderException($transformed, new ConsoleOutput());
+                $container->get(ConsoleApplication::class)->renderException($transformed, new ConsoleOutput());
             } else {
                 throw $transformed;
             }
@@ -172,6 +173,14 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function renderForConsole(OutputInterface $output, Throwable $exception): void
+    {
+        $this->container->get(SymfonyConsole::class)->renderException($exception, $output);
+    }
+
+    /**
      * Get a prepared response with the transformed exception.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -196,6 +205,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
 
             $response = $container->get(ResponseFactoryInterface::class)->createResponse();
             $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
+            $response = $response->withHeader('Content-Type', 'text/plain');
         }
 
         return $response;

@@ -2,23 +2,28 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
+use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
 {
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(ApplicationContract $app): void
+    public function bootstrap(KernelContract $kernel): void
     {
         $loadedFromCache = false;
-        $config          = $app->get(RepositoryContract::class);
+        $container       = $kernel->getContainer();
+
+        $container->register(new ConfigServiceProvider());
+
+        $config = $container->get(RepositoryContract::class);
 
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.
-        if (file_exists($cached = $config->get('patch.cached.config'))) {
+        if (file_exists($cached = $kernel->getStoragePath('config.cache'))) {
             $items = require $cached;
 
             $config->setArray($items);
@@ -29,10 +34,10 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the config manager.
         if (! $loadedFromCache) {
-            $this->loadConfigurationFiles($app, $config);
+            $this->loadConfigurationFiles($kernel, $config);
         }
 
-        $app->detectEnvironment(function () use ($config) {
+        $kernel->detectEnvironment(function () use ($config) {
             return $config->get('viserio.app.env', 'production');
         });
 
@@ -44,14 +49,13 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     /**
      * Load the configuration items from all of the files.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Application $app
-     * @param \Viserio\Component\Contracts\Config\Repository      $config
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
+     * @param \Viserio\Component\Contracts\Config\Repository $config
+     * @param KernelContract                                 $kernel
      */
-    protected function loadConfigurationFiles(ApplicationContract $app, RepositoryContract $config)
+    protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config)
     {
-        $configPath = realpath($config->get('path.config'));
-
-        foreach ($this->getFiles($configPath) as $key => $path) {
+        foreach ($this->getFiles($kernel->getConfigPath()) as $key => $path) {
             $config->import($path);
         }
     }

@@ -6,9 +6,8 @@ use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Foundation\Application;
+use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\Events\BootstrappedEvent;
 use Viserio\Component\Foundation\Events\BootstrappingEvent;
@@ -17,27 +16,25 @@ class SetRequestForConsoleTest extends MockeryTestCase
 {
     public function testBootstrap()
     {
-        $app = new class() extends Application {
-            public function __construct()
-            {
-            }
-
-            /**
-             * Register all of the base service providers.
-             *
-             * @return void
-             */
+        $kernel = new class() extends AbstractKernel {
             protected function registerBaseServiceProviders(): void
             {
             }
-        };
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('app.url', 'http://localhost')
-            ->andReturn('http://localhost');
-        $app->instance(RepositoryContract::class, $config);
+            public function bootstrap(): void
+            {
+            }
+        };
+        $kernel->setKernelConfigurations([
+            'viserio' => [
+                'app' => [
+                    'env' => 'prod',
+                    'url' => 'http://localhost',
+                ],
+            ],
+        ]);
+
+        $container = $kernel->getContainer();
 
         $serverRequest = $this->mock(ServerRequestInterface::class);
 
@@ -46,7 +43,7 @@ class SetRequestForConsoleTest extends MockeryTestCase
             ->once()
             ->with('GET', 'http://localhost')
             ->andReturn($serverRequest);
-        $app->instance(ServerRequestFactoryInterface::class, $request);
+        $container->instance(ServerRequestFactoryInterface::class, $request);
 
         $events = $this->mock(EventManagerContract::class);
         $events->shouldReceive('trigger')
@@ -55,10 +52,10 @@ class SetRequestForConsoleTest extends MockeryTestCase
         $events->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(BootstrappedEvent::class));
-        $app->instance(EventManagerContract::class, $events);
+        $container->instance(EventManagerContract::class, $events);
 
-        $app->bootstrapWith([SetRequestForConsole::class]);
+        $kernel->bootstrapWith([SetRequestForConsole::class]);
 
-        self::assertInstanceOf(ServerRequestInterface::class, $app->get(ServerRequestInterface::class));
+        self::assertInstanceOf(ServerRequestInterface::class, $container->get(ServerRequestInterface::class));
     }
 }

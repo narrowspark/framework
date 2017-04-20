@@ -13,12 +13,16 @@ class INI implements FormatContract, DumperContract
      */
     public function parse(string $payload): array
     {
-        $ini = parse_ini_string($payload, true);
+        $ini = @parse_ini_string($payload, true);
 
-        if (empty($ini)) {
-            throw new ParseException([
-                'message' => 'Invalid INI provided.',
-            ]);
+        if (! $ini) {
+            $errors = error_get_last();
+
+            if ($errors === null) {
+                $errors['message'] = 'Invalid INI provided.';
+            }
+
+            throw new ParseException($errors);
         }
 
         return $ini;

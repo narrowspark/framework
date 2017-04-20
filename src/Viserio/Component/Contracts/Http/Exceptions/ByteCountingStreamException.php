@@ -30,9 +30,11 @@ class ByteCountingStreamException extends RuntimeException
      */
     public function __construct(int $expect, int $actual, Throwable $previous = null)
     {
-        $msg = 'The ByteCountingStream decorator expects to be able to '
-        . sprintf('read %s bytes from a stream, but the stream being decorated ', $expect)
-        . sprintf('only contains %s bytes.', $actual);
+        $msg = 'The ByteCountingStream decorator expects to be able to ' . sprintf(
+            'read %s bytes from a stream, but the stream being decorated only contains %s bytes.',
+            $expect,
+            $actual
+        );
 
         $this->expectBytes = $expect;
         $this->actualBytes = $actual;

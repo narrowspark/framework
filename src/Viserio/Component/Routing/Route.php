@@ -6,6 +6,7 @@ use Interop\Container\Exception\NotFoundException;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Routing\Route\Action as RouteAction;
@@ -361,8 +362,8 @@ class Route implements RouteContract
             try {
                 $this->controller = $container->get($class);
             } catch (NotFoundException $exception) {
-                if (method_exists($container, 'make')) {
-                    $this->controller = $container->make($class);
+                if ($container instanceof FactoryContract) {
+                    $this->controller = $container->resolve($class);
                 } else {
                     throw new $exception();
                 }

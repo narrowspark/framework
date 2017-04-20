@@ -102,7 +102,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
     /**
      * Convert a number string to bytes.
      *
-     * @param string
      * @param string $memoryLimit
      *
      * @return int

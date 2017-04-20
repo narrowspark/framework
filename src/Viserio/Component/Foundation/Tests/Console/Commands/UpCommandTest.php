@@ -5,29 +5,30 @@ namespace Viserio\Component\Foundation\Tests\Console\Commands;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Commands\UpCommand;
 
 class UpCommandTest extends MockeryTestCase
 {
     public function testCommand()
     {
-        $path      = __DIR__ . '/../../Fixtures';
-        $framework = $path . '/framework';
+        $framework = __DIR__ . '/../../Fixtures/framework';
+        $down      = $framework . '/down';
 
         if (! is_dir($framework)) {
             mkdir($framework);
         }
 
-        file_put_contents($framework . '/down', 'test');
+        file_put_contents($down, 'test');
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->with('path.storage')
-            ->andReturn($path);
+        $kernel = $this->mock(ConsoleKernelContract::class);
+        $kernel->shouldReceive('storagePath')
+            ->once()
+            ->with('framework/down')
+            ->andReturn($down);
 
         $container = new ArrayContainer([
-            RepositoryContract::class => $config,
+            ConsoleKernelContract::class => $kernel,
         ]);
 
         $command = new UpCommand();

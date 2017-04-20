@@ -9,7 +9,6 @@ use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Parsers\FileLoader;
-use Viserio\Component\Parsers\TaggableParser;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
@@ -205,11 +204,6 @@ declare(strict_types=1); return [
 
     protected function getFileLoader()
     {
-        return new FileLoader(
-            new TaggableParser(),
-            [
-                $this->root->url(),
-            ]
-        );
+        return (new FileLoader())->addDirectory($this->root->url());
     }
 }

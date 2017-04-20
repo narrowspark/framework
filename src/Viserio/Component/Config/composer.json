@@ -43,7 +43,7 @@
     },
     "suggest": {
         "container-interop/service-provider" : "Required to use service-provider (^0.3).",
-        "viserio/parsers"                    : "Required to import yaml, php, ini config files (self.version).",
+        "viserio/parsers"                    : "Required to import yaml, ini, json, po, toml and xml config files (self.version).",
         "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."
     },
     "extra": {

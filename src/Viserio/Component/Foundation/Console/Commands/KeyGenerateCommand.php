@@ -6,6 +6,7 @@ use Defuse\Crypto\Key;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 
 class KeyGenerateCommand extends Command
 {
@@ -28,22 +29,21 @@ class KeyGenerateCommand extends Command
      */
     public function handle()
     {
-        $key = $this->generateRandomKey();
+        $key       = $this->generateRandomKey();
+        $container = $this->getContainer();
 
-        if ($this->option('show')) {
+        if ($this->option('show') || ! $container->has(RepositoryContract::class)) {
             return $this->line('<comment>' . $key . '</comment>');
         }
-
-        $config = $this->getContainer()->get(RepositoryContract::class);
 
         // Next, we will replace the application key in the environment file so it is
         // automatically setup for this developer. This key gets generated using
         // https://github.com/defuse/php-encryption
-        if (! $this->setKeyInEnvironmentFile($config, $key)) {
+        if (! $this->setKeyInEnvironmentFile($key)) {
             return;
         }
 
-        $config->set('viserio.app.key', $key);
+        $container->get(RepositoryContract::class)->set('viserio.app.key', $key);
 
         $this->info("Application key [$key] set successfully.");
     }
@@ -51,20 +51,20 @@ class KeyGenerateCommand extends Command
     /**
      * Set the application key in the environment file.
      *
-     * @param \Viserio\Component\Contracts\Config\Repository $config
-     * @param string                                         $key
+     * @param string $key
      *
      * @return bool
      */
-    protected function setKeyInEnvironmentFile(RepositoryContract $config, string $key): bool
+    protected function setKeyInEnvironmentFile(string $key): bool
     {
-        $currentKey = $config->get('viserio.app.key', '');
+        $container  = $this->getContainer();
+        $currentKey = $container->get(RepositoryContract::class)->get('viserio.app.key', '');
 
         if (mb_strlen($currentKey) !== 0 && (! $this->confirmToProceed())) {
             return false;
         }
 
-        $env = $config->get('path.env');
+        $env = $container->get(ConsoleKernelContract::class)->getEnvironmentFilePath();
 
         file_put_contents($env, str_replace(
             'APP_KEY=' . $currentKey,

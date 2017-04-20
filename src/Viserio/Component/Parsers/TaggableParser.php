@@ -2,23 +2,32 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
-use Viserio\Component\Contracts\Parsers\TaggableParser as TaggableParserContract;
-
-class TaggableParser extends Parser implements TaggableParserContract
+class TaggableParser extends Parser
 {
     /**
-     * Tagged key for grouping.
+     * Tag delimiter.
      *
      * @var string
      */
-    private $taggedKey;
+    public const TAG_DELIMITER = '::';
 
     /**
-     * {@inheritdoc}
+     * Key for tagging.
+     *
+     * @var string
      */
-    public function setTag(string $key): TaggableParserContract
+    private $tagKey;
+
+    /**
+     * Set tag key.
+     *
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function setTag(string $key): self
     {
-        $this->taggedKey = $key;
+        $this->tagKey = $key;
 
         return $this;
     }
@@ -28,30 +37,30 @@ class TaggableParser extends Parser implements TaggableParserContract
      */
     public function parse(string $payload): array
     {
-        if (! $this->taggedKey) {
+        if (! $this->tagKey) {
             /* @var $method self */
             return parent::parse($payload);
         }
 
-        return $this->group($this->taggedKey, parent::parse($payload));
+        return $this->tag($this->tagKey, parent::parse($payload));
     }
 
     /**
-     * Check if config belongs to a group.
+     * Tag all keys with given tag.
      *
-     * @param string|array $taggedKey
-     * @param array        $data
+     * @param string $tag
+     * @param array  $data
      *
      * @return array
      */
-    protected function group($taggedKey, array $data): array
+    protected function tag(string $tag, array $data): array
     {
         $taggedData = [];
 
         foreach ($data as $key => $value) {
             $name = sprintf(
-                '%s' . TaggableParserContract::TAG_DELIMITER . '%s',
-                $taggedKey,
+                '%s' . self::TAG_DELIMITER . '%s',
+                $tag,
                 $key
             );
 

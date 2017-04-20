@@ -2,7 +2,7 @@
     "name"       : "viserio/foundation",
     "type"       : "library",
     "description": "The Viserio Foundation package.",
-    "keywords"   : ["narrowspark", "viserio", "foundation", "container", "config", "log", "exception", "events", "parsers", "routing", "sparkle"],
+    "keywords"   : ["narrowspark", "sparkle", "viserio", "foundation", "container", "config", "log", "exception", "events", "parsers", "routing"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -18,49 +18,54 @@
         }
     ],
     "require": {
-        "php"                              : "^7.1",
-        "narrowspark/http-emitter"         : "^0.1",
-        "viserio/config"                   : "self.version",
-        "viserio/container"                : "self.version",
-        "viserio/contracts"                : "self.version",
-        "viserio/events"                   : "self.version",
-        "viserio/exception"                : "self.version",
-        "viserio/log"                      : "self.version",
-        "viserio/options-resolver"         : "self.version",
-        "viserio/parsers"                  : "self.version",
-        "viserio/routing"                  : "self.version"
+        "php"                                 : "^7.1",
+        "container-interop/container-interop" : "^1.1",
+        "narrowspark/http-status"             : "^2.0",
+        "psr/log"                             : "^1.0",
+        "viserio/contracts"                   : "self.version",
+        "viserio/container"                   : "self.version",
+        "viserio/events"                      : "self.version",
+        "viserio/exception"                   : "self.version",
+        "viserio/options-resolver"            : "self.version",
+        "viserio/routing"                     : "self.version"
     },
     "require-dev": {
-        "cakephp/chronos"                  : "^1.0",
-        "narrowspark/testing-helper"       : "^2.0",
-        "phpunit/phpunit"                  : "^5.7",
-        "viserio/console"                  : "self.version",
-        "viserio/web-profiler"             : "self.version"
+        "cakephp/chronos"                     : "^1.0",
+        "http-interop/http-factory"           : "^0.3",
+        "narrowspark/testing-helper"          : "^2.0",
+        "phpunit/phpunit"                     : "^6.0",
+        "viserio/config"                      : "self.version",
+        "viserio/console"                     : "self.version",
+        "viserio/log"                         : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Foundation\\"        : ""
+            "Viserio\\Foundation\\"           : ""
         },
-        "exclude-from-classmap"            : ["/Tests/"]
+        "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Foundation\\Tests\\" : "Tests/"
+            "Viserio\\Foundation\\Tests\\"    : "Tests/"
         }
     },
     "provide": {
-        "psr/container-implementation"     : "^1.0",
-        "psr/http-message-implementation"  : "^1.0"
+        "psr/container-implementation"        : "^1.0",
+        "psr/http-message-implementation"     : "^1.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                   : "1.0-dev"
+            "dev-master"                      : "1.0-dev"
         }
     },
     "suggest": {
-        "cakephp/chronos"                  : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0)",
-        "viserio/statical-proxy"           : "Required to use statical-proxy bootstrapper (self.version).",
+        "cakephp/chronos"                     : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0)",
+        "http-interop/http-factory"           : "Required to use SetRequestForConsole (^0.3).",
+        "viserio/config"                      : "Required to use the LoadConfiguration bootstrap class (self.version).",
+        "viserio/console"                     : "Required to use the Console Kernel (self.version).",
+        "viserio/log"                         : "Required to use ConfigureLoggingServiceProvider and HandleLogger bootstrap class (self.version).",
+        "viserio/statical-proxy"              : "Required to use statical-proxy bootstrap class (self.version)."
     },
-    "minimum-stability"                    : "dev",
-    "prefer-stable"                        : true
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }

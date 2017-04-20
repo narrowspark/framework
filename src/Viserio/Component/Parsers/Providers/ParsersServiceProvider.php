@@ -4,92 +4,38 @@ namespace Viserio\Component\Parsers\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Component\Contracts\Parsers\TaggableParser as TaggableParserContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Parsers\FileLoader;
+use Viserio\Component\Parsers\GroupParser;
+use Viserio\Component\Parsers\Parser;
 use Viserio\Component\Parsers\TaggableParser;
 
-class ParsersServiceProvider implements
-    ServiceProvider,
-    RequiresComponentConfigContract,
-    ProvidesDefaultOptionsContract
+class ParsersServiceProvider implements ServiceProvider
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
-
     /**
      * {@inheritdoc}
      */
     public function getServices()
     {
         return [
-            LoaderContract::class => [self::class, 'createFileLoader'],
+            LoaderContract::class => function (ContainerInterface $container): FileLoader {
+                return new FileLoader();
+            },
             FileLoader::class     => function (ContainerInterface $container) {
                 return $container->get(LoaderContract::class);
             },
-            TaggableParserContract::class => [self::class, 'createTaggableParser'],
-            TaggableParser::class         => function (ContainerInterface $container) {
-                return $container->get(TaggableParserContract::class);
+            TaggableParser::class => function (ContainerInterface $container): TaggableParser {
+                return new TaggableParser();
             },
-            'parser' => function (ContainerInterface $container) {
-                return $container->get(TaggableParserContract::class);
+            GroupParser::class    => function (ContainerInterface $container): GroupParser {
+                return new GroupParser();
+            },
+            Parser::class         => function (ContainerInterface $container): Parser {
+                return new Parser();
+            },
+            'parser'              => function (ContainerInterface $container) {
+                return $container->get(Parser::class);
             },
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDimensions(): iterable
-    {
-        return ['viserio', 'parsers'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions(): iterable
-    {
-        return [
-            'directories' => [],
-        ];
-    }
-
-    public static function createFileLoader(ContainerInterface $container): FileLoader
-    {
-        self::resolveOptions($container);
-
-        return new FileLoader(
-            $container->get(TaggableParser::class),
-            self::$options['directories']
-        );
-    }
-
-    public static function createTaggableParser(): TaggableParser
-    {
-        return new TaggableParser();
-    }
-
-    /**
-     * Resolve component options.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private static function resolveOptions(ContainerInterface $container): void
-    {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
     }
 }

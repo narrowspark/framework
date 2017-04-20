@@ -6,18 +6,36 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 
 class SetRequestForConsole implements BootstrapContract
 {
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(ApplicationContract $app): void
+    public function bootstrap(KernelContract $kernel): void
     {
-        $app->register(new class() implements ServiceProvider {
+        $config = $kernel->getKernelConfigurations();
+
+        $kernel->getContainer()->register(new class($config) implements ServiceProvider {
+            /**
+             * Config array.
+             *
+             * @var array
+             */
+            protected static $config;
+
+            /**
+             * Create a new server request instance.
+             *
+             * @param array $config
+             */
+            public function __construct(array $config)
+            {
+                self::$config = $config;
+            }
+
             /**
              * {@inheritdoc}
              */
@@ -37,9 +55,10 @@ class SetRequestForConsole implements BootstrapContract
              */
             public static function createRequest(ContainerInterface $container): ServerRequestInterface
             {
-                $url = $container->get(RepositoryContract::class)->get('viserio.app.url', 'http://localhost');
-
-                return $container->get(ServerRequestFactoryInterface::class)->createServerRequest('GET', $url);
+                return $container->get(ServerRequestFactoryInterface::class)->createServerRequest(
+                    'GET',
+                    self::$config['app']['url']
+                );
             }
         });
     }

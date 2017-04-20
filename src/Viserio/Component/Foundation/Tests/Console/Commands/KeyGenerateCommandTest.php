@@ -6,6 +6,7 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Commands\KeyGenerateCommand;
 
 class KeyGenerateCommandTest extends MockeryTestCase
@@ -21,17 +22,19 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
-            ->with('app.key', '')
+            ->with('viserio.app.key', '')
             ->andReturn('');
         $config->shouldReceive('set')
             ->once();
-        $config->shouldReceive('get')
+
+        $kernel = $this->mock(ConsoleKernelContract::class);
+        $kernel->shouldReceive('getEnvironmentFilePath')
             ->once()
-            ->with('path.env')
             ->andReturn($file);
 
         $container = new ArrayContainer([
-            RepositoryContract::class => $config,
+            RepositoryContract::class    => $config,
+            ConsoleKernelContract::class => $kernel,
         ]);
 
         $command = new KeyGenerateCommand();
@@ -52,15 +55,18 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->never()
-            ->with('app.key', '');
+            ->with('viserio.app.key', '');
         $config->shouldReceive('set')
             ->never();
-        $config->shouldReceive('get')
+
+        $kernel = $this->mock(ConsoleKernelContract::class);
+        $kernel->shouldReceive('get')
             ->never()
-            ->with('path.env');
+            ->with('getEnvironmentFilePath');
 
         $container = new ArrayContainer([
-            RepositoryContract::class => $config,
+            RepositoryContract::class    => $config,
+            ConsoleKernelContract::class => $kernel,
         ]);
 
         $command = new KeyGenerateCommand();
@@ -79,17 +85,19 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
-            ->with('app.key', '')
+            ->with('viserio.app.key', '')
             ->andReturn('test');
         $config->shouldReceive('set')
             ->never();
-        $config->shouldReceive('get')
-            ->never()
-            ->with('path.env');
+
+        $kernel = $this->mock(ConsoleKernelContract::class);
+        $kernel->shouldReceive('getEnvironmentFilePath')
+            ->never();
 
         $container = new ArrayContainer([
-            RepositoryContract::class => $config,
-            'env'                     => 'production',
+            RepositoryContract::class    => $config,
+            ConsoleKernelContract::class => $kernel,
+            'env'                        => 'production',
         ]);
 
         $command = new class() extends KeyGenerateCommand {
