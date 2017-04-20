@@ -5,7 +5,6 @@ namespace Viserio\Component\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
@@ -247,15 +246,14 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     {
         $container = $this->getContainer();
         $router    = $container->get(RouterContract::class);
-        $config    = $container->get(RepositoryContract::class);
 
         $router->setCachePath($this->getStoragePath('routes'));
-        $router->refreshCache($config->get('viserio.app.env', 'production') !== 'production');
+        $router->refreshCache($this->options['app']['env'] !== 'production');
 
         return (new Pipeline())
             ->setContainer($container)
             ->send($request)
-            ->through($config->get('viserio.app.skip_middlewares', false) ? [] : $this->middlewares)
+            ->through($this->options['app']['skip_middlewares'] ? [] : $this->middlewares)
             ->then(function ($request) use ($router, $container) {
                 $container->instance(ServerRequestInterface::class, $request);
 

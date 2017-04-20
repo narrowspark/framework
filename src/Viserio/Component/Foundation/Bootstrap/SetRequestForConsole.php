@@ -6,7 +6,6 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 
@@ -17,7 +16,26 @@ class SetRequestForConsole implements BootstrapContract
      */
     public function bootstrap(KernelContract $kernel): void
     {
-        $kernel->getContainer()->register(new class() implements ServiceProvider {
+        $config = $kernel->getConfigurations();
+
+        $kernel->getContainer()->register(new class($config) implements ServiceProvider {
+            /**
+             * Config array.
+             *
+             * @var array
+             */
+            protected $config;
+
+            /**
+             * Create a new server request instance.
+             *
+             * @param array $config
+             */
+            public function __construct(array $config)
+            {
+                $this->config = $config;
+            }
+
             /**
              * {@inheritdoc}
              */
@@ -37,9 +55,10 @@ class SetRequestForConsole implements BootstrapContract
              */
             public static function createRequest(ContainerInterface $container): ServerRequestInterface
             {
-                $url = $container->get(RepositoryContract::class)->get('viserio.app.url', 'http://localhost');
-
-                return $container->get(ServerRequestFactoryInterface::class)->createServerRequest('GET', $url);
+                return $container->get(ServerRequestFactoryInterface::class)->createServerRequest(
+                    'GET',
+                    $this->config['app']['url']
+                );
             }
         });
     }

@@ -70,6 +70,21 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     /**
      * {@inheritdoc}
      */
+    public function getDefaultOptions(): iterable
+    {
+        $parentOptions = parent::getDefaultOptions();
+        $options       = [
+            'app' => [
+                'url' => 'http://localhost',
+            ],
+        ];
+
+        return array_merge($parentOptions, $options);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function handle(InputInterface $input, OutputInterface $output = null): int
     {
         try {

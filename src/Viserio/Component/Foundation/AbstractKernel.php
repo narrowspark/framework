@@ -122,8 +122,11 @@ abstract class AbstractKernel implements
     {
         return [
             'app' => [
-                'locale'          => 'en',
-                'fallback_locale' => 'en',
+                'locale'           => 'en',
+                'fallback_locale'  => 'en',
+                'skip_middlewares' => false,
+                'serviceproviders' => [],
+                'aliases'          => [],
             ],
         ];
     }
@@ -148,11 +151,23 @@ abstract class AbstractKernel implements
         return $this->container;
     }
 
-    public function setConfigurations(array $config)
+    /**
+     * Set the kernel configuration.
+     *
+     * @param array $config
+     *
+     * @return void
+     */
+    public function setConfigurations(array $config): void
     {
         $this->options = $config;
     }
 
+    /**
+     * Get the kernel configuration.
+     *
+     * @return array
+     */
     public function getConfigurations(): array
     {
         $container = $this->getContainer();
@@ -203,7 +218,7 @@ abstract class AbstractKernel implements
      */
     public function isLocal(): bool
     {
-        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.env') == 'local';
+        return $this->options['app']['env'] == 'local';
     }
 
     /**
@@ -211,7 +226,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningUnitTests(): bool
     {
-        return $this->getContainer()->get(RepositoryContract::class)->get('viserio.app.env') == 'testing';
+        return $this->options['app']['env'] == 'testing';
     }
 
     /**
@@ -388,7 +403,11 @@ abstract class AbstractKernel implements
         $container = $this->getContainer();
         $env       = $container->get(EnvironmentContract::class)->detect($callback, $args);
 
-        $container->get(RepositoryContract::class)->set('viserio.app.env', $env);
+        if ($container->has(RepositoryContract::class)) {
+            $container->get(RepositoryContract::class)->set('viserio.app.env', $env);
+        } else {
+            $this->options['app']['env'] = $env;
+        }
 
         return $env;
     }
