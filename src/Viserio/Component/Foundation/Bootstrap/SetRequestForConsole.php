@@ -16,7 +16,7 @@ class SetRequestForConsole implements BootstrapContract
      */
     public function bootstrap(KernelContract $kernel): void
     {
-        $config = $kernel->getConfigurations();
+        $config = $kernel->getKernelConfigurations();
 
         $kernel->getContainer()->register(new class($config) implements ServiceProvider {
             /**

@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
+use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Application as ConsoleApplication;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
@@ -176,6 +177,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function renderForConsole(OutputInterface $output, Throwable $exception): void
     {
+        $this->container->get(SymfonyConsole::class)->renderException($exception, $output);
     }
 
     /**

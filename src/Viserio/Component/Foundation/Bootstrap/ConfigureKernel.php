@@ -4,7 +4,6 @@ namespace Viserio\Component\Foundation\Bootstrap;
 
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class ConfigureKernel implements BootstrapContract
 {
@@ -13,6 +12,6 @@ class ConfigureKernel implements BootstrapContract
      */
     public function bootstrap(KernelContract $kernel): void
     {
-        $kernel->setConfigurations($kernel->getContainer());
+        $kernel->setKernelConfigurations($kernel->getContainer());
     }
 }

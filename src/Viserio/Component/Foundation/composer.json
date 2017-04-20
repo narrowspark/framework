@@ -25,6 +25,7 @@
         "viserio/contracts"                   : "self.version",
         "viserio/container"                   : "self.version",
         "viserio/events"                      : "self.version",
+        "viserio/exception"                   : "self.version",
         "viserio/options-resolver"            : "self.version",
         "viserio/routing"                     : "self.version"
     },

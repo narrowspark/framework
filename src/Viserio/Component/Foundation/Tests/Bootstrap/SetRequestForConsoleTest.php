@@ -25,7 +25,7 @@ class SetRequestForConsoleTest extends MockeryTestCase
             {
             }
         };
-        $kernel->setConfigurations([
+        $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
                     'env' => 'prod',

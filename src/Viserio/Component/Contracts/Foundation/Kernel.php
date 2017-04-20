@@ -23,14 +23,14 @@ interface Kernel
      *
      * @return void
      */
-    public function setConfigurations($data): void;
+    public function setKernelConfigurations($data): void;
 
     /**
      * Get the kernel configuration.
      *
      * @return array
      */
-    public function getConfigurations(): array;
+    public function getKernelConfigurations(): array;
 
     /**
      * Bootstrap the kernel.

@@ -149,7 +149,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function setConfigurations($data): void
+    public function setKernelConfigurations($data): void
     {
         $this->configureOptions($data);
     }
@@ -157,14 +157,8 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getConfigurations(): array
+    public function getKernelConfigurations(): array
     {
-        $container = $this->getContainer();
-
-        if ($container->has(RepositoryContract::class)) {
-            return (array) $container->get(RepositoryContract::class);
-        }
-
         return $this->options;
     }
 
@@ -387,9 +381,9 @@ abstract class AbstractKernel implements
 
         if ($container->has(RepositoryContract::class)) {
             $container->get(RepositoryContract::class)->set('viserio.app.env', $env);
-        } else {
-            $this->options['app']['env'] = $env;
         }
+
+        $this->options['app']['env'] = $env;
 
         return $env;
     }

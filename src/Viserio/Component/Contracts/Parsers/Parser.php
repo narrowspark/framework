@@ -19,7 +19,7 @@ interface Parser
      * @param string $payload
      *
      * @throws \Viserio\Component\Contracts\Parsers\Exception\ParseException
-     * @throws \RuntimeException                                             If an error occurred during reading.
+     * @throws \RuntimeException                                             if an error occurred during reading
      *
      * @return array
      */

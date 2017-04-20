@@ -29,7 +29,7 @@ class KeyGenerateCommand extends Command
      */
     public function handle()
     {
-        $key = $this->generateRandomKey();
+        $key       = $this->generateRandomKey();
         $container = $this->getContainer();
 
         if ($this->option('show') || ! $container->has(RepositoryContract::class)) {

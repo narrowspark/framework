@@ -31,7 +31,7 @@ class KernelTest extends MockeryTestCase
         $container->instance(EventManagerContract::class, $events);
 
         $kernel = $this->getKernel($container);
-        $kernel->setConfigurations([
+        $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
                     'env' => 'prod',
@@ -51,7 +51,7 @@ class KernelTest extends MockeryTestCase
         $container = new Container();
 
         $kernel = $this->getKernel($container);
-        $kernel->setConfigurations([
+        $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
                     'env' => 'prod',
@@ -67,7 +67,7 @@ class KernelTest extends MockeryTestCase
         $container = new Container();
 
         $kernel = $this->getKernel($container);
-        $kernel->setConfigurations([
+        $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
                     'env' => 'prod',
@@ -179,7 +179,7 @@ class KernelTest extends MockeryTestCase
         $container->singleton(EnvironmentContract::class, EnvironmentDetector::class);
 
         $kernel = $this->getKernel($container);
-        $kernel->setConfigurations([
+        $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
                     'env' => 'prod',

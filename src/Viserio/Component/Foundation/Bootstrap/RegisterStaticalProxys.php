@@ -15,7 +15,7 @@ class RegisterStaticalProxys implements BootstrapContract
     public function bootstrap(KernelContract $kernel): void
     {
         $container = $kernel->getContainer();
-        $config    = $kernel->getConfigurations();
+        $config    = $kernel->getKernelConfigurations();
 
         StaticalProxy::clearResolvedInstances();
 
