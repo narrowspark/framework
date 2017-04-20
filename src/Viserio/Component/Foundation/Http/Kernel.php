@@ -137,8 +137,11 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     public function handle(ServerRequestInterface $serverRequest): ResponseInterface
     {
         $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) ob_get_level());
-        $container     = $this->getContainer();
-        $events        = $container->get(EventManagerContract::class);
+
+        $this->bootstrap();
+
+        $container = $this->getContainer();
+        $events    = $container->get(EventManagerContract::class);
 
         $events->trigger(new KernelRequestEvent($this, $serverRequest));
 
@@ -148,8 +151,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         if (class_exists(StaticalProxy::class)) {
             StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
         }
-
-        $this->bootstrap();
 
         $response = $this->handleRequest($serverRequest, $events);
 
@@ -249,7 +250,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $container = $this->getContainer();
         $router    = $container->get(RouterContract::class);
 
-        $router->setCachePath($this->getStoragePath('routes'));
+        $router->setCachePath($this->getStoragePath('framework/routes.cache.php'));
         $router->refreshCache($this->options['app']['env'] !== 'production');
 
         return (new Pipeline())
