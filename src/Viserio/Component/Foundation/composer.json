@@ -20,7 +20,6 @@
     "require": {
         "php"                                 : "^7.1",
         "container-interop/container-interop" : "^1.1",
-        "http-interop/http-factory"           : "^0.3",
         "narrowspark/http-status"             : "^2.0",
         "psr/log"                             : "^1.0",
         "viserio/contracts"                   : "self.version",
@@ -31,11 +30,11 @@
     },
     "require-dev": {
         "cakephp/chronos"                     : "^1.0",
+        "http-interop/http-factory"           : "^0.3",
         "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "^6.0",
         "viserio/config"                      : "self.version",
         "viserio/console"                     : "self.version",
-        "viserio/exception"                   : "self.version",
         "viserio/log"                         : "self.version"
     },
     "autoload": {
@@ -60,6 +59,9 @@
     },
     "suggest": {
         "cakephp/chronos"                     : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0)",
+        "http-interop/http-factory"           : "Required to use SetRequestForConsole (^0.3).",
+        "viserio/console"                     : "Required to use the Console Kernel (self.version).",
+        "viserio/log"                         : "Required to use ConfigureLoggingServiceProvider and HandleLogger (self.version).",
         "viserio/statical-proxy"              : "Required to use statical-proxy bootstrapper (self.version)."
     },
     "minimum-stability"                       : "dev",

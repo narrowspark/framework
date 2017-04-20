@@ -24,7 +24,7 @@ class SetRequestForConsole implements BootstrapContract
              *
              * @var array
              */
-            protected $config;
+            protected static $config;
 
             /**
              * Create a new server request instance.
@@ -33,7 +33,7 @@ class SetRequestForConsole implements BootstrapContract
              */
             public function __construct(array $config)
             {
-                $this->config = $config;
+                self::$config = $config;
             }
 
             /**
@@ -57,7 +57,7 @@ class SetRequestForConsole implements BootstrapContract
             {
                 return $container->get(ServerRequestFactoryInterface::class)->createServerRequest(
                     'GET',
-                    $this->config['app']['url']
+                    self::$config['app']['url']
                 );
             }
         });

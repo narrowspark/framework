@@ -38,6 +38,9 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $container->instance(RepositoryContract::class, $config);
 
         $kernel = new class() extends AbstractKernel {
+            public function bootstrap(): void
+            {
+            }
         };
 
         $container->instance(KernelContract::class, $kernel);
@@ -68,6 +71,9 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $container->instance(RepositoryContract::class, $config);
 
         $kernel = new class() extends AbstractKernel {
+            public function bootstrap(): void
+            {
+            }
         };
 
         $container->instance(KernelContract::class, $kernel);
@@ -107,6 +113,9 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $container->instance(RepositoryContract::class, $config);
 
         $kernel = new class() extends AbstractKernel {
+            public function bootstrap(): void
+            {
+            }
         };
 
         $container->instance(KernelContract::class, $kernel);
@@ -146,6 +155,9 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         $container->instance(RepositoryContract::class, $config);
 
         $kernel = new class() extends AbstractKernel {
+            public function bootstrap(): void
+            {
+            }
         };
 
         $container->instance(KernelContract::class, $kernel);

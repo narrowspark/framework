@@ -26,15 +26,16 @@ class SetRequestForConsoleTest extends MockeryTestCase
             {
             }
         };
+        $kernel->setConfigurations([
+            'viserio' => [
+                'app' => [
+                    'env' => 'prod',
+                    'url' => 'http://localhost'
+                ]
+            ]
+        ]);
 
         $container = $kernel->getContainer();
-
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('viserio.app.url', 'http://localhost')
-            ->andReturn('http://localhost');
-        $container->instance(RepositoryContract::class, $config);
 
         $serverRequest = $this->mock(ServerRequestInterface::class);
 

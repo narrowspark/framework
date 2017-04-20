@@ -19,7 +19,6 @@ use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
-use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
 {
@@ -51,8 +50,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected $bootstrappers = [
         LoadEnvironmentVariables::class,
-        HandleExceptions::class,
-        SetRequestForConsole::class,
+        HandleExceptions::class
     ];
 
     /**
@@ -113,7 +111,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function terminate(InputInterface $input, int $status): void
     {
-        if ($this->hasBeenBootstrapped === false) {
+        if (! $this->hasBeenBootstrapped()) {
             return;
         }
 

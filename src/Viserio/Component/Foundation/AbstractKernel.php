@@ -19,6 +19,7 @@ use Viserio\Component\Foundation\Events\BootstrappingEvent;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 
 abstract class AbstractKernel implements
     KernelContract,
@@ -27,6 +28,7 @@ abstract class AbstractKernel implements
     RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
+    use ConfigurationTrait;
 
     /**
      * The kernel version.
@@ -83,13 +85,6 @@ abstract class AbstractKernel implements
      * @var string
      */
     protected $environmentPath;
-
-    /**
-     * Config array.
-     *
-     * @var \ArrayAccess|array
-     */
-    protected $options = [];
 
     /**
      * Create a new kernel instance.
@@ -152,21 +147,15 @@ abstract class AbstractKernel implements
     }
 
     /**
-     * Set the kernel configuration.
-     *
-     * @param array $config
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    public function setConfigurations(array $config): void
+    public function setConfigurations($data): void
     {
-        $this->options = $config;
+        $this->configureOptions($data);
     }
 
     /**
-     * Get the kernel configuration.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getConfigurations(): array
     {

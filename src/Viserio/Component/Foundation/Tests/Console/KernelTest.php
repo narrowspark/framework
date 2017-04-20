@@ -78,7 +78,6 @@ class KernelTest extends MockeryTestCase
             ->andReturn($cerebro);
 
         $this->getBootstrap($container);
-        $this->registerBaseProvider($container);
 
         $kernel = $this->getKernel($container);
 
@@ -90,7 +89,6 @@ class KernelTest extends MockeryTestCase
         $container = $this->mock(ContainerContract::class);
 
         $this->getBootstrap($container);
-        $this->registerBaseProvider($container);
 
         $container->shouldReceive('register')
             ->once()
@@ -131,41 +129,43 @@ class KernelTest extends MockeryTestCase
 
     public function testTerminate()
     {
+        $argv = new ArgvInput();
         $container = $this->mock(ContainerContract::class);
 
-        $kernel = $this->getKernel($container);
-        $kernel->terminate(new ArgvInput(), 0);
+        $this->getBootstrap($container);
 
-        $container->shouldReceive('singleton')
+        $container->shouldReceive('register')
             ->once()
-            ->with(EnvironmentContract::class, EnvironmentDetector::class);
-        $container->shouldReceive('singleton')
+            ->with(CronServiceProvider::class);
+        $container->shouldReceive('get')
             ->once()
-            ->with(KernelContract::class, Mock::type(Closure::class));
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(KernelContract::class, 'kernel');
-        $container->shouldReceive('singleton')
-            ->once()
-            ->with(ConsoleKernelContract::class, Mock::type(Closure::class));
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(KernelContract::class, AbstractKernel::class);
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(ConsoleKernelContract::class, 'console_kernel');
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(ConsoleKernelContract::class, Kernel::class);
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(Cerebro::class, Kernel::class);
+            ->with(Schedule::class)
+            ->andReturn($this->mock(Schedule::class));
+               $cerebro = $this->mock(Cerebro::class);
 
-        $this->registerBaseProvider($container);
+        $cerebro->shouldReceive('setVersion')
+            ->once()
+            ->with(AbstractKernel::VERSION);
+        $cerebro->shouldReceive('run')
+            ->once()
+            ->andReturn(0);
+        $cerebro->shouldReceive('add')
+            ->never();
+        $cerebro->shouldReceive('renderException')
+            ->never();
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(Cerebro::class)
+            ->andReturn($cerebro);
 
         $kernel = $this->getKernel($container);
 
         $kernel->terminate(new ArgvInput(), 0);
+
+        $kernel->handle($argv, new ConsoleOutput());
+
+        $kernel->terminate($argv, 0);
     }
 
     public function testGetAll()
@@ -173,7 +173,6 @@ class KernelTest extends MockeryTestCase
         $container = $this->mock(ContainerContract::class);
 
         $this->getBootstrap($container);
-        $this->registerBaseProvider($container);
 
         $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('setVersion')
@@ -202,7 +201,6 @@ class KernelTest extends MockeryTestCase
         $container = $this->mock(ContainerContract::class);
 
         $this->getBootstrap($container);
-        $this->registerBaseProvider($container);
 
         $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('setVersion')
@@ -231,7 +229,6 @@ class KernelTest extends MockeryTestCase
         $container = $this->mock(ContainerContract::class);
 
         $this->getBootstrap($container);
-        $this->registerBaseProvider($container);
 
         $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('setVersion')
@@ -278,7 +275,6 @@ class KernelTest extends MockeryTestCase
         });
 
         $this->getBootstrap($container);
-        $this->registerBaseProvider($container);
 
         $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('setVersion')
@@ -320,46 +316,6 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(EventManagerContract::class)
             ->andReturn($events);
-        $container->shouldReceive('singleton')
-            ->once()
-            ->with(EnvironmentContract::class, EnvironmentDetector::class);
-        $container->shouldReceive('singleton')
-            ->once()
-            ->with(KernelContract::class, Mock::type(Closure::class));
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(KernelContract::class, 'kernel');
-        $container->shouldReceive('singleton')
-            ->once()
-            ->with(ConsoleKernelContract::class, Mock::type(Closure::class));
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(KernelContract::class, AbstractKernel::class);
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(ConsoleKernelContract::class, 'console_kernel');
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(ConsoleKernelContract::class, Kernel::class);
-        $container->shouldReceive('alias')
-            ->once()
-            ->with(Cerebro::class, Kernel::class);
-    }
-
-    private function registerBaseProvider($container)
-    {
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(EventsServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(OptionsResolverServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(RoutingServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(ConsoleServiceProvider::class));
     }
 
     private function getKernel($container)

@@ -17,17 +17,7 @@ class LoadServiceProviderTest extends MockeryTestCase
 
         $bootstraper = new LoadServiceProvider();
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('viserio.app.serviceproviders', [])
-            ->andReturn([ConfigureLoggingServiceProvider::class]);
-
         $container = $this->mock(ContainerContract::class);
-        $container->shouldReceive('get')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn($config);
         $container->shouldReceive('resolve')
             ->once()
             ->with(ConfigureLoggingServiceProvider::class)
@@ -40,6 +30,9 @@ class LoadServiceProviderTest extends MockeryTestCase
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
+        $kernel->shouldReceive('getConfigurations')
+            ->once()
+            ->andReturn(['app' => ['serviceproviders' => [ConfigureLoggingServiceProvider::class]]]);
 
         $bootstraper->bootstrap($kernel);
     }

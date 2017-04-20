@@ -164,7 +164,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        if ($this->hasBeenBootstrapped === false) {
+        if (! $this->hasBeenBootstrapped()) {
             return;
         }
 

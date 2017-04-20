@@ -17,6 +17,22 @@ interface Kernel
     public function getContainer(): ContainerContract;
 
     /**
+     * Set the kernel configuration.
+     *
+     * @param \Interop\Container\ContainerInterface|iterable $data
+     *
+     * @return void
+     */
+    public function setConfigurations($data): void;
+
+    /**
+     * Get the kernel configuration.
+     *
+     * @return array
+     */
+    public function getConfigurations(): array;
+
+    /**
      * Run the given array of bootstrap classes.
      *
      * @param array $bootstrappers

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests;
 
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
@@ -10,6 +11,9 @@ use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\EnvironmentDetector;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Foundation\Events\BootstrappedEvent;
+use Viserio\Component\Foundation\Events\BootstrappingEvent;
 
 class KernelTest extends MockeryTestCase
 {
@@ -17,29 +21,44 @@ class KernelTest extends MockeryTestCase
     {
         $container = new Container();
 
+        $events = $this->mock(EventManagerContract::class);
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(BootstrappedEvent::class));
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(BootstrappingEvent::class));
+
+        $container->instance(EventManagerContract::class, $events);
+
         $kernel = $this->getKernel($container);
+        $kernel->setConfigurations([
+            'viserio' => [
+                'app' => [
+                    'env' => 'prod',
+                ]
+            ]
+        ]);
 
         $kernel->bootstrapWith([
             LoadEnvironmentVariables::class,
         ]);
 
         self::assertTrue($kernel->hasBeenBootstrapped());
-        self::assertTrue($kernel->isBooted());
     }
 
     public function testIsLocal()
     {
         $container = new Container();
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('viserio.app.env')
-            ->andReturn('prod');
-
-        $container->instance(RepositoryContract::class, $config);
-
         $kernel = $this->getKernel($container);
+        $kernel->setConfigurations([
+            'viserio' => [
+                'app' => [
+                    'env' => 'prod',
+                ]
+            ]
+        ]);
 
         self::assertFalse($kernel->isLocal());
     }
@@ -48,15 +67,14 @@ class KernelTest extends MockeryTestCase
     {
         $container = new Container();
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->once()
-            ->with('viserio.app.env')
-            ->andReturn('prod');
-
-        $container->instance(RepositoryContract::class, $config);
-
         $kernel = $this->getKernel($container);
+        $kernel->setConfigurations([
+            'viserio' => [
+                'app' => [
+                    'env' => 'prod',
+                ]
+            ]
+        ]);
 
         self::assertFalse($kernel->isRunningUnitTests());
     }
@@ -161,14 +179,14 @@ class KernelTest extends MockeryTestCase
         $container = new Container();
         $container->singleton(EnvironmentContract::class, EnvironmentDetector::class);
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('set')
-            ->once()
-            ->with('viserio.app.env', 'prod');
-
-        $container->instance(RepositoryContract::class, $config);
-
         $kernel = $this->getKernel($container);
+        $kernel->setConfigurations([
+            'viserio' => [
+                'app' => [
+                    'env' => 'prod',
+                ]
+            ]
+        ]);
 
         self::assertSame('prod', $kernel->detectEnvironment(function () {
             return 'prod';
