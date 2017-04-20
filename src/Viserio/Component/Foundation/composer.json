@@ -2,7 +2,7 @@
     "name"       : "viserio/foundation",
     "type"       : "library",
     "description": "The Viserio Foundation package.",
-    "keywords"   : ["narrowspark", "viserio", "foundation", "container", "config", "log", "exception", "events", "parsers", "routing", "sparkle"],
+    "keywords"   : ["narrowspark", "sparkle", "viserio", "foundation", "container", "config", "log", "exception", "events", "parsers", "routing"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -60,9 +60,10 @@
     "suggest": {
         "cakephp/chronos"                     : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0)",
         "http-interop/http-factory"           : "Required to use SetRequestForConsole (^0.3).",
+        "viserio/config"                      : "Required to use the LoadConfiguration bootstrap class (self.version).",
         "viserio/console"                     : "Required to use the Console Kernel (self.version).",
-        "viserio/log"                         : "Required to use ConfigureLoggingServiceProvider and HandleLogger (self.version).",
-        "viserio/statical-proxy"              : "Required to use statical-proxy bootstrapper (self.version)."
+        "viserio/log"                         : "Required to use ConfigureLoggingServiceProvider and HandleLogger bootstrap class (self.version).",
+        "viserio/statical-proxy"              : "Required to use statical-proxy bootstrap class (self.version)."
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

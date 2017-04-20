@@ -19,6 +19,7 @@ use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
 {
@@ -49,6 +50,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      * @var array
      */
     protected $bootstrappers = [
+        ConfigureKernel::class,
         LoadEnvironmentVariables::class,
         HandleExceptions::class,
     ];

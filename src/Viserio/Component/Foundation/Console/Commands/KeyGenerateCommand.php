@@ -30,8 +30,9 @@ class KeyGenerateCommand extends Command
     public function handle()
     {
         $key = $this->generateRandomKey();
+        $container = $this->getContainer();
 
-        if ($this->option('show')) {
+        if ($this->option('show') || ! $container->has(RepositoryContract::class)) {
             return $this->line('<comment>' . $key . '</comment>');
         }
 
@@ -42,7 +43,7 @@ class KeyGenerateCommand extends Command
             return;
         }
 
-        $this->getContainer()->get(RepositoryContract::class)->set('viserio.app.key', $key);
+        $container->get(RepositoryContract::class)->set('viserio.app.key', $key);
 
         $this->info("Application key [$key] set successfully.");
     }
