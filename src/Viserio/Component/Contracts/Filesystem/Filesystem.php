@@ -83,6 +83,28 @@ interface Filesystem
     public function put(string $path, $contents, array $config = []): bool;
 
     /**
+     * Append existing file or create new.
+     *
+     * @param string $path
+     * @param string $contents
+     * @param array  $config   an optional configuration array
+     *
+     * @return bool true on success, false on failure
+     */
+    public function append(string $path, string $contents, array $config = []): bool;
+
+    /**
+     * Append existing file or create new using stream.
+     *
+     * @param string   $path
+     * @param resource $resource
+     * @param array    $config   an optional configuration array
+     *
+     * @return bool true on success, false on failure
+     */
+    public function appendStream(string $path, $resource, array $config = []): bool;
+
+    /**
      * Update an existing file.
      *
      * @param string $path     the path of the existing file

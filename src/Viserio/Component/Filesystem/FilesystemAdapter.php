@@ -173,6 +173,34 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
+    public function append(string $path, string $contents, array $config = []): bool
+    {
+        if ($this->has($path)) {
+            $contents = $this->read($path) . $contents;
+
+            if (! $this->driver->delete($path)) {
+                throw new RuntimeException(sprintf('File [%s] cannot be deleted.', $path));
+            }
+        }
+
+        return $this->write($path, $contents, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function appendStream(string $path, $resource, array $config = []): bool
+    {
+        if ($this->has($path)) {
+            return $this->updateStream($path, $resource, $config);
+        }
+
+        return $this->writeStream($path, $resource, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function update(string $path, string $contents, array $config = []): bool
     {
         if (! $this->has($path)) {

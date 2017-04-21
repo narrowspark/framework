@@ -129,6 +129,34 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
+    public function append(string $path, string $contents, array $config = []): bool
+    {
+        if ($this->has($path)) {
+            $config['flags'] = isset($config['flags']) ? $config['flags'] | FILE_APPEND : FILE_APPEND;
+
+            return $this->update($path, $contents, $config);
+        }
+
+        return $this->write($path, $contents, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function appendStream(string $path, $resource, array $config = []): bool
+    {
+        if ($this->has($path)) {
+            $config['flags'] = isset($config['flags']) ? $config['flags'] | FILE_APPEND : FILE_APPEND;
+
+            return $this->updateStream($path, $resource, $config);
+        }
+
+        return $this->writeStream($path, $resource, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function update(string $path, string $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
@@ -137,7 +165,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             throw new FileNotFoundException($path);
         }
 
-        return is_int(@file_put_contents($path, $contents));
+        $flags = $config['flags'] ?? 0;
+
+        return is_int(@file_put_contents($path, $contents, $flags));
     }
 
     /**

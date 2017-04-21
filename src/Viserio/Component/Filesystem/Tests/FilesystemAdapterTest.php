@@ -447,6 +447,77 @@ class FilesystemAdapterTest extends TestCase
         );
     }
 
+    public function testAppendOnExistingFile()
+    {
+        $adapter = $this->adapter;
+        $url     = 'append.txt';
+
+        $adapter->write($url, 'Foo Bar');
+        self::assertTrue($adapter->append($url, ' test'));
+
+        self::assertEquals('Foo Bar test', $adapter->read($url));
+    }
+
+    public function testAppend()
+    {
+        $adapter = $this->adapter;
+
+        self::assertTrue($adapter->append('append.txt', 'test'));
+
+        self::assertEquals('test', $adapter->read('append.txt'));
+    }
+
+    public function testAppendStreamOnExistingFile()
+    {
+        $adapter = $this->adapter;
+
+        $temp = tmpfile();
+
+        fwrite($temp, 'copy');
+        rewind($temp);
+
+        $adapter->writeStream('stream.txt', $temp);
+
+        fwrite($temp, ' dummy');
+        rewind($temp);
+
+        self::assertTrue($adapter->appendStream('stream.txt', $temp));
+
+        $stream = $adapter->readStream('stream.txt');
+
+        $contents = stream_get_contents($stream);
+        $size     = Util::getStreamSize($stream);
+
+        fclose($stream);
+
+        self::assertSame(10, $size);
+        self::assertSame('copy dummy', $contents);
+        self::assertInternalType('resource', $stream);
+    }
+
+    public function testAppendStream()
+    {
+        $adapter = $this->adapter;
+
+        $temp = tmpfile();
+
+        fwrite($temp, ' dummy');
+        rewind($temp);
+
+        self::assertTrue($adapter->appendStream('stream.txt', $temp));
+
+        $stream = $adapter->readStream('stream.txt');
+
+        $contents = stream_get_contents($stream);
+        $size     = Util::getStreamSize($stream);
+
+        fclose($stream);
+
+        self::assertSame(6, $size);
+        self::assertSame(' dummy', $contents);
+        self::assertInternalType('resource', $stream);
+    }
+
     private function delTree($dir)
     {
         $files = array_diff(scandir($dir), ['.', '..']);
