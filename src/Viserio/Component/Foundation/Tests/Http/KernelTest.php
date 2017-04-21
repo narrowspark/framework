@@ -120,7 +120,7 @@ class KernelTest extends MockeryTestCase
             ->andReturn($this->mock(ResponseInterface::class));
         $router->shouldReceive('setCachePath')
             ->once()
-            ->with('/storage/routes');
+            ->with('/storage/framework/routes.cache.php');
         $router->shouldReceive('refreshCache')
             ->once()
             ->with(true);
@@ -151,7 +151,7 @@ class KernelTest extends MockeryTestCase
         $router = $this->mock(RouterContract::class);
         $router->shouldReceive('setCachePath')
             ->once()
-            ->with('/storage/routes');
+            ->with('/storage/framework/routes.cache.php');
         $router->shouldReceive('refreshCache')
             ->once()
             ->with(true);
