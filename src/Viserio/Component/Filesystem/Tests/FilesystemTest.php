@@ -564,4 +564,66 @@ class FilesystemTest extends TestCase
 
         self::assertInstanceOf(SplFileInfo::class, $arr[0]);
     }
+
+    public function testAppendOnExistingFile()
+    {
+        $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
+
+        $this->files->append($file->url(), ' test');
+
+        self::assertEquals('Foo Bar test', $this->files->read($file->url()));
+    }
+
+    public function testAppend()
+    {
+        $url = vfsStream::url('tmp/file.php');
+
+        $this->files->append($url, 'test');
+
+        self::assertEquals('test', $this->files->read($url));
+    }
+
+    public function testAppendStreamOnExistingFile()
+    {
+        $file = vfsStream::newFile('copy.txt')->withContent('Foo Bar')->at($this->root);
+        $temp = tmpfile();
+
+        fwrite($temp, ' dummy');
+        rewind($temp);
+
+        $this->files->appendStream($file->url(), $temp);
+
+        $stream = $this->files->readStream($file->url());
+
+        $contents = stream_get_contents($stream);
+        $size     = Util::getStreamSize($stream);
+
+        fclose($stream);
+
+        self::assertSame(13, $size);
+        self::assertSame('Foo Bar dummy', $contents);
+        self::assertInternalType('resource', $this->files->readStream($file->url()));
+    }
+
+    public function testAppendStream()
+    {
+        $url = vfsStream::url('tmp/file.php');
+        $temp = tmpfile();
+
+        fwrite($temp, 'dummy');
+        rewind($temp);
+
+        $this->files->appendStream($url, $temp);
+
+        $stream = $this->files->readStream($url);
+
+        $contents = stream_get_contents($stream);
+        $size     = Util::getStreamSize($stream);
+
+        fclose($stream);
+
+        self::assertSame(5, $size);
+        self::assertSame('dummy', $contents);
+        self::assertInternalType('resource', $this->files->readStream($url));
+    }
 }
