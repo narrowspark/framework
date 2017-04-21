@@ -607,7 +607,7 @@ class FilesystemTest extends TestCase
 
     public function testAppendStream()
     {
-        $url = vfsStream::url('tmp/file.php');
+        $url  = vfsStream::url('tmp/file.php');
         $temp = tmpfile();
 
         fwrite($temp, 'dummy');

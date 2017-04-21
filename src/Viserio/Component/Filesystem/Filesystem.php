@@ -165,7 +165,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             throw new FileNotFoundException($path);
         }
 
-        $flags = $config['flags']  ?? 0;
+        $flags = $config['flags'] ?? 0;
 
         return is_int(@file_put_contents($path, $contents, $flags));
     }
