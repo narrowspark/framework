@@ -8,7 +8,6 @@ use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Profiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\Component\Support\Env;
-use Viserio\Component\Profiler\DataCollectors\PhpInfoDataCollector;
 
 class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAwareContract
 {

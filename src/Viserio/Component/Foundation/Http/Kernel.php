@@ -25,7 +25,6 @@ use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
-use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 
 class Kernel extends AbstractKernel implements HttpKernelContract, TerminableContract
 {

@@ -8,7 +8,6 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Interop\Container\ContainerInterface;
 
 class ProfilerMiddleware implements MiddlewareInterface
 {
