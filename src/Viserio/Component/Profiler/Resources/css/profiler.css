@@ -40,7 +40,6 @@
     left: 0;
     position: absolute;
     right: 0;
-    border-top: 1px solid #383838;
     background-color: var(--main-profiler-background-color);
     z-index: 9999;
 }

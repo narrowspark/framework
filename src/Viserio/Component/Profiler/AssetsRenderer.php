@@ -203,16 +203,18 @@ class AssetsRenderer implements AssetsRendererContract
             $this->jsFiles
         );
 
-        $additionalAssets = [];
+        $additionalAssets = array_filter(
+            array_map(
+                function($collector) {
+                    $collector = $collector['collector'];
 
-        // finds assets provided by collectors
-        foreach ($this->profiler->getCollectors() as $collector) {
-            if ($collector instanceof AssetAwareContract &&
-                ! in_array($collector->getName(), $this->ignoredCollectors)
-            ) {
-                $additionalAssets[] = $collector->getAssets();
-            }
-        }
+                    if ($collector instanceof AssetAwareContract && ! in_array($collector->getName(), $this->ignoredCollectors)) {
+                        return $collector->getAssets();
+                    }
+                },
+                $this->profiler->getCollectors()
+            )
+        );
 
         foreach ($additionalAssets as $assets) {
             if (isset($assets['css'])) {

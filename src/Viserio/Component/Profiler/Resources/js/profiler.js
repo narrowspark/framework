@@ -98,7 +98,7 @@ if (typeof(Profiler) == 'undefined') {
             openPanel = false;
         });
 
-        // close Profiler button
+        // close button
         $('.profiler .profiler-header .profiler-hide-button').on('click', function(e) {
             e.preventDefault();
 

@@ -122,6 +122,8 @@ class TemplateManager implements RenderableContract
         ];
 
         foreach ($this->collectors as $name => $collector) {
+            $collector = $collector['collector'];
+
             if ($collector instanceof TooltipAwareContract) {
                 $data['menus'][$collector->getName()] = [
                     'menu'     => $collector->getMenu(),

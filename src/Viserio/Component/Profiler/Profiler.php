@@ -283,7 +283,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
         foreach ($this->collectors as $name => $collector) {
             $collector['collector']->collect($serverRequest, $response);
 
-            $this->collectors[$name] = $collector['collector'];
+            $this->collectors[$name]['collector'] = $collector['collector'];
         }
 
         if ($this->cachePool !== null) {
