@@ -5,16 +5,16 @@
     margin-right: 5px;
 }
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-green .profiler-menu-label {
-    background-color: #4F805D;
+    background-color: var(--main-status-green-color);
 }
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-yellow .profiler-menu-label {
-    background-color: #A46A1F;
+    background-color: var(--main-status-yellow-color);
     color: #FFF;
 }
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-red .profiler-menu-label {
-    background-color: #B0413E;
+    background-color: var(--main-status-red-color);
 }
-.Profiler .profiler-header .profiler-menus .profiler-menu-position-left.profiler-menu-viserio-http-data-collector .profiler-menu-content {
+.profiler .profiler-header .profiler-menus .profiler-menu-position-left.profiler-menu-viserio-http-data-collector .profiler-menu-content {
     padding-left: 0;
     padding-right: 7px;
 }

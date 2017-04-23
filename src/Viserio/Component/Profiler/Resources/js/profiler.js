@@ -21,9 +21,9 @@ if (typeof(Profiler) == 'undefined') {
     var openPanel = false;
 
     // helper vars for long class names
-    var panelBodyClass = '.Profiler .profiler-body';
+    var panelBodyClass = '.profiler .profiler-body';
     var panelClass = panelBodyClass + ' .profiler-panel';
-    var menuHasPanel = '.Profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-panel';
+    var menuHasPanel = '.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-panel';
     var bodyMenu = panelBodyClass + ' .profiler-body-menu';
     var getPreference = function(name) {
         if (!window.localStorage) {
@@ -99,22 +99,22 @@ if (typeof(Profiler) == 'undefined') {
         });
 
         // close Profiler button
-        $('.Profiler .profiler-header .profiler-hide-button').on('click', function(e) {
+        $('.profiler .profiler-header .profiler-hide-button').on('click', function(e) {
             e.preventDefault();
 
             openPanel = false;
 
-            $('.Profiler .profiler-body, ' + panelClass).removeClass('active');
-            $('.Profiler .profiler-header').addClass('hide');
-            $('.Profiler .profiler-show-button').addClass('active');
+            $('.profiler .profiler-body, ' + panelClass).removeClass('active');
+            $('.profiler .profiler-header').addClass('hide');
+            $('.profiler .profiler-show-button').addClass('active');
         });
 
         // open button
-        $('.Profiler .profiler-show-button').on('click', function(e) {
+        $('.profiler .profiler-show-button').on('click', function(e) {
             e.preventDefault();
 
-            $('.Profiler .profiler-header').removeClass('hide');
-            $('.Profiler .profiler-show-button').removeClass('active');
+            $('.profiler .profiler-header').removeClass('hide');
+            $('.profiler .profiler-show-button').removeClass('active');
         });
     };
 
