@@ -14,40 +14,50 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      *
      * @param string $abstract
      * @param string $alias
+     *
+     * @return void
      */
-    public function alias(string $abstract, string $alias);
+    public function alias(string $abstract, string $alias): void;
 
     /**
      * Register a binding with the container.
      *
      * @param string|array         $abstract
      * @param \Closure|string|null $concrete
+     *
+     * @return void
      */
-    public function bind($abstract, $concrete = null);
+    public function bind($abstract, $concrete = null): void;
 
     /**
      * Register a binding if it hasn't already been registered.
      *
      * @param string               $abstract
      * @param \Closure|string|null $concrete
+     *
+     * @return void
      */
-    public function bindIf(string $abstract, $concrete = null);
+    public function bindIf(string $abstract, $concrete = null): void;
 
     /**
      * Register a shared binding in the container.
      *
      * @param string               $abstract
      * @param \Closure|string|null $concrete
+     *
+     * @return void
      */
-    public function singleton(string $abstract, $concrete = null);
+    public function singleton(string $abstract, $concrete = null): void;
 
     /**
      * Register an existing instance as shared in the container.
      *
      * @param string $abstract
      * @param mixed  $instance
+     *
+     * @return void
      */
-    public function instance(string $abstract, $instance);
+    public function instance(string $abstract, $instance): void;
 
     /**
      * Delegate a backup container to be checked for services if it
@@ -72,16 +82,20 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      * Removes an entry from the container.
      *
      * @param string $abstract Identifier of the entry to remove
+     *
+     * @return void
      */
-    public function forget(string $abstract);
+    public function forget(string $abstract): void;
 
     /**
      * "Extend" an abstract type in the container.
      *
      * @param string   $binding
      * @param \Closure $closure
+     *
+     * @return void
      */
-    public function extend(string $binding, Closure $closure);
+    public function extend(string $binding, Closure $closure): void;
 
     /**
      * Resolve a bound type from container.

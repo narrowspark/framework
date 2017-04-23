@@ -97,9 +97,15 @@ abstract class AbstractKernel implements
 
         $this->initializeContainer();
 
+        $this->registerBaseBindings();
+
         $this->registerBaseServiceProviders();
 
-        $this->registerBaseBindings();
+        $container = $this->getContainer();
+
+        foreach ($this->registerServiceProviders($this) as $provider) {
+            $container->register($container->resolve($provider));
+        }
     }
 
     /**
@@ -120,7 +126,6 @@ abstract class AbstractKernel implements
                 'locale'           => 'en',
                 'fallback_locale'  => 'en',
                 'skip_middlewares' => false,
-                'serviceproviders' => [],
                 'aliases'          => [],
             ],
         ];
@@ -386,6 +391,24 @@ abstract class AbstractKernel implements
         $this->options['app']['env'] = $env;
 
         return $env;
+    }
+
+    /**
+     * Register all of the application / kernel service providers.
+     *
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
+     *
+     * @return array
+     */
+    protected function registerServiceProviders(KernelContract $kernel): array
+    {
+        $providers = $kernel->getConfigPath('/serviceproviders.php');
+
+        if (file_exists($providers)) {
+            return require_once $providers;
+        }
+
+        return [];
     }
 
     /**

@@ -41,10 +41,10 @@ class ProfilerServiceProvider implements
     public function getServices()
     {
         return [
-            RouterContract::class      => [self::class, 'registerProfilerAssetsControllers'],
-            AssetsRenderer::class      => [self::class, 'createAssetsRenderer'],
-            ProfilerContract::class    => [self::class, 'createProfiler'],
-            Profiler::class            => function (ContainerInterface $container) {
+            RouterContract::class   => [self::class, 'registerProfilerAssetsControllers'],
+            AssetsRenderer::class   => [self::class, 'createAssetsRenderer'],
+            ProfilerContract::class => [self::class, 'createProfiler'],
+            Profiler::class         => function (ContainerInterface $container) {
                 return $container->get(ProfilerContract::class);
             },
         ];
@@ -82,7 +82,7 @@ class ProfilerServiceProvider implements
             ],
             'jquery_is_used' => false,
             'path'           => null,
-            'collectors'     => null,
+            'collectors'     => [],
         ];
     }
 
@@ -109,13 +109,11 @@ class ProfilerServiceProvider implements
         );
 
         if ($container->has(UrlGeneratorContract::class)) {
-            // $profiler->setUrlGenerator(
-            //     $container->get(UrlGeneratorContract::class)
-            // );
+            $profiler->setUrlGenerator($container->get(UrlGeneratorContract::class));
         }
 
         self::registerCollectorsFromConfig($container, $profiler);
-        self::registerCollectors($container, $profiler);
+        self::registerBaseCollectors($container, $profiler);
 
         return $profiler;
     }
@@ -124,37 +122,52 @@ class ProfilerServiceProvider implements
     {
         self::resolveOptions($container);
 
-        return new AssetsRenderer(
-            self::$options['jquery_is_used'],
-            self::$options['path']
-        );
+        return new AssetsRenderer(self::$options['jquery_is_used'], self::$options['path']);
     }
 
-    public static function registerProfilerAssetsControllers(ContainerInterface $container): RouterContract
+    /**
+     * Register profiler asset controllers.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return \Viserio\Component\Contracts\Routing\Router
+     */
+    public static function registerProfilerAssetsControllers(ContainerInterface $container, ?callable $getPrevious = null): RouterContract
     {
-        $router = $container->get(RouterContract::class);
+        $router = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
-        $router->group(
-            [
-                'namespace' => 'Viserio\Component\Profiler\Controllers',
-                'prefix'    => 'Profiler',
-            ],
-            function ($router) {
-                $router->get('assets/stylesheets', [
-                    'uses' => 'AssetController@css',
-                    'as'   => 'Profiler.assets.css',
-                ]);
-                $router->get('assets/javascript', [
-                    'uses' => 'AssetController@js',
-                    'as'   => 'Profiler.assets.js',
-                ]);
-            }
-        );
+        if ($router !== null) {
+            $router->group(
+                [
+                    'namespace' => 'Viserio\Component\Profiler\Controllers',
+                    'prefix'    => 'profiler',
+                ],
+                function ($router) {
+                    $router->get('assets/stylesheets', [
+                        'uses' => 'AssetController@css',
+                        'as'   => 'profiler.assets.css',
+                    ]);
+                    $router->get('assets/javascript', [
+                        'uses' => 'AssetController@js',
+                        'as'   => 'profiler.assets.js',
+                    ]);
+                }
+            );
+        }
 
         return $router;
     }
 
-    protected static function registerCollectors(ContainerInterface $container, Profiler $profiler)
+    /**
+     * Register base collectors.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
+     *
+     * @return void
+     */
+    protected static function registerBaseCollectors(ContainerInterface $container, ProfilerContract $profiler): void
     {
         self::resolveOptions($container);
 
@@ -177,9 +190,17 @@ class ProfilerServiceProvider implements
         }
     }
 
-    private static function registerCollectorsFromConfig(ContainerInterface $container, Profiler $profiler)
+    /**
+     * Register all found collectors in config.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
+     *
+     * @return void
+     */
+    private static function registerCollectorsFromConfig(ContainerInterface $container, ProfilerContract $profiler): void
     {
-        if (($collectors = self::$options['collectors']) !== null) {
+        if ($collectors = self::$options['collectors']) {
             foreach ($collectors as $collector) {
                 $profiler->addCollector($container->get($collector));
             }

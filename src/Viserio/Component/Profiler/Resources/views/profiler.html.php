@@ -5,7 +5,7 @@ if (! isset($token, $menus, $icons, $panels)) {
     return;
 }
 ?>
-<div id="Profiler" data-token="profiler-<?php echo TemplateManager::escape($token); ?>" class="Profiler">
+<div id="profiler" data-token="profiler-<?php echo TemplateManager::escape($token); ?>" class="profiler">
     <a class="profiler-show-button" title="Show Profiler" tabindex="-1">
         <?php echo file_get_contents($icons['ic_narrowspark_white_24px.svg']); ?>
     </a>

@@ -25,7 +25,7 @@ class LogsDataCollectorServiceProviderTest extends MockeryTestCase
 
         $container->instance('config', [
             'viserio' => [
-                'Profiler' => [
+                'profiler' => [
                     'enable'        => true,
                     'logs_storages' => [__DIR__],
                     'collector'     => [

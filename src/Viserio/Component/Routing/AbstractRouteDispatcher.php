@@ -237,18 +237,13 @@ abstract class AbstractRouteDispatcher
         // Add route to the request's attributes in case a middleware or handler needs access to the route
         $serverRequest = $serverRequest->withAttribute('_route', $route);
 
-        $this->current = $route;
+        $this->current = $route->bindServerRequest($serverRequest);
 
         if ($this->events !== null) {
-            $this->getEventManager()->trigger(
-                new RouteMatchedEvent(
-                    $this,
-                    ['route' => $route, 'server_request' => $serverRequest]
-                )
-            );
+            $this->getEventManager()->trigger(new RouteMatchedEvent($this, $this->current, $serverRequest));
         }
 
-        return $this->runRouteWithinStack($route, $serverRequest);
+        return $this->runRouteWithinStack($this->current, $serverRequest);
     }
 
     /**
@@ -274,14 +269,12 @@ abstract class AbstractRouteDispatcher
      */
     protected function runRouteWithinStack(RouteContract $route, ServerRequestInterface $request): ResponseInterface
     {
-        $middlewares = $this->getRouteMiddlewares($route);
-
         return (new Pipeline())
             ->setContainer($this->getContainer())
             ->send($request)
-            ->through($middlewares)
+            ->through($this->getRouteMiddlewares($route))
             ->then(function ($request) use ($route) {
-                return $route->run($request);
+                return $route->run();
             });
     }
 

@@ -206,11 +206,18 @@ interface Route
     public function getController();
 
     /**
-     * Run the route action and return the response.
+     * Bind the route to a given server request.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param\Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return $this
+     */
+    public function bindServerRequest(ServerRequestInterface $request): Route;
+
+    /**
+     * Run the route action and return the response.
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function run(ServerRequestInterface $request): ResponseInterface;
+    public function run(): ResponseInterface;
 }

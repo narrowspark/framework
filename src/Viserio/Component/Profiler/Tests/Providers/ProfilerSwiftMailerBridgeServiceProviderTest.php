@@ -25,7 +25,7 @@ class ProfilerSwiftMailerBridgeServiceProviderTest extends MockeryTestCase
         $container->register(new ProfilerServiceProvider());
         $container->register(new ProfilerSwiftMailerBridgeServiceProvider());
 
-        $container->instance('config', ['viserio' => ['Profiler' => ['enable' => true]]]);
+        $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }

@@ -234,8 +234,8 @@ class AssetsRenderer implements AssetsRendererContract
      */
     protected function renderIntoHtml(): string
     {
-        $html = '<style>' . $this->dumpAssetsToString('css') . '</style>';
-        $html .= "<script type='text/javascript'>" . $this->dumpAssetsToString('js') . '</script>';
+        $html = sprintf('<style>%s</style>', $this->dumpAssetsToString('css'));
+        $html .= sprintf('<script type="text/javascript">%s</script>', $this->dumpAssetsToString('js'));
 
         return $html;
     }

@@ -13,6 +13,13 @@ class KernelResponseEvent implements EventContract
     use EventTrait;
 
     /**
+     * Modified or original response.
+     *
+     * @var \Psr\Http\Message\ResponseInterface $response
+     */
+    protected $response;
+
+    /**
      * Create a new kernel response event.
      *
      * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
@@ -24,5 +31,29 @@ class KernelResponseEvent implements EventContract
         $this->name       = HttpKernelContract::RESPONSE;
         $this->target     = $kernel;
         $this->parameters = ['server_request' => $serverRequest, 'response' => $response];
+    }
+
+    /**
+     * Set a response.
+     *
+     * @param \Psr\Http\Message\ResponseInterface $response
+     *
+     * @return void
+     */
+    public function setResponse(ResponseInterface $response): void
+    {
+        $this->response = $response;
+    }
+
+    /**
+     * Get a modified or original response.
+     *
+     * @param \Psr\Http\Message\ResponseInterface $response
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function getResponse($value='')
+    {
+        return $this->response ?? $this->parameters['response'];
     }
 }

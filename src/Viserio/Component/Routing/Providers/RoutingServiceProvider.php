@@ -21,11 +21,11 @@ class RoutingServiceProvider implements ServiceProvider
     {
         return [
             RouterContract::class => [self::class, 'createRouter'],
-            'router'              => function (ContainerInterface $container) {
+            'route'               => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
             },
-            'route' => function (ContainerInterface $container) {
-                return $container->get(Router::class);
+            'router'              => function (ContainerInterface $container) {
+                return $container->get(RouterContract::class);
             },
             Router::class => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
@@ -41,9 +41,9 @@ class RoutingServiceProvider implements ServiceProvider
     {
         $router = new Router($container);
 
-        if ($container->has(EventManagerContract::class)) {
-            $router->setEventManager($container->get(EventManagerContract::class));
-        }
+        // if ($container->has(EventManagerContract::class)) {
+        //     $router->setEventManager($container->get(EventManagerContract::class));
+        // }
 
         return $router;
     }

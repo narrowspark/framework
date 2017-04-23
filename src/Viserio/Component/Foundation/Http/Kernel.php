@@ -24,6 +24,7 @@ use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
+use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 
 class Kernel extends AbstractKernel implements HttpKernelContract, TerminableContract
 {
@@ -65,6 +66,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     protected $middlewarePriority = [
         StartSessionMiddleware::class,
         ShareErrorsFromSessionMiddleware::class,
+        99999 => ProfilerMiddleware::class,
     ];
 
     /**
@@ -201,7 +203,9 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
             $response = $this->sendRequestThroughRouter($serverRequest);
 
-            $events->trigger(new KernelResponseEvent($this, $serverRequest, $response));
+            $events->trigger($event = new KernelResponseEvent($this, $serverRequest, $response));
+
+            $response = $event->getResponse();
         } catch (Throwable $exception) {
             $this->reportException($exception);
 

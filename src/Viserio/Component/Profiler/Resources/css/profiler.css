@@ -1,3 +1,12 @@
+:root {
+    --main-font-color: #EEE;
+    --main-profiler-background-color: #222;
+    --main-status-default-color: #666;
+    --main-status-red-color: #CC0000;
+    --main-status-yellow-color: #FFCC00;
+    --main-status-green-color: #88C425;
+}
+
 .profiler {
     bottom: 0;
     color: #EEE;
@@ -32,13 +41,12 @@
     position: absolute;
     right: 0;
     border-top: 1px solid #383838;
-    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
-    background-color: #222;
+    background-color: var(--main-profiler-background-color);
     z-index: 9999;
 }
 
 .profiler .profiler-show-button {
-    background-color: #222;
+    background-color: var(--main-profiler-background-color);
     border-top-left-radius: 4px;
     bottom: 0;
     -webkit-box-sizing: border-box;
@@ -82,7 +90,7 @@
 .profiler .profiler-header .profiler-menus .profiler-menu .status-green {
     display: inline-block;
     color: #FFF;
-    background-color: #666;
+    background-color: var(--main-status-default-color);
     padding: 3px 6px;
     margin-bottom: 2px;
     vertical-align: middle;
@@ -96,14 +104,14 @@
     border-left: 5px solid #444;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-green {
-    background-color: #4F805D;
+    background-color: var(--main-status-green-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-yellow {
-    background-color: #A46A1F;
+    background-color: var(--main-status-yellow-color);
     color: #FFF;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-red {
-    background-color: #B0413E;
+    background-color: var(--main-status-red-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.active,
 .profiler .profiler-header .profiler-menus .profiler-menu:hover {

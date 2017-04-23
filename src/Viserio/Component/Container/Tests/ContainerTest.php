@@ -622,8 +622,11 @@ class ContainerTest extends MockeryTestCase
 
             return $obj;
         });
+
         self::assertFalse(ContainerLazyExtendFixture::$initialized);
+
         $container->resolve(ContainerLazyExtendFixture::class);
+
         self::assertTrue(ContainerLazyExtendFixture::$initialized);
     }
 

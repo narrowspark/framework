@@ -376,10 +376,18 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function run(ServerRequestInterface $request): ResponseInterface
+    public function bindServerRequest(ServerRequestInterface $request): RouteContract
     {
         $this->serverRequest = $request;
 
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function run(): ResponseInterface
+    {
         if ($this->isControllerAction()) {
             return $this->getController()->{$this->getControllerMethod()}();
         }

@@ -25,7 +25,7 @@ class ProfilerPsr6CacheBridgeServiceProviderTest extends MockeryTestCase
         $container->register(new ProfilerServiceProvider());
         $container->register(new ProfilerPsr6CacheBridgeServiceProvider());
 
-        $container->instance('config', ['viserio' => ['Profiler' => ['enable' => true]]]);
+        $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
         self::assertInstanceOf(TraceableCacheItemDecorater::class, $container->get(CacheItemPoolInterface::class));

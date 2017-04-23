@@ -25,7 +25,7 @@ class ProfilerPDOBridgeServiceProviderTest extends MockeryTestCase
         $container->register(new ProfilerServiceProvider());
         $container->register(new ProfilerPDOBridgeServiceProvider());
 
-        $container->instance('config', ['viserio' => ['Profiler' => ['enable' => true]]]);
+        $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
         self::assertInstanceOf(TraceablePDODecorater::class, $container->get(PDO::class));

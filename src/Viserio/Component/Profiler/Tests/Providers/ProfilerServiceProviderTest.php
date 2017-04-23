@@ -26,7 +26,7 @@ class ProfilerServiceProviderTest extends MockeryTestCase
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new ProfilerServiceProvider());
 
-        $container->instance('config', ['viserio' => ['Profiler' => ['enable' => true]]]);
+        $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
         self::assertInstanceOf(AssetsRenderer::class, $container->get(AssetsRenderer::class));
         self::assertInstanceOf(Profiler::class, $container->get(ProfilerContract::class));
@@ -43,7 +43,7 @@ class ProfilerServiceProviderTest extends MockeryTestCase
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new ProfilerServiceProvider());
 
-        $container->instance('config', ['viserio' => ['Profiler' => ['enable' => true]]]);
+        $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
         $router  = $container->get(RouterContract::class);
         $routes  = $router->getRoutes()->getRoutes();
