@@ -48,12 +48,9 @@ class KernelResponseEvent implements EventContract
     /**
      * Get a modified or original response.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     * @param mixed                               $value
-     *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function getResponse($value='')
+    public function getResponse()
     {
         return $this->response ?? $this->parameters['response'];
     }
