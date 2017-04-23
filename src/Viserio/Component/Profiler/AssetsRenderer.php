@@ -205,7 +205,7 @@ class AssetsRenderer implements AssetsRendererContract
 
         $additionalAssets = array_filter(
             array_map(
-                function($collector) {
+                function ($collector) {
                     $collector = $collector['collector'];
 
                     if ($collector instanceof AssetAwareContract && ! in_array($collector->getName(), $this->ignoredCollectors)) {
