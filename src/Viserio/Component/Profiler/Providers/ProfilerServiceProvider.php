@@ -162,7 +162,7 @@ class ProfilerServiceProvider implements
     /**
      * Register base collectors.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Interop\Container\ContainerInterface          $container
      * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
      *
      * @return void
@@ -193,7 +193,7 @@ class ProfilerServiceProvider implements
     /**
      * Register all found collectors in config.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Interop\Container\ContainerInterface          $container
      * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
      *
      * @return void

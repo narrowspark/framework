@@ -19,12 +19,12 @@ use Viserio\Component\Foundation\Http\Events\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
+use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
-use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 
 class Kernel extends AbstractKernel implements HttpKernelContract, TerminableContract
 {

@@ -15,7 +15,7 @@ class KernelResponseEvent implements EventContract
     /**
      * Modified or original response.
      *
-     * @var \Psr\Http\Message\ResponseInterface $response
+     * @var \Psr\Http\Message\ResponseInterface
      */
     protected $response;
 
@@ -49,6 +49,7 @@ class KernelResponseEvent implements EventContract
      * Get a modified or original response.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
+     * @param mixed                               $value
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

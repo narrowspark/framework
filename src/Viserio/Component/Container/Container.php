@@ -402,7 +402,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
         foreach ($provider->getServices() as $key => $callable) {
             if ($this->has($key)) {
                 $this->extend($key, function ($previous, $container) use ($callable) {
-                // Extend a previous entry
+                    // Extend a previous entry
                     return $callable($container, function () use ($previous) {
                         return $previous;
                     });

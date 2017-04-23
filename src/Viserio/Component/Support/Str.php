@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use BadMethodCallException;
-use Stringy\Stringy;
 use Stringy\StaticStringy;
+use Stringy\Stringy;
 use Viserio\Component\Contracts\Support\CharacterType;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
@@ -49,7 +49,7 @@ class Str
         if (class_exists(StaticStringy::class)) {
             try {
                 return self::macroableCallStatic($name, $arguments);
-            } catch(BadMethodCallException $exception) {
+            } catch (BadMethodCallException $exception) {
                 return forward_static_call_array([StaticStringy::class, $name], $arguments);
             }
         }
