@@ -1,4 +1,4 @@
-# narrowspark contributing guidelines
+<h1 align="center">Narrowspark Contributing Guidelines</h1>
 
 Thank you for wanting to contribute to narrowspark!
 
