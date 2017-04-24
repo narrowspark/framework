@@ -184,7 +184,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 ) . $this->createTable(
                     $request->getParsedBody() ?? [],
                     [
-                        'name' => 'Post Parameters',
+                        'name'       => 'Post Parameters',
                         'empty_text' => 'No POST parameters',
                     ]
                 ) . $this->createTable(
@@ -216,7 +216,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                     $this->splitOnAttributeDelimiter($request->getHeaderLine('Cookie')),
                     [
                         'name'       => 'Request Cookies',
-                        'empty_text' => 'No request cookies'
+                        'empty_text' => 'No request cookies',
                     ]
                 ) . $this->createTable(
                     array_map(function ($setCookieString) {
@@ -224,7 +224,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                     }, $response->getHeader('Set-Cookie')),
                     [
                         'name'       => 'Response Cookies',
-                        'empty_text' => 'No response cookies'
+                        'empty_text' => 'No response cookies',
                     ]
                 ),
             ],
@@ -233,7 +233,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     $sessionMeta,
                     [
-                        'name' => 'Session Metadata',
+                        'name'       => 'Session Metadata',
                         'empty_text' => 'No session metadata',
                     ]
                 ) . $this->createTable(
@@ -250,7 +250,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                     $session !== null ? $session->get('_flash') : [],
                     [
                         'name'       => 'Flashes',
-                        'empty_text' => 'No flash messages were created'
+                        'empty_text' => 'No flash messages were created',
                     ]
                 ),
             ],
