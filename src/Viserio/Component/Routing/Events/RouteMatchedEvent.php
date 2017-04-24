@@ -4,6 +4,7 @@ namespace Viserio\Component\Routing\Events;
 
 use Viserio\Component\Contracts\Events\Event as EventContract;
 use Viserio\Component\Events\Traits\EventTrait;
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
 
 class RouteMatchedEvent implements EventContract
 {
@@ -12,12 +13,10 @@ class RouteMatchedEvent implements EventContract
     /**
      * Create a new route matched event.
      *
-     * @param       $router
-     * @param array $param
-     *
-     * @codeCoverageIgnore
+     * @param \Viserio\Component\Contracts\Routing\Router $router
+     * @param array                                       $param
      */
-    public function __construct($router, array $param)
+    public function __construct(RouterContract $router, array $param)
     {
         $this->name       = 'route.matched';
         $this->target     = $router;
