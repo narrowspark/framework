@@ -140,8 +140,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getPatterns(): array
     {
@@ -160,8 +158,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function removeParameter(string $name)
     {
@@ -170,8 +166,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getParameters(): array
     {
@@ -242,8 +236,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getGroupStack(): array
     {
@@ -252,8 +244,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getCurrentRoute()
     {
@@ -262,8 +252,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getRoutes(): RouteCollectionContract
     {
@@ -333,9 +321,9 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     protected function addWhereClausesToRoute(RouteContract $route): void
     {
         $where  = $route->getAction()['where'] ?? [];
-        $patern = array_merge($this->patterns, $where);
+        $pattern = array_merge($this->patterns, $where);
 
-        foreach ($patern as $name => $value) {
+        foreach ($pattern as $name => $value) {
             $route->where($name, $value);
         }
     }
@@ -417,15 +405,15 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     protected function prefix(string $uri): string
     {
-        $trimed = trim($this->getLastGroupPrefix(), '/') . '/' . trim($uri, '/');
+        $trimmed = trim($this->getLastGroupPrefix(), '/') . '/' . trim($uri, '/');
 
-        if (! $trimed) {
+        if (! $trimmed) {
             return '/';
-        } elseif (mb_substr($trimed, 0, 1) === '/') {
-            return $trimed;
+        } elseif (mb_substr($trimmed, 0, 1) === '/') {
+            return $trimmed;
         }
 
-        return '/' . $trimed;
+        return '/' . $trimmed;
     }
 
     /**

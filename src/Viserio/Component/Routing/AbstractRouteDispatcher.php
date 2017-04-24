@@ -77,7 +77,7 @@ abstract class AbstractRouteDispatcher
     protected $middlewarePriority = [];
 
     /**
-     * Add a list of middlewares.
+     * Add a middleware list.
      *
      * @param array $middlewares
      *
@@ -95,8 +95,6 @@ abstract class AbstractRouteDispatcher
      * @param array  $middleware
      *
      * @return void
-     *
-     * @codeCoverageIgnore
      */
     public function setMiddlewareGroup(string $name, array $middleware): void
     {
@@ -109,8 +107,6 @@ abstract class AbstractRouteDispatcher
      * @param array $middlewarePriorities
      *
      * @return void
-     *
-     * @codeCoverageIgnore
      */
     public function setMiddlewarePriorities(array $middlewarePriorities): void
     {
@@ -121,8 +117,6 @@ abstract class AbstractRouteDispatcher
      * Get a list of middleware priorities.
      *
      * @return array
-     *
-     * @codeCoverageIgnore
      */
     public function getMiddlewarePriorities(): array
     {
@@ -133,8 +127,6 @@ abstract class AbstractRouteDispatcher
      * Get all with and without middlewares.
      *
      * @return array
-     *
-     * @codeCoverageIgnore
      */
     public function getMiddlewares(): array
     {
@@ -151,8 +143,6 @@ abstract class AbstractRouteDispatcher
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getCachePath(): string
     {
@@ -169,7 +159,7 @@ abstract class AbstractRouteDispatcher
 
     /**
      * Match and dispatch a route matching the given http method and
-     * uri, retruning an execution chain.
+     * uri, returning an execution chain.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
