@@ -157,7 +157,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $session     = $this->serverRequest->getAttribute('session');
+        $request     = $this->serverRequest;
+        $response    = $this->response;
+        $session     = $request->getAttribute('session');
         $sessionMeta = [];
 
         if ($session !== null) {
@@ -174,55 +176,82 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             [
                 'name'    => 'Request',
                 'content' => $this->createTable(
-                    $this->serverRequest->getQueryParams(),
-                    ['name' => 'Get Parameters']
+                    $request->getQueryParams(),
+                    [
+                        'name'       => 'Get Parameters',
+                        'empty_text' => 'No GET parameters',
+                    ]
                 ) . $this->createTable(
-                    $this->serverRequest->getParsedBody() ?? [],
-                    ['name' => 'Post Parameters']
+                    $request->getParsedBody() ?? [],
+                    [
+                        'name' => 'Post Parameters',
+                        'empty_text' => 'No POST parameters',
+                    ]
                 ) . $this->createTable(
-                    $this->prepareRequestAttributes($this->serverRequest->getAttributes()),
+                    $this->prepareRequestAttributes($request->getAttributes()),
                     ['name' => 'Request Attributes']
                 ) . $this->createTable(
-                    $this->splitOnAttributeDelimiter($this->serverRequest->getHeaderLine('Cookie')),
-                    ['name' => 'Cookies']
-                ) . $this->createTable(
-                    $this->prepareRequestHeaders($this->serverRequest->getHeaders()),
+                    $this->prepareRequestHeaders($request->getHeaders()),
                     ['name' => 'Request Headers']
                 ) . $this->createTable(
-                    $this->prepareServerParams($this->serverRequest->getServerParams()),
+                    $this->prepareServerParams($request->getServerParams()),
                     ['name' => 'Server Parameters']
                 ),
             ],
             [
                 'name'    => 'Response',
                 'content' => $this->createTable(
-                    $this->response->getHeaders(),
+                    $response->getHeaders(),
                     [
                         'name'    => 'Response Headers',
                         'headers' => [
                             'key' => 'Header',
                         ],
                     ]
+                ),
+            ],
+            [
+                'name'    => 'Cookies',
+                'content' => $this->createTable(
+                    $this->splitOnAttributeDelimiter($request->getHeaderLine('Cookie')),
+                    [
+                        'name'       => 'Request Cookies',
+                        'empty_text' => 'No request cookies'
+                    ]
                 ) . $this->createTable(
-                    $this->serverRequest->getHeader('Set-Cookie'),
-                    ['name' => 'Cookies']
+                    array_map(function ($setCookieString) {
+                        return $this->fromStringCookie($setCookieString);
+                    }, $response->getHeader('Set-Cookie')),
+                    [
+                        'name'       => 'Response Cookies',
+                        'empty_text' => 'No response cookies'
+                    ]
                 ),
             ],
             [
                 'name'    => 'Session',
                 'content' => $this->createTable(
                     $sessionMeta,
-                    ['name' => 'Session Metadata']
+                    [
+                        'name' => 'Session Metadata',
+                        'empty_text' => 'No session metadata',
+                    ]
                 ) . $this->createTable(
                     $session !== null ? $session->getAll() : [],
-                    ['name' => 'Session Attributes']
+                    [
+                        'name'       => 'Session Attributes',
+                        'empty_text' => 'No session attributes',
+                    ]
                 ),
             ],
             [
                 'name'    => 'Flashes',
                 'content' => $this->createTable(
                     $session !== null ? $session->get('_flash') : [],
-                    ['name' => 'Flashes']
+                    [
+                        'name'       => 'Flashes',
+                        'empty_text' => 'No flash messages were created'
+                    ]
                 ),
             ],
         ]);
@@ -330,6 +359,44 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     protected function splitOnAttributeDelimiter(string $string): array
     {
         return array_filter(preg_split('@\s*[;]\s*@', $string));
+    }
+
+    /**
+     * Split a string to array.
+     *
+     * @param string $string
+     *
+     * @return array
+     */
+    protected function splitCookiePair(string $string): array
+    {
+        $pairParts = explode('=', $string, 2);
+
+        if (count($pairParts) === 1) {
+            $pairParts[1] = '';
+        }
+
+        return array_map(function ($part) {
+            if ($part === null) {
+                return '';
+            }
+
+            return urldecode($part);
+        }, $pairParts);
+    }
+
+    /**
+     * Creates a Cookie instance from a Set-Cookie header value.
+     *
+     * @param string $string
+     *
+     * @return \Viserio\Component\Contracts\Cookie\Cookie
+     */
+    protected static function fromStringCookie(string $string): CookieContract
+    {
+        $rawAttributes = $this->splitOnAttributeDelimiter($string);
+
+        list($cookieName, $cookieValue) = $this->splitCookiePair(array_shift($rawAttributes));
     }
 
     /**

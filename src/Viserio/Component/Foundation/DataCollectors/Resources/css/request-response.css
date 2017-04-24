@@ -5,14 +5,14 @@
     margin-right: 5px;
 }
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-green .profiler-menu-label {
-    background-color: var(--main-status-green-color);
+    background-color: var(--profiler-status-green-color);
 }
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-yellow .profiler-menu-label {
-    background-color: var(--main-status-yellow-color);
+    background-color: var(--profiler-status-yellow-color);
     color: #FFF;
 }
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-red .profiler-menu-label {
-    background-color: var(--main-status-red-color);
+    background-color: var(--profiler-status-red-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu-position-left.profiler-menu-viserio-http-data-collector .profiler-menu-content {
     padding-left: 0;

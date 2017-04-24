@@ -52,7 +52,7 @@ if (! isset($token, $menus, $icons, $panels)) {
         <?php endif; ?>
     </div>
     <div class="profiler-body">
-        <div class="row profiler-body-menu">
+        <div class="profiler-body-menu">
             <a class="profiler-body-close-panel"  title="Close panel" tabindex="-1">
                 <?php echo file_get_contents($icons['ic_clear_white_24px.svg']); ?>
             </a>

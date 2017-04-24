@@ -198,18 +198,12 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     protected function createTabs(array $data): string
     {
-        $grid = '';
-
-        if (($counted = count($data)) < 12) {
-            $grid = ' col span_' . floor(12 / $counted);
-        }
-
-        $html = '<div class="profiler-tabs' . ($grid !== '' ? ' row' : '') . '">';
+        $html = '<div class="profiler-tabs row">';
 
         foreach ($data as $key => $value) {
             $id = uniqid($key . '-');
 
-            $html .= '<div class="profiler-tabs-tab' . $grid . '">';
+            $html .= '<div class="profiler-tabs-tab col">';
             $html .= '<input type="radio" name="tabgroup" id="tab-' . $id . '">';
             $html .= '<label for="tab-' . $id . '">' . $value['name'] . '</label>';
             $html .= '<div class="profiler-tabs-tab-content">';
@@ -233,15 +227,16 @@ abstract class AbstractDataCollector implements DataCollectorContract
     protected function createTable(array $data, array $settings = []): string
     {
         $options = array_merge([
-            'name'      => null,
-            'headers'   => ['Key', 'Value'],
-            'vardumper' => true,
+            'name'       => null,
+            'headers'    => ['Key', 'Value'],
+            'vardumper'  => true,
+            'empty_text' => 'Empty',
         ], $settings);
 
         $html = $options['name'] !== null ? '<h3>' . $options['name'] . '</h3>' : '';
 
         if (count($data) !== 0) {
-            $html .= '<table class="row"><thead><tr>';
+            $html .= '<table><thead><tr>';
 
             foreach ((array) $options['headers'] as $header) {
                 $html .= '<th scope="col" class="' . $header . '">' . $header . '</th>';
@@ -253,17 +248,17 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 if (is_string($key)) {
                     $html .= '<tr>';
                     $html .= '<th>' . $key . '</th>';
-                    $html .= '<td>' . ($options['vardumper'] ? $this->cloneVar($values) : $values) . '</td>';
+                    $html .= sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($values) : $values));
                     $html .= '</tr>';
                 } else {
                     $html .= '<tr>';
 
                     if (is_array($values)) {
                         foreach ($values as $key => $value) {
-                            $html .= '<td>' . ($options['vardumper'] ? $this->cloneVar($value) : $value) . '</td>';
+                            $html .= sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($value) : $value));
                         }
                     } else {
-                        $html .= '<td>' . ($options['vardumper'] ? $this->cloneVar($values) : $values) . '</td>';
+                        $html .= sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($values) : $values));
                     }
 
                     $html .= '</tr>';
@@ -272,7 +267,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
             $html .= '</tbody></table>';
         } else {
-            $html .= '<div class="empty">Empty</div>';
+            $html .= sprintf('<div class="empty">%s</div>', $options['empty_text']);
         }
 
         return $html;

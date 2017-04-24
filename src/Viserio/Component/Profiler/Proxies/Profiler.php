@@ -4,7 +4,7 @@ namespace Viserio\Component\Profileroxies;
 
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
-class WebProfiler extends StaticalProxy
+class Profiler extends StaticalProxy
 {
     /**
      * {@inheritdoc}
@@ -13,6 +13,6 @@ class WebProfiler extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return 'web_profiler';
+        return 'profiler';
     }
 }

@@ -1,20 +1,20 @@
 .profiler-panel.profiler-panel-twig-data-collector.active .twig-graph {
-    margin-top: 25px;
+    margin: 25px 0;
 }
 .profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre {
     font-size: 14px;
-    color: #2B2A28;
+    color: var(--profiler-second-font-color);
     padding: 10px;
-    background-color: #fff;
+    background-color: #FFF;
 }
 .profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre .status-success {
-    color: #4F805D;
+    color: var(--profiler-status-green-color);
 }
 .profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre .status-warning {
-    background-color: #A46A1F;
+    background-color: var(--profiler-status-yellow-color);
     color: #FFF;
     padding: 0px 5px;
 }
 .profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre .status-error {
-    color: #B0413E;
+    color: var(--profiler-status-red-color);
 }

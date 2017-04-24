@@ -25,6 +25,7 @@ if (typeof(Profiler) == 'undefined') {
     var panelClass = panelBodyClass + ' .profiler-panel';
     var menuHasPanel = '.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-panel';
     var bodyMenu = panelBodyClass + ' .profiler-body-menu';
+    var profilerHeader = '.profiler .profiler-header';
     var getPreference = function(name) {
         if (!window.localStorage) {
             return null;
@@ -105,7 +106,7 @@ if (typeof(Profiler) == 'undefined') {
             openPanel = false;
 
             $('.profiler .profiler-body, ' + panelClass).removeClass('active');
-            $('.profiler .profiler-header').addClass('hide');
+            $(profilerHeader).addClass('hide');
             $('.profiler .profiler-show-button').addClass('active');
         });
 
@@ -113,7 +114,7 @@ if (typeof(Profiler) == 'undefined') {
         $('.profiler .profiler-show-button').on('click', function(e) {
             e.preventDefault();
 
-            $('.profiler .profiler-header').removeClass('hide');
+            $(profilerHeader).removeClass('hide');
             $('.profiler .profiler-show-button').removeClass('active');
         });
     };
@@ -141,19 +142,20 @@ if (typeof(Profiler) == 'undefined') {
 
     Profiler.resize = function() {
         var resizeIsActive = false;
-        var panelHeight = $(window).height() - 38;
-        var tabContentHeight = $(panelBodyClass).height() - 87;
 
-        $(bodyMenu + ' .profiler-body-resize-panel').on('click', function(e) {
+        $(bodyMenu + ' .profiler-body-resize-panel').on('click', function (e) {
             if (resizeIsActive) {
                 resizeIsActive = false;
 
                 $(panelBodyClass).height(null);
-                $('.profiler-tabs-tab-content').height(null);
+                $(panelClass + ' .profiler-tabs .profiler-tabs-tab-content').height(null);
                 $(this).removeClass('orginal-size-panel');
             } else {
+                var panelHeight = $(window).height() - 38;
+                var contentHeight = $(window).height() - $(panelClass + ' .profiler-tabs').height() + ($(profilerHeader).height() + $(bodyMenu).height());
+
                 resizeIsActive = true;
-                resizeBodyAndTabContent(panelHeight, tabContentHeight);
+                resizeBodyAndTabContent(panelHeight, $(window).height() + $(bodyMenu).height() - $(panelClass + ' .profiler-tabs').height() + $(profilerHeader).height() + 4);
 
                 $(this).addClass('orginal-size-panel');
             }
@@ -161,7 +163,10 @@ if (typeof(Profiler) == 'undefined') {
 
         $(window).resize(function() {
             if (resizeIsActive) {
-                resizeBodyAndTabContent(panelHeight, tabContentHeight);
+                var panelHeight = $(window).height() - 38;
+                var contentHeight = $(window).height() - $(panelClass + ' .profiler-tabs').height() + ($(profilerHeader).height() + $(bodyMenu).height());
+
+                resizeBodyAndTabContent(panelHeight, contentHeight);
             }
         });
     };

@@ -1,15 +1,18 @@
 :root {
-    --main-font-color: #eee;
-    --main-profiler-background-color: #212121;
-    --main-menu-background-color: #424242;
-    --main-status-default-color: #666;
-    --main-status-red-color: #b71c1c;
-    --main-status-yellow-color: #fdd835;
-    --main-status-green-color: #7cb342;
-    --main-tab-default-color: #2b2a28;
-    --main-tab-active-color: #fff;
-    --main-tab-active-font-color: #2b2a28;
-    --main-tab-counter-color: #2b2a28;
+    --profiler-font-color: #eee;
+    --profiler-second-font-color: #2b2a28;
+    --profiler-profiler-background-color: #212121;
+    --profiler-menu-background-active-color: #424242;
+    --profiler-status-default-color: #666;
+    --profiler-status-red-color: #b71c1c;
+    --profiler-status-yellow-color: #fdd835;
+    --profiler-status-green-color: #7cb342;
+    --profiler-tab-default-color: #424242;
+    --profiler-tab-active-color: #fff;
+    --profiler-tab-active-font-color: #2b2a28;
+    --profiler-tab-counter-color: #424242;
+    --profiler-table-head-background-color: #424242;
+    --profiler-table-body-background-color: #fff;
 }
 
 .profiler {
@@ -31,6 +34,18 @@
     -moz-osx-font-smoothing: auto;
 }
 
+
+.profiler ::-webkit-scrollbar-track {
+    background-color: #FFF;
+}
+.profiler ::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+.profiler ::-webkit-scrollbar-thumb {
+    background-color: var(--profiler-tab-default-color);
+}
+
 .profiler .profiler-header.hide,
 .profiler .profiler-body .profiler-panel .selected-content {
     display: none;
@@ -49,7 +64,7 @@
     bottom: 0;
     left: 0;
 
-    background-color: var(--main-profiler-background-color);
+    background-color: var(--profiler-profiler-background-color);
 }
 
 .profiler .profiler-show-button {
@@ -69,7 +84,7 @@
     cursor: pointer;
 
     border-top-left-radius: 4px;
-    background-color: var(--main-profiler-background-color);
+    background-color: var(--profiler-profiler-background-color);
 }
 .profiler .profiler-header .profiler-hide-button,
 .profiler .profiler-body .profiler-body-close-panel,
@@ -83,7 +98,7 @@
     cursor: pointer;
     text-align: center;
 
-    background: var(--main-menu-background-color);
+    background: var(--profiler-menu-background-active-color);
 }
 .profiler .profiler-header .profiler-hide-button svg,
 .profiler .profiler-header .profiler-menus .profiler-menu svg {
@@ -116,7 +131,7 @@
     vertical-align: middle;
 
     color: #fff;
-    background-color: var(--main-status-default-color);
+    background-color: var(--profiler-status-default-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-red + .status-red,
 .profiler .profiler-header .profiler-menus .profiler-menu .status-yellow + .status-yellow,
@@ -124,21 +139,21 @@
     border-left: 5px solid #444;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-green {
-    background-color: var(--main-status-green-color);
+    background-color: var(--profiler-status-green-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-yellow {
     color: #fff;
-    background-color: var(--main-status-yellow-color);
+    background-color: var(--profiler-status-yellow-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-red {
-    background-color: var(--main-status-red-color);
+    background-color: var(--profiler-status-red-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.active,
 .profiler .profiler-header .profiler-menus .profiler-menu:hover {
     position: relative;
     z-index: 10002;
 
-    background-color: var(--main-menu-background-color);
+    background-color: var(--profiler-menu-background-active-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover {
     cursor: help;
@@ -163,7 +178,7 @@
 
     word-wrap: break-word;
 
-    background-color: var(--main-menu-background-color);
+    background-color: var(--profiler-menu-background-active-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group {
     margin-bottom: 4px;
@@ -196,7 +211,7 @@
 
     display: table-cell;
 
-    color: var(--main-font-color);
+    color: var(--profiler-font-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group a {
     color: #fff;
@@ -234,7 +249,7 @@
 
     padding: 0;
 
-    color: var(--main-font-color);
+    color: var(--profiler-font-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-icon .profiler-menu-value {
     margin-left: 4px;
@@ -249,8 +264,8 @@
     height: 324px;
     margin-bottom: 36px;
 
-    background-color: var(--main-profiler-background-color);
-    color: var(--main-font-color);
+    background-color: var(--profiler-profiler-background-color);
+    color: var(--profiler-font-color);
 }
 .profiler .profiler-body pre {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
@@ -288,12 +303,7 @@
 .profiler .profiler-body .profiler-panel .profiler-tabs {
     position: relative;
 
-    display: block;
-
     min-height: 180px;
-}
-.profiler .profiler-body .profiler-panel .profiler-tabs-tab {
-    display: inline-block;
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs-tab label {
     display: block;
@@ -306,7 +316,7 @@
 
     color: #fff;
     border-bottom: 3px solid #fff;
-    background: var(--main-tab-default-color);
+    background: var(--profiler-tab-default-color);
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs-tab label span.counter {
     display: inline-block;
@@ -320,7 +330,7 @@
     text-align: center;
     vertical-align: middle;
 
-    color: var(--main-tab-active-font-color);
+    color: var(--profiler-tab-active-font-color);
     background-color: #fff;
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs-tab [type=radio] {
@@ -342,7 +352,7 @@
 
     overflow-y: auto;
 
-    height: 236px;
+    height: 247px;
     padding: 15px 15px 0 15px;
 
     opacity: 0;
@@ -350,12 +360,12 @@
 .profiler .profiler-body .profiler-panel .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label {
     z-index: 2;
 
-    color: var(--main-tab-active-font-color);
-    background: var(--main-tab-active-color);
+    color: var(--profiler-tab-active-font-color);
+    background: var(--profiler-tab-active-color);
 }
 .profiler .profiler-body .profiler-panel  .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label span.counter {
-    color: var(--main-tab-active-color);
-    background: var(--main-tab-counter-color);
+    color: var(--profiler-tab-active-color);
+    background: var(--profiler-tab-counter-color);
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label ~ .profiler-tabs-tab-content {
     z-index: 1;
@@ -377,14 +387,16 @@
 
     vertical-align: top;
 
-    background: #fff;
+    background: var(--profiler-table-body-background-color);
 }
 .profiler .profiler-body .profiler-panel table {
     width: 100%;
     margin: 0;
 
-    background: #fff;
     box-shadow: 0 0 1px rgba(128, 128, 128, .2);
+}
+.profiler .profiler-body .profiler-panel table:last-child {
+    margin-bottom: 25px;
 }
 .profiler .profiler-body .profiler-panel table + table {
     margin-top: 30px;
@@ -401,7 +413,7 @@
 }
 .profiler .profiler-body .profiler-panel table thead th {
     color: #fff;
-    background-color: #2b2a28;
+    background-color: var(--profiler-table-head-background-color);
 }
 .profiler .profiler-body .profiler-panel table thead th.key {
     width: 19%;
@@ -413,7 +425,7 @@
     font-size-adjust: .5;
 
     color: #2b2a28;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--profiler-table-body-background-color);
     border-width: 1px 0;
 }
 .profiler .profiler-body .profiler-panel table tbody td {
@@ -440,7 +452,7 @@
     text-align: center;
 
     color: #fff;
-    border: 4px dashed #e0e0e0;
+    border: 4px dashed var(--profiler-table-body-background-color);
 }
 
 .profiler .profiler-body .profiler-panel .metrics {
