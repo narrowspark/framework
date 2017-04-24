@@ -320,7 +320,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     protected function addWhereClausesToRoute(RouteContract $route): void
     {
-        $where  = $route->getAction()['where'] ?? [];
+        $where   = $route->getAction()['where'] ?? [];
         $pattern = array_merge($this->patterns, $where);
 
         foreach ($pattern as $name => $value) {
