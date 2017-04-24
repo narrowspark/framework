@@ -1,21 +1,28 @@
 :root {
-    --main-font-color: #EEE;
-    --main-profiler-background-color: #222;
+    --main-font-color: #eee;
+    --main-profiler-background-color: #212121;
+    --main-menu-background-color: #424242;
     --main-status-default-color: #666;
-    --main-status-red-color: #CC0000;
-    --main-status-yellow-color: #FFCC00;
-    --main-status-green-color: #88C425;
+    --main-status-red-color: #b71c1c;
+    --main-status-yellow-color: #fdd835;
+    --main-status-green-color: #7cb342;
+    --main-tab-default-color: #2b2a28;
+    --main-tab-active-color: #fff;
+    --main-tab-active-font-color: #2b2a28;
+    --main-tab-counter-color: #2b2a28;
 }
 
 .profiler {
-    bottom: 0;
-    color: #EEE;
-    font: 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    left: 0;
-    margin: 0;
-    padding: 0;
+    font: 11px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
     position: fixed;
     right: 0;
+    bottom: 0;
+    left: 0;
+
+    margin: 0;
+    padding: 0;
+
     text-align: left;
     text-transform: none;
 
@@ -36,66 +43,80 @@
 }
 
 .profiler .profiler-header {
+    position: absolute;
+    z-index: 9999;
+    right: 0;
     bottom: 0;
     left: 0;
-    position: absolute;
-    right: 0;
+
     background-color: var(--main-profiler-background-color);
-    z-index: 9999;
 }
 
 .profiler .profiler-show-button {
-    background-color: var(--main-profiler-background-color);
-    border-top-left-radius: 4px;
+    position: fixed;
+    z-index: 99999;
+    right: 0;
     bottom: 0;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+
     display: none;
+
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
     height: 36px;
     padding: 6px;
-    position: fixed;
-    right: 0;
-    z-index: 99999;
+
     cursor: pointer;
+
+    border-top-left-radius: 4px;
+    background-color: var(--main-profiler-background-color);
 }
 .profiler .profiler-header .profiler-hide-button,
 .profiler .profiler-body .profiler-body-close-panel,
 .profiler .profiler-body .profiler-body-menu .profiler-body-resize-panel {
-    background: #444;
     display: block;
+    float: right;
+
     width: 36px;
     height: 36px;
+
     cursor: pointer;
     text-align: center;
-    float: right;
+
+    background: var(--main-menu-background-color);
 }
 .profiler .profiler-header .profiler-hide-button svg,
 .profiler .profiler-header .profiler-menus .profiler-menu svg {
     position: relative;
     top: 6px;
+
     max-height: 24px;
 }
 
 .profiler .profiler-header .profiler-menus .profiler-menu {
-    cursor: default;
     display: block;
+
     height: 36px;
     margin-right: 0;
+
+    cursor: default;
     white-space: nowrap;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-red,
 .profiler .profiler-header .profiler-menus .profiler-menu .status-yellow,
 .profiler .profiler-header .profiler-menus .profiler-menu .status-green {
     display: inline-block;
-    color: #FFF;
-    background-color: var(--main-status-default-color);
-    padding: 3px 6px;
-    margin-bottom: 2px;
-    vertical-align: middle;
+
     min-width: 15px;
     min-height: 13px;
+    margin-bottom: 2px;
+    padding: 3px 6px;
+
     text-align: center;
+    vertical-align: middle;
+
+    color: #fff;
+    background-color: var(--main-status-default-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-red + .status-red,
 .profiler .profiler-header .profiler-menus .profiler-menu .status-yellow + .status-yellow,
@@ -106,17 +127,18 @@
     background-color: var(--main-status-green-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-yellow {
+    color: #fff;
     background-color: var(--main-status-yellow-color);
-    color: #FFF;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .status-red {
     background-color: var(--main-status-red-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.active,
 .profiler .profiler-header .profiler-menus .profiler-menu:hover {
-    background-color: #444;
     position: relative;
     z-index: 10002;
+
+    background-color: var(--main-menu-background-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover {
     cursor: help;
@@ -128,45 +150,56 @@
     display: none;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip {
+    position: absolute;
+    bottom: 36px;
+
     display: block;
-    padding: 10px;
-    max-width: 480px;
-    max-height: 480px;
-    word-wrap: break-word;
     overflow: hidden;
     overflow-y: auto;
-    background-color: #444;
-    bottom: 36px;
-    color: #F5F5F5;
-    position: absolute;
+
+    max-width: 480px;
+    max-height: 480px;
+    padding: 10px;
+
+    word-wrap: break-word;
+
+    background-color: var(--main-menu-background-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group {
     margin-bottom: 4px;
     padding-bottom: 4px;
-    border-bottom: 1px solid #333333;
+
+    border-bottom: 1px solid #333;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group:last-child {
     margin-bottom: 0;
     padding-bottom: 0;
+
     border-bottom: none;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group-piece {
-    border-bottom: solid transparent 3px;
     display: table-row;
+
+    border-bottom: solid transparent 3px;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group b {
-    color: #AAA;
-    display: table-cell;
     font-size: 11px;
+
+    display: table-cell;
+
     padding: 4px 8px 4px 0;
+
+    color: #aaa;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group span {
-    color: #F5F5F5;
     font-size: 12px;
+
     display: table-cell;
+
+    color: var(--main-font-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group a {
-    color: #FFF;
+    color: #fff;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-position-left.profiler-menu-has-tooltip:hover .profiler-menu-tooltip {
     left: 0;
@@ -181,9 +214,11 @@
     float: right;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content {
-    display: block;
-    height: 36px;
     line-height: 36px;
+
+    display: block;
+
+    height: 36px;
 }
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-position-left .profiler-menu-content,
 .profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-position-right .profiler-menu-content {
@@ -192,26 +227,33 @@
 .profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content .profiler-menu-icon,
 .profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content .profiler-menu-label,
 .profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content .profiler-menu-value {
-    display: inline-block;
-    color: #F5F5F5;
     font-size: 13px;
     line-height: 36px;
+
+    display: inline-block;
+
     padding: 0;
+
+    color: var(--main-font-color);
 }
 .profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-icon .profiler-menu-value {
     margin-left: 4px;
 }
 
 .profiler .profiler-body {
-    height: 324px;
-    background-color: #222;
-    margin-bottom: 37px;
-    display: none;
     position: relative;
     z-index: 9998;
+
+    display: none;
+
+    height: 324px;
+    margin-bottom: 36px;
+
+    background-color: var(--main-profiler-background-color);
+    color: var(--main-font-color);
 }
 .profiler .profiler-body pre {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 }
 .profiler .profiler-body pre.sf-dump,
 .profiler .profiler-body pre.sf-dump .sf-dump-num,
@@ -227,101 +269,122 @@
 .profiler .profiler-body pre.sf-dump .sf-dump-index {
     margin: 0;
     padding: 0;
-    color: #2B2A28;
+
+    color: #2b2a28;
 }
 .profiler .profiler-body .profiler-panel {
-    height: 270px;
     display: none;
+
+    height: 270px;
 }
 .profiler .profiler-body .profiler-panel.profiler-body-has-table,
 .profiler .profiler-body .profiler-panel.profiler-body-has-selector,
 .profiler .profiler-body .profiler-panel.profiler-body-has-metrics {
-    overflow-y: auto;
     overflow-x: hidden;
+    overflow-y: auto;
+
     padding: 15px;
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs {
     position: relative;
-    min-height: 180px;
+
     display: block;
+
+    min-height: 180px;
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs-tab {
     display: inline-block;
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs-tab label {
-    cursor: pointer;
-    background: #2B2A28;
-    color: #FFF;
     display: block;
+
     margin: 0 0 0 -1px;
     padding: 10px 15px;
-    border-bottom: 3px solid #FFF;
+
+    cursor: pointer;
     text-align: center;
+
+    color: #fff;
+    border-bottom: 3px solid #fff;
+    background: var(--main-tab-default-color);
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs-tab label span.counter {
     display: inline-block;
-    color: #FFF;
-    background-color: #666;
-    padding: 3px 6px;
-    margin-bottom: 2px;
-    vertical-align: middle;
+
     min-width: 15px;
     min-height: 13px;
-    text-align: center;
-    margin-bottom: 0;
+    margin-bottom: 2px;
     margin-left: 10px;
+    padding: 2px 6px 3px 6px;
+
+    text-align: center;
+    vertical-align: middle;
+
+    color: var(--main-tab-active-font-color);
+    background-color: #fff;
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs-tab [type=radio] {
     position: absolute;
-    height: 0;
-    width: 0;
+
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
+
+    width: 0;
+    height: 0;
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs-tab [type=radio]:focus + label {
     /*  */
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs-tab-content {
     position: absolute;
-    left: 0;
     right: 0;
-    opacity: 0;
-    padding: 15px;
+    left: 0;
+
     overflow-y: auto;
+
     height: 236px;
+    padding: 15px 15px 0 15px;
+
+    opacity: 0;
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label {
-    background: #FFF;
-    color: #2B2A28;
     z-index: 2;
+
+    color: var(--main-tab-active-font-color);
+    background: var(--main-tab-active-color);
 }
 .profiler .profiler-body .profiler-panel  .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label span.counter {
-    background: #ECECEC;
-    color: #2B2A28;
+    color: var(--main-tab-active-color);
+    background: var(--main-tab-counter-color);
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label ~ .profiler-tabs-tab-content {
     z-index: 1;
+
     opacity: 1;
 }
 
 .profiler .profiler-body h3:first-child {
-    margin-top:  0;
+    margin-top: 0;
 }
 
 .profiler .profiler-body .profiler-panel table,
 .profiler .profiler-body .profiler-panel tr,
 .profiler .profiler-body .profiler-panel th,
 .profiler .profiler-body .profiler-panel td {
-    background: #FFF;
-    border-collapse: collapse;
     line-height: 1.5;
+
+    border-collapse: collapse;
+
     vertical-align: top;
+
+    background: #fff;
 }
 .profiler .profiler-body .profiler-panel table {
-    background: #FFF;
-    box-shadow: 0px 0px 1px rgba(128, 128, 128, .2);
-    margin: 0;
     width: 100%;
+    margin: 0;
+
+    background: #fff;
+    box-shadow: 0 0 1px rgba(128, 128, 128, .2);
 }
 .profiler .profiler-body .profiler-panel table + table {
     margin-top: 30px;
@@ -333,30 +396,32 @@
 }
 .profiler .profiler-body .profiler-panel table th {
     font-weight: bold;
+
     text-align: left;
 }
 .profiler .profiler-body .profiler-panel table thead th {
-    background-color: #2B2A28;
-    color: #FFF;
+    color: #fff;
+    background-color: #2b2a28;
 }
 .profiler .profiler-body .profiler-panel table thead th.key {
     width: 19%;
 }
 .profiler .profiler-body .profiler-panel table tbody th,
 .profiler .profiler-body .profiler-panel table tbody td {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
     font-size: 13px;
-    font-size-adjust: 0.5;
-    border: 1px solid #E0E0E0;
+    font-size-adjust: .5;
+
+    color: #2b2a28;
+    border: 1px solid #e0e0e0;
     border-width: 1px 0;
-    color: #2B2A28;
 }
 .profiler .profiler-body .profiler-panel table tbody td {
+        word-break: break-all;
     -ms-word-break: break-all;
-    word-break: break-all;
     -webkit-hyphens: auto;
-    -moz-hyphens: auto;
-    hyphens: auto;
+       -moz-hyphens: auto;
+            hyphens: auto;
 }
 .profiler .profiler-body .profiler-panel table tbody div {
     margin: .25em 0;
@@ -366,66 +431,92 @@
     padding: 0 0 0 1em;
 }
 .profiler .profiler-body .profiler-panel .empty {
-    border: 4px dashed #E0E0E0;
-    color: #FFF;
     font-size: 16px;
+    font-weight: bold;
+
     margin: 1em 0;
     padding: .5em 2em;
+
     text-align: center;
-    font-weight: bold;
+
+    color: #fff;
+    border: 4px dashed #e0e0e0;
 }
 
 .profiler .profiler-body .profiler-panel .metrics {
     overflow: auto;
-    list-style: none;
+
     margin: 0;
     padding: 0;
+
+    list-style: none;
 }
 .profiler .profiler-body .profiler-panel .metrics .metric {
-    margin: 0 1em 1em 0;
-    background: #FFF;
-    box-shadow: 0px 0px 1px rgba(128, 128, 128, .2);
+    display: inline-block;
+
     min-width: 100px;
     min-height: 65px;
-    display: inline-block;
+    margin: 0 1em 1em 0;
+
+    background: #fff;
+    box-shadow: 0 0 1px rgba(128, 128, 128, .2);
 }
 .profiler .profiler-body .profiler-panel .metrics .metric .value {
-    display: block;
     font-size: 28px;
+
+    display: block;
+
     padding: 8px 15px 4px;
+
     text-align: center;
-    color: #2B2A28;
+
+    color: #2b2a28;
 }
 .profiler .profiler-body .profiler-panel .metrics .metric .label {
-    background: #444;
-    color: #FFF;
-    display: block;
     font-size: 12px;
+
+    display: block;
+
     padding: 5px;
+
     text-align: center;
+
+    color: #fff;
+    background: #444;
 }
 
 .profiler .profiler-body .profiler-panel select {
-    width: 100%;
-    padding: 10px 0;
-    cursor: pointer;
-    margin-bottom: 15px;
     font-weight: bold;
+
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px 0;
+
+    cursor: pointer;
+
     border: 0;
 }
 
 .profiler .profiler-body .profiler-body-menu {
     height: 24px;
+
     border-bottom: 1px solid #383838;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
     background-color: #222;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .2);
 }
 .profiler .profiler-body .profiler-body-menu .profiler-body-close-panel,
 .profiler .profiler-body .profiler-body-menu .profiler-body-resize-panel {
+    float: right;
+
     width: 24px;
     height: 24px;
-    float: right;
 }
 .profiler .profiler-body .profiler-body-menu .profiler-body-resize-panel.orginal-size-panel svg {
     transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+  .profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content .profiler-menu-value {
+      display: none;
+  }
 }
