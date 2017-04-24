@@ -1,7 +1,7 @@
 {
     "name"       : "viserio/bus",
     "type"       : "library",
-    "description": "The Viserio Command Bus package.",
+    "description": "The Viserio Bus package.",
     "keywords"   : [
         "narrowspark",
         "viserio",
