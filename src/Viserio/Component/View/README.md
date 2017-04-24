@@ -28,7 +28,7 @@ Documentation for the framework can be found on the [Narrowspark website](http:/
 Contributing
 -------------
 Issues for this package shall be posted on [Narrowspark framework issues](http://github.com/narrowspark/framework/issues). <br>
-Thank you for considering contributing to the Narrowspark framework! The contribution guide can be found in the [Narrowspark contributing](https://github.com/narrowspark/framework/blob/develop/CONTRIBUTING.md).
+Thank you for considering contributing to the Narrowspark framework! The contribution guide can be found in the [Narrowspark contributing](https://github.com/narrowspark/framework/blob/master/CONTRIBUTING.md).
 
 License
 -------------
