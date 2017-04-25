@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Tests;
+namespace Viserio\Component\Support\Tests;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Viserio\Component\Routing\Tests\Fixture\Controller;
-use Viserio\Component\Routing\VarExporter;
+use Viserio\Component\Support\Tests\Fixture\Controller;
+use Viserio\Component\Support\VarExporter;
 
 class VarExporterTest extends TestCase
 {

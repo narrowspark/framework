@@ -4,7 +4,7 @@ namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
-use Viserio\Component\Routing\VarExporter;
+use Viserio\Component\Support\VarExporter;
 
 class RouteTreeCompiler
 {
