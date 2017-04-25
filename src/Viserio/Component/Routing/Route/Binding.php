@@ -5,4 +5,3 @@ namespace Viserio\Component\Routing\Route;
 class Binding
 {
 }
-

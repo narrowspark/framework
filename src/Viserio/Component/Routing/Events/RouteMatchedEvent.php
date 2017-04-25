@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Events;
 
 use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Events\Traits\EventTrait;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Events\Traits\EventTrait;
 
 class RouteMatchedEvent implements EventContract
 {

@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use RuntimeException;
 use LogicException;
+use RuntimeException;
 
 trait MiddlewareAwareTrait
 {
@@ -133,7 +133,7 @@ trait MiddlewareAwareTrait
      */
     private function validateMiddlewareClass($middlewares): void
     {
-        $middlewareCheck = function($middleware) {
+        $middlewareCheck = function ($middleware) {
             if (! in_array(MiddlewareInterface::class, class_implements($middleware))) {
                 throw new LogicException(
                     sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)

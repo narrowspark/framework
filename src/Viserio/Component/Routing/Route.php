@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use Interop\Container\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Factory as FactoryContract;
