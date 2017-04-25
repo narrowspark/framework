@@ -19,7 +19,7 @@
     ],
     "require": {
         "php"                                 : "^7.1",
-        "container-interop/container-interop" : "^1.0",
+        "container-interop/container-interop" : "^1.1",
         "http-interop/http-factory"           : "^0.3",
         "http-interop/http-middleware"        : "^0.4",
         "narrowspark/arr"                     : "^1.1",

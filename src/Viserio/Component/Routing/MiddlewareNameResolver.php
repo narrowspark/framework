@@ -10,13 +10,16 @@ class MiddlewareNameResolver
      * @param string $name
      * @param array  $map
      * @param array  $middlewareGroups
+     * @param array  $disabledMiddlewares
      *
      * @return string|array
      */
-    public static function resolve(string $name, array $map, array $middlewareGroups)
+    public static function resolve(string $name, array $map, array $middlewareGroups, array $disabledMiddlewares)
     {
-        if (isset($middlewareGroups[$name])) {
-            return self::parseMiddlewareGroup($name, $map, $middlewareGroups);
+        if (isset($disabledMiddlewares[$name])) {
+            return [];
+        } elseif (isset($middlewareGroups[$name])) {
+            return self::parseMiddlewareGroup($name, $map, $middlewareGroups, $disabledMiddlewares);
         }
 
         return $map[$name] ?? $name;
@@ -28,21 +31,26 @@ class MiddlewareNameResolver
      * @param string $name
      * @param array  $map
      * @param array  $middlewareGroups
+     * @param array  $disabledMiddlewares
      *
      * @return array
      */
-    protected static function parseMiddlewareGroup(string $name, array $map, array $middlewareGroups): array
+    protected static function parseMiddlewareGroup(string $name, array $map, array $middlewareGroups, array $disabledMiddlewares): array
     {
         $results = [];
 
         foreach ($middlewareGroups[$name] as $middleware) {
+            if (isset($disabledMiddlewares[$middleware])) {
+                continue;
+            }
+
             // If the middleware is another middleware group we will pull in the group and
             // merge its middleware into the results. This allows groups to conveniently
             // reference other groups without needing to repeat all their middlewares.
             if (isset($middlewareGroups[$middleware])) {
                 $results = array_merge(
                     $results,
-                    self::parseMiddlewareGroup($middleware, $map, $middlewareGroups)
+                    self::parseMiddlewareGroup($middleware, $map, $middlewareGroups, $disabledMiddlewares)
                 );
 
                 continue;

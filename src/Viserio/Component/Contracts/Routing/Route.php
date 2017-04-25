@@ -69,6 +69,13 @@ interface Route
     public function gatherMiddleware(): array;
 
     /**
+     * Return all disabled middlewares.
+     *
+     * @return array
+     */
+    public function gatherDisabledMiddlewares(): array;
+
+    /**
      * Determine if the route only responds to HTTP requests.
      *
      * @return bool
@@ -208,9 +215,7 @@ interface Route
     /**
      * Run the route action and return the response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function run(ServerRequestInterface $request): ResponseInterface;
+    public function run(): ResponseInterface;
 }

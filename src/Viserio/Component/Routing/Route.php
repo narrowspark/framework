@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Interop\Container\Exception\NotFoundException;
-use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Factory as FactoryContract;
@@ -196,23 +195,39 @@ class Route implements RouteContract
      */
     public function gatherMiddleware(): array
     {
-        // Merge middlewares from Action.
-        $middlewares        = Arr::get($this->action, 'middlewares', []);
-        $withoutMiddlewares = Arr::get($this->action, 'without_middlewares', []);
+        $middlewares = [];
 
-        $mergedMiddlewares = [
-            'middlewares' => array_unique(array_merge(
-                $this->middlewares['middlewares'] ?? [],
-                is_array($middlewares) ? $middlewares : [$middlewares],
-                $this->getControllerMiddleware()
-            ), SORT_REGULAR),
-            'without_middlewares' => array_unique(array_merge(
-                $this->middlewares['without_middlewares'] ?? [],
-                is_array($withoutMiddlewares) ? $withoutMiddlewares : [$withoutMiddlewares]
-            ), SORT_REGULAR),
-        ];
+        if (isset($this->action['middlewares'])) {
+            $actionMiddleware = $this->action['middlewares'];
+            $middlewares      = is_array($actionMiddleware) ? $actionMiddleware : [$actionMiddleware];
+        }
 
-        return $this->middlewares = $mergedMiddlewares;
+        return array_unique(
+            array_merge(
+                $this->middlewares,
+                $middlewares,
+                $this->getControllerMiddlewares()
+            ),
+            SORT_REGULAR
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function gatherDisabledMiddlewares(): array
+    {
+        $bypass = [];
+
+        if (isset($this->action['bypass'])) {
+            $bypass = is_array($this->action['bypass']) ? $this->action['bypass'] : [$this->action['bypass']];
+        }
+
+        return array_unique(array_merge(
+            $this->bypassedMiddlewares,
+            $bypass,
+            $this->getControllerDisabledMiddlewares()
+        ), SORT_REGULAR);
     }
 
     /**
@@ -312,7 +327,11 @@ class Route implements RouteContract
      */
     public function getParameter(string $name, $default = null)
     {
-        return Arr::get($this->parameters, $name, $default);
+        if (isset($this->parameters[$name])) {
+            return $this->parameters[$name];
+        }
+
+        return $default;
     }
 
     /**
@@ -320,7 +339,7 @@ class Route implements RouteContract
      */
     public function hasParameter(string $name): bool
     {
-        return Arr::has($this->parameters, $name);
+        return isset($this->parameters[$name]);
     }
 
     /**
@@ -359,14 +378,10 @@ class Route implements RouteContract
         if (! $this->controller) {
             $container = $this->getContainer();
 
-            try {
+            if ($container->has($class)) {
                 $this->controller = $container->get($class);
-            } catch (NotFoundException $exception) {
-                if ($container instanceof FactoryContract) {
-                    $this->controller = $container->resolve($class);
-                } else {
-                    throw new $exception();
-                }
+            } elseif ($container instanceof FactoryContract) {
+                $this->controller = $container->resolve($class);
             }
         }
 
@@ -376,10 +391,8 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function run(ServerRequestInterface $request): ResponseInterface
+    public function run(): ResponseInterface
     {
-        $this->serverRequest = $request;
-
         if ($this->isControllerAction()) {
             return $this->getController()->{$this->getControllerMethod()}();
         }
@@ -414,11 +427,11 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the middleware for the route's controller.
+     * Get the bound route controller middlewares.
      *
      * @return array
      */
-    protected function getControllerMiddleware(): array
+    protected function getControllerMiddlewares(): array
     {
         if (! $this->isControllerAction()) {
             return [];
@@ -428,6 +441,26 @@ class Route implements RouteContract
 
         if (method_exists($controller, 'gatherMiddleware')) {
             return $controller->gatherMiddleware();
+        }
+
+        return [];
+    }
+
+    /**
+     * Get the bound route controller disabled middlewares.
+     *
+     * @return array
+     */
+    protected function getControllerDisabledMiddlewares(): array
+    {
+        if (! $this->isControllerAction()) {
+            return [];
+        }
+
+        $controller = $this->getController();
+
+        if (method_exists($controller, 'gatherDisabledMiddlewares')) {
+            return $controller->gatherDisabledMiddlewares();
         }
 
         return [];

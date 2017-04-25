@@ -285,21 +285,15 @@ abstract class AbstractRouteDispatcher
     protected function getRouteMiddlewares(RouteContract $route): array
     {
         $middlewares      = [];
-        $routeMiddlewares = $route->gatherMiddleware();
 
-        Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {
-            $middlewares[] = MiddlewareNameResolver::resolve($name, $this->middlewares, $this->middlewareGroups);
+        Arr::map($route->gatherMiddleware(), function ($name) use (&$middlewares) {
+            $middlewares[] = MiddlewareNameResolver::resolve(
+                $name,
+                $this->middlewares,
+                $this->middlewareGroups,
+                $route->gatherDisabledMiddlewares()
+            );
         });
-
-        if (count($routeMiddlewares['without_middlewares']) !== 0) {
-            $withoutMiddlewares = [];
-
-            Arr::map($routeMiddlewares['without_middlewares'], function ($name) use (&$withoutMiddlewares) {
-                $withoutMiddlewares[] = MiddlewareNameResolver::resolve($name, $this->middlewares, $this->middlewareGroups);
-            });
-
-            $middlewares = array_diff($middlewares, $withoutMiddlewares);
-        }
 
         return (new SortedMiddleware(
             $this->middlewarePriority,

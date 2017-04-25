@@ -33,4 +33,14 @@ abstract class AbstractController
     {
         return $this->middlewares;
     }
+
+    /**
+     * Return all disabled middlewares.
+     *
+     * @return array
+     */
+    public function gatherDisabledMiddlewares(): array
+    {
+        return $this->bypassedMiddlewares;
+    }
 }
