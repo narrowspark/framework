@@ -21,7 +21,7 @@ class RoutingServiceProvider implements ServiceProvider
     {
         return [
             RouterContract::class => [self::class, 'createRouter'],
-            'route' => function (ContainerInterface $container) {
+            'route'               => function (ContainerInterface $container) {
                 return $container->get(Router::class);
             },
             'router'              => function (ContainerInterface $container) {
