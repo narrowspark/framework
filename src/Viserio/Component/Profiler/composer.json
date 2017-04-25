@@ -2,7 +2,7 @@
     "name"       : "viserio/profiler",
     "type"       : "library",
     "description": "The Viserio Profiler package.",
-    "keywords"   : ["narrowspark", "viserio", "profiler", "web-profiler"],
+    "keywords"   : ["narrowspark", "viserio", "profiler", "web-profiler", "debugbar"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
