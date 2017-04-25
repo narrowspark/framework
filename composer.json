@@ -62,7 +62,6 @@
         "symfony/polyfill-mbstring"                          : "^1.0",
         "symfony/polyfill-intl-icu"                          : "^1.0",
         "symfony/process"                                    : "^3.2",
-        "symfony/stopwatch"                                  : "^3.2",
         "symfony/var-dumper"                                 : "^3.2",
         "swiftmailer/swiftmailer"                            : "^5.4",
         "vlucas/phpdotenv"                                   : "^2.3"
