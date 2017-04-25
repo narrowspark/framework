@@ -1,22 +1,18 @@
-# Viserio Session package
+<h1 align="center">Viserio Session Component</h1>
+<p align="center">
+    <a href="https://github.com/narrowspark/framework/releases"><img src="https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square"></a>
+    <a href="https://php.net/"><img src="https://img.shields.io/badge/php-%5E7.1.0-8892BF.svg?style=flat-square"></a>
+    <a href="https://codecov.io/gh/narrowspark/framework"><img src="https://img.shields.io/codecov/c/github/narrowspark/framework/master.svg?style=flat-square"></a>
+    <a href="https://gitter.im/narrowspark/framework"><img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square"></a>
+    <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
+</p>
 
-This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
-[![Author](http://img.shields.io/badge/author-@anolilab-blue.svg?style=flat-square)](https://twitter.com/anolilab)
-[![Quality Score](https://img.shields.io/scrutinizer/g/narrowspark/framework.svg?style=flat-square)](https://scrutinizer-ci.com/g/narrowspark/framework/code-structure/master)
-[![Build Status](https://api.travis-ci.org/narrowspark/framework.svg?branch=master&style=flat-square)](https://travis-ci.org/narrowspark/framework)
-[![Latest Version](https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square)](https://github.com/narrowspark/framework/releases)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%5E7.1.0-8892BF.svg?style=flat-square)](https://php.net/)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
-> **Note:** If you want to build an application using Narrowspark, visit the main [![Source Code](http://img.shields.io/badge/source-narrowspark/narrowspark-blue.svg?style=flat-square)](https://github.com/narrowspark/narrowspark).
+> **Note:** This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework). <br> If you want to build an application using Narrowspark, visit the main [source](https://github.com/narrowspark/framework).
 
-## Contributing
-
-Issues for this package shall be posted on [Narrowspark framework issues](http://github.com/narrowspark/framework/issues).
-Thank you for considering contributing to the Narrowspark framework! The contribution guide can be found in the [Narrowspark documentation](http://narrowspark.de/docs/contributions).
-
-## Installation
+Installation
+-------------
 
 Use [Composer](https://getcomposer.org/) to install this package:
 
@@ -24,10 +20,17 @@ Use [Composer](https://getcomposer.org/) to install this package:
 composer require viserio/session
 ```
 
-## Official Documentation
+Official Documentation
+-------------
 
-Documentation for the framework can be found on the [Narrowspark website](http://narrowspark.de/docs).
+Documentation for the framework can be found on the [Narrowspark website](http://narrowspark.com/docs).
 
-### License
+Contributing
+-------------
+Issues for this package shall be posted on [Narrowspark framework issues](http://github.com/narrowspark/framework/issues). <br>
+Thank you for considering contributing to the Narrowspark framework! The contribution guide can be found in the [Narrowspark contributing](/CONTRIBUTING.md).
+
+License
+-------------
 
 The Narrowspark framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).

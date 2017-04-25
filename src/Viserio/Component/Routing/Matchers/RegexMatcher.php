@@ -4,7 +4,7 @@ namespace Viserio\Component\Routing\Matchers;
 
 use RuntimeException;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
-use Viserio\Component\Routing\VarExporter;
+use Viserio\Component\Support\VarExporter;
 
 class RegexMatcher extends AbstractMatcher
 {
