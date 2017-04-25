@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Matchers;
 
 use RuntimeException;
-use Viserio\Component\Routing\VarExporter;
+use Viserio\Component\Support\VarExporter;
 
 class StaticMatcher extends AbstractMatcher
 {
