@@ -220,7 +220,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
         if (! empty($this->groupStack)) {
             $last = end($this->groupStack);
 
-            return isset($last['prefix']) ? $last['prefix'] : '';
+            return $last['prefix'] ?? '';
         }
 
         return '';

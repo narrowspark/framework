@@ -63,7 +63,7 @@ class Group
      */
     protected static function formatGroupPrefix(array $new, array $old): ?string
     {
-        $oldPrefix = Arr::get($old, 'prefix');
+        $oldPrefix = $old['prefix'] ?? null;
 
         if (isset($new['prefix'])) {
             return trim($oldPrefix, '/') . '/' . trim($new['prefix'], '/');
@@ -118,7 +118,7 @@ class Group
     protected static function formatAs(array $new, array $old): array
     {
         if (isset($old['as'])) {
-            $new['as'] = $old['as'] . Arr::get($new, 'as', '');
+            $new['as'] = $old['as'] . ($new['as'] ?? '');
         }
 
         return $new;
