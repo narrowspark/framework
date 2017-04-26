@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
+use Fig\Http\Message\RequestMethodInterface;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
-class Request extends AbstractMessage implements RequestInterface
+class Request extends AbstractMessage implements RequestInterface, RequestMethodInterface
 {
     /**
      * The request method.
@@ -32,15 +33,15 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * Create a new request instance.
      *
-     * @param null|string|UriInterface                               $uri     uRI for the request
-     * @param string|null                                            $method  hTTP method for the request
+     * @param null|string|UriInterface                               $uri     uri for the request
+     * @param string|null                                            $method  http method for the request
      * @param array                                                  $headers headers for the message
      * @param string|null|resource|\Psr\Http\Message\StreamInterface $body    message body
-     * @param string                                                 $version hTTP protocol version
+     * @param string                                                 $version http protocol version
      */
     public function __construct(
         $uri,
-        ?string $method = 'GET',
+        ?string $method = self::METHOD_GET,
         array $headers = [],
         $body = null,
         string $version = '1.1'
@@ -187,7 +188,7 @@ class Request extends AbstractMessage implements RequestInterface
     private function filterMethod(?string $method): string
     {
         if ($method === null) {
-            return 'GET';
+            return self::METHOD_GET;
         }
 
         $method = mb_strtoupper($method);
