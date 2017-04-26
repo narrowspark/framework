@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
+use Fig\Http\Message\RequestMethodInterface;
 use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +14,6 @@ use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
-use Fig\Http\Message\RequestMethodInterface;
 
 class Router extends AbstractRouteDispatcher implements RouterContract, RequestMethodInterface
 {
@@ -120,7 +120,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract, RequestM
                 self::METHOD_CONNECT,
                 self::METHOD_TRACE,
                 'LINK',
-                'UNLINK'
+                'UNLINK',
             ],
             $uri,
             $action
