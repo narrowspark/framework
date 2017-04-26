@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapters;
 
 use InvalidArgumentException;
+use Narrowspark\Arr\Arr;
 use Spatie\Dropbox\Client;
 use Spatie\FlysystemDropbox\DropboxAdapter;
-use Narrowspark\Arr\Arr;
 
 class DropboxConnector extends AbstractConnector
 {

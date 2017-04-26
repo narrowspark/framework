@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests\Adapters;
 
-use Spatie\FlysystemDropbox\DropboxAdapter;
 use PHPUnit\Framework\TestCase;
+use Spatie\FlysystemDropbox\DropboxAdapter;
 use Viserio\Component\Filesystem\Adapters\DropboxConnector;
 
 class DropboxConnectorTest extends TestCase
