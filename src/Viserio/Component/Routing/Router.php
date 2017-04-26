@@ -13,8 +13,9 @@ use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
+use Fig\Http\Message\RequestMethodInterface;
 
-class Router extends AbstractRouteDispatcher implements RouterContract
+class Router extends AbstractRouteDispatcher implements RouterContract, RequestMethodInterface
 {
     use InvokerAwareTrait;
     use MacroableTrait;
@@ -49,7 +50,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function get(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute(['GET', 'HEAD'], $uri, $action);
+        return $this->addRoute([self::METHOD_GET, self::METHOD_HEAD], $uri, $action);
     }
 
     /**
@@ -57,7 +58,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function post(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('POST', $uri, $action);
+        return $this->addRoute(self::METHOD_POST, $uri, $action);
     }
 
     /**
@@ -65,7 +66,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function put(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('PUT', $uri, $action);
+        return $this->addRoute(self::METHOD_PUT, $uri, $action);
     }
 
     /**
@@ -73,7 +74,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function patch(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('PATCH', $uri, $action);
+        return $this->addRoute(self::METHOD_PATCH, $uri, $action);
     }
 
     /**
@@ -81,7 +82,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function head(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('HEAD', $uri, $action);
+        return $this->addRoute(self::METHOD_HEAD, $uri, $action);
     }
 
     /**
@@ -89,7 +90,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function delete(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('DELETE', $uri, $action);
+        return $this->addRoute(self::METHOD_DELETE, $uri, $action);
     }
 
     /**
@@ -97,7 +98,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function options(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('OPTIONS', $uri, $action);
+        return $this->addRoute(self::METHOD_OPTIONS, $uri, $action);
     }
 
     /**
@@ -105,7 +106,25 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function any(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute(self::HTTP_METHOD_VARS, $uri, $action);
+        return $this->addRoute(
+            [
+                self::METHOD_HEAD,
+                self::METHOD_GET,
+                self::METHOD_POST,
+                self::METHOD_PUT,
+                self::METHOD_PATCH,
+                self::METHOD_DELETE,
+                self::METHOD_PURGE,
+                self::METHOD_OPTIONS,
+                self::METHOD_TRACE,
+                self::METHOD_CONNECT,
+                self::METHOD_TRACE,
+                'LINK',
+                'UNLINK'
+            ],
+            $uri,
+            $action
+        );
     }
 
     /**

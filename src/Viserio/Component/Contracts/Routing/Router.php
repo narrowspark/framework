@@ -29,13 +29,6 @@ interface Router
     public const HTTP_METHOD_NOT_ALLOWED = 2;
 
     /**
-     * All of the verbs supported by the router.
-     *
-     * @var array
-     */
-    public const HTTP_METHOD_VARS = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
-
-    /**
      * Register a new GET route with the router.
      *
      * @param string                     $uri
