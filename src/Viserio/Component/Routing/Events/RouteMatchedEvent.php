@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Events;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Events\Event as EventContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;

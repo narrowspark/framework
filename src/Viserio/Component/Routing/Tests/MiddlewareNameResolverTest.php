@@ -15,8 +15,8 @@ class MiddlewareNameResolverTest extends TestCase
         ];
         $middlewareGroups = [];
 
-        self::assertSame($map['test'], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups));
-        self::assertSame('dontexists', MiddlewareNameResolver::resolve('dontexists', $map, $middlewareGroups));
+        self::assertSame($map['test'], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups, []));
+        self::assertSame('dontexists', MiddlewareNameResolver::resolve('dontexists', $map, $middlewareGroups, []));
     }
 
     public function testRolveMiddlewareGroup()
@@ -32,7 +32,7 @@ class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups));
+        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 
     public function testRolveMiddlewareGroupWitNestedGroup()
@@ -53,6 +53,6 @@ class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups));
+        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 }

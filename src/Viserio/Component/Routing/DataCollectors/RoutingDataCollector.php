@@ -60,15 +60,14 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
 
         foreach ($this->data['routes'] as $route) {
             $middlewares        = $route->gatherMiddleware();
-            $middleware         = array_values($middlewares['middlewares']);
-            $withoutMiddlewares = array_values($middlewares['without_middlewares']);
+            $withoutMiddlewares = $route->gatherDisabledMiddlewares();
 
             $routeData = [
                 0 => implode(' | ', $route->getMethods()),
                 2 => $route->getUri(),
                 3 => $route->getName() ?? '',
                 4 => $route->getActionName(),
-                5 => implode(', ', $middleware),
+                5 => implode(', ', $middlewares),
                 6 => implode(', ', $withoutMiddlewares),
             ];
 

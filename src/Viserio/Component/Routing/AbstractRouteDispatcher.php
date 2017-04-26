@@ -233,7 +233,8 @@ abstract class AbstractRouteDispatcher
             $this->getEventManager()->trigger(
                 new RouteMatchedEvent(
                     $this,
-                    ['route' => $route, 'server_request' => $serverRequest]
+                    $route,
+                    $serverRequest
                 )
             );
         }
@@ -264,7 +265,7 @@ abstract class AbstractRouteDispatcher
      */
     protected function runRouteWithinStack(RouteContract $route, ServerRequestInterface $request): ResponseInterface
     {
-        $middlewares = $this->getRouteMiddlewares($route);
+        $middlewares = $this->gatherRouteMiddleware($route);
 
         return (new Pipeline())
             ->setContainer($this->getContainer())
@@ -282,11 +283,11 @@ abstract class AbstractRouteDispatcher
      *
      * @return array
      */
-    protected function getRouteMiddlewares(RouteContract $route): array
+    protected function gatherRouteMiddleware(RouteContract $route): array
     {
         $middlewares      = [];
 
-        Arr::map($route->gatherMiddleware(), function ($name) use (&$middlewares) {
+        Arr::map($route->gatherMiddleware(), function ($name) use (&$middlewares, $route) {
             $middlewares[] = MiddlewareNameResolver::resolve(
                 $name,
                 $this->middlewares,

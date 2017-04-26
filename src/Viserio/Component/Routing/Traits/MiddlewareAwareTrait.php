@@ -44,14 +44,14 @@ trait MiddlewareAwareTrait
     /**
      * Set the middlewares to the route.
      *
-     * @param string|array $middleware
+     * @param string|array $middlewares
      *
      * @throws \RuntimeException
      * @throws \LogicException
      *
      * @return $this
      */
-    public function withMiddleware($middleware)
+    public function withMiddleware($middlewares)
     {
         $this->validateMiddlewareInput($middlewares);
         $this->validateMiddlewareClass($middlewares);
@@ -82,7 +82,7 @@ trait MiddlewareAwareTrait
      */
     public function withoutMiddleware($middlewares = null)
     {
-        if ($middleware === null) {
+        if ($middlewares === null) {
             $this->middlewares[] = [];
 
             return $this;
@@ -119,7 +119,7 @@ trait MiddlewareAwareTrait
             return;
         }
 
-        throw new RuntimeException(sprintf('Expected string or array; received [%s]', gettype($middlewares)));
+        throw new RuntimeException(sprintf('Expected string or array; received [%s].', gettype($middlewares)));
     }
 
     /**

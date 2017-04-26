@@ -121,6 +121,9 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
         $router->getContainer()->shouldReceive('get')
             ->with(ControllerClosureMiddleware::class)
             ->andReturn(new ControllerClosureMiddleware());
+        $router->getContainer()->shouldReceive('has')
+            ->with(RouteTestClosureMiddlewareController::class)
+            ->andReturn(true);
         $router->getContainer()->shouldReceive('get')
             ->with(RouteTestClosureMiddlewareController::class)
             ->andReturn(new RouteTestClosureMiddlewareController());
@@ -137,9 +140,9 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
         ])->setParameter('name', 'middleware3');
 
         $router->get('/middleware4', [
-            'uses'                => RouteTestClosureMiddlewareController::class . '@index',
-            'middlewares'         => FooMiddleware::class,
-            'without_middlewares' => FooMiddleware::class,
+            'uses'        => RouteTestClosureMiddlewareController::class . '@index',
+            'middlewares' => FooMiddleware::class,
+            'bypass'      => FooMiddleware::class,
         ])->setParameter('name', 'middleware4');
 
         $router->getContainer()->shouldReceive('has')

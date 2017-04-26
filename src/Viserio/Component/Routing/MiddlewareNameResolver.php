@@ -16,7 +16,7 @@ class MiddlewareNameResolver
      */
     public static function resolve(string $name, array $map, array $middlewareGroups, array $disabledMiddlewares)
     {
-        if (isset($disabledMiddlewares[$name])) {
+        if (isset($disabledMiddlewares[$name]) || in_array($name, $disabledMiddlewares)) {
             return [];
         } elseif (isset($middlewareGroups[$name])) {
             return self::parseMiddlewareGroup($name, $map, $middlewareGroups, $disabledMiddlewares);

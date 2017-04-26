@@ -222,24 +222,6 @@ interface Router
     public function getGroupStack(): array;
 
     /**
-     * Add a middleware to all routes.
-     *
-     * @param string $middleware
-     *
-     * @return $this
-     */
-    public function withMiddleware(string $middleware);
-
-    /**
-     * Remove a middleware from all routes.
-     *
-     * @param string $middleware
-     *
-     * @return $this
-     */
-    public function withoutMiddleware(string $middleware);
-
-    /**
      * Get all with and without middlewares.
      *
      * @return array
@@ -264,13 +246,6 @@ interface Router
      * @return $this
      */
     public function setMiddlewarePriorities(array $middlewarePriorities);
-
-    /**
-     * Add a list of middlewares.
-     *
-     * @param array $middlewares
-     */
-    public function addMiddlewares(array $middlewares): void;
 
     /**
      * Get the currently dispatched route instance.
