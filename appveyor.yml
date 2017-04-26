@@ -38,7 +38,7 @@ install:
   - IF %PHP%==1 appveyor DownloadFile https://raw.githubusercontent.com/symfony/binary-utils/master/cacert.pem
   - IF %PHP%==1 cd ext
   - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/mongodb/1.2.2/php_mongodb-1.2.2-7.1-nts-vc14-x64.zip
-  - IF %PHP%==1 7z x php_mongodb-1.2.2-7.1-nts-vc14-x86.zip -y >nul
+  - IF %PHP%==1 7z x php_mongodb-1.2.2-7.1-nts-vc14-x64.zip -y >nul
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ..
   - IF %PHP%==1 copy /Y php.ini-production php.ini
