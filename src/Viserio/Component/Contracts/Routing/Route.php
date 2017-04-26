@@ -8,13 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 interface Route
 {
     /**
-     * Get the route server request.
-     *
-     * @return \Psr\Http\Message\ServerRequestInterface
-     */
-    public function getServerRequest(): ServerRequestInterface;
-
-    /**
      * Get the domain defined for the route.
      *
      * @return string|null
@@ -215,7 +208,9 @@ interface Route
     /**
      * Run the route action and return the response.
      *
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function run(): ResponseInterface;
+    public function run(ServerRequestInterface $serverRequest): ResponseInterface;
 }

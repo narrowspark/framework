@@ -19,13 +19,6 @@ class Route implements RouteContract
     use MiddlewareAwareTrait;
 
     /**
-     * A server request instance.
-     *
-     * @var \Psr\Http\Message\ServerRequestInterface
-     */
-    protected $serverRequest;
-
-    /**
      * The URI pattern the route responds to.
      *
      * @var string
@@ -121,14 +114,6 @@ class Route implements RouteContract
     public function getIdentifier(): string
     {
         return implode($this->httpMethods, '|') . $this->getDomain() . $this->uri;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getServerRequest(): ServerRequestInterface
-    {
-        return $this->serverRequest;
     }
 
     /**
@@ -390,7 +375,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function run(): ResponseInterface
+    public function run(ServerRequestInterface $serverRequest): ResponseInterface
     {
         if ($this->isControllerAction()) {
             return $this->getController()->{$this->getControllerMethod()}();
@@ -398,7 +383,7 @@ class Route implements RouteContract
 
         return $this->getInvoker()->call(
             $this->action['uses'],
-            [$request, $this->parameters]
+            [$serverRequest, $this->parameters]
         );
     }
 
