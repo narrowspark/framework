@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
+use Fig\Http\Message\RequestMethodInterface;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Matchers\RegexMatcher;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\Route;
@@ -12,7 +12,6 @@ use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
 use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
-use Fig\Http\Message\RequestMethodInterface;
 
 class RouteTreeBuilderTest extends TestCase
 {
@@ -29,7 +28,7 @@ class RouteTreeBuilderTest extends TestCase
         RequestMethodInterface::METHOD_CONNECT,
         RequestMethodInterface::METHOD_TRACE,
         'LINK',
-        'UNLINK'
+        'UNLINK',
     ];
 
     public function routeTreeBuilderCases()
