@@ -62,7 +62,6 @@
         "symfony/polyfill-mbstring"                          : "^1.0",
         "symfony/polyfill-intl-icu"                          : "^1.0",
         "symfony/process"                                    : "^3.2",
-        "symfony/var-dumper"                                 : "^3.2",
         "swiftmailer/swiftmailer"                            : "^5.4",
         "vlucas/phpdotenv"                                   : "^2.3"
     },
@@ -137,6 +136,7 @@
         "twig/twig"                                          : "^2.0",
         "sepia/po-parser"                                    : "^4.2",
         "symfony/routing"                                    : "^3.1",
+        "symfony/var-dumper"                                 : "^3.2",
         "symfony/yaml"                                       : "^3.1",
         "yosymfony/toml"                                     : "^0.3"
     },
