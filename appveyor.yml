@@ -4,7 +4,7 @@ platform:
 clone_depth: 1
 clone_folder: c:\projects\narrowspark
 
- environment:
+environment:
   matrix:
   - dependencies: lowest
     php_ver_target: 7.1
