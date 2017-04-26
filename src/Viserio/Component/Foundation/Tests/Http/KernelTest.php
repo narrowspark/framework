@@ -31,10 +31,6 @@ class KernelTest extends MockeryTestCase
         $kernel                 = new class() extends Kernel {
             public $middlewares = [];
 
-            protected $routeWithoutMiddlewares = [
-                'test',
-            ];
-
             protected $middlewareGroups = [
                 'test' => ['web'],
             ];

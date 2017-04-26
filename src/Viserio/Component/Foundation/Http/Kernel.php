@@ -49,13 +49,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     protected $routeMiddlewares = [];
 
     /**
-     * The application's route without a middleware.
-     *
-     * @var array
-     */
-    protected $routeWithoutMiddlewares = [];
-
-    /**
      * The priority-sorted list of middleware.
      *
      * Forces the listed middleware to always be in the given order.
@@ -88,11 +81,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $router = $this->getContainer()->get(RouterContract::class);
 
         $router->setMiddlewarePriorities($this->middlewarePriority);
-        $router->addMiddlewares($this->routeMiddlewares);
-
-        foreach ($this->routeWithoutMiddlewares as $routeWithoutMiddleware) {
-            $router->withoutMiddleware($routeWithoutMiddleware);
-        }
+        $router->withMiddleware($this->routeMiddlewares);
 
         foreach ($this->middlewareGroups as $key => $middleware) {
             $router->setMiddlewareGroup($key, $middleware);

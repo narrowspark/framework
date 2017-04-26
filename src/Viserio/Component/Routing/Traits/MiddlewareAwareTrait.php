@@ -141,11 +141,13 @@ trait MiddlewareAwareTrait
             }
         };
 
-        if (is_string($middlewares)) {
+        if (is_string($middlewares) && ! isset($this->middlewares[$middlewares])) {
             $middlewareCheck($middlewares);
         } elseif (is_array($middlewares)) {
-            foreach ($middlewares as $middleware) {
-                $middlewareCheck($middlewares);
+            foreach ($middlewares as $name => $middleware) {
+                if (! isset($this->middlewares[$middleware])) {
+                    $middlewareCheck($middlewares);
+                }
             }
         }
     }
