@@ -41,6 +41,7 @@
         "doctrine/dbal"                                      : "^2.5",
         "doctrine/migrations"                                : "^1.4",
         "egulias/email-validator"                            : "^2.1",
+        "fig/http-message-util"                              : "^1.1",
         "http-interop/http-factory"                          : "^0.3",
         "http-interop/http-middleware"                       : "^0.4",
         "league/flysystem"                                   : "^1.0",

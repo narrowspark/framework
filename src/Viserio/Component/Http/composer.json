@@ -19,6 +19,7 @@
     ],
     "require": {
         "php"                             : "^7.1",
+        "fig/http-message-util"           : "^1.1",
         "league/uri"                      : "^5.0",
         "narrowspark/http-status"         : "^3.0",
         "psr/http-message"                : "^1.0",
