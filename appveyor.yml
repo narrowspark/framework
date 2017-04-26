@@ -6,10 +6,16 @@ clone_folder: c:\projects\narrowspark
 
 environment:
   matrix:
-  - dependencies: lowest
-    php_ver_target: 7.1
-  - dependencies: highest
-    php_ver_target: 7.1
+    - dependencies: lowest
+      php_ver_target: 7.1
+    - dependencies: highest
+      php_ver_target: 7.1
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - dependencies: lowest
+      php_ver_target: 7.1
 
 cache:
   - '%LOCALAPPDATA%\Composer\files -> composer.lock'
