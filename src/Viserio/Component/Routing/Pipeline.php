@@ -43,21 +43,13 @@ class Pipeline extends BasePipeline
 
         if ($this->container->has($name)) {
             $class = $this->container->get($name);
-        // @codeCoverageIgnoreStart
         } elseif ($this->container instanceof FactoryContract) {
             $class = $this->container->resolve($name);
         } else {
             throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.', $name));
         }
-        // @codeCoverageIgnoreStop
 
-        return $this->getInvoker()->call(
-            [
-                $class,
-                $this->method,
-            ],
-            $parameters
-        );
+        return $this->getInvoker()->call([$class, $this->method], $parameters);
     }
 
     /**

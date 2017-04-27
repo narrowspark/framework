@@ -31,18 +31,6 @@ class MiddlewareBasedDispatcher extends BasicDispatcher
     protected $middlewarePriority = [];
 
     /**
-     * Add a middleware list.
-     *
-     * @param array $middlewares
-     *
-     * @return void
-     */
-    public function addMiddlewares(array $middlewares): void
-    {
-        $this->middlewares = $middlewares;
-    }
-
-    /**
      * Register a group of middleware.
      *
      * @param string $name

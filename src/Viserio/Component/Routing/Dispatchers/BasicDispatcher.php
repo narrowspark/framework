@@ -7,16 +7,16 @@ use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Routing\Events\RouteMatchedEvent;
-use Viserio\Component\Routing\Route\Collection;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeCompiler;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class BasicDispatcher
+class BasicDispatcher implements DispatcherContract
 {
     use EventsAwareTrait;
     use NormalizePathAndDirectorySeparatorTrait;
@@ -43,15 +43,24 @@ class BasicDispatcher
     protected $refreshCache = false;
 
     /**
-     * {@inheritdoc}
+     * Create a new basic dispatcher instance.
+     *
+     * @var string
+     * @var bool   $refreshCache
+     *
+     * @param string $path
+     * @param bool   $refreshCache
      */
-    public function setCachePath(string $path): void
+    public function __construct(string $path, bool $refreshCache = false)
     {
-        $this->path = self::normalizeDirectorySeparator($path);
+        $this->path         = self::normalizeDirectorySeparator($path);
+        $this->refreshCache = $refreshCache;
     }
 
     /**
-     * {@inheritdoc}
+     * Get the cache path for the compiled routes.
+     *
+     * @return string
      */
     public function getCachePath(): string
     {
@@ -61,113 +70,76 @@ class BasicDispatcher
     /**
      * {@inheritdoc}
      */
-    public function refreshCache(bool $refreshCache): void
+    public function getCurrentRoute(): ?RouteContract
     {
-        $this->refreshCache = $refreshCache;
+        return $this->current;
     }
 
     /**
-     * Match and dispatch a route matching the given http method and
-     * uri, returning an execution chain.
-     *
-     * @param \Viserio\Component\Routing\Route\Collection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface    $request
-     *
-     * @throws \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
-     * @throws \Narrowspark\HttpStatus\Exception\NotFoundException
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * {@inheritdoc}
      */
-    public function dispatchToRoute(Collection $routes, ServerRequestInterface $request): ResponseInterface
+    public function handle(RouteCollectionContract $routes, ServerRequestInterface $request): ResponseInterface
     {
         if (! file_exists($this->path) || $this->refreshCache === true) {
-            $this->createCacheFolder($this->path);
-            $this->generateRouterFile($routes);
+            static::createCacheFolder($this->path);
+            static::generateRouterFile($routes);
         }
 
-        $router = require $this->path;
-        $match  = $router(
-            $request->getMethod(),
-           '/' . ltrim($request->getUri()->getPath(), '/')
-        );
+        $router              = require $this->path;
+        $preparedRequestPath = '/' . ltrim($request->getUri()->getPath(), '/');
 
-        if ($match[0] === RouterContract::FOUND) {
+        $match = $router($request->getMethod(), $preparedRequestPath);
+
+        if ($match[0] === self::FOUND) {
             return $this->handleFound($routes, $request, $match[1], $match[2]);
         }
 
-        $requestPath = ltrim($request->getUri()->getPath(), '/');
-
-        if ($match[0] === RouterContract::HTTP_METHOD_NOT_ALLOWED) {
+        if ($match[0] === self::HTTP_METHOD_NOT_ALLOWED) {
             throw new MethodNotAllowedException(sprintf(
-                '405 Method [%s] Not Allowed: For requested route [/%s]',
+                '405 Method [%s] Not Allowed: For requested route [%s]',
                 implode(',', $match[1]),
-                $requestPath
+                $preparedRequestPath
             ));
         }
 
         throw new NotFoundException(sprintf(
-            '404 Not Found: Requested route [/%s]',
-            $requestPath
+            '404 Not Found: Requested route [%s]',
+            $preparedRequestPath
         ));
     }
 
     /**
      * Handle dispatching of a found route.
      *
-     * @param \Viserio\Component\Routing\Route\Collection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface    $serverRequest
-     * @param string                                      $identifier
-     * @param array                                       $segments
+     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
+     * @param \Psr\Http\Message\ServerRequestInterface             $request
+     * @param string                                               $identifier
+     * @param array                                                $segments
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function handleFound(
         Collection $routes,
-        ServerRequestInterface $serverRequest,
+        ServerRequestInterface $request,
         string $identifier,
         array $segments
     ): ResponseInterface {
         $route = $routes->match($identifier);
 
-        foreach ($this->globalParameterConditions as $key => $value) {
-            $route->setParameter($key, $value);
-        }
-
         foreach ($segments as $key => $value) {
             $route->setParameter($key, rawurldecode($value));
         }
 
-        // Add route to the request's attributes in case a middleware or handler needs access to the route
-        $serverRequest = $serverRequest->withAttribute('_route', $route);
+        // Add route to the request's attributes in case a middleware or handler needs access to the route.
+        $request = $request->withAttribute('_route', $route);
 
         $this->current = $route;
 
         if ($this->events !== null) {
-            $this->getEventManager()->trigger(
-                new RouteMatchedEvent(
-                    $this,
-                    $route,
-                    $serverRequest
-                )
-            );
+            $this->getEventManager()->trigger(new RouteMatchedEvent($this, $route, $request));
         }
 
-        return $this->runRouteWithinStack($route, $serverRequest);
-    }
-
-    /**
-     * Generates a router file with all routes.
-     *
-     * @param \Viserio\Component\Routing\Route\Collection $routes
-     *
-     * @return void
-     */
-    protected function generateRouterFile(Collection $routes): void
-    {
-        $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
-        $closure        = $routerCompiler->compile($routes->getRoutes());
-
-        file_put_contents($this->path, $closure, LOCK_EX);
+        return $this->runRouteWithinStack($route, $request);
     }
 
     /**
@@ -184,13 +156,28 @@ class BasicDispatcher
     }
 
     /**
+     * Generates a router file with all routes.
+     *
+     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
+     *
+     * @return void
+     */
+    protected static function generateRouterFile(RouteCollectionContract $routes): void
+    {
+        $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
+        $closure        = $routerCompiler->compile($routes->getRoutes());
+
+        file_put_contents($this->path, $closure, LOCK_EX);
+    }
+
+    /**
      * Make a nested path, creating directories down the path recursion.
      *
      * @param string $path
      *
      * @return bool
      */
-    protected function createCacheFolder(string $path): bool
+    protected static function createCacheFolder(string $path): bool
     {
         $dir = pathinfo($path, PATHINFO_DIRNAME);
 
@@ -198,7 +185,7 @@ class BasicDispatcher
             return true;
         }
 
-        if ($this->createCacheFolder($dir)) {
+        if (static::createCacheFolder($dir)) {
             if (mkdir($dir)) {
                 chmod($dir, 0777);
 

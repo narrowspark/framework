@@ -4,9 +4,10 @@ namespace Viserio\Component\Routing;
 
 use Closure;
 use Fig\Http\Message\RequestMethodInterface;
-use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
@@ -15,8 +16,9 @@ use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
-class Router extends AbstractRouteDispatcher implements RouterContract, RequestMethodInterface
+class Router implements RouterContract, RequestMethodInterface
 {
+    use ContainerAwareTrait;
     use InvokerAwareTrait;
     use MacroableTrait;
 
@@ -51,12 +53,14 @@ class Router extends AbstractRouteDispatcher implements RouterContract, RequestM
     /**
      * Create a new Router instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Interop\Container\ContainerInterface           $container
+     * @param \Viserio\Component\Contracts\Routing\Dispatcher $dispatcher
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(DispatcherContract $dispatcher)
     {
-        $this->container = $container;
-        $this->routes    = new RouteCollection();
+        $this->container  = $container;
+        $this->dispatcher = $dispatcher;
+        $this->routes     = new RouteCollection();
     }
 
     /**
@@ -280,7 +284,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract, RequestM
      */
     public function getCurrentRoute()
     {
-        return $this->current;
+        return $this->dispatcher->getCurrentRoute();
     }
 
     /**
@@ -296,7 +300,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract, RequestM
      */
     public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->dispatchToRoute($request);
+        return $this->dispatcher->handle($this->routes, $request);
     }
 
     /**
@@ -332,7 +336,11 @@ class Router extends AbstractRouteDispatcher implements RouterContract, RequestM
         }
 
         $route = new Route($methods, $this->prefix($this->suffix($uri)), $action);
-        $route->setContainer($this->getContainer());
+
+        if ($this->container !== null) {
+            $route->setContainer($this->getContainer());
+        }
+
         $route->setInvoker($this->getInvoker());
 
         if ($this->hasGroupStack()) {
@@ -340,6 +348,10 @@ class Router extends AbstractRouteDispatcher implements RouterContract, RequestM
         }
 
         $this->addWhereClausesToRoute($route);
+
+        foreach ($this->globalParameterConditions as $key => $value) {
+            $route->setParameter($key, $value);
+        }
 
         return $route;
     }

@@ -8,27 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 interface Router
 {
     /**
-     * Match number for a not found route.
-     *
-     * @var int
-     */
-    public const NOT_FOUND = 0;
-
-    /**
-     * Match number for a found route.
-     *
-     * @var int
-     */
-    public const FOUND = 1;
-
-    /**
-     * Match number for a not allowed http method.
-     *
-     * @var int
-     */
-    public const HTTP_METHOD_NOT_ALLOWED = 2;
-
-    /**
      * Register a new GET route with the router.
      *
      * @param string                     $uri
@@ -215,32 +194,6 @@ interface Router
     public function getGroupStack(): array;
 
     /**
-     * Get all with and without middlewares.
-     *
-     * @return array
-     */
-    public function getMiddlewares(): array;
-
-    /**
-     * Register a group of middleware.
-     *
-     * @param string $name
-     * @param array  $middleware
-     *
-     * @return $this
-     */
-    public function setMiddlewareGroup(string $name, array $middleware);
-
-    /**
-     * Set a list of middleware priorities.
-     *
-     * @param array $middlewarePriorities
-     *
-     * @return $this
-     */
-    public function setMiddlewarePriorities(array $middlewarePriorities);
-
-    /**
      * Get the currently dispatched route instance.
      *
      * @return \Viserio\Component\Contracts\Routing\Route|null
@@ -262,29 +215,4 @@ interface Router
      * @return \Viserio\Component\Contracts\Routing\RouteCollection
      */
     public function getRoutes(): RouteCollection;
-
-    /**
-     * Set the cache path for compiled routes.
-     *
-     * @param string $path
-     *
-     * @return void
-     */
-    public function setCachePath(string $path): void;
-
-    /**
-     * Get the cache path for the compiled routes.
-     *
-     * @return string
-     */
-    public function getCachePath(): string;
-
-    /**
-     * Refresh cache file on development.
-     *
-     * @param bool $refreshCache
-     *
-     * @return void
-     */
-    public function refreshCache(bool $refreshCache): void;
 }

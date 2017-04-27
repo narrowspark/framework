@@ -359,13 +359,17 @@ class Route implements RouteContract
     {
         list($class) = explode('@', $this->action['uses']);
 
-        if (! $this->controller) {
-            $container = $this->getContainer();
+        if ($this->controller === null) {
+            if ($this->container !== null) {
+                $container = $this->getContainer();
 
-            if ($container->has($class)) {
-                $this->controller = $container->get($class);
-            } elseif ($container instanceof FactoryContract) {
-                $this->controller = $container->resolve($class);
+                if ($container->has($class)) {
+                    $this->controller = $container->get($class);
+                } elseif ($container instanceof FactoryContract) {
+                    $this->controller = $container->resolve($class);
+                }
+            } else {
+                $this->controller = new $class();
             }
         }
 
