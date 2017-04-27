@@ -287,7 +287,7 @@ abstract class AbstractRouteDispatcher
     {
         $middlewares      = [];
 
-        Arr::map($route->gatherMiddleware(), function ($name) use (&$middlewares, $route) {
+        self::map($route->gatherMiddleware(), function ($name) use (&$middlewares, $route) {
             $middlewares[] = MiddlewareNameResolver::resolve(
                 $name,
                 $this->middlewares,
@@ -298,8 +298,54 @@ abstract class AbstractRouteDispatcher
 
         return (new SortedMiddleware(
             $this->middlewarePriority,
-            array_values(Arr::flatten($middlewares))
+            array_values(self::flatten($middlewares))
         ))->getAll();
+    }
+
+    /**
+     * Applies the callback to the elements of the given arrays
+     *
+     * @param array    $array
+     * @param callable $callback
+     *
+     * @return array
+     */
+    protected static function map(array $array, callable $callback): array
+    {
+        $newArray = [];
+
+        foreach ($array as $key => $item) {
+            $result = $callback($item, $key);
+
+            $newArray = is_array($result) ?
+                array_replace_recursive($array, $result) :
+                array_merge_recursive($array, (array) $result);
+        }
+
+        return $newArray;
+    }
+
+    /**
+     * Flatten a nested array to a separated key.
+     *
+     * @param array  $array
+     * @param string $prepend
+     *
+     * @return array
+     */
+    protected static function flatten(array $array, string $prepend = ''): array
+    {
+        $flattened = [];
+
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $flattened = array_merge($flattened, static::flatten($value, $prepend . $key));
+            } else {
+                $flattened[$prepend . $key] = $value;
+            }
+        }
+
+        return $flattened;
     }
 
     /**

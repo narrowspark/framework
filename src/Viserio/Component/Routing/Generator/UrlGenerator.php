@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Generator;
 
 use Interop\Http\Factory\UriFactoryInterface;
-use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Viserio\Component\Contracts\Routing\Exceptions\RouteNotFoundException;
@@ -341,7 +340,13 @@ class UrlGenerator implements UrlGeneratorContract
     {
         return preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
             if (isset($parameters[$m[1]]) && ! empty($parameters[$m[1]])) {
-                return Arr::pull($parameters, $m[1]);
+                $parameter = $parameters[$m[1]] ?? null;
+
+                if ($parameter !== null) {
+                    unset($parameters[$m[1]]);
+                }
+
+                return $parameter;
             }
 
             return $m[0];

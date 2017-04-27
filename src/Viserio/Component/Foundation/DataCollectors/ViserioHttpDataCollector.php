@@ -64,9 +64,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     public function __construct(RouterContract $router, RepositoryContract $config)
     {
-        $this->route         = $router->getCurrentRoute();
-        $this->serverRequest = $this->route->getServerRequest();
-        $this->config        = $config;
+        $this->route  = $router->getCurrentRoute();
+        $this->config = $config;
     }
 
     /**
@@ -75,6 +74,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $this->response = $response;
+        $this->serverRequest = $serverRequest;
 
         $sessions = [];
 
