@@ -73,7 +73,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        $this->response = $response;
+        $this->response      = $response;
         $this->serverRequest = $serverRequest;
 
         $sessions = [];

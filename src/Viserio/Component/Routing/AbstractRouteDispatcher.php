@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use Narrowspark\Arr\Arr;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
@@ -303,7 +302,7 @@ abstract class AbstractRouteDispatcher
     }
 
     /**
-     * Applies the callback to the elements of the given arrays
+     * Applies the callback to the elements of the given arrays.
      *
      * @param array    $array
      * @param callable $callback
