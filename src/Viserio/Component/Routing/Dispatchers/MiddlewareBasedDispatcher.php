@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Dispatcher;
+namespace Viserio\Component\Routing\Dispatchers;
 
+use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
+use Viserio\Component\Routing\SortedMiddleware;
+use Viserio\Component\Routing\MiddlewareNameResolver;
 
 class MiddlewareBasedDispatcher extends BasicDispatcher
 {
@@ -29,6 +32,23 @@ class MiddlewareBasedDispatcher extends BasicDispatcher
      * @var array
      */
     protected $middlewarePriority = [];
+
+    /**
+     * Create a new basic dispatcher instance.
+     *
+     * @var string
+     * @var bool   $refreshCache
+     *
+     * @param string                                $path
+     * @param \Interop\Container\ContainerInterface $container
+     * @param bool                                  $refreshCache
+     */
+    public function __construct(string $path, ContainerInterface $container, bool $refreshCache = false)
+    {
+        $this->path         = self::normalizeDirectorySeparator($path);
+        $this->container    = $container;
+        $this->refreshCache = $refreshCache;
+    }
 
     /**
      * Register a group of middleware.

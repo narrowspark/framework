@@ -15,8 +15,8 @@ use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Pipeline\Pipeline;
-use Viserio\Component\Routing\Dispatcher\BasicDispatcher;
-use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
+use Viserio\Component\Routing\Dispatchers\BasicDispatcher;
+use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Router;
 
@@ -100,12 +100,12 @@ class RoutingServiceProvider implements
         if (is_callable($getPrevious)) {
             $dispatcher = $getPrevious();
         } elseif (class_exists(Pipeline::class)) {
-            $dispatcher = new MiddlewareBasedDispatcher(self::$options['path'], self::$options['refresh_cache']);
+            $dispatcher = new MiddlewareBasedDispatcher(self::$options['path'], $container, self::$options['refresh_cache']);
         } else {
             $dispatcher = new BasicDispatcher(self::$options['path'], self::$options['refresh_cache']);
-        }
 
-        $dispatcher->setContainer($container);
+            $dispatcher->setContainer($container);
+        }
 
         if ($container->has(EventManagerContract::class)) {
             $dispatcher->setEventManager($container->get(EventManagerContract::class));
@@ -123,11 +123,7 @@ class RoutingServiceProvider implements
      */
     public static function createRouter(ContainerInterface $container): RouterContract
     {
-        $router = new Router($container->get(DispatcherContract::class));
-
-        $router->setContainer($container);
-
-        return $router;
+        return new Router($container->get(DispatcherContract::class));
     }
 
     /**

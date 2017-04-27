@@ -11,16 +11,26 @@ use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Routing\Router;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class RoutingServiceProviderTest extends MockeryTestCase
 {
     public function testProvider()
     {
         $container = new Container();
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new RoutingServiceProvider());
         $container->register(new EventsServiceProvider());
         $container->instance(ServerRequestInterface::class, $this->mock(ServerRequestInterface::class));
         $container->instance(UriFactoryInterface::class, $this->mock(UriFactoryInterface::class));
+
+        $container->instance('config', [
+            'viserio' => [
+                'routing' => [
+                    'path' => '',
+                ],
+            ],
+        ]);
 
         self::assertInstanceOf(Router::class, $container->get(Router::class));
         self::assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGeneratorContract::class));

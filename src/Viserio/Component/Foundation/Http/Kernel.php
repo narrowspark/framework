@@ -24,6 +24,8 @@ use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
+use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 
 class Kernel extends AbstractKernel implements HttpKernelContract, TerminableContract
 {
@@ -78,13 +80,15 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     {
         parent::__construct();
 
-        $router = $this->getContainer()->get(RouterContract::class);
+        $dispatcher = $this->getContainer()->get(DispatcherContract::class);
 
-        $router->setMiddlewarePriorities($this->middlewarePriority);
-        $router->withMiddleware($this->routeMiddlewares);
+        if ($dispatcher instanceof MiddlewareBasedDispatcher) {
+            $dispatcher->setMiddlewarePriorities($this->middlewarePriority);
+            $dispatcher->withMiddleware($this->routeMiddlewares);
 
-        foreach ($this->middlewareGroups as $key => $middleware) {
-            $router->setMiddlewareGroup($key, $middleware);
+            foreach ($this->middlewareGroups as $key => $middleware) {
+                $dispatcher->setMiddlewareGroup($key, $middleware);
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Dispatcher;
+namespace Viserio\Component\Routing\Dispatchers;
 
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
@@ -82,7 +82,7 @@ class BasicDispatcher implements DispatcherContract
     {
         if (! file_exists($this->path) || $this->refreshCache === true) {
             static::createCacheFolder($this->path);
-            static::generateRouterFile($routes);
+            $this->generateRouterFile($routes);
         }
 
         $router              = require $this->path;
@@ -119,7 +119,7 @@ class BasicDispatcher implements DispatcherContract
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function handleFound(
-        Collection $routes,
+        RouteCollectionContract $routes,
         ServerRequestInterface $request,
         string $identifier,
         array $segments
@@ -162,7 +162,7 @@ class BasicDispatcher implements DispatcherContract
      *
      * @return void
      */
-    protected static function generateRouterFile(RouteCollectionContract $routes): void
+    protected function generateRouterFile(RouteCollectionContract $routes): void
     {
         $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
         $closure        = $routerCompiler->compile($routes->getRoutes());
