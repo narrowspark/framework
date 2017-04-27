@@ -7,8 +7,8 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionClass;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
-use Viserio\Component\Routing\Router;
 use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
+use Viserio\Component\Routing\Router;
 
 abstract class RouteRouterBaseTest extends MockeryTestCase
 {

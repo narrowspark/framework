@@ -4,8 +4,8 @@ namespace Viserio\Component\Routing\Events;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
 class RouteMatchedEvent implements EventContract

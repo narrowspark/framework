@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
-use RuntimeException;
 use Fig\Http\Message\RequestMethodInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
@@ -63,7 +63,6 @@ class Router implements RouterContract, RequestMethodInterface
         try {
             $this->container = $this->dispatcher->getContainer();
         } catch (RuntimeException $e) {
-
         }
 
         $this->routes = new RouteCollection();

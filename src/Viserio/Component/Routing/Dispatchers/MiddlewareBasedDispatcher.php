@@ -7,10 +7,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Routing\Pipeline;
-use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
-use Viserio\Component\Routing\SortedMiddleware;
 use Viserio\Component\Routing\MiddlewareNameResolver;
+use Viserio\Component\Routing\Pipeline;
+use Viserio\Component\Routing\SortedMiddleware;
+use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 
 class MiddlewareBasedDispatcher extends BasicDispatcher
 {

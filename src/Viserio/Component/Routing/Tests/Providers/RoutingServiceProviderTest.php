@@ -8,10 +8,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
+use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Routing\Router;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class RoutingServiceProviderTest extends MockeryTestCase
 {
