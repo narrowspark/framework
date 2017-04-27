@@ -67,7 +67,6 @@ class FilesystemManagerTest extends MockeryTestCase
                     'connections'   => [
                         'dropbox' => [
                             'token' => 'your-token',
-                            'app'   => 'your-app',
                         ],
                     ],
                 ],
