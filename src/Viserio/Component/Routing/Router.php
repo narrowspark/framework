@@ -21,6 +21,20 @@ class Router extends AbstractRouteDispatcher implements RouterContract, RequestM
     use MacroableTrait;
 
     /**
+     * The route collection instance.
+     *
+     * @var \Viserio\Component\Routing\Route\Collection
+     */
+    protected $routes;
+
+    /**
+     * The globally available parameter patterns.
+     *
+     * @var string[]
+     */
+    protected $globalParameterConditions = [];
+
+    /**
      * The route group attribute stack.
      *
      * @var array

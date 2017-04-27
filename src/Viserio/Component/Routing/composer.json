@@ -27,7 +27,6 @@
         "php-di/invoker"                      : "^2.0",
         "psr/http-message"                    : "^1.0",
         "viserio/contracts"                   : "self.version",
-        "viserio/pipeline"                    : "self.version",
         "viserio/support"                     : "self.version"
     },
     "require-dev": {
@@ -39,6 +38,7 @@
         "viserio/events"                      : "self.version",
         "viserio/http-factory"                : "self.version",
         "viserio/options-resolver"            : "self.version",
+        "viserio/pipeline"                    : "self.version",
         "viserio/web-profiler"                : "self.version"
     },
     "autoload": {
