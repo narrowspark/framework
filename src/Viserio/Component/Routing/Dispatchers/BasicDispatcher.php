@@ -190,7 +190,7 @@ class BasicDispatcher
      *
      * @return bool
      */
-    private function createCacheFolder(string $path): bool
+    protected function createCacheFolder(string $path): bool
     {
         $dir = pathinfo($path, PATHINFO_DIRNAME);
 
