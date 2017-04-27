@@ -4,5 +4,4 @@ namespace Viserio\Component\Routing\Dispatcher;
 
 class MiddlewareBasedDispatcher extends BasicDispatcher
 {
-
 }
