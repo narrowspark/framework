@@ -55,7 +55,7 @@ class RoutingServiceProvider implements ServiceProvider
         if (is_callable($getPrevious)) {
             $dispatcher = $getPrevious();
         } elseif (class_exists(Pipeline::class)) {
-            $dispatcher = new MiddlewareBasedDispatcher($container);
+            $dispatcher = new MiddlewareBasedDispatcher();
         } else {
             $dispatcher = new SimpleDispatcher();
         }
@@ -76,7 +76,11 @@ class RoutingServiceProvider implements ServiceProvider
      */
     public static function createRouter(ContainerInterface $container): RouterContract
     {
-        return new Router($container->get(DispatcherContract::class));
+        $router = new Router($container->get(DispatcherContract::class));
+
+        $router->setContainer($container);
+
+        return $router;
     }
 
     /**

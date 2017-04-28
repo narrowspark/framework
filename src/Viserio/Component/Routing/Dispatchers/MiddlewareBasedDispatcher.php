@@ -34,16 +34,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     protected $middlewarePriority = [];
 
     /**
-     * Create a new basic dispatcher instance.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
      * Register a group of middleware.
      *
      * @param string $name
@@ -98,12 +88,14 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
      */
     protected function runRouteWithinStack(RouteContract $route, ServerRequestInterface $request): ResponseInterface
     {
-        $middlewares = $this->gatherRouteMiddleware($route);
+        $pipeline = new Pipeline();
 
-        return (new Pipeline())
-            ->setContainer($this->getContainer())
-            ->send($request)
-            ->through($middlewares)
+        if ($this->container !== null) {
+            $pipeline->setContainer($this->getContainer());
+        }
+
+        return $pipeline->send($request)
+            ->through($this->gatherRouteMiddleware($route))
             ->then(function ($request) use ($route) {
                 return $route->run($request);
             });

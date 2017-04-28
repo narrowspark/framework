@@ -66,13 +66,7 @@ class Router implements RouterContract, RequestMethodInterface
     public function __construct(DispatcherContract $dispatcher)
     {
         $this->dispatcher = $dispatcher;
-
-        try {
-            $this->container = $this->dispatcher->getContainer();
-        } catch (RuntimeException $e) {
-        }
-
-        $this->routes = new RouteCollection();
+        $this->routes     = new RouteCollection();
     }
 
     /**
@@ -312,7 +306,13 @@ class Router implements RouterContract, RequestMethodInterface
      */
     public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->dispatcher->handle($this->routes, $request);
+        $dispatcher = $this->dispatcher;
+
+        if ($this->container !== null && method_exists($dispatcher, 'setContainer')) {
+            $dispatcher->setContainer($this->getContainer());
+        }
+
+        return $dispatcher->handle($this->routes, $request);
     }
 
     /**

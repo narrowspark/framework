@@ -57,10 +57,9 @@
         "psr/http-message-implementation"     : "^1.0"
     },
     "suggest": {
-        "container-interop/container-interop" : "Requires a container to get more intelligent controllers instances (^1.1)",
+        "container-interop/container-interop" : "Requires a container to get more intelligent controller and middleware instances (^1.1)",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
-        "viserio/options-resolver"            : "Required to use routes data collector and routing service-provider (self.version).",
         "viserio/pipeline"                    : "Required to use psr-15 middlewares (self.version).",
         "viserio/web-profiler"                : "Required to use the routes data collector (self.version)."
     },

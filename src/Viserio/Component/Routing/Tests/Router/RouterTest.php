@@ -17,11 +17,15 @@ class RouterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $dispatcher  = new MiddlewareBasedDispatcher($this->mock(ContainerInterface::class));
+        $dispatcher  = new MiddlewareBasedDispatcher();
+        $dispatcher->setContainer($this->mock(ContainerInterface::class));
         $dispatcher->setCachePath(__DIR__ . '/../Cache/RouterTest.cache');
         $dispatcher->refreshCache(true);
 
-        $this->router = new Router($dispatcher);
+        $router = new Router($dispatcher);
+        $router->setContainer($this->mock(ContainerInterface::class));
+
+        $this->router = $router;
     }
 
     public function tearDown()
