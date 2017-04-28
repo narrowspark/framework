@@ -122,7 +122,7 @@ abstract class AbstractKernel implements
                 'skip_middlewares' => false,
                 'serviceproviders' => [],
                 'aliases'          => [],
-            ]
+            ],
         ];
     }
 
