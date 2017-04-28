@@ -151,9 +151,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
         foreach ($array as $key => $item) {
             $result = $callback($item, $key);
 
-            $newArray = is_array($result) ?
-                array_replace_recursive($array, $result) :
-                array_merge_recursive($array, (array) $result);
+            $newArray = array_merge_recursive($array, (array) $result);
         }
 
         return $newArray;
