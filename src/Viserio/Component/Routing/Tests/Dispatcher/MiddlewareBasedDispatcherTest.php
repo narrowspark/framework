@@ -9,8 +9,8 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
-use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
+use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 
 class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 {
@@ -24,7 +24,8 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
     }
 
     public function tearDown()
-    {}
+    {
+    }
 
     public function testMiddlewareFunc()
     {
@@ -55,7 +56,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
             ]
         ));
 
-        $this->dispatcher->setMiddlewareGroup('api', [new FakeMiddleware]);
+        $this->dispatcher->setMiddlewareGroup('api', [new FakeMiddleware()]);
 
         $response = $this->dispatcher->handle(
             $collection,

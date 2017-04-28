@@ -3,9 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Traits;
 
 use PHPUnit\Framework\TestCase;
-use stdClass;
-use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
+use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 
 class MiddlewareAwareTraitTest extends TestCase
@@ -64,7 +63,7 @@ class MiddlewareAwareTraitTest extends TestCase
     public function testWithoutMiddlewareWithNull()
     {
         //reset
-        $this->middlewares = [];
+        $this->middlewares         = [];
         $this->bypassedMiddlewares = [];
 
         $this->withMiddleware(FooMiddleware::class);
