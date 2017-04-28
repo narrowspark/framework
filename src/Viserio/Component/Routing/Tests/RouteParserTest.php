@@ -162,9 +162,6 @@ class RouteParserTest extends TestCase
             [
                 '/test/{a{bc}}',
             ],
-            [
-                '/////foo/////',
-            ],
         ];
     }
 }
