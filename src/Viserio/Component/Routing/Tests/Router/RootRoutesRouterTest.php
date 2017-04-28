@@ -11,7 +11,7 @@ use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 use Viserio\Component\Routing\Tests\Fixture\RouteTestClosureMiddlewareController;
 
-class RootRoutesRouterTest extends RouteRouterBaseTest
+class RootRoutesRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {

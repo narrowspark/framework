@@ -10,7 +10,7 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Router;
 
-abstract class RouteRouterBaseTest extends MockeryTestCase
+abstract class AbstractRouterBaseTest extends MockeryTestCase
 {
     protected $router;
 

@@ -68,13 +68,23 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     }
 
     /**
-     * Get all with and without middlewares.
+     * Get a middleware list.
      *
      * @return array
      */
     public function getMiddlewares(): array
     {
         return $this->middlewares;
+    }
+
+    /**
+     * Get a bypass middleware list.
+     *
+     * @return array
+     */
+    public function getDisabledMiddlewares(): array
+    {
+        return $this->bypassedMiddlewares;
     }
 
     /**
@@ -109,7 +119,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
      */
     protected function gatherRouteMiddleware(RouteContract $route): array
     {
-        $middlewares      = [];
+        $middlewares = [];
 
         self::map($route->gatherMiddleware(), function ($name) use (&$middlewares, $route) {
             $middlewares[] = MiddlewareNameResolver::resolve(

@@ -7,7 +7,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class ComplexShopRouterTest extends RouteRouterBaseTest
+class ComplexShopRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {

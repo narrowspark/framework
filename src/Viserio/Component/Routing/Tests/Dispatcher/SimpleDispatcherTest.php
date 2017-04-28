@@ -1,15 +1,12 @@
+<?php
+declare(strict_types=1);
+namespace Viserio\Component\Routing\Tests\Dispatchers;
 
+use PHPUnit\Framework\TestCase;
+use Viserio\Component\HttpFactory\ServerRequestFactory;
+use Viserio\Component\Routing\Dispatchers\SimpleDispatcher;
+use Viserio\Component\Routing\Router;
 
-    // /**
-    //  * @expectedException \UnexpectedValueException
-    //  */
-    // public function testRouterInvalidRouteAction()
-    // {
-    //     $router    = new Router($this->mock(ContainerInterface::class));
-    //     $router->setCachePath(__DIR__ . '/invalid.cache');
-
-    //     $router->get('/invalid', ['uses' => stdClass::class]);
-    //     $router->dispatch(
-    //         (new ServerRequestFactory())->createServerRequest('GET', 'invalid')
-    //     );
-    // }
+class SimpleDispatcherTest extends TestCase
+{
+}
