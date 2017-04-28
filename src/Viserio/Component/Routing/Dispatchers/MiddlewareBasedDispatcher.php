@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Dispatchers;
 
-use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
