@@ -17,7 +17,9 @@ class RouterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $dispatcher  = new MiddlewareBasedDispatcher(__DIR__ . '/../Cache/RouterTest.cache', $this->mock(ContainerInterface::class), true);
+        $dispatcher  = new MiddlewareBasedDispatcher($this->mock(ContainerInterface::class));
+        $dispatcher->setCachePath(__DIR__ . '/../Cache/RouterTest.cache');
+        $dispatcher->refreshCache(true);
 
         $this->router = new Router($dispatcher);
     }

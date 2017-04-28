@@ -30,6 +30,31 @@ interface Dispatcher
     public const HTTP_METHOD_NOT_ALLOWED = 2;
 
     /**
+     * Set the cache path for compiled routes.
+     *
+     * @param string $path
+     *
+     * @return void
+     */
+    public function setCachePath(string $path): void;
+
+    /**
+     * Get the cache path for the compiled routes.
+     *
+     * @return string
+     */
+    public function getCachePath(): string;
+
+    /**
+     * Refresh cache file on development.
+     *
+     * @param bool $refreshCache
+     *
+     * @return void
+     */
+    public function refreshCache(bool $refreshCache): void;
+
+    /**
      * Get the currently dispatched route instance.
      *
      * @return \Viserio\Component\Contracts\Routing\Route|null

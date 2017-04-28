@@ -16,7 +16,7 @@ use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeCompiler;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class BasicDispatcher implements DispatcherContract
+class SimpleDispatcher implements DispatcherContract
 {
     use EventsAwareTrait;
     use NormalizePathAndDirectorySeparatorTrait;
@@ -43,18 +43,15 @@ class BasicDispatcher implements DispatcherContract
     protected $refreshCache = false;
 
     /**
-     * Create a new basic dispatcher instance.
-     *
-     * @var string
-     * @var bool   $refreshCache
+     * Set the cache path for compiled routes.
      *
      * @param string $path
-     * @param bool   $refreshCache
+     *
+     * @return void
      */
-    public function __construct(string $path, bool $refreshCache = false)
+    public function setCachePath(string $path): void
     {
-        $this->path         = self::normalizeDirectorySeparator($path);
-        $this->refreshCache = $refreshCache;
+        $this->path = self::normalizeDirectorySeparator($path);
     }
 
     /**
@@ -65,6 +62,18 @@ class BasicDispatcher implements DispatcherContract
     public function getCachePath(): string
     {
         return $this->path;
+    }
+
+    /**
+     * Refresh cache file on development.
+     *
+     * @param bool $refreshCache
+     *
+     * @return void
+     */
+    public function refreshCache(bool $refreshCache): void
+    {
+        $this->refreshCache = $refreshCache;
     }
 
     /**

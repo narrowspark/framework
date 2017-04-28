@@ -12,7 +12,7 @@ use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\SortedMiddleware;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 
-class MiddlewareBasedDispatcher extends BasicDispatcher
+class MiddlewareBasedDispatcher extends SimpleDispatcher
 {
     use ContainerAwareTrait;
     use MiddlewareAwareTrait;
@@ -36,18 +36,11 @@ class MiddlewareBasedDispatcher extends BasicDispatcher
     /**
      * Create a new basic dispatcher instance.
      *
-     * @var string
-     * @var bool   $refreshCache
-     *
-     * @param string                                $path
      * @param \Interop\Container\ContainerInterface $container
-     * @param bool                                  $refreshCache
      */
-    public function __construct(string $path, ContainerInterface $container, bool $refreshCache = false)
+    public function __construct(ContainerInterface $container)
     {
-        $this->path         = self::normalizeDirectorySeparator($path);
-        $this->container    = $container;
-        $this->refreshCache = $refreshCache;
+        $this->container = $container;
     }
 
     /**

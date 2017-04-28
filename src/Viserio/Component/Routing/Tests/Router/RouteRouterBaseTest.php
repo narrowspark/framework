@@ -20,7 +20,9 @@ abstract class RouteRouterBaseTest extends MockeryTestCase
 
         $name = (new ReflectionClass($this))->getShortName();
 
-        $dispatcher  = new MiddlewareBasedDispatcher(__DIR__ . '/../Cache/' . $name . '.cache', $this->mock(ContainerInterface::class), true);
+        $dispatcher  = new MiddlewareBasedDispatcher($this->mock(ContainerInterface::class));
+        $dispatcher->setCachePath(__DIR__ . '/../Cache/' . $name . '.cache');
+        $dispatcher->refreshCache(true);
         $dispatcher->setEventManager(new EventManager());
 
         $router = new Router($dispatcher);
