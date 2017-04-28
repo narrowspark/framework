@@ -58,8 +58,6 @@ class RoutingServiceProvider implements ServiceProvider
             $dispatcher = new MiddlewareBasedDispatcher($container);
         } else {
             $dispatcher = new SimpleDispatcher();
-
-            $dispatcher->setContainer($container);
         }
 
         if ($container->has(EventManagerContract::class)) {

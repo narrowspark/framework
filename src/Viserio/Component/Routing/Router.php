@@ -31,6 +31,13 @@ class Router implements RouterContract, RequestMethodInterface
     protected $routes;
 
     /**
+     * The dispatcher instance.
+     *
+     * @var \Viserio\Component\Contracts\Routing\Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
      * The globally available parameter patterns.
      *
      * @var string[]
