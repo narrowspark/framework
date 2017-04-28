@@ -3,14 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Dispatchers;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
-use Viserio\Component\Routing\Route\Collection as RouteCollection;
+use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Route;
-use Viserio\Component\Routing\Tests\Fixture\Controller;
-use Psr\Http\Message\ResponseInterface;
+use Viserio\Component\Routing\Route\Collection as RouteCollection;
 
 class SimpleDispatcherTest extends TestCase
 {
