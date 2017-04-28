@@ -42,7 +42,6 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
             ['GET', '/blog/post/abc!@#'],
             ['GET', '/blog/post/aBc'],
             ['GET', '/blog/post/another-123-post/comment/foo'],
-            ['GET', '/blog/post/another-123-post/comment/'],
             ['GET', '/blog/post/another-123-post/comment/-1'],
         ];
     }

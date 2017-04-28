@@ -93,7 +93,6 @@ class ComplexShopRouterTest extends AbstractRouterBaseTest
             ['GET', '/shop/product/search/bad-prop:fun'],
             ['GET', '/shop/cart/checkout/abc'],
             ['GET', '/admin/logout/foo'],
-            ['GET', '/admin/'],
             ['GET', '/admin/product/abc'],
             ['GET', '/admin/category/abc'],
         ];

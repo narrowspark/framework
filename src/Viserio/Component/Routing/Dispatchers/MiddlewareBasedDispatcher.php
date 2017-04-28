@@ -33,6 +33,14 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     protected $middlewarePriority = [];
 
     /**
+     * {@inheritdoc}
+     */
+    public function withoutMiddleware($middlewares = null)
+    {
+        // not used!
+    }
+
+    /**
      * Register a group of middleware.
      *
      * @param string $name
@@ -78,16 +86,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     }
 
     /**
-     * Get a bypass middleware list.
-     *
-     * @return array
-     */
-    public function getDisabledMiddlewares(): array
-    {
-        return $this->bypassedMiddlewares;
-    }
-
-    /**
      * Run the given route within a Stack "onion" instance.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
@@ -95,7 +93,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function runRouteWithinStack(RouteContract $route, ServerRequestInterface $request): ResponseInterface
+    protected function runRoute(RouteContract $route, ServerRequestInterface $request): ResponseInterface
     {
         $pipeline = new Pipeline();
 
@@ -121,18 +119,24 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     {
         $middlewares = [];
 
-        self::map($route->gatherMiddleware(), function ($name) use (&$middlewares, $route) {
-            $middlewares[] = MiddlewareNameResolver::resolve(
-                $name,
-                $this->middlewares,
-                $this->middlewareGroups,
-                $route->gatherDisabledMiddlewares()
-            );
+        self::map($route->gatherMiddleware(), function ($nameOrObject) use (&$middlewares, $route) {
+            $bypass = $route->gatherDisabledMiddlewares();
+
+            if (is_object($nameOrObject) && ! isset($bypass[get_class($nameOrObject)])) {
+                $middlewares[] = $nameOrObject;
+            } else {
+                $middlewares[] = MiddlewareNameResolver::resolve(
+                    $nameOrObject,
+                    $this->middlewares,
+                    $this->middlewareGroups,
+                    $bypass
+                );
+            }
         });
 
         return (new SortedMiddleware(
             $this->middlewarePriority,
-            array_values(self::flatten($middlewares))
+            self::flatten($middlewares)
         ))->getAll();
     }
 
@@ -158,22 +162,22 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     }
 
     /**
-     * Flatten a nested array to a separated key.
+     * Convert a multi-dimensional array into a single-dimensional array without keys.
      *
      * @param array  $array
      * @param string $prepend
      *
      * @return array
      */
-    protected static function flatten(array $array, string $prepend = ''): array
+    protected static function flatten(array $array): array
     {
         $flattened = [];
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $flattened = array_merge($flattened, static::flatten($value, $prepend . $key));
+                $flattened = array_merge($flattened, static::flatten($value));
             } else {
-                $flattened[$prepend . $key] = $value;
+                $flattened[] = $value;
             }
         }
 

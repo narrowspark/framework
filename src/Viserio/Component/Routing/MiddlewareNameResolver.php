@@ -40,14 +40,16 @@ class MiddlewareNameResolver
         $results = [];
 
         foreach ($middlewareGroups[$name] as $middleware) {
-            if (isset($disabledMiddlewares[$middleware])) {
+            $name = is_object($middleware)? get_class($middleware) : $middleware;
+
+            if (isset($disabledMiddlewares[$name])) {
                 continue;
             }
 
             // If the middleware is another middleware group we will pull in the group and
             // merge its middleware into the results. This allows groups to conveniently
             // reference other groups without needing to repeat all their middlewares.
-            if (isset($middlewareGroups[$middleware])) {
+            if (is_string($middleware) && isset($middlewareGroups[$middleware])) {
                 $results = array_merge(
                     $results,
                     self::parseMiddlewareGroup($middleware, $map, $middlewareGroups, $disabledMiddlewares)
@@ -59,8 +61,8 @@ class MiddlewareNameResolver
             // If this middleware is actually a route middleware, we will extract the full
             // class name out of the middleware list now. Then we'll add the parameters
             // back onto this class' name so the pipeline will properly extract them.
-            if (isset($map[$middleware])) {
-                $middleware = $map[$middleware];
+            if (isset($map[$name])) {
+                $middleware = $map[$name];
             }
 
             $results[] = $middleware;

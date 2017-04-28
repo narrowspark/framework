@@ -91,29 +91,31 @@ class SimpleDispatcher implements DispatcherContract
     {
         if (! file_exists($this->path) || $this->refreshCache === true) {
             static::createCacheFolder($this->path);
+
             $this->generateRouterFile($routes);
         }
 
-        $router              = require $this->path;
-        $preparedRequestPath = '/' . ltrim($request->getUri()->getPath(), '/');
+        $router = require $this->path;
 
-        $match = $router($request->getMethod(), $preparedRequestPath);
+        $match = $router($request->getMethod(), $this->prepareUriPath($request->getUri()->getPath()));
 
         if ($match[0] === self::FOUND) {
             return $this->handleFound($routes, $request, $match[1], $match[2]);
         }
 
+        $requestPath = '/' . ltrim($request->getUri()->getPath(), '/');
+
         if ($match[0] === self::HTTP_METHOD_NOT_ALLOWED) {
             throw new MethodNotAllowedException(sprintf(
-                '405 Method [%s] Not Allowed: For requested route [%s]',
+                '405 Method [%s] Not Allowed: For requested route [%s].',
                 implode(',', $match[1]),
-                $preparedRequestPath
+                $requestPath
             ));
         }
 
         throw new NotFoundException(sprintf(
-            '404 Not Found: Requested route [%s]',
-            $preparedRequestPath
+            '404 Not Found: Requested route [%s].',
+            $requestPath
         ));
     }
 
@@ -148,20 +150,38 @@ class SimpleDispatcher implements DispatcherContract
             $this->getEventManager()->trigger(new RouteMatchedEvent($this, $route, $request));
         }
 
-        return $this->runRouteWithinStack($route, $request);
+        return $this->runRoute($route, $request);
     }
 
     /**
-     * Run the given route within a Stack "onion" instance.
+     * Run the given route.
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
      * @param \Psr\Http\Message\ServerRequestInterface   $request
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function runRouteWithinStack(RouteContract $route, ServerRequestInterface $request): ResponseInterface
+    protected function runRoute(RouteContract $route, ServerRequestInterface $request): ResponseInterface
     {
         return $route->run($request);
+    }
+
+    /**
+     * Prepare the request uri path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function prepareUriPath(string $path): string
+    {
+        $path = '/' . ltrim($path, '/');
+
+        if (mb_strlen($path) !== 1 && mb_substr($path, -1) === '/') {
+            $path = substr_replace($path, '', -1);
+        }
+
+        return $path;
     }
 
     /**

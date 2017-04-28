@@ -25,28 +25,37 @@ trait MiddlewareAwareTrait
     /**
      * Register a short-hand name for a middleware.
      *
-     * @param string $name
-     * @param string $middleware
+     * @param string        $name
+     * @param string|object $middleware
      *
+     * @throws \RuntimeException if wrong type is given or alias exists
      * @throws \LogicException
      *
      * @return $this
      */
-    public function aliasMiddleware(string $name, string $middleware)
+    public function aliasMiddleware(string $name, $middleware)
     {
-        $this->validateMiddlewareClass($middleware);
+        if (isset($this->middlewares[$name])) {
+            throw new RuntimeException(sprintf('Alias [%s] already exists.', $name));
+        }
 
-        $this->middlewares[$name] = $middleware;
+        if (is_string($middleware) || is_object($middleware)) {
+            $this->validateMiddlewareClass($middleware);
 
-        return $this;
+            $this->middlewares[$name] = $middleware;
+
+            return $this;
+        }
+
+        throw new RuntimeException(sprintf('Expected string or object; received [%s].', gettype($middleware)));
     }
 
     /**
      * Set the middlewares to the route.
      *
-     * @param string|array $middlewares
+     * @param string|array|object $middlewares
      *
-     * @throws \RuntimeException
+     * @throws \RuntimeException if wrong type is given
      * @throws \LogicException
      *
      * @return $this
@@ -56,14 +65,18 @@ trait MiddlewareAwareTrait
         $this->validateMiddlewareInput($middlewares);
         $this->validateMiddlewareClass($middlewares);
 
-        if (is_string($middlewares)) {
-            $this->middlewares[] = $middlewares;
+        if (is_string($middlewares) || is_object($middlewares)) {
+            $name = is_object($middlewares) ? get_class($middlewares) : $middlewares;
+
+            $this->middlewares[$name] = $middlewares;
 
             return $this;
         }
 
         foreach ($middlewares as $middleware) {
-            $this->middlewares[] = $middleware;
+            $name = is_object($middleware) ? get_class($middleware) : $middleware;
+
+            $this->middlewares[$name] = $middleware;
         }
 
         return $this;
@@ -83,7 +96,7 @@ trait MiddlewareAwareTrait
     public function withoutMiddleware($middlewares = null)
     {
         if ($middlewares === null) {
-            $this->middlewares[] = [];
+            $this->middlewares = [];
 
             return $this;
         }
@@ -92,22 +105,22 @@ trait MiddlewareAwareTrait
         $this->validateMiddlewareClass($middlewares);
 
         if (is_string($middlewares)) {
-            $this->bypassedMiddlewares[] = $middlewares;
+            $this->bypassedMiddlewares[$middlewares] = $middlewares;
 
             return $this;
         }
 
         foreach ($middlewares as $middleware) {
-            $this->bypassedMiddlewares[] = $middleware;
+            $this->bypassedMiddlewares[$middleware] = $middleware;
         }
 
         return $this;
     }
 
     /**
-     * Check if given input is a string or array.
+     * Check if given input is a string, object or array.
      *
-     * @param string|array $middlewares
+     * @param string|object|array $middlewares
      *
      * @throws \RuntimeException
      *
@@ -115,17 +128,17 @@ trait MiddlewareAwareTrait
      */
     private function validateMiddlewareInput($middlewares): void
     {
-        if (is_array($middlewares) || is_string($middlewares)) {
+        if (is_array($middlewares) || is_string($middlewares) || is_object($middlewares)) {
             return;
         }
 
-        throw new RuntimeException(sprintf('Expected string or array; received [%s].', gettype($middlewares)));
+        throw new RuntimeException(sprintf('Expected string, object or array; received [%s].', gettype($middlewares)));
     }
 
     /**
      * Check if given middleware class has \Interop\Http\ServerMiddleware\MiddlewareInterface implemented.
      *
-     * @param string|array $middlewares
+     * @param string|object|array $middlewares
      *
      * @throws \LogicException
      *
@@ -141,12 +154,15 @@ trait MiddlewareAwareTrait
             }
         };
 
-        if (is_string($middlewares) && ! isset($this->middlewares[$middlewares])) {
+        if (
+            (is_string($middlewares) && ! isset($this->middlewares[$middlewares])) ||
+            is_object($middlewares)
+        ) {
             $middlewareCheck($middlewares);
         } elseif (is_array($middlewares)) {
             foreach ($middlewares as $name => $middleware) {
                 if (! isset($this->middlewares[$middleware])) {
-                    $middlewareCheck($middlewares);
+                    $middlewareCheck($middleware);
                 }
             }
         }

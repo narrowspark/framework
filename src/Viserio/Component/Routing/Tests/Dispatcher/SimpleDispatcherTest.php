@@ -2,47 +2,33 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Dispatchers;
 
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
-use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
+use Viserio\Component\Routing\Dispatchers\SimpleDispatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class SimpleDispatcherTest extends TestCase
+class SimpleDispatcherTest extends AbstractDispatcherTest
 {
-    public function tearDown()
-    {
-        parent::tearDown();
+    use NormalizePathAndDirectorySeparatorTrait;
 
-        $this->delTree(__DIR__ . '/../Cache');
-    }
-
-    /**
-     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
-     * @expectedExceptionMessage 404 Not Found: Requested route [/]
-     */
-    public function testHandleNotFound()
+    public function setUp()
     {
-        $dispatcher  = new MiddlewareBasedDispatcher();
+        $dispatcher  = new SimpleDispatcher();
         $dispatcher->setCachePath(__DIR__ . '/../Cache/SimpleDispatcherTest.cache');
         $dispatcher->refreshCache(true);
 
-        $collection = new RouteCollection();
-
-        $response = $dispatcher->handle(
-            $collection,
-            (new ServerRequestFactory())->createServerRequest('GET', '/')
-        );
+        $this->dispatcher = $dispatcher;
     }
 
     public function testHandleFound()
     {
-        $dispatcher  = new MiddlewareBasedDispatcher();
-        $dispatcher->setCachePath(__DIR__ . '/../Cache/SimpleDispatcherTest.cache');
-        $dispatcher->refreshCache(true);
+        $path = __DIR__ . '/../Cache/SimpleDispatcherTest.cache';
+
+        self::assertSame(self::normalizeDirectorySeparator($path), $this->dispatcher->getCachePath());
 
         $collection = new RouteCollection();
         $collection->add(new Route(
@@ -55,29 +41,19 @@ class SimpleDispatcherTest extends TestCase
             }
         ));
 
-        $response = $dispatcher->handle(
+        $response = $this->dispatcher->handle(
             $collection,
             (new ServerRequestFactory())->createServerRequest('GET', '/test')
         );
 
         self::assertInstanceOf(ResponseInterface::class, $response);
 
-        // $response = $dispatcher->handle(
-        //     $collection,
-        //     (new ServerRequestFactory())->createServerRequest('GET', '/test/')
-        // );
+        $response = $this->dispatcher->handle(
+            $collection,
+            (new ServerRequestFactory())->createServerRequest('GET', '/test/')
+        );
 
-        // self::assertInstanceOf(ResponseInterface::class, $response);
-    }
-
-    private function delTree($dir)
-    {
-        $files = array_diff(scandir($dir), ['.', '..']);
-
-        foreach ($files as $file) {
-            is_dir("$dir/$file") ? $this->delTree("$dir/$file") : unlink("$dir/$file");
-        }
-
-        return rmdir($dir);
+        self::assertInstanceOf(ResponseInterface::class, $response);
+        self::assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
     }
 }
