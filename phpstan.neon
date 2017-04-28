@@ -110,6 +110,7 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
         - '#Property Viserio\\Component\\Routing\\Matchers\\ParameterMatcher::\$names#'
         - '#Property Viserio\\Component\\Routing\\Matchers\\RegexMatcher::\$parameterKeyGroupMap#'
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Routing\\Dispatcher::setContainer#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'
