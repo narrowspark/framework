@@ -4,7 +4,9 @@ namespace Viserio\Component\Routing\Tests;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use stdClass;
 use Viserio\Component\HttpFactory\ResponseFactory;
+use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Dispatchers\SimpleDispatcher;

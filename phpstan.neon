@@ -6,8 +6,8 @@ parameters:
         - %currentWorkingDirectory%/src/Viserio
 
     excludes_analyse:
-        - %currentWorkingDirectory%/src/Viserio/Bridge/**/Tests/Fixture/*
-        - %currentWorkingDirectory%/src/Viserio/Component/**/Tests/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Bridge/*/Tests/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Component/*/Tests/Fixture/*
         # Use all classes of php-cache
         - %currentWorkingDirectory%/src/Viserio/Component/Cache/*
 
@@ -77,6 +77,7 @@ parameters:
         - '#\$resource of static method League\\Flysystem\\Util::getStreamSize#'
         - '#\$view of method Viserio\\Component\\Mail\\Mailer::send#'
         - '#\$callback of method Viserio\\Component\\Mail\\Mailer::send#'
+        - '#Viserio\\Component\\Routing\\Tests\\Fixture\\Controller::put#'
 
         # Is wrong
         - '#Property Viserio\\Component\\Cookie\\AbstractCookie::\$maxAge#'
