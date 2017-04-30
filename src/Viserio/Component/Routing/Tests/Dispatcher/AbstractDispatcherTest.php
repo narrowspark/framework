@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Dispatchers;
 
 use Narrowspark\HttpStatus\Exception\NotFoundException;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -11,7 +11,7 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 
-abstract class AbstractDispatcherTest extends TestCase
+abstract class AbstractDispatcherTest extends MockeryTestCase
 {
     protected $dispatcher;
 

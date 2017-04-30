@@ -182,8 +182,7 @@ class Route implements RouteContract
         $middlewares = [];
 
         if (isset($this->action['middlewares'])) {
-            $actionMiddleware = $this->action['middlewares'];
-            $middlewares      = is_array($actionMiddleware) ? $actionMiddleware : [$actionMiddleware];
+            $middlewares = (array) $this->action['middlewares'];
         }
 
         return array_unique(
@@ -204,7 +203,7 @@ class Route implements RouteContract
         $bypass = [];
 
         if (isset($this->action['bypass'])) {
-            $bypass = is_array($this->action['bypass']) ? $this->action['bypass'] : [$this->action['bypass']];
+            $bypass = (array) $this->action['bypass'];
         }
 
         return array_unique(array_merge(

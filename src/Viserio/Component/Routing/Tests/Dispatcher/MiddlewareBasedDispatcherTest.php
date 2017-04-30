@@ -11,6 +11,8 @@ use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
+use Interop\Container\ContainerInterface;
+use Viserio\Component\Contracts\Container\Container as ContainerContract;
 
 class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 {
@@ -65,5 +67,72 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         self::assertInstanceOf(ResponseInterface::class, $response);
         self::assertSame('caught', (string) $response->getBody());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Class [Viserio\Component\Routing\Tests\Fixture\FakeMiddleware] is not being managed by the container.
+     */
+    public function testHandleFoundThrowExceptionClassNotManaged()
+    {
+        $collection = new RouteCollection();
+        $collection->add(new Route(
+            'GET',
+            '/test',
+            [
+                'uses' => function () {
+                    return (new ResponseFactory())
+                        ->createResponse()
+                        ->withBody((new StreamFactory())->createStream('hello'));
+                },
+                'middlewares' => FakeMiddleware::class,
+            ]
+        ));
+
+        $container = $this->mock(ContainerInterface::class);
+        $container->shouldReceive('has')
+            ->once()
+            ->andReturn(false);
+
+        $this->dispatcher->setContainer($container);
+
+        $this->dispatcher->handle(
+            $collection,
+            (new ServerRequestFactory())->createServerRequest('GET', '/test')
+        );
+    }
+
+    public function testHandleFoundWithResolve()
+    {
+        $collection = new RouteCollection();
+        $collection->add(new Route(
+            'GET',
+            '/test',
+            [
+                'uses' => function () {
+                    return (new ResponseFactory())
+                        ->createResponse()
+                        ->withBody((new StreamFactory())->createStream('hello'));
+                },
+                'middlewares' => FakeMiddleware::class,
+            ]
+        ));
+
+        $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('has')
+            ->once()
+            ->andReturn(false);
+        $container->shouldReceive('resolve')
+            ->once()
+            ->with(FakeMiddleware::class)
+            ->andReturn(new FakeMiddleware());
+
+
+        $this->dispatcher->setContainer($container);
+
+        $this->dispatcher->handle(
+            $collection,
+            (new ServerRequestFactory())->createServerRequest('GET', '/test')
+        );
     }
 }

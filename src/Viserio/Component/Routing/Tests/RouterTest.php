@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Tests\Router;
+namespace Viserio\Component\Routing\Tests;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -119,6 +119,8 @@ class RouterTest extends MockeryTestCase
                 );
             }]);
         });
+
+        self::assertSame([], $router->getGroupStack());
 
         $route = $router->getRoutes()->getByName('Foo::bar');
 
@@ -307,6 +309,18 @@ class RouterTest extends MockeryTestCase
         $routes[1]->addSuffix('bar');
 
         self::assertEquals('/bar', $routes[1]->getUri());
+    }
+
+    public function testSetRemoveAndGetParameters()
+    {
+        $router = $this->router;
+        $router->setParameter('foo', 'bar');
+
+        self::assertSame(['foo' => 'bar'], $router->getParameters());
+
+        $router->removeParameter('foo', 'bar');
+
+        self::assertSame([], $router->getParameters());
     }
 
     private function delTree($dir)
