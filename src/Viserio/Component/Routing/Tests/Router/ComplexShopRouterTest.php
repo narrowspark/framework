@@ -147,10 +147,10 @@ class ComplexShopRouterTest extends AbstractRouterBaseTest
 
         self::assertSame(
             [
-                'post_slug' => Pattern::ALPHA_NUM_DASH,
+                'post_slug'   => Pattern::ALPHA_NUM_DASH,
                 'category_id' => Pattern::DIGITS,
-                'product_id' => Pattern::DIGITS,
-                'filter_by' => Pattern::ALPHA
+                'product_id'  => Pattern::DIGITS,
+                'filter_by'   => Pattern::ALPHA,
             ],
             $router->getPatterns()
         );

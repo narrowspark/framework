@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Dispatchers;
 
+use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -11,8 +13,6 @@ use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
-use Interop\Container\ContainerInterface;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
 
 class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 {
@@ -126,7 +126,6 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
             ->once()
             ->with(FakeMiddleware::class)
             ->andReturn(new FakeMiddleware());
-
 
         $this->dispatcher->setContainer($container);
 
