@@ -43,7 +43,7 @@ class Action
         if (is_string($action['uses']) && mb_strpos($action['uses'], '@') === false) {
             if (! method_exists($action['uses'], '__invoke')) {
                 throw new UnexpectedValueException(sprintf(
-                    'Invalid route action: [%s]',
+                    'Invalid route action: [%s].',
                     $action['uses']
                 ));
             }
