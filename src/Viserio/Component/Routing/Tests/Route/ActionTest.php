@@ -5,7 +5,6 @@ namespace Viserio\Component\Routing\Tests\Route;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Routing\Route\Action;
 use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
-use Psr\Http\Message\ResponseInterface;
 
 class ActionTest extends TestCase
 {
