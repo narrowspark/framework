@@ -7,9 +7,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionClass;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
+use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Router;
 
-abstract class RouteRouterBaseTest extends MockeryTestCase
+abstract class AbstractRouterBaseTest extends MockeryTestCase
 {
     protected $router;
 
@@ -17,14 +18,15 @@ abstract class RouteRouterBaseTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $cachefolder = __DIR__ . '/../Cache/';
-        $name        = (new ReflectionClass($this))->getShortName();
-        $container   = $this->mock(ContainerInterface::class);
+        $name = (new ReflectionClass($this))->getShortName();
 
-        $router    = new Router($container);
-        $router->setCachePath($cachefolder . $name . '.cache');
-        $router->refreshCache(true);
-        $router->setEventManager(new EventManager());
+        $dispatcher  = new MiddlewareBasedDispatcher();
+        $dispatcher->setCachePath(__DIR__ . '/../Cache/' . $name . '.cache');
+        $dispatcher->refreshCache(true);
+        $dispatcher->setEventManager(new EventManager());
+
+        $router = new Router($dispatcher);
+        $router->setContainer($this->mock(ContainerInterface::class));
 
         $this->definitions($router);
 

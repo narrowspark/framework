@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use Interop\Container\Exception\NotFoundException;
-use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Factory as FactoryContract;
@@ -19,13 +17,6 @@ class Route implements RouteContract
     use ContainerAwareTrait;
     use InvokerAwareTrait;
     use MiddlewareAwareTrait;
-
-    /**
-     * A server request instance.
-     *
-     * @var \Psr\Http\Message\ServerRequestInterface
-     */
-    protected $serverRequest;
 
     /**
      * The URI pattern the route responds to.
@@ -128,14 +119,6 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getServerRequest(): ServerRequestInterface
-    {
-        return $this->serverRequest;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDomain(): ?string
     {
         if (isset($this->action['domain'])) {
@@ -196,23 +179,38 @@ class Route implements RouteContract
      */
     public function gatherMiddleware(): array
     {
-        // Merge middlewares from Action.
-        $middlewares        = Arr::get($this->action, 'middlewares', []);
-        $withoutMiddlewares = Arr::get($this->action, 'without_middlewares', []);
+        $middlewares = [];
 
-        $mergedMiddlewares = [
-            'middlewares' => array_unique(array_merge(
-                $this->middlewares['middlewares'] ?? [],
-                is_array($middlewares) ? $middlewares : [$middlewares],
-                $this->getControllerMiddleware()
-            ), SORT_REGULAR),
-            'without_middlewares' => array_unique(array_merge(
-                $this->middlewares['without_middlewares'] ?? [],
-                is_array($withoutMiddlewares) ? $withoutMiddlewares : [$withoutMiddlewares]
-            ), SORT_REGULAR),
-        ];
+        if (isset($this->action['middlewares'])) {
+            $middlewares = (array) $this->action['middlewares'];
+        }
 
-        return $this->middlewares = $mergedMiddlewares;
+        return array_unique(
+            array_merge(
+                $this->middlewares,
+                $middlewares,
+                $this->getControllerMiddlewares()
+            ),
+            SORT_REGULAR
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function gatherDisabledMiddlewares(): array
+    {
+        $bypass = [];
+
+        if (isset($this->action['bypass'])) {
+            $bypass = (array) $this->action['bypass'];
+        }
+
+        return array_unique(array_merge(
+            $this->bypassedMiddlewares,
+            $bypass,
+            $this->getControllerDisabledMiddlewares()
+        ), SORT_REGULAR);
     }
 
     /**
@@ -312,7 +310,11 @@ class Route implements RouteContract
      */
     public function getParameter(string $name, $default = null)
     {
-        return Arr::get($this->parameters, $name, $default);
+        if (isset($this->parameters[$name])) {
+            return $this->parameters[$name];
+        }
+
+        return $default;
     }
 
     /**
@@ -320,7 +322,7 @@ class Route implements RouteContract
      */
     public function hasParameter(string $name): bool
     {
-        return Arr::has($this->parameters, $name);
+        return isset($this->parameters[$name]);
     }
 
     /**
@@ -356,17 +358,17 @@ class Route implements RouteContract
     {
         list($class) = explode('@', $this->action['uses']);
 
-        if (! $this->controller) {
-            $container = $this->getContainer();
+        if ($this->controller === null) {
+            if ($this->container !== null) {
+                $container = $this->getContainer();
 
-            try {
-                $this->controller = $container->get($class);
-            } catch (NotFoundException $exception) {
-                if ($container instanceof FactoryContract) {
+                if ($container->has($class)) {
+                    $this->controller = $container->get($class);
+                } elseif ($container instanceof FactoryContract) {
                     $this->controller = $container->resolve($class);
-                } else {
-                    throw new $exception();
                 }
+            } else {
+                $this->controller = new $class();
             }
         }
 
@@ -376,17 +378,15 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function run(ServerRequestInterface $request): ResponseInterface
+    public function run(ServerRequestInterface $serverRequest): ResponseInterface
     {
-        $this->serverRequest = $request;
-
         if ($this->isControllerAction()) {
             return $this->getController()->{$this->getControllerMethod()}();
         }
 
         return $this->getInvoker()->call(
             $this->action['uses'],
-            [$request, $this->parameters]
+            [$serverRequest, $this->parameters]
         );
     }
 
@@ -414,11 +414,11 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the middleware for the route's controller.
+     * Get the bound route controller middlewares.
      *
      * @return array
      */
-    protected function getControllerMiddleware(): array
+    protected function getControllerMiddlewares(): array
     {
         if (! $this->isControllerAction()) {
             return [];
@@ -428,6 +428,26 @@ class Route implements RouteContract
 
         if (method_exists($controller, 'gatherMiddleware')) {
             return $controller->gatherMiddleware();
+        }
+
+        return [];
+    }
+
+    /**
+     * Get the bound route controller disabled middlewares.
+     *
+     * @return array
+     */
+    protected function getControllerDisabledMiddlewares(): array
+    {
+        if (! $this->isControllerAction()) {
+            return [];
+        }
+
+        $controller = $this->getController();
+
+        if (method_exists($controller, 'gatherDisabledMiddlewares')) {
+            return $controller->gatherDisabledMiddlewares();
         }
 
         return [];

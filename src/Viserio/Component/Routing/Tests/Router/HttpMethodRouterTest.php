@@ -5,7 +5,7 @@ namespace Viserio\Component\Routing\Tests\Router;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class HttpMethodRouterTest extends RouteRouterBaseTest
+class HttpMethodRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {

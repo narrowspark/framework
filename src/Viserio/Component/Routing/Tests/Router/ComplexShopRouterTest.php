@@ -7,7 +7,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class ComplexShopRouterTest extends RouteRouterBaseTest
+class ComplexShopRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
@@ -93,7 +93,6 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
             ['GET', '/shop/product/search/bad-prop:fun'],
             ['GET', '/shop/cart/checkout/abc'],
             ['GET', '/admin/logout/foo'],
-            ['GET', '/admin/'],
             ['GET', '/admin/product/abc'],
             ['GET', '/admin/category/abc'],
         ];
@@ -145,6 +144,16 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
         $router->pattern('category_id', Pattern::DIGITS);
         $router->pattern('product_id', Pattern::DIGITS);
         $router->patterns(['filter_by' => Pattern::ALPHA]);
+
+        self::assertSame(
+            [
+                'post_slug'   => Pattern::ALPHA_NUM_DASH,
+                'category_id' => Pattern::DIGITS,
+                'product_id'  => Pattern::DIGITS,
+                'filter_by'   => Pattern::ALPHA,
+            ],
+            $router->getPatterns()
+        );
 
         $router->get('/', function ($request, $args) {
             return (new ResponseFactory())

@@ -21,7 +21,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected $manager;
 
     /**
-     * Driver config.
+     * Session manager driver config.
      *
      * @var array
      */
@@ -35,14 +35,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected $config = [];
 
     /**
-     * The URIs that should be excluded from CSRF verification.
-     *
-     * @var array
-     */
-    protected $except = [];
-
-    /**
-     * Enviroment.
+     * Environment.
      *
      * @var string
      */
@@ -71,7 +64,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 
         if ($this->isReading($request) ||
             $this->runningUnitTests() ||
-            $this->shouldPassThrough($request) ||
             $this->tokensMatch($request)
         ) {
             return $this->addCookieToResponse($request, $response);
@@ -88,28 +80,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected function runningUnitTests(): bool
     {
         return php_sapi_name() == 'cli' && $this->env === 'testing';
-    }
-
-    /**
-     * Determine if the request has a URI that should pass through CSRF verification.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return bool
-     */
-    protected function shouldPassThrough(ServerRequestInterface $request): bool
-    {
-        foreach ($this->except as $except) {
-            if ($except !== '/') {
-                $except = trim($except, '/');
-            }
-
-            if ($request->getUri()->getPath() === $except) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

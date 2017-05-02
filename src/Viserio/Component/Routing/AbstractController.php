@@ -18,8 +18,6 @@ abstract class AbstractController
      * @throws \BadMethodCallException
      *
      * @return mixed
-     *
-     * @codeCoverageIgnore
      */
     public function __call($method, $parameters)
     {
@@ -34,5 +32,15 @@ abstract class AbstractController
     public function gatherMiddleware(): array
     {
         return $this->middlewares;
+    }
+
+    /**
+     * Return all disabled middlewares.
+     *
+     * @return array
+     */
+    public function gatherDisabledMiddlewares(): array
+    {
+        return $this->bypassedMiddlewares;
     }
 }

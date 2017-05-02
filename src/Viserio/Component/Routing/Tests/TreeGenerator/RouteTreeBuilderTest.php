@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
+use Fig\Http\Message\RequestMethodInterface;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Matchers\RegexMatcher;
 use Viserio\Component\Routing\Matchers\StaticMatcher;
 use Viserio\Component\Routing\Route;
@@ -15,22 +15,38 @@ use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 
 class RouteTreeBuilderTest extends TestCase
 {
+    private const HTTP_METHOD_VARS = [
+        RequestMethodInterface::METHOD_HEAD,
+        RequestMethodInterface::METHOD_GET,
+        RequestMethodInterface::METHOD_POST,
+        RequestMethodInterface::METHOD_PUT,
+        RequestMethodInterface::METHOD_PATCH,
+        RequestMethodInterface::METHOD_DELETE,
+        RequestMethodInterface::METHOD_PURGE,
+        RequestMethodInterface::METHOD_OPTIONS,
+        RequestMethodInterface::METHOD_TRACE,
+        RequestMethodInterface::METHOD_CONNECT,
+        RequestMethodInterface::METHOD_TRACE,
+        'LINK',
+        'UNLINK',
+    ];
+
     public function routeTreeBuilderCases()
     {
         return [
             [
-                [(new Route(RouterContract::HTTP_METHOD_VARS, '', null))],
-                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS']]]),
+                [(new Route(self::HTTP_METHOD_VARS, '', null))],
+                new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK']]]),
                 [],
             ],
             [
-                [(new Route(RouterContract::HTTP_METHOD_VARS, '/', null))],
+                [(new Route(self::HTTP_METHOD_VARS, '/', null))],
                 null,
                 [
                     1 => new ChildrenNodeCollection([
                         (new StaticMatcher(''))->getHash() => new RouteTreeNode(
                             [0 => new StaticMatcher('')],
-                            new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/']]])
+                            new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK/']]])
                         ),
                     ]),
                 ],
@@ -84,22 +100,22 @@ class RouteTreeBuilderTest extends TestCase
             ],
             [
                 [
-                    (new Route(RouterContract::HTTP_METHOD_VARS, '', null)),
-                    (new Route(RouterContract::HTTP_METHOD_VARS, '/main', null)),
+                    (new Route(self::HTTP_METHOD_VARS, '', null)),
+                    (new Route(self::HTTP_METHOD_VARS, '/main', null)),
                     (new Route(['GET'], '/main/place', null)),
                     (new Route(['POST'], '/main/place', null)),
-                    (new Route(RouterContract::HTTP_METHOD_VARS, '/main/thing', null)),
-                    (new Route(RouterContract::HTTP_METHOD_VARS, '/main/thing/abc', null)),
-                    (new Route(RouterContract::HTTP_METHOD_VARS, '/user/{name}', null))->where('name', Pattern::ANY),
-                    (new Route(RouterContract::HTTP_METHOD_VARS, '/user/{name}/edit', null))->where('name', Pattern::ANY),
-                    (new Route(RouterContract::HTTP_METHOD_VARS, '/user/create', null))->setParameter('user.create', ''),
+                    (new Route(self::HTTP_METHOD_VARS, '/main/thing', null)),
+                    (new Route(self::HTTP_METHOD_VARS, '/main/thing/abc', null)),
+                    (new Route(self::HTTP_METHOD_VARS, '/user/{name}', null))->where('name', Pattern::ANY),
+                    (new Route(self::HTTP_METHOD_VARS, '/user/{name}/edit', null))->where('name', Pattern::ANY),
+                    (new Route(self::HTTP_METHOD_VARS, '/user/create', null))->setParameter('user.create', ''),
                 ],
-                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS']]]),
+                new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK']]]),
                 [
                     1 => new ChildrenNodeCollection([
                         (new StaticMatcher('main'))->getHash() => new RouteTreeNode(
                             [0 => new StaticMatcher('main')],
-                            new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/main']]])
+                            new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK/main']]])
                         ),
                     ]),
                     2 => new ChildrenNodeCollection([
@@ -113,17 +129,17 @@ class RouteTreeBuilderTest extends TestCase
                             ),
                             (new StaticMatcher('thing'))->getHash() => new RouteTreeNode(
                                 [1 => new StaticMatcher('thing')],
-                                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/main/thing']]])
+                                new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK/main/thing']]])
                             ),
                         ])),
                         (new StaticMatcher('user'))->getHash() => new RouteTreeNode([0 => new StaticMatcher('user')], new ChildrenNodeCollection([
                             (new RegexMatcher(Pattern::ANY, 0))->getHash() => new RouteTreeNode(
                                 [1 => new RegexMatcher(Pattern::ANY, 0)],
-                                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[0 => 'name'], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/user/{name}']]])
+                                new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[0 => 'name'], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK/user/{name}']]])
                             ),
                             (new StaticMatcher('create'))->getHash() => new RouteTreeNode(
                                 [1 => new StaticMatcher('create')],
-                                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/user/create']]])
+                                new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK/user/create']]])
                             ),
                         ])),
                     ]),
@@ -132,7 +148,7 @@ class RouteTreeBuilderTest extends TestCase
                             (new StaticMatcher('thing'))->getHash() => new RouteTreeNode([1 => new StaticMatcher('thing')], new ChildrenNodeCollection([
                                 (new StaticMatcher('abc'))->getHash() => new RouteTreeNode(
                                     [2 => new StaticMatcher('abc')],
-                                    new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/main/thing/abc']]])
+                                    new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK/main/thing/abc']]])
                                 ),
                             ])),
                         ])),
@@ -140,7 +156,7 @@ class RouteTreeBuilderTest extends TestCase
                             (new RegexMatcher(Pattern::ANY, 0))->getHash() => new RouteTreeNode([1 => new RegexMatcher(Pattern::ANY, 0)], new ChildrenNodeCollection([
                                 (new StaticMatcher('edit'))->getHash() => new RouteTreeNode(
                                     [2 => new StaticMatcher('edit')],
-                                    new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[0 => 'name'], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/user/{name}/edit']]])
+                                    new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[0 => 'name'], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK/user/{name}/edit']]])
                                 ),
                             ])),
                         ])),

@@ -27,6 +27,7 @@
         "viserio/events"                      : "self.version",
         "viserio/exception"                   : "self.version",
         "viserio/options-resolver"            : "self.version",
+        "viserio/pipeline"                    : "self.version",
         "viserio/routing"                     : "self.version"
     },
     "require-dev": {

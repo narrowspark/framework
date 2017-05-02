@@ -7,8 +7,12 @@ use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Pipeline\Pipeline;
+use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
+use Viserio\Component\Routing\Dispatchers\SimpleDispatcher;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Router;
 
@@ -20,12 +24,13 @@ class RoutingServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            RouterContract::class => [self::class, 'createRouter'],
-            'router'              => function (ContainerInterface $container) {
-                return $container->get(RouterContract::class);
-            },
-            'route' => function (ContainerInterface $container) {
+            DispatcherContract::class   => [self::class, 'createRouteDispatcher'],
+            RouterContract::class       => [self::class, 'createRouter'],
+            'route'                     => function (ContainerInterface $container) {
                 return $container->get(Router::class);
+            },
+            'router'                    => function (ContainerInterface $container) {
+                return $container->get(RouterContract::class);
             },
             Router::class => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
@@ -37,18 +42,55 @@ class RoutingServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createRouter(ContainerInterface $container): Router
+    /**
+     * Create a route dispatcher instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return \Viserio\Component\Contracts\Routing\Dispatcher
+     */
+    public static function createRouteDispatcher(ContainerInterface $container, ?callable $getPrevious = null): DispatcherContract
     {
-        $router = new Router($container);
+        if (is_callable($getPrevious)) {
+            $dispatcher = $getPrevious();
+        } elseif (class_exists(Pipeline::class)) {
+            $dispatcher = new MiddlewareBasedDispatcher();
+        } else {
+            $dispatcher = new SimpleDispatcher();
+        }
 
         if ($container->has(EventManagerContract::class)) {
-            $router->setEventManager($container->get(EventManagerContract::class));
+            $dispatcher->setEventManager($container->get(EventManagerContract::class));
         }
+
+        return $dispatcher;
+    }
+
+    /**
+     * Create a router instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Routing\Router
+     */
+    public static function createRouter(ContainerInterface $container): RouterContract
+    {
+        $router = new Router($container->get(DispatcherContract::class));
+
+        $router->setContainer($container);
 
         return $router;
     }
 
-    public static function createUrlGenerator(ContainerInterface $container): UrlGenerator
+    /**
+     * Create a url generator instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Routing\UrlGenerator
+     */
+    public static function createUrlGenerator(ContainerInterface $container): UrlGeneratorContract
     {
         return new UrlGenerator(
             $container->get(RouterContract::class)->getRoutes(),

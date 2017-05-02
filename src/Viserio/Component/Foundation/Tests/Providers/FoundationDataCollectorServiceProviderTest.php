@@ -19,11 +19,7 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
 {
     public function testGetServices()
     {
-        $serverRequest = $this->mock(ServerRequestInterface::class);
-        $route         = $this->mock(RouteContract::class);
-        $route->shouldReceive('getServerRequest')
-            ->once()
-            ->andReturn($serverRequest);
+        $route  = $this->mock(RouteContract::class);
         $router = $this->mock(RouterContract::class);
         $router->shouldReceive('group')
             ->once();

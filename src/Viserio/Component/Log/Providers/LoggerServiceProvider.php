@@ -71,7 +71,7 @@ class LoggerServiceProvider implements
     }
 
     /**
-     * Create a handler parser.
+     * Create a handler parser instance.
      *
      * @param \Interop\Container\ContainerInterface $container
      *
@@ -85,7 +85,7 @@ class LoggerServiceProvider implements
     }
 
     /**
-     * Create a monolog writer.
+     * Create a monolog writer instance.
      *
      * @param \Interop\Container\ContainerInterface $container
      *

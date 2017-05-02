@@ -3,9 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
-use Interop\Container\ContainerInterface;
+use Fig\Http\Message\RequestMethodInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
@@ -14,10 +16,32 @@ use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
-class Router extends AbstractRouteDispatcher implements RouterContract
+class Router implements RouterContract, RequestMethodInterface
 {
+    use ContainerAwareTrait;
     use InvokerAwareTrait;
     use MacroableTrait;
+
+    /**
+     * The route collection instance.
+     *
+     * @var \Viserio\Component\Routing\Route\Collection
+     */
+    protected $routes;
+
+    /**
+     * The dispatcher instance.
+     *
+     * @var \Viserio\Component\Contracts\Routing\Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
+     * The globally available parameter patterns.
+     *
+     * @var string[]
+     */
+    protected $globalParameterConditions = [];
 
     /**
      * The route group attribute stack.
@@ -36,12 +60,12 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     /**
      * Create a new Router instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Component\Contracts\Routing\Dispatcher $dispatcher
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(DispatcherContract $dispatcher)
     {
-        $this->container = $container;
-        $this->routes    = new RouteCollection();
+        $this->dispatcher = $dispatcher;
+        $this->routes     = new RouteCollection();
     }
 
     /**
@@ -49,7 +73,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function get(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute(['GET', 'HEAD'], $uri, $action);
+        return $this->addRoute([self::METHOD_GET, self::METHOD_HEAD], $uri, $action);
     }
 
     /**
@@ -57,7 +81,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function post(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('POST', $uri, $action);
+        return $this->addRoute(self::METHOD_POST, $uri, $action);
     }
 
     /**
@@ -65,7 +89,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function put(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('PUT', $uri, $action);
+        return $this->addRoute(self::METHOD_PUT, $uri, $action);
     }
 
     /**
@@ -73,7 +97,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function patch(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('PATCH', $uri, $action);
+        return $this->addRoute(self::METHOD_PATCH, $uri, $action);
     }
 
     /**
@@ -81,7 +105,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function head(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('HEAD', $uri, $action);
+        return $this->addRoute(self::METHOD_HEAD, $uri, $action);
     }
 
     /**
@@ -89,7 +113,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function delete(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('DELETE', $uri, $action);
+        return $this->addRoute(self::METHOD_DELETE, $uri, $action);
     }
 
     /**
@@ -97,7 +121,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function options(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute('OPTIONS', $uri, $action);
+        return $this->addRoute(self::METHOD_OPTIONS, $uri, $action);
     }
 
     /**
@@ -105,7 +129,25 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function any(string $uri, $action = null): RouteContract
     {
-        return $this->addRoute(self::HTTP_METHOD_VARS, $uri, $action);
+        return $this->addRoute(
+            [
+                self::METHOD_HEAD,
+                self::METHOD_GET,
+                self::METHOD_POST,
+                self::METHOD_PUT,
+                self::METHOD_PATCH,
+                self::METHOD_DELETE,
+                self::METHOD_PURGE,
+                self::METHOD_OPTIONS,
+                self::METHOD_TRACE,
+                self::METHOD_CONNECT,
+                self::METHOD_TRACE,
+                'LINK',
+                'UNLINK',
+            ],
+            $uri,
+            $action
+        );
     }
 
     /**
@@ -140,8 +182,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getPatterns(): array
     {
@@ -160,8 +200,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function removeParameter(string $name)
     {
@@ -170,8 +208,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getParameters(): array
     {
@@ -226,7 +262,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
         if (! empty($this->groupStack)) {
             $last = end($this->groupStack);
 
-            return isset($last['prefix']) ? $last['prefix'] : '';
+            return $last['prefix'] ?? '';
         }
 
         return '';
@@ -242,8 +278,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getGroupStack(): array
     {
@@ -252,18 +286,14 @@ class Router extends AbstractRouteDispatcher implements RouterContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getCurrentRoute()
     {
-        return $this->current;
+        return $this->dispatcher->getCurrentRoute();
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getRoutes(): RouteCollectionContract
     {
@@ -275,7 +305,13 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->dispatchToRoute($request);
+        $dispatcher = $this->dispatcher;
+
+        if ($this->container !== null && method_exists($dispatcher, 'setContainer')) {
+            $dispatcher->setContainer($this->getContainer());
+        }
+
+        return $dispatcher->handle($this->routes, $request);
     }
 
     /**
@@ -311,7 +347,11 @@ class Router extends AbstractRouteDispatcher implements RouterContract
         }
 
         $route = new Route($methods, $this->prefix($this->suffix($uri)), $action);
-        $route->setContainer($this->getContainer());
+
+        if ($this->container !== null) {
+            $route->setContainer($this->getContainer());
+        }
+
         $route->setInvoker($this->getInvoker());
 
         if ($this->hasGroupStack()) {
@@ -319,6 +359,10 @@ class Router extends AbstractRouteDispatcher implements RouterContract
         }
 
         $this->addWhereClausesToRoute($route);
+
+        foreach ($this->globalParameterConditions as $key => $value) {
+            $route->setParameter($key, $value);
+        }
 
         return $route;
     }
@@ -332,10 +376,10 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     protected function addWhereClausesToRoute(RouteContract $route): void
     {
-        $where  = $route->getAction()['where'] ?? [];
-        $patern = array_merge($this->patterns, $where);
+        $where   = $route->getAction()['where'] ?? [];
+        $pattern = array_merge($this->patterns, $where);
 
-        foreach ($patern as $name => $value) {
+        foreach ($pattern as $name => $value) {
             $route->where($name, $value);
         }
     }
@@ -417,15 +461,15 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     protected function prefix(string $uri): string
     {
-        $trimed = trim($this->getLastGroupPrefix(), '/') . '/' . trim($uri, '/');
+        $trimmed = trim($this->getLastGroupPrefix(), '/') . '/' . trim($uri, '/');
 
-        if (! $trimed) {
+        if (! $trimmed) {
             return '/';
-        } elseif (mb_substr($trimed, 0, 1) === '/') {
-            return $trimed;
+        } elseif (mb_substr($trimmed, 0, 1) === '/') {
+            return $trimmed;
         }
 
-        return '/' . $trimed;
+        return '/' . $trimmed;
     }
 
     /**

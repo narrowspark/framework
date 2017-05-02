@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
-use Narrowspark\Arr\Arr;
-
 class Group
 {
     /**
@@ -27,7 +25,13 @@ class Group
             'suffix'    => static::formatGroupSuffix($new, $old),
         ]);
 
-        return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'suffix', 'where', 'as']), $new);
+        foreach (['namespace', 'prefix', 'suffix', 'where', 'as'] as $name) {
+            if (isset($old[$name])) {
+                unset($old[$name]);
+            }
+        }
+
+        return array_merge_recursive($old, $new);
     }
 
     /**
@@ -63,7 +67,7 @@ class Group
      */
     protected static function formatGroupPrefix(array $new, array $old): ?string
     {
-        $oldPrefix = Arr::get($old, 'prefix');
+        $oldPrefix = $old['prefix'] ?? null;
 
         if (isset($new['prefix'])) {
             return trim($oldPrefix, '/') . '/' . trim($new['prefix'], '/');
@@ -118,7 +122,7 @@ class Group
     protected static function formatAs(array $new, array $old): array
     {
         if (isset($old['as'])) {
-            $new['as'] = $old['as'] . Arr::get($new, 'as', '');
+            $new['as'] = $old['as'] . ($new['as'] ?? '');
         }
 
         return $new;
