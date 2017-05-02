@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Events;
 
-use Viserio\Component\Routing\Events\RouteMatchedEvent;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Routing\Events\RouteMatchedEvent;
 
 class RouteMatchedEventTest extends MockeryTestCase
 {

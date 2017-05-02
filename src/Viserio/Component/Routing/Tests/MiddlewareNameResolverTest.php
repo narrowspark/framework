@@ -32,7 +32,7 @@ class MiddlewareNameResolverTest extends TestCase
     public function testResolveWithBypassMiddlewareOnGroup()
     {
         $test2 = new stdClass();
-        $map = [
+        $map   = [
             'test'  => new stdClass(),
             'test2' => $test2,
         ];
