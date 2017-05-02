@@ -3,16 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
 use LogicException;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Cron\Cron as CronContract;
 
 class Schedule
 {
     use ContainerAwareTrait;
+    use CacheItemPoolAwareTrait;
 
     /**
      * All of the cron jobs on the schedule.
@@ -36,22 +37,13 @@ class Schedule
     protected $workingDirPath;
 
     /**
-     * The cache store implementation.
-     *
-     * @var \Psr\Cache\CacheItemPoolInterface
-     */
-    protected $cache;
-
-    /**
      * Create a new Schedule instance.
      *
-     * @param \Psr\Cache\CacheItemPoolInterface $cache
      * @param string                            $path
      * @param null|string                       $consoleName
      */
-    public function __construct(CacheItemPoolInterface $cache, string $path, string $consoleName = null)
+    public function __construct(string $path, string $consoleName = null)
     {
-        $this->cache          = $cache;
         $this->workingDirPath = $path;
         $this->console        = $consoleName;
     }
@@ -66,7 +58,12 @@ class Schedule
      */
     public function call($callback, array $parameters = []): CallbackCron
     {
-        $cron = new CallbackCron($this->cache, $callback, $parameters);
+        $cron = new CallbackCron($callback, $parameters);
+
+        if ($this->cachePool !== null) {
+            $cron->setCacheItemPool($this->getCacheItemPool());
+        }
+
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
@@ -118,7 +115,12 @@ class Schedule
             $command .= ' ' . $this->compileParameters($parameters);
         }
 
-        $cron = new Cron($this->cache, $command);
+        $cron = new Cron($command);
+
+        if ($this->cachePool !== null) {
+            $cron->setCacheItemPool($this->getCacheItemPool());
+        }
+
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {

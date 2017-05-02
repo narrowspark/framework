@@ -20,8 +20,8 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new CacheServiceProvider());
         $container->register(new ConsoleServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
 
         $container->instance('config', [
             'viserio' => [
@@ -42,5 +42,13 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertInstanceOf(CronListCommand::class, $commands['cron:list']);
         self::assertInstanceOf(ForgetCommand::class, $commands['cron:forget']);
         self::assertInstanceOf(ScheduleRunCommand::class, $commands['cron:run']);
+    }
+
+    public function testConsoleCommandsWithNoConsole()
+    {
+        $container = new Container();
+        $container->register(new ConsoleCommandsServiceProvider());
+
+        self::assertNull($container->get(Application::class));
     }
 }

@@ -5,7 +5,6 @@ namespace Viserio\Component\Cron;
 use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
@@ -134,21 +133,12 @@ class Cron implements CronContract
     protected $withoutOverlapping = false;
 
     /**
-     * The psr-6 implementation.
-     *
-     * @var \Psr\Cache\CacheItemPoolInterface
-     */
-    protected $cache;
-
-    /**
      * Create a new cron instance.
      *
-     * @param string                            $command
-     * @param \Psr\Cache\CacheItemPoolInterface $cache
+     * @param string $command
      */
-    public function __construct(CacheItemPoolInterface $cache, string $command)
+    public function __construct(string $command)
     {
-        $this->cache   = $cache;
         $this->command = $command;
         $this->output  = $this->getDefaultOutput();
     }
@@ -249,11 +239,11 @@ class Cron implements CronContract
     public function run()
     {
         if ($this->withoutOverlapping) {
-            $item = $this->cache->getItem($this->getMutexName());
+            $item = $this->cachePool->getItem($this->getMutexName());
             $item->set($this->getMutexName());
             $item->expiresAfter(1440);
 
-            $this->cache->save($item);
+            $this->cachePool->save($item);
         }
 
         if (! $this->runInBackground) {
@@ -263,7 +253,7 @@ class Cron implements CronContract
         $run = $this->runCommandInBackground();
 
         if ($this->withoutOverlapping) {
-            $this->cache->deleteItem($this->getMutexName());
+            $this->cachePool->deleteItem($this->getMutexName());
         }
 
         return $run;
@@ -284,12 +274,11 @@ class Cron implements CronContract
      */
     public function buildCommand(): string
     {
-        $isWindows = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
         $output    = ProcessUtils::escapeArgument($this->output);
         $redirect  = $this->shouldAppendOutput ? ' >> ' : ' > ';
-        $command   = $this->command . $redirect . $output . ($isWindows ? ' 2>&1' : ' 2>&1 &');
+        $command   = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
 
-        return $this->ensureCorrectUser($isWindows, $command);
+        return $this->ensureCorrectUser($command);
     }
 
     /**
@@ -300,7 +289,7 @@ class Cron implements CronContract
         $this->withoutOverlapping = true;
 
         return $this->skip(function () {
-            return $this->cache->hasItem($this->getMutexName());
+            return $this->cachePool->hasItem($this->getMutexName());
         });
     }
 
@@ -671,20 +660,29 @@ class Cron implements CronContract
     }
 
     /**
+     * Check if os is windows.
+     *
+     * @return bool
+     */
+    protected function isWindows(): bool
+    {
+        return mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+    }
+
+    /**
      * Finalize the event's command syntax with the correct user.
      *
-     * @param bool   $isWindows
      * @param string $command
      *
      * @return string
      */
-    protected function ensureCorrectUser(bool $isWindows, string $command): string
+    protected function ensureCorrectUser(string $command): string
     {
         // Windows fix:
         // The "start" command will start a detached process, a similar effect to &. The "/B" option prevents
         // start from opening a new terminal window if the program you are running is a console application.
 
-        return $this->user && ! $isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : 'start /B ' . $command;
+        return $this->user && ! $this->isWindows() ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : 'start /B ' . $command;
     }
 
     /**
@@ -710,7 +708,7 @@ class Cron implements CronContract
      */
     protected function getDefaultOutput(): string
     {
-        return (DIRECTORY_SEPARATOR == '\\') ? 'NUL' : '/dev/null';
+        return $this->isWindows() ? 'NUL' : '/dev/null';
     }
 
     /**
