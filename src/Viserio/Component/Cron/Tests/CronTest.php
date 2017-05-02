@@ -276,7 +276,6 @@ class CronTest extends MockeryTestCase
         $windows       = $isWindows ? 'start /B' : '';
         $background    = $isWindows ? '' : ' &';
 
-
         self::assertSame("{$windows} php -i > {$quote}{$defaultOutput}{$quote} 2>&1{$background}", $cron->buildCommand());
     }
 
@@ -305,7 +304,7 @@ class CronTest extends MockeryTestCase
 
     public function testBuildCommandSendOutputTo()
     {
-        $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
+        $quote         = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
         $isWindows     = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
         $windows       = $isWindows ? 'start /B ' : '';
         $background    = $isWindows ? '' : ' &';
@@ -323,7 +322,7 @@ class CronTest extends MockeryTestCase
 
     public function testBuildCommandAppendOutput()
     {
-        $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
+        $quote         = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
         $isWindows     = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
         $windows       = $isWindows ? 'start /B ' : '';
         $background    = $isWindows ? '' : ' &';

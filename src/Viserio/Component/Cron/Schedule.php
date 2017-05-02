@@ -95,7 +95,7 @@ class Schedule
         if (defined('CEREBRO_BINARY')) {
             return $this->exec(Application::formatCommandString($command), $parameters);
         } elseif ($this->console !== null) {
-            $binary = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
+            $binary  = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
             $console = ProcessUtils::escapeArgument($this->console);
 
             return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);

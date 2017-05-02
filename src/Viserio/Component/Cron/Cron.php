@@ -8,11 +8,11 @@ use Cron\CronExpression;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
+use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Cron\Cron as CronContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
-use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 
 class Cron implements CronContract
 {
@@ -290,23 +290,6 @@ class Cron implements CronContract
         $command   = $this->command . $redirect . $output . ($isWindows ? ' 2>&1' : ' 2>&1 &');
 
         return $this->ensureCorrectUser($isWindows, $command);
-    }
-
-    /**
-     * Finalize the event's command syntax with the correct user.
-     *
-     * @param bool $isWindows
-     * @param string $command
-     *
-     * @return string
-     */
-    protected function ensureCorrectUser(bool $isWindows, string $command): string
-    {
-        // Windows fix:
-        // The "start" command will start a detached process, a similar effect to &. The "/B" option prevents
-        // start from opening a new terminal window if the program you are running is a console application.
-
-        return $this->user && ! $isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : 'start /B ' . $command;
     }
 
     /**
@@ -685,6 +668,23 @@ class Cron implements CronContract
         }
 
         return true;
+    }
+
+    /**
+     * Finalize the event's command syntax with the correct user.
+     *
+     * @param bool   $isWindows
+     * @param string $command
+     *
+     * @return string
+     */
+    protected function ensureCorrectUser(bool $isWindows, string $command): string
+    {
+        // Windows fix:
+        // The "start" command will start a detached process, a similar effect to &. The "/B" option prevents
+        // start from opening a new terminal window if the program you are running is a console application.
+
+        return $this->user && ! $isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : 'start /B ' . $command;
     }
 
     /**
