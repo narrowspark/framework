@@ -39,8 +39,8 @@ class Schedule
     /**
      * Create a new Schedule instance.
      *
-     * @param string                            $path
-     * @param null|string                       $consoleName
+     * @param string      $path
+     * @param null|string $consoleName
      */
     public function __construct(string $path, string $consoleName = null)
     {

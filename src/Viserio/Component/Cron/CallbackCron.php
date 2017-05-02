@@ -25,8 +25,8 @@ class CallbackCron extends Cron
     /**
      * Create a new callback cron instance.
      *
-     * @param string|callable                   $callback
-     * @param array                             $parameters
+     * @param string|callable $callback
+     * @param array           $parameters
      *
      * @throws \InvalidArgumentException
      */
