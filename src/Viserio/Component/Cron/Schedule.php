@@ -92,17 +92,16 @@ class Schedule
             $command = $this->getContainer()->get($command)->getName();
         }
 
-        $binary = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
-
         if (defined('CEREBRO_BINARY')) {
-            $console = Application::cerebroBinary();
+            return $this->exec(Application::formatCommandString($command), $parameters);
         } elseif ($this->console !== null) {
+            $binary = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
             $console = ProcessUtils::escapeArgument($this->console);
-        } else {
-            throw new LogicException('You need to set a console name or a path to a console, before you call command.');
+
+            return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);
         }
 
-        return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);
+        throw new LogicException('You need to set a console name or a path to a console, before you call command.');
     }
 
     /**

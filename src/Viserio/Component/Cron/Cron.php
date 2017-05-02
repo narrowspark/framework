@@ -12,10 +12,12 @@ use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Cron\Cron as CronContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
+use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 
 class Cron implements CronContract
 {
     use ContainerAwareTrait;
+    use CacheItemPoolAwareTrait;
     use InvokerAwareTrait;
     use MacroableTrait;
 
@@ -282,13 +284,29 @@ class Cron implements CronContract
      */
     public function buildCommand(): string
     {
+        $isWindows = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
         $output    = ProcessUtils::escapeArgument($this->output);
         $redirect  = $this->shouldAppendOutput ? ' >> ' : ' > ';
-        $isWindows = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        $command   = $this->command . $redirect . $output . ($isWindows ? ' 2>&1' : ' 2>&1 &');
 
-        $command = $this->command . $redirect . $output . ' 2>&1 &';
+        return $this->ensureCorrectUser($isWindows, $command);
+    }
 
-        return $this->user && ! $isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : $command;
+    /**
+     * Finalize the event's command syntax with the correct user.
+     *
+     * @param bool $isWindows
+     * @param string $command
+     *
+     * @return string
+     */
+    protected function ensureCorrectUser(bool $isWindows, string $command): string
+    {
+        // Windows fix:
+        // The "start" command will start a detached process, a similar effect to &. The "/B" option prevents
+        // start from opening a new terminal window if the program you are running is a console application.
+
+        return $this->user && ! $isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : 'start /B ' . $command;
     }
 
     /**
@@ -721,7 +739,7 @@ class Cron implements CronContract
         $this->callBeforeCallbacks();
 
         $process = new Process(
-            trim($this->buildCommand(), '& '),
+            trim($this->buildCommand(), ' &'),
             $this->path,
             null,
             null,
@@ -742,13 +760,15 @@ class Cron implements CronContract
      */
     protected function runCommandInBackground(): int
     {
-        return (new Process(
+        $process = new Process(
             $this->buildCommand(),
             $this->path,
             null,
             null,
             null
-        ))->run();
+        );
+
+        return $process->run();
     }
 
     /**

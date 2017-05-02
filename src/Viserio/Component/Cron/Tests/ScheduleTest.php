@@ -81,6 +81,48 @@ class ScheduleTest extends MockeryTestCase
         }
     }
 
+    /**
+     * @runTestsInSeparateProcesses
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage You need to set a console name or a path to a console, before you call command.
+     */
+    public function testCommandThrowException()
+    {
+        $schedule = new Schedule($this->cache, __DIR__);
+
+        $schedule->command('clear:view');
+    }
+
+    /**
+     * @runTestsInSeparateProcesses
+     */
+    public function testCommandCreatesNewCerebroBinaryCommand()
+    {
+        define('CEREBRO_BINARY', 'cerebro');
+
+        $schedule = new Schedule($this->cache, __DIR__);
+
+        $schedule->command('clear:view');
+        $schedule->command('clear:view --tries=3');
+        $schedule->command('clear:view', ['--tries' => 3]);
+
+        $cronJobs = $schedule->getCronJobs();
+
+        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
+        $binary = $escape . PHP_BINARY . $escape;
+
+        if (getenv('TRAVIS')) {
+            self::assertEquals($binary . ' \'cerebro\' clear:view', $cronJobs[0]->getCommand());
+            self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[1]->getCommand());
+            self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[2]->getCommand());
+        } else {
+            self::assertEquals($binary . ' "cerebro" clear:view', $cronJobs[0]->getCommand());
+            self::assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[1]->getCommand());
+            self::assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[2]->getCommand());
+        }
+    }
+
     public function testCreateNewCerebroCommandUsingCommandClass()
     {
         $schedule  = new Schedule($this->cache, __DIR__, 'cerebro');

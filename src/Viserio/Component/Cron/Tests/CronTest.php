@@ -271,9 +271,13 @@ class CronTest extends MockeryTestCase
         $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
 
         $cron          = new Cron($this->cache, 'php -i');
-        $defaultOutput = (DIRECTORY_SEPARATOR == '\\') ? 'NUL' : '/dev/null';
+        $isWindows     = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        $defaultOutput = $isWindows ? 'NUL' : '/dev/null';
+        $windows       = $isWindows ? 'start /B' : '';
+        $background    = $isWindows ? '' : ' &';
 
-        self::assertSame("php -i > {$quote}{$defaultOutput}{$quote} 2>&1 &", $cron->buildCommand());
+
+        self::assertSame("{$windows} php -i > {$quote}{$defaultOutput}{$quote} 2>&1{$background}", $cron->buildCommand());
     }
 
     public function testGetAndSetUser()
@@ -302,26 +306,32 @@ class CronTest extends MockeryTestCase
     public function testBuildCommandSendOutputTo()
     {
         $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
+        $isWindows     = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        $windows       = $isWindows ? 'start /B ' : '';
+        $background    = $isWindows ? '' : ' &';
 
         $cron = new Cron($this->cache, 'php -i');
         $cron->sendOutputTo('/dev/null');
 
-        self::assertSame("php -i > {$quote}/dev/null{$quote} 2>&1 &", $cron->buildCommand());
+        self::assertSame("{$windows}php -i > {$quote}/dev/null{$quote} 2>&1{$background}", $cron->buildCommand());
 
         $cron = new Cron($this->cache, 'php -i');
         $cron->sendOutputTo('/my folder/foo.log');
 
-        self::assertSame("php -i > {$quote}/my folder/foo.log{$quote} 2>&1 &", $cron->buildCommand());
+        self::assertSame("{$windows}php -i > {$quote}/my folder/foo.log{$quote} 2>&1{$background}", $cron->buildCommand());
     }
 
     public function testBuildCommandAppendOutput()
     {
         $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
+        $isWindows     = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        $windows       = $isWindows ? 'start /B ' : '';
+        $background    = $isWindows ? '' : ' &';
 
         $cron = new Cron($this->cache, 'php -i');
         $cron->appendOutputTo('/dev/null');
 
-        self::assertSame("php -i >> {$quote}/dev/null{$quote} 2>&1 &", $cron->buildCommand());
+        self::assertSame("{$windows}php -i >> {$quote}/dev/null{$quote} 2>&1{$background}", $cron->buildCommand());
     }
 
     public function testGetSummaryForDisplay()
@@ -357,13 +367,11 @@ class CronTest extends MockeryTestCase
         self::assertEquals('* * * * 4 *', $cron->thursdays()->getExpression());
         self::assertTrue($cron->isDue('test'));
 
-        // TODO fix test
-        // $cron2 = new Cron($this->cache, 'php foo');
-        // $cron2->wednesdays()->dailyAt('19:00');
-        // $cron2->setTimezone('UTC');
+        self::assertFalse($cron->isDue('test', true));
 
-        // self::assertEquals('0 19 * * 3 *', $cron2->getExpression());
-        // self::assertTrue($cron2->isDue('test'));
+        $cron->evenInMaintenanceMode();
+
+        self::assertTrue($cron->isDue('test', true));
     }
 
     public function testCronRun()
@@ -379,11 +387,21 @@ class CronTest extends MockeryTestCase
             $_SERVER['test'] = $_SERVER['test'] . ' after';
         });
 
-        $cron->run();
+        // OK
+        self::assertSame(0, $cron->run());
 
         self::assertSame('before after', $_SERVER['test']);
 
         unset($_SERVER['test']);
+    }
+
+    public function testCronRunInBackground()
+    {
+        $cron = new Cron($this->cache, 'ls -lsa');
+        $cron->runInBackground();
+
+        // Error
+        self::assertSame(0, $cron->run());
     }
 
     public function testFrequencyMacro()
