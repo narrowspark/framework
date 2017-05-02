@@ -8,6 +8,7 @@ parameters:
     excludes_analyse:
         - %currentWorkingDirectory%/src/Viserio/Bridge/*/Tests/Fixture/*
         - %currentWorkingDirectory%/src/Viserio/Component/*/Tests/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Component/Routing/Tests/Fixture/*
         # Use all classes of php-cache
         - %currentWorkingDirectory%/src/Viserio/Component/Cache/*
 
