@@ -32,9 +32,9 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
      */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
-        if ($getPrevious !== null) {
-            $console = $getPrevious();
+        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
+        if ($console !== null) {
             $console->addCommands([
                 new CronListCommand(),
                 new ForgetCommand($container->get(CacheItemPoolInterface::class)),
@@ -44,6 +44,6 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
             return $console;
         }
 
-        return null;
+        return $console;
     }
 }

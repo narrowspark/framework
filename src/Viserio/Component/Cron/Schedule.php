@@ -43,7 +43,7 @@ class Schedule
     protected $cache;
 
     /**
-     * Set the mutex path.
+     * Create a new Schedule instance.
      *
      * @param \Psr\Cache\CacheItemPoolInterface $cache
      * @param string                            $path
@@ -88,7 +88,7 @@ class Schedule
      */
     public function command(string $command, array $parameters = []): CronContract
     {
-        if (class_exists($command) && $this->container !== null) {
+        if ($this->container !== null) {
             $command = $this->getContainer()->get($command)->getName();
         }
 
@@ -99,9 +99,7 @@ class Schedule
         } elseif ($this->console !== null) {
             $console = ProcessUtils::escapeArgument($this->console);
         } else {
-            // @codeCoverageIgnoreStart
-            throw new LogicException('You need to set a console name or a path to a console, befor you call command.');
-            // @codeCoverageIgnoreEnd
+            throw new LogicException('You need to set a console name or a path to a console, before you call command.');
         }
 
         return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);

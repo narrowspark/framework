@@ -189,8 +189,6 @@ class Cron implements CronContract
      * State that the cron job should run even in maintenance mode.
      *
      * @return $this
-     *
-     * @codeCoverageIgnore
      */
     public function evenInMaintenanceMode(): CronContract
     {
