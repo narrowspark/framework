@@ -16,7 +16,7 @@ final class Parser
     /**
      * Parses the supplied route pattern into an array of route segments.
      *
-     * Example: 'user/{id}/create'
+     * Example: '/user/{id}/create'
      * Should return: [
      *     \Viserio\Component\Routing\Matchers\StaticMatcher{ $value => 'user' },
      *     \Viserio\Component\Routing\Matchers\ParameterMatcher{ $name => 'id', $match => '[0-9]+' },
@@ -34,7 +34,7 @@ final class Parser
     {
         if (mb_strlen($route) > 1 && $route[0] !== '/') {
             throw new InvalidRoutePatternException(sprintf(
-                'Invalid route pattern: non-root route must be prefixed with \'/\', \'%s\' given',
+                'Invalid route pattern: non-root route must be prefixed with \'/\', \'%s\' given.',
                 $route
             ));
         }
@@ -102,7 +102,7 @@ final class Parser
                     continue;
                 } elseif ($character === '{') {
                     throw new InvalidRoutePatternException(sprintf(
-                        'Invalid route uri: cannot contain nested \'{\', \'%s\' given',
+                        'Invalid route uri; Cannot contain nested \'{\', \'%s\' given.',
                         $route
                     ));
                 }
@@ -115,7 +115,7 @@ final class Parser
                     continue;
                 } elseif ($character === '}') {
                     throw new InvalidRoutePatternException(sprintf(
-                        'Invalid route uri: cannot contain \'}\' before opening \'{\', \'%s\' given',
+                        'Invalid route uri; Cannot contain \'}\' before opening \'{\', \'%s\' given.',
                         $route
                     ));
                 }

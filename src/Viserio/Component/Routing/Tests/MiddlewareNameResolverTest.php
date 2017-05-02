@@ -8,7 +8,7 @@ use Viserio\Component\Routing\MiddlewareNameResolver;
 
 class MiddlewareNameResolverTest extends TestCase
 {
-    public function testRolveMiddleware()
+    public function testResolveMiddleware()
     {
         $map = [
             'test' => new stdClass(),
@@ -19,7 +19,17 @@ class MiddlewareNameResolverTest extends TestCase
         self::assertSame('dontexists', MiddlewareNameResolver::resolve('dontexists', $map, $middlewareGroups, []));
     }
 
-    public function testRolveMiddlewareGroup()
+    public function testResolveWithBypassMiddleware()
+    {
+        $map = [
+            'test' => new stdClass(),
+        ];
+        $middlewareGroups = [];
+
+        self::assertSame([], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups, ['test']));
+    }
+
+    public function testResolveMiddlewareGroup()
     {
         $map = [
             'test'  => new stdClass(),
@@ -35,7 +45,7 @@ class MiddlewareNameResolverTest extends TestCase
         self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 
-    public function testRolveMiddlewareGroupWitNestedGroup()
+    public function testResolveMiddlewareGroupWitNestedGroup()
     {
         $map = [
             'test'     => new stdClass(),

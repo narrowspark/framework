@@ -11,6 +11,8 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Dispatchers\SimpleDispatcher;
 use Viserio\Component\Routing\Router;
+use Viserio\Component\Routing\Route;
+use Psr\Http\Message\ResponseInterface;
 
 class RouterTest extends MockeryTestCase
 {
@@ -52,6 +54,23 @@ class RouterTest extends MockeryTestCase
         $router->dispatch(
             (new ServerRequestFactory())->createServerRequest('GET', 'invalid')
         );
+    }
+
+    public function testRouterDispatch()
+    {
+        $router = $this->router;
+
+        $router->get('/invalid', function () {
+            return $this->mock(ResponseInterface::class);
+        });
+
+        self::assertNull($router->getCurrentRoute());
+
+        $router->dispatch(
+            (new ServerRequestFactory())->createServerRequest('GET', '/invalid')
+        );
+
+        self::assertInstanceOf(Route::class, $router->getCurrentRoute());
     }
 
     public function testMergingControllerUses()
