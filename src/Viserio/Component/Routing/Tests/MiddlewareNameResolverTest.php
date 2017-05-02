@@ -59,7 +59,7 @@ class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        self::assertSame([array_values($map)], MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
+        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 
     public function testResolveMiddlewareGroupWitNestedGroup()
