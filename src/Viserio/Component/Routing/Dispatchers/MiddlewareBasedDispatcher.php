@@ -34,6 +34,8 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function withoutMiddleware($middlewares = null)
     {

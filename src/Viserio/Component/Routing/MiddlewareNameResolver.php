@@ -42,7 +42,7 @@ class MiddlewareNameResolver
         foreach ($middlewareGroups[$name] as $middleware) {
             $name = is_object($middleware) ? get_class($middleware) : $middleware;
 
-            if (isset($disabledMiddlewares[$name])) {
+            if (isset($disabledMiddlewares[$name]) || in_array($name, $disabledMiddlewares)) {
                 continue;
             }
 
