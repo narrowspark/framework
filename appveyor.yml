@@ -19,6 +19,11 @@ matrix:
     - dependencies: lowest
       php_ver_target: 7.1
 
+services:
+  - mongodb
+  - memcached
+  - redis
+
 cache:
   - '%LOCALAPPDATA%\Composer\files -> composer.lock'
   - composer.phar
@@ -35,10 +40,11 @@ init:
   - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
+  # Install memcached
+  - choco install -y memcached
   # Install redis
-  - nuget install redis-64 -excludeversion
-  - redis-64\tools\redis-server.exe --service-install
-  - redis-64\tools\redis-server.exe --service-start
+  - choco install -y redis
+  # PHP
   - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
   - cinst -y OpenSSL.Light
   - ps: appveyor-retry cinst --params '""/InstallDir:C:\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
@@ -69,6 +75,7 @@ install:
   - mkdir %APPDATA%\Composer
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd c:\projects\narrowspark
+  # Matrix
   - IF %dependencies%==basic appveyor-retry composer install --prefer-dist --no-interaction --profile --no-suggest --no-progress --ansi
   - IF %dependencies%==lowest appveyor-retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --profile --no-suggest --no-progress --ansi
   - IF %dependencies%==stable appveyor-retry composer update --prefer-dist --no-interaction --prefer-stable --profile --no-progress --ansi
