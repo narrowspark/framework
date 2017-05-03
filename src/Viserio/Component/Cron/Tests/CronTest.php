@@ -273,10 +273,10 @@ class CronTest extends MockeryTestCase
         $cron          = new Cron('php -i');
         $isWindows     = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
         $defaultOutput = $isWindows ? 'NUL' : '/dev/null';
-        $windows       = $isWindows ? 'start /B' : '';
+        $windows       = $isWindows ? 'start /B ' : '';
         $background    = $isWindows ? '' : ' &';
 
-        self::assertSame("{$windows} php -i > {$quote}{$defaultOutput}{$quote} 2>&1{$background}", $cron->buildCommand());
+        self::assertSame("{$windows}php -i > {$quote}{$defaultOutput}{$quote} 2>&1{$background}", $cron->buildCommand());
     }
 
     public function testGetAndSetUser()
