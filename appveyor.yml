@@ -70,8 +70,8 @@ install:
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd c:\projects\narrowspark
   - IF %dependencies%==basic appveyor-retry composer install --prefer-dist --no-interaction --profile --no-suggest --no-progress --ansi
-  - IF %dependencies%==lowest appveyor-retry composer update --prefer-dist --no-interaction --prefer-stable --profile --no-progress --ansi
-  - IF %dependencies%==stable appveyor-retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest --no-progress --ansi
+  - IF %dependencies%==lowest appveyor-retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --profile --no-suggest --no-progress --ansi
+  - IF %dependencies%==stable appveyor-retry composer update --prefer-dist --no-interaction --prefer-stable --profile --no-progress --ansi
 
 test_script:
   - cd c:\projects\narrowspark
