@@ -21,8 +21,7 @@ matrix:
 
 services:
   - mongodb
-  # - memcached
-  - redis
+  - memcached
 
 cache:
   - '%LOCALAPPDATA%\Composer\files -> composer.lock'
@@ -40,11 +39,12 @@ init:
   - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
-  - chocolatey upgrade chocolatey
   # Install memcached
-  # - choco install -y memcached
-  # Install redis
-  - choco install -y redis
+  - choco install -y memcached
+  # Install redis and start
+  - nuget install redis-64 -excludeversion
+  - redis-64\tools\redis-server.exe --service-install
+  - redis-64\tools\redis-server.exe --service-start
   # PHP
   - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
   - cinst -y OpenSSL.Light
@@ -54,6 +54,8 @@ install:
   - IF %PHP%==1 cd ext
   - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/mongodb/1.2.2/php_mongodb-1.2.2-7.1-nts-vc14-x64.zip
   - IF %PHP%==1 7z x php_mongodb-1.2.2-7.1-nts-vc14-x64.zip -y >nul
+  - IF %PHP%==1 appveyor DownloadFile https://github.com/nono303/PHP7-memcache-dll/blob/master/vc14/x64/nts/php-7.1.x_memcache.dll?raw=true
+  - IF %PHP%==1 rename php-7.1.x_memcache.dll php_memcache.dll
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ..
   - IF %PHP%==1 copy /Y php.ini-production php.ini
