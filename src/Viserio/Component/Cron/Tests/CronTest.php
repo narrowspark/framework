@@ -362,6 +362,7 @@ class CronTest extends MockeryTestCase
         Chronos::setTestNow(Chronos::create(2015, 1, 1, 0, 0, 0));
 
         $cron = new Cron('php foo');
+        $cron->setTimezone('Europe/Berlin');
 
         self::assertEquals('* * * * 4 *', $cron->thursdays()->getExpression());
         self::assertTrue($cron->isDue('test'));
@@ -399,7 +400,7 @@ class CronTest extends MockeryTestCase
         $cron = new Cron('ls -lsa');
         $cron->runInBackground();
 
-        // Error
+        // OK
         self::assertSame(0, $cron->run());
     }
 
