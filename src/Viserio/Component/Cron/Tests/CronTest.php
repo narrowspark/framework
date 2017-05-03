@@ -4,8 +4,8 @@ namespace Viserio\Component\Cron\Tests;
 
 use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cron\Cron;
 
 class CronTest extends MockeryTestCase
