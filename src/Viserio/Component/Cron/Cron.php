@@ -678,11 +678,23 @@ class Cron implements CronContract
      */
     protected function ensureCorrectUser(string $command): string
     {
-        // Windows fix:
+        if ($this->user && ! $this->isWindows()) {
+            return 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'';
+
+        // Fix for windows:
+        // http://de2.php.net/manual/en/function.exec.php#56599
         // The "start" command will start a detached process, a similar effect to &. The "/B" option prevents
         // start from opening a new terminal window if the program you are running is a console application.
+        } elseif($this->user && $this->isWindows()) {
+            // https://superuser.com/questions/42537/is-there-any-sudo-command-for-windows
+            // Options for runas : [{/profile|/noprofile}] [/env] [/netonly] [/smartcard] [/showtrustlevels] [/trustlevel] /user:UserAccountName
 
-        return $this->user && ! $this->isWindows() ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : 'start /B ' . $command;
+            return 'runas ' . $this->user . 'start /B ' . $command;
+        } elseif($this->isWindows()) {
+            return 'start /B ' . $command;
+        }
+
+        return $command;
     }
 
     /**
