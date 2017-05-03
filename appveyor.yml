@@ -21,7 +21,7 @@ matrix:
 
 services:
   - mongodb
-  - memcached
+  # - memcached
   - redis
 
 cache:
@@ -41,7 +41,7 @@ init:
 
 install:
   # Install memcached
-  - choco install -y memcached
+  # - choco install -y memcached
   # Install redis
   - choco install -y redis
   # PHP
