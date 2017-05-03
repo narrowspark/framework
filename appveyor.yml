@@ -39,8 +39,6 @@ init:
   - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
-  # Install memcached
-  - choco install -y memcached
   # Install redis and start
   - nuget install redis-64 -excludeversion
   - redis-64\tools\redis-server.exe --service-install
@@ -66,6 +64,7 @@ install:
   - IF %PHP%==1 echo opcache.enable_cli=1 >> php.ini
   - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
   - IF %PHP%==1 echo extension=php_mongodb.dll >> php.ini
+  - IF %PHP%==1 echo extension=php_memcache.dll >> php.ini
   - IF %PHP%==1 echo apc.enable_cli=1 >> php.ini
   - IF %PHP%==1 echo extension=php_intl.dll >> php.ini
   - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
