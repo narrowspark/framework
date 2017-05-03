@@ -90,5 +90,44 @@ class CallbackCronTest extends MockeryTestCase
         unset($_SERVER['test']);
     }
 
+    public function testCronRunWithoutOverlappinga()
+    {
+        $name = 'schedule-' . sha1('* * * * * *' . 'test');
+        $item = $this->mock(CacheItemInterface::class);
+        $item->shouldReceive('set')
+            ->once()
+            ->with($name);
+        $item->shouldReceive('expiresAfter')
+            ->once()
+            ->with(1440);
+        $cache = $this->mock(CacheItemPoolInterface::class);
+        $cache->shouldReceive('getItem')
+            ->once()
+            ->andReturn($item);
+        $cache->shouldReceive('save')
+            ->once()
+            ->with($item);
+        $cache->shouldReceive('deleteItem')
+            ->once()
+            ->with($name);
+
+        $_SERVER['test'] = false;
+
+        $cron = new CallbackCron(function () {
+            $_SERVER['test'] = true;
+        });
+        $cron->setCacheItemPool($cache)
+            ->setDescription('test')
+            ->withoutOverlapping()
+            ->runInBackground();
+
+        // OK
+        $cron->run();
+
+        self::assertTrue($_SERVER['test']);
+
+        unset($_SERVER['test']);
+    }
+
     //TODO: Add before | this is the output of the cron | after test case
 }

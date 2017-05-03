@@ -5,6 +5,7 @@ namespace Viserio\Component\Cron\Tests;
 use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\CacheItemInterface;
 use Viserio\Component\Cron\Cron;
 
 class CronTest extends MockeryTestCase
@@ -399,6 +400,36 @@ class CronTest extends MockeryTestCase
     {
         $cron = new Cron('ls -lsa');
         $cron->runInBackground();
+
+        // OK
+        self::assertSame(0, $cron->run());
+    }
+
+    public function testCronRunWithoutOverlapping()
+    {
+        $name = 'schedule-' . sha1('* * * * * *' . 'ls -lsa');
+        $item = $this->mock(CacheItemInterface::class);
+        $item->shouldReceive('set')
+            ->once()
+            ->with($name);
+        $item->shouldReceive('expiresAfter')
+            ->once()
+            ->with(1440);
+        $cache = $this->mock(CacheItemPoolInterface::class);
+        $cache->shouldReceive('getItem')
+            ->once()
+            ->andReturn($item);
+        $cache->shouldReceive('save')
+            ->once()
+            ->with($item);
+        $cache->shouldReceive('deleteItem')
+            ->once()
+            ->with($name);
+
+        $cron = new Cron('ls -lsa');
+        $cron->setCacheItemPool($cache)
+            ->withoutOverlapping()
+            ->runInBackground();
 
         // OK
         self::assertSame(0, $cron->run());

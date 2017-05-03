@@ -33,6 +33,8 @@ class ScheduleTest extends MockeryTestCase
     public function testExecCreatesNewCommand()
     {
         $schedule = new Schedule(__DIR__);
+        $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
+
         $schedule->exec('path/to/command');
         $schedule->exec('path/to/command -f --foo="bar"');
         $schedule->exec('path/to/command', ['-f']);
@@ -60,6 +62,7 @@ class ScheduleTest extends MockeryTestCase
     public function testCommandCreatesNewCerebroCommand()
     {
         $schedule = new Schedule(__DIR__, 'cerebro');
+        $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
 
         $schedule->command('clear:view');
         $schedule->command('clear:view --tries=3');
@@ -164,7 +167,9 @@ class ScheduleTest extends MockeryTestCase
     public function testCreateNewCerebroCommandUsingCallBack()
     {
         $schedule = new Schedule(__DIR__, 'cerebro');
+        $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
         $schedule->setContainer(new ArrayContainer([]));
+
         $schedule->call(function () {
             return 'foo';
         });

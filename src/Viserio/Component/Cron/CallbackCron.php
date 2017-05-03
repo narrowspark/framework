@@ -116,6 +116,6 @@ class CallbackCron extends Cron
      */
     protected function getMutexName(): string
     {
-        return 'schedule-' . sha1($this->description);
+        return 'schedule-' . sha1($this->expression . $this->description);
     }
 }
