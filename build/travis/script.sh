@@ -12,7 +12,7 @@ bash -e <<TRY
     if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
         ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
     elif [[ "$PHPUNIT" = true ]]; then
-        for f in ./src/Viserio/*/*; do
+        for f in ./; do
                     print "$f";
 
         done
