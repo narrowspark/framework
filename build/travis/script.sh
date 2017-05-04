@@ -2,9 +2,20 @@
 
 # Create logs dir
 mkdir -p build/logs
-for f in src/Viserio/*/*; do
-    echo "$f";
+
+for f in ./src/Viserio/*/*; do
+    if [[ -d "$f" && ! -L "$f" ]]; then
+        SLUG="$(basename $f)";
+        TYPE="$(basename ${f%/*})";
+
+        if [[ "$TYPE" = "Component" ]]; then
+            tfold ./vendor/bin/phpunit -c phpunit.xml.dist --testsuite="Narrowspark $SLUG Component Test Suite" --verbose;
+        elif [[ "$TYPE" = "Bridge" ]]; then
+            tfold ./vendor/bin/phpunit -c phpunit.xml.dist --testsuite="Narrowspark $SLUG Bridge Test Suite" --verbose;
+        fi
+    fi
 done
+
 set +e
 bash -e <<TRY
     if [[ "$PHPSTAN" = true ]]; then
@@ -14,11 +25,7 @@ bash -e <<TRY
     if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
         ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
     elif [[ "$PHPUNIT" = true ]]; then
-        for f in src/Viserio/*/*; do
-            if [[ -d "$f" && ! -L "$f" ]]; then
-                echo "test $f";
-            fi
-        done
+
     fi
 TRY
 if [ $? -ne 0 ]; then
