@@ -17,7 +17,7 @@ if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
     # Create logs dir
     mkdir -p build/logs
 
-    "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
+    bash -xc ""$TEST" -c ../../phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
 elif [[ "$PHPUNIT" = true ]]; then
     for f in ./src/Viserio/*/*; do
         if [[ -d "$f" && ! -L "$f" ]]; then
