@@ -12,8 +12,8 @@ bash -e <<TRY
     if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
         ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
     elif [[ "$PHPUNIT" = true ]]; then
-        for f in ./; do
-                    print "$f";
+        for f in src/*; do
+            echo "$f";
 
         done
     fi
