@@ -2,7 +2,7 @@
 
 # Create logs dir
 mkdir -p build/logs
-for f in ../../src/Viserio/*/*; do
+for f in src/Viserio/*/*; do
     echo "$f";
 done
 set +e
