@@ -244,11 +244,12 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     protected function sendRequestThroughRouter(ServerRequestInterface $request): ResponseInterface
     {
-        $container = $this->getContainer();
-        $router    = $container->get(RouterContract::class);
+        $container  = $this->getContainer();
+        $router     = $container->get(RouterContract::class);
+        $dispatcher = $container->get(DispatcherContract::class);
 
-        $router->setCachePath($this->getStoragePath('framework/routes.cache.php'));
-        $router->refreshCache($this->options['app']['env'] !== 'production');
+        $dispatcher->setCachePath($this->getStoragePath('framework/routes.cache.php'));
+        $dispatcher->refreshCache($this->options['app']['env'] !== 'production');
 
         return (new Pipeline())
             ->setContainer($container)
