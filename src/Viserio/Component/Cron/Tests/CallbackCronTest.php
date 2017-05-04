@@ -29,7 +29,7 @@ class CallbackCronTest extends MockeryTestCase
      */
     public function testCallbackCronToThrowException()
     {
-        new CallbackCron($this->cache, new CallbackCron($this->cache, 'tests'));
+        new CallbackCron(new CallbackCron('tests'));
     }
 
     /**
@@ -38,7 +38,7 @@ class CallbackCronTest extends MockeryTestCase
      */
     public function testWithoutOverlappingToThrowException()
     {
-        $cron = new CallbackCron($this->cache, 'tests');
+        $cron = new CallbackCron('tests');
         $cron->withoutOverlapping();
     }
 
@@ -62,9 +62,10 @@ class CallbackCronTest extends MockeryTestCase
         $cache->shouldReceive('deleteItem')
             ->once();
 
-        $cron = new CallbackCron($cache, function () {
+        $cron = new CallbackCron(function () {
             $_SERVER['test'] = true;
         });
+        $cron->setCacheItemPool($cache);
         $cron->setPath(__DIR__);
 
         $cron->run();
@@ -75,15 +76,55 @@ class CallbackCronTest extends MockeryTestCase
 
         $_SERVER['test'] = false;
 
-        $cron = new CallbackCron($cache, function () {
+        $cron = new CallbackCron(function () {
             $_SERVER['test'] = true;
         });
+        $cron->setCacheItemPool($cache);
         $cron->setPath(__DIR__);
 
         $cron->setDescription('run test')->run();
 
         self::assertTrue($_SERVER['test']);
         self::assertSame('run test', $cron->getSummaryForDisplay());
+
+        unset($_SERVER['test']);
+    }
+
+    public function testCronRunWithoutOverlappinga()
+    {
+        $name = 'schedule-' . sha1('* * * * * *' . 'test');
+        $item = $this->mock(CacheItemInterface::class);
+        $item->shouldReceive('set')
+            ->once()
+            ->with($name);
+        $item->shouldReceive('expiresAfter')
+            ->once()
+            ->with(1440);
+        $cache = $this->mock(CacheItemPoolInterface::class);
+        $cache->shouldReceive('getItem')
+            ->once()
+            ->andReturn($item);
+        $cache->shouldReceive('save')
+            ->once()
+            ->with($item);
+        $cache->shouldReceive('deleteItem')
+            ->once()
+            ->with($name);
+
+        $_SERVER['test'] = false;
+
+        $cron = new CallbackCron(function () {
+            $_SERVER['test'] = true;
+        });
+        $cron->setCacheItemPool($cache)
+            ->setDescription('test')
+            ->withoutOverlapping()
+            ->runInBackground();
+
+        // OK
+        $cron->run();
+
+        self::assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
     }
