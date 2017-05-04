@@ -22,9 +22,9 @@ elif [[ "$PHPUNIT" = true ]]; then
             TYPE="$(basename ${f%/*})";
 
             if [[ "$TYPE" = "Component" ]]; then
-                tfold "Narrowspark $SLUG Component Test Suite" $PHPUNIT --testsuite="Narrowspark $SLUG Component Test Suite" --verbose;
+                tfold "Narrowspark $SLUG Component Test Suite" $TEST --testsuite="Narrowspark $SLUG Component Test Suite" --verbose;
             elif [[ "$TYPE" = "Bridge" ]]; then
-                tfold "Narrowspark $SLUG Bridge Test Suite" $PHPUNIT --testsuite="Narrowspark $SLUG Bridge Test Suite" --verbose;
+                tfold "Narrowspark $SLUG Bridge Test Suite" $TEST --testsuite="Narrowspark $SLUG Bridge Test Suite" --verbose;
             fi
         fi
     done

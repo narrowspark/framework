@@ -4,7 +4,7 @@ sudo: false
 
 env:
   global:
-    - PHPUNIT="./vendor/bin/phpunit"
+    - TEST="./vendor/bin/phpunit"
 
 services:
   - memcached
