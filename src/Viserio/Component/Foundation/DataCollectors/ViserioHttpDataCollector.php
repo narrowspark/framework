@@ -308,45 +308,10 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
-        $middlewares = $route->gatherMiddleware();
-
-        if ($middleware = $this->getMiddlewares($middlewares)) {
-            $result['middlewares'] = $middleware;
-        }
-
-        if ($middleware = $this->getWithoutMiddlewares($middlewares)) {
-            $result['without_middlewares'] = $middleware;
-        }
+        $result['middlewares'] = implode(', ', $route->gatherMiddleware());
+        $result['without_middlewares'] = implode(', ', $route->gatherDisabledMiddlewares());
 
         return $result;
-    }
-
-    /**
-     * Get middleware.
-     *
-     * @param array $middlewares
-     *
-     * @return string
-     */
-    protected function getMiddlewares(array $middlewares): string
-    {
-        $middleware = array_keys($middlewares['middlewares']);
-
-        return implode(', ', $middleware);
-    }
-
-    /**
-     * Get without middleware.
-     *
-     * @param array $middlewares
-     *
-     * @return string
-     */
-    protected function getWithoutMiddlewares(array $middlewares): string
-    {
-        $middleware = array_keys($middlewares['without_middlewares']);
-
-        return implode(', ', $middleware);
     }
 
     /**
