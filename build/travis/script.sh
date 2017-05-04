@@ -16,7 +16,7 @@ export -f tfold
 # if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
 #     ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
 # elif [[ "$PHPUNIT" = true ]]; then
-    for f in ../../src/Viserio/*/*; do
+    for f in ./src/Viserio/*/*; do
         if [[ -d "$f" && ! -L "$f" ]]; then
             SLUG="$(basename $f)";
             TYPE="$(basename ${f%/*})";
