@@ -77,7 +77,7 @@ class ScheduleRunCommandTest extends MockeryTestCase
         $schedule = new Schedule(__DIR__);
         $schedule->call(function () {
             return 'foo';
-        })->when(function() {
+        })->when(function () {
             return false;
         });
 
