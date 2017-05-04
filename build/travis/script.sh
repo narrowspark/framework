@@ -15,11 +15,11 @@ tfold () {
     bash -xc "$*" 2>&1 && echo -e "\\e[32mOK\\e[0m $title\\n\\ntravis_fold:end:$fold" || ( echo -e "\\e[41mKO\\e[0m $title\\n" && exit 1 )
 }
 export -f tfold
-TEST="phpunit"
-# if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
-#     ./vendor/bin/phpunit -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
-# elif [[ "$PHPUNIT" = true ]]; then
-    for f in ../../src/Viserio/*/*; do
+
+if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
+    ./vendor/bin/phpunit -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
+elif [[ "$PHPUNIT" = true ]]; then
+    for f in ./src/Viserio/*/*; do
         if [[ -d "$f" && ! -L "$f" ]]; then
             SLUG="$(basename $f)";
             TYPE="$(basename ${f%/*})";
@@ -30,9 +30,9 @@ TEST="phpunit"
                 TESTSUITE="Narrowspark $SLUG Bridge Test Suite";
             fi
 
-            tfold "$TESTSUITE" "$TEST -c ../../phpunit.xml.dist --testsuite=\"$TESTSUITE\"";
+            tfold "$TESTSUITE" "$TEST -c ./phpunit.xml.dist --testsuite=\"$TESTSUITE\"";
         fi
     done
-# elif [[ "$PHPSTAN" = true ]]; then
-#     ./vendor/bin/phpstan analyse -c phpstan.neon -l 5 src/Viserio
-# fi
+elif [[ "$PHPSTAN" = true ]]; then
+    ./vendor/bin/phpstan analyse -c phpstan.neon -l 5 src/Viserio
+fi
