@@ -11,9 +11,9 @@ class AliasLoaderTest extends TestCase
     public function testLiteral()
     {
         $aliasloader = new AliasLoader();
-        $aliasloader->alias('Test', Foo::class);
+        $aliasloader->alias('TestFoo', Foo::class);
 
-        self::assertTrue($aliasloader->load('Test'));
+        self::assertTrue($aliasloader->load('TestFoo'));
         self::assertFalse($aliasloader->load('Unknown'));
     }
 

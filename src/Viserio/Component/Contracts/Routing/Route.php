@@ -8,13 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 interface Route
 {
     /**
-     * Get the route server request.
-     *
-     * @return \Psr\Http\Message\ServerRequestInterface
-     */
-    public function getServerRequest(): ServerRequestInterface;
-
-    /**
      * Get the domain defined for the route.
      *
      * @return string|null
@@ -67,6 +60,13 @@ interface Route
      * @return array
      */
     public function gatherMiddleware(): array;
+
+    /**
+     * Return all disabled middlewares.
+     *
+     * @return array
+     */
+    public function gatherDisabledMiddlewares(): array;
 
     /**
      * Determine if the route only responds to HTTP requests.
@@ -206,18 +206,11 @@ interface Route
     public function getController();
 
     /**
-     * Bind the route to a given server request.
-     *
-     * @param\Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return $this
-     */
-    public function bindServerRequest(ServerRequestInterface $request): Route;
-
-    /**
      * Run the route action and return the response.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function run(): ResponseInterface;
+    public function run(ServerRequestInterface $serverRequest): ResponseInterface;
 }

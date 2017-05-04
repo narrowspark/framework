@@ -6,7 +6,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class InlineParameterRouterTest extends RouteRouterBaseTest
+class InlineParameterRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
@@ -42,7 +42,6 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
             ['GET', '/blog/post/abc!@#'],
             ['GET', '/blog/post/aBc'],
             ['GET', '/blog/post/another-123-post/comment/foo'],
-            ['GET', '/blog/post/another-123-post/comment/'],
             ['GET', '/blog/post/another-123-post/comment/-1'],
         ];
     }

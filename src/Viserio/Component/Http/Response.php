@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
+use Fig\Http\Message\StatusCodeInterface;
 use InvalidArgumentException;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 
-class Response extends AbstractMessage implements ResponseInterface
+class Response extends AbstractMessage implements ResponseInterface, StatusCodeInterface
 {
     /**
      * @var null|string
@@ -16,7 +17,7 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * @var int
      */
-    private $statusCode = 200;
+    private $statusCode = self::STATUS_OK;
 
     /**
      * Create a new response instance.
@@ -29,7 +30,7 @@ class Response extends AbstractMessage implements ResponseInterface
      * @throws InvalidArgumentException on any invalid element
      */
     public function __construct(
-        int $status = 200,
+        int $status = self::STATUS_OK,
         array $headers = [],
         $body = null,
         string $version = '1.1'

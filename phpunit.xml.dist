@@ -21,9 +21,9 @@
     </php>
 
     <testsuites>
-        <!--<testsuite name="Narrowspark Doctrine Bridge Test Suite">
+        <testsuite name="Narrowspark Doctrine Bridge Test Suite">
             <directory>./src/Viserio/Bridge/Doctrine/Tests</directory>
-        </testsuite>-->
+        </testsuite>
         <testsuite name="Narrowspark Twig Bridge Test Suite">
             <directory>./src/Viserio/Bridge/Twig/Tests</directory>
         </testsuite>

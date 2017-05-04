@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
 use LogicException;
-use Narrowspark\Arr\Arr;
 use UnexpectedValueException;
 
 class Action
@@ -34,15 +33,17 @@ class Action
         // If no "uses" property has been set, we will dig through the array to find a
         // Closure instance within this list. We will set the first Closure we come across.
         if (! isset($action['uses'])) {
-            $action['uses'] = Arr::first($action, function ($key, $value) {
+            $callback = function ($key, $value) {
                 return is_callable($value) && is_numeric($key);
-            });
+            };
+
+            $action['uses'] = self::getFirst($action, $callback);
         }
 
         if (is_string($action['uses']) && mb_strpos($action['uses'], '@') === false) {
             if (! method_exists($action['uses'], '__invoke')) {
                 throw new UnexpectedValueException(sprintf(
-                    'Invalid route action: [%s]',
+                    'Invalid route action: [%s].',
                     $action['uses']
                 ));
             }
@@ -65,5 +66,22 @@ class Action
         return ['uses' => function () use ($uri) {
             throw new LogicException(sprintf('Route for [%s] has no action.', $uri));
         }];
+    }
+
+    /**
+     * Return the first element in an array passing a given truth test.
+     *
+     * @param array    $array
+     * @param callable $callback
+     *
+     * @return mixed
+     */
+    protected static function getFirst(array $array, callable $callback)
+    {
+        foreach ($array as $key => $value) {
+            if ($callback($key, $value)) {
+                return $value;
+            }
+        }
     }
 }

@@ -8,18 +8,45 @@ use Viserio\Component\Routing\MiddlewareNameResolver;
 
 class MiddlewareNameResolverTest extends TestCase
 {
-    public function testRolveMiddleware()
+    public function testResolveMiddleware()
     {
         $map = [
             'test' => new stdClass(),
         ];
         $middlewareGroups = [];
 
-        self::assertSame($map['test'], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups));
-        self::assertSame('dontexists', MiddlewareNameResolver::resolve('dontexists', $map, $middlewareGroups));
+        self::assertSame($map['test'], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups, []));
+        self::assertSame('dontexists', MiddlewareNameResolver::resolve('dontexists', $map, $middlewareGroups, []));
     }
 
-    public function testRolveMiddlewareGroup()
+    public function testResolveWithBypassMiddleware()
+    {
+        $map = [
+            'test' => new stdClass(),
+        ];
+        $middlewareGroups = [];
+
+        self::assertSame([], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups, ['test']));
+    }
+
+    public function testResolveWithBypassMiddlewareOnGroup()
+    {
+        $test2 = new stdClass();
+        $map   = [
+            'test'  => new stdClass(),
+            'test2' => $test2,
+        ];
+        $middlewareGroups = [
+            'web' => [
+                'test',
+                'test2',
+            ],
+        ];
+
+        self::assertSame([$test2], MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, ['test']));
+    }
+
+    public function testResolveMiddlewareGroup()
     {
         $map = [
             'test'  => new stdClass(),
@@ -32,10 +59,10 @@ class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups));
+        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 
-    public function testRolveMiddlewareGroupWitNestedGroup()
+    public function testResolveMiddlewareGroupWitNestedGroup()
     {
         $map = [
             'test'     => new stdClass(),
@@ -53,6 +80,6 @@ class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups));
+        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 }

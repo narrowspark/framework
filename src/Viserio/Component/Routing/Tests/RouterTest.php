@@ -1,13 +1,17 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Tests\Router;
+namespace Viserio\Component\Routing\Tests;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ResponseInterface;
 use stdClass;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
+use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
+use Viserio\Component\Routing\Dispatchers\SimpleDispatcher;
+use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Router;
 
 class RouterTest extends MockeryTestCase
@@ -18,9 +22,13 @@ class RouterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $router = new Router($this->mock(ContainerInterface::class));
-        $router->setCachePath(__DIR__ . '/../Cache/RouterTest.cache');
-        $router->refreshCache(true);
+        $dispatcher  = new MiddlewareBasedDispatcher();
+        $dispatcher->setContainer($this->mock(ContainerInterface::class));
+        $dispatcher->setCachePath(__DIR__ . '/../Cache/RouterTest.cache');
+        $dispatcher->refreshCache(true);
+
+        $router = new Router($dispatcher);
+        $router->setContainer($this->mock(ContainerInterface::class));
 
         $this->router = $router;
     }
@@ -37,13 +45,32 @@ class RouterTest extends MockeryTestCase
      */
     public function testRouterInvalidRouteAction()
     {
-        $router    = new Router($this->mock(ContainerInterface::class));
-        $router->setCachePath(__DIR__ . '/invalid.cache');
+        $dispatcher = new SimpleDispatcher();
+        $dispatcher->setCachePath(__DIR__ . '/invalid.cache');
+
+        $router = new Router($dispatcher);
 
         $router->get('/invalid', ['uses' => stdClass::class]);
         $router->dispatch(
             (new ServerRequestFactory())->createServerRequest('GET', 'invalid')
         );
+    }
+
+    public function testRouterDispatch()
+    {
+        $router = $this->router;
+
+        $router->get('/invalid', function () {
+            return $this->mock(ResponseInterface::class);
+        });
+
+        self::assertNull($router->getCurrentRoute());
+
+        $router->dispatch(
+            (new ServerRequestFactory())->createServerRequest('GET', '/invalid')
+        );
+
+        self::assertInstanceOf(Route::class, $router->getCurrentRoute());
     }
 
     public function testMergingControllerUses()
@@ -113,6 +140,8 @@ class RouterTest extends MockeryTestCase
                 );
             }]);
         });
+
+        self::assertSame([], $router->getGroupStack());
 
         $route = $router->getRoutes()->getByName('Foo::bar');
 
@@ -301,6 +330,18 @@ class RouterTest extends MockeryTestCase
         $routes[1]->addSuffix('bar');
 
         self::assertEquals('/bar', $routes[1]->getUri());
+    }
+
+    public function testSetRemoveAndGetParameters()
+    {
+        $router = $this->router;
+        $router->setParameter('foo', 'bar');
+
+        self::assertSame(['foo' => 'bar'], $router->getParameters());
+
+        $router->removeParameter('foo', 'bar');
+
+        self::assertSame([], $router->getParameters());
     }
 
     private function delTree($dir)

@@ -11,7 +11,7 @@ use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 use Viserio\Component\Routing\Tests\Fixture\RouteTestClosureMiddlewareController;
 
-class RootRoutesRouterTest extends RouteRouterBaseTest
+class RootRoutesRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
@@ -121,6 +121,9 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
         $router->getContainer()->shouldReceive('get')
             ->with(ControllerClosureMiddleware::class)
             ->andReturn(new ControllerClosureMiddleware());
+        $router->getContainer()->shouldReceive('has')
+            ->with(RouteTestClosureMiddlewareController::class)
+            ->andReturn(true);
         $router->getContainer()->shouldReceive('get')
             ->with(RouteTestClosureMiddlewareController::class)
             ->andReturn(new RouteTestClosureMiddlewareController());
@@ -137,9 +140,9 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
         ])->setParameter('name', 'middleware3');
 
         $router->get('/middleware4', [
-            'uses'                => RouteTestClosureMiddlewareController::class . '@index',
-            'middlewares'         => FooMiddleware::class,
-            'without_middlewares' => FooMiddleware::class,
+            'uses'        => RouteTestClosureMiddlewareController::class . '@index',
+            'middlewares' => FooMiddleware::class,
+            'bypass'      => FooMiddleware::class,
         ])->setParameter('name', 'middleware4');
 
         $router->getContainer()->shouldReceive('has')

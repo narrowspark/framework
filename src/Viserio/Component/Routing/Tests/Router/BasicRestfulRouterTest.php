@@ -7,12 +7,13 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class BasicRestfulRouterTest extends RouteRouterBaseTest
+class BasicRestfulRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
         return [
             ['GET', '/user', 'user.index | '],
+            ['GET', '/user/', 'user.index | '],
             ['GET', '/user/create', 'user.create | '],
             ['POST', '/user', 'user.save | '],
             ['GET', '/user/1', 'user.show | 1'],
@@ -47,13 +48,11 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ['GET', '/'],
             ['GET', '/users'],
             ['GET', '/users/1'],
-            ['GET', '/user/'],
             ['GET', '/user/abc'],
             ['GET', '/user/-1'],
             ['GET', '/user/1.0'],
-            ['GET', '/user/1/'],
+            ['GET', '/user/1///'],
             ['GET', '/user//edit'],
-            ['GET', '/user/1/edit/'],
             ['GET', '/user/abc/edit'],
             ['GET', '/user/-1/edit'],
         ];

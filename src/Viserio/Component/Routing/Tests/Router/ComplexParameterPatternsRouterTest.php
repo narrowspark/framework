@@ -7,7 +7,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
+class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
@@ -48,17 +48,15 @@ class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
             ['GET', 'a/'],
             ['GET', '/a/abc'],
             ['GET', '/a/prefix:'],
-            ['GET', '/a/prefix:abc/'],
+            ['GET', '/a//prefix:abc/'],
             ['GET', '/b/'],
             ['GET', '/b/abc'],
             ['GET', '/b/:suffix'],
-            ['GET', '/b/abc:suffix/'],
             ['GET', '/c/'],
             ['GET', '/c/abc'],
             ['GET', '/c/:suffix'],
             ['GET', '/c/prefix:'],
-            ['GET', '/c/prefix::suffix'],
-            ['GET', '/c/prefix:abc:suffix/'],
+            ['GET', '/c////prefix::suffix'],
             ['GET', '/d/'],
             ['GET', '/d/abc'],
             ['GET', '/d/-:'],

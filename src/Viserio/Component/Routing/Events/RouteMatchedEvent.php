@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Events;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Events\Event as EventContract;
+use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
 class RouteMatchedEvent implements EventContract
@@ -14,14 +15,14 @@ class RouteMatchedEvent implements EventContract
     /**
      * Create a new route matched event.
      *
-     * @param Viserio\Component\Contracts\Routing\Router $router
-     * @param \Viserio\Component\Contracts\Routing\Route $route
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Viserio\Component\Contracts\Routing\Dispatcher $dispatcher
+     * @param \Viserio\Component\Contracts\Routing\Route      $route
+     * @param \Psr\Http\Message\ServerRequestInterface        $request
      */
-    public function __construct(RouterContract $router, RouteContract $route, ServerRequestInterface $request)
+    public function __construct(DispatcherContract $dispatcher, RouteContract $route, ServerRequestInterface $request)
     {
         $this->name       = 'route.matched';
-        $this->target     = $router;
+        $this->target     = $dispatcher;
         $this->parameters = ['route' => $route, 'server_request' => $request];
     }
 

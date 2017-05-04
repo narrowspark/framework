@@ -3,55 +3,47 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
 use LogicException;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Cron\Cron as CronContract;
 
 class Schedule
 {
     use ContainerAwareTrait;
+    use CacheItemPoolAwareTrait;
 
     /**
      * All of the cron jobs on the schedule.
      *
      * @var array
      */
-    protected $jobs = [];
+    private $jobs = [];
 
     /**
      * Console path or console name that should be called.
      *
      * @var string|null
      */
-    protected $console;
+    private $console;
 
     /**
      * Path for the working directory.
      *
      * @var string
      */
-    protected $workingDirPath;
+    private $workingDirPath;
 
     /**
-     * The cache store implementation.
+     * Create a new Schedule instance.
      *
-     * @var \Psr\Cache\CacheItemPoolInterface
+     * @param string      $path
+     * @param null|string $consoleName
      */
-    protected $cache;
-
-    /**
-     * Set the mutex path.
-     *
-     * @param \Psr\Cache\CacheItemPoolInterface $cache
-     * @param string                            $path
-     * @param null|string                       $consoleName
-     */
-    public function __construct(CacheItemPoolInterface $cache, string $path, string $consoleName = null)
+    public function __construct(string $path, string $consoleName = null)
     {
-        $this->cache          = $cache;
         $this->workingDirPath = $path;
         $this->console        = $consoleName;
     }
@@ -66,7 +58,12 @@ class Schedule
      */
     public function call($callback, array $parameters = []): CallbackCron
     {
-        $cron = new CallbackCron($this->cache, $callback, $parameters);
+        $cron = new CallbackCron($callback, $parameters);
+
+        if ($this->cachePool !== null) {
+            $cron->setCacheItemPool($this->getCacheItemPool());
+        }
+
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
@@ -88,23 +85,20 @@ class Schedule
      */
     public function command(string $command, array $parameters = []): CronContract
     {
-        if (class_exists($command) && $this->container !== null) {
+        if ($this->container !== null && $this->getContainer()->has($command)) {
             $command = $this->getContainer()->get($command)->getName();
         }
 
-        $binary = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
-
         if (defined('CEREBRO_BINARY')) {
-            $console = Application::cerebroBinary();
+            return $this->exec(Application::formatCommandString($command), $parameters);
         } elseif ($this->console !== null) {
+            $binary  = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
             $console = ProcessUtils::escapeArgument($this->console);
-        } else {
-            // @codeCoverageIgnoreStart
-            throw new LogicException('You need to set a console name or a path to a console, befor you call command.');
-            // @codeCoverageIgnoreEnd
+
+            return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);
         }
 
-        return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);
+        throw new LogicException('You need to set a console name or a path to a console, before you call command.');
     }
 
     /**
@@ -121,7 +115,12 @@ class Schedule
             $command .= ' ' . $this->compileParameters($parameters);
         }
 
-        $cron = new Cron($this->cache, $command);
+        $cron = new Cron($command);
+
+        if ($this->cachePool !== null) {
+            $cron->setCacheItemPool($this->getCacheItemPool());
+        }
+
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {

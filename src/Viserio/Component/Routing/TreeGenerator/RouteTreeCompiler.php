@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Support\VarExporter;
 
@@ -241,7 +241,7 @@ PHP;
      */
     protected function compileNotFound($code)
     {
-        $code->appendLine('return [' . VarExporter::export(RouterContract::NOT_FOUND) . '];');
+        $code->appendLine('return [' . VarExporter::export(DispatcherContract::NOT_FOUND) . '];');
     }
 
     /**
@@ -256,11 +256,11 @@ PHP;
             'isset($allowedHttpMethods) '
             . '? '
             . '['
-            . VarExporter::export(RouterContract::HTTP_METHOD_NOT_ALLOWED)
+            . VarExporter::export(DispatcherContract::HTTP_METHOD_NOT_ALLOWED)
             . ', $allowedHttpMethods] '
             . ': '
             . '['
-            . VarExporter::export(RouterContract::NOT_FOUND)
+            . VarExporter::export(DispatcherContract::NOT_FOUND)
             . '];'
         );
     }
@@ -288,7 +288,7 @@ PHP;
 
         $code->appendLine(
             'return ['
-            . VarExporter::export(RouterContract::FOUND)
+            . VarExporter::export(DispatcherContract::FOUND)
             . ', '
             . VarExporter::export($foundRoute[1])
             . ', '

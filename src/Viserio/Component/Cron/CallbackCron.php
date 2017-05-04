@@ -4,7 +4,6 @@ namespace Viserio\Component\Cron;
 
 use InvalidArgumentException;
 use LogicException;
-use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Contracts\Cron\Cron as CronContract;
 
 class CallbackCron extends Cron
@@ -26,13 +25,12 @@ class CallbackCron extends Cron
     /**
      * Create a new callback cron instance.
      *
-     * @param \Psr\Cache\CacheItemPoolInterface $cache
-     * @param string|callable                   $callback
-     * @param array                             $parameters
+     * @param string|callable $callback
+     * @param array           $parameters
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(CacheItemPoolInterface $cache, $callback, array $parameters = [])
+    public function __construct($callback, array $parameters = [])
     {
         if (! is_string($callback) && ! is_callable($callback)) {
             throw new InvalidArgumentException(
@@ -40,7 +38,7 @@ class CallbackCron extends Cron
             );
         }
 
-        parent::__construct($cache, '');
+        parent::__construct('');
 
         $this->callback   = $callback;
         $this->parameters = $parameters;
@@ -54,11 +52,11 @@ class CallbackCron extends Cron
     public function run()
     {
         if ($this->description) {
-            $item = $this->cache->getItem($this->getMutexName());
+            $item = $this->cachePool->getItem($this->getMutexName());
             $item->set($this->getMutexName());
             $item->expiresAfter(1440);
 
-            $this->cache->save($item);
+            $this->cachePool->save($item);
         }
 
         $this->callBeforeCallbacks();
@@ -67,7 +65,7 @@ class CallbackCron extends Cron
             $response = $this->getInvoker()->call($this->callback, $this->parameters);
         } finally {
             if ($this->description) {
-                $this->cache->deleteItem($this->getMutexName());
+                $this->cachePool->deleteItem($this->getMutexName());
             }
         }
 
@@ -93,7 +91,7 @@ class CallbackCron extends Cron
         }
 
         return $this->skip(function () {
-            return $this->cache->hasItem($this->getMutexName());
+            return $this->cachePool->hasItem($this->getMutexName());
         });
     }
 
@@ -118,6 +116,6 @@ class CallbackCron extends Cron
      */
     protected function getMutexName(): string
     {
-        return 'schedule-' . sha1($this->description);
+        return 'schedule-' . sha1($this->expression . $this->description);
     }
 }

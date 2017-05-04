@@ -8,7 +8,6 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Cron\Commands\CronListCommand;
-use Viserio\Component\Cron\Commands\ForgetCommand;
 use Viserio\Component\Cron\Commands\ScheduleRunCommand;
 use Viserio\Component\Cron\Providers\ConsoleCommandsServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
@@ -20,8 +19,8 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new CacheServiceProvider());
         $container->register(new ConsoleServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
+        $container->register(new OptionsResolverServiceProvider());
 
         $container->instance('config', [
             'viserio' => [
@@ -40,7 +39,14 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $commands = $console->all();
 
         self::assertInstanceOf(CronListCommand::class, $commands['cron:list']);
-        self::assertInstanceOf(ForgetCommand::class, $commands['cron:forget']);
         self::assertInstanceOf(ScheduleRunCommand::class, $commands['cron:run']);
+    }
+
+    public function testConsoleCommandsWithNoConsole()
+    {
+        $container = new Container();
+        $container->register(new ConsoleCommandsServiceProvider());
+
+        self::assertNull($container->get(Application::class));
     }
 }

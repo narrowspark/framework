@@ -5,9 +5,9 @@ namespace Viserio\Component\Cron;
 use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
+use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Cron\Cron as CronContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
@@ -16,6 +16,7 @@ use Viserio\Component\Support\Traits\MacroableTrait;
 class Cron implements CronContract
 {
     use ContainerAwareTrait;
+    use CacheItemPoolAwareTrait;
     use InvokerAwareTrait;
     use MacroableTrait;
 
@@ -52,7 +53,7 @@ class Cron implements CronContract
      *
      * @var string
      */
-    protected $output = '/dev/null';
+    protected $output;
 
     /**
      * Indicates whether output should be appended.
@@ -132,21 +133,12 @@ class Cron implements CronContract
     protected $withoutOverlapping = false;
 
     /**
-     * The psr-6 implementation.
-     *
-     * @var \Psr\Cache\CacheItemPoolInterface
-     */
-    protected $cache;
-
-    /**
      * Create a new cron instance.
      *
-     * @param string                            $command
-     * @param \Psr\Cache\CacheItemPoolInterface $cache
+     * @param string $command
      */
-    public function __construct(CacheItemPoolInterface $cache, string $command)
+    public function __construct(string $command)
     {
-        $this->cache   = $cache;
         $this->command = $command;
         $this->output  = $this->getDefaultOutput();
     }
@@ -189,8 +181,6 @@ class Cron implements CronContract
      * State that the cron job should run even in maintenance mode.
      *
      * @return $this
-     *
-     * @codeCoverageIgnore
      */
     public function evenInMaintenanceMode(): CronContract
     {
@@ -249,11 +239,11 @@ class Cron implements CronContract
     public function run()
     {
         if ($this->withoutOverlapping) {
-            $item = $this->cache->getItem($this->getMutexName());
+            $item = $this->cachePool->getItem($this->getMutexName());
             $item->set($this->getMutexName());
             $item->expiresAfter(1440);
 
-            $this->cache->save($item);
+            $this->cachePool->save($item);
         }
 
         if (! $this->runInBackground) {
@@ -263,7 +253,7 @@ class Cron implements CronContract
         $run = $this->runCommandInBackground();
 
         if ($this->withoutOverlapping) {
-            $this->cache->deleteItem($this->getMutexName());
+            $this->cachePool->deleteItem($this->getMutexName());
         }
 
         return $run;
@@ -286,11 +276,9 @@ class Cron implements CronContract
     {
         $output    = ProcessUtils::escapeArgument($this->output);
         $redirect  = $this->shouldAppendOutput ? ' >> ' : ' > ';
-        $isWindows = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        $command   = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
 
-        $command = $this->command . $redirect . $output . ' 2>&1 &';
-
-        return $this->user && ! $isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : $command;
+        return $this->ensureCorrectUser($command);
     }
 
     /**
@@ -301,7 +289,7 @@ class Cron implements CronContract
         $this->withoutOverlapping = true;
 
         return $this->skip(function () {
-            return $this->cache->hasItem($this->getMutexName());
+            return $this->cachePool->hasItem($this->getMutexName());
         });
     }
 
@@ -672,6 +660,44 @@ class Cron implements CronContract
     }
 
     /**
+     * Check if os is windows.
+     *
+     * @return bool
+     */
+    protected function isWindows(): bool
+    {
+        return mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+    }
+
+    /**
+     * Finalize the event's command syntax with the correct user.
+     *
+     * @param string $command
+     *
+     * @return string
+     */
+    protected function ensureCorrectUser(string $command): string
+    {
+        if ($this->user && ! $this->isWindows()) {
+            return 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'';
+        }
+
+        // http://de2.php.net/manual/en/function.exec.php#56599
+        // The "start" command will start a detached process, a similar effect to &. The "/B" option prevents
+        // start from opening a new terminal window if the program you are running is a console application.
+        if ($this->user && $this->isWindows()) {
+            // https://superuser.com/questions/42537/is-there-any-sudo-command-for-windows
+            // Options for runas : [{/profile|/noprofile}] [/env] [/netonly] [/smartcard] [/showtrustlevels] [/trustlevel] /user:UserAccountName
+
+            return 'runas ' . $this->user . 'start /B ' . $command;
+        } elseif ($this->isWindows()) {
+            return 'start /B ' . $command;
+        }
+
+        return $command;
+    }
+
+    /**
      * Splice the given value into the given position of the expression.
      *
      * @param int        $position
@@ -694,7 +720,7 @@ class Cron implements CronContract
      */
     protected function getDefaultOutput(): string
     {
-        return (DIRECTORY_SEPARATOR == '\\') ? 'NUL' : '/dev/null';
+        return $this->isWindows() ? 'NUL' : '/dev/null';
     }
 
     /**
@@ -723,7 +749,7 @@ class Cron implements CronContract
         $this->callBeforeCallbacks();
 
         $process = new Process(
-            trim($this->buildCommand(), '& '),
+            trim($this->buildCommand(), ' &'),
             $this->path,
             null,
             null,
@@ -744,13 +770,15 @@ class Cron implements CronContract
      */
     protected function runCommandInBackground(): int
     {
-        return (new Process(
+        $process = new Process(
             $this->buildCommand(),
             $this->path,
             null,
             null,
             null
-        ))->run();
+        );
+
+        return $process->run();
     }
 
     /**

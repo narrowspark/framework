@@ -49,6 +49,7 @@
     },
     "suggest": {
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "psr/cache"                           : "WithoutOverlapping requires a cache component.",
         "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
         "viserio/console"                     : "Required to use commands (self.version).",
         "viserio/options-resolver"            : "Required to use service-provider and commands (self.version)."

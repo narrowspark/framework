@@ -82,8 +82,6 @@ class Collection implements Countable, RouteCollectionContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getRoutes(): array
     {

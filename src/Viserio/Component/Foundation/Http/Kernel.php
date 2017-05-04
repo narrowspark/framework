@@ -9,6 +9,7 @@ use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContra
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
+use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
@@ -20,6 +21,7 @@ use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
+use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\Router;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
@@ -48,13 +50,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      * @var array
      */
     protected $routeMiddlewares = [];
-
-    /**
-     * The application's route without a middleware.
-     *
-     * @var array
-     */
-    protected $routeWithoutMiddlewares = [];
 
     /**
      * The priority-sorted list of middleware.
@@ -87,17 +82,15 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     {
         parent::__construct();
 
-        $router = $this->getContainer()->get(RouterContract::class);
+        $dispatcher = $this->getContainer()->get(DispatcherContract::class);
 
-        $router->setMiddlewarePriorities($this->middlewarePriority);
-        $router->addMiddlewares($this->routeMiddlewares);
+        if ($dispatcher instanceof MiddlewareBasedDispatcher) {
+            $dispatcher->setMiddlewarePriorities($this->middlewarePriority);
+            $dispatcher->withMiddleware($this->routeMiddlewares);
 
-        foreach ($this->routeWithoutMiddlewares as $routeWithoutMiddleware) {
-            $router->withoutMiddleware($routeWithoutMiddleware);
-        }
-
-        foreach ($this->middlewareGroups as $key => $middleware) {
-            $router->setMiddlewareGroup($key, $middleware);
+            foreach ($this->middlewareGroups as $key => $middleware) {
+                $dispatcher->setMiddlewareGroup($key, $middleware);
+            }
         }
     }
 
