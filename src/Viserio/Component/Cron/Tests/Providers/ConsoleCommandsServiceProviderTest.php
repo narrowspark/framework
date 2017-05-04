@@ -40,7 +40,6 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $commands = $console->all();
 
         self::assertInstanceOf(CronListCommand::class, $commands['cron:list']);
-        self::assertInstanceOf(ForgetCommand::class, $commands['cron:forget']);
         self::assertInstanceOf(ScheduleRunCommand::class, $commands['cron:run']);
     }
 

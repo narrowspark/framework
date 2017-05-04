@@ -53,7 +53,7 @@ class Cron implements CronContract
      *
      * @var string
      */
-    protected $output = '/dev/null';
+    protected $output;
 
     /**
      * Indicates whether output should be appended.
