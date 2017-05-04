@@ -20,21 +20,21 @@ class Schedule
      *
      * @var array
      */
-    protected $jobs = [];
+    private $jobs = [];
 
     /**
      * Console path or console name that should be called.
      *
      * @var string|null
      */
-    protected $console;
+    private $console;
 
     /**
      * Path for the working directory.
      *
      * @var string
      */
-    protected $workingDirPath;
+    private $workingDirPath;
 
     /**
      * Create a new Schedule instance.
@@ -85,7 +85,7 @@ class Schedule
      */
     public function command(string $command, array $parameters = []): CronContract
     {
-        if ($this->container !== null) {
+        if ($this->container !== null && $this->getContainer()->has($command)) {
             $command = $this->getContainer()->get($command)->getName();
         }
 
