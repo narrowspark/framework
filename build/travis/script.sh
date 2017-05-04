@@ -14,16 +14,7 @@ bash -e <<TRY
     elif [[ "$PHPUNIT" = true ]]; then
         for f in ./src/Viserio/*/*; do
                     echo "$f";
-            # if [[ -d "$f" && ! -L "$f" ]]; then
-            #     SLUG="$(basename $f)";
-            #     TYPE="$(basename ${f%/*})";
 
-            #     if [[ "$TYPE" = "Component" ]]; then
-            #         tfold ./vendor/bin/phpunit -c phpunit.xml.dist --testsuite="Narrowspark $SLUG Component Test Suite" --verbose;
-            #     elif [[ "$TYPE" = "Bridge" ]]; then
-            #         tfold ./vendor/bin/phpunit -c phpunit.xml.dist --testsuite="Narrowspark $SLUG Bridge Test Suite" --verbose;
-            #     fi
-            # fi
         done
     fi
 TRY
