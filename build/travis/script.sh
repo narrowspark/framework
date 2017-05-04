@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Create logs dir
-mkdir -p build/logs
-
 # tfold is a helper to create folded reports
 # Arguments:
 #   $1 fold name
@@ -17,7 +14,10 @@ tfold () {
 export -f tfold
 
 if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
-    ./vendor/bin/phpunit -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
+    # Create logs dir
+    mkdir -p build/logs
+
+    "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
 elif [[ "$PHPUNIT" = true ]]; then
     for f in ./src/Viserio/*/*; do
         if [[ -d "$f" && ! -L "$f" ]]; then
@@ -30,7 +30,7 @@ elif [[ "$PHPUNIT" = true ]]; then
                 TESTSUITE="Narrowspark $SLUG Bridge Test Suite";
             fi
 
-            tfold "$TESTSUITE" "$TEST -c ./phpunit.xml.dist --testsuite=\"$TESTSUITE\"";
+            tfold "$TESTSUITE" "$TEST -c ./phpunit.xml.dist --verbose --testsuite=\"$TESTSUITE\"";
         fi
     done
 elif [[ "$PHPSTAN" = true ]]; then
