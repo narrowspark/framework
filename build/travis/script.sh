@@ -3,6 +3,18 @@
 # Create logs dir
 mkdir -p build/logs
 
+# tfold is a helper to create folded reports
+tfold () {
+    title=$1
+    fold=$(echo $title | sed -r 's/[^-_A-Za-z\d]+/./g')
+    shift
+    echo -e "travis_fold:start:$fold\\n\\e[1;34m$title\\e[0m"
+    bash -xc "$*" 2>&1 &&
+        echo -e "\\e[32mOK\\e[0m $title\\n\\ntravis_fold:end:$fold" ||
+        ( echo -e "\\e[41mKO\\e[0m $title\\n" && exit 1 )
+}
+export -f tfold
+
 for f in ./src/Viserio/*/*; do
     if [[ -d "$f" && ! -L "$f" ]]; then
         SLUG="$(basename $f)";
