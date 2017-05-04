@@ -49,6 +49,7 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
         $container->instance('config', [
             'viserio' => [
                 'webprofiler' => [
+                    'enable'    => true,
                     'collector' => [
                         'translation' => true,
                     ],

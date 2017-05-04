@@ -24,15 +24,14 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     public function createServerRequestFromArray(array $server): ServerRequestInterface
     {
-        $server  = $this->normalizeServer($server);
-        $headers = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
+        $headers = $this->getHeaders($server);
         $method  = $server['REQUEST_METHOD'] ?? 'GET';
 
         return $this->buildServerRequest($server, $headers, $method, Uri::createFromServer($server));
     }
 
     /**
-     * Build a server request from given datas.
+     * Build a server request from given data.
      *
      * @param array                                 $server
      * @param array                                 $headers
@@ -51,44 +50,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $this->marshalProtocolVersion($server),
             $server
         );
-    }
-
-    /**
-     * Marshal the $_SERVER array.
-     *
-     * Pre-processes and returns the $_SERVER superglobal.
-     *
-     * @param array $server
-     *
-     * @return array
-     */
-    protected function normalizeServer(array $server): array
-    {
-        // This seems to be the only way to get the Authorization header on Apache
-        if (! function_exists('apache_request_headers') ||
-            isset($server['HTTP_AUTHORIZATION'])
-        ) {
-            return $server;
-        }
-
-        // Can only be testet on a apache server
-        // @codeCoverageIgnoreStart
-        $headers = apache_request_headers();
-
-        if (isset($headers['Authorization'])) {
-            $server['HTTP_AUTHORIZATION'] = $headers['Authorization'];
-
-            return $server;
-        }
-
-        if (isset($headers['authorization'])) {
-            $server['HTTP_AUTHORIZATION'] = $headers['authorization'];
-
-            return $server;
-        }
-        // @codeCoverageIgnoreStop
-
-        return $server;
     }
 
     /**
@@ -123,7 +84,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return array
      */
-    protected function allHeaders(array $server): array
+    protected function getHeaders(array $server): array
     {
         $headers = [];
         $content = [
@@ -147,12 +108,12 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         if (! isset($headers['Authorization'])) {
             if (isset($server['REDIRECT_HTTP_AUTHORIZATION'])) {
-                $headers['Authorization'] = $server['REDIRECT_HTTP_AUTHORIZATION'];
+                $headers['HTTP_AUTHORIZATION'] = $server['REDIRECT_HTTP_AUTHORIZATION'];
             } elseif (isset($server['PHP_AUTH_USER'])) {
-                $basicPass                = isset($server['PHP_AUTH_PW']) ? $server['PHP_AUTH_PW'] : '';
-                $headers['Authorization'] = 'Basic ' . base64_encode($server['PHP_AUTH_USER'] . ':' . $basicPass);
+                $basicPass                     = $server['PHP_AUTH_PW'] ?? '';
+                $headers['HTTP_AUTHORIZATION'] = 'Basic ' . base64_encode($server['PHP_AUTH_USER'] . ':' . $basicPass);
             } elseif (isset($server['PHP_AUTH_DIGEST'])) {
-                $headers['Authorization'] = $server['PHP_AUTH_DIGEST'];
+                $headers['HTTP_AUTHORIZATION'] = $server['PHP_AUTH_DIGEST'];
             }
         }
 

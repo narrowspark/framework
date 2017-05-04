@@ -40,7 +40,7 @@ init:
 
 install:
   # Install redis and start
-  - nuget install redis-64 -excludeversion
+  - nuget install redis-64 -excludeversion -Verbosity quiet
   - redis-64\tools\redis-server.exe --service-install
   - redis-64\tools\redis-server.exe --service-start
   # PHP
