@@ -10,4 +10,4 @@ echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php
 echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 # Install mongodb
-# pecl install -f mongodb-1.1.2
+pecl install -f mongodb-1.1.2
