@@ -308,7 +308,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
-        $result['middlewares'] = implode(', ', $route->gatherMiddleware());
+        $result['middlewares']         = implode(', ', $route->gatherMiddleware());
         $result['without_middlewares'] = implode(', ', $route->gatherDisabledMiddlewares());
 
         return $result;
