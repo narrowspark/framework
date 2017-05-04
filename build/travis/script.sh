@@ -13,9 +13,9 @@ tfold () {
 }
 export -f tfold
 
-if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
-    ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
-elif [[ "$PHPUNIT" = true ]]; then
+# if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
+#     ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
+# elif [[ "$PHPUNIT" = true ]]; then
     for f in ../../src/Viserio/*/*; do
         if [[ -d "$f" && ! -L "$f" ]]; then
             SLUG="$(basename $f)";
@@ -30,6 +30,6 @@ elif [[ "$PHPUNIT" = true ]]; then
             fi
         fi
     done
-elif [[ "$PHPSTAN" = true ]]; then
-    ./vendor/bin/phpstan analyse -c phpstan.neon -l 5 src/Viserio
-fi
+# elif [[ "$PHPSTAN" = true ]]; then
+#     ./vendor/bin/phpstan analyse -c phpstan.neon -l 5 src/Viserio
+# fi
