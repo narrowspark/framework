@@ -7,12 +7,12 @@ services:
   - mongodb
   - redis-server
 
-addons:
-  apt:
-    sources:
-      - mongodb-3.2-precise
-    packages:
-      - mongodb-org-server
+# addons:
+#   apt:
+#     sources:
+#       - mongodb-3.2-precise
+#     packages:
+#       - mongodb-org-server
 
 matrix:
   include:
@@ -50,12 +50,12 @@ before_install:
   - ./build/travis/before_install.sh
 
 install:
-  - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
-  - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
-  - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
+  # - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
+  # - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
+  # - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
 
 before_script:
-  - sleep 15
+  # - sleep 15
 
 script:
   - ./build/travis/script.sh
