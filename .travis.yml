@@ -2,6 +2,10 @@ language: php
 
 sudo: false
 
+env:
+  global:
+    - PHPUNIT="./vendor/bin/phpunit"
+
 services:
   - memcached
   - mongodb

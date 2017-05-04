@@ -13,23 +13,21 @@ tfold () {
 }
 export -f tfold
 
-# if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
-#     ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
-# elif [[ "$PHPUNIT" = true ]]; then
+if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
+    ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
+elif [[ "$PHPUNIT" = true ]]; then
     for f in ./src/Viserio/*/*; do
         if [[ -d "$f" && ! -L "$f" ]]; then
             SLUG="$(basename $f)";
             TYPE="$(basename ${f%/*})";
 
             if [[ "$TYPE" = "Component" ]]; then
-                PHPUNIT=./vendor/bin/phpunit -c phpunit.xml.dist --testsuite="Narrowspark $SLUG Component Test Suite" --verbose;
-                tfold "Narrowspark $SLUG Component Test Suite" $PHPUNIT;
+                tfold "Narrowspark $SLUG Component Test Suite" $PHPUNIT --testsuite="Narrowspark $SLUG Component Test Suite" --verbose;
             elif [[ "$TYPE" = "Bridge" ]]; then
-                PHPUNIT=./vendor/bin/phpunit -c phpunit.xml.dist --testsuite="Narrowspark $SLUG Bridge Test Suite" --verbose;
-                tfold "Narrowspark $SLUG Bridge Test Suite" $PHPUNIT;
+                tfold "Narrowspark $SLUG Bridge Test Suite" $PHPUNIT --testsuite="Narrowspark $SLUG Bridge Test Suite" --verbose;
             fi
         fi
     done
-# elif [[ "$PHPSTAN" = true ]]; then
-#     ./vendor/bin/phpstan analyse -c phpstan.neon -l 5 src/Viserio
-# fi
+elif [[ "$PHPSTAN" = true ]]; then
+    ./vendor/bin/phpstan analyse -c phpstan.neon -l 5 src/Viserio
+fi
