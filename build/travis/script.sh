@@ -6,7 +6,7 @@ mkdir -p build/logs
 # tfold is a helper to create folded reports
 tfold () {
     title=$1
-    fold=$(echo $title | sed -r 's/[^-_A-Za-z\d]+/./g')
+    fold=$(echo $2 | sed -r 's/[^-_A-Za-z\d]+/./g')
     shift
     echo -e "travis_fold:start:$fold\\n\\e[1;34m$title\\e[0m"
     bash -xc "$*" 2>&1 && echo -e "\\e[32mOK\\e[0m $title\\n\\ntravis_fold:end:$fold" || ( echo -e "\\e[41mKO\\e[0m $title\\n" && exit 1 )
@@ -24,7 +24,8 @@ elif [[ "$PHPUNIT" = true ]]; then
             if [[ "$TYPE" = "Component" ]]; then
                 tfold "Narrowspark $SLUG Component Test Suite" $TEST --testsuite="Narrowspark $SLUG Component Test Suite" --verbose;
             elif [[ "$TYPE" = "Bridge" ]]; then
-                tfold "Narrowspark $SLUG Bridge Test Suite" $TEST --testsuite="Narrowspark $SLUG Bridge Test Suite" --verbose;
+                TESTSUITE=$TEST --testsuite="Narrowspark $SLUG Bridge Test Suite" --verbose;
+                tfold "Narrowspark $SLUG Bridge Test Suite" $TESTSUITE;
             fi
         fi
     done
