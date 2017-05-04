@@ -2,7 +2,9 @@
 
 # Create logs dir
 mkdir -p build/logs
-
+for f in ../../src/Viserio/*/*; do
+    echo "$f";
+done
 set +e
 bash -e <<TRY
     if [[ "$PHPSTAN" = true ]]; then
@@ -12,9 +14,10 @@ bash -e <<TRY
     if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
         ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
     elif [[ "$PHPUNIT" = true ]]; then
-        for f in src/*; do
-            echo "$f";
-
+        for f in src/Viserio/*/*; do
+            if [[ -d "$f" && ! -L "$f" ]]; then
+                echo "test $f";
+            fi
         done
     fi
 TRY
