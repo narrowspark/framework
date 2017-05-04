@@ -18,7 +18,7 @@ class CronListCommandTest extends MockeryTestCase
         });
 
         $container = new ArrayContainer([
-            Schedule::class => $schedule
+            Schedule::class => $schedule,
         ]);
 
         $command = new CronListCommand();

@@ -21,14 +21,14 @@ class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'options' => [
+            'options'       => [
                 'viserio' => [
                     'cron' => [
-                        'env' => 'test',
+                        'env'         => 'test',
                         'maintenance' => false,
                     ],
                 ],
-            ]
+            ],
         ]);
 
         $command = new ScheduleRunCommand();
@@ -51,14 +51,14 @@ class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'options' => [
+            'options'       => [
                 'viserio' => [
                     'cron' => [
-                        'env' => 'test',
+                        'env'         => 'test',
                         'maintenance' => false,
                     ],
                 ],
-            ]
+            ],
         ]);
 
         $command = new ScheduleRunCommand();

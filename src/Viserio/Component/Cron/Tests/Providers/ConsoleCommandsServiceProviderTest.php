@@ -8,7 +8,6 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Cron\Commands\CronListCommand;
-use Viserio\Component\Cron\Commands\ForgetCommand;
 use Viserio\Component\Cron\Commands\ScheduleRunCommand;
 use Viserio\Component\Cron\Providers\ConsoleCommandsServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
