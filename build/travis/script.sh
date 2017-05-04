@@ -13,7 +13,7 @@ bash -e <<TRY
         ./vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-clover=coverage.xml;
     elif [[ "$PHPUNIT" = true ]]; then
         for f in ./src/Viserio/*/*; do
-                    echo "$f";
+                    print "$f";
 
         done
     fi
