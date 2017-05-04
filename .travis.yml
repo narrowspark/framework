@@ -46,8 +46,8 @@ cache:
 
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
-  - ./build/travis/all.sh
+  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
+  - ./build/travis/before_install.sh
 
 install:
   - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
