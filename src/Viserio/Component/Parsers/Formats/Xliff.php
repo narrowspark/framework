@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats;
 
 use DOMDocument;
-use RuntimeException;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
@@ -37,7 +36,7 @@ class Xliff implements FormatContract
     private function extractXliff1(DOMDocument $dom)
     {
         $xml      = simplexml_import_dom($dom);
-        $encoding = strtoupper($dom->encoding);
+        $encoding = mb_strtoupper($dom->encoding);
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:1.2');
     }
@@ -50,7 +49,7 @@ class Xliff implements FormatContract
     private function extractXliff2(DOMDocument $dom)
     {
         $xml      = simplexml_import_dom($dom);
-        $encoding = strtoupper($dom->encoding);
+        $encoding = mb_strtoupper($dom->encoding);
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:2.0');
     }
@@ -82,7 +81,7 @@ class Xliff implements FormatContract
                     throw new InvalidArgumentException(sprintf('Not a valid XLIFF namespace "%s"', $namespace));
                 }
 
-                return substr($namespace, 34);
+                return mb_substr($namespace, 34);
             }
         }
         // Falls back to v1.2
@@ -102,10 +101,10 @@ class Xliff implements FormatContract
      */
     private function validateSchema(string $file, DOMDocument $dom, string $schema): void
     {
-        $internalErrors = libxml_use_internal_errors(true);
+        $internalErrors  = libxml_use_internal_errors(true);
         $disableEntities = libxml_disable_entity_loader(false);
 
-        if (!@$dom->schemaValidateSource($schema)) {
+        if (! @$dom->schemaValidateSource($schema)) {
             libxml_disable_entity_loader($disableEntities);
 
             throw new InvalidResourceException(
@@ -136,10 +135,10 @@ class Xliff implements FormatContract
     {
         if ($xliffVersion === '1.2') {
             //http://www.w3.org/2001/xml.xsd
-            $schemaSource = file_get_contents(__DIR__.'/../Schemas/dic/xliff-core/xliff-core-1.2-strict.xsd');
+            $schemaSource = file_get_contents(__DIR__ . '/../Schemas/dic/xliff-core/xliff-core-1.2-strict.xsd');
         } elseif ($xliffVersion === '2.0') {
             // informativeCopiesOf3rdPartySchemas/w3c/xml.xsd
-            $schemaSource = file_get_contents(__DIR__.'/../Schemas/dic/xliff-core/xliff-core-2.0.xsd');
+            $schemaSource = file_get_contents(__DIR__ . '/../Schemas/dic/xliff-core/xliff-core-2.0.xsd');
         } else {
             throw new InvalidArgumentException(sprintf('No support implemented for loading XLIFF version "%s".', $xliffVersion));
         }
@@ -156,7 +155,7 @@ class Xliff implements FormatContract
      */
     private function getXmlErrors(bool $internalErrors): array
     {
-        $errors = array();
+        $errors = [];
 
         foreach (libxml_get_errors() as $error) {
             $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
@@ -185,7 +184,7 @@ class Xliff implements FormatContract
      */
     private function utf8ToCharset(string $content, string $encoding = null): string
     {
-        if ($encoding !== 'UTF-8' && !empty($encoding)) {
+        if ($encoding !== 'UTF-8' && ! empty($encoding)) {
             return mb_convert_encoding($content, $encoding, 'UTF-8');
         }
 
