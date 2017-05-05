@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats\Traits;
 
-use Throwable;
 use DOMDocument;
 use DOMElement;
 use InvalidArgumentException;
+use Throwable;
 
 final class XmlUtils
 {
@@ -24,9 +24,9 @@ final class XmlUtils
      * @param string               $file             An XML file path
      * @param string|callable|null $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
-     * @return \DOMDocument
-     *
      * @throws \InvalidArgumentException When loading of XML file returns error
+     *
+     * @return \DOMDocument
      */
     public static function loadFile(string $file, $schemaOrCallable = null): DOMDocument
     {
@@ -41,10 +41,10 @@ final class XmlUtils
 
         libxml_clear_errors();
 
-        $dom = new DOMDocument();
+        $dom                  = new DOMDocument();
         $dom->validateOnParse = true;
 
-        if (!$dom->loadXML($content, LIBXML_NONET | (defined('LIBXML_COMPACT') ? LIBXML_COMPACT : 0))) {
+        if (! $dom->loadXML($content, LIBXML_NONET | (defined('LIBXML_COMPACT') ? LIBXML_COMPACT : 0))) {
             libxml_disable_entity_loader($disableEntities);
 
             throw new InvalidArgumentException(implode("\n", static::getXmlErrors($internalErrors)));
@@ -75,18 +75,18 @@ final class XmlUtils
                 }
             } elseif (! is_array($schemaOrCallable) && is_file((string) $schemaOrCallable)) {
                 $schemaSource = file_get_contents((string) $schemaOrCallable);
-                $valid = @$dom->schemaValidateSource($schemaSource);
+                $valid        = @$dom->schemaValidateSource($schemaSource);
             } else {
                 libxml_use_internal_errors($internalErrors);
 
                 throw new InvalidArgumentException('The schemaOrCallable argument has to be a valid path to XSD file or callable.');
             }
 
-            if (!$valid) {
+            if (! $valid) {
                 $messages = static::getXmlErrors($internalErrors);
 
                 if (empty($messages)) {
-                    $messages = array(sprintf('The XML file "%s" is not valid.', $file));
+                    $messages = [sprintf('The XML file "%s" is not valid.', $file)];
                 }
 
                 throw new InvalidArgumentException(implode("\n", $messages), 0, $e);
@@ -122,15 +122,15 @@ final class XmlUtils
     public static function convertDomElementToArray(DOMElement $element, $checkPrefix = true)
     {
         $prefix = (string) $element->prefix;
-        $empty = true;
+        $empty  = true;
         $config = [];
 
         foreach ($element->attributes as $name => $node) {
-            if ($checkPrefix && !in_array((string) $node->prefix, array('', $prefix), true)) {
+            if ($checkPrefix && ! in_array((string) $node->prefix, ['', $prefix], true)) {
                 continue;
             }
             $config[$name] = static::phpize($node->value);
-            $empty = false;
+            $empty         = false;
         }
 
         $nodeValue = false;
@@ -139,18 +139,18 @@ final class XmlUtils
             if ($node instanceof \DOMText) {
                 if ('' !== trim($node->nodeValue)) {
                     $nodeValue = trim($node->nodeValue);
-                    $empty = false;
+                    $empty     = false;
                 }
             } elseif ($checkPrefix && $prefix != (string) $node->prefix) {
                 continue;
-            } elseif (!$node instanceof \DOMComment) {
+            } elseif (! $node instanceof \DOMComment) {
                 $value = static::convertDomElementToArray($node, $checkPrefix);
 
                 $key = $node->localName;
 
                 if (isset($config[$key])) {
-                    if (!is_array($config[$key]) || !is_int(key($config[$key]))) {
-                        $config[$key] = array($config[$key]);
+                    if (! is_array($config[$key]) || ! is_int(key($config[$key]))) {
+                        $config[$key] = [$config[$key]];
                     }
                     $config[$key][] = $value;
                 } else {
@@ -170,7 +170,7 @@ final class XmlUtils
             }
         }
 
-        return !$empty ? $config : null;
+        return ! $empty ? $config : null;
     }
 
     /**
@@ -182,19 +182,19 @@ final class XmlUtils
      */
     public static function phpize($value)
     {
-        $value = (string) $value;
-        $lowercaseValue = strtolower($value);
+        $value          = (string) $value;
+        $lowercaseValue = mb_strtolower($value);
 
         switch (true) {
             case 'null' === $lowercaseValue:
                 return;
             case ctype_digit($value):
-                $raw = $value;
+                $raw  = $value;
                 $cast = (int) $value;
 
                 return '0' == $value[0] ? octdec($value) : (((string) $raw === (string) $cast) ? $cast : $raw);
-            case isset($value[1]) && '-' === $value[0] && ctype_digit(substr($value, 1)):
-                $raw = $value;
+            case isset($value[1]) && '-' === $value[0] && ctype_digit(mb_substr($value, 1)):
+                $raw  = $value;
                 $cast = (int) $value;
 
                 return '0' == $value[1] ? octdec($value) : (((string) $raw === (string) $cast) ? $cast : $raw);
@@ -202,10 +202,10 @@ final class XmlUtils
                 return true;
             case 'false' === $lowercaseValue:
                 return false;
-            case isset($value[1]) && '0b' == $value[0].$value[1]:
+            case isset($value[1]) && '0b' == $value[0] . $value[1]:
                 return bindec($value);
             case is_numeric($value):
-                return '0x' === $value[0].$value[1] ? hexdec($value) : (float) $value;
+                return '0x' === $value[0] . $value[1] ? hexdec($value) : (float) $value;
             case preg_match('/^0x[0-9a-f]++$/i', $value):
                 return hexdec($value);
             case preg_match('/^(-|\+)?[0-9]+(\.[0-9]+)?$/', $value):
@@ -215,9 +215,9 @@ final class XmlUtils
         }
     }
 
-    protected static function getXmlErrors($internalErrors)
+    private static function getXmlErrors($internalErrors)
     {
-        $errors = array();
+        $errors = [];
 
         foreach (libxml_get_errors() as $error) {
             $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
