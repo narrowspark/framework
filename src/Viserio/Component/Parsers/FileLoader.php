@@ -12,7 +12,7 @@ class FileLoader implements LoaderContract
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * Pparsers list.
+     * Parsers list.
      *
      * @var array
      */
@@ -140,7 +140,7 @@ class FileLoader implements LoaderContract
     /**
      * Check if the right option are given.
      *
-     * @param arra|null $options
+     * @param array|null $options
      *
      * @throws \RuntimeException
      *
