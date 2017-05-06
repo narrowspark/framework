@@ -1,22 +1,21 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Providers;
+namespace Viserio\Component\Profiler\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Monolog\Logger;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Log\DataCollectors\LogParser;
-use Viserio\Component\Log\DataCollectors\LogsDataCollector;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Profiler\DataCollectors\Bridge\Log\DebugProcessor;
+use Viserio\Component\Profiler\DataCollectors\Bridge\Log\MonologLoggerDataCollector;
 
-class LogsDataCollectorServiceProvider implements
+class ProfilerMonologDataCollectorServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
-    ProvidesDefaultOptionsContract,
-    RequiresMandatoryOptionsContract
+    ProvidesDefaultOptionsContract
 {
     /**
      * Resolved cached options.
@@ -31,8 +30,8 @@ class LogsDataCollectorServiceProvider implements
     public function getServices()
     {
         return [
-            LogParser::class           => [self::class, 'createLogParser'],
-            ProfilerContract::class    => [self::class, 'createProfiler'],
+            ProfilerContract::class => [self::class, 'extendProfiler'],
+            Logger::class           => [self::class, 'extendLogger'],
         ];
     }
 
@@ -42,14 +41,6 @@ class LogsDataCollectorServiceProvider implements
     public function getDimensions(): iterable
     {
         return ['viserio', 'profiler'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMandatoryOptions(): iterable
-    {
-        return ['logs_storages'];
     }
 
     /**
@@ -65,42 +56,47 @@ class LogsDataCollectorServiceProvider implements
     }
 
     /**
-     * Create a handler parser.
+     * Extend monolog with a processor.
      *
-     * @return \Viserio\Component\Log\DataCollectors\LogParser
+     * @param \Interop\Container\ContainerInterface $container
+     * @param null|callable                         $getPrevious
+     *
+     * @return null|\Monolog\Logger|\Viserio\Component\Log\Writer
      */
-    public static function createLogParser(): LogParser
+    public static function extendLogger(ContainerInterface $container, ?callable $getPrevious = null)
     {
-        return new LogParser();
+        $log = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+
+        if ($log !== null) {
+            $log->pushProcessor(new DebugProcessor());
+        }
+
+        return $log;
     }
 
     /**
-     * Extend viserio profiler with data collector.
+     * Extend viserio profiler with a data collector.
      *
      * @param \Interop\Container\ContainerInterface $container
      * @param null|callable                         $getPrevious
      *
      * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */
-    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
+    public static function extendProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
-        if ($getPrevious !== null) {
+        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+
+        if ($profiler !== null) {
             self::resolveOptions($container);
 
-            $profiler = $getPrevious();
-
             if (self::$options['collector']['logs']) {
-                $profiler->addCollector(new LogsDataCollector(
-                    $container->get(LogParser::class),
-                    self::$options['logs_storages']
-                ));
+                $profiler->addCollector(new MonologLoggerDataCollector($container->get(Logger::class)));
             }
 
             return $profiler;
         }
-        // @codeCoverageIgnoreStart
-        return null;
-        // @codeCoverageIgnoreEnd
+
+        return $profiler;
     }
 
     /**

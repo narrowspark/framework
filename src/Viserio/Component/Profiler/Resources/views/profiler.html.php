@@ -27,23 +27,23 @@ if (! isset($token, $menus, $icons, $panels)) {
                 $hasTooltip = $tooltip ? ' profiler-menu-has-tooltip' : '';
                 $cssClasses = isset($menu['menu']['class']) ? ' ' . $menu['menu']['class'] : '';
             ?>
-            <div <?php echo $data ?> class="profiler-menu profiler-menu-<?php echo TemplateManager::escape($name) ?> profiler-menu-position-<?php echo $menu['position'] . $hasPanels . $hasTooltip . $cssClasses; ?>">
+            <div <?php echo $data; ?> class="profiler-menu profiler-menu-<?php echo TemplateManager::escape($name); ?> profiler-menu-position-<?php echo $menu['position'] . $hasPanels . $hasTooltip . $cssClasses; ?>">
                 <div class="profiler-menu-content">
                     <?php if (isset($menu['menu']['icon'])): ?>
                     <span class="profiler-menu-icon">
-                        <?php echo isset($icons[$menu['menu']['icon']]) ? file_get_contents($icons[$menu['menu']['icon']]) : $menu['menu']['icon'] ?>
+                        <?php echo isset($icons[$menu['menu']['icon']]) ? file_get_contents($icons[$menu['menu']['icon']]) : $menu['menu']['icon']; ?>
                     </span>
                     <?php endif; ?>
                     <span class="profiler-menu-label">
-                        <?php echo TemplateManager::escape((string) $menu['menu']['label']) ?>
+                        <?php echo TemplateManager::escape((string) $menu['menu']['label']); ?>
                     </span>
                     <span class="profiler-menu-value">
-                        <?php echo TemplateManager::escape((string) $menu['menu']['value']) ?>
+                        <?php echo TemplateManager::escape((string) $menu['menu']['value']); ?>
                     </span>
                 </div>
                 <?php if ($tooltip): ?>
                     <div class="profiler-menu-tooltip">
-                        <?php echo $menu['tooltip'] ?>
+                        <?php echo $menu['tooltip']; ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -62,7 +62,7 @@ if (! isset($token, $menus, $icons, $panels)) {
         </div>
         <?php foreach ($panels as $name => $panel): ?>
         <div class="profiler-panel profiler-panel-<?php echo TemplateManager::escape($name) . TemplateManager::escape($panel['class']); ?>">
-            <?php echo $panel['content'] ?>
+            <?php echo $panel['content']; ?>
         </div>
         <?php endforeach; ?>
     </div>

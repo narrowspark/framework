@@ -1,41 +1,38 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Tests\Providers;
+namespace Viserio\Component\Profiler\Tests\Providers;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Component\Log\DataCollectors\LogParser;
-use Viserio\Component\Log\Providers\LogsDataCollectorServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\Profiler\Providers\ProfilerMonologDataCollectorServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
-class LogsDataCollectorServiceProviderTest extends MockeryTestCase
+class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
 {
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->instance(ServerRequestInterface::class, $this->getRequest());
+        $container->register(new OptionsResolverServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ProfilerServiceProvider());
-        $container->register(new LogsDataCollectorServiceProvider());
+        $container->register(new ProfilerMonologDataCollectorServiceProvider());
 
         $container->instance('config', [
             'viserio' => [
                 'profiler' => [
-                    'enable'        => true,
-                    'logs_storages' => [__DIR__],
-                    'collector'     => [
+                    'enable'    => true,
+                    'collector' => [
                         'logs' => true,
                     ],
                 ],
             ],
         ]);
 
-        self::assertInstanceOf(LogParser::class, $container->get(LogParser::class));
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 

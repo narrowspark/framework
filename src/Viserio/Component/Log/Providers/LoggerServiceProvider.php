@@ -32,7 +32,7 @@ class LoggerServiceProvider implements
     public function getServices()
     {
         return [
-            MonologWriter::class => [self::class, 'createLogger'],
+            MonologWriter::class => [self::class, 'createMonologWriter'],
             HandlerParser::class => [self::class, 'createHandlerParser'],
             'log'                => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
@@ -91,7 +91,7 @@ class LoggerServiceProvider implements
      *
      * @return \Viserio\Component\Log\Writer
      */
-    public static function createLogger(ContainerInterface $container): MonologWriter
+    public static function createMonologWriter(ContainerInterface $container): MonologWriter
     {
         $logger = new MonologWriter($container->get(HandlerParser::class));
 

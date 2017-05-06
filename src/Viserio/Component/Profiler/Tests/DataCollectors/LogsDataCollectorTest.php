@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Tests\DataCollectors;
+namespace Viserio\Component\Profiler\Tests\DataCollectors;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Log\DataCollectors\LogParser;
-use Viserio\Component\Log\DataCollectors\LogsDataCollector;
+use Viserio\Component\Profiler\DataCollectors\LogParser;
+use Viserio\Component\Profiler\DataCollectors\LogsDataCollector;
 
 class LogsDataCollectorTest extends MockeryTestCase
 {
