@@ -19,7 +19,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[0];
 
         self::assertEquals('getItem', $call->name);
-        self::assertSame(array('k' => false), $call->result);
+        self::assertSame(['k' => false], $call->result);
         self::assertEquals(0, $call->hits);
         self::assertEquals(1, $call->misses);
         self::assertNotEmpty($call->start);
@@ -58,7 +58,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[0];
 
         self::assertEquals('getItems', $call->name);
-        self::assertSame(array('k0' => false, 'k1' => false), $call->result);
+        self::assertSame(['k0' => false, 'k1' => false], $call->result);
         self::assertEquals(2, $call->misses);
         self::assertNotEmpty($call->start);
         self::assertNotEmpty($call->end);
@@ -75,7 +75,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[0];
 
         self::assertEquals('hasItem', $call->name);
-        self::assertSame(array('k' => false), $call->result);
+        self::assertSame(['k' => false], $call->result);
         self::assertNotEmpty($call->start);
         self::assertNotEmpty($call->end);
     }
@@ -93,7 +93,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[2];
 
         self::assertEquals('hasItem', $call->name);
-        self::assertSame(array('k' => true), $call->result);
+        self::assertSame(['k' => true], $call->result);
         self::assertNotEmpty($call->start);
         self::assertNotEmpty($call->end);
     }
@@ -109,7 +109,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[0];
 
         self::assertEquals('deleteItem', $call->name);
-        self::assertSame(array('k' => true), $call->result);
+        self::assertSame(['k' => true], $call->result);
         self::assertEquals(0, $call->hits);
         self::assertEquals(0, $call->misses);
         self::assertNotEmpty($call->start);
@@ -128,7 +128,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[0];
 
         self::assertEquals('deleteItems', $call->name);
-        self::assertSame(array('keys' => $arg, 'result' => true), $call->result);
+        self::assertSame(['keys' => $arg, 'result' => true], $call->result);
         self::assertEquals(0, $call->hits);
         self::assertEquals(0, $call->misses);
         self::assertNotEmpty($call->start);
@@ -147,7 +147,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[1];
 
         self::assertEquals('save', $call->name);
-        self::assertSame(array('k' => true), $call->result);
+        self::assertSame(['k' => true], $call->result);
         self::assertEquals(0, $call->hits);
         self::assertEquals(0, $call->misses);
         self::assertNotEmpty($call->start);
@@ -166,7 +166,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[1];
 
         self::assertEquals('saveDeferred', $call->name);
-        self::assertSame(array('k' => true), $call->result);
+        self::assertSame(['k' => true], $call->result);
         self::assertEquals(0, $call->hits);
         self::assertEquals(0, $call->misses);
         self::assertNotEmpty($call->start);

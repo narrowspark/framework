@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollectors\Bridge\Log;
 
 use ErrorException;
-use RuntimeException;
 use Monolog\Logger;
-use Viserio\Component\Log\Writer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Log\Writer;
 use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
 
 class MonologLoggerDataCollector extends AbstractDataCollector implements
