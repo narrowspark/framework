@@ -74,7 +74,7 @@ class AssetsRenderer implements AssetsRendererContract
     protected $ignoredCollectors = [];
 
     /**
-     * jQuery is used, remove zapto js.
+     * If jQuery is used, remove zapto.
      *
      * @var bool
      */

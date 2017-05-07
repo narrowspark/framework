@@ -11,12 +11,12 @@ class DataCollectorTest extends TestCase
     {
         $collector = new FixtureDataCollector();
 
-        static::assertSame('fixture-data-collector', $collector->getName());
+        self::assertSame('fixture-data-collector', $collector->getName());
     }
 
     public function testGetMenuPosition()
     {
-        static::assertSame('left', (new FixtureDataCollector())->getMenuPosition());
+        self::assertSame('left', (new FixtureDataCollector())->getMenuPosition());
     }
 
     public function testCreateTableDefault()
@@ -24,7 +24,7 @@ class DataCollectorTest extends TestCase
         $collector    = new FixtureDataCollector();
         $defaultTable = file_get_contents(__DIR__ . '/../Fixture/View/default_table.html');
 
-        static::assertSame(
+        self::assertSame(
             $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $defaultTable)),
             $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $collector->getTableDefault()))
         );
@@ -35,7 +35,7 @@ class DataCollectorTest extends TestCase
         $collector    = new FixtureDataCollector();
         $defaultTable = file_get_contents(__DIR__ . '/../Fixture/View/array_table.html');
 
-        static::assertSame(
+        self::assertSame(
             $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $defaultTable)),
             $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $collector->getTableArray()))
         );
@@ -45,7 +45,7 @@ class DataCollectorTest extends TestCase
     {
         $collector = new FixtureDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>test</b><span>test</span></div></div>',
             $collector->getTooltippGroupDefault()
         );
@@ -55,7 +55,7 @@ class DataCollectorTest extends TestCase
     {
         $collector = new FixtureDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Resources</b><span><a href="//narrowspark.de/doc/">Read Narrowspark Doc\'s </a></span></div><div class="profiler-menu-tooltip-group-piece"><b>Help</b><span><a href="//narrowspark.de/support">Narrowspark Support Channels</a></span></div></div>',
             $collector->getTooltippGroupDefaultWithLink()
         );
@@ -65,7 +65,7 @@ class DataCollectorTest extends TestCase
     {
         $collector = new FixtureDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>test</b><span class="test">test</span><span class="test2">test2</span></div></div>',
             $collector->getTooltippGroupArray()
         );
@@ -75,7 +75,7 @@ class DataCollectorTest extends TestCase
     {
         $collector = new FixtureDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             $this->removeTabId('<div class="profiler-tabs row"><div class="profiler-tabs-tab col span_12"><input type="radio" name="tabgroup" id="tab-0-5857be8b2c3d4"><label for="tab-0-5857be8b2c3d4">test</label><div class="profiler-tabs-tab-content">test</div></div></div>'),
             $this->removeTabId($collector->getTabs())
         );
@@ -85,7 +85,7 @@ class DataCollectorTest extends TestCase
     {
         $collector = new FixtureDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             $this->removeDropdownMenuId('<select class="content-selector" name="fixture-data-collector"><option value="content-dropdown-5858e9e677a84"selected>dropdown</option></select><div id="content-dropdown-5858e9e677a84" class="selected-content">content</div>'),
             $this->removeDropdownMenuId($collector->getDropdownMenuContent())
         );

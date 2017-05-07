@@ -18,7 +18,7 @@ first line
 
 string;
 
-        static::assertSame($expectedOutput, $htmlDumperOutput->getOutput());
+        self::assertSame($expectedOutput, $htmlDumperOutput->getOutput());
     }
 
     public function testClear()
@@ -28,6 +28,6 @@ string;
         $htmlDumperOutput('second line', 2);
         $htmlDumperOutput->flush();
 
-        static::assertNull($htmlDumperOutput->getOutput());
+        self::assertNull($htmlDumperOutput->getOutput());
     }
 }

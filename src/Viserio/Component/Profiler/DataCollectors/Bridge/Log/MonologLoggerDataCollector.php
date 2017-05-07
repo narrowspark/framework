@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollectors\Bridge\Log;
 
 use ErrorException;
+use RuntimeException;
 use Monolog\Logger;
+use Viserio\Component\Log\Writer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
@@ -29,7 +31,20 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function __construct($logger)
     {
-        $this->logger = $logger;
+        if ($logger instanceof Logger || $logger instanceof Writer) {
+            $this->logger = $logger;
+        } else {
+            throw new RuntimeException(sprintf(
+                'Class [%s] or [%s] is required; Instance of [%s] given.',
+                Logger::class,
+                Writer::class,
+                get_class($logger)
+            ));
+        }
+
+        if ($this->getDebugLogger() === null) {
+            throw new RuntimeException(sprintf('Processor %s is missing from %s', DebugProcessor::class, get_class($logger)));
+        }
     }
 
     /**
@@ -37,7 +52,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function getMenu(): array
     {
-        $status     = '';
+        $status = '';
 
         if ($this->getCountedErrors() !== 0) {
             $status = 'status-red';
@@ -132,20 +147,10 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     {
         $data = $this->getComputedErrorsCount();
 
-        $data['logs']    = $this->sanitizeLogs($this->getMessages());
+        $data['logs']    = $this->sanitizeLogs($this->getLogs());
         $data['counted'] = count($data['logs']);
 
         $this->data = $data;
-    }
-
-    /**
-     * Gets the logs.
-     *
-     * @return array An array of logs
-     */
-    public function getLogs(): array
-    {
-        return $this->data['logs'] ?? [];
     }
 
     /**
@@ -209,9 +214,11 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * {@inheritdoc}
+     * Returns collected logs.
+     *
+     * @return array
      */
-    public function getMessages(): array
+    public function getLogs(): array
     {
         if ($logger = $this->getDebugLogger()) {
             return $logger->getLogs();
@@ -318,7 +325,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
             'priorities'        => [],
         ];
 
-        foreach ($this->getMessages() as $log) {
+        foreach ($this->getLogs() as $log) {
             if (isset($count['priorities'][$log['priority']])) {
                 ++$count['priorities'][$log['priority']]['count'];
             } else {

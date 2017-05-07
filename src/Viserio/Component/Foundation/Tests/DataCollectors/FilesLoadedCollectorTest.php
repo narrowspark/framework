@@ -13,7 +13,7 @@ class FilesLoadedCollectorTest extends MockeryTestCase
     {
         $collector = new FilesLoadedCollector(__DIR__);
 
-        static::assertSame(
+        self::assertSame(
             [
                 'icon'  => 'ic_insert_drive_file_white_24px.svg',
                 'label' => '',
@@ -31,6 +31,6 @@ class FilesLoadedCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        static::assertTrue(is_string($collector->getPanel()));
+        self::assertTrue(is_string($collector->getPanel()));
     }
 }

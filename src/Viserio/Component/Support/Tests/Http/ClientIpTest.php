@@ -21,7 +21,7 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertSame('111.111.111.111', $clientIp->getIpAddress());
+        self::assertSame('111.111.111.111', $clientIp->getIpAddress());
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('hasHeader')
@@ -38,6 +38,6 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertSame('100.8.116.127', $clientIp->getIpAddress());
+        self::assertSame('100.8.116.127', $clientIp->getIpAddress());
     }
 }

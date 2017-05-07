@@ -45,7 +45,7 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
      */
     public function getItem($key)
     {
-        $event = $this->start(__FUNCTION__, $key);
+        $event = $this->start(__FUNCTION__);
 
         try {
             $item = $this->pool->getItem($key);
@@ -53,13 +53,11 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
             $event->end = microtime(true);
         }
 
-        if ($item->isHit()) {
+        if ($event->result[$key] = $item->isHit()) {
             ++$event->hits;
         } else {
             ++$event->misses;
         }
-
-        $event->result = $item->get();
 
         return $item;
     }
@@ -69,10 +67,10 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
      */
     public function hasItem($key)
     {
-        $event = $this->start(__FUNCTION__, $key);
+        $event = $this->start(__FUNCTION__);
 
         try {
-            return $event->result = $this->pool->hasItem($key);
+            return $event->result[$key] = $this->pool->hasItem($key);
         } finally {
             $event->end = microtime(true);
         }
@@ -83,10 +81,10 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
      */
     public function deleteItem($key)
     {
-        $event = $this->start(__FUNCTION__, $key);
+        $event = $this->start(__FUNCTION__);
 
         try {
-            return $event->result = $this->pool->deleteItem($key);
+            return $event->result[$key] = $this->pool->deleteItem($key);
         } finally {
             $event->end = microtime(true);
         }
@@ -97,10 +95,10 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
      */
     public function save(CacheItemInterface $item)
     {
-        $event = $this->start(__FUNCTION__, $item);
+        $event = $this->start(__FUNCTION__);
 
         try {
-            return $event->result = $this->pool->save($item);
+            return $event->result[$item->getKey()] = $this->pool->save($item);
         } finally {
             $event->end = microtime(true);
         }
@@ -111,10 +109,10 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
      */
     public function saveDeferred(CacheItemInterface $item)
     {
-        $event = $this->start(__FUNCTION__, $item);
+        $event = $this->start(__FUNCTION__);
 
         try {
-            return $event->result = $this->pool->saveDeferred($item);
+            return $event->result[$item->getKey()] = $this->pool->saveDeferred($item);
         } finally {
             $event->end = microtime(true);
         }
@@ -137,13 +135,11 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
             $event->result = [];
 
             foreach ($result as $key => $item) {
-                if ($item->isHit()) {
+                if ($event->result[$key] = $item->isHit()) {
                     ++$event->hits;
                 } else {
                     ++$event->misses;
                 }
-
-                $event->result[$key] = $item->get();
 
                 yield $key => $item;
             }
@@ -220,15 +216,13 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
      * Start new event.
      *
      * @param string $name
-     * @param mixed  $argument
      *
      * @return object
      */
-    private function start(string $name, $argument = null)
+    private function start(string $name)
     {
         $this->calls[] = $event = new class() {
             public $name;
-            public $argument;
             public $start;
             public $end;
             public $result;
@@ -236,9 +230,8 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
             public $misses = 0;
         };
 
-        $event->name     = $name;
-        $event->argument = $argument;
-        $event->start    = microtime(true);
+        $event->name  = $name;
+        $event->start = microtime(true);
 
         return $event;
     }

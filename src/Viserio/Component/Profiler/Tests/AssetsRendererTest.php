@@ -19,7 +19,7 @@ class AssetsRendererTest extends MockeryTestCase
 
         $assets->setIcon('ic_clear_white_24px.svg', __DIR__ . 'Fixture/Icons/');
 
-        static::assertSame(self::normalizePath(__DIR__ . 'Fixture/Icons/ic_clear_white_24px.svg'), $assets->getIcons()['ic_clear_white_24px.svg']);
+        self::assertSame(self::normalizePath(__DIR__ . 'Fixture/Icons/ic_clear_white_24px.svg'), $assets->getIcons()['ic_clear_white_24px.svg']);
     }
 
     public function testSetAndGetIgnoredCollectors()
@@ -28,7 +28,7 @@ class AssetsRendererTest extends MockeryTestCase
 
         $assets->setIgnoredCollector('test');
 
-        static::assertSame('test', $assets->getIgnoredCollectors()[0]);
+        self::assertSame('test', $assets->getIgnoredCollectors()[0]);
     }
 
     public function testGetAssets()
@@ -49,8 +49,8 @@ class AssetsRendererTest extends MockeryTestCase
             __DIR__ . '/js/profiler.js',
         ];
 
-        static::assertSame($cssAssets, $assets->getAssets('css'));
-        static::assertSame($jsAssets, $assets->getAssets('js'));
+        self::assertSame($cssAssets, $assets->getAssets('css'));
+        self::assertSame($jsAssets, $assets->getAssets('js'));
     }
 
     public function testGetAssetsFromCollectors()
@@ -72,7 +72,7 @@ class AssetsRendererTest extends MockeryTestCase
             str_replace('Tests', 'DataCollectors', __DIR__) . '/../Resources/js/ajaxHandler.js',
         ];
 
-        static::assertSame([$cssAssets, $jsAssets], $assets->getAssets());
+        self::assertSame([$cssAssets, $jsAssets], $assets->getAssets());
     }
 
     public function testRenderWithUrlGenerator()
@@ -93,6 +93,6 @@ class AssetsRendererTest extends MockeryTestCase
         $assets = new AssetsRenderer();
         $assets->setProfiler($profiler);
 
-        static::assertSame('<link rel="stylesheet" type="text/css" property="stylesheet" href="path_css"><script type="text/javascript" src="path_js"></script>', $assets->render());
+        self::assertSame('<link rel="stylesheet" type="text/css" property="stylesheet" href="path_css"><script type="text/javascript" src="path_js"></script>', $assets->render());
     }
 }

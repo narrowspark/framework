@@ -14,7 +14,7 @@ class UploadedFileFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setUploadedFileFactory($this->mock(UploadedFileFactoryInterface::class));
 
-        static::assertInstanceOf(UploadedFileFactoryInterface::class, $this->getUploadedFileFactory());
+        self::assertInstanceOf(UploadedFileFactoryInterface::class, $this->getUploadedFileFactory());
     }
 
     /**

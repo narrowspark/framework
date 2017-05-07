@@ -44,7 +44,7 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
-        static::assertEquals(
+        self::assertEquals(
             [
             'icon'      => file_get_contents(__DIR__ . '/../../DataCollectors/Resources/icons/ic_translate_white_24px.svg'),
                 'label' => '',
@@ -58,7 +58,7 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
-        static::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Missing messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Fallback messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Defined messages</b><span></span></div></div>', $collector->getTooltip());
+        self::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Missing messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Fallback messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Defined messages</b><span></span></div></div>', $collector->getTooltip());
     }
 
     public function testGetPanel()
@@ -69,7 +69,7 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        static::assertSame(
+        self::assertSame(
             $this->removeId('<div class="profiler-tabs row"><div class="profiler-tabs-tab col span_4"><input type="radio" name="tabgroup" id="tab-0-586ade7256e86"><label for="tab-0-586ade7256e86">Defined <span class="counter">0</span></label><div class="profiler-tabs-tab-content"><h3>These messages are correctly translated into the given locale.</h3><div class="empty">Empty</div></div></div><div class="profiler-tabs-tab col span_4"><input type="radio" name="tabgroup" id="tab-1-586ade7256e8d"><label for="tab-1-586ade7256e8d">Fallback <span class="counter">0</span></label><div class="profiler-tabs-tab-content"><h3>These messages are not available for the given locale but Symfony found them in the fallback locale catalog.</h3><div class="empty">Empty</div></div></div><div class="profiler-tabs-tab col span_4"><input type="radio" name="tabgroup" id="tab-2-586ade7256e93"><label for="tab-2-586ade7256e93">Missing <span class="counter">0</span></label><div class="profiler-tabs-tab-content"><h3>These messages are not available for the given locale and cannot be found in the fallback locales. <br> Add them to the translation catalogue to avoid Narrowspark outputting untranslated contents.</h3><div class="empty">Empty</div></div></div></div>'),
             $this->removeId($collector->getPanel())
         );
@@ -88,7 +88,7 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        static::assertSame(
+        self::assertSame(
             '<div class="profiler-tabs row"><div class="profiler-tabs-tab col span_4"><input type="radio" name="tabgroup" id><label for>Defined <span class="counter">1</span></label><div class="profiler-tabs-tab-content"><h3>These messages are correctly translated into the given locale.</h3><table class="row"><thead><tr><th scope="col" class="Locale">Locale</th><th scope="col" class="Domain">Domain</th><th scope="col" class="Times used">Times used</th><th scope="col" class="Message ID">Message ID</th><th scope="col" class="Message Preview">Message Preview</th></tr></thead><tbody><tr><td><pre class=sf-dump data-indent-pad=" ">"<span class=sf-dump-str title="2 characters">en</span>"
 </pre>
 </td><td><pre class=sf-dump data-indent-pad=" ">"<span class=sf-dump-str title="8 characters">messages</span>"

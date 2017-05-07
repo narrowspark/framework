@@ -35,13 +35,13 @@ class SortedMiddlewareTest extends TestCase
             'Third',
         ];
 
-        static::assertEquals($expected, (new SortedMiddleware($priority, $middleware))->getAll());
-        static::assertEquals([], (new SortedMiddleware(['First'], []))->getAll());
-        static::assertEquals(['First'], (new SortedMiddleware(['First'], ['First']))->getAll());
-        static::assertEquals(['First', 'Second'], (new SortedMiddleware(['First', 'Second'], ['Second', 'First']))->getAll());
+        self::assertEquals($expected, (new SortedMiddleware($priority, $middleware))->getAll());
+        self::assertEquals([], (new SortedMiddleware(['First'], []))->getAll());
+        self::assertEquals(['First'], (new SortedMiddleware(['First'], ['First']))->getAll());
+        self::assertEquals(['First', 'Second'], (new SortedMiddleware(['First', 'Second'], ['Second', 'First']))->getAll());
 
         $closure = function () {
         };
-        static::assertEquals(['Second', $closure], (new SortedMiddleware(['First', 'Second'], ['Second', $closure]))->getAll());
+        self::assertEquals(['Second', $closure], (new SortedMiddleware(['First', 'Second'], ['Second', $closure]))->getAll());
     }
 }

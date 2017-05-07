@@ -20,7 +20,7 @@ class ProfilerTest extends MockeryTestCase
 
         $profiler->setUrlGenerator($this->mock(UrlGeneratorContract::class));
 
-        static::assertInstanceOf(UrlGeneratorContract::class, $profiler->getUrlGenerator());
+        self::assertInstanceOf(UrlGeneratorContract::class, $profiler->getUrlGenerator());
     }
 
     public function testSetAndGetTemplate()
@@ -29,7 +29,7 @@ class ProfilerTest extends MockeryTestCase
 
         $profiler->setTemplate(__DIR__);
 
-        static::assertSame(__DIR__, $profiler->getTemplate());
+        self::assertSame(__DIR__, $profiler->getTemplate());
     }
 
     public function testAddHasAndGetCollectors()
@@ -39,9 +39,9 @@ class ProfilerTest extends MockeryTestCase
 
         $profiler->addCollector($collector);
 
-        static::assertTrue($profiler->hasCollector('php-info-data-collector'));
+        self::assertTrue($profiler->hasCollector('php-info-data-collector'));
 
-        static::assertSame(
+        self::assertSame(
             [
                 'php-info-data-collector' => [
                     'collector' => $collector,
@@ -91,7 +91,7 @@ class ProfilerTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        static::assertEquals(
+        self::assertEquals(
             $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
@@ -128,7 +128,7 @@ class ProfilerTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        static::assertEquals(
+        self::assertEquals(
             $this->removeId('<!DOCTYPE html><html><head><title></title></head><body>' . $renderedContent . '</body></html>'),
             $this->removeId((string) $response->getBody())
         );
@@ -151,7 +151,7 @@ class ProfilerTest extends MockeryTestCase
             $orginalResponse
         );
 
-        static::assertEquals($response, $orginalResponse);
+        self::assertEquals($response, $orginalResponse);
     }
 
     private function removeId(string $html): string

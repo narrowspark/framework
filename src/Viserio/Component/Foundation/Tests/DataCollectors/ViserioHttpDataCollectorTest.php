@@ -41,7 +41,7 @@ class ViserioHttpDataCollectorTest extends MockeryTestCase
         $collect = new ViserioHttpDataCollector($router, $this->mock(RepositoryContract::class));
         $collect->collect($serverRequest, $response);
 
-        static::assertSame(
+        self::assertSame(
             [
                 'label' => '@',
                 'value' => 'Home',
@@ -49,6 +49,6 @@ class ViserioHttpDataCollectorTest extends MockeryTestCase
             $collect->getMenu()
         );
 
-        static::assertSame('left', $collect->getMenuPosition());
+        self::assertSame('left', $collect->getMenuPosition());
     }
 }

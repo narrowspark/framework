@@ -15,7 +15,7 @@ class SwiftMailDataCollectorTest extends MockeryTestCase
     {
         $collector = $this->getSwiftDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             [
                 'icon'  => 'ic_mail_outline_white_24px.svg',
                 'label' => 'Mails',
@@ -29,7 +29,7 @@ class SwiftMailDataCollectorTest extends MockeryTestCase
     {
         $collector = $this->getSwiftDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             '<div class="empty">Empty</div>',
             $collector->getPanel()
         );

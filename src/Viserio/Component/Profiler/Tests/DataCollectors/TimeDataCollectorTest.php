@@ -14,8 +14,8 @@ class TimeDataCollectorTest extends MockeryTestCase
         $collect = $this->getTimeDataCollector();
         $data    = $collect->getData();
 
-        static::assertSame('right', $collect->getMenuPosition());
-        static::assertSame(
+        self::assertSame('right', $collect->getMenuPosition());
+        self::assertSame(
             [
                 'icon'  => 'ic_schedule_white_24px.svg',
                 'label' => '',
@@ -30,7 +30,7 @@ class TimeDataCollectorTest extends MockeryTestCase
         $collect = $this->getTimeDataCollector();
         $data    = $collect->getData();
 
-        static::assertSame($data['duration'], $collect->getRequestDuration());
+        self::assertSame($data['duration'], $collect->getRequestDuration());
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
@@ -43,7 +43,7 @@ class TimeDataCollectorTest extends MockeryTestCase
             ->andReturn('');
         $collect = new TimeDataCollector($request);
 
-        static::assertTrue(is_float($collect->getRequestDuration()));
+        self::assertTrue(is_float($collect->getRequestDuration()));
     }
 
     public function testStartHasStopMeasure()
@@ -52,13 +52,13 @@ class TimeDataCollectorTest extends MockeryTestCase
 
         $collect->startMeasure('test');
 
-        static::assertTrue($collect->hasStartedMeasure('test'));
+        self::assertTrue($collect->hasStartedMeasure('test'));
 
         $collect->stopMeasure('test');
 
         $measure = $collect->getMeasures()[0];
 
-        static::assertSame('test', $measure['label']);
+        self::assertSame('test', $measure['label']);
 
         $keysExistCheck = [
             'label',
@@ -73,7 +73,7 @@ class TimeDataCollectorTest extends MockeryTestCase
         ];
 
         foreach ($keysExistCheck as $key => $value) {
-            static::assertTrue(array_key_exists($value, $measure));
+            self::assertTrue(array_key_exists($value, $measure));
         }
     }
 

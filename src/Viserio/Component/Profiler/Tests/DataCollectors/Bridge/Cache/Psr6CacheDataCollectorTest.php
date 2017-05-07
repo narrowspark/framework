@@ -15,7 +15,7 @@ class Psr6CacheDataCollectorTest extends MockeryTestCase
     {
         $collector = $this->getPsr6CacheDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             [
                 'icon'  => 'ic_layers_white_24px.svg',
                 'label' => '0 in',
@@ -29,7 +29,7 @@ class Psr6CacheDataCollectorTest extends MockeryTestCase
     {
         $collector = $this->getPsr6CacheDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Cache calls</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Total time</b><span>0μs</span></div><div class="profiler-menu-tooltip-group-piece"><b>Cache hits</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Cache writes</b><span>0</span></div></div>',
             $collector->getTooltip()
         );
@@ -39,7 +39,7 @@ class Psr6CacheDataCollectorTest extends MockeryTestCase
     {
         $collector = $this->getPsr6CacheDataCollector();
 
-        static::assertSame(
+        self::assertSame(
             $this->removeTabId('<div class="profiler-tabs row"><div class="profiler-tabs-tab col span_12"><input type="radio" name="tabgroup" id="tab-0-58658cec676d8"><label for="tab-0-58658cec676d8">ArrayCachePool</label><div class="profiler-tabs-tab-content"><h3>Statistics</h3><ul class="metrics"><li class="metric"><span class="value">0</span><span class="label">calls</span></li><li class="metric"><span class="value">0μs</span><span class="label">time</span></li><li class="metric"><span class="value">0</span><span class="label">reads</span></li><li class="metric"><span class="value">0</span><span class="label">hits</span></li><li class="metric"><span class="value">0</span><span class="label">misses</span></li><li class="metric"><span class="value">0</span><span class="label">writes</span></li><li class="metric"><span class="value">0</span><span class="label">deletes</span></li><li class="metric"><span class="value">N/A</span><span class="label">hits/reads</span></li></ul><h3>Calls</h3><div class="empty">Empty</div></div></div></div>'),
             $this->removeSymfonyVarDumper($collector->getPanel())
         );

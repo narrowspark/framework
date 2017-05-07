@@ -8,26 +8,25 @@ use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDec
 
 class TraceableCacheItemDecoraterTest extends MockeryTestCase
 {
-    public function testGetItemMiss()
+    public function testGetItemMissTrace()
     {
         $pool = $this->createCachePool();
         $pool->getItem('k');
         $calls = $pool->getCalls();
 
-        static::assertCount(1, $calls);
+        self::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        static::assertEquals('getItem', $call->name);
-        static::assertEquals('k', $call->argument);
-        static::assertEquals(0, $call->hits);
-        static::assertEquals(1, $call->misses);
-        static::assertNull($call->result);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('getItem', $call->name);
+        self::assertSame(array('k' => false), $call->result);
+        self::assertEquals(0, $call->hits);
+        self::assertEquals(1, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
-    public function testGetItemHit()
+    public function testGetItemHitTrace()
     {
         $pool = $this->createCachePool();
         $item = $pool->getItem('k')->set('foo');
@@ -35,15 +34,15 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $pool->getItem('k');
         $calls = $pool->getCalls();
 
-        static::assertCount(3, $calls);
+        self::assertCount(3, $calls);
 
         $call = $calls[2];
 
-        static::assertEquals(1, $call->hits);
-        static::assertEquals(0, $call->misses);
+        self::assertEquals(1, $call->hits);
+        self::assertEquals(0, $call->misses);
     }
 
-    public function testGetItemsMiss()
+    public function testGetItemsMissTrace()
     {
         $pool  = $this->createCachePool();
         $arg   = ['k0', 'k1'];
@@ -54,35 +53,34 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
 
         $calls = $pool->getCalls();
 
-        static::assertCount(1, $calls);
+        self::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        static::assertEquals('getItems', $call->name);
-        static::assertEquals($arg, $call->argument);
-        static::assertEquals(2, $call->misses);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('getItems', $call->name);
+        self::assertSame(array('k0' => false, 'k1' => false), $call->result);
+        self::assertEquals(2, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
-    public function testHasItemMiss()
+    public function testHasItemMissTrace()
     {
         $pool = $this->createCachePool();
         $pool->hasItem('k');
         $calls = $pool->getCalls();
 
-        static::assertCount(1, $calls);
+        self::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        static::assertEquals('hasItem', $call->name);
-        static::assertEquals('k', $call->argument);
-        static::assertFalse($call->result);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('hasItem', $call->name);
+        self::assertSame(array('k' => false), $call->result);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
-    public function testHasItemHit()
+    public function testHasItemHitTrace()
     {
         $pool = $this->createCachePool();
         $item = $pool->getItem('k')->set('foo');
@@ -90,108 +88,107 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $pool->hasItem('k');
         $calls = $pool->getCalls();
 
-        static::assertCount(3, $calls);
+        self::assertCount(3, $calls);
 
         $call = $calls[2];
 
-        static::assertEquals('hasItem', $call->name);
-        static::assertEquals('k', $call->argument);
-        static::assertTrue($call->result);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('hasItem', $call->name);
+        self::assertSame(array('k' => true), $call->result);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
-    public function testDeleteItem()
+    public function testDeleteItemTrace()
     {
         $pool = $this->createCachePool();
         $pool->deleteItem('k');
         $calls = $pool->getCalls();
 
-        static::assertCount(1, $calls);
+        self::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        static::assertEquals('deleteItem', $call->name);
-        static::assertEquals('k', $call->argument);
-        static::assertEquals(0, $call->hits);
-        static::assertEquals(0, $call->misses);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('deleteItem', $call->name);
+        self::assertSame(array('k' => true), $call->result);
+        self::assertEquals(0, $call->hits);
+        self::assertEquals(0, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
-    public function testDeleteItems()
+    public function testDeleteItemsTrace()
     {
         $pool = $this->createCachePool();
         $arg  = ['k0', 'k1'];
         $pool->deleteItems($arg);
         $calls = $pool->getCalls();
 
-        static::assertCount(1, $calls);
+        self::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        static::assertEquals('deleteItems', $call->name);
-        static::assertEquals($arg, $call->argument);
-        static::assertEquals(0, $call->hits);
-        static::assertEquals(0, $call->misses);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('deleteItems', $call->name);
+        self::assertSame(array('keys' => $arg, 'result' => true), $call->result);
+        self::assertEquals(0, $call->hits);
+        self::assertEquals(0, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
-    public function testSave()
+    public function testSaveTrace()
     {
         $pool = $this->createCachePool();
         $item = $pool->getItem('k')->set('foo');
         $pool->save($item);
         $calls = $pool->getCalls();
 
-        static::assertCount(2, $calls);
+        self::assertCount(2, $calls);
 
         $call = $calls[1];
 
-        static::assertEquals('save', $call->name);
-        static::assertEquals($item, $call->argument);
-        static::assertEquals(0, $call->hits);
-        static::assertEquals(0, $call->misses);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('save', $call->name);
+        self::assertSame(array('k' => true), $call->result);
+        self::assertEquals(0, $call->hits);
+        self::assertEquals(0, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
-    public function testSaveDeferred()
+    public function testSaveDeferredTrace()
     {
         $pool = $this->createCachePool();
         $item = $pool->getItem('k')->set('foo');
         $pool->saveDeferred($item);
         $calls = $pool->getCalls();
 
-        static::assertCount(2, $calls);
+        self::assertCount(2, $calls);
 
         $call = $calls[1];
 
-        static::assertEquals('saveDeferred', $call->name);
-        static::assertEquals($item, $call->argument);
-        static::assertEquals(0, $call->hits);
-        static::assertEquals(0, $call->misses);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('saveDeferred', $call->name);
+        self::assertSame(array('k' => true), $call->result);
+        self::assertEquals(0, $call->hits);
+        self::assertEquals(0, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
-    public function testCommit()
+    public function testCommitTrace()
     {
         $pool = $this->createCachePool();
         $pool->commit();
         $calls = $pool->getCalls();
 
-        static::assertCount(1, $calls);
+        self::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        static::assertEquals('commit', $call->name);
-        static::assertNull(null, $call->argument);
-        static::assertEquals(0, $call->hits);
-        static::assertEquals(0, $call->misses);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('commit', $call->name);
+        self::assertTrue($call->result);
+        self::assertEquals(0, $call->hits);
+        self::assertEquals(0, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
     public function testClear()
@@ -200,16 +197,16 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $pool->clear();
         $calls = $pool->getCalls();
 
-        static::assertCount(1, $calls);
+        self::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        static::assertEquals('clear', $call->name);
-        static::assertNull(null, $call->argument);
-        static::assertEquals(0, $call->hits);
-        static::assertEquals(0, $call->misses);
-        static::assertNotEmpty($call->start);
-        static::assertNotEmpty($call->end);
+        self::assertEquals('clear', $call->name);
+        self::assertNull(null, $call->argument);
+        self::assertEquals(0, $call->hits);
+        self::assertEquals(0, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
     private function createCachePool()

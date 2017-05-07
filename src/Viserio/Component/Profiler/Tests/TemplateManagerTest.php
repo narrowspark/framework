@@ -48,7 +48,7 @@ class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        static::assertSame(
+        self::assertSame(
             $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profile.html')),
             $this->removeId($template->render())
         );
@@ -72,7 +72,7 @@ class TemplateManagerTest extends MockeryTestCase
 
         require_once __DIR__ . '/Fixture/View/profilewithcollector.html.php';
 
-        static::assertSame(
+        self::assertSame(
             $this->removeId($text),
             $this->removeId($template->render())
         );
@@ -94,7 +94,7 @@ class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        static::assertSame(
+        self::assertSame(
             $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html.php')),
             $this->removeId($template->render())
         );
@@ -118,7 +118,7 @@ class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        static::assertSame(
+        self::assertSame(
             $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html.php')),
             $this->removeId($template->render())
         );

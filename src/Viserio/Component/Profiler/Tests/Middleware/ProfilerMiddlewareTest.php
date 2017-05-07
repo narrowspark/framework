@@ -40,7 +40,7 @@ class ProfilerMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        static::assertEquals(
+        self::assertEquals(
             $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );

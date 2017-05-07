@@ -217,10 +217,10 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
             $statistics[$name]['time'] = $statistics[$name]['time'];
 
             if ($statistics[$name]['reads']) {
-                $statistics[$name]['hits/reads'] =
+                $statistics[$name]['hit_read_ratio'] =
                     round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
             } else {
-                $statistics[$name]['hits/reads'] = 'N/A';
+                $statistics[$name]['hit_read_ratio'] = null;
             }
         }
 
@@ -249,9 +249,9 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
         }
 
         if ($totals['reads']) {
-            $totals['hits/reads'] = round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
+            $totals['hit_read_ratio'] = round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
         } else {
-            $totals['hits/reads'] = 'N/A';
+            $totals['hit_read_ratio'] = null;
         }
 
         return $totals;
