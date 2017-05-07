@@ -287,6 +287,9 @@
 
     color: #2b2a28;
 }
+.profiler .profiler-body .text-muted {
+    color: #999;
+}
 .profiler .profiler-body .profiler-panel {
     display: none;
 

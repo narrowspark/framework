@@ -4,11 +4,16 @@ namespace Viserio\Component\Profiler\DataCollectors\Bridge\Log;
 
 use ErrorException;
 use Monolog\Logger;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Profiler\DataCollectors\MessagesDataCollector;
+use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
 
-class MonologLoggerDataCollector extends MessagesDataCollector implements PanelAwareContract
+class MonologLoggerDataCollector extends AbstractDataCollector implements
+    TooltipAwareContract,
+    PanelAwareContract
 {
     /**
      * Monolog logger instance.
@@ -24,8 +29,6 @@ class MonologLoggerDataCollector extends MessagesDataCollector implements PanelA
      */
     public function __construct($logger)
     {
-        parent::__construct('logs');
-
         $this->logger = $logger;
     }
 
@@ -34,8 +37,20 @@ class MonologLoggerDataCollector extends MessagesDataCollector implements PanelA
      */
     public function getMenu(): array
     {
+        $status     = '';
+
+        if ($this->getCountedErrors() !== 0) {
+            $status = 'status-red';
+        } elseif ($this->getCountedWarnings() !== 0) {
+            $status = 'status-yellow';
+        } elseif ($this->getCountedDeprecations() !== 0) {
+            $status = 'status-yellow';
+        }
+
         return [
+            'class' => $status,
             'label' => 'Logs',
+            'icon'  => 'ic_library_books_white_24px.svg',
             'value' => $this->data['counted'],
         ];
     }
@@ -43,13 +58,144 @@ class MonologLoggerDataCollector extends MessagesDataCollector implements PanelA
     /**
      * {@inheritdoc}
      */
-    public function getPanel(): string
+    public function getTooltip(): string
     {
-        $html = '';
-
-        $messages = $this->sanitizeLogs($this->getMessages());
+        $html = $this->createTooltipGroup([
+            'Errors'       => $this->getCountedErrors(),
+            'Warnings'     => $this->getCountedWarnings(),
+            'Deprecations' => $this->getCountedDeprecations(),
+        ]);
 
         return $html;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPanel(): string
+    {
+        $html          = '';
+        $tableHeaders  = [
+            'Level',
+            'Channel',
+            'Message',
+        ];
+        $logs          = $this->groupLogLevels();
+
+        $html = $this->createTabs([
+            [
+                'name'    => 'Info. & Errors <span class="counter">' . count($logs['info_error']) . '</span>',
+                'content' => $this->createTable(
+                    $logs['info_error'],
+                    [
+                        'headers' => $tableHeaders,
+                        'vardumper' => false,
+                    ]
+                ),
+            ], [
+                'name'    => 'Deprecations <span class="counter">' . $this->getCountedDeprecations() . '</span>',
+                'content' => $this->createTable(
+                    $logs['deprecation'],
+                    [
+                        'headers' => $tableHeaders,
+                        'vardumper' => false,
+                    ]
+                ),
+            ], [
+                'name'    => 'Debug <span class="counter">' . count($logs['debug']) . '</span>',
+                'content' => $this->createTable(
+                    $logs['debug'],
+                    [
+                        'headers' => $tableHeaders,
+                        'vardumper' => false,
+                    ]
+                ),
+            ], [
+                'name'    => 'Silenced PHP Notices <span class="counter">' . count($logs['silenced']) . '</span>',
+                'content' => $this->createTable(
+                    $logs['silenced'],
+                    [
+                        'headers' => $tableHeaders,
+                        'vardumper' => false,
+                    ]
+                ),
+            ],
+        ]);
+
+        return $html;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
+    {
+        $data = $this->getComputedErrorsCount();
+
+        $data['logs']    = $this->sanitizeLogs($this->getMessages());
+        $data['counted'] = count($data['logs']);
+
+        $this->data = $data;
+    }
+
+    /**
+     * Gets the logs.
+     *
+     * @return array An array of logs
+     */
+    public function getLogs(): array
+    {
+        return $this->data['logs'] ?? [];
+    }
+
+    /**
+     * Get log error priorities.
+     *
+     * @return array
+     */
+    public function getPriorities(): array
+    {
+        return $this->data['priorities'] ?? [];
+    }
+
+    /**
+     * Get counted errors.
+     *
+     * @return int
+     */
+    public function getCountedErrors(): int
+    {
+        return $this->data['error_count'] ?? 0;
+    }
+
+    /**
+     * Get counted deprecations.
+     *
+     * @return int
+     */
+    public function getCountedDeprecations(): int
+    {
+        return $this->data['deprecation_count'] ?? 0;
+    }
+
+    /**
+     * Get counted warnings.
+     *
+     * @return int
+     */
+    public function getCountedWarnings(): int
+    {
+        return $this->data['warning_count'] ?? 0;
+    }
+
+    /**
+     * Get counted screams.
+     *
+     * @return int
+     */
+    public function getCountedScreams(): int
+    {
+        return $this->data['scream_count'] ?? 0;
     }
 
     /**
@@ -75,20 +221,6 @@ class MonologLoggerDataCollector extends MessagesDataCollector implements PanelA
     }
 
     /**
-     * Returns the number of errors.
-     *
-     * @return int
-     */
-    private function getCountedErrors(): int
-    {
-        if ($logger = $this->getDebugLogger()) {
-            return $logger->countErrors();
-        }
-
-        return 0;
-    }
-
-    /**
      * Returns a DebugProcessor instance if one is registered with this logger.
      *
      * @return Viserio\Component\Profiler\DataCollectors\Bridge\Log\DebugProcessor|null
@@ -104,7 +236,14 @@ class MonologLoggerDataCollector extends MessagesDataCollector implements PanelA
         return null;
     }
 
-    private function sanitizeLogs(array $logs)
+    /**
+     * Undocumented function
+     *
+     * @param array $logs
+     *
+     * @return array
+     */
+    private function sanitizeLogs(array $logs): array
     {
         $sanitizedLogs = [];
 
@@ -132,6 +271,13 @@ class MonologLoggerDataCollector extends MessagesDataCollector implements PanelA
         return array_values($sanitizedLogs);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param array $log
+     *
+     * @return bool
+     */
     private function isSilencedOrDeprecationErrorLog(array $log): bool
     {
         if (! isset($log['context']['exception'])) {
@@ -151,10 +297,21 @@ class MonologLoggerDataCollector extends MessagesDataCollector implements PanelA
         return false;
     }
 
-    private function computeErrorsCount()
+    /**
+     * Get computed log error levels.
+     *
+     * @return array
+     */
+    private function getComputedErrorsCount(): array
     {
+        $errorCount = 0;
+
+        if ($logger = $this->getDebugLogger()) {
+            $errorCount = $logger->countErrors();
+        }
+
         $count = [
-            'error_count'       => $this->getCountedErrors(),
+            'error_count'       => $errorCount,
             'deprecation_count' => 0,
             'warning_count'     => 0,
             'scream_count'      => 0,
@@ -187,5 +344,47 @@ class MonologLoggerDataCollector extends MessagesDataCollector implements PanelA
         ksort($count['priorities']);
 
         return $count;
+    }
+
+    /**
+     * Group log level together.
+     *
+     * @return array
+     */
+    private function groupLogLevels(): array
+    {
+        $deprecationLogs  = [];
+        $debugLogs        = [];
+        $infoAndErrorLogs = [];
+        $silencedLogs     = [];
+
+        $formatLog = function($log) {
+            return[
+                $log['priorityName'] . '<br>' . '<div class="text-muted">' . date('H:i:s', $log['timestamp']) . '</div>',
+                $log['channel'],
+                $log['message'] . '<br>' . (! empty($log['context']) ? $this->cloneVar($log['context']) : '')
+            ];
+        };
+
+        foreach ($this->data['logs'] as $log) {
+            if (isset($log['priority']) && (in_array($log['priority'], [Logger::ERROR, Logger::INFO]))) {
+                $infoAndErrorLogs[] = $formatLog($log);
+            } elseif (isset($log['priority']) && $log['priority'] === Logger::DEBUG) {
+                $debugLogs[] = $formatLog($log);
+            } elseif ($this->isSilencedOrDeprecationErrorLog($log)) {
+                if (isset($log['context']) && $log['context']['exception'] instanceof SilencedErrorContext) {
+                    $silencedLogs[] = $formatLog($log);
+                } else {
+                    $deprecationLogs[] = $formatLog($log);
+                }
+            }
+        }
+
+        return [
+            'deprecation' => $deprecationLogs,
+            'debug' => $debugLogs,
+            'info_error' => $infoAndErrorLogs,
+            'silenced' => $silencedLogs,
+        ];
     }
 }

@@ -239,7 +239,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
             $html .= '<table><thead><tr>';
 
             foreach ((array) $options['headers'] as $header) {
-                $html .= '<th scope="col" class="' . $header . '">' . $header . '</th>';
+                $html .= '<th scope="col" class="' . strtolower($header) . '">' . $header . '</th>';
             }
 
             $html .= '</tr></thead><tbody>';

@@ -49,6 +49,7 @@ class AssetsRenderer implements AssetsRendererContract
         'ic_repeat_white_24px.svg'              => __DIR__ . '/Resources/icons/ic_repeat_white_24px.svg',
         'ic_layers_white_24px.svg'              => __DIR__ . '/Resources/icons/ic_layers_white_24px.svg',
         'ic_insert_drive_file_white_24px.svg'   => __DIR__ . '/Resources/icons/ic_insert_drive_file_white_24px.svg',
+        'ic_library_books_white_24px.svg'       => __DIR__ . '/Resources/icons/ic_library_books_white_24px.svg',
     ];
 
     /**
