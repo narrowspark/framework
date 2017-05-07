@@ -88,7 +88,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     $logs['info_error'],
                     [
-                        'headers' => $tableHeaders,
+                        'headers'   => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
@@ -97,7 +97,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     $logs['deprecation'],
                     [
-                        'headers' => $tableHeaders,
+                        'headers'   => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
@@ -106,7 +106,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     $logs['debug'],
                     [
-                        'headers' => $tableHeaders,
+                        'headers'   => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
@@ -115,7 +115,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     $logs['silenced'],
                     [
-                        'headers' => $tableHeaders,
+                        'headers'   => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
@@ -237,7 +237,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @param array $logs
      *
@@ -272,7 +272,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @param array $log
      *
@@ -358,11 +358,11 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
         $infoAndErrorLogs = [];
         $silencedLogs     = [];
 
-        $formatLog = function($log) {
+        $formatLog = function ($log) {
             return[
                 $log['priorityName'] . '<br>' . '<div class="text-muted">' . date('H:i:s', $log['timestamp']) . '</div>',
                 $log['channel'],
-                $log['message'] . '<br>' . (! empty($log['context']) ? $this->cloneVar($log['context']) : '')
+                $log['message'] . '<br>' . (! empty($log['context']) ? $this->cloneVar($log['context']) : ''),
             ];
         };
 
@@ -382,9 +382,9 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
 
         return [
             'deprecation' => $deprecationLogs,
-            'debug' => $debugLogs,
-            'info_error' => $infoAndErrorLogs,
-            'silenced' => $silencedLogs,
+            'debug'       => $debugLogs,
+            'info_error'  => $infoAndErrorLogs,
+            'silenced'    => $silencedLogs,
         ];
     }
 }
