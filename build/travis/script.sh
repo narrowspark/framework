@@ -13,13 +13,13 @@ tfold () {
 }
 
 function try () {
-    [[ $- = *e* ]]; SAVED_OPT_E=$?
+    [[ $- = *e* ]]; SAVED_EXCEPTION=$?
     set +e
 }
 
 function catch () {
     export ex_code=$?
-    (( $SAVED_OPT_E )) && set +e
+    (( $SAVED_EXCEPTION )) && set +e
     return $ex_code
 }
 
@@ -37,11 +37,10 @@ elif [[ "$PHPUNIT" = true ]]; then
                 TESTSUITE="Narrowspark $SLUG Bridge Test Suite";
             fi
 
-            try (
+            try
                 tfold "$TESTSUITE" "$TEST -c ./phpunit.xml.dist --verbose --testsuite=\"$TESTSUITE\"";
-            ) catch || {
+            catch || {
                 exit 1
-                break
             }
         fi
     done
