@@ -34,14 +34,17 @@ class XMLTest extends TestCase
     public function testParse()
     {
         $file = vfsStream::newFile('temp.xml')->withContent(
-            '<?xml version="1.0" encoding="UTF-8"?>
-<parameter key="database_name">symfony</parameter>
+            '<?xml version="1.0"?>
+<data>
+  <to>Tove</to>
+  <from>Jani</from>
+  <heading>Reminder</heading>
+</data>
             '
         )->at($this->root);
 
         $parsed = $this->parser->parse($file->url());
 
-        self::assertTrue(is_array($parsed));
         self::assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
     }
 

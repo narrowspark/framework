@@ -10,6 +10,7 @@
         "toml",
         "yaml",
         "xml",
+        "xliff",
         "parser",
         "parsers"
     ],

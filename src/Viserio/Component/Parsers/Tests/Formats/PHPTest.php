@@ -48,10 +48,26 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage No such file [nonexistfile] found.
      */
     public function testParseToThrowException()
     {
         $this->parser->parse('nonexistfile');
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage An exception was thrown by file
+     */
+    public function testParseToThrowExceptionWithInFileException()
+    {
+        $file = vfsStream::newFile('temp.php')->withContent(
+            '<?php
+                throw new \Exception();
+            '
+        )->at($this->root);
+
+        $this->parser->parse($file->url());
     }
 
     public function testDump()

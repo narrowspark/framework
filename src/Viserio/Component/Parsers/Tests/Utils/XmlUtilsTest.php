@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Tests\Util;
 
 use DOMDocument;
+use Exception;
 use InvalidArgumentException;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -16,63 +18,135 @@ class XmlUtilsTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
+    /**
+     * @var string
+     */
     private $fixturesPath;
+
+    /**
+     * @var \org\bovigo\vfs\vfsStreamDirectory
+     */
+    private $root;
 
     public function setUp()
     {
+        $this->root         = vfsStream::setup();
         $this->fixturesPath = self::normalizeDirectorySeparator(__DIR__ . '/../Fixtures/Utils/');
     }
 
-    public function testLoadFile()
+    public function testLoadFileWithError77()
     {
+        $file = vfsStream::newFile('invalid.xml')->withContent(
+            '<?xml version="1.0" encoding="UTF-8"?>
+<root>
+            '
+        )->at($this->root);
+
         try {
-            XmlUtils::loadFile($this->fixturesPath . 'invalid.xml');
+            XmlUtils::loadFile($file->url());
             $this->fail();
         } catch (InvalidArgumentException $e) {
             self::assertContains('ERROR 77', $e->getMessage());
         }
+    }
+
+    public function testLoadFileWithDocumentTypes()
+    {
+        $file = vfsStream::newFile('document_type.xml')->withContent(
+            '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE scan [<!ENTITY test SYSTEM "php://filter/read=convert.base64-encode/resource={{ resource }}">]>
+<scan></scan>
+            '
+        )->at($this->root);
 
         try {
-            XmlUtils::loadFile($this->fixturesPath . 'document_type.xml');
+            XmlUtils::loadFile($file->url());
             $this->fail();
         } catch (InvalidArgumentException $e) {
             self::assertContains('Document types are not allowed', $e->getMessage());
         }
+    }
+
+    public function testLoadFileWithError1845()
+    {
+        $file = vfsStream::newFile('invalid_schema.xml')->withContent(
+            '<?xml version="1.0" encoding="UTF-8"?>
+<root2 xmlns="http://example.com/schema" />
+            '
+        )->at($this->root);
+
+        $schemaFile = vfsStream::newFile('schema.xsd')->withContent(
+            '<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://example.com/schema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://example.com/schema"
+    elementFormDefault="qualified">
+
+  <xsd:element name="root" />
+</xsd:schema>
+            '
+        )->at($this->root);
 
         try {
-            XmlUtils::loadFile($this->fixturesPath . 'invalid_schema.xml', $this->fixturesPath . 'schema.xsd');
+            XmlUtils::loadFile($file->url(), $schemaFile->url());
             $this->fail();
         } catch (InvalidArgumentException $e) {
             self::assertContains('ERROR 1845', $e->getMessage());
         }
+    }
+
+    public function testLoadFileWithInvalidCallback()
+    {
+        $file = vfsStream::newFile('invalid_schema.xml')->withContent(
+            '<?xml version="1.0" encoding="UTF-8"?>
+<root2 xmlns="http://example.com/schema" />
+            '
+        )->at($this->root);
 
         try {
-            XmlUtils::loadFile($this->fixturesPath . 'invalid_schema.xml', 'invalid_callback_or_file');
+            XmlUtils::loadFile($file->url(), 'invalid_callback_or_file');
             $this->fail();
         } catch (InvalidArgumentException $e) {
             self::assertContains('XSD file or callable', $e->getMessage());
         }
+    }
 
-        $mock = $this->getMockBuilder(__NAMESPACE__ . '\Validator')->getMock();
+    public function testLoadFileWithValidCallback()
+    {
+        $file = vfsStream::newFile('valid.xml')->withContent(
+            '<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="http://example.com/schema">
+</root>
+            '
+        )->at($this->root);
+
+        $mock = $this->getMockBuilder(Validator::class)->getMock();
         $mock->expects($this->exactly(2))->method('validate')->will($this->onConsecutiveCalls(false, true));
 
         try {
-            XmlUtils::loadFile($this->fixturesPath . 'valid.xml', [$mock, 'validate']);
+            XmlUtils::loadFile($file->url(), [$mock, 'validate']);
             $this->fail();
         } catch (InvalidArgumentException $e) {
             self::assertContains('is not valid', $e->getMessage());
         }
 
-        self::assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($this->fixturesPath . 'valid.xml', [$mock, 'validate']));
+        self::assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url(), [$mock, 'validate']));
         self::assertSame([], libxml_get_errors());
     }
 
     public function testLoadFileWithInternalErrorsEnabled()
     {
+        $file = vfsStream::newFile('invalid_schema.xml')->withContent(
+            '<?xml version="1.0" encoding="UTF-8"?>
+<root2 xmlns="http://example.com/schema" />
+            '
+        )->at($this->root);
+
         $internalErrors = libxml_use_internal_errors(true);
 
         self::assertSame([], libxml_get_errors());
-        self::assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($this->fixturesPath . 'invalid_schema.xml'));
+        self::assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url()));
         self::assertSame([], libxml_get_errors());
 
         libxml_clear_errors();
@@ -163,35 +237,37 @@ class XmlUtilsTest extends TestCase
 
     public function testLoadEmptyXmlFile()
     {
-        $file = $this->fixturesPath . 'foo.xml';
+        $file = vfsStream::newFile('foo.xml')->withContent(
+            '
+            '
+        )->at($this->root);
 
-        if (method_exists($this, 'expectException')) {
-            $this->expectException('InvalidArgumentException');
-            $this->expectExceptionMessage(sprintf('File %s does not contain valid XML, it is empty.', $file));
-        } else {
-            $this->setExpectedException('InvalidArgumentException', sprintf('File %s does not contain valid XML, it is empty.', $file));
-        }
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(sprintf('File %s does not contain valid XML, it is empty.', $file->url()));
 
-        XmlUtils::loadFile($file);
+        XmlUtils::loadFile($file->url());
     }
 
     // test for issue https://github.com/symfony/symfony/issues/9731
     public function testLoadWrongEmptyXMLWithErrorHandler()
     {
+        $file = vfsStream::newFile('foo.xml')->withContent(
+            '
+            '
+        )->at($this->root);
         $originalDisableEntities = libxml_disable_entity_loader(false);
         $errorReporting          = error_reporting(-1);
 
         set_error_handler(function ($errno, $errstr) {
-            throw new \Exception($errstr, $errno);
+            throw new Exception($errstr, $errno);
         });
 
-        $file = $this->fixturesPath . 'foo.xml';
         try {
             try {
-                XmlUtils::loadFile($file);
+                XmlUtils::loadFile($file->url());
                 $this->fail('An exception should have been raised');
             } catch (InvalidArgumentException $e) {
-                self::assertEquals(sprintf('File %s does not contain valid XML, it is empty.', $file), $e->getMessage());
+                self::assertEquals(sprintf('File %s does not contain valid XML, it is empty.', $file->url()), $e->getMessage());
             }
         } finally {
             restore_error_handler();
@@ -205,8 +281,27 @@ class XmlUtilsTest extends TestCase
 
         self::assertFalse($disableEntities);
 
+        $file = vfsStream::newFile('valid.xml')->withContent(
+            '<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="http://example.com/schema">
+</root>
+            '
+        )->at($this->root);
+        $schemaFile = vfsStream::newFile('schema.xsd')->withContent(
+            '<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://example.com/schema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://example.com/schema"
+    elementFormDefault="qualified">
+
+  <xsd:element name="root" />
+</xsd:schema>
+            '
+        )->at($this->root);
+
         // should not throw an exception
-        XmlUtils::loadFile($this->fixturesPath . 'valid.xml', $this->fixturesPath . 'schema.xsd');
+        XmlUtils::loadFile($file->url(), $schemaFile->url());
     }
 }
 

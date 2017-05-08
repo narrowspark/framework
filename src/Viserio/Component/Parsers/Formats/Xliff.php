@@ -18,6 +18,17 @@ class Xliff implements FormatContract
             throw new ParseException(['message' => 'File not found.']);
         }
 
+        try {
+            $dom = XmlUtils::loadFile($resource);
+        } catch (InvalidArgumentException $exception) {
+            throw new ParseException([
+                'message' => $exception->getMessage(),
+                'code'    => $exception->getCode(),
+                'file'    => $exception->getFile(),
+                'line'    => $exception->getLine(),
+            ]);
+        }
+
         $xliffVersion = $this->getVersionNumber($dom);
         $this->validateSchema($xliffVersion, $dom, $this->getSchema($xliffVersion));
 
