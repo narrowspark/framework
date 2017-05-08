@@ -4,11 +4,13 @@ namespace Viserio\Component\Parsers\Formats;
 
 use DOMException;
 use RuntimeException;
+use InvalidArgumentException;
 use Spatie\ArrayToXml\ArrayToXml;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\DumpException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Parsers\Utils\XmlUtils;
 
 class XML implements FormatContract, DumperContract
 {
@@ -17,26 +19,17 @@ class XML implements FormatContract, DumperContract
      */
     public function parse(string $payload): array
     {
-        libxml_use_internal_errors(true);
-
-        $data = simplexml_load_string($payload, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-        if ($data === false) {
-            $errors      = libxml_get_errors();
-            $latestError = array_pop($errors);
-
+        try {
+            $dom  = XmlUtils::loadFile($payload);
+            $data = XmlUtils::convertDomElementToArray($dom);
+        } catch(InvalidArgumentException $exception) {
             throw new ParseException([
-                'message' => $latestError->message,
-                'type'    => $latestError->level,
-                'code'    => $latestError->code,
-                'file'    => $latestError->file,
-                'line'    => $latestError->line,
+                'message' => $exception->getMessage(),
+                'code'    => $exception->getCode(),
+                'file'    => $exception->getFile(),
+                'line'    => $exception->getLine(),
             ]);
         }
-
-        $data = json_decode(json_encode((array) $data), true); // Work around to accept xml input
-        $data = str_replace(':{}', ':null', $data);
-        $data = str_replace(':[]', ':null', $data);
 
         return $data;
     }
@@ -47,7 +40,7 @@ class XML implements FormatContract, DumperContract
     public function dump(array $data): string
     {
         // @codeCoverageIgnoreStart
-        if (! class_exists('Spatie\\ArrayToXml\\ArrayToXml')) {
+        if (! class_exists(ArrayToXml::class)) {
             throw new RuntimeException('Unable to dump XML, the ArrayToXml dumper is not installed.');
         }
         // @codeCoverageIgnoreEnd

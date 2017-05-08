@@ -1,12 +1,18 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats\Traits;
+namespace Viserio\Component\Parsers\Utils;
 
 use DOMDocument;
+use DOMText;
+use DOMComment;
 use DOMElement;
 use InvalidArgumentException;
 use Throwable;
 
+/**
+ * This file has been ported from Symfony. The original
+ * code is (c) Fabien Potencier <fabien@symfony.com>.
+ */
 final class XmlUtils
 {
     /**
@@ -30,6 +36,10 @@ final class XmlUtils
      */
     public static function loadFile(string $file, $schemaOrCallable = null): DOMDocument
     {
+        if (! file_exists($file)) {
+            throw new InvalidArgumentException(sprintf('No such file %s.', $file));
+        }
+
         $content = @file_get_contents($file);
 
         if (trim($content) === '') {
@@ -47,7 +57,7 @@ final class XmlUtils
         if (! $dom->loadXML($content, LIBXML_NONET | (defined('LIBXML_COMPACT') ? LIBXML_COMPACT : 0))) {
             libxml_disable_entity_loader($disableEntities);
 
-            throw new InvalidArgumentException(implode("\n", static::getXmlErrors($internalErrors)));
+            throw new InvalidArgumentException(implode("\n", self::getXmlErrors($internalErrors)));
         }
 
         $dom->normalizeDocument();
@@ -61,36 +71,8 @@ final class XmlUtils
             }
         }
 
-        if (null !== $schemaOrCallable) {
-            $internalErrors = libxml_use_internal_errors(true);
-            libxml_clear_errors();
-
-            $e = null;
-
-            if (is_callable($schemaOrCallable)) {
-                try {
-                    $valid = call_user_func($schemaOrCallable, $dom, $internalErrors);
-                } catch (Throwable $e) {
-                    $valid = false;
-                }
-            } elseif (! is_array($schemaOrCallable) && is_file((string) $schemaOrCallable)) {
-                $schemaSource = file_get_contents((string) $schemaOrCallable);
-                $valid        = @$dom->schemaValidateSource($schemaSource);
-            } else {
-                libxml_use_internal_errors($internalErrors);
-
-                throw new InvalidArgumentException('The schemaOrCallable argument has to be a valid path to XSD file or callable.');
-            }
-
-            if (! $valid) {
-                $messages = static::getXmlErrors($internalErrors);
-
-                if (empty($messages)) {
-                    $messages = [sprintf('The XML file "%s" is not valid.', $file)];
-                }
-
-                throw new InvalidArgumentException(implode("\n", $messages), 0, $e);
-            }
+        if ($schemaOrCallable !== null) {
+            self::validateXmlDom($file, $dom, $schemaOrCallable);
         }
 
         libxml_clear_errors();
@@ -117,9 +99,9 @@ final class XmlUtils
      * @param \DomElement $element     A \DomElement instance
      * @param bool        $checkPrefix Check prefix in an element or an attribute name
      *
-     * @return array A PHP array
+     * @return array|string|null A PHP array
      */
-    public static function convertDomElementToArray(DOMElement $element, $checkPrefix = true)
+    public static function convertDomElementToArray(DOMElement $element, bool $checkPrefix = true)
     {
         $prefix = (string) $element->prefix;
         $empty  = true;
@@ -129,29 +111,30 @@ final class XmlUtils
             if ($checkPrefix && ! in_array((string) $node->prefix, ['', $prefix], true)) {
                 continue;
             }
-            $config[$name] = static::phpize($node->value);
+
+            $config[$name] = self::phpize($node->value);
             $empty         = false;
         }
 
         $nodeValue = false;
 
         foreach ($element->childNodes as $node) {
-            if ($node instanceof \DOMText) {
-                if ('' !== trim($node->nodeValue)) {
+            if ($node instanceof DOMText) {
+                if (trim($node->nodeValue) !== '') {
                     $nodeValue = trim($node->nodeValue);
                     $empty     = false;
                 }
             } elseif ($checkPrefix && $prefix != (string) $node->prefix) {
                 continue;
-            } elseif (! $node instanceof \DOMComment) {
-                $value = static::convertDomElementToArray($node, $checkPrefix);
-
-                $key = $node->localName;
+            } elseif (! $node instanceof DOMComment) {
+                $value = self::convertDomElementToArray($node, $checkPrefix);
+                $key   = $node->localName;
 
                 if (isset($config[$key])) {
                     if (! is_array($config[$key]) || ! is_int(key($config[$key]))) {
                         $config[$key] = [$config[$key]];
                     }
+
                     $config[$key][] = $value;
                 } else {
                     $config[$key] = $value;
@@ -161,8 +144,9 @@ final class XmlUtils
             }
         }
 
-        if (false !== $nodeValue) {
-            $value = static::phpize($nodeValue);
+        if ($nodeValue !== false) {
+            $value = self::phpize($nodeValue);
+
             if (count($config)) {
                 $config['value'] = $value;
             } else {
@@ -215,7 +199,13 @@ final class XmlUtils
         }
     }
 
-    private static function getXmlErrors($internalErrors)
+    /**
+     *
+     * @var bool $internalErrors
+     *
+     * @return array
+     */
+    private static function getXmlErrors(bool $internalErrors): array
     {
         $errors = [];
 
@@ -234,5 +224,44 @@ final class XmlUtils
         libxml_use_internal_errors($internalErrors);
 
         return $errors;
+    }
+
+    /**
+     *
+     *
+     *
+     * @return bool
+     */
+    private static function validateXmlDom(string $file, DOMDocument $dom, $schemaOrCallable)
+    {
+        $internalErrors = libxml_use_internal_errors(true);
+        libxml_clear_errors();
+
+        $exception = null;
+
+        if (is_callable($schemaOrCallable)) {
+            try {
+                $valid = call_user_func($schemaOrCallable, $dom, $internalErrors);
+            } catch (Throwable $exception) {
+                $valid = false;
+            }
+        } elseif (! is_array($schemaOrCallable) && is_file((string) $schemaOrCallable)) {
+            $schemaSource = file_get_contents((string) $schemaOrCallable);
+            $valid        = @$dom->schemaValidateSource($schemaSource);
+        } else {
+            libxml_use_internal_errors($internalErrors);
+
+            throw new InvalidArgumentException('The schemaOrCallable argument has to be a valid path to XSD file or callable.');
+        }
+
+        if (! $valid) {
+            $messages = self::getXmlErrors($internalErrors);
+
+            if (empty($messages)) {
+                $messages = [sprintf('The XML file "%s" is not valid.', $file)];
+            }
+
+            throw new InvalidArgumentException(implode("\n", $messages), 0, $exception);
+        }
     }
 }
