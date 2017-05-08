@@ -13,6 +13,8 @@ tfold () {
 }
 export -f tfold
 
+set +e
+bash -e <<TRY
 if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
     bash -xc ""$TEST" -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
 elif [[ "$PHPUNIT" = true ]]; then
@@ -32,4 +34,8 @@ elif [[ "$PHPUNIT" = true ]]; then
     done
 elif [[ "$PHPSTAN" = true ]]; then
     ./vendor/bin/phpstan analyse -c phpstan.neon -l 5 src/Viserio
+fi
+TRY
+if [ $? -ne 0 ]; then
+  exit 1
 fi
