@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Utils;
 
-use DOMDocument;
-use DOMText;
 use DOMComment;
+use DOMDocument;
 use DOMElement;
+use DOMText;
 use InvalidArgumentException;
 use Throwable;
 
@@ -200,8 +200,7 @@ final class XmlUtils
     }
 
     /**
-     *
-     * @var bool $internalErrors
+     * @var bool
      *
      * @return array
      */
@@ -227,8 +226,7 @@ final class XmlUtils
     }
 
     /**
-     *
-     *
+     * @param mixed $schemaOrCallable
      *
      * @return bool
      */

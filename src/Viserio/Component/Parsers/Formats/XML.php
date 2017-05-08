@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats;
 
 use DOMException;
-use RuntimeException;
 use InvalidArgumentException;
+use RuntimeException;
 use Spatie\ArrayToXml\ArrayToXml;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\DumpException;
@@ -22,7 +22,7 @@ class XML implements FormatContract, DumperContract
         try {
             $dom  = XmlUtils::loadFile($payload);
             $data = XmlUtils::convertDomElementToArray($dom);
-        } catch(InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             throw new ParseException([
                 'message' => $exception->getMessage(),
                 'code'    => $exception->getCode(),
