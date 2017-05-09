@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parsers\Formats\Json;
 
-class JsonTest extends TestCase
+class JSONTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

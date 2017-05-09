@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parsers\Formats\Yaml;
 
-class YamlTest extends TestCase
+class YAMLTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

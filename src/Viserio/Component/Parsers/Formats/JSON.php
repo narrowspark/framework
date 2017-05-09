@@ -7,7 +7,7 @@ use Viserio\Component\Contracts\Parsers\Exception\DumpException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 
-class Json implements FormatContract, DumperContract
+class JSON implements FormatContract, DumperContract
 {
     /**
      * {@inheritdoc}

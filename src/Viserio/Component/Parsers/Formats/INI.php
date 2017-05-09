@@ -6,7 +6,7 @@ use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 
-class Ini implements FormatContract, DumperContract
+class INI implements FormatContract, DumperContract
 {
     /**
      * {@inheritdoc}

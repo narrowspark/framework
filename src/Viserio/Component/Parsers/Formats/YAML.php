@@ -9,7 +9,7 @@ use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 
-class Yaml implements FormatContract, DumperContract
+class YAML implements FormatContract, DumperContract
 {
     /**
      * Create a new Yaml parser.

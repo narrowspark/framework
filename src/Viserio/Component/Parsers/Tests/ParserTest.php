@@ -5,7 +5,6 @@ namespace Viserio\Component\Parsers\Tests;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parsers\Formats\Ini;
 use Viserio\Component\Parsers\Formats\Json;
-use Viserio\Component\Parsers\Formats\MSGPack;
 use Viserio\Component\Parsers\Formats\Php;
 use Viserio\Component\Parsers\Formats\QueryStr;
 use Viserio\Component\Parsers\Formats\Serialize;

@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parsers\Formats\Toml;
 
-class TomlTest extends TestCase
+class TOMLTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
