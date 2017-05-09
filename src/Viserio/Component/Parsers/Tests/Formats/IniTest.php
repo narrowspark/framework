@@ -28,17 +28,17 @@ class IniTest extends TestCase
 
     public function setUp()
     {
-        $this->file   = new Filesystem();
-        $this->root   = vfsStream::setup();
+        $this->file     = new Filesystem();
+        $this->root     = vfsStream::setup();
         $this->iniArray = [
             'first_section' => [
-                'one' => true,
-                'five' => 5,
+                'one'    => true,
+                'five'   => 5,
                 'animal' => 'BIRD',
             ],
             'second_section' => [
                 'path' => '/usr/local/bin',
-                'URL' => 'http://www.example.com/~username',
+                'URL'  => 'http://www.example.com/~username',
             ],
             'third_section' => [
                 'phpversion' => [

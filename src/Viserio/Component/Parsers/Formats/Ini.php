@@ -5,7 +5,6 @@ namespace Viserio\Component\Parsers\Formats;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
-use Viserio\Component\Support\VarExporter;
 
 class Ini implements FormatContract, DumperContract
 {
@@ -26,7 +25,7 @@ class Ini implements FormatContract, DumperContract
             throw new ParseException($errors);
         }
 
-        foreach($ini as $key => $value) {
+        foreach ($ini as $key => $value) {
             $ini[$key] = self::normalize($value);
         }
 
@@ -72,9 +71,9 @@ class Ini implements FormatContract, DumperContract
             $output .= PHP_EOL;
 
             foreach ($subsections as $section => $data) {
-                if (is_array($data)){
-                    foreach($data as $key => $value) {
-                        $output .= $section . '['. (is_string($key) ? $key : '') .']=' . self::export($value);
+                if (is_array($data)) {
+                    foreach ($data as $key => $value) {
+                        $output .= $section . '[' . (is_string($key) ? $key : '') . ']=' . self::export($value);
                     }
                 } else {
                     $output .= $section . '[]=' . $data;
@@ -98,7 +97,7 @@ class Ini implements FormatContract, DumperContract
             return 'null';
         } elseif (is_bool($value)) {
             return $value ? 'true' : 'false';
-        } elseif(is_numeric($value)) {
+        } elseif (is_numeric($value)) {
             return '"' . var_export($value, true) . '"';
         }
 
@@ -124,7 +123,7 @@ class Ini implements FormatContract, DumperContract
         }
 
         // Don't normalize non-string value
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             return $value;
         }
 

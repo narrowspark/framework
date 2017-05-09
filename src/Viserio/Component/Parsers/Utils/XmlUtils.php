@@ -46,7 +46,7 @@ final class XmlUtils
     /**
      * Loads an XML string.
      *
-     * @param string               $content             An XML string content
+     * @param string               $content          An XML string content
      * @param string|callable|null $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
      * @throws \InvalidArgumentException When loading of XML file returns error
