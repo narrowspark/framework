@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parsers\Formats\Php;
 
-class PhpTest extends TestCase
+class PHPTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

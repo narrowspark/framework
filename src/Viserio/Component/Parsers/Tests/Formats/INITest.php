@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parsers\Formats\Ini;
 
-class IniTest extends TestCase
+class INITest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

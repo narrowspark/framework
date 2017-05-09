@@ -7,7 +7,7 @@ use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 
-class Php implements FormatContract, DumperContract
+class PHP implements FormatContract, DumperContract
 {
     /**
      * {@inheritdoc}

@@ -12,7 +12,7 @@ use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 
-class Xml implements FormatContract, DumperContract
+class XML implements FormatContract, DumperContract
 {
     /**
      * {@inheritdoc}
