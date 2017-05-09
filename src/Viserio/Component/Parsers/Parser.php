@@ -6,15 +6,15 @@ use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
-use Viserio\Component\Parsers\Formats\INI;
-use Viserio\Component\Parsers\Formats\JSON;
-use Viserio\Component\Parsers\Formats\PHP;
+use Viserio\Component\Parsers\Formats\Ini;
+use Viserio\Component\Parsers\Formats\Json;
+use Viserio\Component\Parsers\Formats\Php;
 use Viserio\Component\Parsers\Formats\Po;
 use Viserio\Component\Parsers\Formats\QueryStr;
 use Viserio\Component\Parsers\Formats\Serialize;
-use Viserio\Component\Parsers\Formats\TOML;
-use Viserio\Component\Parsers\Formats\XML;
-use Viserio\Component\Parsers\Formats\YAML;
+use Viserio\Component\Parsers\Formats\Toml;
+use Viserio\Component\Parsers\Formats\Xml;
+use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Parser implements ParserContract
@@ -55,13 +55,13 @@ class Parser implements ParserContract
     ];
 
     private $supportedParsers = [
-        'ini'       => INI::class,
-        'json'      => JSON::class,
-        'php'       => PHP::class,
+        'ini'       => Ini::class,
+        'json'      => Json::class,
+        'php'       => Php::class,
         'po'        => Po::class,
         'querystr'  => QueryStr::class,
         'serialize' => Serialize::class,
-        'toml'      => TOML::class,
+        'toml'      => Toml::class,
         'xml'       => Xml::class,
         'yaml'      => Yaml::class,
     ];
