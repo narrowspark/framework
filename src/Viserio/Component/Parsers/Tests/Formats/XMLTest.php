@@ -5,9 +5,9 @@ namespace Viserio\Component\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\XML;
+use Viserio\Component\Parsers\Formats\Xml;
 
-class XMLTest extends TestCase
+class XmlTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -15,7 +15,7 @@ class XMLTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Parsers\Formats\XML
+     * @var \Viserio\Component\Parsers\Formats\Xml
      */
     private $parser;
 
@@ -28,7 +28,7 @@ class XMLTest extends TestCase
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
-        $this->parser = new XML();
+        $this->parser = new Xml();
     }
 
     public function testParse()

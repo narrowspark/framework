@@ -5,9 +5,9 @@ namespace Viserio\Component\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\JSON;
+use Viserio\Component\Parsers\Formats\Json;
 
-class JSONTest extends TestCase
+class JsonTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -15,7 +15,7 @@ class JSONTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Parsers\Formats\JSON
+     * @var \Viserio\Component\Parsers\Formats\Json
      */
     private $parser;
 
@@ -28,7 +28,7 @@ class JSONTest extends TestCase
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
-        $this->parser = new JSON();
+        $this->parser = new Json();
     }
 
     public function testParse()

@@ -5,9 +5,9 @@ namespace Viserio\Component\Parsers\Tests\Formats\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\INI;
+use Viserio\Component\Parsers\Formats\Ini;
 
-class INITest extends TestCase
+class IniTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -15,7 +15,7 @@ class INITest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Parsers\Formats\INI
+     * @var \Viserio\Component\Parsers\Formats\Ini
      */
     private $parser;
 
@@ -28,7 +28,7 @@ class INITest extends TestCase
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
-        $this->parser = new INI();
+        $this->parser = new Ini();
     }
 
     public function testParse()

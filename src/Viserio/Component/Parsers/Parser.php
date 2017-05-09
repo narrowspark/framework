@@ -62,8 +62,8 @@ class Parser implements ParserContract
         'querystr'  => QueryStr::class,
         'serialize' => Serialize::class,
         'toml'      => TOML::class,
-        'xml'       => XML::class,
-        'yaml'      => YAML::class,
+        'xml'       => Xml::class,
+        'yaml'      => Yaml::class,
     ];
 
     /**
