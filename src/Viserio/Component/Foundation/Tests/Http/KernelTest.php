@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Router as  RouterContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
@@ -114,10 +115,11 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(Mock::type(ServerRequestInterface::class))
             ->andReturn($this->mock(ResponseInterface::class));
-        $router->shouldReceive('setCachePath')
+        $dispatcher = $this->mock(DispatcherContract::class);
+        $dispatcher->shouldReceive('setCachePath')
             ->once()
             ->with('/storage/framework/routes.cache.php');
-        $router->shouldReceive('refreshCache')
+        $dispatcher->shouldReceive('refreshCache')
             ->once()
             ->with(true);
 
@@ -125,6 +127,10 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(RouterContract::class)
             ->andReturn($router);
+        $container->shouldReceive('get')
+            ->once()
+            ->with(DispatcherContract::class)
+            ->andReturn($dispatcher);
 
         $kernel = $this->getKernel($container);
 
@@ -144,13 +150,14 @@ class KernelTest extends MockeryTestCase
             ->with('X-Php-Ob-Level', (string) ob_get_level())
             ->andReturn($serverRequest);
 
-        $router = $this->mock(RouterContract::class);
-        $router->shouldReceive('setCachePath')
+        $dispatcher = $this->mock(DispatcherContract::class);
+        $dispatcher->shouldReceive('setCachePath')
             ->once()
             ->with('/storage/framework/routes.cache.php');
-        $router->shouldReceive('refreshCache')
+        $dispatcher->shouldReceive('refreshCache')
             ->once()
             ->with(true);
+        $router = $this->mock(RouterContract::class);
         $router->shouldReceive('dispatch')
             ->once()
             ->with($serverRequest)
@@ -173,6 +180,10 @@ class KernelTest extends MockeryTestCase
             ->twice()
             ->with(ExceptionHandlerContract::class)
             ->andReturn($handler);
+        $container->shouldReceive('get')
+            ->once()
+            ->with(DispatcherContract::class)
+            ->andReturn($dispatcher);
 
         $events = $this->mock(EventManagerContract::class);
         $events->shouldReceive('trigger')
