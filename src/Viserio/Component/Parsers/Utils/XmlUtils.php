@@ -213,7 +213,8 @@ final class XmlUtils
     }
 
     /**
-     * @param mixed $schemaOrCallable
+     * @param mixed       $schemaOrCallable
+     * @param DOMDocument $dom
      *
      * @return bool
      */
@@ -252,6 +253,8 @@ final class XmlUtils
 
     /**
      * @var bool
+     *
+     * @param bool $internalErrors
      *
      * @return array
      */

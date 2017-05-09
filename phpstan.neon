@@ -103,7 +103,6 @@ parameters:
         - '#\$values of method Viserio\\Component\\Http\\AbstractMessage::trimHeaderValues#'
         - '#\$array of method Viserio\\Component\\Http\\AbstractMessage::arrayContainsOnlyStrings#'
         - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
-        - '#\$payload of method Viserio\\Component\\Parsers\\Formats\\INI::parse#'
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
         - '#Method Viserio\\Component\\Routing\\Router::convertToControllerAction#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeCompiler::compileSegmentNodes#'

@@ -32,9 +32,11 @@ class IniTest extends TestCase
         $this->root     = vfsStream::setup();
         $this->iniArray = [
             'first_section' => [
-                'one'    => true,
-                'five'   => 5,
-                'animal' => 'BIRD',
+                'one'     => true,
+                'two'     => false,
+                'tree'    => null,
+                'five'    => 5,
+                'animal'  => 'BIRD',
             ],
             'second_section' => [
                 'path' => '/usr/local/bin',
@@ -65,6 +67,8 @@ class IniTest extends TestCase
 
 [first_section]
 one = true
+two = false
+tree = null
 five = 5
 animal = BIRD
 
@@ -82,7 +86,7 @@ urls[svn] = "http://svn.php.net"
 urls[git] = "http://git.php.net"')
             ->at($this->root);
 
-        $parsed = $this->parser->parse($this->file->read($file->url()));
+        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame($this->iniArray, $parsed);
@@ -101,7 +105,7 @@ explore=true
 value=5'
         )->at($this->root);
 
-        $parsed = $this->parser->parse($this->file->read($file->url()));
+        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame(
@@ -125,6 +129,8 @@ value=5'
             ->withContent('
 [first_section]
 one=true
+two=false
+tree=null
 five="5"
 animal="BIRD"
 
