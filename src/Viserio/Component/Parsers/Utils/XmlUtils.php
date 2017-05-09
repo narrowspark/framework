@@ -25,6 +25,34 @@ final class XmlUtils
     }
 
     /**
+     * Returns the XML errors of the internal XML parser.
+     *
+     * @param bool $internalErrors
+     *
+     * @return array An array of errors
+     */
+    public static function getXmlErrors(bool $internalErrors): array
+    {
+        $errors = [];
+
+        foreach (libxml_get_errors() as $error) {
+            $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
+                $error->level == LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
+                $error->code,
+                trim($error->message),
+                $error->file ?: 'n/a',
+                $error->line,
+                $error->column
+            );
+        }
+
+        libxml_clear_errors();
+        libxml_use_internal_errors($internalErrors);
+
+        return $errors;
+    }
+
+    /**
      * Loads an XML file.
      *
      * @param string               $file             An XML file path
@@ -249,33 +277,5 @@ final class XmlUtils
 
             throw new InvalidArgumentException(implode("\n", $messages), 0, $exception);
         }
-    }
-
-    /**
-     * @var bool
-     *
-     * @param bool $internalErrors
-     *
-     * @return array
-     */
-    private static function getXmlErrors(bool $internalErrors): array
-    {
-        $errors = [];
-
-        foreach (libxml_get_errors() as $error) {
-            $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
-                $error->level == LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
-                $error->code,
-                trim($error->message),
-                $error->file ?: 'n/a',
-                $error->line,
-                $error->column
-            );
-        }
-
-        libxml_clear_errors();
-        libxml_use_internal_errors($internalErrors);
-
-        return $errors;
     }
 }

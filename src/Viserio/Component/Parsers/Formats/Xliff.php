@@ -15,12 +15,8 @@ class Xliff implements FormatContract
      */
     public function parse(string $payload): array
     {
-        if (! file_exists($payload)) {
-            throw new ParseException(['message' => 'File not found.']);
-        }
-
         try {
-            $dom = XmlUtils::loadFile($resource);
+            $dom = XmlUtils::loadString($resource);
         } catch (InvalidArgumentException $exception) {
             throw new ParseException([
                 'message' => $exception->getMessage(),
@@ -53,7 +49,9 @@ class Xliff implements FormatContract
         $encoding = mb_strtoupper($dom->encoding);
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:1.2');
-        $xml->registerXPathNamespace('narrowspark', 'urn:narrowspark:translation');
+
+        foreach ($xml->xpath('//xliff:trans-unit') as $translation) {
+        }
     }
 
     /**
@@ -126,7 +124,7 @@ class Xliff implements FormatContract
                 sprintf(
                     'Invalid resource provided: "%s"; Errors: %s',
                     $file,
-                    implode("\n", $this->getXmlErrors($internalErrors))
+                    implode("\n", XmlUtils::getXmlErrors($internalErrors))
                 )
             );
         }
@@ -144,49 +142,21 @@ class Xliff implements FormatContract
      *
      * @param string $xliffVersion
      *
+     * @throws \InvalidArgumentException
+     *
      * @return string
      */
     private function getSchema(string $xliffVersion): string
     {
         if ($xliffVersion === '1.2') {
             //http://www.w3.org/2001/xml.xsd
-            $schemaSource = file_get_contents(__DIR__ . '/../Schemas/dic/xliff-core/xliff-core-1.2-strict.xsd');
+            return file_get_contents(__DIR__ . '/../Schemas/dic/xliff-core/xliff-core-1.2-strict.xsd');
         } elseif ($xliffVersion === '2.0') {
             // informativeCopiesOf3rdPartySchemas/w3c/xml.xsd
-            $schemaSource = file_get_contents(__DIR__ . '/../Schemas/dic/xliff-core/xliff-core-2.0.xsd');
-        } else {
-            throw new InvalidArgumentException(sprintf('No support implemented for loading XLIFF version "%s".', $xliffVersion));
+            return file_get_contents(__DIR__ . '/../Schemas/dic/xliff-core/xliff-core-2.0.xsd');
         }
 
-        return $schemaSource;
-    }
-
-    /**
-     * Returns the XML errors of the internal XML parser.
-     *
-     * @param bool $internalErrors
-     *
-     * @return array An array of errors
-     */
-    private function getXmlErrors(bool $internalErrors): array
-    {
-        $errors = [];
-
-        foreach (libxml_get_errors() as $error) {
-            $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
-                LIBXML_ERR_WARNING == $error->level ? 'WARNING' : 'ERROR',
-                $error->code,
-                trim($error->message),
-                $error->file ?: 'n/a',
-                $error->line,
-                $error->column
-            );
-        }
-
-        libxml_clear_errors();
-        libxml_use_internal_errors($internalErrors);
-
-        return $errors;
+        throw new InvalidArgumentException(sprintf('No support implemented for loading XLIFF version "%s".', $xliffVersion));
     }
 
     /**
@@ -204,5 +174,33 @@ class Xliff implements FormatContract
         }
 
         return $content;
+    }
+
+    /**
+     * Internally changes the URI of a dependent xsd to be loaded locally.
+     *
+     * @param string $schemaSource Current content of schema file
+     * @param string $xmlUri       External URI of XML to convert to local
+     *
+     * @return string
+     */
+    private function fixXmlLocation(string $schemaSource, string $xmlUri): string
+    {
+        $newPath = str_replace('\\', '/', __DIR__).'/../Schemas/xliff-core/xml.xsd';
+        $parts   = explode('/', $newPath);
+
+        if (stripos($newPath, 'phar://') === 0) {
+            $tmpfile = tempnam(sys_get_temp_dir(), 'sf2');
+
+            if ($tmpfile) {
+                copy($newPath, $tmpfile);
+                $parts = explode('/', str_replace('\\', '/', $tmpfile));
+            }
+        }
+
+        $drive = '\\' === DIRECTORY_SEPARATOR ? array_shift($parts).'/' : '';
+        $newPath = 'file:///'.$drive.implode('/', array_map('rawurlencode', $parts));
+
+        return str_replace($xmlUri, $newPath, $schemaSource);
     }
 }
