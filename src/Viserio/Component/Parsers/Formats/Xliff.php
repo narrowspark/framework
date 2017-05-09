@@ -186,10 +186,10 @@ class Xliff implements FormatContract
      */
     private function fixXmlLocation(string $schemaSource, string $xmlUri): string
     {
-        $newPath = str_replace('\\', '/', __DIR__).'/../Schemas/xliff-core/xml.xsd';
+        $newPath = str_replace('\\', '/', __DIR__) . '/../Schemas/xliff-core/xml.xsd';
         $parts   = explode('/', $newPath);
 
-        if (stripos($newPath, 'phar://') === 0) {
+        if (mb_stripos($newPath, 'phar://') === 0) {
             $tmpfile = tempnam(sys_get_temp_dir(), 'sf2');
 
             if ($tmpfile) {
@@ -198,8 +198,8 @@ class Xliff implements FormatContract
             }
         }
 
-        $drive = '\\' === DIRECTORY_SEPARATOR ? array_shift($parts).'/' : '';
-        $newPath = 'file:///'.$drive.implode('/', array_map('rawurlencode', $parts));
+        $drive   = '\\' === DIRECTORY_SEPARATOR ? array_shift($parts) . '/' : '';
+        $newPath = 'file:///' . $drive . implode('/', array_map('rawurlencode', $parts));
 
         return str_replace($xmlUri, $newPath, $schemaSource);
     }
