@@ -20,7 +20,7 @@ class Xml implements FormatContract, DumperContract
     public function parse(string $payload): array
     {
         try {
-            $dom  = XmlUtils::loadFile($payload);
+            $dom  = XmlUtils::loadString($payload);
             // Work around to accept xml input
             $data = json_decode(json_encode((array) simplexml_import_dom($dom)), true);
             $data = str_replace(':{}', ':null', $data);

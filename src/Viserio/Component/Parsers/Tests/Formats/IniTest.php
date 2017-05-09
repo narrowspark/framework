@@ -24,26 +24,68 @@ class IniTest extends TestCase
      */
     private $file;
 
+    private $iniArray;
+
     public function setUp()
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
+        $this->iniArray = [
+            'first_section' => [
+                'one' => true,
+                'five' => 5,
+                'animal' => 'BIRD',
+            ],
+            'second_section' => [
+                'path' => '/usr/local/bin',
+                'URL' => 'http://www.example.com/~username',
+            ],
+            'third_section' => [
+                'phpversion' => [
+                    5.0,
+                    5.1,
+                    5.2,
+                    5.3,
+                ],
+                'urls' => [
+                    'svn' => 'http://svn.php.net',
+                    'git' => 'http://git.php.net',
+                ],
+            ],
+        ];
         $this->parser = new Ini();
     }
 
     public function testParse()
     {
-        $file = vfsStream::newFile('temp.ini')->withContent(
-            '
-one = 1
+        $file = vfsStream::newFile('temp.ini')
+            ->withContent('
+; This is a sample configuration file
+; Comments start with \';\', as in php.ini
+
+[first_section]
+one = true
 five = 5
-animal = BIRD'
-        )->at($this->root);
+animal = BIRD
+
+[second_section]
+path = "/usr/local/bin"
+URL = "http://www.example.com/~username"
+
+[third_section]
+phpversion[] = "5.0"
+phpversion[] = "5.1"
+phpversion[] = "5.2"
+phpversion[] = "5.3"
+
+urls[svn] = "http://svn.php.net"
+urls[git] = "http://git.php.net"')
+            ->at($this->root);
 
         $parsed = $this->parser->parse($this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
-        self::assertSame(['one' => '1', 'five' => '5', 'animal' => 'BIRD'], $parsed);
+        self::assertSame($this->iniArray, $parsed);
     }
 
     public function testParseWithSection()
@@ -63,7 +105,7 @@ value=5'
 
         self::assertTrue(is_array($parsed));
         self::assertSame(
-            ['main' => ['explore' => '1'], 'main.sub' => [], 'main.sub.sub' => ['value' => '5']],
+            ['main' => ['explore' => true], 'main.sub' => [], 'main.sub.sub' => ['value' => 5]],
             $parsed
         );
     }
@@ -78,11 +120,27 @@ value=5'
 
     public function testDump()
     {
-        $dump = $this->parser->dump(['test' => ['value' => true, 'five' => 5]]);
-        $file = vfsStream::newFile('temp.ini')->withContent(
-'[test]
-value=true
-five=5')->at($this->root);
+        $dump = $this->parser->dump($this->iniArray);
+        $file = vfsStream::newFile('temp.ini')
+            ->withContent('
+[first_section]
+one=true
+five="5"
+animal="BIRD"
+
+[second_section]
+path="/usr/local/bin"
+URL="http://www.example.com/~username"
+
+[third_section]
+phpversion[]="5.0"
+phpversion[]="5.1"
+phpversion[]="5.2"
+phpversion[]="5.3"
+
+urls[svn]="http://svn.php.net"
+urls[git]="http://git.php.net"')
+            ->at($this->root);
 
         self::assertEquals(preg_replace('/^\s+|\n|\r|\s+$/m', '', $this->file->read($file->url())), preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
     }

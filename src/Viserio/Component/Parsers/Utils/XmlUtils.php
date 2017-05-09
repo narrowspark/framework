@@ -40,10 +40,23 @@ final class XmlUtils
             throw new InvalidArgumentException(sprintf('No such file %s.', $file));
         }
 
-        $content = @file_get_contents($file);
+        return self::loadString(@file_get_contents($file), $schemaOrCallable);
+    }
 
+    /**
+     * Loads an XML string.
+     *
+     * @param string               $content             An XML string content
+     * @param string|callable|null $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
+     *
+     * @throws \InvalidArgumentException When loading of XML file returns error
+     *
+     * @return \DOMDocument
+     */
+    public static function loadString(string $content, $schemaOrCallable = null): DOMDocument
+    {
         if (trim($content) === '') {
-            throw new InvalidArgumentException(sprintf('File %s does not contain valid XML, it is empty.', $file));
+            throw new InvalidArgumentException('Content does not contain valid XML, it is empty.');
         }
 
         $internalErrors  = libxml_use_internal_errors(true);
@@ -72,7 +85,7 @@ final class XmlUtils
         }
 
         if ($schemaOrCallable !== null) {
-            self::validateXmlDom($file, $dom, $schemaOrCallable);
+            self::validateXmlDom($dom, $schemaOrCallable);
         }
 
         libxml_clear_errors();
@@ -200,37 +213,11 @@ final class XmlUtils
     }
 
     /**
-     * @var bool
-     *
-     * @return array
-     */
-    private static function getXmlErrors(bool $internalErrors): array
-    {
-        $errors = [];
-
-        foreach (libxml_get_errors() as $error) {
-            $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
-                $error->level == LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
-                $error->code,
-                trim($error->message),
-                $error->file ?: 'n/a',
-                $error->line,
-                $error->column
-            );
-        }
-
-        libxml_clear_errors();
-        libxml_use_internal_errors($internalErrors);
-
-        return $errors;
-    }
-
-    /**
      * @param mixed $schemaOrCallable
      *
      * @return bool
      */
-    private static function validateXmlDom(string $file, DOMDocument $dom, $schemaOrCallable)
+    private static function validateXmlDom(DOMDocument $dom, $schemaOrCallable)
     {
         $internalErrors = libxml_use_internal_errors(true);
         libxml_clear_errors();
@@ -256,10 +243,36 @@ final class XmlUtils
             $messages = self::getXmlErrors($internalErrors);
 
             if (empty($messages)) {
-                $messages = [sprintf('The XML file "%s" is not valid.', $file)];
+                $messages = ['The XML file is not valid.'];
             }
 
             throw new InvalidArgumentException(implode("\n", $messages), 0, $exception);
         }
+    }
+
+    /**
+     * @var bool
+     *
+     * @return array
+     */
+    private static function getXmlErrors(bool $internalErrors): array
+    {
+        $errors = [];
+
+        foreach (libxml_get_errors() as $error) {
+            $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
+                $error->level == LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
+                $error->code,
+                trim($error->message),
+                $error->file ?: 'n/a',
+                $error->line,
+                $error->column
+            );
+        }
+
+        libxml_clear_errors();
+        libxml_use_internal_errors($internalErrors);
+
+        return $errors;
     }
 }

@@ -5,6 +5,7 @@ namespace Viserio\Component\Parsers\Formats;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Support\VarExporter;
 
 class Ini implements FormatContract, DumperContract
 {
@@ -13,7 +14,7 @@ class Ini implements FormatContract, DumperContract
      */
     public function parse(string $payload): array
     {
-        $ini = @parse_ini_string($payload, true);
+        $ini = @parse_ini_string($payload, true, INI_SCANNER_RAW);
 
         if (! $ini) {
             $errors = error_get_last();
@@ -23,6 +24,10 @@ class Ini implements FormatContract, DumperContract
             }
 
             throw new ParseException($errors);
+        }
+
+        foreach($ini as $key => $value) {
+            $ini[$key] = self::normalize($value);
         }
 
         return $ini;
@@ -55,19 +60,10 @@ class Ini implements FormatContract, DumperContract
 
         foreach ($array as $key => $value) {
             if (is_array($value) || is_object($value)) {
-                $key               = $section . '.' . $key;
                 $subsections[$key] = is_array($value) ? $value : (array) $value;
             } else {
                 $output .= str_replace('=', '_', $key) . '=';
-
-                if (is_string($value)) {
-                    $output .= '"' . addslashes($value) . '"';
-                } elseif (is_bool($value)) {
-                    $output .= $value ? 'true' : 'false';
-                } else {
-                    $output .= $value;
-                }
-
+                $output .= self::export($value);
                 $output .= PHP_EOL;
             }
         }
@@ -75,11 +71,108 @@ class Ini implements FormatContract, DumperContract
         if (! empty($subsections)) {
             $output .= PHP_EOL;
 
-            foreach ($subsections as $section => $array) {
-                $output .= $this->writeSection($section, $array);
+            foreach ($subsections as $section => $data) {
+                if (is_array($data)){
+                    foreach($data as $key => $value) {
+                        $output .= $section . '['. (is_string($key) ? $key : '') .']=' . self::export($value);
+                    }
+                } else {
+                    $output .= $section . '[]=' . $data;
+                }
             }
         }
 
         return $output;
+    }
+
+    /**
+     * Converts the supplied value into a valid ini representation.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    private static function export($value): string
+    {
+        if (is_null($value)) {
+            return 'null';
+        } elseif (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        } elseif(is_numeric($value)) {
+            return '"' . var_export($value, true) . '"';
+        }
+
+        return sprintf('"%s"', $value);
+    }
+
+    /**
+     * Normalizes INI and other values.
+     *
+     * @param mixed $value
+     *
+     * @return bool|int|null|string|array
+     */
+    private static function normalize($value)
+    {
+        // Normalize array values
+        if (is_array($value)) {
+            foreach ($value as &$subValue) {
+                $subValue = self::normalize($subValue);
+            }
+
+            return $value;
+        }
+
+        // Don't normalize non-string value
+        if (!is_string($value)) {
+            return $value;
+        }
+
+        // Normalize true boolean value
+        if (self::compareValues($value, ['true', 'on', 'yes'])) {
+            return true;
+        }
+
+        // Normalize false boolean value
+        if (self::compareValues($value, ['false', 'off', 'no', 'none'])) {
+            return false;
+        }
+
+        // Normalize null value
+        if (self::compareValues($value, ['null'])) {
+            return null;
+        }
+
+        // Normalize numeric value
+        if (is_numeric($value)) {
+            $numericValue = $value + 0;
+
+            if ((is_int($numericValue) && (int) $value === $numericValue)
+                || (is_float($numericValue) && (float) $value === $numericValue)
+            ) {
+                $value = $numericValue;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * Case insensitively compares values.
+     *
+     * @param string $value
+     * @param array  $comparisons
+     *
+     * @return bool
+     */
+    private static function compareValues(string $value, array $comparisons): bool
+    {
+        foreach ($comparisons as $comparison) {
+            if (0 === strcasecmp($value, $comparison)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

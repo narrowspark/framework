@@ -43,7 +43,7 @@ class XmlTest extends TestCase
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file->url());
+        $parsed = $this->parser->parse($this->file->read($file->url()));
 
         self::assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
     }

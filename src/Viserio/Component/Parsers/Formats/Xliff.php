@@ -6,6 +6,7 @@ use DOMDocument;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Parsers\Utils\XmlUtils;
 
 class Xliff implements FormatContract
 {
@@ -37,6 +38,8 @@ class Xliff implements FormatContract
         } elseif ($xliffVersion === '2.0') {
             return $this->extractXliff2($dom);
         }
+
+        throw new ParseException(['message' => '']);
     }
 
     /**
@@ -50,6 +53,7 @@ class Xliff implements FormatContract
         $encoding = mb_strtoupper($dom->encoding);
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:1.2');
+        $xml->registerXPathNamespace('narrowspark', 'urn:narrowspark:translation');
     }
 
     /**
@@ -106,7 +110,7 @@ class Xliff implements FormatContract
      * @param \DOMDocument $dom
      * @param string       $schema source of the schema
      *
-     * @throws \InvalidResourceException
+     * @throws \InvalidArgumentException
      *
      * @return void
      */
@@ -118,7 +122,7 @@ class Xliff implements FormatContract
         if (! @$dom->schemaValidateSource($schema)) {
             libxml_disable_entity_loader($disableEntities);
 
-            throw new InvalidResourceException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'Invalid resource provided: "%s"; Errors: %s',
                     $file,
