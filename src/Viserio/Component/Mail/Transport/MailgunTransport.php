@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Client;
 use Swift_Mime_Message;
 
 class MailgunTransport extends AbstractTransport
@@ -10,7 +10,7 @@ class MailgunTransport extends AbstractTransport
     /**
      * Guzzle client instance.
      *
-     * @var \GuzzleHttp\ClientInterface
+     * @var \GuzzleHttp\Client
      */
     protected $client;
 
@@ -38,11 +38,11 @@ class MailgunTransport extends AbstractTransport
     /**
      * Create a new Mailgun transport instance.
      *
-     * @param \GuzzleHttp\ClientInterface $client
-     * @param string                      $key
-     * @param string                      $domain
+     * @param \GuzzleHttp\Client $client
+     * @param string             $key
+     * @param string             $domain
      */
-    public function __construct(ClientInterface $client, string $key, string $domain)
+    public function __construct(Client $client, string $key, string $domain)
     {
         $this->client = $client;
         $this->key    = $key;

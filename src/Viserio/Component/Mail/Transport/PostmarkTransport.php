@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Client;
 use Swift_Mime_Attachment;
 use Swift_Mime_Headers_DateHeader;
 use Swift_Mime_Headers_IdentificationHeader;
@@ -18,7 +18,7 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Guzzle client instance.
      *
-     * @var \GuzzleHttp\ClientInterface
+     * @var \GuzzleHttp\Client
      */
     protected $client;
 
@@ -32,10 +32,10 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Create a new Postmark transport instance.
      *
-     * @param \GuzzleHttp\ClientInterface $client
-     * @param string                      $serverToken
+     * @param \GuzzleHttp\Client $client
+     * @param string             $serverToken
      */
-    public function __construct(ClientInterface $client, $serverToken)
+    public function __construct(Client $client, $serverToken)
     {
         $this->client      = $client;
         $this->serverToken = $serverToken;
