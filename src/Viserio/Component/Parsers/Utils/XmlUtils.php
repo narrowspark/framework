@@ -36,7 +36,8 @@ final class XmlUtils
         $errors = [];
 
         foreach (libxml_get_errors() as $error) {
-            $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
+            $errors[] = sprintf(
+                '[%s %s] %s (in %s - line %d, column %d)',
                 $error->level == LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
                 $error->code,
                 trim($error->message),
@@ -217,12 +218,12 @@ final class XmlUtils
                 $raw  = $value;
                 $cast = (int) $value;
 
-                return '0' == $value[0] ? octdec($value) : (((string) $raw === (string) $cast) ? $cast : $raw);
+                return '0' == $value[0] ? octdec($value) : (($raw === (string) $cast) ? $cast : $raw);
             case isset($value[1]) && '-' === $value[0] && ctype_digit(mb_substr($value, 1)):
                 $raw  = $value;
                 $cast = (int) $value;
 
-                return '0' == $value[1] ? octdec($value) : (((string) $raw === (string) $cast) ? $cast : $raw);
+                return '0' == $value[1] ? octdec($value) : (($raw === (string) $cast) ? $cast : $raw);
             case 'true' === $lowercaseValue:
                 return true;
             case 'false' === $lowercaseValue:

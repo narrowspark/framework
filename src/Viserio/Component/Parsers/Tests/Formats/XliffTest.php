@@ -9,7 +9,7 @@ use Viserio\Component\Parsers\Formats\Xliff;
 class XliffTest extends TestCase
 {
     /**
-     * @var \Viserio\Component\Parsers\Formats\Xml
+     * @var \Viserio\Component\Parsers\Formats\Xliff
      */
     private $parser;
 
@@ -26,14 +26,14 @@ class XliffTest extends TestCase
 
     public function testParseXliffV1()
     {
-        $datas = $this->parser->parse($this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv1.xlf'));
+        $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv1.xlf'));
 
         self::assertSame(unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv1.xlf')), $datas);
     }
 
     public function testParseXliffV2()
     {
-        $datas = $this->parser->parse($this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv2.xlf'));
+        $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv2.xlf'));
 
         self::assertSame(unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv2.xlf')), $datas);
     }
