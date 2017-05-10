@@ -25,7 +25,7 @@ class MandrillTransport extends AbstractTransport
      * Create a new Mandrill transport instance.
      *
      * @param \GuzzleHttp\Client $client
-     * @param string                      $key
+     * @param string             $key
      */
     public function __construct(Client $client, string $key)
     {

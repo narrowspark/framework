@@ -33,7 +33,7 @@ class PostmarkTransport extends AbstractTransport
      * Create a new Postmark transport instance.
      *
      * @param \GuzzleHttp\Client $client
-     * @param string                      $serverToken
+     * @param string             $serverToken
      */
     public function __construct(Client $client, $serverToken)
     {

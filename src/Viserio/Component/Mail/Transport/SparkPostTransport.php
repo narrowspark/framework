@@ -33,8 +33,8 @@ class SparkPostTransport extends AbstractTransport
      * Create a new SparkPost transport instance.
      *
      * @param \GuzzleHttp\Client $client
-     * @param string                      $key
-     * @param array                       $options
+     * @param string             $key
+     * @param array              $options
      */
     public function __construct(Client $client, string $key, array $options = [])
     {
