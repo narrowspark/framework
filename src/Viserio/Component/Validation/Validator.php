@@ -27,7 +27,7 @@ class Validator implements ValidatorContract
     protected $validRules = [];
 
     /**
-     * Creat new validator instance.
+     * Create new validator instance.
      */
     public function __construct()
     {
