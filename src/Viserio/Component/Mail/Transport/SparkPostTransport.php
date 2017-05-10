@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Swift_Mime_Message;
 
 class SparkPostTransport extends AbstractTransport
@@ -138,11 +138,11 @@ class SparkPostTransport extends AbstractTransport
     /**
      * Get the transmission ID from the response.
      *
-     * @param \GuzzleHttp\Psr7\Response $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return string|null
      */
-    protected function getTransmissionId(Response $response): ?string
+    protected function getTransmissionId(ResponseInterface $response): ?string
     {
         $object = json_decode($response->getBody()->getContents());
 
