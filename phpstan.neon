@@ -1,5 +1,6 @@
 includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-guzzle/extension.neon
 
 parameters:
     autoload_directories:
@@ -60,7 +61,6 @@ parameters:
         - '#Viserio\\Component\\Console\\Command\\Command::__construct#'
 
         # We only mock this dependency, and never really require it:
-        - '#Call to an undefined method GuzzleHttp\\ClientInterface::post#'
         - '#Call to an undefined method Aws\\Ses\\SesClient::sendRawEmail#'
 
         # Mock dependencies
