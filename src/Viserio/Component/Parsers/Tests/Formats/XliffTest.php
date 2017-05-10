@@ -28,13 +28,13 @@ class XliffTest extends TestCase
     {
         $datas = $this->parser->parse($this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv1.xlf'));
 
-        self::assertSame(unserialize($this->file->read(__DIR__.'/../Fixtures/xliff/output_xliffv1.xlf')), $datas);
+        self::assertSame(unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv1.xlf')), $datas);
     }
 
     public function testParseXliffV2()
     {
         $datas = $this->parser->parse($this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv2.xlf'));
 
-        self::assertSame(unserialize($this->file->read(__DIR__.'/../Fixtures/xliff/output_xliffv2.xlf')), $datas);
+        self::assertSame(unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv2.xlf')), $datas);
     }
 }

@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats;
 
 use DOMDocument;
-use SimpleXMLElement;
 use InvalidArgumentException;
+use SimpleXMLElement;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
