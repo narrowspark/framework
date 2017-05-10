@@ -1,0 +1,67 @@
+a:14:{s:81:"The set of
+                     is {
+                    , ...}.
+                ";a:4:{s:6:"source";s:81:"The set of
+                     is {
+                    , ...}.
+                ";s:6:"target";s:85:"Zthe zset zof
+                     zis {
+                    , ...}.
+                ";s:2:"id";s:18:"135956960462609535";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:63:"Example: The set of prime numbers is {2, 3, 5, 7, 11, 13, ...}.";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:75:"
+                     took a trip to
+                    .
+                ";a:4:{s:6:"source";s:75:"
+                     took a trip to
+                    .
+                ";s:6:"target";s:79:"
+                     ztook za ztrip zto
+                    .
+                ";s:2:"id";s:18:"768490705511913603";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:41:"Example: Alice took a trip to wonderland.";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:71:"
+                     is nowhere near the value of pi.
+                ";a:4:{s:6:"source";s:71:"
+                     is nowhere near the value of pi.
+                ";s:6:"target";s:78:"
+                     zis znowhere znear zthe zvalue zof zpi.
+                ";s:2:"id";s:18:"889614911019327165";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:43:"Example: 5 is nowhere near the value of pi.";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:21:"Your favorite keyword";a:4:{s:6:"source";s:21:"Your favorite keyword";s:6:"target";s:24:"Zyour zfavorite zkeyword";s:2:"id";s:19:"2209690285855487595";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:29:"Ask user to pick best keyword";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:12:"Hello world!";a:4:{s:6:"source";s:12:"Hello world!";s:6:"target";s:14:"Zhello zworld!";s:2:"id";s:19:"3022994926184248873";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:24:"Says hello to the world.";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:51:"
+                     took a trip.
+                ";a:4:{s:6:"source";s:51:"
+                     took a trip.
+                ";s:6:"target";s:54:"
+                     ztook za ztrip.
+                ";s:2:"id";s:19:"3179387603303514412";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:27:"Example: Alice took a trip.";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:17:"A trip was taken.";a:3:{s:6:"source";s:17:"A trip was taken.";s:6:"target";s:21:"Za ztrip zwas ztaken.";s:2:"id";s:19:"3329840836245051515";}s:7:"Archive";a:4:{s:6:"source";s:7:"Archive";s:6:"target";s:8:"Zarchive";s:2:"id";s:19:"7224011416745566687";s:5:"notes";a:2:{i:0;a:3:{s:7:"content";s:61:"The word 'Archive' used as a noun, i.e. an information store.";s:8:"priority";i:1;s:4:"from";s:11:"description";}i:1;a:3:{s:7:"content";s:4:"noun";s:8:"priority";i:1;s:4:"from";s:7:"meaning";}}}s:84:"Click
+                    here
+                     to access Labs.
+                ";a:4:{s:6:"source";s:84:"Click
+                    here
+                     to access Labs.
+                ";s:6:"target";s:89:"Zclick
+                    zhere
+                     zto zaccess Zlabs.
+                ";s:2:"id";s:19:"5539341884085868292";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:38:"Link to the unreleased 'Labs' feature.";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:69:"
+                     is a good approximation of pi.
+                ";a:4:{s:6:"source";s:69:"
+                     is a good approximation of pi.
+                ";s:6:"target";s:75:"
+                     zis za zgood zapproximation zof zpi.
+                ";s:2:"id";s:19:"6820146346443344314";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:46:"Example: 3.1416 is a good approximation of pi.";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:68:"
+                     is a bad approximation of pi.
+                ";a:4:{s:6:"source";s:68:"
+                     is a bad approximation of pi.
+                ";s:6:"target";s:74:"
+                     zis za zbad zapproximation zof zpi.
+                ";s:2:"id";s:19:"6820284805811944992";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:42:"Example: 3.1 is a bad approximation of pi.";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:44:"Hello
+                    !
+                ";a:4:{s:6:"source";s:44:"Hello
+                    !
+                ";s:6:"target";s:45:"Zhello
+                    !
+                ";s:2:"id";s:19:"6936162475751860807";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:23:"Says hello to a person.";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:64:"by
+                     (
+                    )
+                ";a:4:{s:6:"source";s:64:"by
+                     (
+                    )
+                ";s:6:"target";s:65:"zby
+                     (
+                    )
+                ";s:2:"id";s:19:"7036633296476174078";s:5:"notes";a:1:{i:0;a:3:{s:7:"content";s:71:"Indicates who wrote the book and when, e.g. 'by Rudyard Kipling (1892)'";s:8:"priority";i:1;s:4:"from";s:11:"description";}}}s:4:"Help";a:4:{s:6:"source";s:4:"Help";s:6:"target";s:5:"Zhelp";s:2:"id";s:19:"7911416166208830577";s:5:"notes";a:2:{i:0;a:3:{s:7:"content";s:12:"Link to Help";s:8:"priority";i:1;s:4:"from";s:11:"description";}i:1;a:3:{s:7:"content";s:13:"Link to Help2";s:8:"priority";i:2;s:4:"from";s:11:"description";}}}}
