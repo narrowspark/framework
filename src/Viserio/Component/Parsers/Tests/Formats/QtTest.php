@@ -87,7 +87,6 @@ class QtTest extends TestCase
 
     public function testDump()
     {
-
         self::assertXmlStringEqualsXmlFile(
             __DIR__ . '/../Fixtures/qt/resources.ts',
             $this->parser->dump($this->data)

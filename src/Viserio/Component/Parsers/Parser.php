@@ -10,12 +10,12 @@ use Viserio\Component\Parsers\Formats\Ini;
 use Viserio\Component\Parsers\Formats\Json;
 use Viserio\Component\Parsers\Formats\Php;
 use Viserio\Component\Parsers\Formats\Po;
+use Viserio\Component\Parsers\Formats\Qt;
 use Viserio\Component\Parsers\Formats\QueryStr;
 use Viserio\Component\Parsers\Formats\Serialize;
 use Viserio\Component\Parsers\Formats\Toml;
-use Viserio\Component\Parsers\Formats\Qt;
-use Viserio\Component\Parsers\Formats\Xml;
 use Viserio\Component\Parsers\Formats\Xliff;
+use Viserio\Component\Parsers\Formats\Xml;
 use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 

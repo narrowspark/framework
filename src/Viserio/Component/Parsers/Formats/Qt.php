@@ -76,7 +76,7 @@ class Qt implements FormatContract, DumperContract
      */
     public function dump(array $data): string
     {
-        $dom = new DOMDocument('1.0', 'utf-8');
+        $dom               = new DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = true;
 
         $ts      = $dom->appendChild($dom->createElement('TS'));
