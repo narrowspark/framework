@@ -67,7 +67,6 @@
         "sepia/po-parser"                     : "Required to use the PO parser (^4.2).",
         "spatie/array-to-xml"                 : "Required to use the XML dump (^2.1.1).",
         "yosymfony/toml"                      : "Required to use the TOML parser (^0.3).",
-        "viserio/console"                     : "Required to use the transform command (self.version).",
         "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },
     "extra": {

@@ -5,10 +5,12 @@ namespace Viserio\Component\Parsers\Formats;
 use DOMDocument;
 use InvalidArgumentException;
 use SimpleXMLElement;
+use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\Contracts\Parsers\Exception\DumpException;
 
 /**
  * This code has been ported from Symfony. The original
@@ -16,7 +18,7 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  *
  * Good article about xliff @link http://www.wikiwand.com/en/XLIFF
  */
-class Xliff implements FormatContract
+class Xliff implements FormatContract, DumperContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -44,6 +46,34 @@ class Xliff implements FormatContract
                 'line'    => $exception->getLine(),
             ]);
         }
+    }
+
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dump(array $data): string
+    {
+        if ('1.2' === $xliffVersion) {
+            return self::dumpXliff1($data, $options);
+        }
+
+        if ('2.0' === $xliffVersion) {
+            return self::dumpXliff2($data, $options);
+        }
+
+        throw new DumpException([
+            'message' => sprintf('No support implemented for dumping XLIFF version "%s".', $xliffVersion)
+        ]);
+    }
+
+    private static function dumpXliffVersion1(array $data, array $options = array())
+    {
+    }
+
+    private static function dumpXliffVersion2(array $data, array $options = array())
+    {
     }
 
     /**
