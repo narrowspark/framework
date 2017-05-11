@@ -27,6 +27,15 @@ class Xliff implements FormatContract
     {
         try {
             $dom = XmlUtils::loadString($payload);
+
+            $xliffVersion = self::getVersionNumber($dom);
+            self::validateSchema($xliffVersion, $dom, self::getSchema($xliffVersion));
+
+            if ($xliffVersion === '2.0') {
+                return $this->extractXliffVersion2($dom);
+            }
+
+            return $this->extractXliffVersion1($dom);
         } catch (InvalidArgumentException $exception) {
             throw new ParseException([
                 'message' => $exception->getMessage(),
@@ -35,15 +44,6 @@ class Xliff implements FormatContract
                 'line'    => $exception->getLine(),
             ]);
         }
-
-        $xliffVersion = self::getVersionNumber($dom);
-        self::validateSchema($xliffVersion, $dom, self::getSchema($xliffVersion));
-
-        if ($xliffVersion === '2.0') {
-            return $this->extractXliffVersion2($dom);
-        }
-
-        return $this->extractXliffVersion1($dom);
     }
 
     /**
@@ -73,20 +73,16 @@ class Xliff implements FormatContract
                 'source' => (string) $trans->source,
                 // If the xlf file has another encoding specified, try to convert it because
                 // simple_xml will always return utf-8 encoded values
-                'target' => isset($trans->target) ? self::utf8ToCharset((string) $trans->target) : null,
+                'target' => isset($trans->target) ? self::utf8ToCharset((string) $trans->target, $encoding) : null,
             ];
 
             if (isset($attributes['id'])) {
                 $datas[$id]['id'] = (string) $attributes['id'];
             }
 
-            if (isset($trans->target['state'])) {
-                $datas[$id]['state'] = $trans->target['state'];
-            }
-
             // If the translation has a note
             if (isset($trans->note)) {
-                $datas[$id]['notes'] = self::parseNotes($trans->note);
+                $datas[$id]['notes'] = self::parseNotes($trans->note, $encoding);
             }
 
             if (isset($trans->target) && ($attributes = $trans->target->attributes())) {
@@ -104,17 +100,13 @@ class Xliff implements FormatContract
     /**
      * Parse xliff notes.
      *
-     * @param \SimpleXMLElement|null $noteElement
-     * @param string|null            $encoding
+     * @param \SimpleXMLElement $noteElement
+     * @param string|null       $encoding
      *
      * @return array
      */
-    private static function parseNotes(?SimpleXMLElement $noteElement = null, ?string $encoding = null): array
+    private static function parseNotes(SimpleXMLElement $noteElement, ?string $encoding = null): array
     {
-        if ($noteElement === null) {
-            return [];
-        }
-
         $notes = [];
 
         /** @var \SimpleXMLElement $xmlNote */
@@ -152,18 +144,20 @@ class Xliff implements FormatContract
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:2.0');
 
         foreach ($xml->xpath('//xliff:unit/xliff:segment') as $segment) {
-            $datas[(string) $segment->source] = [
-                'source'   => (string) $segment->source,
+            $source = (string) $segment->source;
+
+            $datas[$source] = [
+                'source'   => $source,
                 // If the xlf file has another encoding specified, try to convert it because
                 // simple_xml will always return utf-8 encoded values
-                'target'   => isset($segment->target) ? self::utf8ToCharset((string) $segment->target) : null,
+                'target'   => isset($segment->target) ? self::utf8ToCharset((string) $segment->target, $encoding) : null,
             ];
 
             if (isset($segment->target) && $segment->target->attributes()) {
-                $datas[$segment->source]['target-attributes'] = [];
+                $datas[$source]['target-attributes'] = [];
 
                 foreach ($segment->target->attributes() as $key => $value) {
-                    $datas[$segment->source]['target-attributes'][$key] = (string) $value;
+                    $datas[$source]['target-attributes'][$key] = (string) $value;
                 }
             }
         }
@@ -189,10 +183,8 @@ class Xliff implements FormatContract
                 return $version->nodeValue;
             }
 
-            $namespace = $xliff->attributes->getNamedItem('xmlns');
-
-            if ($namespace) {
-                if (substr_compare('urn:oasis:names:tc:xliff:document:', $namespace->nodeValue, 0, 34) !== 0) {
+            if ($namespace = $xliff->namespaceURI) {
+                if (substr_compare('urn:oasis:names:tc:xliff:document:', $namespace, 0, 34) !== 0) {
                     throw new InvalidArgumentException(sprintf('Not a valid XLIFF namespace "%s"', $namespace));
                 }
 
@@ -294,9 +286,7 @@ class Xliff implements FormatContract
         $parts   = explode('/', $newPath);
 
         if (mb_stripos($newPath, 'phar://') === 0) {
-            $tmpfile = tempnam(sys_get_temp_dir(), 'sf2');
-
-            if ($tmpfile) {
+            if ($tmpfile = tempnam(sys_get_temp_dir(), 'narrowspark')) {
                 copy($newPath, $tmpfile);
                 $parts = explode('/', str_replace('\\', '/', $tmpfile));
             }

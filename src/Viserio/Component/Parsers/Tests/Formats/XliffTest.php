@@ -96,6 +96,81 @@ class XliffTest extends TestCase
         self::assertSame(unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv2.xlf')), $datas);
     }
 
+    public function testParseEncodingV1()
+    {
+        $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v1.xlf'));
+
+        self::assertSame([
+            'foo' => [
+                'source' => 'foo',
+                'target' => 'bär',
+                'id'     => '1',
+                'notes'  => [
+                    [
+                        'content' => 'bäz',
+                    ],
+                ],
+            ],
+            'bar' => [
+                'source' => 'bar',
+                'target' => 'föö',
+                'id'     => '2',
+            ],
+        ], $datas);
+    }
+
+    public function testParseEncodingV2()
+    {
+        $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf'));
+
+        self::assertSame([
+            'foo' => [
+                'source' => 'foo',
+                'target' => 'bär',
+            ],
+            'bar' => [
+                'source' => 'bar',
+                'target' => 'föö',
+            ],
+        ], $datas);
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage Invalid resource provided: "2.0"; Errors: [ERROR 1868] Element '{urn:oasis:names:tc:xliff:document:2.0}xliff': The attribute 'version' is required but missing. (in file:
+     */
+    public function testParseXliffV1NoVersion()
+    {
+        $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version.xlf'));
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage No support implemented for loading XLIFF version "3.0".
+     */
+    public function testParseXliffV1NoVersionAndNamespace()
+    {
+        $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_namespace.xlf'));
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage Not a valid XLIFF namespace "urn:oasis:names:tc:xliff:"
+     */
+    public function testParseXliffV1NoVersionAndInvalidNamespace()
+    {
+        $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_invalid_namespace.xlf'));
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage Invalid resource provided: "1.2"; Errors: [ERROR 1845] Element 'xliff': No matching global declaration available for the validation root. (in file:
+     */
+    public function testParseXliffV1NoVersionAndNoNamespace()
+    {
+        $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_no_namespace.xlf'));
+    }
+
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage Content does not contain valid XML, it is empty.

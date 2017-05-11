@@ -2,13 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats;
 
-use DOMXPath;
+use DOMDocument;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 
+/**
+ * For more infos.
+ *
+ * @link http://doc.qt.io/qt-5/linguist-ts-file-format.html
+ * @link http://svn.ez.no/svn/ezcomponents/trunk/Translation/docs/linguist-format.txt
+ */
 class Qt implements FormatContract, DumperContract
 {
     /**
@@ -31,37 +37,70 @@ class Qt implements FormatContract, DumperContract
 
         libxml_clear_errors();
 
-        $xpath = new DOMXPath($dom);
-        $nodes = $xpath->evaluate('//TS/context/name');
-        $data  = [];
+        $xpath  = simplexml_import_dom($dom);
+        $nodes  = $xpath->xpath('//TS/context');
+        $datas  = [];
 
-        if ($nodes->length == 1) {
-            $values = $nodes->item(0)->nextSibling->parentNode->parentNode->getElementsByTagName('message');
+        foreach ($nodes as $node) {
+            $name         = (string) $node->name;
+            $datas[$name] = [];
 
-            foreach ($values as $value) {
-                $translationValue = (string) $value->getElementsByTagName('translation')->item(0)->nodeValue;
+            foreach ($node->message as $message) {
+                $translation           = $message->translation;
+                $translationAttributes = (array) $translation->attributes();
 
-                if (! empty($translationValue)) {
-                    $data[] =[
-                        // 'name'   => null,
-                        'source' => (string) $value->getElementsByTagName('source')->item(0)->nodeValue,
-                        'target' => $translationValue,
-                    ];
-                }
-
-                $value = $value->nextSibling;
+                $datas[$name][] = [
+                    'source'      => (string) $message->source,
+                    'translation' => [
+                        'content'    => (string) $translation,
+                        'attributes' => $translationAttributes['@attributes'] ?? null,
+                    ],
+                ];
             }
         }
 
         libxml_use_internal_errors($internalErrors);
 
-        return $data;
+        return $datas;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * array['name']                    string     the id to group translation and to create the name element.
+     *     array[]
+     *          ['source']              string     content of the source element
+     *          ['translation']         array
+     *              array['content']    string     content of the translation element
+     *              array['attributes'] null|array attributes for the translation element
      */
     public function dump(array $data): string
     {
+        $dom = new DOMDocument('1.0', 'utf-8');
+        $dom->formatOutput = true;
+
+        $ts      = $dom->appendChild($dom->createElement('TS'));
+
+        foreach ($data as $name => $groups) {
+            $context = $ts->appendChild($dom->createElement('context'));
+            $context->appendChild($dom->createElement('name', $name));
+
+            foreach ($groups as $key => $value) {
+                $message = $context->appendChild($dom->createElement('message'));
+                $message->appendChild($dom->createElement('source', $value['source']));
+
+                $translation = $dom->createElement('translation', $value['translation']['content']);
+
+                if ($value['translation']['attributes'] !== null) {
+                    foreach ($value['translation']['attributes'] as $key => $value) {
+                        $translation->setAttribute($key, $value);
+                    }
+                }
+
+                $message->appendChild($translation);
+            }
+        }
+
+        return $dom->saveXML();
     }
 }

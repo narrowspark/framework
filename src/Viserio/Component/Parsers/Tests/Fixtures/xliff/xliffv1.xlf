@@ -18,7 +18,7 @@
                     <x id="NAME"/> took a trip to
                     <x id="DESTINATION"/>.
                 </source>
-                <target>
+                <target state="new">
                     <x id="NAME"/> ztook za ztrip zto
                     <x id="DESTINATION"/>.
                 </target>

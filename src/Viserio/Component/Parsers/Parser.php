@@ -13,7 +13,9 @@ use Viserio\Component\Parsers\Formats\Po;
 use Viserio\Component\Parsers\Formats\QueryStr;
 use Viserio\Component\Parsers\Formats\Serialize;
 use Viserio\Component\Parsers\Formats\Toml;
+use Viserio\Component\Parsers\Formats\Qt;
 use Viserio\Component\Parsers\Formats\Xml;
+use Viserio\Component\Parsers\Formats\Xliff;
 use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -22,12 +24,16 @@ class Parser implements ParserContract
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * @var array Supported Formats
+     * Supported mime type formats.
+     *
+     * @var array
      */
     private $supportedFormats = [
         // XML
         'application/xml' => 'xml',
         'text/xml'        => 'xml',
+        // Xliff
+        'application/x-xliff+xml' => 'xlf',
         // JSON
         'application/json'         => 'json',
         'application/x-javascript' => 'json',
@@ -44,13 +50,20 @@ class Parser implements ParserContract
         'application/x-www-form-urlencoded' => 'querystr',
     ];
 
+    /**
+     * Supported file formats.
+     *
+     * @var array
+     */
     private $supportedFileFormats = [
         'ini',
         'json',
         'php',
         'po',
         'toml',
+        'ts',
         'xml',
+        'xlf',
         'yaml',
     ];
 
@@ -62,7 +75,9 @@ class Parser implements ParserContract
         'querystr'  => QueryStr::class,
         'serialize' => Serialize::class,
         'toml'      => Toml::class,
+        'ts'        => Qt::class,
         'xml'       => Xml::class,
+        'xlf'       => Xliff::class,
         'yaml'      => Yaml::class,
     ];
 
@@ -102,10 +117,10 @@ class Parser implements ParserContract
 
             if (is_file($fileName)) {
                 $payload  = file_get_contents($fileName);
-            }
 
-            if ($payload === false) {
-                throw new RuntimeException(sprintf('A error occurred during reading [%s]', $fileName));
+                if ($payload === false) {
+                    throw new RuntimeException(sprintf('A error occurred during reading [%s]', $fileName));
+                }
             }
         }
 

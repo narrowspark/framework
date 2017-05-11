@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TS version="2.0">
+<TS>
     <context>
+        <name>contentstructuremenu/show_content_structure</name>
         <message>
-            <source>New tweets</source>
-            <extracomment> This is just an extra comment</extracomment>
-            <translation type= "unfinished"> This is the master string</translation>
-        </message>
-        <message>
-            <source>Another tweet</source>
-            <translation type="obsolete"> This string is obsolete</translation>
+            <source>Node ID: %node_id Visibility: %visibility</source>
+            <translation>Knoop ID: %node_id Zichtbaar: %visibility</translation>
         </message>
     </context>
-
     <context>
-        <name>Another context</name>
-        <message numerus= "yes">
-            <location filename="../findsubtitles/findsubtitleswindow.cpp" line= "522"/>
-            <source>%1 subtitle(s) extracted</source>
-            <translation><numerusform>%1 subtitle extracted</numerusform> <numerusform>%1 subtitles extracted</numerusform></translation>
+        <name>design/admin/class/classlist</name>
+        <message>
+            <source>%group_name [Class group]</source>
+            <translation>%group_name [Class groep]</translation>
+        </message>
+        <message>
+            <source>Select the item that you want to be the default selection and click &quot;OK&quot;.</source>
+            <translation type="unfinished"/>
+        </message>
+    </context>
+    <context>
+        <name>design/admin/collaboration/group_tree</name>
+        <message>
+            <source>Groups</source>
+            <translation type="obsolete">Groepen</translation>
         </message>
     </context>
 </TS>

@@ -16,7 +16,7 @@
         <unit id="key.nested">
             <segment>
                 <source>XLIFF Data Manager</source>
-                <target>XLIFF Daten Manager</target>
+                <target order="1">XLIFF Daten Manager</target>
             </segment>
         </unit>
     </file>
