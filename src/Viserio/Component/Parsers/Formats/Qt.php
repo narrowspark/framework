@@ -4,8 +4,8 @@ namespace Viserio\Component\Parsers\Formats;
 
 use DOMXPath;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
+use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 
