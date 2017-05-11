@@ -23,13 +23,11 @@
                 <target xml:lang="de-AT"></target>
             </trans-unit>
             <trans-unit id="6" resname="placeholder_lingochecks">
-                <source xml:lang="en">We just like to see you happy, that's why LingoChecks automatically check translations for predetermined criteria.    Among other checks LingoHub verifies if &quot;
-                    <ph id="1">{0}</ph>&quot; used in the original text are also present in translated texts.
-                </source>
+                <source xml:lang="en">We just like to see you happy, that's why LingoChecks automatically check translations for predetermined criteria.    Among other checks LingoHub verifies if used in the original text are also present in translated texts.</source>
                 <target xml:lang="de-AT">Bazinga!</target>
             </trans-unit>
-            <trans-unit id="7" resname="side_panel">
-                <source xml:lang="en">Dear developers, you are the masters of translation files. Add comments in a file (depends on file format) to provide translators with more information. They are imported as a description, visible in the side panel.</source>
+            <trans-unit id="7" resname="">
+                <source xml:lang="en"></source>
                 <target xml:lang="de-AT"></target>
             </trans-unit>
             <trans-unit id="8" resname="comments">

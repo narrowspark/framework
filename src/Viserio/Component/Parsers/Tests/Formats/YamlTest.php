@@ -51,6 +51,7 @@ linting: true
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage Unable to parse at line 3 (near "  foo: bar").
      */
     public function testParseToThrowException()
     {

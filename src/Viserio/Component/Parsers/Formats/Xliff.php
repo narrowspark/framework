@@ -64,7 +64,7 @@ class Xliff implements FormatContract
         foreach ($xml->xpath('//xliff:trans-unit') as $trans) {
             $attributes = $trans->attributes();
 
-            if (! (isset($attributes['resname']) || isset($trans->source))) {
+            if (! isset($attributes['resname']) || empty($trans->source)) {
                 continue;
             }
 

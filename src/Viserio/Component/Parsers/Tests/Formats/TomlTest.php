@@ -47,6 +47,7 @@ class TomlTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage Unable to parse the TOML string.
      */
     public function testParseToThrowException()
     {

@@ -50,6 +50,7 @@ class XmlTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage [ERROR 4] Start tag expected, '<' not found (in n/a - line 1, column 1)
      */
     public function testParseToThrowException()
     {
