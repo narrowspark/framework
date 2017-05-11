@@ -6,11 +6,11 @@ use DOMDocument;
 use InvalidArgumentException;
 use SimpleXMLElement;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
+use Viserio\Component\Contracts\Parsers\Exception\DumpException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\Component\Contracts\Parsers\Exception\DumpException;
 
 /**
  * This code has been ported from Symfony. The original
@@ -48,8 +48,6 @@ class Xliff implements FormatContract, DumperContract
         }
     }
 
-
-
     /**
      * {@inheritdoc}
      */
@@ -64,15 +62,15 @@ class Xliff implements FormatContract, DumperContract
         }
 
         throw new DumpException([
-            'message' => sprintf('No support implemented for dumping XLIFF version "%s".', $xliffVersion)
+            'message' => sprintf('No support implemented for dumping XLIFF version "%s".', $xliffVersion),
         ]);
     }
 
-    private static function dumpXliffVersion1(array $data, array $options = array())
+    private static function dumpXliffVersion1(array $data, array $options = [])
     {
     }
 
-    private static function dumpXliffVersion2(array $data, array $options = array())
+    private static function dumpXliffVersion2(array $data, array $options = [])
     {
     }
 

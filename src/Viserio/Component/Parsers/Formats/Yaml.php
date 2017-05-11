@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats;
 
-use RuntimeException;
 use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
-use Viserio\Component\Contracts\Parsers\Exception\DumpException;
 
 class Yaml implements FormatContract, DumperContract
 {
