@@ -137,7 +137,6 @@ class XliffTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
-     * @expectedExceptionMessage Invalid resource provided: "2.0"; Errors: [ERROR 1868] Element '{urn:oasis:names:tc:xliff:document:2.0}xliff': The attribute 'version' is required but missing. (in file:
      */
     public function testParseXliffV1NoVersion()
     {
@@ -164,7 +163,6 @@ class XliffTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
-     * @expectedExceptionMessage Invalid resource provided: "1.2"; Errors: [ERROR 1845] Element 'xliff': No matching global declaration available for the validation root. (in file:
      */
     public function testParseXliffV1NoVersionAndNoNamespace()
     {
