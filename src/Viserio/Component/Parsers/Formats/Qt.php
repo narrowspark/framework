@@ -30,7 +30,7 @@ class Qt implements FormatContract, DumperContract
         libxml_clear_errors();
 
         $xpath = new DOMXPath($dom);
-        $nodes = $xpath->evaluate('//TS/context/name[text()=""]');
+        $nodes = $xpath->evaluate('//TS/context/name');
         $data  = [];
 
         if ($nodes->length == 1) {
@@ -41,6 +41,7 @@ class Qt implements FormatContract, DumperContract
 
                 if (! empty($translationValue)) {
                     $data[] =[
+                        // 'name'   => null,
                         'source' => (string) $value->getElementsByTagName('source')->item(0)->nodeValue,
                         'target' => $translationValue,
                     ];

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <!DOCTYPE TS>
 <TS version="2.0">
     <context>
         <message>
@@ -18,10 +17,7 @@
         <message numerus= "yes">
             <location filename="../findsubtitles/findsubtitleswindow.cpp" line= "522"/>
             <source>%1 subtitle(s) extracted</source>
-            <translation>
-                <numerusform>%1 subtitle extracted</numerusform>
-                <numerusform>%1 subtitles extracted</numerusform>
-            </translation>
+            <translation><numerusform>%1 subtitle extracted</numerusform> <numerusform>%1 subtitles extracted</numerusform></translation>
         </message>
     </context>
 </TS>
