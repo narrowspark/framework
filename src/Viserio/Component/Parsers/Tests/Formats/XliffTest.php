@@ -95,7 +95,7 @@ class XliffTest extends TestCase
     public function testParseXliffV2()
     {
         $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv2.xlf'));
-        file_put_contents('t', serialize($datas));
+
         self::assertSame(unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv2.xlf')), $datas);
     }
 
