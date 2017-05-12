@@ -186,4 +186,55 @@ class XliffTest extends TestCase
     {
         $datas = $this->parser->parse('');
     }
+
+    public function testDumpXliffV2()
+    {
+        $datas = [
+            'version' => '2.0',
+            'srcLang' => 'en-US',
+            'trgLang' => 'de-CH',
+            'foo'     => [
+                'source' => 'foo',
+                'target' => 'bär',
+            ],
+            'bar' => [
+                'source' => 'bar',
+                'target' => 'föö',
+            ],
+        ];
+
+        self::assertXmlStringEqualsXmlFile(
+            __DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf',
+            $this->parser->dump($datas)
+        );
+    }
+
+    public function testDumpXliffV1()
+    {
+        $datas = [
+            'version'         => '1.2',
+            'source-language' => 'en',
+            'target-language' => '',
+            'foo'             => [
+                'source' => 'foo',
+                'target' => 'bär',
+                'id'     => '1',
+                'notes'  => [
+                    [
+                        'content' => 'bäz',
+                    ],
+                ],
+            ],
+            'bar' => [
+                'source' => 'bar',
+                'target' => 'föö',
+                'id'     => '2',
+            ],
+        ];
+
+        self::assertXmlStringEqualsXmlFile(
+            __DIR__ . '/../Fixtures/xliff/encoding_xliff_v1_utf8.xlf',
+            $this->parser->dump($datas)
+        );
+    }
 }

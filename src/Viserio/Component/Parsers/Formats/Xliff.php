@@ -58,11 +58,11 @@ class Xliff implements FormatContract, DumperContract
         unset($data['version']);
 
         if ($version === '1.2') {
-            return self::dumpXliff1($data);
+            return self::dumpXliffVersion1($data);
         }
 
         if ($version === '2.0') {
-            return self::dumpXliff2($data);
+            return self::dumpXliffVersion2($data);
         }
 
         throw new DumpException([
@@ -70,9 +70,27 @@ class Xliff implements FormatContract, DumperContract
         ]);
     }
 
-    private static function dumpXliffVersion1(array $data)
+    /**
+     *
+     * @param array $data
+     *
+     * @return string
+     */
+    private static function dumpXliffVersion1(array $data): string
     {
-        $dom               = new DOMDocument('1.0', 'utf-8');
+        $sourceLanguage = $data['source-language'];
+        $targetLanguage = $data['target-language'];
+        $encoding       = 'UTF-8';
+
+        if (isset($data['encoding'])) {
+            $encoding = $data['encoding'];
+
+            unset($data['encoding']);
+        }
+
+        unset($data['source-language'], $data['target-language']);
+
+        $dom               = new DOMDocument('1.0', $encoding);
         $dom->formatOutput = true;
 
         $xliff = $dom->appendChild($dom->createElement('xliff'));
@@ -80,14 +98,89 @@ class Xliff implements FormatContract, DumperContract
         $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:1.2');
 
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
-        $xliffFile->setAttribute('source-language', str_replace('_', '-', ''));
-        $xliffFile->setAttribute('target-language', str_replace('_', '-', ''));
+        $xliffFile->setAttribute('source-language', str_replace('_', '-', $sourceLanguage));
+
+        if ($targetLanguage !== '') {
+            $xliffFile->setAttribute('target-language', str_replace('_', '-', $targetLanguage));
+        }
+
         $xliffFile->setAttribute('datatype', 'plaintext');
         $xliffFile->setAttribute('original', 'file.ext');
+
+        $xliffBody = $xliffFile->appendChild($dom->createElement('body'));
+
+        foreach ($data as $resname => $translation) {
+            $unit = $dom->createElement('trans-unit');
+            $unit->setAttribute('id', $translation['id'] ?? md5($resname));
+            $unit->setAttribute('resname', $resname);
+
+            $source = $unit->appendChild($dom->createElement('source'));
+            $source->appendChild($dom->createTextNode($translation['source']));
+
+            $targetElement = $dom->createElement('target');
+
+            if (isset($translation['target-attributes'])) {
+                foreach ($translation['target-attributes'] as $key => $value) {
+                    $targetElement->setAttribute($name, $value);
+                }
+            }
+
+            $target = $unit->appendChild($targetElement);
+
+            // Does the target contain characters requiring a CDATA section?
+            if (preg_match('/[&<>]/', $translation['target']) === 1) {
+                $target->appendChild($dom->createCDATASection($translation['target']));
+            } else {
+                $target->appendChild($dom->createTextNode($translation['target']));
+            }
+
+            if (isset($translation['notes'])) {
+                foreach ($translation['notes'] as $note) {
+                    $noteElement = $dom->createElement('note');
+                    $noteElement->appendChild($dom->createTextNode($note['content']));
+
+                    if (isset($note['priority'])) {
+                        $noteElement->setAttribute('priority', $note['priority']);
+                    } elseif(isset($note['from'])) {
+                        $noteElement->setAttribute('from', $note['from']);
+                    }
+                }
+
+                $unit->appendChild($noteElement);
+            }
+
+            $xliffBody->appendChild($unit);
+        }
+
+        return $dom->saveXML();
     }
 
-    private static function dumpXliffVersion2(array $data)
+    /**
+     *
+     * @param array $data
+     *
+     * @return string
+     */
+    private static function dumpXliffVersion2(array $data): string
     {
+        $sourceLanguage = $data['srcLang'];
+        $targetLanguage = $data['trgLang'];
+
+        unset($data['srcLang'], $data['trgLang']);
+
+        $dom = new DOMDocument('1.0', 'utf-8');
+        $dom->formatOutput = true;
+
+        $xliff = $dom->appendChild($dom->createElement('xliff'));
+        $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:2.0');
+        $xliff->setAttribute('version', '2.0');
+        $xliff->setAttribute('srcLang', str_replace('_', '-', $sourceLanguage));
+        $xliff->setAttribute('trgLang', str_replace('_', '-', $targetLanguage));
+
+        $xliffFile = $xliff->appendChild($dom->createElement('file'));
+        $xliffFile->setAttribute('id', 'translation' . $sourceLanguage . 'To' . $targetLanguage);
+
+        return $dom->saveXML();
     }
 
     /**
@@ -194,9 +287,9 @@ class Xliff implements FormatContract, DumperContract
         $xml      = simplexml_import_dom($dom);
         $encoding = mb_strtoupper($dom->encoding);
         $datas    = [
-            'version' => '2.0',
-            'srcLang' => '',
-            'trgLang' => '',
+            'version'  => '2.0',
+            'srcLang'  => '',
+            'trgLang'  => '',
         ];
 
         foreach ($xml->attributes() as $key => $value) {
