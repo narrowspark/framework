@@ -163,10 +163,17 @@ class Xliff implements FormatContract, DumperContract
     {
         $sourceLanguage = $data['srcLang'];
         $targetLanguage = $data['trgLang'];
+        $encoding       = 'UTF-8';
+
+        if (isset($data['encoding'])) {
+            $encoding = $data['encoding'];
+
+            unset($data['encoding']);
+        }
 
         unset($data['srcLang'], $data['trgLang']);
 
-        $dom               = new DOMDocument('1.0', 'utf-8');
+        $dom               = new DOMDocument('1.0', $encoding);
         $dom->formatOutput = true;
 
         $xliff = $dom->appendChild($dom->createElement('xliff'));
@@ -176,7 +183,38 @@ class Xliff implements FormatContract, DumperContract
         $xliff->setAttribute('trgLang', str_replace('_', '-', $targetLanguage));
 
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
-        $xliffFile->setAttribute('id', 'translation' . $sourceLanguage . 'To' . $targetLanguage);
+        $xliffFile->setAttribute(
+            'id',
+            'translation_' . strtolower(str_replace('-', '_', $sourceLanguage . '_to_' . $targetLanguage))
+        );
+
+        foreach ($data as $id => $translation) {
+            $unit = $dom->createElement('unit');
+            $unit->setAttribute('id', $id);
+
+            $segmentElement = $unit->appendChild($dom->createElement('segment'));
+            $source        = $segmentElement->appendChild($dom->createElement('source'));
+            $source->appendChild($dom->createTextNode($translation['source']));
+
+            $targetElement = $dom->createElement('target');
+
+            if (isset($translation['target-attributes'])) {
+                foreach ($translation['target-attributes'] as $key => $value) {
+                    $targetElement->setAttribute($name, $value);
+                }
+            }
+
+            $target = $segmentElement->appendChild($targetElement);
+
+            // Does the target contain characters requiring a CDATA section?
+            if (preg_match('/[&<>]/', $translation['target']) === 1) {
+                $target->appendChild($dom->createCDATASection($translation['target']));
+            } else {
+                $target->appendChild($dom->createTextNode($translation['target']));
+            }
+
+            $xliffFile->appendChild($unit);
+        }
 
         return $dom->saveXML();
     }
@@ -298,21 +336,28 @@ class Xliff implements FormatContract, DumperContract
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:2.0');
 
-        foreach ($xml->xpath('//xliff:unit/xliff:segment') as $segment) {
-            $source = (string) $segment->source;
+        foreach ($xml->xpath('//xliff:unit') as $unit) {
+            $unitAttr = (array)$unit->attributes();
+            $source = (string) $unit->segment->source;
+            $target = null;
+            $id = $unitAttr['@attributes']['id'];
 
-            $datas[$source] = [
+            if (isset($unit->segment->target)) {
+                $target = self::utf8ToCharset((string) $unit->segment->target, $encoding);
+            }
+
+            $datas[$id] = [
                 'source'   => $source,
                 // If the xlf file has another encoding specified, try to convert it because
                 // simple_xml will always return utf-8 encoded values
-                'target'   => isset($segment->target) ? self::utf8ToCharset((string) $segment->target, $encoding) : null,
+                'target'   => $target,
             ];
 
-            if (isset($segment->target) && $segment->target->attributes()) {
-                $datas[$source]['target-attributes'] = [];
+            if ($target !== null && $unit->segment->target->attributes()) {
+                $datas[$id]['target-attributes'] = [];
 
-                foreach ($segment->target->attributes() as $key => $value) {
-                    $datas[$source]['target-attributes'][$key] = (string) $value;
+                foreach ($unit->segment->target->attributes() as $key => $value) {
+                    $datas[$id]['target-attributes'][$key] = (string) $value;
                 }
             }
         }
