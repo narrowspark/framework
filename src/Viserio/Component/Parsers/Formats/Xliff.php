@@ -72,7 +72,7 @@ class Xliff implements FormatContract, DumperContract
 
     private static function dumpXliffVersion1(array $data)
     {
-        $dom = new DOMDocument('1.0', 'utf-8');
+        $dom               = new DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = true;
 
         $xliff = $dom->appendChild($dom->createElement('xliff'));
@@ -102,7 +102,7 @@ class Xliff implements FormatContract, DumperContract
         $xml       = simplexml_import_dom($dom);
         $encoding  = mb_strtoupper($dom->encoding);
         $datas     = [
-            'version' => '1.2',
+            'version'         => '1.2',
             'source-language' => '',
             'target-language' => '',
         ];
