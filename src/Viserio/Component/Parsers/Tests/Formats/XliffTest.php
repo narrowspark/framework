@@ -95,7 +95,7 @@ class XliffTest extends TestCase
     public function testParseXliffV2()
     {
         $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv2.xlf'));
-file_put_contents('t', serialize($datas));
+        file_put_contents('t', serialize($datas));
         self::assertSame(unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv2.xlf')), $datas);
     }
 
@@ -130,9 +130,9 @@ file_put_contents('t', serialize($datas));
         $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf'));
 
         self::assertSame([
-            'version' => '2.0',
-            'srcLang' => 'en-US',
-            'trgLang' => 'de-CH',
+            'version'  => '2.0',
+            'srcLang'  => 'en-US',
+            'trgLang'  => 'de-CH',
             'key1'     => [
                 'source' => 'foo',
                 'target' => 'bär',
@@ -190,9 +190,9 @@ file_put_contents('t', serialize($datas));
     public function testDumpXliffV2()
     {
         $datas = [
-            'version' => '2.0',
-            'srcLang' => 'en-US',
-            'trgLang' => 'de-CH',
+            'version'  => '2.0',
+            'srcLang'  => 'en-US',
+            'trgLang'  => 'de-CH',
             'key1'     => [
                 'source' => 'foo',
                 'target' => 'bär',

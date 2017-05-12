@@ -185,7 +185,7 @@ class Xliff implements FormatContract, DumperContract
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
         $xliffFile->setAttribute(
             'id',
-            'translation_' . strtolower(str_replace('-', '_', $sourceLanguage . '_to_' . $targetLanguage))
+            'translation_' . mb_strtolower(str_replace('-', '_', $sourceLanguage . '_to_' . $targetLanguage))
         );
 
         foreach ($data as $id => $translation) {
@@ -193,7 +193,7 @@ class Xliff implements FormatContract, DumperContract
             $unit->setAttribute('id', $id);
 
             $segmentElement = $unit->appendChild($dom->createElement('segment'));
-            $source        = $segmentElement->appendChild($dom->createElement('source'));
+            $source         = $segmentElement->appendChild($dom->createElement('source'));
             $source->appendChild($dom->createTextNode($translation['source']));
 
             $targetElement = $dom->createElement('target');
@@ -337,10 +337,10 @@ class Xliff implements FormatContract, DumperContract
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:2.0');
 
         foreach ($xml->xpath('//xliff:unit') as $unit) {
-            $unitAttr = (array)$unit->attributes();
-            $source = (string) $unit->segment->source;
-            $target = null;
-            $id = $unitAttr['@attributes']['id'];
+            $unitAttr = (array) $unit->attributes();
+            $source   = (string) $unit->segment->source;
+            $target   = null;
+            $id       = $unitAttr['@attributes']['id'];
 
             if (isset($unit->segment->target)) {
                 $target = self::utf8ToCharset((string) $unit->segment->target, $encoding);
