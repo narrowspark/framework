@@ -53,24 +53,40 @@ class Xliff implements FormatContract, DumperContract
      */
     public function dump(array $data): string
     {
-        if ('1.2' === $xliffVersion) {
-            return self::dumpXliff1($data, $options);
+        $version = $data['version'];
+
+        unset($data['version']);
+
+        if ($version === '1.2') {
+            return self::dumpXliff1($data);
         }
 
-        if ('2.0' === $xliffVersion) {
-            return self::dumpXliff2($data, $options);
+        if ($version === '2.0') {
+            return self::dumpXliff2($data);
         }
 
         throw new DumpException([
-            'message' => sprintf('No support implemented for dumping XLIFF version "%s".', $xliffVersion),
+            'message' => sprintf('No support implemented for dumping XLIFF version "%s".', $version),
         ]);
     }
 
-    private static function dumpXliffVersion1(array $data, array $options = [])
+    private static function dumpXliffVersion1(array $data)
     {
+        $dom = new DOMDocument('1.0', 'utf-8');
+        $dom->formatOutput = true;
+
+        $xliff = $dom->appendChild($dom->createElement('xliff'));
+        $xliff->setAttribute('version', '1.2');
+        $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:1.2');
+
+        $xliffFile = $xliff->appendChild($dom->createElement('file'));
+        $xliffFile->setAttribute('source-language', str_replace('_', '-', ''));
+        $xliffFile->setAttribute('target-language', str_replace('_', '-', ''));
+        $xliffFile->setAttribute('datatype', 'plaintext');
+        $xliffFile->setAttribute('original', 'file.ext');
     }
 
-    private static function dumpXliffVersion2(array $data, array $options = [])
+    private static function dumpXliffVersion2(array $data)
     {
     }
 
@@ -85,7 +101,17 @@ class Xliff implements FormatContract, DumperContract
     {
         $xml       = simplexml_import_dom($dom);
         $encoding  = mb_strtoupper($dom->encoding);
-        $datas     = [];
+        $datas     = [
+            'version' => '1.2',
+            'source-language' => '',
+            'target-language' => '',
+        ];
+
+        foreach ($xml->file->attributes() as $key => $value) {
+            if ($key === 'source-language' || $key === 'target-language') {
+                $datas[$key] = (string) $value;
+            }
+        }
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:1.2');
 
@@ -167,7 +193,17 @@ class Xliff implements FormatContract, DumperContract
     {
         $xml      = simplexml_import_dom($dom);
         $encoding = mb_strtoupper($dom->encoding);
-        $datas    = [];
+        $datas    = [
+            'version' => '2.0',
+            'srcLang' => '',
+            'trgLang' => '',
+        ];
+
+        foreach ($xml->attributes() as $key => $value) {
+            if ($key === 'srcLang' || $key === 'trgLang') {
+                $datas[$key] = (string) $value;
+            }
+        }
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:2.0');
 

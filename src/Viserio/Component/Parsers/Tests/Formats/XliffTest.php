@@ -36,6 +36,9 @@ class XliffTest extends TestCase
         $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/translated.xlf'));
 
         self::assertSame([
+            'version' => '1.2',
+            'source-language' => 'en',
+            'target-language' => 'de-AT',
             'welcome' => [
                 'source' => 'Hooray, you\'re here! The day just got better - enjoy the following tips!',
                 'target' => 'Hurra, du bist hier! Der Tag ist gerettet - nutze die folgenden Tipps!',
@@ -101,6 +104,9 @@ class XliffTest extends TestCase
         $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v1.xlf'));
 
         self::assertSame([
+            'version' => '1.2',
+            'source-language' => 'en',
+            'target-language' => '',
             'foo' => [
                 'source' => 'foo',
                 'target' => 'bär',
@@ -124,6 +130,9 @@ class XliffTest extends TestCase
         $datas = $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf'));
 
         self::assertSame([
+            'version' => '2.0',
+            'srcLang' => 'en-US',
+            'trgLang' => 'de-CH',
             'foo' => [
                 'source' => 'foo',
                 'target' => 'bär',
