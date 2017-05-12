@@ -71,7 +71,6 @@ class Xliff implements FormatContract, DumperContract
     }
 
     /**
-     *
      * @param array $data
      *
      * @return string
@@ -141,7 +140,7 @@ class Xliff implements FormatContract, DumperContract
 
                     if (isset($note['priority'])) {
                         $noteElement->setAttribute('priority', $note['priority']);
-                    } elseif(isset($note['from'])) {
+                    } elseif (isset($note['from'])) {
                         $noteElement->setAttribute('from', $note['from']);
                     }
                 }
@@ -156,7 +155,6 @@ class Xliff implements FormatContract, DumperContract
     }
 
     /**
-     *
      * @param array $data
      *
      * @return string
@@ -168,7 +166,7 @@ class Xliff implements FormatContract, DumperContract
 
         unset($data['srcLang'], $data['trgLang']);
 
-        $dom = new DOMDocument('1.0', 'utf-8');
+        $dom               = new DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = true;
 
         $xliff = $dom->appendChild($dom->createElement('xliff'));
