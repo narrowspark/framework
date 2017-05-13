@@ -65,9 +65,7 @@ class Xliff implements FormatContract, DumperContract
             return self::dumpXliffVersion2($data);
         }
 
-        throw new DumpException([
-            'message' => sprintf('No support implemented for dumping XLIFF version "%s".', $version),
-        ]);
+        throw new DumpException(sprintf('No support implemented for dumping XLIFF version [%s].', $version));
     }
 
     /**
@@ -120,7 +118,7 @@ class Xliff implements FormatContract, DumperContract
 
             if (isset($translation['target-attributes'])) {
                 foreach ($translation['target-attributes'] as $key => $value) {
-                    $targetElement->setAttribute($name, $value);
+                    $targetElement->setAttribute($key, $value);
                 }
             }
 
@@ -140,12 +138,13 @@ class Xliff implements FormatContract, DumperContract
 
                     if (isset($note['priority'])) {
                         $noteElement->setAttribute('priority', $note['priority']);
-                    } elseif (isset($note['from'])) {
+                    }
+                    if (isset($note['from'])) {
                         $noteElement->setAttribute('from', $note['from']);
                     }
-                }
 
-                $unit->appendChild($noteElement);
+                    $unit->appendChild($noteElement);
+                }
             }
 
             $xliffBody->appendChild($unit);
@@ -200,7 +199,7 @@ class Xliff implements FormatContract, DumperContract
 
             if (isset($translation['target-attributes'])) {
                 foreach ($translation['target-attributes'] as $key => $value) {
-                    $targetElement->setAttribute($name, $value);
+                    $targetElement->setAttribute($key, $value);
                 }
             }
 

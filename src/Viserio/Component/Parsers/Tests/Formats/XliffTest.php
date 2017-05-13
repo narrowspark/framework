@@ -187,34 +187,13 @@ class XliffTest extends TestCase
         $datas = $this->parser->parse('');
     }
 
-    public function testDumpXliffV2()
-    {
-        $datas = [
-            'version'  => '2.0',
-            'srcLang'  => 'en-US',
-            'trgLang'  => 'de-CH',
-            'key1'     => [
-                'source' => 'foo',
-                'target' => 'bär',
-            ],
-            'key2' => [
-                'source' => 'bar',
-                'target' => 'föö',
-            ],
-        ];
-
-        self::assertXmlStringEqualsXmlFile(
-            __DIR__ . '/../Fixtures/xliff/encoding_xliff_v2_utf8.xlf',
-            $this->parser->dump($datas)
-        );
-    }
-
     public function testDumpXliffV1()
     {
         $datas = [
             'version'         => '1.2',
             'source-language' => 'en',
-            'target-language' => '',
+            'target-language' => 'de-CH',
+            'encoding'        => 'UTF-8',
             'foo'             => [
                 'source' => 'foo',
                 'target' => 'bär',
@@ -236,5 +215,37 @@ class XliffTest extends TestCase
             __DIR__ . '/../Fixtures/xliff/encoding_xliff_v1_utf8.xlf',
             $this->parser->dump($datas)
         );
+    }
+
+    public function testDumpXliffV2()
+    {
+        $datas = [
+            'version'  => '2.0',
+            'srcLang'  => 'en-US',
+            'trgLang'  => 'de-CH',
+            'encoding' => 'UTF-8',
+            'key1'     => [
+                'source' => 'foo',
+                'target' => 'bär',
+            ],
+            'key2' => [
+                'source' => 'bar',
+                'target' => 'föö',
+            ],
+        ];
+
+        self::assertXmlStringEqualsXmlFile(
+            __DIR__ . '/../Fixtures/xliff/encoding_xliff_v2_utf8.xlf',
+            $this->parser->dump($datas)
+        );
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\DumpException
+     * @expectedExceptionMessage No support implemented for dumping XLIFF version [3.0].
+     */
+    public function testDumpWithWrongVersion()
+    {
+        $datas = $this->parser->dump(['version' => '3.0']);
     }
 }
