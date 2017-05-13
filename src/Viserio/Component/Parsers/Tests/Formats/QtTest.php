@@ -33,7 +33,7 @@ class QtTest extends TestCase
                     'source'      => 'Node ID: %node_id Visibility: %visibility',
                     'translation' => [
                         'content'    => 'Knoop ID: %node_id Zichtbaar: %visibility',
-                        'attributes' => null,
+                        'attributes' => false,
                     ],
                 ],
             ],
@@ -42,7 +42,7 @@ class QtTest extends TestCase
                     'source'      => '%group_name [Class group]',
                     'translation' => [
                         'content'    => '%group_name [Class groep]',
-                        'attributes' => null,
+                        'attributes' => false,
                     ],
                 ],
                 [
@@ -66,7 +66,7 @@ class QtTest extends TestCase
     }
 
     /**
-     * @covers Viserio\Component\Parsers\Formats\Qt::parse
+     * @covers \Viserio\Component\Parsers\Formats\Qt::parse
      */
     public function testParse()
     {

@@ -7,6 +7,7 @@ use DOMDocument;
 use DOMElement;
 use DOMText;
 use InvalidArgumentException;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -60,13 +61,14 @@ final class XmlUtils
      * @param string|callable|null $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
      * @throws \InvalidArgumentException When loading of XML file returns error
+     * @throws \RuntimeException         When no file was found
      *
      * @return \DOMDocument
      */
     public static function loadFile(string $file, $schemaOrCallable = null): DOMDocument
     {
         if (! file_exists($file)) {
-            throw new InvalidArgumentException(sprintf('No such file %s.', $file));
+            throw new RuntimeException(sprintf('No such file [%s] found.', $file));
         }
 
         return self::loadString(@file_get_contents($file), $schemaOrCallable);
@@ -242,12 +244,14 @@ final class XmlUtils
     }
 
     /**
-     * @param mixed       $schemaOrCallable
-     * @param DOMDocument $dom
+     * Validates DOMDocument against a file or callback.
      *
-     * @return bool
+     * @param \DOMDocument   $dom
+     * @param array|callable $schemaOrCallable
+     *
+     * @return void
      */
-    private static function validateXmlDom(DOMDocument $dom, $schemaOrCallable)
+    private static function validateXmlDom(DOMDocument $dom, $schemaOrCallable): void
     {
         $internalErrors = libxml_use_internal_errors(true);
         libxml_clear_errors();

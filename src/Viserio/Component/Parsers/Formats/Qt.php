@@ -48,12 +48,13 @@ class Qt implements FormatContract, DumperContract
             foreach ($node->message as $message) {
                 $translation           = $message->translation;
                 $translationAttributes = (array) $translation->attributes();
+                $attributes            = reset($translationAttributes);
 
                 $datas[$name][] = [
                     'source'      => (string) $message->source,
                     'translation' => [
                         'content'    => (string) $translation,
-                        'attributes' => $translationAttributes['@attributes'] ?? null,
+                        'attributes' => $attributes,
                     ],
                 ];
             }
@@ -67,19 +68,19 @@ class Qt implements FormatContract, DumperContract
     /**
      * {@inheritdoc}
      *
-     * array['name']                    string     the id to group translation and to create the name element.
+     * array['name']                    string      the id to group translation and to create the name element.
      *     array[]
-     *          ['source']              string     content of the source element
-     *          ['translation']         array
-     *              array['content']    string     content of the translation element
-     *              array['attributes'] null|array attributes for the translation element
+     *          ['source']              string
+     *          array['translation']
+     *              array['content']    string      content of the translation element
+     *              array['attributes'] false|array attributes for the translation element; simple key value array
      */
     public function dump(array $data): string
     {
         $dom               = new DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = true;
 
-        $ts      = $dom->appendChild($dom->createElement('TS'));
+        $ts = $dom->appendChild($dom->createElement('TS'));
 
         foreach ($data as $name => $groups) {
             $context = $ts->appendChild($dom->createElement('context'));
@@ -90,9 +91,10 @@ class Qt implements FormatContract, DumperContract
                 $message->appendChild($dom->createElement('source', $value['source']));
 
                 $translation = $dom->createElement('translation', $value['translation']['content']);
+                $attributes  = $value['translation']['attributes'];
 
-                if ($value['translation']['attributes'] !== null) {
-                    foreach ($value['translation']['attributes'] as $key => $value) {
+                if (is_array($attributes)) {
+                    foreach ($attributes as $key => $value) {
                         $translation->setAttribute($key, $value);
                     }
                 }

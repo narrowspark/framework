@@ -13,7 +13,7 @@ use Viserio\Component\Parsers\Utils\XmlUtils;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
- * This code has been ported from Symfony. The original
+ * Some of this code has been ported from Symfony. The original
  * code is (c) Fabien Potencier <fabien@symfony.com>.
  *
  * Good article about xliff @link http://www.wikiwand.com/en/XLIFF
@@ -50,6 +50,32 @@ class Xliff implements FormatContract, DumperContract
 
     /**
      * {@inheritdoc}
+     *
+     * For xliff v1:
+     *    array[]
+     *          ['version']                        string Need to be 1.2
+     *          ['source-language']                string
+     *          ['target-language']                string
+     *          ['encoding']                       string A optional option; to set the file encoding
+     *          array['resname']                   string
+     *                  ['source']                 string
+     *                  ['target']                 string
+     *                  ['id']                     string A optional option; if this is missing, md5 hash from resname is generated
+     *                  array['target-attributes']        A optional array to set the target attributes; simple key value array
+     *                  array['notes']                    A optional array to generate notes
+     *                          ['content']        string
+     *                          ['from']           string optional
+     *                          ['priority']       string optional
+     * For xliff v2:
+     *    array[]
+     *          ['version']                        string Need to be 2.0
+     *          ['srcLang']                        string
+     *          ['trgLang']                        string
+     *          ['encoding']                       string A optional option; to set the file encoding
+     *          array['id']                        string
+     *                  ['source']                 string
+     *                  ['target']                 string
+     *                  array['target-attributes']        A optional array to set the target attributes; simple key value array
      */
     public function dump(array $data): string
     {
@@ -69,6 +95,8 @@ class Xliff implements FormatContract, DumperContract
     }
 
     /**
+     * Dump xliff version 1.
+     *
      * @param array $data
      *
      * @return string
@@ -154,6 +182,8 @@ class Xliff implements FormatContract, DumperContract
     }
 
     /**
+     * Dump xliff version 2.
+     *
      * @param array $data
      *
      * @return string
@@ -337,9 +367,10 @@ class Xliff implements FormatContract, DumperContract
 
         foreach ($xml->xpath('//xliff:unit') as $unit) {
             $unitAttr = (array) $unit->attributes();
+            $unitAttr = reset($unitAttr);
             $source   = (string) $unit->segment->source;
             $target   = null;
-            $id       = $unitAttr['@attributes']['id'];
+            $id       = $unitAttr['id'];
 
             if (isset($unit->segment->target)) {
                 $target = self::utf8ToCharset((string) $unit->segment->target, $encoding);

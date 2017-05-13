@@ -5,11 +5,15 @@
             <trans-unit id="1" resname="foo">
                 <source>foo</source>
                 <target>bär</target>
-                <note>bäz</note>
+                <note from="daniel" priority="1">bäz</note>
             </trans-unit>
             <trans-unit id="2" resname="bar">
                 <source>bar</source>
-                <target>föö</target>
+                <target order="1">föö</target>
+            </trans-unit>
+            <trans-unit id="18e6a493872558d949b4c16ea1fa6ab6" resname="key.with.cdata">
+                <source>key.with.cdata</source>
+                <target><![CDATA[<source> & <target>]]></target>
             </trans-unit>
         </body>
     </file>

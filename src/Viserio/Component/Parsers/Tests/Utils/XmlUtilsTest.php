@@ -34,6 +34,15 @@ class XmlUtilsTest extends TestCase
         $this->fixturesPath = self::normalizeDirectorySeparator(__DIR__ . '/../Fixtures/Utils/');
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage No such file [nonexistfile] found.
+     */
+    public function testLoadFileToThrowException()
+    {
+        XmlUtils::loadFile('nonexistfile');
+    }
+
     public function testLoadFileWithError77()
     {
         $file = vfsStream::newFile('invalid.xml')->withContent(
@@ -232,6 +241,7 @@ class XmlUtilsTest extends TestCase
             ['1111,2222,3333,4444,5555', '1111,2222,3333,4444,5555'],
             ['foo', 'foo'],
             [6, '0b0110'],
+            [6.1, '6.1'],
         ];
     }
 

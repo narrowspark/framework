@@ -200,14 +200,23 @@ class XliffTest extends TestCase
                 'id'     => '1',
                 'notes'  => [
                     [
-                        'content' => 'bäz',
+                        'content'  => 'bäz',
+                        'from'     => 'daniel',
+                        'priority' => '1',
                     ],
                 ],
             ],
             'bar' => [
-                'source' => 'bar',
-                'target' => 'föö',
-                'id'     => '2',
+                'source'            => 'bar',
+                'target'            => 'föö',
+                'id'                => '2',
+                'target-attributes' => [
+                    'order' => '1',
+                ],
+            ],
+            'key.with.cdata' => [
+                'source' => 'key.with.cdata',
+                'target' => '<source> & <target>',
             ],
         ];
 
@@ -229,8 +238,15 @@ class XliffTest extends TestCase
                 'target' => 'bär',
             ],
             'key2' => [
-                'source' => 'bar',
-                'target' => 'föö',
+                'source'            => 'bar',
+                'target'            => 'föö',
+                'target-attributes' => [
+                    'order' => '1',
+                ],
+            ],
+            'key.with.cdata' => [
+                'source' => 'cdata',
+                'target' => '<source> & <target>',
             ],
         ];
 
