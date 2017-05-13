@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en-US" trgLang="de-CH">
+    <file id="translation_en_us_to_de_ch">
+        <unit id="key1">
+            <segment>
+                <source>foo</source>
+                <target>bär</target>
+            </segment>
+        </unit>
+        <unit id="key2">
+            <segment>
+                <source>bar</source>
+                <target order="1">föö</target>
+            </segment>
+        </unit>
+        <unit id="key.with.cdata">
+            <segment>
+                <source>cdata</source>
+                <target><![CDATA[<source> & <target>]]></target>
+            </segment>
+        </unit>
+    </file>
+</xliff>

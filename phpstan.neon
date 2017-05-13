@@ -7,14 +7,18 @@ parameters:
         - %currentWorkingDirectory%/src/Viserio
 
     excludes_analyse:
-        - %currentWorkingDirectory%/src/Viserio/Bridge/*/Tests/Fixture/*
-        - %currentWorkingDirectory%/src/Viserio/Component/*/Tests/Fixture/*
-        - %currentWorkingDirectory%/src/Viserio/Component/Routing/Tests/Fixture/*
-        # Use all classes of php-cache
+        - %currentWorkingDirectory%/src/Viserio/Bridge/**/Tests/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Component/**/Tests/Fixture/*
+        # Classes of php-cache are used
         - %currentWorkingDirectory%/src/Viserio/Component/Cache/*
 
         # Needs https://github.com/narrowspark/framework/issues/394
         - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
+
+    universalObjectCratesClasses:
+        - DOMDocument
+        - DomElement
+        - DOMText
 
     ignoreErrors:
         # Anonymous class not working in phpstan
@@ -48,6 +52,11 @@ parameters:
         - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::getProtectedStatic#'
         - '#Swift_#'
         - '#Call to an undefined method Viserio\\Component\\Mail\\Message::setBody#'
+
+        # Can be found in DOMNode
+        - '#Access to an undefined property DomElement::\$prefix#'
+        - '#Access to an undefined property DomElement::\$attributes#'
+        - '#Access to an undefined property DomElement::\$childNodes#'
 
         # Required file variables
         - '#Undefined variable: \$class#'
@@ -103,7 +112,6 @@ parameters:
         - '#\$values of method Viserio\\Component\\Http\\AbstractMessage::trimHeaderValues#'
         - '#\$array of method Viserio\\Component\\Http\\AbstractMessage::arrayContainsOnlyStrings#'
         - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
-        - '#\$payload of method Viserio\\Component\\Parsers\\Formats\\INI::parse#'
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
         - '#Method Viserio\\Component\\Routing\\Router::convertToControllerAction#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeCompiler::compileSegmentNodes#'

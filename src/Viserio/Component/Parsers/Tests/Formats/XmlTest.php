@@ -5,9 +5,9 @@ namespace Viserio\Component\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\XML;
+use Viserio\Component\Parsers\Formats\Xml;
 
-class XMLTest extends TestCase
+class XmlTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -15,7 +15,7 @@ class XMLTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Parsers\Formats\XML
+     * @var \Viserio\Component\Parsers\Formats\Xml
      */
     private $parser;
 
@@ -28,7 +28,7 @@ class XMLTest extends TestCase
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
-        $this->parser = new XML();
+        $this->parser = new Xml();
     }
 
     public function testParse()
@@ -45,12 +45,12 @@ class XMLTest extends TestCase
 
         $parsed = $this->parser->parse((string) $this->file->read($file->url()));
 
-        self::assertTrue(is_array($parsed));
         self::assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
     }
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage [ERROR 4] Start tag expected, '<' not found (in n/a - line 1, column 1)
      */
     public function testParseToThrowException()
     {

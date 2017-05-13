@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-strict.xsd">
+    <file original="sample.properties" source-language="en" target-language="de-AT" datatype="javapropertyresourcebundle">
+        <body>
+            <trans-unit id="1" resname="welcome">
+                <source xml:lang="en">Hooray, you're here! The day just got better - enjoy the following tips!</source>
+                <target xml:lang="de-AT">Hurra, du bist hier! Der Tag ist gerettet - nutze die folgenden Tipps!</target>
+            </trans-unit>
+            <trans-unit id="2" resname="text_segment">
+                <source xml:lang="en">A section of text like this is known as a text segment. Start rockin' your translations now!</source>
+                <target xml:lang="de-AT">Eine Textpassage wie diese bezeichnen wir als Textsegment. Starte jetzt mit deinen Übersetzungen durch!</target>
+            </trans-unit>
+            <trans-unit id="3" resname="tab_shortcut">
+                <source xml:lang="en">Arriba, Arriba! Andale, Andale! Be fast as Speedy Gonzales. Just hit TAB to save and go to the next text segment, once you're done.</source>
+                <target xml:lang="de-AT">Arriba, Arriba! Andale, Andale! Sei schneller als Speedy Gonzales. Springe mit TAB ins nächste Textsegment, sobald du fertig bist. Deine Änderungen werden automatisch gespeichert.</target>
+            </trans-unit>
+            <trans-unit id="4" resname="statuses">
+                <source xml:lang="en">Houston, we have no problem. Keep track of the progress of your translations by statuses at any time.</source>
+                <target xml:lang="de-AT"></target>
+            </trans-unit>
+            <trans-unit id="5" resname="status_shortcut">
+                <source xml:lang="en">Keep your fingers off the mouse. Master your keyboard: Change the status by using one of the shortcut keys: e.g. CTRL+K = Translated.    You can see other shortcuts by pressing CTRL+H!</source>
+                <target xml:lang="de-AT"></target>
+            </trans-unit>
+            <trans-unit id="6" resname="placeholder_lingochecks">
+                <source xml:lang="en">We just like to see you happy, that's why LingoChecks automatically check translations for predetermined criteria.    Among other checks LingoHub verifies if used in the original text are also present in translated texts.</source>
+                <target xml:lang="de-AT">Bazinga!</target>
+            </trans-unit>
+            <trans-unit id="7" resname="">
+                <source xml:lang="en"></source>
+                <target xml:lang="de-AT"></target>
+            </trans-unit>
+            <trans-unit id="8" resname="comments">
+                <source xml:lang="en">Dear developers, you are the masters of translation files. Add comments in a file (depends on file format) to provide translators with more information. They are imported as a description, visible in the side panel.</source>
+                <target xml:lang="de-AT"></target>
+                <note>This is an awesome description.</note>
+            </trans-unit>
+            <trans-unit id="9" resname="love">
+                <source xml:lang="en">Made with ❤</source>
+                <target xml:lang="de-AT">❤</target>
+                <note>lh-check { min: 10, max: 15 }</note>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

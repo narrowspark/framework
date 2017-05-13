@@ -6,15 +6,17 @@ use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
-use Viserio\Component\Parsers\Formats\INI;
-use Viserio\Component\Parsers\Formats\JSON;
-use Viserio\Component\Parsers\Formats\PHP;
+use Viserio\Component\Parsers\Formats\Ini;
+use Viserio\Component\Parsers\Formats\Json;
+use Viserio\Component\Parsers\Formats\Php;
 use Viserio\Component\Parsers\Formats\Po;
+use Viserio\Component\Parsers\Formats\Qt;
 use Viserio\Component\Parsers\Formats\QueryStr;
 use Viserio\Component\Parsers\Formats\Serialize;
-use Viserio\Component\Parsers\Formats\TOML;
-use Viserio\Component\Parsers\Formats\XML;
-use Viserio\Component\Parsers\Formats\YAML;
+use Viserio\Component\Parsers\Formats\Toml;
+use Viserio\Component\Parsers\Formats\Xliff;
+use Viserio\Component\Parsers\Formats\Xml;
+use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Parser implements ParserContract
@@ -22,12 +24,16 @@ class Parser implements ParserContract
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * @var array Supported Formats
+     * Supported mime type formats.
+     *
+     * @var array
      */
     private $supportedFormats = [
         // XML
         'application/xml' => 'xml',
         'text/xml'        => 'xml',
+        // Xliff
+        'application/x-xliff+xml' => 'xlf',
         // JSON
         'application/json'         => 'json',
         'application/x-javascript' => 'json',
@@ -44,26 +50,35 @@ class Parser implements ParserContract
         'application/x-www-form-urlencoded' => 'querystr',
     ];
 
+    /**
+     * Supported file formats.
+     *
+     * @var array
+     */
     private $supportedFileFormats = [
         'ini',
         'json',
         'php',
         'po',
         'toml',
+        'ts',
         'xml',
+        'xlf',
         'yaml',
     ];
 
     private $supportedParsers = [
-        'ini'       => INI::class,
-        'json'      => JSON::class,
-        'php'       => PHP::class,
+        'ini'       => Ini::class,
+        'json'      => Json::class,
+        'php'       => Php::class,
         'po'        => Po::class,
         'querystr'  => QueryStr::class,
         'serialize' => Serialize::class,
-        'toml'      => TOML::class,
-        'xml'       => XML::class,
-        'yaml'      => YAML::class,
+        'toml'      => Toml::class,
+        'ts'        => Qt::class,
+        'xml'       => Xml::class,
+        'xlf'       => Xliff::class,
+        'yaml'      => Yaml::class,
     ];
 
     /**
@@ -102,10 +117,10 @@ class Parser implements ParserContract
 
             if (is_file($fileName)) {
                 $payload  = file_get_contents($fileName);
-            }
 
-            if ($payload === false) {
-                throw new RuntimeException(sprintf('A error occurred during reading [%s]', $fileName));
+                if ($payload === false) {
+                    throw new RuntimeException(sprintf('A error occurred during reading [%s]', $fileName));
+                }
             }
         }
 

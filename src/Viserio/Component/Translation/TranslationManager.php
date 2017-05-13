@@ -71,7 +71,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     protected $translations = [];
 
     /**
-     * Creat new Translation instance.
+     * Create a new Translation instance.
      *
      * @param \Viserio\Component\Contracts\Translation\PluralizationRules $pluralization
      * @param \Viserio\Component\Contracts\Translation\MessageSelector    $messageSelector

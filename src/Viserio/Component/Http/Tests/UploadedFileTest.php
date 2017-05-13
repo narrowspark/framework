@@ -261,6 +261,7 @@ class UploadedFileTest extends TestCase
         copy(__FILE__, $from);
         $uploadedFile = new UploadedFile($from, 100, UPLOAD_ERR_OK, basename($from), 'text/plain');
         $uploadedFile->moveTo($to);
+
         self::assertFileEquals(__FILE__, $to);
     }
 }

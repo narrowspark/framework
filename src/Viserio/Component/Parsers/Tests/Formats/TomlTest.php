@@ -5,9 +5,9 @@ namespace Viserio\Component\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\TOML;
+use Viserio\Component\Parsers\Formats\Toml;
 
-class TOMLTest extends TestCase
+class TomlTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -15,7 +15,7 @@ class TOMLTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Parsers\Formats\TOML
+     * @var \Viserio\Component\Parsers\Formats\Toml
      */
     private $parser;
 
@@ -28,7 +28,7 @@ class TOMLTest extends TestCase
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
-        $this->parser = new TOML();
+        $this->parser = new Toml();
     }
 
     public function testParses()
@@ -47,6 +47,7 @@ class TOMLTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedExceptionMessage Unable to parse the TOML string.
      */
     public function testParseToThrowException()
     {
