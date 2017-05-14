@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Console;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -12,14 +11,13 @@ use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
+use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\Console\Kernel;
-use Viserio\Component\Foundation\Events\BootstrappedEvent;
-use Viserio\Component\Foundation\Events\BootstrappingEvent;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 
 class KernelTest extends MockeryTestCase
 {
@@ -69,6 +67,18 @@ class KernelTest extends MockeryTestCase
             ->with(Cerebro::class)
             ->andReturn($cerebro);
 
+        $container->shouldReceive('get')
+            ->once()
+            ->with(KernelContract::class)
+            ->andReturn($this->mock(KernelContract::class));
+
+        $bootstrapManager = $this->mock(new BootstrapManager($container));
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(BootstrapManager::class)
+            ->andReturn($bootstrapManager);
+
         $this->getBootstrap($container);
 
         $kernel = $this->getKernel($container);
@@ -115,6 +125,18 @@ class KernelTest extends MockeryTestCase
             ->with(Cerebro::class)
             ->andReturn($cerebro);
 
+        $container->shouldReceive('get')
+            ->once()
+            ->with(KernelContract::class)
+            ->andReturn($this->mock(KernelContract::class));
+
+        $bootstrapManager = $this->mock(new BootstrapManager($container));
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(BootstrapManager::class)
+            ->andReturn($bootstrapManager);
+
         $kernel = $this->getKernel($container);
         $kernel->handle(new ArgvInput(), new ConsoleOutput());
     }
@@ -151,6 +173,18 @@ class KernelTest extends MockeryTestCase
             ->with(Cerebro::class)
             ->andReturn($cerebro);
 
+        $container->shouldReceive('get')
+            ->once()
+            ->with(KernelContract::class)
+            ->andReturn($this->mock(KernelContract::class));
+
+        $bootstrapManager = $this->mock(new BootstrapManager($container));
+
+        $container->shouldReceive('get')
+            ->times(3)
+            ->with(BootstrapManager::class)
+            ->andReturn($bootstrapManager);
+
         $kernel = $this->getKernel($container);
 
         $kernel->terminate(new ArgvInput(), 0);
@@ -183,6 +217,18 @@ class KernelTest extends MockeryTestCase
             ->with(Cerebro::class)
             ->andReturn($cerebro);
 
+        $container->shouldReceive('get')
+            ->once()
+            ->with(KernelContract::class)
+            ->andReturn($this->mock(KernelContract::class));
+
+        $bootstrapManager = $this->mock(new BootstrapManager($container));
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(BootstrapManager::class)
+            ->andReturn($bootstrapManager);
+
         $kernel = $this->getKernel($container);
 
         self::assertTrue(is_array($kernel->getAll()));
@@ -210,6 +256,18 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(Cerebro::class)
             ->andReturn($cerebro);
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(KernelContract::class)
+            ->andReturn($this->mock(KernelContract::class));
+
+        $bootstrapManager = $this->mock(new BootstrapManager($container));
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(BootstrapManager::class)
+            ->andReturn($bootstrapManager);
 
         $kernel = $this->getKernel($container);
 
@@ -239,6 +297,18 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(Cerebro::class)
             ->andReturn($cerebro);
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(KernelContract::class)
+            ->andReturn($this->mock(KernelContract::class));
+
+        $bootstrapManager = $this->mock(new BootstrapManager($container));
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(BootstrapManager::class)
+            ->andReturn($bootstrapManager);
 
         $kernel = $this->getKernel($container);
 
@@ -281,7 +351,20 @@ class KernelTest extends MockeryTestCase
             ->with(Cerebro::class)
             ->andReturn($cerebro);
 
+        $container->shouldReceive('get')
+            ->once()
+            ->with(KernelContract::class)
+            ->andReturn($this->mock(KernelContract::class));
+
+        $bootstrapManager = $this->mock(new BootstrapManager($container));
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(BootstrapManager::class)
+            ->andReturn($bootstrapManager);
+
         $kernel = $this->getKernel($container);
+
         $kernel->registerCommand($command);
     }
 
@@ -295,19 +378,6 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(SetRequestForConsole::class)
             ->andReturn($setRequestForConsole);
-
-        $events = $this->mock(EventManagerContract::class);
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(BootstrappedEvent::class));
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(BootstrappingEvent::class));
-
-        $container->shouldReceive('get')
-            ->once()
-            ->with(EventManagerContract::class)
-            ->andReturn($events);
     }
 
     private function getKernel($container)

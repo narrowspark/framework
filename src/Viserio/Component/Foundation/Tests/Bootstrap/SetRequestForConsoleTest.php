@@ -3,25 +3,26 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Interop\Http\Factory\ServerRequestFactoryInterface;
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
-use Viserio\Component\Foundation\Events\BootstrappedEvent;
-use Viserio\Component\Foundation\Events\BootstrappingEvent;
+use Viserio\Component\Foundation\Console\Kernel;
 
 class SetRequestForConsoleTest extends MockeryTestCase
 {
     public function testBootstrap()
     {
-        $kernel = new class() extends AbstractKernel {
-            protected function registerBaseServiceProviders(): void
-            {
-            }
+        $kernel = new class() extends Kernel {
+            /**
+             * The bootstrap classes for the application.
+             *
+             * @var array
+             */
+            protected $bootstrappers = [
+                SetRequestForConsole::class,
+            ];
 
-            public function bootstrap(): void
+            protected function registerBaseServiceProviders(): void
             {
             }
         };
@@ -45,16 +46,7 @@ class SetRequestForConsoleTest extends MockeryTestCase
             ->andReturn($serverRequest);
         $container->instance(ServerRequestFactoryInterface::class, $request);
 
-        $events = $this->mock(EventManagerContract::class);
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(BootstrappingEvent::class));
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(BootstrappedEvent::class));
-        $container->instance(EventManagerContract::class, $events);
-
-        $kernel->bootstrapWith([SetRequestForConsole::class]);
+        $kernel->bootstrap();
 
         self::assertInstanceOf(ServerRequestInterface::class, $container->get(ServerRequestInterface::class));
     }

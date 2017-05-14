@@ -2,7 +2,19 @@
     "name"       : "viserio/foundation",
     "type"       : "library",
     "description": "The Viserio Foundation package.",
-    "keywords"   : ["narrowspark", "sparkle", "viserio", "foundation", "container", "config", "log", "exception", "events", "parsers", "routing"],
+    "keywords"   : [
+        "narrowspark",
+        "sparkle",
+        "viserio",
+        "foundation",
+        "container",
+        "config",
+        "log",
+        "exception",
+        "events",
+        "parsers",
+        "routing"
+    ],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -22,6 +34,7 @@
         "container-interop/container-interop" : "^1.1",
         "narrowspark/http-status"             : "^2.0",
         "psr/log"                             : "^1.0",
+        "symfony/finder"                      : "^3.2",
         "viserio/contracts"                   : "self.version",
         "viserio/container"                   : "self.version",
         "viserio/events"                      : "self.version",
