@@ -2,15 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
-use Closure;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 
 final class BootstrapManager
 {
-    use ContainerAwareTrait;
-
     /**
      * Indicates if the application has been bootstrapped before.
      *
@@ -33,6 +29,13 @@ final class BootstrapManager
     private $bootstrappedCallbacks = [];
 
     /**
+     * A container instance.
+     *
+     * @var \Viserio\Component\Contracts\Container\Container
+     */
+    private $container;
+
+    /**
      * Create a new bootstrap manger instance.
      *
      * @param \Viserio\Component\Contracts\Container\Container $container
@@ -46,26 +49,30 @@ final class BootstrapManager
      * Register a callback to run before a bootstrapper.
      *
      * @param string   $bootstrapper
-     * @param \Closure $callback
+     * @param callable $callback
      *
      * @return void
      */
-    public function addBeforeBootstrapping(string $bootstrapper, Closure $callback): void
+    public function addBeforeBootstrapping(string $bootstrapper, callable $callback): void
     {
-        $this->bootstrappingCallbacks['bootstrapping: ' . $bootstrapper][] = $callback;
+        $key = 'bootstrapping: ' . str_replace('\\', '', $bootstrapper);
+
+        $this->bootstrappingCallbacks[$key][] = $callback;
     }
 
     /**
      * Register a callback to run after a bootstrapper.
      *
      * @param string   $bootstrapper
-     * @param \Closure $callback
+     * @param callable $callback
      *
      * @return void
      */
-    public function addAfterBootstrapping(string $bootstrapper, Closure $callback): void
+    public function addAfterBootstrapping(string $bootstrapper, callable $callback): void
     {
-        $this->bootstrappedCallbacks['bootstrapped: ' . $bootstrapper][] = $callback;
+        $key = 'bootstrapped: ' . str_replace('\\', '', $bootstrapper);
+
+        $this->bootstrappedCallbacks[$key][] = $callback;
     }
 
     /**
@@ -77,22 +84,24 @@ final class BootstrapManager
      */
     public function bootstrapWith(array $bootstrappers): void
     {
-        $kernel = $this->getContainer()->get(KernelContract::class);
+        $kernel = $this->container->get(KernelContract::class);
 
         foreach ($bootstrappers as $bootstrap) {
-            foreach ($this->bootstrappingCallbacks as $name => $callback) {
-                if ('bootstrapping: ' . str_replace('\\', '', $bootstrap) === $name) {
-                    $callback($kernel);
-                }
-            }
+            $this->callCallbacks(
+                $this->bootstrappingCallbacks,
+                $kernel,
+                'bootstrapping: ',
+                $bootstrap
+            );
 
-            $this->getContainer()->resolve($bootstrap)->bootstrap($kernel);
+            $this->container->resolve($bootstrap)->bootstrap($kernel);
 
-            foreach ($this->bootstrappedCallbacks as $name => $callback) {
-                if ('bootstrapped: ' . str_replace('\\', '', $bootstrap) === $name) {
-                    $callback($kernel);
-                }
-            }
+            $this->callCallbacks(
+                $this->bootstrappedCallbacks,
+                $kernel,
+                'bootstrapped: ',
+                $bootstrap
+            );
         }
 
         $this->hasBeenBootstrapped = true;
@@ -106,5 +115,30 @@ final class BootstrapManager
     public function hasBeenBootstrapped(): bool
     {
         return $this->hasBeenBootstrapped;
+    }
+
+    /**
+     * Calls callbacks on bootstrap name.
+     *
+     * @param array                                          $bootCallbacks
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
+     * @param string                                         $type
+     * @param string                                         $bootstrap
+     *
+     * @return void
+     */
+    private function callCallbacks(
+        array $bootCallbacks,
+        KernelContract $kernel,
+        string $type,
+        string $bootstrap
+    ): void {
+        foreach ($this->bootstrappedCallbacks as $name => $callbacks) {
+            if ($type . str_replace('\\', '', $bootstrap) === $name) {
+                foreach ($callbacks as $callback) {
+                    $callback($kernel);
+                }
+            }
+        }
     }
 }
