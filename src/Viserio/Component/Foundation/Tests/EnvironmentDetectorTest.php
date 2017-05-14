@@ -22,6 +22,7 @@ class EnvironmentDetectorTest extends TestCase
         $result = $this->env->detect(function () {
             return 'foobar';
         });
+
         self::assertEquals('foobar', $result);
     }
 

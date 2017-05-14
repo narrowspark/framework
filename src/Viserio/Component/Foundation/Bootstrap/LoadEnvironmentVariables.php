@@ -37,7 +37,7 @@ class LoadEnvironmentVariables implements BootstrapContract
      */
     protected function checkForSpecificEnvironmentFile(KernelContract $kernel): void
     {
-        if (php_sapi_name() == 'cli' && ($input = new ArgvInput())->hasParameterOption('--env')) {
+        if ($kernel->isRunningInConsole() && ($input = new ArgvInput())->hasParameterOption('--env')) {
             $this->setEnvironmentFilePath(
                 $kernel,
                 $kernel->getEnvironmentFile() . '.' . $input->getParameterOption('--env')

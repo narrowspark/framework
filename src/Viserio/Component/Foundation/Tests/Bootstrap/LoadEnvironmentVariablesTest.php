@@ -40,6 +40,9 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
         $kernel->shouldReceive('getEnvironmentPath')
             ->once()
             ->andReturn('');
+        $kernel->shouldReceive('isRunningInConsole')
+            ->once()
+            ->andReturn(false);
 
         $bootstraper->bootstrap($kernel);
     }
@@ -64,11 +67,50 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
             ->once()
             ->with('config.cache')
             ->andReturn('');
+        $kernel->shouldReceive('isRunningInConsole')
+            ->once()
+            ->andReturn(false);
 
         $bootstraper->bootstrap($kernel);
 
         // remove APP_ENV
         putenv('APP_ENV=');
         putenv('APP_ENV');
+    }
+
+    public function testBootstrapWithArgv()
+    {
+        $_SERVER['argv'] = [
+            'load',
+            '--env=local',
+        ];
+
+        $bootstraper = new LoadEnvironmentVariables();
+
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getEnvironmentPath')
+            ->twice()
+            ->andReturn(__DIR__ . '/../Fixtures/');
+        $kernel->shouldReceive('getEnvironmentFile')
+            ->twice()
+            ->andReturn('.env');
+        $kernel->shouldReceive('getStoragePath')
+            ->once()
+            ->with('config.cache')
+            ->andReturn('');
+        $kernel->shouldReceive('loadEnvironmentFrom')
+            ->once()
+            ->with('.env.local');
+        $kernel->shouldReceive('isRunningInConsole')
+            ->once()
+            ->andReturn(true);
+
+        $bootstraper->bootstrap($kernel);
+
+        foreach (['load', '--env=local',] as $i => $value) {
+            if(($key = array_search($value, $_SERVER['argv'])) !== false) {
+                unset($_SERVER['argv'][$key]);
+            }
+        }
     }
 }

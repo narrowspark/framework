@@ -12,8 +12,7 @@ class LoadServiceProviderTest extends MockeryTestCase
 {
     public function testBootstrap()
     {
-        $provider = new ConfigureLoggingServiceProvider();
-
+        $provider    = new ConfigureLoggingServiceProvider();
         $bootstraper = new LoadServiceProvider();
 
         $container = $this->mock(ContainerContract::class);
@@ -33,6 +32,32 @@ class LoadServiceProviderTest extends MockeryTestCase
             ->once()
             ->with('/serviceproviders.php')
             ->andReturn(__DIR__ . '/../Fixtures/serviceproviders.php');
+
+        $bootstraper->bootstrap($kernel);
+    }
+
+    public function testBootstrapWithFileNotFound()
+    {
+        $provider    = new ConfigureLoggingServiceProvider();
+        $bootstraper = new LoadServiceProvider();
+
+        $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('resolve')
+            ->never()
+            ->with(ConfigureLoggingServiceProvider::class)
+            ->andReturn($provider);
+        $container->shouldReceive('register')
+            ->never()
+            ->with($provider);
+
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getContainer')
+            ->once()
+            ->andReturn($container);
+        $kernel->shouldReceive('getConfigPath')
+            ->once()
+            ->with('/serviceproviders.php')
+            ->andReturn('serviceproviders.php');
 
         $bootstraper->bootstrap($kernel);
     }
