@@ -107,8 +107,8 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
 
         $bootstraper->bootstrap($kernel);
 
-        foreach (['load', '--env=local',] as $i => $value) {
-            if(($key = array_search($value, $_SERVER['argv'])) !== false) {
+        foreach (['load', '--env=local'] as $i => $value) {
+            if (($key = array_search($value, $_SERVER['argv'])) !== false) {
                 unset($_SERVER['argv'][$key]);
             }
         }
