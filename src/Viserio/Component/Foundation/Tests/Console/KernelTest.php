@@ -11,13 +11,13 @@ use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
+use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Console\Kernel;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 
 class KernelTest extends MockeryTestCase
 {
