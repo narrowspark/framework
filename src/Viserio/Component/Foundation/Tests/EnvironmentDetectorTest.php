@@ -21,7 +21,13 @@ class EnvironmentDetectorTest extends TestCase
     {
         $result = $this->env->detect(function () {
             return 'foobar';
-        });
+        }, ['--env=local']);
+
+        self::assertEquals('local', $result);
+
+        $result = $this->env->detect(function () {
+            return 'foobar';
+        }, ['env=local']);
 
         self::assertEquals('foobar', $result);
     }
@@ -30,9 +36,9 @@ class EnvironmentDetectorTest extends TestCase
     {
         $result = $this->env->detect(function () {
             return 'foobar';
-        }, ['--env=local']);
+        });
 
-        self::assertEquals('local', $result);
+        self::assertEquals('foobar', $result);
     }
 
     public function testAbilityToCollectCodeCoverageCanBeAssessed()
