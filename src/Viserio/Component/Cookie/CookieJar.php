@@ -19,7 +19,7 @@ class CookieJar implements JarContract
     /**
      * The default domain (if specified).
      *
-     * @var string
+     * @var string|null
      */
     protected $domain = null;
 
@@ -42,10 +42,10 @@ class CookieJar implements JarContract
      */
     public function create(
         string $name,
-        string $value = null,
+        ?string $value = null,
         int $minutes = 0,
-        string $path = null,
-        string $domain = null,
+        ?string $path = null,
+        ?string $domain = null,
         bool $secure = false,
         bool $httpOnly = true,
         $sameSite = false
@@ -62,9 +62,9 @@ class CookieJar implements JarContract
      */
     public function forever(
         string $name,
-        string $value = null,
-        string $path = null,
-        string $domain = null,
+        ?string $value = null,
+        ?string $path = null,
+        ?string $domain = null,
         bool $secure = false,
         bool $httpOnly = true,
         $sameSite = false
@@ -77,8 +77,8 @@ class CookieJar implements JarContract
      */
     public function delete(
         string $name,
-        string $path = null,
-        string $domain = null
+        ?string $path = null,
+        ?string $domain = null
     ): CookieContract {
         return $this->create($name, null, -2628000, $path, $domain);
     }
@@ -102,7 +102,7 @@ class CookieJar implements JarContract
     /**
      * {@inheritdoc}
      */
-    public function queue(...$arguments)
+    public function queue(...$arguments): void
     {
         if (reset($arguments) instanceof CookieContract) {
             $cookie = reset($arguments);
@@ -154,7 +154,7 @@ class CookieJar implements JarContract
      *
      * @return string[]
      */
-    protected function getPathAndDomain($path, $domain, bool $secure = false): array
+    protected function getPathAndDomain(?string $path, ?string $domain, bool $secure = false): array
     {
         return [$path ?? $this->path, $domain ?? $this->domain, $secure ?? $this->secure];
     }

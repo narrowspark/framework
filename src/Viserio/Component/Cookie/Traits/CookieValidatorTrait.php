@@ -14,8 +14,10 @@ trait CookieValidatorTrait
      * @throws \InvalidArgumentException
      *
      * @link http://tools.ietf.org/search/rfc2616#section-2.2
+     *
+     * @return void
      */
-    protected function validateName(string $name)
+    protected function validateName(string $name): void
     {
         if (mb_strlen($name) < 1) {
             throw new InvalidArgumentException('The name cannot be empty');
@@ -35,8 +37,10 @@ trait CookieValidatorTrait
      * @throws \InvalidArgumentException
      *
      * @link http://tools.ietf.org/html/rfc6265#section-4.1.1
+     *
+     * @return void
      */
-    protected function validateValue($value = null)
+    protected function validateValue(?string $value = null): void
     {
         if (isset($value)) {
             if (preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {

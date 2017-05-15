@@ -31,7 +31,7 @@ interface Cookie
      *
      * @return string|null
      */
-    public function getValue();
+    public function getValue(): ?string;
 
     /**
      * Checks if there is a value.
@@ -54,7 +54,7 @@ interface Cookie
      *
      * @return int|null
      */
-    public function getMaxAge();
+    public function getMaxAge(): ?int;
 
     /**
      * Checks if there is a max age.
@@ -77,7 +77,7 @@ interface Cookie
      *
      * @return null|int
      */
-    public function getExpiresTime();
+    public function getExpiresTime(): ?int;
 
     /**
      * Checks if there is an expiration time.
@@ -107,7 +107,7 @@ interface Cookie
      *
      * @return string|null
      */
-    public function getDomain();
+    public function getDomain(): ?string;
 
     /**
      * Checks if there is a domain.

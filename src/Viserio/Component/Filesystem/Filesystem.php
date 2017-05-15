@@ -202,7 +202,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function setVisibility(string $path, string $visibility): bool
     {
         $path       = self::normalizeDirectorySeparator($path);
-        $visibility = $this->parseVisibility($path, $visibility);
+        $visibility = $this->parseVisibility($path, $visibility) ?: 0777;
 
         try {
             $this->chmod($path, $visibility);

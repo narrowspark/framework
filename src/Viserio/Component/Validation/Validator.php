@@ -164,8 +164,7 @@ class Validator implements ValidatorContract
         }
 
         // reset keys
-        $rules = array_values($rules);
-
+        $rules     = array_values($rules);
         $validator = $this->createValidator($rules, $notRules, $optionalRules);
 
         return $this->createChainableValidators($validator, $rules);
@@ -226,14 +225,14 @@ class Validator implements ValidatorContract
     }
 
     /**
-     * Chain validators to a chanined validator object.
+     * Chain validator to a chained validator object.
      *
-     * @param string|\Respect\Validation\Validator $class
-     * @param array                                $rules
+     * @param \Respect\Validation\Validator $class
+     * @param array                         $rules
      *
      * @return \Respect\Validation\Validator
      */
-    protected function createChainableValidators($class, array $rules): RespectValidator
+    protected function createChainableValidators(RespectValidator $class, array $rules): RespectValidator
     {
         // reset keys
         $rules = array_values($rules);

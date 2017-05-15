@@ -89,35 +89,26 @@ class CommandLineTransformer implements TransformerContract
             case E_USER_ERROR:
             case E_CORE_ERROR:
             case E_COMPILE_ERROR:
-                $severity = 'Fatal Error';
-                break;
+                return 'Fatal Error';
             case E_PARSE:
-                $severity = 'Parse Error';
-                break;
+                return 'Parse Error';
             case E_WARNING:
             case E_USER_WARNING:
             case E_CORE_WARNING:
             case E_COMPILE_WARNING:
-                $severity = 'Warning';
-                break;
+                return 'Warning';
             case E_NOTICE:
             case E_USER_NOTICE:
-                $severity = 'Notice';
-                break;
+                return 'Notice';
             case E_STRICT:
-                $severity = 'Strict Standards';
-                break;
+                return 'Strict Standards';
             case E_RECOVERABLE_ERROR:
-                $severity = 'Catchable Error';
-                break;
+                return 'Catchable Error';
             case E_DEPRECATED:
             case E_USER_DEPRECATED:
-                $severity = 'Deprecated';
-                break;
+                return 'Deprecated';
             default:
-                $severity = 'Unknown Error';
+                return 'Unknown Error';
         }
-
-        return $severity;
     }
 }

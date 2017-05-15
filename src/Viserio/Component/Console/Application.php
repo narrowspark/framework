@@ -62,7 +62,7 @@ class Application extends SymfonyConsole
     /**
      * The output from the previous command.
      *
-     * @var \Symfony\Component\Console\Output\BufferedOutput
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $lastOutput;
 
@@ -205,7 +205,11 @@ class Application extends SymfonyConsole
      */
     public function output(): string
     {
-        return $this->lastOutput ? $this->lastOutput->fetch() : '';
+        if (method_exists($this->lastOutput, 'fetch')) {
+            return $this->lastOutput->fetch();
+        }
+
+        return '';
     }
 
     /**
@@ -292,7 +296,9 @@ class Application extends SymfonyConsole
      */
     public static function cerebroBinary(): string
     {
-        return defined('CEREBRO_BINARY') ? ProcessUtils::escapeArgument(CEREBRO_BINARY) : 'cerebro';
+        $constant = defined('CEREBRO_BINARY') ? constant('CEREBRO_BINARY') : null;
+
+        return  $constant !== null ? ProcessUtils::escapeArgument($constant) : 'cerebro';
     }
 
     /**
