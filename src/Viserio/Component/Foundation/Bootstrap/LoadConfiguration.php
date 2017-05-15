@@ -56,6 +56,10 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config)
     {
         foreach ($this->getFiles($kernel->getConfigPath()) as $key => $path) {
+            if ($key === 'serviceproviders') {
+                continue;
+            }
+
             $config->import($path);
         }
     }

@@ -20,6 +20,7 @@ use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Viserio\Component\Foundation\BootstrapManager;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
 {
@@ -112,7 +113,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function terminate(InputInterface $input, int $status): void
     {
-        if (! $this->hasBeenBootstrapped()) {
+        if (! $this->getContainer()->get(BootstrapManager::class)->hasBeenBootstrapped()) {
             return;
         }
 
@@ -148,8 +149,10 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function bootstrap(): void
     {
-        if (! $this->hasBeenBootstrapped()) {
-            $this->bootstrapWith($this->bootstrappers);
+        $bootstrapManager = $this->getContainer()->get(BootstrapManager::class);
+
+        if (! $bootstrapManager->hasBeenBootstrapped()) {
+            $bootstrapManager->bootstrapWith($this->bootstrappers);
         }
     }
 
