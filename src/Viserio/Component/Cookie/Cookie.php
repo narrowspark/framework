@@ -27,7 +27,7 @@ final class Cookie implements StringableContract
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(string $name, string $value = null)
+    public function __construct(string $name, ?string $value = null)
     {
         $this->validateName($name);
         $this->validateValue($value);
@@ -65,7 +65,7 @@ final class Cookie implements StringableContract
      *
      * @return $this
      */
-    public function withValue(string $value = null): Cookie
+    public function withValue(?string $value = null): Cookie
     {
         $this->validateValue($value);
 
@@ -80,7 +80,7 @@ final class Cookie implements StringableContract
      *
      * @return string|null
      */
-    public function getValue()
+    public function getValue(): ?string
     {
         return $this->value;
     }

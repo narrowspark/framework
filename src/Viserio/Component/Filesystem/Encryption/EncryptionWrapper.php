@@ -238,7 +238,7 @@ class EncryptionWrapper
     {
         $resource = $this->getStreamFromString($contents);
 
-        return stream_get_contents($this->decryptStream($resource));
+        return (string) stream_get_contents($this->decryptStream($resource));
     }
 
     /**
@@ -252,6 +252,6 @@ class EncryptionWrapper
     {
         $resource = $this->getStreamFromString($contents);
 
-        return stream_get_contents($this->encryptStream($resource));
+        return (string) stream_get_contents($this->encryptStream($resource));
     }
 }

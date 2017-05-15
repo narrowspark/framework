@@ -147,7 +147,7 @@ final class XmlUtils
      */
     public static function convertDomElementToArray(DOMElement $element, bool $checkPrefix = true)
     {
-        $prefix = (string) $element->prefix;
+        $prefix = $element->prefix;
         $empty  = true;
         $config = [];
 

@@ -45,5 +45,5 @@ elif [[ "$PHPUNIT" = true ]]; then
         fi
     done
 elif [[ "$PHPSTAN" = true ]]; then
-    ./vendor/bin/phpstan analyse -c phpstan.neon -l 5 src/Viserio
+    ./vendor/bin/phpstan analyse -c phpstan.neon -l 6 src/Viserio
 fi
