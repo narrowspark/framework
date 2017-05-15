@@ -1,6 +1,3 @@
-includes:
-    - vendor/phpstan/phpstan-doctrine/extension.neon
-
 parameters:
     autoload_directories:
         - %currentWorkingDirectory%/src/Viserio
