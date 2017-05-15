@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Client;
 use Swift_Mime_Message;
 
 class MandrillTransport extends AbstractTransport
@@ -10,7 +10,7 @@ class MandrillTransport extends AbstractTransport
     /**
      * Guzzle client instance.
      *
-     * @var \GuzzleHttp\ClientInterface
+     * @var \GuzzleHttp\Client
      */
     protected $client;
 
@@ -24,10 +24,10 @@ class MandrillTransport extends AbstractTransport
     /**
      * Create a new Mandrill transport instance.
      *
-     * @param \GuzzleHttp\ClientInterface $client
-     * @param string                      $key
+     * @param \GuzzleHttp\Client $client
+     * @param string             $key
      */
-    public function __construct(ClientInterface $client, string $key)
+    public function __construct(Client $client, string $key)
     {
         $this->client = $client;
         $this->key    = $key;

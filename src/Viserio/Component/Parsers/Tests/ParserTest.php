@@ -3,16 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Parsers\Formats\BSON;
-use Viserio\Component\Parsers\Formats\INI;
-use Viserio\Component\Parsers\Formats\JSON;
-use Viserio\Component\Parsers\Formats\MSGPack;
-use Viserio\Component\Parsers\Formats\PHP;
+use Viserio\Component\Parsers\Formats\Ini;
+use Viserio\Component\Parsers\Formats\Json;
+use Viserio\Component\Parsers\Formats\Php;
 use Viserio\Component\Parsers\Formats\QueryStr;
 use Viserio\Component\Parsers\Formats\Serialize;
-use Viserio\Component\Parsers\Formats\TOML;
-use Viserio\Component\Parsers\Formats\XML;
-use Viserio\Component\Parsers\Formats\YAML;
+use Viserio\Component\Parsers\Formats\Toml;
+use Viserio\Component\Parsers\Formats\Xml;
+use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Parsers\Parser;
 
 class ParserTest extends TestCase
@@ -31,25 +29,25 @@ class ParserTest extends TestCase
 
     public function testGetParser()
     {
-        self::assertInstanceOf(INI::class, $this->parser->getParser('ini'));
-        self::assertInstanceOf(JSON::class, $this->parser->getParser('json'));
-        self::assertInstanceOf(JSON::class, $this->parser->getParser('application/json'));
-        self::assertInstanceOf(JSON::class, $this->parser->getParser('application/x-javascript'));
-        self::assertInstanceOf(JSON::class, $this->parser->getParser('text/javascript'));
-        self::assertInstanceOf(JSON::class, $this->parser->getParser('text/x-javascript'));
-        self::assertInstanceOf(JSON::class, $this->parser->getParser('text/x-json'));
-        self::assertInstanceOf(PHP::class, $this->parser->getParser('php'));
+        self::assertInstanceOf(Ini::class, $this->parser->getParser('ini'));
+        self::assertInstanceOf(Json::class, $this->parser->getParser('json'));
+        self::assertInstanceOf(Json::class, $this->parser->getParser('application/json'));
+        self::assertInstanceOf(Json::class, $this->parser->getParser('application/x-javascript'));
+        self::assertInstanceOf(Json::class, $this->parser->getParser('text/javascript'));
+        self::assertInstanceOf(Json::class, $this->parser->getParser('text/x-javascript'));
+        self::assertInstanceOf(Json::class, $this->parser->getParser('text/x-json'));
+        self::assertInstanceOf(Php::class, $this->parser->getParser('php'));
         self::assertInstanceOf(Serialize::class, $this->parser->getParser('application/vnd.php.serialized'));
         self::assertInstanceOf(QueryStr::class, $this->parser->getParser('application/x-www-form-urlencoded'));
-        self::assertInstanceOf(TOML::class, $this->parser->getParser('toml'));
-        self::assertInstanceOf(XML::class, $this->parser->getParser('xml'));
-        self::assertInstanceOf(XML::class, $this->parser->getParser('application/xml'));
-        self::assertInstanceOf(XML::class, $this->parser->getParser('text/xml'));
-        self::assertInstanceOf(YAML::class, $this->parser->getParser('yaml'));
-        self::assertInstanceOf(YAML::class, $this->parser->getParser('text/yaml'));
-        self::assertInstanceOf(YAML::class, $this->parser->getParser('text/x-yaml'));
-        self::assertInstanceOf(YAML::class, $this->parser->getParser('application/yaml'));
-        self::assertInstanceOf(YAML::class, $this->parser->getParser('application/x-yaml'));
+        self::assertInstanceOf(Toml::class, $this->parser->getParser('toml'));
+        self::assertInstanceOf(Xml::class, $this->parser->getParser('xml'));
+        self::assertInstanceOf(Xml::class, $this->parser->getParser('application/xml'));
+        self::assertInstanceOf(Xml::class, $this->parser->getParser('text/xml'));
+        self::assertInstanceOf(Yaml::class, $this->parser->getParser('yaml'));
+        self::assertInstanceOf(Yaml::class, $this->parser->getParser('text/yaml'));
+        self::assertInstanceOf(Yaml::class, $this->parser->getParser('text/x-yaml'));
+        self::assertInstanceOf(Yaml::class, $this->parser->getParser('application/yaml'));
+        self::assertInstanceOf(Yaml::class, $this->parser->getParser('application/x-yaml'));
     }
 
     public function testGetFormat()
@@ -90,14 +88,6 @@ class ParserTest extends TestCase
         self::assertEquals('application/yaml', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-yaml';
         self::assertEquals('application/x-yaml', $this->parser->getFormat());
-
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/msgpack';
-        self::assertEquals('application/msgpack', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-msgpack';
-        self::assertEquals('application/x-msgpack', $this->parser->getFormat());
-
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/bson';
-        self::assertEquals('application/bson', $this->parser->getFormat());
 
         unset($_SERVER['HTTP_CONTENT_TYPE']);
     }

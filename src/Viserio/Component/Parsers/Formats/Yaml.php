@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats;
 
+use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
@@ -9,7 +10,7 @@ use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 
-class YAML implements FormatContract, DumperContract
+class Yaml implements FormatContract, DumperContract
 {
     /**
      * Create a new Yaml parser.
@@ -45,6 +46,13 @@ class YAML implements FormatContract, DumperContract
      */
     public function dump(array $data): string
     {
-        return SymfonyYaml::dump($data);
+        try {
+            return SymfonyYaml::dump($data);
+        } catch (InvalidArgumentException $exception) {
+            throw new ParseException([
+                'message'   => $exception->getMessage(),
+                'exception' => $exception,
+            ]);
+        }
     }
 }

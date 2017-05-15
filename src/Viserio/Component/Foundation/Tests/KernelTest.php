@@ -2,50 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\EnvironmentDetector;
-use Viserio\Component\Foundation\Events\BootstrappedEvent;
-use Viserio\Component\Foundation\Events\BootstrappingEvent;
 
 class KernelTest extends MockeryTestCase
 {
-    public function testKernelBootAndBootstrap()
-    {
-        $container = new Container();
-
-        $events = $this->mock(EventManagerContract::class);
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(BootstrappedEvent::class));
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(BootstrappingEvent::class));
-
-        $container->instance(EventManagerContract::class, $events);
-
-        $kernel = $this->getKernel($container);
-        $kernel->setKernelConfigurations([
-            'viserio' => [
-                'app' => [
-                    'env' => 'prod',
-                ],
-            ],
-        ]);
-
-        $kernel->bootstrapWith([
-            LoadEnvironmentVariables::class,
-        ]);
-
-        self::assertTrue($kernel->hasBeenBootstrapped());
-    }
-
     public function testIsLocal()
     {
         $container = new Container();

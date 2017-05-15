@@ -7,15 +7,12 @@ use ReflectionObject;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
-use Viserio\Component\Foundation\Events\BootstrappedEvent;
-use Viserio\Component\Foundation\Events\BootstrappingEvent;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
@@ -59,13 +56,6 @@ abstract class AbstractKernel implements
     protected $container;
 
     /**
-     * Indicates if the application has been bootstrapped before.
-     *
-     * @var bool
-     */
-    protected $hasBeenBootstrapped = false;
-
-    /**
      * Project path.
      *
      * @var string
@@ -89,23 +79,15 @@ abstract class AbstractKernel implements
     /**
      * Create a new kernel instance.
      *
-     * Let's start make magic!
+     * Let's start! Making magic!
      */
     public function __construct()
     {
         $this->projectDir = $this->getProjectDir();
 
         $this->initializeContainer();
-
         $this->registerBaseBindings();
-
         $this->registerBaseServiceProviders();
-
-        $container = $this->getContainer();
-
-        foreach ($this->registerServiceProviders($this) as $provider) {
-            $container->register($container->resolve($provider));
-        }
     }
 
     /**
@@ -125,7 +107,6 @@ abstract class AbstractKernel implements
             'app' => [
                 'locale'           => 'en',
                 'fallback_locale'  => 'en',
-                'skip_middlewares' => false,
                 'aliases'          => [],
             ],
         ];
@@ -165,33 +146,6 @@ abstract class AbstractKernel implements
     public function getKernelConfigurations(): array
     {
         return $this->options;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function bootstrapWith(array $bootstrappers): void
-    {
-        $container = $this->getContainer();
-        $events    = $container->get(EventManagerContract::class);
-
-        foreach ($bootstrappers as $bootstrapper) {
-            $events->trigger(new BootstrappingEvent($bootstrapper, $this));
-
-            $container->resolve($bootstrapper)->bootstrap($this);
-
-            $events->trigger(new BootstrappedEvent($bootstrapper, $this));
-        }
-
-        $this->hasBeenBootstrapped = true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasBeenBootstrapped(): bool
-    {
-        return $this->hasBeenBootstrapped;
     }
 
     /**
@@ -439,6 +393,7 @@ abstract class AbstractKernel implements
         $container->singleton(KernelContract::class, function () use ($kernel) {
             return $kernel;
         });
+        $container->singleton(BootstrapManager::class, BootstrapManager::class);
 
         $container->alias(KernelContract::class, self::class);
         $container->alias(KernelContract::class, 'kernel');

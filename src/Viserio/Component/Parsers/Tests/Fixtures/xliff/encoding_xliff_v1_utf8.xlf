@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de-CH" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1" resname="foo">
+                <source>foo</source>
+                <target>bär</target>
+                <note from="daniel" priority="1">bäz</note>
+            </trans-unit>
+            <trans-unit id="2" resname="bar">
+                <source>bar</source>
+                <target order="1">föö</target>
+            </trans-unit>
+            <trans-unit id="18e6a493872558d949b4c16ea1fa6ab6" resname="key.with.cdata">
+                <source>key.with.cdata</source>
+                <target><![CDATA[<source> & <target>]]></target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -40,22 +40,6 @@ interface Kernel
     public function bootstrap(): void;
 
     /**
-     * Run the given array of bootstrap classes.
-     *
-     * @param array $bootstrappers
-     *
-     * @return void
-     */
-    public function bootstrapWith(array $bootstrappers): void;
-
-    /**
-     * Determine if the application has been bootstrapped before.
-     *
-     * @return bool
-     */
-    public function hasBeenBootstrapped(): bool;
-
-    /**
      * Determine if application is in local environment.
      *
      * @return bool

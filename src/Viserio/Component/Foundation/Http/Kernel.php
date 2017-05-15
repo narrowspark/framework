@@ -15,6 +15,7 @@ use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Events\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Events\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
@@ -70,28 +71,24 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      * @var array
      */
     protected $bootstrappers = [
-        ConfigureKernel::class,
         LoadEnvironmentVariables::class,
+        ConfigureKernel::class,
         HandleExceptions::class,
     ];
 
     /**
-     * Create a new http kernel instance.
+     * {@inheritdoc}
      */
-    public function __construct()
+    public function getDefaultOptions(): iterable
     {
-        parent::__construct();
-
-        $dispatcher = $this->getContainer()->get(DispatcherContract::class);
-
-        if ($dispatcher instanceof MiddlewareBasedDispatcher) {
-            $dispatcher->setMiddlewarePriorities($this->middlewarePriority);
-            $dispatcher->withMiddleware($this->routeMiddlewares);
-
-            foreach ($this->middlewareGroups as $key => $middleware) {
-                $dispatcher->setMiddlewareGroup($key, $middleware);
-            }
-        }
+        return array_merge(
+            parent::getDefaultOptions(),
+            [
+                'app' => [
+                    'skip_middlewares' => false,
+                ],
+            ]
+        );
     }
 
     /**
@@ -160,7 +157,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        if (! $this->hasBeenBootstrapped()) {
+        if (! $this->getContainer()->get(BootstrapManager::class)->hasBeenBootstrapped()) {
             return;
         }
 
@@ -176,8 +173,22 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function bootstrap(): void
     {
-        if (! $this->hasBeenBootstrapped()) {
-            $this->bootstrapWith($this->bootstrappers);
+        $container        = $this->getContainer();
+        $bootstrapManager = $container->get(BootstrapManager::class);
+
+        if (! $bootstrapManager->hasBeenBootstrapped()) {
+            $bootstrapManager->bootstrapWith($this->bootstrappers);
+
+            $dispatcher = $container->get(DispatcherContract::class);
+
+            if ($dispatcher instanceof MiddlewareBasedDispatcher) {
+                $dispatcher->setMiddlewarePriorities($this->middlewarePriority);
+                $dispatcher->withMiddleware($this->routeMiddlewares);
+
+                foreach ($this->middlewareGroups as $key => $middleware) {
+                    $dispatcher->setMiddlewareGroup($key, $middleware);
+                }
+            }
         }
     }
 

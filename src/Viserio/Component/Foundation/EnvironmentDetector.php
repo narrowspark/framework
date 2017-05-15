@@ -12,7 +12,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function detect(Closure $callback, array $consoleArgs = null): string
     {
-        if ($consoleArgs) {
+        if ($consoleArgs !== null) {
             return $this->detectConsoleEnvironment($callback, $consoleArgs);
         }
 

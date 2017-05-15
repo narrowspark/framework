@@ -8,7 +8,7 @@ use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Yosymfony\Toml\Exception\ParseException as TomlParseException;
 use Yosymfony\Toml\Toml as YosymfonyToml;
 
-class TOML implements FormatContract
+class Toml implements FormatContract
 {
     /**
      * Create a new Toml parser.

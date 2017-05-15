@@ -18,7 +18,7 @@ final class VarExporter
     /**
      * Converts the supplied value into a valid PHP representation.
      *
-     * @param string|array|null|object $value
+     * @param mixed $value
      *
      * @return string
      */

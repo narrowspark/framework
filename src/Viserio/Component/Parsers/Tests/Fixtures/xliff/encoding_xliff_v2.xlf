@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en-US" trgLang="de-CH">
+    <file id="translation_en_us_to_de_ch">
+        <unit id="key1">
+            <segment>
+                <source>foo</source>
+                <target>bär</target>
+            </segment>
+        </unit>
+        <unit id="key2">
+            <segment>
+                <source>bar</source>
+                <target>föö</target>
+            </segment>
+        </unit>
+    </file>
+</xliff>
