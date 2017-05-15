@@ -37,7 +37,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected $maxAge;
 
     /**
-     * @var string|null
+     * @var string
      */
     protected $path;
 
@@ -72,7 +72,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function getValue()
+    public function getValue(): ?string
     {
         return $this->value;
     }
@@ -99,7 +99,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function getMaxAge()
+    public function getMaxAge(): ?int
     {
         return $this->maxAge;
     }
@@ -126,7 +126,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function getExpiresTime()
+    public function getExpiresTime(): ?int
     {
         return $this->expires;
     }
@@ -162,7 +162,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function getDomain()
+    public function getDomain(): ?string
     {
         return $this->domain;
     }

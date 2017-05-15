@@ -75,8 +75,7 @@ class FileLoader implements LoaderContract
         $this->checkOption($options);
 
         // Determine if the given file exists.
-        $path = $this->exists($file);
-
+        $path   = $this->exists($file);
         $parser = $options === null ? new Parser() : new $this->parsers[key($options)]();
 
         if (($tag = $options['tag'] ?? null) !== null) {
@@ -104,15 +103,11 @@ class FileLoader implements LoaderContract
             return $this->exists[$key];
         }
 
-        $path = $this->getPath($file);
-        $file = self::normalizeDirectorySeparator($path . $file);
+        $file = self::normalizeDirectorySeparator($this->getPath($file) . $file);
 
         if (file_exists($file)) {
             return $this->exists[$key] = $file;
         }
-
-        // False is returned if no path exists for a namespace.
-        $this->exists[$key] = false;
 
         throw new LoadingException(sprintf('File [%s] not found.', $file));
     }

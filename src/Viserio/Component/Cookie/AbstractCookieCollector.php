@@ -96,7 +96,7 @@ abstract class AbstractCookieCollector
     }
 
     /**
-     * spplit string on attributes delimiter to array.
+     * Split string on attributes delimiter to array.
      *
      * @param string $string
      *
