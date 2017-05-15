@@ -202,25 +202,22 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 'name'    => 'Response',
                 'content' => $this->createTable(
                     $response->getHeaders(),
-                    [
-                        'name'    => 'Response Headers',
-                        'headers' => [
-                            'key' => 'Header',
-                        ],
-                    ]
+                    ['name'    => 'Response Headers']
                 ),
             ],
             [
                 'name'    => 'Cookies',
                 'content' => $this->createTable(
-                    $this->splitOnAttributeDelimiter($request->getHeaderLine('Cookie')),
+                    array_map(function ($cookieString) {
+                        return self::fromStringCookie($cookieString);
+                    }, self::splitOnAttributeDelimiter($request->getHeaderLine('Cookie'))),
                     [
                         'name'       => 'Request Cookies',
                         'empty_text' => 'No request cookies',
                     ]
                 ) . $this->createTable(
                     array_map(function ($setCookieString) {
-                        return $this->fromStringCookie($setCookieString);
+                        return self::fromStringCookie($setCookieString);
                     }, $response->getHeader('Set-Cookie')),
                     [
                         'name'       => 'Response Cookies',
@@ -247,7 +244,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             [
                 'name'    => 'Flashes',
                 'content' => $this->createTable(
-                    $session !== null ? $session->get('_flash') : [],
+                    $session !== null && $session->has('_flash') ? $session->get('_flash') : [],
                     [
                         'name'       => 'Flashes',
                         'empty_text' => 'No flash messages were created',
@@ -315,13 +312,13 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * spplit string on attributes delimiter to array.
+     * Split string on attributes delimiter to array.
      *
      * @param string $string
      *
      * @return array
      */
-    protected function splitOnAttributeDelimiter(string $string): array
+    protected static function splitOnAttributeDelimiter(string $string): array
     {
         return array_filter(preg_split('@\s*[;]\s*@', $string));
     }
@@ -333,7 +330,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      *
      * @return array
      */
-    protected function splitCookiePair(string $string): array
+    protected static function splitCookiePair(string $string): array
     {
         $pairParts = explode('=', $string, 2);
 
@@ -355,13 +352,13 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      *
      * @param string $string
      *
-     * @return \Viserio\Component\Contracts\Cookie\Cookie
+     * @return array
      */
-    protected static function fromStringCookie(string $string): CookieContract
+    protected static function fromStringCookie(string $string): array
     {
-        $rawAttributes = $this->splitOnAttributeDelimiter($string);
+        $rawAttributes = self::splitOnAttributeDelimiter($string);
 
-        list($cookieName, $cookieValue) = $this->splitCookiePair(array_shift($rawAttributes));
+        return self::splitCookiePair(array_shift($rawAttributes));
     }
 
     /**
@@ -385,6 +382,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 }
 
                 $preparedAttributes[$key] = $value;
+            } elseif ($value instanceof StoreContract) {
+                $preparedAttributes[$key] = $value->getId();
             } else {
                 $preparedAttributes[$key] = $value;
             }
