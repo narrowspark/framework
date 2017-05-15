@@ -50,7 +50,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     protected $defaultFallback;
 
     /**
-     * Fallbacks for speziall languages.
+     * Fallbacks for special languages.
      *
      * @var array
      */

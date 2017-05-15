@@ -30,14 +30,14 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     protected $catalogue;
 
     /**
-     * All registred filters.
+     * All registered filters.
      *
      * @var array
      */
     protected $filters = [];
 
     /**
-     * All registred helpers.
+     * All registered helpers.
      *
      * @var array
      */
@@ -58,7 +58,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     protected $messages = [];
 
     /**
-     * Creat new Translator instance.
+     * Create new Translator instance.
      *
      * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $catalogue
      * @param \Viserio\Component\Contracts\Translation\MessageSelector  $selector  The message selector for pluralization
@@ -258,7 +258,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     }
 
     /**
-     * Applay filter on string.
+     * Apply filter on string.
      *
      * @param string $translation
      *
@@ -282,8 +282,10 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      *
      * @param string $id
      * @param string $domain
+     *
+     * @return void
      */
-    protected function log(string $id, string $domain)
+    protected function log(string $id, string $domain): void
     {
         $catalogue = $this->catalogue;
 
