@@ -9,13 +9,17 @@ class IntlMessageFormatterTest extends TestCase
 {
     public function setUp()
     {
-        if (!extension_loaded('intl')) {
+        if (! extension_loaded('intl')) {
             self::markTestSkipped('The Intl extension is not available.');
         }
     }
 
     /**
      * @dataProvider provideDataForFormat
+     *
+     * @param mixed $expected
+     * @param mixed $message
+     * @param mixed $arguments
      */
     public function testFormat($expected, $message, $arguments)
     {
@@ -47,28 +51,28 @@ class IntlMessageFormatterTest extends TestCase
      other {{host} invites {guest} as one of the # people invited to their party.}}}}
 _MSG_;
         $formatter = $this->getMessageFormatter();
-        $message = $formatter->format($chooseMessage, 'en', array(
+        $message   = $formatter->format($chooseMessage, 'en', [
             'gender_of_host' => 'male',
-            'num_guests' => 10,
-            'host' => 'Fabien',
-            'guest' => 'Guilherme',
-        ));
+            'num_guests'     => 10,
+            'host'           => 'Fabien',
+            'guest'          => 'Guilherme',
+        ]);
         $this->assertEquals('Fabien invites Guilherme as one of the 9 people invited to his party.', $message);
     }
 
     public function provideDataForFormat()
     {
-        return array(
-            array(
+        return [
+            [
                 'There is one apple',
                 'There is one apple',
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 '4,560 monkeys on 123 trees make 37.073 monkeys per tree',
                 '{0,number,integer} monkeys on {1,number,integer} trees make {2,number} monkeys per tree',
-                array(4560, 123, 4560 / 123),
-            ),
-        );
+                [4560, 123, 4560 / 123],
+            ],
+        ];
     }
 }

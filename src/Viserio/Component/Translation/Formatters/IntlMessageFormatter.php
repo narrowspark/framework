@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Formatters;
 
-use MessageFormatter;
 use IntlException;
-use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
+use MessageFormatter;
 use Viserio\Component\Contracts\Translation\Exceptions\CannotFormatException;
 use Viserio\Component\Contracts\Translation\Exceptions\CannotInstantiateFormatterException;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 
 class IntlMessageFormatter implements MessageFormatterContract
 {
