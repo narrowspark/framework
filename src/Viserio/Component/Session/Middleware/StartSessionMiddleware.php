@@ -75,11 +75,9 @@ class StartSessionMiddleware implements MiddlewareInterface
         // so that the attributes may be persisted to some storage medium. We will also
         // add the session identifier cookie to the application response headers now.
         if ($this->isSessionConfigured()) {
-            $this->storeCurrentUrl($request, $session);
+            $session = $this->storeCurrentUrl($request, $session);
 
             $response = $this->addCookieToResponse($request, $response, $session);
-
-            $session->save();
         }
 
         return $response;
@@ -114,10 +112,11 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     protected function getSession(ServerRequestInterface $request): StoreContract
     {
-        $session = $this->manager->getDriver();
-        $cookies = RequestCookies::fromRequest($request);
+        $session    = $this->manager->getDriver();
+        $cookies    = RequestCookies::fromRequest($request);
+        $hasCookie  = $cookies->has($session->getName());
 
-        $session->setId($cookies->get($session->getName()) ?? '');
+        $session->setId($hasCookie ? $cookies->get($session->getName())->getName() : '');
 
         $session->addFingerprintGenerator(new ClientIpGenerator($request));
         $session->addFingerprintGenerator(new UserAgentGenerator());
@@ -130,8 +129,10 @@ class StartSessionMiddleware implements MiddlewareInterface
      *
      * @param \Psr\Http\Message\ServerRequestInterface   $request
      * @param \Viserio\Component\Contracts\Session\Store $session
+     *
+     * @return \Viserio\Component\Contracts\Session\Store
      */
-    protected function storeCurrentUrl(ServerRequestInterface $request, StoreContract $session)
+    protected function storeCurrentUrl(ServerRequestInterface $request, StoreContract $session): StoreContract
     {
         if ($request->getMethod() === 'GET' &&
             $request->getAttribute('route') &&
@@ -139,6 +140,8 @@ class StartSessionMiddleware implements MiddlewareInterface
         ) {
             $session->setPreviousUrl((string) $request->getUri());
         }
+
+        return $session;
     }
 
     /**
@@ -177,14 +180,15 @@ class StartSessionMiddleware implements MiddlewareInterface
         }
 
         $config = $this->config;
+        $uri    = $request->getUri();
 
         $setCookie = new SetCookie(
             $session->getName(),
             $session->getId(),
             $this->getCookieExpirationDate($config),
             $config['path'] ?? '/',
-            $config['domain'] ?? null,
-            $config['secure'] ?? ($request->getUri()->getScheme() === 'https'),
+            $config['domain'] ?? $uri->getHost(),
+            $config['secure'] ?? ($uri->getScheme() === 'https'),
             $config['http_only'] ?? false,
             $config['same_site'] ?? false
         );

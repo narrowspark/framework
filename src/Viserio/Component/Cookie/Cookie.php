@@ -43,7 +43,7 @@ final class Cookie implements StringableContract
      */
     public function __toString()
     {
-        $name = urlencode($this->name) . '=';
+        $name  = urlencode($this->name) . '=';
 
         return $name . urlencode($this->getValue());
     }
@@ -78,10 +78,10 @@ final class Cookie implements StringableContract
     /**
      * Returns the value.
      *
-     * @return string|null
+     * @return string
      */
-    public function getValue(): ?string
+    public function getValue(): string
     {
-        return $this->value;
+        return (string) $this->value;
     }
 }

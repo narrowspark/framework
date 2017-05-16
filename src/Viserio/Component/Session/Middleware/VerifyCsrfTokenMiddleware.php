@@ -119,14 +119,15 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         ResponseInterface $response
     ): ResponseInterface {
         $config = $this->config;
+        $uri    = $request->getUri();
 
         $setCookie = new SetCookie(
             'XSRF-TOKEN',
             $request->getAttribute('session')->getToken(),
             $config['csrf.livetime'] ?? Chronos::now()->getTimestamp() + 60 * 120,
             $config['path'],
-            $config['domain'],
-            $config['secure'] ?? false,
+            $config['domain'] ?? $uri->getHost(),
+            $config['secure'] ?? ($uri->getScheme() === 'https'),
             false,
             $config['csrf.samesite'] ?? false
         );

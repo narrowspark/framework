@@ -235,7 +235,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
         return new Store(
-            $this->options['cookie'] ?? '',
+            $this->options['cookie'] ?? '_ns_attributes',
             $handler,
             $this->getEncrypter()
         );
