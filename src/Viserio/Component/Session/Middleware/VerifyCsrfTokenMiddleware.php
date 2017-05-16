@@ -114,8 +114,8 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         ResponseInterface $response
     ): ResponseInterface {
-        $config  = $this->config;
-        $uri     = $request->getUri();
+        $config = $this->config;
+        $uri    = $request->getUri();
 
         $setCookie = new SetCookie(
             'XSRF-TOKEN',
