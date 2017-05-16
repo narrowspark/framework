@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Translation\MessageSelector as MessageSelectorContract;
 use Viserio\Component\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
 use Viserio\Component\Translation\Traits\IntervalTrait;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 
-class MessageSelector implements MessageSelectorContract
+class ExpressionsMessageFormatter implements MessageFormatterContract
 {
     use IntervalTrait;
 
@@ -39,7 +39,7 @@ class MessageSelector implements MessageSelectorContract
     /**
      * {@inheritdoc}
      */
-    public function choose(string $message, $number, string $locale): string
+    public function format(string $message, string $locale, array $parameters = []): string
     {
         $parts = explode('|', $message);
 
