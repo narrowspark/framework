@@ -78,8 +78,6 @@ class StartSessionMiddleware implements MiddlewareInterface
             $session = $this->storeCurrentUrl($request, $session);
 
             $response = $this->addCookieToResponse($request, $response, $session);
-
-            // $session->save();
         }
 
         return $response;
