@@ -7,6 +7,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use ReflectionMethod;
+use Viserio\Component\Cookie\ResponseCookies;
+use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
@@ -246,6 +248,40 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     {
         return [
             'css' => __DIR__ . '/Resources/css/request-response.css',
+        ];
+    }
+
+    protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): ?array
+    {
+        if (! (class_exists(RequestCookies::class) && class_exists(ResponseCookies::class))) {
+            return null;
+        }
+
+        $requestCookies = $responseCookies = [];
+
+        foreach (RequestCookies::fromRequest($serverRequest)->getAll() as $cookie) {
+            $requestCookies[$cookie->getName()] = $cookie->getValue();
+        }
+
+        foreach (ResponseCookies::fromResponse($response)->getAll() as $cookie) {
+            $responseCookies[$cookie->getName()] = $cookie->getValue();
+        }
+
+        return [
+            'name'    => 'Cookies',
+            'content' => $this->createTable(
+                $requestCookies,
+                [
+                    'name'       => 'Request Cookies',
+                    'empty_text' => 'No request cookies',
+                ]
+            ) . $this->createTable(
+                $responseCookies,
+                [
+                    'name'       => 'Response Cookies',
+                    'empty_text' => 'No response cookies',
+                ]
+            ),
         ];
     }
 
