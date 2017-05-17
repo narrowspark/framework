@@ -9,6 +9,7 @@ use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogue
 use Viserio\Component\Contracts\Translation\MessageSelector as MessageSelectorContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 
 class Translator implements TranslatorContract, LoggerAwareInterface
 {
@@ -16,11 +17,11 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     use ValidateLocaleTrait;
 
     /**
-     * The message selector.
+     * Formatter instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageSelector
+     * @var \Viserio\Component\Contracts\Translation\MessageFormatter
      */
-    protected $selector;
+    protected $formatter;
 
     /**
      * The message catalogue.
@@ -61,16 +62,16 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      * Create new Translator instance.
      *
      * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $catalogue
-     * @param \Viserio\Component\Contracts\Translation\MessageSelector  $selector  The message selector for pluralization
+     * @param \Viserio\Component\Contracts\Translation\MessageFormatter $formatter
      *
      * @throws \InvalidArgumentException If a locale contains invalid characters
      */
-    public function __construct(MessageCatalogueContract $catalogue, MessageSelectorContract $selector)
+    public function __construct(MessageCatalogueContract $catalogue, MessageSelectorContract $formatter)
     {
         $this->setLocale($catalogue->getLocale());
 
         $this->catalogue = $catalogue;
-        $this->selector  = $selector;
+        $this->formatter = $formatter;
     }
 
     /**

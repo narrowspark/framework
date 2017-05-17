@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
-use Viserio\Component\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
 use Viserio\Component\Translation\PluralCategorys\Arabic;
 use Viserio\Component\Translation\PluralCategorys\Balkan;
 use Viserio\Component\Translation\PluralCategorys\Breton;
@@ -29,7 +28,7 @@ use Viserio\Component\Translation\PluralCategorys\Two;
 use Viserio\Component\Translation\PluralCategorys\Welsh;
 use Viserio\Component\Translation\PluralCategorys\Zero;
 
-class PluralizationRules implements PluralizationRulesContract
+class PluralizationRules
 {
     /**
      * Rules.

@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Translation\MessageSelector;
+use Viserio\Component\Translation\Formatters\ExpressionsMessageFormatter;
 use Viserio\Component\Translation\PluralizationRules;
 
-class MessageSelectorTest extends TestCase
+class ExpressionsMessageFormatterTest extends TestCase
 {
     /**
      * @dataProvider getChooseTests
@@ -17,7 +17,7 @@ class MessageSelectorTest extends TestCase
      */
     public function testChoose($expected, $id, $number)
     {
-        $selector = new MessageSelector();
+        $selector = new ExpressionsMessageFormatter();
         $selector->setPluralization(new PluralizationRules());
 
         self::assertEquals($expected, $selector->choose($id, $number, 'en'));
@@ -26,7 +26,7 @@ class MessageSelectorTest extends TestCase
 
     public function testReturnMessageIfExactlyOneStandardRuleIsGiven()
     {
-        $selector = new MessageSelector();
+        $selector = new ExpressionsMessageFormatter();
         $selector->setPluralization(new PluralizationRules());
 
         self::assertEquals('There are two apples', $selector->choose('There are two apples', 2, 'en'));
@@ -41,7 +41,7 @@ class MessageSelectorTest extends TestCase
      */
     public function testThrowExceptionIfMatchingMessageCannotBeFound($id, $number)
     {
-        $selector = new MessageSelector();
+        $selector = new ExpressionsMessageFormatter();
         $selector->setPluralization(new PluralizationRules());
         $selector->choose($id, $number, 'en');
     }
