@@ -125,10 +125,14 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      */
     public function import(string $file): self
     {
-        $loader = $this->getLoader();
-        $loader->setDirectories($this->directories);
+        if ($this->loader !== null && pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
 
-        $langFile = $loader->load($file);
+        } else {
+            $loader = $this->getLoader();
+            $loader->setDirectories($this->directories);
+
+            $langFile = $loader->load($file);
+        }
 
         if (! isset($langFile['lang'])) {
             throw new RuntimeException(sprintf('File [%s] cant be imported. Key for language is missing.', $file));

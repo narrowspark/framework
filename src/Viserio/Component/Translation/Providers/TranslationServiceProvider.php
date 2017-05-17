@@ -68,10 +68,7 @@ class TranslationServiceProvider implements
     {
         self::resolveOptions($container);
 
-        $manager = new TranslationManager(
-            new PluralizationRules(),
-            new MessageSelector()
-        );
+        $manager = new TranslationManager(new PluralizationRules());
 
         $manager->setLoader($container->get(LoaderContract::class));
 
