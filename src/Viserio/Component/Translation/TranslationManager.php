@@ -126,7 +126,6 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     public function import(string $file): self
     {
         if ($this->loader !== null && pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
-
         } else {
             $loader = $this->getLoader();
             $loader->setDirectories($this->directories);

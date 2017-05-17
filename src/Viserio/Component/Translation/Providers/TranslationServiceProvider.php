@@ -11,7 +11,6 @@ use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\TranslationManager;
 
