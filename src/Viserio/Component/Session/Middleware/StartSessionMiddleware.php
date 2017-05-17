@@ -135,8 +135,8 @@ class StartSessionMiddleware implements MiddlewareInterface
     protected function storeCurrentUrl(ServerRequestInterface $request, StoreContract $session): StoreContract
     {
         if ($request->getMethod() === 'GET' &&
-            $request->getAttribute('route') &&
-            ! $request->getHeaderLine('HTTP_X_REQUESTED_WITH') == 'xmlhttprequest'
+            $request->getAttribute('_route') &&
+            $request->getHeaderLine('X-Requested-With') !== 'XMLHttpRequest'
         ) {
             $session->setPreviousUrl((string) $request->getUri());
         }
@@ -189,7 +189,7 @@ class StartSessionMiddleware implements MiddlewareInterface
             $config['path'] ?? '/',
             $config['domain'] ?? $uri->getHost(),
             $config['secure'] ?? ($uri->getScheme() === 'https'),
-            $config['http_only'] ?? false,
+            $config['http_only'] ?? true,
             $config['same_site'] ?? false
         );
 

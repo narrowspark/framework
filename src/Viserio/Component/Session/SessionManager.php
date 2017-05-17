@@ -42,7 +42,9 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     public function getDefaultOptions(): iterable
     {
         return [
-            'default' => 'array',
+            'default'  => 'array',
+            'cookie'   => 'narrowsparksession',
+            'lifetime' => 120
         ];
     }
 
@@ -112,10 +114,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      */
     protected function createMongodbDriver(): StoreContract
     {
-        return $this->createCacheBased(
-            'mongodb',
-            $this->options['mongodb']
-        );
+        return $this->createCacheBased('mongodb');
     }
 
     /**
@@ -127,10 +126,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      */
     protected function createPredisDriver(): StoreContract
     {
-        return $this->createCacheBased(
-            'predis',
-            $this->options['predis']
-        );
+        return $this->createCacheBased('predis');
     }
 
     /**
@@ -142,10 +138,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      */
     protected function createRedisDriver(): StoreContract
     {
-        return $this->createCacheBased(
-            'redis',
-            $this->options['redis']
-        );
+        return $this->createCacheBased('redis');
     }
 
     /**
@@ -157,10 +150,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      */
     protected function createFilesystemDriver(): StoreContract
     {
-        return $this->createCacheBased(
-            'filesystem',
-            $this->options['flysystem']
-        );
+        return $this->createCacheBased('filesystem');
     }
 
     /**
@@ -211,15 +201,14 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      * Create the cache based session handler instance.
      *
      * @param string $driver
-     * @param array  $options
      *
      * @return \Viserio\Component\Contracts\Session\Store
      */
-    protected function createCacheBased($driver, array $options = []): StoreContract
+    protected function createCacheBased($driver): StoreContract
     {
         return $this->buildSession(
             new CacheBasedSessionHandler(
-                clone $this->container->get(CacheManagerContract::class)->getDriver($driver, $options),
+                clone $this->container->get(CacheManagerContract::class)->getDriver($driver),
                 $this->options['lifetime']
             )
         );
@@ -235,7 +224,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
         return new Store(
-            $this->options['cookie'] ?? '_ns_attributes',
+            $this->options['cookie'],
             $handler,
             $this->getEncrypter()
         );

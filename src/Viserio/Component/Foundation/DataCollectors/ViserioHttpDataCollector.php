@@ -7,6 +7,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use ReflectionMethod;
+use Viserio\Component\Cookie\ResponseCookies;
+use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
@@ -205,26 +207,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                     ['name'    => 'Response Headers']
                 ),
             ],
-            [
-                'name'    => 'Cookies',
-                'content' => $this->createTable(
-                    array_map(function ($cookieString) {
-                        return self::fromStringCookie($cookieString);
-                    }, self::splitOnAttributeDelimiter($request->getHeaderLine('Cookie'))),
-                    [
-                        'name'       => 'Request Cookies',
-                        'empty_text' => 'No request cookies',
-                    ]
-                ) . $this->createTable(
-                    array_map(function ($setCookieString) {
-                        return self::fromStringCookie($setCookieString);
-                    }, $response->getHeader('Set-Cookie')),
-                    [
-                        'name'       => 'Response Cookies',
-                        'empty_text' => 'No response cookies',
-                    ]
-                ),
-            ],
+            $this->createCookieTab($request, $response),
             [
                 'name'    => 'Session',
                 'content' => $this->createTable(
@@ -263,6 +246,40 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     {
         return [
             'css' => __DIR__ . '/Resources/css/request-response.css',
+        ];
+    }
+
+    protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): ?array
+    {
+        if (! (class_exists(RequestCookies::class) && class_exists(ResponseCookies::class))) {
+            return null;
+        }
+
+        $requestCookies = $responseCookies = [];
+
+        foreach (RequestCookies::fromRequest($serverRequest)->getAll() as $cookie) {
+            $requestCookies[$cookie->getName()] = $cookie->getValue();
+        }
+
+        foreach (ResponseCookies::fromResponse($response)->getAll() as $cookie) {
+            $responseCookies[$cookie->getName()] = $cookie->getValue();
+        }
+
+        return [
+            'name'    => 'Cookies',
+            'content' => $this->createTable(
+                $requestCookies,
+                [
+                    'name'       => 'Request Cookies',
+                    'empty_text' => 'No request cookies',
+                ]
+            ) . $this->createTable(
+                $responseCookies,
+                [
+                    'name'       => 'Response Cookies',
+                    'empty_text' => 'No response cookies',
+                ]
+            ),
         ];
     }
 
@@ -309,56 +326,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $result['without_middlewares'] = implode(', ', $route->gatherDisabledMiddlewares());
 
         return $result;
-    }
-
-    /**
-     * Split string on attributes delimiter to array.
-     *
-     * @param string $string
-     *
-     * @return array
-     */
-    protected static function splitOnAttributeDelimiter(string $string): array
-    {
-        return array_filter(preg_split('@\s*[;]\s*@', $string));
-    }
-
-    /**
-     * Split a string to array.
-     *
-     * @param string $string
-     *
-     * @return array
-     */
-    protected static function splitCookiePair(string $string): array
-    {
-        $pairParts = explode('=', $string, 2);
-
-        if (count($pairParts) === 1) {
-            $pairParts[1] = '';
-        }
-
-        return array_map(function ($part) {
-            if ($part === null) {
-                return '';
-            }
-
-            return urldecode($part);
-        }, $pairParts);
-    }
-
-    /**
-     * Creates a Cookie instance from a Set-Cookie header value.
-     *
-     * @param string $string
-     *
-     * @return array
-     */
-    protected static function fromStringCookie(string $string): array
-    {
-        $rawAttributes = self::splitOnAttributeDelimiter($string);
-
-        return self::splitCookiePair(array_shift($rawAttributes));
     }
 
     /**
