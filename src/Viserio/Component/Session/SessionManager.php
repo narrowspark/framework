@@ -44,7 +44,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
         return [
             'default'  => 'array',
             'cookie'   => 'narrowsparksession',
-            'lifetime' => 120
+            'lifetime' => 120,
         ];
     }
 
