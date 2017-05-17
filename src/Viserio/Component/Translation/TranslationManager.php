@@ -7,11 +7,11 @@ use RuntimeException;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
-use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 
 class TranslationManager implements TranslationManagerContract, LoggerAwareInterface
 {
@@ -65,7 +65,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Create a new Translation instance.
      *
-     * @param \Viserio\Component\Contracts\Translation\MessageFormatter   $formatter
+     * @param \Viserio\Component\Contracts\Translation\MessageFormatter $formatter
      */
     public function __construct(MessageFormatterContract $formatter)
     {

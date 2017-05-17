@@ -37,9 +37,6 @@ class PluralizationRules
      */
     protected $rules = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(int $count, string $language): int
     {
         if (mb_strlen($language) > 3) {
@@ -59,9 +56,6 @@ class PluralizationRules
         return $this->createRules($language)->category($count);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set(string $language, callable $rule): PluralizationRulesContract
     {
         if (mb_strlen($language) > 3) {
