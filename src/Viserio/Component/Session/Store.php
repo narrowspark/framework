@@ -55,7 +55,7 @@ class Store implements StoreContract
     protected $encrypter;
 
     /**
-     * Number of requests after which id is regeneratd.
+     * Number of requests after which id is regenerated.
      *
      * @var int|null
      */
