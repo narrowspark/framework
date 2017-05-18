@@ -166,9 +166,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         if ($session !== null) {
             $sessionMeta = [
-                'firstTrace'        => $session->getFirstTrace(),
-                'lastTrace'         => $session->getLastTrace(),
-                'regenerationTrace' => $session->getRegenerationTrace(),
+                'Created'           => date(DATE_RFC2822, $session->getFirstTrace()),
+                'Last used'         => date(DATE_RFC2822, $session->getLastTrace()),
+                'Last regeneration' => date(DATE_RFC2822, $session->getRegenerationTrace()),
                 'requestsCount'     => $session->getRequestsCount(),
                 'fingerprint'       => $session->getFingerprint(),
             ];
@@ -249,10 +249,18 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         ];
     }
 
-    protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): ?array
+    /**
+     * Prepare request and response cookie infos and create a cookie tab.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return array
+     */
+    protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): array
     {
         if (! (class_exists(RequestCookies::class) && class_exists(ResponseCookies::class))) {
-            return null;
+            return [];
         }
 
         $requestCookies = $responseCookies = [];
