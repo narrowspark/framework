@@ -239,7 +239,7 @@ class Store implements StoreContract
      */
     public function save(): void
     {
-        if (!$this->started) {
+        if (! $this->started) {
             return;
         }
 
