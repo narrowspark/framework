@@ -14,7 +14,7 @@ interface Store extends JsonSerializable
     /**
      * Starts the session storage.
      * It should be called only once at the beginning. If called for existing
-     * session it ovewrites it (clears all values etc).
+     * session it overwrites it (clears all values etc).
      *
      * @return bool true if session started
      */
@@ -41,9 +41,9 @@ interface Store extends JsonSerializable
     /**
      * Returns the session ID.
      *
-     * @return string the session ID
+     * @return string|null the session ID
      */
-    public function getId(): string;
+    public function getId(): ?string;
 
     /**
      * Sets the session name.
