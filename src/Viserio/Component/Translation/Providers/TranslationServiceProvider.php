@@ -63,13 +63,22 @@ class TranslationServiceProvider implements
         ];
     }
 
-    public static function createTranslationManager(ContainerInterface $container): TranslationManager
+    /**
+     * Create a new TranslationManager instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Translation\TranslationManager
+     */
+    public static function createTranslationManager(ContainerInterface $container): TranslationManagerContract
     {
         self::resolveOptions($container);
 
         $manager = new TranslationManager(new PluralizationRules());
 
-        $manager->setLoader($container->get(LoaderContract::class));
+        if ($container->has(LoaderContract::class)) {
+            $manager->setLoader($container->get(LoaderContract::class));
+        }
 
         if ($locale = self::$options['locale']) {
             $manager->setLocale($locale);
@@ -92,6 +101,13 @@ class TranslationServiceProvider implements
         return $manager;
     }
 
+    /**
+     * Create a new Translation instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Translation\TranslationManager
+     */
     public static function createTranslator(ContainerInterface $container): TranslatorContract
     {
         return $container->get(TranslationManager::class)->getTranslator();

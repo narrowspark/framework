@@ -5,7 +5,8 @@ namespace Viserio\Component\Translation\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Translation\MessageCatalogue;
-use Viserio\Component\Translation\MessageSelector;
+use Viserio\Component\Translation\Formatters\MessageFormatter;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Translator;
 
@@ -29,19 +30,19 @@ class TranslatorTest extends MockeryTestCase
             ],
         ]));
 
-        $selector = new MessageSelector();
-        $selector->setPluralization(new PluralizationRules());
+        $formatter = new MessageFormatter();
+        $formatter->setPluralization(new PluralizationRules());
 
         $this->translator = new Translator(
             $catalogue,
-            $selector
+            $formatter
         );
     }
 
-    public function testGetSelectorAndCatalogue()
+    public function testGetFormatterAndCatalogue()
     {
         self::assertInstanceOf(MessageCatalogue::class, $this->translator->getCatalogue());
-        self::assertInstanceOf(MessageSelector::class, $this->translator->getSelector());
+        self::assertInstanceOf(MessageFormatterContract::class, $this->translator->getFormatter());
     }
 
     public function testTrans()

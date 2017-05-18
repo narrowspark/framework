@@ -29,9 +29,9 @@ interface Translator
     /**
      * Get the message selector instance.
      *
-     * @return \Viserio\Component\Contracts\Translation\MessageSelector
+     * @return \Viserio\Component\Contracts\Translation\MessageFormatter
      */
-    public function getSelector(): MessageSelector;
+    public function getFormatter(): MessageFormatter;
 
     /**
      * Get the message catalogue.

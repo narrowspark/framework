@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Translation;
+namespace Viserio\Component\Translation\Formatters;
 
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
 use Viserio\Component\Translation\Traits\IntervalTrait;
 
-class ExpressionsMessageFormatter implements MessageFormatterContract
+class MessageFormatter implements MessageFormatterContract
 {
     use IntervalTrait;
 
@@ -55,7 +55,7 @@ class ExpressionsMessageFormatter implements MessageFormatterContract
             }
         }
 
-        $position = $this->pluralization->get((int) $number, $locale);
+        $position = $this->getPluralization()->get((int) $number, $locale);
 
         if (! isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard

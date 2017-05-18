@@ -6,7 +6,7 @@ use Countable;
 use Psr\Log\LoggerAwareInterface;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contracts\Translation\MessageSelector as MessageSelectorContract;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 
@@ -65,7 +65,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      *
      * @throws \InvalidArgumentException If a locale contains invalid characters
      */
-    public function __construct(MessageCatalogueContract $catalogue, MessageSelectorContract $formatter)
+    public function __construct(MessageCatalogueContract $catalogue, MessageFormatterContract $formatter)
     {
         $this->setLocale($catalogue->getLocale());
 
@@ -95,9 +95,9 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelector(): MessageSelectorContract
+    public function getFormatter(): MessageFormatterContract
     {
-        return $this->selector;
+        return $this->formatter;
     }
 
     /**
@@ -148,7 +148,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         }
 
         $trans = strtr(
-            $this->selector->choose(
+            $this->formatter->format(
                 $this->catalogue->get($id, $domain),
                 $number,
                 $this->locale
