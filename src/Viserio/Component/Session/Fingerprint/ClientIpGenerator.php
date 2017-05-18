@@ -22,13 +22,11 @@ class ClientIpGenerator implements FingerprintContract
      */
     public function __construct(ServerRequestInterface $serverRequest)
     {
-        $ip = (new ClientIp($serverRequest))->getIpAddress();
-
-        $this->clientIp = random_bytes(32) . $ip;
+        $this->clientIp = (new ClientIp($serverRequest))->getIpAddress();
     }
 
     /**
-     * {@inhertiddoc}.
+     * {@inheritdoc}.
      */
     public function generate(): string
     {

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Fingerprint;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
 
 class UserAgentGenerator implements FingerprintContract
@@ -16,19 +17,22 @@ class UserAgentGenerator implements FingerprintContract
     /**
      * Create a new UserAgentGenerator instance.
      *
-     * @param string|null $userAgent
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      */
-    public function __construct(string $userAgent = null)
+    public function __construct(ServerRequestInterface $serverRequest)
     {
-        if ($userAgent !== null) {
-            $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $userAgent    = '';
+        $serverParams = $serverRequest->getServerParams();
+
+        if (isset($serverParams['REMOTE_ADDR'])) {
+            $userAgent = $serverParams['REMOTE_ADDR'];
         }
 
-        $this->userAgent = random_bytes(32) . $userAgent;
+        $this->userAgent = $userAgent;
     }
 
     /**
-     * {@inhertiddoc}.
+     * {@inheritdoc}.
      */
     public function generate(): string
     {

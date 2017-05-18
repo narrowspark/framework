@@ -39,6 +39,16 @@ class StartSessionMiddleware implements MiddlewareInterface
     protected $config = [];
 
     /**
+     * List of fingerprint generators.
+     *
+     * @var array
+     */
+    private $fingerprintGenerators = [
+        ClientIpGenerator::class,
+        UserAgentGenerator::class
+    ];
+
+    /**
      * Create a new session middleware.
      *
      * @param \Viserio\Component\Session\SessionManager $manager
@@ -98,8 +108,9 @@ class StartSessionMiddleware implements MiddlewareInterface
 
         $session->setId($hasCookie ? $cookies->get($session->getName())->getValue() : '');
 
-        $session->addFingerprintGenerator(new ClientIpGenerator($request));
-        $session->addFingerprintGenerator(new UserAgentGenerator());
+        foreach ($this->fingerprintGenerators as $fingerprintGenerator) {
+            $session->addFingerprintGenerator(new $fingerprintGenerator($request));
+        }
 
         if ($session->handlerNeedsRequest()) {
             $session->setRequestOnHandler($request);
