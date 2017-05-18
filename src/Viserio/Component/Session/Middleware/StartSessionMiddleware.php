@@ -45,7 +45,7 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     private $fingerprintGenerators = [
         ClientIpGenerator::class,
-        UserAgentGenerator::class
+        UserAgentGenerator::class,
     ];
 
     /**

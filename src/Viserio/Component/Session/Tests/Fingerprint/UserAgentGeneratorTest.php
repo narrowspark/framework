@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 
 class UserAgentGeneratorTest extends MockeryTestCase
 {
