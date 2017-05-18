@@ -39,31 +39,28 @@ class ClientIp
     /**
      * Returns client IP address.
      *
-     * @return string|null
+     * @return string
      */
-    public function getIpAddress(): ?string
+    public function getIpAddress(): string
     {
-        $ipAddress    = null;
-        $request      = $this->serverRequest;
-        $serverParams = $request->getServerParams();
+        $serverParams = $this->serverRequest->getServerParams();
 
         // direct IP address
         if (isset($serverParams['REMOTE_ADDR']) && $this->isValidIpAddress($serverParams['REMOTE_ADDR'])) {
-            $ipAddress = $serverParams['REMOTE_ADDR'];
+            return $serverParams['REMOTE_ADDR'];
         }
 
         foreach ($this->headersToInspect as $header) {
-            if ($request->hasHeader($header)) {
+            if ($this->serverRequest->hasHeader($header)) {
                 $ip = $this->getFirstIpAddressFromHeader($request, $header);
 
                 if ($this->isValidIpAddress($ip)) {
-                    $ipAddress = $ip;
-                    break;
+                    return $ip;
                 }
             }
         }
 
-        return $ipAddress;
+        return '';
     }
 
     /**
@@ -92,14 +89,14 @@ class ClientIp
      */
     private function getFirstIpAddressFromHeader(ServerRequestInterface $serverRequest, string $header): string
     {
-        $items       = explode(',', $serverRequest->getHeaderLine($header));
+        $items       = explode(',', $request->getHeaderLine($header));
         $headerValue = trim(reset($items));
 
         if (ucfirst($header) == 'Forwarded') {
             foreach (explode(';', $headerValue) as $headerPart) {
-                if (mb_strtolower(mb_substr($headerPart, 0, 4)) == 'for=') {
+                if (strtolower(substr($headerPart, 0, 4)) == 'for=') {
                     $for         = explode(']', $headerPart);
-                    $headerValue = trim(mb_substr(reset($for), 4), " \t\n\r\0\x0B" . '"[]');
+                    $headerValue = trim(substr(reset($for), 4), " \t\n\r\0\x0B" . "\"[]");
                     break;
                 }
             }
