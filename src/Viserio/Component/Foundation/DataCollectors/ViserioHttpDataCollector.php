@@ -249,10 +249,18 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         ];
     }
 
-    protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): ?array
+    /**
+     * Prepare request and response cookie infos and create a cookie tab.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return array
+     */
+    protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): array
     {
         if (! (class_exists(RequestCookies::class) && class_exists(ResponseCookies::class))) {
-            return null;
+            return [];
         }
 
         $requestCookies = $responseCookies = [];
