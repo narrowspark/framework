@@ -94,9 +94,9 @@ class ClientIp
 
         if (ucfirst($header) == 'Forwarded') {
             foreach (explode(';', $headerValue) as $headerPart) {
-                if (strtolower(substr($headerPart, 0, 4)) == 'for=') {
+                if (mb_strtolower(mb_substr($headerPart, 0, 4)) == 'for=') {
                     $for         = explode(']', $headerPart);
-                    $headerValue = trim(substr(reset($for), 4), " \t\n\r\0\x0B" . "\"[]");
+                    $headerValue = trim(mb_substr(reset($for), 4), " \t\n\r\0\x0B" . '"[]');
                     break;
                 }
             }
