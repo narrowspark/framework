@@ -21,7 +21,7 @@ class Store implements StoreContract
     /**
      * The session ID.
      *
-     * @var string
+     * @var string|null
      */
     protected $id;
 
@@ -161,7 +161,7 @@ class Store implements StoreContract
     public function open(): bool
     {
         if (! $this->started) {
-            if ($this->id) {
+            if ($this->id !== null) {
                 $this->loadSession();
 
                 $this->started = true;
@@ -187,7 +187,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -239,18 +239,20 @@ class Store implements StoreContract
      */
     public function save(): void
     {
-        if ($this->started) {
-            if ($this->shouldRegenerateId()) {
-                $this->migrate(true);
-            }
-
-            $this->updateLastTrace();
-            $this->ageFlashData();
-            $this->writeToHandler();
-
-            $this->values  = [];
-            $this->started = false;
+        if (!$this->started) {
+            return;
         }
+
+        if ($this->shouldRegenerateId()) {
+            $this->migrate(true);
+        }
+
+        $this->updateLastTrace();
+        $this->ageFlashData();
+        $this->writeToHandler();
+
+        $this->values  = [];
+        $this->started = false;
     }
 
     /**

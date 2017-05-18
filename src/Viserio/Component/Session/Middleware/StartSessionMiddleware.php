@@ -92,34 +92,24 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     protected function startSession(ServerRequestInterface $request): StoreContract
     {
-        $session = $this->getSession($request);
+        $session    = $this->manager->getDriver();
+        $cookies    = RequestCookies::fromRequest($request);
+        $hasCookie  = $cookies->has($session->getName());
+
+        $session->setId($hasCookie ? $cookies->get($session->getName())->getValue() : '');
+
+        $session->addFingerprintGenerator(new ClientIpGenerator($request));
+        $session->addFingerprintGenerator(new UserAgentGenerator());
 
         if ($session->handlerNeedsRequest()) {
             $session->setRequestOnHandler($request);
         }
 
-        $session->start();
-
-        return $session;
-    }
-
-    /**
-     * Get the session implementation from the manager.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Viserio\Component\Contracts\Session\Store
-     */
-    protected function getSession(ServerRequestInterface $request): StoreContract
-    {
-        $session    = $this->manager->getDriver();
-        $cookies    = RequestCookies::fromRequest($request);
-        $hasCookie  = $cookies->has($session->getName());
-
-        $session->setId($hasCookie ? $cookies->get($session->getName())->getName() : '');
-
-        $session->addFingerprintGenerator(new ClientIpGenerator($request));
-        $session->addFingerprintGenerator(new UserAgentGenerator());
+        if ($hasCookie) {
+            $session->open();
+        } else {
+            $session->start();
+        }
 
         return $session;
     }
@@ -175,8 +165,6 @@ class StartSessionMiddleware implements MiddlewareInterface
     {
         if ($session->getHandler() instanceof CookieSessionHandler) {
             $session->save();
-
-            return $response;
         }
 
         $config = $this->config;
