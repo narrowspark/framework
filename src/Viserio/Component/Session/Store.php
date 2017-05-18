@@ -9,11 +9,11 @@ use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
+use Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException;
 use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Support\Str;
-use Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException;
 
 class Store implements StoreContract
 {
@@ -169,10 +169,9 @@ class Store implements StoreContract
                     return false;
                 } elseif ($this->generateFingerprint() !== $this->getFingerprint()) {
                     throw new SuspiciousOperationException();
-                } else {
-                    $this->started = true;
-                    $this->requestsCount += 1;
                 }
+                $this->started = true;
+                $this->requestsCount += 1;
             }
         }
 
@@ -218,7 +217,7 @@ class Store implements StoreContract
             return true;
         }
 
-        return ($lastTrace + $this->getTtl() < time());
+        return $lastTrace + $this->getTtl() < time();
     }
 
     /**
