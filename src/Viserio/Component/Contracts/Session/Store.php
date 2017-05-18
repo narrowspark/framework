@@ -25,6 +25,8 @@ interface Store extends JsonSerializable
      *
      * If called earlier, then second (and next ones) call does nothing.
      *
+     * @throws \Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException if fingerprints dont match
+     *
      * @return bool true if session started
      */
     public function open(): bool;
@@ -60,6 +62,20 @@ interface Store extends JsonSerializable
      * @return string the session name
      */
     public function getName(): string;
+
+    /**
+     * Time after session is regenerated.
+     *
+     * @return int
+     */
+    public function getTtl(): int;
+
+    /**
+     * Is session expired?
+     *
+     * @return bool
+     */
+    public function isExpired(): bool;
 
     /**
      * Invalidates the current session.
@@ -190,23 +206,23 @@ interface Store extends JsonSerializable
     /**
      * Gets last trace timestamp.
      *
-     * @return int
+     * @return int|null
      */
-    public function getLastTrace(): int;
+    public function getLastTrace(): ?int;
 
     /**
      * Gets first trace timestamp.
      *
-     * @return int
+     * @return int|null
      */
-    public function getFirstTrace(): int;
+    public function getFirstTrace(): ?int;
 
     /**
      * Gets last (id) regeneration timestamp.
      *
-     * @return int
+     * @return int|null
      */
-    public function getRegenerationTrace(): int;
+    public function getRegenerationTrace(): ?int;
 
     /**
      * Age the flash data for the session.

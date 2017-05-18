@@ -11,6 +11,7 @@ use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Component\Session\Store;
+use Psr\Http\Message\ServerRequestInterface;
 
 class StoreTest extends MockeryTestCase
 {
@@ -45,7 +46,7 @@ class StoreTest extends MockeryTestCase
                         'lastTrace'         => 0,
                         'regenerationTrace' => 1,
                         'requestsCount'     => 0,
-                        'fingerprint'       => 0,
+                        'fingerprint'       => '',
                     ],
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
@@ -66,7 +67,7 @@ class StoreTest extends MockeryTestCase
                         'lastTrace'         => 0,
                         'regenerationTrace' => 0,
                         'requestsCount'     => 0,
-                        'fingerprint'       => 0,
+                        'fingerprint'       => '',
                     ],
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
@@ -217,10 +218,14 @@ class StoreTest extends MockeryTestCase
     public function testStartMethodGeneratesFingerprint()
     {
         $session = $this->session;
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getServerParams')
+            ->once()
+            ->andReturn(['REMOTE_ADDR' => 'test']);
 
         $oldFingerprint = $session->getFingerprint();
 
-        $session->addFingerprintGenerator(new UserAgentGenerator('test'));
+        $session->addFingerprintGenerator(new UserAgentGenerator($request));
 
         $session->start();
 
@@ -264,38 +269,38 @@ class StoreTest extends MockeryTestCase
     {
         $session = $this->session;
         $session->setIdRequestsLimit(3);
-        $session->setId(self::SESSION_ID);
         $session->getHandler()
             ->shouldReceive('read')
-            ->times(4);
+            ->times(3);
         $session->getHandler()
             ->shouldReceive('write')
             ->times(3);
         $session->getHandler()
             ->shouldReceive('destroy')
-            ->times(1);
+            ->once();
 
+        $session->start();
         $session->open();
+
         self::assertSame(1, $session->getRequestsCount());
-        self::assertSame(self::SESSION_ID, $session->getId());
 
         $session->save();
-        $session->open();
+
+        self::assertTrue($session->open());
 
         self::assertSame(2, $session->getRequestsCount());
-        self::assertSame(self::SESSION_ID, $session->getId());
 
         $session->save();
-        $session->open();
+
+        self::assertTrue($session->open());
 
         self::assertSame(3, $session->getRequestsCount());
-        self::assertSame(self::SESSION_ID, $session->getId());
 
         $session->save();
-        $session->open();
+        // Session should migrate to a new one
+        self::assertTrue($session->open());
 
-        self::assertSame(4, $session->getRequestsCount());
-        self::assertNotSame(self::SESSION_ID, $session->getId());
+        self::assertSame(1, $session->getRequestsCount());
     }
 
     public function testSessionIdShouldBeRegeneratedIfIdTtlLimitReached()

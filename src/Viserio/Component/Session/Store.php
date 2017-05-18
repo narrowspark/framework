@@ -13,6 +13,7 @@ use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Support\Str;
+use Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException;
 
 class Store implements StoreContract
 {
@@ -61,7 +62,7 @@ class Store implements StoreContract
     private $idRequestsLimit = null;
 
     /**
-     * Time after id is regenerated.
+     * Time after session is regenerated.
      *
      * @var int
      */
@@ -70,21 +71,21 @@ class Store implements StoreContract
     /**
      * Last (id) regeneration timestamp.
      *
-     * @var int
+     * @var int|null
      */
     private $regenerationTrace;
 
     /**
      * First trace (timestamp), time when session was created.
      *
-     * @var int
+     * @var int|null
      */
     private $firstTrace;
 
     /**
      * Last trace (Unix timestamp).
      *
-     * @var int
+     * @var int|null
      */
     private $lastTrace;
 
@@ -161,11 +162,17 @@ class Store implements StoreContract
     public function open(): bool
     {
         if (! $this->started) {
-            if ($this->id !== null) {
+            if ($this->getId() !== null) {
                 $this->loadSession();
 
-                $this->started = true;
-                $this->requestsCount += 1;
+                if ($this->getFirstTrace() === null) {
+                    return false;
+                } elseif ($this->generateFingerprint() !== $this->getFingerprint()) {
+                    throw new SuspiciousOperationException();
+                } else {
+                    $this->started = true;
+                    $this->requestsCount += 1;
+                }
             }
         }
 
@@ -195,6 +202,28 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
+    public function getTtl(): int
+    {
+        return $this->idTtl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isExpired(): bool
+    {
+        $lastTrace = $this->getLastTrace();
+
+        if ($lastTrace === null) {
+            return true;
+        }
+
+        return ($lastTrace + $this->getTtl() < time());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function invalidate(): bool
     {
         $this->clear();
@@ -211,9 +240,9 @@ class Store implements StoreContract
             $this->handler->destroy($this->id);
         }
 
-        $this->id = $this->generateSessionId();
-
+        $this->id                = $this->generateSessionId();
         $this->regenerationTrace = $this->getTimestamp();
+        $this->requestsCount     = 0;
 
         return true;
     }
@@ -360,7 +389,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getLastTrace(): int
+    public function getLastTrace(): ?int
     {
         return $this->lastTrace;
     }
@@ -368,7 +397,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getFirstTrace(): int
+    public function getFirstTrace(): ?int
     {
         return $this->firstTrace;
     }
@@ -376,7 +405,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getRegenerationTrace(): int
+    public function getRegenerationTrace(): ?int
     {
         return $this->regenerationTrace;
     }
@@ -600,7 +629,7 @@ class Store implements StoreContract
     }
 
     /**
-     * Determine if session id should be regenerated? (based on request_counter or regenerationTrace).
+     * Determine if session id should be regenerated? (based on requestsCount or regenerationTrace).
      *
      * @return bool
      */
