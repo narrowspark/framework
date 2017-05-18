@@ -12,7 +12,6 @@ use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Component\Session\Store;
-use Psr\Http\Message\ServerRequestInterface;
 
 class StoreTest extends MockeryTestCase
 {
