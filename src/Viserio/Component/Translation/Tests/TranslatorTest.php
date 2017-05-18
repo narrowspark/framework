@@ -4,9 +4,9 @@ namespace Viserio\Component\Translation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
-use Viserio\Component\Translation\MessageCatalogue;
-use Viserio\Component\Translation\Formatters\MessageFormatter;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Component\Translation\Formatters\MessageFormatter;
+use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Translator;
 
