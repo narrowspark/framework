@@ -5,7 +5,6 @@ namespace Viserio\Component\Session;
 use Cache\SessionHandler\Psr6SessionHandler;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use SessionHandlerInterface;
-use Cache\SessionHandler\Psr6SessionHandler;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
