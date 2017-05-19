@@ -12,14 +12,14 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * The cookie jar instance.
      *
-     * @var JarContract
+     * @var \Viserio\Component\Contracts\Cookie\QueueingFactory
      */
     protected $cookie;
 
     /**
      * The request instance.
      *
-     * @var ServerRequestInterface
+     * @var \Psr\Http\Message\ServerRequestInterface
      */
     protected $request;
 
@@ -33,8 +33,8 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * Create a new cookie driven handler instance.
      *
-     * @param JarContract $cookie
-     * @param int         $lifetime
+     * @param \Viserio\Component\Contracts\Cookie\QueueingFactory $cookie
+     * @param int                                                 $lifetime
      */
     public function __construct(JarContract $cookie, int $lifetime)
     {
@@ -119,7 +119,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * Set the request instance.
      *
-     * @param ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function setRequest(ServerRequestInterface $request)
     {

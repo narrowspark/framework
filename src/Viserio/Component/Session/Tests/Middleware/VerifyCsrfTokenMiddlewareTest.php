@@ -60,9 +60,9 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'default' => 'local',
+                    'default' => 'file',
                     'drivers' => [
-                        'local' => [
+                        'file' => [
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],
@@ -121,9 +121,9 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'default' => 'local',
+                    'default' => 'file',
                     'drivers' => [
-                        'local' => [
+                        'file' => [
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],
@@ -182,9 +182,9 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'default' => 'local',
+                    'default' => 'file',
                     'drivers' => [
-                        'local' => [
+                        'file' => [
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],
@@ -249,9 +249,9 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'default' => 'local',
+                    'default' => 'file',
                     'drivers' => [
-                        'local' => [
+                        'file' => [
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],

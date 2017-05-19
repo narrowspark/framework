@@ -12,7 +12,7 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * The filesystem instance.
      *
-     * @var FilesystemContract
+     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
      */
     protected $files;
 
@@ -33,9 +33,9 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * Create a new file driven handler instance.
      *
-     * @param FilesystemContract $files
-     * @param string             $path
-     * @param int                $lifetime The session lifetime in minutes
+     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
+     * @param string                                             $path
+     * @param int                                                $lifetime The session lifetime in minutes
      */
     public function __construct(FilesystemContract $files, string $path, int $lifetime)
     {

@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Session;
 
 use DateTimeImmutable;
-use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -290,7 +289,7 @@ class Store implements StoreContract
     {
         $this->checkIfSessionHasStarted();
 
-        return Arr::has($this->values, $name);
+        return isset($this->values[$name]);
     }
 
     /**
@@ -300,7 +299,7 @@ class Store implements StoreContract
     {
         $this->checkIfSessionHasStarted();
 
-        return Arr::get($this->values, $name, $default);
+        return $this->has($name) ? $this->values[$name] : $default;
     }
 
     /**
@@ -310,7 +309,7 @@ class Store implements StoreContract
     {
         $this->checkIfSessionHasStarted();
 
-        $this->values = Arr::set($this->values, $name, $value);
+        $this->values[$name] = $value;
     }
 
     /**
@@ -332,7 +331,9 @@ class Store implements StoreContract
     {
         $value = $this->get($name);
 
-        Arr::forget($this->values, $name);
+        if ($this->has($name)) {
+            unset($this->values[$name]);
+        }
 
         return $value;
     }

@@ -23,7 +23,7 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
      */
     public function __construct(CacheItemPoolInterface $cache, int $lifetime)
     {
-        $this->psr6cache = new Psr6SessionHandler($cache, ['ttl' => $lifetime]);
+        $this->psr6cache = new Psr6SessionHandler($cache, ['ttl' => $lifetime, 'prefix' => 'ns_ses_']);
     }
 
     /**
@@ -44,8 +44,6 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * // @codeCoverageIgnore
      */
     public function read($sessionId)
     {
@@ -54,8 +52,6 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * // @codeCoverageIgnore
      */
     public function write($sessionId, $data)
     {
@@ -64,8 +60,6 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * // @codeCoverageIgnore
      */
     public function destroy($sessionId)
     {

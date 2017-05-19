@@ -55,7 +55,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @return \Viserio\Component\Contracts\Session\Store
      */
-    protected function createLocalDriver(array $config): StoreContract
+    protected function createFileDriver(array $config): StoreContract
     {
         return $this->buildSession(
             new FileSessionHandler(
