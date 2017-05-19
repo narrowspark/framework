@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session;
 
+use Cache\SessionHandler\Psr6SessionHandler;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use SessionHandlerInterface;
-use Cache\SessionHandler\Psr6SessionHandler;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -12,7 +12,6 @@ use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Session\Handler\CacheBasedSessionHandler;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Support\AbstractManager;
