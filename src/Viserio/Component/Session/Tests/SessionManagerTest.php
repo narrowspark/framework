@@ -13,18 +13,10 @@ use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class SessionManagerTest extends MockeryTestCase
 {
-    private $manager;
-
-    public function tearDown()
-    {
-        $this->manager = null;
-
-        parent::tearDown();
-    }
-
     public function testCookieStore()
     {
         $config = $this->mock(RepositoryContract::class);
@@ -93,8 +85,8 @@ class SessionManagerTest extends MockeryTestCase
                 CacheManagerContract::class => new CacheManager(new ArrayContainer([
                     RepositoryContract::class   => $config,
                 ])),
-            ]),
-            new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString())
+                EncrypterContract::class => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+            ])
         );
     }
 }

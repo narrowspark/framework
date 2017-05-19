@@ -20,8 +20,8 @@ class SessionServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            SessionManager::class => [self::class, 'createSessionManager'],
-            'session'             => function (ContainerInterface $container) {
+            SessionManager::class       => [self::class, 'createSessionManager'],
+            'session'                   => function (ContainerInterface $container) {
                 return $container->get(SessionManager::class);
             },
             'session.store'             => [self::class, 'createSessionStore'],
@@ -54,14 +54,25 @@ class SessionServiceProvider implements ServiceProvider
         return $eventManager;
     }
 
+    /**
+     * Create new session manager instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Session\SessionManager
+     */
     public static function createSessionManager(ContainerInterface $container): SessionManager
     {
-        return new SessionManager(
-            $container,
-            $container->get(Encrypter::class)
-        );
+        return new SessionManager($container);
     }
 
+    /**
+     * Create session store from default driver.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Session\Store
+     */
     public static function createSessionStore(ContainerInterface $container): StoreContract
     {
         return $container->get(SessionManager::class)->getDriver();

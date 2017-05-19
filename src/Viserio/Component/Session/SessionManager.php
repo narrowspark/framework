@@ -23,17 +23,15 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create a new session manager instance.
      *
-     * @param \Interop\Container\ContainerInterface             $container
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(
-        ContainerInteropInterface $container,
-        EncrypterContract $encrypter
-    ) {
+    public function __construct(ContainerInteropInterface $container)
+    {
         parent::__construct($container);
 
         $this->container = $container;
-        $this->encrypter = $encrypter;
+
+        $this->setEncrypter($container->get(EncrypterContract::class));
     }
 
     /**
@@ -44,7 +42,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
         return [
             'default'  => 'array',
             'cookie'   => 'NSSESSID',
-            'lifetime' => 120,
+            'lifetime' => 86400,
         ];
     }
 

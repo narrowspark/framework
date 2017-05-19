@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session;
 
-use DateTimeImmutable;
+use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -61,21 +61,21 @@ class Store implements StoreContract
     private $idRequestsLimit = null;
 
     /**
-     * Time after session is regenerated.
+     * The number of seconds the session should be valid.
      *
      * @var int
      */
     private $idTtl = 86400;
 
     /**
-     * Last (id) regeneration timestamp.
+     * Last (id) regeneration (Unix timestamp).
      *
      * @var int|null
      */
     private $regenerationTrace;
 
     /**
-     * First trace (timestamp), time when session was created.
+     * First trace (Unix timestamp), time when session was created.
      *
      * @var int|null
      */
@@ -195,14 +195,6 @@ class Store implements StoreContract
     public function getId(): ?string
     {
         return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTtl(): int
-    {
-        return $this->idTtl;
     }
 
     /**
@@ -384,6 +376,14 @@ class Store implements StoreContract
     public function setIdLiveTime(int $ttl): void
     {
         $this->idTtl = $ttl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTtl(): int
+    {
+        return $this->idTtl;
     }
 
     /**
@@ -640,7 +640,9 @@ class Store implements StoreContract
         }
 
         if ($this->idTtl && $this->regenerationTrace) {
-            return $this->regenerationTrace + $this->idTtl < $this->getTimestamp();
+            $expires = Chronos::createFromTimestamp($this->regenerationTrace)->addSeconds($this->getTtl())->getTimestamp();
+
+            return $expires < $this->getTimestamp();
         }
 
         return false;
@@ -734,6 +736,6 @@ class Store implements StoreContract
      */
     private function getTimestamp(): int
     {
-        return (new DateTimeImmutable())->getTimestamp();
+        return Chronos::now()->toMutable()->getTimestamp();
     }
 }

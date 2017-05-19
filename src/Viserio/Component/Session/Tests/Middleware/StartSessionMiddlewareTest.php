@@ -16,6 +16,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class StartSessionMiddlewareTest extends MockeryTestCase
 {
@@ -74,8 +75,8 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
                 JarContract::class        => $this->mock(JarContract::class),
-            ]),
-            new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString())
+                EncrypterContract::class  => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+            ])
         );
 
         $middleware = new StartSessionMiddleware($manager);
@@ -128,8 +129,8 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
                 JarContract::class        => $jar,
-            ]),
-            new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString())
+                EncrypterContract::class  => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+            ])
         );
 
         $middleware = new StartSessionMiddleware($manager);

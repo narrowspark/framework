@@ -17,6 +17,7 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 {
@@ -299,8 +300,8 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-            ]),
-            $this->encrypter
+                EncrypterContract::class  => $this->encrypter,
+            ])
         );
     }
 }
