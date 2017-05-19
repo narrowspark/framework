@@ -12,6 +12,7 @@ use Viserio\Component\Contracts\Session\Exceptions\TokenMismatchException;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
 
 class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 {

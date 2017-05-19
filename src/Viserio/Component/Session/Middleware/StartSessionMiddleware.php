@@ -172,7 +172,7 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     protected function addCookieToResponse(ServerRequestInterface $request, ResponseInterface $response, StoreContract $session): ResponseInterface
     {
-        if ($session->getHandler() instanceof CookieSessionHandler) {
+        if (! $session->getHandler() instanceof CookieSessionHandler) {
             $session->save();
         }
 
