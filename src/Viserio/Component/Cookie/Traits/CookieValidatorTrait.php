@@ -25,7 +25,10 @@ trait CookieValidatorTrait
 
         // Name attribute is a token as per spec in RFC 2616
         if (preg_match('/[\x00-\x20\x22\x28-\x29\x2c\x2f\x3a-\x40\x5b-\x5d\x7b\x7d\x7f]/', $name)) {
-            throw new InvalidArgumentException(sprintf('The cookie name [%s] contains invalid characters.', $name));
+            throw new InvalidArgumentException(sprintf(
+                'Cookie name [%s] must not contain invalid characters: ASCII Control characters (0-31;127), space, tab and the following characters: ()<>@,;:\"/[]?={}',
+                $name
+            ));
         }
     }
 
