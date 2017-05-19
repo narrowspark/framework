@@ -18,7 +18,6 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Component\Session\SessionManager;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 {

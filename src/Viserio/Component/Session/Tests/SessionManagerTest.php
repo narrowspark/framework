@@ -14,7 +14,6 @@ use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Session\SessionManager;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class SessionManagerTest extends MockeryTestCase
 {
