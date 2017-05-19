@@ -35,22 +35,13 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected $config = [];
 
     /**
-     * Environment.
-     *
-     * @var string
-     */
-    protected $env;
-
-    /**
      * Create a new session middleware.
      *
      * @param \Viserio\Component\Session\SessionManager $manager
-     * @param string                                    $env
      */
-    public function __construct(SessionManager $manager, string $env = 'production')
+    public function __construct(SessionManager $manager)
     {
         $this->manager      = $manager;
-        $this->env          = $env;
         $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
         $this->config       = $manager->getConfig();
     }
@@ -79,7 +70,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return php_sapi_name() == 'cli' && $this->env === 'testing';
+        return php_sapi_name() == 'cli' && ($this->config['env'] ?? 'production') === 'testing';
     }
 
     /**
@@ -91,8 +82,9 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
-        $sessionToken = $request->getAttribute('session')->getToken();
-        $data         = $request->getParsedBody();
+        $session      = $request->getAttribute('session');
+        $sessionToken = $session ?? $session->getToken();
+        $data         = is_array($request->getParsedBody());
         $token        = $data['_token'] ?? $request->getHeaderLine('X-CSRF-TOKEN');
 
         if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
@@ -118,12 +110,13 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         ResponseInterface $response
     ): ResponseInterface {
-        $config = $this->config;
-        $uri    = $request->getUri();
+        $config  = $this->config;
+        $uri     = $request->getUri();
+        $session = $request->getAttribute('session');
 
         $setCookie = new SetCookie(
             'XSRF-TOKEN',
-            $request->getAttribute('session')->getToken(),
+            $session ?? $session->getToken(),
             $config['csrf.livetime'] ?? Chronos::now()->getTimestamp() + 60 * 120,
             $config['path'],
             $config['domain'] ?? $uri->getHost(),

@@ -8,6 +8,7 @@ use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
@@ -53,9 +54,9 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'default' => 'local',
+                    'default' => 'file',
                     'drivers' => [
-                        'local' => [
+                        'file' => [
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],
@@ -73,9 +74,8 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-                JarContract::class        => $this->mock(JarContract::class),
-            ]),
-            new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString())
+                EncrypterContract::class  => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+            ])
         );
 
         $middleware = new StartSessionMiddleware($manager);
@@ -84,8 +84,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
-
+        $request  = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);
         }));
@@ -128,8 +127,8 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
                 JarContract::class        => $jar,
-            ]),
-            new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString())
+                EncrypterContract::class  => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+            ])
         );
 
         $middleware = new StartSessionMiddleware($manager);
@@ -138,9 +137,9 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request  = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
-        $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
+        $middleware->process($request, new DelegateMiddleware(function ($request) {
             self::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
 
             return (new ResponseFactory())->createResponse(200);

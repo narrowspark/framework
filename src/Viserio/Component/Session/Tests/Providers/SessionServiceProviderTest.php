@@ -27,9 +27,9 @@ class SessionServiceProviderTest extends TestCase
         $container->instance('config', [
             'viserio' => [
                 'session' => [
-                    'default'  => 'local',
+                    'default'  => 'file',
                     'drivers'  => [
-                        'local' => [
+                        'file' => [
                             'path' => '',
                         ],
                     ],

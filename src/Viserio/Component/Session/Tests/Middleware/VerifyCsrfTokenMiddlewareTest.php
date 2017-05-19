@@ -9,6 +9,7 @@ use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Filesystem\Filesystem;
@@ -60,9 +61,9 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'default' => 'local',
+                    'default' => 'file',
                     'drivers' => [
-                        'local' => [
+                        'file' => [
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],
@@ -121,9 +122,9 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'default' => 'local',
+                    'default' => 'file',
                     'drivers' => [
-                        'local' => [
+                        'file' => [
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],
@@ -182,9 +183,9 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'default' => 'local',
+                    'default' => 'file',
                     'drivers' => [
-                        'local' => [
+                        'file' => [
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],
@@ -249,9 +250,9 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'default' => 'local',
+                    'default' => 'file',
                     'drivers' => [
-                        'local' => [
+                        'file' => [
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],
@@ -299,8 +300,8 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-            ]),
-            $this->encrypter
+                EncrypterContract::class  => $this->encrypter,
+            ])
         );
     }
 }

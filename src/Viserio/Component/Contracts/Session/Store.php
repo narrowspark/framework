@@ -64,7 +64,7 @@ interface Store extends JsonSerializable
     public function getName(): string;
 
     /**
-     * Time after session is regenerated.
+     * Time after session is regenerated (in seconds).
      *
      * @return int
      */

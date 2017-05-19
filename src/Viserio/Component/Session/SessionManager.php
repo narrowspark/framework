@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session;
 
+use Cache\SessionHandler\Psr6SessionHandler;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use SessionHandlerInterface;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
@@ -11,7 +12,6 @@ use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Session\Handler\CacheBasedSessionHandler;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Support\AbstractManager;
@@ -23,17 +23,15 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create a new session manager instance.
      *
-     * @param \Interop\Container\ContainerInterface             $container
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(
-        ContainerInteropInterface $container,
-        EncrypterContract $encrypter
-    ) {
+    public function __construct(ContainerInteropInterface $container)
+    {
         parent::__construct($container);
 
         $this->container = $container;
-        $this->encrypter = $encrypter;
+
+        $this->setEncrypter($container->get(EncrypterContract::class));
     }
 
     /**
@@ -42,9 +40,10 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     public function getDefaultOptions(): iterable
     {
         return [
-            'default'  => 'array',
-            'cookie'   => 'NSSESSID',
-            'lifetime' => 120,
+            'default'         => 'array',
+            'cookie'          => 'NSSESSID',
+            'lifetime'        => 86400,
+            'expire_on_close' => false,
         ];
     }
 
@@ -55,7 +54,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @return \Viserio\Component\Contracts\Session\Store
      */
-    protected function createLocalDriver(array $config): StoreContract
+    protected function createFileDriver(array $config): StoreContract
     {
         return $this->buildSession(
             new FileSessionHandler(
@@ -207,9 +206,9 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     protected function createCacheBased($driver): StoreContract
     {
         return $this->buildSession(
-            new CacheBasedSessionHandler(
+            new Psr6SessionHandler(
                 clone $this->container->get(CacheManagerContract::class)->getDriver($driver),
-                $this->options['lifetime']
+                ['ttl' => $this->options['lifetime'], 'prefix' => 'ns_ses_']
             )
         );
     }

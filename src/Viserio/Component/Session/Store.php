@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session;
 
-use DateTimeImmutable;
-use Narrowspark\Arr\Arr;
+use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -62,21 +61,21 @@ class Store implements StoreContract
     private $idRequestsLimit = null;
 
     /**
-     * Time after session is regenerated.
+     * The number of seconds the session should be valid.
      *
      * @var int
      */
     private $idTtl = 86400;
 
     /**
-     * Last (id) regeneration timestamp.
+     * Last (id) regeneration (Unix timestamp).
      *
      * @var int|null
      */
     private $regenerationTrace;
 
     /**
-     * First trace (timestamp), time when session was created.
+     * First trace (Unix timestamp), time when session was created.
      *
      * @var int|null
      */
@@ -201,14 +200,6 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getTtl(): int
-    {
-        return $this->idTtl;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isExpired(): bool
     {
         $lastTrace = $this->getLastTrace();
@@ -290,7 +281,7 @@ class Store implements StoreContract
     {
         $this->checkIfSessionHasStarted();
 
-        return Arr::has($this->values, $name);
+        return isset($this->values[$name]);
     }
 
     /**
@@ -300,7 +291,7 @@ class Store implements StoreContract
     {
         $this->checkIfSessionHasStarted();
 
-        return Arr::get($this->values, $name, $default);
+        return $this->has($name) ? $this->values[$name] : $default;
     }
 
     /**
@@ -310,7 +301,7 @@ class Store implements StoreContract
     {
         $this->checkIfSessionHasStarted();
 
-        $this->values = Arr::set($this->values, $name, $value);
+        $this->values[$name] = $value;
     }
 
     /**
@@ -332,7 +323,9 @@ class Store implements StoreContract
     {
         $value = $this->get($name);
 
-        Arr::forget($this->values, $name);
+        if ($this->has($name)) {
+            unset($this->values[$name]);
+        }
 
         return $value;
     }
@@ -383,6 +376,14 @@ class Store implements StoreContract
     public function setIdLiveTime(int $ttl): void
     {
         $this->idTtl = $ttl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTtl(): int
+    {
+        return $this->idTtl;
     }
 
     /**
@@ -511,8 +512,6 @@ class Store implements StoreContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function jsonSerialize()
     {
@@ -639,7 +638,9 @@ class Store implements StoreContract
         }
 
         if ($this->idTtl && $this->regenerationTrace) {
-            return $this->regenerationTrace + $this->idTtl < $this->getTimestamp();
+            $expires = Chronos::createFromTimestamp($this->regenerationTrace)->addSeconds($this->getTtl())->getTimestamp();
+
+            return $expires < $this->getTimestamp();
         }
 
         return false;
@@ -733,6 +734,6 @@ class Store implements StoreContract
      */
     private function getTimestamp(): int
     {
-        return (new DateTimeImmutable())->getTimestamp();
+        return Chronos::now()->toMutable()->getTimestamp();
     }
 }
