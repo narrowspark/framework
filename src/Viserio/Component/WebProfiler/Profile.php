@@ -290,7 +290,7 @@ class Profile
     public function setCollectors(array $collectors): void
     {
         foreach ($collectors as $collector) {
-            $this->addCollector($collector['collector']);
+            $this->addCollector($collector);
         }
     }
 

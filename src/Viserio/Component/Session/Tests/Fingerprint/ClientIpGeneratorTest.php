@@ -13,6 +13,21 @@ class ClientIpGeneratorTest extends MockeryTestCase
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->andReturn(['REMOTE_ADDR' => '127.0.0.1']);
+        $request->shouldReceive('hasHeader')
+            ->with('Forwarded')
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('X-Forwarded-For')
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('X-Forwarded')
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('X-Cluster-Client-Ip')
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('Client-Ip')
+            ->andReturn(false);
 
         $generator = new ClientIpGenerator($request);
 
