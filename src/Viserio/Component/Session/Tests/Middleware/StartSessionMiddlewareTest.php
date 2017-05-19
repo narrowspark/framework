@@ -8,6 +8,7 @@ use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
@@ -16,7 +17,6 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\SessionManager;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class StartSessionMiddlewareTest extends MockeryTestCase
 {

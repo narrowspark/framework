@@ -10,10 +10,10 @@ use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Session\SessionManager;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class SessionManagerTest extends MockeryTestCase
 {

@@ -4,7 +4,6 @@ namespace Viserio\Component\Session\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Component\Contracts\Encryption\Encrypter;
 use Viserio\Component\Contracts\Events\Event as EventContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
