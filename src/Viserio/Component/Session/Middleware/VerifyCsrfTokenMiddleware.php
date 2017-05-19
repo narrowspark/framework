@@ -9,9 +9,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
 use Viserio\Component\Contracts\Session\Exceptions\TokenMismatchException;
+use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\SessionManager;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
 
 class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 {
