@@ -39,28 +39,31 @@ class ClientIp
     /**
      * Returns client IP address.
      *
-     * @return string
+     * @return string|null
      */
-    public function getIpAddress(): string
+    public function getIpAddress(): ?string
     {
-        $serverParams = $this->serverRequest->getServerParams();
+        $ipAddress    = null;
+        $request      = $this->serverRequest;
+        $serverParams = $request->getServerParams();
 
         // direct IP address
         if (isset($serverParams['REMOTE_ADDR']) && $this->isValidIpAddress($serverParams['REMOTE_ADDR'])) {
-            return $serverParams['REMOTE_ADDR'];
+            $ipAddress = $serverParams['REMOTE_ADDR'];
         }
 
         foreach ($this->headersToInspect as $header) {
-            if ($this->serverRequest->hasHeader($header)) {
+            if ($request->hasHeader($header)) {
                 $ip = $this->getFirstIpAddressFromHeader($request, $header);
 
                 if ($this->isValidIpAddress($ip)) {
-                    return $ip;
+                    $ipAddress = $ip;
+                    break;
                 }
             }
         }
 
-        return '';
+        return $ipAddress;
     }
 
     /**
@@ -89,7 +92,7 @@ class ClientIp
      */
     private function getFirstIpAddressFromHeader(ServerRequestInterface $serverRequest, string $header): string
     {
-        $items       = explode(',', $request->getHeaderLine($header));
+        $items       = explode(',', $serverRequest->getHeaderLine($header));
         $headerValue = trim(reset($items));
 
         if (ucfirst($header) == 'Forwarded') {
