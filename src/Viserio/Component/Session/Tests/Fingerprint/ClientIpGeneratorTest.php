@@ -11,60 +11,26 @@ class ClientIpGeneratorTest extends MockeryTestCase
     public function testGenerate()
     {
         $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getServerParams')
+            ->andReturn(['REMOTE_ADDR' => '127.0.0.1']);
         $request->shouldReceive('hasHeader')
-            ->with('HTTP_X_FORWARDED_FOR')
-            ->once()
+            ->with('Forwarded')
             ->andReturn(false);
         $request->shouldReceive('hasHeader')
-            ->with('REMOTE_ADDR')
-            ->once()
+            ->with('X-Forwarded-For')
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('X-Forwarded')
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('X-Cluster-Client-Ip')
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('Client-Ip')
             ->andReturn(false);
 
         $generator = new ClientIpGenerator($request);
 
-        self::assertInternalType('string', $generator->generate());
-        self::assertSame(40, mb_strlen($generator->generate()));
-    }
-
-    public function testGenerateWithProxyIp()
-    {
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('hasHeader')
-            ->with('HTTP_X_FORWARDED_FOR')
-            ->once()
-            ->andReturn(true);
-        $request->shouldReceive('getHeader')
-            ->with('HTTP_X_FORWARDED_FOR')
-            ->andReturn('111.111.111.111,123.45.67.178');
-
-        $generator = new ClientIpGenerator($request);
-
-        self::assertInternalType('string', $generator->generate());
-        self::assertSame(40, mb_strlen($generator->generate()));
-    }
-
-    public function testGenerateWithIp()
-    {
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('hasHeader')
-            ->with('HTTP_X_FORWARDED_FOR')
-            ->once()
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('REMOTE_ADDR')
-            ->once()
-            ->andReturn(true);
-        $request->shouldReceive('getHeader')
-            ->with('REMOTE_ADDR')
-            ->andReturn('100.8.116.127');
-
-        $generator = new ClientIpGenerator($request);
-
-        self::assertInternalType('string', $generator->generate());
-        self::assertSame(40, mb_strlen($generator->generate()));
-
-        // return empty ip string
-        self::assertInternalType('string', $generator->generate());
         self::assertSame(40, mb_strlen($generator->generate()));
     }
 }

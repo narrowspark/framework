@@ -12,7 +12,7 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * The filesystem instance.
      *
-     * @var FilesystemContract
+     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
      */
     protected $files;
 
@@ -24,7 +24,7 @@ class FileSessionHandler implements SessionHandlerInterface
     protected $path;
 
     /**
-     * The number of minutes the session should be valid.
+     * The number of seconds the session should be valid.
      *
      * @var int
      */
@@ -33,9 +33,9 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * Create a new file driven handler instance.
      *
-     * @param FilesystemContract $files
-     * @param string             $path
-     * @param int                $lifetime The session lifetime in minutes
+     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
+     * @param string                                             $path
+     * @param int                                                $lifetime The session lifetime in seconds
      */
     public function __construct(FilesystemContract $files, string $path, int $lifetime)
     {
@@ -68,9 +68,9 @@ class FileSessionHandler implements SessionHandlerInterface
         $path = $this->path . '/' . $sessionId;
 
         if ($this->files->has($path)) {
-            if (strtotime($this->files->getTimestamp($path)) >=
-                Chronos::now()->subMinutes($this->lifetime)->getTimestamp()
-            ) {
+            $chronos = Chronos::now()->subSeconds($this->lifetime);
+
+            if (strtotime($this->files->getTimestamp($path)) >= $chronos->getTimestamp()) {
                 return (string) $this->files->read($path);
             }
         }

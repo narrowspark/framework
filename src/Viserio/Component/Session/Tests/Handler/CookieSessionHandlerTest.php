@@ -21,7 +21,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
 
         $this->handler = new CookieSessionHandler(
             $this->mock(JarContract::class),
-            5
+            300
         );
     }
 
@@ -47,7 +47,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
             ->once()
             ->andReturn('{
                 "temp": {
-                    "expires": "' . Chronos::now()->addMinutes(6)->getTimestamp() . '",
+                    "expires": "' . Chronos::now()->addSeconds(350)->getTimestamp() . '",
                     "data": "Foo Bar"
                 }
             }');
@@ -80,15 +80,15 @@ class CookieSessionHandlerTest extends MockeryTestCase
                 json_encode(
                     [
                         'data'    => ['user_id' => 1],
-                        'expires' => Chronos::now()->addMinutes(5)->getTimestamp(),
+                        'expires' => Chronos::now()->addSeconds(300)->getTimestamp(),
                     ],
                     \JSON_PRESERVE_ZERO_FRACTION
                 ),
-                5
+                300
             );
         $handler = new CookieSessionHandler(
             $jar,
-            5
+            300
         );
 
         self::assertTrue($handler->write('write.sess', ['user_id' => 1]));
@@ -115,7 +115,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
 
         $handler = new CookieSessionHandler(
             $jar,
-            5
+            300
         );
 
         self::assertTrue($handler->destroy('cookie.sess'));

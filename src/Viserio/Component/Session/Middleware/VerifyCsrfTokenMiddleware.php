@@ -7,7 +7,9 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
 use Viserio\Component\Contracts\Session\Exceptions\TokenMismatchException;
+use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\SessionManager;
 
@@ -35,22 +37,13 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected $config = [];
 
     /**
-     * Environment.
-     *
-     * @var string
-     */
-    protected $env;
-
-    /**
      * Create a new session middleware.
      *
      * @param \Viserio\Component\Session\SessionManager $manager
-     * @param string                                    $env
      */
-    public function __construct(SessionManager $manager, string $env = 'production')
+    public function __construct(SessionManager $manager)
     {
         $this->manager      = $manager;
-        $this->env          = $env;
         $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
         $this->config       = $manager->getConfig();
     }
@@ -60,6 +53,10 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
+        if (! $request->getAttribute('session') instanceof StoreContract) {
+            throw new SessionNotStartedException('The session is not started.');
+        }
+
         $response = $delegate->process($request);
 
         if ($this->isReading($request) ||
@@ -79,7 +76,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return php_sapi_name() == 'cli' && $this->env === 'testing';
+        return php_sapi_name() == 'cli' && ($this->config['env'] ?? 'production') === 'testing';
     }
 
     /**
@@ -92,8 +89,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
         $sessionToken = $request->getAttribute('session')->getToken();
-        $data         = $request->getParsedBody();
-        $token        = $data['_token'] ?? $request->getHeaderLine('X-CSRF-TOKEN');
+        $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('X-CSRF-TOKEN');
 
         if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
             $token = $this->manager->getEncrypter()->decrypt($header);
@@ -118,15 +114,16 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         ResponseInterface $response
     ): ResponseInterface {
-        $config = $this->config;
+        $config  = $this->config;
+        $uri     = $request->getUri();
 
         $setCookie = new SetCookie(
             'XSRF-TOKEN',
             $request->getAttribute('session')->getToken(),
             $config['csrf.livetime'] ?? Chronos::now()->getTimestamp() + 60 * 120,
             $config['path'],
-            $config['domain'],
-            $config['secure'] ?? false,
+            $config['domain'] ?? $uri->getHost(),
+            $config['secure'] ?? ($uri->getScheme() === 'https'),
             false,
             $config['csrf.samesite'] ?? false
         );

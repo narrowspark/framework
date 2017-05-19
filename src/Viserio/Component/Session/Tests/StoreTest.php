@@ -5,6 +5,7 @@ namespace Viserio\Component\Session\Tests;
 use Cake\Chronos\Chronos;
 use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -45,7 +46,7 @@ class StoreTest extends MockeryTestCase
                         'lastTrace'         => 0,
                         'regenerationTrace' => 1,
                         'requestsCount'     => 0,
-                        'fingerprint'       => 0,
+                        'fingerprint'       => '',
                     ],
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
@@ -66,7 +67,7 @@ class StoreTest extends MockeryTestCase
                         'lastTrace'         => 0,
                         'regenerationTrace' => 0,
                         'requestsCount'     => 0,
-                        'fingerprint'       => 0,
+                        'fingerprint'       => '',
                     ],
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
@@ -77,6 +78,7 @@ class StoreTest extends MockeryTestCase
             ->once()
             ->andReturn($encryptString);
         $session->setId(self::SESSION_ID);
+
         $session->open();
 
         self::assertEquals('bar', $session->get('foo'));
@@ -90,6 +92,62 @@ class StoreTest extends MockeryTestCase
         $session->save();
 
         self::assertFalse($session->isStarted());
+    }
+
+    public function testSaveDontSaveIfSessionIsNotStarted()
+    {
+        $session = $this->session;
+
+        self::assertFalse($session->isStarted());
+
+        // save dont work if no session is started.
+        $session->save();
+
+        $session->getHandler()
+            ->shouldReceive('write')
+            ->never();
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException
+     */
+    public function testSessionHasSuspiciousFingerPrint()
+    {
+        $session       = $this->session;
+        $encryptString = $this->encrypter->encrypt(
+            json_encode(
+                [
+                    'foo'          => 'bar',
+                    'bagged'       => ['name' => 'viserio'],
+                    '__metadata__' => [
+                        'firstTrace'        => 0,
+                        'lastTrace'         => 0,
+                        'regenerationTrace' => 0,
+                        'requestsCount'     => 0,
+                        'fingerprint'       => 'foo',
+                    ],
+                ],
+                \JSON_PRESERVE_ZERO_FRACTION
+            )
+        );
+        $session->getHandler()
+            ->shouldReceive('read')
+            ->once()
+            ->andReturn($encryptString);
+        $session->setId(self::SESSION_ID);
+        $session->open();
+    }
+
+    public function testSessionReturnsFalseOnFirstTraceNull()
+    {
+        $session       = $this->session;
+        $session->getHandler()
+            ->shouldReceive('read')
+            ->once()
+            ->andReturn([]);
+        $session->setId(self::SESSION_ID);
+
+        self::assertFalse($session->open());
     }
 
     public function testName()
@@ -182,6 +240,9 @@ class StoreTest extends MockeryTestCase
     public function testStartMethodResetsLastTraceAndFirstTrace()
     {
         $session = $this->encryptedSession();
+
+        self::assertTrue($session->isExpired());
+
         $session->open();
 
         $lastTrace  = $session->getLastTrace();
@@ -189,6 +250,7 @@ class StoreTest extends MockeryTestCase
 
         $session->start();
 
+        self::assertFalse($session->isExpired());
         self::assertNotEquals($lastTrace, $session->getLastTrace());
         self::assertNotEquals($firstTrace, $session->getFirstTrace());
     }
@@ -217,10 +279,14 @@ class StoreTest extends MockeryTestCase
     public function testStartMethodGeneratesFingerprint()
     {
         $session = $this->session;
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getServerParams')
+            ->once()
+            ->andReturn(['REMOTE_ADDR' => 'test']);
 
         $oldFingerprint = $session->getFingerprint();
 
-        $session->addFingerprintGenerator(new UserAgentGenerator('test'));
+        $session->addFingerprintGenerator(new UserAgentGenerator($request));
 
         $session->start();
 
@@ -264,38 +330,38 @@ class StoreTest extends MockeryTestCase
     {
         $session = $this->session;
         $session->setIdRequestsLimit(3);
-        $session->setId(self::SESSION_ID);
         $session->getHandler()
             ->shouldReceive('read')
-            ->times(4);
+            ->times(3);
         $session->getHandler()
             ->shouldReceive('write')
             ->times(3);
         $session->getHandler()
             ->shouldReceive('destroy')
-            ->times(1);
+            ->once();
 
+        $session->start();
         $session->open();
+
         self::assertSame(1, $session->getRequestsCount());
-        self::assertSame(self::SESSION_ID, $session->getId());
 
         $session->save();
-        $session->open();
+
+        self::assertTrue($session->open());
 
         self::assertSame(2, $session->getRequestsCount());
-        self::assertSame(self::SESSION_ID, $session->getId());
 
         $session->save();
-        $session->open();
+
+        self::assertTrue($session->open());
 
         self::assertSame(3, $session->getRequestsCount());
-        self::assertSame(self::SESSION_ID, $session->getId());
 
         $session->save();
-        $session->open();
+        // Session should migrate to a new one
+        self::assertTrue($session->open());
 
-        self::assertSame(4, $session->getRequestsCount());
-        self::assertNotSame(self::SESSION_ID, $session->getId());
+        self::assertSame(1, $session->getRequestsCount());
     }
 
     public function testSessionIdShouldBeRegeneratedIfIdTtlLimitReached()
@@ -406,6 +472,13 @@ class StoreTest extends MockeryTestCase
 
         self::assertNotFalse(array_search('foo', $session->get('_flash.new')));
         self::assertFalse(array_search('foo', $session->get('_flash.old')));
+    }
+
+    public function testIfSessionCanBeJsonSerialized()
+    {
+        $session = $this->session;
+
+        self::assertSame([], $session->jsonSerialize());
     }
 
     private function encryptedSession()

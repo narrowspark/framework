@@ -14,7 +14,7 @@ interface Store extends JsonSerializable
     /**
      * Starts the session storage.
      * It should be called only once at the beginning. If called for existing
-     * session it ovewrites it (clears all values etc).
+     * session it overwrites it (clears all values etc).
      *
      * @return bool true if session started
      */
@@ -24,6 +24,8 @@ interface Store extends JsonSerializable
      * Opens the session (for a given request).
      *
      * If called earlier, then second (and next ones) call does nothing.
+     *
+     * @throws \Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException if fingerprints dont match
      *
      * @return bool true if session started
      */
@@ -41,9 +43,9 @@ interface Store extends JsonSerializable
     /**
      * Returns the session ID.
      *
-     * @return string the session ID
+     * @return string|null the session ID
      */
-    public function getId(): string;
+    public function getId(): ?string;
 
     /**
      * Sets the session name.
@@ -60,6 +62,20 @@ interface Store extends JsonSerializable
      * @return string the session name
      */
     public function getName(): string;
+
+    /**
+     * Time after session is regenerated (in seconds).
+     *
+     * @return int
+     */
+    public function getTtl(): int;
+
+    /**
+     * Is session expired?
+     *
+     * @return bool
+     */
+    public function isExpired(): bool;
 
     /**
      * Invalidates the current session.
@@ -190,23 +206,23 @@ interface Store extends JsonSerializable
     /**
      * Gets last trace timestamp.
      *
-     * @return int
+     * @return int|null
      */
-    public function getLastTrace(): int;
+    public function getLastTrace(): ?int;
 
     /**
      * Gets first trace timestamp.
      *
-     * @return int
+     * @return int|null
      */
-    public function getFirstTrace(): int;
+    public function getFirstTrace(): ?int;
 
     /**
      * Gets last (id) regeneration timestamp.
      *
-     * @return int
+     * @return int|null
      */
-    public function getRegenerationTrace(): int;
+    public function getRegenerationTrace(): ?int;
 
     /**
      * Age the flash data for the session.

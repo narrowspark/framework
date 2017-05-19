@@ -231,7 +231,7 @@ class Profile
     }
 
     /**
-     * Set the responce status code.
+     * Set the response status code.
      *
      * @param int $statusCode
      *

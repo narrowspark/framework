@@ -21,7 +21,6 @@
         "php"                                                : "^7.1",
         "container-interop/container-interop"                : "^1.1",
         "cakephp/chronos"                                    : "^1.0",
-        "narrowspark/arr"                                    : "^1.0",
         "psr/http-message"                                   : "^1.0",
         "viserio/cotracts"                                   : "self.version",
         "viserio/encrypter"                                  : "self.version",
@@ -64,7 +63,9 @@
         "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "cache/session-handler"                              : "Required to use the CacheBasedSessionHandler (^0.2).",
         "http-interop/http-middleware"                       : "Required to use middleware (^0.4).",
-        "viserio/cookie"                                     : "Required to use the CookieSessionHandler (self.version).",
+        "psr/container"                                      : "A container instance is required to use the SessionManager.",
+        "viserio/cache"                                      : "Required to use the CookieSessionHandler (self.version).",
+        "viserio/cookie"                                     : "Required to use the CookieSessionHandler and StartSessionMiddleware (self.version).",
         "viserio/filesystem"                                 : "Required to use the FileSessionHandler (self.version).",
         "viserio/statical-proxy"                             : "Required to use the proxy instances (self.version)."
     },

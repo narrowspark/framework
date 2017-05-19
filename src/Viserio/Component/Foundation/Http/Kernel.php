@@ -79,14 +79,13 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function getDefaultOptions(): iterable
     {
-        return array_merge(
-            parent::getDefaultOptions(),
-            [
-                'app' => [
-                    'skip_middlewares' => false,
-                ],
-            ]
-        );
+        $options = [
+            'app' => [
+                'skip_middlewares' => false,
+            ],
+        ];
+
+        return array_merge(parent::getDefaultOptions(), $options);
     }
 
     /**

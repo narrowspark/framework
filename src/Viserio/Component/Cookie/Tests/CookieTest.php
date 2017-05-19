@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Cookie\Cookie;
 
@@ -10,7 +11,6 @@ class CookieTest extends TestCase
     public function invalidNames()
     {
         return [
-            [''],
             [',MyName'],
             [';MyName'],
             [' MyName'],
@@ -23,13 +23,24 @@ class CookieTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidNames
      * @expectedException \InvalidArgumentException
+     * @expectExceptionMessage The name cannot be empty.
+     */
+    public function testInstantiationThrowsExceptionIfCookieNameIsEmpty()
+    {
+        new Cookie('');
+    }
+
+    /**
+     * @dataProvider invalidNames
      *
      * @param mixed $name
      */
     public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name)
     {
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage('Cookie name [' . $name . '] must not contain invalid characters: ASCII Control characters (0-31;127), space, tab and the following characters: ()<>@,;:\"/[]?={}');
+
         new Cookie($name);
     }
 

@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session;
 
-use DateTimeImmutable;
-use Narrowspark\Arr\Arr;
+use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
+use Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException;
 use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
@@ -21,7 +21,7 @@ class Store implements StoreContract
     /**
      * The session ID.
      *
-     * @var string
+     * @var string|null
      */
     protected $id;
 
@@ -54,37 +54,37 @@ class Store implements StoreContract
     protected $encrypter;
 
     /**
-     * Number of requests after which id is regeneratd.
+     * Number of requests after which id is regenerated.
      *
      * @var int|null
      */
     private $idRequestsLimit = null;
 
     /**
-     * Time after id is regenerated.
+     * The number of seconds the session should be valid.
      *
      * @var int
      */
     private $idTtl = 86400;
 
     /**
-     * Last (id) regeneration timestamp.
+     * Last (id) regeneration (Unix timestamp).
      *
-     * @var int
+     * @var int|null
      */
     private $regenerationTrace;
 
     /**
-     * First trace (timestamp), time when session was created.
+     * First trace (Unix timestamp), time when session was created.
      *
-     * @var int
+     * @var int|null
      */
     private $firstTrace;
 
     /**
      * Last trace (Unix timestamp).
      *
-     * @var int
+     * @var int|null
      */
     private $lastTrace;
 
@@ -161,9 +161,14 @@ class Store implements StoreContract
     public function open(): bool
     {
         if (! $this->started) {
-            if ($this->id) {
+            if ($this->getId() !== null) {
                 $this->loadSession();
 
+                if ($this->getFirstTrace() === null) {
+                    return false;
+                } elseif ($this->generateFingerprint() !== $this->getFingerprint()) {
+                    throw new SuspiciousOperationException();
+                }
                 $this->started = true;
                 $this->requestsCount += 1;
             }
@@ -187,9 +192,23 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isExpired(): bool
+    {
+        $lastTrace = $this->getLastTrace();
+
+        if ($lastTrace === null) {
+            return true;
+        }
+
+        return $lastTrace + $this->getTtl() < time();
     }
 
     /**
@@ -211,9 +230,9 @@ class Store implements StoreContract
             $this->handler->destroy($this->id);
         }
 
-        $this->id = $this->generateSessionId();
-
+        $this->id                = $this->generateSessionId();
         $this->regenerationTrace = $this->getTimestamp();
+        $this->requestsCount     = 0;
 
         return true;
     }
@@ -239,18 +258,20 @@ class Store implements StoreContract
      */
     public function save(): void
     {
-        if ($this->started) {
-            if ($this->shouldRegenerateId()) {
-                $this->migrate(true);
-            }
-
-            $this->updateLastTrace();
-            $this->ageFlashData();
-            $this->writeToHandler();
-
-            $this->values  = [];
-            $this->started = false;
+        if (! $this->started) {
+            return;
         }
+
+        if ($this->shouldRegenerateId()) {
+            $this->migrate(true);
+        }
+
+        $this->updateLastTrace();
+        $this->ageFlashData();
+        $this->writeToHandler();
+
+        $this->values  = [];
+        $this->started = false;
     }
 
     /**
@@ -260,7 +281,7 @@ class Store implements StoreContract
     {
         $this->checkIfSessionHasStarted();
 
-        return Arr::has($this->values, $name);
+        return isset($this->values[$name]);
     }
 
     /**
@@ -270,7 +291,7 @@ class Store implements StoreContract
     {
         $this->checkIfSessionHasStarted();
 
-        return Arr::get($this->values, $name, $default);
+        return $this->has($name) ? $this->values[$name] : $default;
     }
 
     /**
@@ -280,7 +301,7 @@ class Store implements StoreContract
     {
         $this->checkIfSessionHasStarted();
 
-        $this->values = Arr::set($this->values, $name, $value);
+        $this->values[$name] = $value;
     }
 
     /**
@@ -302,7 +323,9 @@ class Store implements StoreContract
     {
         $value = $this->get($name);
 
-        Arr::forget($this->values, $name);
+        if ($this->has($name)) {
+            unset($this->values[$name]);
+        }
 
         return $value;
     }
@@ -358,7 +381,15 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getLastTrace(): int
+    public function getTtl(): int
+    {
+        return $this->idTtl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastTrace(): ?int
     {
         return $this->lastTrace;
     }
@@ -366,7 +397,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getFirstTrace(): int
+    public function getFirstTrace(): ?int
     {
         return $this->firstTrace;
     }
@@ -374,7 +405,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getRegenerationTrace(): int
+    public function getRegenerationTrace(): ?int
     {
         return $this->regenerationTrace;
     }
@@ -481,8 +512,6 @@ class Store implements StoreContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function jsonSerialize()
     {
@@ -598,7 +627,7 @@ class Store implements StoreContract
     }
 
     /**
-     * Determine if session id should be regenerated? (based on request_counter or regenerationTrace).
+     * Determine if session id should be regenerated? (based on requestsCount or regenerationTrace).
      *
      * @return bool
      */
@@ -609,7 +638,9 @@ class Store implements StoreContract
         }
 
         if ($this->idTtl && $this->regenerationTrace) {
-            return $this->regenerationTrace + $this->idTtl < $this->getTimestamp();
+            $expires = Chronos::createFromTimestamp($this->regenerationTrace)->addSeconds($this->getTtl())->getTimestamp();
+
+            return $expires < $this->getTimestamp();
         }
 
         return false;
@@ -703,6 +734,6 @@ class Store implements StoreContract
      */
     private function getTimestamp(): int
     {
-        return (new DateTimeImmutable())->getTimestamp();
+        return Chronos::now()->toMutable()->getTimestamp();
     }
 }

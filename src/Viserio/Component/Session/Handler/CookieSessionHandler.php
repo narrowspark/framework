@@ -12,19 +12,19 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * The cookie jar instance.
      *
-     * @var JarContract
+     * @var \Viserio\Component\Contracts\Cookie\QueueingFactory
      */
     protected $cookie;
 
     /**
      * The request instance.
      *
-     * @var ServerRequestInterface
+     * @var \Psr\Http\Message\ServerRequestInterface
      */
     protected $request;
 
     /**
-     * The number of minutes the session should be valid.
+     * The number of seconds the session should be valid.
      *
      * @var int
      */
@@ -33,8 +33,8 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * Create a new cookie driven handler instance.
      *
-     * @param JarContract $cookie
-     * @param int         $lifetime
+     * @param \Viserio\Component\Contracts\Cookie\QueueingFactory $cookie
+     * @param int                                                 $lifetime The session lifetime in seconds
      */
     public function __construct(JarContract $cookie, int $lifetime)
     {
@@ -61,7 +61,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function read($sessionId)
+    public function read($sessionId): string
     {
         $cookies = $this->request->getCookieParams();
 
@@ -81,14 +81,14 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function write($sessionId, $data)
+    public function write($sessionId, $data): bool
     {
         $this->cookie->queue(
             $sessionId,
             json_encode(
                 [
                     'data'    => $data,
-                    'expires' => Chronos::now()->addMinutes($this->lifetime)->getTimestamp(),
+                    'expires' => Chronos::now()->addSeconds($this->lifetime)->getTimestamp(),
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
             ),
@@ -101,7 +101,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function destroy($sessionId)
+    public function destroy($sessionId): bool
     {
         $this->cookie->queue($this->cookie->delete($sessionId));
 
@@ -111,7 +111,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function gc($lifetime)
+    public function gc($lifetime): bool
     {
         return true;
     }
@@ -119,7 +119,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * Set the request instance.
      *
-     * @param ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function setRequest(ServerRequestInterface $request)
     {
