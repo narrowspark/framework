@@ -116,9 +116,7 @@ class StartSessionMiddleware implements MiddlewareInterface
             $session->setRequestOnHandler($request);
         }
 
-        if ($hasCookie) {
-            $session->open();
-        } else {
+        if (! $session->open()) {
             $session->start();
         }
 
@@ -188,7 +186,7 @@ class StartSessionMiddleware implements MiddlewareInterface
             $config['path'] ?? '/',
             $config['domain'] ?? $uri->getHost(),
             $config['secure'] ?? ($uri->getScheme() === 'https'),
-            $config['http_only'] ?? false,
+            $config['http_only'] ?? true,
             $config['same_site'] ?? false
         );
 
