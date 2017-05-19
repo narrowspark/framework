@@ -86,6 +86,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
 
         $request  = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
+
             return (new ResponseFactory())->createResponse(200);
         }));
 
