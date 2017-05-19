@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Session\Exceptions\TokenMismatchException;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
 
 class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 {
@@ -51,6 +52,10 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
+        if ($request->getAttribute('session') === null) {
+            throw new SessionNotStartedException('The session is not started.');
+        }
+
         $response = $delegate->process($request);
 
         if ($this->isReading($request) ||
@@ -82,10 +87,8 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
-        $session      = $request->getAttribute('session');
-        $sessionToken = $session ?? $session->getToken();
-        $data         = is_array($request->getParsedBody());
-        $token        = $data['_token'] ?? $request->getHeaderLine('X-CSRF-TOKEN');
+        $sessionToken = $request->getAttribute('session')->getToken();
+        $token        = $request->getHeaderLine('X-CSRF-TOKEN');
 
         if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
             $token = $this->manager->getEncrypter()->decrypt($header);
@@ -112,11 +115,10 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     ): ResponseInterface {
         $config  = $this->config;
         $uri     = $request->getUri();
-        $session = $request->getAttribute('session');
 
         $setCookie = new SetCookie(
             'XSRF-TOKEN',
-            $session ?? $session->getToken(),
+            $request->getAttribute('session')->getToken(),
             $config['csrf.livetime'] ?? Chronos::now()->getTimestamp() + 60 * 120,
             $config['path'],
             $config['domain'] ?? $uri->getHost(),
