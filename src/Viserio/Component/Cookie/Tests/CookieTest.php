@@ -39,7 +39,7 @@ class CookieTest extends TestCase
     public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name)
     {
         self::expectException(InvalidArgumentException::class);
-        self::expectExceptionMessage('Cookie name ['.$name.'] must not contain invalid characters: ASCII Control characters (0-31;127), space, tab and the following characters: ()<>@,;:\"/[]?={}');
+        self::expectExceptionMessage('Cookie name [' . $name . '] must not contain invalid characters: ASCII Control characters (0-31;127), space, tab and the following characters: ()<>@,;:\"/[]?={}');
 
         new Cookie($name);
     }
