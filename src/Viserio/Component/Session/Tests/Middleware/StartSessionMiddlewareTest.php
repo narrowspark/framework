@@ -74,7 +74,6 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-                JarContract::class        => $this->mock(JarContract::class),
                 EncrypterContract::class  => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
             ])
         );
@@ -85,9 +84,9 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
-
+        $request  = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
+
             return (new ResponseFactory())->createResponse(200);
         }));
 
@@ -139,9 +138,9 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request  = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
-        $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
+        $middleware->process($request, new DelegateMiddleware(function ($request) {
             self::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
 
             return (new ResponseFactory())->createResponse(200);

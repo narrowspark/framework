@@ -203,9 +203,9 @@ class StartSessionMiddleware implements MiddlewareInterface
     protected function getSessionLifetimeInSeconds(): int
     {
         // Default 1 day
-        $lifetime = $this->config['lifetime'] ?? 1440;
+        $lifetime = $this->config['lifetime'] ?? 86400;
 
-        return Chronos::now()->subMinutes($lifetime)->getTimestamp();
+        return Chronos::now()->subSeconds($lifetime)->getTimestamp();
     }
 
     /**
@@ -219,7 +219,7 @@ class StartSessionMiddleware implements MiddlewareInterface
     {
         return ($config['expire_on_close'] ?? false) ?
             0 :
-            Chronos::now()->addMinutes($config['lifetime']);
+            Chronos::now()->addSeconds($config['lifetime']);
     }
 
     /**

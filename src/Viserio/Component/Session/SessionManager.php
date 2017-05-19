@@ -4,6 +4,7 @@ namespace Viserio\Component\Session;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use SessionHandlerInterface;
+use Cache\SessionHandler\Psr6SessionHandler;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -40,9 +41,10 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     public function getDefaultOptions(): iterable
     {
         return [
-            'default'  => 'array',
-            'cookie'   => 'NSSESSID',
-            'lifetime' => 86400,
+            'default'         => 'array',
+            'cookie'          => 'NSSESSID',
+            'lifetime'        => 86400,
+            'expire_on_close' => false,
         ];
     }
 
@@ -205,9 +207,9 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     protected function createCacheBased($driver): StoreContract
     {
         return $this->buildSession(
-            new CacheBasedSessionHandler(
+            new Psr6SessionHandler(
                 clone $this->container->get(CacheManagerContract::class)->getDriver($driver),
-                $this->options['lifetime']
+                ['ttl' => $this->options['lifetime'], 'prefix' => 'ns_ses_']
             )
         );
     }

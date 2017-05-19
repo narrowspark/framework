@@ -61,7 +61,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function read($sessionId)
+    public function read($sessionId): string
     {
         $cookies = $this->request->getCookieParams();
 
@@ -81,7 +81,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function write($sessionId, $data)
+    public function write($sessionId, $data): bool
     {
         $this->cookie->queue(
             $sessionId,
@@ -101,7 +101,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function destroy($sessionId)
+    public function destroy($sessionId): bool
     {
         $this->cookie->queue($this->cookie->delete($sessionId));
 
@@ -111,7 +111,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function gc($lifetime)
+    public function gc($lifetime): bool
     {
         return true;
     }
