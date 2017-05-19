@@ -68,16 +68,16 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                         ],
                     ],
                     'cookie'          => 'session',
-                    'path'            => __DIR__ . '/stubs',
+                    'path'            => '/',
                     'expire_on_close' => false,
                     'lottery'         => [2, 100],
                     'lifetime'        => 1440,
-                    'domain'          => '/',
+                    'domain'          => 'test.com',
                     'http_only'       => false,
                     'secure'          => false,
                     'csrf'            => [
                         'samesite' => false,
-                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
+                        'livetime' => Chronos::now()->getTimestamp() + 60 * 1200,
                     ],
                 ],
             ]);
@@ -94,7 +94,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             [
                 new StartSessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
-                    $request = $request->withParsedBody(['_token' => $request->getAttribute('session')->getToken()]);
+                    $request = $request->withAttribute('_token', $request->getAttribute('session')->getToken());
 
                     return $delegate->process($request);
                 }),
@@ -129,11 +129,11 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                         ],
                     ],
                     'cookie'          => 'session',
-                    'path'            => __DIR__ . '/stubs',
+                    'path'            => '/',
                     'expire_on_close' => false,
                     'lottery'         => [2, 100],
                     'lifetime'        => 1440,
-                    'domain'          => '/',
+                    'domain'          => 'test.com',
                     'http_only'       => false,
                     'secure'          => false,
                     'csrf'            => [
@@ -190,11 +190,11 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                         ],
                     ],
                     'cookie'          => 'session',
-                    'path'            => __DIR__ . '/stubs',
+                    'path'            => '/',
                     'expire_on_close' => false,
                     'lottery'         => [2, 100],
                     'lifetime'        => 1440,
-                    'domain'          => '/',
+                    'domain'          => 'test.com',
                     'http_only'       => false,
                     'secure'          => false,
                     'csrf'            => [
@@ -257,11 +257,11 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                         ],
                     ],
                     'cookie'          => 'session',
-                    'path'            => __DIR__ . '/stubs',
+                    'path'            => '/',
                     'expire_on_close' => false,
                     'lottery'         => [2, 100],
                     'lifetime'        => 1440,
-                    'domain'          => '/',
+                    'domain'          => 'test.com',
                     'http_only'       => false,
                     'secure'          => false,
                     'csrf'            => [

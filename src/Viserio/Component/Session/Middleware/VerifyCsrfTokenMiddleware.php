@@ -11,6 +11,7 @@ use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
 use Viserio\Component\Contracts\Session\Exceptions\TokenMismatchException;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Contracts\Session\Store as StoreContract;
 
 class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 {
@@ -52,7 +53,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-        if ($request->getAttribute('session') === null) {
+        if (! $request->getAttribute('session') instanceof StoreContract) {
             throw new SessionNotStartedException('The session is not started.');
         }
 
@@ -88,7 +89,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
         $sessionToken = $request->getAttribute('session')->getToken();
-        $token        = $request->getHeaderLine('X-CSRF-TOKEN');
+        $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('X-CSRF-TOKEN');
 
         if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
             $token = $this->manager->getEncrypter()->decrypt($header);
