@@ -31,7 +31,7 @@ class FileSessionHandlerTest extends TestCase
         $this->handler = new FileSessionHandler(
             $this->files,
             $this->root->url(),
-            1
+            60
         );
 
         $this->files->createDirectory(__DIR__ . '/stubs');
@@ -81,7 +81,7 @@ class FileSessionHandlerTest extends TestCase
         $handler = new FileSessionHandler(
             $this->files,
             __DIR__ . '/stubs',
-            2
+            120
         );
 
         self::assertTrue($handler->write('write.sess', json_encode(['user_id' => 1])));
@@ -96,7 +96,7 @@ class FileSessionHandlerTest extends TestCase
         $handler = new FileSessionHandler(
             $this->files,
             __DIR__ . '/stubs',
-            2
+            120
         );
         $handler->write('temp.sess', json_encode(['user_id' => 1]));
 

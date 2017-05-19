@@ -44,7 +44,7 @@ class SessionServiceProvider implements ServiceProvider
             $eventManager->attach(TerminableContract::TERMINATE, function (EventContract $event) {
                 $driver = $event->getTarget()->getContainer()->get(SessionManager::class)->getDriver();
 
-                if ($driver->getHandler() instanceof CookieSessionHandler) {
+                if (! $driver->getHandler() instanceof CookieSessionHandler) {
                     $driver->save();
                 }
             });
