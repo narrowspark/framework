@@ -3,8 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests\DataCollectors;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Translation\DataCollectors\ViserioTranslationDataCollector;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\MessageSelector;

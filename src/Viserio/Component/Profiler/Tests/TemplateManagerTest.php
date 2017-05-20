@@ -66,8 +66,8 @@ class TemplateManagerTest extends MockeryTestCase
         $template = new TemplateManager(
             [
                 'php-info-data-collector' => [
-                    'collector' => $collector
-                ]
+                    'collector' => $collector,
+                ],
             ],
             __DIR__ . '/../Resources/views/profiler.html.php',
             'fds4f6as',
@@ -94,8 +94,8 @@ class TemplateManagerTest extends MockeryTestCase
         $template = new TemplateManager(
             [
                 'php-info-data-collector' => [
-                    'collector' => $collector
-                ]
+                    'collector' => $collector,
+                ],
             ],
             __DIR__ . '/../Resources/views/profiler.html.php',
             'fds4f6as',
@@ -122,8 +122,8 @@ class TemplateManagerTest extends MockeryTestCase
         $template = new TemplateManager(
             [
                 'php-info-data-collector' => [
-                    'collector' => $collector
-                ]
+                    'collector' => $collector,
+                ],
             ],
             __DIR__ . '/../Resources/views/profiler.html.php',
             'fds4f6as',

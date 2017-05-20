@@ -61,8 +61,8 @@ class AssetsRendererTest extends MockeryTestCase
             ->andReturn([
                 'ajax' => [
                     'collector' => new AjaxRequestsDataCollector(),
-                    'priority'  => 100
-                ]
+                    'priority'  => 100,
+                ],
             ]);
         $assets = new AssetsRenderer(true, __DIR__);
         $assets->setProfiler($profiler);

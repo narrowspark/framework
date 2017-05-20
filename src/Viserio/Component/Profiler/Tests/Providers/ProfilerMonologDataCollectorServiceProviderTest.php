@@ -7,10 +7,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerMonologDataCollectorServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
-use Viserio\Component\Log\Providers\LoggerServiceProvider;
 
 class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
 {
