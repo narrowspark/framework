@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollectors\Bridge\Cache;
 
-use stdClass;
 use Psr\SimpleCache\CacheInterface;
+use stdClass;
 use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 
 /**

@@ -27,7 +27,7 @@ class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
         $container->instance('config', [
             'viserio' => [
                 'log' => [
-                    'env' => 'prod'
+                    'env' => 'prod',
                 ],
                 'profiler' => [
                     'enable'    => true,
