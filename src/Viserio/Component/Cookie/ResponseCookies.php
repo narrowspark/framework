@@ -23,7 +23,7 @@ class ResponseCookies extends AbstractCookieCollector
                 throw new InvalidArgumentException(sprintf(
                     'The object [%s] must implement [%s].',
                     get_class($cookie),
-                    Cookie::class
+                    CookieContract::class
                 ));
             }
 

@@ -121,7 +121,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
 
             $calledCalls = [];
             foreach ($calls as $i => $call) {
-                $calledCalls[] =[
+                $calledCalls[] = [
                     $call->name,
                     $call->argument,
                     $call->result,
@@ -227,10 +227,10 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
             $statistics[$name]['time'] = $statistics[$name]['time'];
 
             if ($statistics[$name]['reads']) {
-                $statistics[$name]['hit_read_ratio'] =
+                $statistics[$name]['hits'] =
                     round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
             } else {
-                $statistics[$name]['hit_read_ratio'] = null;
+                $statistics[$name]['hits'] = 0;
             }
         }
 
@@ -259,9 +259,9 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
         }
 
         if ($totals['reads']) {
-            $totals['hit_read_ratio'] = round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
+            $totals['hits'] = round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
         } else {
-            $totals['hit_read_ratio'] = null;
+            $totals['hits'] = 0;
         }
 
         return $totals;
