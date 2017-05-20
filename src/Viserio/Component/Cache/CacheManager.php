@@ -63,7 +63,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
         $namespace = $this->options['namespace'];
 
         if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
-            $driver = $this->namespacedPool($driver, $namespace);
+            $driver = $this->getNamespacedPool($driver, $namespace);
         }
 
         if ($this->logger !== null) {
@@ -218,7 +218,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
      *
      * @return \Cache\Namespaced\NamespacedCachePool
      */
-    protected function namespacedPool(HierarchicalPoolInterface $hierarchyPool, $namespace): NamespacedCachePool
+    protected function getNamespacedPool(HierarchicalPoolInterface $hierarchyPool, string $namespace): NamespacedCachePool
     {
         return new NamespacedCachePool($hierarchyPool, $namespace);
     }

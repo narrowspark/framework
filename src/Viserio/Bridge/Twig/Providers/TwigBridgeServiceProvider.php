@@ -9,6 +9,7 @@ use Twig_Lexer;
 use Twig_Loader_Array;
 use Twig_Loader_Chain;
 use Twig_LoaderInterface;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
@@ -129,7 +130,7 @@ class TwigBridgeServiceProvider implements
             $twig->setLexer($container->get(Twig_Lexer::class));
         }
 
-        if ($options['debug']) {
+        if ($options['debug'] && class_exists(VarCloner::class)) {
             $twig->addExtension(new DumpExtension());
         }
 
