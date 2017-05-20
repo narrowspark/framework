@@ -4,12 +4,12 @@ namespace Viserio\Bridge\Twig\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Twig_Environment as TwigEnvironment;
 use Twig_Lexer;
 use Twig_Loader_Array;
 use Twig_Loader_Chain;
 use Twig_LoaderInterface;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
