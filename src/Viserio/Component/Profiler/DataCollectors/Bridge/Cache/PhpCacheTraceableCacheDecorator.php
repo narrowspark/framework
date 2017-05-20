@@ -3,16 +3,29 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollectors\Bridge\Cache;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\CacheInterface;
+use stdClass;
+use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
-/**
- * Ported from.
- *
- * @link Symfony\Component\Cache\Adapter\TraceableAdapter
- */
-final class TraceableCacheItemDecorator implements CacheItemPoolInterface
+class PhpCacheTraceableCacheDecorator implements CacheInterface, CacheItemPoolInterface
 {
+    use SimpleTraceableCacheDecoratorTrait;
     use TraceableCacheItemDecoratorTrait;
+
+    /**
+     * A instance of psr16 cache.
+     *
+     * @var \Psr\SimpleCache\CacheInterface|\Psr\Cache\CacheItemPoolInterface
+     */
+    private $pool;
+
+    /**
+     * Instance of stdClass.
+     *
+     * @var \stdClass
+     */
+    private $miss;
 
     /**
      * List of event calls.
@@ -22,13 +35,6 @@ final class TraceableCacheItemDecorator implements CacheItemPoolInterface
     private $calls = [];
 
     /**
-     * A instance of the item pool.
-     *
-     * @var \Psr\Cache\CacheItemPoolInterface
-     */
-    private $pool;
-
-    /**
      * Original class name.
      *
      * @var string
@@ -36,14 +42,15 @@ final class TraceableCacheItemDecorator implements CacheItemPoolInterface
     private $name;
 
     /**
-     * Create new Traceable Cache Item Decorator instance.
+     * Create new Php Cache Traceable Cache Decorator instance.
      *
-     * @param \Psr\Cache\CacheItemPoolInterface $pool
+     * @param \Psr\SimpleCache\CacheInterface|\Psr\Cache\CacheItemPoolInterface $pool
      */
-    public function __construct(CacheItemPoolInterface $pool)
+    public function __construct($pool)
     {
-        $this->name = get_class($pool);
         $this->pool = $pool;
+        $this->name = get_class($pool);
+        $this->miss = new stdClass();
     }
 
     /**

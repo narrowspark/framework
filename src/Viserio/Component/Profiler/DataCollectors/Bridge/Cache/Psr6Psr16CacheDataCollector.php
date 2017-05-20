@@ -29,7 +29,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     /**
      * Create a new cache data collector.
      *
-     * @param \Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorator|\Viserio\Component\Profiler\DataCollectors\Bridge\Cache\SimpleTraceableCacheDecorator $cache
+     * @param \Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorator|\Viserio\Component\Profiler\DataCollectors\Bridge\Cache\SimpleTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollectors\Bridge\Cache\PhpCacheTraceableCacheDecorator $cache
      *
      * @throws \InvalidArgumentException
      *
@@ -37,7 +37,10 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
      */
     public function addPool($cache): void
     {
-        if ($cache instanceof TraceableCacheItemDecorator || $cache instanceof SimpleTraceableCacheDecorator) {
+        if ($cache instanceof TraceableCacheItemDecorator ||
+            $cache instanceof SimpleTraceableCacheDecorator ||
+            $cache instanceof PhpCacheTraceableCacheDecorator
+        ) {
             $this->pools[$cache->getName()] = $cache;
 
             return;
@@ -122,10 +125,9 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
             $calledCalls = [];
             foreach ($calls as $i => $call) {
                 $calledCalls[] = [
-                    $call->name,
-                    $call->argument,
-                    $call->result,
                     $this->formatDuration($call->end - $call->start),
+                    $call->name,
+                    $call->result,
                 ];
             }
 
@@ -133,7 +135,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
                 $calledCalls,
                 [
                     'name'    => 'Calls',
-                    'headers' => ['Method', 'Argument', 'Result', 'Time'],
+                    'headers' => ['Time', 'Call', 'Hit'],
                 ]
             );
 

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cache\Proxies;
 
-use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
-class Cache extends StaticalProxy
+class SimpleCache extends StaticalProxy
 {
     /**
      * {@inheritdoc}
@@ -14,6 +14,6 @@ class Cache extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return CacheItemPoolInterface::class;
+        return CacheInterface::class;
     }
 }

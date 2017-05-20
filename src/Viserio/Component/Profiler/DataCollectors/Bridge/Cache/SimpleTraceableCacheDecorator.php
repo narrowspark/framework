@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollectors\Bridge\Cache;
 
-use Psr\SimpleCache\CacheInterface;
 use stdClass;
-use Traversable;
+use Psr\SimpleCache\CacheInterface;
+use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 
 /**
  * Ported from.
@@ -13,6 +13,8 @@ use Traversable;
  */
 class SimpleTraceableCacheDecorator implements CacheInterface
 {
+    use SimpleTraceableCacheDecoratorTrait;
+
     /**
      * A instance of psr16 cache.
      *
@@ -34,134 +36,33 @@ class SimpleTraceableCacheDecorator implements CacheInterface
      */
     private $calls = [];
 
+    /**
+     * Original class name.
+     *
+     * @var string
+     */
+    private $name;
+
+    /**
+     * Create new Simple Traceable Cache Decorator instance.
+     *
+     * @param CacheInterface $pool
+     */
     public function __construct(CacheInterface $pool)
     {
         $this->pool = $pool;
+        $this->name = get_class($pool);
         $this->miss = new stdClass();
     }
 
     /**
-     * {@inheritdoc}
+     * Get the original class name.
+     *
+     * @return string
      */
-    public function get($key, $default = null)
+    public function getName(): string
     {
-        $miss  = null !== $default && is_object($default) ? $default : $this->miss;
-        $event = $this->start(__FUNCTION__);
-
-        try {
-            $value = $this->pool->get($key, $miss);
-        } finally {
-            $event->end = microtime(true);
-        }
-
-        if ($event->result[$key] = $miss !== $value) {
-            ++$event->hits;
-        } else {
-            ++$event->misses;
-            $value = $default;
-        }
-
-        return $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function has($key)
-    {
-        $event = $this->start(__FUNCTION__);
-
-        try {
-            return $event->result[$key] = $this->pool->has($key);
-        } finally {
-            $event->end = microtime(true);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($key)
-    {
-        $event = $this->start(__FUNCTION__);
-
-        try {
-            return $event->result[$key] = $this->pool->delete($key);
-        } finally {
-            $event->end = microtime(true);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function set($key, $value, $ttl = null)
-    {
-        $event = $this->start(__FUNCTION__);
-
-        try {
-            return $event->result[$key] = $this->pool->set($key, $value, $ttl);
-        } finally {
-            $event->end = microtime(true);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setMultiple($values, $ttl = null)
-    {
-        $event                 = $this->start(__FUNCTION__);
-        $event->result['keys'] = [];
-
-        if ($values instanceof Traversable) {
-            $values = function () use ($values, $event) {
-                foreach ($values as $k => $v) {
-                    $event->result['keys'][] = $k;
-
-                    yield $k => $v;
-                }
-            };
-            $values = $values();
-        } elseif (is_array($values)) {
-            $event->result['keys'] = array_keys($values);
-        }
-
-        try {
-            return $event->result['result'] = $this->pool->setMultiple($values, $ttl);
-        } finally {
-            $event->end = microtime(true);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMultiple($keys, $default = null)
-    {
-        $miss  = null !== $default && is_object($default) ? $default : $this->miss;
-        $event = $this->start(__FUNCTION__);
-
-        try {
-            $result = $this->pool->getMultiple($keys, $miss);
-        } finally {
-            $event->end = microtime(true);
-        }
-
-        $f = function () use ($result, $event, $miss, $default) {
-            $event->result = [];
-            foreach ($result as $key => $value) {
-                if ($event->result[$key] = $miss !== $value) {
-                    ++$event->hits;
-                } else {
-                    ++$event->misses;
-                    $value = $default;
-                }
-                yield $key => $value;
-            }
-        };
-
-        return $f();
+        return $this->name;
     }
 
     /**
@@ -179,26 +80,11 @@ class SimpleTraceableCacheDecorator implements CacheInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get a list of calls.
+     *
+     * @return array
      */
-    public function deleteMultiple($keys)
-    {
-        $event = $this->start(__FUNCTION__);
-
-        if ($keys instanceof Traversable) {
-            $keys = $event->result['keys'] = iterator_to_array($keys, false);
-        } else {
-            $event->result['keys'] = $keys;
-        }
-
-        try {
-            return $event->result['result'] = $this->pool->deleteMultiple($keys);
-        } finally {
-            $event->end = microtime(true);
-        }
-    }
-
-    public function getCalls()
+    public function getCalls(): array
     {
         try {
             return $this->calls;
@@ -214,9 +100,9 @@ class SimpleTraceableCacheDecorator implements CacheInterface
      *
      * @return object
      */
-    private function start($name)
+    private function start(string $name)
     {
-        $this->calls[] = $event = $event = new class() {
+        $this->calls[] = $event = new class() {
             public $name;
             public $start;
             public $end;

@@ -7,6 +7,7 @@ use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\PhpCacheTraceableCacheDecorator;
 use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\Psr6Psr16CacheDataCollector;
 use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\SimpleTraceableCacheDecorator;
 use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorator;
@@ -20,7 +21,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
     {
         return [
             CacheItemPoolInterface::class => [self::class, 'createCacheItemPoolDecorator'],
-            CacheInterface::class         => [self::class, 'createCacheInterfaceDecorator'],
+            CacheInterface::class         => [self::class, 'createSimpleTraceableCacheDecorator'],
             ProfilerContract::class       => [self::class, 'createProfiler'],
         ];
     }
@@ -38,6 +39,10 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
         $cache = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($cache !== null) {
+            if (self::checkForPhpCacheNamespace($cache)) {
+                return new PhpCacheTraceableCacheDecorator($cache);
+            }
+
             return new TraceableCacheItemDecorator($cache);
         }
 
@@ -52,11 +57,15 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
      *
      * @return null|\Psr\SimpleCache\CacheInterface
      */
-    public static function createCacheInterfaceDecorator(ContainerInterface $container, ?callable $getPrevious = null): ?CacheInterface
+    public static function createSimpleTraceableCacheDecorator(ContainerInterface $container, ?callable $getPrevious = null): ?CacheInterface
     {
         $cache = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($cache !== null) {
+            if (self::checkForPhpCacheNamespace($cache)) {
+                return new PhpCacheTraceableCacheDecorator($cache);
+            }
+
             return new SimpleTraceableCacheDecorator($cache);
         }
 
@@ -80,7 +89,8 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
 
             if ($container->has(CacheItemPoolInterface::class) || $container->has(CacheInterface::class)) {
                 if (($cache = $container->get(CacheItemPoolInterface::class)) instanceof TraceableCacheItemDecorator ||
-                    ($cache = $container->get(CacheInterface::class)) instanceof SimpleTraceableCacheDecorator
+                    ($cache = $container->get(CacheInterface::class)) instanceof SimpleTraceableCacheDecorator ||
+                    ($cache = $container->get(CacheInterface::class)) instanceof PhpCacheTraceableCacheDecorator
                 ) {
                     $collector->addPool($cache);
                 }
@@ -92,5 +102,17 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
         }
 
         return $profiler;
+    }
+
+    private static function checkForPhpCacheNamespace($class): bool
+    {
+        $class = get_class($class);
+        $pos   = mb_strrpos($class, '\\');
+
+        if ($pos === false) {
+            return false;
+        }
+
+        return mb_strpos(mb_substr($class, 0, $pos), 'Cache\Adapter') !== false;
     }
 }

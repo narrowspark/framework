@@ -70,7 +70,7 @@ abstract class AbstractCookieCollector
         }
 
         throw new InvalidArgumentException(sprintf(
-            'The object [%s] must be an instance of "\Viserio\Component\Cookie\Cookie" or "\Viserio\Component\Contracts\Cookie\Cookie".',
+            'The object [%s] must be an instance of [%s] or [%s].',
             get_class($cookie),
             Cookie::class,
             SetCookie::class
