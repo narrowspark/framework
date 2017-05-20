@@ -65,13 +65,12 @@ class CookieSessionHandler implements SessionHandlerInterface
     {
         $cookies = $this->request->getCookieParams();
 
-        if (! is_null($decoded = json_decode($cookies, true)) && is_array($decoded)) {
-            if (isset($decoded[$sessionId])) {
-                $data = $decoded[$sessionId];
-
-                if (isset($data['expires']) && Chronos::now()->getTimestamp() <= $data['expires']) {
-                    return $data['data'];
-                }
+        if (isset($cookies[$sessionId]) &&
+            ! is_null($decoded = json_decode($cookies[$sessionId], true)) &&
+            is_array($decoded)
+        ) {
+            if (isset($decoded['expires']) && Chronos::now()->getTimestamp() <= $decoded['expires']) {
+                return $decoded['data'];
             }
         }
 

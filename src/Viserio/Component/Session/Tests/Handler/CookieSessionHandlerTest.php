@@ -45,12 +45,10 @@ class CookieSessionHandlerTest extends MockeryTestCase
         $request
             ->shouldReceive('getCookieParams')
             ->once()
-            ->andReturn('{
-                "temp": {
-                    "expires": "' . Chronos::now()->addSeconds(350)->getTimestamp() . '",
-                    "data": "Foo Bar"
-                }
-            }');
+            ->andReturn(['temp' => '{
+                "expires": "' . Chronos::now()->addSeconds(350)->getTimestamp() . '",
+                "data": "Foo Bar"
+            }']);
         $handler = $this->handler;
         $handler->setRequest($request);
 
@@ -63,7 +61,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
         $request
             ->shouldReceive('getCookieParams')
             ->once()
-            ->andReturn('');
+            ->andReturn(['']);
         $handler = $this->handler;
         $handler->setRequest($request);
 
