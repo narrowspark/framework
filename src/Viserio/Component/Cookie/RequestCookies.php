@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
 use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
+use InvalidArgumentException;
 
 class RequestCookies extends AbstractCookieCollector
 {
@@ -12,15 +12,16 @@ class RequestCookies extends AbstractCookieCollector
      *
      * @param array $cookies
      *
-     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     public function __construct(array $cookies = [])
     {
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof Cookie)) {
-                throw new RuntimeException(sprintf(
-                    'The object [%s] must be an instance of [\Viserio\Component\Cookie\Cookie].',
-                    get_class($cookie)
+                throw new InvalidArgumentException(sprintf(
+                    'The object [%s] must be an instance of [%s].',
+                    get_class($cookie),
+                    Cookie::class
                 ));
             }
 

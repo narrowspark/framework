@@ -12,8 +12,8 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 class RequestCookiesTest extends MockeryTestCase
 {
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage The object [Viserio\Component\Cookie\SetCookie] must be an instance of [\Viserio\Component\Cookie\Cookie].
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The object [Viserio\Component\Cookie\SetCookie] must be an instance of [Viserio\Component\Cookie\Cookie].
      */
     public function testRequestCookiesToThrowException()
     {

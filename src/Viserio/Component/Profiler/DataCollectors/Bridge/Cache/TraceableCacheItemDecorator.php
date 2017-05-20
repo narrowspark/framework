@@ -10,14 +10,18 @@ use Psr\Cache\CacheItemPoolInterface;
  *
  * @link Symfony\Component\Cache\Adapter\TraceableAdapter
  */
-final class TraceableCacheItemDecorater implements CacheItemPoolInterface
+final class TraceableCacheItemDecorator implements CacheItemPoolInterface
 {
     /**
+     * List of event calls.
+     *
      * @var array
      */
     private $calls = [];
 
     /**
+     * A instance of the item pool.
+     *
      * @var \Psr\Cache\CacheItemPoolInterface
      */
     private $pool;
@@ -167,7 +171,7 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
      */
     public function deleteItems(array $keys)
     {
-        $event = $this->start(__FUNCTION__, $keys);
+        $event = $this->start(__FUNCTION__);
 
         try {
             return $event->result = $this->pool->deleteItems($keys);

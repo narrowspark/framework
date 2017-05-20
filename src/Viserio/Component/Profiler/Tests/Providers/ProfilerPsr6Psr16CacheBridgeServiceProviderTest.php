@@ -9,11 +9,11 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
-use Viserio\Component\Profiler\Providers\ProfilerPsr6CacheBridgeServiceProvider;
+use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorator;
+use Viserio\Component\Profiler\Providers\ProfilerPsr6Psr16CacheBridgeServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
-class ProfilerPsr6CacheBridgeServiceProviderTest extends MockeryTestCase
+class ProfilerPsr6Psr16CacheBridgeServiceProviderTest extends MockeryTestCase
 {
     public function testProvider()
     {
@@ -23,12 +23,12 @@ class ProfilerPsr6CacheBridgeServiceProviderTest extends MockeryTestCase
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new ProfilerServiceProvider());
-        $container->register(new ProfilerPsr6CacheBridgeServiceProvider());
+        $container->register(new ProfilerPsr6Psr16CacheBridgeServiceProvider());
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
-        self::assertInstanceOf(TraceableCacheItemDecorater::class, $container->get(CacheItemPoolInterface::class));
+        self::assertInstanceOf(TraceableCacheItemDecorator::class, $container->get(CacheItemPoolInterface::class));
     }
 
     private function getRequest()

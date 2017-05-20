@@ -6,10 +6,10 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
-use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
+use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\Psr6Psr16CacheDataCollector;
+use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorator;
 
-class Psr6CacheDataCollectorTest extends MockeryTestCase
+class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
 {
     public function testGetMenu()
     {
@@ -42,8 +42,8 @@ class Psr6CacheDataCollectorTest extends MockeryTestCase
 
     private function getPsr6CacheDataCollector()
     {
-        $collector = new Psr6CacheDataCollector();
-        $collector->addPool(new TraceableCacheItemDecorater(new ArrayCachePool()));
+        $collector = new Psr6Psr16CacheDataCollector();
+        $collector->addPool(new TraceableCacheItemDecorator(new ArrayCachePool()));
         $collector->collect(
             $this->mock(ServerRequestInterface::class),
             $this->mock(ResponseInterface::class)

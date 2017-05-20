@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollectors\Bridge\Cache;
 
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
@@ -14,7 +15,7 @@ use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
  *
  * @link https://github.com/php-cache/cache-bundle/blob/master/src/DataCollector/CacheDataCollector.php
  */
-class Psr6CacheDataCollector extends AbstractDataCollector implements
+class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     TooltipAwareContract,
     PanelAwareContract
 {
@@ -28,11 +29,26 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     /**
      * Create a new cache data collector.
      *
-     * @param \Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater $cache
+     * @param \Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorator|\Viserio\Component\Profiler\DataCollectors\Bridge\Cache\SimpleTraceableCacheDecorator $cache
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return void
      */
-    public function addPool(TraceableCacheItemDecorater $cache)
+    public function addPool($cache): void
     {
-        $this->pools[$cache->getName()] = $cache;
+        if ($cache instanceof TraceableCacheItemDecorator || $cache instanceof SimpleTraceableCacheDecorator) {
+            $this->pools[$cache->getName()] = $cache;
+
+            return;
+        }
+
+        throw new InvalidArgumentException(sprintf(
+            'The object [%s] must be an instance of [%s] or [%s].',
+            get_class($cache),
+            TraceableCacheItemDecorator::class,
+            SimpleTraceableCacheDecorator::class
+        ));
     }
 
     /**
@@ -134,8 +150,6 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      * Method returns amount of logged Cache reads: "get" calls.
      *
      * @return array
-     *
-     * @codeCoverageIgnore
      */
     public function getStatistics(): array
     {
@@ -146,8 +160,6 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      * Method returns the statistic totals.
      *
      * @return array
-     *
-     * @codeCoverageIgnore
      */
     public function getTotals(): array
     {
@@ -158,8 +170,6 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      * Method returns all logged Cache call objects.
      *
      * @return int
-     *
-     * @codeCoverageIgnore
      */
     public function getCalls(): int
     {

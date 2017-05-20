@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests\DataCollectors\Bridge\Cache;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
+use PHPUnit\Framework\TestCase;
+use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorator;
 
-class TraceableCacheItemDecoraterTest extends MockeryTestCase
+class TraceableCacheItemDecoratorTest extends TestCase
 {
     public function testGetItemMissTrace()
     {
@@ -120,7 +120,9 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
     {
         $pool = $this->createCachePool();
         $arg  = ['k0', 'k1'];
+
         $pool->deleteItems($arg);
+
         $calls = $pool->getCalls();
 
         self::assertCount(1, $calls);
@@ -128,7 +130,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[0];
 
         self::assertEquals('deleteItems', $call->name);
-        self::assertSame(['keys' => $arg, 'result' => true], $call->result);
+        self::assertTrue($call->result);
         self::assertEquals(0, $call->hits);
         self::assertEquals(0, $call->misses);
         self::assertNotEmpty($call->start);
@@ -177,6 +179,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
     {
         $pool = $this->createCachePool();
         $pool->commit();
+
         $calls = $pool->getCalls();
 
         self::assertCount(1, $calls);
@@ -195,6 +198,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
     {
         $pool = $this->createCachePool();
         $pool->clear();
+
         $calls = $pool->getCalls();
 
         self::assertCount(1, $calls);
@@ -202,7 +206,7 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
         $call = $calls[0];
 
         self::assertEquals('clear', $call->name);
-        self::assertNull(null, $call->argument);
+        self::assertNull(null, $call->result);
         self::assertEquals(0, $call->hits);
         self::assertEquals(0, $call->misses);
         self::assertNotEmpty($call->start);
@@ -211,6 +215,6 @@ class TraceableCacheItemDecoraterTest extends MockeryTestCase
 
     private function createCachePool()
     {
-        return new TraceableCacheItemDecorater(new ArrayCachePool());
+        return new TraceableCacheItemDecorator(new ArrayCachePool());
     }
 }

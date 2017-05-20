@@ -13,7 +13,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 class ResponseCookiesTest extends MockeryTestCase
 {
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement [Viserio\Component\Contracts\Cookie\Cookie].
      */
     public function testRequestCookiesToThrowException()
