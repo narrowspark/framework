@@ -160,8 +160,6 @@
     "suggest": {
         "alcaeus/mongo-php-adapter"                          : "Required to use the ext-mongo interface on ext-mongodb interface (^1.0).",
         "aws/aws-sdk-php"                                    : "Required to use the SQS queue driver and SES mail driver (^3.18).",
-        "cache/apc-adapter"                                  : "Required to use the Apc cache (^0.3).",
-        "cache/apcu-adapter"                                 : "Required to use the Apcu cache (^0.3).",
         "cache/array-adapter"                                : "Required to use the Array cache (^0.2)",
         "cache/filesystem-adapter"                           : "Required to use the Filesystem cache (^0.3).",
         "cache/memcache-adapter"                             : "Required to use the Memcache cache (^0.3).",

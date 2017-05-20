@@ -25,16 +25,6 @@ class SwiftMailDataCollectorTest extends MockeryTestCase
         );
     }
 
-    public function testGetPanel()
-    {
-        $collector = $this->getSwiftDataCollector();
-
-        self::assertSame(
-            '<div class="empty">Empty</div>',
-            $collector->getPanel()
-        );
-    }
-
     private function getSwiftDataCollector()
     {
         $collector = new SwiftMailDataCollector(

@@ -84,7 +84,9 @@ class ProfileTest extends TestCase
         $collector = new PhpInfoDataCollector();
 
         $profile->setCollectors([
-            $collector,
+            $collector->getName() => [
+                'collector' => $collector,
+            ]
         ]);
 
         self::assertInstanceOf(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));

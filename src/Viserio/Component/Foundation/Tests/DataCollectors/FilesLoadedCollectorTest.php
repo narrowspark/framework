@@ -22,15 +22,4 @@ class FilesLoadedCollectorTest extends MockeryTestCase
             $collector->getMenu()
         );
     }
-
-    public function testGetPanel()
-    {
-        $collector = new FilesLoadedCollector(__DIR__);
-        $collector->collect(
-            $this->mock(ServerRequestInterface::class),
-            $this->mock(ResponseInterface::class)
-        );
-
-        self::assertTrue(is_string($collector->getPanel()));
-    }
 }

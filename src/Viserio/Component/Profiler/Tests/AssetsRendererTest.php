@@ -58,7 +58,12 @@ class AssetsRendererTest extends MockeryTestCase
         $profiler = $this->mock(ProfilerContract::class);
         $profiler->shouldReceive('getCollectors')
             ->once()
-            ->andReturn([new AjaxRequestsDataCollector()]);
+            ->andReturn([
+                'ajax' => [
+                    'collector' => new AjaxRequestsDataCollector(),
+                    'priority'  => 100
+                ]
+            ]);
         $assets = new AssetsRenderer(true, __DIR__);
         $assets->setProfiler($profiler);
 

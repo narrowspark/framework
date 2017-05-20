@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Translation\MessageCatalogue;
@@ -14,7 +14,7 @@ use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Providers\TranslationDataCollectorServiceProvider;
 use Viserio\Component\Translation\Translator;
-use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
 class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
 {
@@ -43,12 +43,12 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
         ));
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new OptionsResolverServiceProvider());
-        $container->register(new WebProfilerServiceProvider());
+        $container->register(new ProfilerServiceProvider());
         $container->register(new TranslationDataCollectorServiceProvider());
 
         $container->instance('config', [
             'viserio' => [
-                'webprofiler' => [
+                'profiler' => [
                     'enable'    => true,
                     'collector' => [
                         'translation' => true,
@@ -57,7 +57,7 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(WebProfilerContract::class, $container->get(WebProfilerContract::class));
+        self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
     private function getRequest()

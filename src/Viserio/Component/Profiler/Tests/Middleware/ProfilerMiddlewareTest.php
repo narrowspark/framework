@@ -10,6 +10,8 @@ use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Profiler\TemplateManager;
 use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 
 class ProfilerMiddlewareTest extends MockeryTestCase
 {
@@ -20,7 +22,7 @@ class ProfilerMiddlewareTest extends MockeryTestCase
 
         $profiler->enable();
 
-        $middleware = new ProfilerMiddleware($profiler);
+        $middleware = new ProfilerMiddleware(new ArrayContainer([ProfilerContract::class => $profiler]));
         $template   = new TemplateManager(
             [],
             $profiler->getTemplate(),

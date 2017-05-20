@@ -42,7 +42,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
         return [
             'default'         => 'array',
             'cookie'          => 'NSSESSID',
-            'lifetime'        => 86400,
+            'lifetime'        => 86400, // 1 day
             'expire_on_close' => false,
         ];
     }

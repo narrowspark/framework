@@ -215,6 +215,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                     [
                         'name'       => 'Session Metadata',
                         'empty_text' => 'No session metadata',
+                        'vardumper'  => false,
                     ]
                 ) . $this->createTable(
                     $session !== null ? $session->getAll() : [],
@@ -246,48 +247,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     {
         return [
             'css' => __DIR__ . '/Resources/css/request-response.css',
-        ];
-    }
-
-    /**
-     * Prepare request and response cookie infos and create a cookie tab.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     *
-     * @return array
-     */
-    protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): array
-    {
-        if (! (class_exists(RequestCookies::class) && class_exists(ResponseCookies::class))) {
-            return [];
-        }
-
-        $requestCookies = $responseCookies = [];
-
-        foreach (RequestCookies::fromRequest($serverRequest)->getAll() as $cookie) {
-            $requestCookies[$cookie->getName()] = $cookie->getValue();
-        }
-
-        foreach (ResponseCookies::fromResponse($response)->getAll() as $cookie) {
-            $responseCookies[$cookie->getName()] = $cookie->getValue();
-        }
-
-        return [
-            'name'    => 'Cookies',
-            'content' => $this->createTable(
-                $requestCookies,
-                [
-                    'name'       => 'Request Cookies',
-                    'empty_text' => 'No request cookies',
-                ]
-            ) . $this->createTable(
-                $responseCookies,
-                [
-                    'name'       => 'Response Cookies',
-                    'empty_text' => 'No response cookies',
-                ]
-            ),
         ];
     }
 

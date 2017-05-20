@@ -31,9 +31,9 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
      */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
-        if ($getPrevious !== null) {
-            $console = $getPrevious();
+        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
+        if ($console !== null) {
             $console->addCommands([
                 new DownCommand(),
                 new UpCommand(),
@@ -42,8 +42,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
 
             return $console;
         }
-        // @codeCoverageIgnoreStart
-        return null;
-        // @codeCoverageIgnoreEnd
+
+        return $console;
     }
 }

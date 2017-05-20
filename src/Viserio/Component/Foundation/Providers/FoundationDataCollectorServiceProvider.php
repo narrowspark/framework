@@ -80,7 +80,7 @@ class FoundationDataCollectorServiceProvider implements
      */
     public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
-        $profiler = $getPrevious();
+        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($profiler !== null) {
             self::resolveOptions($container);
@@ -99,9 +99,8 @@ class FoundationDataCollectorServiceProvider implements
 
             return $profiler;
         }
-        // @codeCoverageIgnoreStart
+
         return $profiler;
-        // @codeCoverageIgnoreEnd
     }
 
     private static function createNarrowsparkDataCollector(): NarrowsparkDataCollector

@@ -44,6 +44,7 @@ class ViserioHttpDataCollectorTest extends MockeryTestCase
         self::assertSame(
             [
                 'label' => '@',
+                'class' => 'response-status-green',
                 'value' => 'Home',
             ],
             $collect->getMenu()

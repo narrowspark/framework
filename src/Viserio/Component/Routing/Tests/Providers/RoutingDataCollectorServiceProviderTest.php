@@ -36,7 +36,7 @@ class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
         $container->instance('config',
             [
                 'viserio' => [
-                    'Profiler' => [
+                    'profiler' => [
                         'enable'    => true,
                         'collector' => [
                             'routes'  => true,

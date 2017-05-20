@@ -64,7 +64,7 @@ class MacroableTraitTest extends TestCase
 
     /**
      * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Method dontExist does not exist.
+     * @expectedExceptionMessage Method [dontExist] does not exist.
      */
     public function testBadStaticFunctionCall()
     {

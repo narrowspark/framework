@@ -12,7 +12,8 @@
     --profiler-tab-active-font-color: #2b2a28;
     --profiler-tab-counter-color: #424242;
     --profiler-table-head-background-color: #424242;
-    --profiler-table-body-background-color: #fff;
+    --profiler-table-body-background-color-even: #eee;
+    --profiler-table-body-background-color-odd: #fff;
 }
 
 .profiler {
@@ -372,7 +373,6 @@
 }
 .profiler .profiler-body .profiler-panel .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label ~ .profiler-tabs-tab-content {
     z-index: 1;
-
     opacity: 1;
 }
 
@@ -380,22 +380,23 @@
     margin-top: 0;
 }
 
+.profiler .profiler-body .profiler-panel table tr:nth-child(even) {
+    background: var(--profiler-table-body-background-color-even);
+}
+.profiler .profiler-body .profiler-panel table tr:nth-child(odd) {
+    background: var(--profiler-table-body-background-color-odd);
+}
 .profiler .profiler-body .profiler-panel table,
 .profiler .profiler-body .profiler-panel tr,
 .profiler .profiler-body .profiler-panel th,
 .profiler .profiler-body .profiler-panel td {
     line-height: 1.5;
-
     border-collapse: collapse;
-
     vertical-align: top;
-
-    background: var(--profiler-table-body-background-color);
 }
 .profiler .profiler-body .profiler-panel table {
     width: 100%;
     margin: 0;
-
     box-shadow: 0 0 1px rgba(128, 128, 128, .2);
 }
 .profiler .profiler-body .profiler-panel table:last-child {
@@ -428,7 +429,7 @@
     font-size-adjust: .5;
 
     color: #2b2a28;
-    border: 1px solid var(--profiler-table-body-background-color);
+    border: 1px solid var(--profiler-table-body-background-color-odd);
     border-width: 1px 0;
 }
 .profiler .profiler-body .profiler-panel table tbody td {
@@ -455,7 +456,7 @@
     text-align: center;
 
     color: #fff;
-    border: 4px dashed var(--profiler-table-body-background-color);
+    border: 4px dashed var(--profiler-table-body-background-color-odd);
 }
 
 .profiler .profiler-body .profiler-panel .metrics {

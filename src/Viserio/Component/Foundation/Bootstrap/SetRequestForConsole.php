@@ -57,7 +57,7 @@ class SetRequestForConsole implements BootstrapContract
             {
                 return $container->get(ServerRequestFactoryInterface::class)->createServerRequest(
                     'GET',
-                    self::$config['app']['url']
+                    self::$config['console']['url']
                 );
             }
         });

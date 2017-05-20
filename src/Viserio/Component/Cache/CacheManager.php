@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cache;
 
-use Cache\Adapter\Apc\ApcCachePool;
-use Cache\Adapter\Apcu\ApcuCachePool;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\Memcache\MemcacheCachePool;
 use Cache\Adapter\Memcached\MemcachedCachePool;
@@ -76,35 +74,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     }
 
     /**
-     * Create an instance of the Apc cache driver.
-     *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Apc\ApcCachePool
-     *
-     * @codeCoverageIgnore
-     */
-    protected function createApcDriver(array $config): ApcCachePool
-    {
-        return new ApcCachePool();
-    }
-
-    /**
-     * Create an instance of the Apcu cache driver.
-     *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Apcu\ApcuCachePool
-     *
-     * @codeCoverageIgnore
-     */
-    protected function createApcuDriver(array $config): ApcuCachePool
-    {
-        return new ApcuCachePool();
-    }
-
-    /**
-     * Create an instance of the Apcu cache driver.
+     * Create an instance of the Array cache driver.
      *
      * @param array $config
      *

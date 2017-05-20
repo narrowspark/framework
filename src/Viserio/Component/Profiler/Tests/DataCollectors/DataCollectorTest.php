@@ -76,7 +76,7 @@ class DataCollectorTest extends TestCase
         $collector = new FixtureDataCollector();
 
         self::assertSame(
-            $this->removeTabId('<div class="profiler-tabs row"><div class="profiler-tabs-tab col span_12"><input type="radio" name="tabgroup" id="tab-0-5857be8b2c3d4"><label for="tab-0-5857be8b2c3d4">test</label><div class="profiler-tabs-tab-content">test</div></div></div>'),
+            $this->removeTabId('<div class="profiler-tabs row"><div class="profiler-tabs-tab col"><input type="radio" name="tabgroup" id="tab-0-5857be8b2c3d4"><label for="tab-0-5857be8b2c3d4">test</label><div class="profiler-tabs-tab-content">test</div></div></div>'),
             $this->removeTabId($collector->getTabs())
         );
     }

@@ -89,7 +89,7 @@ class ProfilerMonologDataCollectorServiceProvider implements
         if ($profiler !== null) {
             self::resolveOptions($container);
 
-            if (self::$options['collector']['logs']) {
+            if (self::$options['collector']['logs'] === true && $container->has(Logger::class)) {
                 $profiler->addCollector(new MonologLoggerDataCollector($container->get(Logger::class)));
             }
 

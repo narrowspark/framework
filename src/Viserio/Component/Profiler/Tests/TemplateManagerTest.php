@@ -64,7 +64,11 @@ class TemplateManagerTest extends MockeryTestCase
 
         $assets   = new AssetsRenderer();
         $template = new TemplateManager(
-            ['php-info-data-collector' => $collector],
+            [
+                'php-info-data-collector' => [
+                    'collector' => $collector
+                ]
+            ],
             __DIR__ . '/../Resources/views/profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
@@ -88,7 +92,11 @@ class TemplateManagerTest extends MockeryTestCase
 
         $assets   = new AssetsRenderer();
         $template = new TemplateManager(
-            ['php-info-data-collector' => $collector],
+            [
+                'php-info-data-collector' => [
+                    'collector' => $collector
+                ]
+            ],
             __DIR__ . '/../Resources/views/profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
@@ -112,7 +120,11 @@ class TemplateManagerTest extends MockeryTestCase
 
         $assets   = new AssetsRenderer();
         $template = new TemplateManager(
-            ['php-info-data-collector' => $collector],
+            [
+                'php-info-data-collector' => [
+                    'collector' => $collector
+                ]
+            ],
             __DIR__ . '/../Resources/views/profiler.html.php',
             'fds4f6as',
             $assets->getIcons()

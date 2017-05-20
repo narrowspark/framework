@@ -187,7 +187,7 @@ class StartSessionMiddleware implements MiddlewareInterface
             $config['domain'] ?? $uri->getHost(),
             $config['secure'] ?? ($uri->getScheme() === 'https'),
             $config['http_only'] ?? true,
-            $config['same_site'] ?? false
+            $config['samesite'] ?? false
         );
 
         return $response->withAddedHeader('Set-Cookie', (string) $setCookie);
