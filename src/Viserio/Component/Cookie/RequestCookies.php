@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
-use Psr\Http\Message\ServerRequestInterface;
 use InvalidArgumentException;
+use Psr\Http\Message\ServerRequestInterface;
 
 class RequestCookies extends AbstractCookieCollector
 {

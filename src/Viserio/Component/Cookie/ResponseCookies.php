@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
 use Cake\Chronos\Chronos;
-use Psr\Http\Message\ResponseInterface;
 use InvalidArgumentException;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
 
 class ResponseCookies extends AbstractCookieCollector

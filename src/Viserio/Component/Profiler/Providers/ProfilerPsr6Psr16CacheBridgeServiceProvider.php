@@ -82,7 +82,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
                 if (($cache = $container->get(CacheItemPoolInterface::class)) instanceof TraceableCacheItemDecorator ||
                     ($cache = $container->get(CacheInterface::class)) instanceof SimpleTraceableCacheDecorator
                 ) {
-                   $collector->addPool($cache);
+                    $collector->addPool($cache);
                 }
             }
 
