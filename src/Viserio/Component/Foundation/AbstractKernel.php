@@ -348,6 +348,24 @@ abstract class AbstractKernel implements
     }
 
     /**
+     * Register all of the application / kernel service providers.
+     *
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
+     *
+     * @return array
+     */
+    protected function registerServiceProviders(KernelContract $kernel): array
+    {
+        $providers = $kernel->getConfigPath('/serviceproviders.php');
+
+        if (file_exists($providers)) {
+            return require_once $providers;
+        }
+
+        return [];
+    }
+
+    /**
      * Register all of the base service providers.
      *
      * @return void

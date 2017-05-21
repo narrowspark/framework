@@ -8,13 +8,15 @@ use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use ReflectionMethod;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
+use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Contracts\WebProfiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\Component\Cookie\RequestCookies;
+use Viserio\Component\Cookie\ResponseCookies;
+use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
 
 class ViserioHttpDataCollector extends AbstractDataCollector implements
     TooltipAwareContract,
@@ -108,11 +110,12 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         $tabInfos = [
             'label' => $statusCode,
+            'class' => $status,
             'value' => '',
         ];
 
         if ($this->route !== null && $this->route->getName() !== null) {
-            $tabInfos = array_merge(
+            return array_merge(
                 $tabInfos,
                 [
                     'label' => '@',
@@ -120,10 +123,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 ]
             );
         } elseif ($this->route !== null) {
-            $tabInfos = array_merge(
+            return array_merge(
                 $tabInfos,
                 [
-                    'class'  => $status,
                     'value'  => implode(' | ', $this->route->getMethods()),
                 ]
             );
@@ -157,14 +159,16 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $session     = $this->serverRequest->getAttribute('session');
+        $request     = $this->serverRequest;
+        $response    = $this->response;
+        $session     = $request->getAttribute('session');
         $sessionMeta = [];
 
         if ($session !== null) {
             $sessionMeta = [
-                'firstTrace'        => $session->getFirstTrace(),
-                'lastTrace'         => $session->getLastTrace(),
-                'regenerationTrace' => $session->getRegenerationTrace(),
+                'Created'           => date(DATE_RFC2822, $session->getFirstTrace()),
+                'Last used'         => date(DATE_RFC2822, $session->getLastTrace()),
+                'Last regeneration' => date(DATE_RFC2822, $session->getRegenerationTrace()),
                 'requestsCount'     => $session->getRequestsCount(),
                 'fingerprint'       => $session->getFingerprint(),
             ];
@@ -174,55 +178,61 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             [
                 'name'    => 'Request',
                 'content' => $this->createTable(
-                    $this->serverRequest->getQueryParams(),
-                    ['name' => 'Get Parameters']
+                    $request->getQueryParams(),
+                    [
+                        'name'       => 'Get Parameters',
+                        'empty_text' => 'No GET parameters',
+                    ]
                 ) . $this->createTable(
-                    $this->serverRequest->getParsedBody() ?? [],
-                    ['name' => 'Post Parameters']
+                    $request->getParsedBody() ?? [],
+                    [
+                        'name'       => 'Post Parameters',
+                        'empty_text' => 'No POST parameters',
+                    ]
                 ) . $this->createTable(
-                    $this->prepareRequestAttributes($this->serverRequest->getAttributes()),
+                    $this->prepareRequestAttributes($request->getAttributes()),
                     ['name' => 'Request Attributes']
                 ) . $this->createTable(
-                    $this->splitOnAttributeDelimiter($this->serverRequest->getHeaderLine('Cookie')),
-                    ['name' => 'Cookies']
-                ) . $this->createTable(
-                    $this->prepareRequestHeaders($this->serverRequest->getHeaders()),
+                    $this->prepareRequestHeaders($request->getHeaders()),
                     ['name' => 'Request Headers']
                 ) . $this->createTable(
-                    $this->prepareServerParams($this->serverRequest->getServerParams()),
+                    $this->prepareServerParams($request->getServerParams()),
                     ['name' => 'Server Parameters']
                 ),
             ],
             [
                 'name'    => 'Response',
                 'content' => $this->createTable(
-                    $this->response->getHeaders(),
-                    [
-                        'name'    => 'Response Headers',
-                        'headers' => [
-                            'key' => 'Header',
-                        ],
-                    ]
-                ) . $this->createTable(
-                    $this->serverRequest->getHeader('Set-Cookie'),
-                    ['name' => 'Cookies']
+                    $response->getHeaders(),
+                    ['name'    => 'Response Headers']
                 ),
             ],
+            $this->createCookieTab($request, $response),
             [
                 'name'    => 'Session',
                 'content' => $this->createTable(
                     $sessionMeta,
-                    ['name' => 'Session Metadata']
+                    [
+                        'name'       => 'Session Metadata',
+                        'empty_text' => 'No session metadata',
+                        'vardumper'  => false,
+                    ]
                 ) . $this->createTable(
                     $session !== null ? $session->getAll() : [],
-                    ['name' => 'Session Attributes']
+                    [
+                        'name'       => 'Session Attributes',
+                        'empty_text' => 'No session attributes',
+                    ]
                 ),
             ],
             [
                 'name'    => 'Flashes',
                 'content' => $this->createTable(
-                    $session !== null ? $session->get('_flash') : [],
-                    ['name' => 'Flashes']
+                    $session !== null && $session->has('_flash') ? $session->get('_flash') : [],
+                    [
+                        'name'       => 'Flashes',
+                        'empty_text' => 'No flash messages were created',
+                    ]
                 ),
             ],
         ]);
@@ -237,6 +247,48 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     {
         return [
             'css' => __DIR__ . '/Resources/css/request-response.css',
+        ];
+    }
+
+    /**
+     * Prepare request and response cookie infos and create a cookie tab.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return array
+     */
+    protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): array
+    {
+        if (! (class_exists(RequestCookies::class) && class_exists(ResponseCookies::class))) {
+            return [];
+        }
+
+        $requestCookies = $responseCookies = [];
+
+        foreach (RequestCookies::fromRequest($serverRequest)->getAll() as $cookie) {
+            $requestCookies[$cookie->getName()] = $cookie->getValue();
+        }
+
+        foreach (ResponseCookies::fromResponse($response)->getAll() as $cookie) {
+            $responseCookies[$cookie->getName()] = $cookie->getValue();
+        }
+
+        return [
+            'name'    => 'Cookies',
+            'content' => $this->createTable(
+                $requestCookies,
+                [
+                    'name'       => 'Request Cookies',
+                    'empty_text' => 'No request cookies',
+                ]
+            ) . $this->createTable(
+                $responseCookies,
+                [
+                    'name'       => 'Response Cookies',
+                    'empty_text' => 'No response cookies',
+                ]
+            ),
         ];
     }
 
@@ -279,57 +331,10 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
-        $middlewares = $route->gatherMiddleware();
-
-        if ($middleware = $this->getMiddlewares($middlewares)) {
-            $result['middlewares'] = $middleware;
-        }
-
-        if ($middleware = $this->getWithoutMiddlewares($middlewares)) {
-            $result['without_middlewares'] = $middleware;
-        }
+        $result['middlewares']         = implode(', ', $route->gatherMiddleware());
+        $result['without_middlewares'] = implode(', ', $route->gatherDisabledMiddlewares());
 
         return $result;
-    }
-
-    /**
-     * Get middleware.
-     *
-     * @param array $middlewares
-     *
-     * @return string
-     */
-    protected function getMiddlewares(array $middlewares): string
-    {
-        $middleware = array_keys($middlewares['middlewares']);
-
-        return implode(', ', $middleware);
-    }
-
-    /**
-     * Get without middleware.
-     *
-     * @param array $middlewares
-     *
-     * @return string
-     */
-    protected function getWithoutMiddlewares(array $middlewares): string
-    {
-        $middleware = array_keys($middlewares['without_middlewares']);
-
-        return implode(', ', $middleware);
-    }
-
-    /**
-     * spplit string on attributes delimiter to array.
-     *
-     * @param string $string
-     *
-     * @return array
-     */
-    protected function splitOnAttributeDelimiter(string $string): array
-    {
-        return array_filter(preg_split('@\s*[;]\s*@', $string));
     }
 
     /**
@@ -353,6 +358,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 }
 
                 $preparedAttributes[$key] = $value;
+            } elseif ($value instanceof StoreContract) {
+                $preparedAttributes[$key] = $value->getId();
             } else {
                 $preparedAttributes[$key] = $value;
             }

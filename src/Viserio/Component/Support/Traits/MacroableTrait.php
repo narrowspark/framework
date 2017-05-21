@@ -27,7 +27,7 @@ trait MacroableTrait
     public static function __callStatic($method, $parameters)
     {
         if (! static::hasMacro($method)) {
-            throw new BadMethodCallException("Method {$method} does not exist.");
+            throw new BadMethodCallException(sprintf('Method [%s] does not exist.', $method));
         }
 
         return static::resolveMacroCall($method, $parameters, Closure::bind(static::$macros[$method], null, static::class));

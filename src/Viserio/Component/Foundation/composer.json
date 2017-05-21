@@ -41,7 +41,8 @@
         "viserio/exception"                   : "self.version",
         "viserio/options-resolver"            : "self.version",
         "viserio/pipeline"                    : "self.version",
-        "viserio/routing"                     : "self.version"
+        "viserio/routing"                     : "self.version",
+        "viserio/support"                     : "self.version"
     },
     "require-dev": {
         "cakephp/chronos"                     : "^1.0",

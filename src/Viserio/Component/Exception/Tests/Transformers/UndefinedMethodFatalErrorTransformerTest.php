@@ -16,11 +16,11 @@ class UndefinedMethodFatalErrorTransformerTest extends TestCase
             new FatalErrorException('Call to undefined method SplObjectStorage::what()', 0, 1, 'foo.php', 12)
         );
 
-        static::assertInstanceOf(
+        self::assertInstanceOf(
             UndefinedMethodException::class,
             $exception
         );
-        static::assertSame('Attempted to call an undefined method named "what" of class "SplObjectStorage".', $exception->getMessage());
+        self::assertSame('Attempted to call an undefined method named "what" of class "SplObjectStorage".', $exception->getMessage());
     }
 
     public function testExceptionIsNotWrapped()
@@ -30,10 +30,10 @@ class UndefinedMethodFatalErrorTransformerTest extends TestCase
             new FatalErrorException('', 0, 1, 'foo.php', 12)
         );
 
-        static::assertInstanceOf(
+        self::assertInstanceOf(
             FatalErrorException::class,
             $exception
         );
-        static::assertSame('', $exception->getMessage());
+        self::assertSame('', $exception->getMessage());
     }
 }

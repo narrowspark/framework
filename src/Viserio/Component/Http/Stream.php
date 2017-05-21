@@ -14,6 +14,8 @@ class Stream implements StreamInterface
      * Bit mask to determine if the stream is a pipe.
      *
      * This is octal as per header stat.h
+     *
+     * @var int
      */
     public const FSTAT_MODE_S_IFIFO = 0010000;
 
@@ -137,8 +139,6 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @var string
-     *
      * @param mixed $name
      *
      * @throws \RuntimeException|\BadMethodCallException

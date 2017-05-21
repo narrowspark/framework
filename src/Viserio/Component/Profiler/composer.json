@@ -1,0 +1,71 @@
+{
+    "name"       : "viserio/profiler",
+    "type"       : "library",
+    "description": "The Viserio Profiler package.",
+    "keywords"   : ["narrowspark", "viserio", "profiler", "web-profiler", "debugbar"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : "^7.1",
+        "http-interop/http-factory"          : "^0.3",
+        "psr/cache"                          : "^1.0",
+        "psr/http-message"                   : "^1.0",
+        "symfony/var-dumper"                 : "^3.2",
+        "viserio/contracts"                  : "self.version",
+        "viserio/support"                    : "self.version"
+    },
+    "require-dev": {
+        "cache/array-adapter"                : "^0.4",
+        "narrowspark/testing-helper"         : "^1.5",
+        "phpunit/phpunit"                    : "^6.0",
+        "http-interop/http-middleware"       : "^0.4",
+        "viserio/cache"                      : "self.version",
+        "viserio/container"                  : "self.version",
+        "viserio/events"                     : "self.version",
+        "viserio/http-factory"               : "self.version",
+        "viserio/options-resolver"           : "self.version",
+        "viserio/routing"                    : "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Profiler\\"            : ""
+        },
+        "exclude-from-classmap"              : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Profiler\\Tests\\"     : "Tests/"
+        }
+    },
+    "provide": {
+        "psr/log-implementation"             : "^1.0",
+        "psr/http-message"                   : "^1.0",
+        "psr/http-message-implementation"    : "^1.0"
+    },
+    "suggest": {
+        "container-interop/service-provider" : "Required to use service-provider (^0.3).",
+        "http-interop/http-middleware"       : "Required to use middleware (^0.4).",
+        "viserio/options-resolver"           : "Required to use service-provider (self.version).",
+        "viserio/routing"                    : "Required to use the Profiler assets controllers (self.version).",
+        "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "1.0-dev"
+        }
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

@@ -47,7 +47,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->register(new ConfigureLoggingServiceProvider());
 
-        static::assertInstanceOf(Writer::class, $container->get(Writer::class));
+        self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
     /**
@@ -80,7 +80,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->register(new ConfigureLoggingServiceProvider());
 
-        static::assertInstanceOf(Writer::class, $container->get(Writer::class));
+        self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
     /**
@@ -122,7 +122,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->register(new ConfigureLoggingServiceProvider());
 
-        static::assertInstanceOf(Writer::class, $container->get(Writer::class));
+        self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
     /**
@@ -164,6 +164,6 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->register(new ConfigureLoggingServiceProvider());
 
-        static::assertInstanceOf(Writer::class, $container->get(Writer::class));
+        self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 }

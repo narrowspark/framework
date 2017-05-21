@@ -9,12 +9,12 @@ use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\Providers\TwigBridgeDataCollectorsServiceProvider;
 use Viserio\Bridge\Twig\Providers\TwigBridgeServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
-use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
 
 /**
  * @runTestsInSeparateProcesses
@@ -29,13 +29,13 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
         $container->register(new FilesServiceProvider());
         $container->register(new ViewServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
-        $container->register(new WebProfilerServiceProvider());
+        $container->register(new ProfilerServiceProvider());
         $container->register(new TwigBridgeServiceProvider());
         $container->register(new TwigBridgeDataCollectorsServiceProvider());
 
         $container->instance('config', [
             'viserio' => [
-                'webprofiler' => [
+                'profiler' => [
                     'enable'    => true,
                     'collector' => [
                         'twig'  => true,
@@ -61,13 +61,13 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        $profiler = $container->get(WebProfilerContract::class);
+        $profiler = $container->get(ProfilerContract::class);
 
-        static::assertInstanceOf(WebProfilerContract::class, $profiler);
+        self::assertInstanceOf(ProfilerContract::class, $profiler);
 
-        static::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
-        static::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));
-        static::assertTrue(array_key_exists('twig-data-collector', $profiler->getCollectors()));
+        self::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
+        self::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));
+        self::assertTrue(array_key_exists('twig-data-collector', $profiler->getCollectors()));
 
         self::assertInstanceOf(Twig_Profiler_Profile::class, $container->get(Twig_Profiler_Profile::class));
         self::assertInstanceOf(Twig_Environment::class, $container->get(Twig_Environment::class));

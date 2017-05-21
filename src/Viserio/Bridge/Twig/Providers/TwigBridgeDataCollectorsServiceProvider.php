@@ -10,7 +10,7 @@ use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class TwigBridgeDataCollectorsServiceProvider implements
@@ -35,7 +35,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
                 return new Twig_Profiler_Profile();
             },
             TwigEnvironment::class       => [self::class, 'createTwigEnvironment'],
-            WebProfilerContract::class   => [self::class, 'createProfiler'],
+            ProfilerContract::class      => [self::class, 'createProfiler'],
         ];
     }
 
@@ -44,7 +44,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio', 'webprofiler'];
+        return ['viserio', 'profiler'];
     }
 
     /**
@@ -65,9 +65,9 @@ class TwigBridgeDataCollectorsServiceProvider implements
      * @param \Interop\Container\ContainerInterface $container
      * @param null|callable                         $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\WebProfiler\WebProfiler
+     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */
-    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
+    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
         if ($getPrevious !== null) {
             self::resolveOptions($container);

@@ -104,7 +104,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function bind($abstract, $concrete = null)
+    public function bind($abstract, $concrete = null): void
     {
         $concrete = ($concrete) ? $concrete : $abstract;
 
@@ -121,7 +121,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      *
      * @codeCoverageIgnore
      */
-    public function bindIf(string $abstract, $concrete = null)
+    public function bindIf(string $abstract, $concrete = null): void
     {
         if (! $this->has($abstract)) {
             $this->bind($abstract, $concrete);
@@ -131,7 +131,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function instance(string $abstract, $instance)
+    public function instance(string $abstract, $instance): void
     {
         $this->bindPlain($abstract, $instance);
     }
@@ -139,7 +139,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function singleton(string $abstract, $concrete = null)
+    public function singleton(string $abstract, $concrete = null): void
     {
         $concrete = ($concrete) ? $concrete : $abstract;
 
@@ -149,7 +149,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function alias(string $abstract, string $alias)
+    public function alias(string $abstract, string $alias): void
     {
         $this->bindings[$alias] = &$this->bindings[$abstract];
     }
@@ -157,9 +157,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function extend(string $abstract, Closure $closure)
+    public function extend(string $abstract, Closure $closure): void
     {
-        $this->extendAbstract($abstract, $closure);
+        $this->extenders[$abstract][] = $closure;
     }
 
     /**
@@ -189,7 +189,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function forget(string $abstract)
+    public function forget(string $abstract): void
     {
         unset($this->bindings[$abstract]);
     }
@@ -399,19 +399,16 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function register(ServiceProvider $provider, array $parameters = []): ContainerContract
     {
-        $entries   = $provider->getServices();
-        $container = $this;
-
-        foreach ($entries as $key => $callable) {
+        foreach ($provider->getServices() as $key => $callable) {
             if ($this->has($key)) {
-                // Extend a previous entry
-                $this->extend($key, function ($previous) use ($container, $callable) {
+                $this->extend($key, function ($previous, $container) use ($callable) {
+                    // Extend a previous entry
                     return $callable($container, function () use ($previous) {
                         return $previous;
                     });
                 });
             } else {
-                $this->singleton($key, function () use ($container, $callable) {
+                $this->singleton($key, function ($container) use ($callable) {
                     return $callable($container, null);
                 });
             }
@@ -653,17 +650,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
             $this->bindings[$abstract][TypesContract::VALUE] = $resolved;
         }
-    }
-
-    /**
-     * "Extend" an abstract type in the container.
-     *
-     * @param string   $abstract
-     * @param \Closure $closure
-     */
-    protected function extendAbstract(string $abstract, Closure $closure)
-    {
-        $this->extenders[$abstract][] = $closure;
     }
 
     /**

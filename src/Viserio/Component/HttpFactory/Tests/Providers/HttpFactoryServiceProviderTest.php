@@ -25,22 +25,22 @@ class HttpFactoryServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new HttpFactoryServiceProvider());
 
-        static::assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
-        static::assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactory::class));
+        self::assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
+        self::assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactory::class));
 
-        static::assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactoryInterface::class));
-        static::assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactory::class));
+        self::assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactoryInterface::class));
+        self::assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactory::class));
 
-        static::assertInstanceOf(ServerRequestFactoryInterface::class, $container->get(ServerRequestFactoryInterface::class));
-        static::assertInstanceOf(ServerRequestFactoryInterface::class, $container->get(ServerRequestFactory::class));
+        self::assertInstanceOf(ServerRequestFactoryInterface::class, $container->get(ServerRequestFactoryInterface::class));
+        self::assertInstanceOf(ServerRequestFactoryInterface::class, $container->get(ServerRequestFactory::class));
 
-        static::assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
-        static::assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactory::class));
+        self::assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
+        self::assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactory::class));
 
-        static::assertInstanceOf(UploadedFileFactoryInterface::class, $container->get(UploadedFileFactoryInterface::class));
-        static::assertInstanceOf(UploadedFileFactoryInterface::class, $container->get(UploadedFileFactory::class));
+        self::assertInstanceOf(UploadedFileFactoryInterface::class, $container->get(UploadedFileFactoryInterface::class));
+        self::assertInstanceOf(UploadedFileFactoryInterface::class, $container->get(UploadedFileFactory::class));
 
-        static::assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactoryInterface::class));
-        static::assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactory::class));
+        self::assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactoryInterface::class));
+        self::assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactory::class));
     }
 }

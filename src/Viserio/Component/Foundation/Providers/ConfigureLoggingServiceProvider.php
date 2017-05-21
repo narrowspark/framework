@@ -83,16 +83,16 @@ class ConfigureLoggingServiceProvider implements
      */
     public static function createConfiguredWriter(ContainerInterface $container, ?callable $getPrevious = null): ?Writer
     {
-        if ($getPrevious !== null) {
-            $log = $getPrevious();
+        $log = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
+        if ($log !== null) {
             self::resolveOptions($container);
             self::configureHandlers($container, $log);
 
             return $log;
         }
         // @codeCoverageIgnoreStart
-        return null;
+        return $log;
         // @codeCoverageIgnoreEnd
     }
 

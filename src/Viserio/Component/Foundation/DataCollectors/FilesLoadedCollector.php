@@ -4,8 +4,8 @@ namespace Viserio\Component\Foundation\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
 
 class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareContract
 {
@@ -49,8 +49,8 @@ class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareCo
         $included = [];
 
         foreach (get_included_files() as $file) {
-            // Skip the files from webprofiler, they are only loaded for Debugging and confuse the output.
-            if (mb_strpos($file, 'vendor/narrowspark/framework/src/Viserio/WebProfiler') !== false ||
+            // Skip the files from Profiler, they are only loaded for Debugging and confuse the output.
+            if (mb_strpos($file, 'vendor/narrowspark/framework/src/Viserio/Profiler') !== false ||
                 mb_strpos($file, 'vendor/viserio/web-profiler') !== false
             ) {
                 continue;

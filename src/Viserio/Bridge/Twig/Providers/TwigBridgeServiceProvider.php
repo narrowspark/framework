@@ -4,6 +4,7 @@ namespace Viserio\Bridge\Twig\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Twig_Environment as TwigEnvironment;
 use Twig_Lexer;
 use Twig_Loader_Array;
@@ -129,7 +130,7 @@ class TwigBridgeServiceProvider implements
             $twig->setLexer($container->get(Twig_Lexer::class));
         }
 
-        if ($options['debug']) {
+        if ($options['debug'] && class_exists(VarCloner::class)) {
             $twig->addExtension(new DumpExtension());
         }
 

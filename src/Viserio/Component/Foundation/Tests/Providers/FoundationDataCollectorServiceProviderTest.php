@@ -7,13 +7,13 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\Providers\FoundationDataCollectorServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
 class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
 {
@@ -33,11 +33,11 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ConfigServiceProvider());
-        $container->register(new WebProfilerServiceProvider());
+        $container->register(new ProfilerServiceProvider());
         $container->register(new FoundationDataCollectorServiceProvider());
 
         $container->get(RepositoryContract::class)->set('viserio', [
-            'webprofiler' => [
+            'profiler' => [
                 'enable'    => true,
                 'collector' => [
                     'narrowspark'  => true,
@@ -48,15 +48,15 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
         ]);
         $container->get(RepositoryContract::class)->set('path.base', '/');
 
-        $profiler = $container->get(WebProfilerContract::class);
+        $profiler = $container->get(ProfilerContract::class);
 
-        static::assertInstanceOf(WebProfilerContract::class, $profiler);
+        self::assertInstanceOf(ProfilerContract::class, $profiler);
 
-        static::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
-        static::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));
-        static::assertTrue(array_key_exists('narrowspark', $profiler->getCollectors()));
-        static::assertTrue(array_key_exists('viserio-http-data-collector', $profiler->getCollectors()));
-        static::assertTrue(array_key_exists('files-loaded-collector', $profiler->getCollectors()));
+        self::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
+        self::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));
+        self::assertTrue(array_key_exists('narrowspark', $profiler->getCollectors()));
+        self::assertTrue(array_key_exists('viserio-http-data-collector', $profiler->getCollectors()));
+        self::assertTrue(array_key_exists('files-loaded-collector', $profiler->getCollectors()));
     }
 
     private function getRequest()

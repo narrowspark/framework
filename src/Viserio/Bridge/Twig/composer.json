@@ -35,7 +35,7 @@
         "viserio/session"                    : "self.version",
         "viserio/support"                    : "self.version",
         "viserio/translation"                : "self.version",
-        "viserio/web-profiler"               : "self.version"
+        "viserio/profiler"                   : "self.version"
     },
     "autoload": {
         "psr-4": {

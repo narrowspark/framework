@@ -1,0 +1,31 @@
+.profiler * {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    vertical-align: baseline;
+}
+.profiler .row:after,
+.profiler .col:after,
+.profiler .clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.profiler .row {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.profiler .col {
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+}
+@media (max-width : 480px) {
+    .profiler .row {
+        display: block;
+    }
+    .profiler .col {
+        width: 100%;
+    }
+}

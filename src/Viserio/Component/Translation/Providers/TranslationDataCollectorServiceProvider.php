@@ -6,8 +6,8 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Translation\DataCollectors\ViserioTranslationDataCollector;
 
@@ -29,7 +29,7 @@ class TranslationDataCollectorServiceProvider implements
     public function getServices()
     {
         return [
-            WebProfilerContract::class => [self::class, 'createWebProfiler'],
+            ProfilerContract::class => [self::class, 'createProfiler'],
         ];
     }
 
@@ -38,7 +38,7 @@ class TranslationDataCollectorServiceProvider implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio', 'webprofiler'];
+        return ['viserio', 'profiler'];
     }
 
     /**
@@ -59,9 +59,9 @@ class TranslationDataCollectorServiceProvider implements
      * @param \Interop\Container\ContainerInterface $container
      * @param null|callable                         $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\WebProfiler\WebProfiler
+     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */
-    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
+    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
         $profiler = $getPrevious();
 

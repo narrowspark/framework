@@ -1,0 +1,67 @@
+.profiler-menu-ajax-requests-data-collector {
+    display: none;
+}
+.profiler-menu-ajax-requests-data-collector.ajax-request {
+    display: inline-block;
+}
+.profiler-menu-ajax-requests-data-collector .profiler-menu-icon svg {
+    transform: rotate(90deg) scaleX(-1);
+}
+
+.profiler-menu-ajax-requests-data-collector .profiler-ajax-requests {
+    table-layout: auto;
+    width: 100%;
+}
+.profiler-menu-ajax-requests-data-collector .profiler-ajax-requests td {
+    background-color: #444;
+    border-bottom: 1px solid #777;
+    color: #F5F5F5;
+    font-size: 12px;
+    padding: 4px;
+}
+.profiler-menu-ajax-requests-data-collector .profiler-ajax-requests tr:last-child td {
+    border-bottom: 0;
+}
+.profiler-menu-ajax-requests-data-collector .profiler-ajax-requests th {
+    background-color: #222;
+    border-bottom: 0;
+    color: #AAA;
+    font-size: 11px;
+    padding: 4px;
+}
+.profiler-menu-ajax-requests-data-collector .profiler-ajax-requests .ajax-request-url {
+    max-width: 250px;
+    line-height: 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.profiler-menu-ajax-requests-data-collector .profiler-ajax-requests .ajax-request-url a {
+    text-decoration: none;
+}
+.profiler-menu-ajax-requests-data-collector .profiler-ajax-requests .ajax-request-url a:hover {
+    text-decoration: underline;
+}
+.profiler-menu-ajax-requests-data-collector .profiler-ajax-requests .ajax-request-duration {
+    text-align: right;
+}
+.profiler-menu-ajax-requests-data-collector .profiler-ajax-requests .ajax-request-loading {
+    -webkit-animation: ns-blink .5s ease-in-out infinite;
+    -o-animation: ns-blink .5s ease-in-out infinite;
+    -moz-animation: ns-blink .5s ease-in-out infinite;
+    animation: ns-blink .5s ease-in-out infinite;
+}
+@-webkit-keyframes ns-blink {
+    0% { background: #222; }
+    50% { background: #444; }
+    100% { background: #222; }
+}
+@-moz-keyframes ns-blink {
+    0% { background: #222; }
+    50% { background: #444; }
+    100% { background: #222; }
+}
+@keyframes ns-blink {
+    0% { background: #222; }
+    50% { background: #444; }
+    100% { background: #222; }
+}

@@ -75,10 +75,8 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                     'domain'          => 'test.com',
                     'http_only'       => false,
                     'secure'          => false,
-                    'csrf'            => [
-                        'samesite' => false,
-                        'livetime' => Chronos::now()->getTimestamp() + 60 * 1200,
-                    ],
+                    'samesite'        => false,
+                    'livetime'        => Chronos::now()->getTimestamp() + 60 * 1200,
                 ],
             ]);
         $manager = $this->getSessionManager($config);
@@ -136,10 +134,8 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                     'domain'          => 'test.com',
                     'http_only'       => false,
                     'secure'          => false,
-                    'csrf'            => [
-                        'samesite' => false,
-                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
-                    ],
+                    'samesite'        => false,
+                    'livetime'        => Chronos::now()->getTimestamp() + 60 * 120,
                 ],
             ]);
         $manager = $this->getSessionManager($config);
@@ -197,10 +193,8 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                     'domain'          => 'test.com',
                     'http_only'       => false,
                     'secure'          => false,
-                    'csrf'            => [
-                        'samesite' => false,
-                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
-                    ],
+                    'samesite'        => false,
+                    'livetime'        => Chronos::now()->getTimestamp() + 60 * 120,
                 ],
             ]);
         $manager = $this->getSessionManager($config);
@@ -264,10 +258,8 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                     'domain'          => 'test.com',
                     'http_only'       => false,
                     'secure'          => false,
-                    'csrf'            => [
-                        'samesite' => false,
-                        'livetime' => Chronos::now()->getTimestamp() + 60 * 120,
-                    ],
+                    'samesite'        => false,
+                    'livetime'        => Chronos::now()->getTimestamp() + 60 * 120,
                 ],
             ]);
         $manager = $this->getSessionManager($config);

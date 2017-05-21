@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cache;
 
-use Cache\Adapter\Apc\ApcCachePool;
-use Cache\Adapter\Apcu\ApcuCachePool;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\Memcache\MemcacheCachePool;
 use Cache\Adapter\Memcached\MemcachedCachePool;
@@ -65,7 +63,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
         $namespace = $this->options['namespace'];
 
         if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
-            $driver = $this->namespacedPool($driver, $namespace);
+            $driver = $this->getNamespacedPool($driver, $namespace);
         }
 
         if ($this->logger !== null) {
@@ -76,35 +74,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     }
 
     /**
-     * Create an instance of the Apc cache driver.
-     *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Apc\ApcCachePool
-     *
-     * @codeCoverageIgnore
-     */
-    protected function createApcDriver(array $config): ApcCachePool
-    {
-        return new ApcCachePool();
-    }
-
-    /**
-     * Create an instance of the Apcu cache driver.
-     *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Apcu\ApcuCachePool
-     *
-     * @codeCoverageIgnore
-     */
-    protected function createApcuDriver(array $config): ApcuCachePool
-    {
-        return new ApcuCachePool();
-    }
-
-    /**
-     * Create an instance of the Apcu cache driver.
+     * Create an instance of the Array cache driver.
      *
      * @param array $config
      *
@@ -248,7 +218,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
      *
      * @return \Cache\Namespaced\NamespacedCachePool
      */
-    protected function namespacedPool(HierarchicalPoolInterface $hierarchyPool, $namespace): NamespacedCachePool
+    protected function getNamespacedPool(HierarchicalPoolInterface $hierarchyPool, string $namespace): NamespacedCachePool
     {
         return new NamespacedCachePool($hierarchyPool, $namespace);
     }

@@ -52,7 +52,7 @@ class TwigEngineTest extends MockeryTestCase
 
         $template = $engine->get(['name' => 'twightml.twig.html']);
 
-        static::assertSame(trim('<!DOCTYPE html>
+        self::assertSame(trim('<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -110,7 +110,7 @@ class TwigEngineTest extends MockeryTestCase
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
 
-        static::assertSame(trim('<!DOCTYPE html>
+        self::assertSame(trim('<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">

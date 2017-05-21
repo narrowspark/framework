@@ -1,20 +1,20 @@
-.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph {
-    margin-top: 25px;
+.profiler-panel.profiler-panel-twig-data-collector.active .twig-graph {
+    margin: 25px 0;
 }
-.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph pre {
+.profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre {
     font-size: 14px;
-    color: #2B2A28;
+    color: var(--profiler-second-font-color);
     padding: 10px;
-    background-color: #fff;
+    background-color: #FFF;
 }
-.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph pre .status-success {
-    color: #4F805D;
+.profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre .status-success {
+    color: var(--profiler-status-green-color);
 }
-.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph pre .status-warning {
-    background-color: #A46A1F;
+.profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre .status-warning {
+    background-color: var(--profiler-status-yellow-color);
     color: #FFF;
     padding: 0px 5px;
 }
-.webprofiler-panel.webprofiler-panel-twig-data-collector.active .twig-graph pre .status-error {
-    color: #B0413E;
+.profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre .status-error {
+    color: var(--profiler-status-red-color);
 }

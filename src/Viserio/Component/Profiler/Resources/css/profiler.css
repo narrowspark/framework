@@ -1,0 +1,538 @@
+:root {
+    --profiler-font-color: #eee;
+    --profiler-second-font-color: #2b2a28;
+    --profiler-profiler-background-color: #212121;
+    --profiler-menu-background-active-color: #424242;
+    --profiler-status-default-color: #666;
+    --profiler-status-red-color: #b71c1c;
+    --profiler-status-yellow-color: #fdd835;
+    --profiler-status-green-color: #7cb342;
+    --profiler-tab-default-color: #424242;
+    --profiler-tab-active-color: #fff;
+    --profiler-tab-active-font-color: #2b2a28;
+    --profiler-tab-counter-color: #424242;
+    --profiler-table-head-background-color: #424242;
+    --profiler-table-body-background-color-even: #eee;
+    --profiler-table-body-background-color-odd: #fff;
+}
+
+.profiler {
+    font: 11px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    margin: 0;
+    padding: 0;
+
+    text-align: left;
+    text-transform: none;
+
+    /* neutralize the aliasing defined by external CSS styles */
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+}
+
+
+.profiler ::-webkit-scrollbar-track {
+    background-color: #FFF;
+}
+.profiler ::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+.profiler ::-webkit-scrollbar-thumb {
+    background-color: var(--profiler-tab-default-color);
+}
+
+.profiler .profiler-header.hide,
+.profiler .profiler-body .profiler-panel .selected-content {
+    display: none;
+}
+.profiler .profiler-show-button.active,
+.profiler .profiler-body.active,
+.profiler .profiler-body .profiler-panel.active,
+.profiler .profiler-body .profiler-panel .selected-content.active {
+    display: block;
+}
+
+.profiler .profiler-header {
+    position: absolute;
+    z-index: 9999;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background-color: var(--profiler-profiler-background-color);
+}
+
+.profiler .profiler-show-button {
+    position: fixed;
+    z-index: 99999;
+    right: 0;
+    bottom: 0;
+
+    display: none;
+
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+    height: 36px;
+    padding: 6px;
+
+    cursor: pointer;
+
+    border-top-left-radius: 4px;
+    background-color: var(--profiler-profiler-background-color);
+}
+.profiler .profiler-header .profiler-hide-button,
+.profiler .profiler-body .profiler-body-close-panel,
+.profiler .profiler-body .profiler-body-menu .profiler-body-resize-panel {
+    display: block;
+    float: right;
+
+    width: 36px;
+    height: 36px;
+
+    cursor: pointer;
+    text-align: center;
+
+    background: var(--profiler-menu-background-active-color);
+}
+.profiler .profiler-header .profiler-hide-button svg,
+.profiler .profiler-header .profiler-menus .profiler-menu svg {
+    position: relative;
+    top: 6px;
+
+    max-height: 24px;
+}
+
+.profiler .profiler-header .profiler-menus .profiler-menu {
+    display: block;
+
+    height: 36px;
+    margin-right: 0;
+
+    cursor: default;
+    white-space: nowrap;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu .status-red,
+.profiler .profiler-header .profiler-menus .profiler-menu .status-yellow,
+.profiler .profiler-header .profiler-menus .profiler-menu .status-green {
+    display: inline-block;
+
+    min-width: 15px;
+    min-height: 13px;
+    margin-bottom: 2px;
+    padding: 3px 6px;
+
+    text-align: center;
+    vertical-align: middle;
+
+    color: #fff;
+    background-color: var(--profiler-status-default-color);
+}
+.profiler .profiler-header .profiler-menus .profiler-menu .status-red + .status-red,
+.profiler .profiler-header .profiler-menus .profiler-menu .status-yellow + .status-yellow,
+.profiler .profiler-header .profiler-menus .profiler-menu .status-green + .status-green {
+    border-left: 5px solid #444;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu .status-green {
+    background-color: var(--profiler-status-green-color);
+}
+.profiler .profiler-header .profiler-menus .profiler-menu .status-yellow {
+    color: #fff;
+    background-color: var(--profiler-status-yellow-color);
+}
+.profiler .profiler-header .profiler-menus .profiler-menu .status-red {
+    background-color: var(--profiler-status-red-color);
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.active,
+.profiler .profiler-header .profiler-menus .profiler-menu:hover {
+    position: relative;
+    z-index: 10002;
+
+    background-color: var(--profiler-menu-background-active-color);
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover {
+    cursor: help;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-panel:hover {
+    cursor: pointer;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip .profiler-menu-tooltip {
+    display: none;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip {
+    position: absolute;
+    bottom: 36px;
+
+    display: block;
+    overflow: hidden;
+    overflow-y: auto;
+
+    max-width: 480px;
+    max-height: 480px;
+    padding: 10px;
+
+    word-wrap: break-word;
+
+    background-color: var(--profiler-menu-background-active-color);
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group {
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+
+    border-bottom: 1px solid #333;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    border-bottom: none;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group-piece {
+    display: table-row;
+
+    border-bottom: solid transparent 3px;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group b {
+    font-size: 11px;
+
+    display: table-cell;
+
+    padding: 4px 8px 4px 0;
+
+    color: #aaa;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group span {
+    font-size: 12px;
+
+    display: table-cell;
+
+    color: var(--profiler-font-color);
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-has-tooltip:hover .profiler-menu-tooltip .profiler-menu-tooltip-group a {
+    color: #fff;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-position-left.profiler-menu-has-tooltip:hover .profiler-menu-tooltip {
+    left: 0;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-position-right.profiler-menu-has-tooltip:hover .profiler-menu-tooltip {
+    right: 0;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-position-left {
+    float: left;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-position-right {
+    float: right;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content {
+    line-height: 36px;
+
+    display: block;
+
+    height: 36px;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-position-left .profiler-menu-content,
+.profiler .profiler-header .profiler-menus .profiler-menu.profiler-menu-position-right .profiler-menu-content {
+    padding: 0 7px;
+}
+.profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content .profiler-menu-icon,
+.profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content .profiler-menu-label,
+.profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content .profiler-menu-value {
+    font-size: 13px;
+    line-height: 36px;
+
+    display: inline-block;
+
+    padding: 0;
+
+    color: var(--profiler-font-color);
+}
+.profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-icon .profiler-menu-value {
+    margin-left: 4px;
+}
+
+.profiler .profiler-body {
+    position: relative;
+    z-index: 9998;
+
+    display: none;
+
+    height: 324px;
+    margin-bottom: 36px;
+
+    background-color: var(--profiler-profiler-background-color);
+    color: var(--profiler-font-color);
+}
+.profiler .profiler-body pre {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+}
+.profiler .profiler-body pre.sf-dump,
+.profiler .profiler-body pre.sf-dump .sf-dump-num,
+.profiler .profiler-body pre.sf-dump .sf-dump-const,
+.profiler .profiler-body pre.sf-dump .sf-dump-str,
+.profiler .profiler-body pre.sf-dump .sf-dump-note,
+.profiler .profiler-body pre.sf-dump .sf-dump-ref,
+.profiler .profiler-body pre.sf-dump .sf-dump-public,
+.profiler .profiler-body pre.sf-dump .sf-dump-protected,
+.profiler .profiler-body pre.sf-dump .sf-dump-private,
+.profiler .profiler-body pre.sf-dump .sf-dump-meta,
+.profiler .profiler-body pre.sf-dump .sf-dump-key,
+.profiler .profiler-body pre.sf-dump .sf-dump-index {
+    margin: 0;
+    padding: 0;
+
+    color: #2b2a28;
+}
+.profiler .profiler-body .text-muted {
+    color: #999;
+}
+.profiler .profiler-body .profiler-panel {
+    display: none;
+
+    height: 270px;
+}
+.profiler .profiler-body .profiler-panel.profiler-body-has-table,
+.profiler .profiler-body .profiler-panel.profiler-body-has-selector,
+.profiler .profiler-body .profiler-panel.profiler-body-has-metrics {
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding: 15px;
+}
+.profiler .profiler-body .profiler-panel .profiler-tabs {
+    position: relative;
+
+    min-height: 180px;
+}
+.profiler .profiler-body .profiler-panel .profiler-tabs-tab label {
+    display: block;
+
+    margin: 0 0 0 -1px;
+    padding: 10px 15px;
+
+    cursor: pointer;
+    text-align: center;
+
+    color: #fff;
+    border-bottom: 3px solid #fff;
+    background: var(--profiler-tab-default-color);
+}
+.profiler .profiler-body .profiler-panel .profiler-tabs-tab label span.counter {
+    display: inline-block;
+
+    min-width: 15px;
+    min-height: 13px;
+    margin-bottom: 2px;
+    margin-left: 10px;
+    padding: 2px 6px 3px 6px;
+
+    text-align: center;
+    vertical-align: middle;
+
+    color: var(--profiler-tab-active-font-color);
+    background-color: #fff;
+}
+.profiler .profiler-body .profiler-panel .profiler-tabs-tab [type=radio] {
+    position: absolute;
+
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+
+    width: 0;
+    height: 0;
+}
+.profiler .profiler-body .profiler-panel .profiler-tabs-tab [type=radio]:focus + label {
+    /*  */
+}
+.profiler .profiler-body .profiler-panel .profiler-tabs-tab-content {
+    position: absolute;
+    right: 0;
+    left: 0;
+
+    overflow-y: auto;
+
+    height: 247px;
+    padding: 15px 15px 0 15px;
+
+    opacity: 0;
+}
+.profiler .profiler-body .profiler-panel .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label {
+    z-index: 2;
+
+    color: var(--profiler-tab-active-font-color);
+    background: var(--profiler-tab-active-color);
+}
+.profiler .profiler-body .profiler-panel  .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label span.counter {
+    color: var(--profiler-tab-active-color);
+    background: var(--profiler-tab-counter-color);
+}
+.profiler .profiler-body .profiler-panel .profiler-tabs .profiler-tabs-tab [type=radio]:checked ~ label ~ .profiler-tabs-tab-content {
+    z-index: 1;
+    opacity: 1;
+}
+
+.profiler .profiler-body h3:first-child {
+    margin-top: 0;
+}
+
+.profiler .profiler-body .profiler-panel table tr:nth-child(even) {
+    background: var(--profiler-table-body-background-color-even);
+}
+.profiler .profiler-body .profiler-panel table tr:nth-child(odd) {
+    background: var(--profiler-table-body-background-color-odd);
+}
+.profiler .profiler-body .profiler-panel table,
+.profiler .profiler-body .profiler-panel tr,
+.profiler .profiler-body .profiler-panel th,
+.profiler .profiler-body .profiler-panel td {
+    line-height: 1.5;
+    border-collapse: collapse;
+    vertical-align: top;
+}
+.profiler .profiler-body .profiler-panel table {
+    width: 100%;
+    margin: 0;
+    box-shadow: 0 0 1px rgba(128, 128, 128, .2);
+}
+.profiler .profiler-body .profiler-panel table:last-child {
+    margin-bottom: 25px;
+}
+.profiler .profiler-body .profiler-panel table + table {
+    margin-top: 30px;
+}
+
+.profiler .profiler-body .profiler-panel table th,
+.profiler .profiler-body .profiler-panel table td {
+    padding: 8px 10px;
+}
+.profiler .profiler-body .profiler-panel table th {
+    font-weight: bold;
+
+    text-align: left;
+}
+.profiler .profiler-body .profiler-panel table thead th {
+    color: #fff;
+    background-color: var(--profiler-table-head-background-color);
+}
+.profiler .profiler-body .profiler-panel table thead th.key {
+    width: 19%;
+}
+.profiler .profiler-body .profiler-panel table tbody th,
+.profiler .profiler-body .profiler-panel table tbody td {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-size: 13px;
+    font-size-adjust: .5;
+
+    color: #2b2a28;
+    border: 1px solid var(--profiler-table-body-background-color-odd);
+    border-width: 1px 0;
+}
+.profiler .profiler-body .profiler-panel table tbody td {
+        word-break: break-all;
+    -ms-word-break: break-all;
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+            hyphens: auto;
+}
+.profiler .profiler-body .profiler-panel table tbody div {
+    margin: .25em 0;
+}
+.profiler .profiler-body .profiler-panel table tbody ul {
+    margin: 0;
+    padding: 0 0 0 1em;
+}
+.profiler .profiler-body .profiler-panel .empty {
+    font-size: 16px;
+    font-weight: bold;
+
+    margin: 1em 0;
+    padding: .5em 2em;
+
+    text-align: center;
+
+    color: #fff;
+    border: 4px dashed var(--profiler-table-body-background-color-odd);
+}
+
+.profiler .profiler-body .profiler-panel .metrics {
+    overflow: auto;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+.profiler .profiler-body .profiler-panel .metrics .metric {
+    display: inline-block;
+
+    min-width: 100px;
+    min-height: 65px;
+    margin: 0 1em 1em 0;
+
+    background: #fff;
+    box-shadow: 0 0 1px rgba(128, 128, 128, .2);
+}
+.profiler .profiler-body .profiler-panel .metrics .metric .value {
+    font-size: 28px;
+
+    display: block;
+
+    padding: 8px 15px 4px;
+
+    text-align: center;
+
+    color: #2b2a28;
+}
+.profiler .profiler-body .profiler-panel .metrics .metric .label {
+    font-size: 12px;
+
+    display: block;
+
+    padding: 5px;
+
+    text-align: center;
+
+    color: #fff;
+    background: #444;
+}
+
+.profiler .profiler-body .profiler-panel select {
+    font-weight: bold;
+
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px 0;
+
+    cursor: pointer;
+
+    border: 0;
+}
+
+.profiler .profiler-body .profiler-body-menu {
+    height: 24px;
+
+    border-bottom: 1px solid #383838;
+    background-color: #222;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .2);
+}
+.profiler .profiler-body .profiler-body-menu .profiler-body-close-panel,
+.profiler .profiler-body .profiler-body-menu .profiler-body-resize-panel {
+    float: right;
+
+    width: 24px;
+    height: 24px;
+}
+.profiler .profiler-body .profiler-body-menu .profiler-body-resize-panel.orginal-size-panel svg {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+  .profiler .profiler-header .profiler-menus .profiler-menu .profiler-menu-content .profiler-menu-value {
+      display: none;
+  }
+}

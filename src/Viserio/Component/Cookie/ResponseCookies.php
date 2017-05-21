@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
 use Cake\Chronos\Chronos;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
 
 class ResponseCookies extends AbstractCookieCollector
@@ -14,15 +14,16 @@ class ResponseCookies extends AbstractCookieCollector
      *
      * @param array $cookies
      *
-     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     public function __construct(array $cookies = [])
     {
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof CookieContract)) {
-                throw new RuntimeException(sprintf(
-                    'The object [%s] must implement [Viserio\Component\Contracts\Cookie\Cookie].',
-                    get_class($cookie)
+                throw new InvalidArgumentException(sprintf(
+                    'The object [%s] must implement [%s].',
+                    get_class($cookie),
+                    CookieContract::class
                 ));
             }
 

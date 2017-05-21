@@ -39,8 +39,8 @@
     ],
     "require": {
         "php"                                 : "^7.1",
-        "cache/array-adapter"                 : "^0.4",
-        "cache/void-adapter"                  : "^0.3",
+        "cache/array-adapter"                 : "^0.5",
+        "cache/void-adapter"                  : "^0.4",
         "container-interop/container-interop" : "^1.1",
         "viserio/cotracts"                    : "self.version",
         "viserio/options-resolver"            : "self.version",
@@ -79,16 +79,14 @@
         }
     },
     "suggest": {
-        "cache/apc-adapter"                   : "Required to use the Apc cache (^0.3).",
-        "cache/apcu-adapter"                  : "Required to use the Apcu cache (^0.3).",
-        "cache/array-adapter"                 : "Required to use the Array cache (^0.4)",
+        "cache/array-adapter"                 : "Required to use the Array cache (^0.5)",
         "cache/encryption-cache"              : "Required to use the Encryption cache (^0.1)",
-        "cache/filesystem-adapter"            : "Required to use the Filesystem cache (^0.3).",
+        "cache/filesystem-adapter"            : "Required to use the Filesystem cache (^0.4).",
         "cache/memcache-adapter"              : "Required to use the Memcache cache (^0.3).",
-        "cache/memcached-adapter"             : "Required to use the Memcached cache (^0.3).",
+        "cache/memcached-adapter"             : "Required to use the Memcached cache (^0.4).",
         "cache/namespaced-adapter"            : "Required to use the Namespaced cache (^0.1).",
-        "cache/mongodb-adapter"               : "Required to use the Mongodb cache (^0.2).",
-        "cache/predis-adapter"                : "Required to use the Predis cache (^0.4).",
+        "cache/mongodb-adapter"               : "Required to use the Mongodb cache (^0.3).",
+        "cache/predis-adapter"                : "Required to use the Predis cache (^0.5).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },

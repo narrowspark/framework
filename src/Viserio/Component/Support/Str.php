@@ -4,10 +4,16 @@ namespace Viserio\Component\Support;
 
 use BadMethodCallException;
 use Stringy\StaticStringy;
+use Stringy\Stringy;
 use Viserio\Component\Contracts\Support\CharacterType;
+use Viserio\Component\Support\Traits\MacroableTrait;
 
 class Str
 {
+    use MacroableTrait {
+        __callStatic as macroableCallStatic;
+    }
+
     /**
      * The cache of snake-cased words.
      *
@@ -41,11 +47,14 @@ class Str
     public static function __callStatic($name, $arguments)
     {
         if (class_exists(StaticStringy::class)) {
-            return forward_static_call_array([StaticStringy::class, $name], $arguments);
+            try {
+                return self::macroableCallStatic($name, $arguments);
+            } catch (BadMethodCallException $exception) {
+                return forward_static_call_array([StaticStringy::class, $name], $arguments);
+            }
         }
-        // @codeCoverageIgnoreStart
-        throw new BadMethodCallException($name . ' is not a valid method');
-        // @codeCoverageIgnoreEnd
+
+        return self::macroableCallStatic($name, $arguments);
     }
 
     /**

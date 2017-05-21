@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
-use RuntimeException;
+use InvalidArgumentException;
 
 abstract class AbstractCookieCollector
 {
@@ -56,7 +56,7 @@ abstract class AbstractCookieCollector
      *
      * @param \Viserio\Component\Cookie\Cookie|\Viserio\Component\Contracts\Cookie\Cookie $cookie
      *
-     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      *
      * @return $this
      */
@@ -69,9 +69,11 @@ abstract class AbstractCookieCollector
             return $clone;
         }
 
-        throw new RuntimeException(sprintf(
-            'The object [%s] must be an instance of "\Viserio\Component\Cookie\Cookie" or "\Viserio\Component\Contracts\Cookie\Cookie".',
-            get_class($cookie)
+        throw new InvalidArgumentException(sprintf(
+            'The object [%s] must be an instance of [%s] or [%s].',
+            get_class($cookie),
+            Cookie::class,
+            SetCookie::class
         ));
     }
 

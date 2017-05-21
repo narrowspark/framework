@@ -21,6 +21,7 @@ use Viserio\Component\Foundation\Http\Events\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
+use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\Router;
@@ -61,6 +62,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     protected $middlewarePriority = [
         StartSessionMiddleware::class,
         ShareErrorsFromSessionMiddleware::class,
+        99999 => ProfilerMiddleware::class,
     ];
 
     /**
@@ -204,7 +206,9 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
             $response = $this->sendRequestThroughRouter($serverRequest);
 
-            $events->trigger(new KernelResponseEvent($this, $serverRequest, $response));
+            $events->trigger($event = new KernelResponseEvent($this, $serverRequest, $response));
+
+            $response = $event->getResponse();
         } catch (Throwable $exception) {
             $this->reportException($exception);
 

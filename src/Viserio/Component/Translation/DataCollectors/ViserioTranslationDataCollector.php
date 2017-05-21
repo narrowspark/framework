@@ -4,11 +4,11 @@ namespace Viserio\Component\Translation\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
 
 class ViserioTranslationDataCollector extends AbstractDataCollector implements
     TooltipAwareContract,

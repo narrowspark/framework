@@ -8,8 +8,8 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Component\Foundation\DataCollectors\FilesLoadedCollector;
 use Viserio\Component\Foundation\DataCollectors\NarrowsparkDataCollector;
 use Viserio\Component\Foundation\DataCollectors\ViserioHttpDataCollector;
@@ -34,7 +34,7 @@ class FoundationDataCollectorServiceProvider implements
     public function getServices()
     {
         return [
-            WebProfilerContract::class => [self::class, 'createWebProfiler'],
+            ProfilerContract::class => [self::class, 'createProfiler'],
         ];
     }
 
@@ -43,7 +43,7 @@ class FoundationDataCollectorServiceProvider implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio', 'webprofiler'];
+        return ['viserio', 'profiler'];
     }
 
     /**
@@ -76,11 +76,11 @@ class FoundationDataCollectorServiceProvider implements
      * @param \Interop\Container\ContainerInterface $container
      * @param null|callable                         $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\WebProfiler\WebProfiler
+     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */
-    public static function createWebProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?WebProfilerContract
+    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
-        $profiler = $getPrevious();
+        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($profiler !== null) {
             self::resolveOptions($container);
@@ -99,9 +99,8 @@ class FoundationDataCollectorServiceProvider implements
 
             return $profiler;
         }
-        // @codeCoverageIgnoreStart
+
         return $profiler;
-        // @codeCoverageIgnoreEnd
     }
 
     private static function createNarrowsparkDataCollector(): NarrowsparkDataCollector

@@ -10,8 +10,10 @@ interface EventManager
      * @param string $eventName
      * @param mixed  $listener
      * @param int    $priority
+     *
+     * @return void
      */
-    public function attach(string $eventName, $listener, int $priority = 0);
+    public function attach(string $eventName, $listener, int $priority = 0): void;
 
     /**
      * Removes a specific listener from an event.
@@ -32,7 +34,7 @@ interface EventManager
      * If the eventName argument is specified, all listeners for that event are
      * removed.
      *
-     * @param string|null $eventName
+     * @param string $eventName
      *
      * @return void
      */

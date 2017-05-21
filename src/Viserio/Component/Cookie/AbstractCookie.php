@@ -323,7 +323,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         $expires = null;
 
         if (is_int($expiration)) {
-            $expires = (new Chronos(sprintf('%d seconds', $expiration)))->toCookieString();
+            $expires = Chronos::now()->addSeconds($expiration)->toCookieString();
         } elseif ($expiration instanceof DateTimeInterface) {
             $expires = $expiration->format(DateTime::COOKIE);
         }
@@ -335,7 +335,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
 
             // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
             if (! is_int($tsExpires) && PHP_INT_SIZE === 4) {
-                $dateTime = new DateTime($expires);
+                $dateTime = new Chronos($expires);
 
                 if ($dateTime->format('Y') > 2038) {
                     $tsExpires = PHP_INT_MAX;

@@ -14,7 +14,7 @@ class UriFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setUriFactory($this->mock(UriFactoryInterface::class));
 
-        static::assertInstanceOf(UriFactoryInterface::class, $this->getUriFactory());
+        self::assertInstanceOf(UriFactoryInterface::class, $this->getUriFactory());
     }
 
     /**

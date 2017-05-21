@@ -41,7 +41,7 @@ class EventManager implements EventManagerContract
     /**
      * {@inheritdoc}
      */
-    public function attach(string $eventName, $listener, int $priority = 0)
+    public function attach(string $eventName, $listener, int $priority = 0): void
     {
         $this->validateEventName($eventName);
 
