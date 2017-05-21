@@ -3,9 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
 use Psr\Log\LoggerInterface;
-use Swift_Mime_SimpleMessage;
-use Swift_Mime_MimeEntity;
 use Swift_Message;
+use Swift_Mime_SimpleMessage;
 
 class LogTransport extends AbstractTransport
 {

@@ -5,7 +5,6 @@ namespace Viserio\Component\Mail\Tests\Transport;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_Message;
-use Swift_Mime_MimeEntity;
 use Viserio\Component\Mail\Transport\LogTransport;
 
 class LogTransportTest extends MockeryTestCase

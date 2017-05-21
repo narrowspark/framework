@@ -11,7 +11,6 @@ use Swift_Mime_Headers_ParameterizedHeader;
 use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
 use Swift_Mime_SimpleMessage;
-use Swift_Mime_MimeEntity;
 use Swift_MimePart;
 
 class PostmarkTransport extends AbstractTransport
@@ -129,7 +128,7 @@ class PostmarkTransport extends AbstractTransport
      * are handled later.
      *
      * @param \Swift_Mime_SimpleMessage $message
-     * @param string              $mimeType
+     * @param string                    $mimeType
      *
      * @return \Swift_MimePart|null
      */
@@ -170,7 +169,7 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Applies the recipients of the message into the API Payload.
      *
-     * @param array               $payload
+     * @param array                     $payload
      * @param \Swift_Mime_SimpleMessage $message
      *
      * @return array
@@ -200,7 +199,7 @@ class PostmarkTransport extends AbstractTransport
      * Applies the message parts and attachments
      * into the API Payload.
      *
-     * @param array               $payload
+     * @param array                     $payload
      * @param \Swift_Mime_SimpleMessage $message
      *
      * @return array
@@ -256,7 +255,7 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Applies the headers into the API Payload.
      *
-     * @param array               $payload
+     * @param array                     $payload
      * @param \Swift_Mime_SimpleMessage $message
      *
      * @return array
