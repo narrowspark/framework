@@ -4,7 +4,6 @@ namespace Viserio\Component\Mail;
 
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
-use Narrowspark\Arr\Arr;
 use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
@@ -139,7 +138,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
         return new SparkPostTransport(
             $this->getHttpClient($config),
             $config['secret'],
-            Arr::get($config, 'options', [])
+            $config['options'] ?? []
         );
     }
 
@@ -157,8 +156,8 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
             'service' => 'email',
         ];
 
-        if ($config['key'] && $config['secret']) {
-            $config['credentials'] = Arr::only($config, ['key', 'secret']);
+        if (isset($config['key'], $config['secret'])) {
+            $config['credentials'] = array_intersect_key($config, array_flip(['key', 'secret']));
         }
 
         return new SesTransport(new SesClient($config));
@@ -173,9 +172,11 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      */
     protected function getHttpClient(array $config): HttpClient
     {
-        $guzzleConfig = Arr::get($config, 'guzzle', []);
+        $guzzleConfig = $config['guzzle'] ?? [];
 
-        return new HttpClient(Arr::add($guzzleConfig, 'connect_timeout', 90));
+        $guzzleConfig['connect_timeout'] = 90;
+
+        return new HttpClient($guzzleConfig);
     }
 
     /**

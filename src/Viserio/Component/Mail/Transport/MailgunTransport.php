@@ -84,8 +84,6 @@ class MailgunTransport extends AbstractTransport
      * Get the API key being used by the transport.
      *
      * @return string
-     *
-     * @codeCoverageIgnore
      */
     public function getKey(): string
     {
@@ -98,8 +96,6 @@ class MailgunTransport extends AbstractTransport
      * @param string $key
      *
      * @return $this
-     *
-     * @codeCoverageIgnore
      */
     public function setKey(string $key): self
     {

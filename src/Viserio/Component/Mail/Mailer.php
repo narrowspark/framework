@@ -4,7 +4,6 @@ namespace Viserio\Component\Mail;
 
 use Closure;
 use InvalidArgumentException;
-use Narrowspark\Arr\Arr;
 use Swift_Mailer;
 use Swift_Mime_SimpleMessage;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
@@ -17,13 +16,15 @@ use Viserio\Component\Mail\Events\MessageSendingEvent;
 use Viserio\Component\Mail\Events\MessageSentEvent;
 use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Viserio\Component\Support\Traits\MacroableTrait;
 
 class Mailer implements MailerContract, RequiresComponentConfigContract
 {
     use ContainerAwareTrait;
     use ConfigurationTrait;
-    use InvokerAwareTrait;
     use EventsAwareTrait;
+    use InvokerAwareTrait;
+    use MacroableTrait;
     use ViewAwareTrait;
 
     /**
@@ -139,7 +140,9 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         // to creating view based emails that are able to receive arrays of data.
         $this->addContent($message, $view, $plain, $raw, $data);
 
-        $this->callMessageBuilder($callback, $message);
+        if ($callback !== null) {
+            $this->callMessageBuilder($callback, $message);
+        }
 
         // If a global to address has been specified we will override
         // any recipient addresses previously set and use this one instead.
@@ -195,7 +198,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      *
      * @return array
      */
-    protected function parseView($view)
+    protected function parseView($view): array
     {
         if (is_string($view)) {
             return [$view, null, null];
@@ -211,9 +214,9 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
             // named keys instead, allowing the developers to use one or the other.
         } elseif (is_array($view)) {
             return [
-                Arr::get($view, 'html'),
-                Arr::get($view, 'text'),
-                Arr::get($view, 'raw'),
+                $view['html'] ?? null,
+                $view['text'] ?? null,
+                $view['raw'] ?? null,
             ];
         }
 
@@ -229,7 +232,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      * @param string|null                     $raw
      * @param array                           $data
      */
-    protected function addContent(MessageContract $message, $view, $plain, $raw, array $data)
+    protected function addContent(MessageContract $message, ?string $view, ?string $plain, ?string $raw, array $data)
     {
         if ($view !== null) {
             $message->setBody($this->createView($view, $data), 'text/html');
@@ -257,15 +260,31 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     protected function sendSwiftMessage(Swift_Mime_SimpleMessage $message): int
     {
-        if ($this->events !== null) {
-            $this->events->trigger(new MessageSendingEvent($this, $message));
+        if (! $this->shouldSendMessage($message)) {
+            return 0;
         }
 
         try {
             return $this->swift->send($message, $this->failedRecipients);
         } finally {
-            $this->forceReconnection();
+            $this->forceReconnecting();
         }
+    }
+
+    /**
+     * Determines if the message can be sent.
+     *
+     * @param \Swift_Mime_SimpleMessage $message
+     *
+     * @return bool
+     */
+    protected function shouldSendMessage(Swift_Mime_SimpleMessage $message): bool
+    {
+        if (! $this->events) {
+            return true;
+        }
+
+        return $this->events->trigger(new MessageSendingEvent($this, $message)) !== false;
     }
 
     /**
@@ -275,7 +294,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      *
      * @return void
      */
-    protected function forceReconnection()
+    protected function forceReconnecting()
     {
         $this->swift->getTransport()->stop();
     }
@@ -321,19 +340,15 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     }
 
     /**
-     * Creats a view string for the email body.
+     * Creates a view string for the email body.
      *
-     * @param string|null $view
-     * @param array       $data
+     * @param string $view
+     * @param array  $data
      *
      * @return string
      */
-    protected function createView($view, array $data): string
+    protected function createView(string $view, array $data): string
     {
-        if (! is_string($view)) {
-            return '';
-        }
-
         if ($this->views !== null) {
             return $this->getViewFactory()->create($view, $data)->render();
         }

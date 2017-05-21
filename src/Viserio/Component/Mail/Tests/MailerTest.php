@@ -248,8 +248,7 @@ class MailerTest extends MockeryTestCase
     public function testMailerPlainSend()
     {
         unset($_SERVER['__mailer.test']);
-        $event = $this->mock(EventManagerContract::class);
-
+        $event  = $this->mock(EventManagerContract::class);
         $mailer = $this->getMockBuilder(Mailer::class)
             ->setMethods(['createMessage'])
             ->setConstructorArgs($this->getMocks())
@@ -267,16 +266,17 @@ class MailerTest extends MockeryTestCase
         $message->shouldReceive('setFrom')
             ->never();
 
-        $mailer = $this->setSwiftMailer($mailer);
-
+        $mailer      = $this->setSwiftMailer($mailer);
         $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
 
         $event->shouldReceive('trigger')
             ->once()
-            ->with(Mock::type(MessageSendingEvent::class));
+            ->with(Mock::type(MessageSendingEvent::class))
+            ->andReturn(true);
         $event->shouldReceive('trigger')
             ->once()
-            ->with(Mock::type(MessageSentEvent::class));
+            ->with(Mock::type(MessageSentEvent::class))
+            ->andReturn(true);
 
         $mailer->setEventManager($event);
 
@@ -344,6 +344,56 @@ class MailerTest extends MockeryTestCase
         $mailer->send('test', [], new stdClass());
     }
 
+    public function testSendWithFailedEvent()
+    {
+        $event  = $this->mock(EventManagerContract::class);
+        $mailer = $this->getMockBuilder(Mailer::class)
+            ->setMethods(['createMessage'])
+            ->setConstructorArgs($this->getMocks())
+            ->getMock();
+
+        $message = $this->mock(MessageContract::class);
+
+        $mailer->expects($this->once())
+            ->method('createMessage')
+            ->will($this->returnValue($message));
+
+        $message->shouldReceive('setBody')
+            ->never();
+        $message->shouldReceive('setFrom')
+            ->never();
+
+        $swift = $this->mock(Swift_Mailer::class);
+        $swift->shouldReceive('getTransport')
+            ->never();
+        $swift->shouldReceive('createMessage')
+            ->andReturn(new Swift_Message());
+
+        $mailer->setSwiftMailer($swift);
+
+        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
+
+        $event->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(MessageSendingEvent::class))
+            ->andReturn(false);
+        $event->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(MessageSentEvent::class))
+            ->andReturn(true);
+
+        $mailer->setEventManager($event);
+
+        $message->shouldReceive('getSwiftMessage')
+            ->twice()
+            ->andReturn($mimeMessage);
+
+        $mailer->getSwiftMailer()->shouldReceive('send')
+            ->never();
+
+        self::assertSame(0, $mailer->send([], []));
+    }
+
     protected function setSwiftMailer($mailer)
     {
         $transport = $this->mock(Swift_Transport::class);
@@ -359,6 +409,20 @@ class MailerTest extends MockeryTestCase
         $mailer->setSwiftMailer($swift);
 
         return $mailer;
+    }
+
+    public function testMacroable()
+    {
+        Mailer::macro('foo', function () {
+            return 'bar';
+        });
+
+        $mailer = new Mailer(
+            $this->mock(Swift_Mailer::class),
+            ['viserio' => ['mail' => []]]
+        );
+
+        $this->assertEquals('bar', $mailer->foo());
     }
 
     protected function getMocks(): array

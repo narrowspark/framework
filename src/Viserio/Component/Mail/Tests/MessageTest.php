@@ -136,6 +136,12 @@ class MessageTest extends MockeryTestCase
             ->with('foo@bar.baz', 'Foo');
 
         self::assertInstanceOf(Message::class, $this->message->cc('foo@bar.baz', 'Foo'));
+
+        $this->swift->shouldReceive('setCc')
+            ->once()
+            ->with('foo@bar.baz', 'Foo');
+
+        self::assertInstanceOf(Message::class, $this->message->cc('foo@bar.baz', 'Foo', true));
     }
 
     public function testBccMethod()
@@ -145,6 +151,12 @@ class MessageTest extends MockeryTestCase
             ->with('foo@bar.baz', 'Foo');
 
         self::assertInstanceOf(Message::class, $this->message->bcc('foo@bar.baz', 'Foo'));
+
+        $this->swift->shouldReceive('setBcc')
+            ->once()
+            ->with('foo@bar.baz', 'Foo');
+
+        self::assertInstanceOf(Message::class, $this->message->bcc('foo@bar.baz', 'Foo', true));
     }
 
     public function testReplyToMethod()

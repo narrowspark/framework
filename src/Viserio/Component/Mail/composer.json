@@ -20,7 +20,6 @@
     "require": {
         "php"                                 : "^7.1",
         "php-di/invoker"                      : "^2.0",
-        "narrowspark/arr"                     : "^2.1",
         "swiftmailer/swiftmailer"             : "^6.0",
         "viserio/contracts"                   : "self.version",
         "viserio/options-resolver"            : "self.version",

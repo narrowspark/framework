@@ -195,8 +195,8 @@ class TransportManagerTest extends MockeryTestCase
                 'mail' => [
                     'drivers'   => [
                         'ses' => [
-                            'secret' => '',
-                            'key'    => '',
+                            'secret' => 'test',
+                            'key'    => 'test',
                             'region' => 'us-west-2',
                         ],
                     ],

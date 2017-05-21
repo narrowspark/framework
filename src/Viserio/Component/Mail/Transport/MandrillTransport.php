@@ -68,8 +68,6 @@ class MandrillTransport extends AbstractTransport
      * Get the API key being used by the transport.
      *
      * @return string
-     *
-     * @codeCoverageIgnore
      */
     public function getKey(): string
     {
@@ -82,8 +80,6 @@ class MandrillTransport extends AbstractTransport
      * @param string $key
      *
      * @return \Viserio\Component\Mail\Transport\Mandrill
-     *
-     * @codeCoverageIgnore
      */
     public function setKey(string $key): self
     {

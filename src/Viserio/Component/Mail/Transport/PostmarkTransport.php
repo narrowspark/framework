@@ -77,8 +77,6 @@ class PostmarkTransport extends AbstractTransport
      * Get the API key being used by the transport.
      *
      * @return string
-     *
-     * @codeCoverageIgnore
      */
     public function getServerToken(): string
     {
@@ -91,8 +89,6 @@ class PostmarkTransport extends AbstractTransport
      * @param string $serverToken
      *
      * @return \Viserio\Component\Mail\Transport\Postmark
-     *
-     * @codeCoverageIgnore
      */
     public function setServerToken(string $serverToken): self
     {
