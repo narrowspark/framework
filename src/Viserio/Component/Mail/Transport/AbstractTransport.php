@@ -18,8 +18,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function isStarted(): bool
     {
@@ -28,8 +26,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function start()
     {
@@ -37,8 +33,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function stop()
     {
