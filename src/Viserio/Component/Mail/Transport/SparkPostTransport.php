@@ -81,6 +81,8 @@ class SparkPostTransport extends AbstractTransport
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function ping(): bool
     {

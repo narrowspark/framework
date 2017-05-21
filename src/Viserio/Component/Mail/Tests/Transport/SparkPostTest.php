@@ -10,6 +10,26 @@ use Viserio\Component\Mail\Transport\SparkPostTransport;
 
 class SparkPostTest extends TestCase
 {
+    public function testSetAndGetKey()
+    {
+        $client = $this->getMockBuilder(HttpClient::class)
+            ->getMock();
+        $transport = new SparkPostTransport($client, 'API_KEY');
+        $transport->setKey('test');
+
+        self::assertSame('test', $transport->getKey());
+    }
+
+    public function testSetAndGetOptions()
+    {
+        $client = $this->getMockBuilder(HttpClient::class)
+            ->getMock();
+        $transport = new SparkPostTransport($client, 'API_KEY');
+        $transport->setOptions(['key' => 'test']);
+
+        self::assertSame(['key' => 'test'], $transport->getOptions());
+    }
+
     public function testSend()
     {
         $message = new Swift_Message('Foo subject', 'Bar body');

@@ -9,6 +9,26 @@ use Viserio\Component\Mail\Transport\MailgunTransport;
 
 class MailgunTest extends TestCase
 {
+    public function testSetAndGetDomain()
+    {
+        $client = $this->getMockBuilder(HttpClient::class)
+            ->getMock();
+        $transport = new MailgunTransport($client, 'API_KEY', 'narrowspark');
+        $transport->setDomain('anolilab.com');
+
+        self::assertSame('anolilab.com', $transport->getDomain());
+    }
+
+    public function testSetAndGetKey()
+    {
+        $client = $this->getMockBuilder(HttpClient::class)
+            ->getMock();
+        $transport = new MailgunTransport($client, 'API_KEY', 'narrowspark');
+        $transport->setKey('test');
+
+        self::assertSame('test', $transport->getKey());
+    }
+
     public function testSend()
     {
         $message = new Swift_Message('Foo subject', 'Bar body');

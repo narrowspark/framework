@@ -9,11 +9,22 @@ use Viserio\Component\Mail\Tests\Fixture\MandrillTransportStub;
 
 class MandrillTransportTest extends TestCase
 {
+    public function testSetAndGetKey()
+    {
+        $client = $this->getMockBuilder(HttpClient::class)
+            ->getMock();
+        $transport = new MandrillTransportStub($client, 'API_KEY');
+        $transport->setKey('test');
+
+        self::assertSame('test', $transport->getKey());
+    }
+
     public function testSend()
     {
         $message = new Swift_Message('Foo subject', 'Bar body');
         $message->setTo('me@example.com');
         $message->setBcc('you@example.com');
+        $message->setCc('cc@example.com');
 
         $client = $this->getMockBuilder(HttpClient::class)
             ->setMethods(['post'])
@@ -30,7 +41,7 @@ class MandrillTransportTest extends TestCase
                         'key'         => 'testkey',
                         'raw_message' => $message->toString(),
                         'async'       => false,
-                        'to'          => ['me@example.com', 'you@example.com'],
+                        'to'          => ['me@example.com', 'cc@example.com', 'you@example.com'],
                     ],
                 ])
             );

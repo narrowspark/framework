@@ -47,6 +47,8 @@ class SesTransport extends AbstractTransport
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function ping(): bool
     {

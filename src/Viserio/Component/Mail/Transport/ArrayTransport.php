@@ -27,6 +27,8 @@ class ArrayTransport extends AbstractTransport
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function ping(): bool
     {

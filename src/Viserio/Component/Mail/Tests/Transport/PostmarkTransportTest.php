@@ -83,4 +83,16 @@ class PostmarkTransportTest extends TestCase
 
         $transport->send($message);
     }
+
+    public function testSetAndGetServerToken()
+    {
+        $client = $this->getMockBuilder(HttpClient::class)
+            ->getMock();
+
+        $transport = new PostmarkTransport($client, 'TESTING_SERVER');
+
+        $transport->setServerToken('token');
+
+        self::assertSame('token', $transport->getServerToken());
+    }
 }

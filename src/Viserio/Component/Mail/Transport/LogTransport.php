@@ -41,6 +41,8 @@ class LogTransport extends AbstractTransport
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function ping(): bool
     {
