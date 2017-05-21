@@ -29,7 +29,6 @@ abstract class AbstractTransport implements Swift_Transport
      */
     public function start()
     {
-        return true;
     }
 
     /**
@@ -37,15 +36,16 @@ abstract class AbstractTransport implements Swift_Transport
      */
     public function stop()
     {
-        return true;
     }
 
     /**
      * Register a plug-in with the transport.
      *
      * @param \Swift_Events_EventListener $plugin
+     *
+     * @return void
      */
-    public function registerPlugin(Swift_Events_EventListener $plugin)
+    public function registerPlugin(Swift_Events_EventListener $plugin): void
     {
         array_push($this->plugins, $plugin);
     }

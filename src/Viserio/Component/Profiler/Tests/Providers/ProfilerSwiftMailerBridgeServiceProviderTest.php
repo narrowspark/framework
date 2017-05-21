@@ -19,7 +19,7 @@ class ProfilerSwiftMailerBridgeServiceProviderTest extends MockeryTestCase
     {
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
-        $container->instance(Swift_Mailer::class, Swift_Mailer::newInstance(Swift_SmtpTransport::newInstance('smtp.example.org', 25)));
+        $container->instance(Swift_Mailer::class, new Swift_Mailer(new Swift_SmtpTransport('smtp.example.org', 25)));
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new OptionsResolverServiceProvider());
         $container->register(new ProfilerServiceProvider());

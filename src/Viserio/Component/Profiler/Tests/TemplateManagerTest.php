@@ -111,7 +111,7 @@ class TemplateManagerTest extends MockeryTestCase
     public function testRenderWithAPanelCollector()
     {
         $collector = new SwiftMailDataCollector(
-            Swift_Mailer::newInstance(Swift_SmtpTransport::newInstance('smtp.example.org', 25))
+            new Swift_Mailer(new Swift_SmtpTransport('smtp.example.org', 25))
         );
         $collector->collect(
             $this->mock(ServerRequestInterface::class),

@@ -26,7 +26,6 @@ parameters:
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
         - '#Access to an undefined property Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::\$protectedVariable#'
-        - '#Call to an undefined method Swift_Mime_Message::shouldReceive#'
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FacadeStub#'
         - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\MacroTest::#'
