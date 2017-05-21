@@ -283,7 +283,8 @@ class Profile
     /**
      * Sets the Collectors associated with this profile.
      *
-     * @param \Viserio\Component\Contracts\Profiler\DataCollector[] $collectors
+     *
+     * @param array $collectors
      *
      * @return void
      */

@@ -22,7 +22,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     /**
      * Collection of TraceableCacheItemDecorater.
      *
-     * @var \Viserio\Component\Profiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater[]
+     * @var array
      */
     private $pools = [];
 

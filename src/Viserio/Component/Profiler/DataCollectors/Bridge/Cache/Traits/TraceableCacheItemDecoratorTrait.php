@@ -89,7 +89,7 @@ trait TraceableCacheItemDecoratorTrait
      */
     public function getItems(array $keys = [])
     {
-        $event = $this->start(__FUNCTION__, $keys);
+        $event = $this->start(__FUNCTION__);
 
         try {
             $result = $this->pool->getItems($keys);
