@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
 use GuzzleHttp\Client;
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 
 class MandrillTransport extends AbstractTransport
 {
@@ -36,7 +36,7 @@ class MandrillTransport extends AbstractTransport
     /**
      * {@inheritdoc}
      */
-    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
     {
         $this->beforeSendPerformed($message);
 
@@ -54,6 +54,14 @@ class MandrillTransport extends AbstractTransport
         $this->sendPerformed($message);
 
         return $this->numberOfRecipients($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ping(): bool
+    {
+        return true;
     }
 
     /**
@@ -88,11 +96,11 @@ class MandrillTransport extends AbstractTransport
      * Get all the addresses this email should be sent to,
      * including "to", "cc" and "bcc" addresses.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return array
      */
-    protected function getToAddresses(Swift_Mime_Message $message): array
+    protected function getToAddresses(Swift_Mime_SimpleMessage $message): array
     {
         $to = [];
 

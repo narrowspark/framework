@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
 use GuzzleHttp\Client;
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 
 class MailgunTransport extends AbstractTransport
 {
@@ -52,7 +52,7 @@ class MailgunTransport extends AbstractTransport
     /**
      * {@inheritdoc}
      */
-    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
     {
         $this->beforeSendPerformed($message);
 
@@ -70,6 +70,14 @@ class MailgunTransport extends AbstractTransport
         $this->sendPerformed($message);
 
         return $this->numberOfRecipients($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ping(): bool
+    {
+        return true;
     }
 
     /**
@@ -129,11 +137,11 @@ class MailgunTransport extends AbstractTransport
     /**
      * Get the "to" payload field for the API request.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return string
      */
-    protected function getTo(Swift_Mime_Message $message): string
+    protected function getTo(Swift_Mime_SimpleMessage $message): string
     {
         return $this->formatAddress(is_null($message->getTo()) ? [] : $message->getTo());
     }
@@ -141,11 +149,11 @@ class MailgunTransport extends AbstractTransport
     /**
      * Get the "cc" payload field for the API request.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return string
      */
-    protected function getCc(Swift_Mime_Message $message): string
+    protected function getCc(Swift_Mime_SimpleMessage $message): string
     {
         return $this->formatAddress(is_null($message->getCc()) ? [] : $message->getCc());
     }
@@ -153,11 +161,11 @@ class MailgunTransport extends AbstractTransport
     /**
      * Get the "bcc" payload field for the API request.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return string
      */
-    protected function getBcc(Swift_Mime_Message $message): string
+    protected function getBcc(Swift_Mime_SimpleMessage $message): string
     {
         return $this->formatAddress(is_null($message->getBcc()) ? [] : $message->getBcc());
     }

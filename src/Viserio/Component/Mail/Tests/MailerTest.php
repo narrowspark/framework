@@ -8,7 +8,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Swift_Mailer;
 use Swift_Message;
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 use Swift_Transport;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
@@ -63,7 +63,7 @@ class MailerTest extends MockeryTestCase
 
         $mailer = $this->setSwiftMailer($mailer);
 
-        $mimeMessage = $this->mock(Swift_Mime_Message::class);
+        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
 
         $message->shouldReceive('getSwiftMessage')
             ->once()
@@ -125,7 +125,7 @@ class MailerTest extends MockeryTestCase
 
         $mailer = $this->setSwiftMailer($mailer);
 
-        $mimeMessage = $this->mock(Swift_Mime_Message::class);
+        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
 
         $message->shouldReceive('getSwiftMessage')
             ->once()
@@ -186,7 +186,7 @@ class MailerTest extends MockeryTestCase
 
         $mailer = $this->setSwiftMailer($mailer);
 
-        $mimeMessage = $this->mock(Swift_Mime_Message::class);
+        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
 
         $message->shouldReceive('getSwiftMessage')
             ->once()
@@ -226,7 +226,7 @@ class MailerTest extends MockeryTestCase
 
         $mailer = $this->setSwiftMailer($mailer);
 
-        $mimeMessage = $this->mock(Swift_Mime_Message::class);
+        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
 
         $message->shouldReceive('getSwiftMessage')
             ->once()
@@ -269,7 +269,7 @@ class MailerTest extends MockeryTestCase
 
         $mailer = $this->setSwiftMailer($mailer);
 
-        $mimeMessage = $this->mock(Swift_Mime_Message::class);
+        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
 
         $event->shouldReceive('trigger')
             ->once()

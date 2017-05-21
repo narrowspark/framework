@@ -6,7 +6,7 @@ use Closure;
 use InvalidArgumentException;
 use Narrowspark\Arr\Arr;
 use Swift_Mailer;
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
@@ -251,11 +251,11 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Send a Swift Message instance.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return int
      */
-    protected function sendSwiftMessage(Swift_Mime_Message $message): int
+    protected function sendSwiftMessage(Swift_Mime_SimpleMessage $message): int
     {
         if ($this->events !== null) {
             $this->events->trigger(new MessageSendingEvent($this, $message));

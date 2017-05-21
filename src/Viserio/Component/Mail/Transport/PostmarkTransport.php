@@ -10,8 +10,8 @@ use Swift_Mime_Headers_OpenDKIMHeader;
 use Swift_Mime_Headers_ParameterizedHeader;
 use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
-use Swift_Mime_Message;
-use Swift_Mime_MimeEntity;
+use Swift_Mime_SimpleMessage;
+use Swift_MimePart;
 
 class PostmarkTransport extends AbstractTransport
 {
@@ -44,7 +44,7 @@ class PostmarkTransport extends AbstractTransport
     /**
      * {@inheritdoc}
      */
-    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
     {
         $this->beforeSendPerformed($message);
 
@@ -63,6 +63,14 @@ class PostmarkTransport extends AbstractTransport
         $this->sendPerformed($message);
 
         return $this->numberOfRecipients($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ping(): bool
+    {
+        return true;
     }
 
     /**
@@ -119,12 +127,12 @@ class PostmarkTransport extends AbstractTransport
      * Excludes parts of type \Swift_Mime_Attachment as those
      * are handled later.
      *
-     * @param \Swift_Mime_Message $message
-     * @param string              $mimeType
+     * @param \Swift_Mime_SimpleMessage $message
+     * @param string                    $mimeType
      *
-     * @return \Swift_Mime_MimeEntity|null
+     * @return \Swift_MimePart|null
      */
-    protected function getMIMEPart(Swift_Mime_Message $message, $mimeType): ?Swift_Mime_MimeEntity
+    protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType): ?Swift_MimePart
     {
         foreach ($message->getChildren() as $part) {
             if (mb_strpos($part->getContentType(), $mimeType) === 0 &&
@@ -140,11 +148,11 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Convert a Swift Mime Message to a Postmark Payload.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return array
      */
-    protected function getMessagePayload(Swift_Mime_Message $message): array
+    protected function getMessagePayload(Swift_Mime_SimpleMessage $message): array
     {
         $payload = [];
 
@@ -161,12 +169,12 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Applies the recipients of the message into the API Payload.
      *
-     * @param array               $payload
-     * @param \Swift_Mime_Message $message
+     * @param array                     $payload
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return array
      */
-    protected function processRecipients(array $payload, Swift_Mime_Message $message): array
+    protected function processRecipients(array $payload, Swift_Mime_SimpleMessage $message): array
     {
         $payload['From']    = implode(',', $this->convertEmailsArray($message->getFrom()));
         $payload['To']      = implode(',', $this->convertEmailsArray($message->getTo()));
@@ -191,12 +199,12 @@ class PostmarkTransport extends AbstractTransport
      * Applies the message parts and attachments
      * into the API Payload.
      *
-     * @param array               $payload
-     * @param \Swift_Mime_Message $message
+     * @param array                     $payload
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return array
      */
-    protected function processMessageParts(array $payload, Swift_Mime_Message $message): array
+    protected function processMessageParts(array $payload, Swift_Mime_SimpleMessage $message): array
     {
         //Get the primary message.
         switch ($message->getContentType()) {
@@ -247,12 +255,12 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Applies the headers into the API Payload.
      *
-     * @param array               $payload
-     * @param \Swift_Mime_Message $message
+     * @param array                     $payload
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return array
      */
-    protected function processHeaders(array $payload, Swift_Mime_Message $message): array
+    protected function processHeaders(array $payload, Swift_Mime_SimpleMessage $message): array
     {
         $headers = [];
 

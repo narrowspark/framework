@@ -22,9 +22,9 @@ class PostmarkTransportTest extends TestCase
         $message->addBcc('another+4@example.com', 'Extra 4');
         $message->addPart('<q>Narrowspark</q>', 'text/html');
 
-        $attachment = Swift_Attachment::newInstance('This is the plain text attachment.', 'hello.txt', 'text/plain');
+        $attachment = new Swift_Attachment('This is the plain text attachment.', 'hello.txt', 'text/plain');
 
-        $attachment2 = Swift_Attachment::newInstance('This is the plain text attachment.', 'hello.txt', 'text/plain');
+        $attachment2 = new Swift_Attachment('This is the plain text attachment.', 'hello.txt', 'text/plain');
         $attachment2->setDisposition('inline');
 
         $message->attach($attachment);
