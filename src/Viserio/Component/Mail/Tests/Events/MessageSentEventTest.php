@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests\Events;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Mail\Events\MessageSentEvent;
 use Swift_Mime_SimpleMessage;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
+use Viserio\Component\Mail\Events\MessageSentEvent;
 
 class MessageSentEventTest extends MockeryTestCase
 {

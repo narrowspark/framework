@@ -394,6 +394,20 @@ class MailerTest extends MockeryTestCase
         self::assertSame(0, $mailer->send([], []));
     }
 
+    public function testMacroable()
+    {
+        Mailer::macro('foo', function () {
+            return 'bar';
+        });
+
+        $mailer = new Mailer(
+            $this->mock(Swift_Mailer::class),
+            ['viserio' => ['mail' => []]]
+        );
+
+        $this->assertEquals('bar', $mailer->foo());
+    }
+
     protected function setSwiftMailer($mailer)
     {
         $transport = $this->mock(Swift_Transport::class);
@@ -409,20 +423,6 @@ class MailerTest extends MockeryTestCase
         $mailer->setSwiftMailer($swift);
 
         return $mailer;
-    }
-
-    public function testMacroable()
-    {
-        Mailer::macro('foo', function () {
-            return 'bar';
-        });
-
-        $mailer = new Mailer(
-            $this->mock(Swift_Mailer::class),
-            ['viserio' => ['mail' => []]]
-        );
-
-        $this->assertEquals('bar', $mailer->foo());
     }
 
     protected function getMocks(): array
