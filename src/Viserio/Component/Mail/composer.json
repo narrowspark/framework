@@ -21,7 +21,7 @@
         "php"                                 : "^7.1",
         "php-di/invoker"                      : "^2.0",
         "narrowspark/arr"                     : "^2.1",
-        "swiftmailer/swiftmailer"             : "^5.4",
+        "swiftmailer/swiftmailer"             : "^6.0",
         "viserio/contracts"                   : "self.version",
         "viserio/options-resolver"            : "self.version",
         "viserio/support"                     : "self.version"
@@ -60,7 +60,6 @@
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "guzzlehttp/guzzle"                   : "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
         "opis/closure"                        : "Required to be able to serialize closures (^2.2.1).",
-        "pear/crypt_gpg"                      : "Required to send GPG-encrypted emails (^1.4).",
         "viserio/queue"                       : "Required to send queue emails (self.version).",
         "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },

@@ -4,7 +4,7 @@ namespace Viserio\Component\Mail\Transport;
 
 use Swift_Events_EventListener;
 use Swift_Events_SendEvent;
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 use Swift_Transport;
 
 abstract class AbstractTransport implements Swift_Transport
@@ -18,8 +18,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function isStarted(): bool
     {
@@ -28,8 +26,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function start()
     {
@@ -38,8 +34,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function stop()
     {
@@ -50,8 +44,6 @@ abstract class AbstractTransport implements Swift_Transport
      * Register a plug-in with the transport.
      *
      * @param \Swift_Events_EventListener $plugin
-     *
-     * @codeCoverageIgnore
      */
     public function registerPlugin(Swift_Events_EventListener $plugin)
     {
@@ -61,11 +53,11 @@ abstract class AbstractTransport implements Swift_Transport
     /**
      * Iterate through registered plugins and execute plugins' methods.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return void
      */
-    protected function beforeSendPerformed(Swift_Mime_Message $message): void
+    protected function beforeSendPerformed(Swift_Mime_SimpleMessage $message): void
     {
         $event = new Swift_Events_SendEvent($this, $message);
 
@@ -79,11 +71,11 @@ abstract class AbstractTransport implements Swift_Transport
     /**
      * Get the number of recipients.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return int
      */
-    protected function numberOfRecipients(Swift_Mime_Message $message): int
+    protected function numberOfRecipients(Swift_Mime_SimpleMessage $message): int
     {
         $to  = is_null($message->getTo()) ? [] : $message->getTo();
         $cc  = is_null($message->getCc()) ? [] : $message->getCc();
@@ -95,11 +87,11 @@ abstract class AbstractTransport implements Swift_Transport
     /**
      * Iterate through registered plugins and execute plugins' methods.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return void
      */
-    protected function sendPerformed(Swift_Mime_Message $message): void
+    protected function sendPerformed(Swift_Mime_SimpleMessage $message): void
     {
         $event = new Swift_Events_SendEvent($this, $message);
 

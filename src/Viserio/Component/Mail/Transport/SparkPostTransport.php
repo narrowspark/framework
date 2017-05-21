@@ -4,7 +4,7 @@ namespace Viserio\Component\Mail\Transport;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 
 class SparkPostTransport extends AbstractTransport
 {
@@ -46,7 +46,7 @@ class SparkPostTransport extends AbstractTransport
     /**
      * {@inheritdoc}
      */
-    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
     {
         $this->beforeSendPerformed($message);
 
@@ -77,6 +77,14 @@ class SparkPostTransport extends AbstractTransport
         $this->sendPerformed($message);
 
         return $this->numberOfRecipients($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ping(): bool
+    {
+        return true;
     }
 
     /**
@@ -162,11 +170,11 @@ class SparkPostTransport extends AbstractTransport
      *
      * Note that SparkPost still respects CC, BCC headers in raw message itself.
      *
-     * @param \Swift_Mime_Message $message
+     * @param \Swift_Mime_SimpleMessage $message
      *
      * @return array
      */
-    protected function getRecipients(Swift_Mime_Message $message): array
+    protected function getRecipients(Swift_Mime_SimpleMessage $message): array
     {
         $recipients = [];
 

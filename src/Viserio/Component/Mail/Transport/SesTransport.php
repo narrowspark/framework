@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
 use Aws\Ses\SesClient;
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 
 class SesTransport extends AbstractTransport
 {
@@ -25,14 +25,9 @@ class SesTransport extends AbstractTransport
     }
 
     /**
-     * Send Email.
-     *
-     * @param \Swift_Mime_Message $message
-     * @param string[]|null       $failedRecipients
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
     {
         $this->beforeSendPerformed($message);
 
@@ -48,5 +43,13 @@ class SesTransport extends AbstractTransport
         $this->sendPerformed($message);
 
         return $this->numberOfRecipients($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ping(): bool
+    {
+        return true;
     }
 }

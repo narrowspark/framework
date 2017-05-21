@@ -67,7 +67,7 @@
         "symfony/polyfill-mbstring"                          : "^1.0",
         "symfony/polyfill-intl-icu"                          : "^1.0",
         "symfony/process"                                    : "^3.2",
-        "swiftmailer/swiftmailer"                            : "^5.4",
+        "swiftmailer/swiftmailer"                            : "^6.0",
         "vlucas/phpdotenv"                                   : "^2.3"
     },
     "replace": {

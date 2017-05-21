@@ -29,11 +29,11 @@ class LogTransportTest extends MockeryTestCase
     /**
      * Get a loggable string out of a Swiftmailer entity.
      *
-     * @param \Swift_Mime_MimeEntity $entity
+     * @param \Swift_Message $entity
      *
      * @return string
      */
-    protected function getMimeEntityString(Swift_Mime_MimeEntity $entity): string
+    protected function getMimeEntityString(Swift_Message $entity): string
     {
         $string = (string) $entity->getHeaders() . PHP_EOL . $entity->getBody();
 

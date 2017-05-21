@@ -5,7 +5,7 @@ namespace Viserio\Component\Mail;
 use Swift_Attachment;
 use Swift_Image;
 use Swift_Mime_Attachment;
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 
 class Message implements MessageContract
@@ -13,16 +13,16 @@ class Message implements MessageContract
     /**
      * The Swift Message instance.
      *
-     * @var \Swift_Mime_Message
+     * @var \Swift_Mime_SimpleMessage
      */
     protected $swift;
 
     /**
      * Create a new message instance.
      *
-     * @param \Swift_Mime_Message $swift
+     * @param \Swift_Mime_SimpleMessage $swift
      */
-    public function __construct(Swift_Mime_Message $swift)
+    public function __construct(Swift_Mime_SimpleMessage $swift)
     {
         $this->swift = $swift;
     }
@@ -173,7 +173,7 @@ class Message implements MessageContract
      */
     public function embedData(string $data, string $name, string $contentType = null): string
     {
-        $image = Swift_Image::newInstance($data, $name, $contentType);
+        $image = new Swift_Image($data, $name, $contentType);
 
         return $this->swift->embed($image);
     }
@@ -230,7 +230,7 @@ class Message implements MessageContract
      */
     protected function createAttachmentFromData(string $data, string $name): Swift_Mime_Attachment
     {
-        return Swift_Attachment::newInstance($data, $name);
+        return new Swift_Attachment($data, $name);
     }
 
     /**

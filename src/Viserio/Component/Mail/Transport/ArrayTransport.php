@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Transport;
 
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 
 class ArrayTransport extends AbstractTransport
 {
@@ -16,13 +16,21 @@ class ArrayTransport extends AbstractTransport
     /**
      * {@inheritdoc}
      */
-    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
     {
         $this->beforeSendPerformed($message);
 
         $this->messages[] = $message;
 
         return $this->numberOfRecipients($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ping(): bool
+    {
+        return true;
     }
 
     /**

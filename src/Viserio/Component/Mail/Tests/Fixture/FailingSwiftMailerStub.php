@@ -5,12 +5,12 @@ namespace Viserio\Component\Mail\Tests\Fixture;
 use Mockery;
 use Swift_Mailer;
 use Swift_Message;
-use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 use Swift_Transport;
 
 class FailingSwiftMailerStub extends Swift_Mailer
 {
-    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null)
     {
         $failedRecipients[] = 'info@narrowspark.de';
 

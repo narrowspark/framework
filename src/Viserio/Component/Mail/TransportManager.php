@@ -58,7 +58,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      */
     protected function createSendmailDriver(array $config): Swift_SendmailTransport
     {
-        return Swift_SendmailTransport::newInstance($config);
+        return new Swift_SendmailTransport($config['command'] ?? '/usr/sbin/sendmail -bs');
     }
 
     /**
@@ -73,7 +73,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
         // The Swift SMTP transport instance will allow us to use any SMTP backend
         // for delivering mail such as Amazon SES, Sendgrid or a custom server
         // a developer has available.
-        $transport = Swift_SmtpTransport::newInstance(
+        $transport = new Swift_SmtpTransport(
             $config['host'],
             $config['port']
         );
