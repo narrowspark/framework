@@ -14,12 +14,12 @@ use Viserio\Component\Support\Invoker;
 class CommandTest extends TestCase
 {
     /**
-     * @var Application
+     * @var \Viserio\Component\Console\Application
      */
     private $application;
 
     /**
-     * @var Invoker
+     * @var \Viserio\Component\Support\Invoker
      */
     private $invoker;
 
@@ -31,7 +31,8 @@ class CommandTest extends TestCase
             },
         ]);
 
-        $this->application = new Application($container, '1.0.0');
+        $this->application = new Application('1.0.0');
+        $this->application->setContainer($container);
 
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
@@ -42,15 +43,18 @@ class CommandTest extends TestCase
     public function testGetNormalVerbosity()
     {
         $command = new ViserioSecCommand();
+
         self::assertSame(32, $command->getVerbosity());
     }
 
     public function testGetVerbosityLevelFromCommand()
     {
         $command = new ViserioSecCommand();
+
         self::assertSame(128, $command->getVerbosity(128));
 
         $command = new ViserioSecCommand();
+
         self::assertSame(128, $command->getVerbosity('vv'));
     }
 
@@ -58,6 +62,7 @@ class CommandTest extends TestCase
     {
         $command = new ViserioSecCommand();
         $command->setVerbosity(256);
+
         self::assertSame(256, $command->getVerbosity());
     }
 

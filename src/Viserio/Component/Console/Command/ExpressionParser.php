@@ -6,14 +6,14 @@ use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contracts\Console\Exceptions\InvalidCommandExpression;
 
-class ExpressionParser
+final class ExpressionParser
 {
     /**
      * @param string $expression
      *
      * @return array
      */
-    public function parse(string $expression): array
+    public static function parse(string $expression): array
     {
         preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
 
@@ -52,7 +52,7 @@ class ExpressionParser
      *
      * @return bool
      */
-    protected static function isOption(string $token): bool
+    private static function isOption(string $token): bool
     {
         return self::startsWith($token, '[-');
     }
@@ -64,7 +64,7 @@ class ExpressionParser
      *
      * @return \Viserio\Component\Console\Input\InputArgument
      */
-    protected static function parseArgument(string $token): InputArgument
+    private static function parseArgument(string $token): InputArgument
     {
         list($token, $description) = static::extractDescription($token);
 
@@ -93,7 +93,7 @@ class ExpressionParser
      *
      * @return \Viserio\Component\Console\Input\InputOption
      */
-    protected static function parseOption(string $token): InputOption
+    private static function parseOption(string $token): InputOption
     {
         list($token, $description) = static::extractDescription(trim($token, '[]'));
 
@@ -129,7 +129,7 @@ class ExpressionParser
      *
      * @return array
      */
-    protected static function extractDescription(string $token): array
+    private static function extractDescription(string $token): array
     {
         preg_match('/(.*)\s:(\s+.*(?<!]))(.*)/', trim($token), $parts);
 

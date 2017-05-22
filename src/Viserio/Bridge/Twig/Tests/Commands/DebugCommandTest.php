@@ -33,18 +33,16 @@ class DebugCommandTest extends MockeryTestCase
         $loader = new Loader($finder);
         $twig   = new Twig_Environment($loader);
 
-        $application = new Application(
-            new ArrayContainer(
-                array_merge(
-                    $config,
-                    [
-                        FinderContract::class       => $finder,
-                        Twig_LoaderInterface::class => $loader,
-                    ]
-                )
-            ),
-            '1'
-        );
+        $application = new Application('1');
+        $application->setContainer(new ArrayContainer(
+            array_merge(
+                $config,
+                [
+                    FinderContract::class       => $finder,
+                    Twig_LoaderInterface::class => $loader,
+                ]
+            )
+        ));
         $application->add(new DebugCommand());
 
         $tester = new CommandTester($application->find('twig:debug'));
@@ -159,19 +157,17 @@ Tests
         $loader = new Loader($finder);
         $twig   = new Twig_Environment($loader);
 
-        $application = new Application(
-            new ArrayContainer(
-                array_merge(
-                    $config,
-                    [
-                        Twig_Environment::class     => $twig,
-                        FinderContract::class       => $finder,
-                        Twig_LoaderInterface::class => $loader,
-                    ]
-                )
-            ),
-            '1'
-        );
+        $application = new Application('1');
+        $application->setContainer(new ArrayContainer(
+            array_merge(
+                $config,
+                [
+                    Twig_Environment::class     => $twig,
+                    FinderContract::class       => $finder,
+                    Twig_LoaderInterface::class => $loader,
+                ]
+            )
+        ));
         $application->add(new DebugCommand());
 
         return new CommandTester($application->find('twig:debug'));

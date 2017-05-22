@@ -23,7 +23,8 @@ class ConfirmableTraitTest extends TestCase
             'env' => 'production',
         ]);
 
-        $this->application = new Application($container, '1.0.0');
+        $this->application = new Application('1.0.0');
+        $this->application->setContainer($container);
     }
 
     public function testConfirmableCommandWithTrue()

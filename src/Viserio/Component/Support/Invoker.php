@@ -11,6 +11,7 @@ use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ParameterResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Invoker\ParameterResolver\TypeHintResolver;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Invoker implements InvokerInterface
@@ -85,9 +86,7 @@ class Invoker implements InvokerInterface
      */
     public function call($callable, array $parameters = [])
     {
-        $this->getInvoker();
-
-        return $this->invoker->call($callable, $parameters);
+        return $this->getInvoker()->call($callable, $parameters);
     }
 
     /**
@@ -99,8 +98,9 @@ class Invoker implements InvokerInterface
     {
         if ($this->invoker === null) {
             $resolvers = array_merge([
-                new NumericArrayResolver(),
                 new AssociativeArrayResolver(),
+                new NumericArrayResolver(),
+                new TypeHintResolver(),
                 new DefaultValueResolver(),
             ], $this->resolvers);
 

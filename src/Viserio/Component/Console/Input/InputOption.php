@@ -6,14 +6,17 @@ use Symfony\Component\Console\Input\InputOption as SymfonyInputOption;
 
 class InputOption extends SymfonyInputOption
 {
+    /**
+     * Input option description.
+     *
+     * @var string
+     */
     protected $description;
 
     /**
      * Set the input option description.
      *
      * @param string $description
-     *
-     * @codeCoverageIgnore
      */
     public function setDescription(string $description)
     {
@@ -22,8 +25,6 @@ class InputOption extends SymfonyInputOption
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getDescription()
     {

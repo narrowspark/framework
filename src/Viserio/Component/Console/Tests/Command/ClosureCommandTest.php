@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Tests\Command;
 
-use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Component\Console\Application;
@@ -24,14 +23,11 @@ class ClosureCommandTest extends TestCase
 
     public function setUp()
     {
-        $container = new ArrayContainer([]);
-
-        $this->application = new Application($container, '1.0.0');
+        $this->application = new Application('1.0.0');
 
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
-            ->injectByParameterName(true)
-            ->setContainer($this->application->getContainer());
+            ->injectByParameterName(true);
     }
 
     public function testCommand()

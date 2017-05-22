@@ -128,18 +128,16 @@ class LintCommandTest extends MockeryTestCase
         $loader = new Loader($finder);
         $twig   = new Twig_Environment($loader);
 
-        $application = new Application(
-            new ArrayContainer(
-                array_merge(
-                    $config,
-                    [
-                        FinderContract::class       => $finder,
-                        Twig_LoaderInterface::class => $loader,
-                    ]
-                )
-            ),
-            '1'
-        );
+        $application = new Application('1');
+        $application->setContainer(new ArrayContainer(
+            array_merge(
+                $config,
+                [
+                    FinderContract::class       => $finder,
+                    Twig_LoaderInterface::class => $loader,
+                ]
+            )
+        ));
         $application->add(new LintCommand());
 
         $tester = new CommandTester($application->find('twig:lint'));
@@ -171,19 +169,17 @@ class LintCommandTest extends MockeryTestCase
         $loader = new Loader($finder);
         $twig   = new Twig_Environment($loader);
 
-        $application = new Application(
-            new ArrayContainer(
-                array_merge(
-                    $config,
-                    [
+        $application = new Application('1');
+        $application->setContainer(new ArrayContainer(
+            array_merge(
+                $config,
+                [
                         Twig_Environment::class     => $twig,
                         FinderContract::class       => $finder,
                         Twig_LoaderInterface::class => $loader,
-                    ]
-                )
-            ),
-            '1'
-        );
+                ]
+            )
+        ));
         $application->add(new LintCommand());
 
         return new CommandTester($application->find('twig:lint'));

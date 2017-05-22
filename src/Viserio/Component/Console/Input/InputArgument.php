@@ -6,14 +6,17 @@ use Symfony\Component\Console\Input\InputArgument as SymfonyInputArgument;
 
 class InputArgument extends SymfonyInputArgument
 {
+    /**
+     * Input argument description.
+     *
+     * @var string
+     */
     protected $description;
 
     /**
      * Set the input argument description.
      *
      * @param string $description
-     *
-     * @codeCoverageIgnore
      */
     public function setDescription(string $description)
     {
@@ -22,8 +25,6 @@ class InputArgument extends SymfonyInputArgument
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getDescription()
     {

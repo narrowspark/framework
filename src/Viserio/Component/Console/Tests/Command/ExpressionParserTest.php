@@ -184,8 +184,7 @@ class ExpressionParserTest extends TestCase
      */
     public function testProvidesAnErrorMessageOnOptionsMissingBrackets()
     {
-        $parser = new ExpressionParser();
-        $parser->parse('greet --yell');
+        ExpressionParser::parse('greet --yell');
     }
 
     /**
@@ -194,8 +193,7 @@ class ExpressionParserTest extends TestCase
      */
     public function testProvidesAnErrorMessageOnEmpty()
     {
-        $parser = new ExpressionParser();
-        $parser->parse('');
+        ExpressionParser::parse('');
     }
 
     /**
@@ -204,8 +202,6 @@ class ExpressionParserTest extends TestCase
      */
     protected static function assertParsesTo(string $expression, array $expected = [])
     {
-        $parser = new ExpressionParser();
-
-        self::assertEquals($expected, $parser->parse($expression));
+        self::assertEquals($expected, ExpressionParser::parse($expression));
     }
 }

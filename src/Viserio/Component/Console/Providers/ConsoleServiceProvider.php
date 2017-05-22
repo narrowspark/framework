@@ -75,10 +75,10 @@ class ConsoleServiceProvider implements
         self::resolveOptions($container);
 
         $console = new Application(
-            $container,
             self::$options['version'],
             self::$options['name']
         );
+        $console->setContainer($container);
 
         if ($container->has(EventManagerContract::class)) {
             $console->setEventManager($container->get(EventManagerContract::class));

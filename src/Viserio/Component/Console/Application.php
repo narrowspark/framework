@@ -3,9 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Console;
 
 use Closure;
-use Interop\Container\ContainerInterface as ContainerContract;
-use Invoker\Exception\InvocationException;
-use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
@@ -24,7 +21,7 @@ use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
 use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
-use Viserio\Component\Console\Command\ExpressionParser as Parser;
+use Viserio\Component\Console\Command\CommandResolver;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleErrorEvent;
 use Viserio\Component\Console\Events\ConsoleTerminateEvent;
@@ -51,13 +48,6 @@ class Application extends SymfonyConsole
      * @var string
      */
     public $version = 'UNKNOWN';
-
-    /**
-     * Command expression parser.
-     *
-     * @var \Viserio\Component\Console\Command\ExpressionParser
-     */
-    protected $expressionParser;
 
     /**
      * The output from the previous command.
@@ -90,20 +80,16 @@ class Application extends SymfonyConsole
     /**
      * Create a new Cerebro console application.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param string                                $version
-     * @param string                                $name
+     * @param string $version
+     * @param string $name
      */
     public function __construct(
-        ContainerContract $container,
         string $version,
         string $name = 'Cerebro'
     ) {
-        $this->name             = $name;
-        $this->version          = $version;
-        $this->container        = $container;
-        $this->expressionParser = new Parser();
-        $this->terminal         = new Terminal();
+        $this->name     = $name;
+        $this->version  = $version;
+        $this->terminal = new Terminal();
 
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
@@ -123,7 +109,10 @@ class Application extends SymfonyConsole
     public function add(SymfonyCommand $command): ?SymfonyCommand
     {
         if ($command instanceof ViserioCommand) {
-            $command->setContainer($this->getContainer());
+            if ($this->container !== null) {
+                $command->setContainer($this->getContainer());
+            }
+
             $command->setInvoker($this->getInvoker());
         }
 
@@ -143,33 +132,8 @@ class Application extends SymfonyConsole
      */
     public function command(string $expression, $callable, array $aliases = []): SymfonyCommand
     {
-        $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
-            $parameters = array_merge(
-                [
-                    'input'  => $input,
-                    'output' => $output,
-                ],
-                $input->getArguments(),
-                $input->getOptions()
-            );
-
-            if ($callable instanceof Closure) {
-                $callable = $callable->bindTo($this, $this);
-            }
-
-            try {
-                $this->getInvoker()->call($callable, $parameters);
-            } catch (InvocationException $exception) {
-                throw new RuntimeException(sprintf(
-                    "Impossible to call the '%s' command: %s",
-                    $input->getFirstArgument(),
-                    $exception->getMessage()
-                ), 0, $exception);
-            }
-        };
-
-        $command = $this->createCommand($expression, $commandFunction);
-        $command->setAliases($aliases);
+        $commandResolver = new CommandResolver($this->getInvoker(), $this);
+        $command         = $commandResolver->resolve($expression, $callable, $aliases);
 
         $this->add($command);
 
@@ -191,7 +155,9 @@ class Application extends SymfonyConsole
 
         $this->setCatchExceptions(false);
 
-        $result = $this->run(new ArrayInput(array_unshift($parameters, $command)), $this->lastOutput);
+        array_unshift($parameters, $command);
+
+        $result = $this->run(new ArrayInput($parameters), $this->lastOutput);
 
         $this->setCatchExceptions(true);
 
@@ -257,8 +223,6 @@ class Application extends SymfonyConsole
      * @param \Closure $callback
      *
      * @return void
-     *
-     * @codeCoverageIgnore
      */
     public static function starting(Closure $callback): void
     {
@@ -269,8 +233,6 @@ class Application extends SymfonyConsole
      * Clear the console application bootstrappers.
      *
      * @return void
-     *
-     * @codeCoverageIgnore
      */
     public static function clearBootstrappers(): void
     {
@@ -479,7 +441,7 @@ class Application extends SymfonyConsole
      *
      * @return \Viserio\Component\Console\Input\InputOption
      */
-    protected function getEnvironmentOption(): InputOption
+    private function getEnvironmentOption(): InputOption
     {
         $message = 'The environment the command should run under.';
 
@@ -487,38 +449,22 @@ class Application extends SymfonyConsole
     }
 
     /**
-     * Create Command.
-     *
-     * @param string   $expression
-     * @param callable $callable
-     *
-     * @return \Symfony\Component\Console\Command\Command
-     */
-    protected function createCommand(string $expression, callable $callable): SymfonyCommand
-    {
-        $result = $this->expressionParser->parse($expression);
-
-        $command = new SymfonyCommand($result['name']);
-        $command->getDefinition()->addArguments($result['arguments']);
-        $command->getDefinition()->addOptions($result['options']);
-        $command->setCode($callable);
-
-        return $command;
-    }
-
-    /**
      * Get configured invoker.
      *
      * @return \Viserio\Component\Support\Invoker
      */
-    protected function getInvoker(): Invoker
+    private function getInvoker(): Invoker
     {
         if (! $this->invoker) {
-            $this->invoker = (new Invoker())
-                ->injectByTypeHint(true)
-                ->injectByParameterName(true)
-                ->addResolver(new HyphenatedInputResolver())
-                ->setContainer($this->getContainer());
+            $invoker = new Invoker();
+            $invoker->injectByTypeHint(true)
+                ->injectByParameterName(true);
+
+            if ($this->container !== null) {
+                $invoker->setContainer($this->getContainer());
+            }
+
+            $this->invoker = $invoker;
         }
 
         return $this->invoker;
@@ -528,10 +474,8 @@ class Application extends SymfonyConsole
      * Bootstrap the console application.
      *
      * @return void
-     *
-     * @codeCoverageIgnore
      */
-    protected function bootstrap(): void
+    private function bootstrap(): void
     {
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
