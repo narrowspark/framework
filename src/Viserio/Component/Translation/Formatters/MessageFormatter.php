@@ -4,9 +4,8 @@ namespace Viserio\Component\Translation\Formatters;
 
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
-use Viserio\Component\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
-use Viserio\Component\Translation\Traits\IntervalTrait;
 use Viserio\Component\Translation\PluralizationRules;
+use Viserio\Component\Translation\Traits\IntervalTrait;
 
 class MessageFormatter implements MessageFormatterContract
 {

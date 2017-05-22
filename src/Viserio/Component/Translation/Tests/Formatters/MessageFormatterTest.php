@@ -19,7 +19,7 @@ class MessageFormatterTest extends TestCase
     {
         $selector = new MessageFormatter();
 
-        self::assertEquals($expected, $selector->format($id,'en', [$number]));
+        self::assertEquals($expected, $selector->format($id, 'en', [$number]));
         self::assertInstanceOf(PluralizationRules::class, $selector->getPluralization());
     }
 
@@ -40,7 +40,7 @@ class MessageFormatterTest extends TestCase
     public function testThrowExceptionIfMatchingMessageCannotBeFound($id, $number)
     {
         $selector = new MessageFormatter();
-        $selector->format($id,'en', [$number]);
+        $selector->format($id, 'en', [$number]);
     }
 
     public function getNonMatchingMessages()

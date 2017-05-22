@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
-use Countable;
 use Psr\Log\LoggerAwareInterface;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;

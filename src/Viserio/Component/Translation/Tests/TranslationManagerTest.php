@@ -10,9 +10,8 @@ use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogue
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\Component\Translation\PluralizationRules;
-use Viserio\Component\Translation\TranslationManager;
 use Viserio\Component\Translation\Formatters\MessageFormatter;
+use Viserio\Component\Translation\TranslationManager;
 
 class TranslationManagerTest extends MockeryTestCase
 {

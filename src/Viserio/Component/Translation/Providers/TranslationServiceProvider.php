@@ -8,13 +8,12 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Translation\PluralizationRules;
-use Viserio\Component\Translation\TranslationManager;
-use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Translation\Formatters\IntlMessageFormatter;
+use Viserio\Component\Translation\TranslationManager;
 
 class TranslationServiceProvider implements
     ServiceProvider,
