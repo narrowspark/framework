@@ -15,6 +15,7 @@ use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Providers\TranslationDataCollectorServiceProvider;
 use Viserio\Component\Translation\Translator;
+use Viserio\Component\Translation\Formatters\MessageFormatter;
 
 class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
 {
@@ -32,14 +33,11 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
             ],
         ]));
 
-        $selector = new MessageSelector();
-        $selector->setPluralization(new PluralizationRules());
-
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->instance(TranslatorContract::class, new Translator(
             $catalogue,
-            $selector
+            new MessageFormatter()
         ));
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new OptionsResolverServiceProvider());

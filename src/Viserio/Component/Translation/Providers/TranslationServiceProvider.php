@@ -13,6 +13,8 @@ use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\TranslationManager;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Component\Translation\Formatters\IntlMessageFormatter;
 
 class TranslationServiceProvider implements
     ServiceProvider,
@@ -32,12 +34,13 @@ class TranslationServiceProvider implements
     public function getServices()
     {
         return [
+            MessageFormatterContract::class   => [self::class, 'createMessageFormatter'],
             TranslationManagerContract::class => [self::class, 'createTranslationManager'],
             TranslationManager::class         => function (ContainerInterface $container) {
                 return $container->get(TranslationManagerContract::class);
             },
-            TranslatorContract::class => [self::class, 'createTranslator'],
-            'translator'              => function (ContainerInterface $container) {
+            TranslatorContract::class         => [self::class, 'createTranslator'],
+            'translator'                      => function (ContainerInterface $container) {
                 return $container->get(TranslatorContract::class);
             },
         ];
@@ -64,6 +67,18 @@ class TranslationServiceProvider implements
     }
 
     /**
+     * Create a new IntlMessageFormatter instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Translation\Formatters\IntlMessageFormatter
+     */
+    public static function createMessageFormatter(ContainerInterface $container): IntlMessageFormatter
+    {
+        return new IntlMessageFormatter();
+    }
+
+    /**
      * Create a new TranslationManager instance.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -74,7 +89,7 @@ class TranslationServiceProvider implements
     {
         self::resolveOptions($container);
 
-        $manager = new TranslationManager(new PluralizationRules());
+        $manager = new TranslationManager($container->get(MessageFormatterContract::class));
 
         if ($container->has(LoaderContract::class)) {
             $manager->setLoader($container->get(LoaderContract::class));

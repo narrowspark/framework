@@ -6,35 +6,11 @@ use InvalidArgumentException;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
 use Viserio\Component\Translation\Traits\IntervalTrait;
+use Viserio\Component\Translation\PluralizationRules;
 
 class MessageFormatter implements MessageFormatterContract
 {
     use IntervalTrait;
-
-    /**
-     * PluralizationRules instance.
-     *
-     * @var \Viserio\Component\Contracts\Translation\PluralizationRules
-     */
-    protected $pluralization;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setPluralization(PluralizationRulesContract $pluralization): MessageSelectorContract
-    {
-        $this->pluralization = $pluralization;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPluralization(): PluralizationRulesContract
-    {
-        return $this->pluralization;
-    }
 
     /**
      * {@inheritdoc}
@@ -55,7 +31,7 @@ class MessageFormatter implements MessageFormatterContract
             }
         }
 
-        $position = $this->getPluralization()->get((int) $number, $locale);
+        $position = (new PluralizationRules())->get((int) $number, $locale);
 
         if (! isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard

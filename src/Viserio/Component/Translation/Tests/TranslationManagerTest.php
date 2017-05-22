@@ -10,9 +10,9 @@ use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogue
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\Component\Translation\MessageSelector;
 use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\TranslationManager;
+use Viserio\Component\Translation\Formatters\MessageFormatter;
 
 class TranslationManagerTest extends MockeryTestCase
 {
@@ -30,10 +30,7 @@ class TranslationManagerTest extends MockeryTestCase
         parent::setUp();
 
         $this->root    = vfsStream::setup();
-        $this->manager = new TranslationManager(
-            new PluralizationRules(),
-            new MessageSelector()
-        );
+        $this->manager = new TranslationManager(new MessageFormatter());
     }
 
     public function testSetAndGetDirectories()
@@ -180,11 +177,6 @@ declare(strict_types=1); return [
         $this->manager->setLocale('de');
 
         self::assertSame('de', $this->manager->getLocale());
-    }
-
-    public function testGetPluralization()
-    {
-        self::assertInstanceOf(PluralizationRules::class, $this->manager->getPluralization());
     }
 
     public function testSetAndGetLogger()

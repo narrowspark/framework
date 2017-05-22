@@ -5,8 +5,7 @@ namespace Viserio\Component\Translation\Tests\DataCollectors;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Translation\DataCollectors\ViserioTranslationDataCollector;
 use Viserio\Component\Translation\MessageCatalogue;
-use Viserio\Component\Translation\MessageSelector;
-use Viserio\Component\Translation\PluralizationRules;
+use Viserio\Component\Translation\Formatters\MessageFormatter;
 use Viserio\Component\Translation\Translator;
 
 class ViserioTranslationDataCollectorTest extends MockeryTestCase
@@ -29,12 +28,9 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
             ],
         ]));
 
-        $selector = new MessageSelector();
-        $selector->setPluralization(new PluralizationRules());
-
         $this->translator = new Translator(
             $catalogue,
-            $selector
+            new MessageFormatter()
         );
     }
 

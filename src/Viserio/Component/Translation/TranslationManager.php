@@ -21,11 +21,11 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * MessageSelector instance.
+     * MessageFormatter instance.
      *
      * @var \Viserio\Component\Contracts\Translation\MessageFormatter
      */
-    protected $messageSelector;
+    protected $formatter;
 
     /**
      * A string dictating the default language to translate into. (e.g. 'en').
@@ -125,13 +125,10 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      */
     public function import(string $file): self
     {
-        if ($this->loader !== null && pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
-        } else {
-            $loader = $this->getLoader();
-            $loader->setDirectories($this->directories);
+        $loader = $this->getLoader();
+        $loader->setDirectories($this->directories);
 
-            $langFile = $loader->load($file);
-        }
+        $langFile = $loader->load($file);
 
         if (! isset($langFile['lang'])) {
             throw new RuntimeException(sprintf('File [%s] cant be imported. Key for language is missing.', $file));
@@ -159,7 +156,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
             $messageCatalogue->addFallbackCatalogue($fallback);
         }
 
-        $translation = new Translator($messageCatalogue, $this->messageSelector);
+        $translation = new Translator($messageCatalogue, $this->formatter);
 
         if ($this->logger !== null) {
             $translation->setLogger($this->logger);

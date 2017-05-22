@@ -116,8 +116,15 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         array $parameters = [],
         string $domain = 'messages'
     ): string {
-        $trans = strtr($this->catalogue->get($id, $domain), $parameters);
+        if (preg_match("/^(.*?)\[(.*?)\]$/", $id, $match)) {
+            $id = $match[1];
+        }
 
+        $trans = $this->formatter->format(
+            $this->catalogue->get($id, $domain),
+            $this->locale,
+            $parameters
+        );
         $trans = $this->applyFilters($trans);
         $trans = $this->applyHelpers($trans);
 
@@ -126,44 +133,6 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         }
 
         $this->collectMessage($this->locale, $domain, $id, $trans, $parameters);
-
-        return $trans;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function transChoice(
-        string $id,
-        $number,
-        array $parameters = [],
-        string $domain = 'messages'
-    ): string {
-        if (is_array($number) || $number instanceof Countable) {
-            $number = count($number);
-        }
-
-        if (preg_match("/^(.*?)\[(.*?)\]$/", $id, $match)) {
-            $id = $match[1];
-        }
-
-        $trans = strtr(
-            $this->formatter->format(
-                $this->catalogue->get($id, $domain),
-                $number,
-                $this->locale
-            ),
-            $parameters
-        );
-
-        $trans = $this->applyFilters($trans);
-        $trans = $this->applyHelpers(empty($match) ? $trans : $trans . '[' . $match[2] . ']');
-
-        if ($this->logger !== null) {
-            $this->log($id, $domain);
-        }
-
-        $this->collectMessage($this->locale, $domain, $id, $trans, $parameters, $number);
 
         return $trans;
     }

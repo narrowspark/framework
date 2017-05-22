@@ -58,25 +58,6 @@ interface Translator
     ): string;
 
     /**
-     * Translates the given choice message by choosing a translation according to a number.
-     *
-     * @param string               $id         The message id (may also be an object that can be cast to string)
-     * @param int|array|\Countable $number     The number to use to find the indice of the message
-     * @param array                $parameters An array of parameters for the message
-     * @param string               $domain     The domain for the message or null to use the default
-     *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
-     *
-     * @return string The translated string
-     */
-    public function transChoice(
-        string $id,
-        $number,
-        array $parameters = [],
-        string $domain = 'messages'
-    ): string;
-
-    /**
      * Add helper.
      *
      * @param string   $name

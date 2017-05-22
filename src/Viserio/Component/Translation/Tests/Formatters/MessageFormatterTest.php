@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Translation\Tests;
+namespace Viserio\Component\Translation\Tests\Formatters;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Translation\Formatters\MessageFormatter;
@@ -15,21 +15,19 @@ class MessageFormatterTest extends TestCase
      * @param mixed $id
      * @param mixed $number
      */
-    public function testChoose($expected, $id, $number)
+    public function testFormat($expected, $id, $number)
     {
         $selector = new MessageFormatter();
-        $selector->setPluralization(new PluralizationRules());
 
-        self::assertEquals($expected, $selector->format($id, $number, 'en'));
+        self::assertEquals($expected, $selector->format($id,'en', [$number]));
         self::assertInstanceOf(PluralizationRules::class, $selector->getPluralization());
     }
 
     public function testReturnMessageIfExactlyOneStandardRuleIsGiven()
     {
         $selector = new MessageFormatter();
-        $selector->setPluralization(new PluralizationRules());
 
-        self::assertEquals('There are two apples', $selector->choose('There are two apples', 2, 'en'));
+        self::assertEquals('There are two apples', $selector->format('There are two apples', 'en', [2]));
     }
 
     /**
@@ -42,8 +40,7 @@ class MessageFormatterTest extends TestCase
     public function testThrowExceptionIfMatchingMessageCannotBeFound($id, $number)
     {
         $selector = new MessageFormatter();
-        $selector->setPluralization(new PluralizationRules());
-        $selector->choose($id, $number, 'en');
+        $selector->format($id,'en', [$number]);
     }
 
     public function getNonMatchingMessages()
