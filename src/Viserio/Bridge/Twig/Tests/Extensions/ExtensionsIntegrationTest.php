@@ -85,8 +85,8 @@ class ExtensionsIntegrationTest extends Twig_Test_IntegrationTestCase
         $translator->shouldReceive('trans')
             ->with('test')
             ->andReturn('test');
-        $translator->shouldReceive('transChoice')
-            ->with('{0} There are no apples|{1} There is one apple', 1)
+        $translator->shouldReceive('trans')
+            ->with('{0} There are no apples|{1} There is one apple', [1])
             ->andReturn('There is one apple');
 
         return $translator;

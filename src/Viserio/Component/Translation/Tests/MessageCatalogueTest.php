@@ -156,6 +156,7 @@ class MessageCatalogueTest extends TestCase
 
     /**
      * @expectedException \LogicException
+     * @expectedExceptionMessage Circular reference detected when adding a fallback catalogue for locale [fr_FR].
      */
     public function testAddFallbackCatalogueWithCircularReference()
     {
@@ -167,6 +168,7 @@ class MessageCatalogueTest extends TestCase
 
     /**
      * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot add a catalogue for locale [fr] as the current locale for this catalogue is [en].
      */
     public function testAddCatalogueWhenLocaleIsNotTheSameAsTheCurrentOne()
     {

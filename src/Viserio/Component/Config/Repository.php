@@ -39,7 +39,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function import(string $filepath, array $options = null): RepositoryContract
     {
-        if (pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
+        if ($this->loader === null && pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
             if (! file_exists($filepath)) {
                 throw new RuntimeException(sprintf('File [%s] not found.', $filepath));
             }

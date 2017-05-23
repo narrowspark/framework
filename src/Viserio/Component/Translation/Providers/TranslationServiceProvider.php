@@ -8,11 +8,11 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\Translation\MessageSelector;
-use Viserio\Component\Translation\PluralizationRules;
+use Viserio\Component\Translation\Formatters\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
 
 class TranslationServiceProvider implements
@@ -33,12 +33,13 @@ class TranslationServiceProvider implements
     public function getServices()
     {
         return [
+            MessageFormatterContract::class   => [self::class, 'createMessageFormatter'],
             TranslationManagerContract::class => [self::class, 'createTranslationManager'],
             TranslationManager::class         => function (ContainerInterface $container) {
                 return $container->get(TranslationManagerContract::class);
             },
-            TranslatorContract::class => [self::class, 'createTranslator'],
-            'translator'              => function (ContainerInterface $container) {
+            TranslatorContract::class         => [self::class, 'createTranslator'],
+            'translator'                      => function (ContainerInterface $container) {
                 return $container->get(TranslatorContract::class);
             },
         ];
@@ -64,16 +65,34 @@ class TranslationServiceProvider implements
         ];
     }
 
-    public static function createTranslationManager(ContainerInterface $container): TranslationManager
+    /**
+     * Create a new IntlMessageFormatter instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Translation\Formatters\IntlMessageFormatter
+     */
+    public static function createMessageFormatter(ContainerInterface $container): IntlMessageFormatter
+    {
+        return new IntlMessageFormatter();
+    }
+
+    /**
+     * Create a new TranslationManager instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Translation\TranslationManager
+     */
+    public static function createTranslationManager(ContainerInterface $container): TranslationManagerContract
     {
         self::resolveOptions($container);
 
-        $manager = new TranslationManager(
-            new PluralizationRules(),
-            new MessageSelector()
-        );
+        $manager = new TranslationManager($container->get(MessageFormatterContract::class));
 
-        $manager->setLoader($container->get(LoaderContract::class));
+        if ($container->has(LoaderContract::class)) {
+            $manager->setLoader($container->get(LoaderContract::class));
+        }
 
         if ($locale = self::$options['locale']) {
             $manager->setLocale($locale);
@@ -96,6 +115,13 @@ class TranslationServiceProvider implements
         return $manager;
     }
 
+    /**
+     * Create a new Translation instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Translation\TranslationManager
+     */
     public static function createTranslator(ContainerInterface $container): TranslatorContract
     {
         return $container->get(TranslationManager::class)->getTranslator();

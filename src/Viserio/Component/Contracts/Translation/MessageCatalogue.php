@@ -35,8 +35,10 @@ interface MessageCatalogue
      * @param string $id          The message id
      * @param string $translation The messages translation
      * @param string $domain      The domain name
+     *
+     * @return void
      */
-    public function set(string $id, string $translation, string $domain = 'messages');
+    public function set(string $id, string $translation, string $domain = 'messages'): void;
 
     /**
      * Checks if a message has a translation.
@@ -73,35 +75,43 @@ interface MessageCatalogue
      *
      * @param array  $messages An array of translations
      * @param string $domain   The domain name
+     *
+     * @return void
      */
-    public function replace(array $messages, string $domain = 'messages');
+    public function replace(array $messages, string $domain = 'messages'): void;
 
     /**
      * Removes a record.
      *
      * @param string $messages
      * @param string $domain
+     *
+     * @return void
      */
-    public function remove(string $messages, string $domain = 'messages');
+    public function remove(string $messages, string $domain = 'messages'): void;
 
     /**
      * Adds translations for a given domain.
      *
      * @param array  $messages An array of translations
      * @param string $domain   The domain name
+     *
+     * @return void
      */
-    public function add(array $messages, string $domain = 'messages');
+    public function add(array $messages, string $domain = 'messages'): void;
 
     /**
      * Merges translations from the given Catalogue into the current one.
      *
      * The two catalogues must have the same locale.
      *
-     * @param MessageCatalogue $catalogue A MessageCatalogue instance
+     * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $catalogue A MessageCatalogue instance
      *
      * @throws \LogicException
+     *
+     * @return void
      */
-    public function addCatalogue(MessageCatalogue $catalogue);
+    public function addCatalogue(MessageCatalogue $catalogue): void;
 
     /**
      * Merges translations from the given Catalogue into the current one
@@ -109,23 +119,25 @@ interface MessageCatalogue
      *
      * This is used to provide default translations when they do not exist for the current locale.
      *
-     * @param MessageCatalogue $catalogue A MessageCatalogue instance
+     * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $catalogue A MessageCatalogue instance
      *
      * @throws \LogicException
+     *
+     * @return void
      */
-    public function addFallbackCatalogue(MessageCatalogue $catalogue);
+    public function addFallbackCatalogue(MessageCatalogue $catalogue): void;
 
     /**
      * Gets the fallback catalogue.
      *
-     * @return MessageCatalogue|null A MessageCatalogue instance or null when no fallback has been set
+     * @return \Viserio\Component\Contracts\Translation\MessageCatalogue|null A MessageCatalogue instance or null when no fallback has been set
      */
-    public function getFallbackCatalogue();
+    public function getFallbackCatalogue(): ?MessageCatalogue;
 
     /**
      * Set parent.
      *
-     * @param MessageCatalogue $parent
+     * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $parent
      *
      * @return $this
      */

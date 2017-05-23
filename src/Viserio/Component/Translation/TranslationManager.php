@@ -7,8 +7,7 @@ use RuntimeException;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contracts\Translation\MessageSelector as MessageSelectorContract;
-use Viserio\Component\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -22,18 +21,11 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * PluralizationRules instance.
+     * MessageFormatter instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\PluralizationRules
+     * @var \Viserio\Component\Contracts\Translation\MessageFormatter
      */
-    protected $pluralization;
-
-    /**
-     * MessageSelector instance.
-     *
-     * @var \Viserio\Component\Contracts\Translation\MessageSelector
-     */
-    protected $messageSelector;
+    protected $formatter;
 
     /**
      * A string dictating the default language to translate into. (e.g. 'en').
@@ -50,7 +42,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     protected $defaultFallback;
 
     /**
-     * Fallbacks for speziall languages.
+     * Fallbacks for special languages.
      *
      * @var array
      */
@@ -73,17 +65,11 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Create a new Translation instance.
      *
-     * @param \Viserio\Component\Contracts\Translation\PluralizationRules $pluralization
-     * @param \Viserio\Component\Contracts\Translation\MessageSelector    $messageSelector
+     * @param \Viserio\Component\Contracts\Translation\MessageFormatter $formatter
      */
-    public function __construct(
-        PluralizationRulesContract $pluralization,
-        MessageSelectorContract $messageSelector
-    ) {
-        $this->pluralization = $pluralization;
-
-        $messageSelector->setPluralization($pluralization);
-        $this->messageSelector = $messageSelector;
+    public function __construct(MessageFormatterContract $formatter)
+    {
+        $this->formatter = $formatter;
     }
 
     /**
@@ -170,7 +156,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
             $messageCatalogue->addFallbackCatalogue($fallback);
         }
 
-        $translation = new Translator($messageCatalogue, $this->messageSelector);
+        $translation = new Translator($messageCatalogue, $this->formatter);
 
         if ($this->logger !== null) {
             $translation->setLogger($this->logger);
@@ -262,16 +248,6 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
         $this->locale = $locale;
 
         return $this;
-    }
-
-    /**
-     * Returns the pluralization instance.
-     *
-     * @return \Viserio\Component\Contracts\Translation\PluralizationRules
-     */
-    public function getPluralization(): PluralizationRulesContract
-    {
-        return $this->pluralization;
     }
 
     /**

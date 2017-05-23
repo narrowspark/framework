@@ -2,11 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
-use Countable;
 use Psr\Log\LoggerAwareInterface;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contracts\Translation\MessageSelector as MessageSelectorContract;
+use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 
@@ -16,11 +15,11 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     use ValidateLocaleTrait;
 
     /**
-     * The message selector.
+     * Formatter instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageSelector
+     * @var \Viserio\Component\Contracts\Translation\MessageFormatter
      */
-    protected $selector;
+    protected $formatter;
 
     /**
      * The message catalogue.
@@ -30,14 +29,14 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     protected $catalogue;
 
     /**
-     * All registred filters.
+     * All registered filters.
      *
      * @var array
      */
     protected $filters = [];
 
     /**
-     * All registred helpers.
+     * All registered helpers.
      *
      * @var array
      */
@@ -58,19 +57,19 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     protected $messages = [];
 
     /**
-     * Creat new Translator instance.
+     * Create new Translator instance.
      *
      * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $catalogue
-     * @param \Viserio\Component\Contracts\Translation\MessageSelector  $selector  The message selector for pluralization
+     * @param \Viserio\Component\Contracts\Translation\MessageFormatter $formatter
      *
      * @throws \InvalidArgumentException If a locale contains invalid characters
      */
-    public function __construct(MessageCatalogueContract $catalogue, MessageSelectorContract $selector)
+    public function __construct(MessageCatalogueContract $catalogue, MessageFormatterContract $formatter)
     {
         $this->setLocale($catalogue->getLocale());
 
         $this->catalogue = $catalogue;
-        $this->selector  = $selector;
+        $this->formatter = $formatter;
     }
 
     /**
@@ -95,9 +94,9 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelector(): MessageSelectorContract
+    public function getFormatter(): MessageFormatterContract
     {
-        return $this->selector;
+        return $this->formatter;
     }
 
     /**
@@ -116,7 +115,19 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         array $parameters = [],
         string $domain = 'messages'
     ): string {
-        $trans = strtr($this->catalogue->get($id, $domain), $parameters);
+        if (preg_match("/^(.*?)(\[.*?\])$/", $id, $match)) {
+            $id = $match[1];
+        }
+
+        $trans = $this->formatter->format(
+            $this->catalogue->get($id, $domain),
+            $this->locale,
+            $parameters
+        );
+        // Add filter and helper back
+        if (isset($match[2])) {
+            $trans = $trans . $match[2];
+        }
 
         $trans = $this->applyFilters($trans);
         $trans = $this->applyHelpers($trans);
@@ -126,44 +137,6 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         }
 
         $this->collectMessage($this->locale, $domain, $id, $trans, $parameters);
-
-        return $trans;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function transChoice(
-        string $id,
-        $number,
-        array $parameters = [],
-        string $domain = 'messages'
-    ): string {
-        if (is_array($number) || $number instanceof Countable) {
-            $number = count($number);
-        }
-
-        if (preg_match("/^(.*?)\[(.*?)\]$/", $id, $match)) {
-            $id = $match[1];
-        }
-
-        $trans = strtr(
-            $this->selector->choose(
-                $this->catalogue->get($id, $domain),
-                $number,
-                $this->locale
-            ),
-            $parameters
-        );
-
-        $trans = $this->applyFilters($trans);
-        $trans = $this->applyHelpers(empty($match) ? $trans : $trans . '[' . $match[2] . ']');
-
-        if ($this->logger !== null) {
-            $this->log($id, $domain);
-        }
-
-        $this->collectMessage($this->locale, $domain, $id, $trans, $parameters, $number);
 
         return $trans;
     }
@@ -189,6 +162,8 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     }
 
     /**
+     * Get all collected messages.
+     *
      * @return array
      */
     public function getCollectedMessages(): array
@@ -258,7 +233,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     }
 
     /**
-     * Applay filter on string.
+     * Apply filter on string.
      *
      * @param string $translation
      *
@@ -282,8 +257,10 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      *
      * @param string $id
      * @param string $domain
+     *
+     * @return void
      */
-    protected function log(string $id, string $domain)
+    protected function log(string $id, string $domain): void
     {
         $catalogue = $this->catalogue;
 
@@ -308,24 +285,18 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      * Collect messages about all translations.
      *
      * @param string|null $locale
-     * @param string|null $domain
+     * @param string      $domain
      * @param string      $id
      * @param string      $translation
      * @param array       $parameters
-     * @param int|null    $number
      */
     protected function collectMessage(
-        $locale,
-        $domain,
+        ?string $locale,
+        string $domain,
         string $id,
         string $translation,
-        array $parameters = [],
-        int $number = null
+        array $parameters = []
     ) {
-        if ($domain === null) {
-            $domain = 'messages';
-        }
-
         $catalogue = $this->catalogue;
 
         if ($catalogue->defines($id, $domain)) {
@@ -352,7 +323,6 @@ class Translator implements TranslatorContract, LoggerAwareInterface
             'id'                => $id,
             'translation'       => $translation,
             'parameters'        => $parameters,
-            'transChoiceNumber' => $number,
             'state'             => $state,
         ];
     }

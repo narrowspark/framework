@@ -10,9 +10,8 @@ use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
+use Viserio\Component\Translation\Formatters\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
-use Viserio\Component\Translation\MessageSelector;
-use Viserio\Component\Translation\PluralizationRules;
 use Viserio\Component\Translation\Providers\TranslationDataCollectorServiceProvider;
 use Viserio\Component\Translation\Translator;
 
@@ -32,14 +31,11 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
             ],
         ]));
 
-        $selector = new MessageSelector();
-        $selector->setPluralization(new PluralizationRules());
-
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->instance(TranslatorContract::class, new Translator(
             $catalogue,
-            $selector
+            new IntlMessageFormatter()
         ));
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new OptionsResolverServiceProvider());
@@ -58,6 +54,26 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
         ]);
 
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+    }
+
+    public function testProviderProfilerIsNull()
+    {
+        $container = new Container();
+        $container->register(new OptionsResolverServiceProvider());
+        $container->register(new TranslationDataCollectorServiceProvider());
+
+        $container->instance('config', [
+            'viserio' => [
+                'profiler' => [
+                    'enable'    => true,
+                    'collector' => [
+                        'translation' => true,
+                    ],
+                ],
+            ],
+        ]);
+
+        self::assertNull($container->get(ProfilerContract::class));
     }
 
     private function getRequest()

@@ -85,8 +85,9 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     array_values($sortedMessages[TranslatorContract::MESSAGE_DEFINED]),
                     [
-                        'name'    => 'These messages are correctly translated into the given locale.',
-                        'headers' => $tableHeaders,
+                        'name'       => 'These messages are correctly translated into the given locale.',
+                        'headers'    => $tableHeaders,
+                        'vardumper'  => false,
                     ]
                 ),
             ],
@@ -97,8 +98,9 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     array_values($sortedMessages[TranslatorContract::MESSAGE_EQUALS_FALLBACK]),
                     [
-                        'name'    => 'These messages are not available for the given locale but Symfony found them in the fallback locale catalog.',
-                        'headers' => $tableHeaders,
+                        'name'       => 'These messages are not available for the given locale but Narrowspark found them in the fallback locale catalog.',
+                        'headers'    => $tableHeaders,
+                        'vardumper'  => false,
                     ]
                 ),
             ],
@@ -111,7 +113,8 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                     [
                         'name' => 'These messages are not available for the given locale and cannot be found in the fallback locales.' .
                         ' <br> Add them to the translation catalogue to avoid Narrowspark outputting untranslated contents.',
-                        'headers' => $tableHeaders,
+                        'headers'    => $tableHeaders,
+                        'vardumper'  => false,
                     ]
                 ),
             ],

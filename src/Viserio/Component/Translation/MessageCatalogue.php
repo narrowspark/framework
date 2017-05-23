@@ -11,7 +11,7 @@ class MessageCatalogue implements MessageCatalogueContract
     use ValidateLocaleTrait;
 
     /**
-     * Messages.
+     * List of messages.
      *
      * @var array
      */
@@ -32,7 +32,7 @@ class MessageCatalogue implements MessageCatalogueContract
     protected $locale = 'en';
 
     /**
-     *  Parent.
+     * A parent instance of MessageCatalogue.
      *
      * @var \Viserio\Component\Contracts\Translation\MessageCatalogue
      */
@@ -84,7 +84,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function set(string $id, string $translation, string $domain = 'messages')
+    public function set(string $id, string $translation, string $domain = 'messages'): void
     {
         $this->add([$id => $translation], $domain);
     }
@@ -132,7 +132,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function replace(array $messages, string $domain = 'messages')
+    public function replace(array $messages, string $domain = 'messages'): void
     {
         $this->messages[$domain] = [];
         $this->add($messages, $domain);
@@ -141,7 +141,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function remove(string $messages, string $domain = 'messages')
+    public function remove(string $messages, string $domain = 'messages'): void
     {
         unset($this->messages[$domain][$messages]);
     }
@@ -149,7 +149,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function add(array $messages, string $domain = 'messages')
+    public function add(array $messages, string $domain = 'messages'): void
     {
         if (! isset($this->messages[$domain])) {
             $this->messages[$domain] = $messages;
@@ -161,11 +161,11 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function addCatalogue(MessageCatalogueContract $catalogue)
+    public function addCatalogue(MessageCatalogueContract $catalogue): void
     {
         if ($catalogue->getLocale() !== $this->locale) {
             throw new LogicException(sprintf(
-                'Cannot add a catalogue for locale [%s] as the current locale for this catalogue is [%s]',
+                'Cannot add a catalogue for locale [%s] as the current locale for this catalogue is [%s].',
                 $catalogue->getLocale(),
                 $this->locale
             ));
@@ -179,7 +179,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function addFallbackCatalogue(MessageCatalogueContract $catalogue)
+    public function addFallbackCatalogue(MessageCatalogueContract $catalogue): void
     {
         // detect circular references
         $circular = $this;
@@ -201,7 +201,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function getFallbackCatalogue()
+    public function getFallbackCatalogue(): ?MessageCatalogueContract
     {
         return $this->fallbackCatalogue;
     }

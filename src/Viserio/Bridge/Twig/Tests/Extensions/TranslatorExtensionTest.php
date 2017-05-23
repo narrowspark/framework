@@ -15,9 +15,6 @@ class TranslatorExtensionTest extends MockeryTestCase
 
         self::assertEquals('trans', $functions[0]->getName());
         self::assertEquals('trans', $functions[0]->getCallable()[1]);
-
-        self::assertEquals('trans_choice', $functions[1]->getName());
-        self::assertEquals('transChoice', $functions[1]->getCallable()[1]);
     }
 
     public function testGetFilters()
@@ -27,9 +24,6 @@ class TranslatorExtensionTest extends MockeryTestCase
 
         self::assertEquals('trans', $filter[0]->getName());
         self::assertEquals('trans', $filter[0]->getCallable()[1]);
-
-        self::assertEquals('trans_choice', $filter[1]->getName());
-        self::assertEquals('transChoice', $filter[1]->getCallable()[1]);
     }
 
     public function testGetName()

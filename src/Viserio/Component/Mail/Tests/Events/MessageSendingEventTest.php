@@ -10,7 +10,7 @@ use Viserio\Component\Mail\Events\MessageSendingEvent;
 class MessageSendingEventTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contracts\Events\Event
+     * @var \Viserio\Component\Mail\Events\MessageSendingEvent
      */
     private $event;
 
