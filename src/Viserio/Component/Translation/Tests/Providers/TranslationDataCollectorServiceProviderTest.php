@@ -10,7 +10,7 @@ use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
-use Viserio\Component\Translation\Formatters\MessageFormatter;
+use Viserio\Component\Translation\Formatters\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\Providers\TranslationDataCollectorServiceProvider;
 use Viserio\Component\Translation\Translator;
@@ -35,7 +35,7 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->instance(TranslatorContract::class, new Translator(
             $catalogue,
-            new MessageFormatter()
+            new IntlMessageFormatter()
         ));
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new OptionsResolverServiceProvider());

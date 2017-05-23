@@ -5,7 +5,7 @@ namespace Viserio\Component\Translation\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
-use Viserio\Component\Translation\Formatters\MessageFormatter;
+use Viserio\Component\Translation\Formatters\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\Translator;
 
@@ -31,7 +31,7 @@ class TranslatorTest extends MockeryTestCase
 
         $this->translator = new Translator(
             $catalogue,
-            new MessageFormatter()
+            new IntlMessageFormatter()
         );
     }
 
@@ -45,18 +45,18 @@ class TranslatorTest extends MockeryTestCase
     {
         self::assertSame('bar', $this->translator->trans('foo'));
         self::assertSame(
-            'There is one apple',
-            $this->translator->trans('{0} There are no apples|{1} There is one apple', [1])
+            'She avoids bugs',
+            $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }', ['gender' => 'female'])
         );
 
         self::assertSame(
-            'There are no apples',
-            $this->translator->trans('{0} There are no apples|{1} There is one apple', [0])
+            'They avoid bugs',
+            $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }', ['gender' => 'other'])
         );
 
         self::assertSame(
-            'There is one apple',
-            $this->translator->trans('{0} There are no apples|{1} There is one apple', [1])
+            '{gender}',
+            $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }')
         );
     }
 
@@ -67,7 +67,7 @@ class TranslatorTest extends MockeryTestCase
 
     public function testTransWithVars()
     {
-        self::assertSame('Hallo Daniel', $this->translator->trans('Hallo %name%', ['%name%' => 'Daniel']));
+        self::assertSame('Hallo Daniel', $this->translator->trans('Hallo {name}', ['name' => 'Daniel']));
     }
 
     public function testSetAndGetLogger()
@@ -87,8 +87,8 @@ class TranslatorTest extends MockeryTestCase
         self::assertSame('dont', $this->translator->trans('dont'));
 
         self::assertSame(
-            'There is one apple',
-            $this->translator->trans('{0} There are no apples|{1} There is one apple', [1])
+            'They avoid bugs',
+            $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }', ['gender' => 'other'])
         );
 
         self::assertSame('bar', $this->translator->trans('foo'));
@@ -106,10 +106,10 @@ class TranslatorTest extends MockeryTestCase
         self::assertSame('He', $this->translator->trans('hello[truncate:2|firstUpper]'));
         self::assertSame('hello[nohelper]', $this->translator->trans('hello[nohelper]'));
         self::assertSame(
-            'Th',
+            'Tr',
             $this->translator->trans(
-                '{0} There are no apples|{1} There is one apple[truncate:2|firstUpper]',
-                [1]
+                'trainers: { count, number }[truncate:2|firstUpper]',
+                [21629693]
             )
         );
     }

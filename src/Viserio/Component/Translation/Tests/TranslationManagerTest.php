@@ -10,7 +10,7 @@ use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogue
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\Component\Translation\Formatters\MessageFormatter;
+use Viserio\Component\Translation\Formatters\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
 
 class TranslationManagerTest extends MockeryTestCase
@@ -29,7 +29,7 @@ class TranslationManagerTest extends MockeryTestCase
         parent::setUp();
 
         $this->root    = vfsStream::setup();
-        $this->manager = new TranslationManager(new MessageFormatter());
+        $this->manager = new TranslationManager(new IntlMessageFormatter());
     }
 
     public function testSetAndGetDirectories()

@@ -11,7 +11,7 @@ class MessageCatalogue implements MessageCatalogueContract
     use ValidateLocaleTrait;
 
     /**
-     * Messages.
+     * List of messages.
      *
      * @var array
      */
@@ -32,7 +32,7 @@ class MessageCatalogue implements MessageCatalogueContract
     protected $locale = 'en';
 
     /**
-     *  Parent.
+     * A parent instance of MessageCatalogue.
      *
      * @var \Viserio\Component\Contracts\Translation\MessageCatalogue
      */
