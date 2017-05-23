@@ -15,7 +15,7 @@ class IntlMessageFormatter implements MessageFormatterContract
      */
     public function format(string $message, string $locale, array $parameters = []): string
     {
-        if ($message === '') {
+        if (empty($message)) {
             // Empty strings are not accepted as message pattern by the \MessageFormatter.
             return $message;
         }

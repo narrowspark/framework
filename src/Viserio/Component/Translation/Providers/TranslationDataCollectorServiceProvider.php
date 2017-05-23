@@ -63,7 +63,7 @@ class TranslationDataCollectorServiceProvider implements
      */
     public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
-        $profiler = $getPrevious();
+        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($profiler !== null) {
             self::resolveOptions($container);

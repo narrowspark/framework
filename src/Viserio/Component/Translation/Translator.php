@@ -162,6 +162,8 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     }
 
     /**
+     * Get all collected messages.
+     *
      * @return array
      */
     public function getCollectedMessages(): array
@@ -283,24 +285,18 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      * Collect messages about all translations.
      *
      * @param string|null $locale
-     * @param string|null $domain
+     * @param string      $domain
      * @param string      $id
      * @param string      $translation
      * @param array       $parameters
-     * @param int|null    $number
      */
     protected function collectMessage(
-        $locale,
-        $domain,
+        ?string $locale,
+        string $domain,
         string $id,
         string $translation,
-        array $parameters = [],
-        int $number = null
+        array $parameters = []
     ) {
-        if ($domain === null) {
-            $domain = 'messages';
-        }
-
         $catalogue = $this->catalogue;
 
         if ($catalogue->defines($id, $domain)) {
@@ -327,7 +323,6 @@ class Translator implements TranslatorContract, LoggerAwareInterface
             'id'                => $id,
             'translation'       => $translation,
             'parameters'        => $parameters,
-            'transChoiceNumber' => $number,
             'state'             => $state,
         ];
     }

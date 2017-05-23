@@ -44,6 +44,21 @@ class TranslatorTest extends MockeryTestCase
     public function testTrans()
     {
         self::assertSame('bar', $this->translator->trans('foo'));
+
+        self::assertSame(
+            [
+                [
+                    'locale' => 'en',
+                    'domain' => 'messages',
+                    'id' => 'foo',
+                    'translation' => 'bar',
+                    'parameters' =>[],
+                    'state' => 0,
+                ]
+            ],
+            $this->translator->getCollectedMessages()
+        );
+
         self::assertSame(
             'She avoids bugs',
             $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }', ['gender' => 'female'])
@@ -70,7 +85,7 @@ class TranslatorTest extends MockeryTestCase
         $logger = $this->mock(LoggerInterface::class);
         $logger
             ->shouldReceive('debug')
-            ->once();
+            ->twice();
         $logger
             ->shouldReceive('warning')
             ->twice();
@@ -87,6 +102,15 @@ class TranslatorTest extends MockeryTestCase
         );
 
         self::assertSame('bar', $this->translator->trans('foo'));
+
+
+        $this->translator->getCatalogue()->getFallbackCatalogue()->addFallbackCatalogue(new MessageCatalogue('de', [
+            'messages' => [
+                'wurst' => 'salat',
+            ],
+        ]));
+
+        self::assertSame('salat', $this->translator->trans('wurst'));
     }
 
     public function testTranslateAddHelper()

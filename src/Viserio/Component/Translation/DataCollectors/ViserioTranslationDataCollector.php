@@ -97,7 +97,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     array_values($sortedMessages[TranslatorContract::MESSAGE_EQUALS_FALLBACK]),
                     [
-                        'name'    => 'These messages are not available for the given locale but Symfony found them in the fallback locale catalog.',
+                        'name'    => 'These messages are not available for the given locale but Narrowspark found them in the fallback locale catalog.',
                         'headers' => $tableHeaders,
                     ]
                 ),

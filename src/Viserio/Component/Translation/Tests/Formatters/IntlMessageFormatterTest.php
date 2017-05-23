@@ -14,6 +14,31 @@ class IntlMessageFormatterTest extends TestCase
         }
     }
 
+    public function testFormatWithEmptyString()
+    {
+        self::assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Translation\Exceptions\CannotInstantiateFormatterException
+     * @expectedExceptionMessage Constructor failed
+     */
+    public function testFormatToThrowException()
+    {
+        self::assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
+  male {He avoids bugs}
+female {She avoids bugs} }', 'en', [1]));
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Translation\Exceptions\CannotFormatException
+     * @expectedExceptionMessage The argument for key 'catchDate' cannot be used as a date or time: U_ILLEGAL_ARGUMENT_ERROR
+     */
+    public function testFormatToThrowExceptionOnFormat()
+    {
+        self::assertSame('', (new IntlMessageFormatter())->format('Caught on { catchDate, date, short }', 'en', ['catchDate' => '1/1/1']));
+    }
+
     /**
      * @dataProvider provideDataForFormat
      *

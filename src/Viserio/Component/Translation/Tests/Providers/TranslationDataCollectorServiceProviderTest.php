@@ -56,6 +56,26 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
+    public function testProviderProfilerIsNull()
+    {
+        $container = new Container();
+        $container->register(new OptionsResolverServiceProvider());
+        $container->register(new TranslationDataCollectorServiceProvider());
+
+        $container->instance('config', [
+            'viserio' => [
+                'profiler' => [
+                    'enable'    => true,
+                    'collector' => [
+                        'translation' => true,
+                    ],
+                ],
+            ],
+        ]);
+
+        self::assertNull($container->get(ProfilerContract::class));
+    }
+
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);
