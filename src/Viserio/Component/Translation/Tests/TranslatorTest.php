@@ -48,13 +48,13 @@ class TranslatorTest extends MockeryTestCase
         self::assertSame(
             [
                 [
-                    'locale' => 'en',
-                    'domain' => 'messages',
-                    'id' => 'foo',
+                    'locale'      => 'en',
+                    'domain'      => 'messages',
+                    'id'          => 'foo',
                     'translation' => 'bar',
-                    'parameters' =>[],
-                    'state' => 0,
-                ]
+                    'parameters'  => [],
+                    'state'       => 0,
+                ],
             ],
             $this->translator->getCollectedMessages()
         );
@@ -102,7 +102,6 @@ class TranslatorTest extends MockeryTestCase
         );
 
         self::assertSame('bar', $this->translator->trans('foo'));
-
 
         $this->translator->getCatalogue()->getFallbackCatalogue()->addFallbackCatalogue(new MessageCatalogue('de', [
             'messages' => [
