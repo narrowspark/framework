@@ -37,7 +37,7 @@ class PluralizationRules
      */
     protected $rules = [];
 
-/**
+    /**
      * Returns the plural position to use for the given locale and number.
      *
      * @param int    $count
