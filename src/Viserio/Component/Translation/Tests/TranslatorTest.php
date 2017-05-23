@@ -53,11 +53,6 @@ class TranslatorTest extends MockeryTestCase
             'They avoid bugs',
             $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }', ['gender' => 'other'])
         );
-
-        self::assertSame(
-            '{gender}',
-            $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }')
-        );
     }
 
     public function testTransWithDomain()
