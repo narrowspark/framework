@@ -126,7 +126,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         );
         // Add filter and helper back
         if (isset($match[2])) {
-            $trans = $trans.$match[2];
+            $trans = $trans . $match[2];
         }
 
         $trans = $this->applyFilters($trans);

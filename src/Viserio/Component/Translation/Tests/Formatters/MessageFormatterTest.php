@@ -4,7 +4,6 @@ namespace Viserio\Component\Translation\Tests\Formatters;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Translation\Formatters\MessageFormatter;
-use Viserio\Component\Translation\PluralizationRules;
 
 class MessageFormatterTest extends TestCase
 {
