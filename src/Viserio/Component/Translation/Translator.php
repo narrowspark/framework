@@ -115,7 +115,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         array $parameters = [],
         string $domain = 'messages'
     ): string {
-        if (preg_match("/^(.*?)\[(.*?)\]$/", $id, $match)) {
+        if (preg_match("/^(.*?)(\[.*?\])$/", $id, $match)) {
             $id = $match[1];
         }
 
@@ -124,6 +124,11 @@ class Translator implements TranslatorContract, LoggerAwareInterface
             $this->locale,
             $parameters
         );
+        // Add filter and helper back
+        if (isset($match[2])) {
+            $trans = $trans.$match[2];
+        }
+
         $trans = $this->applyFilters($trans);
         $trans = $this->applyHelpers($trans);
 

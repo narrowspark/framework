@@ -37,7 +37,6 @@ class TranslatorExtension extends Twig_Extension
     {
         return [
             new Twig_Function('trans', [$this->translator, 'trans']),
-            new Twig_Function('trans_choice', [$this->translator, 'transChoice']),
         ];
     }
 
@@ -50,14 +49,6 @@ class TranslatorExtension extends Twig_Extension
             new Twig_Filter(
                 'trans',
                 [$this->translator, 'trans'],
-                [
-                    'pre_escape' => 'html',
-                    'is_safe'    => ['html'],
-                ]
-            ),
-            new Twig_Filter(
-                'trans_choice',
-                [$this->translator, 'transChoice'],
                 [
                     'pre_escape' => 'html',
                     'is_safe'    => ['html'],

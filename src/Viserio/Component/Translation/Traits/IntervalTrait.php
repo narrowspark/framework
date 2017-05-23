@@ -11,6 +11,16 @@ trait IntervalTrait
     /**
      * Tests if the given number is in the math interval.
      *
+     * An interval can represent a finite set of numbers:
+     * {1,2,3,4}
+     *
+     * An interval can represent numbers between two numbers:
+     * [1, +Inf] ]-1,2[
+     *
+     * The left delimiter can be [ (inclusive) or ] (exclusive).
+     * The right delimiter can be [ (exclusive) or ] (inclusive).
+     * Beside numbers, you can use -Inf and +Inf for the infinite.
+     *
      * @param int    $number
      * @param string $interval
      *

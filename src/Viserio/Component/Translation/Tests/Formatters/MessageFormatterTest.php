@@ -19,8 +19,7 @@ class MessageFormatterTest extends TestCase
     {
         $selector = new MessageFormatter();
 
-        self::assertEquals($expected, $selector->format($id, 'en', [$number]));
-        self::assertInstanceOf(PluralizationRules::class, $selector->getPluralization());
+        self::assertEquals($expected, $selector->format($id, 'en', [$number, 'foo' => 'bar']));
     }
 
     public function testReturnMessageIfExactlyOneStandardRuleIsGiven()

@@ -9,7 +9,7 @@ trait NormalizeIntegerValueTrait
      *
      * @param int|float $inter
      *
-     * @return int
+     * @return int|float
      */
     public function normalizeInteger($inter)
     {

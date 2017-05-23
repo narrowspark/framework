@@ -44,6 +44,20 @@ class TranslatorTest extends MockeryTestCase
     public function testTrans()
     {
         self::assertSame('bar', $this->translator->trans('foo'));
+        self::assertSame(
+            'There is one apple',
+            $this->translator->trans('{0} There are no apples|{1} There is one apple', [1])
+        );
+
+        self::assertSame(
+            'There are no apples',
+            $this->translator->trans('{0} There are no apples|{1} There is one apple', [0])
+        );
+
+        self::assertSame(
+            'There is one apple',
+            $this->translator->trans('{0} There are no apples|{1} There is one apple', [1])
+        );
     }
 
     public function testTransWithDomain()
@@ -55,24 +69,6 @@ class TranslatorTest extends MockeryTestCase
     {
         self::assertSame('Hallo Daniel', $this->translator->trans('Hallo %name%', ['%name%' => 'Daniel']));
     }
-
-    // public function testTransChoice()
-    // {
-    //     self::assertSame(
-    //         'There is one apple',
-    //         $this->translator->transChoice('{0} There are no apples|{1} There is one apple', 1)
-    //     );
-
-    //     self::assertSame(
-    //         'There are no apples',
-    //         $this->translator->transChoice('{0} There are no apples|{1} There is one apple', 0)
-    //     );
-
-    //     self::assertSame(
-    //         'There is one apple',
-    //         $this->translator->transChoice('{0} There are no apples|{1} There is one apple', ['one'])
-    //     );
-    // }
 
     public function testSetAndGetLogger()
     {
@@ -90,10 +86,10 @@ class TranslatorTest extends MockeryTestCase
         self::assertSame('bar', $this->translator->trans('test'));
         self::assertSame('dont', $this->translator->trans('dont'));
 
-        // self::assertSame(
-        //     'There is one apple',
-        //     $this->translator->transChoice('{0} There are no apples|{1} There is one apple', ['one'])
-        // );
+        self::assertSame(
+            'There is one apple',
+            $this->translator->trans('{0} There are no apples|{1} There is one apple', [1])
+        );
 
         self::assertSame('bar', $this->translator->trans('foo'));
     }
@@ -109,25 +105,14 @@ class TranslatorTest extends MockeryTestCase
 
         self::assertSame('He', $this->translator->trans('hello[truncate:2|firstUpper]'));
         self::assertSame('hello[nohelper]', $this->translator->trans('hello[nohelper]'));
+        self::assertSame(
+            'Th',
+            $this->translator->trans(
+                '{0} There are no apples|{1} There is one apple[truncate:2|firstUpper]',
+                [1]
+            )
+        );
     }
-
-    // public function testTranslateAddHelperWithTransChoice()
-    // {
-    //     $this->translator->addHelper('firstUpper', function ($translation) {
-    //         return ucfirst($translation);
-    //     });
-    //     $this->translator->addHelper('truncate', function ($translation, $length) {
-    //         return mb_substr($translation, 0, (int) $length);
-    //     });
-
-    //     self::assertSame(
-    //         'Th',
-    //         $this->translator->transChoice(
-    //             '{0} There are no apples|{1} There is one apple[truncate:2|firstUpper]',
-    //             ['one']
-    //         )
-    //     );
-    // }
 
     public function testTranslateAddFilter()
     {

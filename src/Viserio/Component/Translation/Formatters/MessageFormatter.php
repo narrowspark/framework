@@ -16,6 +16,15 @@ class MessageFormatter implements MessageFormatterContract
      */
     public function format(string $message, string $locale, array $parameters = []): string
     {
+        $parameter = reset($parameters);
+        $key       = key($parameters);
+
+        if ((is_int($key) || $key === '%count%') && is_numeric($parameter)) {
+            $number = $parameter;
+        } else {
+            return strtr($message, $parameters);
+        }
+
         $parts = explode('|', $message);
 
         $explicitRules = $this->getExplicitRules($parts);
