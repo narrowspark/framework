@@ -43,6 +43,7 @@ parameters:
         - '#Cannot call method getTarget#'
         - '#Cannot call method getName#'
         - '#Swift_#'
+        - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'
 
         # Required file variables
         - '#Undefined variable: \$class#'

@@ -37,6 +37,14 @@ class PluralizationRules
      */
     protected $rules = [];
 
+/**
+     * Returns the plural position to use for the given locale and number.
+     *
+     * @param int    $count
+     * @param string $language
+     *
+     * @return int
+     */
     public function get(int $count, string $language): int
     {
         if (mb_strlen($language) > 3) {
@@ -56,7 +64,15 @@ class PluralizationRules
         return $this->createRules($language)->category($count);
     }
 
-    public function set(string $language, callable $rule): PluralizationRulesContract
+    /**
+     * Overrides the default plural rule for a given locale.
+     *
+     * @param string   $language
+     * @param callable $rule
+     *
+     * @return $this
+     */
+    public function set(string $language, callable $rule): self
     {
         if (mb_strlen($language) > 3) {
             $language = mb_substr($language, 0, -mb_strlen(mb_strrchr($language, '_')));
