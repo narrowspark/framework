@@ -4,16 +4,26 @@ namespace Viserio\Component\Console\Input;
 
 use Symfony\Component\Console\Input\InputArgument as SymfonyInputArgument;
 
+/**
+ * Code in this class it taken from silly.
+ *
+ * See the original here: https://github.com/mnapoli/silly/blob/master/src/Input/InputArgument.php
+ *
+ * @author Matthieu Napoli https://github.com/mnapoli
+ */
 class InputArgument extends SymfonyInputArgument
 {
+    /**
+     * Input argument description.
+     *
+     * @var string
+     */
     protected $description;
 
     /**
      * Set the input argument description.
      *
      * @param string $description
-     *
-     * @codeCoverageIgnore
      */
     public function setDescription(string $description)
     {
@@ -22,8 +32,6 @@ class InputArgument extends SymfonyInputArgument
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getDescription()
     {

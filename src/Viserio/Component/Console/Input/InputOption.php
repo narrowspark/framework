@@ -4,16 +4,26 @@ namespace Viserio\Component\Console\Input;
 
 use Symfony\Component\Console\Input\InputOption as SymfonyInputOption;
 
+/**
+ * Code in this class it taken from silly.
+ *
+ * See the original here: https://github.com/mnapoli/silly/blob/master/src/Input/InputOption.php
+ *
+ * @author Matthieu Napoli https://github.com/mnapoli
+ */
 class InputOption extends SymfonyInputOption
 {
+    /**
+     * Input option description.
+     *
+     * @var string
+     */
     protected $description;
 
     /**
      * Set the input option description.
      *
      * @param string $description
-     *
-     * @codeCoverageIgnore
      */
     public function setDescription(string $description)
     {
@@ -22,8 +32,6 @@ class InputOption extends SymfonyInputOption
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getDescription()
     {

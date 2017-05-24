@@ -5,7 +5,6 @@ namespace Viserio\Component\Console\Command;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -41,6 +40,13 @@ abstract class Command extends BaseCommand
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     protected $output;
+
+    /**
+     * Indicates whether the command should be shown in the Artisan command list.
+     *
+     * @var bool
+     */
+    protected $hidden = false;
 
     /**
      * The mapping between human readable verbosity levels and Symfony's
@@ -92,6 +98,8 @@ abstract class Command extends BaseCommand
         }
 
         $this->setDescription($this->description);
+
+        $this->setHidden($this->hidden);
 
         if (! isset($this->signature)) {
             $this->specifyParameters();
@@ -166,10 +174,7 @@ abstract class Command extends BaseCommand
      */
     public function call(string $command, array $arguments = []): int
     {
-        $instance             = $this->getApplication()->find($command);
-        $arguments['command'] = $command;
-
-        return $instance->run(new ArrayInput($arguments), $this->output);
+        return $this->getApplication()->call($command, $arguments, $this->output);
     }
 
     /**
@@ -182,10 +187,7 @@ abstract class Command extends BaseCommand
      */
     public function callSilent(string $command, array $arguments = []): int
     {
-        $instance             = $this->getApplication()->find($command);
-        $arguments['command'] = $command;
-
-        return $instance->run(new ArrayInput($arguments), new NullOutput());
+        return $this->getApplication()->call($command, $arguments, new NullOutput());
     }
 
     /**

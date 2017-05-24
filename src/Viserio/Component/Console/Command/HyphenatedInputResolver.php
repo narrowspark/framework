@@ -1,10 +1,17 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Console;
+namespace Viserio\Component\Console\Command;
 
 use Invoker\ParameterResolver\ParameterResolver;
 use ReflectionFunctionAbstract;
 
+/**
+ * Code in this class it taken from silly.
+ *
+ * See the original here: https://github.com/mnapoli/silly/blob/master/src/HyphenatedInputResolver.php
+ *
+ * @author Matthieu Napoli https://github.com/mnapoli
+ */
 class HyphenatedInputResolver implements ParameterResolver
 {
     /**

@@ -8,30 +8,17 @@ use Symfony\Component\Console\Input\StringInput;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Tests\Fixture\SpyOutput;
-use Viserio\Component\Support\Invoker;
 
 class ClosureCommandTest extends TestCase
 {
     /**
-     * @var Application
+     * @var \Viserio\Component\Console\Application
      */
     private $application;
 
-    /**
-     * @var Invoker
-     */
-    private $invoker;
-
     public function setUp()
     {
-        $container = new ArrayContainer([]);
-
-        $this->application = new Application($container, '1.0.0');
-
-        $this->invoker = (new Invoker())
-            ->injectByTypeHint(true)
-            ->injectByParameterName(true)
-            ->setContainer($this->application->getContainer());
+        $this->application = new Application('1.0.0');
     }
 
     public function testCommand()
@@ -44,6 +31,21 @@ class ClosureCommandTest extends TestCase
 
         self::assertSame($command, $this->application->get('demo'));
         self::assertOutputIs('demo', 'hello' . "\n");
+    }
+
+    public function testCommandWithParam()
+    {
+        $this->application->setContainer(new ArrayContainer([
+            'name' => ' daniel',
+        ]));
+        $command = new ClosureCommand('demo', function ($name) {
+            $this->comment('hello' . $name);
+        });
+
+        $this->application->add($command);
+
+        self::assertSame($command, $this->application->get('demo'));
+        self::assertOutputIs('demo', 'hello daniel' . "\n");
     }
 
     /**
