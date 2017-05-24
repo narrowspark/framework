@@ -70,6 +70,7 @@ parameters:
         - '#\$view of method Viserio\\Component\\Mail\\Mailer::send#'
         - '#\$callback of method Viserio\\Component\\Mail\\Mailer::send#'
         - '#Viserio\\Component\\Routing\\Tests\\Fixture\\Controller::put#'
+        - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\ApplicationTest::call#'
 
         # Is wrong
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'

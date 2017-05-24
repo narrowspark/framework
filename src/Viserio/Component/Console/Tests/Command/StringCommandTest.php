@@ -14,7 +14,7 @@ class StringCommandTest extends TestCase
     private $application;
 
     /**
-     * @var \Viserio\Component\Console\StringCommand
+     * @var \Viserio\Component\Console\Command\StringCommand
      */
     private $command;
 

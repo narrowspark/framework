@@ -22,6 +22,7 @@ use Symfony\Component\Process\ProcessUtils;
 use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
 use Viserio\Component\Console\Command\CommandResolver;
+use Viserio\Component\Console\Command\StringCommand;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
 use Viserio\Component\Console\Events\ConsoleErrorEvent;
 use Viserio\Component\Console\Events\ConsoleTerminateEvent;
@@ -128,9 +129,9 @@ class Application extends SymfonyConsole
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
      *
-     * @return \Symfony\Component\Console\Command\Command
+     * @return \Viserio\Component\Console\Command\StringCommand
      */
-    public function command(string $expression, $callable, array $aliases = []): SymfonyCommand
+    public function command(string $expression, $callable, array $aliases = []): StringCommand
     {
         $commandResolver = new CommandResolver($this->getInvoker(), $this);
         $command         = $commandResolver->resolve($expression, $callable, $aliases);

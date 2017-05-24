@@ -772,6 +772,8 @@ class ApplicationTest extends MockeryTestCase
 
             if ($skipCommand) {
                 $event->disableCommand();
+            } else {
+                $event->enableCommand();
             }
         });
 

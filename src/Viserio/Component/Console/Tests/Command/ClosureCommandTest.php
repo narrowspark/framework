@@ -4,30 +4,22 @@ namespace Viserio\Component\Console\Tests\Command;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Tests\Fixture\SpyOutput;
-use Viserio\Component\Support\Invoker;
+use Narrowspark\TestingHelper\ArrayContainer;
 
 class ClosureCommandTest extends TestCase
 {
     /**
-     * @var Application
+     * @var \Viserio\Component\Console\Application
      */
     private $application;
-
-    /**
-     * @var Invoker
-     */
-    private $invoker;
 
     public function setUp()
     {
         $this->application = new Application('1.0.0');
-
-        $this->invoker = (new Invoker())
-            ->injectByTypeHint(true)
-            ->injectByParameterName(true);
     }
 
     public function testCommand()
@@ -40,6 +32,21 @@ class ClosureCommandTest extends TestCase
 
         self::assertSame($command, $this->application->get('demo'));
         self::assertOutputIs('demo', 'hello' . "\n");
+    }
+
+    public function testCommandWithParam()
+    {
+        $this->application->setContainer(new ArrayContainer([
+            'name' => ' daniel',
+        ]));
+        $command = new ClosureCommand('demo', function ($name) {
+            $this->comment('hello' . $name);
+        });
+
+        $this->application->add($command);
+
+        self::assertSame($command, $this->application->get('demo'));
+        self::assertOutputIs('demo', 'hello daniel' . "\n");
     }
 
     /**
