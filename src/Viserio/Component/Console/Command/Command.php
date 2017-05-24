@@ -41,12 +41,12 @@ abstract class Command extends BaseCommand
      */
     protected $output;
 
-      /**
-       * Indicates whether the command should be shown in the Artisan command list.
-       *
-       * @var bool
-       */
-      protected $hidden = false;
+    /**
+     * Indicates whether the command should be shown in the Artisan command list.
+     *
+     * @var bool
+     */
+    protected $hidden = false;
 
     /**
      * The mapping between human readable verbosity levels and Symfony's
