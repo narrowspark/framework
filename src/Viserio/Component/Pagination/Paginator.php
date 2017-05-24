@@ -138,6 +138,7 @@ class Paginator extends AbstractPaginator
             'from'          => $this->getFirstItem(),
             'to'            => $this->getLastItem(),
             'data'          => $this->items->toArray(),
+            'path'          => $this->path,
         ];
     }
 
