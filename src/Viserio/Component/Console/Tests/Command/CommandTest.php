@@ -76,15 +76,15 @@ class CommandTest extends TestCase
 
         self::assertSame(
             [
-                'help' => false,
-                'quiet' => false,
-                'verbose' => false,
-                'version' => false,
-                'ansi' => false,
-                'no-ansi' => false,
+                'help'           => false,
+                'quiet'          => false,
+                'verbose'        => false,
+                'version'        => false,
+                'ansi'           => false,
+                'no-ansi'        => false,
                 'no-interaction' => false,
-                'env' => null,
-                'yell' => false,
+                'env'            => null,
+                'yell'           => false,
             ],
             $command->option()
         );

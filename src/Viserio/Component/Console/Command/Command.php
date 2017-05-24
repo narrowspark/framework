@@ -5,7 +5,6 @@ namespace Viserio\Component\Console\Command;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,7 +41,7 @@ abstract class Command extends BaseCommand
      */
     protected $output;
 
-    /**
+      /**
        * Indicates whether the command should be shown in the Artisan command list.
        *
        * @var bool
