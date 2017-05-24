@@ -43,6 +43,13 @@ abstract class Command extends BaseCommand
     protected $output;
 
     /**
+       * Indicates whether the command should be shown in the Artisan command list.
+       *
+       * @var bool
+       */
+      protected $hidden = false;
+
+    /**
      * The mapping between human readable verbosity levels and Symfony's
      * OutputInterface.
      *
@@ -92,6 +99,8 @@ abstract class Command extends BaseCommand
         }
 
         $this->setDescription($this->description);
+
+        $this->setHidden($this->hidden);
 
         if (! isset($this->signature)) {
             $this->specifyParameters();
@@ -166,10 +175,7 @@ abstract class Command extends BaseCommand
      */
     public function call(string $command, array $arguments = []): int
     {
-        $instance             = $this->getApplication()->find($command);
-        $arguments['command'] = $command;
-
-        return $instance->run(new ArrayInput($arguments), $this->output);
+        return $this->getApplication()->call($command, $arguments, $this->output);
     }
 
     /**
@@ -182,10 +188,7 @@ abstract class Command extends BaseCommand
      */
     public function callSilent(string $command, array $arguments = []): int
     {
-        $instance             = $this->getApplication()->find($command);
-        $arguments['command'] = $command;
-
-        return $instance->run(new ArrayInput($arguments), new NullOutput());
+        return $this->getApplication()->call($command, $arguments, new NullOutput());
     }
 
     /**

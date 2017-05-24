@@ -288,7 +288,9 @@ class Cron implements CronContract
     {
         $this->withoutOverlapping = true;
 
-        return $this->skip(function () {
+        return $this->after(function () {
+            $this->cachePool->deleteItem($this->getMutexName());
+        })->skip(function () {
             return $this->cachePool->hasItem($this->getMutexName());
         });
     }

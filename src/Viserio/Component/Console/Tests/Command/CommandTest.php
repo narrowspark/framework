@@ -74,7 +74,22 @@ class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        self::assertSame(false, $command->option('yell'));
+        self::assertSame(
+            [
+                'help' => false,
+                'quiet' => false,
+                'verbose' => false,
+                'version' => false,
+                'ansi' => false,
+                'no-ansi' => false,
+                'no-interaction' => false,
+                'env' => null,
+                'yell' => false,
+            ],
+            $command->option()
+        );
+        self::assertFalse($command->option('yell'));
+        self::assertFalse($command->hasOption('help'));
         self::assertInternalType('array', $command->option());
     }
 
