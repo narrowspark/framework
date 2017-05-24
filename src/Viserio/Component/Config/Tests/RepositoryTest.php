@@ -83,7 +83,6 @@ class RepositoryTest extends TestCase
     public function testImportWithAPhpFile()
     {
         $config = new Repository();
-        $config->setLoader($this->fileloader);
 
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
