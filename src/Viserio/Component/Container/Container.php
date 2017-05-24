@@ -333,10 +333,20 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
             }
         }
 
+        $concrete = gettype($this->concrete);
+
+        if (is_object($this->concrete)) {
+            $concrete = get_class($this->concrete);
+        } elseif (is_array($this->concrete)) {
+            $concrete = $this->concrete[0];
+        } elseif (is_string($this->concrete)) {
+            $concrete = $this->concrete;
+        }
+
         throw new UnresolvableDependencyException(sprintf(
             'Parameter [%s] cannot be injected in [%s].',
-            is_object($this->parameter) ? get_class($this->parameter) : gettype($this->parameter),
-            is_object($this->concrete) ? get_class($this->concrete) : gettype($this->concrete)
+            is_object($this->parameter) ? get_class($this->parameter) : $this->parameter,
+            $concrete
         ));
     }
 

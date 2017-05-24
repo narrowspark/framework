@@ -439,7 +439,7 @@ class ContainerTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException
-     * @expectedExceptionMessage Parameter [string] cannot be injected in [array].
+     * @expectedExceptionMessage Parameter [something] cannot be injected in [Viserio\Component\Container\Tests\Fixture\ContainerInjectVariableFixture].
      */
     public function testContainerWhenNeedsGiveToThrowException()
     {
@@ -756,5 +756,21 @@ class ContainerTest extends MockeryTestCase
         $container->resolve(ContainerTestContextInjectOneFixture::class);
 
         self::assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
+    }
+
+    /**
+     * @expectedException Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException
+     * @expectedExceptionMessage Parameter [stub] cannot be injected in [Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixture].
+     */
+    public function testContextualBindingNotWorksOnBoundAlias()
+    {
+        $container = new Container();
+
+        $container->alias(ContainerContractFixtureInterface::class, 'stub');
+        $container->bind('stub', ContainerImplementationFixture::class);
+
+        $container->when(ContainerTestContextInjectOneFixture::class)->needs('stub')->give(ContainerImplementationTwoFixture::class);
+
+        $container->get(ContainerTestContextInjectOneFixture::class);
     }
 }
