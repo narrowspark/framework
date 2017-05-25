@@ -7,6 +7,14 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use RuntimeException;
 
+/**
+ * Some code in this class it taken from zend-diactoros.
+ *
+ * See the original here: https://github.com/zendframework/zend-diactoros/blob/master/src/ServerRequestFactory.php
+ *
+ * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ */
 final class Util
 {
     /**

@@ -4,6 +4,7 @@ namespace Viserio\Component\HttpFactory\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionProperty;
 use Viserio\Component\Http\Uri;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
@@ -14,6 +15,15 @@ class ServerRequestFactoryTest extends TestCase
     public function setUp()
     {
         $this->factory = new ServerRequestFactory();
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Unrecognized protocol version (HTTPa1.0)
+     */
+    public function testWithWrongServerProtocol()
+    {
+        $this->factory->createServerRequestFromArray(['SERVER_PROTOCOL' => 'HTTPa1.0', 'HTTP_HOST' => 'example.org']);
     }
 
     public function dataGetUriFromGlobals()
@@ -120,35 +130,46 @@ class ServerRequestFactoryTest extends TestCase
             'SERVER_SIGNATURE'     => 'Version signature: 5.123',
             'SCRIPT_NAME'          => '/doc/framwork.php',
             'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
+            'PHP_AUTH_USER'        => 'foo',
+            'PHP_AUTH_PW'          => 'bar',
         ];
 
         $server = $this->factory->createServerRequestFromArray($_SERVER);
 
         self::assertEquals('POST', $server->getMethod());
         self::assertEquals([
-                'Accept' => [
+                'accept' => [
                     'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 ],
-                'Accept-Charset' => [
+                'accept-charset' => [
                     'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
                 ],
-                'Accept-Encoding' => [
+                'accept-encoding' => [
                     'gzip,deflate',
                 ],
-                'Accept-Language' => [
+                'accept-language' => [
                     'en-gb,en;q=0.5',
                 ],
-                'Connection' => [
+                'connection' => [
                     'keep-alive',
                 ],
-                'Host' => [
+                'host' => [
                     'www.narrowspark.com',
                 ],
-                'Referer' => [
+                'referer' => [
                     'http://previous.url.com',
                 ],
-                'User-Agent' => [
+                'user-agent' => [
                     'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6 ( .NET CLR 3.5.30729)',
+                ],
+                'php-auth-user' => [
+                    'foo',
+                ],
+                'php-auth-pw' => [
+                    'bar',
+                ],
+                'authorization' => [
+                    'Basic Zm9vOmJhcg==',
                 ],
             ],
             $server->getHeaders()
@@ -156,7 +177,7 @@ class ServerRequestFactoryTest extends TestCase
         self::assertEquals('', (string) $server->getBody());
         self::assertEquals('1.0', $server->getProtocolVersion());
         self::assertEquals(
-            Uri::createFromString('https://www.narrowspark.com:80/doc/framwork.php?id=10&user=foo'),
+            Uri::createFromString('https://foo:bar@www.narrowspark.com:80/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
     }
@@ -262,6 +283,227 @@ class ServerRequestFactoryTest extends TestCase
         $request = $this->factory->createServerRequest('POST', 'http://example.org/test');
 
         self::assertEmpty($request->getParsedBody());
+    }
+
+    public function testReturnsServerValueUnchangedIfHttpAuthorizationHeaderIsPresent()
+    {
+        $server = [
+            'HTTP_HOST'          => 'example.org',
+            'HTTP_AUTHORIZATION' => 'token',
+            'HTTP_X_Foo'         => 'bar',
+        ];
+
+        self::assertSame($server, $this->factory->createServerRequestFromArray($server)->getServerParams());
+    }
+
+    public function testMarshalsExpectedHeadersFromServerArray()
+    {
+        $server = [
+            'HTTP_HOST'          => 'example.org',
+            'HTTP_COOKIE'        => 'COOKIE',
+            'HTTP_AUTHORIZATION' => 'token',
+            'HTTP_CONTENT_TYPE'  => 'application/json',
+            'HTTP_ACCEPT'        => 'application/json',
+            'HTTP_X_FOO_BAR'     => 'FOOBAR',
+            'CONTENT_MD5'        => 'CONTENT-MD5',
+            'CONTENT_LENGTH'     => 'UNSPECIFIED',
+        ];
+        $expected = [
+            'host'           => ['example.org'],
+            'cookie'         => ['COOKIE'],
+            'authorization'  => ['token'],
+            'content-type'   => ['application/json'],
+            'accept'         => ['application/json'],
+            'x-foo-bar'      => ['FOOBAR'],
+            'content-md5'    => ['CONTENT-MD5'],
+            'content-length' => ['UNSPECIFIED'],
+        ];
+
+        self::assertSame($expected, $this->factory->createServerRequestFromArray($server)->getHeaders());
+    }
+
+    public function testHttpPasswordIsOptional()
+    {
+        self::assertEquals(
+            [
+                'host'          => ['example.org'],
+                'authorization' => ['Basic ' . base64_encode('foo:')],
+                'php-auth-user' => ['foo'],
+                'php-auth-pw'   => [''],
+            ],
+            $this->factory->createServerRequestFromArray(['PHP_AUTH_USER' => 'foo', 'HTTP_HOST' => 'example.org'])->getHeaders()
+        );
+    }
+
+    public function testHttpBasicAuthWithPhpCgi()
+    {
+        self::assertEquals(
+            [
+                'host'          => ['example.org'],
+                'authorization' => ['Basic ' . base64_encode('foo:bar')],
+                'php-auth-user' => ['foo'],
+                'php-auth-pw'   => ['bar'],
+            ],
+            $this->factory->createServerRequestFromArray(['HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('foo:bar'), 'HTTP_HOST' => 'example.org'])->getHeaders()
+        );
+    }
+
+    public function testHttpBasicAuthWithPhpCgiBogus()
+    {
+        // Username and passwords should not be set as the header is bogus
+        $headers = $this->factory->createServerRequestFromArray(['HTTP_AUTHORIZATION' => 'Basic_' . base64_encode('foo:bar'), 'HTTP_HOST' => 'example.org'])->getHeaders();
+
+        self::assertFalse(isset($headers['php-auth-user']));
+        self::assertFalse(isset($headers['php-auth-pw']));
+    }
+
+    public function testHttpBasicAuthWithPhpCgiRedirect()
+    {
+        self::assertEquals(
+            [
+                'host'          => ['example.org'],
+                'authorization' => ['Basic ' . base64_encode('username:pass:word')],
+                'php-auth-user' => ['username'],
+                'php-auth-pw'   => ['pass:word'],
+            ],
+            $this->factory->createServerRequestFromArray(['REDIRECT_HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('username:pass:word'), 'HTTP_HOST' => 'example.org'])->getHeaders()
+        );
+    }
+
+    public function testHttpBasicAuthWithPhpCgiEmptyPassword()
+    {
+        self::assertEquals(
+            [
+                'host'          => ['example.org'],
+                'authorization' => ['Basic ' . base64_encode('foo:')],
+                'php-auth-user' => ['foo'],
+                'php-auth-pw'   => [''],
+            ],
+            $this->factory->createServerRequestFromArray(['HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('foo:'), 'HTTP_HOST' => 'example.org'])->getHeaders()
+        );
+    }
+
+    public function testHttpDigestAuthWithPhpCgi()
+    {
+        $digest = 'Digest username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
+
+        self::assertEquals(
+            [
+                'host'            => ['example.org'],
+                'authorization'   => [$digest],
+                'php-auth-digest' => [$digest],
+            ],
+            $this->factory->createServerRequestFromArray(['HTTP_AUTHORIZATION' => $digest, 'HTTP_HOST' => 'example.org'])->getHeaders()
+        );
+    }
+
+    public function testHttpDigestAuthWithPhpCgiBogus()
+    {
+        $digest = 'Digest_username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
+
+        // Username and passwords should not be set as the header is bogus
+        $headers = $this->factory->createServerRequestFromArray(['HTTP_AUTHORIZATION' => $digest, 'HTTP_HOST' => 'example.org'])->getHeaders();
+
+        self::assertFalse(isset($headers['php-auth-user']));
+        self::assertFalse(isset($headers['php-auth-pw']));
+    }
+
+    public function testHttpDigestAuthWithPhpCgiRedirect()
+    {
+        $digest = 'Digest username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
+        self::assertEquals(
+            [
+                'host'            => ['example.org'],
+                'authorization'   => [$digest],
+                'php-auth-digest' => [$digest],
+            ],
+            $this->factory->createServerRequestFromArray(['REDIRECT_HTTP_AUTHORIZATION' => $digest, 'HTTP_HOST' => 'example.org'])->getHeaders()
+        );
+    }
+
+    public function testOAuthBearerAuth()
+    {
+        $headerContent = 'Bearer L-yLEOr9zhmUYRkzN1jwwxwQ-PBNiKDc8dgfB4hTfvo';
+
+        self::assertEquals(
+            [
+                'host'          => ['example.org'],
+                'authorization' => [$headerContent],
+            ],
+            $this->factory->createServerRequestFromArray(['HTTP_AUTHORIZATION' => $headerContent, 'HTTP_HOST' => 'example.org'])->getHeaders()
+        );
+    }
+
+    public function testOAuthBearerAuthWithRedirect()
+    {
+        $headerContent = 'Bearer L-yLEOr9zhmUYRkzN1jwwxwQ-PBNiKDc8dgfB4hTfvo';
+
+        self::assertEquals(
+            [
+                'host'          => ['example.org'],
+                'authorization' => [$headerContent],
+            ],
+            $this->factory->createServerRequestFromArray(['REDIRECT_HTTP_AUTHORIZATION' => $headerContent, 'HTTP_HOST' => 'example.org'])->getHeaders()
+        );
+    }
+
+    /**
+     * @see https://github.com/symfony/symfony/issues/17345
+     */
+    public function testItDoesNotOverwriteTheAuthorizationHeaderIfItIsAlreadySet()
+    {
+        $headerContent = 'Bearer L-yLEOr9zhmUYRkzN1jwwxwQ-PBNiKDc8dgfB4hTfvo';
+
+        self::assertEquals(
+            [
+                'host'          => ['example.org'],
+                'authorization' => [$headerContent],
+                'php-auth-user' => ['foo'],
+                'php-auth-pw'   => [''],
+            ],
+            $this->factory->createServerRequestFromArray(['PHP_AUTH_USER' => 'foo', 'HTTP_AUTHORIZATION' => $headerContent, 'HTTP_HOST' => 'example.org'])->getHeaders()
+        );
+    }
+
+    public function testNormalizeServerUsesMixedCaseAuthorizationHeaderFromApacheWhenPresent()
+    {
+        $r = new ReflectionProperty(ServerRequestFactory::class, 'apacheRequestHeaders');
+        $r->setAccessible(true);
+        $r->setValue(function () {
+            return ['Authorization' => 'foobar'];
+        });
+
+        $headers = $this->factory->createServerRequestFromArray(['HTTP_HOST' => 'example.org'])->getHeaders();
+
+        self::assertArrayHasKey('authorization', $headers);
+        self::assertEquals(['foobar'], $headers['authorization']);
+    }
+
+    public function testNormalizeServerUsesLowerCaseAuthorizationHeaderFromApacheWhenPresent()
+    {
+        $r = new ReflectionProperty(ServerRequestFactory::class, 'apacheRequestHeaders');
+        $r->setAccessible(true);
+        $r->setValue(function () {
+            return ['authorization' => 'foobar'];
+        });
+
+        $headers = $this->factory->createServerRequestFromArray(['HTTP_HOST' => 'example.org'])->getHeaders();
+
+        self::assertArrayHasKey('authorization', $headers);
+        self::assertEquals(['foobar'], $headers['authorization']);
+    }
+
+    public function testNormalizeServerReturnsArrayUnalteredIfApacheHeadersDoNotContainAuthorization()
+    {
+        $r = new ReflectionProperty(ServerRequestFactory::class, 'apacheRequestHeaders');
+        $r->setAccessible(true);
+        $r->setValue(function () {
+            return [];
+        });
+
+        $headers = $this->factory->createServerRequestFromArray(['HTTP_HOST' => 'example.org'])->getHeaders();
+
+        self::assertEquals(['host' => ['example.org']], $headers);
     }
 
     protected function assertServerRequest($request, $method, $uri)
