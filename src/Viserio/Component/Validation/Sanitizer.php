@@ -2,7 +2,6 @@
 namespace Viserio\Component\Validation;
 
 use Closure;
-use Narrowspark\Arr\Arr;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Sanitizer
@@ -19,10 +18,12 @@ class Sanitizer
     /**
      * Register a new sanitization method.
      *
-     * @param string $name
-     * @param mixed  $callback
+     * @param string                    $name
+     * @param callable|string|\Closure  $callback
+     *
+     * @return void
      */
-    public function register(string $name, $callback)
+    public function register(string $name, $callback): void
     {
         $this->sanitizers[$name] = $callback;
     }
@@ -39,44 +40,13 @@ class Sanitizer
     {
         list($data, $rules) = $this->runGlobalSanitizers($rules, $data);
 
-        $availableRules = Arr::only($rules, array_keys($data));
+        $availableRules = array_intersect_key($rules, array_flip(array_keys($data)));
 
         foreach ($availableRules as $field => $ruleset) {
             $data[$field] = $this->sanitizeField($data, $field, $ruleset);
         }
 
         return $data;
-    }
-
-    /**
-     * Execute a sanitizer using the appropriate method.
-     *
-     * @param mixed $sanitizer
-     * @param mixed $parameters
-     *
-     * @return mixed
-     */
-    public function executeSanitizer($sanitizer, $parameters)
-    {
-        if (is_callable($sanitizer)) {
-            return $sanitizer(...$parameters);
-        }
-
-        if ($sanitizer instanceof Closure) {
-            return $sanitizer(extract($parameters));
-        }
-
-        if ($this->container !== null) {
-            // Transform a container resolution to a callback.
-            $sanitizer = $this->resolveCallback($sanitizer);
-
-            if (is_callable($sanitizer)) {
-                return $sanitizer(...$parameters);
-            }
-        }
-
-        // If the sanitizer can't be called, return the passed value.
-        return $parameters[0];
     }
 
     /**
@@ -149,6 +119,33 @@ class Sanitizer
         }
 
         return $value;
+    }
+
+    /**
+     * Execute a sanitizer using the appropriate method.
+     *
+     * @param callable|string|\Closure $sanitizer
+     * @param array                    $parameters
+     *
+     * @return string
+     */
+    protected function executeSanitizer($sanitizer, array $parameters): string
+    {
+        if (is_callable($sanitizer)) {
+            return $sanitizer(...$parameters);
+        }
+
+        if ($this->container !== null) {
+            // Transform a container resolution to a callback.
+            $sanitizer = $this->resolveCallback($sanitizer);
+
+            if (is_callable($sanitizer)) {
+                return $sanitizer(...$parameters);
+            }
+        }
+
+        // If the sanitizer can't be called, return the passed value.
+        return $parameters[0];
     }
 
     /**

@@ -20,7 +20,6 @@
     "require": {
         "php"                                                : "^7.1",
         "egulias/email-validator"                            : "^2.1",
-        "narrowspark/arr"                                    : "^2.1",
         "respect/validation"                                 : "^1.1",
         "viserio/contracts"                                  : "self.version"
     },

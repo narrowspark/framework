@@ -10,18 +10,21 @@ use Viserio\Component\Validation\Tests\Fixture\SuffixFixture;
 
 class SanitizerTest extends TestCase
 {
-    public function testThatSanitizerCanSanitizeWithClosure()
+    public function testThatSanitizerCanSanitizeWithLambdaAndClosure()
     {
+        $name      = 'viserio';
         $sanitizer = new Sanitizer();
         $sanitizer->register('reverse', function ($field) {
             return strrev($field);
         });
 
-        $data = ['name' => 'narrowspark'];
-
-        $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
+        $data = $sanitizer->sanitize(['name' => 'reverse'], ['name' => 'narrowspark']);
 
         self::assertEquals('krapsworran', $data['name']);
+
+        $data = $sanitizer->sanitize(['name' => 'plus'], ['name' => 'narrowspark']);
+
+        self::assertEquals('narrowspark', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClass()
