@@ -759,7 +759,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException
+     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException
      * @expectedExceptionMessage Parameter [stub] cannot be injected in [Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixture].
      */
     public function testContextualBindingNotWorksOnBoundAlias()

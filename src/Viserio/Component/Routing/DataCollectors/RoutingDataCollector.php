@@ -62,7 +62,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
             $routeData = [
                 0 => implode(' | ', $route->getMethods()),
                 2 => $route->getUri(),
-                3 => $route->getName() ?? '',
+                3 => $route->getName() ?? '-',
                 4 => $route->getActionName(),
                 5 => implode(', ', $route->gatherMiddleware()),
                 6 => implode(', ', $route->gatherDisabledMiddlewares()),
