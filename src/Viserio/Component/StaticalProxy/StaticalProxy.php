@@ -104,7 +104,7 @@ class StaticalProxy
     /**
      * Get the root object behind the facade.
      *
-     * @return mixed
+     * @return object|string
      */
     public static function getStaticalProxyRoot()
     {
@@ -132,9 +132,9 @@ class StaticalProxy
     /**
      * Resolve the statical proxy root instance from the app.
      *
-     * @param object $name
+     * @param object|string $name
      *
-     * @return mixed
+     * @return object
      */
     protected static function resolveStaticalProxyInstance($name)
     {
@@ -154,7 +154,7 @@ class StaticalProxy
      *
      * @param string $name
      *
-     * @return MockInterface
+     * @return \Mockery\MockInterface
      */
     protected static function createFreshMockInstance(string $name)
     {
@@ -168,13 +168,16 @@ class StaticalProxy
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @return MockInterface
+     * @return \Mockery\MockInterface
      */
-    protected static function createMock()
+    protected static function createMock(): MockInterface
     {
-        $class = static::getMockableClass();
-
-        return $class !== null ? Mockery::mock($class) : Mockery::mock();
+        if ($root = static::getStaticalProxyRoot()) {
+            return Mockery::mock(get_class($root));
+        }
+        // @codeCoverageIgnoreStart
+        return Mockery::mock();
+        // @codeCoverageIgnoreStop
     }
 
     /**
@@ -188,17 +191,5 @@ class StaticalProxy
 
         return isset(static::$resolvedInstance[$name]) &&
                 static::$resolvedInstance[$name] instanceof MockInterface;
-    }
-
-    /**
-     * Get the mockable class for the bound instance.
-     *
-     * @return string|null
-     */
-    protected static function getMockableClass()
-    {
-        if ($root = static::getStaticalProxyRoot()) {
-            return get_class($root);
-        }
     }
 }
