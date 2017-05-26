@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Contracts\Filesystem\Exception;
+namespace Viserio\Component\Contracts\Filesystem\Exceptions;
 
 use Exception;
 use RuntimeException;
@@ -27,9 +27,9 @@ class IOException extends RuntimeException
     /**
      * Get the file path.
      *
-     * @codeCoverageIgnore
+     * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
