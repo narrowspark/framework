@@ -13,8 +13,6 @@ class UploadedFile implements UploadedFileInterface
     /**
      * All errors which can happen on a upload.
      *
-     * @internal
-     *
      * @var int[]
      */
     protected const ERRORS = [
@@ -110,7 +108,7 @@ class UploadedFile implements UploadedFileInterface
     ];
 
     /**
-     * Create a new uploadedfile instance.
+     * Create a new uploaded file instance.
      *
      * @param StreamInterface|string|resource $streamOrFile
      * @param int                             $size

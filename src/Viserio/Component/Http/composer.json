@@ -44,7 +44,6 @@
         }
     },
     "provide": {
-        "psr/http-message"                : "^1.0",
         "psr/http-message-implementation" : "^1.0"
     },
     "extra": {
