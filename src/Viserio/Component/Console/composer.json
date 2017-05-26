@@ -22,7 +22,7 @@
         "container-interop/container-interop" : "^1.1",
         "php-di/invoker"                      : "^2.0",
         "symfony/console"                     : "^3.2",
-        "viserio/cotracts"                    : "self.version",
+        "viserio/contracts"                   : "self.version",
         "viserio/support"                     : "self.version"
     },
     "require-dev": {

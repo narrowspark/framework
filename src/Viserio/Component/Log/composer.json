@@ -20,7 +20,7 @@
     "require": {
         "php"                                 : "^7.1",
         "monolog/monolog"                     : "^1.17",
-        "viserio/cotracts"                    : "self.version"
+        "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",

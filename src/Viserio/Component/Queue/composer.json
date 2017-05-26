@@ -24,7 +24,7 @@
         "narrowspark/arr"                    : "^1.1",
         "opis/closure"                       : "^2.2.1",
         "symfony/process"                    : "^3.2",
-        "viserio/cotracts"                   : "self.version",
+        "viserio/contracts"                  : "self.version",
         "viserio/console"                    : "self.version",
         "viserio/encryption"                 : "self.version",
         "viserio/options-resolver"           : "self.version",

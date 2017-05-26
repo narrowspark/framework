@@ -19,7 +19,7 @@
     ],
     "require": {
         "php"                                : "^7.1",
-        "viserio/cotracts"                   : "self.version"
+        "viserio/contracts"                  : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
@@ -30,7 +30,7 @@
         "viserio/web-profiler"               : "self.version"
     },
     "provide": {
-        "psr/event-manager-implementation"   : "^1.0",
+        "psr/event-manager-implementation"   : "^1.0"
     },
     "autoload": {
         "psr-4": {

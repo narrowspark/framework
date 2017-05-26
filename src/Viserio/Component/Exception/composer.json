@@ -24,7 +24,7 @@
         "narrowspark/http-status"             : "^2.0",
         "psr/log"                             : "^1.0",
         "symfony/debug"                       : "^3.2",
-        "viserio/cotracts"                    : "self.version",
+        "viserio/contracts"                   : "self.version",
         "viserio/options-resolver"            : "self.version"
     },
     "require-dev": {
