@@ -56,7 +56,7 @@ class EncryptionWrapper
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
      *
      * @return string|false the file contents or false on failure
      */
@@ -74,7 +74,7 @@ class EncryptionWrapper
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
      *
      * @return resource
      */
@@ -142,7 +142,7 @@ class EncryptionWrapper
      * @param string $contents the file contents
      * @param array  $config   an optional configuration array
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
      *
      * @return bool true on success, false on failure
      */

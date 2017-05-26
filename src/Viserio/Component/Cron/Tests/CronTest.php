@@ -8,6 +8,9 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cron\Cron;
 
+/**
+ * @coversDefaultClass \Viserio\Component\Cron\Cron
+ */
 class CronTest extends MockeryTestCase
 {
     /**
@@ -267,6 +270,9 @@ class CronTest extends MockeryTestCase
         self::assertSame('0 0 * * 1 *', $cron->weeklyOn(1)->getExpression());
     }
 
+    /**
+     * @covers ::ensureCorrectUser
+     */
     public function testBuildCommand()
     {
         $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";

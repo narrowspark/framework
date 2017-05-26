@@ -103,7 +103,7 @@ class EncryptionWrapperTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
      */
     public function testRead()
     {
@@ -111,7 +111,7 @@ class EncryptionWrapperTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
      */
     public function testReadStream()
     {
