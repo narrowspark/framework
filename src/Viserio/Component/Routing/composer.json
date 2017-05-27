@@ -39,7 +39,7 @@
         "viserio/http-factory"                : "self.version",
         "viserio/options-resolver"            : "self.version",
         "viserio/pipeline"                    : "self.version",
-        "viserio/web-profiler"                : "self.version"
+        "viserio/profiler"                : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -61,7 +61,7 @@
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
         "viserio/pipeline"                    : "Required to use psr-15 middlewares (self.version).",
-        "viserio/web-profiler"                : "Required to use the routes data collector (self.version)."
+        "viserio/profiler"                    : "Required to use the routes data collector (self.version)."
     },
     "extra": {
         "branch-alias": {

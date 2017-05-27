@@ -51,7 +51,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareCo
         foreach (get_included_files() as $file) {
             // Skip the files from Profiler, they are only loaded for Debugging and confuse the output.
             if (mb_strpos($file, 'vendor/narrowspark/framework/src/Viserio/Profiler') !== false ||
-                mb_strpos($file, 'vendor/viserio/web-profiler') !== false
+                mb_strpos($file, 'vendor/viserio/profiler') !== false
             ) {
                 continue;
             }
