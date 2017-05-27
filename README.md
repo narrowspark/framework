@@ -13,22 +13,19 @@
 
 > **Note:** This repository contains the core code of the Narrowspark framework. If you want to build an application using Narrowspark, visit the main [Narrowspark repository][2].
 
-[Narrowspark][1] is a **PHP framework** for web applications and a set of reusable
-**PHP components** with expressive, elegant syntax. Narrowspark attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+[Narrowspark][1] is a **PHP framework** for large, robust web applications and a superb combination of simplicity, elegance, reusable **PHP components** with expressive, elegant syntax. Narrowspark attempts to take the pain out of development by easing common tasks.
 
 * Powerful dependency injection container.
-* Multiple back-ends for session and cache storage.
+* Multiple back-ends for session, filesystem and cache storage.
 * A powerful console "cerebro" based on [Symfony Console][5]
-* Simple, fast routing engine.
-
-Narrowspark is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
-
+* Simple, fast and with support for psr-15 middleware routing engine.
+* Powerful [encryption][7] and [hashing][8].
 
 Documentation
 -------------
 
 The [Narrowspark documentation][6] is thorough, complete, and makes it a breeze to get started learning the framework.
-You need more informations take a look on [Narrowspark website][1].
+You need more information's take a look on [Narrowspark website][1].
 
 Community
 ------------
@@ -69,3 +66,5 @@ The Narrowspark framework is open-sourced software licensed under the [MIT licen
 [4]: https://github.com/narrowspark
 [5]: https://symfony.com/doc/current/components/console.html
 [6]: https://narrowspark.com/docs
+[7]: https://github.com/defuse/php-encryption
+[8]: https://github.com/paragonie/password_lock
