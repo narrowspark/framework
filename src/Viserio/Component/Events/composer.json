@@ -18,40 +18,40 @@
         }
     ],
     "require": {
-        "php"                                : "^7.1",
-        "viserio/contracts"                  : "self.version"
+        "php"                                     : "^7.1",
+        "viserio/contracts"                       : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider" : "^0.3",
-        "narrowspark/testing-helper"         : "^2.0",
-        "phpunit/phpunit"                    : "^6.0",
-        "viserio/container"                  : "self.version",
-        "viserio/http-factory"               : "self.version",
-        "viserio/profiler"                   : "self.version"
+        "container-interop/service-provider"      : "^0.3",
+        "narrowspark/testing-helper"              : "^3.0",
+        "phpunit/phpunit"                         : "^6.0",
+        "viserio/container"                       : "self.version",
+        "viserio/http-factory"                    : "self.version",
+        "viserio/profiler"                        : "self.version"
     },
     "provide": {
-        "psr/event-manager-implementation"   : "^1.0"
+        "psr/event-manager-implementation"        : "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Events\\"              : ""
+            "Viserio\\Component\\Events\\"        : ""
         },
-        "exclude-from-classmap"              : ["/Tests/"]
+        "exclude-from-classmap"                   : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Events\\Tests\\"       : "Tests/"
+            "Viserio\\Component\\Events\\Tests\\" : "Tests/"
         }
     },
     "suggest": {
-        "container-interop/service-provider" : "Required to use service-provider (^0.3).",
-        "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."
+        "container-interop/service-provider"      : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "1.0-dev"
+            "dev-master"                          : "1.0-dev"
         }
     },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "minimum-stability"                           : "dev",
+    "prefer-stable"                               : true
 }

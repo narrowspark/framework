@@ -18,35 +18,34 @@
         }
     ],
     "require": {
-        "php"                               : "^7.1",
-        "http-interop/http-factory"         : "^0.3",
-        "viserio/http"                      : "self.version"
+        "php"                                          : "^7.1",
+        "http-interop/http-factory"                    : "^0.3",
+        "viserio/http"                                 : "self.version"
     },
     "require-dev": {
-        "mockery/mockery"                   : "^1.0",
-        "narrowspark/testing-helper"        : "^1.6",
-        "phpunit/phpunit"                   : "^6.0"
+        "mockery/mockery"                              : "^1.0",
+        "narrowspark/testing-helper"                   : "^3.0",
+        "phpunit/phpunit"                              : "^6.0"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\HttpFactory\\"        : ""
+            "Viserio\\Component\\HttpFactory\\"        : ""
         },
-        "exclude-from-classmap"             : ["/Tests/"]
+        "exclude-from-classmap"                        : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\HttpFactory\\Tests\\" : "Tests/"
+            "Viserio\\Component\\HttpFactory\\Tests\\" : "Tests/"
         }
     },
     "provide": {
-        "psr/http-message"                  : "^1.0",
-        "psr/http-message-implementation"   : "^1.0"
+        "psr/http-message-implementation"              : "^1.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                    : "1.0-dev"
+            "dev-master"                               : "1.0-dev"
         }
     },
-    "minimum-stability"                     : "dev",
-    "prefer-stable"                         : true
+    "minimum-stability"                                : "dev",
+    "prefer-stable"                                    : true
 }

@@ -18,53 +18,53 @@
         }
     ],
     "require": {
-        "php"                                 : "^7.1",
-        "container-interop/container-interop" : "^1.1",
-        "http-interop/http-factory"           : "^0.3",
-        "narrowspark/http-status"             : "^3.0",
-        "psr/log"                             : "^1.0",
-        "symfony/debug"                       : "^3.2",
-        "viserio/contracts"                   : "self.version",
-        "viserio/options-resolver"            : "self.version"
+        "php"                                            : "^7.1",
+        "container-interop/container-interop"            : "^1.1",
+        "http-interop/http-factory"                      : "^0.3",
+        "narrowspark/http-status"                        : "^3.0",
+        "psr/log"                                        : "^1.0",
+        "symfony/debug"                                  : "^3.2",
+        "viserio/contracts"                              : "self.version",
+        "viserio/options-resolver"                       : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"  : "^0.3",
-        "filp/whoops"                         : "^2.0",
-        "narrowspark/testing-helper"          : "^2.0",
-        "phpunit/phpunit"                     : "^6.0",
-        "symfony/console"                     : "^3.2",
-        "viserio/config"                      : "self.version",
-        "viserio/container"                   : "self.version",
-        "viserio/http-factory"                : "self.version",
-        "viserio/view"                        : "self.version"
+        "container-interop/service-provider"             : "^0.3",
+        "filp/whoops"                                    : "^2.0",
+        "narrowspark/testing-helper"                     : "^3.0",
+        "phpunit/phpunit"                                : "^6.0",
+        "symfony/console"                                : "^3.2",
+        "viserio/config"                                 : "self.version",
+        "viserio/container"                              : "self.version",
+        "viserio/http-factory"                           : "self.version",
+        "viserio/view"                                   : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Exception\\"            : ""
+            "Viserio\\Component\\Exception\\"            : ""
         },
-        "exclude-from-classmap"               : ["/Tests/"]
+        "exclude-from-classmap"                          : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Exception\\Tests\\"     : "Tests/"
+            "Viserio\\Component\\Exception\\Tests\\"     : "Tests/"
         }
     },
     "provide": {
-        "psr/http-message"                    : "^1.0",
-        "psr/http-message-implementation"     : "^1.0"
+        "psr/http-message"                               : "^1.0",
+        "psr/http-message-implementation"                : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
-        "filp/whoops"                         : "Enables use of the whoops displayer (^2.0).",
-        "symfony/console"                     : "Required to use renderForConsole function (^3.2).",
-        "narrowspark/http"                    : "Enables use of the json displayer (self.version).",
-        "narrowspark/view"                    : "Enables use of the view displayer (self.version)."
+        "container-interop/service-provider"             : "Required to use service-provider (^0.3).",
+        "filp/whoops"                                    : "Enables use of the whoops displayer (^2.0).",
+        "symfony/console"                                : "Required to use renderForConsole function (^3.2).",
+        "narrowspark/http"                               : "Enables use of the json displayer (self.version).",
+        "narrowspark/view"                               : "Enables use of the view displayer (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                      : "1.0-dev"
+            "dev-master"                                 : "1.0-dev"
         }
     },
-    "minimum-stability"                       : "dev",
-    "prefer-stable"                           : true
+    "minimum-stability"                                  : "dev",
+    "prefer-stable"                                      : true
 }

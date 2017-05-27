@@ -18,42 +18,42 @@
         }
     ],
     "require": {
-        "php"                                : "^7.1",
-        "psr/log"                            : "^1.0",
-        "symfony/polyfill-intl-icu"          : "^1.3",
-        "viserio/contracts"                  : "self.version",
-        "viserio/parsers"                    : "self.version"
+        "php"                                           : "^7.1",
+        "psr/log"                                       : "^1.0",
+        "symfony/polyfill-intl-icu"                     : "^1.3",
+        "viserio/contracts"                             : "self.version",
+        "viserio/parsers"                               : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider" : "^0.3",
-        "mikey179/vfsStream"                 : "^1.6",
-        "narrowspark/testing-helper"         : "^2.0",
-        "phpunit/phpunit"                    : "^6.0",
-        "viserio/container"                  : "self.version",
-        "viserio/log"                        : "self.version",
-        "viserio/options-resolver"           : "self.version",
-        "viserio/profiler"                   : "self.version"
+        "container-interop/service-provider"            : "^0.3",
+        "mikey179/vfsStream"                            : "^1.6",
+        "narrowspark/testing-helper"                    : "^3.0",
+        "phpunit/phpunit"                               : "^6.0",
+        "viserio/container"                             : "self.version",
+        "viserio/log"                                   : "self.version",
+        "viserio/options-resolver"                      : "self.version",
+        "viserio/profiler"                              : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Translation\\"         : ""
+            "Viserio\\Component\\Translation\\"         : ""
         },
-        "exclude-from-classmap"              : ["/Tests/"]
+        "exclude-from-classmap"                         : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            " Viserio\\Translation\\Tests\\" : "Tests/"
+            "Viserio\\Component\\Translation\\Tests\\"  : "Tests/"
         }
     },
     "suggest": {
-        "container-interop/service-provider" : "Required to use service-provider (^0.3).",
-        "viserio/options-resolver"           : "Required to use service-provider (self.version)."
+        "container-interop/service-provider"            : "Required to use service-provider (^0.3).",
+        "viserio/options-resolver"                      : "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "1.0-dev"
+            "dev-master"                                : "1.0-dev"
         }
     },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "minimum-stability"                                 : "dev",
+    "prefer-stable"                                     : true
 }

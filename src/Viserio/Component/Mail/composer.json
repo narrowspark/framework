@@ -18,50 +18,50 @@
         }
     ],
     "require": {
-        "php"                                 : "^7.1",
-        "php-di/invoker"                      : "^2.0",
-        "swiftmailer/swiftmailer"             : "^6.0",
-        "viserio/contracts"                   : "self.version",
-        "viserio/options-resolver"            : "self.version",
-        "viserio/support"                     : "self.version"
+        "php"                                   : "^7.1",
+        "php-di/invoker"                        : "^2.0",
+        "swiftmailer/swiftmailer"               : "^6.0",
+        "viserio/contracts"                     : "self.version",
+        "viserio/options-resolver"              : "self.version",
+        "viserio/support"                       : "self.version"
     },
     "require-dev": {
-        "aws/aws-sdk-php"                     : "^3.0",
-        "container-interop/service-provider"  : "^0.3",
-        "guzzlehttp/guzzle"                   : "^6.0",
-        "narrowspark/testing-helper"          : "^2.0",
-        "opis/closure"                        : "^2.2.1",
-        "phpunit/phpunit"                     : "^6.0",
-        "viserio/config"                      : "self.version",
-        "viserio/events"                      : "self.version",
-        "viserio/queue"                       : "self.version",
-        "viserio/view"                        : "self.version"
+        "aws/aws-sdk-php"                       : "^3.0",
+        "container-interop/service-provider"    : "^0.3",
+        "guzzlehttp/guzzle"                     : "^6.0",
+        "narrowspark/testing-helper"            : "^3.0",
+        "opis/closure"                          : "^2.2",
+        "phpunit/phpunit"                       : "^6.0",
+        "viserio/config"                        : "self.version",
+        "viserio/events"                        : "self.version",
+        "viserio/queue"                         : "self.version",
+        "viserio/view"                          : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Mail\\"                 : ""
+            "Viserio\\Component\\Mail\\"        : ""
         },
-        "exclude-from-classmap"               : ["/Tests/"]
+        "exclude-from-classmap"                 : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Mail\\Tests\\"          : "Tests/"
+            "Viserio\\Component\\Mail\\Tests\\" : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                      : "1.0-dev"
+            "dev-master"                        : "1.0-dev"
         }
     },
     "suggest": {
-        "aws/aws-sdk-php"                     : "Required to use the SES mail driver (^3.0).",
-        "container-interop/container-interop" : "Required to use the invoker in mailer (^1.1).",
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
-        "guzzlehttp/guzzle"                   : "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
-        "opis/closure"                        : "Required to be able to serialize closures (^2.2.1).",
-        "viserio/queue"                       : "Required to send queue emails (self.version).",
-        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
+        "aws/aws-sdk-php"                       : "Required to use the SES mail driver (^3.0).",
+        "container-interop/container-interop"   : "Required to use the invoker in mailer (^1.1).",
+        "container-interop/service-provider"    : "Required to use service-provider (^0.3).",
+        "guzzlehttp/guzzle"                     : "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
+        "opis/closure"                          : "Required to be able to serialize closures (^2.2.1).",
+        "viserio/queue"                         : "Required to send queue emails (self.version).",
+        "viserio/statical-proxy"                : "Required to use the proxy instances (self.version)."
     },
-    "minimum-stability"                       : "dev",
-    "prefer-stable"                           : true
+    "minimum-stability"                         : "dev",
+    "prefer-stable"                             : true
 }

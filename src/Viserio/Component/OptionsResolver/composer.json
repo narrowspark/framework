@@ -18,33 +18,36 @@
         }
     ],
     "require": {
-        "php"                                   : "^7.1",
-        "container-interop/container-interop"   : "^1.1",
-        "viserio/contracts"                     : "self.version"
+        "php"                                              : "^7.1",
+        "container-interop/container-interop"              : "^1.1",
+        "viserio/contracts"                                : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"    : "^0.3",
-        "narrowspark/testing-helper"            : "^1.5",
-        "phpunit/phpunit"                       : "^6.0",
-        "viserio/config"                        : "self.version",
-        "viserio/container"                     : "self.version"
+        "container-interop/service-provider"               : "^0.3",
+        "narrowspark/testing-helper"                       : "^3.0",
+        "phpunit/phpunit"                                  : "^6.0",
+        "viserio/config"                                   : "self.version",
+        "viserio/container"                                : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\OptionsResolver\\"        : ""
+            "Viserio\\Component\\OptionsResolver\\"        : ""
         },
-        "exclude-from-classmap"                 : ["/Tests/"]
+        "exclude-from-classmap"                            : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\OptionsResolver\\Tests\\" : "Tests/"
+            "Viserio\\Component\\OptionsResolver\\Tests\\" : "Tests/"
         }
+    },
+    "provide": {
+        "psr/container-implementation"                     : "^1.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                        : "1.0-dev"
+            "dev-master"                                   : "1.0-dev"
         }
     },
-    "minimum-stability"                         : "dev",
-    "prefer-stable"                             : true
+    "minimum-stability"                                    : "dev",
+    "prefer-stable"                                        : true
 }

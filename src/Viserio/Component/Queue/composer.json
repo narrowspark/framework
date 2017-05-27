@@ -18,55 +18,55 @@
         }
     ],
     "require": {
-        "php"                                : "^7.1",
-        "cakephp/chronos"                    : "^1.0",
-        "container-interop/container-interop": "^1.1",
-        "narrowspark/arr"                    : "^1.1",
-        "opis/closure"                       : "^2.2.1",
-        "symfony/process"                    : "^3.2",
-        "viserio/contracts"                  : "self.version",
-        "viserio/console"                    : "self.version",
-        "viserio/encryption"                 : "self.version",
-        "viserio/options-resolver"           : "self.version",
-        "viserio/support"                    : "self.version"
+        "php"                                    : "^7.1",
+        "cakephp/chronos"                        : "^1.0",
+        "container-interop/container-interop"    : "^1.1",
+        "narrowspark/arr"                        : "^1.1",
+        "opis/closure"                           : "^2.2.1",
+        "symfony/process"                        : "^3.2",
+        "viserio/contracts"                      : "self.version",
+        "viserio/console"                        : "self.version",
+        "viserio/encryption"                     : "self.version",
+        "viserio/options-resolver"               : "self.version",
+        "viserio/support"                        : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider" : "^0.3",
-        "narrowspark/testing-helper"         : "^2.0",
-        "phpunit/phpunit"                    : "^6.0",
-        "php-amqplib/php-amqplib"            : "^2.6",
-        "pda/pheanstalk"                     : "^3.1",
-        "viserio/connect"                    : "self.version",
-        "viserio/container"                  : "self.version",
-        "viserio/events"                     : "self.version"
+        "container-interop/service-provider"     : "^0.3",
+        "narrowspark/testing-helper"             : "^3.0",
+        "phpunit/phpunit"                        : "^6.0",
+        "php-amqplib/php-amqplib"                : "^2.6",
+        "pda/pheanstalk"                         : "^3.1",
+        "viserio/connect"                        : "self.version",
+        "viserio/container"                      : "self.version",
+        "viserio/events"                         : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Queue\\"               : ""
+            "Viserio\\Component\\Queue\\"        : ""
         },
-        "exclude-from-classmap"              : ["/Tests/"]
+        "exclude-from-classmap"                  : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Queue\\Tests\\"        : "Tests/"
+            "Viserio\\Component\\Queue\\Tests\\" : "Tests/"
         }
     },
     "provide": {
-        "psr/container-implementation"       : "^1.0"
+        "psr/container-implementation"           : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider" : "Required to use service-provider (^0.3).",
-        "google/appengine-php-sdk"           : "Required to use the Google App Engine queue driver (^1.9.30).",
-        "aws/aws-sdk-php"                    : "Required to use the SQS queue driver (^3.0).",
-        "pda/pheanstalk"                     : "Required to use the Beanstalk queue driver (^3.0).",
-        "iron-io/iron_mq"                    : "Required to use the IronMQ queue driver (^4.0).",
-        "viserio/connect"                    : "Required to use the Redis and Database queue driver (^0.4)."
+        "container-interop/service-provider"     : "Required to use service-provider (^0.3).",
+        "google/appengine-php-sdk"               : "Required to use the Google App Engine queue driver (^1.9.30).",
+        "aws/aws-sdk-php"                        : "Required to use the SQS queue driver (^3.0).",
+        "pda/pheanstalk"                         : "Required to use the Beanstalk queue driver (^3.0).",
+        "iron-io/iron_mq"                        : "Required to use the IronMQ queue driver (^4.0).",
+        "viserio/connect"                        : "Required to use the Redis and Database queue driver (^0.4)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "1.0-dev"
+            "dev-master"                         : "1.0-dev"
         }
     },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "minimum-stability"                          : "dev",
+    "prefer-stable"                              : true
 }

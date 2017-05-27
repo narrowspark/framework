@@ -2,7 +2,7 @@
     "name"       : "viserio/hashing",
     "type"       : "library",
     "description": "The Viserio Hashing package.",
-    "keywords"   : ["narrowspark", "viserio", "hashing", "password", "hash"],
+    "keywords"   : ["narrowspark", "viserio", "hashing", "password", "hash", "encryption"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -18,39 +18,38 @@
         }
     ],
     "require": {
-        "php"                                 : "^7.1",
-        "defuse/php-encryption"               : "^2.0",
-        "paragonie/password_lock"             : "^3.0",
-        "viserio/contracts"                   : "self.version"
+        "php"                                      : "^7.1",
+        "paragonie/password_lock"                  : "^3.0",
+        "viserio/contracts"                        : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"  : "^0.3",
-        "narrowspark/testing-helper"          : "^2.0",
-        "phpunit/phpunit"                     : "^6.0",
-        "viserio/container"                   : "self.version",
-        "viserio/options-resolver"            : "self.version"
+        "container-interop/service-provider"       : "^0.3",
+        "narrowspark/testing-helper"               : "^3.0",
+        "phpunit/phpunit"                          : "^6.0",
+        "viserio/container"                        : "self.version",
+        "viserio/options-resolver"                 : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Hashing\\"              : ""
+            "Viserio\\Component\\Hashing\\"        : ""
         },
-        "exclude-from-classmap"               : ["/Tests/"]
+        "exclude-from-classmap"                    : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Hashing\\Tests\\"       : "Tests/"
+            "Viserio\\Component\\Hashing\\Tests\\" : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                      : "1.0-dev"
+            "dev-master"                           : "1.0-dev"
         }
     },
     "suggest": {
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
-        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
-        "viserio/options-resolver"            : "Required to use service-provider (self.version)."
+        "container-interop/service-provider"       : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version).",
+        "viserio/options-resolver"                 : "Required to use service-provider (self.version)."
     },
-    "minimum-stability"                       : "dev",
-    "prefer-stable"                           : true
+    "minimum-stability"                            : "dev",
+    "prefer-stable"                                : true
 }

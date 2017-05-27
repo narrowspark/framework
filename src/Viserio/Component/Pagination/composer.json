@@ -18,39 +18,38 @@
         }
     ],
     "require": {
-        "php"                                 : "^7.1",
-        "narrowspark/collection"              : "^0.1",
-        "psr/http-message"                    : "^1.0",
-        "viserio/contracts"                   : "self.version"
+        "php"                                         : "^7.1",
+        "narrowspark/collection"                      : "^0.1",
+        "psr/http-message"                            : "^1.0",
+        "viserio/contracts"                           : "self.version"
     },
     "require-dev": {
-        "container-interop/container-interop" : "^1.1",
-        "container-interop/service-provider"  : "^0.3",
-        "doctrine/dbal"                       : "^2.5",
-        "narrowspark/testing-helper"          : "^1.5",
-        "phpunit/phpunit"                     : "^6.0",
-        "viserio/http-factory"                : "self.version"
+        "container-interop/container-interop"         : "^1.1",
+        "container-interop/service-provider"          : "^0.3",
+        "doctrine/dbal"                               : "^2.5",
+        "narrowspark/testing-helper"                  : "^3.0",
+        "phpunit/phpunit"                             : "^6.0",
+        "viserio/http-factory"                        : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Pagination\\"           : ""
+            "Viserio\\Component\\Pagination\\"        : ""
         },
-        "exclude-from-classmap"               : ["/Tests/"]
+        "exclude-from-classmap"                       : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Pagination\\Tests\\"    : "Tests/"
+            "Viserio\\Component\\Pagination\\Tests\\" : "Tests/"
         }
     },
     "provide": {
-        "psr/http-message"                : "^1.0",
-        "psr/http-message-implementation" : "^1.0"
+        "psr/http-message-implementation"             : "^1.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                      : "1.0-dev"
+            "dev-master"                              : "1.0-dev"
         }
     },
-    "minimum-stability"                       : "dev",
-    "prefer-stable"                           : true
+    "minimum-stability"                               : "dev",
+    "prefer-stable"                                   : true
 }

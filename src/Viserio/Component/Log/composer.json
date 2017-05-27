@@ -18,48 +18,48 @@
         }
     ],
     "require": {
-        "php"                                 : "^7.1",
-        "monolog/monolog"                     : "^1.17",
-        "viserio/contracts"                   : "self.version"
+        "php"                                  : "^7.1",
+        "monolog/monolog"                      : "^1.17",
+        "viserio/contracts"                    : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"  : "^0.3",
-        "narrowspark/testing-helper"          : "^2.0",
-        "phpunit/phpunit"                     : "^6.0",
-        "symfony/var-dumper"                  : "^3.2",
-        "viserio/console"                     : "self.version",
-        "viserio/container"                   : "self.version",
-        "viserio/events"                      : "self.version",
-        "viserio/options-resolver"            : "self.version",
-        "viserio/profiler"                    : "self.version"
+        "container-interop/service-provider"   : "^0.3",
+        "narrowspark/testing-helper"           : "^3.0",
+        "phpunit/phpunit"                      : "^6.0",
+        "symfony/var-dumper"                   : "^3.2",
+        "viserio/console"                      : "self.version",
+        "viserio/container"                    : "self.version",
+        "viserio/events"                       : "self.version",
+        "viserio/options-resolver"             : "self.version",
+        "viserio/profiler"                     : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Log\\"                  : ""
+            "Viserio\\Component\\Log\\"       : ""
         },
         "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Log\\Tests\\"           : "Tests/"
+            "Viserio\\Component\\Log\\Tests\\" : "Tests/"
         }
     },
     "provide": {
-        "psr/log-implementation"              : "^1.0"
+        "psr/log-implementation"               : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
-        "symfony/var-dumper"                  : "Required to use VarDumperFormatter and optional for ConsoleFormatter (^3.2).",
-        "viserio/console"                     : "Required to use ConsoleFormatter (^self.version).",
-        "viserio/events"                      : "Required to use ConsoleFormatter (^self.version).",
-        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
-        "viserio/options-resolver"            : "Required to use service-provider (self.version)."
+        "container-interop/service-provider"   : "Required to use service-provider (^0.3).",
+        "symfony/var-dumper"                   : "Required to use VarDumperFormatter and optional for ConsoleFormatter (^3.2).",
+        "viserio/console"                      : "Required to use ConsoleFormatter (^self.version).",
+        "viserio/events"                       : "Required to use ConsoleFormatter (^self.version).",
+        "viserio/statical-proxy"               : "Required to use the proxy instances (self.version).",
+        "viserio/options-resolver"             : "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                      : "1.0-dev"
+            "dev-master"                       : "1.0-dev"
         }
     },
-    "minimum-stability"                       : "dev",
-    "prefer-stable"                           : true
+    "minimum-stability"                        : "dev",
+    "prefer-stable"                            : true
 }

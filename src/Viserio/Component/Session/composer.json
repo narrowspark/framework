@@ -18,62 +18,60 @@
         }
     ],
     "require": {
-        "php"                                                : "^7.1",
-        "container-interop/container-interop"                : "^1.1",
-        "cakephp/chronos"                                    : "^1.0",
-        "psr/http-message"                                   : "^1.0",
-        "viserio/contracts"                                  : "self.version",
-        "viserio/encryption"                                 : "self.version",
-        "viserio/options-resolver"                           : "self.version",
-        "viserio/support"                                    : "self.version"
+        "php"                                      : "^7.1",
+        "container-interop/container-interop"      : "^1.1",
+        "cakephp/chronos"                          : "^1.0",
+        "psr/http-message"                         : "^1.0",
+        "viserio/contracts"                        : "self.version",
+        "viserio/encryption"                       : "self.version",
+        "viserio/options-resolver"                 : "self.version",
+        "viserio/support"                          : "self.version"
     },
     "require-dev": {
-        "cache/array-adapter"                                : "^0.4",
-        "cache/session-handler"                              : "^0.2",
-        "container-interop/service-provider"                 : "^0.3",
-        "narrowspark/testing-helper"                         : "^2.0",
-        "mockery/mockery"                                    : "^1.0",
-        "mikey179/vfsStream"                                 : "^1.6",
-        "phpunit/phpunit"                                    : "^6.0",
-        "http-interop/http-middleware"                       : "^0.4",
-        "viserio/cache"                                      : "self.version",
-        "viserio/config"                                     : "self.version",
-        "viserio/cookie"                                     : "self.version",
-        "viserio/filesystem"                                 : "self.version",
-        "viserio/http-factory"                               : "self.version"
+        "cache/array-adapter"                      : "^0.4",
+        "cache/session-handler"                    : "^0.2",
+        "container-interop/service-provider"       : "^0.3",
+        "narrowspark/testing-helper"               : "^2.0",
+        "mockery/mockery"                          : "^1.0",
+        "mikey179/vfsStream"                       : "^1.6",
+        "phpunit/phpunit"                          : "^6.0",
+        "http-interop/http-middleware"             : "^0.4",
+        "viserio/cache"                            : "self.version",
+        "viserio/config"                           : "self.version",
+        "viserio/cookie"                           : "self.version",
+        "viserio/filesystem"                       : "self.version",
+        "viserio/http-factory"                     : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Session\\"                             : ""
+            "Viserio\\Component\\Session\\"        : ""
         },
-        "exclude-from-classmap"                              : ["/Tests/"]
+        "exclude-from-classmap"                    : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Session\\Tests\\"                      : "Tests/"
+            "Viserio\\Component\\Session\\Tests\\" : "Tests/"
         }
     },
     "provide": {
-        "container-interop/container-interop-implementation" : "^1.1",
-        "psr/container-implementation"                       : "^1.0",
-        "psr/http-message"                                   : "^1.0",
-        "psr/http-message-implementation"                    : "^1.0"
+        "psr/container-implementation"             : "^1.0",
+        "psr/http-message"                         : "^1.0",
+        "psr/http-message-implementation"          : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
-        "cache/session-handler"                              : "Required to use the CacheBasedSessionHandler (^0.2).",
-        "http-interop/http-middleware"                       : "Required to use middleware (^0.4).",
-        "psr/container"                                      : "A container instance is required to use the SessionManager.",
-        "viserio/cache"                                      : "Required to use the CookieSessionHandler (self.version).",
-        "viserio/cookie"                                     : "Required to use the CookieSessionHandler and StartSessionMiddleware (self.version).",
-        "viserio/filesystem"                                 : "Required to use the FileSessionHandler (self.version).",
-        "viserio/statical-proxy"                             : "Required to use the proxy instances (self.version)."
+        "container-interop/service-provider"       : "Required to use service-provider (^0.3).",
+        "cache/session-handler"                    : "Required to use the CacheBasedSessionHandler (^0.2).",
+        "http-interop/http-middleware"             : "Required to use middleware (^0.4).",
+        "viserio/cache"                            : "Required to use the CookieSessionHandler (self.version).",
+        "viserio/cookie"                           : "Required to use the CookieSessionHandler and StartSessionMiddleware class (self.version).",
+        "viserio/filesystem"                       : "Required to use the FileSessionHandler (self.version).",
+        "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                                     : "1.0-dev"
+            "dev-master"                           : "1.0-dev"
         }
     },
-    "minimum-stability"                                      : "dev",
-    "prefer-stable"                                          : true
+    "minimum-stability"                            : "dev",
+    "prefer-stable"                                : true
 }

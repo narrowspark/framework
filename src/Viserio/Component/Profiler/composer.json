@@ -28,7 +28,7 @@
     },
     "require-dev": {
         "cache/array-adapter"                : "^0.4",
-        "narrowspark/testing-helper"         : "^1.5",
+        "narrowspark/testing-helper"         : "^3.0",
         "phpunit/phpunit"                    : "^6.0",
         "http-interop/http-middleware"       : "^0.4",
         "viserio/cache"                      : "self.version",

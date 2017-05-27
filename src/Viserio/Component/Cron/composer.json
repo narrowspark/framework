@@ -18,47 +18,47 @@
         }
     ],
     "require": {
-        "php"                                 : "^7.1",
-        "cakephp/chronos"                     : "^1.0",
-        "mtdowling/cron-expression"           : "^1.1",
-        "php-di/invoker"                      : "^2.0",
-        "psr/cache"                           : "^1.0",
-        "psr/container-implementation"        : "^1.0",
-        "symfony/process"                     : "^3.2",
-        "viserio/contracts"                   : "self.version",
-        "viserio/support"                     : "self.version"
+        "php"                                   : "^7.1",
+        "cakephp/chronos"                       : "^1.0",
+        "mtdowling/cron-expression"             : "^1.1",
+        "php-di/invoker"                        : "^2.0",
+        "psr/cache"                             : "^1.0",
+        "psr/container-implementation"          : "^1.0",
+        "symfony/process"                       : "^3.2",
+        "viserio/contracts"                     : "self.version",
+        "viserio/support"                       : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"  : "^0.3",
-        "narrowspark/testing-helper"          : "^2.0",
-        "phpunit/phpunit"                     : "^6.0",
-        "viserio/cache"                       : "self.version",
-        "viserio/console"                     : "self.version",
-        "viserio/options-resolver"            : "self.version"
+        "container-interop/service-provider"    : "^0.3",
+        "narrowspark/testing-helper"            : "^3.0",
+        "phpunit/phpunit"                       : "^6.0",
+        "viserio/cache"                         : "self.version",
+        "viserio/console"                       : "self.version",
+        "viserio/options-resolver"              : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Cron\\"                 : ""
+            "Viserio\\Component\\Cron\\"        : ""
         },
-        "exclude-from-classmap"               : ["/Tests/"]
+        "exclude-from-classmap"                 : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Cron\\Tests\\"          : "Tests/"
+            "Viserio\\Component\\Cron\\Tests\\" : "Tests/"
         }
     },
     "suggest": {
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
-        "psr/cache"                           : "WithoutOverlapping requires a cache component.",
-        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
-        "viserio/console"                     : "Required to use commands (self.version).",
-        "viserio/options-resolver"            : "Required to use service-provider and commands (self.version)."
+        "container-interop/service-provider"    : "Required to use service-provider (^0.3).",
+        "psr/cache"                             : "WithoutOverlapping requires a cache component.",
+        "viserio/statical-proxy"                : "Required to use the proxy instances (self.version).",
+        "viserio/console"                       : "Required to use commands (self.version).",
+        "viserio/options-resolver"              : "Required to use service-provider and commands (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                      : "1.0-dev"
+            "dev-master"                        : "1.0-dev"
         }
     },
-    "minimum-stability"                       : "dev",
-    "prefer-stable"                           : true
+    "minimum-stability"                         : "dev",
+    "prefer-stable"                             : true
 }
