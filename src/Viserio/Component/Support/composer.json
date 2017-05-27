@@ -31,6 +31,9 @@
         "viserio/config"                           : "self.version"
     },
     "autoload": {
+        "files": [
+            "helpers.php"
+        ],
         "psr-4": {
             "Viserio\\Component\\Support\\"        : ""
         },

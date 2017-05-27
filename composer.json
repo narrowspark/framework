@@ -145,7 +145,7 @@
     },
     "autoload": {
         "files": [
-            "src/Viserio/helpers.php"
+            "src/Viserio/Support/helpers.php"
         ],
         "psr-4": {
             "Viserio\\Component\\"                           : "src/Viserio/Component/",
