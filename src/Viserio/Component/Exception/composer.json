@@ -21,7 +21,7 @@
         "php"                                 : "^7.1",
         "container-interop/container-interop" : "^1.1",
         "http-interop/http-factory"           : "^0.3",
-        "narrowspark/http-status"             : "^2.0",
+        "narrowspark/http-status"             : "^3.0",
         "psr/log"                             : "^1.0",
         "symfony/debug"                       : "^3.2",
         "viserio/contracts"                   : "self.version",

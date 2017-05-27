@@ -23,7 +23,7 @@
         "fig/http-message-util"               : "^1.1",
         "http-interop/http-factory"           : "^0.3",
         "http-interop/http-middleware"        : "^0.4",
-        "narrowspark/http-status"             : "^2.0",
+        "narrowspark/http-status"             : "^3.0",
         "php-di/invoker"                      : "^2.0",
         "psr/http-message"                    : "^1.0",
         "viserio/contracts"                   : "self.version",
