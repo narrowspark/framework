@@ -66,6 +66,16 @@ class ParserTest extends MockeryTestCase
         $this->parser->setServerRequest($request);
 
         self::assertEquals('application/json', $this->parser->getFormat());
+
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('hasHeader')
+            ->once()
+            ->with('content-type')
+            ->andReturn(false);
+
+        $this->parser->setServerRequest($request);
+
+        self::assertEquals('json', $this->parser->getFormat('json'));
     }
 
     /**
