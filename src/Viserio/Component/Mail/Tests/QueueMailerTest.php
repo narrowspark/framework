@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests;
 
-use Interop\Container\ContainerInterface;
 use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -11,6 +10,7 @@ use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
 use Swift_Transport;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\Queue\QueueConnector as QueueContract;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Traits;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 
 trait ConfigurationTrait
@@ -24,8 +24,8 @@ trait ConfigurationTrait
     /**
      * Configure and resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface|iterable $data
-     * @param string|null                                    $id
+     * @param \Psr\Container\ContainerInterface|iterable $data
+     * @param string|null                                $id
      *
      * @return void
      */

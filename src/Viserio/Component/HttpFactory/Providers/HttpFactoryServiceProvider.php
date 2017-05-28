@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\HttpFactory\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\RequestFactoryInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
@@ -10,6 +9,7 @@ use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Interop\Http\Factory\UploadedFileFactoryInterface;
 use Interop\Http\Factory\UriFactoryInterface;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\HttpFactory\RequestFactory;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -80,7 +80,7 @@ class CookieServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

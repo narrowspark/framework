@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy;
 
 use BadMethodCallException;
-use Interop\Container\ContainerInterface;
 use Mockery;
 use Mockery\MockInterface;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 class StaticalProxy

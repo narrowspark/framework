@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Jobs;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class SyncJob extends AbstractJob
 {
@@ -23,8 +23,8 @@ class SyncJob extends AbstractJob
     /**
      * Create a new job instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param string                                $payload
+     * @param \Psr\Container\ContainerInterface $container
+     * @param string                            $payload
      */
     public function __construct(ContainerInterface $container, $payload)
     {

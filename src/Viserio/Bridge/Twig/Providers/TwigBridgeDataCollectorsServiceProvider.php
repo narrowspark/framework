@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Twig_Environment as TwigEnvironment;
 use Twig_Extension_Profiler;
 use Twig_Profiler_Profile;
@@ -62,8 +62,8 @@ class TwigBridgeDataCollectorsServiceProvider implements
     /**
      * Extend viserio profiler with data collector.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */
@@ -90,8 +90,8 @@ class TwigBridgeDataCollectorsServiceProvider implements
     /**
      * Wrap Twig_Environment.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Twig_Environment
      */
@@ -117,7 +117,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

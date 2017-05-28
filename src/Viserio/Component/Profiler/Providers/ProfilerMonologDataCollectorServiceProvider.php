@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Logger;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
@@ -58,8 +58,8 @@ class ProfilerMonologDataCollectorServiceProvider implements
     /**
      * Extend monolog with a processor.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Monolog\Logger|\Viserio\Component\Log\Writer
      */
@@ -77,8 +77,8 @@ class ProfilerMonologDataCollectorServiceProvider implements
     /**
      * Extend viserio profiler with a data collector.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */
@@ -102,7 +102,7 @@ class ProfilerMonologDataCollectorServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

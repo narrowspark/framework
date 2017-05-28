@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemManager;

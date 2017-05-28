@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Bus;
 
 use Closure;
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Bus\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Pipeline\Pipeline;
@@ -53,7 +53,7 @@ class Dispatcher implements DispatcherContract
     /**
      * Create a new command dispatcher instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {

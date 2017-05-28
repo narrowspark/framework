@@ -19,8 +19,8 @@
     ],
     "require": {
         "php"                                      : "^7.1",
-        "container-interop/container-interop"      : "^1.1",
         "php-di/invoker"                           : "^2.0",
+        "psr/container"                            : "^1.1",
         "symfony/console"                          : "^3.2",
         "viserio/contracts"                        : "self.version",
         "viserio/support"                          : "self.version"

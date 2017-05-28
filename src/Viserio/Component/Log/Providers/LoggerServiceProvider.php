@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Logger;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Log\Log;
@@ -73,7 +73,7 @@ class LoggerServiceProvider implements
     /**
      * Create a handler parser instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Viserio\Component\Log\HandlerParser
      */
@@ -87,7 +87,7 @@ class LoggerServiceProvider implements
     /**
      * Create a monolog writer instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Viserio\Component\Log\Writer
      */
@@ -105,7 +105,7 @@ class LoggerServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

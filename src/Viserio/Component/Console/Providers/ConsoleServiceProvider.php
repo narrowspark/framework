@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
@@ -90,7 +90,7 @@ class ConsoleServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

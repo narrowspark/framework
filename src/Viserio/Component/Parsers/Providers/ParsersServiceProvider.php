@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\GroupParser;

@@ -41,7 +41,7 @@
         "php"                                    : "^7.1",
         "cache/array-adapter"                    : "^0.5",
         "cache/void-adapter"                     : "^0.4",
-        "container-interop/container-interop"    : "^1.1",
+        "psr/container"                          : "^1.1",
         "viserio/contracts"                      : "self.version",
         "viserio/options-resolver"               : "self.version",
         "viserio/support"                        : "self.version"

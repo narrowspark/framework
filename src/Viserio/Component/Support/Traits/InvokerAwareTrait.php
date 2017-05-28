@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Support\Traits;
 
-use Interop\Container\ContainerInterface;
 use Invoker\InvokerInterface;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Support\Invoker;
 
 trait InvokerAwareTrait
@@ -34,7 +34,7 @@ trait InvokerAwareTrait
      *
      * @throws \RuntimeException
      *
-     * @return \Interop\Container\ContainerInterface
+     * @return \Psr\Container\ContainerInterface
      */
     abstract public function getContainer(): ContainerInterface;
 

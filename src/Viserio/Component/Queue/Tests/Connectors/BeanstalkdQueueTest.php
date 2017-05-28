@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connectors;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Pheanstalk\Job;
 use Pheanstalk\Pheanstalk;

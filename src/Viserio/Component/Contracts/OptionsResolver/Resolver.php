@@ -8,7 +8,7 @@ interface Resolver
      * Tell the resolver from wich class he should take the configuration.
      *
      * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
-     * @param \Interop\Container\ContainerInterface|iterable              $data
+     * @param \Psr\Container\ContainerInterface|iterable                      $data
      *
      * @return \Viserio\Component\Contracts\OptionsResolver\Resolver
      */

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connectors;
 
+use Psr\Container\ContainerInterface;
 use Defuse\Crypto\Key;
 use Exception;
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;
 use Viserio\Component\Encryption\Encrypter;

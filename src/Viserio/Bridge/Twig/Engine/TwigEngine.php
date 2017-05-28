@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Engine;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Twig_Environment;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
@@ -25,8 +25,8 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     /**
      * Create a new engine instance.
      *
-     * @param \Twig_Environment                              $twig
-     * @param \Interop\Container\ContainerInterface|iterable $data
+     * @param \Twig_Environment                          $twig
+     * @param \Psr\Container\ContainerInterface|iterable $data
      */
     public function __construct(Twig_Environment $twig, $data)
     {

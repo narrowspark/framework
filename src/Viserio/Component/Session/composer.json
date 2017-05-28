@@ -19,8 +19,8 @@
     ],
     "require": {
         "php"                                      : "^7.1",
-        "container-interop/container-interop"      : "^1.1",
         "cakephp/chronos"                          : "^1.0",
+        "psr/container"                            : "^1.0",
         "psr/http-message"                         : "^1.0",
         "viserio/contracts"                        : "self.version",
         "viserio/encryption"                       : "self.version",

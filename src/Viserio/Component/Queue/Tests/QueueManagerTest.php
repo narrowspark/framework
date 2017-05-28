@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests;
 
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface as ContainerInteropInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\QueueManager;

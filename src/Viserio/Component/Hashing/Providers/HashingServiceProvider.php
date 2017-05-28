@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Hashing\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Hashing\Password as PasswordContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
@@ -64,7 +64,7 @@ class HashingServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

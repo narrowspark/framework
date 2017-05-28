@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Bus\QueueingDispatcher;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;

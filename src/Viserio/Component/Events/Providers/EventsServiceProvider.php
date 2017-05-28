@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
 

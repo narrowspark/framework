@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connectors;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connectors\RabbitMQQueue;
 use Viserio\Component\Queue\Jobs\RabbitMQJob;

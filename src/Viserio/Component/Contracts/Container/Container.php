@@ -4,8 +4,8 @@ namespace Viserio\Component\Contracts\Container;
 
 use ArrayAccess;
 use Closure;
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 
 interface Container extends ContainerInterface, Factory, ArrayAccess
 {
@@ -63,7 +63,7 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      * Delegate a backup container to be checked for services if it
      * cannot be resolved via this container.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return $this
      */
@@ -129,8 +129,8 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
     /**
      * Registers a service provider.
      *
-     * @param \Interop\Container\ServiceProvider $provider   the service provider to register
-     * @param array                              $parameters An array of values that customizes the provider
+     * @param \Psr\Container\ServiceProvider $provider   the service provider to register
+     * @param array                          $parameters An array of values that customizes the provider
      *
      * @return $this
      */

@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Container;
 
 use Closure;
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
@@ -13,6 +12,7 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionClass;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
@@ -42,7 +42,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * Array full of container implementing the ContainerInterface.
      *
-     * @var \Interop\Container\ContainerInterface[]
+     * @var \Psr\Container\ContainerInterface[]
      */
     protected $delegates = [];
 

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Traits;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ConfigurationTraitAndContainerAwareConfiguration;

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -128,8 +128,8 @@ class ProfilerServiceProvider implements
     /**
      * Register profiler asset controllers.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return \Viserio\Component\Contracts\Routing\Router
      */
@@ -162,7 +162,7 @@ class ProfilerServiceProvider implements
     /**
      * Register base collectors.
      *
-     * @param \Interop\Container\ContainerInterface          $container
+     * @param \Psr\Container\ContainerInterface              $container
      * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
      *
      * @return void
@@ -193,7 +193,7 @@ class ProfilerServiceProvider implements
     /**
      * Register all found collectors in config.
      *
-     * @param \Interop\Container\ContainerInterface          $container
+     * @param \Psr\Container\ContainerInterface              $container
      * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
      *
      * @return void
@@ -210,7 +210,7 @@ class ProfilerServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

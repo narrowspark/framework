@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Pipeline\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Component\Pipeline\Pipeline;
 

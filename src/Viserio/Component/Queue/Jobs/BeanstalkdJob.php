@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Jobs;
 
-use Interop\Container\ContainerInterface;
 use Pheanstalk\Job as PheanstalkJob;
 use Pheanstalk\Pheanstalk;
+use Psr\Container\ContainerInterface;
 
 class BeanstalkdJob extends AbstractJob
 {
@@ -25,10 +25,10 @@ class BeanstalkdJob extends AbstractJob
     /**
      * Create a new job instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Pheanstalk\Pheanstalk                $pheanstalk
-     * @param \Pheanstalk\Job                       $job
-     * @param string                                $queue
+     * @param \Psr\Container\ContainerInterface $container
+     * @param \Pheanstalk\Pheanstalk            $pheanstalk
+     * @param \Pheanstalk\Job                   $job
+     * @param string                            $queue
      */
     public function __construct(
         ContainerInterface $container,

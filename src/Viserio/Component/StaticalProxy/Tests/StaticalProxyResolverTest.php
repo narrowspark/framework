@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Tests;
 
-use Interop\Container\ContainerInterface;
 use Mockery as Mock;
+use Psr\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\StaticalProxy\StaticalProxy;

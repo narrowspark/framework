@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Twig_Environment as TwigEnvironment;
 use Twig_Lexer;
@@ -142,7 +142,7 @@ class TwigBridgeServiceProvider implements
     /**
      * Create a twig bridge loader.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Twig_LoaderInterface
      */
@@ -176,8 +176,8 @@ class TwigBridgeServiceProvider implements
     /**
      * Register viserio twig extension.
      *
-     * @param \Twig_Environment                     $twig
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Twig_Environment                 $twig
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      *
@@ -205,7 +205,7 @@ class TwigBridgeServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Events\Event as EventContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
@@ -31,8 +31,8 @@ class SessionServiceProvider implements ServiceProvider
     /**
      * Extend viserio events with data collector.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Contracts\Events\EventManager
      */
@@ -56,7 +56,7 @@ class SessionServiceProvider implements ServiceProvider
     /**
      * Create new session manager instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Viserio\Component\Session\SessionManager
      */
@@ -68,7 +68,7 @@ class SessionServiceProvider implements ServiceProvider
     /**
      * Create session store from default driver.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Viserio\Component\Contracts\Session\Store
      */
