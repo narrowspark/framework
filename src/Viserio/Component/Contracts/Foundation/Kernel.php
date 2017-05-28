@@ -19,7 +19,7 @@ interface Kernel
     /**
      * Set the kernel configuration.
      *
-     * @param \Interop\Container\ContainerInterface|iterable $data
+     * @param \Psr\Container\ContainerInterface|iterable $data
      *
      * @return void
      */

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Filesystem;
 

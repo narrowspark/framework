@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Session;
 
 use Cache\SessionHandler\Psr6SessionHandler;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Psr\Container\ContainerInterface as ContainerInteropInterface;
 use SessionHandlerInterface;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
@@ -23,7 +23,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create a new session manager instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      */
     public function __construct(ContainerInteropInterface $container)
     {

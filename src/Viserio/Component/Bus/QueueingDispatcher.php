@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Bus;
 
 use Closure;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use RuntimeException;
 use Viserio\Component\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
@@ -22,8 +22,8 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     /**
      * Create a new queue command dispatcher instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Closure|null                         $queueResolver
+     * @param \Psr\Container\ContainerInterface $container
+     * @param \Closure|null                     $queueResolver
      */
     public function __construct(ContainerInterface $container, Closure $queueResolver = null)
     {

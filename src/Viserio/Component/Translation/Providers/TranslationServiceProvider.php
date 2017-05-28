@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -68,7 +68,7 @@ class TranslationServiceProvider implements
     /**
      * Create a new IntlMessageFormatter instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Viserio\Component\Translation\Formatters\IntlMessageFormatter
      */
@@ -80,7 +80,7 @@ class TranslationServiceProvider implements
     /**
      * Create a new TranslationManager instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Viserio\Component\Contracts\Translation\TranslationManager
      */
@@ -118,7 +118,7 @@ class TranslationServiceProvider implements
     /**
      * Create a new Translation instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Viserio\Component\Contracts\Translation\TranslationManager
      */
@@ -130,7 +130,7 @@ class TranslationServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

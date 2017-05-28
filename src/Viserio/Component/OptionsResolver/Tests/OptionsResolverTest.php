@@ -4,8 +4,8 @@ namespace Viserio\Component\OptionsResolver\Tests;
 
 use ArrayIterator;
 use ArrayObject;
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Jobs;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Pheanstalk\Job as PheanstalkJob;
 use Pheanstalk\Pheanstalk;
+use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Queue\Jobs\BeanstalkdJob;
 use Viserio\Component\Queue\Tests\Fixture\BeanstalkdJobTestFailed;

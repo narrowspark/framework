@@ -5,10 +5,10 @@ namespace Viserio\Component\Exception;
 use Error;
 use ErrorException;
 use Exception;
-use Interop\Container\ContainerInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Console\Application as ConsoleApplication;
@@ -57,7 +57,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     /**
      * Create a new error handler instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {

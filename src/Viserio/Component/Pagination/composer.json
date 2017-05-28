@@ -24,11 +24,11 @@
         "viserio/contracts"                           : "self.version"
     },
     "require-dev": {
-        "container-interop/container-interop"         : "^1.1",
         "container-interop/service-provider"          : "^0.3",
         "doctrine/dbal"                               : "^2.5",
         "narrowspark/testing-helper"                  : "^3.0",
         "phpunit/phpunit"                             : "^6.0",
+        "psr/container"                               : "^1.0",
         "viserio/http-factory"                        : "self.version"
     },
     "autoload": {

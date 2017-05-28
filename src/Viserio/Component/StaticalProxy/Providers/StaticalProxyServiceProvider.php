@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\StaticalProxy\StaticalProxyResolver;
 

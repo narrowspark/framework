@@ -13,12 +13,12 @@ use Cache\Adapter\Void\VoidCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
 use Defuse\Crypto\Key;
-use Interop\Container\ContainerInterface;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Redis;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
@@ -33,7 +33,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     /**
      * Create a new cache manager instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {

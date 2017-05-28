@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use PDO;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Profiler\DataCollectors\Bridge\PDO\PDODataCollector;
 use Viserio\Component\Profiler\DataCollectors\Bridge\PDO\TraceablePDODecorater;
@@ -28,8 +28,8 @@ class ProfilerPDOBridgeServiceProvider implements ServiceProvider
     /**
      * Extend PDO with our TraceablePDODecorater.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Profiler\DataCollectors\Bridge\PDO\TraceablePDODecorater
      */
@@ -47,8 +47,8 @@ class ProfilerPDOBridgeServiceProvider implements ServiceProvider
     /**
      * Extend viserio profiler with data collector.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Jobs;
 
 use Aws\Sqs\SqsClient;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class SqsJob extends AbstractJob
 {
@@ -23,10 +23,10 @@ class SqsJob extends AbstractJob
     /**
      * Create a new job instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Aws\Sqs\SqsClient                    $sqs
-     * @param string                                $queue
-     * @param array                                 $job
+     * @param \Psr\Container\ContainerInterface $container
+     * @param \Aws\Sqs\SqsClient                $sqs
+     * @param string                            $queue
+     * @param array                             $job
      */
     public function __construct(
         ContainerInterface $container,

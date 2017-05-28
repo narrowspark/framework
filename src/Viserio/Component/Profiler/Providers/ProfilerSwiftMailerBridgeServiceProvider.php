@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Swift_Mailer;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Profiler\DataCollectors\Bridge\SwiftMailDataCollector;
@@ -23,8 +23,8 @@ class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
     /**
      * Extend viserio profiler with data collector.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */

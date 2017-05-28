@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ServerRequestFactory;

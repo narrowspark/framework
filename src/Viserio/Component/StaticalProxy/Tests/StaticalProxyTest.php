@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Tests;
 
-use Interop\Container\ContainerInterface;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\StaticalProxy\Tests\Fixture\ExceptionFacadeStub;

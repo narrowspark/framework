@@ -115,7 +115,7 @@ abstract class AbstractOptionsResolver implements ResolverContract
     /**
      * Get resolve the right configuration data.
      *
-     * @param \Interop\Container\ContainerInterface|\ArrayAccess|array $data
+     * @param \Psr\Container\ContainerInterface|\ArrayAccess|array $data
      *
      * @throws \RuntimeException
      *

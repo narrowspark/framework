@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception;
 
 use Exception;
-use Interop\Container\ContainerInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
@@ -183,9 +183,9 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * Get a prepared response with the transformed exception.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Throwable                            $exception
-     * @param \Throwable                            $transformed
+     * @param \Psr\Container\ContainerInterface $container
+     * @param \Throwable                        $exception
+     * @param \Throwable                        $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

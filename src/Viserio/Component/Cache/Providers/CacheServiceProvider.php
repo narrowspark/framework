@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cache\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
@@ -37,7 +37,7 @@ class CacheServiceProvider implements ServiceProvider
     /**
      * A instance of the default driver.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface
      */

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\SyslogHandler;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -76,8 +76,8 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Extend viserio log writer.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\VViserio\Component\Log\Writer
      */
@@ -99,8 +99,8 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Configure the Monolog handlers for the application.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Contracts\Log\Log  $log
+     * @param \Psr\Container\ContainerInterface    $container
+     * @param \Viserio\Component\Contracts\Log\Log $log
      *
      * @return void
      */
@@ -114,9 +114,9 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Configure the Monolog handlers for the application.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Contracts\Log\Log  $log
-     * @param string                                $level
+     * @param \Psr\Container\ContainerInterface    $container
+     * @param \Viserio\Component\Contracts\Log\Log $log
+     * @param string                               $level
      *
      * @return void
      */
@@ -131,9 +131,9 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Configure the Monolog handlers for the application.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Contracts\Log\Log  $log
-     * @param string                                $level
+     * @param \Psr\Container\ContainerInterface    $container
+     * @param \Viserio\Component\Contracts\Log\Log $log
+     * @param string                               $level
      *
      * @return void
      */
@@ -149,9 +149,9 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Configure the Monolog handlers for the application.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Contracts\Log\Log  $log
-     * @param string                                $level
+     * @param \Psr\Container\ContainerInterface    $container
+     * @param \Viserio\Component\Contracts\Log\Log $log
+     * @param string                               $level
      *
      * @return void
      */
@@ -169,9 +169,9 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Configure the Monolog handlers for the application.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Component\Contracts\Log\Log  $log
-     * @param string                                $level
+     * @param \Psr\Container\ContainerInterface    $container
+     * @param \Viserio\Component\Contracts\Log\Log $log
+     * @param string                               $level
      *
      * @return void
      */
@@ -189,7 +189,7 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

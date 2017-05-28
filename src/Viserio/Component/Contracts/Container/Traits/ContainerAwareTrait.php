@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Container\Traits;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 
 trait ContainerAwareTrait
@@ -10,14 +10,14 @@ trait ContainerAwareTrait
     /**
      * Container instance.
      *
-     * @var \Interop\Container\ContainerInterface|null
+     * @var \Psr\Container\ContainerInterface|null
      */
     protected $container;
 
     /**
      * Set a container instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return $this
      */
@@ -33,7 +33,7 @@ trait ContainerAwareTrait
      *
      * @throws \RuntimeException
      *
-     * @return \Interop\Container\ContainerInterface
+     * @return \Psr\Container\ContainerInterface
      */
     public function getContainer(): ContainerInterface
     {

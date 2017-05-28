@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Profiler\DataCollectors\Bridge\Cache\PhpCacheTraceableCacheDecorator;
@@ -29,8 +29,8 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
     /**
      * Decorate CacheItemPool instances.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Psr\Cache\CacheItemPoolInterface
      */
@@ -52,8 +52,8 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
     /**
      * Decorate SimpleTraceableCache instances.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Psr\SimpleCache\CacheInterface
      */
@@ -75,8 +75,8 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
     /**
      * Extend viserio profiler with data collector.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */

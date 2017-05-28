@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue;
 
 use Aws\Sqs\SqsClient;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\Arr\Arr;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use Psr\Container\ContainerInterface as ContainerInteropInterface;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
@@ -30,7 +30,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create a new queue manager instance.
      *
-     * @param \Interop\Container\ContainerInterface             $container
+     * @param \Psr\Container\ContainerInterface                 $container
      * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(

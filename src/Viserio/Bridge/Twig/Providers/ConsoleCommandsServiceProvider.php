@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Twig\Commands\CleanCommand;
 use Viserio\Bridge\Twig\Commands\DebugCommand;
 use Viserio\Bridge\Twig\Commands\LintCommand;
@@ -24,8 +24,8 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
     /**
      * Extend viserio console with commands.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Console\Application
      */

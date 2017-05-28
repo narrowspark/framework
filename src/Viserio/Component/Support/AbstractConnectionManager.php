@@ -35,7 +35,7 @@ abstract class AbstractConnectionManager implements
     /**
      * Create a new connection manager instance.
      *
-     * @param \Interop\Container\ContainerInterface|iterable $data
+     * @param \Psr\Container\ContainerInterface|iterable $data
      */
     public function __construct($data)
     {

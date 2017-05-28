@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Cron\Commands\CronListCommand;
 use Viserio\Component\Cron\Commands\ScheduleRunCommand;
@@ -23,8 +23,8 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
     /**
      * Extend viserio console with commands.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Console\Application
      */

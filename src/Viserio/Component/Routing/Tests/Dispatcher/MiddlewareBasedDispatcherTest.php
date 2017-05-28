@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Dispatchers;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\HttpFactory\ResponseFactory;

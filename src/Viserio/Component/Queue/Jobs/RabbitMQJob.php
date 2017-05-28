@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Jobs;
 
-use Interop\Container\ContainerInterface;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Queue\Connectors\RabbitMQQueue;
 
 class RabbitMQJob extends AbstractJob
@@ -33,7 +33,7 @@ class RabbitMQJob extends AbstractJob
     /**
      * Create a new job instance.
      *
-     * @param \Interop\Container\ContainerInterface             $container
+     * @param \Psr\Container\ContainerInterface                 $container
      * @param \Viserio\Component\Queue\Connectors\RabbitMQQueue $connection
      * @param \PhpAmqpLib\Channel\AMQPChannel                   $channel
      * @param string                                            $queue

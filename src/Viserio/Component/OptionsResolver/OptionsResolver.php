@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver;
 
 use ArrayAccess;
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Iterator;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
