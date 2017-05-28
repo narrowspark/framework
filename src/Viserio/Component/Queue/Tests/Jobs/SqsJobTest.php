@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Jobs;
 
-use Psr\Container\ContainerInterface;
 use Aws\Sqs\SqsClient;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Queue\Jobs\SqsJob;
 

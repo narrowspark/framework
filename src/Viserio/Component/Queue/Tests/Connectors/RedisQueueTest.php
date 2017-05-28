@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connectors;
 
-use Psr\Container\ContainerInterface;
 use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;

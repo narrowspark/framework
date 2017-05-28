@@ -46,7 +46,7 @@ class RoutingServiceProvider implements ServiceProvider
      * Create a route dispatcher instance.
      *
      * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable             $getPrevious
+     * @param null|callable                     $getPrevious
      *
      * @return \Viserio\Component\Contracts\Routing\Dispatcher
      */

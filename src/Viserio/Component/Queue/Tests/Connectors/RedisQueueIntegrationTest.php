@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connectors;
 
-use Psr\Container\ContainerInterface;
 use Defuse\Crypto\Key;
 use Exception;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Queue\Connectors\RedisQueue;
 use Viserio\Component\Queue\Tests\Fixture\RedisQueueIntegrationJob;
