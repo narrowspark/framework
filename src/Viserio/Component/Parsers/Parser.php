@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
+use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
@@ -22,6 +23,13 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 class Parser implements ParserContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
+
+    /**
+     * A server request instance.
+     *
+     * @var \Psr\Http\Message\ServerRequestInterface
+     */
+    protected $serverRequest;
 
     /**
      * Supported mime type formats.
@@ -82,23 +90,38 @@ class Parser implements ParserContract
     ];
 
     /**
+     * Set a server request instance.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     *
+     * @return void
+     */
+    public function setServerRequest(ServerRequestInterface $serverRequest): void
+    {
+        $this->serverRequest = $serverRequest;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function getFormat(string $format = null): string
+    public function getFormat(?string $format = null): ?string
     {
         if ($format !== null) {
             $format = mb_strtolower($format);
-        } else {
-            $format = '';
+            $format = self::normalizeDirectorySeparator($format);
+
+            if (is_file($format)) {
+                return pathinfo($format, PATHINFO_EXTENSION);
+            }
         }
 
-        $format = self::normalizeDirectorySeparator($format);
-
-        if (is_file($format)) {
-            return pathinfo($format, PATHINFO_EXTENSION);
+        if ($this->serverRequest !== null &&
+            $this->serverRequest->hasHeader('content-type')
+        ) {
+            return $this->serverRequest->getHeader('content-type')[0];
         }
 
-        return $_SERVER['HTTP_CONTENT_TYPE'] ?? $format;
+        return $format;
     }
 
     /**

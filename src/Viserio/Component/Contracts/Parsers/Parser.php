@@ -9,9 +9,9 @@ interface Parser
      *
      * @param string|null $format
      *
-     * @return string Return the short format code (xml, json, ...)
+     * @return string|null Return the short format code (xml, json, ...)
      */
-    public function getFormat(string $format = null): string;
+    public function getFormat(?string $format = null): ?string;
 
     /**
      * Loads a file and output it content as array.
