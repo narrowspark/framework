@@ -6,4 +6,5 @@ use Viserio\Component\Console\Command\Command;
 
 class ConfigDumperCommand extends Command
 {
+
 }
