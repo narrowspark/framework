@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Config\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;

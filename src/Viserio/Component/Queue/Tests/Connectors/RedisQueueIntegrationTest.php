@@ -4,9 +4,9 @@ namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Defuse\Crypto\Key;
 use Exception;
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Queue\Connectors\RedisQueue;
 use Viserio\Component\Queue\Tests\Fixture\RedisQueueIntegrationJob;

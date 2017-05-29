@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Parsedown;
 use ParsedownExtra;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
@@ -80,7 +80,7 @@ class ViewServiceProvider implements ServiceProvider
      * Register the PHP engine implementation.
      *
      * @param \Viserio\Component\View\Engines\EngineResolver $engines
-     * @param \Interop\Container\ContainerInterface          $container
+     * @param \Psr\Container\ContainerInterface              $container
      *
      * @return void
      */
@@ -95,7 +95,7 @@ class ViewServiceProvider implements ServiceProvider
      * Register the File engine implementation.
      *
      * @param \Viserio\Component\View\Engines\EngineResolver $engines
-     * @param \Interop\Container\ContainerInterface          $container
+     * @param \Psr\Container\ContainerInterface              $container
      *
      * @return void
      */
@@ -110,7 +110,7 @@ class ViewServiceProvider implements ServiceProvider
      * Register the Markdown engine implementation.
      *
      * @param \Viserio\Component\View\Engines\EngineResolver $engines
-     * @param \Interop\Container\ContainerInterface          $container
+     * @param \Psr\Container\ContainerInterface              $container
      *
      * @return void
      */

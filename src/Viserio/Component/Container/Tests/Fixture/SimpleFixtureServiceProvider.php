@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\Fixture;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 
 class SimpleFixtureServiceProvider implements ServiceProvider
 {

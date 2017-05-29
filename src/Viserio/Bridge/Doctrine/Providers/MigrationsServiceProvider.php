@@ -9,8 +9,8 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand;
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Doctrine\Connection;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
@@ -98,7 +98,7 @@ class MigrationsServiceProvider implements
     /**
      * Resolve component options.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
      */

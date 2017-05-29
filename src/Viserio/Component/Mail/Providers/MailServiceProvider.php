@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Swift_Mailer;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;

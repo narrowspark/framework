@@ -217,7 +217,7 @@ class ServerRequestFactoryTest extends TestCase
      *
      * @param mixed $server
      */
-    public function testcreateServerRequestFromArray($server)
+    public function testCreateServerRequestFromArray($server)
     {
         $method  = $server['REQUEST_METHOD'];
         $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";

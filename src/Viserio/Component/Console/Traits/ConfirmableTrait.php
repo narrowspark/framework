@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Traits;
 
 use Closure;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 trait ConfirmableTrait
 {
@@ -74,7 +74,7 @@ trait ConfirmableTrait
      *
      * @throws \RuntimeException
      *
-     * @return \Interop\Container\ContainerInterface
+     * @return \Psr\Container\ContainerInterface
      */
     abstract public function getContainer(): ContainerInterface;
 

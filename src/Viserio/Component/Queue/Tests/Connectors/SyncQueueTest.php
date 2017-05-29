@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connectors;
 
 use Exception;
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Opis\Closure\SerializableClosure;
+use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connectors\SyncQueue;

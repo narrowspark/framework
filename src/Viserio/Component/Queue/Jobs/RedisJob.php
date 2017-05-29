@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Jobs;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\Arr\Arr;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Queue\Connectors\RedisQueue;
 
 class RedisJob extends AbstractJob
@@ -39,7 +39,7 @@ class RedisJob extends AbstractJob
     /**
      * Create a new job instance.
      *
-     * @param \Interop\Container\ContainerInterface          $container
+     * @param \Psr\Container\ContainerInterface              $container
      * @param \Viserio\Component\Queue\Connectors\RedisQueue $redis
      * @param string                                         $job
      * @param string                                         $reserved

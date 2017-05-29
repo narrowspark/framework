@@ -60,7 +60,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      * Create a new file view loader instance.
      *
      * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
-     * @param \Interop\Container\ContainerInterface|iterable     $data
+     * @param \Psr\Container\ContainerInterface|iterable         $data
      */
     public function __construct(FilesystemContract $files, $data)
     {

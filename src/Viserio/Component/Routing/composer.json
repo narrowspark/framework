@@ -19,12 +19,12 @@
     ],
     "require": {
         "php"                                      : "^7.1",
-        "container-interop/container-interop"      : "^1.1",
         "fig/http-message-util"                    : "^1.1",
         "http-interop/http-factory"                : "^0.3",
         "http-interop/http-middleware"             : "^0.4",
         "narrowspark/http-status"                  : "^3.0",
         "php-di/invoker"                           : "^2.0",
+        "psr/container"                            : "^1.0",
         "psr/http-message"                         : "^1.0",
         "viserio/contracts"                        : "self.version",
         "viserio/support"                          : "self.version"
@@ -57,7 +57,6 @@
         "psr/http-message-implementation"          : "^1.0"
     },
     "suggest": {
-        "container-interop/container-interop"      : "Requires a container to get more intelligent controller and middleware instances (^1.1)",
         "container-interop/service-provider"       : "Required to use service-provider (^0.3).",
         "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version).",
         "viserio/pipeline"                         : "Required to use psr-15 middlewares (self.version).",

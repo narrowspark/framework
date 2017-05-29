@@ -20,9 +20,9 @@
     "require": {
         "php"                                    : "^7.1",
         "cakephp/chronos"                        : "^1.0",
-        "container-interop/container-interop"    : "^1.1",
         "narrowspark/arr"                        : "^1.1",
         "opis/closure"                           : "^2.2.1",
+        "psr/container"                          : "^1.0",
         "symfony/process"                        : "^3.2",
         "viserio/contracts"                      : "self.version",
         "viserio/console"                        : "self.version",

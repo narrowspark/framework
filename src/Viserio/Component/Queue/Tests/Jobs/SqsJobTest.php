@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Jobs;
 
 use Aws\Sqs\SqsClient;
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Queue\Jobs\SqsJob;
 

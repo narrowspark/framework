@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Bus\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Bus\QueueingDispatcher;
 use Viserio\Component\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
 use Viserio\Component\Contracts\Queue\Factory as FactoryContract;

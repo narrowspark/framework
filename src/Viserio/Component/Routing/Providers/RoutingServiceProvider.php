@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\UriFactoryInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
@@ -45,8 +45,8 @@ class RoutingServiceProvider implements ServiceProvider
     /**
      * Create a route dispatcher instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
      *
      * @return \Viserio\Component\Contracts\Routing\Dispatcher
      */
@@ -70,7 +70,7 @@ class RoutingServiceProvider implements ServiceProvider
     /**
      * Create a router instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Viserio\Component\Contracts\Routing\Router
      */
@@ -86,7 +86,7 @@ class RoutingServiceProvider implements ServiceProvider
     /**
      * Create a url generator instance.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Viserio\Component\Contracts\Routing\UrlGenerator
      */

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Validation\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Contracts\Validation\Validator as ValidatorContract;
 use Viserio\Component\Validation\Validator;
