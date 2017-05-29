@@ -4,5 +4,4 @@ namespace Viserio\Component\OptionsResolver\Traits;
 
 trait OptionsResolverTrait
 {
-
 }
