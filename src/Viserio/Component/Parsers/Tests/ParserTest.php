@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Tests;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Parsers\Formats\Ini;
 use Viserio\Component\Parsers\Formats\Json;
 use Viserio\Component\Parsers\Formats\Php;
@@ -13,7 +14,7 @@ use Viserio\Component\Parsers\Formats\Xml;
 use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Parsers\Parser;
 
-class ParserTest extends TestCase
+class ParserTest extends MockeryTestCase
 {
     private $parser;
 
@@ -52,44 +53,29 @@ class ParserTest extends TestCase
 
     public function testGetFormat()
     {
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/json';
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('hasHeader')
+            ->once()
+            ->with('content-type')
+            ->andReturn(true);
+        $request->shouldReceive('getHeader')
+            ->once()
+            ->with('content-type')
+            ->andReturn(['application/json']);
+
+        $this->parser->setServerRequest($request);
+
         self::assertEquals('application/json', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-javascript';
-        self::assertEquals('application/x-javascript', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'text/javascript';
-        self::assertEquals('text/javascript', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'text/x-javascript';
-        self::assertEquals('text/x-javascript', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'text/x-json';
-        self::assertEquals('text/x-json', $this->parser->getFormat());
 
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
-        self::assertEquals('application/x-www-form-urlencoded', $this->parser->getFormat());
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('hasHeader')
+            ->once()
+            ->with('content-type')
+            ->andReturn(false);
 
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/vnd.php.serialized';
-        self::assertEquals('application/vnd.php.serialized', $this->parser->getFormat());
+        $this->parser->setServerRequest($request);
 
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/xml';
-        self::assertEquals('application/xml', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/xml; charset=utf8';
-        self::assertEquals('application/xml; charset=utf8', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'charset=utf8; application/xml';
-        self::assertEquals('charset=utf8; application/xml', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'APPLICATION/XML';
-        self::assertEquals('APPLICATION/XML', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'text/xml';
-        self::assertEquals('text/xml', $this->parser->getFormat());
-
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'text/yaml';
-        self::assertEquals('text/yaml', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'text/x-yaml';
-        self::assertEquals('text/x-yaml', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/yaml';
-        self::assertEquals('application/yaml', $this->parser->getFormat());
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-yaml';
-        self::assertEquals('application/x-yaml', $this->parser->getFormat());
-
-        unset($_SERVER['HTTP_CONTENT_TYPE']);
+        self::assertEquals('json', $this->parser->getFormat('json'));
     }
 
     /**
