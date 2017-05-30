@@ -8,8 +8,10 @@ use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class CookieServiceProvider implements
     ServiceProvider,
@@ -17,12 +19,7 @@ class CookieServiceProvider implements
     ProvidesDefaultOptionsContract,
     RequiresMandatoryOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -68,28 +65,27 @@ class CookieServiceProvider implements
 
     public static function createCookieJar(ContainerInterface $container): CookieJar
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
         return (new CookieJar())->setDefaultPathAndDomain(
-            self::$options['path'],
-            self::$options['domain'],
-            self::$options['secure']
+            $options['path'],
+            $options['domain'],
+            $options['secure']
         );
     }
 
-    /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function resolveConfiguration($data)
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
+        if (is_iterable($data)) {
+            return $data;
+        } elseif ($data instanceof ContainerInterface) {
+            if ($data->has(RepositoryContract::class)) {
+                return $data->get(RepositoryContract::class);
+            } elseif ($data->has('config')) {
+                return $data->get('config');
+            } elseif ($data->has('options')) {
+                return $data->get('options');
+            }
         }
     }
 }

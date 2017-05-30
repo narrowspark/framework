@@ -5,10 +5,11 @@ namespace Viserio\Component\Support;
 use Closure;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Support\ConnectionManager as ConnectionManagerContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractConnectionManager implements
     RequiresComponentConfigContract,
@@ -16,7 +17,14 @@ abstract class AbstractConnectionManager implements
     ConnectionManagerContract
 {
     use ContainerAwareTrait;
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
+
+    /**
+     * Resolved options.
+     *
+     * @var \ArrayAccess|array
+     */
+    protected $options;
 
     /**
      * The active connection instances.
@@ -39,7 +47,14 @@ abstract class AbstractConnectionManager implements
      */
     public function __construct($data)
     {
-        $this->configureOptions($data);
+        $this->options = self::resolveOptions($data);
+    }
+
+    protected static function resolveConfiguration($data) {}
+
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self;
     }
 
     /**

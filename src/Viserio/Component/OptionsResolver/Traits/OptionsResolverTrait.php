@@ -18,19 +18,19 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 trait OptionsResolverTrait
 {
     /**
-     * All of the configuration items.
+     * A list of configuration items.
      *
      * @var iterable
      */
-    protected $options;
+    protected $configs;
 
     /**
      * {@inheritdoc}
      */
-    public function resolve(string $configId = null): array
+    public static function resolveOptions($config, string $configId = null): array
     {
-        $configClass = $this->getConfigClass();
-        $config      = $this->options;
+        $config      = self::resolveConfiguration($config);
+        $configClass = self::getConfigClass();
         $dimensions  = [];
 
         if ($configClass instanceof RequiresComponentConfigContract) {
@@ -44,12 +44,12 @@ trait OptionsResolverTrait
             $dimensions[] = $configId;
         } elseif ($configId !== null) {
             throw new InvalidArgumentException(
-                sprintf('The factory [%s] does not support multiple instances.', get_class($this->configClass))
+                sprintf('The factory [%s] does not support multiple instances.', get_class($configClass))
             );
         }
 
         // get configuration for provided dimensions
-        $config = $this->getConfigurationDimensions($dimensions, $config, $configClass, $configId);
+        $config = self::getConfigurationDimensions($dimensions, $config, $configClass, $configId);
 
         if ((array) $config !== $config &&
             ! $config instanceof ArrayAccess &&
@@ -59,7 +59,7 @@ trait OptionsResolverTrait
         }
 
         if ($configClass instanceof RequiresMandatoryOptionsContract) {
-            $this->checkMandatoryOptions($configClass->getMandatoryOptions(), $config);
+            self::checkMandatoryOptions($configClass->getMandatoryOptions(), $config);
         }
 
         if ($configClass instanceof ProvidesDefaultOptionsContract) {
@@ -74,13 +74,24 @@ trait OptionsResolverTrait
     }
 
     /**
-     * Configurable class.
+     * Resolve the configuration from given data.
+     *
+     * @param \Psr\Container\ContainerInterface|\ArrayAccess|array $data
+     *
+     * @throws \RuntimeException Is thrown if config cant be resolved
+     *
+     * @return array|\ArrayAccess
+     */
+    abstract protected static function resolveConfiguration($data);
+
+    /**
+     * The configurable class.
      *
      * @return \Viserio\Component\Contracts\OptionsResolver\RequiresConfig
      */
-    protected function getConfigClass(): RequiresConfigContract
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        return $this;
+        return new self;
     }
 
     /**
@@ -93,7 +104,7 @@ trait OptionsResolverTrait
      *
      * @return void
      */
-    private function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
+    private static function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
     {
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
             $useRecursion = ! is_scalar($mandatoryOption);
@@ -103,12 +114,12 @@ trait OptionsResolverTrait
             }
 
             if ($useRecursion && isset($config[$key])) {
-                $this->checkMandatoryOptions($mandatoryOption, $config[$key]);
+                self::checkMandatoryOptions($mandatoryOption, $config[$key]);
 
                 return;
             }
 
-            $configClass = $this->getConfigClass();
+            $configClass = self::getConfigClass();
 
             throw new MandatoryOptionNotFoundException(
                 $configClass instanceof RequiresComponentConfigContract ? $configClass->getDimensions() : [],
@@ -129,7 +140,7 @@ trait OptionsResolverTrait
      *
      * @return iterable|object
      */
-    private function getConfigurationDimensions(
+    private static function getConfigurationDimensions(
         iterable $dimensions,
         $config,
         RequiresConfigContract $configClass,
