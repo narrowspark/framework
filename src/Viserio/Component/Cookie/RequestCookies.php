@@ -5,7 +5,7 @@ namespace Viserio\Component\Cookie;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 
-class RequestCookies extends AbstractCookieCollector
+final class RequestCookies extends AbstractCookieCollector
 {
     /**
      * Create a new cookie collection instance.

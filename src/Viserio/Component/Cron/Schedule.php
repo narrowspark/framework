@@ -4,7 +4,6 @@ namespace Viserio\Component\Cron;
 
 use LogicException;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
@@ -92,8 +91,8 @@ class Schedule
         if (defined('CEREBRO_BINARY')) {
             return $this->exec(Application::formatCommandString($command), $parameters);
         } elseif ($this->console !== null) {
-            $binary  = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
-            $console = ProcessUtils::escapeArgument($this->console);
+            $binary  = escapeshellarg((string) (new PhpExecutableFinder())->find(false));
+            $console = escapeshellarg($this->console);
 
             return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);
         }
@@ -171,12 +170,12 @@ class Schedule
         $items = array_map(function ($value, $key) {
             if (is_array($value)) {
                 $value = array_map(function ($value) {
-                    return ProcessUtils::escapeArgument($value);
+                    return escapeshellarg($value);
                 }, $value);
 
                 $value = implode(' ', $value);
             } elseif (! is_numeric($value) && ! preg_match('/^(-.$|--.*)/i', $value)) {
-                $value = ProcessUtils::escapeArgument($value);
+                $value = escapeshellarg($value);
             }
 
             return is_numeric($key) ? $value : sprintf('%s=%s', $key, $value);

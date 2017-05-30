@@ -21,7 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Events\ConsoleCommandEvent;
@@ -627,7 +626,7 @@ class ApplicationTest extends MockeryTestCase
     public function testPhpBinary()
     {
         $finder = (new PhpExecutableFinder())->find(false);
-        $php    = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+        $php    = escapeshellarg($finder === false ? '' : $finder);
 
         self::assertSame($php, Application::phpBinary());
     }
@@ -635,7 +634,7 @@ class ApplicationTest extends MockeryTestCase
     public function testFormatCommandString()
     {
         $finder = (new PhpExecutableFinder())->find(false);
-        $php    = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+        $php    = escapeshellarg($finder === false ? '' : $finder);
 
         self::assertSame($php . ' cerebro' . ' command.greet', Application::formatCommandString('command.greet'));
     }
