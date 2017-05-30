@@ -5,8 +5,8 @@ namespace Viserio\Component\Support;
 use Closure;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Support\ConnectionManager as ConnectionManagerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -48,13 +48,6 @@ abstract class AbstractConnectionManager implements
     public function __construct($data)
     {
         $this->options = self::resolveOptions($data);
-    }
-
-    protected static function resolveConfiguration($data) {}
-
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self;
     }
 
     /**
@@ -207,6 +200,15 @@ abstract class AbstractConnectionManager implements
         }
 
         throw new InvalidArgumentException(sprintf('Connection [%s] not supported.', $config['name']));
+    }
+
+    protected static function resolveConfiguration($data)
+    {
+    }
+
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
     }
 
     /**

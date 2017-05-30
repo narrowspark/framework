@@ -91,7 +91,7 @@ trait OptionsResolverTrait
      */
     protected static function getConfigClass(): RequiresConfigContract
     {
-        return new self;
+        return new self();
     }
 
     /**
