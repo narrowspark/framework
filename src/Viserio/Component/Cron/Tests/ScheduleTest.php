@@ -6,7 +6,6 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Cron\Tests\Fixture\ConsoleCerebroCommandFixture;
@@ -47,7 +46,7 @@ class ScheduleTest extends MockeryTestCase
         $cronJobs = $schedule->getCronJobs();
 
         $escape     = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $escapeReal = '\\' === DIRECTORY_SEPARATOR ? '\\"' : '"';
+        $escapeReal = '\\' === DIRECTORY_SEPARATOR ? ' ' : '"';
 
         self::assertEquals('path/to/command', $cronJobs[0]->getCommand());
         self::assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
@@ -136,7 +135,7 @@ class ScheduleTest extends MockeryTestCase
         ]);
         $finder = (new PhpExecutableFinder())->find(false);
 
-        $binary = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+        $binary = escapeshellarg($finder === false ? '' : $finder);
 
         if (getenv('TRAVIS')) {
             $cron = new Cron($binary . ' \'cerebro\' foo:bar --force');
