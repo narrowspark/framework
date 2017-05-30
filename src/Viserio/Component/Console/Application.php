@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\ProcessUtils;
 use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
 use Viserio\Component\Console\Command\CommandResolver;
@@ -249,7 +248,7 @@ class Application extends SymfonyConsole
     {
         $finder = (new PhpExecutableFinder())->find(false);
 
-        return ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+        return escapeshellarg($finder === false ? '' : $finder);
     }
 
     /**
@@ -261,7 +260,7 @@ class Application extends SymfonyConsole
     {
         $constant = defined('CEREBRO_BINARY') ? constant('CEREBRO_BINARY') : null;
 
-        return  $constant !== null ? ProcessUtils::escapeArgument($constant) : 'cerebro';
+        return  $constant !== null ? escapeshellarg($constant) : 'cerebro';
     }
 
     /**

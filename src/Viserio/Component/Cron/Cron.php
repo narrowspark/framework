@@ -6,7 +6,6 @@ use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Cron\Cron as CronContract;
@@ -274,7 +273,7 @@ class Cron implements CronContract
      */
     public function buildCommand(): string
     {
-        $output    = ProcessUtils::escapeArgument($this->output);
+        $output    = escapeshellarg($this->output);
         $redirect  = $this->shouldAppendOutput ? ' >> ' : ' > ';
         $command   = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
 

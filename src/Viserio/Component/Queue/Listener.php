@@ -5,7 +5,6 @@ namespace Viserio\Component\Queue;
 use Closure;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessUtils;
 
 class Listener
 {
@@ -133,7 +132,7 @@ class Listener
         // workers will run under the specified environment. Otherwise, they will
         // just run under the production environment which is not always right.
         if (isset($this->environment)) {
-            $string .= ' --env=' . ProcessUtils::escapeArgument($this->environment);
+            $string .= ' --env=' . escapeshellarg($this->environment);
         }
 
         // Next, we will just format out the worker commands with all of the various
@@ -141,8 +140,8 @@ class Listener
         // line that we will pass into a Symfony process object for processing.
         $command = sprintf(
             $string,
-            ProcessUtils::escapeArgument($connection),
-            ProcessUtils::escapeArgument($queue),
+            escapeshellarg($connection),
+            escapeshellarg($queue),
             $delay,
             $memory,
             $this->sleep,
@@ -244,9 +243,9 @@ class Listener
      */
     protected function buildWorkerCommand(): string
     {
-        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
+        $binary = escapeshellarg((new PhpExecutableFinder())->find(false));
 
-        $console = ProcessUtils::escapeArgument($this->consoleName);
+        $console = escapeshellarg($this->consoleName);
         $command = 'queue:work %s --queue=%s --delay=%s --memory=%s --sleep=%s --tries=%s';
 
         return "{$binary} {$console} {$command}";
