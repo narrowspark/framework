@@ -23,7 +23,7 @@
         "narrowspark/http-status"                    : "^3.0",
         "psr/container"                              : "^1.0",
         "psr/log"                                    : "^1.0",
-        "symfony/debug"                              : "^3.2",
+        "symfony/debug"                              : "~3.3",
         "viserio/contracts"                          : "self.version",
         "viserio/options-resolver"                   : "self.version"
     },
@@ -32,7 +32,7 @@
         "filp/whoops"                                : "^2.0",
         "narrowspark/testing-helper"                 : "^3.0",
         "phpunit/phpunit"                            : "^6.0",
-        "symfony/console"                            : "^3.2",
+        "symfony/console"                            : "~3.3",
         "viserio/config"                             : "self.version",
         "viserio/container"                          : "self.version",
         "viserio/http-factory"                       : "self.version",
@@ -55,7 +55,7 @@
     "suggest": {
         "container-interop/service-provider"         : "Required to use service-provider (^0.3).",
         "filp/whoops"                                : "Enables use of the whoops displayer (^2.0).",
-        "symfony/console"                            : "Required to use renderForConsole function (^3.2).",
+        "symfony/console"                            : "Required to use renderForConsole function (~3.3).",
         "narrowspark/http"                           : "Enables use of the json displayer (self.version).",
         "narrowspark/view"                           : "Enables use of the view displayer (self.version)."
     },

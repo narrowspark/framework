@@ -38,8 +38,8 @@
         "psr/container"                      : "^1.0",
         "league/flysystem"                   : "^1.0.27",
         "narrowspark/arr"                    : "^1.0",
-        "symfony/filesystem"                 : "^3.2",
-        "symfony/finder"                     : "^3.2",
+        "symfony/filesystem"                 : "~3.3",
+        "symfony/finder"                     : "~3.3",
         "viserio/contracts"                  : "self.version",
         "viserio/options-resolver"           : "self.version",
         "viserio/support"                    : "self.version"
