@@ -46,7 +46,7 @@ class ScheduleTest extends MockeryTestCase
         $cronJobs = $schedule->getCronJobs();
 
         $escape     = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $escapeReal = '\\' === DIRECTORY_SEPARATOR ? '\\"' : '"';
+        $escapeReal = '\\' === DIRECTORY_SEPARATOR ? ' ' : '"';
 
         self::assertEquals('path/to/command', $cronJobs[0]->getCommand());
         self::assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
@@ -55,7 +55,7 @@ class ScheduleTest extends MockeryTestCase
         self::assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
         self::assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
         self::assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
-        self::assertEquals("path/to/command --title={$escape}A  real  test{$escape}", $cronJobs[5]->getCommand());
+        self::assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
     }
 
     public function testCommandCreatesNewCerebroCommand()
