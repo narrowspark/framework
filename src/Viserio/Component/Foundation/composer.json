@@ -34,7 +34,7 @@
         "narrowspark/http-status"                     : "^3.0",
         "psr/container"                               : "^1.0",
         "psr/log"                                     : "^1.0",
-        "symfony/finder"                              : "^3.2",
+        "symfony/finder"                              : "~3.3",
         "viserio/contracts"                           : "self.version",
         "viserio/container"                           : "self.version",
         "viserio/events"                              : "self.version",

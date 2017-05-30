@@ -83,9 +83,6 @@ parameters:
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
         - '#Method Viserio\\Component\\Cron\\Cron::withoutOverlapping#'
 
-        # DUMP_COMMA_SEPARATOR constant only supported from var-dumper v3.3
-        - "#DUMP_COMMA_SEPARATOR#"
-
         # if check exists
         - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
         - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
