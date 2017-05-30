@@ -81,12 +81,12 @@ class Application extends SymfonyConsole
     /**
      * Create a new Cerebro console application.
      *
-     * @param string $version
-     * @param string $name
+     * @param string $version The version of the application
+     * @param string $name    The name of the application
      */
     public function __construct(
-        string $version,
-        string $name = 'Cerebro'
+        string $version = 'UNKNOWN',
+        string $name = 'UNKNOWN'
     ) {
         $this->name     = $name;
         $this->version  = $version;

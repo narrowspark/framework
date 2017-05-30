@@ -77,6 +77,10 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             'app' => [
                 'url' => 'http://localhost',
             ],
+            'console' => [
+                'version' => self::VERSION,
+                'name'    => 'Cerebro',
+            ]
         ];
 
         return array_merge(parent::getDefaultOptions(), $options);
@@ -238,7 +242,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $container = $this->getContainer();
             $console   = $container->get(Cerebro::class);
 
-            $console->setVersion(self::VERSION);
+            $console->setVersion($this->options['console']['version']);
+            $console->setName($this->options['console']['name']);
 
             foreach ($this->commands as $command) {
                 $console->add($container->resolve($command));

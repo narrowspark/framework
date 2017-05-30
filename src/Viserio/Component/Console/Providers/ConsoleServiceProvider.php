@@ -7,24 +7,9 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 
-class ConsoleServiceProvider implements
-    ServiceProvider,
-    RequiresComponentConfigContract,
-    ProvidesDefaultOptionsContract,
-    RequiresMandatoryOptionsContract
+class ConsoleServiceProvider implements ServiceProvider
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
-
     /**
      * {@inheritdoc}
      */
@@ -44,40 +29,9 @@ class ConsoleServiceProvider implements
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDimensions(): iterable
-    {
-        return ['viserio', 'console'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMandatoryOptions(): iterable
-    {
-        return ['version'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions(): iterable
-    {
-        return [
-            'name' => 'Cerebro',
-        ];
-    }
-
     public static function createCerebro(ContainerInterface $container): Application
     {
-        self::resolveOptions($container);
-
-        $console = new Application(
-            self::$options['version'],
-            self::$options['name']
-        );
+        $console = new Application();
         $console->setContainer($container);
 
         if ($container->has(EventManagerContract::class)) {
@@ -85,21 +39,5 @@ class ConsoleServiceProvider implements
         }
 
         return $console;
-    }
-
-    /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private static function resolveOptions(ContainerInterface $container): void
-    {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
     }
 }

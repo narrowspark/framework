@@ -50,8 +50,7 @@
     "suggest": {
         "container-interop/service-provider"       : "Required to use service-provider (^0.3).",
         "symfony/process"                          : "Required to use scheduling component (~3.3).",
-        "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version).",
-        "viserio/options-resolver"                 : "Required to use service-provider (self.version)."
+        "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {

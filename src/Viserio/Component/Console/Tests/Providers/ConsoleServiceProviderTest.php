@@ -8,24 +8,14 @@ use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConsoleServiceProviderTest extends TestCase
 {
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new EventsServiceProvider());
         $container->register(new ConsoleServiceProvider());
-
-        $container->instance('config', [
-            'viserio' => [
-                'console' => [
-                    'version' => '1',
-                ],
-            ],
-        ]);
 
         $console = $container->get(Application::class);
 
