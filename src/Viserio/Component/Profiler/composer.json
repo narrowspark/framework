@@ -22,7 +22,7 @@
         "http-interop/http-factory"          : "^0.3",
         "psr/cache"                          : "^1.0",
         "psr/http-message"                   : "^1.0",
-        "symfony/var-dumper"                 : "^3.2",
+        "symfony/var-dumper"                 : "~3.3",
         "viserio/contracts"                  : "self.version",
         "viserio/support"                    : "self.version"
     },
