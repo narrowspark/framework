@@ -6,7 +6,6 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\ProcessUtils;
 use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Cron\Tests\Fixture\ConsoleCerebroCommandFixture;
@@ -56,7 +55,7 @@ class ScheduleTest extends MockeryTestCase
         self::assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
         self::assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
         self::assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
-        self::assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
+        self::assertEquals("path/to/command --title={$escape}A  real  test{$escape}", $cronJobs[5]->getCommand());
     }
 
     public function testCommandCreatesNewCerebroCommand()
@@ -136,7 +135,7 @@ class ScheduleTest extends MockeryTestCase
         ]);
         $finder = (new PhpExecutableFinder())->find(false);
 
-        $binary = ProcessUtils::escapeArgument($finder === false ? '' : $finder);
+        $binary = escapeshellarg($finder === false ? '' : $finder);
 
         if (getenv('TRAVIS')) {
             $cron = new Cron($binary . ' \'cerebro\' foo:bar --force');
