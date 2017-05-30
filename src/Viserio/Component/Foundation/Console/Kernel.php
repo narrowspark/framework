@@ -80,7 +80,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             'console' => [
                 'version' => self::VERSION,
                 'name'    => 'Cerebro',
-            ]
+            ],
         ];
 
         return array_merge(parent::getDefaultOptions(), $options);
