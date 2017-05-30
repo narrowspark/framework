@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
 
-class ResponseCookies extends AbstractCookieCollector
+final class ResponseCookies extends AbstractCookieCollector
 {
     /**
      * Create a new cookie collection instance.
