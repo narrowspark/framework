@@ -21,7 +21,7 @@
         "php"                                      : "^7.1",
         "php-di/invoker"                           : "^2.0",
         "psr/container"                            : "^1.1",
-        "symfony/console"                          : "^3.2",
+        "symfony/console"                          : "~3.3",
         "viserio/contracts"                        : "self.version",
         "viserio/support"                          : "self.version"
     },
@@ -49,7 +49,7 @@
     },
     "suggest": {
         "container-interop/service-provider"       : "Required to use service-provider (^0.3).",
-        "symfony/process"                          : "Required to use scheduling component (^3.2).",
+        "symfony/process"                          : "Required to use scheduling component (~3.3).",
         "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version).",
         "viserio/options-resolver"                 : "Required to use service-provider (self.version)."
     },
