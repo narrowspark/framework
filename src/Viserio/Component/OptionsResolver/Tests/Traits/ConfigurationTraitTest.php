@@ -9,7 +9,7 @@ use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\OptionsResolverTraitAndContainerAwareConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\OptionsResolverTraitAwareConfiguration;
 
-class OptionsResolverTraitTest extends MockeryTestCase
+class ConfigurationTraitTest extends MockeryTestCase
 {
     public function testResolveOptionsResolverFromDataContainer()
     {
