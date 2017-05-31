@@ -8,8 +8,9 @@ use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Cookie\CookieJar;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class CookieServiceProvider implements
     ServiceProvider,
@@ -17,7 +18,7 @@ class CookieServiceProvider implements
     ProvidesDefaultOptionsContract,
     RequiresMandatoryOptionsContract
 {
-    use OptionsResolverTrait;
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -70,6 +71,11 @@ class CookieServiceProvider implements
             $options['domain'],
             $options['secure']
         );
+    }
+
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
     }
 
     protected static function resolveConfiguration($data)

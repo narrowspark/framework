@@ -15,7 +15,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfig
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-trait OptionsResolverTrait
+trait StaticOptionsResolverTrait
 {
     /**
      * Returns options based on getDimensions() like [vendor][package] if class implements RequiresComponentConfig
@@ -34,10 +34,10 @@ trait OptionsResolverTrait
      *
      * @return array
      */
-    public function resolveOptions($config, string $configId = null): array
+    public static function resolveOptions($config, string $configId = null): array
     {
-        $config      = $this->resolveConfiguration($config);
-        $configClass = $this->getConfigClass();
+        $config      = self::resolveConfiguration($config);
+        $configClass = self::getConfigClass();
         $dimensions  = [];
 
         if ($configClass instanceof RequiresComponentConfigContract) {
@@ -56,7 +56,7 @@ trait OptionsResolverTrait
         }
 
         // get configuration for provided dimensions
-        $config = $this->getConfigurationDimensions($dimensions, $config, $configClass, $configId);
+        $config = self::getConfigurationDimensions($dimensions, $config, $configClass, $configId);
 
         if ((array) $config !== $config &&
             ! $config instanceof ArrayAccess &&
@@ -66,7 +66,7 @@ trait OptionsResolverTrait
         }
 
         if ($configClass instanceof RequiresMandatoryOptionsContract) {
-            $this->checkMandatoryOptions($configClass->getMandatoryOptions(), $config);
+            self::checkMandatoryOptions($configClass->getMandatoryOptions(), $config);
         }
 
         if ($configClass instanceof ProvidesDefaultOptionsContract) {
@@ -89,14 +89,14 @@ trait OptionsResolverTrait
      *
      * @return array|\ArrayAccess
      */
-    abstract protected function resolveConfiguration($data);
+    abstract protected static function resolveConfiguration($data);
 
     /**
      * The configurable class.
      *
      * @return \Viserio\Component\Contracts\OptionsResolver\RequiresConfig
      */
-    abstract protected function getConfigClass(): RequiresConfigContract;
+    abstract protected static function getConfigClass(): RequiresConfigContract;
 
     /**
      * Checks if a mandatory param is missing, supports recursion.
@@ -108,7 +108,7 @@ trait OptionsResolverTrait
      *
      * @return void
      */
-    private function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
+    private static function checkMandatoryOptions(iterable $mandatoryOptions, iterable $config): void
     {
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
             $useRecursion = ! is_scalar($mandatoryOption);
@@ -118,12 +118,12 @@ trait OptionsResolverTrait
             }
 
             if ($useRecursion && isset($config[$key])) {
-                $this->checkMandatoryOptions($mandatoryOption, $config[$key]);
+                self::checkMandatoryOptions($mandatoryOption, $config[$key]);
 
                 return;
             }
 
-            $configClass = $this->getConfigClass();
+            $configClass = self::getConfigClass();
 
             throw new MandatoryOptionNotFoundException(
                 $configClass instanceof RequiresComponentConfigContract ? $configClass->getDimensions() : [],
@@ -144,7 +144,7 @@ trait OptionsResolverTrait
      *
      * @return iterable|object
      */
-    private function getConfigurationDimensions(
+    private static function getConfigurationDimensions(
         iterable $dimensions,
         $config,
         RequiresConfigContract $configClass,

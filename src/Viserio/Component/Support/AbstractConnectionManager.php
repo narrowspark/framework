@@ -47,7 +47,7 @@ abstract class AbstractConnectionManager implements
      */
     public function __construct($data)
     {
-        $this->options = self::resolveOptions($data);
+        $this->options = $this->resolveOptions($data);
     }
 
     /**
@@ -200,15 +200,6 @@ abstract class AbstractConnectionManager implements
         }
 
         throw new InvalidArgumentException(sprintf('Connection [%s] not supported.', $config['name']));
-    }
-
-    protected static function resolveConfiguration($data)
-    {
-    }
-
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
     }
 
     /**
