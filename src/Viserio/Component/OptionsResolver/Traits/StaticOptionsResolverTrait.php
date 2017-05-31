@@ -26,6 +26,7 @@ trait StaticOptionsResolverTrait
      * The RequiresConfigId interface is supported.
      *
      * @param null|string $configId Config name, must be provided if factory uses RequiresConfigId interface
+     * @param mixed       $config
      *
      * @throws \InvalidArgumentException                                                                If the $configId parameter is provided but factory does not support it
      * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException         If the $config parameter has the wrong type
