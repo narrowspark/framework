@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class ConfigurationTraitAwareConfiguration implements RequiresComponentConfigContract
+class OptionsResolverTraitAwareConfiguration implements RequiresComponentConfigContract
 {
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
 
     public function getOptions($data)
     {
@@ -17,7 +17,7 @@ class ConfigurationTraitAwareConfiguration implements RequiresComponentConfigCon
     }
 
     /**
-     * @interitdoc
+     * {@inheritdoc}
      */
     public function getDimensions(): iterable
     {

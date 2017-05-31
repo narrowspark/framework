@@ -73,23 +73,11 @@ class CookieServiceProvider implements
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected static function getConfigClass(): RequiresConfigContract
     {
         return new self();
-    }
-
-    protected static function resolveConfiguration($data)
-    {
-        if (is_iterable($data)) {
-            return $data;
-        } elseif ($data instanceof ContainerInterface) {
-            if ($data->has(RepositoryContract::class)) {
-                return $data->get(RepositoryContract::class);
-            } elseif ($data->has('config')) {
-                return $data->get('config');
-            } elseif ($data->has('options')) {
-                return $data->get('options');
-            }
-        }
     }
 }

@@ -6,14 +6,14 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConfigurationTraitAndContainerAwareConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConfigurationTraitAwareConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixtures\OptionsResolverTraitAndContainerAwareConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixtures\OptionsResolverTraitAwareConfiguration;
 
-class ConfigurationTraitTest extends MockeryTestCase
+class OptionsResolverTraitTest extends MockeryTestCase
 {
     public function testResolveOptionsResolverFromDataContainer()
     {
-        $fixture       = new ConfigurationTraitAwareConfiguration();
+        $fixture       = new OptionsResolverTraitAwareConfiguration();
         $defaultConfig = [
             // package name
             'connection' => [
@@ -59,7 +59,7 @@ class ConfigurationTraitTest extends MockeryTestCase
 
     public function testResolveOptionsResolverFromContainer()
     {
-        $fixture   = new ConfigurationTraitAndContainerAwareConfiguration();
+        $fixture   = new OptionsResolverTraitAndContainerAwareConfiguration();
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('has')

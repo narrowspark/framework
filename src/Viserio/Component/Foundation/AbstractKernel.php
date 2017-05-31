@@ -14,7 +14,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -25,7 +25,7 @@ abstract class AbstractKernel implements
     RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
 
     /**
      * The kernel version.

@@ -15,12 +15,12 @@ use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LintCommand extends Command implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**

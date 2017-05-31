@@ -12,9 +12,33 @@ class OptionsResolver
 {
     use OptionsResolverTrait;
 
+    /**
+     * Configurable class.
+     *
+     * @var \Viserio\Component\Contracts\OptionsResolver\RequiresConfig
+     */
+    protected $configClass;
+
+    /**
+     * Tell the resolver from witch class he should take the configuration.
+     *
+     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
+     *
+     * @return \Viserio\Component\Contracts\OptionsResolver\Resolver
+     */
+    public function configure(RequiresConfigContract $configClass): self
+    {
+        $this->configClass = $configClass;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getConfigClass(): RequiresConfigContract
     {
-        return $this;
+        return $this->configClass;
     }
 
     /**

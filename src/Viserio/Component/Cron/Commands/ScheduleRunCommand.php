@@ -6,13 +6,13 @@ use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ScheduleRunCommand extends Command implements
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
 
     /**
      * The console command name.

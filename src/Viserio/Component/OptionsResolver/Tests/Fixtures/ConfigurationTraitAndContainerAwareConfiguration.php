@@ -4,12 +4,12 @@ namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class ConfigurationTraitAndContainerAwareConfiguration implements RequiresComponentConfigContract
+class OptionsResolverTraitAndContainerAwareConfiguration implements RequiresComponentConfigContract
 {
     use ContainerAwareTrait;
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
 
     public function getOptions($data)
     {
@@ -19,7 +19,7 @@ class ConfigurationTraitAndContainerAwareConfiguration implements RequiresCompon
     }
 
     /**
-     * @interitdoc
+     * {@inheritdoc}
      */
     public function getDimensions(): iterable
     {
