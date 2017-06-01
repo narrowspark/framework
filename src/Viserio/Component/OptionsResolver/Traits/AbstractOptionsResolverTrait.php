@@ -172,18 +172,17 @@ trait AbstractOptionsResolverTrait
      */
     private static function validateOptions(iterable $config, RequiresConfigContract $configClass): void
     {
-        $valid = true;
-
         foreach ($configClass->getOptionValidators() as $key => $callable) {
             if (isset($config[$key])) {
-                // code...
+                throw new InvalidArgumentException(sprintf('Key [%s] not found in given config.', $key));
+            } elseif (! is_callable($callable)) {
+                throw new RuntimeException(sprintf(
+                    'The value must be of type callable, [%s] given.',
+                    is_object($callable) ? get_class($callable) : gettype($callable)
+                ));
             }
 
-            $valid = $callable($config[$key]);
-        }
-
-        if ($valid === false) {
-            // code...
+            $callable($config[$key]);
         }
     }
 }
