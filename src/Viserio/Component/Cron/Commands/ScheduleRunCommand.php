@@ -7,6 +7,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 
 class ScheduleRunCommand extends Command implements
     RequiresComponentConfigContract,
@@ -53,12 +54,10 @@ class ScheduleRunCommand extends Command implements
     public function handle()
     {
         $container = $this->getContainer();
-
-        $this->configureOptions($container);
-
+        $options   = $this->resolveOptions($container);
         $cronJobs  = $container->get(Schedule::class)->dueCronJobs(
-            $this->options['env'],
-            $this->options['maintenance']
+            $options['env'],
+            $options['maintenance']
         );
 
         $cronJobsRan = 0;
@@ -78,5 +77,13 @@ class ScheduleRunCommand extends Command implements
         if (count($cronJobs) === 0 || $cronJobsRan === 0) {
             $this->info('No scheduled commands are ready to run.');
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 }

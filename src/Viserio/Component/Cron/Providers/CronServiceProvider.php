@@ -16,13 +16,6 @@ class CronServiceProvider implements
     RequiresMandatoryOptionsContract
 {
     /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
-
-    /**
      * {@inheritdoc}
      */
     public function getServices()
@@ -45,7 +38,7 @@ class CronServiceProvider implements
      */
     public function getMandatoryOptions(): iterable
     {
-        return ['path', 'console'];
+        return ['path'];
     }
 
     public static function createSchedule(ContainerInterface $container): Schedule
@@ -64,21 +57,5 @@ class CronServiceProvider implements
         $scheduler->setContainer($container);
 
         return $scheduler;
-    }
-
-    /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private static function resolveOptions(ContainerInterface $container): void
-    {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
     }
 }

@@ -26,7 +26,7 @@ trait StaticOptionsResolverTrait
      *
      * @return array
      */
-    protected static function resolve($config, string $configId = null): array
+    protected static function resolveOptions($config, string $configId = null): array
     {
         return self::resolveOptions(
             self::resolveConfiguration($config),

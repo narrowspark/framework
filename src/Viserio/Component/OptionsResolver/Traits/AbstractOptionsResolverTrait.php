@@ -42,7 +42,7 @@ trait AbstractOptionsResolverTrait
      *
      * @return array
      */
-    protected static function resolveOptions($config, RequiresConfigContract $configClass, string $configId = null): array
+    protected static function getOptions($config, RequiresConfigContract $configClass, string $configId = null): array
     {
         $dimensions  = [];
 

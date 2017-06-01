@@ -26,7 +26,10 @@ use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
 
-class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface, ProvidesDefaultOptionsContract
+class CacheManager extends AbstractManager implements
+    CacheManagerContract,
+    LoggerAwareInterface,
+    ProvidesDefaultOptionsContract
 {
     use LoggerAwareTrait;
 

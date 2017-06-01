@@ -24,7 +24,7 @@ trait OptionsResolverTrait
      *
      * @return array
      */
-    public function resolve($config, string $configId = null): array
+    public function resolveOptions($config, string $configId = null): array
     {
         return self::resolveOptions(
             $this->resolveConfiguration($config),
