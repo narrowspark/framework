@@ -17,7 +17,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Contracts\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
 /**
- * Some code in this trait it taken from interop-config.
+ * Some code in this trait is taken from interop-config.
  *
  * @author Sandro Keil https://sandro-keil.de/blog/
  */
