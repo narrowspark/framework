@@ -33,7 +33,7 @@ trait AbstractOptionsResolverTrait
      *
      * @param mixed                                                       $config
      * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
-     * @param null|string                                                 $configId Config name, must be provided if factory uses RequiresConfigId interface
+     * @param null|string                                                 $configId    Config name, must be provided if factory uses RequiresConfigId interface
      *
      * @throws \InvalidArgumentException                                                                If the $configId parameter is provided but factory does not support it
      * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException         If the $config parameter has the wrong type
@@ -176,14 +176,14 @@ trait AbstractOptionsResolverTrait
 
         foreach ($configClass->getOptionValidators() as $key => $callable) {
             if (isset($config[$key])) {
-                # code...
+                // code...
             }
 
             $valid = $callable($config[$key]);
         }
 
         if ($valid === false) {
-            # code...
+            // code...
         }
     }
 }

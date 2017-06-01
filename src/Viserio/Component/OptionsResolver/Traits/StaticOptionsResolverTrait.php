@@ -2,18 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Traits;
 
-use ArrayAccess;
-use InvalidArgumentException;
-use Iterator;
-use Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException;
-use Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException;
-use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
 trait StaticOptionsResolverTrait
 {
@@ -55,12 +44,12 @@ trait StaticOptionsResolverTrait
      *
      * @return array|\ArrayAccess
      */
-    abstract static protected function resolveConfiguration($data);
+    abstract protected static function resolveConfiguration($data);
 
     /**
      * The configurable class.
      *
      * @return \Viserio\Component\Contracts\OptionsResolver\RequiresConfig
      */
-    abstract static protected function getConfigClass(): RequiresConfigContract;
+    abstract protected static function getConfigClass(): RequiresConfigContract;
 }
