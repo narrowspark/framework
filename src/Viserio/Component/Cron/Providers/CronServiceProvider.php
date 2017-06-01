@@ -8,7 +8,6 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class CronServiceProvider implements
     ServiceProvider,
