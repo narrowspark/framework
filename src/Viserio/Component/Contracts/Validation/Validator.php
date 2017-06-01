@@ -12,7 +12,7 @@ interface Validator
     public function with(string $namespace);
 
     /**
-     * Run the validator's rules against its data.
+     * Run the validators rules against given data.
      *
      * @param array $data
      * @param array $rules

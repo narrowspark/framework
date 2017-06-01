@@ -33,7 +33,7 @@ use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
 
 /**
- * Some test code in this class it taken from silly.
+ * Some code in this class it taken from silly.
  *
  * @author Matthieu Napoli https://github.com/mnapoli
  */
