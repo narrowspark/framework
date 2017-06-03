@@ -12,7 +12,6 @@ use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\Providers\FoundationDataCollectorServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
 class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
@@ -30,7 +29,6 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->instance(RouterContract::class, $router);
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ConfigServiceProvider());
         $container->register(new ProfilerServiceProvider());

@@ -7,14 +7,12 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Hashing\Password;
 use Viserio\Component\Hashing\Providers\HashingServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class HashingServiceProviderTest extends TestCase
 {
     public function testProviderWithoutRepositoryContract()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new HashingServiceProvider());
 
         $container->instance('config', [

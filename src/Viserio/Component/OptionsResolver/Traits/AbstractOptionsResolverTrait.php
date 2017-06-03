@@ -5,6 +5,9 @@ namespace Viserio\Component\OptionsResolver\Traits;
 use ArrayAccess;
 use InvalidArgumentException;
 use Iterator;
+use Psr\Container\ContainerInterface;
+use RuntimeException;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
@@ -24,6 +27,13 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresValidatedConfig as Requi
 trait AbstractOptionsResolverTrait
 {
     /**
+     * Resolved cached options.
+     *
+     * @var array
+     */
+    protected static $resolvedConfig = [];
+
+    /**
      * Returns options based on getDimensions() like [vendor][package] if class implements RequiresComponentConfig
      * and can perform mandatory option checks if class implements RequiresMandatoryOptions. If the
      * ProvidesDefaultOptions interface is implemented, these options must be overridden by the provided config.
@@ -42,8 +52,13 @@ trait AbstractOptionsResolverTrait
      *
      * @return array
      */
-    protected static function getOptions($config, RequiresConfigContract $configClass, string $configId = null): array
+    protected static function getResolvedConfig($config, RequiresConfigContract $configClass, string $configId = null): array
     {
+        if (\count(self::$resolvedConfig) !== 0) {
+            return self::$resolvedConfig;
+        }
+
+        $config      = self::resolveConfiguration($config);
         $dimensions  = [];
 
         if ($configClass instanceof RequiresComponentConfigContract) {
@@ -87,7 +102,33 @@ trait AbstractOptionsResolverTrait
             );
         }
 
-        return (array) $config;
+        return self::$resolvedConfig = (array) $config;
+    }
+
+    /**
+     * Resolve the configuration from given data.
+     *
+     * @param \Psr\Container\ContainerInterface|\ArrayAccess|array $data
+     *
+     * @throws \RuntimeException Is thrown if config cant be resolved
+     *
+     * @return array|\ArrayAccess
+     */
+    protected static function resolveConfiguration($data)
+    {
+        if (is_iterable($data)) {
+            return $data;
+        } elseif ($data instanceof ContainerInterface) {
+            if ($data->has(RepositoryContract::class)) {
+                return $data->get(RepositoryContract::class);
+            } elseif ($data->has('config')) {
+                return $data->get('config');
+            } elseif ($data->has('options')) {
+                return $data->get('options');
+            }
+        }
+
+        throw new RuntimeException('No configuration found.');
     }
 
     /**

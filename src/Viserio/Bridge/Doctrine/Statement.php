@@ -8,7 +8,7 @@ use Narrowspark\Collection\Collection;
 class Statement
 {
     /**
-     * Instace of doctrine statement.
+     * Instance of doctrine statement.
      *
      * @var \Doctrine\DBAL\Driver\Statement
      */

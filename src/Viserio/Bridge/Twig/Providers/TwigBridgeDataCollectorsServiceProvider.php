@@ -9,21 +9,17 @@ use Twig_Extension_Profiler;
 use Twig_Profiler_Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class TwigBridgeDataCollectorsServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -69,12 +65,12 @@ class TwigBridgeDataCollectorsServiceProvider implements
      */
     public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
+        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+
         if ($getPrevious !== null) {
-            self::resolveOptions($container);
+            $options = self::resolveOptions($container);
 
-            $profiler = $getPrevious();
-
-            if (self::$options['collector']['twig'] === true) {
+            if ($options['collector']['twig'] === true) {
                 $profiler->addCollector(new TwigDataCollector(
                     $container->get(Twig_Profiler_Profile::class),
                     $container->get(TwigEnvironment::class)
@@ -84,7 +80,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
             return $profiler;
         }
 
-        return null;
+        return $profiler;
     }
 
     /**
@@ -97,12 +93,12 @@ class TwigBridgeDataCollectorsServiceProvider implements
      */
     public static function createTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
     {
-        if ($getPrevious !== null) {
-            self::resolveOptions($container);
+        $twig = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
-            $twig = $getPrevious();
+        if ($twig !== null) {
+            $options = self::resolveOptions($container);
 
-            if (self::$options['collector']['twig'] === true) {
+            if ($options['collector']['twig'] === true) {
                 $twig->addExtension(new Twig_Extension_Profiler(
                     $container->get(Twig_Profiler_Profile::class)
                 ));
@@ -111,22 +107,14 @@ class TwigBridgeDataCollectorsServiceProvider implements
             return $twig;
         }
 
-        return null;
+        return $twig;
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

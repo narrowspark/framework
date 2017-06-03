@@ -6,6 +6,7 @@ use Closure;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Support\Manager as ManagerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -173,6 +174,14 @@ abstract class AbstractManager implements
         }
 
         throw new InvalidArgumentException(sprintf('Driver [%s] not supported.', $config['name']));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 
     /**

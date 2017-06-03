@@ -12,14 +12,12 @@ use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Providers\LoggerServiceProvider;
 use Viserio\Component\Log\Writer as MonologWriter;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class LoggerServiceProviderTest extends TestCase
 {
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new EventsServiceProvider());
         $container->register(new LoggerServiceProvider());
 

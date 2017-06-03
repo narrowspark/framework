@@ -7,7 +7,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Bridge\Twig\Commands\CleanCommand;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class CleanCommandTest extends MockeryTestCase
 {
@@ -22,7 +21,6 @@ class CleanCommandTest extends MockeryTestCase
             ->with(__DIR__)
             ->andReturn(true);
         $container = new ArrayContainer([
-            OptionsResolver::class          => new OptionsResolver(),
             FilesystemContract::class       => $files,
             'config'                        => [
                 'viserio' => [
@@ -60,7 +58,6 @@ class CleanCommandTest extends MockeryTestCase
             ->once()
             ->andReturn(false);
         $container = new ArrayContainer([
-            OptionsResolver::class          => new OptionsResolver(),
             FilesystemContract::class       => $files,
             'config'                        => [
                 'viserio' => [

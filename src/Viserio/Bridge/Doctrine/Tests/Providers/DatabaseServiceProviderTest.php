@@ -9,7 +9,6 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Bridge\Doctrine\Connection;
 use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 /**
  * @runTestsInSeparateProcesses
@@ -19,7 +18,6 @@ class DatabaseServiceProviderTest extends TestCase
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new DatabaseServiceProvider());
 
         $container->instance('config', [

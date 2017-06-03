@@ -10,7 +10,6 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Cron\Commands\CronListCommand;
 use Viserio\Component\Cron\Commands\ScheduleRunCommand;
 use Viserio\Component\Cron\Providers\ConsoleCommandsServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
@@ -20,7 +19,6 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $container->register(new CacheServiceProvider());
         $container->register(new ConsoleServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
 
         $container->instance('config', [
             'viserio' => [

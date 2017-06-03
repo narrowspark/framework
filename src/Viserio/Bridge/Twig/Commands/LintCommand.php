@@ -14,6 +14,7 @@ use Twig_Source;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -61,8 +62,6 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
     public function handle()
     {
         $container = $this->getContainer();
-
-        $this->configureOptions($container);
 
         if (! $container->has(Twig_Environment::class)) {
             $this->error('The Twig environment needs to be set.');
@@ -213,10 +212,12 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
      */
     protected function getFinder(array $paths, string $file = null): Finder
     {
+        $options = $this->resolveOptions($this->getContainer());
+
         return Finder::create()
             ->files()
             ->in($paths)
-            ->name(($file === null ? '*.' : $file . '.') . $this->options['engines']['twig']['file_extension']);
+            ->name(($file === null ? '*.' : $file . '.') . $options['engines']['twig']['file_extension']);
     }
 
     /**
@@ -397,5 +398,13 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 }

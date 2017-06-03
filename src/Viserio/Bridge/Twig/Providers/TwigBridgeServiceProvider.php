@@ -19,12 +19,13 @@ use Viserio\Bridge\Twig\Extensions\TranslatorExtension;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\Support\Str;
 use Viserio\Component\View\Engines\EngineResolver;
 
@@ -33,12 +34,7 @@ class TwigBridgeServiceProvider implements
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -46,13 +42,13 @@ class TwigBridgeServiceProvider implements
     public function getServices()
     {
         return [
-            Twig_LoaderInterface::class           => [self::class, 'createTwigLoader'],
-            TwigLoader::class                     => function (ContainerInterface $container) {
+            Twig_LoaderInterface::class => [self::class, 'createTwigLoader'],
+            TwigLoader::class           => function (ContainerInterface $container) {
                 return $container->get(Twig_LoaderInterface::class);
             },
             TwigEnvironment::class      => [self::class, 'createTwigEnvironment'],
-            FactoryContract::class      => [self::class, 'createViewFactory'],
-            EngineResolver::class       => [self::class, 'createEngineResolver'],
+            FactoryContract::class      => [self::class, 'extendViewFactory'],
+            EngineResolver::class       => [self::class, 'extendEngineResolver'],
             TwigEngine::class           => [self::class, 'createTwigEngine'],
         ];
     }
@@ -82,29 +78,52 @@ class TwigBridgeServiceProvider implements
         ];
     }
 
+    /**
+     * Create a new twig engine instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Bridge\Twig\Engine\TwigEngine
+     */
     public static function createTwigEngine(ContainerInterface $container): TwigEngine
     {
         return new TwigEngine($container->get(TwigEnvironment::class), $container);
     }
 
-    public static function createViewFactory(ContainerInterface $container, ?callable $getPrevious = null): ?FactoryContract
+    /**
+     * Extend ViewFactory.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
+     *
+     * @return null|\Viserio\Component\Contracts\View\Factory
+     */
+    public static function extendViewFactory(ContainerInterface $container, ?callable $getPrevious = null): ?FactoryContract
     {
-        if ($getPrevious !== null) {
-            $view = $getPrevious();
+        $view = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
+        if ($view !== null) {
             $view->addExtension('twig', 'twig');
 
             return $view;
         }
 
-        return null;
+        return $view;
     }
 
-    public static function createEngineResolver(ContainerInterface $container, ?callable $getPrevious = null): ?EngineResolver
+    /**
+     * Extend EngineResolver with twig extension.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
+     *
+     * @return null|\Viserio\Component\Contracts\View\Factory
+     */
+    public static function extendEngineResolver(ContainerInterface $container, ?callable $getPrevious = null): ?EngineResolver
     {
-        if ($getPrevious !== null) {
-            $engines = $getPrevious();
+        $engines = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
+        if ($engines !== null) {
             $engines->register('twig', function () use ($container) {
                 return $container->get(TwigEngine::class);
             });
@@ -112,25 +131,31 @@ class TwigBridgeServiceProvider implements
             return $engines;
         }
 
-        return null;
+        return $engines;
     }
 
+    /**
+     * Create a twig environment.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Twig_Environment
+     */
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        self::resolveOptions($container);
-
-        $options = self::$options['engines']['twig']['options'];
+        $options     = self::resolveOptions($container);
+        $twigOptions = $options['engines']['twig']['options'];
 
         $twig = new TwigEnvironment(
             $container->get(Twig_LoaderInterface::class),
-            $options
+            $twigOptions
         );
 
         if ($container->has(Twig_Lexer::class)) {
             $twig->setLexer($container->get(Twig_Lexer::class));
         }
 
-        if ($options['debug'] && class_exists(VarCloner::class)) {
+        if ($twigOptions['debug'] && class_exists(VarCloner::class)) {
             $twig->addExtension(new DumpExtension());
         }
 
@@ -148,26 +173,26 @@ class TwigBridgeServiceProvider implements
      */
     public static function createTwigLoader(ContainerInterface $container): Twig_LoaderInterface
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
-        $loaders = [];
-        $options = self::$options['engines']['twig'];
-        $loader  = new TwigLoader(
+        $loaders     = [];
+        $twigOptions = $options['engines']['twig'];
+        $loader      = new TwigLoader(
             $container->get(FinderContract::class)
         );
 
-        if (isset($options['file_extension'])) {
-            $loader->setExtension($options['file_extension']);
+        if (isset($twigOptions['file_extension'])) {
+            $loader->setExtension($twigOptions['file_extension']);
         }
 
         $loaders[] = $loader;
 
-        if (isset($options['templates']) && is_array($options['templates'])) {
-            $loaders[] = new Twig_Loader_Array($options['templates']);
+        if (isset($twigOptions['templates']) && is_array($twigOptions['templates'])) {
+            $loaders[] = new Twig_Loader_Array($twigOptions['templates']);
         }
 
-        if (isset($options['loaders']) && is_array($options['loaders'])) {
-            $loaders = array_merge($loaders, $options['loaders']);
+        if (isset($twigOptions['loaders']) && is_array($twigOptions['loaders'])) {
+            $loaders = array_merge($loaders, $twigOptions['loaders']);
         }
 
         return new Twig_Loader_Chain($loaders);
@@ -203,18 +228,10 @@ class TwigBridgeServiceProvider implements
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

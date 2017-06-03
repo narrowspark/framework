@@ -10,14 +10,12 @@ use Viserio\Component\Foundation\Console\Commands\DownCommand;
 use Viserio\Component\Foundation\Console\Commands\KeyGenerateCommand;
 use Viserio\Component\Foundation\Console\Commands\UpCommand;
 use Viserio\Component\Foundation\Providers\ConsoleCommandsServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
     public function testGetServices()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ConsoleServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
 

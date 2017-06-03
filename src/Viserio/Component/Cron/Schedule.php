@@ -39,7 +39,7 @@ class Schedule
     /**
      * Create a new Schedule instance.
      *
-     * @param string      $path        Path for the working directory.
+     * @param string      $path        path for the working directory
      * @param null|string $consoleName
      */
     public function __construct(string $path, ?string $consoleName = null)

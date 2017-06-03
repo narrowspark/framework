@@ -9,7 +9,6 @@ use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\Profiler;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
@@ -23,7 +22,7 @@ class ProfilerServiceProviderTest extends MockeryTestCase
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new EventsServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
+
         $container->register(new ProfilerServiceProvider());
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
@@ -40,7 +39,6 @@ class ProfilerServiceProviderTest extends MockeryTestCase
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new RoutingServiceProvider());
         $container->register(new EventsServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ProfilerServiceProvider());
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);

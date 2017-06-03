@@ -10,7 +10,6 @@ use Viserio\Bridge\Twig\Providers\ConsoleCommandsServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
@@ -18,7 +17,6 @@ class ConsoleCommandsServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new ConsoleServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
 
         $container->instance('config', [
