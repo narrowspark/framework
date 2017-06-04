@@ -123,7 +123,7 @@ trait AbstractOptionsResolverTrait
     /**
      * Checks if a mandatory param is missing, supports recursion.
      *
-     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
+     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions $configClass
      * @param iterable                                                    $mandatoryOptions
      * @param iterable                                                    $config
      *
@@ -131,7 +131,7 @@ trait AbstractOptionsResolverTrait
      *
      * @return void
      */
-    private static function checkMandatoryOptions(RequiresConfigContract $configClass, iterable $mandatoryOptions, iterable $config): void
+    private static function checkMandatoryOptions(RequiresMandatoryOptionsContract $configClass, iterable $mandatoryOptions, iterable $config): void
     {
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
             $useRecursion = ! is_scalar($mandatoryOption);

@@ -22,9 +22,9 @@ abstract class AbstractConnectionManager implements
     /**
      * Resolved options.
      *
-     * @var \ArrayAccess|array
+     * @var array
      */
-    protected $options;
+    protected $resolvedOptions;
 
     /**
      * The active connection instances.
@@ -47,7 +47,7 @@ abstract class AbstractConnectionManager implements
      */
     public function __construct($data)
     {
-        $this->options = $this->resolveOptions($data);
+        $this->resolvedOptions = $this->resolveOptions($data);
     }
 
     /**
@@ -84,7 +84,7 @@ abstract class AbstractConnectionManager implements
      */
     public function getConfig(): array
     {
-        return $this->options;
+        return $this->resolvedOptions;
     }
 
     /**
@@ -130,7 +130,7 @@ abstract class AbstractConnectionManager implements
      */
     public function getDefaultConnection(): string
     {
-        return $this->options['default'];
+        return $this->resolvedOptions['default'];
     }
 
     /**
@@ -138,7 +138,7 @@ abstract class AbstractConnectionManager implements
      */
     public function setDefaultConnection(string $name): void
     {
-        $this->options['default'] = $name;
+        $this->resolvedOptions['default'] = $name;
     }
 
     /**
@@ -174,7 +174,7 @@ abstract class AbstractConnectionManager implements
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        $connections = $this->options['connections'];
+        $connections = $this->resolvedOptions['connections'];
 
         if (isset($connections[$name]) && is_array($connections[$name])) {
             $config         = $connections[$name];

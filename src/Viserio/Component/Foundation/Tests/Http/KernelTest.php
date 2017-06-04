@@ -23,7 +23,6 @@ use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 
 class KernelTest extends MockeryTestCase
@@ -301,9 +300,6 @@ class KernelTest extends MockeryTestCase
         $container->shouldReceive('register')
             ->once()
             ->with(Mock::type(EventsServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(OptionsResolverServiceProvider::class));
         $container->shouldReceive('register')
             ->once()
             ->with(Mock::type(RoutingServiceProvider::class));

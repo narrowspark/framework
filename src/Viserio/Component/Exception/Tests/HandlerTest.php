@@ -187,9 +187,6 @@ class HandlerTest extends MockeryTestCase
         $container->shouldReceive('get')
             ->with(ExceptionInfo::class)
             ->andReturn($this->mock(ExceptionInfo::class));
-        $container->shouldReceive('has')
-            ->with(OptionsResolver::class)
-            ->andReturn(false);
 
         return $container;
     }
