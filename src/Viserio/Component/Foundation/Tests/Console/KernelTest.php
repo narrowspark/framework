@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
@@ -54,6 +55,9 @@ class KernelTest extends MockeryTestCase
         $cerebro->shouldReceive('setVersion')
             ->once()
             ->with(AbstractKernel::VERSION);
+        $cerebro->shouldReceive('setName')
+            ->once()
+            ->with('Cerebro');
         $cerebro->shouldReceive('run')
             ->once()
             ->andReturn(0);
@@ -117,6 +121,9 @@ class KernelTest extends MockeryTestCase
         $cerebro->shouldReceive('setVersion')
             ->once()
             ->with(AbstractKernel::VERSION);
+        $cerebro->shouldReceive('setName')
+            ->once()
+            ->with('Cerebro');
         $cerebro->shouldReceive('add')
             ->never();
 
@@ -160,6 +167,9 @@ class KernelTest extends MockeryTestCase
         $cerebro->shouldReceive('setVersion')
             ->once()
             ->with(AbstractKernel::VERSION);
+        $cerebro->shouldReceive('setName')
+            ->once()
+            ->with('Cerebro');
         $cerebro->shouldReceive('run')
             ->once()
             ->andReturn(0);
@@ -204,6 +214,9 @@ class KernelTest extends MockeryTestCase
         $cerebro->shouldReceive('setVersion')
             ->once()
             ->with(AbstractKernel::VERSION);
+        $cerebro->shouldReceive('setName')
+            ->once()
+            ->with('Cerebro');
         $cerebro->shouldReceive('add')
             ->never();
         $cerebro->shouldReceive('renderException')
@@ -244,6 +257,9 @@ class KernelTest extends MockeryTestCase
         $cerebro->shouldReceive('setVersion')
             ->once()
             ->with(AbstractKernel::VERSION);
+        $cerebro->shouldReceive('setName')
+            ->once()
+            ->with('Cerebro');
         $cerebro->shouldReceive('add')
             ->never();
         $cerebro->shouldReceive('renderException')
@@ -284,6 +300,9 @@ class KernelTest extends MockeryTestCase
         $cerebro->shouldReceive('setVersion')
             ->once()
             ->with(AbstractKernel::VERSION);
+        $cerebro->shouldReceive('setName')
+            ->once()
+            ->with('Cerebro');
         $cerebro->shouldReceive('add')
             ->never();
         $cerebro->shouldReceive('renderException')
@@ -342,6 +361,9 @@ class KernelTest extends MockeryTestCase
         $cerebro->shouldReceive('setVersion')
             ->once()
             ->with(AbstractKernel::VERSION);
+        $cerebro->shouldReceive('setName')
+            ->once()
+            ->with('Cerebro');
         $cerebro->shouldReceive('add')
             ->once()
             ->with($command);
@@ -382,7 +404,7 @@ class KernelTest extends MockeryTestCase
 
     private function getKernel($container)
     {
-        return new class($container) extends Kernel {
+        $kernel                      = new class($container) extends Kernel {
             protected $bootstrappers = [
                 SetRequestForConsole::class,
             ];
@@ -396,5 +418,31 @@ class KernelTest extends MockeryTestCase
             {
             }
         };
+
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'app' => [
+                    'env' => 'dev',
+                ],
+            ]);
+        $container->shouldReceive('has')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn(true);
+        $container->shouldReceive('get')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn($config);
+
+        $kernel->setKernelConfigurations($container);
+
+        return $kernel;
     }
 }

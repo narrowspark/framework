@@ -7,7 +7,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as Req
 class ConnectionContainerIdConfiguration implements RequiresComponentConfigIdContract
 {
     /**
-     * @interitdoc
+     * {@inheritdoc}.
      */
     public function getDimensions(): iterable
     {

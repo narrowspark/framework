@@ -7,6 +7,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
@@ -29,9 +30,15 @@ class KernelTest extends MockeryTestCase
 {
     public function testPrependMiddleware()
     {
-        $kernel                 = new class() extends Kernel {
+        $kernel = new class() extends Kernel {
+            /**
+             * @var array
+             */
             public $middlewares = [];
 
+            /**
+             * @var array
+             */
             protected $middlewareGroups = [
                 'test' => ['web'],
             ];
@@ -304,7 +311,7 @@ class KernelTest extends MockeryTestCase
 
     private function getKernel($container)
     {
-        return new class($container) extends Kernel {
+        $kernel                      = new class($container) extends Kernel {
             protected $bootstrappers = [
                 LoadServiceProvider::class,
             ];
@@ -318,5 +325,31 @@ class KernelTest extends MockeryTestCase
             {
             }
         };
+
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'app' => [
+                    'env' => 'dev',
+                ],
+            ]);
+        $container->shouldReceive('has')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn(true);
+        $container->shouldReceive('get')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn($config);
+
+        $kernel->setKernelConfigurations($container);
+
+        return $kernel;
     }
 }

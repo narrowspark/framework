@@ -11,6 +11,7 @@ use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
@@ -35,6 +36,13 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     protected $path;
 
     /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions = [];
+
+    /**
      * Create a new html displayer instance.
      *
      * @param \Viserio\Component\Exception\ExceptionInfo     $info
@@ -52,7 +60,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
 
-        $this->configureOptions($data);
+        $this->resolvedOptions = $this->resolveOptions($data);
     }
 
     /**
@@ -123,12 +131,20 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      */
     protected function render(array $info): string
     {
-        $content = file_get_contents($this->options['template_path']);
+        $content = file_get_contents($this->resolvedOptions['template_path']);
 
         foreach ($info as $key => $val) {
             $content = str_replace("{{ $$key }}", $val, $content);
         }
 
         return $content;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 }

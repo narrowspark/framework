@@ -37,7 +37,6 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
             new IntlMessageFormatter()
         ));
         $container->register(new HttpFactoryServiceProvider());
-
         $container->register(new ProfilerServiceProvider());
         $container->register(new TranslationDataCollectorServiceProvider());
 

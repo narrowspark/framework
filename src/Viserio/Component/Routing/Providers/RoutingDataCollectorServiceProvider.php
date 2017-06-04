@@ -6,9 +6,10 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\Routing\DataCollectors\RoutingDataCollector;
 
 class RoutingDataCollectorServiceProvider implements
@@ -16,12 +17,7 @@ class RoutingDataCollectorServiceProvider implements
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -66,9 +62,9 @@ class RoutingDataCollectorServiceProvider implements
         $profiler = $getPrevious();
 
         if ($profiler !== null) {
-            self::resolveOptions($container);
+            $options = self::resolveOptions($container);
 
-            if (self::$options['collector']['routes']) {
+            if ($options['collector']['routes']) {
                 $profiler->addCollector(
                     new RoutingDataCollector(
                         $container->get(RouterContract::class)->getRoutes()
@@ -78,24 +74,15 @@ class RoutingDataCollectorServiceProvider implements
 
             return $profiler;
         }
-        // @codeCoverageIgnoreStart
+
         return $profiler;
-        // @codeCoverageIgnoreEnd
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

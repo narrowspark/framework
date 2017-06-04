@@ -10,7 +10,7 @@ use Viserio\Component\Hashing\Providers\HashingServiceProvider;
 
 class HashingServiceProviderTest extends TestCase
 {
-    public function testProviderWithoutRepositoryContract()
+    public function testProvider()
     {
         $container = new Container();
         $container->register(new HashingServiceProvider());

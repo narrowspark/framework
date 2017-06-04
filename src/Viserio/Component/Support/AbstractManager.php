@@ -34,13 +34,20 @@ abstract class AbstractManager implements
     protected $extensions = [];
 
     /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions = [];
+
+    /**
      * Create a new manager instance.
      *
      * @param \Psr\Container\ContainerInterface|iterable $data
      */
     public function __construct($data)
     {
-        $this->configureOptions($data);
+        $this->resolvedOptions = $this->resolveOptions($data);
     }
 
     /**
@@ -77,7 +84,7 @@ abstract class AbstractManager implements
      */
     public function getConfig(): array
     {
-        return $this->options;
+        return $this->resolvedOptions;
     }
 
     /**
@@ -85,7 +92,7 @@ abstract class AbstractManager implements
      */
     public function getDefaultDriver(): string
     {
-        return $this->options['default'];
+        return $this->resolvedOptions['default'];
     }
 
     /**
@@ -93,7 +100,7 @@ abstract class AbstractManager implements
      */
     public function setDefaultDriver(string $name): void
     {
-        $this->options['default'] = $name;
+        $this->resolvedOptions['default'] = $name;
     }
 
     /**
@@ -148,7 +155,7 @@ abstract class AbstractManager implements
     {
         $name = $name ?? $this->getDefaultDriver();
 
-        $drivers = $this->options['drivers'] ?? [];
+        $drivers = $this->resolvedOptions['drivers'] ?? [];
 
         if (isset($drivers[$name]) && is_array($drivers[$name])) {
             $config         = $drivers[$name];
@@ -177,14 +184,6 @@ abstract class AbstractManager implements
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
-    }
-
-    /**
      * Call a custom driver creator.
      *
      * @param string $driver
@@ -195,6 +194,14 @@ abstract class AbstractManager implements
     protected function callCustomCreator(string $driver, array $config = [])
     {
         return $this->extensions[$driver]($config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 
     /**

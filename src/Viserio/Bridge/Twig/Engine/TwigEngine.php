@@ -33,9 +33,8 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
             $this->container = $data;
         }
 
-        $this->resolveOptions($data);
-
-        $this->twig = $twig;
+        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->twig            = $twig;
     }
 
     /**
@@ -79,7 +78,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        $twig = $this->addExtensions($this->twig, self::$resolvedConfig['engines']['twig']);
+        $twig = $this->addExtensions($this->twig, $this->resolvedOptions['engines']['twig']);
 
         return $twig->render($fileInfo['name'] ?? '', $data);
     }

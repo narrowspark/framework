@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\OptionsResolver;
+namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -9,25 +9,21 @@ class OptionsResolver
 {
     use OptionsResolverTrait;
 
-    /**
-     * Configurable class.
-     *
-     * @var \Viserio\Component\Contracts\OptionsResolver\RequiresConfig
-     */
     protected $configClass;
 
-    /**
-     * Tell the resolver from witch class he should take the configuration.
-     *
-     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
-     *
-     * @return \Viserio\Component\Contracts\OptionsResolver\Resolver
-     */
-    public function configure(RequiresConfigContract $configClass): self
+    protected $data;
+
+    public function configure(RequiresConfigContract $configClass, $data): self
     {
         $this->configClass = $configClass;
+        $this->data        = $data;
 
         return $this;
+    }
+
+    public function resolve(string $configId = null): array
+    {
+        return self::resolveOptions($this->data, $configId);
     }
 
     /**

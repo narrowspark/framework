@@ -15,6 +15,13 @@ abstract class AbstractBaseEngine implements
     use OptionsResolverTrait;
 
     /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions = [];
+
+    /**
      * {@inheritdoc}
      */
     public function getDimensions(): iterable

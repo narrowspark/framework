@@ -29,6 +29,13 @@ class ConsoleServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * Create a new console application instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Console\Application
+     */
     public static function createCerebro(ContainerInterface $container): Application
     {
         $console = new Application();

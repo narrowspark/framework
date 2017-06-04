@@ -6,6 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
@@ -14,13 +15,20 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     use OptionsResolverTrait;
 
     /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions = [];
+
+    /**
      * Create a new verbose filter instance.
      *
      * @param \Psr\Container\ContainerInterface|iterable $data
      */
     public function __construct($data)
     {
-        $this->configureOptions($data);
+        $this->resolvedOptions = $this->resolveOptions($data);
     }
 
     /**
@@ -49,7 +57,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
         Throwable $transformed,
         int $code
     ): array {
-        if ($this->options['debug'] !== true) {
+        if ($this->resolvedOptions['debug'] !== true) {
             foreach ($displayers as $index => $displayer) {
                 if ($displayer->isVerbose()) {
                     unset($displayers[$index]);
@@ -58,5 +66,13 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
         }
 
         return array_values($displayers);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 }

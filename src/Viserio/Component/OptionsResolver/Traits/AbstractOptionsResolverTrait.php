@@ -8,6 +8,7 @@ use Iterator;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\OptionsResolver\Exceptions\InvalidValidatorException;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException;
 use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
@@ -27,13 +28,6 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresValidatedConfig as Requi
  */
 trait AbstractOptionsResolverTrait
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    protected static $resolvedConfig = [];
-
     /**
      * Returns options based on getDimensions() like [vendor][package] if class implements RequiresComponentConfig
      * and can perform mandatory option checks if class implements RequiresMandatoryOptions. If the
@@ -55,10 +49,6 @@ trait AbstractOptionsResolverTrait
      */
     protected static function getResolvedConfig($config, RequiresConfigContract $configClass, string $configId = null): array
     {
-        if (\count(self::$resolvedConfig) !== 0) {
-            return self::$resolvedConfig;
-        }
-
         $config      = self::resolveConfiguration($config);
         $dimensions  = [];
 
@@ -92,7 +82,7 @@ trait AbstractOptionsResolverTrait
         }
 
         if ($configClass instanceof RequiresValidatedConfigContract) {
-            self::validateOptions($config);
+            self::validateOptions($configClass->getOptionValidators(), $config);
         }
 
         if ($configClass instanceof ProvidesDefaultOptionsContract) {
@@ -103,7 +93,7 @@ trait AbstractOptionsResolverTrait
             );
         }
 
-        return self::$resolvedConfig = (array) $config;
+        return (array) $config;
     }
 
     /**
@@ -111,7 +101,7 @@ trait AbstractOptionsResolverTrait
      *
      * @param \Psr\Container\ContainerInterface|\ArrayAccess|array $data
      *
-     * @throws \RuntimeException Is thrown if config cant be resolved
+     * @throws \RuntimeException is thrown if config cant be resolved
      *
      * @return array|\ArrayAccess
      */
@@ -119,14 +109,12 @@ trait AbstractOptionsResolverTrait
     {
         if (is_iterable($data)) {
             return $data;
-        } elseif ($data instanceof ContainerInterface) {
-            if ($data->has(RepositoryContract::class)) {
-                return $data->get(RepositoryContract::class);
-            } elseif ($data->has('config')) {
-                return $data->get('config');
-            } elseif ($data->has('options')) {
-                return $data->get('options');
-            }
+        } elseif ($data instanceof ContainerInterface && $data->has(RepositoryContract::class)) {
+            return $data->get(RepositoryContract::class);
+        } elseif ($data instanceof ContainerInterface && $data->has('config')) {
+            return $data->get('config');
+        } elseif ($data instanceof ContainerInterface && $data->has('options')) {
+            return $data->get('options');
         }
 
         throw new RuntimeException('No configuration found.');
@@ -150,9 +138,7 @@ trait AbstractOptionsResolverTrait
 
             if (! $useRecursion && isset($config[$mandatoryOption])) {
                 continue;
-            }
-
-            if ($useRecursion && isset($config[$key])) {
+            } elseif ($useRecursion && isset($config[$key])) {
                 self::checkMandatoryOptions($configClass, $mandatoryOption, $config[$key]);
 
                 return;
@@ -186,9 +172,7 @@ trait AbstractOptionsResolverTrait
         foreach ($dimensions as $dimension) {
             if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
                 throw new UnexpectedValueException($dimensions, $dimension);
-            }
-
-            if (! isset($config[$dimension])) {
+            } elseif (! isset($config[$dimension])) {
                 if (! $configClass instanceof RequiresMandatoryOptionsContract &&
                     $configClass instanceof ProvidesDefaultOptionsContract
                 ) {
@@ -205,26 +189,36 @@ trait AbstractOptionsResolverTrait
     }
 
     /**
-     * Run the validators against given config.
+     * Run a validator against given config.
      *
-     * @param iterable                                                    $config
-     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
+     * @param array    $validators
+     * @param iterable $config
      *
      * @return void
      */
-    private static function validateOptions(iterable $config, RequiresConfigContract $configClass): void
+    private static function validateOptions(array $validators, iterable $config): void
     {
-        foreach ($configClass->getOptionValidators() as $key => $callable) {
-            if (isset($config[$key])) {
-                throw new InvalidArgumentException(sprintf('Key [%s] not found in given config.', $key));
-            } elseif (! is_callable($callable)) {
-                throw new RuntimeException(sprintf(
-                    'The value must be of type callable, [%s] given.',
-                    is_object($callable) ? get_class($callable) : gettype($callable)
+        foreach ($validators as $key => $value) {
+            $useRecursion = ! is_scalar($value);
+
+            if (! $useRecursion && isset($config[$value])) {
+                continue;
+            } elseif ($useRecursion && isset($config[$key])) {
+                if (is_callable($value)) {
+                    $value($config[$key]);
+
+                    return;
+                }
+
+                self::validateOptions($value, $config[$key]);
+
+                return;
+            } elseif (! is_callable($value)) {
+                throw new InvalidValidatorException(sprintf(
+                    'The validator must be of type callable, [%s] given.',
+                    is_object($value) ? get_class($value) : gettype($value)
                 ));
             }
-
-            $callable($config[$key]);
         }
     }
 }

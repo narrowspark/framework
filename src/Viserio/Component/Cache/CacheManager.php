@@ -63,7 +63,7 @@ class CacheManager extends AbstractManager implements
     public function createDriver(array $config)
     {
         $driver    = parent::createDriver($config);
-        $namespace = $this->options['namespace'];
+        $namespace = $this->resolvedOptions['namespace'];
 
         if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
             $driver = $this->getNamespacedPool($driver, $namespace);

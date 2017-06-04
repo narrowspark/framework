@@ -6,21 +6,17 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Hashing\Password as PasswordContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Hashing\Password;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class HashingServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -54,26 +50,25 @@ class HashingServiceProvider implements
         return ['key'];
     }
 
-    public static function createPassword(ContainerInterface $container): Password
-    {
-        self::resolveOptions($container);
-
-        return new Password(self::$options['key']);
-    }
-
     /**
-     * Resolve component options.
+     * Create a new Password instance.
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return void
+     * @return \Viserio\Component\Hashing\Password
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    public static function createPassword(ContainerInterface $container): Password
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        $options = self::resolveOptions($container);
+
+        return new Password($options['key']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
     }
 }

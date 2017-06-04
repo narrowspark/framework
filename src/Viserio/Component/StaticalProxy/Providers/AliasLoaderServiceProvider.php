@@ -6,8 +6,9 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\StaticalProxy\AliasLoader;
 
 class AliasLoaderServiceProvider implements
@@ -15,12 +16,7 @@ class AliasLoaderServiceProvider implements
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -56,26 +52,25 @@ class AliasLoaderServiceProvider implements
         ];
     }
 
-    public static function createAliasLoader(ContainerInterface $container): AliasLoader
-    {
-        self::resolveOptions($container);
-
-        return new AliasLoader(self::$options['aliases']);
-    }
-
     /**
-     * Resolve component options.
+     * Create a new Alias loader.
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return void
+     * @return \Viserio\Component\Contracts\StaticalProxy\AliasLoader
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    public static function createAliasLoader(ContainerInterface $container): AliasLoaderContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        $options = self::resolveOptions($container);
+
+        return new AliasLoader($options['aliases']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
     }
 }

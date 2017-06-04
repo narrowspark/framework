@@ -6,14 +6,18 @@ use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class CronServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
+    use StaticOptionsResolverTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -42,11 +46,11 @@ class CronServiceProvider implements
 
     public static function createSchedule(ContainerInterface $container): Schedule
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
         $scheduler = new Schedule(
-            self::$options['path'],
-            self::$options['console']
+            $options['path'],
+            $options['console']
         );
 
         if ($container->has(CacheItemPoolInterface::class)) {
@@ -56,5 +60,13 @@ class CronServiceProvider implements
         $scheduler->setContainer($container);
 
         return $scheduler;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
     }
 }
