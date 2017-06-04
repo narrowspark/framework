@@ -124,8 +124,8 @@ trait AbstractOptionsResolverTrait
      * Checks if a mandatory param is missing, supports recursion.
      *
      * @param \Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions $configClass
-     * @param iterable                                                    $mandatoryOptions
-     * @param iterable                                                    $config
+     * @param iterable                                                              $mandatoryOptions
+     * @param iterable                                                              $config
      *
      * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
      *

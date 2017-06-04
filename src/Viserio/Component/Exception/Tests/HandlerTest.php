@@ -22,7 +22,6 @@ use Viserio\Component\Exception\Handler;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 
 class HandlerTest extends MockeryTestCase
 {
