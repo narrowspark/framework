@@ -9,16 +9,12 @@ use Viserio\Component\Cron\Schedule;
 class CronListCommand extends Command
 {
     /**
-     * The console command name.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $name = 'cron:list';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $description = 'List all Cron jobs';
 

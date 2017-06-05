@@ -5,7 +5,8 @@ namespace Viserio\Component\Contracts\OptionsResolver;
 interface RequiresValidatedConfig
 {
     /**
-     * Returns a list of option validator callables which must be available in getMandatoryOptions.
+     * Returns a list of callable validators
+     * which key should be available in getMandatoryOptions or getDefaultOptions.
      *
      * @return array
      */

@@ -16,16 +16,12 @@ class ScheduleRunCommand extends Command implements
     use OptionsResolverTrait;
 
     /**
-     * The console command name.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $name = 'cron:run';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $description = 'Run Cron jobs';
 

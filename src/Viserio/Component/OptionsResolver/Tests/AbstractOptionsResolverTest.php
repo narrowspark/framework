@@ -25,6 +25,7 @@ use Viserio\Component\OptionsResolver\Tests\Fixtures\PlainConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\UniversalContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedConfigurationFixture;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedDimensionalConfigurationFixture;
+use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidateDefaultValueOnOverwriteFixture;
 
 /**
  * Code in this test is taken from interop-config.
@@ -661,6 +662,46 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
                 'vendor' => [
                     'package' => [
                         'maxLength' => 'string',
+                    ],
+                ],
+            ]
+        );
+    }
+
+    public function testValidatorOnDefaultOverwrite()
+    {
+        try {
+            $this->getOptionsResolver(
+                new ValidateDefaultValueOnOverwriteFixture(),
+                [
+                    'vendor' => [
+                        'package' => [
+                            'maxLength' => 20,
+                            'minLength' => 10,
+                        ],
+                    ],
+                ]
+            );
+        } catch (Exception $e) {
+            self::assertFalse(true);
+        }
+
+        self::assertTrue(true);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Value is not a int.
+     */
+    public function testValidatorThrowExceptionOnWrongDefaultValue()
+    {
+        $this->getOptionsResolver(
+            new ValidateDefaultValueOnOverwriteFixture(),
+            [
+                'vendor' => [
+                    'package' => [
+                        'maxLength' => 20,
+                        'minLength' => 'string',
                     ],
                 ],
             ]
