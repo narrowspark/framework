@@ -26,20 +26,20 @@ class ExceptionServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            ExceptionInfo::class            => [self::class, 'createExceptionInfo'],
-            HandlerContract::class          => [self::class, 'createExceptionHandler'],
-            Handler::class                  => function (ContainerInterface $container) {
+            ExceptionInfo::class             => [self::class, 'createExceptionInfo'],
+            HandlerContract::class           => [self::class, 'createExceptionHandler'],
+            Handler::class                   => function (ContainerInterface $container) {
                 return $container->get(HandlerContract::class);
             },
             ExceptionHandlerContract::class  => function (ContainerInterface $container) {
                 return $container->get(HandlerContract::class);
             },
-            HtmlDisplayer::class    => [self::class, 'createHtmlDisplayer'],
-            JsonDisplayer::class    => [self::class, 'createJsonDisplayer'],
-            ViewDisplayer::class    => [self::class, 'createViewDisplayer'],
-            WhoopsDisplayer::class  => [self::class, 'createWhoopsDisplayer'],
-            VerboseFilter::class    => [self::class, 'createVerboseFilter'],
-            CanDisplayFilter::class => [self::class, 'createCanDisplayFilter'],
+            HtmlDisplayer::class             => [self::class, 'createHtmlDisplayer'],
+            JsonDisplayer::class             => [self::class, 'createJsonDisplayer'],
+            ViewDisplayer::class             => [self::class, 'createViewDisplayer'],
+            WhoopsDisplayer::class           => [self::class, 'createWhoopsDisplayer'],
+            VerboseFilter::class             => [self::class, 'createVerboseFilter'],
+            CanDisplayFilter::class          => [self::class, 'createCanDisplayFilter'],
         ];
     }
 
