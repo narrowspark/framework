@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Commands;
 
-use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 use Viserio\Component\Console\Command\Command;
 
@@ -29,6 +28,6 @@ class OptionDumpCommand extends Command
             ->ignoreUnreadableDirs()
             ->contains('Viserio\\Component\\Contracts\\OptionsResolver')
             ->name('*.php')
-            ->in(__DIR__.'/../../../');
+            ->in(__DIR__ . '/../../../');
     }
 }

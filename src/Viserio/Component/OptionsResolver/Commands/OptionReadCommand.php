@@ -24,12 +24,12 @@ class OptionReadCommand extends Command
     public function handle()
     {
         $finder = new Finder();
-        $files  = $finder->files()->name('*.php')->in(__DIR__.'/../../../');
+        $files  = $finder->files()->name('*.php')->in(__DIR__ . '/../../../');
 
         foreach ($files as $file) {
             \var_dump($file);
             $reflectionClass = new ReflectionClass($className);
-            $interfaces = $reflectionClass->getInterfaceNames();
+            $interfaces      = $reflectionClass->getInterfaceNames();
 
             if (in_array(RequiresConfig::class, $interfaces, true)) {
                 $dimensions = $factory->dimensions();
