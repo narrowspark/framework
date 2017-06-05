@@ -5,10 +5,10 @@ namespace Viserio\Bridge\Twig\Tests\DataCollector;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Twig_Environment;
-use Twig_Extension_Profiler;
-use Twig_Loader_Array;
-use Twig_Profiler_Profile;
+use Twig\Environment;
+use Twig\Extension\ProfilerExtension;
+use Twig\Loader\ArrayLoader;
+use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 
 class TwigDataCollectorTest extends MockeryTestCase
@@ -43,7 +43,7 @@ class TwigDataCollectorTest extends MockeryTestCase
     {
         $collect = $this->getTwigDataCollector();
 
-        self::assertInstanceOf(Twig_Profiler_Profile::class, $collect->getProfile());
+        self::assertInstanceOf(Profile::class, $collect->getProfile());
     }
 
     private function removeTabId(string $html): string
@@ -53,11 +53,11 @@ class TwigDataCollectorTest extends MockeryTestCase
 
     private function getTwigDataCollector()
     {
-        $profile = new Twig_Profiler_Profile();
-        $env     = new Twig_Environment(
-            new Twig_Loader_Array(['test.twig' => 'test'])
+        $profile = new Profile();
+        $env     = new Environment(
+            new ArrayLoader(['test.twig' => 'test'])
         );
-        $env->addExtension(new Twig_Extension_Profiler($profile));
+        $env->addExtension(new ProfilerExtension($profile));
 
         $template = $env->load('test.twig');
         $template->render([]);

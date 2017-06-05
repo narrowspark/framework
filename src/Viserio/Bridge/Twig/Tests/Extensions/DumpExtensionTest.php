@@ -5,9 +5,9 @@ namespace Viserio\Bridge\Twig\Tests\Extensions;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
-use Twig_Environment;
-use Twig_Loader_Array;
-use Twig_LoaderInterface;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
+use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
 
 class DumpExtensionTest extends TestCase
@@ -22,7 +22,7 @@ class DumpExtensionTest extends TestCase
      */
     public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped)
     {
-        $twig = new Twig_Environment(new Twig_Loader_Array(['template' => $template]), [
+        $twig = new Environment(new ArrayLoader(['template' => $template]), [
             'debug'         => $debug,
             'cache'         => false,
             'optimizations' => 0,
@@ -69,7 +69,7 @@ class DumpExtensionTest extends TestCase
     public function testDump($context, $args, $expectedOutput, $debug = true)
     {
         $extension = new DumpExtension();
-        $twig      = new Twig_Environment($this->getMockBuilder(Twig_LoaderInterface::class)->getMock(), [
+        $twig      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock(), [
             'debug'         => $debug,
             'cache'         => false,
             'optimizations' => 0,

@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Providers;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Twig_Environment;
-use Twig_Lexer;
-use Twig_Loader_Array;
-use Twig_Loader_Chain;
-use Twig_LoaderInterface;
+use Twig\Environment;
+use Twig\Lexer;
+use Twig\Loader\ArrayLoader;
+use Twig\Loader\ChainLoader;
+use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Bridge\Twig\Providers\TwigBridgeServiceProvider;
@@ -27,7 +27,7 @@ class TwigBridgeServiceProviderTest extends MockeryTestCase
         $container->register(new FilesServiceProvider());
         $container->register(new ViewServiceProvider());
         $container->register(new TwigBridgeServiceProvider());
-        $container->instance(Twig_Lexer::class, $this->mock(Twig_Lexer::class));
+        $container->instance(Lexer::class, $this->mock(Lexer::class));
 
         $container->instance('config', [
             'viserio' => [
@@ -47,7 +47,7 @@ class TwigBridgeServiceProviderTest extends MockeryTestCase
                                 'test.html' => 'tests',
                             ],
                             'loaders' => [
-                                new Twig_Loader_Array(['test2.html' => 'testsa']),
+                                new ArrayLoader(['test2.html' => 'testsa']),
                             ],
                         ],
                     ],
@@ -56,9 +56,9 @@ class TwigBridgeServiceProviderTest extends MockeryTestCase
         ]);
 
         self::assertInstanceOf(TwigEngine::class, $container->get(TwigEngine::class));
-        self::assertInstanceOf(Twig_Loader_Chain::class, $container->get(TwigLoader::class));
-        self::assertInstanceOf(Twig_Loader_Chain::class, $container->get(Twig_LoaderInterface::class));
-        self::assertInstanceOf(Twig_Environment::class, $container->get(Twig_Environment::class));
+        self::assertInstanceOf(ChainLoader::class, $container->get(TwigLoader::class));
+        self::assertInstanceOf(ChainLoader::class, $container->get(LoaderInterface::class));
+        self::assertInstanceOf(Environment::class, $container->get(Environment::class));
         self::assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
     }
 }

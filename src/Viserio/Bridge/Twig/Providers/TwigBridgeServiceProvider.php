@@ -5,11 +5,11 @@ namespace Viserio\Bridge\Twig\Providers;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Twig_Environment as TwigEnvironment;
-use Twig_Lexer;
-use Twig_Loader_Array;
-use Twig_Loader_Chain;
-use Twig_LoaderInterface;
+use Twig\Environment as TwigEnvironment;
+use Twig\Lexer;
+use Twig\Loader\ArrayLoader;
+use Twig\Loader\ChainLoader;
+use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
@@ -42,9 +42,9 @@ class TwigBridgeServiceProvider implements
     public function getServices()
     {
         return [
-            Twig_LoaderInterface::class => [self::class, 'createTwigLoader'],
+            LoaderInterface::class => [self::class, 'createTwigLoader'],
             TwigLoader::class           => function (ContainerInterface $container) {
-                return $container->get(Twig_LoaderInterface::class);
+                return $container->get(LoaderInterface::class);
             },
             TwigEnvironment::class      => [self::class, 'createTwigEnvironment'],
             FactoryContract::class      => [self::class, 'extendViewFactory'],
@@ -139,7 +139,7 @@ class TwigBridgeServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Twig_Environment
+     * @return \Twig\Environment
      */
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
@@ -147,12 +147,12 @@ class TwigBridgeServiceProvider implements
         $twigOptions = $options['engines']['twig']['options'];
 
         $twig = new TwigEnvironment(
-            $container->get(Twig_LoaderInterface::class),
+            $container->get(LoaderInterface::class),
             $twigOptions
         );
 
-        if ($container->has(Twig_Lexer::class)) {
-            $twig->setLexer($container->get(Twig_Lexer::class));
+        if ($container->has(Lexer::class)) {
+            $twig->setLexer($container->get(Lexer::class));
         }
 
         if ($twigOptions['debug'] && class_exists(VarCloner::class)) {
@@ -169,9 +169,9 @@ class TwigBridgeServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Twig_LoaderInterface
+     * @return \Twig\Loader\LoaderInterface
      */
-    public static function createTwigLoader(ContainerInterface $container): Twig_LoaderInterface
+    public static function createTwigLoader(ContainerInterface $container): LoaderInterface
     {
         $options = self::resolveOptions($container);
 
@@ -188,20 +188,20 @@ class TwigBridgeServiceProvider implements
         $loaders[] = $loader;
 
         if (isset($twigOptions['templates']) && is_array($twigOptions['templates'])) {
-            $loaders[] = new Twig_Loader_Array($twigOptions['templates']);
+            $loaders[] = new ArrayLoader($twigOptions['templates']);
         }
 
         if (isset($twigOptions['loaders']) && is_array($twigOptions['loaders'])) {
             $loaders = array_merge($loaders, $twigOptions['loaders']);
         }
 
-        return new Twig_Loader_Chain($loaders);
+        return new ChainLoader($loaders);
     }
 
     /**
      * Register viserio twig extension.
      *
-     * @param \Twig_Environment                 $twig
+     * @param \Twig\Environment                 $twig
      * @param \Psr\Container\ContainerInterface $container
      *
      * @return void

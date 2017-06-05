@@ -6,7 +6,7 @@ use ReflectionFunction;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Twig_Environment;
+use Twig\Environment;
 use UnexpectedValueException;
 use Viserio\Component\Console\Command\Command;
 
@@ -34,13 +34,13 @@ class DebugCommand extends Command
     {
         $container = $this->getContainer();
 
-        if (! $container->has(Twig_Environment::class)) {
+        if (! $container->has(Environment::class)) {
             $this->error('The Twig environment needs to be set.');
 
             return;
         }
 
-        $twig = $container->get(Twig_Environment::class);
+        $twig = $container->get(Environment::class);
 
         $types = ['functions', 'filters', 'tests', 'globals'];
 
@@ -162,7 +162,7 @@ class DebugCommand extends Command
                     return false;
                 }
 
-                return ! $param->getClass() || $param->getClass()->getName() !== 'Twig_Environment';
+                return ! $param->getClass() || $param->getClass()->getName() !== 'Environment';
             });
 
             // format args

@@ -4,10 +4,10 @@ namespace Viserio\Bridge\Twig\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Twig_Environment;
-use Twig_Markup;
-use Twig_Profiler_Dumper_Html;
-use Twig_Profiler_Profile;
+use Twig\Environment;
+use Twig\Markup;
+use Twig\Profiler\Dumper\HtmlDumper;
+use Twig\Profiler\Profile;
 use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
@@ -21,14 +21,14 @@ class TwigDataCollector extends AbstractDataCollector implements
     /**
      * Twig profiler profile.
      *
-     * @var \Twig_Profiler_Profile
+     * @var \Twig\Profiler\Profile
      */
     private $profile;
 
     /**
      * Twig environment.
      *
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     private $twigEnvironment;
 
@@ -42,10 +42,10 @@ class TwigDataCollector extends AbstractDataCollector implements
     /**
      * Create new twig collector instance.
      *
-     * @param \Twig_Profiler_Profile $profile
-     * @param \Twig_Environment      $twigEnvironment
+     * @param \Twig\Profiler\Profile $profile
+     * @param \Twig\Environment      $twigEnvironment
      */
-    public function __construct(Twig_Profiler_Profile $profile, Twig_Environment $twigEnvironment)
+    public function __construct(Profile $profile, Environment $twigEnvironment)
     {
         $this->profile         = $profile;
         $this->twigEnvironment = $twigEnvironment;
@@ -61,9 +61,9 @@ class TwigDataCollector extends AbstractDataCollector implements
     /**
      * Get twig profile.
      *
-     * @return \Twig_Profiler_Profile
+     * @return \Twig\Profiler\Profile
      */
-    public function getProfile(): Twig_Profiler_Profile
+    public function getProfile(): Profile
     {
         return $this->profile;
     }
@@ -121,13 +121,13 @@ class TwigDataCollector extends AbstractDataCollector implements
     /**
      * Get a html call graph.
      *
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      *
      * @codeCoverageIgnore
      */
     public function getHtmlCallGraph()
     {
-        $dumper = new Twig_Profiler_Dumper_Html();
+        $dumper = new HtmlDumper();
         $dump   = $dumper->dump($this->getProfile());
 
         // needed to remove the hardcoded CSS styles
@@ -141,7 +141,7 @@ class TwigDataCollector extends AbstractDataCollector implements
             '<span class="status-success">',
         ], $dump);
 
-        return new Twig_Markup($dump, 'UTF-8');
+        return new Markup($dump, 'UTF-8');
     }
 
     /**
@@ -237,11 +237,11 @@ class TwigDataCollector extends AbstractDataCollector implements
     /**
      * Generate Compute data.
      *
-     * @param \Twig_Profiler_Profile $profile
+     * @param \Twig\Profiler\Profile $profile
      *
      * @return array
      */
-    private function generateComputeData(Twig_Profiler_Profile $profile): array
+    private function generateComputeData(Profile $profile): array
     {
         $data = [
             'template_count' => 0,

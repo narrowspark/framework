@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Nodes;
 
 use PHPUnit\Framework\TestCase;
-use Twig_Compiler;
-use Twig_Environment;
-use Twig_LoaderInterface;
-use Twig_Node;
-use Twig_Node_Expression_Name;
+use Twig\Compiler;
+use Twig\Environment;
+use Twig\Loader\LoaderInterface;
+use Twig\Node\Node;
+use Twig\Node\Expression\NameExpression;
 use Viserio\Bridge\Twig\Nodes\DumpNode;
 
 class DumpNodeTest extends TestCase
@@ -15,13 +15,13 @@ class DumpNodeTest extends TestCase
     public function testNoVar()
     {
         $node     = new DumpNode('bar', null, 7);
-        $env      = new Twig_Environment($this->getMockBuilder(Twig_LoaderInterface::class)->getMock());
-        $compiler = new Twig_Compiler($env);
+        $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
+        $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
 if ($this->env->isDebug()) {
     $barvars = [];
     foreach ($context as $barkey => $barval) {
-        if (!$barval instanceof \Twig_Template) {
+        if (!$barval instanceof \Twig\Template) {
             $barvars[$barkey] = $barval;
         }
     }
@@ -36,13 +36,13 @@ EOTXT;
     public function testIndented()
     {
         $node     = new DumpNode('bar', null, 7);
-        $env      = new Twig_Environment($this->getMockBuilder(Twig_LoaderInterface::class)->getMock());
-        $compiler = new Twig_Compiler($env);
+        $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
+        $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
     if ($this->env->isDebug()) {
         $barvars = [];
         foreach ($context as $barkey => $barval) {
-            if (!$barval instanceof \Twig_Template) {
+            if (!$barval instanceof \Twig\Template) {
                 $barvars[$barkey] = $barval;
             }
         }
@@ -56,12 +56,12 @@ EOTXT;
 
     public function testOneVar()
     {
-        $vars = new Twig_Node([
-            new Twig_Node_Expression_Name('foo', 7),
+        $vars = new Node([
+            new NameExpression('foo', 7),
         ]);
         $node     = new DumpNode('bar', $vars, 7);
-        $env      = new Twig_Environment($this->getMockBuilder(Twig_LoaderInterface::class)->getMock());
-        $compiler = new Twig_Compiler($env);
+        $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
+        $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
 if ($this->env->isDebug()) {
     // line 7
@@ -76,13 +76,13 @@ EOTXT;
 
     public function testMultiVars()
     {
-        $vars = new Twig_Node([
-            new Twig_Node_Expression_Name('foo', 7),
-            new Twig_Node_Expression_Name('bar', 7),
+        $vars = new Node([
+            new NameExpression('foo', 7),
+            new NameExpression('bar', 7),
         ]);
         $node     = new DumpNode('bar', $vars, 7);
-        $env      = new Twig_Environment($this->getMockBuilder(Twig_LoaderInterface::class)->getMock());
-        $compiler = new Twig_Compiler($env);
+        $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
+        $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
 if ($this->env->isDebug()) {
     // line 7

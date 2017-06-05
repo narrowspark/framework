@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extensions;
 
-use Twig_Extension;
-use Twig_Filter;
-use Twig_Function;
+use Twig\TwigFilter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 use Viserio\Component\Support\Str as ViserioStr;
 
-class StrExtension extends Twig_Extension
+class StrExtension extends AbstractExtension
 {
     /**
      * @var array|callable
@@ -50,7 +50,7 @@ class StrExtension extends Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new Twig_Function(
+            new TwigFunction(
                 'str_*',
                 function (string $name) {
                     $arguments = array_slice(func_get_args(), 1);
@@ -68,7 +68,7 @@ class StrExtension extends Twig_Extension
     public function getFilters(): array
     {
         return [
-            new Twig_Filter(
+            new TwigFilter(
                 'str_*',
                 function (string $name) {
                     $arguments = array_slice(func_get_args(), 1);
