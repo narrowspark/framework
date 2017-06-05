@@ -6,8 +6,8 @@ use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
 use Twig\Template;
+use Twig\TwigFunction;
 use Viserio\Bridge\Twig\TokenParsers\DumpTokenParser;
 
 /**

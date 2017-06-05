@@ -19,10 +19,10 @@ class DumpNode extends Node
     /**
      * Create a new dump node instance.
      *
-     * @param string         $varPrefix
+     * @param string               $varPrefix
      * @param \Twig\Node\Node|null $values
-     * @param int            $lineno
-     * @param string|null    $tag
+     * @param int                  $lineno
+     * @param string|null          $tag
      */
     public function __construct(string $varPrefix, ?Node $values = null, int $lineno = 0, ?string $tag = null)
     {

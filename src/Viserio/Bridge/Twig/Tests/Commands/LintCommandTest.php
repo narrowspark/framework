@@ -134,7 +134,7 @@ class LintCommandTest extends MockeryTestCase
                 $config,
                 [
                     FinderContract::class       => $finder,
-                    LoaderInterface::class => $loader,
+                    LoaderInterface::class      => $loader,
                 ]
             )
         ));
@@ -174,9 +174,9 @@ class LintCommandTest extends MockeryTestCase
             array_merge(
                 $config,
                 [
-                        Environment::class     => $twig,
+                        Environment::class          => $twig,
                         FinderContract::class       => $finder,
-                        LoaderInterface::class => $loader,
+                        LoaderInterface::class      => $loader,
                 ]
             )
         ));

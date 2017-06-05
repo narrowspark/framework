@@ -6,8 +6,8 @@ use PHPUnit\Framework\TestCase;
 use Twig\Compiler;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
-use Twig\Node\Node;
 use Twig\Node\Expression\NameExpression;
+use Twig\Node\Node;
 use Viserio\Bridge\Twig\Nodes\DumpNode;
 
 class DumpNodeTest extends TestCase

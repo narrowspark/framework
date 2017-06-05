@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extensions;
 
-use Twig\TwigFilter;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Viserio\Component\Support\Str as ViserioStr;
 

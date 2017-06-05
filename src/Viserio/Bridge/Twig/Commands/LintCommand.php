@@ -379,8 +379,8 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
      * Grabs the surrounding lines around the exception.
      *
      * @param \Twig\Source $template contents of Twig template
-     * @param string|int  $line     line where the exception occurred
-     * @param int         $context  number of lines around the line where the exception occurred
+     * @param string|int   $line     line where the exception occurred
+     * @param int          $context  number of lines around the line where the exception occurred
      *
      * @return array
      */

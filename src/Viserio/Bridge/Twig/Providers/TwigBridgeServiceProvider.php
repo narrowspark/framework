@@ -42,7 +42,7 @@ class TwigBridgeServiceProvider implements
     public function getServices()
     {
         return [
-            LoaderInterface::class => [self::class, 'createTwigLoader'],
+            LoaderInterface::class      => [self::class, 'createTwigLoader'],
             TwigLoader::class           => function (ContainerInterface $container) {
                 return $container->get(LoaderInterface::class);
             },

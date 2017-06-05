@@ -39,7 +39,7 @@ class DebugCommandTest extends MockeryTestCase
                 $config,
                 [
                     FinderContract::class       => $finder,
-                    LoaderInterface::class => $loader,
+                    LoaderInterface::class      => $loader,
                 ]
             )
         ));
@@ -93,9 +93,9 @@ class DebugCommandTest extends MockeryTestCase
             array_merge(
                 $config,
                 [
-                    Environment::class     => $twig,
+                    Environment::class          => $twig,
                     FinderContract::class       => $finder,
-                    LoaderInterface::class => $loader,
+                    LoaderInterface::class      => $loader,
                 ]
             )
         ));
