@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
 use Viserio\Bridge\Doctrine\Providers\MigrationsServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Support\Env;
 
 /**
@@ -17,7 +16,6 @@ class MigrationsServiceProviderTest extends TestCase
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new DatabaseServiceProvider());
         $container->register(new MigrationsServiceProvider());
 

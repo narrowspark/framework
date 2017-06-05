@@ -38,9 +38,7 @@
         "viserio/contracts"                           : "self.version",
         "viserio/container"                           : "self.version",
         "viserio/events"                              : "self.version",
-        "viserio/exception"                           : "self.version",
         "viserio/options-resolver"                    : "self.version",
-        "viserio/pipeline"                            : "self.version",
         "viserio/routing"                             : "self.version",
         "viserio/support"                             : "self.version"
     },
@@ -51,7 +49,9 @@
         "phpunit/phpunit"                             : "^6.0",
         "viserio/config"                              : "self.version",
         "viserio/console"                             : "self.version",
-        "viserio/log"                                 : "self.version"
+        "viserio/exception"                           : "self.version",
+        "viserio/log"                                 : "self.version",
+        "viserio/pipeline"                            : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -80,6 +80,8 @@
         "viserio/config"                              : "Required to use the LoadConfiguration bootstrap class (self.version).",
         "viserio/console"                             : "Required to use the Console Kernel (self.version).",
         "viserio/log"                                 : "Required to use ConfigureLoggingServiceProvider and HandleLogger bootstrap class (self.version).",
+        "viserio/exception"                           : "Required to use and see exceptions (self.version).",
+        "viserio/pipeline"                            : "Required to use psr-15 middlewares (self.version).",
         "viserio/statical-proxy"                      : "Required to use statical-proxy bootstrap class (self.version)."
     },
     "minimum-stability"                               : "dev",

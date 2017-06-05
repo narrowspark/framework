@@ -6,9 +6,10 @@ use Closure;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Support\ConnectionManager as ConnectionManagerContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractConnectionManager implements
     RequiresComponentConfigContract,
@@ -16,7 +17,14 @@ abstract class AbstractConnectionManager implements
     ConnectionManagerContract
 {
     use ContainerAwareTrait;
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
+
+    /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions;
 
     /**
      * The active connection instances.
@@ -39,7 +47,7 @@ abstract class AbstractConnectionManager implements
      */
     public function __construct($data)
     {
-        $this->configureOptions($data);
+        $this->resolvedOptions = $this->resolveOptions($data);
     }
 
     /**
@@ -76,7 +84,7 @@ abstract class AbstractConnectionManager implements
      */
     public function getConfig(): array
     {
-        return $this->options;
+        return $this->resolvedOptions;
     }
 
     /**
@@ -122,7 +130,7 @@ abstract class AbstractConnectionManager implements
      */
     public function getDefaultConnection(): string
     {
-        return $this->options['default'];
+        return $this->resolvedOptions['default'];
     }
 
     /**
@@ -130,7 +138,7 @@ abstract class AbstractConnectionManager implements
      */
     public function setDefaultConnection(string $name): void
     {
-        $this->options['default'] = $name;
+        $this->resolvedOptions['default'] = $name;
     }
 
     /**
@@ -166,7 +174,7 @@ abstract class AbstractConnectionManager implements
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        $connections = $this->options['connections'];
+        $connections = $this->resolvedOptions['connections'];
 
         if (isset($connections[$name]) && is_array($connections[$name])) {
             $config         = $connections[$name];
@@ -192,6 +200,14 @@ abstract class AbstractConnectionManager implements
         }
 
         throw new InvalidArgumentException(sprintf('Connection [%s] not supported.', $config['name']));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 
     /**

@@ -10,11 +10,12 @@ use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Log\Writer;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class ConfigureLoggingServiceProvider implements
     ServiceProvider,
@@ -23,13 +24,7 @@ class ConfigureLoggingServiceProvider implements
     RequiresMandatoryOptionsContract
 {
     use ParseLevelTrait;
-
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -86,29 +81,24 @@ class ConfigureLoggingServiceProvider implements
         $log = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($log !== null) {
-            self::resolveOptions($container);
-            self::configureHandlers($container, $log);
+            // Configure the Monolog handlers for the application.
+            $options = self::resolveOptions($container);
+            $method  = 'configure' . ucfirst($options['log']['handler']) . 'Handler';
+
+            self::{$method}($container, $log, $options);
 
             return $log;
         }
-        // @codeCoverageIgnoreStart
+
         return $log;
-        // @codeCoverageIgnoreEnd
     }
 
     /**
-     * Configure the Monolog handlers for the application.
-     *
-     * @param \Psr\Container\ContainerInterface    $container
-     * @param \Viserio\Component\Contracts\Log\Log $log
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function configureHandlers(ContainerInterface $container, LogContract $log): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        $method = 'configure' . ucfirst(self::$options['log']['handler']) . 'Handler';
-
-        self::{$method}($container, $log, self::$options['log']['level']);
+        return new self();
     }
 
     /**
@@ -116,15 +106,15 @@ class ConfigureLoggingServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface    $container
      * @param \Viserio\Component\Contracts\Log\Log $log
-     * @param string                               $level
+     * @param array                                $options
      *
      * @return void
      */
-    private static function configureSingleHandler(ContainerInterface $container, LogContract $log, string $level): void
+    private static function configureSingleHandler(ContainerInterface $container, LogContract $log, array $options): void
     {
         $log->useFiles(
             $container->get(KernelContract::class)->getStoragePath('logs/narrowspark.log'),
-            $level
+            $options['log']['level']
         );
     }
 
@@ -133,16 +123,16 @@ class ConfigureLoggingServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface    $container
      * @param \Viserio\Component\Contracts\Log\Log $log
-     * @param string                               $level
+     * @param array                                $options
      *
      * @return void
      */
-    private static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level): void
+    private static function configureDailyHandler(ContainerInterface $container, LogContract $log, array $options): void
     {
         $log->useDailyFiles(
             $container->get(KernelContract::class)->getStoragePath('logs/narrowspark.log'),
-            self::$options['log']['max_files'],
-            $level
+            $options['log']['max_files'],
+            $options['log']['level']
         );
     }
 
@@ -151,14 +141,14 @@ class ConfigureLoggingServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface    $container
      * @param \Viserio\Component\Contracts\Log\Log $log
-     * @param string                               $level
+     * @param array                                $options
      *
      * @return void
      */
-    private static function configureErrorlogHandler(ContainerInterface $container, LogContract $log, string $level): void
+    private static function configureErrorlogHandler(ContainerInterface $container, LogContract $log, array $options): void
     {
         $container->get(HandlerParser::class)->parseHandler(
-            new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, self::parseLevel($level)),
+            new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, self::parseLevel($options['log']['level'])),
             '',
             '',
             null,
@@ -171,34 +161,18 @@ class ConfigureLoggingServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface    $container
      * @param \Viserio\Component\Contracts\Log\Log $log
-     * @param string                               $level
+     * @param array                                $options
      *
      * @return void
      */
-    private static function configureSyslogHandler(ContainerInterface $container, LogContract $log, string $level): void
+    private static function configureSyslogHandler(ContainerInterface $container, LogContract $log, array $options): void
     {
         $container->get(HandlerParser::class)->parseHandler(
-            new SyslogHandler(self::$options['name'], LOG_USER, self::parseLevel($level)),
+            new SyslogHandler($options['name'], LOG_USER, self::parseLevel($options['log']['level'])),
             '',
             '',
             null,
             'line'
         );
-    }
-
-    /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private static function resolveOptions(ContainerInterface $container): void
-    {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
     }
 }

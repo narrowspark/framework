@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Providers\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Routing\Commands\RouteListCommand;
 use Viserio\Component\Routing\Providers\ConsoleCommandsServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
@@ -16,7 +15,6 @@ class ConsoleCommandsServiceProviderTest extends TestCase
     public function testGetServices()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new RoutingServiceProvider());
         $container->register(new ConsoleServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());

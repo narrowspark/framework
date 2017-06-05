@@ -10,11 +10,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollectors\AjaxRequestsDataCollector;
 use Viserio\Component\Profiler\DataCollectors\MemoryDataCollector;
@@ -28,12 +29,7 @@ class ProfilerServiceProvider implements
     ProvidesDefaultOptionsContract,
     RequiresMandatoryOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -88,11 +84,10 @@ class ProfilerServiceProvider implements
 
     public static function createProfiler(ContainerInterface $container): ProfilerContract
     {
-        self::resolveOptions($container);
-
+        $options  = self::resolveOptions($container);
         $profiler = new Profiler($container->get(AssetsRenderer::class));
 
-        if (self::$options['enable']) {
+        if ($options['enable']) {
             $profiler->enable();
         }
 
@@ -112,17 +107,24 @@ class ProfilerServiceProvider implements
             $profiler->setUrlGenerator($container->get(UrlGeneratorContract::class));
         }
 
-        self::registerCollectorsFromConfig($container, $profiler);
+        self::registerCollectorsFromConfig($container, $profiler, $options);
         self::registerBaseCollectors($container, $profiler);
 
         return $profiler;
     }
 
+    /**
+     * Create a new AssetsRenderer instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Profiler\AssetsRenderer
+     */
     public static function createAssetsRenderer(ContainerInterface $container): AssetsRenderer
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
-        return new AssetsRenderer(self::$options['jquery_is_used'], self::$options['path']);
+        return new AssetsRenderer($options['jquery_is_used'], $options['path']);
     }
 
     /**
@@ -169,25 +171,33 @@ class ProfilerServiceProvider implements
      */
     protected static function registerBaseCollectors(ContainerInterface $container, ProfilerContract $profiler): void
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
-        if (self::$options['collector']['time']) {
+        if ($options['collector']['time']) {
             $profiler->addCollector(new TimeDataCollector(
                 $container->get(ServerRequestInterface::class)
             ));
         }
 
-        if (self::$options['collector']['memory']) {
+        if ($options['collector']['memory']) {
             $profiler->addCollector(new MemoryDataCollector());
         }
 
-        if (self::$options['collector']['ajax']) {
+        if ($options['collector']['ajax']) {
             $profiler->addCollector(new AjaxRequestsDataCollector());
         }
 
-        if (self::$options['collector']['phpinfo']) {
+        if ($options['collector']['phpinfo']) {
             $profiler->addCollector(new PhpInfoDataCollector());
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
     }
 
     /**
@@ -195,31 +205,16 @@ class ProfilerServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface              $container
      * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
+     * @param array                                          $options
      *
      * @return void
      */
-    private static function registerCollectorsFromConfig(ContainerInterface $container, ProfilerContract $profiler): void
+    private static function registerCollectorsFromConfig(ContainerInterface $container, ProfilerContract $profiler, $options): void
     {
-        if ($collectors = self::$options['collectors']) {
+        if ($collectors = $options['collectors']) {
             foreach ($collectors as $collector) {
                 $profiler->addCollector($container->get($collector));
             }
-        }
-    }
-
-    /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private static function resolveOptions(ContainerInterface $container): void
-    {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
         }
     }
 }

@@ -14,7 +14,6 @@ use Viserio\Bridge\Twig\Providers\TwigBridgeServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
 
 /**
@@ -27,7 +26,6 @@ class TwigBridgeServiceProviderTest extends MockeryTestCase
         $container = new Container();
         $container->register(new FilesServiceProvider());
         $container->register(new ViewServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new TwigBridgeServiceProvider());
         $container->instance(Twig_Lexer::class, $this->mock(Twig_Lexer::class));
 

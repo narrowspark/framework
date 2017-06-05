@@ -9,22 +9,18 @@ use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Log\Log;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer as MonologWriter;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class LoggerServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -79,9 +75,9 @@ class LoggerServiceProvider implements
      */
     public static function createHandlerParser(ContainerInterface $container): HandlerParser
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
-        return new HandlerParser(new Logger(self::$options['env']));
+        return new HandlerParser(new Logger($options['env']));
     }
 
     /**
@@ -103,18 +99,10 @@ class LoggerServiceProvider implements
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

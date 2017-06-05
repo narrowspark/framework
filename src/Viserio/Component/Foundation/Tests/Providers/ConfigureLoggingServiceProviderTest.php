@@ -14,7 +14,6 @@ use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 {
@@ -24,7 +23,6 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
     public function testGetServicesWithSingle()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
 
         $writer = $this->mock(Writer::class);
         $writer->shouldReceive('useFiles')
@@ -56,7 +54,6 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
     public function testGetServicesWithDaily()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
 
         $writer = $this->mock(Writer::class);
         $writer->shouldReceive('useDailyFiles')
@@ -89,7 +86,6 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
     public function testGetServicesWithErrorlog()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
 
         $writer  = $this->mock(Writer::class);
         $handler = $this->mock(HandlerParser::class);
@@ -131,7 +127,6 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
     public function testGetServicesWithSyslog()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
 
         $writer  = $this->mock(Writer::class);
         $handler = $this->mock(HandlerParser::class);

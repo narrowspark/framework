@@ -4,29 +4,23 @@ namespace Viserio\Component\Foundation\Providers;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\DataCollectors\FilesLoadedCollector;
 use Viserio\Component\Foundation\DataCollectors\NarrowsparkDataCollector;
 use Viserio\Component\Foundation\DataCollectors\ViserioHttpDataCollector;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class FoundationDataCollectorServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
-    ProvidesDefaultOptionsContract,
-    RequiresMandatoryOptionsContract
+    ProvidesDefaultOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -34,7 +28,7 @@ class FoundationDataCollectorServiceProvider implements
     public function getServices()
     {
         return [
-            ProfilerContract::class => [self::class, 'createProfiler'],
+            ProfilerContract::class => [self::class, 'extendProfiler'],
         ];
     }
 
@@ -44,16 +38,6 @@ class FoundationDataCollectorServiceProvider implements
     public function getDimensions(): iterable
     {
         return ['viserio', 'profiler'];
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @ToDo file path
-     */
-    public function getMandatoryOptions(): iterable
-    {
-        return [];
     }
 
     /**
@@ -78,23 +62,30 @@ class FoundationDataCollectorServiceProvider implements
      *
      * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */
-    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
+    public static function extendProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
         $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($profiler !== null) {
-            self::resolveOptions($container);
+            $options = self::resolveOptions($container);
+            $kernel  = $container->get(KernelContract::class);
 
-            if (self::$options['collector']['narrowspark']) {
-                $profiler->addCollector(static::createNarrowsparkDataCollector(), -100);
+            if ($options['collector']['narrowspark']) {
+                $profiler->addCollector(new NarrowsparkDataCollector(), -100);
             }
 
-            if (self::$options['collector']['viserio_http']) {
-                $profiler->addCollector(static::createViserioHttpDataCollector($container), 1);
+            if ($options['collector']['viserio_http']) {
+                $profiler->addCollector(
+                    new ViserioHttpDataCollector(
+                        $container->get(RouterContract::class),
+                        $kernel->getRoutesPath()
+                    ),
+                    1
+                );
             }
 
-            if (self::$options['collector']['files']) {
-                $profiler->addCollector(self::createFilesLoadedCollector($container));
+            if ($options['collector']['files']) {
+                $profiler->addCollector(new FilesLoadedCollector($kernel->getProjectDir()));
             }
 
             return $profiler;
@@ -103,39 +94,11 @@ class FoundationDataCollectorServiceProvider implements
         return $profiler;
     }
 
-    private static function createNarrowsparkDataCollector(): NarrowsparkDataCollector
-    {
-        return new NarrowsparkDataCollector();
-    }
-
-    private static function createViserioHttpDataCollector(ContainerInterface $container): ViserioHttpDataCollector
-    {
-        return new ViserioHttpDataCollector(
-            $container->get(RouterContract::class),
-            $container->get(RepositoryContract::class)
-        );
-    }
-
-    private static function createFilesLoadedCollector(ContainerInterface $container): FilesLoadedCollector
-    {
-        $config = $container->get(RepositoryContract::class);
-
-        return new FilesLoadedCollector($config->get('path.base'));
-    }
-
     /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

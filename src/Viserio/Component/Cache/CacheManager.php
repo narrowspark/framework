@@ -26,7 +26,10 @@ use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
 
-class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface, ProvidesDefaultOptionsContract
+class CacheManager extends AbstractManager implements
+    CacheManagerContract,
+    LoggerAwareInterface,
+    ProvidesDefaultOptionsContract
 {
     use LoggerAwareTrait;
 
@@ -60,7 +63,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
     public function createDriver(array $config)
     {
         $driver    = parent::createDriver($config);
-        $namespace = $this->options['namespace'];
+        $namespace = $this->resolvedOptions['namespace'];
 
         if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
             $driver = $this->getNamespacedPool($driver, $namespace);

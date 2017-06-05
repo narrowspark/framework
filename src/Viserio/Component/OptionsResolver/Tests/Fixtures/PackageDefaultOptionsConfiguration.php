@@ -8,7 +8,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 class PackageDefaultOptionsConfiguration implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
     /**
-     * @interitdoc
+     * {@inheritdoc}.
      */
     public function getDimensions(): iterable
     {
@@ -16,7 +16,7 @@ class PackageDefaultOptionsConfiguration implements RequiresComponentConfigContr
     }
 
     /**
-     * @interitdoc
+     * {@inheritdoc}.
      */
     public function getDefaultOptions(): array
     {

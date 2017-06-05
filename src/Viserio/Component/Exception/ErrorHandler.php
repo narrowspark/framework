@@ -21,16 +21,17 @@ use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\CommandLineTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
     use ContainerAwareTrait;
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
     use LoggerAwareTrait;
 
     /**
@@ -55,6 +56,13 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     protected $dontReport = [];
 
     /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions = [];
+
+    /**
      * Create a new error handler instance.
      *
      * @param \Psr\Container\ContainerInterface $container
@@ -68,7 +76,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             $this->logger = $this->container->get(LoggerInterface::class);
         }
 
-        $this->configureOptions($this->container);
+        $this->resolvedOptions = $this->resolveOptions($this->container);
     }
 
     /**
@@ -355,7 +363,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $container    = $this->container;
         $transformers = array_merge(
             $this->transformers,
-            $this->options['transformers']
+            $this->resolvedOptions['transformers']
         );
 
         foreach ($transformers as $transformer) {
@@ -382,7 +390,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function getLevel(Throwable $exception): string
     {
-        foreach ($this->options['levels'] as $class => $level) {
+        foreach ($this->resolvedOptions['levels'] as $class => $level) {
             if ($exception instanceof $class) {
                 return $level;
             }
@@ -402,7 +410,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     {
         $dontReport = array_merge(
             $this->dontReport,
-            $this->options['dont_report']
+            $this->resolvedOptions['dont_report']
         );
 
         foreach ($dontReport as $type) {
@@ -412,5 +420,13 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         }
 
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 }

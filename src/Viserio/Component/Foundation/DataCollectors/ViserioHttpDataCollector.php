@@ -7,7 +7,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use ReflectionMethod;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
@@ -52,22 +51,22 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     protected $route;
 
     /**
-     * Config instance.
+     * Path to the route dir.
      *
-     * @var \Viserio\Component\Contracts\Config\Repository
+     * @var string
      */
-    protected $config;
+    protected $routeDirPath = '';
 
     /**
      * Create a new viserio request and response data collector.
      *
-     * @param \Viserio\Component\Contracts\Routing\Router    $router
-     * @param \Viserio\Component\Contracts\Config\Repository $config
+     * @param \Viserio\Component\Contracts\Routing\Router $router
+     * @param string                                      $routeDirPath
      */
-    public function __construct(RouterContract $router, RepositoryContract $config)
+    public function __construct(RouterContract $router, string $routeDirPath)
     {
-        $this->route  = $router->getCurrentRoute();
-        $this->config = $config;
+        $this->route        = $router->getCurrentRoute();
+        $this->routeDirPath = $routeDirPath;
     }
 
     /**
@@ -77,8 +76,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     {
         $this->response      = $response;
         $this->serverRequest = $serverRequest;
-
-        $sessions = [];
+        $sessions            = [];
 
         foreach ($this->serverRequest->getAttributes() as $name => $value) {
             if ($value instanceof StoreContract) {
@@ -301,7 +299,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     protected function getRouteInformation(RouteContract $route): array
     {
-        $routesPath = realpath($this->config->get('path.app', ''));
+        $routesPath = realpath($this->routeDirPath);
         $action     = $route->getAction();
 
         $result = [

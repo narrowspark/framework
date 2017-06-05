@@ -7,8 +7,9 @@ use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\Profiler\DataCollectors\Bridge\Log\DebugProcessor;
 use Viserio\Component\Profiler\DataCollectors\Bridge\Log\MonologLoggerDataCollector;
 
@@ -17,12 +18,7 @@ class ProfilerMonologDataCollectorServiceProvider implements
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -87,9 +83,9 @@ class ProfilerMonologDataCollectorServiceProvider implements
         $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($profiler !== null) {
-            self::resolveOptions($container);
+            $options = self::resolveOptions($container);
 
-            if (self::$options['collector']['logs'] === true && $container->has(Logger::class)) {
+            if ($options['collector']['logs'] === true && $container->has(Logger::class)) {
                 $profiler->addCollector(new MonologLoggerDataCollector($container->get(Logger::class)));
             }
 
@@ -100,18 +96,10 @@ class ProfilerMonologDataCollectorServiceProvider implements
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

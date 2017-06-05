@@ -7,9 +7,10 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cookie\CookieJar;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class CookieServiceProvider implements
     ServiceProvider,
@@ -17,12 +18,7 @@ class CookieServiceProvider implements
     ProvidesDefaultOptionsContract,
     RequiresMandatoryOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -68,28 +64,20 @@ class CookieServiceProvider implements
 
     public static function createCookieJar(ContainerInterface $container): CookieJar
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
         return (new CookieJar())->setDefaultPathAndDomain(
-            self::$options['path'],
-            self::$options['domain'],
-            self::$options['secure']
+            $options['path'],
+            $options['domain'],
+            $options['secure']
         );
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

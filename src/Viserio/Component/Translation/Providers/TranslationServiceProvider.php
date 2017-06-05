@@ -7,11 +7,12 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\Translation\Formatters\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
 
@@ -20,12 +21,7 @@ class TranslationServiceProvider implements
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -86,7 +82,7 @@ class TranslationServiceProvider implements
      */
     public static function createTranslationManager(ContainerInterface $container): TranslationManagerContract
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
         $manager = new TranslationManager($container->get(MessageFormatterContract::class));
 
@@ -94,15 +90,15 @@ class TranslationServiceProvider implements
             $manager->setLoader($container->get(LoaderContract::class));
         }
 
-        if ($locale = self::$options['locale']) {
+        if ($locale = $options['locale']) {
             $manager->setLocale($locale);
         }
 
-        if ($directories = self::$options['directories']) {
+        if ($directories = $options['directories']) {
             $manager->setDirectories($directories);
         }
 
-        if ($imports = self::$options['files']) {
+        if ($imports = $options['files']) {
             foreach ((array) $imports as $import) {
                 $manager->import($import);
             }
@@ -128,18 +124,10 @@ class TranslationServiceProvider implements
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

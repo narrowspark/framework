@@ -7,6 +7,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
@@ -22,16 +23,21 @@ use Viserio\Component\Foundation\Http\Events\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Events\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Events\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 
 class KernelTest extends MockeryTestCase
 {
     public function testPrependMiddleware()
     {
-        $kernel                 = new class() extends Kernel {
+        $kernel = new class() extends Kernel {
+            /**
+             * @var array
+             */
             public $middlewares = [];
 
+            /**
+             * @var array
+             */
             protected $middlewareGroups = [
                 'test' => ['web'],
             ];
@@ -296,15 +302,12 @@ class KernelTest extends MockeryTestCase
             ->with(Mock::type(EventsServiceProvider::class));
         $container->shouldReceive('register')
             ->once()
-            ->with(Mock::type(OptionsResolverServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
             ->with(Mock::type(RoutingServiceProvider::class));
     }
 
     private function getKernel($container)
     {
-        return new class($container) extends Kernel {
+        $kernel                      = new class($container) extends Kernel {
             protected $bootstrappers = [
                 LoadServiceProvider::class,
             ];
@@ -318,5 +321,31 @@ class KernelTest extends MockeryTestCase
             {
             }
         };
+
+        $config = $this->mock(RepositoryContract::class);
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
+        $config->shouldReceive('offsetGet')
+            ->once()
+            ->with('viserio')
+            ->andReturn([
+                'app' => [
+                    'env' => 'dev',
+                ],
+            ]);
+        $container->shouldReceive('has')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn(true);
+        $container->shouldReceive('get')
+            ->once()
+            ->with(RepositoryContract::class)
+            ->andReturn($config);
+
+        $kernel->setKernelConfigurations($container);
+
+        return $kernel;
     }
 }

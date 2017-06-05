@@ -8,7 +8,6 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Providers\EncrypterServiceProvider;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Session\Providers\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
 
@@ -18,7 +17,6 @@ class SessionServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new EncrypterServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new SessionServiceProvider());
         $container->register(new FilesServiceProvider());
 

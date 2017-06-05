@@ -9,7 +9,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 class PackageDefaultAndMandatoryOptionsConfiguration implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresMandatoryOptionsContract
 {
     /**
-     * @interitdoc
+     * {@inheritdoc}.
      */
     public function getDimensions(): iterable
     {
@@ -17,7 +17,7 @@ class PackageDefaultAndMandatoryOptionsConfiguration implements RequiresComponen
     }
 
     /**
-     * @interitdoc
+     * {@inheritdoc}.
      */
     public function getDefaultOptions(): array
     {
@@ -28,7 +28,7 @@ class PackageDefaultAndMandatoryOptionsConfiguration implements RequiresComponen
     }
 
     /**
-     * @interitdoc
+     * {@inheritdoc}.
      */
     public function getMandatoryOptions(): iterable
     {

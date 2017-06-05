@@ -60,7 +60,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
             new FileSessionHandler(
                 $this->getContainer()->get(FilesystemContract::class),
                 $config['path'],
-                $this->options['lifetime']
+                $this->resolvedOptions['lifetime']
             )
         );
     }
@@ -75,7 +75,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
         return $this->buildSession(
             new CookieSessionHandler(
                 $this->getContainer()->get(JarContract::class),
-                $this->options['lifetime']
+                $this->resolvedOptions['lifetime']
             )
         );
     }
@@ -208,7 +208,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
         return $this->buildSession(
             new Psr6SessionHandler(
                 clone $this->container->get(CacheManagerContract::class)->getDriver($driver),
-                ['ttl' => $this->options['lifetime'], 'prefix' => 'ns_ses_']
+                ['ttl' => $this->resolvedOptions['lifetime'], 'prefix' => 'ns_ses_']
             )
         );
     }
@@ -223,7 +223,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
         return new Store(
-            $this->options['cookie'],
+            $this->resolvedOptions['cookie'],
             $handler,
             $this->getEncrypter()
         );

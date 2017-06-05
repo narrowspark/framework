@@ -16,18 +16,14 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Bridge\Doctrine\Connection;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class DatabaseServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -59,10 +55,8 @@ class DatabaseServiceProvider implements
 
     public static function createConnection(ContainerInterface $container): DoctrineConnection
     {
-        self::resolveOptions($container);
-
         return DriverManager::getConnection(
-            self::parseConfig(self::$options),
+            self::parseConfig(self::resolveOptions($container)),
             $container->get(Configuration::class),
             $container->get(EventManager::class)
         );
@@ -94,6 +88,14 @@ class DatabaseServiceProvider implements
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
+    }
+
     private static function parseConfig(array $config): array
     {
         $connections = $config['connections'][$config['default']];
@@ -119,21 +121,5 @@ class DatabaseServiceProvider implements
         $config['wrapperClass'] = $config['wrapperClass'] ?? Connection::class;
 
         return $config;
-    }
-
-    /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private static function resolveOptions(ContainerInterface $container): void
-    {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
     }
 }

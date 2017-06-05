@@ -8,7 +8,6 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 use Viserio\Component\Translation\Formatters\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
@@ -38,7 +37,6 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
             new IntlMessageFormatter()
         ));
         $container->register(new HttpFactoryServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ProfilerServiceProvider());
         $container->register(new TranslationDataCollectorServiceProvider());
 
@@ -59,7 +57,6 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
     public function testProviderProfilerIsNull()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new TranslationDataCollectorServiceProvider());
 
         $container->instance('config', [

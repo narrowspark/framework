@@ -6,21 +6,17 @@ use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class CronServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options = [];
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -45,16 +41,16 @@ class CronServiceProvider implements
      */
     public function getMandatoryOptions(): iterable
     {
-        return ['path', 'console'];
+        return ['path'];
     }
 
     public static function createSchedule(ContainerInterface $container): Schedule
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
         $scheduler = new Schedule(
-            self::$options['path'],
-            self::$options['console']
+            $options['path'],
+            $options['console']
         );
 
         if ($container->has(CacheItemPoolInterface::class)) {
@@ -67,18 +63,10 @@ class CronServiceProvider implements
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (count(self::$options) === 0) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

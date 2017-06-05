@@ -5,7 +5,6 @@ namespace Viserio\Component\Foundation\Tests\DataCollectors;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\DataCollectors\ViserioHttpDataCollector;
@@ -38,7 +37,7 @@ class ViserioHttpDataCollectorTest extends MockeryTestCase
             ->withNoArgs()
             ->andReturn($route);
 
-        $collect = new ViserioHttpDataCollector($router, $this->mock(RepositoryContract::class));
+        $collect = new ViserioHttpDataCollector($router, '');
         $collect->collect($serverRequest, $response);
 
         self::assertSame(

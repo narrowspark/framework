@@ -7,7 +7,6 @@ use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Component\Translation\Providers\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;
@@ -53,7 +52,6 @@ return [
         $container->instance(PsrLoggerInterface::class, $this->mock(PsrLoggerInterface::class));
         $container->register(new TranslationServiceProvider());
         $container->register(new ParsersServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
 
         $container->instance('config', [
             'viserio' => [

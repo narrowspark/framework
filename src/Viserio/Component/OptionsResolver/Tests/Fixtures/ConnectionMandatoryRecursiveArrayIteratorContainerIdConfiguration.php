@@ -8,7 +8,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 class ConnectionMandatoryRecursiveArrayIteratorContainerIdConfiguration implements RequiresComponentConfigIdContract, RequiresMandatoryOptionsContract
 {
     /**
-     * @interitdoc
+     * {@inheritdoc}.
      */
     public function getDimensions(): iterable
     {
@@ -16,7 +16,7 @@ class ConnectionMandatoryRecursiveArrayIteratorContainerIdConfiguration implemen
     }
 
     /**
-     * @interitdoc
+     * {@inheritdoc}.
      */
     public function getMandatoryOptions(): iterable
     {

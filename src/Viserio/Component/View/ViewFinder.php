@@ -5,15 +5,16 @@ namespace Viserio\Component\View;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
 
     /**
      * The filesystem instance.
@@ -65,13 +66,12 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     public function __construct(FilesystemContract $files, $data)
     {
         $this->files = $files;
+        $options     = $this->resolveOptions($data);
 
-        $this->configureOptions($data);
+        $this->paths = $options['paths'];
 
-        $this->paths = $this->options['paths'];
-
-        if (isset($this->options['extensions']) && is_array($this->options['extensions'])) {
-            $this->extensions = array_merge($this->extensions, $this->options['extensions']);
+        if (isset($options['extensions']) && is_array($options['extensions'])) {
+            $this->extensions = array_merge($this->extensions, $options['extensions']);
         }
     }
 
@@ -325,5 +325,13 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
                 'file'      => str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
         }, $this->extensions);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 }

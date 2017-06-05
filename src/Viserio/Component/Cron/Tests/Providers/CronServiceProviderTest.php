@@ -7,14 +7,12 @@ use Viserio\Component\Cache\Providers\CacheServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Cron\Providers\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class CronServiceProviderTest extends TestCase
 {
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new CacheServiceProvider());
         $container->register(new CronServiceProvider());
 

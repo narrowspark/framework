@@ -8,7 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Routing\Router;
@@ -18,7 +17,6 @@ class RoutingServiceProviderTest extends MockeryTestCase
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new RoutingServiceProvider());
         $container->register(new EventsServiceProvider());
         $container->instance(ServerRequestInterface::class, $this->mock(ServerRequestInterface::class));

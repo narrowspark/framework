@@ -11,17 +11,18 @@ use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Events\MessageSendingEvent;
 use Viserio\Component\Mail\Events\MessageSentEvent;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
 class Mailer implements MailerContract, RequiresComponentConfigContract
 {
     use ContainerAwareTrait;
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
     use EventsAwareTrait;
     use InvokerAwareTrait;
     use MacroableTrait;
@@ -56,6 +57,13 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     protected $failedRecipients = [];
 
     /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions;
+
+    /**
      * Create a new Mailer instance.
      *
      * @param \Swift_Mailer                              $swiftMailer
@@ -63,18 +71,18 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     public function __construct(Swift_Mailer $swiftMailer, $data)
     {
-        $this->configureOptions($data);
+        $this->resolvedOptions = $this->resolveOptions($data);
 
         // If a "from" address is set, we will set it on the mailer so that all mail
         // messages sent by the applications will utilize the same "from" address
         // on each one, which makes the developer's life a lot more convenient.
-        $from = $this->options['from'] ?? null;
+        $from = $this->resolvedOptions['from'] ?? null;
 
         if (is_array($from) && isset($from['address'], $from['name'])) {
             $this->alwaysFrom($from['address'], $from['name']);
         }
 
-        $to = $this->options['to'] ?? null;
+        $to = $this->resolvedOptions['to'] ?? null;
 
         if (is_array($to) && isset($to['address'], $to['name'])) {
             $this->alwaysTo($to['address'], $to['name']);
@@ -354,5 +362,13 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         }
 
         return vsprintf($view, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 }

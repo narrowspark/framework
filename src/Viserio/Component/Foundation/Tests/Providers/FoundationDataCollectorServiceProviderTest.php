@@ -7,12 +7,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Config\Providers\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\Providers\FoundationDataCollectorServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 
 class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
@@ -27,10 +27,18 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
             ->once()
             ->andReturn($route);
 
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getRoutesPath')
+            ->once()
+            ->andReturn('');
+        $kernel->shouldReceive('getProjectDir')
+            ->once()
+            ->andReturn('');
+
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->instance(RouterContract::class, $router);
-        $container->register(new OptionsResolverServiceProvider());
+        $container->instance(KernelContract::class, $kernel);
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ConfigServiceProvider());
         $container->register(new ProfilerServiceProvider());
@@ -46,7 +54,6 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
                 ],
             ],
         ]);
-        $container->get(RepositoryContract::class)->set('path.base', '/');
 
         $profiler = $container->get(ProfilerContract::class);
 

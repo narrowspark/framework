@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Doctrine\Connection;
 use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 /**
  * @runTestsInSeparateProcesses
@@ -17,7 +16,6 @@ class DatabaseServiceProviderDatabaseConnectionTest extends TestCase
     public function testDatabaseConnection()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new DatabaseServiceProvider());
 
         $container->instance('config', [

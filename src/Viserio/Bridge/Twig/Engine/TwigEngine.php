@@ -7,13 +7,12 @@ use RuntimeException;
 use Twig_Environment;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\View\Engines\AbstractBaseEngine;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsContract
 {
     use ContainerAwareTrait;
-    use ConfigurationTrait;
 
     /**
      * Twig environment.
@@ -34,9 +33,8 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
             $this->container = $data;
         }
 
-        $this->configureOptions($data);
-
-        $this->twig = $twig;
+        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->twig            = $twig;
     }
 
     /**
@@ -80,9 +78,9 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        $twig = $this->addExtensions($this->twig, $this->options['engines']['twig']);
+        $twig = $this->addExtensions($this->twig, $this->resolvedOptions['engines']['twig']);
 
-        return $twig->render($fileInfo['name'], $data);
+        return $twig->render($fileInfo['name'] ?? '', $data);
     }
 
     /**
@@ -109,5 +107,13 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
         }
 
         return $twig;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 }

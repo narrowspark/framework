@@ -11,10 +11,10 @@ use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Events\Providers\EventsServiceProvider;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Routing\Providers\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -25,7 +25,7 @@ abstract class AbstractKernel implements
     RequiresMandatoryOptionsContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
 
     /**
      * The kernel version.
@@ -75,6 +75,13 @@ abstract class AbstractKernel implements
      * @var string
      */
     protected $environmentPath;
+
+    /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions = [];
 
     /**
      * Create a new kernel instance.
@@ -137,7 +144,7 @@ abstract class AbstractKernel implements
      */
     public function setKernelConfigurations($data): void
     {
-        $this->configureOptions($data);
+        $this->resolvedOptions = $this->resolveOptions($data);
     }
 
     /**
@@ -145,7 +152,7 @@ abstract class AbstractKernel implements
      */
     public function getKernelConfigurations(): array
     {
-        return $this->options;
+        return $this->resolvedOptions;
     }
 
     /**
@@ -153,7 +160,7 @@ abstract class AbstractKernel implements
      */
     public function isLocal(): bool
     {
-        return $this->options['app']['env'] == 'local';
+        return $this->resolvedOptions['app']['env'] == 'local';
     }
 
     /**
@@ -161,7 +168,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningUnitTests(): bool
     {
-        return $this->options['app']['env'] == 'testing';
+        return $this->resolvedOptions['app']['env'] == 'testing';
     }
 
     /**
@@ -342,7 +349,7 @@ abstract class AbstractKernel implements
             $container->get(RepositoryContract::class)->set('viserio.app.env', $env);
         }
 
-        $this->options['app']['env'] = $env;
+        $this->resolvedOptions['app']['env'] = $env;
 
         return $env;
     }
@@ -375,7 +382,6 @@ abstract class AbstractKernel implements
         $container = $this->getContainer();
 
         $container->register(new EventsServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new RoutingServiceProvider());
     }
 
@@ -407,5 +413,13 @@ abstract class AbstractKernel implements
     protected function initializeContainer(): void
     {
         $this->container = new Container();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 }

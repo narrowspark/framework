@@ -6,9 +6,10 @@ use Closure;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Support\Manager as ManagerContract;
-use Viserio\Component\OptionsResolver\Traits\ConfigurationTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractManager implements
     RequiresComponentConfigContract,
@@ -16,7 +17,7 @@ abstract class AbstractManager implements
     ManagerContract
 {
     use ContainerAwareTrait;
-    use ConfigurationTrait;
+    use OptionsResolverTrait;
 
     /**
      * The array of created "drivers".
@@ -33,13 +34,20 @@ abstract class AbstractManager implements
     protected $extensions = [];
 
     /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions = [];
+
+    /**
      * Create a new manager instance.
      *
      * @param \Psr\Container\ContainerInterface|iterable $data
      */
     public function __construct($data)
     {
-        $this->configureOptions($data);
+        $this->resolvedOptions = $this->resolveOptions($data);
     }
 
     /**
@@ -76,7 +84,7 @@ abstract class AbstractManager implements
      */
     public function getConfig(): array
     {
-        return $this->options;
+        return $this->resolvedOptions;
     }
 
     /**
@@ -84,7 +92,7 @@ abstract class AbstractManager implements
      */
     public function getDefaultDriver(): string
     {
-        return $this->options['default'];
+        return $this->resolvedOptions['default'];
     }
 
     /**
@@ -92,7 +100,7 @@ abstract class AbstractManager implements
      */
     public function setDefaultDriver(string $name): void
     {
-        $this->options['default'] = $name;
+        $this->resolvedOptions['default'] = $name;
     }
 
     /**
@@ -147,7 +155,7 @@ abstract class AbstractManager implements
     {
         $name = $name ?? $this->getDefaultDriver();
 
-        $drivers = $this->options['drivers'] ?? [];
+        $drivers = $this->resolvedOptions['drivers'] ?? [];
 
         if (isset($drivers[$name]) && is_array($drivers[$name])) {
             $config         = $drivers[$name];
@@ -186,6 +194,14 @@ abstract class AbstractManager implements
     protected function callCustomCreator(string $driver, array $config = [])
     {
         return $this->extensions[$driver]($config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
     }
 
     /**
