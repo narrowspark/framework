@@ -32,6 +32,7 @@
     "require": {
         "php"                                      : "^7.1",
         "psr/http-message"                         : "^1.0",
+        "symfony/polyfill-mbstring"                : "^1.0",
         "viserio/contracts"                        : "self.version",
         "viserio/support"                          : "self.version"
     },
@@ -42,6 +43,7 @@
         "phpunit/phpunit"                          : "^6.0",
         "psr/http-message"                         : "^1.0",
         "sepia/po-parser"                          : "^4.2",
+        "symfony/polyfill-xml"                     : "^1.3",
         "symfony/yaml"                             : "~3.3",
         "yosymfony/toml"                           : "^0.3",
         "viserio/console"                          : "self.version",
