@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extensions;
 
-use Twig\Node\Node;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Twig\Node\Node;
 use Viserio\Bridge\Twig\Extensions\StrExtension;
 use Viserio\Component\Support\Str;
 
