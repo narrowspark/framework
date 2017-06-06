@@ -12,7 +12,7 @@ use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\Fingerprint\ClientIpGenerator;
 use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
-use Viserio\Component\Session\Handler\CookieSessionHandler;
+use Viserio\Component\Session\Handlers\CookieSessionHandler;
 use Viserio\Component\Session\SessionManager;
 
 class StartSessionMiddleware implements MiddlewareInterface

@@ -6,12 +6,12 @@ use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Session\Handler\CookieSessionHandler;
+use Viserio\Component\Session\Handlers\CookieSessionHandler;
 
 class CookieSessionHandlerTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Session\Handler\CookieSessionHandler
+     * @var \Viserio\Component\Session\Handlers\CookieSessionHandler
      */
     private $handler;
 

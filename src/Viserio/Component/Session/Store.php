@@ -11,7 +11,7 @@ use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
 use Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException;
 use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Session\Handler\CookieSessionHandler;
+use Viserio\Component\Session\Handlers\CookieSessionHandler;
 use Viserio\Component\Support\Str;
 
 class Store implements StoreContract
