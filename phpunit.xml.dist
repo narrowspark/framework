@@ -18,6 +18,21 @@
     </php>
 
     <testsuites>
+        <testsuite name="Narrowspark Bridge Doctrine DBAL Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/DBAL/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Bridge Doctrine Extensions Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/Extensions/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Bridge Doctrine Migration Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/Migration/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Bridge Doctrine ORM Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/ORM/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Bridge Doctrine Testing Test Suite">
+            <directory>./src/Viserio/Bridge/Doctrine/Testing/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Twig Bridge Test Suite">
             <directory>./src/Viserio/Bridge/Twig/Tests</directory>
         </testsuite>
@@ -128,9 +143,15 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/Viserio/</directory>
             <exclude>
+<<<<<<< f9bc6c0ef4a65e87be29cef2085550ae54d3bc50
                 <directory>./src/Viserio/Bridge/*/Tests</directory>
                 <directory>./src/Viserio/Component/*/Tests</directory>
                 <directory>./src/Viserio/Provider/*/Tests</directory>
+=======
+                <directory>./src/Viserio/Bridge/Doctrine/**/Tests</directory>
+                <directory>./src/Viserio/Bridge/**/Tests</directory>
+                <directory>./src/Viserio/Component/**/Tests</directory>
+>>>>>>> 6a17ee5c7a65d9684608ab581cfbd21d65300d4c
             </exclude>
         </whitelist>
     </filter>
