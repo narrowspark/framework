@@ -6,7 +6,7 @@ use Doctrine\DBAL\Tools\Console\Command\ImportCommand;
 use Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand;
 use Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
@@ -27,7 +27,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
     /**
      * Extend viserio console with new commands.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                         $getPrevious
      *
      * @return null|\Viserio\Component\Console\Application

@@ -5,25 +5,21 @@ namespace Viserio\Bridge\Doctrine\Migration\Providers;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Gedmo\DoctrineExtensions;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use LaravelDoctrine\Fluent\Extensions\GedmoExtensions;
 use LaravelDoctrine\Fluent\FluentDriver;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class ExtensionsServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options;
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -56,7 +52,7 @@ class ExtensionsServiceProvider implements
     /**
      * Register some doctrine extensions.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                         $getPrevious
      *
      * @return null|\Viserio\Component\Console\Application
@@ -159,18 +155,10 @@ class ExtensionsServiceProvider implements
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (self::$options === null) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

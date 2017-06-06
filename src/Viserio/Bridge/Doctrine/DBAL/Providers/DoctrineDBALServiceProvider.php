@@ -11,18 +11,14 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class DoctrineDBALServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options;
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -56,16 +52,14 @@ class DoctrineDBALServiceProvider implements
     /**
      * Create a new doctrine connection.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return \Doctrine\DBAL\Connection
      */
     public static function createConnection(ContainerInterface $container): DoctrineConnection
     {
-        self::resolveOptions($container);
-
         return DriverManager::getConnection(
-            self::parseConfig(self::$options),
+            self::parseConfig(self::resolveOptions($container)),
             $container->get(Configuration::class),
             $container->get(EventManager::class)
         );
@@ -121,21 +115,5 @@ class DoctrineDBALServiceProvider implements
         $config['wrapperClass'] = $config['wrapperClass'] ?? Connection::class;
 
         return $config;
-    }
-
-    /**
-     * Resolve component options.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return void
-     */
-    private static function resolveOptions(ContainerInterface $container): void
-    {
-        if (self::$options === null) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
     }
 }
