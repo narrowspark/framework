@@ -5,10 +5,10 @@ namespace Viserio\Bridge\Doctrine\Migration\Providers;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Gedmo\DoctrineExtensions;
-use Psr\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use LaravelDoctrine\Fluent\Extensions\GedmoExtensions;
 use LaravelDoctrine\Fluent\FluentDriver;
+use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
@@ -53,7 +53,7 @@ class ExtensionsServiceProvider implements
      * Register some doctrine extensions.
      *
      * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param null|callable                     $getPrevious
      *
      * @return null|\Viserio\Component\Console\Application
      */
@@ -68,6 +68,14 @@ class ExtensionsServiceProvider implements
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
     }
 
     /**
@@ -152,13 +160,5 @@ class ExtensionsServiceProvider implements
     private static function needsAllMappings(): bool
     {
         return self::$options['all_mappings'] !== false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
     }
 }

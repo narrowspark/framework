@@ -11,7 +11,6 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class DoctrineDBALServiceProvider implements
