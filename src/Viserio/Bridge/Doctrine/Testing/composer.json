@@ -1,0 +1,58 @@
+{
+    "name"       : "viserio/doctrine-testing-bridge",
+    "type"       : "library",
+    "description": "The Viserio Doctrine Testing bridge.",
+    "keywords"   : ["narrowspark", "viserio", "database", "testing", "doctrine", "bridge"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                             : "^7.1",
+        "doctrine/common"                                 : "^2.7",
+        "fzaninotto/faker"                                : "^1.6",
+        "narrowspark/collection"                          : "^0.1"
+    },
+    "require-dev": {
+        "container-interop/service-provider"              : "^0.3",
+        "doctrine/data-fixtures"                          : "^1.2",
+        "phpunit/phpunit"                                 : "^6.0",
+        "viserio/container"                               : "self.version",
+        "viserio/doctrine-orm-bridge"                     : "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Bridge\\Doctrine\\Testing\\"        : ""
+        },
+        "exclude-from-classmap"                           : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Bridge\\Doctrine\\Testing\\Tests\\" : "Tests/"
+        }
+    },
+    "suggest": {
+        "container-interop/service-provider"              : "Required to use service-provider (^0.3).",
+        "doctrine/orm"                                    : "Required to use the concerns (self.version).",
+        "viserio/statical-proxy"                          : "Required to use the proxy instances (self.version).",
+        "viserio/console"                                 : "Required to use the data-fixture command (self.version).",
+        "viserio/doctrine-orm-bridge"                     : "Required to use the data-fixture command and concerns (self.version)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                                  : "1.0-dev"
+        }
+    },
+    "minimum-stability"                                   : "dev",
+    "prefer-stable"                                       : true
+}
