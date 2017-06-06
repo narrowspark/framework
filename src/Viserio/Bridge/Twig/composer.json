@@ -20,6 +20,7 @@
     "require": {
         "php"                                : "^7.1",
         "twig/twig"                          : "~2.4",
+        "symfony/polyfill-mbstring"          : "^1.0",
         "viserio/contracts"                  : "self.version",
         "viserio/view"                       : "self.version"
     },

@@ -25,6 +25,7 @@
         "psr/cache"                             : "^1.0",
         "psr/container"                         : "^1.0",
         "symfony/process"                       : "~3.3",
+        "symfony/polyfill-mbstring"             : "^1.0",
         "viserio/contracts"                     : "self.version",
         "viserio/support"                       : "self.version"
     },

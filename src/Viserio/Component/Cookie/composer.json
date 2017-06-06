@@ -21,6 +21,7 @@
         "php"                                     : "^7.1",
         "cakephp/chronos"                         : "^1.0",
         "psr/http-message"                        : "^1.0",
+        "symfony/polyfill-mbstring"               : "^1.0",
         "viserio/contracts"                       : "self.version"
     },
     "require-dev": {

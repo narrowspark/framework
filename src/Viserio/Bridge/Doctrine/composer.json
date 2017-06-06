@@ -23,7 +23,8 @@
         "doctrine/dbal"                          : "^2.5",
         "doctrine/migrations"                    : "^1.4",
         "narrowspark/collection"                 : "^0.1",
-        "ocramius/proxy-manager"                 : "^2.0"
+        "ocramius/proxy-manager"                 : "^2.0",
+        "symfony/polyfill-mbstring"              : "^1.0"
     },
     "require-dev": {
         "container-interop/service-provider"     : "^0.3",
