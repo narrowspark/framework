@@ -18,8 +18,9 @@
 * Powerful dependency injection container.
 * Multiple back-ends for session, filesystem and cache storage.
 * A powerful console "cerebro" based on [Symfony Console][5]
-* Simple, fast and with support for psr-15 middleware routing engine.
-* Powerful [encryption][7] and [hashing][8].
+* Simple, fast routing engine with support for psr-15 middlewares.
+* Powerful [encryption][7] and [hashing][8] components.
+* All components are based on [psr][9] standards, easy to switch or used in other [psr][9] based projects.
 
 Documentation
 -------------
@@ -68,3 +69,4 @@ The Narrowspark framework is open-sourced software licensed under the [MIT licen
 [6]: https://narrowspark.com/docs
 [7]: https://github.com/defuse/php-encryption
 [8]: https://github.com/paragonie/password_lock
+[9]: http://www.php-fig.org/psr/
