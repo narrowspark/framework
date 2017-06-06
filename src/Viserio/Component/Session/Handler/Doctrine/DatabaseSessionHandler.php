@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Handler\Doctrine;
 
-use PDO;
-use PDOException;
-use RuntimeException;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
-use Doctrine\DBAL\Connection;
+use PDO;
+use PDOException;
+use RuntimeException;
 use SessionHandlerInterface;
 
 class DatabaseSessionHandler implements SessionHandlerInterface
@@ -34,7 +34,7 @@ class DatabaseSessionHandler implements SessionHandlerInterface
     public function __construct(Connection $connection, $table = 'sessions')
     {
         $this->connection = $connection;
-        $this->table = $table;
+        $this->table      = $table;
     }
 
     /**
@@ -87,7 +87,6 @@ class DatabaseSessionHandler implements SessionHandlerInterface
     public function read($id): string
     {
         try {
-
             $data = $this->connection->executeQuery("SELECT data FROM {$this->table} WHERE id = :id", ['id' => $id])->fetchAll(PDO::FETCH_NUM);
 
             if ($data) {
@@ -95,7 +94,6 @@ class DatabaseSessionHandler implements SessionHandlerInterface
             }
 
             return '';
-
         } catch (PDOException $e) {
             throw new RuntimeException(sprintf('PDOException was thrown when trying to read the session data: %s', $e->getMessage()), 0, $e);
         }
@@ -111,6 +109,7 @@ class DatabaseSessionHandler implements SessionHandlerInterface
 
             if (null !== $sql = $this->getMergeSql()) {
                 $this->connection->executeQuery($sql, $params);
+
                 return true;
             }
 
@@ -143,7 +142,7 @@ class DatabaseSessionHandler implements SessionHandlerInterface
 
         if ($platform instanceof MySqlPlatform) {
             return "INSERT INTO {$this->table} (id, data, time) VALUES (:id, :data, :time) "
-            . "ON DUPLICATE KEY UPDATE data = VALUES(data), time = CASE WHEN time = :time THEN (VALUES(time) + INTERVAL 1 SECOND) ELSE VALUES(time) END";
+            . 'ON DUPLICATE KEY UPDATE data = VALUES(data), time = CASE WHEN time = :time THEN (VALUES(time) + INTERVAL 1 SECOND) ELSE VALUES(time) END';
         } elseif ($platform instanceof SqlitePlatform) {
             return  "INSERT OR REPLACE INTO {$this->table} (id, data, time) VALUES (:id, :data, :time)";
         }
