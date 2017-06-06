@@ -6,11 +6,11 @@ use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
-use Twig_Environment;
-use Twig_Error;
-use Twig_Error_Loader;
-use Twig_LoaderInterface;
-use Twig_Source;
+use Twig\Environment;
+use Twig\Error\Error;
+use Twig\Error\LoaderError;
+use Twig\Loader\LoaderInterface;
+use Twig\Source;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -63,7 +63,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
     {
         $container = $this->getContainer();
 
-        if (! $container->has(Twig_Environment::class)) {
+        if (! $container->has(Environment::class)) {
             $this->error('The Twig environment needs to be set.');
 
             return;
@@ -79,8 +79,8 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
 
         foreach ($files as $file) {
             try {
-                $template = $container->get(Twig_LoaderInterface::class)->getSourceContext($file);
-            } catch (Twig_Error_Loader $exception) {
+                $template = $container->get(LoaderInterface::class)->getSourceContext($file);
+            } catch (LoaderError $exception) {
                 throw new RuntimeException(sprintf('File or directory [%s] is not readable', $file));
             }
 
@@ -223,18 +223,18 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
     /**
      * Validate the template.
      *
-     * @param \Twig_Source $template twig template
+     * @param \Twig\Source $template twig template
      * @param string|null  $file     filename of the template
      *
      * @return array
      */
-    protected function validate(Twig_Source $template, ?string $file = null): array
+    protected function validate(Source $template, ?string $file = null): array
     {
-        $twig = $this->getContainer()->get(Twig_Environment::class);
+        $twig = $this->getContainer()->get(Environment::class);
 
         try {
             $twig->parse($twig->tokenize($template, $file));
-        } catch (Twig_Error $exception) {
+        } catch (Error $exception) {
             return [
                 'template'  => $template,
                 'file'      => $file,
@@ -378,13 +378,13 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
     /**
      * Grabs the surrounding lines around the exception.
      *
-     * @param Twig_Source $template contents of Twig template
-     * @param string|int  $line     line where the exception occurred
-     * @param int         $context  number of lines around the line where the exception occurred
+     * @param \Twig\Source $template contents of Twig template
+     * @param string|int   $line     line where the exception occurred
+     * @param int          $context  number of lines around the line where the exception occurred
      *
      * @return array
      */
-    protected function getContext(Twig_Source $template, $line, int $context = 3): array
+    protected function getContext(Source $template, $line, int $context = 3): array
     {
         $template = $template->getCode();
         $lines    = explode("\n", $template);

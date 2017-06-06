@@ -6,8 +6,8 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use Twig_Environment;
-use Twig_LoaderInterface;
+use Twig\Environment;
+use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Commands\LintCommand;
 use Viserio\Bridge\Twig\Loader;
 use Viserio\Component\Console\Application;
@@ -126,7 +126,7 @@ class LintCommandTest extends MockeryTestCase
         ];
         $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
         $loader = new Loader($finder);
-        $twig   = new Twig_Environment($loader);
+        $twig   = new Environment($loader);
 
         $application = new Application('1');
         $application->setContainer(new ArrayContainer(
@@ -134,7 +134,7 @@ class LintCommandTest extends MockeryTestCase
                 $config,
                 [
                     FinderContract::class       => $finder,
-                    Twig_LoaderInterface::class => $loader,
+                    LoaderInterface::class      => $loader,
                 ]
             )
         ));
@@ -167,16 +167,16 @@ class LintCommandTest extends MockeryTestCase
         ];
         $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
         $loader = new Loader($finder);
-        $twig   = new Twig_Environment($loader);
+        $twig   = new Environment($loader);
 
         $application = new Application('1');
         $application->setContainer(new ArrayContainer(
             array_merge(
                 $config,
                 [
-                        Twig_Environment::class     => $twig,
+                        Environment::class          => $twig,
                         FinderContract::class       => $finder,
-                        Twig_LoaderInterface::class => $loader,
+                        LoaderInterface::class      => $loader,
                 ]
             )
         ));

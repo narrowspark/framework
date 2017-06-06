@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extensions;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Twig\Node\Node;
 use Viserio\Bridge\Twig\Extensions\StrExtension;
 use Viserio\Component\Support\Str;
 
@@ -49,7 +50,7 @@ class StrExtensionTest extends MockeryTestCase
         $string   = $this->getString();
         $function = $string->getFunctions()[0];
 
-        self::assertFalse(in_array('html', $function->getSafe($this->mock('Twig_Node'))));
+        self::assertFalse(in_array('html', $function->getSafe($this->mock(Node::class))));
     }
 
     public function testCustomFilters()

@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig;
 
 use InvalidArgumentException;
-use Twig_Error_Loader;
-use Twig_ExistsLoaderInterface;
-use Twig_LoaderInterface;
-use Twig_Source;
+use Twig\Error\LoaderError;
+use Twig\Loader\ExistsLoaderInterface;
+use Twig\Loader\LoaderInterface;
+use Twig\Source;
 use Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 
-class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
+class Loader implements LoaderInterface, ExistsLoaderInterface
 {
     /**
      * The filesystem instance.
@@ -58,7 +58,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      *
      * @codeCoverageIgnore
      */
-    public function setExtension(string $extension): Twig_LoaderInterface
+    public function setExtension(string $extension): LoaderInterface
     {
         $this->extension = $extension;
 
@@ -72,7 +72,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
     {
         try {
             $this->findTemplate($name);
-        } catch (Twig_Error_Loader $exception) {
+        } catch (LoaderError $exception) {
             return false;
         }
 
@@ -89,14 +89,14 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         try {
             $source = $this->files->read($template);
         } catch (FileNotFoundException $exception) {
-            throw new Twig_Error_Loader(sprintf('Twig file [%s] was not found.', $exception->getMessage()));
+            throw new LoaderError(sprintf('Twig file [%s] was not found.', $exception->getMessage()));
         }
 
         if ($source === false) {
-            throw new Twig_Error_Loader(sprintf('A error occurred during template [%s] reading', $name));
+            throw new LoaderError(sprintf('A error occurred during template [%s] reading', $name));
         }
 
-        return new Twig_Source($source, $name, $template);
+        return new Source($source, $name, $template);
     }
 
     /**
@@ -122,7 +122,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
      *
      * @param string $name
      *
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      *
      * @return string
      */
@@ -142,7 +142,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
             $found              = $this->finder->find($name);
             $this->cache[$name] = $found['path'];
         } catch (InvalidArgumentException $exception) {
-            throw new Twig_Error_Loader($exception->getMessage());
+            throw new LoaderError($exception->getMessage());
         }
 
         return $this->cache[$name];

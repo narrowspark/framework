@@ -4,10 +4,10 @@ namespace Viserio\Bridge\Twig\Extensions;
 
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
-use Twig_Environment;
-use Twig_Extension;
-use Twig_Function;
-use Twig_Template;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\Template;
+use Twig\TwigFunction;
 use Viserio\Bridge\Twig\TokenParsers\DumpTokenParser;
 
 /**
@@ -19,7 +19,7 @@ use Viserio\Bridge\Twig\TokenParsers\DumpTokenParser;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class DumpExtension extends Twig_Extension
+class DumpExtension extends AbstractExtension
 {
     /**
      * Cloner instance.
@@ -42,7 +42,7 @@ class DumpExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_Function(
+            new TwigFunction(
                 'dump',
                 [$this, 'dump'],
                 [
@@ -70,7 +70,7 @@ class DumpExtension extends Twig_Extension
     /**
      * {inheritdoc}.
      */
-    public function dump(Twig_Environment $env, $context)
+    public function dump(Environment $env, $context)
     {
         if (! $env->isDebug()) {
             return;
@@ -80,7 +80,7 @@ class DumpExtension extends Twig_Extension
             $vars = [];
 
             foreach ($context as $key => $value) {
-                if (! $value instanceof Twig_Template) {
+                if (! $value instanceof Template) {
                     $vars[$key] = $value;
                 }
             }

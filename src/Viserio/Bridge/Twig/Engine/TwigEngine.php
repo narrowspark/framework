@@ -4,7 +4,7 @@ namespace Viserio\Bridge\Twig\Engine;
 
 use Psr\Container\ContainerInterface;
 use RuntimeException;
-use Twig_Environment;
+use Twig\Environment;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
@@ -17,17 +17,17 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     /**
      * Twig environment.
      *
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
     /**
      * Create a new engine instance.
      *
-     * @param \Twig_Environment                          $twig
+     * @param \Twig\Environment                          $twig
      * @param \Psr\Container\ContainerInterface|iterable $data
      */
-    public function __construct(Twig_Environment $twig, $data)
+    public function __construct(Environment $twig, $data)
     {
         if ($data instanceof ContainerInterface) {
             $this->container = $data;
@@ -86,10 +86,10 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     /**
      * Add extensions to twig environment.
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param array             $config
      */
-    protected function addExtensions(Twig_Environment $twig, array $config): Twig_Environment
+    protected function addExtensions(Environment $twig, array $config): Environment
     {
         if (isset($config['extensions']) && is_array($config['extensions'])) {
             foreach ($config['extensions'] as $extension) {

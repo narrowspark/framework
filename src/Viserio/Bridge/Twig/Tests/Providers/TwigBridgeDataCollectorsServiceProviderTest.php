@@ -4,8 +4,8 @@ namespace Viserio\Bridge\Twig\Tests\Providers;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Twig_Environment;
-use Twig_Profiler_Profile;
+use Twig\Environment;
+use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\Providers\TwigBridgeDataCollectorsServiceProvider;
 use Viserio\Bridge\Twig\Providers\TwigBridgeServiceProvider;
 use Viserio\Component\Container\Container;
@@ -15,9 +15,6 @@ use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Providers\ProfilerServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
 
-/**
- * @runTestsInSeparateProcesses
- */
 class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 {
     public function testGetServices()
@@ -67,8 +64,8 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
         self::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));
         self::assertTrue(array_key_exists('twig-data-collector', $profiler->getCollectors()));
 
-        self::assertInstanceOf(Twig_Profiler_Profile::class, $container->get(Twig_Profiler_Profile::class));
-        self::assertInstanceOf(Twig_Environment::class, $container->get(Twig_Environment::class));
+        self::assertInstanceOf(Profile::class, $container->get(Profile::class));
+        self::assertInstanceOf(Environment::class, $container->get(Environment::class));
     }
 
     private function getRequest()

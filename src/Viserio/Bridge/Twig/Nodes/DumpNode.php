@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Nodes;
 
 use Symfony\Component\VarDumper\VarDumper;
-use Twig_Compiler;
-use Twig_Node;
+use Twig\Compiler;
+use Twig\Node\Node;
 
 /**
  * @author Julien Galenski <julien.galenski@gmail.com>
  */
-class DumpNode extends Twig_Node
+class DumpNode extends Node
 {
     /**
      * @var string
@@ -19,12 +19,12 @@ class DumpNode extends Twig_Node
     /**
      * Create a new dump node instance.
      *
-     * @param string         $varPrefix
-     * @param Twig_Node|null $values
-     * @param int            $lineno
-     * @param string|null    $tag
+     * @param string               $varPrefix
+     * @param \Twig\Node\Node|null $values
+     * @param int                  $lineno
+     * @param string|null          $tag
      */
-    public function __construct(string $varPrefix, ?Twig_Node $values = null, int $lineno = 0, ?string $tag = null)
+    public function __construct(string $varPrefix, ?Node $values = null, int $lineno = 0, ?string $tag = null)
     {
         $nodes = [];
 
@@ -40,7 +40,7 @@ class DumpNode extends Twig_Node
     /**
      * {@inheritdoc}
      */
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler->write("if (\$this->env->isDebug()) {\n")
             ->indent();
@@ -50,7 +50,7 @@ class DumpNode extends Twig_Node
             $compiler->write(sprintf('$%svars = [];' . "\n", $this->varPrefix))
                 ->write(sprintf('foreach ($context as $%1$skey => $%1$sval) {' . "\n", $this->varPrefix))
                 ->indent()
-                ->write(sprintf('if (!$%sval instanceof \Twig_Template) {' . "\n", $this->varPrefix))
+                ->write(sprintf('if (!$%sval instanceof \Twig\Template) {' . "\n", $this->varPrefix))
                 ->indent()
                 ->write(sprintf('$%1$svars[$%1$skey] = $%1$sval;' . "\n", $this->varPrefix))
                 ->outdent()

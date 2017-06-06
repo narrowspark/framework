@@ -4,9 +4,9 @@ namespace Viserio\Bridge\Twig\Providers;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Twig_Environment as TwigEnvironment;
-use Twig_Extension_Profiler;
-use Twig_Profiler_Profile;
+use Twig\Environment as TwigEnvironment;
+use Twig\Extension\ProfilerExtension;
+use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
@@ -27,8 +27,8 @@ class TwigBridgeDataCollectorsServiceProvider implements
     public function getServices()
     {
         return [
-            Twig_Profiler_Profile::class => function (): Twig_Profiler_Profile {
-                return new Twig_Profiler_Profile();
+            Profile::class => function (): Profile {
+                return new Profile();
             },
             TwigEnvironment::class       => [self::class, 'createTwigEnvironment'],
             ProfilerContract::class      => [self::class, 'createProfiler'],
@@ -72,7 +72,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
 
             if ($options['collector']['twig'] === true) {
                 $profiler->addCollector(new TwigDataCollector(
-                    $container->get(Twig_Profiler_Profile::class),
+                    $container->get(Profile::class),
                     $container->get(TwigEnvironment::class)
                 ));
             }
@@ -84,12 +84,12 @@ class TwigBridgeDataCollectorsServiceProvider implements
     }
 
     /**
-     * Wrap Twig_Environment.
+     * Wrap Twig Environment.
      *
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\Twig_Environment
+     * @return null|\Twig\Environment
      */
     public static function createTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
     {
@@ -99,8 +99,8 @@ class TwigBridgeDataCollectorsServiceProvider implements
             $options = self::resolveOptions($container);
 
             if ($options['collector']['twig'] === true) {
-                $twig->addExtension(new Twig_Extension_Profiler(
-                    $container->get(Twig_Profiler_Profile::class)
+                $twig->addExtension(new ProfilerExtension(
+                    $container->get(Profile::class)
                 ));
             }
 

@@ -19,7 +19,7 @@
     ],
     "require": {
         "php"                                : "^7.1",
-        "twig/twig"                          : "^2.0",
+        "twig/twig"                          : "~2.4",
         "viserio/contracts"                  : "self.version",
         "viserio/view"                       : "self.version"
     },

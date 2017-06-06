@@ -4,8 +4,8 @@ namespace Viserio\Bridge\Twig\Tests\Engine;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Twig_Environment;
-use Twig_Loader_Filesystem;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Bridge\Twig\Extensions\StrExtension;
@@ -41,8 +41,8 @@ class TwigEngineTest extends MockeryTestCase
             ]);
 
         $engine = new TwigEngine(
-            new Twig_Environment(
-                new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
+            new Environment(
+                new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
             new ArrayContainer([
@@ -98,8 +98,8 @@ class TwigEngineTest extends MockeryTestCase
         ];
 
         $engine = new TwigEngine(
-            new Twig_Environment(
-                new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
+            new Environment(
+                new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
             new ArrayContainer([
@@ -155,8 +155,8 @@ class TwigEngineTest extends MockeryTestCase
         ];
 
         $engine = new TwigEngine(
-            new Twig_Environment(
-                new Twig_Loader_Filesystem($config['viserio']['view']['paths']),
+            new Environment(
+                new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
             new ArrayContainer([

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\TokenParsers;
 
-use Twig_Token;
-use Twig_TokenParser;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
 use Viserio\Bridge\Twig\Nodes\DumpNode;
 
 /**
@@ -18,20 +18,20 @@ use Viserio\Bridge\Twig\Nodes\DumpNode;
  *
  * @author Julien Galenski <julien.galenski@gmail.com>
  */
-class DumpTokenParser extends Twig_TokenParser
+class DumpTokenParser extends AbstractTokenParser
 {
     /**
      * {@inheritdoc}
      */
-    public function parse(Twig_Token $token)
+    public function parse(Token $token)
     {
         $values = null;
 
-        if (! $this->parser->getStream()->test(Twig_Token::BLOCK_END_TYPE)) {
+        if (! $this->parser->getStream()->test(Token::BLOCK_END_TYPE)) {
             $values = $this->parser->getExpressionParser()->parseMultitargetExpression();
         }
 
-        $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
+        $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
 
         return new DumpNode($this->parser->getVarName(), $values, $token->getLine(), $this->getTag());
     }

@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extensions;
 
-use Twig_Extension;
-use Twig_Function;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 
-class SessionExtension extends Twig_Extension
+class SessionExtension extends AbstractExtension
 {
     /**
      * Viserio session instance.
@@ -39,15 +39,20 @@ class SessionExtension extends Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new Twig_Function('session', [$this->session, 'get']),
-            new Twig_Function('csrf_token', [$this->session, 'getToken'], ['is_safe' => ['html']]),
-            new Twig_Function('csrf_field', [$this, 'getCsrfField'], ['is_safe' => ['html']]),
-            new Twig_Function('session_get', [$this->session, 'get']),
-            new Twig_Function('session_has', [$this->session, 'has']),
+            new TwigFunction('session', [$this->session, 'get']),
+            new TwigFunction('csrf_token', [$this->session, 'getToken'], ['is_safe' => ['html']]),
+            new TwigFunction('csrf_field', [$this, 'getCsrfField'], ['is_safe' => ['html']]),
+            new TwigFunction('session_get', [$this->session, 'get']),
+            new TwigFunction('session_has', [$this->session, 'has']),
         ];
     }
 
-    public function getCsrfField()
+    /**
+     * Return a hidden csrf filed.
+     *
+     * @return string
+     */
+    public function getCsrfField(): string
     {
         return '<input type="hidden" name="_token" value="' . $this->session->getToken() . '">';
     }

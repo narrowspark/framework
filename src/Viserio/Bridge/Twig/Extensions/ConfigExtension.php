@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extensions;
 
-use Twig_Extension;
-use Twig_Function;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Config\Traits\ConfigAwareTrait;
 
-class ConfigExtension extends Twig_Extension
+class ConfigExtension extends AbstractExtension
 {
     use ConfigAwareTrait;
 
@@ -35,9 +35,9 @@ class ConfigExtension extends Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new Twig_Function('config', [$this->config, 'get']),
-            new Twig_Function('config_get', [$this->config, 'get']),
-            new Twig_Function('config_has', [$this->config, 'has']),
+            new TwigFunction('config', [$this->config, 'get']),
+            new TwigFunction('config_get', [$this->config, 'get']),
+            new TwigFunction('config_has', [$this->config, 'has']),
         ];
     }
 }

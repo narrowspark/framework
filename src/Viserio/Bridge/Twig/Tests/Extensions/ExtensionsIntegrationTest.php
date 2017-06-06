@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extensions;
 
 use Mockery as Mock;
-use Twig_Test_IntegrationTestCase;
+use Twig\Test\IntegrationTestCase;
 use Viserio\Bridge\Twig\Extensions\ConfigExtension;
 use Viserio\Bridge\Twig\Extensions\DumpExtension;
 use Viserio\Bridge\Twig\Extensions\SessionExtension;
@@ -20,7 +20,7 @@ if (! class_exists('\PHPUnit_Framework_TestCase')) {
 /**
  * @group appveyor
  */
-class ExtensionsIntegrationTest extends Twig_Test_IntegrationTestCase
+class ExtensionsIntegrationTest extends IntegrationTestCase
 {
     public function tearDown()
     {
