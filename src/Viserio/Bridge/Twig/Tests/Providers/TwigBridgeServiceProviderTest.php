@@ -16,9 +16,6 @@ use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
 
-/**
- * @runTestsInSeparateProcesses
- */
 class TwigBridgeServiceProviderTest extends MockeryTestCase
 {
     public function testProvider()

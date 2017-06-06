@@ -10,9 +10,6 @@ use Viserio\Bridge\Doctrine\Connection;
 use Viserio\Bridge\Doctrine\Providers\DatabaseServiceProvider;
 use Viserio\Component\Container\Container;
 
-/**
- * @runTestsInSeparateProcesses
- */
 class DatabaseServiceProviderTest extends TestCase
 {
     public function testProvider()

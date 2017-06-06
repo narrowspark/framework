@@ -84,8 +84,6 @@ class ScheduleTest extends MockeryTestCase
     }
 
     /**
-     * @runTestsInSeparateProcesses
-     *
      * @expectedException \LogicException
      * @expectedExceptionMessage You need to set a console name or a path to a console, before you call command.
      */
@@ -96,9 +94,6 @@ class ScheduleTest extends MockeryTestCase
         $schedule->command('clear:view');
     }
 
-    /**
-     * @runTestsInSeparateProcesses
-     */
     public function testCommandCreatesNewCerebroBinaryCommand()
     {
         define('CEREBRO_BINARY', 'cerebro');
