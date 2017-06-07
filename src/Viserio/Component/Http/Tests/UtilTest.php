@@ -5,7 +5,6 @@ namespace Viserio\Component\Http\Tests;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
-use Viserio\Component\Http\UploadedFile;
 use Viserio\Component\Http\Util;
 
 class UtilTest extends TestCase

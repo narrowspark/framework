@@ -4,8 +4,8 @@ namespace Viserio\Component\Support\Http;
 
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\UriInterface;
 
 /**
  * Some code in this class it taken from zend-diactoros.
@@ -25,15 +25,15 @@ final class GlobalServerRequest
     private static $apacheRequestHeaders = 'apache_request_headers';
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @param ServerRequestInterface $serverRequest
-     * @param UriInterface $uri
+     * @param UriInterface           $uri
      */
     public function __construct(ServerRequestInterface $serverRequest, UriInterface $uri)
     {
         $this->serverRequest = $serverRequest;
-        $this->uri = $uri;
+        $this->uri           = $uri;
     }
 
     /**
@@ -45,15 +45,15 @@ final class GlobalServerRequest
      * The ServerRequest created is then passed to the fromServer() method in
      * order to marshal the request URI and headers.
      *
-     * @param array $server $_SERVER superglobal
-     * @param array $query $_GET superglobal
-     * @param array $body $_POST superglobal
+     * @param array $server  $_SERVER superglobal
+     * @param array $query   $_GET superglobal
+     * @param array $body    $_POST superglobal
      * @param array $cookies $_COOKIE superglobal
-     * @param array $files $_FILES superglobal
-     *
-     * @return \Psr\Http\Message\ServerRequestInterface
+     * @param array $files   $_FILES superglobal
      *
      * @throws \InvalidArgumentException for invalid file values
+     *
+     * @return \Psr\Http\Message\ServerRequestInterface
      */
     public function fromGlobals(
         array $server = null,
@@ -77,7 +77,7 @@ final class GlobalServerRequest
             ->withUploadedFiles(self::normalizeFiles($files ?? $_FILES));
     }
 
-        /**
+    /**
      * Return an UploadedFile instance array.
      *
      * @param array $files A array which respect $_FILES structure

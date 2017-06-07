@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Support\Tests\Http;
 
+use GuzzleHttp\Psr7\UploadedFile;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use GuzzleHttp\Psr7\UploadedFile;
 use Viserio\Component\Support\Http\GlobalServerRequest;
 
 class GlobalServerRequestTest extends MockeryTestCase
@@ -505,13 +505,6 @@ class GlobalServerRequestTest extends MockeryTestCase
         self::assertEquals(['host' => ['example.org']], $headers);
     }
 
-    protected function assertServerRequest($request, $method, $uri)
-    {
-        self::assertInstanceOf(ServerRequestInterface::class, $request);
-        self::assertSame($method, $request->getMethod());
-        self::assertSame($uri, (string) $request->getUri());
-    }
-
     public function dataNormalizeFiles()
     {
         return [
@@ -775,5 +768,12 @@ class GlobalServerRequestTest extends MockeryTestCase
     public function testNormalizeFilesRaisesException()
     {
         Util::normalizeFiles(['test' => 'something']);
+    }
+
+    protected function assertServerRequest($request, $method, $uri)
+    {
+        self::assertInstanceOf(ServerRequestInterface::class, $request);
+        self::assertSame($method, $request->getMethod());
+        self::assertSame($uri, (string) $request->getUri());
     }
 }
