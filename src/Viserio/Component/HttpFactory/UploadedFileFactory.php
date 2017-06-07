@@ -37,7 +37,7 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
      */
     private function getSize($file, $size): int
     {
-        if (null !== $size) {
+        if ($size !== null) {
             return $size;
         }
 

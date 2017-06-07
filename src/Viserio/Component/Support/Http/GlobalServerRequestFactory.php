@@ -15,10 +15,10 @@ use Psr\Http\Message\UriInterface;
  * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-final class GlobalServerRequest
+final class GlobalServerRequestFactory
 {
     /**
-     * Function to use to get apache request headers; present only to simplify mocking.
+     * Create ClientIp instance.
      *
      * @var callable
      */
