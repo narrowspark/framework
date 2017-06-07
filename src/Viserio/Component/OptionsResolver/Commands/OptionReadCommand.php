@@ -23,17 +23,28 @@ class OptionReadCommand extends Command
      */
     public function handle()
     {
-        $finder = new Finder();
-        $files  = $finder->files()->name('*.php')->in(__DIR__ . '/../../../');
+        $reflectionClass = new ReflectionClass($className);
+        $interfaces = $reflectionClass->getInterfaceNames();
 
-        foreach ($files as $file) {
-            \var_dump($file);
-            $reflectionClass = new ReflectionClass($className);
-            $interfaces      = $reflectionClass->getInterfaceNames();
+        if (! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract()) {
+            $factory          = $reflectionClass->newInstanceWithoutConstructor();
+            $dimensions       = [];
+            $mandatoryOptions = [];
+            $defaultOptions   = [];
 
-            if (in_array(RequiresConfig::class, $interfaces, true)) {
-                $dimensions = $factory->dimensions();
+            if (in_array(RequiresComponentConfigContract::class, $interfaces, true)) {
+                $dimensions = $factory->getDimensions();
             }
+
+            if (in_array(ProvidesDefaultOptionsContract::class, $interfaces, true)) {
+                $defaultOptions = $factory->getDefaultOptions();
+            }
+
+            if (in_array(RequiresMandatoryOptionsContract::class, $interfaces, true)) {
+                $mandatoryOptions = $factory->getMandatoryOptions();
+            }
+
+            $config = [];
         }
     }
 }
