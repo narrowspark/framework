@@ -4,9 +4,9 @@ namespace Viserio\Component\OptionsResolver\Commands;
 
 use ReflectionClass;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
 class OptionDumpCommand extends Command
@@ -38,7 +38,7 @@ EOC;
 
         foreach (get_declared_classes() as $className) {
             $reflectionClass = new ReflectionClass($className);
-            $interfaces = $reflectionClass->getInterfaceNames();
+            $interfaces      = $reflectionClass->getInterfaceNames();
 
             if (! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract() && in_array(RequiresConfigContract::class, $interfaces, true)) {
                 $factory          = $reflectionClass->newInstanceWithoutConstructor();
@@ -65,11 +65,12 @@ EOC;
         }
     }
 
-    private function buildMultidimensionalArray(array $dimensions) {
+    private function buildMultidimensionalArray(array $dimensions)
+    {
         $config = [];
         $index  = array_shift($dimensions);
 
-        if (!isset($dimensions[0])) {
+        if (! isset($dimensions[0])) {
             $config[$index] = [];
         } else {
             $config[$index] = $this->buildMultidimensionalArray($dimensions);

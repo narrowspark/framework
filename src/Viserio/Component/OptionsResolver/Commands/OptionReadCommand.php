@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Commands;
 
 use ReflectionClass;
-use Symfony\Component\Finder\Finder;
 use Viserio\Component\Console\Command\Command;
 
 class OptionReadCommand extends Command
@@ -24,7 +23,7 @@ class OptionReadCommand extends Command
     public function handle()
     {
         $reflectionClass = new ReflectionClass($className);
-        $interfaces = $reflectionClass->getInterfaceNames();
+        $interfaces      = $reflectionClass->getInterfaceNames();
 
         if (! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract()) {
             $factory          = $reflectionClass->newInstanceWithoutConstructor();
