@@ -6,7 +6,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
-use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 use Viserio\Component\Parsers\Formats\Ini;
 use Viserio\Component\Parsers\Formats\Json;
 use Viserio\Component\Parsers\Formats\Php;

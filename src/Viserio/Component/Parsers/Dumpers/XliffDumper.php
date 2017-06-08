@@ -3,14 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats;
 
 use DOMDocument;
-use InvalidArgumentException;
-use SimpleXMLElement;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\DumpException;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
-use Viserio\Component\Parsers\Utils\XmlUtils;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * Some of this code has been ported from Symfony. The original

@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats;
 
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 
 class QueryStrDumper implements DumperContract
 {

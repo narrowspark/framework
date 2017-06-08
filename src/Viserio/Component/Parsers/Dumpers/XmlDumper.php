@@ -3,14 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Formats;
 
 use DOMException;
-use InvalidArgumentException;
 use RuntimeException;
 use Spatie\ArrayToXml\ArrayToXml;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\DumpException;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
-use Viserio\Component\Parsers\Utils\XmlUtils;
 
 class XmlDumper implements DumperContract
 {
