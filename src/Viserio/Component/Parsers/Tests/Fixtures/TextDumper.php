@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Dumpers;
+namespace Viserio\Component\Parsers\Tests\Fixtures;
 
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 
-class SerializeDumper implements DumperContract
+class TextDumper implements DumperContract
 {
     /**
      * {@inheritdoc}
      */
     public function dump(array $data): string
     {
-        return serialize($data);
+        return $data[0];
     }
 }

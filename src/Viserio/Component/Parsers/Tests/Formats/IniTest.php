@@ -5,7 +5,8 @@ namespace Viserio\Component\Parsers\Tests\Formats\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\Ini;
+use Viserio\Component\Parsers\Dumpers\IniDumper;
+use Viserio\Component\Parsers\Parsers\IniParser;
 
 class IniTest extends TestCase
 {
@@ -13,11 +14,6 @@ class IniTest extends TestCase
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
-
-    /**
-     * @var \Viserio\Component\Parsers\Formats\Ini
-     */
-    private $parser;
 
     /**
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem
@@ -55,7 +51,6 @@ class IniTest extends TestCase
                 ],
             ],
         ];
-        $this->parser = new Ini();
     }
 
     public function testParse()
@@ -86,7 +81,7 @@ urls[svn] = "http://svn.php.net"
 urls[git] = "http://git.php.net"')
             ->at($this->root);
 
-        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
+        $parsed = (new IniParser())->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame($this->iniArray, $parsed);
@@ -105,7 +100,7 @@ explore=true
 value=5'
         )->at($this->root);
 
-        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
+        $parsed = (new IniParser())->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame(
@@ -115,16 +110,16 @@ value=5'
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\ParseException
      */
     public function testParseToThrowException()
     {
-        $this->parser->parse('nonexistfile');
+        (new IniParser())->parse('nonexistfile');
     }
 
     public function testDump()
     {
-        $dump = $this->parser->dump($this->iniArray);
+        $dump = (new IniDumper())->dump($this->iniArray);
         $file = vfsStream::newFile('temp.ini')
             ->withContent('
 [first_section]

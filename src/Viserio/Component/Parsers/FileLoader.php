@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
 use RuntimeException;
-use Viserio\Component\Contracts\Parsers\Exception\LoadingException;
+use Viserio\Component\Contracts\Parsers\Exceptions\LoadingException;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -75,13 +75,16 @@ class FileLoader implements LoaderContract
         $this->checkOption($options);
 
         // Determine if the given file exists.
-        $path   = $this->exists($file);
-        $parser = $options === null ? new Parser() : new $this->parsers[key($options)]();
+        $path = $this->exists($file);
 
         if (($tag = $options['tag'] ?? null) !== null) {
+            $parser = new $this->parsers['tag']();
             $parser->setTag($tag);
         } elseif (($group = $options['group'] ?? null) !== null) {
+            $parser = new $this->parsers['group']();
             $parser->setGroup($group);
+        } else {
+            $parser = new Parser();
         }
 
         // Set the right Parser for data and return data array

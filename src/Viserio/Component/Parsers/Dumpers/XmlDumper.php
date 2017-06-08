@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Dumpers;
 
 use DOMException;
 use RuntimeException;
 use Spatie\ArrayToXml\ArrayToXml;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exception\DumpException;
+use Viserio\Component\Contracts\Parsers\Exceptions\DumpException;
 
 class XmlDumper implements DumperContract
 {

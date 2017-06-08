@@ -5,7 +5,8 @@ namespace Viserio\Component\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\Php;
+use Viserio\Component\Parsers\Dumpers\PhpDumper;
+use Viserio\Component\Parsers\Parsers\PhpParser;
 
 class PhpTest extends TestCase
 {
@@ -13,11 +14,6 @@ class PhpTest extends TestCase
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
-
-    /**
-     * @var \Viserio\Component\Parsers\Formats\Php
-     */
-    private $parser;
 
     /**
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem
@@ -28,7 +24,6 @@ class PhpTest extends TestCase
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
-        $this->parser = new Php();
     }
 
     public function testParse()
@@ -40,23 +35,23 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file->url());
+        $parsed = (new PhpParser())->parse($file->url());
 
         self::assertTrue(is_array($parsed));
         self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\ParseException
      * @expectedExceptionMessage No such file [nonexistfile] found.
      */
     public function testParseToThrowException()
     {
-        $this->parser->parse('nonexistfile');
+        (new PhpParser())->parse('nonexistfile');
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\ParseException
      * @expectedExceptionMessage An exception was thrown by file
      */
     public function testParseToThrowExceptionWithInFileException()
@@ -67,7 +62,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
             '
         )->at($this->root);
 
-        $this->parser->parse($file->url());
+        (new PhpParser())->parse($file->url());
     }
 
     public function testDump()
@@ -84,7 +79,7 @@ declare(strict_types=1); return array (
         )->at($this->root);
 
         $dump = vfsStream::newFile('temp.php')->withContent(
-            $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
+            (new PhpDumper())->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
         )->at($this->root);
 
         self::assertSame($this->file->read($file->url()), $this->file->read($dump->url()));

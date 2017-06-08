@@ -5,7 +5,7 @@ namespace Viserio\Component\Parsers\Parsers;
 use RuntimeException;
 use Sepia\PoParser as SepiaPoParser;
 use Throwable;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
+use Viserio\Component\Contracts\Parsers\Exceptions\ParseException;
 use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 
 class PoParser implements ParserContract

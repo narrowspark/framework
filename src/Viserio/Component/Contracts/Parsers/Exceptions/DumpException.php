@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Contracts\Parsers\Exception;
+namespace Viserio\Component\Contracts\Parsers\Exceptions;
 
 use RuntimeException;
 

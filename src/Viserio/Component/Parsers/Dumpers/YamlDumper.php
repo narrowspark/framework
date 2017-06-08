@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Dumpers;
 
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
+use Viserio\Component\Contracts\Parsers\Exceptions\ParseException;
 
 class YamlDumper implements DumperContract
 {

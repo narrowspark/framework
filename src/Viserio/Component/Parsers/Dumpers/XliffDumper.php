@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Dumpers;
 
 use DOMDocument;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exception\DumpException;
+use Viserio\Component\Contracts\Parsers\Exceptions\DumpException;
 
 /**
  * Some of this code has been ported from Symfony. The original

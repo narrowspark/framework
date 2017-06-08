@@ -4,15 +4,11 @@ namespace Viserio\Component\Parsers\Tests\Formats;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\Qt;
+use Viserio\Component\Parsers\Dumpers\QtDumper;
+use Viserio\Component\Parsers\Parsers\QtParser;
 
 class QtTest extends TestCase
 {
-    /**
-     * @var \Viserio\Component\Parsers\Formats\Qt
-     */
-    private $parser;
-
     /**
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem
      */
@@ -26,7 +22,6 @@ class QtTest extends TestCase
     public function setUp()
     {
         $this->file   = new Filesystem();
-        $this->parser = new Qt();
         $this->data   = [
             'contentstructuremenu/show_content_structure' => [
                 [
@@ -65,31 +60,28 @@ class QtTest extends TestCase
         ];
     }
 
-    /**
-     * @covers \Viserio\Component\Parsers\Formats\Qt::parse
-     */
     public function testParse()
     {
         self::assertSame(
             $this->data,
-            $this->parser->parse((string) $this->file->read(__DIR__ . '/../Fixtures/qt/resources.ts'))
+            (new QtParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/qt/resources.ts'))
         );
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\ParseException
      * @expectedExceptionMessage Content does not contain valid XML, it is empty.
      */
     public function testParseWithEmptyContent()
     {
-        $datas = $this->parser->parse('');
+        (new QtParser())->parse('');
     }
 
     public function testDump()
     {
         self::assertXmlStringEqualsXmlFile(
             __DIR__ . '/../Fixtures/qt/resources.ts',
-            $this->parser->dump($this->data)
+            (new QtDumper())->dump($this->data)
         );
     }
 }

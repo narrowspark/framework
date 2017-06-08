@@ -5,7 +5,7 @@ namespace Viserio\Component\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\Yaml;
+use Viserio\Component\Parsers\Parsers\YamlParser;
 
 class YamlTest extends TestCase
 {
@@ -15,11 +15,6 @@ class YamlTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Parsers\Formats\Yaml
-     */
-    private $parser;
-
-    /**
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem
      */
     private $file;
@@ -27,7 +22,6 @@ class YamlTest extends TestCase
     public function setUp()
     {
         $this->file   = new Filesystem();
-        $this->parser = new Yaml();
         $this->root   = vfsStream::setup();
     }
 
@@ -43,14 +37,14 @@ linting: true
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
+        $parsed = (new YamlParser())->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\ParseException
      * @expectedExceptionMessage Unable to parse at line 3 (near "  foo: bar").
      */
     public function testParseToThrowException()
@@ -63,6 +57,6 @@ collection:
             '
         )->at($this->root);
 
-        $this->parser->parse((string) $this->file->read($file->url()));
+        (new YamlParser())->parse((string) $this->file->read($file->url()));
     }
 }

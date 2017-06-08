@@ -3,29 +3,25 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
-use Viserio\Component\Parsers\Formats\Ini;
-use Viserio\Component\Parsers\Formats\Json;
-use Viserio\Component\Parsers\Formats\Php;
-use Viserio\Component\Parsers\Formats\Po;
-use Viserio\Component\Parsers\Formats\Qt;
-use Viserio\Component\Parsers\Formats\QueryStr;
-use Viserio\Component\Parsers\Formats\Serialize;
-use Viserio\Component\Parsers\Formats\Xliff;
-use Viserio\Component\Parsers\Formats\Xml;
-use Viserio\Component\Parsers\Formats\Yaml;
-use Viserio\Component\Parsers\Traits\GuessFormatTrait;
+use Viserio\Component\Contracts\Parsers\Exceptions\NotSupportedException;
+use Viserio\Component\Parsers\Dumpers\IniDumper;
+use Viserio\Component\Parsers\Dumpers\JsonDumper;
+use Viserio\Component\Parsers\Dumpers\PhpDumper;
+use Viserio\Component\Parsers\Dumpers\QtDumper;
+use Viserio\Component\Parsers\Dumpers\QueryStrDumper;
+use Viserio\Component\Parsers\Dumpers\SerializeDumper;
+use Viserio\Component\Parsers\Dumpers\XliffDumper;
+use Viserio\Component\Parsers\Dumpers\XmlDumper;
+use Viserio\Component\Parsers\Dumpers\YamlDumper;
 
-final class Dumper extends AbstractFormatter
+class Dumper
 {
-    use GuessFormatTrait;
-
     /**
      * Supported mime type formats.
      *
      * @var array
      */
-    private $supportedFormats = [
+    private static $supportedMimeTypes = [
         // XML
         'application/xml' => 'xml',
         'text/xml'        => 'xml',
@@ -47,21 +43,52 @@ final class Dumper extends AbstractFormatter
         'application/x-www-form-urlencoded' => 'querystr',
     ];
 
-    private $supportedDumper = [
-        'ini'       => Ini::class,
-        'json'      => Json::class,
-        'php'       => Php::class,
-        'po'        => Po::class,
-        'querystr'  => QueryStr::class,
-        'serialize' => Serialize::class,
-        'ts'        => Qt::class,
-        'xml'       => Xml::class,
-        'xlf'       => Xliff::class,
-        'yaml'      => Yaml::class,
+    /**
+     * All supported dumper.
+     *
+     * @var array
+     */
+    private static $supportedDumper = [
+        'ini'       => IniDumper::class,
+        'json'      => JsonDumper::class,
+        'php'       => PhpDumper::class,
+        'querystr'  => QueryStrDumper::class,
+        'serialize' => SerializeDumper::class,
+        'ts'        => QtDumper::class,
+        'xml'       => XmlDumper::class,
+        'xlf'       => XliffDumper::class,
+        'yaml'      => YamlDumper::class,
     ];
 
     /**
-     * Dump given data.
+     * Add a new mime type with extension.
+     *
+     * @param string $mimeType
+     * @param string $extension
+     *
+     * @return void
+     */
+    public function addMimeType(string $mimeType, string $extension): void
+    {
+        self::$supportedMimeTypes[$mimeType] = $extension;
+    }
+
+    /**
+     * Add a new dumper.
+     *
+     * @param \Viserio\Component\Contracts\Parsers\Dumper $parser
+     * @param string                                      $extension
+     * @param DumperContract                              $dumper
+     *
+     * @return void
+     */
+    public function addDumper(DumperContract $dumper, string $extension): void
+    {
+        self::$supportedDumper[$extension] = $dumper;
+    }
+
+    /**
+     * Dump data in your choosing format.
      *
      * @param array  $data
      * @param string $format
@@ -76,16 +103,28 @@ final class Dumper extends AbstractFormatter
     }
 
     /**
-     * {@inheritdoc}
+     * Get supported dumper on extension or mime type.
+     *
+     * @param string $type
+     *
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
+     *
+     * @return \Viserio\Component\Contracts\Parsers\Dumper
      */
     public function getDumper(string $type): DumperContract
     {
-        if (isset($this->supportedDumper[$type])) {
-            return new $this->supportedDumper[$type]();
-        } elseif (isset($this->supportedFormats[$type])) {
-            return new $this->supportedDumper[$this->supportedFormats[$type]]();
+        if (isset(self::$supportedDumper[$type])) {
+            return new self::$supportedDumper[$type]();
+        } elseif (isset(self::$supportedMimeTypes[$type])) {
+            $class = self::$supportedDumper[self::$supportedMimeTypes[$type]];
+
+            if (is_object($class)) {
+                return $class;
+            }
+
+            return new $class();
         }
 
-        throw new NotSupportedException(sprintf('Format [%s] from string/file is not supported.', $type));
+        throw new NotSupportedException(sprintf('Given extension or mime type [%s] is not supported.', $type));
     }
 }

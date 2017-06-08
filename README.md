@@ -20,7 +20,7 @@
 * A powerful console "cerebro" based on [Symfony Console][5]
 * Simple, fast routing engine with support for psr-15 middlewares.
 * Powerful [encryption][7] and [hashing][8] components.
-* All components are based on [psr][9] standards, easy to switch or used in other [psr][9] based projects.
+* All components are based on [psr][9] standards, easy to switch or used in other [psr][9] compatible projects.
 
 Documentation
 -------------

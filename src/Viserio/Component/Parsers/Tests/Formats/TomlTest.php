@@ -5,7 +5,7 @@ namespace Viserio\Component\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\Toml;
+use Viserio\Component\Parsers\Parsers\TomlParser;
 
 class TomlTest extends TestCase
 {
@@ -13,11 +13,6 @@ class TomlTest extends TestCase
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
-
-    /**
-     * @var \Viserio\Component\Parsers\Formats\Toml
-     */
-    private $parser;
 
     /**
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem
@@ -28,7 +23,6 @@ class TomlTest extends TestCase
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
-        $this->parser = new Toml();
     }
 
     public function testParses()
@@ -39,18 +33,18 @@ class TomlTest extends TestCase
             "
         )->at($this->root);
 
-        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
+        $parsed = (new TomlParser())->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\ParseException
      * @expectedExceptionMessage Unable to parse the TOML string.
      */
     public function testParseToThrowException()
     {
-        $this->parser->parse('nonexistfile');
+        (new TomlParser())->parse('nonexistfile');
     }
 }

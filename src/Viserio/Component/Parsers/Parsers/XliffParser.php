@@ -5,7 +5,7 @@ namespace Viserio\Component\Parsers\Parsers;
 use DOMDocument;
 use InvalidArgumentException;
 use SimpleXMLElement;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
+use Viserio\Component\Contracts\Parsers\Exceptions\ParseException;
 use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;

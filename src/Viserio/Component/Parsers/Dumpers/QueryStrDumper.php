@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Dumpers;
 
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 
