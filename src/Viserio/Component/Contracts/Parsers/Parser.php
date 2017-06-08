@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Parsers;
 
-interface Format
+interface Parser
 {
     /**
      * Loads a file and output it content as array.

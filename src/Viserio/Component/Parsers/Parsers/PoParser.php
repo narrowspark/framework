@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Parsers;
 
 use RuntimeException;
 use Sepia\PoParser as SepiaPoParser;
 use Throwable;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 
-class PoParser implements FormatContract
+class PoParser implements ParserContract
 {
     /**
      * Create a new Po loader.
@@ -19,7 +19,7 @@ class PoParser implements FormatContract
     {
         if (! class_exists(SepiaPoParser::class)) {
             throw new RuntimeException(
-                'Loading translations from the Po format requires the Sepia PoParser component.'
+                'Loading translations from the Po Parser requires the Sepia PoParser component.'
             );
         }
     }

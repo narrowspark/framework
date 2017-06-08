@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Parsers;
 
 use DOMDocument;
 use InvalidArgumentException;
 use SimpleXMLElement;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -16,7 +16,7 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  *
  * Good article about xliff @link http://www.wikiwand.com/en/XLIFF
  */
-class XliffParser implements FormatContract
+class XliffParser implements ParserContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
 

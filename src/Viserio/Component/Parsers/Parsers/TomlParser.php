@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Parsers;
 
 use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 use Yosymfony\Toml\Exception\ParseException as TomlParseException;
 use Yosymfony\Toml\Toml as YosymfonyToml;
 
-class TomlParser implements FormatContract
+class TomlParser implements ParserContract
 {
     /**
      * Create a new Toml parser.

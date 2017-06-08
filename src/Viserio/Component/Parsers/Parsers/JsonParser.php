@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Parsers;
 
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 
-class JsonParser implements FormatContract
+class JsonParser implements ParserContract
 {
     /**
      * {@inheritdoc}

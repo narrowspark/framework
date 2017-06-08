@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Parsers;
 
 use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 
-class YamlParser implements FormatContract
+class YamlParser implements ParserContract
 {
     /**
      * Create a new Yaml parser.

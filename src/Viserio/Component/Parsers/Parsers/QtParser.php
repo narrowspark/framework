@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Parsers;
 
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 
 /**
  * For more infos.
  *
- * @link http://doc.qt.io/qt-5/linguist-ts-file-format.html
- * @link http://svn.ez.no/svn/ezcomponents/trunk/Translation/docs/linguist-format.txt
+ * @link http://doc.qt.io/qt-5/linguist-ts-file-Parser.html
+ * @link http://svn.ez.no/svn/ezcomponents/trunk/Translation/docs/linguist-Parser.txt
  */
-class QtParser implements FormatContract
+class QtParser implements ParserContract
 {
     /**
      * {@inheritdoc}
