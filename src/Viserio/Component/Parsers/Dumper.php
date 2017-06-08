@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
-use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
-use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
+use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Parsers\Formats\Ini;
 use Viserio\Component\Parsers\Formats\Json;
 use Viserio\Component\Parsers\Formats\Php;
@@ -66,7 +64,7 @@ class Dumper
 
     public function dump(array $data, string $filePath, ?string $type = null): void
     {
-        # code...
+        // code...
     }
 
     /**
