@@ -47,20 +47,23 @@ EOC;
                 $defaultOptions   = [];
 
                 if (in_array(RequiresComponentConfigContract::class, $interfaces, true)) {
-                    $dimensions = $factory->getDimensions();
+                    $dimensions = (array) $factory->getDimensions();
                 }
 
                 if (in_array(ProvidesDefaultOptionsContract::class, $interfaces, true)) {
-                    $defaultOptions = $factory->getDefaultOptions();
+                    $defaultOptions = (array) $factory->getDefaultOptions();
                 }
 
                 if (in_array(RequiresMandatoryOptionsContract::class, $interfaces, true)) {
-                    $mandatoryOptions = $factory->getMandatoryOptions();
+                    $mandatoryOptions = (array) $factory->getMandatoryOptions();
                 }
 
-                $config = $this->buildMultidimensionalArray($dimensions);
+                $lastKey = end($dimensions);
+                $config  = $this->buildMultidimensionalArray($dimensions);
 
-                $configs[] = $config;
+                $config[$lastKey]  = $defaultOptions;
+
+                $configs[$lastKey] = $config;
             }
         }
     }
