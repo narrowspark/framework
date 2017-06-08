@@ -5,8 +5,7 @@ namespace Viserio\Component\Parsers;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
-use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
+use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Parsers\Formats\Ini;
 use Viserio\Component\Parsers\Formats\Json;
 use Viserio\Component\Parsers\Formats\Php;
@@ -20,16 +19,9 @@ use Viserio\Component\Parsers\Formats\Xml;
 use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class Parser implements ParserContract
+class Dumper
 {
     use NormalizePathAndDirectorySeparatorTrait;
-
-    /**
-     * A server request instance.
-     *
-     * @var \Psr\Http\Message\ServerRequestInterface
-     */
-    protected $serverRequest;
 
     /**
      * Supported mime type formats.
@@ -58,7 +50,7 @@ class Parser implements ParserContract
         'application/x-www-form-urlencoded' => 'querystr',
     ];
 
-    private $supportedParsers = [
+    private $supportedDumper = [
         'ini'       => Ini::class,
         'json'      => Json::class,
         'php'       => Php::class,
@@ -72,76 +64,20 @@ class Parser implements ParserContract
         'yaml'      => Yaml::class,
     ];
 
-    /**
-     * Set a server request instance.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     *
-     * @return void
-     */
-    public function setServerRequest(ServerRequestInterface $serverRequest): void
+    public function dump(array $data, string $filePath, ?string $type = null): void
     {
-        $this->serverRequest = $serverRequest;
+        # code...
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFormat(?string $format = null): ?string
+    public function getDumper(string $type): DumperContract
     {
-        if ($format !== null) {
-            $format = mb_strtolower($format);
-            $format = self::normalizeDirectorySeparator($format);
-
-            if (is_file($format)) {
-                return pathinfo($format, PATHINFO_EXTENSION);
-            }
-        }
-
-        if ($this->serverRequest !== null &&
-            $this->serverRequest->hasHeader('content-type')
-        ) {
-            return $this->serverRequest->getHeader('content-type')[0];
-        }
-
-        return $format;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parse(string $payload): array
-    {
-        if ($payload === '') {
-            return [];
-        }
-
-        $format = $this->getFormat($payload);
-
-        if ($format !== 'php') {
-            $fileName = self::normalizeDirectorySeparator($payload);
-
-            if (is_file($fileName)) {
-                $payload  = file_get_contents($fileName);
-
-                if ($payload === false) {
-                    throw new RuntimeException(sprintf('A error occurred during reading [%s]', $fileName));
-                }
-            }
-        }
-
-        return $this->getParser($format)->parse($payload);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParser(string $type): FormatContract
-    {
-        if (isset($this->supportedParsers[$type])) {
-            return new $this->supportedParsers[$type]();
+        if (isset($this->supportedDumper[$type])) {
+            return new $this->supportedDumper[$type]();
         } elseif (isset($this->supportedFormats[$type])) {
-            return new $this->supportedParsers[$this->supportedFormats[$type]]();
+            return new $this->supportedDumper[$this->supportedFormats[$type]]();
         }
 
         throw new NotSupportedException(sprintf('Format [%s] from string/file is not supported.', $type));
