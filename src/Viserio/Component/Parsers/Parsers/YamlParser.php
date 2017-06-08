@@ -10,7 +10,7 @@ use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 
-class Yaml implements FormatContract, DumperContract
+class YamlParser implements FormatContract
 {
     /**
      * Create a new Yaml parser.
@@ -32,23 +32,6 @@ class Yaml implements FormatContract, DumperContract
         try {
             return SymfonyYaml::parse(trim(preg_replace('/\t+/', '', $payload)));
         } catch (YamlParseException $exception) {
-            throw new ParseException([
-                'message'   => $exception->getMessage(),
-                'exception' => $exception,
-            ]);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function dump(array $data): string
-    {
-        try {
-            return SymfonyYaml::dump($data);
-        } catch (InvalidArgumentException $exception) {
             throw new ParseException([
                 'message'   => $exception->getMessage(),
                 'exception' => $exception,

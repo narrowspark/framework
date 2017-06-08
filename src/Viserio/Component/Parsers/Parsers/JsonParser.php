@@ -7,7 +7,7 @@ use Viserio\Component\Contracts\Parsers\Exception\DumpException;
 use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 
-class Json implements FormatContract, DumperContract
+class JsonParser implements FormatContract
 {
     /**
      * {@inheritdoc}
@@ -23,28 +23,6 @@ class Json implements FormatContract, DumperContract
                 'file'    => $payload,
             ]);
         }
-
-        return $json;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dump(array $data): string
-    {
-        // Clear json_last_error()
-        json_encode(null);
-
-        $json = json_encode($data, JSON_PRETTY_PRINT);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            // @codeCoverageIgnoreStart
-            throw new DumpException(sprintf('JSON dumping failed: %s', json_last_error_msg()));
-            // @codeCoverageIgnoreEnd
-        }
-
-        $json = preg_replace('/\[\s+\]/', '[]', $json);
-        $json = preg_replace('/\{\s+\}/', '{}', $json);
 
         return $json;
     }

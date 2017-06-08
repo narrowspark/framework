@@ -17,7 +17,7 @@ use Viserio\Component\Parsers\Formats\Xml;
 use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Parsers\Traits\GuessFormatTrait;
 
-class Dumper
+final class Dumper extends AbstractFormatter
 {
     use GuessFormatTrait;
 
@@ -55,7 +55,6 @@ class Dumper
         'po'        => Po::class,
         'querystr'  => QueryStr::class,
         'serialize' => Serialize::class,
-        'toml'      => Toml::class,
         'ts'        => Qt::class,
         'xml'       => Xml::class,
         'xlf'       => Xliff::class,
@@ -65,21 +64,16 @@ class Dumper
     /**
      * Dump given data.
      *
-     * @param array       $data
-     * @param string      $filePath
-     * @param string|null $format
+     * @param array  $data
+     * @param string $format
      *
-     * @return void
+     * @return string
      */
-    public function dump(array $data, string $filePath, ?string $format = null): void
+    public function dump(array $data, string $format): string
     {
-        if ($format === null) {
-            $format = $this->guessFormat($filePath);
-        }
-
         $dumper = $this->getDumper($format);
 
-        file_put_contents($filePath, $dumper->dump($data));
+        return $dumper->dump($data);
     }
 
     /**

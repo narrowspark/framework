@@ -20,7 +20,7 @@ use Viserio\Component\Parsers\Formats\Xml;
 use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Parsers\Traits\GuessFormatTrait;
 
-class Parser implements ParserContract
+final class Parser extends AbstractFormatter
 {
     use GuessFormatTrait;
 
@@ -85,7 +85,11 @@ class Parser implements ParserContract
     }
 
     /**
-     * {@inheritdoc}
+     * Auto detect the payload data type using content-type value.
+     *
+     * @param string|null $format
+     *
+     * @return string|null Return the short format code (xml, json, ...)
      */
     public function getFormat(?string $format = null): ?string
     {
@@ -107,7 +111,14 @@ class Parser implements ParserContract
     }
 
     /**
-     * {@inheritdoc}
+     * Loads a file and output it content as array.
+     *
+     * @param string $payload
+     *
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @throws \RuntimeException                                             if an error occurred during reading
+     *
+     * @return array
      */
     public function parse(string $payload): array
     {

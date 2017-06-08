@@ -5,18 +5,8 @@ namespace Viserio\Component\Parsers\Formats;
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 
-class QueryStr implements FormatContract, DumperContract
+class QueryStrDumper implements DumperContract
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function parse(string $payload): array
-    {
-        parse_str(trim($payload), $querystr);
-
-        return $querystr;
-    }
-
     /**
      * {@inheritdoc}
      */

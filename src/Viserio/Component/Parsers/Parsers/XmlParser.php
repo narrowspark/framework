@@ -12,7 +12,7 @@ use Viserio\Component\Contracts\Parsers\Exception\ParseException;
 use Viserio\Component\Contracts\Parsers\Format as FormatContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 
-class Xml implements FormatContract, DumperContract
+class XmlParser implements FormatContract
 {
     /**
      * {@inheritdoc}
@@ -35,23 +35,5 @@ class Xml implements FormatContract, DumperContract
         }
 
         return $data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dump(array $data): string
-    {
-        // @codeCoverageIgnoreStart
-        if (! class_exists(ArrayToXml::class)) {
-            throw new RuntimeException('Unable to dump XML, the ArrayToXml dumper is not installed.');
-        }
-        // @codeCoverageIgnoreEnd
-
-        try {
-            return ArrayToXml::convert($data);
-        } catch (DOMException $exception) {
-            throw new DumpException($exception->getMessage());
-        }
     }
 }
