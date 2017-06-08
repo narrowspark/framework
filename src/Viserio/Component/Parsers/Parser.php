@@ -18,11 +18,11 @@ use Viserio\Component\Parsers\Formats\Toml;
 use Viserio\Component\Parsers\Formats\Xliff;
 use Viserio\Component\Parsers\Formats\Xml;
 use Viserio\Component\Parsers\Formats\Yaml;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\Parsers\Traits\GuessFormatTrait;
 
 class Parser implements ParserContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
+    use GuessFormatTrait;
 
     /**
      * A server request instance.
@@ -90,18 +90,17 @@ class Parser implements ParserContract
     public function getFormat(?string $format = null): ?string
     {
         if ($format !== null) {
-            $format = mb_strtolower($format);
-            $format = self::normalizeDirectorySeparator($format);
+            $guessedFormat = $this->guessFormat($format);
 
-            if (is_file($format)) {
-                return pathinfo($format, PATHINFO_EXTENSION);
+            if ($guessedFormat !== null) {
+                return $guessedFormat;
             }
         }
 
-        if ($this->serverRequest !== null &&
-            $this->serverRequest->hasHeader('content-type')
-        ) {
-            return $this->serverRequest->getHeader('content-type')[0];
+        $request = $this->serverRequest;
+
+        if ($request !== null && $request->hasHeader('content-type')) {
+            return $request->getHeader('content-type')[0];
         }
 
         return $format;

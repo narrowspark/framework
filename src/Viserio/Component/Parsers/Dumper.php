@@ -15,11 +15,11 @@ use Viserio\Component\Parsers\Formats\Toml;
 use Viserio\Component\Parsers\Formats\Xliff;
 use Viserio\Component\Parsers\Formats\Xml;
 use Viserio\Component\Parsers\Formats\Yaml;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\Parsers\Traits\GuessFormatTrait;
 
 class Dumper
 {
-    use NormalizePathAndDirectorySeparatorTrait;
+    use GuessFormatTrait;
 
     /**
      * Supported mime type formats.
@@ -62,9 +62,24 @@ class Dumper
         'yaml'      => Yaml::class,
     ];
 
-    public function dump(array $data, string $filePath, ?string $type = null): void
+    /**
+     * Dump given data.
+     *
+     * @param array       $data
+     * @param string      $filePath
+     * @param string|null $format
+     *
+     * @return void
+     */
+    public function dump(array $data, string $filePath, ?string $format = null): void
     {
-        // code...
+        if ($format === null) {
+            $format = $this->guessFormat($filePath);
+        }
+
+        $dumper = $this->getDumper($format);
+
+        file_put_contents($filePath, $dumper->dump($data));
     }
 
     /**
