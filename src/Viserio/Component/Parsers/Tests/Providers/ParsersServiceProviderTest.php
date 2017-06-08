@@ -5,6 +5,7 @@ namespace Viserio\Component\Parsers\Tests\Providers;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Component\Parsers\Dumper;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\GroupParser;
 use Viserio\Component\Parsers\Parser;
@@ -23,6 +24,7 @@ class ParsersServiceProviderTest extends TestCase
         self::assertInstanceOf(TaggableParser::class, $container->get(TaggableParser::class));
         self::assertInstanceOf(GroupParser::class, $container->get(GroupParser::class));
         self::assertInstanceOf(Parser::class, $container->get(Parser::class));
+        self::assertInstanceOf(Dumper::class, $container->get(Dumper::class));
         self::assertInstanceOf(Parser::class, $container->get('parser'));
     }
 }

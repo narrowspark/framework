@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Proxies;
 
-use Viserio\Component\Parsers\Parser as BaseParser;
+use Viserio\Component\Parsers\Dumper as BaseDumper;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
-class Parser extends StaticalProxy
+class Dumper extends StaticalProxy
 {
     /**
      * {@inheritdoc}
@@ -14,6 +14,6 @@ class Parser extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return BaseParser::class;
+        return BaseDumper::class;
     }
 }

@@ -5,7 +5,8 @@ namespace Viserio\Component\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
-use Viserio\Component\Parsers\Formats\Json;
+use Viserio\Component\Parsers\Dumpers\JsonDumper;
+use Viserio\Component\Parsers\Parsers\JsonParser;
 
 class JsonTest extends TestCase
 {
@@ -13,11 +14,6 @@ class JsonTest extends TestCase
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
-
-    /**
-     * @var \Viserio\Component\Parsers\Formats\Json
-     */
-    private $parser;
 
     /**
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem
@@ -28,7 +24,6 @@ class JsonTest extends TestCase
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
-        $this->parser = new Json();
     }
 
     public function testParse()
@@ -45,18 +40,18 @@ class JsonTest extends TestCase
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse((string) $this->file->read($file->url()));
+        $parsed = (new JsonParser())->parse((string) $this->file->read($file->url()));
 
         self::assertTrue(is_array($parsed));
         self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\ParseException
      */
     public function testParseToThrowException()
     {
-        $this->parser->parse('nonexistfile');
+        (new JsonParser())->parse('nonexistfile');
     }
 
     public function testDump()
@@ -67,7 +62,7 @@ class JsonTest extends TestCase
             'edition' => 6,
         ];
 
-        $dump = $this->parser->dump($book);
+        $dump = (new JsonDumper())->dump($book);
 
         self::assertJsonStringEqualsJsonString('{
     "title": "bar",

@@ -3,19 +3,22 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Parsers\Formats\Ini;
-use Viserio\Component\Parsers\Formats\Json;
-use Viserio\Component\Parsers\Formats\Php;
-use Viserio\Component\Parsers\Formats\QueryStr;
-use Viserio\Component\Parsers\Formats\Serialize;
-use Viserio\Component\Parsers\Formats\Toml;
-use Viserio\Component\Parsers\Formats\Xml;
-use Viserio\Component\Parsers\Formats\Yaml;
 use Viserio\Component\Parsers\Parser;
+use Viserio\Component\Parsers\Parsers\IniParser;
+use Viserio\Component\Parsers\Parsers\JsonParser;
+use Viserio\Component\Parsers\Parsers\PhpParser;
+use Viserio\Component\Parsers\Parsers\QueryStrParser;
+use Viserio\Component\Parsers\Parsers\SerializeParser;
+use Viserio\Component\Parsers\Parsers\TomlParser;
+use Viserio\Component\Parsers\Parsers\XmlParser;
+use Viserio\Component\Parsers\Parsers\YamlParser;
+use Viserio\Component\Parsers\Tests\Fixtures\TextParser;
 
 class ParserTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Parsers\Parser
+     */
     private $parser;
 
     public function setUp()
@@ -23,63 +26,50 @@ class ParserTest extends MockeryTestCase
         $this->parser = new Parser();
     }
 
-    public function testParserEmptyData()
+    public function testParser()
     {
         self::assertEquals([], $this->parser->parse(''));
+
+        self::assertTrue(is_array($this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts')));
+        self::assertTrue(is_array($this->parser->parse(json_encode(['foo' => 'bar']))));
+        self::assertTrue(is_array($this->parser->parse(file_get_contents(__DIR__ . '/Fixtures/xliff/encoding_xliff_v1.xlf'))));
+    }
+
+    public function testAddNewParser()
+    {
+        $this->parser->addMimeType('text/plain', 'txt');
+        $this->parser->addParser(new TextParser(), 'txt');
+
+        self::assertEquals(['test'], $this->parser->parse('test'));
+        self::assertInstanceOf(TextParser::class, $this->parser->getParser('text/plain'));
     }
 
     public function testGetParser()
     {
-        self::assertInstanceOf(Ini::class, $this->parser->getParser('ini'));
-        self::assertInstanceOf(Json::class, $this->parser->getParser('json'));
-        self::assertInstanceOf(Json::class, $this->parser->getParser('application/json'));
-        self::assertInstanceOf(Json::class, $this->parser->getParser('application/x-javascript'));
-        self::assertInstanceOf(Json::class, $this->parser->getParser('text/javascript'));
-        self::assertInstanceOf(Json::class, $this->parser->getParser('text/x-javascript'));
-        self::assertInstanceOf(Json::class, $this->parser->getParser('text/x-json'));
-        self::assertInstanceOf(Php::class, $this->parser->getParser('php'));
-        self::assertInstanceOf(Serialize::class, $this->parser->getParser('application/vnd.php.serialized'));
-        self::assertInstanceOf(QueryStr::class, $this->parser->getParser('application/x-www-form-urlencoded'));
-        self::assertInstanceOf(Toml::class, $this->parser->getParser('toml'));
-        self::assertInstanceOf(Xml::class, $this->parser->getParser('xml'));
-        self::assertInstanceOf(Xml::class, $this->parser->getParser('application/xml'));
-        self::assertInstanceOf(Xml::class, $this->parser->getParser('text/xml'));
-        self::assertInstanceOf(Yaml::class, $this->parser->getParser('yaml'));
-        self::assertInstanceOf(Yaml::class, $this->parser->getParser('text/yaml'));
-        self::assertInstanceOf(Yaml::class, $this->parser->getParser('text/x-yaml'));
-        self::assertInstanceOf(Yaml::class, $this->parser->getParser('application/yaml'));
-        self::assertInstanceOf(Yaml::class, $this->parser->getParser('application/x-yaml'));
-    }
-
-    public function testGetFormat()
-    {
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('hasHeader')
-            ->once()
-            ->with('content-type')
-            ->andReturn(true);
-        $request->shouldReceive('getHeader')
-            ->once()
-            ->with('content-type')
-            ->andReturn(['application/json']);
-
-        $this->parser->setServerRequest($request);
-
-        self::assertEquals('application/json', $this->parser->getFormat());
-
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('hasHeader')
-            ->once()
-            ->with('content-type')
-            ->andReturn(false);
-
-        $this->parser->setServerRequest($request);
-
-        self::assertEquals('json', $this->parser->getFormat('json'));
+        self::assertInstanceOf(IniParser::class, $this->parser->getParser('ini'));
+        self::assertInstanceOf(JsonParser::class, $this->parser->getParser('json'));
+        self::assertInstanceOf(JsonParser::class, $this->parser->getParser('application/json'));
+        self::assertInstanceOf(JsonParser::class, $this->parser->getParser('application/x-javascript'));
+        self::assertInstanceOf(JsonParser::class, $this->parser->getParser('text/javascript'));
+        self::assertInstanceOf(JsonParser::class, $this->parser->getParser('text/x-javascript'));
+        self::assertInstanceOf(JsonParser::class, $this->parser->getParser('text/x-json'));
+        self::assertInstanceOf(PhpParser::class, $this->parser->getParser('php'));
+        self::assertInstanceOf(SerializeParser::class, $this->parser->getParser('application/vnd.php.serialized'));
+        self::assertInstanceOf(QueryStrParser::class, $this->parser->getParser('application/x-www-form-urlencoded'));
+        self::assertInstanceOf(TomlParser::class, $this->parser->getParser('toml'));
+        self::assertInstanceOf(XmlParser::class, $this->parser->getParser('xml'));
+        self::assertInstanceOf(XmlParser::class, $this->parser->getParser('application/xml'));
+        self::assertInstanceOf(XmlParser::class, $this->parser->getParser('text/xml'));
+        self::assertInstanceOf(YamlParser::class, $this->parser->getParser('yaml'));
+        self::assertInstanceOf(YamlParser::class, $this->parser->getParser('text/yaml'));
+        self::assertInstanceOf(YamlParser::class, $this->parser->getParser('text/x-yaml'));
+        self::assertInstanceOf(YamlParser::class, $this->parser->getParser('application/yaml'));
+        self::assertInstanceOf(YamlParser::class, $this->parser->getParser('application/x-yaml'));
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\NotSupportedException
+     * @expectedExceptionMessage Given extension or mime type [inia] is not supported.
      */
     public function testGetParserToThrowException()
     {

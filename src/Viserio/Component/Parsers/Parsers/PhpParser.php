@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Parsers\Formats;
+namespace Viserio\Component\Parsers\Parsers;
 
 use Throwable;
-use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Format as FormatContract;
+use Viserio\Component\Contracts\Parsers\Exceptions\ParseException;
+use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
 
-class Php implements FormatContract, DumperContract
+class PhpParser implements ParserContract
 {
     /**
      * {@inheritdoc}
@@ -30,24 +29,5 @@ class Php implements FormatContract, DumperContract
         }
 
         return (array) $data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dump(array $data): string
-    {
-        $data = var_export($data, true);
-
-        $formatted = str_replace(
-            ['  ', '['],
-            ['', '['],
-            $data
-        );
-
-        $output = '<?php
-declare(strict_types=1); return ' . $formatted . ';';
-
-        return $output;
     }
 }

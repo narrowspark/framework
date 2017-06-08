@@ -5,6 +5,7 @@ namespace Viserio\Component\Parsers\Providers;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Component\Parsers\Dumper;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\GroupParser;
 use Viserio\Component\Parsers\Parser;
@@ -35,6 +36,9 @@ class ParsersServiceProvider implements ServiceProvider
             },
             'parser'              => function (ContainerInterface $container) {
                 return $container->get(Parser::class);
+            },
+            Dumper::class         => function (ContainerInterface $container): Dumper {
+                return new Dumper();
             },
         ];
     }
