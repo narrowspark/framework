@@ -19,14 +19,6 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $container->register(new ConsoleServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
 
-        $container->instance('config', [
-            'viserio' => [
-                'console' => [
-                    'version' => '1',
-                ],
-            ],
-        ]);
-
         $console  = $container->get(Application::class);
         $commands = $console->all();
 

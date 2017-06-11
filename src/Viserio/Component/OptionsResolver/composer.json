@@ -25,7 +25,6 @@
     "require-dev": {
         "narrowspark/testing-helper"                       : "^3.0",
         "phpunit/phpunit"                                  : "^6.0",
-        "symfony/finder"                                   : "~3.3",
         "viserio/config"                                   : "self.version",
         "viserio/console"                                  : "self.version",
         "viserio/container"                                : "self.version",
