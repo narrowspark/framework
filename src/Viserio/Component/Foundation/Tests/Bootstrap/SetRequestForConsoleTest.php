@@ -30,8 +30,6 @@ class SetRequestForConsoleTest extends MockeryTestCase
             'viserio' => [
                 'app' => [
                     'env' => 'prod',
-                ],
-                'console' => [
                     'url' => 'http://localhost',
                 ],
             ],

@@ -12,9 +12,12 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Parsers\Dumper;
+use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
 
 class OptionDumpCommand extends Command
 {
+    use ArrayPrettyPrintTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -60,7 +63,7 @@ class OptionDumpCommand extends Command
 declare(strict_types=1);
 
 return ';
-                $content .= $this->prepareConfig($config);
+                $content .= $this->prettyPrintArray($config);
                 $content .= ';';
             }
 
@@ -112,41 +115,6 @@ return ';
                 'Overwrite existent config',
             ],
         ];
-    }
-
-    /**
-     * Prepare config for save.
-     *
-     * @param iterable $config
-     * @param in       $indentLevel
-     *
-     * @return string
-     */
-    private function prepareConfig(iterable $config, int $indentLevel = 1): string
-    {
-        $indent  = str_repeat(' ', $indentLevel * 4);
-        $entries = [];
-
-        foreach ($config as $key => $value) {
-            if (! is_int($key)) {
-                if (is_string($key) && class_exists($key) && ctype_upper($key[0])) {
-                    $key = sprintf('\\%s::class', ltrim($key, '\\'));
-                } else {
-                    $key = sprintf("'%s'", $key);
-                }
-            }
-
-            $entries[] = sprintf(
-                '%s%s%s,',
-                $indent,
-                sprintf('%s => ', $key),
-                $this->createConfigValue($value, $indentLevel)
-            );
-        }
-
-        $outerIndent = str_repeat(' ', ($indentLevel - 1) * 4);
-
-        return sprintf("[\n%s\n%s]", implode("\n", $entries), $outerIndent);
     }
 
     /**
@@ -240,30 +208,5 @@ return ';
         }
 
         return $config;
-    }
-
-    /**
-     * Create the right value.
-     *
-     * @param mixed $value
-     * @param int   $indentLevel
-     *
-     * @return string|int|float
-     */
-    private function createConfigValue($value, int $indentLevel)
-    {
-        if (is_array($value) || $value instanceof Traversable) {
-            return $this->prepareConfig($value, $indentLevel + 1);
-        }
-
-        if (is_string($value) && class_exists($value) && ctype_upper($value[0])) {
-            return sprintf('\\%s::class', ltrim($value, '\\'));
-        }
-
-        if (is_numeric($value)) {
-            return $value + 0;
-        }
-
-        return var_export($value, true);
     }
 }
