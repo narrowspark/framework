@@ -5,7 +5,6 @@ namespace Viserio\Component\OptionsResolver\Commands;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Traversable;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;

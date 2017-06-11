@@ -64,4 +64,3 @@ trait ArrayPrettyPrintTrait
         return var_export($value, true);
     }
 }
-
