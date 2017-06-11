@@ -6,7 +6,6 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Console\Application;
 use Viserio\Component\OptionsResolver\Commands\OptionDumpCommand;
-use Viserio\Component\OptionsResolver\Commands\OptionReadCommand;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {
@@ -34,7 +33,6 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
 
         if ($console !== null) {
             $console->addCommands([
-                new OptionReadCommand(),
                 new OptionDumpCommand(),
             ]);
 

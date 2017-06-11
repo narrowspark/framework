@@ -74,13 +74,9 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     public function getDefaultOptions(): iterable
     {
         $options = [
-            'app' => [
-                'url' => 'http://localhost',
-            ],
-            'console' => [
-                'version' => self::VERSION,
-                'name'    => 'Cerebro',
-            ],
+            'url'          => 'http://localhost',
+            'version'      => self::VERSION,
+            'console_name' => 'Cerebro',
         ];
 
         return array_merge(parent::getDefaultOptions(), $options);
@@ -242,8 +238,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $container = $this->getContainer();
             $console   = $container->get(Cerebro::class);
 
-            $console->setVersion($this->resolvedOptions['console']['version']);
-            $console->setName($this->resolvedOptions['console']['name']);
+            $console->setVersion($this->resolvedOptions['version']);
+            $console->setName($this->resolvedOptions['name']);
 
             foreach ($this->commands as $command) {
                 $console->add($container->resolve($command));

@@ -65,20 +65,22 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
         (new PhpParser())->parse($file->url());
     }
 
-    public function testDump()
+    public function testDumpFile()
     {
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
-declare(strict_types=1); return array (
-\'a\' => 1,
-\'b\' => 2,
-\'c\' => 3,
-\'d\' => 4,
-\'e\' => 5,
-);'
+declare(strict_types=1);
+
+return [
+    \'a\' => 1,
+    \'b\' => 2,
+    \'c\' => 3,
+    \'d\' => 4,
+    \'e\' => 5,
+];'
         )->at($this->root);
 
-        $dump = vfsStream::newFile('temp.php')->withContent(
+        $dump = vfsStream::newFile('temp2.php')->withContent(
             (new PhpDumper())->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
         )->at($this->root);
 
