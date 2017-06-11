@@ -41,6 +41,7 @@ class OptionDumpCommand extends Command
 
         if ($dumper === null && $format !== 'php') {
             $this->error('Only the php format is supported; use composer req viserio/parsers to get json, xml, yml output.');
+
             return;
         }
 

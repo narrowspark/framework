@@ -191,8 +191,8 @@ trait AbstractOptionsResolverTrait
     /**
      * Run a validator against given config.
      *
-     * @param array    $validators
-     * @param iterable $config
+     * @param array                                                       $validators
+     * @param iterable                                                    $config
      * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
      *
      * @return void
