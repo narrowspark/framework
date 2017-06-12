@@ -53,7 +53,7 @@ trait ArrayPrettyPrintTrait
             return $this->getPrettyPrintArray($value, $indentLevel + 1);
         }
 
-        if (is_string($value) && class_exists($value) && ctype_upper($value[0])) {
+        if (is_string($value) && (class_exists($value) || interface_exists($value)) && ctype_upper($value[0])) {
             return sprintf('\\%s::class', ltrim($value, '\\'));
         }
 

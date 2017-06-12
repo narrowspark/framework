@@ -106,10 +106,10 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             ],
             // Exception transformers.
             'transformers' => [
-                new ClassNotFoundFatalErrorTransformer(),
-                new CommandLineTransformer(),
-                new UndefinedFunctionFatalErrorTransformer(),
-                new UndefinedMethodFatalErrorTransformer(),
+                ClassNotFoundFatalErrorTransformer::class,
+                CommandLineTransformer::class,
+                UndefinedFunctionFatalErrorTransformer::class,
+                UndefinedMethodFatalErrorTransformer::class,
             ],
         ];
     }

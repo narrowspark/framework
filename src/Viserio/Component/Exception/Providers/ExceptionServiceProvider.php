@@ -17,6 +17,10 @@ use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filters\CanDisplayFilter;
 use Viserio\Component\Exception\Filters\VerboseFilter;
 use Viserio\Component\Exception\Handler;
+use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
+use Viserio\Component\Exception\Transformers\CommandLineTransformer;
+use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
+use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
 
 class ExceptionServiceProvider implements ServiceProvider
 {
@@ -34,12 +38,24 @@ class ExceptionServiceProvider implements ServiceProvider
             ExceptionHandlerContract::class  => function (ContainerInterface $container) {
                 return $container->get(HandlerContract::class);
             },
-            HtmlDisplayer::class             => [self::class, 'createHtmlDisplayer'],
-            JsonDisplayer::class             => [self::class, 'createJsonDisplayer'],
-            ViewDisplayer::class             => [self::class, 'createViewDisplayer'],
-            WhoopsDisplayer::class           => [self::class, 'createWhoopsDisplayer'],
-            VerboseFilter::class             => [self::class, 'createVerboseFilter'],
-            CanDisplayFilter::class          => [self::class, 'createCanDisplayFilter'],
+            HtmlDisplayer::class                       => [self::class, 'createHtmlDisplayer'],
+            JsonDisplayer::class                       => [self::class, 'createJsonDisplayer'],
+            ViewDisplayer::class                       => [self::class, 'createViewDisplayer'],
+            WhoopsDisplayer::class                     => [self::class, 'createWhoopsDisplayer'],
+            VerboseFilter::class                       => [self::class, 'createVerboseFilter'],
+            CanDisplayFilter::class                    => [self::class, 'createCanDisplayFilter'],
+            ClassNotFoundFatalErrorTransformer::class  => function () {
+                return new ClassNotFoundFatalErrorTransformer();
+            },
+            CommandLineTransformer::class  => function () {
+                return new CommandLineTransformer();
+            },
+            UndefinedFunctionFatalErrorTransformer::class  => function () {
+                return new UndefinedFunctionFatalErrorTransformer();
+            },
+            UndefinedMethodFatalErrorTransformer::class  => function () {
+                return new UndefinedMethodFatalErrorTransformer();
+            },
         ];
     }
 
