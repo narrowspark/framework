@@ -58,12 +58,10 @@ class OptionDumpCommand extends Command
             if ($dumper !== null) {
                 $content = $dumper->dump($config, $format);
             } else {
-                $content  = '<?php
+                $content = '<?php
 declare(strict_types=1);
 
-return ';
-                $content .= $this->prettyPrintArray($config);
-                $content .= ';';
+return ' . $this->getPrettyPrintArray($data) . ';';
             }
 
             if ($this->hasOption('overwrite') || ! file_exists($file)) {

@@ -12,7 +12,7 @@ trait ArrayPrettyPrintTrait
      *
      * @return string
      */
-    protected function prettyPrintArray(array $config, int $indentLevel = 1): string
+    protected function getPrettyPrintArray(array $config, int $indentLevel = 1): string
     {
         $indent  = str_repeat(' ', $indentLevel * 4);
         $entries = [];
@@ -50,7 +50,7 @@ trait ArrayPrettyPrintTrait
     protected function createValue($value, int $indentLevel)
     {
         if (is_array($value)) {
-            return $this->prettyPrintArray($value, $indentLevel + 1);
+            return $this->getPrettyPrintArray($value, $indentLevel + 1);
         }
 
         if (is_string($value) && class_exists($value) && ctype_upper($value[0])) {

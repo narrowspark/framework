@@ -17,7 +17,7 @@ class PhpDumper implements DumperContract
         $output = '<?php
 declare(strict_types=1);
 
-return ' . $this->prettyPrintArray($data) . ';';
+return ' . $this->getPrettyPrintArray($data) . ';';
 
         return $output;
     }
