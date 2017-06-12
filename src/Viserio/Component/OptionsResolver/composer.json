@@ -37,6 +37,9 @@
         "exclude-from-classmap"                            : ["/Tests/"]
     },
     "autoload-dev": {
+        "files": [
+            "Tests/Commands/OverwritePhpFunctions.php"
+        ],
         "psr-4": {
             "Viserio\\Component\\OptionsResolver\\Tests\\" : "Tests/"
         }

@@ -55,19 +55,36 @@ class OptionDumpCommand extends Command
             $content = '';
             $file    = $dirPath . '\\' . $key . '.' . $format;
 
+            if ($this->hasOption('merge') && file_exists($file)) {
+                $existingConfig = (array) include $file;
+                $config         = array_replace_recursive($existingConfig, $config);
+            }
+
             if ($dumper !== null) {
                 $content = $dumper->dump($config, $format);
             } else {
                 $content = '<?php
 declare(strict_types=1);
 
-return ' . $this->getPrettyPrintArray($data) . ';';
+return ' . $this->getPrettyPrintArray($config) . ';';
+            }
+
+            if ($this->hasOption('dry-run')) {
+                $this->info("Merged array:\n\n" . $content);
+
+                if ($this->confirm(sprintf('Write content to "%s"?', $file)) === false) {
+                    continue;
+                }
             }
 
             if ($this->hasOption('overwrite') || ! file_exists($file)) {
                 file_put_contents($file, $content);
             } else {
-                $confirmed = $this->confirm(sprintf('Do you really wish to overwrite %s', $key));
+                if ($this->hasOption('merge')) {
+                    $confirmed = true;
+                } else {
+                    $confirmed = $this->confirm(sprintf('Do you really wish to overwrite %s', $key));
+                }
 
                 if ($confirmed) {
                     file_put_contents($file, $content);
@@ -76,6 +93,8 @@ return ' . $this->getPrettyPrintArray($data) . ';';
                 }
             }
         }
+
+        return 0;
     }
 
     /**
@@ -109,7 +128,19 @@ return ' . $this->getPrettyPrintArray($data) . ';';
                 'overwrite',
                 null,
                 InputOption::VALUE_NONE,
-                'Overwrite existent config',
+                'Overwrite existent class config',
+            ],
+            [
+                'merge',
+                null,
+                InputOption::VALUE_NONE,
+                'Merge existent class config with a new class config',
+            ],
+            [
+                'dry-run',
+                null,
+                InputOption::VALUE_NONE,
+                'You will be asked before the config is written to a file',
             ],
         ];
     }

@@ -56,8 +56,10 @@ trait ConfirmableTrait
      *
      * @param string          $string
      * @param null|int|string $verbosityLevel
+     *
+     * @return void
      */
-    abstract public function comment(string $string, $verbosityLevel = null);
+    abstract public function comment(string $string, $verbosityLevel = null): void;
 
     /**
      * Confirm a question with the user.

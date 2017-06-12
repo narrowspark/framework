@@ -154,6 +154,11 @@
         },
         "exclude-from-classmap"              : ["src/Viserio/Component/**/Tests/", "src/Viserio/Bridge/**/Tests/", "benchmarks/"]
     },
+    "autoload-dev": {
+        "files": [
+            "src/Viserio/Component/OptionsResolver/Tests/Commands/OverwritePhpFunctions.php"
+        ]
+    },
     "extra": {
         "branch-alias": {
             "dev-master"                     : "1.0-dev"
