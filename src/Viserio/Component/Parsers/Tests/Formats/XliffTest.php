@@ -9,6 +9,8 @@ use Viserio\Component\Parsers\Parsers\XliffParser;
 
 class XliffTest extends TestCase
 {
+    use \Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
+
     /**
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem
      */
@@ -23,7 +25,9 @@ class XliffTest extends TestCase
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv1.xlf'));
 
-        self::assertSame(unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv1.xlf')), $datas);
+        $excepted = include_once __DIR__ . '/../Fixtures/xliff/output_xliffv1.php';
+
+        self::assertEquals($excepted, $datas);
     }
 
     public function testParseXliffV1WithEmptySource()

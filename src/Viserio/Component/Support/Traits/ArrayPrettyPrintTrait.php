@@ -45,9 +45,9 @@ trait ArrayPrettyPrintTrait
      * @param mixed $value
      * @param int   $indentLevel
      *
-     * @return string|int|float
+     * @return string
      */
-    protected function createValue($value, int $indentLevel)
+    protected function createValue($value, int $indentLevel): string
     {
         if (is_array($value)) {
             return $this->getPrettyPrintArray($value, $indentLevel + 1);
@@ -58,7 +58,7 @@ trait ArrayPrettyPrintTrait
         }
 
         if (is_numeric($value)) {
-            return $value + 0;
+            return (string) $value;
         }
 
         return var_export($value, true);

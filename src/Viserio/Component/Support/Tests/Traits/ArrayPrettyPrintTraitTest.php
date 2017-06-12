@@ -24,13 +24,13 @@ class ArrayPrettyPrintTraitTest extends TestCase
 
     public function testWithSimpleArray()
     {
-        $array = $this->getPrettyPrintArray([1 => 'foo', '1.2' => 'bar', 'foo' => 'bar', 'fooa' => 1]);
+        $array = $this->getPrettyPrintArray([1 => 'foo', '188.29614911019327165' => 'bar', 'foo' => '889614911019327165', 'fooa' => 18896141256]);
         $file  = vfsStream::newFile('simpleArray.php')
             ->withContent('[
     1 => \'foo\',
-    \'1.2\' => \'bar\',
-    \'foo\' => \'bar\',
-    \'fooa\' => 1,
+    \'188.29614911019327165\' => \'bar\',
+    \'foo\' => 889614911019327165,
+    \'fooa\' => 18896141256,
 ]')
             ->at($this->root);
         $outFile  = vfsStream::newFile('simpleArrayOutput.php')

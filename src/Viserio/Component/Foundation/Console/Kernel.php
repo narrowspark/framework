@@ -239,7 +239,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $console   = $container->get(Cerebro::class);
 
             $console->setVersion($this->resolvedOptions['version']);
-            $console->setName($this->resolvedOptions['name']);
+            $console->setName($this->resolvedOptions['console_name']);
 
             foreach ($this->commands as $command) {
                 $console->add($container->resolve($command));

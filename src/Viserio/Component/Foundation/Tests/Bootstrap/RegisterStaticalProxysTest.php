@@ -24,7 +24,7 @@ class RegisterStaticalProxysTest extends MockeryTestCase
             ->andReturn($container);
         $kernel->shouldReceive('getKernelConfigurations')
             ->once()
-            ->andReturn(['viserio' => ['app' => ['aliases' => ['test' => RegisterStaticalProxys::class]]]]);
+            ->andReturn(['aliases' => ['test' => RegisterStaticalProxys::class]]);
 
         $bootstraper->bootstrap($kernel);
     }

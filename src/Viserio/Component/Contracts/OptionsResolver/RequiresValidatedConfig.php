@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\OptionsResolver;
 
-interface RequiresValidatedConfig
+interface RequiresValidatedConfig extends RequiresConfig
 {
     /**
      * Returns a list of callable validators
