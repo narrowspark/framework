@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Tests\Traits;
 
 use Exception;
-use Throwable;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
 
 class ArrayPrettyPrintTraitTest extends TestCase
