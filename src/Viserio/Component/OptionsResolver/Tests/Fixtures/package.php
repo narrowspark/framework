@@ -5,7 +5,7 @@ return [
     'vendor' => [
         'package' => [
             'minLength' => 2,
-            'maxLength' => NULL,
+            'maxLength' => null,
         ],
     ],
 ];

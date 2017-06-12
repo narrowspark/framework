@@ -61,8 +61,8 @@ class OptionDumpCommandTest extends MockeryTestCase
 
     public function testCommandWithDumper()
     {
-        $path    = __DIR__ . '/../Command';
-        $file    = $path . '/package.php';
+        $path      = __DIR__ . '/../Command';
+        $file      = $path . '/package.php';
         $container = new ArrayContainer([Dumper::class => new Dumper()]);
         $command   = new OptionDumpCommand();
         $command->setContainer($container);
