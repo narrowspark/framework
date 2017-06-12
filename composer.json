@@ -152,7 +152,11 @@
             "Viserio\\Bridge\\"              : "src/Viserio/Bridge/",
             "Narrowspark\\"                  : "benchmarks/"
         },
-        "exclude-from-classmap"              : ["src/Viserio/Component/**/Tests/", "src/Viserio/Bridge/**/Tests/", "benchmarks/"]
+        "exclude-from-classmap"              : [
+            "src/Viserio/Component/**/Tests/",
+            "src/Viserio/Bridge/**/Tests/",
+            "benchmarks/"
+        ]
     },
     "autoload-dev": {
         "files": [

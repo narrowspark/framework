@@ -10,13 +10,24 @@ use Viserio\Component\Parsers\Dumper;
 
 class OptionDumpCommandTest extends MockeryTestCase
 {
+    public function setUp()
+    {
+        mkdir(__DIR__ . '/../Command');
+    }
+
+    public function tearDown()
+    {
+        rmdir(__DIR__ . '/../Command');
+    }
+
     public function testCommand()
     {
-        $file    = __DIR__ . '/../Fixtures/package.php';
+        $path    = __DIR__ . '/../Command';
+        $file    = $path . '/package.php';
         $command = new OptionDumpCommand();
 
         $tester = new CommandTester($command);
-        $tester->execute(['dir' => __DIR__ . '/../Fixtures'], ['interactive' => false]);
+        $tester->execute(['dir' => $path], ['interactive' => false]);
         $tester->getDisplay();
 
         self::assertEquals(
@@ -31,16 +42,17 @@ class OptionDumpCommandTest extends MockeryTestCase
             include $file
         );
 
-        @unlink($file);
+        unlink($file);
     }
 
     public function testCommandShowError()
     {
-        $file    = __DIR__ . '/../Fixtures/package.php';
+        $path    = __DIR__ . '/../Command';
+        $file    = $path . '/package.php';
         $command = new OptionDumpCommand();
 
         $tester = new CommandTester($command);
-        $tester->execute(['dir' => __DIR__ . '/../Fixtures', '--format' => 'json'], ['interactive' => false]);
+        $tester->execute(['dir' => $path, '--format' => 'json'], ['interactive' => false]);
 
         $output = $tester->getDisplay(true);
 
@@ -49,13 +61,14 @@ class OptionDumpCommandTest extends MockeryTestCase
 
     public function testCommandWithDumper()
     {
-        $file      = __DIR__ . '/../Fixtures/package.php';
+        $path    = __DIR__ . '/../Command';
+        $file    = $path . '/package.php';
         $container = new ArrayContainer([Dumper::class => new Dumper()]);
         $command   = new OptionDumpCommand();
         $command->setContainer($container);
 
         $tester = new CommandTester($command);
-        $tester->execute(['dir' => __DIR__ . '/../Fixtures'], ['interactive' => false]);
+        $tester->execute(['dir' => $path], ['interactive' => false]);
         $tester->getDisplay();
 
         self::assertEquals(
@@ -70,6 +83,6 @@ class OptionDumpCommandTest extends MockeryTestCase
             include $file
         );
 
-        @unlink($file);
+        unlink($file);
     }
 }

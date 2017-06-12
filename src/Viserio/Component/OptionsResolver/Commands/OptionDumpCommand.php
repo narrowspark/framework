@@ -69,7 +69,7 @@ declare(strict_types=1);
 return ' . $this->getPrettyPrintArray($config) . ';';
             }
 
-            if ($this->hasOption('dry-run')) {
+            if ($this->hasOption('show')) {
                 $this->info("Merged array:\n\n" . $content);
 
                 if ($this->confirm(sprintf('Write content to "%s"?', $file)) === false) {
@@ -137,10 +137,10 @@ return ' . $this->getPrettyPrintArray($config) . ';';
                 'Merge existent class config with a new class config',
             ],
             [
-                'dry-run',
+                'show',
                 null,
                 InputOption::VALUE_NONE,
-                'You will be asked before the config is written to a file',
+                'You will see the config and be asked before the config is written to a file',
             ],
         ];
     }
