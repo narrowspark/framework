@@ -31,7 +31,7 @@
         "container-interop/service-provider"    : "^0.3",
         "guzzlehttp/guzzle"                     : "^6.0",
         "narrowspark/testing-helper"            : "^3.0",
-        "opis/closure"                          : "^2.2",
+        "opis/closure"                          : "^3.0",
         "phpunit/phpunit"                       : "^6.0",
         "viserio/config"                        : "self.version",
         "viserio/events"                        : "self.version",
@@ -58,7 +58,7 @@
         "aws/aws-sdk-php"                       : "Required to use the SES mail driver (^3.0).",
         "container-interop/service-provider"    : "Required to use service-provider (^0.3).",
         "guzzlehttp/guzzle"                     : "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
-        "opis/closure"                          : "Required to be able to serialize closures (^2.2.1).",
+        "opis/closure"                          : "Required to be able to serialize closures (^3.0).",
         "psr/container"                         : "Required to use the invoker in mailer (^1.0).",
         "viserio/queue"                         : "Required to send queue emails (self.version).",
         "viserio/statical-proxy"                : "Required to use the proxy instances (self.version)."

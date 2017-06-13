@@ -52,7 +52,7 @@
         "narrowspark/http-emitter"            : "^0.2",
         "narrowspark/http-status"             : "^3.0",
         "mtdowling/cron-expression"           : "^1.1",
-        "opis/closure"                        : "^2.2",
+        "opis/closure"                        : "^3.0",
         "paragonie/password_lock"             : "^3.0",
         "php-di/invoker"                      : "^2.0",
         "psr/cache"                           : "^1.0",
