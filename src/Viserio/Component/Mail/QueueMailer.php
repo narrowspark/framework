@@ -130,7 +130,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
             return $callback;
         }
 
-        return new SerializableClosure($callback, true);
+        return new SerializableClosure($callback);
     }
 
     /**
