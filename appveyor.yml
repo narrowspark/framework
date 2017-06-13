@@ -41,6 +41,7 @@ init:
 install:
   # Enable Windows update service
   - ps: Set-Service wuauserv -StartupType Manual
+  - choco upgrade chocolatey-windowsupdate.extension
   # Install PHP
   - IF EXIST C:\php (SET PHP=0) ELSE (mkdir C:\php)
   - ps: appveyor-retry cinst --params '""/InstallDir:C:\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
