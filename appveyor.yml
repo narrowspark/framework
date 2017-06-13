@@ -2,7 +2,7 @@ build: false
 platform:
  - x64
 clone_depth: 1
-clone_folder: c:\projects\narrowspark
+clone_folder: C:\projects\narrowspark
 
 environment:
   matrix:
@@ -23,33 +23,34 @@ services:
   - mongodb
   - memcached
 
-cache:
+cache: # cache is cleared when linked file is modified
   - '%LOCALAPPDATA%\Composer\files -> composer.lock'
   - composer.phar
+  # Cache chocolatey packages
   - C:\ProgramData\chocolatey\bin -> .appveyor.yml
   - C:\ProgramData\chocolatey\lib -> .appveyor.yml
-  - c:\php -> .appveyor.yml
+  # Cache php install
+  - C:\tools\php -> .appveyor.yml
   - .phpunit -> phpunit
 
 init:
-  - SET PATH=C:\Program Files\OpenSSL;c:\php;%PATH%
+  - SET PATH=C:\Program Files\OpenSSL;C:\tools\php;%PATH%
   - SET PHP=1
   - SET ANSICON=121x90 (121x90)
   - SET COMPOSER_NO_INTERACTION=1
   - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
-  # Enable Windows update service
-  - ps: Set-Service wuauserv -StartupType Manual
+  # Install PHP
+  - IF EXIST C:\tools\php (SET PHP=0) ELSE (mkdir C:\tools\php)
+  - ps: Invoke-WebRequest "https://raw.githubusercontent.com/prisis/ps-install-php/master/Install-PHP.ps1" -OutFile "Install-PHP.ps1"
+  - ps: .\Install-PHP.ps1 -Version $Env:php_ver_target -Highest -Arch x64 -Extensions mbstring,intl,openssl,mongodb,memcache,fileinfo,pdo_sqlite,curl
   # Install redis and start
   - nuget install redis-64 -excludeversion -Verbosity quiet
   - redis-64\tools\redis-server.exe --service-install
   - redis-64\tools\redis-server.exe --service-start
-  # PHP
-  - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
-  - cinst -y OpenSSL.Light
-  - ps: appveyor-retry cinst --params '""/InstallDir:C:\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
-  - cd c:\php
+  # PHP settings and extensions
+  - cd C:\tools\php
   - IF %PHP%==1 appveyor DownloadFile https://raw.githubusercontent.com/symfony/binary-utils/master/cacert.pem
   - IF %PHP%==1 cd ext
   - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/mongodb/1.2.2/php_mongodb-1.2.2-7.1-nts-vc14-x64.zip
@@ -58,34 +59,23 @@ install:
   - IF %PHP%==1 rename php-7.1.x_memcache.dll php_memcache.dll
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ..
-  - IF %PHP%==1 copy /Y php.ini-production php.ini
+  - IF %PHP%==1 echo zend_extension=php_opcache.dll >> php.ini
   - IF %PHP%==1 echo max_execution_time=1200 >> php.ini
   - IF %PHP%==1 echo date.timezone="America/Los_Angeles" >> php.ini
-  - IF %PHP%==1 echo extension_dir=ext >> php.ini
-  - IF %PHP%==1 echo zend_extension=php_opcache.dll >> php.ini
   - IF %PHP%==1 echo opcache.enable_cli=1 >> php.ini
-  - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
-  - IF %PHP%==1 echo extension=php_mongodb.dll >> php.ini
-  - IF %PHP%==1 echo extension=php_memcache.dll >> php.ini
   - IF %PHP%==1 echo apc.enable_cli=1 >> php.ini
-  - IF %PHP%==1 echo extension=php_intl.dll >> php.ini
-  - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
-  - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
-  - IF %PHP%==1 echo extension=php_pdo_sqlite.dll >> php.ini
-  - IF %PHP%==1 echo extension=php_curl.dll >> php.ini
-  - IF %PHP%==1 echo curl.cainfo=c:\php\cacert.pem >> php.ini
-  - IF %PHP%==1 appveyor DownloadFile https://getcomposer.org/composer.phar
+  - IF %PHP%==1 echo curl.cainfo=C:\tools\php\cacert.pem >> php.ini
+  - php -r "readfile('https://getcomposer.org/installer');" | php
   - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
-  - mkdir %APPDATA%\Composer
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
-  - cd c:\projects\narrowspark
+  - cd C:\projects\narrowspark
   # Matrix
   - IF %dependencies%==basic appveyor-retry composer install --prefer-dist --no-interaction --profile --no-suggest --no-progress --ansi
   - IF %dependencies%==lowest appveyor-retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --profile --no-suggest --no-progress --ansi
   - IF %dependencies%==stable appveyor-retry composer update --prefer-dist --no-interaction --prefer-stable --profile --no-progress --ansi
 
 test_script:
-  - cd c:\projects\narrowspark
+  - cd C:\projects\narrowspark
   - SET X=0
   - sh vendor/bin/phpunit -c phpunit.xml.dist -v --exclude-group="appveyor"
   - exit %X%
