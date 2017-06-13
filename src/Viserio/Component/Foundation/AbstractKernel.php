@@ -102,7 +102,7 @@ abstract class AbstractKernel implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio'];
+        return ['viserio', 'app'];
     }
 
     /**
@@ -111,11 +111,10 @@ abstract class AbstractKernel implements
     public function getDefaultOptions(): iterable
     {
         return [
-            'app' => [
-                'locale'           => 'en',
-                'fallback_locale'  => 'en',
-                'aliases'          => [],
-            ],
+            'locale'          => 'en',
+            'fallback_locale' => 'en',
+            'aliases'         => [],
+            'timezone'        => 'UTC',
         ];
     }
 
@@ -125,9 +124,7 @@ abstract class AbstractKernel implements
     public function getMandatoryOptions(): iterable
     {
         return [
-            'app' => [
-                'env',
-            ],
+            'env',
         ];
     }
 
@@ -160,7 +157,7 @@ abstract class AbstractKernel implements
      */
     public function isLocal(): bool
     {
-        return $this->resolvedOptions['app']['env'] == 'local';
+        return $this->resolvedOptions['env'] == 'local';
     }
 
     /**
@@ -168,7 +165,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningUnitTests(): bool
     {
-        return $this->resolvedOptions['app']['env'] == 'testing';
+        return $this->resolvedOptions['env'] == 'testing';
     }
 
     /**
@@ -349,7 +346,7 @@ abstract class AbstractKernel implements
             $container->get(RepositoryContract::class)->set('viserio.app.env', $env);
         }
 
-        $this->resolvedOptions['app']['env'] = $env;
+        $this->resolvedOptions['env'] = $env;
 
         return $env;
     }

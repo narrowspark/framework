@@ -82,7 +82,7 @@ trait AbstractOptionsResolverTrait
         }
 
         if ($configClass instanceof RequiresValidatedConfigContract) {
-            self::validateOptions($configClass->getOptionValidators(), $config);
+            self::validateOptions($configClass->getOptionValidators(), $config, $configClass);
         }
 
         if ($configClass instanceof ProvidesDefaultOptionsContract) {
@@ -191,12 +191,13 @@ trait AbstractOptionsResolverTrait
     /**
      * Run a validator against given config.
      *
-     * @param array    $validators
-     * @param iterable $config
+     * @param array                                                       $validators
+     * @param iterable                                                    $config
+     * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
      *
      * @return void
      */
-    private static function validateOptions(array $validators, iterable $config): void
+    private static function validateOptions(array $validators, iterable $config, RequiresConfigContract $configClass): void
     {
         foreach ($validators as $key => $value) {
             $useRecursion = ! is_scalar($value);
@@ -210,13 +211,14 @@ trait AbstractOptionsResolverTrait
                     return;
                 }
 
-                self::validateOptions($value, $config[$key]);
+                self::validateOptions($value, $config[$key], $configClass);
 
                 return;
             } elseif (! is_callable($value)) {
                 throw new InvalidValidatorException(sprintf(
-                    'The validator must be of type callable, [%s] given.',
-                    is_object($value) ? get_class($value) : gettype($value)
+                    'The validator must be of type callable, [%s] given, in %s.',
+                    is_object($value) ? get_class($value) : gettype($value),
+                    get_class($configClass)
                 ));
             }
         }

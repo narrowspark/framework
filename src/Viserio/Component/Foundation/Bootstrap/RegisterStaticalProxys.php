@@ -21,6 +21,6 @@ class RegisterStaticalProxys implements BootstrapContract
 
         StaticalProxy::setContainer($container);
 
-        (new AliasLoader($config['app']['aliases']))->register();
+        (new AliasLoader($config['aliases']))->register();
     }
 }

@@ -8,16 +8,16 @@ use Twig\Environment as TwigEnvironment;
 use Twig\Extension\ProfilerExtension;
 use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class TwigBridgeDataCollectorsServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+    ProvidesDefaultOptionsContract
 {
     use StaticOptionsResolverTrait;
 
@@ -46,11 +46,11 @@ class TwigBridgeDataCollectorsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public function getDefaultOptions(): iterable
     {
         return [
             'collector' => [
-                'twig',
+                'twig' => false,
             ],
         ];
     }

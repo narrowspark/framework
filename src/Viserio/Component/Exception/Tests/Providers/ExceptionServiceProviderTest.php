@@ -15,6 +15,10 @@ use Viserio\Component\Exception\Filters\CanDisplayFilter;
 use Viserio\Component\Exception\Filters\VerboseFilter;
 use Viserio\Component\Exception\Handler;
 use Viserio\Component\Exception\Providers\ExceptionServiceProvider;
+use Viserio\Component\Exception\Transformers\ClassNotFoundFatalErrorTransformer;
+use Viserio\Component\Exception\Transformers\CommandLineTransformer;
+use Viserio\Component\Exception\Transformers\UndefinedFunctionFatalErrorTransformer;
+use Viserio\Component\Exception\Transformers\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Component\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Component\View\Providers\ViewServiceProvider;
@@ -41,6 +45,10 @@ class ExceptionServiceProviderTest extends TestCase
             ],
         ]);
 
+        self::assertInstanceOf(ClassNotFoundFatalErrorTransformer::class, $container->get(ClassNotFoundFatalErrorTransformer::class));
+        self::assertInstanceOf(CommandLineTransformer::class, $container->get(CommandLineTransformer::class));
+        self::assertInstanceOf(UndefinedFunctionFatalErrorTransformer::class, $container->get(UndefinedFunctionFatalErrorTransformer::class));
+        self::assertInstanceOf(UndefinedMethodFatalErrorTransformer::class, $container->get(UndefinedMethodFatalErrorTransformer::class));
         self::assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfo::class));
         self::assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
         self::assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));

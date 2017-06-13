@@ -652,7 +652,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\InvalidValidatorException
-     * @expectedExceptionMessage he validator must be of type callable, [string] given.
+     * @expectedExceptionMessage he validator must be of type callable, [string] given, in Viserio\Component\OptionsResolver\Tests\Fixtures\InvalidValidatedConfigurationFixture.
      */
     public function testThrowExceptionOnInvalidValidator()
     {

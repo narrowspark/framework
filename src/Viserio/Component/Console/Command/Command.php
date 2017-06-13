@@ -138,8 +138,10 @@ abstract class Command extends BaseCommand
      * Set the verbosity level.
      *
      * @param string|int $level
+     *
+     * @return void
      */
-    public function setVerbosity($level)
+    public function setVerbosity($level): void
     {
         $this->verbosity = $this->getVerbosity($level);
     }
@@ -253,9 +255,9 @@ abstract class Command extends BaseCommand
      * @param string      $question
      * @param string|null $default
      *
-     * @return string
+     * @return string|null
      */
-    public function ask(string $question, ?string $default = null): string
+    public function ask(string $question, ?string $default = null): ?string
     {
         return $this->output->ask($question, $default);
     }
@@ -267,9 +269,9 @@ abstract class Command extends BaseCommand
      * @param array  $choices
      * @param string $default
      *
-     * @return string
+     * @return string|null
      */
-    public function anticipate(string $question, array $choices, string $default = null): string
+    public function anticipate(string $question, array $choices, string $default = null): ?string
     {
         return $this->askWithCompletion($question, $choices, $default);
     }
@@ -281,9 +283,9 @@ abstract class Command extends BaseCommand
      * @param array       $choices
      * @param string|null $default
      *
-     * @return string
+     * @return string|null
      */
-    public function askWithCompletion(string $question, array $choices, ?string $default = null): string
+    public function askWithCompletion(string $question, array $choices, ?string $default = null): ?string
     {
         $question = new Question($question, $default);
 
@@ -318,7 +320,7 @@ abstract class Command extends BaseCommand
      * @param mixed       $attempts
      * @param bool        $multiple
      *
-     * @return string
+     * @return string|null
      */
     public function choice(
         string $question,
@@ -326,7 +328,7 @@ abstract class Command extends BaseCommand
         ?string $default = null,
         $attempts = null,
         bool $multiple = false
-    ): string {
+    ): ?string {
         $question = new ChoiceQuestion($question, $choices, $default);
 
         $question->setMaxAttempts($attempts)->setMultiselect($multiple);
@@ -340,8 +342,10 @@ abstract class Command extends BaseCommand
      * @param array                                                $headers
      * @param array|\Viserio\Component\Contracts\Support\Arrayable $rows
      * @param string                                               $style
+     *
+     * @return void
      */
-    public function table(array $headers, $rows, string $style = 'default')
+    public function table(array $headers, $rows, string $style = 'default'): void
     {
         $table = new Table($this->output);
 
@@ -358,8 +362,10 @@ abstract class Command extends BaseCommand
      * @param string          $string
      * @param string|null     $style          The output style of the string
      * @param null|int|string $verbosityLevel
+     *
+     * @return void
      */
-    public function line(string $string, ?string $style = null, $verbosityLevel = null)
+    public function line(string $string, ?string $style = null, $verbosityLevel = null): void
     {
         $styledString = $style ? "<$style>$string</$style>" : $string;
         $this->output->writeln($styledString, $this->getVerbosity($verbosityLevel));
@@ -370,8 +376,10 @@ abstract class Command extends BaseCommand
      *
      * @param string          $string
      * @param null|int|string $verbosityLevel
+     *
+     * @return void
      */
-    public function info(string $string, $verbosityLevel = null)
+    public function info(string $string, $verbosityLevel = null): void
     {
         $this->line($string, 'info', $verbosityLevel);
     }
@@ -381,8 +389,10 @@ abstract class Command extends BaseCommand
      *
      * @param string          $string
      * @param null|int|string $verbosityLevel
+     *
+     * @return void
      */
-    public function comment(string $string, $verbosityLevel = null)
+    public function comment(string $string, $verbosityLevel = null): void
     {
         $this->line($string, 'comment', $verbosityLevel);
     }
@@ -392,8 +402,10 @@ abstract class Command extends BaseCommand
      *
      * @param string          $string
      * @param null|int|string $verbosityLevel
+     *
+     * @return void
      */
-    public function question(string $string, $verbosityLevel = null)
+    public function question(string $string, $verbosityLevel = null): void
     {
         $this->line($string, 'question', $verbosityLevel);
     }
@@ -403,8 +415,10 @@ abstract class Command extends BaseCommand
      *
      * @param string          $string
      * @param null|int|string $verbosityLevel
+     *
+     * @return void
      */
-    public function error(string $string, $verbosityLevel = null)
+    public function error(string $string, $verbosityLevel = null): void
     {
         $this->line($string, 'error', $verbosityLevel);
     }
@@ -414,8 +428,10 @@ abstract class Command extends BaseCommand
      *
      * @param string          $string
      * @param null|int|string $verbosityLevel
+     *
+     * @return void
      */
-    public function warn(string $string, $verbosityLevel = null)
+    public function warn(string $string, $verbosityLevel = null): void
     {
         if (! $this->output->getFormatter()->hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
@@ -463,7 +479,7 @@ abstract class Command extends BaseCommand
      *
      * @return void
      */
-    protected function configureUsingFluentDefinition()
+    protected function configureUsingFluentDefinition(): void
     {
         $arr = (new ExpressionParser())->parse($this->signature);
 
@@ -482,7 +498,7 @@ abstract class Command extends BaseCommand
      *
      * @return void
      */
-    protected function specifyParameters()
+    protected function specifyParameters(): void
     {
         // We will loop through all of the arguments and options for the command and
         // set them all on the base command instance. This specifies what can get

@@ -23,11 +23,13 @@
         "viserio/contracts"                                : "self.version"
     },
     "require-dev": {
+        "mikey179/vfsStream"                               : "^1.6",
         "narrowspark/testing-helper"                       : "^3.0",
         "phpunit/phpunit"                                  : "^6.0",
         "viserio/config"                                   : "self.version",
         "viserio/console"                                  : "self.version",
-        "viserio/container"                                : "self.version"
+        "viserio/container"                                : "self.version",
+        "viserio/parsers"                                  : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -36,6 +38,9 @@
         "exclude-from-classmap"                            : ["/Tests/"]
     },
     "autoload-dev": {
+        "files": [
+            "Tests/Commands/OverwritePhpFunctions.php"
+        ],
         "psr-4": {
             "Viserio\\Component\\OptionsResolver\\Tests\\" : "Tests/"
         }

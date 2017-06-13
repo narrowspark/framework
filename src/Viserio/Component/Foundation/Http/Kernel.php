@@ -82,9 +82,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     public function getDefaultOptions(): iterable
     {
         $options = [
-            'app' => [
-                'skip_middlewares' => false,
-            ],
+            'name'             => 'Narrowspark',
+            'skip_middlewares' => false,
         ];
 
         return array_merge(parent::getDefaultOptions(), $options);
@@ -259,12 +258,12 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $dispatcher = $container->get(DispatcherContract::class);
 
         $dispatcher->setCachePath($this->getStoragePath('framework/routes.cache.php'));
-        $dispatcher->refreshCache($this->resolvedOptions['app']['env'] !== 'production');
+        $dispatcher->refreshCache($this->resolvedOptions['env'] !== 'production');
 
         return (new Pipeline())
             ->setContainer($container)
             ->send($request)
-            ->through($this->resolvedOptions['app']['skip_middlewares'] ? [] : $this->middlewares)
+            ->through($this->resolvedOptions['skip_middlewares'] ? [] : $this->middlewares)
             ->then(function ($request) use ($router, $container) {
                 $container->instance(ServerRequestInterface::class, $request);
 

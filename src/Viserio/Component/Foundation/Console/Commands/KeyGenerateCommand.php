@@ -33,19 +33,23 @@ class KeyGenerateCommand extends Command
         $container = $this->getContainer();
 
         if ($this->option('show') || ! $container->has(RepositoryContract::class)) {
-            return $this->line('<comment>' . $key . '</comment>');
+            $this->line('<comment>' . $key . '</comment>');
+
+            return 0;
         }
 
         // Next, we will replace the application key in the environment file so it is
         // automatically setup for this developer. This key gets generated using
         // https://github.com/defuse/php-encryption
         if (! $this->setKeyInEnvironmentFile($key)) {
-            return;
+            return 1;
         }
 
         $container->get(RepositoryContract::class)->set('viserio.app.key', $key);
 
         $this->info("Application key [$key] set successfully.");
+
+        return 0;
     }
 
     /**
