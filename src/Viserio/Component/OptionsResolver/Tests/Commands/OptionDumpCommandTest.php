@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Commands;
 
+use org\bovigo\vfs\vfsStream;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -10,49 +11,46 @@ use Viserio\Component\Parsers\Dumper;
 
 class OptionDumpCommandTest extends MockeryTestCase
 {
+    /**
+     * @var \org\bovigo\vfs\vfsStreamDirectory
+     */
+    private $root;
+
     public function setUp()
     {
-        mkdir(__DIR__ . '/../Command');
-    }
-
-    public function tearDown()
-    {
-        rmdir(__DIR__ . '/../Command');
+        $this->root = vfsStream::setup();
     }
 
     public function testCommand()
     {
-        $path    = __DIR__ . '/../Command';
-        $file    = $path . '/package.php';
         $command = new OptionDumpCommand();
 
         $tester = new CommandTester($command);
-        $tester->execute(['dir' => $path], ['interactive' => false]);
+        $tester->execute(['dir' => $this->root->url()], ['interactive' => false]);
         $tester->getDisplay();
 
         self::assertEquals(
-            [
-                'vendor' => [
-                    'package' => [
-                        'minLength' => 2,
-                        'maxLength' => null,
-                    ],
-                ],
-            ],
-            include $file
-        );
+            "<?php
+declare(strict_types=1);
 
-        unlink($file);
+return [
+    'vendor' => [
+        'package' => [
+            'minLength' => 2,
+            'maxLength' => NULL,
+        ],
+    ],
+];",
+            $this->root->getChild('package.php')->getContent()
+        );
     }
 
     public function testCommandShowError()
     {
-        $path    = __DIR__ . '/../Command';
-        $file    = $path . '/package.php';
         $command = new OptionDumpCommand();
 
         $tester = new CommandTester($command);
-        $tester->execute(['dir' => $path, '--format' => 'json'], ['interactive' => false]);
+        $tester->execute(['dir' => $this->root->url(), '--format' => 'json'], ['interactive' => false]);
 
         $output = $tester->getDisplay(true);
 
@@ -61,28 +59,27 @@ class OptionDumpCommandTest extends MockeryTestCase
 
     public function testCommandWithDumper()
     {
-        $path      = __DIR__ . '/../Command';
-        $file      = $path . '/package.php';
         $container = new ArrayContainer([Dumper::class => new Dumper()]);
         $command   = new OptionDumpCommand();
         $command->setContainer($container);
 
         $tester = new CommandTester($command);
-        $tester->execute(['dir' => $path], ['interactive' => false]);
+        $tester->execute(['dir' => $this->root->url()], ['interactive' => false]);
         $tester->getDisplay();
 
         self::assertEquals(
-            [
-                'vendor' => [
-                    'package' => [
-                        'minLength' => 2,
-                        'maxLength' => null,
-                    ],
-                ],
-            ],
-            include $file
-        );
+            "<?php
+declare(strict_types=1);
 
-        unlink($file);
+return [
+    'vendor' => [
+        'package' => [
+            'minLength' => 2,
+            'maxLength' => NULL,
+        ],
+    ],
+];",
+            $this->root->getChild('package.php')->getContent()
+        );
     }
 }
