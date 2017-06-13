@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Commands;
 
-use org\bovigo\vfs\vfsStream;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use org\bovigo\vfs\vfsStream;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\OptionsResolver\Commands\OptionDumpCommand;
 use Viserio\Component\Parsers\Dumper;
