@@ -33,11 +33,11 @@ class RabbitMQJob extends AbstractJob
     /**
      * Create a new job instance.
      *
-     * @param \Psr\Container\ContainerInterface                 $container
+     * @param \Psr\Container\ContainerInterface                $container
      * @param \Viserio\Component\Queue\Connector\RabbitMQQueue $connection
-     * @param \PhpAmqpLib\Channel\AMQPChannel                   $channel
-     * @param string                                            $queue
-     * @param \PhpAmqpLib\Message\AMQPMessage                   $message
+     * @param \PhpAmqpLib\Channel\AMQPChannel                  $channel
+     * @param string                                           $queue
+     * @param \PhpAmqpLib\Message\AMQPMessage                  $message
      */
     public function __construct(
         ContainerInterface $container,

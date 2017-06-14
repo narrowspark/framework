@@ -80,7 +80,7 @@ class ViewServiceProvider implements ServiceProvider
      * Register the PHP engine implementation.
      *
      * @param \Viserio\Component\View\Engine\EngineResolver $engines
-     * @param \Psr\Container\ContainerInterface              $container
+     * @param \Psr\Container\ContainerInterface             $container
      *
      * @return void
      */
@@ -95,7 +95,7 @@ class ViewServiceProvider implements ServiceProvider
      * Register the File engine implementation.
      *
      * @param \Viserio\Component\View\Engine\EngineResolver $engines
-     * @param \Psr\Container\ContainerInterface              $container
+     * @param \Psr\Container\ContainerInterface             $container
      *
      * @return void
      */
@@ -110,7 +110,7 @@ class ViewServiceProvider implements ServiceProvider
      * Register the Markdown engine implementation.
      *
      * @param \Viserio\Component\View\Engine\EngineResolver $engines
-     * @param \Psr\Container\ContainerInterface              $container
+     * @param \Psr\Container\ContainerInterface             $container
      *
      * @return void
      */

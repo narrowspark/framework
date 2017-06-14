@@ -40,7 +40,7 @@ trait AbstractOptionsResolverTrait
      * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
      * @param null|string                                                 $configId    Config name, must be provided if factory uses RequiresConfigId interface
      *
-     * @throws \InvalidArgumentException                                                                If the $configId parameter is provided but factory does not support it
+     * @throws \InvalidArgumentException                                                               If the $configId parameter is provided but factory does not support it
      * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\UnexpectedValueException         If the $config parameter has the wrong type
      * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException          If no options are available
      * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException If a mandatory option is missing
