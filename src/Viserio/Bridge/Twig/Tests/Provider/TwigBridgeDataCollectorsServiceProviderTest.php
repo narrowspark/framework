@@ -15,7 +15,7 @@ use Viserio\Component\HttpFactory\Bridge\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Bridge\ProfilerServiceProvider;
 use Viserio\Component\View\Bridge\ViewServiceProvider;
 
-class TwigProviderDataCollectorsServiceProviderTest extends MockeryTestCase
+class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 {
     public function testGetServices()
     {

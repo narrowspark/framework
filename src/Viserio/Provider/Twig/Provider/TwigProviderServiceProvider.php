@@ -10,13 +10,6 @@ use Twig\Lexer;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\LoaderInterface;
-use Viserio\Provider\Twig\Engine\TwigEngine;
-use Viserio\Provider\Twig\Extension\ConfigExtension;
-use Viserio\Provider\Twig\Extension\DumpExtension;
-use Viserio\Provider\Twig\Extension\SessionExtension;
-use Viserio\Provider\Twig\Extension\StrExtension;
-use Viserio\Provider\Twig\Extension\TranslatorExtension;
-use Viserio\Provider\Twig\Loader as TwigLoader;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
@@ -28,6 +21,13 @@ use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\Support\Str;
 use Viserio\Component\View\Engines\EngineResolver;
+use Viserio\Provider\Twig\Engine\TwigEngine;
+use Viserio\Provider\Twig\Extension\ConfigExtension;
+use Viserio\Provider\Twig\Extension\DumpExtension;
+use Viserio\Provider\Twig\Extension\SessionExtension;
+use Viserio\Provider\Twig\Extension\StrExtension;
+use Viserio\Provider\Twig\Extension\TranslatorExtension;
+use Viserio\Provider\Twig\Loader as TwigLoader;
 
 class TwigProviderServiceProvider implements
     ServiceProvider,

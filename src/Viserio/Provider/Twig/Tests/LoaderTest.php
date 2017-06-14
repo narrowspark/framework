@@ -4,10 +4,10 @@ namespace Viserio\Provider\Twig\Tests;
 
 use InvalidArgumentException;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Provider\Twig\Loader;
 use Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Provider\Twig\Loader;
 
 class LoaderTest extends MockeryTestCase
 {

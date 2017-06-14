@@ -6,9 +6,9 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\HelperSet;
+use Viserio\Component\Container\Container;
 use Viserio\Provider\Doctrine\Connection;
 use Viserio\Provider\Doctrine\Provider\DatabaseServiceProvider;
-use Viserio\Component\Container\Container;
 
 class DatabaseServiceProviderTest extends TestCase
 {

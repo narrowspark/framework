@@ -14,10 +14,10 @@ use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Helper\HelperSet;
-use Viserio\Provider\Doctrine\Connection;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Viserio\Provider\Doctrine\Connection;
 
 class DatabaseServiceProvider implements
     ServiceProvider,

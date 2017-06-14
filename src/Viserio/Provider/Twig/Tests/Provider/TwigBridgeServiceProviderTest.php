@@ -8,15 +8,15 @@ use Twig\Lexer;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\LoaderInterface;
-use Viserio\Provider\Twig\Engine\TwigEngine;
-use Viserio\Provider\Twig\Loader as TwigLoader;
-use Viserio\Provider\Twig\Provider\TwigProviderServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\View\Provider\ViewServiceProvider;
+use Viserio\Provider\Twig\Engine\TwigEngine;
+use Viserio\Provider\Twig\Loader as TwigLoader;
+use Viserio\Provider\Twig\Provider\TwigProviderServiceProvider;
 
-class TwigProviderServiceProviderTest extends MockeryTestCase
+class TwigBridgeServiceProviderTest extends MockeryTestCase
 {
     public function testProvider()
     {

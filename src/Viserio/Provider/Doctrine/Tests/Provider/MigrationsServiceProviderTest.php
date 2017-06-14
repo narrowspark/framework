@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Provider\Doctrine\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Provider\Doctrine\Provider\DatabaseServiceProvider;
-use Viserio\Provider\Doctrine\Provider\MigrationsServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Support\Env;
+use Viserio\Provider\Doctrine\Provider\DatabaseServiceProvider;
+use Viserio\Provider\Doctrine\Provider\MigrationsServiceProvider;
 
 class MigrationsServiceProviderTest extends TestCase
 {

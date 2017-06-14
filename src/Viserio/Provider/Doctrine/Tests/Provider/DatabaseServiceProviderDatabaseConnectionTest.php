@@ -4,9 +4,9 @@ namespace Viserio\Provider\Doctrine\Tests\Provider;
 
 use Narrowspark\Collection\Collection;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Container\Container;
 use Viserio\Provider\Doctrine\Connection;
 use Viserio\Provider\Doctrine\Providers\DatabaseServiceProvider;
-use Viserio\Component\Container\Container;
 
 class DatabaseServiceProviderDatabaseConnectionTest extends TestCase
 {
