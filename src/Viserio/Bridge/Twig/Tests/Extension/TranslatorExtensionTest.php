@@ -29,7 +29,7 @@ class TranslatorExtensionTest extends MockeryTestCase
     public function testGetName()
     {
         self::assertEquals(
-            'Viserio_Provider_Twig_Extension_Translator',
+            'Viserio_Bridge_Twig_Extension_Translator',
             (new TranslatorExtension($this->mock(TranslatorContract::class)))->getName()
         );
     }

@@ -27,7 +27,7 @@ class TranslatorExtension extends AbstractExtension
      */
     public function getName(): string
     {
-        return 'Viserio_Provider_Twig_Extension_Translator';
+        return 'Viserio_Bridge_Twig_Extension_Translator';
     }
 
     /**

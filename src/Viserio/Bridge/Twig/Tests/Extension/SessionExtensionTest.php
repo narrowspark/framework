@@ -32,7 +32,7 @@ class SessionExtensionTest extends MockeryTestCase
     public function testGetName()
     {
         self::assertEquals(
-            'Viserio_Provider_Twig_Extension_Session',
+            'Viserio_Bridge_Twig_Extension_Session',
             (new SessionExtension($this->mock(StoreContract::class)))->getName()
         );
     }

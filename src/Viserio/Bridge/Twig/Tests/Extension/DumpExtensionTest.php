@@ -113,6 +113,6 @@ class DumpExtensionTest extends TestCase
 
     public function testGetName()
     {
-        self::assertEquals('Viserio_Provider_Twig_Extension_Dump', (new DumpExtension())->getName());
+        self::assertEquals('Viserio_Bridge_Twig_Extension_Dump', (new DumpExtension())->getName());
     }
 }

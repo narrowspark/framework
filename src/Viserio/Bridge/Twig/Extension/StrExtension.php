@@ -41,7 +41,7 @@ class StrExtension extends AbstractExtension
      */
     public function getName(): string
     {
-        return 'Viserio_Provider_Twig_Extension_String';
+        return 'Viserio_Bridge_Twig_Extension_String';
     }
 
     /**

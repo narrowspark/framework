@@ -64,7 +64,7 @@ class DumpExtension extends AbstractExtension
      */
     public function getName()
     {
-        return 'Viserio_Provider_Twig_Extension_Dump';
+        return 'Viserio_Bridge_Twig_Extension_Dump';
     }
 
     /**

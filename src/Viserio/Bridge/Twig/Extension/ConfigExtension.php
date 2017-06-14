@@ -26,7 +26,7 @@ class ConfigExtension extends AbstractExtension
      */
     public function getName(): string
     {
-        return 'Viserio_Provider_Twig_Extension_Config';
+        return 'Viserio_Bridge_Twig_Extension_Config';
     }
 
     /**

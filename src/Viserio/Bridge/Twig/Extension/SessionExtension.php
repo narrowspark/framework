@@ -30,7 +30,7 @@ class SessionExtension extends AbstractExtension
      */
     public function getName(): string
     {
-        return 'Viserio_Provider_Twig_Extension_Session';
+        return 'Viserio_Bridge_Twig_Extension_Session';
     }
 
     /**

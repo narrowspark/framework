@@ -28,7 +28,7 @@ class ConfigExtensionTest extends MockeryTestCase
     public function testGetName()
     {
         self::assertEquals(
-            'Viserio_Provider_Twig_Extension_Config',
+            'Viserio_Bridge_Twig_Extension_Config',
             (new ConfigExtension($this->mock(RepositoryContract::class)))->getName()
         );
     }
