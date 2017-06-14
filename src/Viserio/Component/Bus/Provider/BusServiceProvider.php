@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Bus\Providers;
+namespace Viserio\Component\Bus\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;

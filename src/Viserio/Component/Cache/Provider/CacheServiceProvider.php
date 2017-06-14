@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Cache\Providers;
+namespace Viserio\Component\Cache\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;

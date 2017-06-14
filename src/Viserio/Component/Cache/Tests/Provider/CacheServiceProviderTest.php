@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Cache\Tests\Providers;
+namespace Viserio\Component\Cache\Tests\Provider;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cache\CacheManager;
-use Viserio\Component\Cache\Providers\CacheServiceProvider;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
+use Viserio\Component\Cache\Provider\CacheServiceProvider;
+use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 

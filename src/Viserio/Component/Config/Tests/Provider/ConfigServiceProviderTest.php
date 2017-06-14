@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Config\Tests\Providers;
+namespace Viserio\Component\Config\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\Providers\ConfigServiceProvider;
+use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;

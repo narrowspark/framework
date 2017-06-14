@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Bus\Tests\Providers;
+namespace Viserio\Component\Bus\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Bus\Dispatcher;
-use Viserio\Component\Bus\Providers\BusServiceProvider;
+use Viserio\Component\Bus\Provider\BusServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Bus\Dispatcher as DispatcherContract;
 
