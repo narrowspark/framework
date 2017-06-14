@@ -5,8 +5,8 @@ namespace Viserio\Component\Pagination\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\HttpFactory\UriFactory;
-use Viserio\Component\Pagination\Adapters\ArrayAdapter;
-use Viserio\Component\Pagination\Adapters\NullAdapter;
+use Viserio\Component\Pagination\Adapter\ArrayAdapter;
+use Viserio\Component\Pagination\Adapter\NullAdapter;
 use Viserio\Component\Pagination\Paginator;
 
 class PaginatorTest extends MockeryTestCase

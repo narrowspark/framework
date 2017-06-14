@@ -230,7 +230,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Session\Exceptions\TokenMismatchException
+     * @expectedException \Viserio\Component\Contracts\Session\Exception\TokenMismatchException
      */
     public function testSessionCsrfMiddlewareToThrowException()
     {

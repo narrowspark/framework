@@ -33,7 +33,7 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Foundation\Http\Exceptions\MaintenanceModeException
+     * @expectedException \Viserio\Component\Foundation\Http\Exception\MaintenanceModeException
      * @expectedExceptionMessage test
      */
     public function testProcessWithMaintenance()

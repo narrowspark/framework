@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Routing\Matchers\ParameterMatcher;
-use Viserio\Component\Routing\Matchers\StaticMatcher;
+use Viserio\Component\Routing\Matcher\ParameterMatcher;
+use Viserio\Component\Routing\Matcher\StaticMatcher;
 use Viserio\Component\Routing\Route\Parser;
 
 class ParserTest extends TestCase
 {
     /**
-     * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException
+     * @expectedException \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
      * @expectedExceptionMessage Invalid route pattern: non-root route must be prefixed with '/', 'test' given.
      */
     public function testParseThrowException()

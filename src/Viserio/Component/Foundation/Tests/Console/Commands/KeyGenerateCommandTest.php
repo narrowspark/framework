@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Console\Commands;
+namespace Viserio\Component\Foundation\Tests\Console\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Foundation\Console\Commands\KeyGenerateCommand;
+use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 
 class KeyGenerateCommandTest extends MockeryTestCase
 {

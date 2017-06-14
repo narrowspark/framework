@@ -7,8 +7,8 @@ use Viserio\Component\Contracts\View\Engine;
 use Viserio\Component\Contracts\View\Finder;
 use Viserio\Component\Contracts\View\View as ViewContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\Component\View\Engines\EngineResolver;
-use Viserio\Component\View\Engines\PhpEngine;
+use Viserio\Component\View\Engine\EngineResolver;
+use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\Factory;
 
 class ViewFactoryTest extends MockeryTestCase

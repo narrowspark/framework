@@ -25,7 +25,7 @@ interface Store extends JsonSerializable
      *
      * If called earlier, then second (and next ones) call does nothing.
      *
-     * @throws \Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException if fingerprints dont match
+     * @throws \Viserio\Component\Contracts\Session\Exception\SuspiciousOperationException if fingerprints dont match
      *
      * @return bool true if session started
      */

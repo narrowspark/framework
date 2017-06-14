@@ -337,7 +337,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\ContainerException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\ContainerException
      * @expectedExceptionMessage The name parameter must be of type string, [stdClass] given.
      */
     public function testHasToThrowExceptionOnNoStringType()
@@ -348,7 +348,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\ContainerException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\ContainerException
      * @expectedExceptionMessage The id parameter must be of type string, [stdClass] given.
      */
     public function testGetToThrowExceptionOnNoStringType()
@@ -359,7 +359,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\NotFoundException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\NotFoundException
      * @expectedExceptionMessage Abstract [test] is not being managed by the container.
      */
     public function testGetToThrowExceptionOnNotFoundId()
@@ -380,7 +380,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\CyclicDependencyException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\CyclicDependencyException
      * @expectedExceptionMessage Circular reference found while resolving [Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubD].
      */
     public function testCircularReferenceCheck()
@@ -392,7 +392,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\CyclicDependencyException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\CyclicDependencyException
      * @expectedExceptionMessage Circular reference found while resolving [Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubB].
      */
     public function testCircularReferenceCheckDetectCycleStartLocation()
@@ -438,7 +438,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage Parameter [something] cannot be injected in [Viserio\Component\Container\Tests\Fixture\ContainerInjectVariableFixture].
      */
     public function testContainerWhenNeedsGiveToThrowException()
@@ -455,7 +455,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\ContainerTestNotResolvable] is not resolvable.
      */
     public function testContainerCantInjectObjectIsNotResolvable()
@@ -471,7 +471,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\Fixture\ContainerTestNoConstructor] must have a constructor.
      */
     public function testContainerCantInjectObjectWithoutConstructor()
@@ -527,7 +527,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\BindingResolutionException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage Unresolvable dependency resolving [Parameter #0 [ <required> $first ]] in [Viserio\Component\Container\Tests\Fixture\ContainerMixedPrimitiveFixture]
      */
     public function testInternalClassWithDefaultParameters()
@@ -537,7 +537,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\BindingResolutionException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage Unable to reflect on the class [string], does the class exist and is it properly autoloaded?
      */
     public function testUnableToReflectClass()
@@ -547,7 +547,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\BindingResolutionException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\Fixture\ContainerContractFixtureInterface] is not resolvable. Build stack : []
      */
     public function testBindingResolutionExceptionMessage()
@@ -557,7 +557,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\BindingResolutionException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\Fixture\ContainerContractFixtureInterface] is not resolvable. Build stack : [Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixture]
      */
     public function testBindingResolutionExceptionMessageIncludesBuildStack()
@@ -759,7 +759,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException
+     * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage Parameter [stub] cannot be injected in [Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixture].
      */
     public function testContextualBindingNotWorksOnBoundAlias()

@@ -7,7 +7,7 @@ use Twig\Error\LoaderError;
 use Twig\Loader\ExistsLoaderInterface;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
-use Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException;
+use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 
 class Loader implements LoaderInterface, ExistsLoaderInterface

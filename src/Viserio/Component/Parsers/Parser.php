@@ -4,19 +4,19 @@ namespace Viserio\Component\Parsers;
 
 use finfo;
 use RuntimeException;
-use Viserio\Component\Contracts\Parsers\Exceptions\NotSupportedException;
+use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
-use Viserio\Component\Parsers\Parsers\IniParser;
-use Viserio\Component\Parsers\Parsers\JsonParser;
-use Viserio\Component\Parsers\Parsers\PhpParser;
-use Viserio\Component\Parsers\Parsers\PoParser;
-use Viserio\Component\Parsers\Parsers\QtParser;
-use Viserio\Component\Parsers\Parsers\QueryStrParser;
-use Viserio\Component\Parsers\Parsers\SerializeParser;
-use Viserio\Component\Parsers\Parsers\TomlParser;
-use Viserio\Component\Parsers\Parsers\XliffParser;
-use Viserio\Component\Parsers\Parsers\XmlParser;
-use Viserio\Component\Parsers\Parsers\YamlParser;
+use Viserio\Component\Parsers\Parser\IniParser;
+use Viserio\Component\Parsers\Parser\JsonParser;
+use Viserio\Component\Parsers\Parser\PhpParser;
+use Viserio\Component\Parsers\Parser\PoParser;
+use Viserio\Component\Parsers\Parser\QtParser;
+use Viserio\Component\Parsers\Parser\QueryStrParser;
+use Viserio\Component\Parsers\Parser\SerializeParser;
+use Viserio\Component\Parsers\Parser\TomlParser;
+use Viserio\Component\Parsers\Parser\XliffParser;
+use Viserio\Component\Parsers\Parser\XmlParser;
+use Viserio\Component\Parsers\Parser\YamlParser;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Parser
@@ -100,7 +100,7 @@ class Parser
      *
      * @param string $payload
      *
-     * @throws \Viserio\Component\Contracts\Parsers\Exceptions\ParseException
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @throws \RuntimeException                                              if an error occurred during reading
      *
      * @return array

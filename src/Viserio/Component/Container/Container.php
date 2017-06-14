@@ -17,9 +17,9 @@ use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionClass;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
-use Viserio\Component\Contracts\Container\Exceptions\ContainerException;
-use Viserio\Component\Contracts\Container\Exceptions\NotFoundException;
-use Viserio\Component\Contracts\Container\Exceptions\UnresolvableDependencyException;
+use Viserio\Component\Contracts\Container\Exception\ContainerException;
+use Viserio\Component\Contracts\Container\Exception\NotFoundException;
+use Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException;
 use Viserio\Component\Contracts\Container\Factory as FactoryContract;
 use Viserio\Component\Contracts\Container\Types as TypesContract;
 

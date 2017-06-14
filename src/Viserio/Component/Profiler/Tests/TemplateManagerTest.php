@@ -8,9 +8,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 use Viserio\Component\Profiler\AssetsRenderer;
-use Viserio\Component\Profiler\DataCollectors\AjaxRequestsDataCollector;
-use Viserio\Component\Profiler\DataCollectors\Bridge\SwiftMailDataCollector;
-use Viserio\Component\Profiler\DataCollectors\PhpInfoDataCollector;
+use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
+use Viserio\Component\Profiler\DataCollector\Bridge\SwiftMailDataCollector;
+use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\TemplateManager;
 
 class TemplateManagerTest extends MockeryTestCase

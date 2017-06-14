@@ -4,13 +4,13 @@ namespace Viserio\Component\Parsers\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Parsers\Dumper;
-use Viserio\Component\Parsers\Dumpers\IniDumper;
-use Viserio\Component\Parsers\Dumpers\JsonDumper;
-use Viserio\Component\Parsers\Dumpers\PhpDumper;
-use Viserio\Component\Parsers\Dumpers\QueryStrDumper;
-use Viserio\Component\Parsers\Dumpers\SerializeDumper;
-use Viserio\Component\Parsers\Dumpers\XmlDumper;
-use Viserio\Component\Parsers\Dumpers\YamlDumper;
+use Viserio\Component\Parsers\Dumper\IniDumper;
+use Viserio\Component\Parsers\Dumper\JsonDumper;
+use Viserio\Component\Parsers\Dumper\PhpDumper;
+use Viserio\Component\Parsers\Dumper\QueryStrDumper;
+use Viserio\Component\Parsers\Dumper\SerializeDumper;
+use Viserio\Component\Parsers\Dumper\XmlDumper;
+use Viserio\Component\Parsers\Dumper\YamlDumper;
 use Viserio\Component\Parsers\Parser;
 use Viserio\Component\Parsers\Tests\Fixtures\TextDumper;
 
@@ -68,7 +68,7 @@ class DumperTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\NotSupportedException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
      * @expectedExceptionMessage Given extension or mime type [inia] is not supported.
      */
     public function testGetParserToThrowException()

@@ -12,8 +12,8 @@ interface Factory
      *                                           parameters to specific values. Parameters not defined in this array will
      *                                           be automatically resolved.
      *
-     * @throws \Viserio\Component\Contracts\Container\Exceptions\BindingResolutionException
-     * @throws \Viserio\Component\Contracts\Container\Exceptions\CyclicDependencyException
+     * @throws \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contracts\Container\Exception\CyclicDependencyException
      *
      * @return mixed
      */

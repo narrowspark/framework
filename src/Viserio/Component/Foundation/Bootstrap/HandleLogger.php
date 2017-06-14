@@ -4,8 +4,8 @@ namespace Viserio\Component\Foundation\Bootstrap;
 
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
-use Viserio\Component\Log\Providers\LoggerServiceProvider;
+use Viserio\Component\Foundation\Provider\ConfigureLoggingServiceProvider;
+use Viserio\Component\Log\Provider\LoggerServiceProvider;
 
 class HandleLogger implements BootstrapContract
 {

@@ -36,7 +36,7 @@ use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidateDefaultValueOnOverw
 abstract class AbstractOptionsResolverTest extends MockeryTestCase
 {
     /**
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\UnexpectedValueException
      * @expectedExceptionMessage Configuration must either be of type [array] or implement [\ArrayAccess]. Configuration position is [doctrine].
      */
     public function testOptionsResolverThrowsInvalidArgumentExceptionIfConfigIsNotAnArray()
@@ -56,7 +56,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     /**
      * @dataProvider providerConfig
      *
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException
      * @expectedExceptionMessage The configuration [doctrine.connection] needs a config id in class [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionContainerIdConfiguration].
      *
      * @param mixed $config
@@ -67,7 +67,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException
      * @expectedExceptionMessage No options set for configuration [doctrine.connection] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionConfiguration].
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoVendorConfigIsAvailable()
@@ -76,7 +76,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException
      * @expectedExceptionMessage No options set for configuration [doctrine.connection] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionConfiguration].
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoPackageOptionIsAvailable()
@@ -85,7 +85,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException
      * @expectedExceptionMessage No options set for configuration [doctrine.connection.orm_default] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionContainerIdConfiguration].
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoContainerIdOptionIsAvailable()
@@ -98,7 +98,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException
      * @expectedExceptionMessage No options set for configuration [one.two.three.four] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\FlexibleConfiguration].
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfDimensionIsNotAvailable()
@@ -110,7 +110,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException
      * @expectedExceptionMessage No options set for configuration [vendor] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\PackageDefaultAndMandatoryOptionsConfiguration].
      */
     public function testOptionsThrowsExceptionIfMandatoryOptionsWithDefaultOptionsSetAndNoConfigurationIsSet()
@@ -122,7 +122,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\UnexpectedValueException
      * @expectedExceptionMessage Configuration must either be of type [array] or implement [\ArrayAccess]. Configuration position is [doctrine.connection].
      */
     public function testOptionsThrowsUnexpectedValueExceptionIfRetrievedOptionsNotAnArrayOrArrayAccess()
@@ -323,7 +323,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     /**
      * @dataProvider providerConfig
      *
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException
      * @expectedExceptionMessage Mandatory option [params] was not set for configuration [doctrine.connection].
      *
      * @param mixed $config
@@ -342,7 +342,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     /**
      * @dataProvider providerConfig
      *
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException
      * @expectedExceptionMessage Mandatory option [dbname] was not set for configuration [doctrine.connection].
      *
      * @param mixed $config
@@ -393,7 +393,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     /**
      * @dataProvider providerConfig
      *
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException
      * @expectedExceptionMessage Mandatory option [params] was not set for configuration [doctrine.connection].
      */
     public function testOptionsThrowsMandatoryOptionNotFoundExceptionIfOptionsAreEmpty(): void
@@ -651,7 +651,7 @@ abstract class AbstractOptionsResolverTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exceptions\InvalidValidatorException
+     * @expectedException \Viserio\Component\Contracts\OptionsResolver\Exception\InvalidValidatorException
      * @expectedExceptionMessage he validator must be of type callable, [string] given, in Viserio\Component\OptionsResolver\Tests\Fixtures\InvalidValidatedConfigurationFixture.
      */
     public function testThrowExceptionOnInvalidValidator()

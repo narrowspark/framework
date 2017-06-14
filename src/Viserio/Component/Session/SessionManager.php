@@ -12,8 +12,8 @@ use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Session\Handlers\CookieSessionHandler;
-use Viserio\Component\Session\Handlers\FileSessionHandler;
+use Viserio\Component\Session\Handler\CookieSessionHandler;
+use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Support\AbstractManager;
 
 class SessionManager extends AbstractManager implements ProvidesDefaultOptionsContract

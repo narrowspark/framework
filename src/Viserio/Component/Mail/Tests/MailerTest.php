@@ -14,8 +14,8 @@ use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
-use Viserio\Component\Mail\Events\MessageSendingEvent;
-use Viserio\Component\Mail\Events\MessageSentEvent;
+use Viserio\Component\Mail\Event\MessageSendingEvent;
+use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\Mail\Mailer;
 
 class MailerTest extends MockeryTestCase

@@ -162,7 +162,7 @@
     },
     "autoload-dev": {
         "files": [
-            "src/Viserio/Component/OptionsResolver/Tests/Commands/OverwritePhpFunctions.php"
+            "src/Viserio/Component/OptionsResolver/Tests/Command/OverwritePhpFunctions.php"
         ]
     },
     "extra": {

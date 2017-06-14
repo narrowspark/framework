@@ -179,7 +179,7 @@ class ExpressionParserTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Console\Exceptions\InvalidCommandExpression
+     * @expectedException \Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression
      * @expectedExceptionMessage An option must be enclosed by brackets: [--option]
      */
     public function testProvidesAnErrorMessageOnOptionsMissingBrackets()
@@ -188,7 +188,7 @@ class ExpressionParserTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Console\Exceptions\InvalidCommandExpression
+     * @expectedException \Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression
      * @expectedExceptionMessage The expression was empty.
      */
     public function testProvidesAnErrorMessageOnEmpty()

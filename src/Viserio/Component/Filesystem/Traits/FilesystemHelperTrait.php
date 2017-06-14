@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Traits;
 
-use Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException;
+use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
 
 trait FilesystemHelperTrait
 {
@@ -11,7 +11,7 @@ trait FilesystemHelperTrait
      *
      * @param string $path
      *
-     * @throws Viserio\Contracts\Filesystem\Exceptions\FileNotFoundException
+     * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
      */
@@ -31,7 +31,7 @@ trait FilesystemHelperTrait
      *
      * @param string $path
      *
-     * @throws Viserio\Contracts\Filesystem\Exceptions\FileNotFoundException
+     * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
      *

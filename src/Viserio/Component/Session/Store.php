@@ -7,11 +7,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
-use Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException;
-use Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException;
+use Viserio\Component\Contracts\Session\Exception\SessionNotStartedException;
+use Viserio\Component\Contracts\Session\Exception\SuspiciousOperationException;
 use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Session\Handlers\CookieSessionHandler;
+use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Support\Str;
 
 class Store implements StoreContract
@@ -589,7 +589,7 @@ class Store implements StoreContract
     /**
      * Check if session has already started.
      *
-     * @throws \Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException
+     * @throws \Viserio\Component\Contracts\Session\Exception\SessionNotStartedException
      *
      * @return void
      */

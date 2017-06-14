@@ -4,8 +4,8 @@ namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Routing\Matchers\ParameterMatcher;
-use Viserio\Component\Routing\Matchers\StaticMatcher;
+use Viserio\Component\Routing\Matcher\ParameterMatcher;
+use Viserio\Component\Routing\Matcher\StaticMatcher;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
 
 class RouteParserTest extends TestCase
@@ -137,7 +137,7 @@ class RouteParserTest extends TestCase
      * @param mixed $uri
      * @param mixed $expectedExceptionType
      *
-     * @expectedException \Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException
+     * @expectedException \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
      */
     public function testInvalidRouteParsing($uri)
     {

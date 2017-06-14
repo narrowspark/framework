@@ -32,7 +32,7 @@ interface Filesystem
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return string|false the file contents or false on failure
      */
@@ -43,7 +43,7 @@ interface Filesystem
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return resource|bool
      */
@@ -111,7 +111,7 @@ interface Filesystem
      * @param string $contents the file contents
      * @param array  $config   an optional configuration array
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return bool true on success, false on failure
      */
@@ -158,8 +158,8 @@ interface Filesystem
      * @param string $targetFile The target filename
      * @param bool   $override   Whether to override an existing file or not
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException When originFile doesn't exist
-     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\IOException           When copy fails
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException When originFile doesn't exist
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\IOException           When copy fails
      *
      * @return bool
      */
@@ -189,7 +189,7 @@ interface Filesystem
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return string|false the file mime-type or false on failure
      */
@@ -200,7 +200,7 @@ interface Filesystem
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return string|false the timestamp or false on failure
      */

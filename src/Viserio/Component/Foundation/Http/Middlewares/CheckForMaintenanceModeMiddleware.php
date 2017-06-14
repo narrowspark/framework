@@ -7,7 +7,7 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
-use Viserio\Component\Foundation\Http\Exceptions\MaintenanceModeException;
+use Viserio\Component\Foundation\Http\Exception\MaintenanceModeException;
 
 class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
 {

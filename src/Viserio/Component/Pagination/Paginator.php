@@ -7,10 +7,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Pagination\Adapter as AdapterContract;
 use Viserio\Component\Contracts\Pagination\Presenter as PresenterContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
-use Viserio\Component\Pagination\Presenters\Bootstrap4;
-use Viserio\Component\Pagination\Presenters\Foundation6;
-use Viserio\Component\Pagination\Presenters\SemanticUi;
-use Viserio\Component\Pagination\Presenters\SimplePagination;
+use Viserio\Component\Pagination\Presenter\Bootstrap4;
+use Viserio\Component\Pagination\Presenter\Foundation6;
+use Viserio\Component\Pagination\Presenter\SemanticUi;
+use Viserio\Component\Pagination\Presenter\SimplePagination;
 
 class Paginator extends AbstractPaginator
 {

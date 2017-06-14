@@ -27,7 +27,7 @@ use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\Support\Str;
-use Viserio\Component\View\Engines\EngineResolver;
+use Viserio\Component\View\Engine\EngineResolver;
 
 class TwigBridgeServiceProvider implements
     ServiceProvider,

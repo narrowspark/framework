@@ -109,7 +109,7 @@ class StoreTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Session\Exceptions\SuspiciousOperationException
+     * @expectedException \Viserio\Component\Contracts\Session\Exception\SuspiciousOperationException
      */
     public function testSessionHasSuspiciousFingerPrint()
     {
@@ -219,7 +219,7 @@ class StoreTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Session\Exceptions\SessionNotStartedException
+     * @expectedException \Viserio\Component\Contracts\Session\Exception\SessionNotStartedException
      * @expectedExceptionMessage The session is not started.
      */
     public function testSetMethodToThrowException()

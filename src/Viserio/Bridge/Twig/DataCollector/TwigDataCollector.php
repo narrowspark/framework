@@ -11,7 +11,7 @@ use Twig\Profiler\Profile;
 use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
+use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class TwigDataCollector extends AbstractDataCollector implements
     PanelAwareContract,

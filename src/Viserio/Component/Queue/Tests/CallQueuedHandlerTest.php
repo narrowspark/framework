@@ -10,8 +10,8 @@ use Viserio\Component\Bus\QueueingDispatcher;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Queue\Job as JobContract;
 use Viserio\Component\Queue\CallQueuedHandler;
-use Viserio\Component\Queue\Connectors\RedisQueue;
-use Viserio\Component\Queue\Jobs\RedisJob;
+use Viserio\Component\Queue\Connector\RedisQueue;
+use Viserio\Component\Queue\Job\RedisJob;
 use Viserio\Component\Queue\Tests\Fixture\InteractsWithQueue;
 
 class CallQueuedHandlerTest extends MockeryTestCase

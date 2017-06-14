@@ -3,16 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
 use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exceptions\NotSupportedException;
-use Viserio\Component\Parsers\Dumpers\IniDumper;
-use Viserio\Component\Parsers\Dumpers\JsonDumper;
-use Viserio\Component\Parsers\Dumpers\PhpDumper;
-use Viserio\Component\Parsers\Dumpers\QtDumper;
-use Viserio\Component\Parsers\Dumpers\QueryStrDumper;
-use Viserio\Component\Parsers\Dumpers\SerializeDumper;
-use Viserio\Component\Parsers\Dumpers\XliffDumper;
-use Viserio\Component\Parsers\Dumpers\XmlDumper;
-use Viserio\Component\Parsers\Dumpers\YamlDumper;
+use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
+use Viserio\Component\Parsers\Dumper\IniDumper;
+use Viserio\Component\Parsers\Dumper\JsonDumper;
+use Viserio\Component\Parsers\Dumper\PhpDumper;
+use Viserio\Component\Parsers\Dumper\QtDumper;
+use Viserio\Component\Parsers\Dumper\QueryStrDumper;
+use Viserio\Component\Parsers\Dumper\SerializeDumper;
+use Viserio\Component\Parsers\Dumper\XliffDumper;
+use Viserio\Component\Parsers\Dumper\XmlDumper;
+use Viserio\Component\Parsers\Dumper\YamlDumper;
 
 class Dumper
 {

@@ -8,7 +8,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Profiler\AssetsRenderer;
-use Viserio\Component\Profiler\DataCollectors\PhpInfoDataCollector;
+use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\TemplateManager;
 use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester as Profiler;
 

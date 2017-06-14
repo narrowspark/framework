@@ -117,7 +117,7 @@ class FileLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\LoadingException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\LoadingException
      * @expectedExceptionMessage File [no/file] not found.
      */
     public function testExistsWithFalsePath()
