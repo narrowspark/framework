@@ -7,27 +7,15 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Twig\Environment as TwigEnvironment;
 use Twig\Lexer;
-use Twig\Loader\ArrayLoader;
-use Twig\Loader\ChainLoader;
-use Twig\Loader\LoaderInterface;
-use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Bridge\Twig\Extension\ConfigExtension;
 use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
-use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\Support\Str;
-use Viserio\Component\View\Engine\EngineResolver;
 
 class TwigBridgeServiceProvider implements ServiceProvider
 {

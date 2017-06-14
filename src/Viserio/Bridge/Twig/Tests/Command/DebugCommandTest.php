@@ -6,9 +6,9 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Command\DebugCommand;
-use Twig\Loader\ArrayLoader;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
@@ -31,7 +31,7 @@ class DebugCommandTest extends MockeryTestCase
         ];
         $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
         $loader = new ArrayLoader([]);
-        $twig = new Environment($loader);
+        $twig   = new Environment($loader);
 
         $application = new Application('1');
         $application->setContainer(new ArrayContainer(
