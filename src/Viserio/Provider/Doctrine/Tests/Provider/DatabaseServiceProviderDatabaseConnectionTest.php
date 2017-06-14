@@ -6,7 +6,7 @@ use Narrowspark\Collection\Collection;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Provider\Doctrine\Connection;
-use Viserio\Provider\Doctrine\Providers\DatabaseServiceProvider;
+use Viserio\Provider\Doctrine\Provider\DatabaseServiceProvider;
 
 class DatabaseServiceProviderDatabaseConnectionTest extends TestCase
 {

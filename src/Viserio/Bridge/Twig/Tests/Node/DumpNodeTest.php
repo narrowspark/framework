@@ -8,7 +8,7 @@ use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 use Twig\Node\Expression\NameExpression;
 use Twig\Node\Node;
-use Viserio\Bridge\Twig\Nodes\DumpNode;
+use Viserio\Bridge\Twig\Node\DumpNode;
 
 class DumpNodeTest extends TestCase
 {

@@ -129,7 +129,7 @@ class TwigEngineTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Twig extension [Viserio\Provider\Twig\Extension\ConfigExtension] is not a object.
+     * @expectedExceptionMessage Twig extension [Viserio\Bridge\Twig\Extension\ConfigExtension] is not a object.
      */
     public function testTwigExtensionsToThrowException()
     {

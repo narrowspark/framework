@@ -4,7 +4,7 @@ namespace Viserio\Bridge\Twig\TokenParser;
 
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
-use Viserio\Bridge\Twig\Nodes\DumpNode;
+use Viserio\Bridge\Twig\Node\DumpNode;
 
 /**
  * Token Parser for the 'dump' tag.

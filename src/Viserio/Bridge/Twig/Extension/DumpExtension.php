@@ -8,7 +8,7 @@ use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Template;
 use Twig\TwigFunction;
-use Viserio\Bridge\Twig\TokenParsers\DumpTokenParser;
+use Viserio\Bridge\Twig\TokenParser\DumpTokenParser;
 
 /**
  * Dump a variable or the view context.

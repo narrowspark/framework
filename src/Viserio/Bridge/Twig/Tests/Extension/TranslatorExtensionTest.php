@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Bridge\Twig\Extensions\TranslatorExtension;
+use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
 class TranslatorExtensionTest extends MockeryTestCase

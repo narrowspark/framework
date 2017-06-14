@@ -4,7 +4,7 @@ namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Node\Node;
-use Viserio\Bridge\Twig\Extensions\StrExtension;
+use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Component\Support\Str;
 
 class StrExtensionTest extends MockeryTestCase

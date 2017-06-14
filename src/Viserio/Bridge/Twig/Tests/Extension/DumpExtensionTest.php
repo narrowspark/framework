@@ -8,7 +8,7 @@ use Throwable;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\LoaderInterface;
-use Viserio\Bridge\Twig\Extensions\DumpExtension;
+use Viserio\Bridge\Twig\Extension\DumpExtension;
 
 class DumpExtensionTest extends TestCase
 {

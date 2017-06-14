@@ -4,9 +4,9 @@ namespace Viserio\Bridge\Twig\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Viserio\Bridge\Twig\Commands\CleanCommand;
-use Viserio\Bridge\Twig\Commands\DebugCommand;
-use Viserio\Bridge\Twig\Commands\LintCommand;
+use Viserio\Bridge\Twig\Command\CleanCommand;
+use Viserio\Bridge\Twig\Command\DebugCommand;
+use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Component\Console\Application;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
@@ -31,19 +31,16 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
      */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
-        if ($getPrevious !== null) {
-            $console = $getPrevious();
+        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
+        if ($console !== null) {
             $console->addCommands([
                 new CleanCommand(),
                 new DebugCommand(),
                 new LintCommand(),
             ]);
-
-            return $console;
         }
-        // @codeCoverageIgnoreStart
-        return null;
-        // @codeCoverageIgnoreEnd
+
+        return $console;
     }
 }

@@ -103,8 +103,6 @@ class TwigBridgeDataCollectorsServiceProvider implements
                     $container->get(Profile::class)
                 ));
             }
-
-            return $twig;
         }
 
         return $twig;

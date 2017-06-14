@@ -4,29 +4,19 @@ namespace Viserio\Provider\Twig\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Twig\Environment as TwigEnvironment;
 use Twig\Lexer;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\LoaderInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
-use Viserio\Component\Support\Str;
 use Viserio\Component\View\Engine\EngineResolver;
 use Viserio\Provider\Twig\Engine\TwigEngine;
-use Viserio\Provider\Twig\Extension\ConfigExtension;
-use Viserio\Provider\Twig\Extension\DumpExtension;
-use Viserio\Provider\Twig\Extension\SessionExtension;
-use Viserio\Provider\Twig\Extension\StrExtension;
-use Viserio\Provider\Twig\Extension\TranslatorExtension;
 use Viserio\Provider\Twig\Loader as TwigLoader;
 
 class TwigServiceProvider implements
@@ -155,12 +145,6 @@ class TwigServiceProvider implements
             $twig->setLexer($container->get(Lexer::class));
         }
 
-        if ($twigOptions['debug'] && class_exists(VarCloner::class)) {
-            $twig->addExtension(new DumpExtension());
-        }
-
-        self::registerViserioTwigExtension($twig, $container);
-
         return $twig;
     }
 
@@ -196,35 +180,6 @@ class TwigServiceProvider implements
         }
 
         return new ChainLoader($loaders);
-    }
-
-    /**
-     * Register viserio twig extension.
-     *
-     * @param \Twig\Environment                 $twig
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return void
-     *
-     * @codeCoverageIgnore
-     */
-    protected static function registerViserioTwigExtension(TwigEnvironment $twig, ContainerInterface $container): void
-    {
-        if ($container->has(TranslatorContract::class)) {
-            $twig->addExtension(new TranslatorExtension($container->get(TranslatorContract::class)));
-        }
-
-        if (class_exists(Str::class)) {
-            $twig->addExtension(new StrExtension());
-        }
-
-        if ($container->has(StoreContract::class)) {
-            $twig->addExtension(new SessionExtension($container->get(StoreContract::class)));
-        }
-
-        if ($container->has(RepositoryContract::class)) {
-            $twig->addExtension(new ConfigExtension($container->get(RepositoryContract::class)));
-        }
     }
 
     /**

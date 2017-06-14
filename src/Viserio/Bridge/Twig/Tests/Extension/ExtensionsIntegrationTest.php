@@ -4,11 +4,11 @@ namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Mockery as Mock;
 use Twig\Test\IntegrationTestCase;
-use Viserio\Bridge\Twig\Extensions\ConfigExtension;
-use Viserio\Bridge\Twig\Extensions\DumpExtension;
-use Viserio\Bridge\Twig\Extensions\SessionExtension;
-use Viserio\Bridge\Twig\Extensions\StrExtension;
-use Viserio\Bridge\Twig\Extensions\TranslatorExtension;
+use Viserio\Bridge\Twig\Extension\ConfigExtension;
+use Viserio\Bridge\Twig\Extension\DumpExtension;
+use Viserio\Bridge\Twig\Extension\SessionExtension;
+use Viserio\Bridge\Twig\Extension\StrExtension;
+use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;

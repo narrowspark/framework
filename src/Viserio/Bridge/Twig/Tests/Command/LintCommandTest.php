@@ -8,8 +8,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
-use Viserio\Bridge\Twig\Commands\LintCommand;
+use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Bridge\Twig\Loader;
+use Twig\Loader\ArrayLoader;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
@@ -125,7 +126,7 @@ class LintCommandTest extends MockeryTestCase
             ],
         ];
         $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
-        $loader = new Loader($finder);
+        $loader = new ArrayLoader([]);
         $twig   = new Environment($loader);
 
         $application = new Application('1');
@@ -166,7 +167,7 @@ class LintCommandTest extends MockeryTestCase
             ],
         ];
         $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
-        $loader = new Loader($finder);
+        $loader = new ArrayLoader([]);
         $twig   = new Environment($loader);
 
         $application = new Application('1');
