@@ -1,6 +1,6 @@
 {
     "name"       : "viserio/twig-bridge",
-    "type"       : "library",
+    "type"       : "viserio-bridge",
     "description": "The Viserio Twig bridge.",
     "keywords"   : ["narrowspark", "viserio", "twig", "bridge"],
     "license"    : "MIT",
@@ -19,8 +19,7 @@
     ],
     "require": {
         "php"                                : "^7.1",
-        "twig/twig"                          : "~2.4",
-        "symfony/polyfill-mbstring"          : "^1.0"
+        "twig/twig"                          : "~2.4"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
@@ -30,6 +29,7 @@
         "phpunit/phpunit"                    : "^6.0",
         "symfony/var-dumper"                 : "~3.3",
         "viserio/config"                     : "self.version",
+        "viserio/console"                    : "self.version",
         "viserio/container"                  : "self.version",
         "viserio/session"                    : "self.version",
         "viserio/support"                    : "self.version",
@@ -49,6 +49,12 @@
     },
     "suggest": {
         "container-interop/service-provider" : "Required to use service-provider (^0.3).",
+        "viserio/config"                     : "Required to use (self.version).",
+        "viserio/console"                    : "Required to use (self.version).",
+        "viserio/session"                    : "Required to use (self.version).",
+        "viserio/support"                    : "Required to use (self.version).",
+        "viserio/translation"                : "Required to use (self.version).",
+        "viserio/profiler"                   : "Required to use (self.version)."
     },
     "extra": {
         "branch-alias": {

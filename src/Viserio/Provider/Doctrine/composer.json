@@ -1,6 +1,6 @@
 {
     "name"       : "viserio/bridge/doctrine",
-    "type"       : "library",
+    "type"       : "viserio-provider",
     "description": "The Viserio Doctrine bridge.",
     "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations", "bridge"],
     "license"    : "MIT",

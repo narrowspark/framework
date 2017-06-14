@@ -1,8 +1,8 @@
 {
     "name"       : "viserio/twig-provider",
     "type"       : "viserio-provider",
-    "description": "The Viserio Twig bridge.",
-    "keywords"   : ["narrowspark", "viserio", "twig", "bridge"],
+    "description": "The Viserio Twig provider.",
+    "keywords"   : ["narrowspark", "viserio", "twig", "provider"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -18,30 +18,30 @@
         }
     ],
     "require": {
-        "php"                                : "^7.1",
-        "twig-bridge"                        : "~2.4",
-        "viserio/contracts"                  : "self.version",
-        "viserio/view"                       : "self.version"
+        "php"                                  : "^7.1",
+        "viserio/twig-bridge"                  : "self.version",
+        "viserio/contracts"                    : "self.version",
+        "viserio/view"                         : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider" : "^0.3",
-        "danielstjules/stringy"              : "^3.0",
-        "narrowspark/testing-helper"         : "^3.0",
-        "mockery/mockery"                    : "^1.0",
-        "phpunit/phpunit"                    : "^6.0",
-        "symfony/var-dumper"                 : "~3.3",
-        "viserio/config"                     : "self.version",
-        "viserio/container"                  : "self.version",
-        "viserio/session"                    : "self.version",
-        "viserio/support"                    : "self.version",
-        "viserio/translation"                : "self.version",
-        "viserio/profiler"                   : "self.version"
+        "container-interop/service-provider"   : "^0.3",
+        "danielstjules/stringy"                : "^3.0",
+        "narrowspark/testing-helper"           : "^3.0",
+        "mockery/mockery"                      : "^1.0",
+        "phpunit/phpunit"                      : "^6.0",
+        "symfony/var-dumper"                   : "~3.3",
+        "viserio/config"                       : "self.version",
+        "viserio/container"                    : "self.version",
+        "viserio/session"                      : "self.version",
+        "viserio/support"                      : "self.version",
+        "viserio/translation"                  : "self.version",
+        "viserio/profiler"                     : "self.version"
     },
     "autoload": {
         "psr-4": {
             "Viserio\\Provider\\Twig\\"        : ""
         },
-        "exclude-from-classmap"              : ["/Tests/"]
+        "exclude-from-classmap"                : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
@@ -49,13 +49,13 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider" : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"   : "Required to use service-provider (^0.3).",
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "1.0-dev"
+            "dev-master"                       : "1.0-dev"
         }
     },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "minimum-stability"                        : "dev",
+    "prefer-stable"                            : true
 }
