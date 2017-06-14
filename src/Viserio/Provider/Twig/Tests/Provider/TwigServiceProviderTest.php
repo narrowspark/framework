@@ -14,8 +14,6 @@ use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\View\Provider\ViewServiceProvider;
 use Viserio\Provider\Twig\Engine\TwigEngine;
 use Viserio\Provider\Twig\Loader as TwigLoader;
-use Viserio\Provider\Twig\Provider\TwigProviderServiceProvider;
-
 
 class TwigServiceProviderTest extends MockeryTestCase
 {

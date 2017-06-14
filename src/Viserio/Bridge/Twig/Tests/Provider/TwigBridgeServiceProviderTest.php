@@ -8,7 +8,6 @@ use Twig\Lexer;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\LoaderInterface;
-use Viserio\Bridge\Twig\Bridge\TwigProviderServiceProvider;
 use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Component\Container\Container;
