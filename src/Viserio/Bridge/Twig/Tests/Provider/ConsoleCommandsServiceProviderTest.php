@@ -8,7 +8,7 @@ use Viserio\Bridge\Twig\Commands\CleanCommand;
 use Viserio\Bridge\Twig\Commands\DebugCommand;
 use Viserio\Bridge\Twig\Commands\LintCommand;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Console\Bridge\ConsoleServiceProvider;
+use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 
 class ConsoleCommandsServiceProviderTest extends TestCase

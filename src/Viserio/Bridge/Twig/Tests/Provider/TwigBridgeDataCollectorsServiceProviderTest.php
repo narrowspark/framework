@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\Bridge\TwigBridgeDataCollectorsServiceProvider;
-use Viserio\Bridge\Twig\Bridge\TwigProviderServiceProvider;
+use Viserio\Bridge\Twig\Bridge\TwigBridgeServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
@@ -25,7 +25,7 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
         $container->register(new ViewServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ProfilerServiceProvider());
-        $container->register(new TwigProviderServiceProvider());
+        $container->register(new TwigBridgeServiceProvider());
         $container->register(new TwigBridgeDataCollectorsServiceProvider());
 
         $container->instance('config', [
