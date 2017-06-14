@@ -29,7 +29,7 @@ use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 use Viserio\Component\Support\Str;
 use Viserio\Component\View\Engines\EngineResolver;
 
-class TwigProviderServiceProvider implements
+class TwigBridgeServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract

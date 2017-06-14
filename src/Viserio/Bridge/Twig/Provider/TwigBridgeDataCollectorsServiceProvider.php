@@ -14,7 +14,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfig
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
-class TwigProviderDataCollectorsServiceProvider implements
+class TwigBridgeDataCollectorsServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract

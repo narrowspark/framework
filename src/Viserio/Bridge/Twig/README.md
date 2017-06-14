@@ -1,4 +1,4 @@
-# Viserio Twig Provider
+# Viserio Twig Bridge
 
 This bridge is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 

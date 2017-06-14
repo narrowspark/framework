@@ -23,7 +23,7 @@ class TwigBridgeServiceProviderTest extends MockeryTestCase
         $container = new Container();
         $container->register(new FilesServiceProvider());
         $container->register(new ViewServiceProvider());
-        $container->register(new TwigProviderServiceProvider());
+        $container->register(new TwigBridgeServiceProvider());
         $container->instance(Lexer::class, $this->mock(Lexer::class));
 
         $container->instance('config', [

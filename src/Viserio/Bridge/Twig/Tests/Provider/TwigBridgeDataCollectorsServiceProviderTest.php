@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 use Twig\Profiler\Profile;
-use Viserio\Bridge\Twig\Bridge\TwigProviderDataCollectorsServiceProvider;
+use Viserio\Bridge\Twig\Bridge\TwigBridgeDataCollectorsServiceProvider;
 use Viserio\Bridge\Twig\Bridge\TwigProviderServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
@@ -26,7 +26,7 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ProfilerServiceProvider());
         $container->register(new TwigProviderServiceProvider());
-        $container->register(new TwigProviderDataCollectorsServiceProvider());
+        $container->register(new TwigBridgeDataCollectorsServiceProvider());
 
         $container->instance('config', [
             'viserio' => [

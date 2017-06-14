@@ -16,14 +16,15 @@ use Viserio\Provider\Twig\Engine\TwigEngine;
 use Viserio\Provider\Twig\Loader as TwigLoader;
 use Viserio\Provider\Twig\Provider\TwigProviderServiceProvider;
 
-class TwigBridgeServiceProviderTest extends MockeryTestCase
+
+class TwigServiceProviderTest extends MockeryTestCase
 {
     public function testProvider()
     {
         $container = new Container();
         $container->register(new FilesServiceProvider());
         $container->register(new ViewServiceProvider());
-        $container->register(new TwigProviderServiceProvider());
+        $container->register(new TwigServiceProvider());
         $container->instance(Lexer::class, $this->mock(Lexer::class));
 
         $container->instance('config', [

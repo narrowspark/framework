@@ -29,7 +29,7 @@ use Viserio\Provider\Twig\Extension\StrExtension;
 use Viserio\Provider\Twig\Extension\TranslatorExtension;
 use Viserio\Provider\Twig\Loader as TwigLoader;
 
-class TwigProviderServiceProvider implements
+class TwigServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
