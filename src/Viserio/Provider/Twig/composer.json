@@ -1,6 +1,6 @@
 {
-    "name"       : "viserio/twig-bridge",
-    "type"       : "library",
+    "name"       : "viserio/twig-provider",
+    "type"       : "viserio-provider",
     "description": "The Viserio Twig bridge.",
     "keywords"   : ["narrowspark", "viserio", "twig", "bridge"],
     "license"    : "MIT",
@@ -19,8 +19,9 @@
     ],
     "require": {
         "php"                                : "^7.1",
-        "twig/twig"                          : "~2.4",
-        "symfony/polyfill-mbstring"          : "^1.0"
+        "twig-bridge"                        : "~2.4",
+        "viserio/contracts"                  : "self.version",
+        "viserio/view"                       : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
@@ -38,13 +39,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Bridge\\Twig\\"        : ""
+            "Viserio\\Provider\\Twig\\"        : ""
         },
         "exclude-from-classmap"              : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Bridge\\Twig\\Tests\\" : "Tests/"
+            "Viserio\\Provider\\Twig\\Tests\\" : "Tests/"
         }
     },
     "suggest": {

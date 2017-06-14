@@ -149,8 +149,9 @@
             "src/Viserio/Component/Support/helpers.php"
         ],
         "psr-4": {
-            "Viserio\\Component\\"           : "src/Viserio/Component/",
             "Viserio\\Bridge\\"              : "src/Viserio/Bridge/",
+            "Viserio\\Component\\"           : "src/Viserio/Component/",
+            "Viserio\\Provider\\"            : "src/Viserio/Provider/",
             "Narrowspark\\"                  : "benchmarks/"
         },
         "exclude-from-classmap"              : [

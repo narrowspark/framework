@@ -1,6 +1,6 @@
 # Viserio Twig Provider
 
-This bridge is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
+This provider is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
 [![Author](http://img.shields.io/badge/author-@anolilab-blue.svg?style=flat-square)](https://twitter.com/anolilab)
 [![Quality Score](https://img.shields.io/scrutinizer/g/narrowspark/framework.svg?style=flat-square)](https://scrutinizer-ci.com/g/narrowspark/framework/code-structure/master)
