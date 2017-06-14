@@ -12,8 +12,8 @@ use Viserio\Bridge\Twig\Engine\TwigEngine;
 use Viserio\Bridge\Twig\Loader as TwigLoader;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Filesystem\Bridge\FilesServiceProvider;
-use Viserio\Component\View\Bridge\ViewServiceProvider;
+use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
+use Viserio\Component\View\Provider\ViewServiceProvider;
 
 class TwigBridgeServiceProviderTest extends MockeryTestCase
 {

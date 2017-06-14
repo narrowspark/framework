@@ -10,10 +10,10 @@ use Viserio\Bridge\Twig\Bridge\TwigBridgeDataCollectorsServiceProvider;
 use Viserio\Bridge\Twig\Bridge\TwigProviderServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Filesystem\Bridge\FilesServiceProvider;
-use Viserio\Component\HttpFactory\Bridge\HttpFactoryServiceProvider;
-use Viserio\Component\Profiler\Bridge\ProfilerServiceProvider;
-use Viserio\Component\View\Bridge\ViewServiceProvider;
+use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
+use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
+use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
+use Viserio\Component\View\Provider\ViewServiceProvider;
 
 class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 {
