@@ -1,0 +1,16 @@
+--TEST--
+"session" functions
+--TEMPLATE--
+{{ session('test') }}
+{{ session_get('test') }}
+{{ session_has('test') ? 'OK' : 'KO' }}
+{{ csrf_token() }}
+{{ csrf_field() }}
+--DATA--
+return array()
+--EXPECT--
+test
+test
+OK
+18191ds198189d1as89
+<input type="hidden" name="_token" value="18191ds198189d1as89">

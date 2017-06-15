@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Twig\Provider;
+namespace Viserio\Provider\Twig\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Component\Console\Application;
+use Viserio\Provider\Twig\Command\CleanCommand;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {
@@ -34,6 +35,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
 
         if ($console !== null) {
             $console->addCommands([
+                new CleanCommand(),
                 new DebugCommand(),
                 new LintCommand(),
             ]);

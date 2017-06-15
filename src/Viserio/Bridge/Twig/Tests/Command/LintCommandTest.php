@@ -8,22 +8,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
-use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\Component\View\ViewFinder;
 
-class LintCommandTest extends MockeryTestCase
+class LintCommandaTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
     public function testLintCorrectFile()
     {
         $tester   = $this->createCommandTester();
-        $ret      = $tester->execute(['--files' => ['lintCorrectFile']], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
+        $ret      = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--files' => ['lintCorrectFile.twig']], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
         self::assertContains('OK in', trim($tester->getDisplay(true)));
     }
@@ -31,8 +27,8 @@ class LintCommandTest extends MockeryTestCase
     public function testLintIncorrectFile()
     {
         $tester   = $this->createCommandTester();
-        $ret      = $tester->execute(['--files' => ['lintIncorrectFile']], ['decorated' => false]);
-        $file     = $this->normalizeDirectorySeparator(realpath(__DIR__ . '/../Fixtures/lintIncorrectFile.twig'));
+        $ret      = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--files' => ['lintIncorrectFile.twig']], ['decorated' => false]);
+        $file     = $this->normalizeDirectorySeparator(realpath(__DIR__ . '\..\Fixtures\lintIncorrectFile.twig'));
 
         self::assertSame(
             preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim('Fail in ' . $file . ' (line 1)
@@ -46,18 +42,17 @@ class LintCommandTest extends MockeryTestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage No twig files found.
      */
     public function testLintFilesFound()
     {
-        $tester   = $this->createCommandTester(__DIR__ . '/../Engine');
-        $ret      = $tester->execute([], ['decorated' => false]);
+        $tester   = $this->createCommandTester();
+        $ret      = $tester->execute(['dir' => __DIR__ . '\..\Engine'], ['decorated' => false]);
     }
 
     public function testLint2FileWithFilesArgument()
     {
         $tester   = $this->createCommandTester();
-        $ret      = $tester->execute(['--files' => ['lintCorrectFile', 'lintCorrectFile2']], ['decorated' => false]);
+        $ret      = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--files' => ['lintCorrectFile.twig', 'lintCorrectFile2.twig']], ['decorated' => false]);
 
         self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay(true)));
     }
@@ -65,7 +60,7 @@ class LintCommandTest extends MockeryTestCase
     public function testLintFileInSubDir()
     {
         $tester   = $this->createCommandTester();
-        $ret      = $tester->execute(['--directories' => ['twig']], ['decorated' => false]);
+        $ret      = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--directories' => ['twig']], ['decorated' => false]);
 
         self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay(true)));
     }
@@ -73,7 +68,7 @@ class LintCommandTest extends MockeryTestCase
     public function testLintFileInSubDirAndFileName()
     {
         $tester   = $this->createCommandTester();
-        $ret      = $tester->execute(['--directories' => ['twig'], '--files' => ['test']], ['decorated' => false]);
+        $ret      = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--directories' => ['twig'], '--files' => ['test.twig']], ['decorated' => false]);
 
         self::assertSame('All 1 Twig files contain valid syntax.', trim($tester->getDisplay(true)));
     }
@@ -81,8 +76,8 @@ class LintCommandTest extends MockeryTestCase
     public function testLintFileInSubDirAndFileNameAndJson()
     {
         $tester = $this->createCommandTester();
-        $ret    = $tester->execute(['--directories' => ['twig'], '--files' => ['test'], '--format' => 'json'], ['decorated' => false]);
-        $file   = $this->normalizeDirectorySeparator(realpath(__DIR__ . '/../Fixtures/twig/test.twig'));
+        $ret    = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'json'], ['decorated' => false]);
+        $file   = $this->normalizeDirectorySeparator(realpath(__DIR__ . '\..\Fixtures\twig\test.twig'));
 
         self::assertSame('[
     {
@@ -94,8 +89,8 @@ class LintCommandTest extends MockeryTestCase
 
     public function testLint()
     {
-        $tester   = $this->createCommandTester(__DIR__ . '/../Fixtures/twig');
-        $ret      = $tester->execute([], ['decorated' => false]);
+        $tester = $this->createCommandTester();
+        $ret    = $tester->execute(['dir' => __DIR__ . '\..\Fixtures\twig'], ['decorated' => false]);
 
         self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay(true)));
     }
@@ -106,80 +101,40 @@ class LintCommandTest extends MockeryTestCase
      */
     public function testThrowExceptionOnWrongFormat()
     {
-        $tester   = $this->createCommandTester(__DIR__ . '/../Fixtures/twig');
+        $path   = __DIR__ . '\..\Fixtures\twig';
+        $tester = $this->createCommandTester();
 
-        $tester->execute(['--format' => 'test'], ['decorated' => false]);
+        $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'test'], ['decorated' => false]);
     }
 
     public function testThrowErrorIfTwigIsNotSet()
     {
-        $config = [
-            'config' => [
-                'viserio' => [
-                    'view' => [
-                        'paths' => [
-                            $path ?? __DIR__ . '/../Fixtures/',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-        $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
-        $loader = new ArrayLoader([]);
-        $twig   = new Environment($loader);
-
-        $application = new Application('1');
-        $application->setContainer(new ArrayContainer(
-            array_merge(
-                $config,
-                [
-                    FinderContract::class       => $finder,
-                    LoaderInterface::class      => $loader,
-                ]
-            )
-        ));
+        $application = new Application();
+        $application->setContainer(new ArrayContainer());
         $application->add(new LintCommand());
 
         $tester = new CommandTester($application->find('twig:lint'));
 
-        $tester->execute([], ['decorated' => false]);
+        $tester->execute(['dir' => __DIR__ . '\..\Fixtures'], ['decorated' => false]);
 
         self::assertSame('The Twig environment needs to be set.', trim($tester->getDisplay(true)));
     }
 
     /**
-     * @param null|mixed $path
-     *
      * @return CommandTester
      */
-    private function createCommandTester($path = null)
+    private function createCommandTester()
     {
-        $config = [
+        $application = new Application();
+        $application->setContainer(new ArrayContainer([
             'config' => [
                 'viserio' => [
                     'view' => [
-                        'paths' => [
-                            $path !== null ? $path : __DIR__ . '/../Fixtures/',
-                        ],
                     ],
                 ],
             ],
-        ];
-        $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
-        $loader = new ArrayLoader([]);
-        $twig   = new Environment($loader);
-
-        $application = new Application('1');
-        $application->setContainer(new ArrayContainer(
-            array_merge(
-                $config,
-                [
-                        Environment::class          => $twig,
-                        FinderContract::class       => $finder,
-                        LoaderInterface::class      => $loader,
-                ]
-            )
-        ));
+            Environment::class => new Environment(new ArrayLoader([])),
+        ]));
         $application->add(new LintCommand());
 
         return new CommandTester($application->find('twig:lint'));

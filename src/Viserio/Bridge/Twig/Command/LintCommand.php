@@ -3,27 +3,21 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Command;
 
 use InvalidArgumentException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use RuntimeException;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
+use UnexpectedValueException;
 use Twig\Environment;
 use Twig\Error\Error;
-use Twig\Error\LoaderError;
-use Twig\Loader\LoaderInterface;
+use Twig\Loader\ArrayLoader;
 use Twig\Source;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class LintCommand extends Command implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
+class LintCommand extends Command
 {
-    use OptionsResolverTrait;
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -32,29 +26,7 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
     /**
      * {@inheritdoc}
      */
-    protected $description = 'Lints a template and outputs encountered errors';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDimensions(): iterable
-    {
-        return ['viserio', 'view'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions(): iterable
-    {
-        return [
-            'engines' => [
-                'twig' => [
-                    'file_extension' => 'twig',
-                ],
-            ],
-        ];
-    }
+    protected $description = 'Lints a templates and outputs encountered errors';
 
     /**
      * {@inheritdoc}
@@ -70,21 +42,16 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
         }
 
         $files   = $this->getFiles((array) $this->option('files'), (array) $this->option('directories'));
-        $details = [];
 
         // If no files are found.
         if (count($files) === 0) {
             throw new RuntimeException('No twig files found.');
         }
 
-        foreach ($files as $file) {
-            try {
-                $template = $container->get(LoaderInterface::class)->getSourceContext($file);
-            } catch (LoaderError $exception) {
-                throw new RuntimeException(sprintf('File or directory [%s] is not readable', $file));
-            }
+        $details = [];
 
-            $details[] = $this->validate($template, $file);
+        foreach ($files as $file) {
+            $details[] = $this->validate(file_get_contents($file), $file);
         }
 
         return $this->display($details, $this->option('format'));
@@ -100,78 +67,31 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
      */
     protected function getFiles(array $files, array $directories): array
     {
-        // Get files from passed in options
-        $search            = [];
-        $finder            = $this->getContainer()->get(FinderContract::class);
-        $paths             = $finder->getPaths();
-        $hints             = $finder->getHints();
-        $searchDirectories = [];
+        $search = [];
 
-        if (is_array($hints) && count($hints) !== 0) {
-            $paths = array_reduce($hints, function ($package, $paths) {
-                return array_merge($paths, $package);
-            }, $paths);
-        }
-
-        if (count($directories) !== 0) {
-            foreach ($directories as $directory) {
-                foreach ($paths as $path) {
-                    if (is_dir($this->normalizeDirectorySeparator($path . '/' . $directory))) {
-                        $searchDirectories[] = $this->normalizeDirectorySeparator($path . '/' . $directory);
-                    } else {
-                        $this->warn('Path "' . $this->normalizeDirectorySeparator($path . '/' . $directory) . '" is not a directory.');
-                    }
-                }
+        foreach ($this->getFinder($directories) as $file) {
+            if (count($files) !== 0 && ! in_array($file->getFilename(), $files, true)) {
+                continue;
             }
 
-            if (count($searchDirectories) !== 0 && count($files) === 0) {
-                // Get those files from the search directory
-                foreach ($this->getFinder($searchDirectories) as $file) {
-                    $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
-                }
-            }
-        }
-
-        if (count($files) !== 0) {
-            $search = array_merge($search, $this->findArgumentFiles($paths, $searchDirectories, $files));
-        }
-
-        // If no files passed, use the view paths
-        if (count($search) === 0) {
-            foreach ($this->getFinder($paths) as $file) {
-                $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
-            }
+            $search[] = $file->getRealPath();
         }
 
         return $search;
     }
 
     /**
-     * Gets an array of argument files to lint.
-     *
-     * @param array $paths
-     * @param array $searchDirectories
-     * @param array $files
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    protected function findArgumentFiles(array $paths, array $searchDirectories, array $files): array
+    protected function getArguments(): array
     {
-        $search = [];
-
-        foreach ($files as $fileName) {
-            if (count($searchDirectories) !== 0) {
-                foreach ($this->getFinder($searchDirectories, $fileName) as $file) {
-                    $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
-                }
-            } else {
-                foreach ($this->getFinder($paths, $fileName) as $file) {
-                    $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
-                }
-            }
-        }
-
-        return $search;
+        return [
+            [
+                'dir',
+                InputArgument::IS_ARRAY | InputArgument::REQUIRED,
+                'Path to the template dir.',
+            ],
+        ];
     }
 
     /**
@@ -183,14 +103,14 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
             [
                 'files',
                 null,
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Lint multiple files. Relative to the view path. Supports the dot syntax.',
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Lint multiple files. Relative to the view path.',
             ],
             [
                 'directories',
                 null,
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Lint multiple directories. Relative to the view path. Does not support the dot syntax.',
+                'Lint multiple directories. Relative to the view path.',
             ],
             [
                 'format',
@@ -208,33 +128,50 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
      * @param array       $paths paths to search for files in
      * @param string|null $file
      *
-     * @return \Symfony\Component\Finder\Finder
+     * @return iterable
      */
-    protected function getFinder(array $paths, string $file = null): Finder
+    protected function getFinder(array $paths, string $file = null): iterable
     {
-        $options = $this->resolveOptions($this->getContainer());
+        $foundFiles   = [];
+        $baseDir      = (array) $this->argument('dir');
 
-        return Finder::create()
-            ->files()
-            ->in($paths)
-            ->name(($file === null ? '*.' : $file . '.') . $options['engines']['twig']['file_extension']);
+        foreach ($baseDir as $dir) {
+            if (count($paths) !== 0) {
+                foreach ($paths as $path) {
+                    $this->findTwigFiles($dir . '/' . $path, $foundFiles);
+                }
+            } else {
+                $this->findTwigFiles($dir, $foundFiles);
+            }
+        }
+
+        return $foundFiles;
     }
 
     /**
      * Validate the template.
      *
-     * @param \Twig\Source $template twig template
-     * @param string|null  $file     filename of the template
+     * @param string $template twig template
+     * @param string $file
      *
      * @return array
      */
-    protected function validate(Source $template, ?string $file = null): array
+    protected function validate(string $template, string $file): array
     {
-        $twig = $this->getContainer()->get(Environment::class);
+        $twig       = $this->getContainer()->get(Environment::class);
+        $realLoader = $twig->getLoader();
 
         try {
-            $twig->parse($twig->tokenize($template, $file));
+            $temporaryLoader = new ArrayLoader([$file => $template]);
+
+            $twig->setLoader($temporaryLoader);
+            $nodeTree = $twig->parse($twig->tokenize(new Source($template, $file)));
+
+            $twig->compile($nodeTree);
+            $twig->setLoader($realLoader);
         } catch (Error $exception) {
+            $twig->setLoader($realLoader);
+
             return [
                 'template'  => $template,
                 'file'      => $file,
@@ -378,15 +315,14 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
     /**
      * Grabs the surrounding lines around the exception.
      *
-     * @param \Twig\Source $template contents of Twig template
-     * @param string|int   $line     line where the exception occurred
-     * @param int          $context  number of lines around the line where the exception occurred
+     * @param string     $template contents of Twig template
+     * @param string|int $line     line where the exception occurred
+     * @param int        $context  number of lines around the line where the exception occurred
      *
      * @return array
      */
-    protected function getContext(Source $template, $line, int $context = 3): array
+    protected function getContext(string $template, $line, int $context = 3): array
     {
-        $template = $template->getCode();
         $lines    = explode("\n", $template);
         $position = max(0, $line - $context);
         $max      = min(count($lines), $line - 1 + $context);
@@ -401,10 +337,29 @@ class LintCommand extends Command implements RequiresComponentConfigContract, Pr
     }
 
     /**
-     * {@inheritdoc}
+     * Undocumented function.
+     *
+     * @param string $dir
+     * @param array  $foundFiles
+     *
+     * @return void
      */
-    protected function getConfigClass(): RequiresConfigContract
+    private function findTwigFiles(string $dir, array &$foundFiles): void
     {
-        return $this;
+        try {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+        } catch (UnexpectedValueException $e) {
+            // throw new RuntimeException();
+            \var_dump($e);die;
+        }
+
+        foreach ($iterator as $file) {
+            if (pathinfo($file->getRealPath(), PATHINFO_EXTENSION) === 'twig') {
+                $foundFiles[] = $file;
+            }
+        }
     }
 }

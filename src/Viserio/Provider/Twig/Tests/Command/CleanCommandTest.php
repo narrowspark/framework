@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Twig\Tests\Command;
+namespace Viserio\Provider\Twig\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Viserio\Bridge\Twig\Command\CleanCommand;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Provider\Twig\Command\CleanCommand;
 
 class CleanCommandTest extends MockeryTestCase
 {
@@ -21,8 +21,8 @@ class CleanCommandTest extends MockeryTestCase
             ->with(__DIR__)
             ->andReturn(true);
         $container = new ArrayContainer([
-            FilesystemContract::class       => $files,
-            'config'                        => [
+            FilesystemContract::class => $files,
+            'config'                  => [
                 'viserio' => [
                     'view' => [
                         'engines' => [
