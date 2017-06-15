@@ -12,7 +12,7 @@ use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class LintCommandaTest extends MockeryTestCase
+class LintCommandTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 

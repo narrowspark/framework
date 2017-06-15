@@ -9,11 +9,11 @@ use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
-use UnexpectedValueException;
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Loader\ArrayLoader;
 use Twig\Source;
+use UnexpectedValueException;
 use Viserio\Component\Console\Command\Command;
 
 class LintCommand extends Command
@@ -353,7 +353,8 @@ class LintCommand extends Command
             );
         } catch (UnexpectedValueException $e) {
             // throw new RuntimeException();
-            \var_dump($e);die;
+            \var_dump($e);
+            die;
         }
 
         foreach ($iterator as $file) {
