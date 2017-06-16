@@ -30,7 +30,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
             Profile::class => function (): Profile {
                 return new Profile();
             },
-            TwigEnvironment::class       => [self::class, 'createTwigEnvironment'],
+            TwigEnvironment::class       => [self::class, 'extendTwigEnvironment'],
             ProfilerContract::class      => [self::class, 'createProfiler'],
         ];
     }
@@ -91,7 +91,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
      *
      * @return null|\Twig\Environment
      */
-    public static function createTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
+    public static function extendTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
     {
         $twig = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 

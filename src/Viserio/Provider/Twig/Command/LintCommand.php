@@ -47,12 +47,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     }
 
     /**
-     * Gets an array of files to lint.
-     *
-     * @param array $files       array of files to check
-     * @param array $directories array of directories to get the files from
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getFiles(array $files, array $directories): array
     {
@@ -131,12 +126,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     }
 
     /**
-     * Get a finder instance of Twig files in the specified directories.
-     *
-     * @param array       $paths paths to search for files in
-     * @param string|null $file
-     *
-     * @return iterable
+     * {@inheritdoc}
      */
     protected function getFinder(array $paths, string $file = null): iterable
     {

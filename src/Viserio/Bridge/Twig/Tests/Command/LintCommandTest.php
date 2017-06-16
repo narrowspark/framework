@@ -30,13 +30,13 @@ class LintCommandTest extends MockeryTestCase
         $ret      = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--files' => ['lintIncorrectFile.twig']], ['decorated' => false]);
         $file     = $this->normalizeDirectorySeparator(realpath(__DIR__ . '\..\Fixtures\lintIncorrectFile.twig'));
 
-        self::assertSame(
+        self::assertEquals(
             preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim('Fail in ' . $file . ' (line 1)
 >> 1      {{ foo
 >> Unclosed "variable".
     2
       0 Twig files have valid syntax and 1 contain errors.')),
-            preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim($tester->getDisplay(true)))
+            preg_replace('/(\r\n|\n\r|\r|\n)/', '', $this->normalizeDirectorySeparator(trim($tester->getDisplay(true))))
         );
     }
 
@@ -77,14 +77,19 @@ class LintCommandTest extends MockeryTestCase
     {
         $tester = $this->createCommandTester();
         $ret    = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'json'], ['decorated' => false]);
-        $file   = $this->normalizeDirectorySeparator(realpath(__DIR__ . '\..\Fixtures\twig\test.twig'));
 
-        self::assertSame('[
-    {
-        "file": "' . $file . '",
-        "valid": true
-    }
-]', trim($tester->getDisplay(true)));
+        $output            = json_decode(trim($tester->getDisplay(true)), true);
+        $output[0]['file'] = $this->normalizeDirectorySeparator($output[0]['file']);
+
+        self::assertSame(
+            [
+                [
+                    "file" => $this->normalizeDirectorySeparator(realpath(__DIR__ . '\..\Fixtures\twig\test.twig')),
+                    "valid" => true
+                ]
+            ],
+            $output
+        );
     }
 
     public function testLint()

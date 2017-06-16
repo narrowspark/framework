@@ -351,10 +351,8 @@ class LintCommand extends Command
                 new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
                 RecursiveIteratorIterator::SELF_FIRST
             );
-        } catch (UnexpectedValueException $e) {
-            // throw new RuntimeException();
-            \var_dump($e);
-            die;
+        } catch (UnexpectedValueException $exception) {
+            throw new RuntimeException($exception->getMessage());
         }
 
         foreach ($iterator as $file) {

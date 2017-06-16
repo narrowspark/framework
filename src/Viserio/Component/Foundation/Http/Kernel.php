@@ -24,6 +24,7 @@ use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\Router;
+use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
