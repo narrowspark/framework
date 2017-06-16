@@ -56,7 +56,7 @@ class Writer implements LogContract
         string $level = 'debug',
         $processor = null,
         $formatter = null
-    ) {
+    ): void {
         $this->handlerParser->parseHandler(
             'stream',
             $path,
@@ -75,7 +75,7 @@ class Writer implements LogContract
         string $level = 'debug',
         $processor = null,
         $formatter = null
-    ) {
+    ): void {
         $this->handlerParser->parseHandler(
             new RotatingFileHandler($path, $days, self::parseLevel($level)),
             '',

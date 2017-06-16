@@ -94,7 +94,7 @@ interface Profiler
      *
      * @return $this
      */
-    public function setUrlGenerator(UrlGeneratorContract $urlGenerator): self;
+    public function setUrlGenerator(UrlGeneratorContract $urlGenerator): Profiler;
 
     /**
      * Get a url generator instance.

@@ -17,5 +17,6 @@ class BusServiceProviderTest extends TestCase
 
         self::assertInstanceOf(Dispatcher::class, $container->get(Dispatcher::class));
         self::assertInstanceOf(DispatcherContract::class, $container->get(DispatcherContract::class));
+        self::assertInstanceOf(DispatcherContract::class, $container->get('bus'));
     }
 }

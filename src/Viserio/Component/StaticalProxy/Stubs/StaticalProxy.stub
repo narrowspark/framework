@@ -1,0 +1,20 @@
+<?php
+declare(strict_types=1);
+namespace DummyNamespace;
+
+use DummyTarget as RealTimeProxy;
+use Viserio\Component\StaticalProxy\StaticalProxy;
+
+/**
+ * @see \DummyTarget
+ */
+class DummyClass extends StaticalProxy
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static function getInstanceIdentifier()
+    {
+        return RealTimeProxy::class;
+    }
+}

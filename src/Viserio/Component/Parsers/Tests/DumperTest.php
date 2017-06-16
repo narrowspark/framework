@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Tests;
 
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parsers\Dumper;
 use Viserio\Component\Parsers\Dumper\IniDumper;
 use Viserio\Component\Parsers\Dumper\JsonDumper;
@@ -14,7 +14,7 @@ use Viserio\Component\Parsers\Dumper\YamlDumper;
 use Viserio\Component\Parsers\Parser;
 use Viserio\Component\Parsers\Tests\Fixtures\TextDumper;
 
-class DumperTest extends MockeryTestCase
+class DumperTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Parsers\Parser

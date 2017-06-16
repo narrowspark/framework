@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Provider;
 
 use Interop\Container\ServiceProvider;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\SyslogHandler;
 use Psr\Container\ContainerInterface;
@@ -100,6 +101,19 @@ class ConfigureLoggingServiceProvider implements
     }
 
     /**
+     * Get a default Monolog formatter instance.
+     *
+     * @return \Monolog\Formatter\LineFormatter
+     */
+    protected static function getDefaultFormatter(): LineFormatter
+    {
+        $lineFormatter = new LineFormatter(null, null, true, true);
+        $lineFormatter->includeStacktraces();
+
+        return $lineFormatter;
+    }
+
+    /**
      * Configure the Monolog handlers for the application.
      *
      * @param \Psr\Container\ContainerInterface    $container
@@ -112,7 +126,9 @@ class ConfigureLoggingServiceProvider implements
     {
         $log->useFiles(
             $container->get(KernelContract::class)->getStoragePath('logs/narrowspark.log'),
-            $options['log']['level']
+            $options['log']['level'],
+            null,
+            self::getDefaultFormatter()
         );
     }
 
@@ -130,7 +146,9 @@ class ConfigureLoggingServiceProvider implements
         $log->useDailyFiles(
             $container->get(KernelContract::class)->getStoragePath('logs/narrowspark.log'),
             $options['log']['max_files'],
-            $options['log']['level']
+            $options['log']['level'],
+            null,
+            self::getDefaultFormatter()
         );
     }
 

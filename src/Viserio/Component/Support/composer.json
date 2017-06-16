@@ -25,8 +25,8 @@
     "require-dev": {
         "danielstjules/stringy"                    : "^3.0",
         "mikey179/vfsStream"                       : "^1.6",
+        "mockery/mockery"                          : "^0.9",
         "narrowspark/testing-helper"               : "^3.0",
-        "mockery/mockery"                          : "^1.0",
         "php-di/invoker"                           : "^2.0",
         "phpunit/phpunit"                          : "^6.0",
         "symfony/var-dumper"                       : "~3.3",

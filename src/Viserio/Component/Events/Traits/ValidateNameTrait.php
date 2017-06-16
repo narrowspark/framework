@@ -12,8 +12,10 @@ trait ValidateNameTrait
      * @param string $eventName
      *
      * @throws \InvalidArgumentException
+     *
+     * @return void
      */
-    protected function validateEventName(string $eventName)
+    protected function validateEventName(string $eventName): void
     {
         preg_match_all('/([a-zA-Z0-9_\\.]+)/', $eventName, $matches);
 

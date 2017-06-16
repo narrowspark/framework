@@ -10,6 +10,7 @@ use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -74,6 +75,8 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
 
         if ($this->container->has(LoggerInterface::class)) {
             $this->logger = $this->container->get(LoggerInterface::class);
+        } else {
+            $this->logger = new NullLogger();
         }
 
         $this->resolvedOptions = $this->resolveOptions($this->container);
@@ -144,9 +147,10 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $level = $this->getLevel($exception);
         $id    = $this->exceptionIdentifier->identify($exception);
 
-        if ($this->logger !== null) {
-            $this->getLogger()->{$level}($exception, ['identification' => ['id' => $id]]);
-        }
+        $this->getLogger()->{$level}(
+            $exception->getMessage(),
+            ['exception' => $exception, 'identification' => ['id' => $id]]
+        );
     }
 
     /**
@@ -232,9 +236,10 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $this->report($exception);
 
         $transformed = $this->getTransformed($exception);
-        $container   = $this->container;
 
         if (PHP_SAPI === 'cli') {
+            $container = $this->container;
+
             if ($container->has(ConsoleApplication::class)) {
                 $container->get(ConsoleApplication::class)
                     ->renderException($transformed, new ConsoleOutput());
@@ -243,7 +248,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             }
         }
 
-        throw $exception;
+        throw $transformed;
     }
 
     /**
@@ -358,7 +363,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      *
      * @return \Throwable
      */
-    protected function getTransformed(Throwable $exception)
+    protected function getTransformed(Throwable $exception): Throwable
     {
         $container    = $this->container;
         $transformers = array_merge(

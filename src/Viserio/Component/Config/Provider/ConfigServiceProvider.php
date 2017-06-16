@@ -26,7 +26,14 @@ class ConfigServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createRepository($container): RepositoryContract
+    /**
+     * Create a new Repository instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Config\Repository
+     */
+    public static function createRepository(ContainerInterface $container): RepositoryContract
     {
         $config = new Repository();
 

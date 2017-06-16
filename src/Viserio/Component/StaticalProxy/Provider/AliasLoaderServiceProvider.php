@@ -4,6 +4,7 @@ namespace Viserio\Component\StaticalProxy\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
@@ -48,7 +49,9 @@ class AliasLoaderServiceProvider implements
     public function getDefaultOptions(): iterable
     {
         return [
-            'aliases' => [],
+            'aliases'         => [],
+            'cache_path'      => null,
+            'real_time_proxy' => false,
         ];
     }
 
@@ -63,7 +66,18 @@ class AliasLoaderServiceProvider implements
     {
         $options = self::resolveOptions($container);
 
-        return new AliasLoader($options['aliases']);
+        $loader    = new AliasLoader($options['aliases']);
+        $cachePath = self::getCachePath($container, $options);
+
+        if ($cachePath !== null) {
+            $loader->setCachePath($cachePath);
+
+            if ($options['real_time_proxy'] === true) {
+                $loader->enableRealTimeStaticalProxy();
+            }
+        }
+
+        return $loader;
     }
 
     /**
@@ -72,5 +86,24 @@ class AliasLoaderServiceProvider implements
     protected static function getConfigClass(): RequiresConfigContract
     {
         return new self();
+    }
+
+    /**
+     * Get real-time proxy cache path.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     * @param array                             $options
+     *
+     * @return string|null
+     */
+    private static function getCachePath(ContainerInterface $container, array $options): ?string
+    {
+        $cachePath = $options['cache_path'];
+
+        if ($cachePath === null && $container->has(KernelContract::class)) {
+            $cachePath = $container->get(KernelContract::class)->getStoragePath('staticalproxy');
+        }
+
+        return $cachePath;
     }
 }

@@ -16,14 +16,24 @@ class QueueingBusServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            QueueingDispatcherContract::class         => [self::class, 'registerBusDispatcher'],
-            QueueingDispatcher::class                 => function (ContainerInterface $container) {
+            QueueingDispatcherContract::class => [self::class, 'registerBusDispatcher'],
+            QueueingDispatcher::class         => function (ContainerInterface $container) {
+                return $container->get(QueueingDispatcherContract::class);
+            },
+            'bus'                             => function (ContainerInterface $container) {
                 return $container->get(QueueingDispatcherContract::class);
             },
         ];
     }
 
-    public static function registerBusDispatcher(ContainerInterface $container)
+    /**
+     * Create a new QueueingDispatcher instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Bus\Dispatcher
+     */
+    public static function registerBusDispatcher(ContainerInterface $container): QueueingDispatcherContract
     {
         return new QueueingDispatcher($container, function ($connection = null) use ($container) {
             return $container->get(FactoryContract::class)->connection($connection);

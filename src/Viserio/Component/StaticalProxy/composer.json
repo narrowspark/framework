@@ -2,7 +2,7 @@
     "name"       : "viserio/statical-proxy",
     "type"       : "library",
     "description": "The Viserio Statical Proxy package.",
-    "keywords"   : ["narrowspark", "viserio", "static", "facade", "static proxy", "static interface", "statical", "alias"],
+    "keywords"   : ["narrowspark", "viserio", "static", "facade", "static proxy", "static interface", "statical", "alias", "real-time proxy"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -21,11 +21,11 @@
         "php"                                            : "^7.1",
         "psr/container"                                  : "^1.0",
         "symfony/polyfill-mbstring"                      : "^1.0",
-        "viserio/contracts"                              : "self.version",
-        "viserio/support"                                : "self.version"
+        "viserio/contracts"                              : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"             : "^0.3",
+        "mockery/mockery"                                : "^0.9",
         "narrowspark/testing-helper"                     : "^3.0",
         "phpunit/phpunit"                                : "^6.0",
         "viserio/options-resolver"                       : "self.version"

@@ -114,7 +114,7 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inheritdoc}
      */
-    public function maps(array $commands)
+    public function maps(array $commands): void
     {
         $this->mappings = array_merge($this->mappings, $commands);
     }
@@ -122,7 +122,7 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inheritdoc}
      */
-    public function mapUsing(Closure $mapper)
+    public function mapUsing(Closure $mapper): void
     {
         $this->mapper = $mapper;
     }

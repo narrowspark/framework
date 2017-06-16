@@ -46,13 +46,17 @@ interface Dispatcher
      * Register command to handler mappings.
      *
      * @param array $commands
+     *
+     * @return void
      */
-    public function maps(array $commands);
+    public function maps(array $commands): void;
 
     /**
      * Register a fallback mapper callback.
      *
      * @param \Closure $mapper
+     *
+     * @return void
      */
     public function mapUsing(Closure $mapper);
 
