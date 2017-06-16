@@ -25,6 +25,7 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
  *
  * @author Tobias Schultze <http://tobion.de>
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
+ * @copyright Copyright (c) 2004-2017 Fabien Potencier
  */
 class ConsoleFormatter implements FormatterInterface
 {

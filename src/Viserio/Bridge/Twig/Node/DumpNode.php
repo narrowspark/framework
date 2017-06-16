@@ -8,6 +8,7 @@ use Twig\Node\Node;
 
 /**
  * @author Julien Galenski <julien.galenski@gmail.com>
+ * @copyright Copyright (c) 2004-2017 Fabien Potencier
  */
 class DumpNode extends Node
 {

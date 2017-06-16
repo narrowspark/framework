@@ -18,6 +18,7 @@ use Viserio\Bridge\Twig\TokenParser\DumpTokenParser;
  * @link https://github.com/symfony/symfony/blob/2.6/src/Symfony/Bridge/Twig/Extension/DumpExtension.php
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ * @copyright Copyright (c) 2004-2017 Fabien Potencier
  */
 class DumpExtension extends AbstractExtension
 {

@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption as SymfonyInputOption;
  * See the original here: https://github.com/mnapoli/silly/blob/master/src/Input/InputOption.php
  *
  * @author Matthieu Napoli https://github.com/mnapoli
+ * @copyright Copyright (c) Matthieu Napoli
  */
 class InputOption extends SymfonyInputOption
 {

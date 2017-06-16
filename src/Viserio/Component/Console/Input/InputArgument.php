@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument as SymfonyInputArgument;
  * See the original here: https://github.com/mnapoli/silly/blob/master/src/Input/InputArgument.php
  *
  * @author Matthieu Napoli https://github.com/mnapoli
+ * @copyright Copyright (c) Matthieu Napoli
  */
 class InputArgument extends SymfonyInputArgument
 {

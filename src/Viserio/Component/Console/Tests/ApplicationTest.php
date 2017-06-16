@@ -35,6 +35,7 @@ use Viserio\Component\Events\EventManager;
  * Some code in this class it taken from silly.
  *
  * @author Matthieu Napoli https://github.com/mnapoli
+ * @copyright Copyright (c) Matthieu Napoli
  */
 class ApplicationTest extends MockeryTestCase
 {

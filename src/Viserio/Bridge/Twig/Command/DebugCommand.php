@@ -14,6 +14,7 @@ use Viserio\Component\Console\Command\Command;
  * Lists twig functions, filters, globals and tests present in the current project.
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ * @copyright Copyright (c) 2004-2017 Fabien Potencier
  */
 class DebugCommand extends Command
 {

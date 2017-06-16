@@ -21,6 +21,7 @@ use Viserio\Component\Log\Handler\ConsoleHandler;
  * Tests the ConsoleHandler and also the ConsoleFormatter.
  *
  * @author Tobias Schultze <http://tobion.de>
+ * @copyright Copyright (c) 2004-2017 Fabien Potencier
  */
 class ConsoleHandlerTest extends TestCase
 {

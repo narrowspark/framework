@@ -24,6 +24,7 @@ use Viserio\Component\Support\Str;
  * See the original here: https://github.com/mnapoli/silly/blob/master/src/Application.php
  *
  * @author Matthieu Napoli https://github.com/mnapoli
+ * @copyright Copyright (c) Matthieu Napoli
  */
 final class CommandResolver
 {

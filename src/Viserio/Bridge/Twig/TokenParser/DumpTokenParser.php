@@ -17,6 +17,7 @@ use Viserio\Bridge\Twig\Node\DumpNode;
  * </pre>
  *
  * @author Julien Galenski <julien.galenski@gmail.com>
+ * @copyright Copyright (c) 2004-2017 Fabien Potencier
  */
 class DumpTokenParser extends AbstractTokenParser
 {

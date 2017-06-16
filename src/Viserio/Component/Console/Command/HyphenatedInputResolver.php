@@ -11,6 +11,7 @@ use ReflectionFunctionAbstract;
  * See the original here: https://github.com/mnapoli/silly/blob/master/src/HyphenatedInputResolver.php
  *
  * @author Matthieu Napoli https://github.com/mnapoli
+ * @copyright Copyright (c) Matthieu Napoli
  */
 class HyphenatedInputResolver implements ParameterResolver
 {

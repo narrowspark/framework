@@ -13,6 +13,7 @@ use Viserio\Component\Console\Input\InputOption;
  * See the original here: https://github.com/mnapoli/silly/blob/master/src/Command/Command.php
  *
  * @author Matthieu Napoli https://github.com/mnapoli
+ * @copyright Copyright (c) Matthieu Napoli
  */
 class StringCommand extends BaseCommand
 {
