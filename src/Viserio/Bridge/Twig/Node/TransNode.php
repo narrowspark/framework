@@ -18,7 +18,7 @@ class TransNode extends Node
 {
     public function __construct(Node $body, Node $domain = null, AbstractExpression $count = null, AbstractExpression $vars = null, AbstractExpression $locale = null, $lineno = 0, $tag = null)
     {
-        $nodes = array('body' => $body);
+        $nodes = ['body' => $body];
         if (null !== $domain) {
             $nodes['domain'] = $domain;
         }
@@ -32,34 +32,32 @@ class TransNode extends Node
             $nodes['locale'] = $locale;
         }
 
-        parent::__construct($nodes, array(), $lineno, $tag);
+        parent::__construct($nodes, [], $lineno, $tag);
     }
 
     public function compile(Compiler $compiler)
     {
         $compiler->addDebugInfo($this);
 
-        $defaults = new ArrayExpression(array(), -1);
+        $defaults = new ArrayExpression([], -1);
         if ($this->hasNode('vars') && ($vars = $this->getNode('vars')) instanceof ArrayExpression) {
             $defaults = $this->getNode('vars');
-            $vars = null;
+            $vars     = null;
         }
         list($msg, $defaults) = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
 
-        $method = !$this->hasNode('count') ? 'trans' : 'transChoice';
+        $method = ! $this->hasNode('count') ? 'trans' : 'transChoice';
 
         $compiler
-            ->write('echo $this->env->getExtension(\'Symfony\Bridge\Twig\Extension\TranslationExtension\')->getTranslator()->'.$method.'(')
-            ->subcompile($msg)
-        ;
+            ->write('echo $this->env->getExtension(\'Symfony\Bridge\Twig\Extension\TranslationExtension\')->getTranslator()->' . $method . '(')
+            ->subcompile($msg);
 
         $compiler->raw(', ');
 
         if ($this->hasNode('count')) {
             $compiler
                 ->subcompile($this->getNode('count'))
-                ->raw(', ')
-            ;
+                ->raw(', ');
         }
 
         if (null !== $vars) {
@@ -68,15 +66,14 @@ class TransNode extends Node
                 ->subcompile($defaults)
                 ->raw(', ')
                 ->subcompile($this->getNode('vars'))
-                ->raw(')')
-            ;
+                ->raw(')');
         } else {
             $compiler->subcompile($defaults);
         }
 
         $compiler->raw(', ');
 
-        if (!$this->hasNode('domain')) {
+        if (! $this->hasNode('domain')) {
             $compiler->repr('messages');
         } else {
             $compiler->subcompile($this->getNode('domain'));
@@ -85,8 +82,7 @@ class TransNode extends Node
         if ($this->hasNode('locale')) {
             $compiler
                 ->raw(', ')
-                ->subcompile($this->getNode('locale'))
-            ;
+                ->subcompile($this->getNode('locale'));
         }
         $compiler->raw(");\n");
     }
@@ -98,14 +94,14 @@ class TransNode extends Node
         } elseif ($body instanceof TextNode) {
             $msg = $body->getAttribute('data');
         } else {
-            return array($body, $vars);
+            return [$body, $vars];
         }
 
         preg_match_all('/(?<!%)%([^%]+)%/', $msg, $matches);
 
         foreach ($matches[1] as $var) {
-            $key = new ConstantExpression('%'.$var.'%', $body->getTemplateLine());
-            if (!$vars->hasElement($key)) {
+            $key = new ConstantExpression('%' . $var . '%', $body->getTemplateLine());
+            if (! $vars->hasElement($key)) {
                 if ('count' === $var && $this->hasNode('count')) {
                     $vars->addElement($this->getNode('count'), $key);
                 } else {
@@ -116,6 +112,6 @@ class TransNode extends Node
             }
         }
 
-        return array(new ConstantExpression(str_replace('%%', '%', trim($msg)), $body->getTemplateLine()), $vars);
+        return [new ConstantExpression(str_replace('%%', '%', trim($msg)), $body->getTemplateLine()), $vars];
     }
 }
