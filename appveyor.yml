@@ -65,9 +65,9 @@ install:
   - IF %PHP%==1 echo opcache.enable_cli=1 >> php.ini
   - IF %PHP%==1 echo apc.enable_cli=1 >> php.ini
   - IF %PHP%==1 echo curl.cainfo=C:\tools\php\cacert.pem >> php.ini
-  - php -r "readfile('https://getcomposer.org/installer');" | php
+  - IF %PHP%==1 php -r "readfile('https://getcomposer.org/installer');" | php
   - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
-  - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
+  - IF %APPVEYOR_REPO_BRANCH%==master && %PHP%==1 (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd C:\projects\narrowspark
   # Matrix
   - IF %dependencies%==basic appveyor-retry composer install --prefer-dist --no-interaction --profile --no-suggest --no-progress --ansi

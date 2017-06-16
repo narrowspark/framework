@@ -36,7 +36,7 @@ class LintCommandTest extends MockeryTestCase
 >> Unclosed "variable".
     2
       0 Twig files have valid syntax and 1 contain errors.')),
-            preg_replace('/(\r\n|\n\r|\r|\n)/', '', $this->normalizeDirectorySeparator(trim($tester->getDisplay(true))))
+            preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim($tester->getDisplay(true)))
         );
     }
 
@@ -78,9 +78,6 @@ class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $ret    = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'json'], ['decorated' => false]);
 
-        $output            = json_decode(trim($tester->getDisplay(true)), true);
-        $output[0]['file'] = $this->normalizeDirectorySeparator($output[0]['file']);
-
         self::assertSame(
             [
                 [
@@ -88,7 +85,7 @@ class LintCommandTest extends MockeryTestCase
                     'valid' => true,
                 ],
             ],
-            $output
+            json_decode(trim($tester->getDisplay(true)), true)
         );
     }
 
