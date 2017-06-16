@@ -36,8 +36,6 @@ class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
             $profiler->addCollector(new SwiftMailDataCollector(
                 $container->get(Swift_Mailer::class)
             ));
-
-            return $profiler;
         }
 
         return $profiler;

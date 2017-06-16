@@ -94,8 +94,6 @@ class TwigServiceProvider implements
 
         if ($view !== null) {
             $view->addExtension('twig', 'twig');
-
-            return $view;
         }
 
         return $view;
@@ -117,8 +115,6 @@ class TwigServiceProvider implements
             $engines->register('twig', function () use ($container) {
                 return $container->get(TwigEngine::class);
             });
-
-            return $engines;
         }
 
         return $engines;

@@ -60,8 +60,6 @@ class ProfilerPDOBridgeServiceProvider implements ServiceProvider
             $profiler->addCollector(new PDODataCollector(
                 $container->get(TraceablePDODecorater::class)
             ));
-
-            return $profiler;
         }
 
         return $profiler;

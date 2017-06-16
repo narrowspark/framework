@@ -35,8 +35,6 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
             $console->addCommands([
                 new OptionDumpCommand(),
             ]);
-
-            return $console;
         }
 
         return $console;

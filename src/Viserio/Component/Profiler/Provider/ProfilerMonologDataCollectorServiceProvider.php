@@ -88,8 +88,6 @@ class ProfilerMonologDataCollectorServiceProvider implements
             if ($options['collector']['logs'] === true && $container->has(Logger::class)) {
                 $profiler->addCollector(new MonologLoggerDataCollector($container->get(Logger::class)));
             }
-
-            return $profiler;
         }
 
         return $profiler;

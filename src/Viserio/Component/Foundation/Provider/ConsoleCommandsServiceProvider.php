@@ -39,8 +39,6 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
                 new UpCommand(),
                 new KeyGenerateCommand(),
             ]);
-
-            return $console;
         }
 
         return $console;

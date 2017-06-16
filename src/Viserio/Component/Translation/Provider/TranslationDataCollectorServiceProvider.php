@@ -69,8 +69,6 @@ class TranslationDataCollectorServiceProvider implements
                     $container->get(TranslatorContract::class)
                 ));
             }
-
-            return $profiler;
         }
 
         return $profiler;

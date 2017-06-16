@@ -37,8 +37,6 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
                 new CronListCommand(),
                 new ScheduleRunCommand(),
             ]);
-
-            return $console;
         }
 
         return $console;

@@ -86,8 +86,6 @@ class ConfigureLoggingServiceProvider implements
             $method  = 'configure' . ucfirst($options['log']['handler']) . 'Handler';
 
             self::{$method}($container, $log, $options);
-
-            return $log;
         }
 
         return $log;

@@ -76,8 +76,6 @@ class TwigBridgeDataCollectorsServiceProvider implements
                     $container->get(TwigEnvironment::class)
                 ));
             }
-
-            return $profiler;
         }
 
         return $profiler;

@@ -87,8 +87,6 @@ class FoundationDataCollectorServiceProvider implements
             if ($options['collector']['files']) {
                 $profiler->addCollector(new FilesLoadedCollector($kernel->getProjectDir()));
             }
-
-            return $profiler;
         }
 
         return $profiler;

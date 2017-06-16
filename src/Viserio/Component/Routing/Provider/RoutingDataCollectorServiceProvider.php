@@ -71,8 +71,6 @@ class RoutingDataCollectorServiceProvider implements
                     )
                 );
             }
-
-            return $profiler;
         }
 
         return $profiler;

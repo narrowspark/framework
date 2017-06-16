@@ -97,8 +97,6 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
             }
 
             $profiler->addCollector($collector);
-
-            return $profiler;
         }
 
         return $profiler;

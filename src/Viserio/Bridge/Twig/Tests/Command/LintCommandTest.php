@@ -28,10 +28,10 @@ class LintCommandTest extends MockeryTestCase
     {
         $tester   = $this->createCommandTester();
         $ret      = $tester->execute(['dir' => __DIR__ . '/../Fixtures', '--files' => ['lintIncorrectFile.twig']], ['decorated' => false]);
-        $file     = $this->normalizeDirectorySeparator(realpath(__DIR__ . '/../Fixtures/lintIncorrectFile.twig'));
+        $file     = realpath($this->normalizeDirectorySeparator(__DIR__ . '/../Fixtures/lintIncorrectFile.twig'));
 
         self::assertSame(
-            preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim('Fail in ' . $file . ' (line 1)
+            preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim('Fail in ' . $this->normalizeDirectorySeparator($file) . ' (line 1)
 >> 1      {{ foo
 >> Unclosed "variable".
     2
@@ -90,7 +90,7 @@ class LintCommandTest extends MockeryTestCase
     public function testLint()
     {
         $tester = $this->createCommandTester();
-        $ret    = $tester->execute(['dir' => __DIR__ . '/../Fixtures\twig'], ['decorated' => false]);
+        $ret    = $tester->execute(['dir' => __DIR__ . '/../Fixtures/twig'], ['decorated' => false]);
 
         self::assertSame('All 2 Twig files contain valid syntax.', trim($tester->getDisplay(true)));
     }
@@ -101,7 +101,7 @@ class LintCommandTest extends MockeryTestCase
      */
     public function testThrowExceptionOnWrongFormat()
     {
-        $path   = __DIR__ . '/../Fixtures\twig';
+        $path   = __DIR__ . '/../Fixtures/twig';
         $tester = $this->createCommandTester();
 
         $tester->execute(['dir' => __DIR__ . '/../Fixtures', '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'test'], ['decorated' => false]);

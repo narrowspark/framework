@@ -36,8 +36,6 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
             $console->addCommands([
                 new RouteListCommand($container->get(RouterContract::class)),
             ]);
-
-            return $console;
         }
 
         return $console;
