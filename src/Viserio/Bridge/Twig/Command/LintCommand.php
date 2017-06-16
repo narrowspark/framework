@@ -291,8 +291,8 @@ class LintCommand extends Command
         $exception = $info['exception'];
         $line      = $exception->getTemplateLine();
         $lines     = $this->getContext($info['template'], $line);
-
-        $this->line(sprintf("<error>Fail</error> in {$info['file']} (line {$line})"));
+        \var_dump(\is_string($info['file']), \is_null($info['file']));
+        $this->line(sprintf('<error>Fail</error> in %s (line %s)', (string) $info['file'], $line));
 
         foreach ($lines as $no => $code) {
             $this->line(
