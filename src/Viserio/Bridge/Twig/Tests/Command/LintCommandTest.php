@@ -24,12 +24,12 @@ class LintCommandTest extends MockeryTestCase
         self::assertContains('OK in', trim($tester->getDisplay(true)));
     }
 
-    public function testLintIncorrectFile()
+    public function testlintIncorrectFile()
     {
         $tester   = $this->createCommandTester();
         $ret      = $tester->execute(['dir' => __DIR__ . '\..\Fixtures', '--files' => ['lintIncorrectFile.twig']], ['decorated' => false]);
         $file     = $this->normalizeDirectorySeparator(realpath(__DIR__ . '\..\Fixtures\lintIncorrectFile.twig'));
-
+\var_dump($file, realpath(__DIR__ . '\..\Fixtures\lintIncorrectFile.twig'));
         self::assertSame(
             preg_replace('/(\r\n|\n\r|\r|\n)/', '', trim('Fail in ' . $file . ' (line 1)
 >> 1      {{ foo
