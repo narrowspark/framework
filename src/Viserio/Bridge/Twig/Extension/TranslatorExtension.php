@@ -14,7 +14,7 @@ class TranslatorExtension extends AbstractExtension
     use TranslatorAwareTrait;
 
     /**
-     * Undocumented variable
+     * Undocumented variable.
      *
      * @var \Twig\NodeVisitor\NodeVisitorInterface|null
      */
@@ -79,22 +79,22 @@ class TranslatorExtension extends AbstractExtension
      */
     public function getTokenParsers(): array
     {
-        return array(
+        return [
             // {% trans %}Symfony is great!{% endtrans %}
             // or
             // {% trans count %}
             //     {0} There is no apples|{1} There is one apple|]1,Inf] There is {{ count }} apples
             // {% endtrans %}
             new TransTokenParser(),
-        );
+        ];
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     public function getNodeVisitors(): array
     {
-        return array($this->translationNodeVisitor);
+        return [$this->translationNodeVisitor];
     }
 
     /**

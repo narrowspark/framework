@@ -19,13 +19,13 @@ class TransNode extends Node
     /**
      * Create a new trans node instance.
      *
-     * @param \Twig\Node\Node $body
-     * @param \Twig\Node\Node $domain
+     * @param \Twig\Node\Node                               $body
+     * @param \Twig\Node\Node                               $domain
      * @param \Twig\Node\Expression\AbstractExpression|null $count
      * @param \Twig\Node\Expression\AbstractExpression|null $vars
      * @param \Twig\Node\Expression\AbstractExpression|null $locale
-     * @param int $lineno
-     * @param string|null $tag
+     * @param int                                           $lineno
+     * @param string|null                                   $tag
      */
     public function __construct(
         Node $body,
