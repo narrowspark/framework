@@ -70,17 +70,17 @@ class LintCommand extends Command
      */
     protected function getFiles(array $files, array $directories): array
     {
-        $search = [];
+        $foundFiles = [];
 
         foreach ($this->getFinder($directories) as $file) {
             if (count($files) !== 0 && ! in_array($file->getFilename(), $files, true)) {
                 continue;
             }
 
-            $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
+            $foundFiles[] = $this->normalizeDirectorySeparator($file->getRealPath());
         }
 
-        return $search;
+        return $foundFiles;
     }
 
     /**
@@ -228,7 +228,7 @@ class LintCommand extends Command
 
         foreach ($details as $info) {
             if ($info['valid'] && $verbose) {
-                $file = ($info['file']) ? ' in ' . $info['file'] : '';
+                $file = ' in ' . $info['file'];
                 $this->line('<info>OK</info>' . $file);
             } elseif (! $info['valid']) {
                 ++$errors;
@@ -288,16 +288,11 @@ class LintCommand extends Command
      */
     protected function renderException(array $info): void
     {
-        $file      = $info['file'];
         $exception = $info['exception'];
         $line      = $exception->getTemplateLine();
         $lines     = $this->getContext($info['template'], $line);
 
-        if ($file) {
-            $this->line(sprintf('<error>Fail</error> in %s (line %s)', $file, $line));
-        } else {
-            $this->line(sprintf('<error>Fail</error> (line %s)', $line));
-        }
+        $this->line(sprintf('<error>Fail</error> in %s (line %s)', $info['file'], $line));
 
         foreach ($lines as $no => $code) {
             $this->line(
