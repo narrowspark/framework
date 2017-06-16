@@ -19,9 +19,9 @@ use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Exception\Displayers\HtmlDisplayer;
-use Viserio\Component\Exception\Filters\CanDisplayFilter;
-use Viserio\Component\Exception\Filters\VerboseFilter;
+use Viserio\Component\Exception\Displayer\HtmlDisplayer;
+use Viserio\Component\Exception\Filter\CanDisplayFilter;
+use Viserio\Component\Exception\Filter\VerboseFilter;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {

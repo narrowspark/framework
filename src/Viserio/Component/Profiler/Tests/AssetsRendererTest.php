@@ -5,7 +5,7 @@ namespace Viserio\Component\Profiler\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Profiler\AssetsRenderer;
-use Viserio\Component\Profiler\DataCollectors\AjaxRequestsDataCollector;
+use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -70,11 +70,11 @@ class AssetsRendererTest extends MockeryTestCase
         $cssAssets = [
             __DIR__ . '/css/profiler.css',
             __DIR__ . '/css/profiler-grid.css',
-            str_replace('Tests', 'DataCollectors', __DIR__) . '/../Resources/css/ajax-requests.css',
+            str_replace('Tests', 'DataCollector', __DIR__) . '/../Resources/css/ajax-requests.css',
         ];
         $jsAssets = [
             __DIR__ . '/js/profiler.js',
-            str_replace('Tests', 'DataCollectors', __DIR__) . '/../Resources/js/ajaxHandler.js',
+            str_replace('Tests', 'DataCollector', __DIR__) . '/../Resources/js/ajaxHandler.js',
         ];
 
         self::assertSame([$cssAssets, $jsAssets], $assets->getAssets());

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
-use Viserio\Component\Contracts\Routing\Exceptions\InvalidRoutePatternException;
+use Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException;
 use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Routing\Matchers\ParameterMatcher;
-use Viserio\Component\Routing\Matchers\StaticMatcher;
+use Viserio\Component\Routing\Matcher\ParameterMatcher;
+use Viserio\Component\Routing\Matcher\StaticMatcher;
 
 final class Parser
 {
@@ -18,9 +18,9 @@ final class Parser
      *
      * Example: '/user/{id}/create'
      * Should return: [
-     *     \Viserio\Component\Routing\Matchers\StaticMatcher{ $value => 'user' },
-     *     \Viserio\Component\Routing\Matchers\ParameterMatcher{ $name => 'id', $match => '[0-9]+' },
-     *     \Viserio\Component\Routing\Matchers\StaticMatcher{ $value => 'create' },
+     *     \Viserio\Component\Routing\Matcher\StaticMatcher{ $value => 'user' },
+     *     \Viserio\Component\Routing\Matcher\ParameterMatcher{ $name => 'id', $match => '[0-9]+' },
+     *     \Viserio\Component\Routing\Matcher\StaticMatcher{ $value => 'create' },
      * ]
      *
      * @param string   $route

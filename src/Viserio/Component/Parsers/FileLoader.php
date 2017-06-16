@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
 use RuntimeException;
-use Viserio\Component\Contracts\Parsers\Exceptions\LoadingException;
+use Viserio\Component\Contracts\Parsers\Exception\LoadingException;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 

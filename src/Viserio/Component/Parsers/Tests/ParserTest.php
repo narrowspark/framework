@@ -4,14 +4,14 @@ namespace Viserio\Component\Parsers\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Parsers\Parser;
-use Viserio\Component\Parsers\Parsers\IniParser;
-use Viserio\Component\Parsers\Parsers\JsonParser;
-use Viserio\Component\Parsers\Parsers\PhpParser;
-use Viserio\Component\Parsers\Parsers\QueryStrParser;
-use Viserio\Component\Parsers\Parsers\SerializeParser;
-use Viserio\Component\Parsers\Parsers\TomlParser;
-use Viserio\Component\Parsers\Parsers\XmlParser;
-use Viserio\Component\Parsers\Parsers\YamlParser;
+use Viserio\Component\Parsers\Parser\IniParser;
+use Viserio\Component\Parsers\Parser\JsonParser;
+use Viserio\Component\Parsers\Parser\PhpParser;
+use Viserio\Component\Parsers\Parser\QueryStrParser;
+use Viserio\Component\Parsers\Parser\SerializeParser;
+use Viserio\Component\Parsers\Parser\TomlParser;
+use Viserio\Component\Parsers\Parser\XmlParser;
+use Viserio\Component\Parsers\Parser\YamlParser;
 use Viserio\Component\Parsers\Tests\Fixtures\TextParser;
 
 class ParserTest extends MockeryTestCase
@@ -68,7 +68,7 @@ class ParserTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exceptions\NotSupportedException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
      * @expectedExceptionMessage Given extension or mime type [inia] is not supported.
      */
     public function testGetParserToThrowException()

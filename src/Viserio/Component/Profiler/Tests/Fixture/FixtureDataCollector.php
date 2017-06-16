@@ -4,7 +4,7 @@ namespace Viserio\Component\Profiler\Tests\Fixture;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Profiler\DataCollectors\AbstractDataCollector;
+use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class FixtureDataCollector extends AbstractDataCollector
 {

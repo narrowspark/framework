@@ -6,8 +6,8 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\HandleLogger;
-use Viserio\Component\Foundation\Providers\ConfigureLoggingServiceProvider;
-use Viserio\Component\Log\Providers\LoggerServiceProvider;
+use Viserio\Component\Foundation\Provider\ConfigureLoggingServiceProvider;
+use Viserio\Component\Log\Provider\LoggerServiceProvider;
 
 class HandleLoggerTest extends MockeryTestCase
 {

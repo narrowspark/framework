@@ -147,7 +147,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createAwss3Connection(array $config)
     {
-        return (new Adapters\AwsS3Connector())->connect($config);
+        return (new Adapter\AwsS3Connector())->connect($config);
     }
 
     /**
@@ -157,7 +157,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createDropboxConnection(array $config)
     {
-        return (new Adapters\DropboxConnector())->connect($config);
+        return (new Adapter\DropboxConnector())->connect($config);
     }
 
     /**
@@ -167,7 +167,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createFtpConnection(array $config)
     {
-        return (new Adapters\FtpConnector())->connect($config);
+        return (new Adapter\FtpConnector())->connect($config);
     }
 
     /**
@@ -177,7 +177,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createLocalConnection(array $config)
     {
-        return (new Adapters\LocalConnector())->connect($config);
+        return (new Adapter\LocalConnector())->connect($config);
     }
 
     /**
@@ -187,7 +187,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createNullConnection(array $config)
     {
-        return (new Adapters\NullConnector())->connect([]);
+        return (new Adapter\NullConnector())->connect([]);
     }
 
     /**
@@ -197,7 +197,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createRackspaceConnection(array $config)
     {
-        return (new Adapters\RackspaceConnector())->connect($config);
+        return (new Adapter\RackspaceConnector())->connect($config);
     }
 
     /**
@@ -207,7 +207,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createSftpConnection(array $config)
     {
-        return (new Adapters\SftpConnector())->connect($config);
+        return (new Adapter\SftpConnector())->connect($config);
     }
 
     /**
@@ -217,7 +217,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createVfsConnection(array $config)
     {
-        return (new Adapters\VfsConnector())->connect($config);
+        return (new Adapter\VfsConnector())->connect($config);
     }
 
     /**
@@ -227,7 +227,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createWebdavConnection(array $config)
     {
-        return (new Adapters\WebDavConnector())->connect($config);
+        return (new Adapter\WebDavConnector())->connect($config);
     }
 
     /**
@@ -237,6 +237,6 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function createZipConnection(array $config)
     {
-        return (new Adapters\ZipConnector())->connect($config);
+        return (new Adapter\ZipConnector())->connect($config);
     }
 }

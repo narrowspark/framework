@@ -39,7 +39,7 @@
     },
     "autoload-dev": {
         "files": [
-            "Tests/Commands/OverwritePhpFunctions.php"
+            "Tests/Command/OverwritePhpFunctions.php"
         ],
         "psr-4": {
             "Viserio\\Component\\OptionsResolver\\Tests\\" : "Tests/"

@@ -4,7 +4,7 @@ namespace Viserio\Component\Console\Command;
 
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contracts\Console\Exceptions\InvalidCommandExpression;
+use Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression;
 
 final class ExpressionParser
 {

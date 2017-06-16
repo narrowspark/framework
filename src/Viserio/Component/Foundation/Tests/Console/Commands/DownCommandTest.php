@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Console\Commands;
+namespace Viserio\Component\Foundation\Tests\Console\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Foundation\Console\Commands\DownCommand;
+use Viserio\Component\Foundation\Console\Command\DownCommand;
 
 class DownCommandTest extends MockeryTestCase
 {

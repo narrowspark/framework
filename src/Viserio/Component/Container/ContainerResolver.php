@@ -7,8 +7,8 @@ use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
-use Viserio\Component\Contracts\Container\Exceptions\BindingResolutionException;
-use Viserio\Component\Contracts\Container\Exceptions\CyclicDependencyException;
+use Viserio\Component\Contracts\Container\Exception\BindingResolutionException;
+use Viserio\Component\Contracts\Container\Exception\CyclicDependencyException;
 
 class ContainerResolver
 {

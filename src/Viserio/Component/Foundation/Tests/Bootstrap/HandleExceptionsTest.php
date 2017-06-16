@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Exception\Providers\ExceptionServiceProvider;
+use Viserio\Component\Exception\Provider\ExceptionServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 
 class HandleExceptionsTest extends MockeryTestCase

@@ -34,10 +34,10 @@ interface UrlGenerator
      * @param array  $parameters
      * @param int    $referenceType
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exceptions\RouteNotFoundException              If the named route doesn't exist
-     * @throws \Viserio\Component\Contracts\Routing\Exceptions\MissingMandatoryParametersException When some parameters are missing that are mandatory for the route
-     * @throws \InvalidParameterException                                                          When a parameter value for a placeholder is not correct because
-     *                                                                                             it does not match the requirement
+     * @throws \Viserio\Component\Contracts\Routing\Exception\RouteNotFoundException              If the named route doesn't exist
+     * @throws \Viserio\Component\Contracts\Routing\Exception\MissingMandatoryParametersException When some parameters are missing that are mandatory for the route
+     * @throws \InvalidParameterException                                                         When a parameter value for a placeholder is not correct because
+     *                                                                                            it does not match the requirement
      *
      * @return string
      */

@@ -9,7 +9,7 @@ use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Contracts\Support\Arrayable;
 use Viserio\Component\Contracts\Support\Jsonable;
-use Viserio\Component\Log\Events\MessageLoggedEvent;
+use Viserio\Component\Log\Event\MessageLoggedEvent;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 
 class Writer implements LogContract

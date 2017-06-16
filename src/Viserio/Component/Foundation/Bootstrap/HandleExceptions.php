@@ -5,7 +5,7 @@ namespace Viserio\Component\Foundation\Bootstrap;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Exception\Providers\ExceptionServiceProvider;
+use Viserio\Component\Exception\Provider\ExceptionServiceProvider;
 
 class HandleExceptions extends AbstractLoadFiles implements BootstrapContract
 {

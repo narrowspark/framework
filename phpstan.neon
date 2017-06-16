@@ -109,4 +109,4 @@ parameters:
         - '#Method Viserio\\Component\\Cookie\\AbstractCookieCollector::forget#'
 
         # Wrapper
-        - '#Viserio\\Component\\Profiler\\DataCollectors\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
+        - '#Viserio\\Component\\Profiler\\DataCollector\\Bridge\\PDO\\TraceablePDODecorater::__construct#'

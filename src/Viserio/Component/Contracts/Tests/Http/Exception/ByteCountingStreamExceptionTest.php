@@ -4,7 +4,7 @@ namespace Viserio\Component\Contracts\Tests\Http\Exception;
 
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Viserio\Component\Contracts\Http\Exceptions\ByteCountingStreamException;
+use Viserio\Component\Contracts\Http\Exception\ByteCountingStreamException;
 
 class ByteCountingStreamExceptionTest extends TestCase
 {

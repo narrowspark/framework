@@ -14,12 +14,12 @@ use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Queue\Factory as FactoryContract;
 use Viserio\Component\Contracts\Queue\Monitor as MonitorContract;
-use Viserio\Component\Queue\Connectors\BeanstalkdQueue;
-use Viserio\Component\Queue\Connectors\NullQueue;
-use Viserio\Component\Queue\Connectors\RabbitMQQueue;
-use Viserio\Component\Queue\Connectors\RedisQueue;
-use Viserio\Component\Queue\Connectors\SqsQueue;
-use Viserio\Component\Queue\Connectors\SyncQueue;
+use Viserio\Component\Queue\Connector\BeanstalkdQueue;
+use Viserio\Component\Queue\Connector\NullQueue;
+use Viserio\Component\Queue\Connector\RabbitMQQueue;
+use Viserio\Component\Queue\Connector\RedisQueue;
+use Viserio\Component\Queue\Connector\SqsQueue;
+use Viserio\Component\Queue\Connector\SyncQueue;
 use Viserio\Component\Support\AbstractConnectionManager;
 
 class QueueManager extends AbstractConnectionManager implements MonitorContract, FactoryContract
@@ -112,7 +112,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Queue\Connectors\BeanstalkdQueue
+     * @return \Viserio\Component\Queue\Connector\BeanstalkdQueue
      */
     protected function createBeanstalkdConnection(array $config): BeanstalkdQueue
     {
@@ -133,7 +133,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Queue\Connectors\NullQueue
+     * @return \Viserio\Component\Queue\Connector\NullQueue
      */
     protected function createNullConnection(array $config): NullQueue
     {
@@ -145,7 +145,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Queue\Connectors\SyncQueue
+     * @return \Viserio\Component\Queue\Connector\SyncQueue
      */
     protected function createSyncConnection(array $config): SyncQueue
     {
@@ -157,7 +157,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Queue\Connectors\SqsQueue
+     * @return \Viserio\Component\Queue\Connector\SqsQueue
      */
     protected function createSqsConnection(array $config): SqsQueue
     {
@@ -185,7 +185,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Queue\Connectors\RedisQueue
+     * @return \Viserio\Component\Queue\Connector\RedisQueue
      */
     protected function createRedisConnection(array $config): RedisQueue
     {
@@ -203,7 +203,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Queue\Connectors\RabbitMQQueue
+     * @return \Viserio\Component\Queue\Connector\RabbitMQQueue
      */
     protected function createRabitmqConnection(array $config): RabbitMQQueue
     {

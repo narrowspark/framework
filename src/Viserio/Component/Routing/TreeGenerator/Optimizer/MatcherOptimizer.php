@@ -4,11 +4,11 @@ namespace Viserio\Component\Routing\TreeGenerator\Optimizer;
 
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
-use Viserio\Component\Routing\Matchers\AnyMatcher;
-use Viserio\Component\Routing\Matchers\CompoundMatcher;
-use Viserio\Component\Routing\Matchers\ExpressionMatcher;
-use Viserio\Component\Routing\Matchers\RegexMatcher;
-use Viserio\Component\Routing\Matchers\StaticMatcher;
+use Viserio\Component\Routing\Matcher\AnyMatcher;
+use Viserio\Component\Routing\Matcher\CompoundMatcher;
+use Viserio\Component\Routing\Matcher\ExpressionMatcher;
+use Viserio\Component\Routing\Matcher\RegexMatcher;
+use Viserio\Component\Routing\Matcher\StaticMatcher;
 
 final class MatcherOptimizer
 {

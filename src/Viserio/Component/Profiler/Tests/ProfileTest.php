@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Profiler\DataCollectors\PhpInfoDataCollector;
+use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\Profile;
 
 class ProfileTest extends TestCase

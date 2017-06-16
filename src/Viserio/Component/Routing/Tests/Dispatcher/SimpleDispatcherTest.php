@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
-use Viserio\Component\Routing\Dispatchers\SimpleDispatcher;
+use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;

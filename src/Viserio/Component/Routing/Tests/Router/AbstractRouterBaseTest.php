@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
-use Viserio\Component\Routing\Dispatchers\MiddlewareBasedDispatcher;
+use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Router;
 
 abstract class AbstractRouterBaseTest extends MockeryTestCase

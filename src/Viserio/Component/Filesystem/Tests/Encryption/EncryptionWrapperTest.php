@@ -4,7 +4,7 @@ namespace Viserio\Component\Filesystem\Tests\Encryption;
 
 use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Filesystem\Adapters\LocalConnector;
+use Viserio\Component\Filesystem\Adapter\LocalConnector;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 
@@ -103,7 +103,7 @@ class EncryptionWrapperTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
+     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testRead()
     {
@@ -111,7 +111,7 @@ class EncryptionWrapperTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exceptions\FileNotFoundException
+     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testReadStream()
     {

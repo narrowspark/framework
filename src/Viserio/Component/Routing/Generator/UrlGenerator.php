@@ -5,8 +5,8 @@ namespace Viserio\Component\Routing\Generator;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Viserio\Component\Contracts\Routing\Exceptions\RouteNotFoundException;
-use Viserio\Component\Contracts\Routing\Exceptions\UrlGenerationException;
+use Viserio\Component\Contracts\Routing\Exception\RouteNotFoundException;
+use Viserio\Component\Contracts\Routing\Exception\UrlGenerationException;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
@@ -169,7 +169,7 @@ class UrlGenerator implements UrlGeneratorContract
      * @param array                                      $parameters
      * @param int                                        $referenceType
      *
-     * @throws \Viserio\Component\Routing\Exceptions\UrlGenerationException
+     * @throws \Viserio\Component\Routing\Exception\UrlGenerationException
      *
      * @return string
      */

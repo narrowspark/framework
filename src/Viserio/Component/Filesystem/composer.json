@@ -40,7 +40,7 @@
         "narrowspark/arr"                    : "^1.0",
         "symfony/filesystem"                 : "~3.3",
         "symfony/finder"                     : "~3.3",
-        "symfony/polyfill-mbstring"              : "^1.0",
+        "symfony/polyfill-mbstring"          : "^1.0",
         "viserio/contracts"                  : "self.version",
         "viserio/options-resolver"           : "self.version",
         "viserio/support"                    : "self.version"

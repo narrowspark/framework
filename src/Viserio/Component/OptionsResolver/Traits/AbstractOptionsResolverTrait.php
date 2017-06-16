@@ -8,10 +8,10 @@ use Iterator;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\OptionsResolver\Exceptions\InvalidValidatorException;
-use Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException;
-use Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException;
-use Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException;
+use Viserio\Component\Contracts\OptionsResolver\Exception\InvalidValidatorException;
+use Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException;
+use Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException;
+use Viserio\Component\Contracts\OptionsResolver\Exception\UnexpectedValueException;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
@@ -40,10 +40,10 @@ trait AbstractOptionsResolverTrait
      * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
      * @param null|string                                                 $configId    Config name, must be provided if factory uses RequiresConfigId interface
      *
-     * @throws \InvalidArgumentException                                                                If the $configId parameter is provided but factory does not support it
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\UnexpectedValueException         If the $config parameter has the wrong type
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException          If no options are available
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException If a mandatory option is missing
+     * @throws \InvalidArgumentException                                                               If the $configId parameter is provided but factory does not support it
+     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\UnexpectedValueException         If the $config parameter has the wrong type
+     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException          If no options are available
+     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException If a mandatory option is missing
      *
      * @return array
      */
@@ -127,7 +127,7 @@ trait AbstractOptionsResolverTrait
      * @param iterable                                                              $mandatoryOptions
      * @param iterable                                                              $config
      *
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\MandatoryOptionNotFoundException
+     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException
      *
      * @return void
      */
@@ -159,7 +159,7 @@ trait AbstractOptionsResolverTrait
      * @param \Viserio\Component\Contracts\OptionsResolver\RequiresConfig $configClass
      * @param null|string                                                 $configId
      *
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exceptions\OptionNotFoundException
+     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException
      *
      * @return iterable|object
      */
