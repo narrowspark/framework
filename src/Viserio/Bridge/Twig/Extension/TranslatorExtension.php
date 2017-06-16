@@ -6,6 +6,8 @@ use Twig\Extension\AbstractExtension;
 use Twig\NodeVisitor\NodeVisitorInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
+use Viserio\Bridge\Twig\TokenParser\TransTokenParser;
 use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
