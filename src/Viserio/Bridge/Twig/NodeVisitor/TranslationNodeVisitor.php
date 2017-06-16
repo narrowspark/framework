@@ -21,18 +21,18 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
 
     private $enabled = false;
 
-    private $messages = array();
+    private $messages = [];
 
     public function enable()
     {
-        $this->enabled = true;
-        $this->messages = array();
+        $this->enabled  = true;
+        $this->messages = [];
     }
 
     public function disable()
     {
-        $this->enabled = false;
-        $this->messages = array();
+        $this->enabled  = false;
+        $this->messages = [];
     }
 
     /**
@@ -48,9 +48,17 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     /**
      * {@inheritdoc}
      */
+    public function getPriority(): int
+    {
+        return 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function doEnterNode(Node $node, Environment $env)
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return $node;
         }
 
@@ -60,26 +68,26 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
             $node->getNode('node') instanceof ConstantExpression
         ) {
             // extract constant nodes with a trans filter
-            $this->messages[] = array(
+            $this->messages[] = [
                 $node->getNode('node')->getAttribute('value'),
                 $this->getReadDomainFromArguments($node->getNode('arguments'), 1),
-            );
+            ];
         } elseif (
             $node instanceof FilterExpression &&
             'transchoice' === $node->getNode('filter')->getAttribute('value') &&
             $node->getNode('node') instanceof ConstantExpression
         ) {
             // extract constant nodes with a trans filter
-            $this->messages[] = array(
+            $this->messages[] = [
                 $node->getNode('node')->getAttribute('value'),
                 $this->getReadDomainFromArguments($node->getNode('arguments'), 2),
-            );
+            ];
         } elseif ($node instanceof TransNode) {
             // extract trans nodes
-            $this->messages[] = array(
+            $this->messages[] = [
                 $node->getNode('body')->getAttribute('data'),
                 $node->hasNode('domain') ? $this->getReadDomainFromNode($node->getNode('domain')) : null,
-            );
+            ];
         }
 
         return $node;
@@ -91,14 +99,6 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     protected function doLeaveNode(Node $node, Environment $env)
     {
         return $node;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPriority(): int
-    {
-        return 0;
     }
 
     /**
