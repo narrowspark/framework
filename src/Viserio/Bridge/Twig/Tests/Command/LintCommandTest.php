@@ -84,9 +84,9 @@ class LintCommandTest extends MockeryTestCase
         self::assertSame(
             [
                 [
-                    "file" => $this->normalizeDirectorySeparator(realpath(__DIR__ . '\..\Fixtures\twig\test.twig')),
-                    "valid" => true
-                ]
+                    'file'  => $this->normalizeDirectorySeparator(realpath(__DIR__ . '\..\Fixtures\twig\test.twig')),
+                    'valid' => true,
+                ],
             ],
             $output
         );
