@@ -16,40 +16,62 @@ use Twig\Node\TextNode;
  */
 class TransNode extends Node
 {
-    public function __construct(Node $body, Node $domain = null, AbstractExpression $count = null, AbstractExpression $vars = null, AbstractExpression $locale = null, $lineno = 0, $tag = null)
-    {
+    /**
+     * Create a new trans node instance.
+     *
+     * @param \Twig\Node\Node $body
+     * @param \Twig\Node\Node $domain
+     * @param \Twig\Node\Expression\AbstractExpression|null $count
+     * @param \Twig\Node\Expression\AbstractExpression|null $vars
+     * @param \Twig\Node\Expression\AbstractExpression|null $locale
+     * @param int $lineno
+     * @param string|null $tag
+     */
+    public function __construct(
+        Node $body,
+        Node $domain = null,
+        ?AbstractExpression $count = null,
+        ?AbstractExpression $vars = null,
+        ?AbstractExpression $locale = null,
+        int $lineno = 0,
+        ?string $tag = null
+    ) {
         $nodes = ['body' => $body];
-        if (null !== $domain) {
+
+        if ($domain !== null) {
             $nodes['domain'] = $domain;
         }
-        if (null !== $count) {
+        if ($count !== null) {
             $nodes['count'] = $count;
         }
-        if (null !== $vars) {
+        if ($vars !== null) {
             $nodes['vars'] = $vars;
         }
-        if (null !== $locale) {
+        if ($locale !== null) {
             $nodes['locale'] = $locale;
         }
 
         parent::__construct($nodes, [], $lineno, $tag);
     }
 
-    public function compile(Compiler $compiler)
+    /**
+     * {@inheritdoc}
+     */
+    public function compile(Compiler $compiler): void
     {
         $compiler->addDebugInfo($this);
 
         $defaults = new ArrayExpression([], -1);
+
         if ($this->hasNode('vars') && ($vars = $this->getNode('vars')) instanceof ArrayExpression) {
             $defaults = $this->getNode('vars');
             $vars     = null;
         }
+
         list($msg, $defaults) = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
 
-        $method = ! $this->hasNode('count') ? 'trans' : 'transChoice';
-
         $compiler
-            ->write('echo $this->env->getExtension(\'Symfony\Bridge\Twig\Extension\TranslationExtension\')->getTranslator()->' . $method . '(')
+            ->write('echo $this->env->getExtension(\'Viserio\Bridge\Twig\Extension\TranslatorExtension\')->getTranslator()->trans(')
             ->subcompile($msg);
 
         $compiler->raw(', ');
@@ -60,7 +82,7 @@ class TransNode extends Node
                 ->raw(', ');
         }
 
-        if (null !== $vars) {
+        if ($vars !== null) {
             $compiler
                 ->raw('array_merge(')
                 ->subcompile($defaults)
@@ -84,10 +106,20 @@ class TransNode extends Node
                 ->raw(', ')
                 ->subcompile($this->getNode('locale'));
         }
+
         $compiler->raw(");\n");
     }
 
-    protected function compileString(Node $body, ArrayExpression $vars, $ignoreStrictCheck = false)
+    /**
+     * Compile string with given variables.
+     *
+     * @param \Twig\Node\Node                          $body
+     * @param \Twig\Node\Expression\AbstractExpression $vars
+     * @param bool                                     $ignoreStrictCheck
+     *
+     * @return array
+     */
+    protected function compileString(Node $body, ArrayExpression $vars, $ignoreStrictCheck = false): array
     {
         if ($body instanceof ConstantExpression) {
             $msg = $body->getAttribute('value');
@@ -101,6 +133,7 @@ class TransNode extends Node
 
         foreach ($matches[1] as $var) {
             $key = new ConstantExpression('%' . $var . '%', $body->getTemplateLine());
+
             if (! $vars->hasElement($key)) {
                 if ('count' === $var && $this->hasNode('count')) {
                     $vars->addElement($this->getNode('count'), $key);

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
+use Twig\NodeVisitor\NodeVisitorInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
@@ -13,13 +14,27 @@ class TranslatorExtension extends AbstractExtension
     use TranslatorAwareTrait;
 
     /**
+     * Undocumented variable
+     *
+     * @var \Twig\NodeVisitor\NodeVisitorInterface|null
+     */
+    private $translationNodeVisitor;
+
+    /**
      * Create a new translator extension.
      *
      * @param \Viserio\Component\Contracts\Translation\Translator $translator
+     * @param \Twig\NodeVisitor\NodeVisitorInterface|null         $translationNodeVisitor
      */
-    public function __construct(TranslatorContract $translator)
+    public function __construct(TranslatorContract $translator, ?NodeVisitorInterface $translationNodeVisitor = null)
     {
         $this->translator = $translator;
+
+        if ($translationNodeVisitor === null) {
+            $translationNodeVisitor = new TranslationNodeVisitor();
+        }
+
+        $this->translationNodeVisitor = $translationNodeVisitor;
     }
 
     /**
@@ -55,5 +70,40 @@ class TranslatorExtension extends AbstractExtension
                 ]
             ),
         ];
+    }
+
+    /**
+     * Returns the token parser instance to add to the existing list.
+     *
+     * @return \Twig\TokenParser\AbstractTokenParser[]
+     */
+    public function getTokenParsers(): array
+    {
+        return array(
+            // {% trans %}Symfony is great!{% endtrans %}
+            // or
+            // {% trans count %}
+            //     {0} There is no apples|{1} There is one apple|]1,Inf] There is {{ count }} apples
+            // {% endtrans %}
+            new TransTokenParser(),
+        );
+    }
+
+     /**
+     * {@inheritdoc}
+     */
+    public function getNodeVisitors(): array
+    {
+        return array($this->translationNodeVisitor);
+    }
+
+    /**
+     * Get a translation node visitor instance.
+     *
+     * @return \Twig\NodeVisitor\NodeVisitorInterface
+     */
+    public function getTranslationNodeVisitor(): NodeVisitorInterface
+    {
+        return $this->translationNodeVisitor;
     }
 }
