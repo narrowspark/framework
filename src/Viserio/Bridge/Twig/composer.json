@@ -49,12 +49,12 @@
     },
     "suggest": {
         "container-interop/service-provider" : "Required to use service-provider (^0.3).",
-        "viserio/config"                     : "Required to use (self.version).",
-        "viserio/console"                    : "Required to use (self.version).",
-        "viserio/session"                    : "Required to use (self.version).",
-        "viserio/support"                    : "Required to use (self.version).",
-        "viserio/translation"                : "Required to use (self.version).",
-        "viserio/profiler"                   : "Required to use (self.version)."
+        "viserio/config"                     : "Required to use config extension (self.version).",
+        "viserio/console"                    : "Required to use lint and debug command (self.version).",
+        "viserio/session"                    : "Required to use session extension (self.version).",
+        "viserio/support"                    : "Required to use str extension (self.version).",
+        "viserio/translation"                : "Required to use translation extension (self.version).",
+        "viserio/profiler"                   : "Required to use data collector (self.version)."
     },
     "extra": {
         "branch-alias": {

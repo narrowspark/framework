@@ -15,9 +15,12 @@ use Twig\Loader\ArrayLoader;
 use Twig\Source;
 use UnexpectedValueException;
 use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LintCommand extends Command
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -41,7 +44,7 @@ class LintCommand extends Command
             return;
         }
 
-        $files   = $this->getFiles((array) $this->option('files'), (array) $this->option('directories'));
+        $files = $this->getFiles((array) $this->option('files'), (array) $this->option('directories'));
 
         // If no files are found.
         if (count($files) === 0) {
@@ -74,7 +77,7 @@ class LintCommand extends Command
                 continue;
             }
 
-            $search[] = $file->getRealPath();
+            $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
         }
 
         return $search;
@@ -103,7 +106,7 @@ class LintCommand extends Command
             [
                 'files',
                 null,
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
                 'Lint multiple files. Relative to the view path.',
             ],
             [
@@ -138,10 +141,10 @@ class LintCommand extends Command
         foreach ($baseDir as $dir) {
             if (count($paths) !== 0) {
                 foreach ($paths as $path) {
-                    $this->findTwigFiles($dir . '/' . $path, $foundFiles);
+                    $this->findTwigFiles($this->normalizeDirectorySeparator($dir . '/' . $path), $foundFiles);
                 }
             } else {
-                $this->findTwigFiles($dir, $foundFiles);
+                $this->findTwigFiles($this->normalizeDirectorySeparator($dir), $foundFiles);
             }
         }
 
@@ -341,6 +344,8 @@ class LintCommand extends Command
      *
      * @param string $dir
      * @param array  $foundFiles
+     *
+     * @throws \RuntimeException
      *
      * @return void
      */

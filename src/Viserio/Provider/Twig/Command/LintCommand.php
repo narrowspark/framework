@@ -9,11 +9,9 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LintCommand extends BaseLintCommand implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
     use OptionsResolverTrait;
 
     /**
