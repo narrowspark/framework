@@ -61,10 +61,15 @@ class StreamTest extends TestCase
         fwrite($handle, 'data');
 
         $stream = new Stream($handle);
+
         self::assertEquals('', $stream->getContents());
+
         $stream->seek(0);
+
         self::assertEquals('data', $stream->getContents());
         self::assertEquals('', $stream->getContents());
+
+        $stream->close();
     }
 
     public function testChecksEof()
@@ -73,9 +78,12 @@ class StreamTest extends TestCase
         fwrite($handle, 'data');
 
         $stream = new Stream($handle);
-        self::assertFalse($stream->eof());
-        $stream->read(4);
+
+        self::assertSame(4, $stream->tell(), 'Stream cursor already at the end');
+        self::assertFalse($stream->eof(), 'Stream still not eof');
+        self::assertSame('', $stream->read(1), 'Need to read one more byte to reach eof');
         self::assertTrue($stream->eof());
+
         $stream->close();
     }
 
@@ -121,63 +129,27 @@ class StreamTest extends TestCase
         $stream->close();
     }
 
-    public function testCanDetachStream()
+    public function testDetachStreamAndClearProperties()
     {
-        $r      = fopen('php://temp', 'w+');
-        $stream = new Stream($r);
+        $handle = fopen('php://temp', 'r');
+        $stream = new Stream($handle);
 
-        $stream->write('foo');
-        self::assertTrue($stream->isReadable());
-        self::assertSame($r, $stream->detach());
-        $stream->detach();
-        self::assertFalse($stream->isReadable());
-        self::assertFalse($stream->isWritable());
-        self::assertFalse($stream->isSeekable());
+       self::assertSame($handle, $stream->detach());
+       self::assertTrue(is_resource($handle), 'Stream is not closed');
+       self::assertNull($stream->detach());
+       self::assertStreamStateAfterClosedOrDetached($stream);
 
-        $throws = function (callable $fn) use ($stream) {
-            try {
-                $fn($stream);
-                $this->fail();
-            } catch (Throwable $e) {
-            }
-        };
-
-        $throws(function ($stream) {
-            $stream->read(10);
-        });
-        $throws(function ($stream) {
-            $stream->write('bar');
-        });
-        $throws(function ($stream) {
-            $stream->seek(10);
-        });
-        $throws(function ($stream) {
-            $stream->tell();
-        });
-        $throws(function ($stream) {
-            $stream->eof();
-        });
-        $throws(function ($stream) {
-            $stream->getSize();
-        });
-        $throws(function ($stream) {
-            $stream->getContents();
-        });
-        self::assertSame('', (string) $stream);
         $stream->close();
     }
 
-    public function testCloseClearProperties()
+    public function testCloseResourceAndClearProperties()
     {
-        $handle = fopen('php://temp', 'r+');
+        $handle = fopen('php://temp', 'r');
         $stream = new Stream($handle);
         $stream->close();
 
-        self::assertFalse($stream->isSeekable());
-        self::assertFalse($stream->isReadable());
-        self::assertFalse($stream->isWritable());
-        self::assertNull($stream->getSize());
-        self::assertEmpty($stream->getMetadata());
+       self::assertFalse(is_resource($handle));
+       self::assertStreamStateAfterClosedOrDetached($stream);
     }
 
     public function testDoesNotThrowInToString()
@@ -264,7 +236,34 @@ class StreamTest extends TestCase
             ->method('isSeekable')
             ->will($this->returnValue(false));
 
-        $this->assertEquals('FOO BAR', $stream->__toString());
+       self::assertEquals('FOO BAR', $stream->__toString());
+    }
+
+    private static function assertStreamStateAfterClosedOrDetached(Stream $stream)
+    {
+       self::assertFalse($stream->isReadable());
+       self::assertFalse($stream->isWritable());
+       self::assertFalse($stream->isSeekable());
+       self::assertNull($stream->getSize());
+       self::assertSame([], $stream->getMetadata());
+       self::assertNull($stream->getMetadata('foo'));
+
+        $throws = function (callable $fn) {
+            try {
+                $fn();
+            } catch (\Exception $e) {
+               self::assertContains('Stream is detached', $e->getMessage());
+                return;
+            }
+            $this->fail('Exception should be thrown after the stream is detached.');
+        };
+        $throws(function () use ($stream) { $stream->read(10); });
+        $throws(function () use ($stream) { $stream->write('bar'); });
+        $throws(function () use ($stream) { $stream->seek(10); });
+        $throws(function () use ($stream) { $stream->tell(); });
+        $throws(function () use ($stream) { $stream->eof(); });
+        $throws(function () use ($stream) { $stream->getContents(); });
+       self::assertSame('', (string) $stream);
     }
 }
 namespace Viserio\Component\Http;

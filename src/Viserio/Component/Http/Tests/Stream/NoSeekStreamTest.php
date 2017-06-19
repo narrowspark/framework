@@ -27,11 +27,7 @@ class NoSeekStreamTest extends TestCase
         $wrapped->seek(2);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Cannot write to a non-writable stream
-     */
-    public function testHandlesClose()
+    public function testToStringDoesNotSeek()
     {
         $body   = 'foo';
         $stream = fopen('php://temp', 'r+');
@@ -40,8 +36,12 @@ class NoSeekStreamTest extends TestCase
         fseek($stream, 0);
 
         $s       = new Stream($stream);
+        $s->seek(1);
+
         $wrapped = new NoSeekStream($s);
+
+        self::assertEquals('oo', (string) $wrapped);
+
         $wrapped->close();
-        $wrapped->write('foo');
     }
 }
