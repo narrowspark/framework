@@ -14,7 +14,7 @@ use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Support\Str;
 
 class TwigBridgeServiceProvider implements ServiceProvider
@@ -68,8 +68,8 @@ class TwigBridgeServiceProvider implements ServiceProvider
      */
     protected static function registerViserioTwigExtension(TwigEnvironment $twig, ContainerInterface $container): void
     {
-        if ($container->has(TranslatorContract::class)) {
-            $twig->addExtension(new TranslatorExtension($container->get(TranslatorContract::class)));
+        if ($container->has(TranslationManagerContract::class)) {
+            $twig->addExtension(new TranslatorExtension($container->get(TranslationManagerContract::class)));
         }
 
         if (class_exists(Str::class)) {

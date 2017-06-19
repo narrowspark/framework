@@ -10,9 +10,7 @@ use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\FilterExpression;
 use Twig\Node\Expression\NameExpression;
-use Twig\Node\ModuleNode;
 use Twig\Node\Node;
-use Twig\Source;
 use Viserio\Bridge\Twig\Node\TransNode;
 use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 
@@ -20,6 +18,9 @@ class TranslationNodeVisitorTest extends TestCase
 {
     /**
      * @dataProvider getMessagesExtractionTestData
+     *
+     * @param Node  $node
+     * @param array $expectedMessages
      */
     public function testMessagesExtraction(Node $node, array $expectedMessages)
     {
@@ -59,19 +60,6 @@ class TranslationNodeVisitorTest extends TestCase
             [self::getTransFilter($message, $domain), [[$message, $domain]]],
             [self::getTransTag($message, $domain), [[$message, $domain]]],
         ];
-    }
-
-    private static function getModule($content)
-    {
-        return new ModuleNode(
-            new ConstantExpression($content, 0),
-            null,
-            new ArrayExpression([], 0),
-            new ArrayExpression([], 0),
-            new ArrayExpression([], 0),
-            null,
-            new Source('', '')
-        );
     }
 
     private static function getTransFilter($message, $domain = null, $arguments = null)

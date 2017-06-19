@@ -8,13 +8,17 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 use Viserio\Bridge\Twig\TokenParser\TransTokenParser;
-use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
+use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
 class TranslatorExtension extends AbstractExtension
 {
-    use TranslatorAwareTrait;
-
+    /**
+     * Translation instance.
+     *
+     * @var \Viserio\Component\Contracts\Translation\Translator|null
+     */
+    protected $translationManager;
     /**
      * A instance of NodeVisitorInterface.
      *
@@ -25,12 +29,12 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Create a new translator extension.
      *
-     * @param \Viserio\Component\Contracts\Translation\Translator $translator
-     * @param \Twig\NodeVisitor\NodeVisitorInterface|null         $translationNodeVisitor
+     * @param \Viserio\Component\Contracts\Translation\TranslationManager $translationManager
+     * @param \Twig\NodeVisitor\NodeVisitorInterface|null                 $translationNodeVisitor
      */
-    public function __construct(TranslatorContract $translator, ?NodeVisitorInterface $translationNodeVisitor = null)
+    public function __construct(TranslationManagerContract $translationManager, ?NodeVisitorInterface $translationNodeVisitor = null)
     {
-        $this->translator = $translator;
+        $this->translationManager = $translationManager;
 
         if ($translationNodeVisitor === null) {
             $translationNodeVisitor = new TranslationNodeVisitor();
@@ -53,7 +57,7 @@ class TranslatorExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('trans', [$this->translator, 'trans']),
+            new TwigFunction('trans', [$this->getTranslator(), 'trans']),
         ];
     }
 
@@ -65,7 +69,7 @@ class TranslatorExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'trans',
-                [$this->translator, 'trans'],
+                [$this->getTranslator(), 'trans'],
                 [
                     'pre_escape' => 'html',
                     'is_safe'    => ['html'],
@@ -107,5 +111,19 @@ class TranslatorExtension extends AbstractExtension
     public function getTranslationNodeVisitor(): NodeVisitorInterface
     {
         return $this->translationNodeVisitor;
+    }
+
+    /**
+     * Get a language translator instance.
+     *
+     * @param string|null $locale
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Viserio\Component\Contracts\Translation\Translator
+     */
+    public function getTranslator(?string $locale = null): TranslatorContract
+    {
+        return $this->translationManager->getTranslator($locale);
     }
 }

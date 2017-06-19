@@ -70,21 +70,28 @@ class TransNode extends Node
 
         list($msg, $defaults) = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
 
+        $locale = null;
+        $count  = [];
+
+        if ($this->hasNode('locale')) {
+            $locale = $this->getNode('locale');
+        }
+
         $compiler
-            ->write('echo $this->env->getExtension(\'Viserio\Bridge\Twig\Extension\TranslatorExtension\')->getTranslator()->trans(')
+            ->write('echo $this->env->getExtension(\'Viserio\Bridge\Twig\Extension\TranslatorExtension\')->getTranslator(' . $locale . ')->trans(')
             ->subcompile($msg);
 
         $compiler->raw(', ');
 
         if ($this->hasNode('count')) {
-            $compiler
-                ->subcompile($this->getNode('count'))
-                ->raw(', ');
+            $count = [1 => $this->getNode('count')];
         }
 
         if ($vars !== null) {
             $compiler
                 ->raw('array_merge(')
+                ->subcompile($count)
+                ->raw(', ')
                 ->subcompile($defaults)
                 ->raw(', ')
                 ->subcompile($this->getNode('vars'))
@@ -99,12 +106,6 @@ class TransNode extends Node
             $compiler->repr('messages');
         } else {
             $compiler->subcompile($this->getNode('domain'));
-        }
-
-        if ($this->hasNode('locale')) {
-            $compiler
-                ->raw(', ')
-                ->subcompile($this->getNode('locale'));
         }
 
         $compiler->raw(");\n");
@@ -135,7 +136,7 @@ class TransNode extends Node
             $key = new ConstantExpression('%' . $var . '%', $body->getTemplateLine());
 
             if (! $vars->hasElement($key)) {
-                if ('count' === $var && $this->hasNode('count')) {
+                if ($var && $this->hasNode('count') === 'count') {
                     $vars->addElement($this->getNode('count'), $key);
                 } else {
                     $varExpr = new NameExpression($var, $body->getTemplateLine());

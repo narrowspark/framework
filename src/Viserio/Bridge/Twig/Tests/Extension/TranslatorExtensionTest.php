@@ -9,7 +9,7 @@ use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
-use Viserio\Component\Translation\Translator;
+use Viserio\Component\Translation\TranslationManager;
 
 class TranslatorExtensionTest extends MockeryTestCase
 {
@@ -41,8 +41,7 @@ class TranslatorExtensionTest extends MockeryTestCase
 
     public function testEscaping()
     {
-        $output = $this->getTemplate('{% trans %}Percent: %value%%% (%msg%){% endtrans %}')
-            ->render(['value' => 12, 'msg' => 'approx.']);
+        $output = $this->renderTemplate('{% trans %}Percent: %value%%% (%msg%){% endtrans %}', ['value' => 12, 'msg' => 'approx.']);
 
         self::assertEquals('Percent: 12% (approx.)', $output);
     }
@@ -53,7 +52,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransUnknownKeyword()
     {
-        $output = $this->getTemplate("{% trans \n\nfoo %}{% endtrans %}")->render();
+        $output = $this->renderTemplate("{% trans \n\nfoo %}{% endtrans %}");
     }
 
     /**
@@ -62,23 +61,22 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransComplexBody()
     {
-        $output = $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render();
+        $output = $this->renderTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}");
     }
 
     /**
      * @expectedException        \Twig\Error\SyntaxError
-     * @expectedExceptionMessage A message inside a transchoice tag must be a simple text in "index" at line 2.
+     * @expectedExceptionMessage A message inside a trans tag must be a simple text in "index" at line 2.
      */
-    public function testTransChoiceComplexBody()
+    public function testTransComplexBodyWithCount()
     {
-        $output = $this->getTemplate("{% transchoice count %}\n{{ 1 + 2 }}{% endtranschoice %}")->render();
+        $output = $this->renderTemplate("{% trans count %}\n{{ 1 + 2 }}{% endtrans %}");
     }
 
-    protected function getTemplate($template, $translator = null)
+    protected function renderTemplate($template, array $args = [])
     {
-        if ($translator === null) {
-            $translator = new Translator(new MessageCatalogue('en'), new IntlMessageFormatter());
-        }
+        $translator = new TranslationManager(new IntlMessageFormatter());
+        $translator->addMessageCatalogue(new MessageCatalogue('en'));
 
         if (is_array($template)) {
             $loader = new TwigArrayLoader($template);
@@ -89,6 +87,6 @@ class TranslatorExtensionTest extends MockeryTestCase
         $twig = new Environment($loader, ['debug' => true, 'cache' => false]);
         $twig->addExtension(new TranslatorExtension($translator));
 
-        return $twig->loadTemplate('index');
+        return $twig->render('index', $args);
     }
 }

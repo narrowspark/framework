@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\NodeVisitor;
 
-use Symfony\Bridge\Twig\Node\TransNode;
 use Twig\Environment;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\FilterExpression;
 use Twig\Node\Node;
 use Twig\NodeVisitor\AbstractNodeVisitor;
+use Viserio\Bridge\Twig\Node\TransNode;
 
 /**
  * TranslationNodeVisitor extracts translation messages.
@@ -56,7 +56,7 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     /**
      * {@inheritdoc}
      */
-    protected function doEnterNode(Node $node, Environment $env)
+    protected function doEnterNode(Node $node, Environment $env): Node
     {
         if (! $this->enabled) {
             return $node;
@@ -64,23 +64,13 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
 
         if (
             $node instanceof FilterExpression &&
-            'trans' === $node->getNode('filter')->getAttribute('value') &&
+            $node->getNode('filter')->getAttribute('value') === 'trans' &&
             $node->getNode('node') instanceof ConstantExpression
         ) {
             // extract constant nodes with a trans filter
             $this->messages[] = [
                 $node->getNode('node')->getAttribute('value'),
                 $this->getReadDomainFromArguments($node->getNode('arguments'), 1),
-            ];
-        } elseif (
-            $node instanceof FilterExpression &&
-            'transchoice' === $node->getNode('filter')->getAttribute('value') &&
-            $node->getNode('node') instanceof ConstantExpression
-        ) {
-            // extract constant nodes with a trans filter
-            $this->messages[] = [
-                $node->getNode('node')->getAttribute('value'),
-                $this->getReadDomainFromArguments($node->getNode('arguments'), 2),
             ];
         } elseif ($node instanceof TransNode) {
             // extract trans nodes
@@ -96,7 +86,7 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     /**
      * {@inheritdoc}
      */
-    protected function doLeaveNode(Node $node, Environment $env)
+    protected function doLeaveNode(Node $node, Environment $env): Node
     {
         return $node;
     }
