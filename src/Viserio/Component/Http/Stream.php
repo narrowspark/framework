@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use BadMethodCallException;
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
@@ -159,7 +158,7 @@ class Stream implements StreamInterface
      */
     public function getContents(): string
     {
-        if (!isset($this->stream)) {
+        if (! isset($this->stream)) {
             throw new RuntimeException('Stream is detached');
         }
 
@@ -262,7 +261,7 @@ class Stream implements StreamInterface
      */
     public function eof(): bool
     {
-        if (!isset($this->stream)) {
+        if (! isset($this->stream)) {
             throw new RuntimeException('Stream is detached');
         }
 
@@ -274,7 +273,7 @@ class Stream implements StreamInterface
      */
     public function tell(): int
     {
-        if (!isset($this->stream)) {
+        if (! isset($this->stream)) {
             throw new RuntimeException('Stream is detached');
         }
 
@@ -300,7 +299,7 @@ class Stream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET)
     {
-        if (!isset($this->stream)) {
+        if (! isset($this->stream)) {
             throw new RuntimeException('Stream is detached');
         }
 
@@ -321,7 +320,7 @@ class Stream implements StreamInterface
      */
     public function read($length): string
     {
-        if (!isset($this->stream)) {
+        if (! isset($this->stream)) {
             throw new RuntimeException('Stream is detached');
         }
 
@@ -351,7 +350,7 @@ class Stream implements StreamInterface
      */
     public function write($string): int
     {
-        if (!isset($this->stream)) {
+        if (! isset($this->stream)) {
             throw new RuntimeException('Stream is detached');
         }
 
