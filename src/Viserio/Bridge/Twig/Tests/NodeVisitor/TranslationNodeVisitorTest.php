@@ -2,19 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Provider\Twig\Tests\NodeVisitor;
 
-use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
-use Twig\Node\Expression\NameExpression;
+use Twig\Loader\LoaderInterface;
 use Twig\Node\BodyNode;
 use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\FilterExpression;
+use Twig\Node\Expression\NameExpression;
 use Twig\Node\ModuleNode;
 use Twig\Node\Node;
 use Twig\Source;
 use Viserio\Bridge\Twig\Node\TransNode;
-use PHPUnit\Framework\TestCase;
-use Twig\Loader\LoaderInterface;
+use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 
 class TranslationNodeVisitorTest extends TestCase
 {
@@ -23,7 +23,7 @@ class TranslationNodeVisitorTest extends TestCase
      */
     public function testMessagesExtraction(Node $node, array $expectedMessages)
     {
-        $env = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock(), array('cache' => false, 'autoescape' => false, 'optimizations' => 0));
+        $env     = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock(), ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
         $visitor = new TranslationNodeVisitor();
         $visitor->enable();
         $visitor->enterNode($node, $env);
@@ -35,30 +35,30 @@ class TranslationNodeVisitorTest extends TestCase
     public function testMessageExtractionWithInvalidDomainNode()
     {
         $message = 'new key';
-        $node = new FilterExpression(
+        $node    = new FilterExpression(
             new ConstantExpression($message, 0),
             new ConstantExpression('trans', 0),
-            new Node(array(
-                new ArrayExpression(array(), 0),
+            new Node([
+                new ArrayExpression([], 0),
                 new NameExpression('variable', 0),
-            )),
+            ]),
             0
         );
 
-        $this->testMessagesExtraction($node, array(array($message, '_undefined')));
+        $this->testMessagesExtraction($node, [[$message, '_undefined']]);
     }
 
     public function getMessagesExtractionTestData()
     {
         $message = 'new key';
-        $domain = 'domain';
+        $domain  = 'domain';
 
-        return array(
-            array(self::getTransFilter($message), array(array($message, null))),
-            array(self::getTransTag($message), array(array($message, null))),
-            array(self::getTransFilter($message, $domain), array(array($message, $domain))),
-            array(self::getTransTag($message, $domain), array(array($message, $domain))),
-        );
+        return [
+            [self::getTransFilter($message), [[$message, null]]],
+            [self::getTransTag($message), [[$message, null]]],
+            [self::getTransFilter($message, $domain), [[$message, $domain]]],
+            [self::getTransTag($message, $domain), [[$message, $domain]]],
+        ];
     }
 
     private static function getModule($content)
@@ -76,11 +76,11 @@ class TranslationNodeVisitorTest extends TestCase
 
     private static function getTransFilter($message, $domain = null, $arguments = null)
     {
-        if (!$arguments) {
-            $arguments = $domain ? array(
+        if (! $arguments) {
+            $arguments = $domain ? [
                 new ArrayExpression([], 0),
                 new ConstantExpression($domain, 0),
-            ) : [];
+            ] : [];
         }
 
         return new FilterExpression(
@@ -94,7 +94,7 @@ class TranslationNodeVisitorTest extends TestCase
     private static function getTransTag($message, $domain = null)
     {
         return new TransNode(
-            new BodyNode([], array('data' => $message)),
+            new BodyNode([], ['data' => $message]),
             $domain ? new ConstantExpression($domain, 0) : null
         );
     }

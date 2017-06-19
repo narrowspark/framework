@@ -7,9 +7,9 @@ use Twig\Environment;
 use Twig\Loader\ArrayLoader as TwigArrayLoader;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Translation\Translator;
-use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
+use Viserio\Component\Translation\MessageCatalogue;
+use Viserio\Component\Translation\Translator;
 
 class TranslatorExtensionTest extends MockeryTestCase
 {
@@ -42,7 +42,7 @@ class TranslatorExtensionTest extends MockeryTestCase
     public function testEscaping()
     {
         $output = $this->getTemplate('{% trans %}Percent: %value%%% (%msg%){% endtrans %}')
-            ->render(array('value' => 12, 'msg' => 'approx.'));
+            ->render(['value' => 12, 'msg' => 'approx.']);
 
         self::assertEquals('Percent: 12% (approx.)', $output);
     }
@@ -83,10 +83,10 @@ class TranslatorExtensionTest extends MockeryTestCase
         if (is_array($template)) {
             $loader = new TwigArrayLoader($template);
         } else {
-            $loader = new TwigArrayLoader(array('index' => $template));
+            $loader = new TwigArrayLoader(['index' => $template]);
         }
 
-        $twig = new Environment($loader, array('debug' => true, 'cache' => false));
+        $twig = new Environment($loader, ['debug' => true, 'cache' => false]);
         $twig->addExtension(new TranslatorExtension($translator));
 
         return $twig->loadTemplate('index');
