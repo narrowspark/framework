@@ -32,10 +32,7 @@ class YamlDumper implements DumperContract
         try {
             return SymfonyYaml::dump($data);
         } catch (InvalidArgumentException $exception) {
-            throw new ParseException([
-                'message'   => $exception->getMessage(),
-                'exception' => $exception,
-            ]);
+            throw new DumpException($exception->getMessage());
         }
     }
 }
