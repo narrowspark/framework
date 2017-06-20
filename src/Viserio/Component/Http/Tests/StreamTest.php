@@ -251,12 +251,13 @@ class StreamTest extends TestCase
         $throws = function (callable $fn) {
             try {
                 $fn();
-            } catch (\Exception $e) {
+            } catch (Throwable $e) {
                 self::assertContains('Stream is detached', $e->getMessage());
 
                 return;
             }
-            $this->fail('Exception should be thrown after the stream is detached.');
+
+            self::fail('Exception should be thrown after the stream is detached.');
         };
         $throws(function () use ($stream) {
             $stream->read(10);
@@ -276,6 +277,7 @@ class StreamTest extends TestCase
         $throws(function () use ($stream) {
             $stream->getContents();
         });
+
         self::assertSame('', (string) $stream);
     }
 }
