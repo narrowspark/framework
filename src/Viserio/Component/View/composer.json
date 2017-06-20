@@ -54,7 +54,7 @@
     "suggest": {
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "http-interop/http-middleware"        : "Required to use middleware (^0.4).",
-        "viserio/http-factory"                : "Required to use the proxie View::createResponseView (^0.3)."
+        "viserio/http-factory"                : "Required to use the Proxy View::createResponseView (^0.3)."
     },
     "extra": {
         "branch-alias": {

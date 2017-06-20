@@ -20,6 +20,7 @@ use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\NullLogger;
 use Redis;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
@@ -43,6 +44,7 @@ class CacheManager extends AbstractManager implements
         parent::__construct($container);
 
         $this->container = $container;
+        $this->logger    = new NullLogger();
     }
 
     /**
@@ -69,9 +71,7 @@ class CacheManager extends AbstractManager implements
             $driver = $this->getNamespacedPool($driver, $namespace);
         }
 
-        if ($this->logger !== null) {
-            $driver->setLogger($this->getLogger());
-        }
+        $driver->setLogger($this->getLogger());
 
         return $driver;
     }
