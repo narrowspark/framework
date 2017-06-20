@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\NullLogger;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
@@ -70,6 +71,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
 
         $this->catalogue = $catalogue;
         $this->formatter = $formatter;
+        $this->logger    = new NullLogger();
     }
 
     /**
@@ -132,10 +134,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         $trans = $this->applyFilters($trans);
         $trans = $this->applyHelpers($trans);
 
-        if ($this->logger !== null) {
-            $this->log($id, $domain);
-        }
-
+        $this->log($id, $domain);
         $this->collectMessage($this->locale, $domain, $id, $trans, $parameters);
 
         return $trans;

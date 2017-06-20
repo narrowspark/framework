@@ -17,5 +17,6 @@ class QueueingBusServiceProviderTest extends TestCase
 
         self::assertInstanceOf(QueueingDispatcher::class, $container->get(QueueingDispatcher::class));
         self::assertInstanceOf(QueueingDispatcherContract::class, $container->get(QueueingDispatcherContract::class));
+        self::assertInstanceOf(QueueingDispatcherContract::class, $container->get('bus'));
     }
 }
