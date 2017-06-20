@@ -4,8 +4,8 @@ namespace Viserio\Component\Support;
 
 use finfo;
 use LogicException;
-use Viserio\Component\Contracts\Support\Exception\FileNotFoundException;
 use Viserio\Component\Contracts\Support\Exception\AccessDeniedException;
+use Viserio\Component\Contracts\Support\Exception\FileNotFoundException;
 
 final class ExtensionGuesser
 {
@@ -60,10 +60,10 @@ final class ExtensionGuesser
      * Guesses the mime type with the binary "file" (only available on *nix).
      *
      * @param string $path
-     * @param string $cmd The command to run to get the mime type of a file.
-     *                    The $cmd pattern must contain a "%s" string that will be replaced
-     *                    with the file name to guess.
-     *                    The command output must start with the mime type of the file.
+     * @param string $cmd  The command to run to get the mime type of a file.
+     *                     The $cmd pattern must contain a "%s" string that will be replaced
+     *                     with the file name to guess.
+     *                     The command output must start with the mime type of the file.
      *
      * @return string|null
      */
@@ -84,7 +84,7 @@ final class ExtensionGuesser
 
         $type = trim(ob_get_clean());
 
-        if (!preg_match('#^([a-z0-9\-]+/[a-z0-9\-\.]+)#i', $type, $match)) {
+        if (! preg_match('#^([a-z0-9\-]+/[a-z0-9\-\.]+)#i', $type, $match)) {
             // it's not a type, but an error message
             return null;
         }
@@ -102,7 +102,7 @@ final class ExtensionGuesser
      */
     public static function getFileinfoMimeTypeGuess(string $path): ?string
     {
-        if (!$finfo = new finfo(FILEINFO_MIME_TYPE)) {
+        if (! $finfo = new finfo(FILEINFO_MIME_TYPE)) {
             return null;
         }
 
@@ -127,11 +127,11 @@ final class ExtensionGuesser
      */
     public static function guess(string $path): ?string
     {
-        if (!is_file($path)) {
+        if (! is_file($path)) {
             throw new FileNotFoundException($path);
         }
 
-        if (!is_readable($path)) {
+        if (! is_readable($path)) {
             throw new AccessDeniedException($path);
         }
 
@@ -154,4 +154,3 @@ final class ExtensionGuesser
         return null;
     }
 }
-

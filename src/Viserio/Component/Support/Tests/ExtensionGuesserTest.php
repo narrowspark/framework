@@ -3,14 +3,24 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Support\ExtensionGuesser;
 use Viserio\Component\Contracts\Support\Exception\AccessDeniedException;
+use Viserio\Component\Support\ExtensionGuesser;
 
 class ExtensionGuesserTest extends TestCase
 {
+    public static function tearDownAfterClass()
+    {
+        $path = __DIR__ . '/Fixture/to_delete';
+
+        if (file_exists($path)) {
+            @chmod($path, 0666);
+            @unlink($path);
+        }
+    }
+
     public function testRegisterNewGuesser()
     {
-        $file = __DIR__.'/Fixture/test';
+        $file    = __DIR__ . '/Fixture/test';
         $guesser = $this->createMockGuesser($file, 'gif');
 
         ExtensionGuesser::register($guesser);
@@ -20,7 +30,7 @@ class ExtensionGuesserTest extends TestCase
 
     public function testGuessExtensionIsBasedOnMimeType()
     {
-        $this->assertEquals('gif', ExtensionGuesser::guess(__DIR__.'/Fixture/test'));
+        $this->assertEquals('gif', ExtensionGuesser::guess(__DIR__ . '/Fixture/test'));
     }
 
     /**
@@ -30,13 +40,13 @@ class ExtensionGuesserTest extends TestCase
     {
         $this->assertEquals(
             'inode/x-empty',
-            ExtensionGuesser::getFileinfoMimeTypeGuess(__DIR__.'/Fixture/other-file.example')
+            ExtensionGuesser::getFileinfoMimeTypeGuess(__DIR__ . '/Fixture/other-file.example')
         );
 
         ExtensionGuesser::flush();
         ExtensionGuesser::register([ExtensionGuesser::class, 'getFileinfoMimeTypeGuess']);
 
-        $this->assertEquals('image/gif', ExtensionGuesser::guess(__DIR__.'/Fixture/test.gif'));
+        $this->assertEquals('image/gif', ExtensionGuesser::guess(__DIR__ . '/Fixture/test.gif'));
     }
 
     /**
@@ -47,7 +57,7 @@ class ExtensionGuesserTest extends TestCase
     {
         ExtensionGuesser::flush();
 
-        ExtensionGuesser::guess(__DIR__.'/Fixture/test.gif');
+        ExtensionGuesser::guess(__DIR__ . '/Fixture/test.gif');
     }
 
     /**
@@ -55,7 +65,7 @@ class ExtensionGuesserTest extends TestCase
      */
     public function testGuessExtensionToThrowExceptionIfNoFileFound()
     {
-        ExtensionGuesser::guess(__DIR__.'/Fixture/test---');
+        ExtensionGuesser::guess(__DIR__ . '/Fixture/test---');
     }
 
     public function testGuessFileWithUnknownExtension()
@@ -63,7 +73,7 @@ class ExtensionGuesserTest extends TestCase
         ExtensionGuesser::register([ExtensionGuesser::class, 'getFileBinaryMimeTypeGuess']);
         ExtensionGuesser::register([ExtensionGuesser::class, 'getFileinfoMimeTypeGuess']);
 
-        $this->assertEquals('application/octet-stream', ExtensionGuesser::guess(__DIR__.'/Fixture/.unknownextension'));
+        $this->assertEquals('application/octet-stream', ExtensionGuesser::guess(__DIR__ . '/Fixture/.unknownextension'));
 
         ExtensionGuesser::flush();
     }
@@ -74,15 +84,15 @@ class ExtensionGuesserTest extends TestCase
             $this->markTestSkipped('Can not verify chmod operations on Windows');
         }
 
-        if (!getenv('USER') || 'root' === getenv('USER')) {
+        if (! getenv('USER') || 'root' === getenv('USER')) {
             $this->markTestSkipped('This test will fail if run under superuser');
         }
 
-        $path = __DIR__.'/Fixture/to_delete';
+        $path = __DIR__ . '/Fixture/to_delete';
         touch($path);
         @chmod($path, 0333);
 
-        if (substr(sprintf('%o', fileperms($path)), -4) == '0333') {
+        if (mb_substr(sprintf('%o', fileperms($path)), -4) == '0333') {
             $this->expectException(AccessDeniedException::class);
 
             ExtensionGuesser::register([ExtensionGuesser::class, 'getFileBinaryMimeTypeGuess']);
@@ -90,16 +100,6 @@ class ExtensionGuesserTest extends TestCase
             ExtensionGuesser::guess($path);
         } else {
             $this->markTestSkipped('Can not verify chmod operations, change of file permissions failed');
-        }
-    }
-
-    public static function tearDownAfterClass()
-    {
-        $path = __DIR__.'/Fixture/to_delete';
-
-        if (file_exists($path)) {
-            @chmod($path, 0666);
-            @unlink($path);
         }
     }
 
