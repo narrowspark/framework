@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Contracts\Support\Exception;
+namespace Viserio\Component\Http\Exception;
 
 use RuntimeException;
 

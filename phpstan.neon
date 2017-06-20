@@ -82,6 +82,7 @@ parameters:
         - '#setMultiple\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
         - '#Method Viserio\\Component\\Cron\\Cron::withoutOverlapping#'
+        - '#\$guesser of static method Viserio\\Component\\Http\\ExtensionGuesser::register\(\) expects callable, mixed\[\] given.#'
 
         # if check exists
         - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'

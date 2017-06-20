@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Support;
+namespace Viserio\Component\Http;
 
 use finfo;
 use LogicException;
-use Viserio\Component\Contracts\Support\Exception\AccessDeniedException;
-use Viserio\Component\Contracts\Support\Exception\FileNotFoundException;
+use Viserio\Component\Http\Exception\AccessDeniedException;
+use Viserio\Component\Http\Exception\FileNotFoundException;
 
 final class ExtensionGuesser
 {
@@ -24,11 +24,11 @@ final class ExtensionGuesser
     private function __construct()
     {
         if (DIRECTORY_SEPARATOR !== '\\' && function_exists('passthru') && function_exists('escapeshellarg')) {
-            self::register([self, 'getFileBinaryMimeTypeGuess']);
+            self::register([self::class, 'getFileBinaryMimeTypeGuess']);
         }
 
         if (function_exists('finfo_open')) {
-            self::register([self, 'getFileBinaryMimeTypeGuess']);
+            self::register([self::class, 'getFileBinaryMimeTypeGuess']);
         }
     }
 
@@ -119,9 +119,9 @@ final class ExtensionGuesser
      *
      * @param string $path The path to the file
      *
-     * @throws \Viserio\Component\Contracts\Support\Exception\FileNotFoundException If the file does not exist
-     * @throws \Viserio\Component\Contracts\Support\Exception\AccessDeniedException If the file could not be read
-     * @throws \LogicException                                                      If no guesser found
+     * @throws \Viserio\Component\Http\Exception\FileNotFoundException If the file does not exist
+     * @throws \Viserio\Component\Http\Exception\AccessDeniedException If the file could not be read
+     * @throws \LogicException                                         If no guesser found
      *
      * @return string|null The guessed extension or NULL, if none could be guessed
      */
