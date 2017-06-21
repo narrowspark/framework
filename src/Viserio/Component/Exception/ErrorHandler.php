@@ -238,7 +238,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $transformed = $this->getTransformed($exception);
 
         if (PHP_SAPI === 'cli') {
-            $container   = $this->container;
+            $container = $this->container;
 
             if ($container->has(ConsoleApplication::class)) {
                 $container->get(ConsoleApplication::class)
