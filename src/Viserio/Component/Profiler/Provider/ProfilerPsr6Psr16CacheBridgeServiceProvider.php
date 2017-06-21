@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Provider;
 
-use Cache\TagInterop\TaggableCacheItemPoolInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
