@@ -235,18 +235,20 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
 
         $this->report($exception);
 
+        $transformed = $this->getTransformed($exception);
+
         if (PHP_SAPI === 'cli') {
-            $container = $this->container;
+            $container   = $this->container;
 
             if ($container->has(ConsoleApplication::class)) {
                 $container->get(ConsoleApplication::class)
                     ->renderException($transformed, new ConsoleOutput());
             } else {
-                throw $this->getTransformed($exception);
+                throw $transformed;
             }
         }
 
-        throw $exception;
+        throw $transformed;
     }
 
     /**
@@ -361,7 +363,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      *
      * @return \Throwable
      */
-    protected function getTransformed(Throwable $exception)
+    protected function getTransformed(Throwable $exception): Throwable
     {
         $container    = $this->container;
         $transformers = array_merge(
