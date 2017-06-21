@@ -7,12 +7,12 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
+use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContract, ProvidesDefaultOptionsContract
@@ -24,7 +24,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * The exception info instance.
      *
-     * @var \Viserio\Component\Exception\ExceptionInfo
+     * @var \Viserio\Component\Contracts\Exception\ExceptionInfo
      */
     protected $info;
 
@@ -45,13 +45,13 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Exception\ExceptionInfo     $info
-     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
-     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param \Psr\Container\ContainerInterface|iterable     $data
+     * @param \Viserio\Component\Contracts\Exception\ExceptionInfo $info
+     * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
+     * @param \Interop\Http\Factory\StreamFactoryInterface         $streamFactory
+     * @param \Psr\Container\ContainerInterface|iterable           $data
      */
     public function __construct(
-        ExceptionInfo $info,
+        ExceptionInfoContract $info,
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
         $data
