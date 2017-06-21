@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits;
 
-use Psr\Cache\CacheItemPoolInterface;
-
 trait TraceableCacheItemDecoratorTestTrait
 {
     public function testGetItemMissTrace()

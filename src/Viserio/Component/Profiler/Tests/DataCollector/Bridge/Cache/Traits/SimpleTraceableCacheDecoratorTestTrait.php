@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits;
 
-use Psr\SimpleCache\CacheInterface;
-
 trait SimpleTraceableCacheDecoratorTestTrait
 {
     public function testGetMissTrace()
