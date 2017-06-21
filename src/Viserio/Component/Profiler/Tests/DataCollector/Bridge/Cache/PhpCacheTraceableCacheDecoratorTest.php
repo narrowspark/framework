@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
-use Psr\Cache\CacheItemPoolInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator;
-use Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTestTrait;
 use Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTestTrait;
+use Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTestTrait;
 
 class PhpCacheTraceableCacheDecoratorTest extends TestCase
 {

@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache;
 
-use Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTestTrait;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator;
 use Psr\SimpleCache\CacheInterface;
+use Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator;
+use Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTestTrait;
 
 class SimpleTraceableCacheDecoratorTest extends TestCase
 {

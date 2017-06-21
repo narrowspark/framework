@@ -213,4 +213,3 @@ trait TraceableCacheItemDecoratorTestTrait
 
     abstract protected function createCachePool(): CacheItemPoolInterface;
 }
-
