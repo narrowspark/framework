@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Provider;
 
 use Interop\Container\ServiceProvider;
+use Cache\Adapter\Common\PhpCachePool as PhpCachePoolInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
@@ -39,7 +40,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
         $cache = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($cache !== null) {
-            if (self::checkForPhpCacheNamespace($cache)) {
+            if ($cache instanceof PhpCachePoolInterface) {
                 return new PhpCacheTraceableCacheDecorator($cache);
             }
 
@@ -62,7 +63,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
         $cache = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($cache !== null) {
-            if (self::checkForPhpCacheNamespace($cache)) {
+            if ($cache instanceof PhpCachePoolInterface) {
                 return new PhpCacheTraceableCacheDecorator($cache);
             }
 
@@ -100,24 +101,5 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
         }
 
         return $profiler;
-    }
-
-    /**
-     * Check for PHPCache namespace.
-     *
-     * @param object $class
-     *
-     * @return bool
-     */
-    private static function checkForPhpCacheNamespace($class): bool
-    {
-        $class = get_class($class);
-        $pos   = mb_strrpos($class, '\\');
-
-        if ($pos === false) {
-            return false;
-        }
-
-        return mb_strpos(mb_substr($class, 0, $pos), 'Cache\\Adapter') !== false;
     }
 }
