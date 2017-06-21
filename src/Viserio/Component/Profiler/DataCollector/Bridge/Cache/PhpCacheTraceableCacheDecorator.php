@@ -86,7 +86,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, CacheItemPoolIn
         $event = $this->start(__FUNCTION__);
 
         try {
-            $bool = $this->pool->invalidateTags($tags);
+            $bool = $event->result = $this->pool->invalidateTags($tags);
         } finally {
             $event->end = microtime(true);
         }
@@ -102,7 +102,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, CacheItemPoolIn
         $event = $this->start(__FUNCTION__);
 
         try {
-            $bool = $this->pool->invalidateTag($tag);
+            $bool = $event->result = $this->pool->invalidateTag($tag);
         } finally {
             $event->end = microtime(true);
         }
