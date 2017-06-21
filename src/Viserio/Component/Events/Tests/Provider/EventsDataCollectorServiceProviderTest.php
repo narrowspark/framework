@@ -13,7 +13,7 @@ use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
 class EventsDataCollectorServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
@@ -22,7 +22,8 @@ class EventsDataCollectorServiceProviderTest extends MockeryTestCase
         $container->register(new EventsServiceProvider());
         $container->register(new EventsDataCollectorServiceProvider());
 
-        $container->instance('config',
+        $container->instance(
+            'config',
             [
                 'viserio' => [
                     'profiler' => [

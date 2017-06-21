@@ -388,7 +388,7 @@ abstract class AbstractKernel implements
      *
      * @return array
      */
-    protected function registerServiceProviders(KernelContract $kernel): array
+    public function registerServiceProviders(KernelContract $kernel): array
     {
         $providers = $kernel->getConfigPath('/serviceproviders.php');
 

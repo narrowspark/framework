@@ -19,7 +19,7 @@ use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Log\Formatter\ConsoleFormatter;
 
 /**
@@ -41,7 +41,7 @@ use Viserio\Component\Log\Formatter\ConsoleFormatter;
  */
 class ConsoleHandler extends AbstractProcessingHandler
 {
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
 
     /**
      * A output instance.

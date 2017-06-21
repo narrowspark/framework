@@ -33,8 +33,8 @@ class ProfilerMonologDataCollectorServiceProvider implements
     public function getExtensions(): array
     {
         return [
-            ProfilerContract::class => [self::class, 'extendProfiler'],
             Logger::class           => [self::class, 'extendLogger'],
+            ProfilerContract::class => [self::class, 'extendProfiler'],
         ];
     }
 
@@ -68,7 +68,9 @@ class ProfilerMonologDataCollectorServiceProvider implements
      */
     public static function extendLogger(ContainerInterface $container, $log = null)
     {
-        if ($log !== null) {
+        $options = self::resolveOptions($container);
+
+        if ($log !== null && $options['collector']['logs'] === true) {
             $log->pushProcessor(new DebugProcessor());
         }
 

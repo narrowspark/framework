@@ -7,7 +7,7 @@ use ParseError;
 use Throwable;
 use TypeError;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Exception\Handler as ExceptionHandlerContract;
 use Viserio\Component\Contract\Queue\Exception\TimeoutException;
 use Viserio\Component\Contract\Queue\FailedJobProvider as FailedJobProviderContract;
@@ -17,7 +17,7 @@ use Viserio\Component\Contract\Queue\Worker as WorkerContract;
 
 class Worker implements WorkerContract
 {
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
 
     /**
      * The queue manager instance.
@@ -32,13 +32,6 @@ class Worker implements WorkerContract
      * @var \Viserio\Component\Contract\Queue\FailedJobProvider
      */
     protected $failed;
-
-    /**
-     * The event dispatcher instance.
-     *
-     * @var \Viserio\Component\Contract\Events\EventManager
-     */
-    protected $events;
 
     /**
      * The exception handler instance.
@@ -56,12 +49,10 @@ class Worker implements WorkerContract
      */
     public function __construct(
         QueueManager $manager,
-        FailedJobProviderContract $failed = null,
-        EventManagerContract $events = null
+        FailedJobProviderContract $failed = null
     ) {
         $this->manager = $manager;
         $this->failed  = $failed;
-        $this->events  = $events;
     }
 
     /**

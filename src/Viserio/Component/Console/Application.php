@@ -29,13 +29,13 @@ use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Support\Invoker;
 
 class Application extends SymfonyConsole
 {
     use ContainerAwareTrait;
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
 
     /**
      * The console application bootstrappers.
@@ -359,7 +359,7 @@ class Application extends SymfonyConsole
             }
         }
 
-        if ($this->events === null) {
+        if ($this->eventManager === null) {
             try {
                 return $command->run($input, $output);
             } catch (Throwable $e) {
@@ -389,7 +389,7 @@ class Application extends SymfonyConsole
             $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
         }
 
-        $this->events->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        $this->getEventManager()->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
 
         return $event->getExitCode();
     }

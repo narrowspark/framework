@@ -10,7 +10,7 @@ use Psr\Log\LoggerAwareTrait;
 use RuntimeException;
 use Throwable;
 use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
-use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Component\Contract\Profiler\AssetsRenderer as AssetsRendererContract;
 use Viserio\Component\Contract\Profiler\DataCollector as DataCollectorContract;
@@ -21,7 +21,7 @@ use Viserio\Component\Support\Http\ClientIp;
 class Profiler implements ProfilerContract, LoggerAwareInterface
 {
     use CacheItemPoolAwareTrait;
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
     use LoggerAwareTrait;
     use StreamFactoryAwareTrait;
 

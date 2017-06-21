@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface as ContainerInteropInterface;
 use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Queue\Factory as FactoryContract;
 use Viserio\Component\Contract\Queue\Monitor as MonitorContract;
 use Viserio\Component\Queue\Connector\BeanstalkdQueue;
@@ -24,7 +24,7 @@ use Viserio\Component\Support\AbstractConnectionManager;
 
 class QueueManager extends AbstractConnectionManager implements MonitorContract, FactoryContract
 {
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
     use EncrypterAwareTrait;
 
     /**

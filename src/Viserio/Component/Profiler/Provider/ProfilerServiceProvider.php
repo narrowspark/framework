@@ -8,6 +8,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -42,6 +43,9 @@ class ProfilerServiceProvider implements
             ProfilerContract::class => [self::class, 'createProfiler'],
             Profiler::class         => function (ContainerInterface $container) {
                 return $container->get(ProfilerContract::class);
+            },
+            Stopwatch::class        => function () {
+                return new Stopwatch();
             },
         ];
     }

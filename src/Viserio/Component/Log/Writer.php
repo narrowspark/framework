@@ -6,7 +6,7 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
-use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Log\Log as LogContract;
 use Viserio\Component\Contract\Support\Arrayable;
 use Viserio\Component\Contract\Support\Jsonable;
@@ -16,7 +16,7 @@ use Viserio\Component\Log\Traits\ParseLevelTrait;
 class Writer extends LogLevel implements LogContract
 {
     use ParseLevelTrait;
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
     use LoggerTrait;
 
     /**
@@ -99,7 +99,7 @@ class Writer extends LogLevel implements LogContract
     {
         $message = $this->formatMessage($message);
 
-        if ($this->events !== null) {
+        if ($this->eventManager !== null) {
             // If the event dispatcher is set, we will pass along the parameters to the
             // log listeners. These are useful for building profilers or other tools
             // that aggregate all of the log messages for a given "request" cycle.

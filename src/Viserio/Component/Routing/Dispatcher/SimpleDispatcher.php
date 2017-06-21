@@ -6,7 +6,7 @@ use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Exception\RuntimeException;
 use Viserio\Component\Contract\Routing\Route as RouteContract;
@@ -19,7 +19,7 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class SimpleDispatcher implements DispatcherContract
 {
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
