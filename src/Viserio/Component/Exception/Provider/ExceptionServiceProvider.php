@@ -7,6 +7,7 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
@@ -30,84 +31,134 @@ class ExceptionServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            ExceptionInfo::class             => [self::class, 'createExceptionInfo'],
-            HandlerContract::class           => [self::class, 'createExceptionHandler'],
-            Handler::class                   => function (ContainerInterface $container) {
+            ExceptionInfoContract::class                  => [self::class, 'createExceptionInfo'],
+            HandlerContract::class                        => [self::class, 'createExceptionHandler'],
+            Handler::class                                => function (ContainerInterface $container) {
                 return $container->get(HandlerContract::class);
             },
-            ExceptionHandlerContract::class  => function (ContainerInterface $container) {
+            ExceptionHandlerContract::class               => function (ContainerInterface $container) {
                 return $container->get(HandlerContract::class);
             },
-            HtmlDisplayer::class                       => [self::class, 'createHtmlDisplayer'],
-            JsonDisplayer::class                       => [self::class, 'createJsonDisplayer'],
-            ViewDisplayer::class                       => [self::class, 'createViewDisplayer'],
-            WhoopsDisplayer::class                     => [self::class, 'createWhoopsDisplayer'],
-            VerboseFilter::class                       => [self::class, 'createVerboseFilter'],
-            CanDisplayFilter::class                    => [self::class, 'createCanDisplayFilter'],
-            ClassNotFoundFatalErrorTransformer::class  => function () {
+            HtmlDisplayer::class                          => [self::class, 'createHtmlDisplayer'],
+            JsonDisplayer::class                          => [self::class, 'createJsonDisplayer'],
+            ViewDisplayer::class                          => [self::class, 'createViewDisplayer'],
+            WhoopsDisplayer::class                        => [self::class, 'createWhoopsDisplayer'],
+            VerboseFilter::class                          => [self::class, 'createVerboseFilter'],
+            CanDisplayFilter::class                       => [self::class, 'createCanDisplayFilter'],
+            ClassNotFoundFatalErrorTransformer::class     => function () {
                 return new ClassNotFoundFatalErrorTransformer();
             },
-            CommandLineTransformer::class  => function () {
+            CommandLineTransformer::class                 => function () {
                 return new CommandLineTransformer();
             },
-            UndefinedFunctionFatalErrorTransformer::class  => function () {
+            UndefinedFunctionFatalErrorTransformer::class => function () {
                 return new UndefinedFunctionFatalErrorTransformer();
             },
-            UndefinedMethodFatalErrorTransformer::class  => function () {
+            UndefinedMethodFatalErrorTransformer::class   => function () {
                 return new UndefinedMethodFatalErrorTransformer();
             },
         ];
     }
 
-    public static function createExceptionInfo(): ExceptionInfo
+    /**
+     * Create a new ExceptionInfo instance.
+     *
+     * @return \Viserio\Component\Contracts\Exception\ExceptionInfo
+     */
+    public static function createExceptionInfo(): ExceptionInfoContract
     {
         return new ExceptionInfo();
     }
 
-    public static function createExceptionHandler(ContainerInterface $container): Handler
+    /**
+     * Create a new Handler instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Exception\Handler
+     */
+    public static function createExceptionHandler(ContainerInterface $container): HandlerContract
     {
         return new Handler($container);
     }
 
+    /**
+     * Create a new HtmlDisplayer instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Exception\Displayer\HtmlDisplayer
+     */
     public static function createHtmlDisplayer(ContainerInterface $container): HtmlDisplayer
     {
         return new HtmlDisplayer(
-            $container->get(ExceptionInfo::class),
+            $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class),
             $container->get(StreamFactoryInterface::class),
             $container
         );
     }
 
+    /**
+     * Create a new JsonDisplayer instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Exception\Displayer\JsonDisplayer
+     */
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer
     {
         return new JsonDisplayer(
-            $container->get(ExceptionInfo::class),
+            $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class),
             $container->get(StreamFactoryInterface::class)
         );
     }
 
+    /**
+     * Create a new ViewDisplayer instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Exception\Displayer\ViewDisplayer
+     */
     public static function createViewDisplayer(ContainerInterface $container): ViewDisplayer
     {
         return new ViewDisplayer(
-            $container->get(ExceptionInfo::class),
+            $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class),
             $container->get(StreamFactoryInterface::class),
             $container->get(FactoryContract::class)
         );
     }
 
+    /**
+     * Create a new WhoopsDisplayer instance.
+     *
+     * @return \Viserio\Component\Exception\Displayer\WhoopsDisplayer
+     */
     public static function createWhoopsDisplayer(): WhoopsDisplayer
     {
         return new WhoopsDisplayer();
     }
 
+    /**
+     * Create a new VerboseFilter instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Exception\Filter\VerboseFilter
+     */
     public static function createVerboseFilter(ContainerInterface $container): VerboseFilter
     {
         return new VerboseFilter($container);
     }
 
+    /**
+     * Create a new CanDisplayFilter instance.
+     *
+     * @return \Viserio\Component\Exception\Filter\CanDisplayFilter
+     */
     public static function createCanDisplayFilter(): CanDisplayFilter
     {
         return new CanDisplayFilter();

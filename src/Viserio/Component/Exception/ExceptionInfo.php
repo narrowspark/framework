@@ -4,16 +4,12 @@ namespace Viserio\Component\Exception;
 
 use InvalidArgumentException;
 use Narrowspark\HttpStatus\HttpStatus;
+use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
 
-class ExceptionInfo
+class ExceptionInfo implements ExceptionInfoContract
 {
     /**
-     * Get the exception information.
-     *
-     * @param string $id
-     * @param int    $code
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function generate(string $id, int $code): array
     {

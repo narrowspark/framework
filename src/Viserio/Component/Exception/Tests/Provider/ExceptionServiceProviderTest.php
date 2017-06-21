@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
@@ -49,7 +50,7 @@ class ExceptionServiceProviderTest extends TestCase
         self::assertInstanceOf(CommandLineTransformer::class, $container->get(CommandLineTransformer::class));
         self::assertInstanceOf(UndefinedFunctionFatalErrorTransformer::class, $container->get(UndefinedFunctionFatalErrorTransformer::class));
         self::assertInstanceOf(UndefinedMethodFatalErrorTransformer::class, $container->get(UndefinedMethodFatalErrorTransformer::class));
-        self::assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfo::class));
+        self::assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfoContract::class));
         self::assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
         self::assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));
         self::assertInstanceOf(ViewDisplayer::class, $container->get(ViewDisplayer::class));
