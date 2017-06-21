@@ -12,7 +12,7 @@ class SimpleTraceableCacheDecoratorTest extends TestCase
 {
     use SimpleTraceableCacheDecoratorTestTrait;
 
-    protected function createSimpleCache(): CacheInterface
+    protected function createSimpleCache()
     {
         return new SimpleTraceableCacheDecorator(new ArrayCachePool());
     }

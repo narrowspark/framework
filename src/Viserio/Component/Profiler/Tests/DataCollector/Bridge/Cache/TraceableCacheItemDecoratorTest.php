@@ -12,7 +12,7 @@ class TraceableCacheItemDecoratorTest extends TestCase
 {
     use TraceableCacheItemDecoratorTestTrait;
 
-    protected function createCachePool(): CacheItemPoolInterface
+    protected function createCachePool()
     {
         return new TraceableCacheItemDecorator(new ArrayCachePool());
     }

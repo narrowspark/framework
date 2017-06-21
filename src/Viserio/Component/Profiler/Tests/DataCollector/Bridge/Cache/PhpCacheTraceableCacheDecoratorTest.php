@@ -51,12 +51,12 @@ class PhpCacheTraceableCacheDecoratorTest extends TestCase
         self::assertNotEmpty($call->end);
     }
 
-    protected function createCachePool(): CacheItemPoolInterface
+    protected function createCachePool()
     {
         return new PhpCacheTraceableCacheDecorator(new ArrayCachePool());
     }
 
-    protected function createSimpleCache(): CacheInterface
+    protected function createSimpleCache()
     {
         return new PhpCacheTraceableCacheDecorator(new ArrayCachePool());
     }

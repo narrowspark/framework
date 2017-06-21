@@ -211,5 +211,5 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    abstract protected function createCachePool(): CacheItemPoolInterface;
+    abstract protected function createCachePool();
 }

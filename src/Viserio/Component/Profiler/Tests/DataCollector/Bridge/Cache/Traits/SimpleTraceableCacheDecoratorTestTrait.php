@@ -175,5 +175,5 @@ trait SimpleTraceableCacheDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    abstract protected function createSimpleCache(): CacheInterface;
+    abstract protected function createSimpleCache();
 }
