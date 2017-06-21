@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Provider;
 
+use Cache\TagInterop\TaggableCacheItemPoolInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
@@ -22,7 +23,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
         return [
             CacheItemPoolInterface::class => [self::class, 'createCacheItemPoolDecorator'],
             CacheInterface::class         => [self::class, 'createSimpleTraceableCacheDecorator'],
-            ProfilerContract::class       => [self::class, 'createProfiler'],
+            ProfilerContract::class       => [self::class, 'extendsProfiler'],
         ];
     }
 
@@ -80,12 +81,12 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
      *
      * @return null|\Viserio\Component\Contracts\Profiler\Profiler
      */
-    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
+    public static function extendsProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
         $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($profiler !== null) {
-            $collector    = new Psr6Psr16CacheDataCollector();
+            $collector = new Psr6Psr16CacheDataCollector();
 
             if ($container->has(CacheItemPoolInterface::class) || $container->has(CacheInterface::class)) {
                 if (($cache = $container->get(CacheItemPoolInterface::class)) instanceof TraceableCacheItemDecorator ||
@@ -102,6 +103,13 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
         return $profiler;
     }
 
+    /**
+     * Check for PHPCache namespace.
+     *
+     * @param object $class
+     *
+     * @return bool
+     */
     private static function checkForPhpCacheNamespace($class): bool
     {
         $class = get_class($class);
@@ -111,6 +119,6 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
             return false;
         }
 
-        return mb_strpos(mb_substr($class, 0, $pos), 'Cache\Adapter') !== false;
+        return mb_strpos(mb_substr($class, 0, $pos), 'Cache\\Adapter') !== false;
     }
 }
