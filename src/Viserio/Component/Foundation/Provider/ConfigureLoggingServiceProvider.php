@@ -16,6 +16,7 @@ use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Monolog\Formatter\LineFormatter;
 
 class ConfigureLoggingServiceProvider implements
     ServiceProvider,
@@ -112,7 +113,9 @@ class ConfigureLoggingServiceProvider implements
     {
         $log->useFiles(
             $container->get(KernelContract::class)->getStoragePath('logs/narrowspark.log'),
-            $options['log']['level']
+            $options['log']['level'],
+            null,
+            self::getDefaultFormatter()
         );
     }
 
@@ -130,7 +133,9 @@ class ConfigureLoggingServiceProvider implements
         $log->useDailyFiles(
             $container->get(KernelContract::class)->getStoragePath('logs/narrowspark.log'),
             $options['log']['max_files'],
-            $options['log']['level']
+            $options['log']['level'],
+            null,
+            self::getDefaultFormatter()
         );
     }
 
@@ -172,5 +177,18 @@ class ConfigureLoggingServiceProvider implements
             null,
             'line'
         );
+    }
+
+    /**
+     * Get a default Monolog formatter instance.
+     *
+     * @return \Monolog\Formatter\LineFormatter
+     */
+    protected static function getDefaultFormatter(): LineFormatter
+    {
+        $lineFormatter = new LineFormatter(null, null, true, true);
+        $lineFormatter->includeStacktraces();
+
+        return $lineFormatter;
     }
 }
