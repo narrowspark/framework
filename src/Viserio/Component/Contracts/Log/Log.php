@@ -32,7 +32,7 @@ interface Log extends PsrLoggerInterface
         string $level = 'debug',
         $processor = null,
         $formatter = null
-    );
+    ): void;
 
     /**
      * Register a daily file log handler.
@@ -51,5 +51,5 @@ interface Log extends PsrLoggerInterface
         string $level = 'debug',
         $processor = null,
         $formatter = null
-    );
+    ): void;
 }

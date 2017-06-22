@@ -82,7 +82,7 @@ trait FilesystemHelperTrait
      *
      * @codeCoverageIgnore
      */
-    public function link(string $target, string $link)
+    public function link(string $target, string $link): ?bool
     {
         $target = $this->getNormalizedOrPrefixedPath($target);
         $link   = $this->getNormalizedOrPrefixedPath($link);

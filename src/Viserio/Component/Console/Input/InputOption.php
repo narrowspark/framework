@@ -25,8 +25,10 @@ class InputOption extends SymfonyInputOption
      * Set the input option description.
      *
      * @param string $description
+     *
+     * @return void
      */
-    public function setDescription(string $description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
@@ -34,7 +36,7 @@ class InputOption extends SymfonyInputOption
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description ?: parent::getDescription();
     }

@@ -44,6 +44,13 @@ class CronServiceProvider implements
         return ['path'];
     }
 
+    /**
+     * Create a new Schedule instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Cron\Schedule
+     */
     public static function createSchedule(ContainerInterface $container): Schedule
     {
         $options = self::resolveOptions($container);

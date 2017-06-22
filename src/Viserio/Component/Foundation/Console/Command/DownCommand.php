@@ -34,7 +34,7 @@ class DownCommand extends Command
     }
 
     /**
-     * Get the informations that are put into the "down" file.
+     * Get the information that are put into the "down" file.
      *
      * @return array
      */

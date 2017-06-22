@@ -26,7 +26,7 @@ class SftpConnector implements ConnectorContract
     /**
      * {@inheritdoc}
      */
-    protected function getConfig(array $config)
+    protected function getConfig(array $config): array
     {
         if (! array_key_exists('host', $config)) {
             throw new InvalidArgumentException('The sftp connector requires host configuration.');

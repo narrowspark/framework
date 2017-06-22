@@ -288,6 +288,8 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      * @param string      $id
      * @param string      $translation
      * @param array       $parameters
+     *
+     * @return void
      */
     protected function collectMessage(
         ?string $locale,
@@ -295,7 +297,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         string $id,
         string $translation,
         array $parameters = []
-    ) {
+    ): void {
         $catalogue = $this->catalogue;
 
         if ($catalogue->defines($id, $domain)) {

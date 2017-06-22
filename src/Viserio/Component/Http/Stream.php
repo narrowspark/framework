@@ -289,7 +289,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek(0);
     }
@@ -297,7 +297,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         if (! isset($this->stream)) {
             throw new RuntimeException('Stream is detached');

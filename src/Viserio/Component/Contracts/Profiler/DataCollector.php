@@ -36,8 +36,8 @@ interface DataCollector
     public function getMenu(): array;
 
     /**
-     * Get the Tab postion from a collector.
-     * Choose between left or right postion.
+     * Get the Tab position from a collector.
+     * Choose between left or right position.
      *
      * @return string
      */

@@ -180,7 +180,7 @@ interface Filesystem
      *
      * @param string $path the path to the file
      *
-     * @return int|false the file size or false on failure
+     * @return int|bool the file size or false on failure
      */
     public function getSize(string $path);
 
@@ -191,7 +191,7 @@ interface Filesystem
      *
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|false the file mime-type or false on failure
+     * @return string|bool the file mime-type or false on failure
      */
     public function getMimetype(string $path);
 
@@ -202,7 +202,7 @@ interface Filesystem
      *
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|false the timestamp or false on failure
+     * @return string|bool the timestamp or false on failure
      */
     public function getTimestamp(string $path);
 
