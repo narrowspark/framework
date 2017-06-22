@@ -5,7 +5,7 @@ namespace Viserio\Component\Contracts\Pagination;
 interface Paginator
 {
     /**
-     * Render the paginator using the given view.
+     * Render the pagination using the given view.
      *
      * @param string|null $view
      *
@@ -44,7 +44,7 @@ interface Paginator
      *
      * @return string|null
      */
-    public function getPreviousPageUrl();
+    public function getPreviousPageUrl(): ?string;
 
     /**
      * Add a query string value to the paginator.
@@ -54,7 +54,7 @@ interface Paginator
      *
      * @return $this
      */
-    public function addQuery(string $key, string $value);
+    public function addQuery(string $key, string $value): Paginator;
 
     /**
      * Set the URL fragment to be appended to URLs.
@@ -63,14 +63,14 @@ interface Paginator
      *
      * @return $this
      */
-    public function setFragment(string $fragment);
+    public function setFragment(string $fragment): Paginator;
 
     /**
      * Get the URL fragment to be appended to URLs.
      *
      * @return string|null
      */
-    public function getFragment();
+    public function getFragment(): ?string;
 
     /**
      * Add a set of query string values to the paginator.
@@ -80,7 +80,7 @@ interface Paginator
      *
      * @return $this
      */
-    public function appends($key, string $value = null);
+    public function appends($key, string $value = null): Paginator;
 
     /**
      * Get the query string variable used to store the page.
@@ -96,7 +96,7 @@ interface Paginator
      *
      * @return $this
      */
-    public function setPageName(string $name);
+    public function setPageName(string $name): Paginator;
 
     /**
      * Set the base path to assign to all URLs.
@@ -105,7 +105,7 @@ interface Paginator
      *
      * @return $this
      */
-    public function setPath(string $path);
+    public function setPath(string $path): Paginator;
 
     /**
      * Gets the base path.
@@ -143,7 +143,7 @@ interface Paginator
     public function getLastItem(): int;
 
     /**
-     * Determine if the paginator is on the first page.
+     * Determine if the pagination is on the first page.
      *
      * @return bool
      */

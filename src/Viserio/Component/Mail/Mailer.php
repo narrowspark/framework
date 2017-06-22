@@ -102,7 +102,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * {@inheritdoc}
      */
-    public function alwaysFrom(string $address, string $name = null)
+    public function alwaysFrom(string $address, string $name = null): void
     {
         $this->from = compact('address', 'name');
     }
@@ -110,7 +110,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * {@inheritdoc}
      */
-    public function alwaysTo(string $address, string $name = null)
+    public function alwaysTo(string $address, string $name = null): void
     {
         $this->to = compact('address', 'name');
     }

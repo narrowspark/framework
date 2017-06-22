@@ -40,9 +40,11 @@ class Validator implements ValidatorContract
      * @param string $namespace
      * @param bool   $overwrite
      *
+     * @return void
+     *
      * @codeCoverageIgnore
      */
-    public function with(string $namespace, bool $overwrite = false)
+    public function with(string $namespace, bool $overwrite = false): void
     {
         RespectValidator::with($namespace, $overwrite);
     }

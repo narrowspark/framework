@@ -62,6 +62,13 @@ class CookieServiceProvider implements
         ];
     }
 
+    /**
+     * Create a new CookieJar instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Cookie\QueueingFactory
+     */
     public static function createCookieJar(ContainerInterface $container): CookieJar
     {
         $options = self::resolveOptions($container);

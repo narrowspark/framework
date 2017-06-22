@@ -8,11 +8,13 @@ interface Validator
      * Add your own rule's namespace.
      *
      * @param string $namespace
+     *
+     * @return void
      */
-    public function with(string $namespace);
+    public function with(string $namespace): void;
 
     /**
-     * Run the validators rules against given data.
+     * Run the validator rules against given data.
      *
      * @param array $data
      * @param array $rules

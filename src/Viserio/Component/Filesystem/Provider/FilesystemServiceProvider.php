@@ -9,6 +9,7 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemManager;
+use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
 
 class FilesystemServiceProvider implements ServiceProvider
 {
@@ -18,24 +19,31 @@ class FilesystemServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            FilesystemManager::class => [self::class, 'createFilesystemManager'],
-            'flysystem'              => function (ContainerInterface $container) {
+            FilesystemManager::class   => [self::class, 'createFilesystemManager'],
+            'flysystem'                => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
-            'flysystem.connection' => [self::class, 'createFlysystemConnection'],
-            Filesystem::class      => function (ContainerInterface $container) {
+            'flysystem.connection'     => [self::class, 'createFlysystemConnection'],
+            Filesystem::class          => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
             FilesystemInterface::class => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
-            CachedFactory::class      => [self::class, 'createCachedFactory'],
-            'flysystem.cachedfactory' => function (ContainerInterface $container) {
+            CachedFactory::class       => [self::class, 'createCachedFactory'],
+            'flysystem.cachedfactory'  => function (ContainerInterface $container) {
                 return $container->get(CachedFactory::class);
             },
         ];
     }
 
+    /**
+     * Create a new FilesystemManager instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Filesystem\FilesystemManager
+     */
     public static function createFilesystemManager(ContainerInterface $container): FilesystemManager
     {
         $manager = new FilesystemManager($container);
@@ -47,11 +55,25 @@ class FilesystemServiceProvider implements ServiceProvider
         return $manager;
     }
 
+    /**
+     * Create a new Connector instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Filesystem\Connector|\Viserio\Component\Filesystem\FilesystemAdapter
+     */
     public static function createFlysystemConnection(ContainerInterface $container)
     {
         return $container->get(FilesystemManager::class)->getConnection();
     }
 
+    /**
+     * Create a new CachedFactory instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Filesystem\Cache\CachedFactory
+     */
     public static function createCachedFactory(ContainerInterface $container): CachedFactory
     {
         $cache = null;

@@ -54,7 +54,7 @@ class WhoopsDisplayer implements DisplayerContract
      *
      * @return Whoops
      */
-    private function getWhoops()
+    private function getWhoops(): Whoops
     {
         $whoops = new Whoops();
         $whoops->allowQuit(false);

@@ -121,7 +121,7 @@ class AliasLoader implements AliasLoaderContract
     /**
      * {@inheritdoc}
      */
-    public function removeAlias()
+    public function removeAlias(): void
     {
         $class = func_get_args();
 
@@ -150,7 +150,7 @@ class AliasLoader implements AliasLoaderContract
     /**
      * {@inheritdoc}
      */
-    public function aliasPattern($patterns, string $translation = null)
+    public function aliasPattern($patterns, string $translation = null): void
     {
         if (! is_array($patterns)) {
             $patterns = [$patterns => $translation];
@@ -168,7 +168,7 @@ class AliasLoader implements AliasLoaderContract
     /**
      * {@inheritdoc}
      */
-    public function removeAliasPattern(string $pattern, string $translation = null)
+    public function removeAliasPattern(string $pattern, string $translation = null): void
     {
         foreach (array_keys($this->patterns) as $patternKey) {
             if ($this->patterns[$patternKey]->matches($pattern, $translation)) {
@@ -180,7 +180,7 @@ class AliasLoader implements AliasLoaderContract
     /**
      * {@inheritdoc}
      */
-    public function aliasNamespace(string $class, string $alias)
+    public function aliasNamespace(string $class, string $alias): void
     {
         $class = trim($class, '\\');
         $alias = trim($alias, '\\');
@@ -218,7 +218,7 @@ class AliasLoader implements AliasLoaderContract
     /**
      * {@inheritdoc}
      */
-    public function removeNamespaceAlias()
+    public function removeNamespaceAlias(): void
     {
         $class  = func_get_args();
         $filter = function ($namespace) use ($class) {
@@ -231,7 +231,7 @@ class AliasLoader implements AliasLoaderContract
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function register(): void
     {
         if (! $this->registered) {
             spl_autoload_register([$this, 'load'], true, true);
@@ -243,7 +243,7 @@ class AliasLoader implements AliasLoaderContract
     /**
      * {@inheritdoc}
      */
-    public function unregister()
+    public function unregister(): void
     {
         if ($this->registered) {
             spl_autoload_unregister([$this, 'load']);
@@ -271,7 +271,7 @@ class AliasLoader implements AliasLoaderContract
     /**
      * {@inheritdoc}
      */
-    public function setAliases(array $aliases)
+    public function setAliases(array $aliases): void
     {
         $this->aliases = $aliases;
     }

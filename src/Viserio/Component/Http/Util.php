@@ -39,7 +39,7 @@ final class Util
      *
      * @return resource
      */
-    public static function tryFopen($filename, $mode)
+    public static function tryFopen(string $filename, string $mode)
     {
         $ex = null;
 

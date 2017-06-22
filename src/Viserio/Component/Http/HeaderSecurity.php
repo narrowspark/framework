@@ -122,9 +122,11 @@ final class HeaderSecurity
      *
      * @param string $value
      *
-     * @throws InvalidArgumentException for invalid values
+     * @throws \InvalidArgumentException for invalid values
+     *
+     * @return void
      */
-    public static function assertValid(string $value)
+    public static function assertValid(string $value): void
     {
         if (! self::isValid($value)) {
             throw new InvalidArgumentException(sprintf(
@@ -141,9 +143,11 @@ final class HeaderSecurity
      *
      * @param mixed $name
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
+     *
+     * @return void
      */
-    public static function assertValidName($name)
+    public static function assertValidName($name): void
     {
         if (! preg_match('/^[a-zA-Z0-9\'`#$%&*+.^_|~!-]+$/', $name)) {
             throw new InvalidArgumentException(sprintf(

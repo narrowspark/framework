@@ -57,8 +57,10 @@ trait MacroableTrait
      *
      * @param string   $name
      * @param callable $macro
+     *
+     * @return void
      */
-    public static function macro(string $name, callable $macro)
+    public static function macro(string $name, callable $macro): void
     {
         static::$macros[$name] = $macro;
     }

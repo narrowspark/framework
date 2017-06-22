@@ -26,6 +26,13 @@ class QueueingBusServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * Create a new QueueingDispatcher instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Bus\Dispatcher
+     */
     public static function registerBusDispatcher(ContainerInterface $container): QueueingDispatcherContract
     {
         return new QueueingDispatcher($container, function ($connection = null) use ($container) {

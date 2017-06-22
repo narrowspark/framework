@@ -58,7 +58,7 @@ class EncryptionWrapper
      *
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|false the file contents or false on failure
+     * @return string|bool the file contents or false on failure
      */
     public function read(string $path)
     {

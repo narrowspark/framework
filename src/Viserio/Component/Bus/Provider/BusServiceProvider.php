@@ -25,6 +25,13 @@ class BusServiceProvider implements ServiceProvider
         ];
     }
 
+    /**
+     * Create a new Bus instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contracts\Bus\Dispatcher
+     */
     public static function registerBusDispatcher(ContainerInterface $container): DispatcherContract
     {
         return new Dispatcher($container);
