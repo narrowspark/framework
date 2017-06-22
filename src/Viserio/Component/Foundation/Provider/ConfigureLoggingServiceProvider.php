@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Provider;
 
 use Interop\Container\ServiceProvider;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\SyslogHandler;
 use Psr\Container\ContainerInterface;
@@ -16,7 +17,6 @@ use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
-use Monolog\Formatter\LineFormatter;
 
 class ConfigureLoggingServiceProvider implements
     ServiceProvider,
@@ -101,6 +101,19 @@ class ConfigureLoggingServiceProvider implements
     }
 
     /**
+     * Get a default Monolog formatter instance.
+     *
+     * @return \Monolog\Formatter\LineFormatter
+     */
+    protected static function getDefaultFormatter(): LineFormatter
+    {
+        $lineFormatter = new LineFormatter(null, null, true, true);
+        $lineFormatter->includeStacktraces();
+
+        return $lineFormatter;
+    }
+
+    /**
      * Configure the Monolog handlers for the application.
      *
      * @param \Psr\Container\ContainerInterface    $container
@@ -177,18 +190,5 @@ class ConfigureLoggingServiceProvider implements
             null,
             'line'
         );
-    }
-
-    /**
-     * Get a default Monolog formatter instance.
-     *
-     * @return \Monolog\Formatter\LineFormatter
-     */
-    protected static function getDefaultFormatter(): LineFormatter
-    {
-        $lineFormatter = new LineFormatter(null, null, true, true);
-        $lineFormatter->includeStacktraces();
-
-        return $lineFormatter;
     }
 }
