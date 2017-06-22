@@ -9,7 +9,6 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemManager;
-use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
 
 class FilesystemServiceProvider implements ServiceProvider
 {
