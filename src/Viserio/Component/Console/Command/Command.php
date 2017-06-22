@@ -252,8 +252,8 @@ abstract class Command extends BaseCommand
     /**
      * Prompt the user for input.
      *
-     * @param string      $question
-     * @param string|null $default
+     * @param string        $question
+     * @param string|null   $default
      * @param callable|null $validator
      *
      * @return string|null
