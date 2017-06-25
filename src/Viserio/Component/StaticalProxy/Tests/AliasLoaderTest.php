@@ -4,6 +4,7 @@ namespace Viserio\Component\StaticalProxy\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\StaticalProxy\AliasLoader;
+use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\StaticalProxy\Tests\Fixture\Foo;
 
 class AliasLoaderTest extends TestCase
@@ -142,5 +143,67 @@ class AliasLoaderTest extends TestCase
         self::assertTrue($aliasloader->load('Foo'));
         self::assertTrue($aliasloader->load('Some\\Other\\Space\\OtherNameSpace'));
         self::assertFalse($aliasloader->load('OtherFoo'));
+    }
+
+    public function testSetAndGetCachePath()
+    {
+        $path = __DIR__ . '/cache';
+
+        $aliasloader = new AliasLoader();
+        $aliasloader->setCachePath($path);
+
+        self::assertSame($path, $aliasloader->getCachePath());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Please provide a valid cache path.
+     */
+    public function testGetCachePathThrowExceptionIfRealTimeProxyIsActive()
+    {
+        $aliasloader = new AliasLoader();
+        $aliasloader->enableRealTimeStaticalProxy();
+
+        $aliasloader->getCachePath();
+    }
+
+    public function testRealTimeStaticalProxy()
+    {
+        $path = __DIR__ . '/cache';
+
+        mkdir($path);
+
+        StaticalProxy::clearResolvedInstances();
+
+        $aliasloader = new AliasLoader();
+        $aliasloader->setCachePath($path);
+        $aliasloader->enableRealTimeStaticalProxy();
+
+        $class = 'StaticalProxy\\' . Foo::class;
+
+        $aliasloader->load($class);
+
+        self::assertSame(StaticalProxy::class, get_parent_class($class));
+
+        $aliasloader->setStaticalProxyNamespace('StaticalProxyTwo\\');
+
+        $class = 'StaticalProxyTwo\\' . Foo::class;
+
+        $aliasloader->load($class);
+
+        self::assertSame(StaticalProxy::class, get_parent_class($class));
+
+        $this->delTree($path);
+    }
+
+    private function delTree($dir)
+    {
+        $files = array_diff(scandir($dir), ['.', '..']);
+
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+        }
+
+        return rmdir($dir);
     }
 }

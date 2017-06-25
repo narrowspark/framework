@@ -66,7 +66,7 @@ class StaticalProxy
      *
      * @throws \BadMethodCallException if the method has not been implemented by a subclass
      *
-     * @return mixed
+     * @return string|object
      */
     public static function getInstanceIdentifier()
     {
@@ -104,7 +104,7 @@ class StaticalProxy
     /**
      * Get the root object behind the facade.
      *
-     * @return object|string
+     * @return object
      */
     public static function getStaticalProxyRoot()
     {

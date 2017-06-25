@@ -1,16 +1,20 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\StaticalProxy\Tests\Fixture;
+namespace DummyNamespace;
 
+use DummyTarget as RealTimeProxy;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
-class FacadeStub extends StaticalProxy
+/**
+ * @see \DummyTarget
+ */
+class DummyClass extends StaticalProxy
 {
     /**
      * {@inheritdoc}
      */
     public static function getInstanceIdentifier()
     {
-        return 'foo';
+        return RealTimeProxy::class;
     }
 }
