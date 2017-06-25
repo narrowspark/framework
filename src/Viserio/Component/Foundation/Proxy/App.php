@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Proxy;
 
+use Psr\Container\ContainerInterface;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class App extends StaticalProxy
@@ -13,6 +14,6 @@ class App extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return self::$container;
+        return ContainerInterface::class;
     }
 }

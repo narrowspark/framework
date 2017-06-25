@@ -4,7 +4,7 @@ namespace Viserio\Component\StaticalProxy\Tests\Fixture;
 
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
-class ProxyStub extends StaticalProxy
+class StaticalProxyStub extends StaticalProxy
 {
     /**
      * {@inheritdoc}

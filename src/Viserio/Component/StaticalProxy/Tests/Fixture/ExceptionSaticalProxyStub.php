@@ -4,7 +4,7 @@ namespace Viserio\Component\StaticalProxy\Tests\Fixture;
 
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
-class ExceptionFacadeStub extends StaticalProxy
+class ExceptionSaticalProxyStub extends StaticalProxy
 {
     public static function getStaticalProxyRoot()
     {

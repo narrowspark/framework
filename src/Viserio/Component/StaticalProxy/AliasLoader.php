@@ -2,12 +2,27 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy;
 
+use RuntimeException;
 use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
 use Viserio\Component\StaticalProxy\Traits\ExistTrait;
 
 class AliasLoader implements AliasLoaderContract
 {
     use ExistTrait;
+
+    /**
+     * Flag to active or disable real-time statical proxy.
+     *
+     * @var bool
+     */
+    protected $realTimeStaticalProxyActivated = false;
+
+    /**
+     * The namespace for all real-time statical proxies.
+     *
+     * @var string
+     */
+    protected $staticalProxyNamespace = 'StaticalProxy\\';
 
     /**
      * Array of class aliases.
@@ -36,16 +51,23 @@ class AliasLoader implements AliasLoaderContract
     private $registered = false;
 
     /**
+     * @var array
+     */
+    private $resolving = [];
+
+    /**
      * All cached resolved aliases.
      *
      * @var array
      */
-    private $cache = [];
+    private static $cache = [];
 
     /**
-     * @var array
+     * Path to the cache folder.
+     *
+     * @var string|null
      */
-    private $resolving = [];
+    private $cachePath;
 
     /**
      * Create a new AliasLoader instance.
@@ -58,10 +80,67 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
+     * Clone method.
+     *
+     * @return void
+     *
+     * @codeCoverageIgnore
+     */
+    private function __clone()
+    {
+    }
+
+    /**
+     * Set the cache path.
+     *
+     * @param string $path
+     *
+     * @return void
+     */
+    public function setCachePath(string $path): void
+    {
+        $this->cachePath = rtrim($path, DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * Get the cache path.
+     *
+     * @throws \RuntimeException If real-time statical proxy is active and no cache path is given
+     *
+     * @return string|null
+     */
+    public function getCachePath(): ?string
+    {
+        if ($this->realTimeStaticalProxyActivated === true && $this->cachePath === null) {
+            throw new RuntimeException('Please provide a valid cache path.');
+        }
+
+        return $this->cachePath;
+    }
+
+    /**
+     * Enable the real-time statical proxy.
+     *
+     * @return void
+     */
+    public function enableRealTimeStaticalProxy(): void
+    {
+        $this->realTimeStaticalProxyActivated = true;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function load(string $alias): bool
     {
+        if ($this->realTimeStaticalProxyActivated === true &&
+            mb_strpos($alias, $this->staticalProxyNamespace) === 0
+        ) {
+            $this->loadStaticalProxy($alias);
+
+            return true;
+        }
+
         // Skip recursive aliases if defined
         if (in_array($alias, $this->resolving)) {
             return false;
@@ -71,9 +150,9 @@ class AliasLoader implements AliasLoaderContract
         // we want to block recursive resolving
         $this->resolving[] = $alias;
 
-        if (isset($this->cache[$alias])) {
+        if (isset(self::$cache[$alias])) {
             // If we already have the alias in the cache don't bother resolving again
-            $class = $this->cache[$alias];
+            $class = self::$cache[$alias];
         } elseif ($class = $this->resolveAlias($alias)) {
             // We've got a plain alias, now we can skip the others as this
             // is the most powerful one.
@@ -95,8 +174,8 @@ class AliasLoader implements AliasLoaderContract
         // Create the actual alias
         class_alias($class, $alias);
 
-        if (! isset($this->cache[$alias])) {
-            $this->cache[$alias] = $class;
+        if (! isset(self::$cache[$alias])) {
+            self::$cache[$alias] = $class;
         }
 
         return true;
@@ -113,7 +192,7 @@ class AliasLoader implements AliasLoaderContract
             return $this;
         }
 
-        $this->aliases[$classes] = $this->cache[$classes] = $alias;
+        $this->aliases[$classes] = self::$cache[$classes] = $alias;
 
         return $this;
     }
@@ -127,7 +206,7 @@ class AliasLoader implements AliasLoaderContract
 
         foreach ($class as $alias) {
             if (isset($this->aliases[$alias])) {
-                unset($this->aliases[$alias], $this->cache[$alias]);
+                unset($this->aliases[$alias], self::$cache[$alias]);
             }
         }
     }
@@ -277,6 +356,18 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
+     * Set the real-time statical proxy namespace.
+     *
+     * @param string $namespace
+     *
+     * @return void
+     */
+    public function setStaticalProxyNamespace(string $namespace): void
+    {
+        $this->staticalProxyNamespace = rtrim($namespace, '\\') . '\\';
+    }
+
+    /**
      * Resolves pattern aliases.
      *
      * @param string $alias
@@ -296,5 +387,79 @@ class AliasLoader implements AliasLoaderContract
         }
 
         return false;
+    }
+
+    /**
+     * Load a real-time statical proxy for the given alias.
+     *
+     * @param string $alias
+     *
+     * @return void
+     */
+    protected function loadStaticalProxy(string $alias): void
+    {
+        require $this->ensureStaticalProxyExists($alias);
+    }
+
+    /**
+     * Ensure that the given alias has an existing real-time statical proxy class.
+     *
+     * @param string $class
+     * @param string $alias
+     *
+     * @return string
+     */
+    protected function ensureStaticalProxyExists(string $alias): string
+    {
+        $path = $this->getCachePath() . DIRECTORY_SEPARATOR . 'staticalproxy-' . sha1($alias) . '.php';
+
+        if (file_exists($path)) {
+            return $path;
+        }
+
+        file_put_contents(
+            $path,
+            $this->formatStaticalProxyStub(
+                $alias,
+                file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'Stubs' . DIRECTORY_SEPARATOR . 'StaticalProxy.stub')
+            )
+        );
+
+        return $path;
+    }
+
+    /**
+     * Format the statical proxy stub with the proper namespace and class.
+     *
+     * @param string $alias
+     * @param string $stub
+     *
+     * @return string
+     */
+    protected function formatStaticalProxyStub(string $alias, string $stub): string
+    {
+        $replacements = [
+            str_replace('/', '\\', dirname(str_replace('\\', '/', $alias))),
+            self::getClassBasename($alias),
+            mb_substr($alias, mb_strlen($this->staticalProxyNamespace)),
+        ];
+
+        return str_replace(
+            ['DummyNamespace', 'DummyClass', 'DummyTarget'],
+            $replacements,
+            $stub
+        );
+    }
+
+    /**
+     * Get the class "basename" of the given object / class.
+     *
+     * @param string $class
+     *
+     * @return string
+     */
+    private static function getClassBasename(string $class): string
+    {
+        return basename(str_replace('\\', '/', $class));
     }
 }

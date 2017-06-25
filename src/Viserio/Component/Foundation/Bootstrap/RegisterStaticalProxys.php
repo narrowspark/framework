@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\Bootstrap;
 
 use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\StaticalProxy\AliasLoader;
+use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class RegisterStaticalProxys implements BootstrapContract
@@ -15,12 +15,10 @@ class RegisterStaticalProxys implements BootstrapContract
     public function bootstrap(KernelContract $kernel): void
     {
         $container = $kernel->getContainer();
-        $config    = $kernel->getKernelConfigurations();
 
         StaticalProxy::clearResolvedInstances();
-
         StaticalProxy::setContainer($container);
 
-        (new AliasLoader($config['aliases']))->register();
+        $container->get(AliasLoaderContract::class)->register();
     }
 }
