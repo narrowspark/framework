@@ -52,7 +52,7 @@
         "cache/namespaced-cache"                 : "^0.1",
         "cache/void-adapter"                     : "^0.3",
         "container-interop/service-provider"     : "^0.3",
-        "micheh/psr7-cache"                      : "^0.5",
+        "mockery/mockery"                        : "^0.9",
         "narrowspark/testing-helper"             : "^3.0",
         "phpunit/phpunit"                        : "^6.0",
         "viserio/config"                         : "self.version",

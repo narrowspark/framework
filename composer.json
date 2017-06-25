@@ -125,7 +125,7 @@
         "narrowspark/php-cs-fixer-config"     : "^2.2",
         "narrowspark/testing-helper"          : "^3.0",
         "nikic/fast-route"                    : "^1.2",
-        "mockery/mockery"                     : "^1.0",
+        "mockery/mockery"                     : "^0.9",
         "phpunit/phpunit"                     : "^6.0",
         "phpbench/phpbench"                   : "^0.12",
         "phpstan/phpstan"                     : "^0.7",
