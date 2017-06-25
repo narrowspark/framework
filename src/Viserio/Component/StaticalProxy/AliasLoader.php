@@ -11,7 +11,7 @@ class AliasLoader implements AliasLoaderContract
     use ExistTrait;
 
     /**
-     * Flag to active or disable real-time statical proxy.
+     * Flag to enable or disable real-time statical proxy.
      *
      * @var bool
      */
@@ -23,6 +23,13 @@ class AliasLoader implements AliasLoaderContract
      * @var string
      */
     protected $staticalProxyNamespace = 'StaticalProxy\\';
+
+    /**
+     * Path to the real-time statical proxies cache folder.
+     *
+     * @var string|null
+     */
+    private $cachePath;
 
     /**
      * Array of class aliases.
@@ -61,13 +68,6 @@ class AliasLoader implements AliasLoaderContract
      * @var array
      */
     private static $cache = [];
-
-    /**
-     * Path to the cache folder.
-     *
-     * @var string|null
-     */
-    private $cachePath;
 
     /**
      * Create a new AliasLoader instance.
