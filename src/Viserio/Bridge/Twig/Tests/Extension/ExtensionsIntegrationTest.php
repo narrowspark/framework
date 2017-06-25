@@ -12,6 +12,7 @@ use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 
 if (! class_exists('\PHPUnit_Framework_TestCase')) {
     class_alias('PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase');
@@ -89,6 +90,10 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
             ->with('{0} There are no apples|{1} There is one apple', [1])
             ->andReturn('There is one apple');
 
-        return $translator;
+        $manager = Mock::mock(TranslationManagerContract::class);
+        $manager->shouldReceive('getTranslator')
+            ->andReturn($translator);
+
+        return $manager;
     }
 }

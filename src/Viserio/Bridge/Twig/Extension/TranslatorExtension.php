@@ -16,9 +16,10 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Translation instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\Translator|null
+     * @var \Viserio\Component\Contracts\Translation\TranslationManager|null
      */
     protected $translationManager;
+
     /**
      * A instance of NodeVisitorInterface.
      *

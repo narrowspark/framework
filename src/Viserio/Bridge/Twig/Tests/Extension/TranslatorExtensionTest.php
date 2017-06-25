@@ -6,7 +6,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader as TwigArrayLoader;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\TranslationManager;
@@ -15,7 +14,7 @@ class TranslatorExtensionTest extends MockeryTestCase
 {
     public function testGetFunctions()
     {
-        $extension = new TranslatorExtension($this->mock(TranslatorContract::class));
+        $extension = new TranslatorExtension($this->getTranslationManager());
         $functions = $extension->getFunctions();
 
         self::assertEquals('trans', $functions[0]->getName());
@@ -24,7 +23,7 @@ class TranslatorExtensionTest extends MockeryTestCase
 
     public function testGetFilters()
     {
-        $extension = new TranslatorExtension($this->mock(TranslatorContract::class));
+        $extension = new TranslatorExtension($this->getTranslationManager());
         $filter    = $extension->getFilters();
 
         self::assertEquals('trans', $filter[0]->getName());
@@ -35,7 +34,7 @@ class TranslatorExtensionTest extends MockeryTestCase
     {
         self::assertEquals(
             'Viserio_Bridge_Twig_Extension_Translator',
-            (new TranslatorExtension($this->mock(TranslatorContract::class)))->getName()
+            (new TranslatorExtension($this->getTranslationManager()))->getName()
         );
     }
 
@@ -75,8 +74,7 @@ class TranslatorExtensionTest extends MockeryTestCase
 
     protected function renderTemplate($template, array $args = [])
     {
-        $translator = new TranslationManager(new IntlMessageFormatter());
-        $translator->addMessageCatalogue(new MessageCatalogue('en'));
+        $translator = $this->getTranslationManager();
 
         if (is_array($template)) {
             $loader = new TwigArrayLoader($template);
@@ -88,5 +86,13 @@ class TranslatorExtensionTest extends MockeryTestCase
         $twig->addExtension(new TranslatorExtension($translator));
 
         return $twig->render('index', $args);
+    }
+
+    private function getTranslationManager(): TranslationManager
+    {
+        $translator = new TranslationManager(new IntlMessageFormatter());
+        $translator->addMessageCatalogue(new MessageCatalogue('en'));
+
+        return $translator;
     }
 }

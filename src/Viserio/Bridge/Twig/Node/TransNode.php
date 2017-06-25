@@ -77,8 +77,7 @@ class TransNode extends Node
             $locale = $this->getNode('locale');
         }
 
-        $compiler
-            ->write('echo $this->env->getExtension(\'Viserio\Bridge\Twig\Extension\TranslatorExtension\')->getTranslator(' . $locale . ')->trans(')
+        $compiler->write('echo $this->env->getExtension(\'Viserio\Bridge\Twig\Extension\TranslatorExtension\')->getTranslator(' . $locale . ')->trans(')
             ->subcompile($msg);
 
         $compiler->raw(', ');
@@ -88,8 +87,7 @@ class TransNode extends Node
         }
 
         if ($vars !== null) {
-            $compiler
-                ->raw('array_merge(')
+            $compiler->raw('array_merge(')
                 ->subcompile($count)
                 ->raw(', ')
                 ->subcompile($defaults)
@@ -114,13 +112,13 @@ class TransNode extends Node
     /**
      * Compile string with given variables.
      *
-     * @param \Twig\Node\Node                          $body
-     * @param \Twig\Node\Expression\AbstractExpression $vars
-     * @param bool                                     $ignoreStrictCheck
+     * @param \Twig\Node\Node                                          $body
+     * @param \Twig\Node\Expression\AbstractExpression|\Twig\Node\Node $vars
+     * @param bool                                                     $ignoreStrictCheck
      *
      * @return array
      */
-    protected function compileString(Node $body, ArrayExpression $vars, $ignoreStrictCheck = false): array
+    protected function compileString(Node $body, $vars, $ignoreStrictCheck = false): array
     {
         if ($body instanceof ConstantExpression) {
             $msg = $body->getAttribute('value');
