@@ -51,7 +51,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransUnknownKeyword()
     {
-        $output = $this->renderTemplate("{% trans \n\nfoo %}{% endtrans %}");
+        $this->renderTemplate("{% trans foo %}{% endtrans %}");
     }
 
     /**
@@ -60,7 +60,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransComplexBody()
     {
-        $output = $this->renderTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}");
+        $this->renderTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}");
     }
 
     /**
@@ -72,7 +72,7 @@ class TranslatorExtensionTest extends MockeryTestCase
         $output = $this->renderTemplate("{% trans count %}\n{{ 1 + 2 }}{% endtrans %}");
     }
 
-    protected function renderTemplate($template, array $args = [])
+    private function renderTemplate($template, array $args = [])
     {
         $translator = $this->getTranslationManager();
 
