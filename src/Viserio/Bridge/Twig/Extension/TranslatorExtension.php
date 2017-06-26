@@ -145,7 +145,7 @@ class TranslatorExtension extends AbstractExtension
         $parameters = [],
         string $domain = 'messages',
         ?string $locale = null
-    ) : string {
+    ): string {
         return $this->translationManager->getTranslator($locale)->trans($id, $parameters, $domain);
     }
 }
