@@ -43,7 +43,7 @@ interface Translator
     /**
      * Translates the given message.
      *
-     * @param string $id         The message id (may also be an object that can be cast to string)
+     * @param string $id         The message id
      * @param array  $parameters An array of parameters for the message
      * @param string $domain     The domain for the message or null to use the default
      *

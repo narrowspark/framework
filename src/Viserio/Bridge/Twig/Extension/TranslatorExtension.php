@@ -58,7 +58,7 @@ class TranslatorExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('trans', [$this->getTranslator(), 'trans']),
+            new TwigFunction('trans', [$this, 'trans']),
         ];
     }
 
@@ -70,7 +70,7 @@ class TranslatorExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'trans',
-                [$this->getTranslator(), 'trans'],
+                [$this, 'trans'],
                 [
                     'pre_escape' => 'html',
                     'is_safe'    => ['html'],
@@ -126,5 +126,26 @@ class TranslatorExtension extends AbstractExtension
     public function getTranslator(?string $locale = null): TranslatorContract
     {
         return $this->translationManager->getTranslator($locale);
+    }
+
+    /**
+     * Translates the given message.
+     *
+     * @param string      $id         The message id
+     * @param mixed       $parameters An array of parameters for the message
+     * @param string      $domain     The domain for the message or null to use the default
+     * @param string|null $local      The locale to change the translator language
+     *
+     * @throws \InvalidArgumentException If the locale contains invalid characters
+     *
+     * @return string The translated string
+     */
+    public function trans(
+        string $id,
+        $parameters = [],
+        string $domain = 'messages',
+        ?string $locale = null
+    ) : string {
+        return $this->translationManager->getTranslator($locale)->trans($id, $parameters, $domain);
     }
 }
