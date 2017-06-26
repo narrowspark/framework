@@ -33,30 +33,24 @@ class TransTokenParser extends AbstractTokenParser
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
 
-        try {
-            $count  = $this->parser->getExpressionParser()->parseExpression();
-        } catch (SyntaxError $e) {
-            $count = null;
-        }
-
         $vars   = new ArrayExpression([], $lineno);
         $domain = null;
         $locale = null;
 
         if ($stream->test('with')) {
-            // {% trans with vars %} or {% trans count with vars %}
+            // {% trans with vars %}
             $stream->next();
             $vars = $this->parser->getExpressionParser()->parseExpression();
         }
 
         if ($stream->test('from')) {
-            // {% trans from "messages" %} or {% trans count from "messages" %}
+            // {% trans from "messages" %}
             $stream->next();
             $domain = $this->parser->getExpressionParser()->parseExpression();
         }
 
         if ($stream->test('into')) {
-            // {% trans into "fr" %} or {% trans count into "fr" %}
+            // {% trans into "fr" %}
             $stream->next();
             $locale = $this->parser->getExpressionParser()->parseExpression();
         }
@@ -64,7 +58,9 @@ class TransTokenParser extends AbstractTokenParser
         // {% trans %}message{% endtrans %}
         $stream->expect(Token::BLOCK_END_TYPE);
 
-        $body = $this->parser->subparse([$this, 'decideTransFork'], true);
+        $body = $this->parser->subparse(function ($token) {
+            return $token->test(['endtrans']);
+        }, true);
 
         if (! $body instanceof TextNode && ! $body instanceof AbstractExpression) {
             throw new SyntaxError('A message inside a trans tag must be a simple text.', $body->getTemplateLine(), $stream->getSourceContext()->getName());
@@ -72,12 +68,7 @@ class TransTokenParser extends AbstractTokenParser
 
         $stream->expect(Token::BLOCK_END_TYPE);
 
-        return new TransNode($body, $domain, $count, $vars, $locale, $lineno, $this->getTag());
-    }
-
-    public function decideTransFork($token)
-    {
-        return $token->test(['endtrans']);
+        return new TransNode($body, $domain, $vars, $locale, $lineno, $this->getTag());
     }
 
     /**

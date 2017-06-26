@@ -89,8 +89,8 @@ class TranslatorExtension extends AbstractExtension
         return [
             // {% trans %}Narrowspark is great!{% endtrans %}
             // or
-            // {% trans count %}
-            //     {0} There is no apples|{1} There is one apple|]1,Inf] There is {{ count }} apples
+            // {% trans %}
+            //     {count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}
             // {% endtrans %}
             new TransTokenParser(),
         ];

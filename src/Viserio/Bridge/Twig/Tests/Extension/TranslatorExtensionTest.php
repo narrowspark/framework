@@ -40,7 +40,7 @@ class TranslatorExtensionTest extends MockeryTestCase
 
     public function testEscaping()
     {
-        $output = $this->getTemplate('{% trans %}Percent: %value%%% (%msg%){% endtrans %}')->render(['value' => 12, 'msg' => 'approx.']);
+        $output = $this->getTemplate('{% trans %}Percent: {value}% ({msg}){% endtrans %}')->render(['value' => 12, 'msg' => 'approx.']);
 
         self::assertEquals('Percent: 12% (approx.)', $output);
     }
@@ -60,7 +60,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransComplexBodyWithCount()
     {
-        $output = $this->getTemplate("{% trans count %}\n{{ 1 + 2 }}{% endtrans %}")->render();
+        $output = $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render();
     }
 
     /**
@@ -69,7 +69,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      * @param mixed $template
      * @param mixed $expected
      */
-    public function testTrans($template, $expected, array $variables = [])
+    public function testTransa($template, $expected, array $variables = [])
     {
         if ($expected != $this->getTemplate($template)->render($variables)) {
             echo $template . "\n";
@@ -92,34 +92,27 @@ class TranslatorExtensionTest extends MockeryTestCase
         return [
             // trans tag
             ['{% trans %}Hello{% endtrans %}', 'Hello'],
-            ['{% trans %}{name}{% endtrans %}', 'Symfony', ['name' => 'Symfony']],
-            // ['{% trans from elsewhere %}Hello{% endtrans %}', 'Hello'],
-            ['{% trans %}Hello {name}{% endtrans %}', 'Hello Symfony', ['name' => 'Symfony']],
-            // ['{% trans with { \'{name}\': \'Symfony\' } %}Hello {name}{% endtrans %}', 'Hello Symfony'],
-            // ['{% set vars = { \'{name}\': \'Symfony\' } %}{% trans with vars %}Hello {name}{% endtrans %}', 'Hello Symfony'],
-            // ['{% trans into "fr"%}Hello{% endtrans %}', 'Hello'],
-            // ['{% trans count from "messages" %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtrans %}',
-            //     'There is no apples', ['count' => 0], ],
-            // ['{% trans count %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtrans %}',
-            //     'There is 5 apples', ['count' => 5], ],
-            // ['{% trans count %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples ({name}){% endtrans %}',
-            //     'There is 5 apples (Symfony)', ['count' => 5, 'name' => 'Symfony'], ],
-            // ['{% trans count with { \'{name}\': \'Symfony\' } %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples ({name}){% endtrans %}',
-            //     'There is 5 apples (Symfony)', ['count' => 5], ],
-            // ['{% trans count into "fr"%}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtrans %}',
-            //     'There is no apples', ['count' => 0], ],
-            // ['{% trans 5 into "fr"%}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtrans %}',
-            //     'There is 5 apples', ],
+            ['{% trans %}{name}{% endtrans %}', 'Narrospark', ['name' => 'Narrospark']],
+            ['{% trans from "elsewhere" %}Hello{% endtrans %}', 'Hello'],
+            ['{% trans %}Hello {name}{% endtrans %}', 'Hello Narrospark', ['name' => 'Narrospark']],
+            ['{% trans with { \'name\': \'Narrospark\' } %}Hello {name}{% endtrans %}', 'Hello Narrospark'],
+            ['{% set vars = { \'name\': \'Narrospark\' } %}{% trans with vars %}Hello {name}{% endtrans %}', 'Hello Narrospark'],
+            ['{% trans into "fr"%}Hello{% endtrans %}', 'Hello'],
+            ['{% trans from "messages" %}{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}{% endtrans %}', 'No candy left', ['count' => 0], ],
+            ['{% trans %}{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}{% endtrans %}', 'Got 5 candies left', ['count' => 5], ],
+            ['{% trans %}{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}} ({name}){% endtrans %}', 'Got 5 candies left (Narrospark)', ['count' => 5, 'name' => 'Narrospark'], ],
+            ['{% trans with { \'name\': \'Narrospark\' } %}{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}} ({name}){% endtrans %}', 'Got 5 candies left (Narrospark)', ['count' => 5], ],
+            ['{% trans into "fr"%}{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}{% endtrans %}', 'No candy left', ['count' => 0], ],
+            // trans filter
+            ['{{ "Hello"|trans }}', 'Hello'],
+            ['{{ name|trans }}', 'Narrospark', ['name' => 'Narrospark']],
+            ['{{ hello|trans({ \'name\': \'Narrospark\' }) }}', 'Hello Narrospark', ['hello' => 'Hello {name}']],
+            ['{% set vars = { \'name\': \'Narrospark\' } %}{{ hello|trans(vars) }}', 'Hello Narrospark', ['hello' => 'Hello {name}']],
+            ['{{ "Hello"|trans({}, "messages", "fr") }}', 'Hello'],
             // // trans filter
-            // ['{{ "Hello"|trans }}', 'Hello'],
-            // ['{{ name|trans }}', 'Symfony', ['name' => 'Symfony']],
-            // ['{{ hello|trans({ \'{name}\': \'Symfony\' }) }}', 'Hello Symfony', ['hello' => 'Hello {name}']],
-            // ['{% set vars = { \'{name}\': \'Symfony\' } %}{{ hello|trans(vars) }}', 'Hello Symfony', ['hello' => 'Hello {name}']],
-            // ['{{ "Hello"|trans({}, "messages", "fr") }}', 'Hello'],
-            // // trans filter
-            // ['{{ "{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples"|trans(count) }}', 'There is 5 apples', ['count' => 5]],
-            // ['{{ text|trans(5, {\'{name}\': \'Symfony\'}) }}', 'There is 5 apples (Symfony)', ['text' => '{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples ({name})']],
-            // ['{{ "{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples"|trans(count, {}, "messages", "fr") }}', 'There is 5 apples', ['count' => 5]],
+            // ['{{ "{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}"|trans(count) }}', 'Got 5 candies left', ['count' => 5]],
+            // ['{{ text|trans(5, {\'name\': \'Narrospark\'}) }}', 'Got 5 candies left (Narrospark)', ['text' => '{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}} ({name})']],
+            // ['{{ "{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}"|trans(count, {}, "messages", "fr") }}', 'Got 5 candies left', ['count' => 5]],
         ];
     }
 
@@ -143,6 +136,7 @@ class TranslatorExtensionTest extends MockeryTestCase
     {
         $translator = new TranslationManager(new IntlMessageFormatter());
         $translator->addMessageCatalogue(new MessageCatalogue('en'));
+        $translator->addMessageCatalogue(new MessageCatalogue('fr'));
 
         return $translator;
     }
