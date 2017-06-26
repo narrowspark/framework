@@ -128,10 +128,10 @@ class TransNode extends Node
             return [$body, $vars];
         }
 
-        preg_match_all('/(?<!%)%([^%]+)%/', $msg, $matches);
+        preg_match_all('/(?<!%){([^%]+)}/', $msg, $matches);
 
         foreach ($matches[1] as $var) {
-            $key = new ConstantExpression('%' . $var . '%', $body->getTemplateLine());
+            $key = new ConstantExpression($var, $body->getTemplateLine());
 
             if (! $vars->hasElement($key)) {
                 if ($var && $this->hasNode('count') === 'count') {
@@ -139,11 +139,12 @@ class TransNode extends Node
                 } else {
                     $varExpr = new NameExpression($var, $body->getTemplateLine());
                     $varExpr->setAttribute('ignore_strict_check', $ignoreStrictCheck);
+
                     $vars->addElement($varExpr, $key);
                 }
             }
         }
 
-        return [new ConstantExpression(str_replace('%%', '%', trim($msg)), $body->getTemplateLine()), $vars];
+        return [new ConstantExpression(trim($msg), $body->getTemplateLine()), $vars];
     }
 }
