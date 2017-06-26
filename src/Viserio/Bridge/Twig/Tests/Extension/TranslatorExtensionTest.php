@@ -51,7 +51,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransUnknownKeyword()
     {
-        $this->renderTemplate("{% trans foo %}{% endtrans %}");
+        $this->renderTemplate('{% trans foo %}{% endtrans %}');
     }
 
     /**
