@@ -43,30 +43,27 @@ class TransTokenParser extends AbstractTokenParser
         $domain = null;
         $locale = null;
 
-        if (! $stream->test(Token::BLOCK_END_TYPE)) {
-            if ($stream->test('with')) {
-                // {% trans with vars %} or {% trans count with vars %}
-                $stream->next();
-                $vars = $this->parser->getExpressionParser()->parseExpression();
-            }
+        if ($stream->test('with')) {
+            // {% trans with vars %} or {% trans count with vars %}
+            $stream->next();
+            $vars = $this->parser->getExpressionParser()->parseExpression();
+        }
 
-            if ($stream->test('from')) {
-                // {% trans from "messages" %} or {% trans count from "messages" %}
-                $stream->next();
-                $domain = $this->parser->getExpressionParser()->parseExpression();
-            }
+        if ($stream->test('from')) {
+            // {% trans from "messages" %} or {% trans count from "messages" %}
+            $stream->next();
+            $domain = $this->parser->getExpressionParser()->parseExpression();
+        }
 
-            if ($stream->test('into')) {
-                // {% trans into "fr" %} or {% trans count into "fr" %}
-                $stream->next();
-                $locale = $this->parser->getExpressionParser()->parseExpression();
-            } elseif (! $stream->test(Token::BLOCK_END_TYPE)) {
-                throw new SyntaxError('Unexpected token. Twig was looking for the "with", "from", or "into" keyword.', $stream->getCurrent()->getLine(), $stream->getSourceContext()->getName());
-            }
+        if ($stream->test('into')) {
+            // {% trans into "fr" %} or {% trans count into "fr" %}
+            $stream->next();
+            $locale = $this->parser->getExpressionParser()->parseExpression();
         }
 
         // {% trans %}message{% endtrans %}
         $stream->expect(Token::BLOCK_END_TYPE);
+
         $body = $this->parser->subparse([$this, 'decideTransFork'], true);
 
         if (! $body instanceof TextNode && ! $body instanceof AbstractExpression) {

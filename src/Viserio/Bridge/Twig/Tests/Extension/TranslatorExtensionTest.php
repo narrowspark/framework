@@ -40,18 +40,9 @@ class TranslatorExtensionTest extends MockeryTestCase
 
     public function testEscaping()
     {
-        $output = $this->renderTemplate('{% trans %}Percent: %value%%% (%msg%){% endtrans %}', ['value' => 12, 'msg' => 'approx.']);
+        $output = $this->getTemplate('{% trans %}Percent: %value%%% (%msg%){% endtrans %}')->render(['value' => 12, 'msg' => 'approx.']);
 
         self::assertEquals('Percent: 12% (approx.)', $output);
-    }
-
-    /**
-     * @expectedException        \Twig\Error\SyntaxError
-     * @expectedExceptionMessage Unexpected token. Twig was looking for the "with", "from", or "into" keyword in "index" at line 3.
-     */
-    public function testTransUnknownKeyword()
-    {
-        $this->renderTemplate('{% trans foo %}{% endtrans %}');
     }
 
     /**
@@ -60,7 +51,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransComplexBody()
     {
-        $this->renderTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}");
+        $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render();
     }
 
     /**
@@ -69,10 +60,67 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransComplexBodyWithCount()
     {
-        $output = $this->renderTemplate("{% trans count %}\n{{ 1 + 2 }}{% endtrans %}");
+        $output = $this->getTemplate("{% trans count %}\n{{ 1 + 2 }}{% endtrans %}")->render();
     }
 
-    private function renderTemplate($template, array $args = [])
+    /**
+     * @dataProvider getTransTests
+     */
+    public function testTrans($template, $expected, array $variables = array())
+    {
+        if ($expected != $this->getTemplate($template)->render($variables)) {
+            echo $template."\n";
+
+            $loader = new TwigArrayLoader(array('index' => $template));
+            $twig   = new Environment($loader, array('debug' => true, 'cache' => false));
+
+            $twig->addExtension(new TranslatorExtension($this->getTranslationManager()));
+
+            echo $twig->compile($twig->parse($twig->tokenize($twig->getLoader()->getSourceContext('index'))))."\n\n";
+
+            self::assertEquals($expected, $this->getTemplate($template)->render($variables));
+        }
+
+        self::assertEquals($expected, $this->getTemplate($template)->render($variables));
+    }
+
+    public function getTransTests()
+    {
+        return array(
+            // trans tag
+            array('{% trans %}Hello{% endtrans %}', 'Hello'),
+            array('{% trans %}%name%{% endtrans %}', 'Symfony', array('name' => 'Symfony')),
+            array('{% trans from elsewhere %}Hello{% endtrans %}', 'Hello'),
+            array('{% trans %}Hello %name%{% endtrans %}', 'Hello Symfony', array('name' => 'Symfony')),
+            array('{% trans with { \'%name%\': \'Symfony\' } %}Hello %name%{% endtrans %}', 'Hello Symfony'),
+            array('{% set vars = { \'%name%\': \'Symfony\' } %}{% trans with vars %}Hello %name%{% endtrans %}', 'Hello Symfony'),
+            array('{% trans into "fr"%}Hello{% endtrans %}', 'Hello'),
+            array('{% trans count from "messages" %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtrans %}',
+                'There is no apples', array('count' => 0)),
+            array('{% trans count %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtrans %}',
+                'There is 5 apples', array('count' => 5)),
+            array('{% trans count %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples (%name%){% endtrans %}',
+                'There is 5 apples (Symfony)', array('count' => 5, 'name' => 'Symfony')),
+            array('{% trans count with { \'%name%\': \'Symfony\' } %}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples (%name%){% endtrans %}',
+                'There is 5 apples (Symfony)', array('count' => 5)),
+            array('{% trans count into "fr"%}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtrans %}',
+                'There is no apples', array('count' => 0)),
+            array('{% trans 5 into "fr"%}{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples{% endtrans %}',
+                'There is 5 apples'),
+            // trans filter
+            array('{{ "Hello"|trans }}', 'Hello'),
+            array('{{ name|trans }}', 'Symfony', array('name' => 'Symfony')),
+            array('{{ hello|trans({ \'%name%\': \'Symfony\' }) }}', 'Hello Symfony', array('hello' => 'Hello %name%')),
+            array('{% set vars = { \'%name%\': \'Symfony\' } %}{{ hello|trans(vars) }}', 'Hello Symfony', array('hello' => 'Hello %name%')),
+            array('{{ "Hello"|trans({}, "messages", "fr") }}', 'Hello'),
+            // trans filter
+            array('{{ "{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples"|trans(count) }}', 'There is 5 apples', array('count' => 5)),
+            array('{{ text|trans(5, {\'%name%\': \'Symfony\'}) }}', 'There is 5 apples (Symfony)', array('text' => '{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples (%name%)')),
+            array('{{ "{0} There is no apples|{1} There is one apple|]1,Inf] There is %count% apples"|trans(count, {}, "messages", "fr") }}', 'There is 5 apples', array('count' => 5)),
+        );
+    }
+
+    private function getTemplate($template)
     {
         $translator = $this->getTranslationManager();
 
@@ -85,7 +133,7 @@ class TranslatorExtensionTest extends MockeryTestCase
         $twig = new Environment($loader, ['debug' => true, 'cache' => false]);
         $twig->addExtension(new TranslatorExtension($translator));
 
-        return $twig->render('index', $args);
+        return $twig->loadTemplate('index');
     }
 
     private function getTranslationManager(): TranslationManager
