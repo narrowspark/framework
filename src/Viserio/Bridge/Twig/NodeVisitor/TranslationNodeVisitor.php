@@ -25,7 +25,7 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     /**
      * Enable/Disable status of node.
      *
-     * @var boolean
+     * @var bool
      */
     private $enabled = false;
 
