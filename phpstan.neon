@@ -43,7 +43,6 @@ parameters:
         - '#Cannot call method getTarget#'
         - '#Cannot call method getName#'
         - '#Swift_#'
-        - '#\$node of method Twig_Compiler::subcompile\(\) expects Twig_Node\, mixed\[\] given#'
 
         # Required file variables
         - '#Undefined variable: \$class#'
