@@ -70,7 +70,11 @@ class TranslatorExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'trans',
-                [$this, 'trans']
+                [$this, 'trans'],
+                [
+                    'pre_escape' => 'html',
+                    'is_safe'    => ['html'],
+                ]
             ),
         ];
     }
