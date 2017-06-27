@@ -48,8 +48,7 @@ class MessageCatalogue implements MessageCatalogueContract
     {
         $this->assertValidLocale($locale);
 
-        $this->locale = $locale;
-
+        $this->locale   = $locale;
         $this->messages = $messages;
     }
 

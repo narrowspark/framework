@@ -251,13 +251,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     }
 
     /**
-     * Get a language translator instance.
-     *
-     * @param string|null $locale
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Viserio\Component\Contracts\Translation\Translator
+     * {@inheritdoc}
      */
     public function getTranslator(string $locale = null): TranslatorContract
     {

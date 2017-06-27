@@ -19,7 +19,6 @@ parameters:
     ignoreErrors:
         # They are array callables
         - '#callable of class Twig_Function constructor#'
-        - '#callable of class Twig_Filter constructor#'
         - '#callable of method Invoker\\InvokerInterface::call#'
 
         # Magic functions, call and static call
@@ -40,10 +39,10 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::getProtectedStatic#'
         - '#Call to an undefined method Viserio\\Component\\Mail\\Message::setBody#'
+        - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'
         - '#Cannot call method getTarget#'
         - '#Cannot call method getName#'
         - '#Swift_#'
-        - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'
 
         # Required file variables
         - '#Undefined variable: \$class#'

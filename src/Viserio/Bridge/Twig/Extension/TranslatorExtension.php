@@ -3,23 +3,45 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
+use Twig\NodeVisitor\NodeVisitorInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
+use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
+use Viserio\Bridge\Twig\TokenParser\TransTokenParser;
+use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
 
 class TranslatorExtension extends AbstractExtension
 {
-    use TranslatorAwareTrait;
+    /**
+     * Translation instance.
+     *
+     * @var \Viserio\Component\Contracts\Translation\TranslationManager|null
+     */
+    protected $translationManager;
+
+    /**
+     * A instance of NodeVisitorInterface.
+     *
+     * @var \Twig\NodeVisitor\NodeVisitorInterface|null
+     */
+    private $translationNodeVisitor;
 
     /**
      * Create a new translator extension.
      *
-     * @param \Viserio\Component\Contracts\Translation\Translator $translator
+     * @param \Viserio\Component\Contracts\Translation\TranslationManager $translationManager
+     * @param \Twig\NodeVisitor\NodeVisitorInterface|null                 $translationNodeVisitor
      */
-    public function __construct(TranslatorContract $translator)
+    public function __construct(TranslationManagerContract $translationManager, ?NodeVisitorInterface $translationNodeVisitor = null)
     {
-        $this->translator = $translator;
+        $this->translationManager = $translationManager;
+
+        if ($translationNodeVisitor === null) {
+            $translationNodeVisitor = new TranslationNodeVisitor();
+        }
+
+        $this->translationNodeVisitor = $translationNodeVisitor;
     }
 
     /**
@@ -36,7 +58,7 @@ class TranslatorExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('trans', [$this->translator, 'trans']),
+            new TwigFunction('trans', [$this, 'trans']),
         ];
     }
 
@@ -48,12 +70,86 @@ class TranslatorExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'trans',
-                [$this->translator, 'trans'],
+                [$this, 'trans'],
                 [
                     'pre_escape' => 'html',
                     'is_safe'    => ['html'],
                 ]
             ),
         ];
+    }
+
+    /**
+     * Returns the token parser instance to add to the existing list.
+     *
+     * @return \Twig\TokenParser\AbstractTokenParser[]
+     */
+    public function getTokenParsers(): array
+    {
+        return [
+            // {% trans %}Narrowspark is great!{% endtrans %}
+            // or
+            // {% trans %}
+            //     {count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}
+            // {% endtrans %}
+            new TransTokenParser(),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNodeVisitors(): array
+    {
+        return [$this->translationNodeVisitor];
+    }
+
+    /**
+     * Get a translation node visitor instance.
+     *
+     * @return \Twig\NodeVisitor\NodeVisitorInterface
+     */
+    public function getTranslationNodeVisitor(): NodeVisitorInterface
+    {
+        return $this->translationNodeVisitor;
+    }
+
+    /**
+     * Get a language translator instance.
+     *
+     * @param string|null $locale
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Viserio\Component\Contracts\Translation\Translator
+     */
+    public function getTranslator(?string $locale = null): TranslatorContract
+    {
+        return $this->translationManager->getTranslator($locale);
+    }
+
+    /**
+     * Translates the given message.
+     *
+     * @param string      $id         The message id
+     * @param mixed       $parameters An array of parameters for the message
+     * @param string      $domain     The domain for the message or null to use the default
+     * @param string|null $local      The locale to change the translator language
+     *
+     * @throws \InvalidArgumentException If the locale contains invalid characters
+     *
+     * @return string The translated string
+     */
+    public function trans(
+        string $id,
+        $parameters = [],
+        string $domain = 'messages',
+        ?string $locale = null
+    ): string {
+        if (is_numeric($parameters)) {
+            $parameters = ['count' => $parameters];
+        }
+
+        return $this->translationManager->getTranslator($locale)->trans($id, $parameters, $domain);
     }
 }
