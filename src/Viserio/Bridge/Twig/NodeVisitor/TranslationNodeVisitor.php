@@ -17,19 +17,42 @@ use Viserio\Bridge\Twig\Node\TransNode;
  */
 class TranslationNodeVisitor extends AbstractNodeVisitor
 {
+    /**
+     * @var string
+     */
     private const UNDEFINED_DOMAIN = '_undefined';
 
+    /**
+     * Enable/Disable status of node.
+     *
+     * @var boolean
+     */
     private $enabled = false;
 
+    /**
+     * Array of all given messages.
+     *
+     * @var array
+     */
     private $messages = [];
 
-    public function enable()
+    /**
+     * Enable node and clear messages.
+     *
+     * @return void
+     */
+    public function enable(): void
     {
         $this->enabled  = true;
         $this->messages = [];
     }
 
-    public function disable()
+    /**
+     * Disable node and clear messages.
+     *
+     * @return void
+     */
+    public function disable(): void
     {
         $this->enabled  = false;
         $this->messages = [];
@@ -62,8 +85,7 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
             return $node;
         }
 
-        if (
-            $node instanceof FilterExpression &&
+        if ($node instanceof FilterExpression &&
             $node->getNode('filter')->getAttribute('value') === 'trans' &&
             $node->getNode('node') instanceof ConstantExpression
         ) {
