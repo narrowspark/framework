@@ -70,11 +70,7 @@ class TranslatorExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'trans',
-                [$this, 'trans'],
-                [
-                    'pre_escape' => 'html',
-                    'is_safe'    => ['html'],
-                ]
+                [$this, 'trans']
             ),
         ];
     }
@@ -146,6 +142,10 @@ class TranslatorExtension extends AbstractExtension
         string $domain = 'messages',
         ?string $locale = null
     ): string {
+        if (is_numeric($parameters)) {
+            $parameters = ['count' => $parameters];
+        }
+
         return $this->translationManager->getTranslator($locale)->trans($id, $parameters, $domain);
     }
 }

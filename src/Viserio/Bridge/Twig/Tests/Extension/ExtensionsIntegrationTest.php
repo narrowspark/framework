@@ -80,11 +80,11 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
     {
         $translator = Mock::mock(TranslatorContract::class);
         $translator->shouldReceive('trans')
-            ->with('test')
+            ->with('test', [], 'messages')
             ->andReturn('test');
         $translator->shouldReceive('trans')
-            ->with('{0} There are no apples|{1} There is one apple', [1])
-            ->andReturn('There is one apple');
+            ->with('{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}', ['count' => 1], 'messages')
+            ->andReturn('Got one candy left');
 
         $manager = Mock::mock(TranslationManagerContract::class);
         $manager->shouldReceive('getTranslator')
