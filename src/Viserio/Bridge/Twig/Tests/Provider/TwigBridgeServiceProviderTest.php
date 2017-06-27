@@ -7,6 +7,9 @@ use Twig\Environment;
 use Twig\Lexer;
 use Viserio\Bridge\Twig\Provider\TwigBridgeServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
 
 class TwigBridgeServiceProviderTest extends MockeryTestCase
 {
@@ -14,6 +17,9 @@ class TwigBridgeServiceProviderTest extends MockeryTestCase
     {
         $container = new Container();
         $container->register(new TwigBridgeServiceProvider());
+        $container->instance(StoreContract::class, $this->mock(StoreContract::class));
+        $container->instance(RepositoryContract::class, $this->mock(RepositoryContract::class));
+        $container->instance(TranslationManagerContract::class, $this->mock(TranslationManagerContract::class));
         $container->instance(Lexer::class, $this->mock(Lexer::class));
 
         self::assertNull($container->get(Environment::class));

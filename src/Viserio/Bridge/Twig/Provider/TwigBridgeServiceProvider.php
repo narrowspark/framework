@@ -63,8 +63,6 @@ class TwigBridgeServiceProvider implements ServiceProvider
      * @param \Psr\Container\ContainerInterface $container
      *
      * @return void
-     *
-     * @codeCoverageIgnore
      */
     protected static function registerViserioTwigExtension(TwigEnvironment $twig, ContainerInterface $container): void
     {
