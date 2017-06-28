@@ -4,10 +4,7 @@ namespace Viserio\Provider\Twig\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Viserio\Bridge\Twig\Command\DebugCommand;
-use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Component\Console\Application;
-use Viserio\Provider\Twig\Command\CleanCommand;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {
