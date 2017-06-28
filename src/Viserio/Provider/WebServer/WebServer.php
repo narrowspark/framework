@@ -4,6 +4,4 @@ namespace Viserio\Provider\WebServer;
 
 class WebServer
 {
-
 }
-
