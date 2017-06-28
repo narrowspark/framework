@@ -18,14 +18,15 @@
         }
     ],
     "require": {
-        "php"                                  : "^7.1",
-        "viserio/console"                      : "self.version"
+        "php"                                       : "^7.1",
+        "symfony/process"                           : "~3.3",
+        "viserio/console"                           : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"   : "^0.3",
-        "mockery/mockery"                      : "^0.9",
-        "narrowspark/testing-helper"           : "^3.0",
-        "phpunit/phpunit"                      : "^6.0"
+        "container-interop/service-provider"        : "^0.3",
+        "mockery/mockery"                           : "^0.9",
+        "narrowspark/testing-helper"                : "^3.0",
+        "phpunit/phpunit"                           : "^6.0"
     },
     "autoload": {
         "psr-4": {
