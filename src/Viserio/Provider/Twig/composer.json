@@ -19,7 +19,6 @@
     ],
     "require": {
         "php"                                  : "^7.1",
-        "viserio/twig-bridge"                  : "self.version",
         "viserio/contracts"                    : "self.version",
         "viserio/view"                         : "self.version"
     },
@@ -27,7 +26,9 @@
         "container-interop/service-provider"   : "^0.3",
         "mockery/mockery"                      : "^0.9",
         "narrowspark/testing-helper"           : "^3.0",
-        "phpunit/phpunit"                      : "^6.0"
+        "phpunit/phpunit"                      : "^6.0",
+        "viserio/console"                      : "self.version",
+        "viserio/twig-bridge"                  : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -42,6 +43,8 @@
     },
     "suggest": {
         "container-interop/service-provider"   : "Required to use service-provider (^0.3).",
+        "viserio/twig-bridge"                  : "Required to use the twig extensions, commands for lint and debug (self.version).",
+        "viserio/console"                      : "Required to use the commands (self.version)."
     },
     "extra": {
         "branch-alias": {

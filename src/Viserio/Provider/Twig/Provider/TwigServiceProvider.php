@@ -32,14 +32,14 @@ class TwigServiceProvider implements
     public function getServices()
     {
         return [
-            LoaderInterface::class      => [self::class, 'createTwigLoader'],
-            TwigLoader::class           => function (ContainerInterface $container) {
+            LoaderInterface::class => [self::class, 'createTwigLoader'],
+            TwigLoader::class      => function (ContainerInterface $container) {
                 return $container->get(LoaderInterface::class);
             },
-            TwigEnvironment::class      => [self::class, 'createTwigEnvironment'],
-            FactoryContract::class      => [self::class, 'extendViewFactory'],
-            EngineResolver::class       => [self::class, 'extendEngineResolver'],
-            TwigEngine::class           => [self::class, 'createTwigEngine'],
+            TwigEnvironment::class => [self::class, 'createTwigEnvironment'],
+            FactoryContract::class => [self::class, 'extendViewFactory'],
+            EngineResolver::class  => [self::class, 'extendEngineResolver'],
+            TwigEngine::class      => [self::class, 'createTwigEngine'],
         ];
     }
 
