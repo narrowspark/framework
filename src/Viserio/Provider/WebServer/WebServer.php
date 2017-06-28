@@ -16,17 +16,17 @@ class WebServer
 
     public function start()
     {
-        # code...
+        // code...
     }
 
     public function stop()
     {
-        # code...
+        // code...
     }
 
     public function run()
     {
-        # code...
+        // code...
     }
 
     /**
@@ -45,9 +45,9 @@ class WebServer
         }
 
         $address  = file_get_contents($pidFile);
-        $pos      = strrpos($address, ':');
-        $hostname = substr($address, 0, $pos);
-        $port     = substr($address, $pos + 1);
+        $pos      = mb_strrpos($address, ':');
+        $hostname = mb_substr($address, 0, $pos);
+        $port     = mb_substr($address, $pos + 1);
 
         if ($fp = @fsockopen($hostname, $port, $errno, $errstr, 1) !== false) {
             fclose($fp);
@@ -67,7 +67,6 @@ class WebServer
      */
     private function getDefaultPidFile(): string
     {
-        return getcwd().'/.web-server-pid';
+        return getcwd() . '/.web-server-pid';
     }
 }
-
