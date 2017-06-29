@@ -76,7 +76,7 @@ class WebServer implements
         }
 
         $pidFilePath = $this->getPidFilePath($pidFilePath);
-        $address     = sprintf('%s:%s.', $options['hostname'], $port);
+        $address     = sprintf('%s:%s', $options['hostname'], $port);
 
         if ($this->isRunning($pidFilePath)) {
             throw new RuntimeException(sprintf('A process is already listening on http://%s.', $address));

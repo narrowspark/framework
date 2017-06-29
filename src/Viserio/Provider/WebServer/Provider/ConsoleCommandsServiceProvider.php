@@ -1,10 +1,15 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Provider\Twig\Provider;
+namespace Viserio\Provider\WebServer\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Console\Application;
+use Viserio\Provider\WebServer\Command\ServerLogCommand;
+use Viserio\Provider\WebServer\Command\ServerRunCommand;
+use Viserio\Provider\WebServer\Command\ServerStartCommand;
+use Viserio\Provider\WebServer\Command\ServerStatusCommand;
+use Viserio\Provider\WebServer\Command\ServerStopCommand;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {
@@ -31,6 +36,13 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
         $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($console !== null) {
+            $console->addCommands([
+                new ServerLogCommand(),
+                new ServerRunCommand(),
+                new ServerStartCommand(),
+                new ServerStatusCommand(),
+                new ServerStopCommand(),
+            ]);
         }
 
         return $console;
