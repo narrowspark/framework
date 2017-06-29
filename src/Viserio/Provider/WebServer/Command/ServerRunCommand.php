@@ -21,6 +21,5 @@ class ServerRunCommand extends Command
      */
     public function handle()
     {
-
     }
 }

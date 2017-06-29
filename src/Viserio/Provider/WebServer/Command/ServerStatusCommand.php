@@ -21,6 +21,5 @@ class ServerStatusCommand extends Command
      */
     public function handle()
     {
-
     }
 }

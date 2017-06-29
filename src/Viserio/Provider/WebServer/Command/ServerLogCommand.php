@@ -21,6 +21,5 @@ class ServerLogCommand extends Command
      */
     public function handle()
     {
-
     }
 }
