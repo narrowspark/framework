@@ -20,7 +20,8 @@
     "require": {
         "php"                                       : "^7.1",
         "symfony/process"                           : "~3.3",
-        "viserio/console"                           : "self.version"
+        "viserio/console"                           : "self.version",
+        "viserio/options-resolver"                  : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"        : "^0.3",
