@@ -4,8 +4,8 @@ namespace Viserio\Provider\WebServer\Command;
 
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
-use Viserio\Provider\WebServer\WebServer;
 use Viserio\Component\Console\Command\Command;
+use Viserio\Provider\WebServer\WebServer;
 
 class ServerStatusCommand extends Command
 {
@@ -24,7 +24,7 @@ class ServerStatusCommand extends Command
      */
     public function handle()
     {
-        $server = new WebServer();
+        $server  = new WebServer();
         $pidFile = $this->option('pidfile');
 
         if ($filter = $this->option('filter')) {
@@ -57,7 +57,7 @@ class ServerStatusCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function getOptions() : array
+    protected function getOptions(): array
     {
         return [
             ['pidfile', null, InputOption::VALUE_REQUIRED, 'Path to the pidfile.'],

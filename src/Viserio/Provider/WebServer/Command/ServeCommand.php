@@ -28,16 +28,16 @@ class ServeCommand extends Command
             return 1;
         }
 
-        if (!is_dir($documentRoot)) {
+        if (! is_dir($documentRoot)) {
             $this->error(sprintf('The document root directory "%s" does not exist.', $documentRoot));
 
             return 1;
         }
 
-        $callback = null;
+        $callback      = null;
         $disableOutput = false;
-        $output = $this->getOutput();
-        $console = $this;
+        $output        = $this->getOutput();
+        $console       = $this;
 
         if ($output->isQuiet()) {
             $disableOutput = true;
