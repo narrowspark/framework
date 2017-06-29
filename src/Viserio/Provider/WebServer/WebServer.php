@@ -5,10 +5,10 @@ namespace Viserio\Provider\WebServer;
 use RuntimeException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class WebServer implements
@@ -44,7 +44,7 @@ class WebServer implements
         return [
             'hostname'   => '127.0.0.1',
             'port'       => self::findBestPort(),
-            'controller' => 'index.php'
+            'controller' => 'index.php',
         ];
     }
 
@@ -54,14 +54,14 @@ class WebServer implements
     public function getMandatoryOptions(): iterable
     {
         return [
-            'document_root'
+            'document_root',
         ];
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
-     * @param mixed $config
+     * @param mixed  $config
      * @param string $pidFilePath
      *
      * @return int
@@ -108,7 +108,7 @@ class WebServer implements
 
         // stop the web server when the lock file is removed
         while ($process->isRunning()) {
-            if (!file_exists($pidFile)) {
+            if (! file_exists($pidFile)) {
                 $process->stop();
             }
 
@@ -139,7 +139,7 @@ class WebServer implements
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @param mixed    $config
      * @param bool     $disableOutput
@@ -245,7 +245,7 @@ class WebServer implements
             $binary,
             '-S',
             sprintf('%s:%s', $config['host'], $config['hostname']),
-            $config['router_path']
+            $config['router_path'],
         ]);
         $process->setWorkingDirectory($config->getDocumentRoot());
         $process->setTimeout(null);
@@ -264,7 +264,7 @@ class WebServer implements
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @param string|null $pidFilePath
      *
