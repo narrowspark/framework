@@ -14,7 +14,7 @@ class ServerRunCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $description = 'Runs a local web server';
+    protected $description = 'Runs a local web server.';
 
     /**
      * {@inheritdoc}

@@ -43,7 +43,7 @@ class WebServer implements
     {
         return [
             'hostname'   => '127.0.0.1',
-            'port'       => self::findBestPort(),
+            'port'       => null,
             'controller' => 'index.php',
         ];
     }
@@ -69,7 +69,7 @@ class WebServer implements
     public function start($config, string $pidFilePath = null): int
     {
         $options = $this->resolveOptions($config);
-        $port    = $options['port'];
+        $port    = $options['port'] ?? self::findBestPort();
 
         if (! ctype_digit($port)) {
             throw new InvalidArgumentException(sprintf('Port "%s" is not valid.', $port));
@@ -153,7 +153,7 @@ class WebServer implements
     public function run($config, bool $disableOutput = true, callable $callback = null): void
     {
         $options = $this->resolveOptions($config);
-        $port    = $options['port'];
+        $port    = $options['port'] ?? self::findBestPort();
 
         if (! ctype_digit($port)) {
             throw new InvalidArgumentException(sprintf('Port "%s" is not valid.', $port));

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Provider\WebServer\Command;
 
 use Throwable;
+use Symfony\Component\Console\Input\InputOption;
 use Viserio\Component\Console\Command\Command;
 
 class ServerStopCommand extends Command
@@ -28,9 +29,19 @@ class ServerStopCommand extends Command
 
             $this->success('Stopped the web server.');
         } catch (Throwable $exception) {
-            $this->output->error($e->getMessage());
+            $this->getOutput()->error($e->getMessage());
 
             return 1;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getOptions(): array
+    {
+        return [
+            ['pidfile', null, InputOption::VALUE_OPTIONAL, 'Path to the pidfile.'],
+        ];
     }
 }
