@@ -66,7 +66,7 @@ class WebServer implements
      *
      * @return int
      */
-    public function start($config, string $pidFilePath = null): int
+    public function start($config, ?string $pidFilePath = null): int
     {
         $options = $this->resolveOptions($config);
         $port    = $options['port'] ?? self::findBestPort();
@@ -127,7 +127,7 @@ class WebServer implements
      *
      * @return void
      */
-    public function stop(string $pidFilePath = null): void
+    public function stop(?string $pidFilePath = null): void
     {
         $pidFilePath = $this->getPidFilePath($pidFilePath);
 
@@ -196,7 +196,7 @@ class WebServer implements
      *
      * @return bool
      */
-    public function isRunning(string $pidFilePath = null): bool
+    public function isRunning(?string $pidFilePath = null): bool
     {
         $pidFilePath = $this->getPidFilePath($pidFilePath);
 
@@ -218,6 +218,24 @@ class WebServer implements
         unlink($pidFilePath);
 
         return false;
+    }
+
+    /**
+     * Returns the address if pid file exists.
+     *
+     * @param string|null $pidFilePath
+     *
+     * @return string|null
+     */
+    public function getAddress(?string $pidFilePath = null): ?string
+    {
+        $pidFilePath = $this->getPidFilePath($pidFilePath);
+
+        if (! file_exists($pidFilePath)) {
+            return null;
+        }
+
+        return file_get_contents($pidFilePath);
     }
 
     /**
