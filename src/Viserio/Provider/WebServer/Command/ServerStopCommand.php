@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Provider\WebServer\Command;
 
-use Throwable;
 use Symfony\Component\Console\Input\InputOption;
+use Throwable;
 use Viserio\Component\Console\Command\Command;
 
 class ServerStopCommand extends Command
