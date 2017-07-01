@@ -324,7 +324,9 @@ class WebServer
     /**
      * Create a new Server process.
      *
-     * @return string $documentRoot
+     * @param string $documentRoot
+     *
+     * @return \Symfony\Component\Process\Process
      */
     private function createServerProcess(string $documentRoot): Process
     {
