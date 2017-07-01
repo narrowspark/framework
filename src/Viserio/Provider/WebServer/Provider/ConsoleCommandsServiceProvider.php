@@ -5,8 +5,8 @@ namespace Viserio\Provider\WebServer\Provider;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Console\Application;
-use Viserio\Provider\WebServer\Command\ServerLogCommand;
 use Viserio\Provider\WebServer\Command\ServeCommand;
+use Viserio\Provider\WebServer\Command\ServerLogCommand;
 use Viserio\Provider\WebServer\Command\ServerStatusCommand;
 use Viserio\Provider\WebServer\Command\ServerStopCommand;
 

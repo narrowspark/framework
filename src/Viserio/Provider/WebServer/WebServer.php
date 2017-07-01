@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Provider\WebServer;
 
-use RuntimeException;
 use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -112,7 +112,7 @@ class WebServer
      *
      * @return self
      */
-    public function setRouter(string $router) : self
+    public function setRouter(string $router): self
     {
         $this->router = $router;
 
@@ -124,7 +124,7 @@ class WebServer
      *
      * @return string
      */
-    public function getRouter() : string
+    public function getRouter(): string
     {
         return $this->router;
     }

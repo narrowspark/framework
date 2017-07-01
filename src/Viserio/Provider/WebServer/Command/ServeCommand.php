@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Provider\WebServer\Command;
 
-use Throwable;
-use Viserio\Provider\WebServer\WebServer;
-use Viserio\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
+use Viserio\Component\Console\Command\Command;
+use Viserio\Provider\WebServer\WebServer;
 
 class ServeCommand extends Command
 {
@@ -67,6 +66,29 @@ class ServeCommand extends Command
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getArguments(): array
+    {
+        return [
+            ['addressport', InputArgument::OPTIONAL, 'The address to listen to (can be address:port, address, or port).'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getOptions(): array
+    {
+        return [
+            ['pidfile', null, InputOption::VALUE_REQUIRED, 'Path to the pidfile.'],
+            ['docroot', 'd', InputOption::VALUE_REQUIRED, 'Path to the document root.'],
+            ['router', 'r', InputOption::VALUE_REQUIRED, 'Path to custom router script.'],
+            ['background', null, InputOption::VALUE_NONE, 'Starts the server as a background process.'],
+        ];
+    }
+
+    /**
      * Configure the webserver with hostname, port and router path.
      * If option and argument are not empty.
      *
@@ -79,7 +101,7 @@ class ServeCommand extends Command
         if (($addressport = $this->argument('addressport')) !== null) {
             list($host, $port) = explode(':', $addressport);
 
-            if ($host !== null && !ctype_digit($host)) {
+            if ($host !== null && ! ctype_digit($host)) {
                 $server->setHostname($host);
             }
 
@@ -117,28 +139,5 @@ class ServeCommand extends Command
 
             $output->write($buffer, false, OutputInterface::OUTPUT_RAW);
         };
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getArguments() : array
-    {
-        return [
-            ['addressport', InputArgument::OPTIONAL, 'The address to listen to (can be address:port, address, or port).'],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOptions() : array
-    {
-        return [
-            ['pidfile', null, InputOption::VALUE_REQUIRED, 'Path to the pidfile.'],
-            ['docroot', 'd', InputOption::VALUE_REQUIRED, 'Path to the document root.'],
-            ['router', 'r', InputOption::VALUE_REQUIRED, 'Path to custom router script.'],
-            ['background', null, InputOption::VALUE_NONE, 'Starts the server as a background process.'],
-        ];
     }
 }
