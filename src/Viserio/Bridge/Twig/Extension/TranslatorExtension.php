@@ -134,7 +134,7 @@ class TranslatorExtension extends AbstractExtension
      * @param string      $id         The message id
      * @param mixed       $parameters An array of parameters for the message
      * @param string      $domain     The domain for the message or null to use the default
-     * @param string|null $locale      The locale to change the translator language
+     * @param string|null $locale     The locale to change the translator language
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *
