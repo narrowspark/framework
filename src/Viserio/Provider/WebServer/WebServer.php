@@ -3,21 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Provider\WebServer;
 
 use RuntimeException;
+use InvalidArgumentException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class WebServer implements
-    ProvidesDefaultOptionsContract,
-    RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+class WebServer
 {
-    use OptionsResolverTrait;
-
     /**
      * @var int
      */
@@ -29,54 +20,151 @@ class WebServer implements
     private const STOPPED = 1;
 
     /**
-     * {@inheritdoc}
-     */
-    public function getDimensions(): iterable
-    {
-        return ['viserio', 'webserver'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions(): iterable
-    {
-        return [
-            'hostname'   => '127.0.0.1',
-            'port'       => null,
-            'controller' => 'index.php',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMandatoryOptions(): iterable
-    {
-        return [
-            'document_root',
-        ];
-    }
-
-    /**
-     * Undocumented function.
+     * WebServer hostname.
      *
-     * @param mixed  $config
+     * @var string
+     */
+    private $hostname = '127.0.0.1';
+
+    /**
+     * WebServer port.
+     *
+     * @var int|null
+     */
+    private $port;
+
+    /**
+     * Path to the router file.
+     *
+     * @var string
+     */
+    private $router = __DIR__ . '/Resources/router.php';
+
+    /**
+     * File name of controller that should be used.
+     *
+     * @var string
+     */
+    private $controller = 'index.php';
+
+    /**
+     * Set the web-server hostname.
+     *
+     * @param string $hostname
+     *
+     * @return self
+     */
+    public function setHostname(string $hostname): self
+    {
+        $this->hostname = $hostname;
+
+        return $this;
+    }
+
+    /**
+     * Get the actual web server hostname.
+     *
+     * @return string
+     */
+    public function getHostname(): string
+    {
+        return $this->hostname;
+    }
+
+    /**
+     * Set the web server port.
+     *
+     * @param int $port
+     *
+     * @return self
+     */
+    public function setPort(int $port): self
+    {
+        if (! ctype_digit($port)) {
+            throw new InvalidArgumentException(sprintf('Port "%s" is not valid.', $this->port));
+        }
+
+        $this->port = $port;
+
+        return $this;
+    }
+
+    /**
+     * Get the actual web server port.
+     *
+     * @throws \InvalidArgumentException If port is invalid
+     *
+     * @return int
+     */
+    public function getPort(): int
+    {
+        if ($this->port !== null) {
+            return $this->port;
+        }
+
+        return self::findBestPort($this->getHostname());
+    }
+
+    /**
+     * Set the path to your custom router file.
+     *
+     * @param string $router
+     *
+     * @return self
+     */
+    public function setRouter(string $router) : self
+    {
+        $this->router = $router;
+
+        return $this;
+    }
+
+    /**
+     * Get the router file path.
+     *
+     * @return string
+     */
+    public function getRouter() : string
+    {
+        return $this->router;
+    }
+
+    /**
+     * Set the controller file name.
+     *
+     * @param string $controller
+     *
+     * @return self
+     */
+    public function setController(string $controller): self
+    {
+        $this->controller = $controller;
+
+        return $this;
+    }
+
+    /**
+     * Returns the controller file path.
+     *
+     * @return string
+     */
+    public function getController(): string
+    {
+        return $this->controller;
+    }
+
+    /**
+     * Starts the build in php web server.
+     *
+     * @param string $documentRoot
      * @param string $pidFilePath
      *
      * @return int
      */
-    public function start($config, ?string $pidFilePath = null): int
+    public function start(string $documentRoot, ?string $pidFilePath = null): int
     {
-        $options = $this->resolveOptions($config);
-        $port    = $options['port'] ?? self::findBestPort();
-
-        if (! ctype_digit($port)) {
-            throw new InvalidArgumentException(sprintf('Port "%s" is not valid.', $port));
-        }
-
         $pidFilePath = $this->getPidFilePath($pidFilePath);
-        $address     = sprintf('%s:%s', $options['hostname'], $port);
+        $address     = sprintf('%s:%s', $this->getHostname(), $this->getPort());
 
         if ($this->isRunning($pidFilePath)) {
             throw new RuntimeException(sprintf('A process is already listening on http://%s.', $address));
@@ -96,7 +184,7 @@ class WebServer implements
             throw new RuntimeException('Unable to set the child process as session leader.');
         }
 
-        $process = $this->createServerProcess($config);
+        $process = $this->createServerProcess($documentRoot);
         $process->disableOutput();
         $process->start();
 
@@ -141,7 +229,7 @@ class WebServer implements
     /**
      * Undocumented function.
      *
-     * @param mixed    $config
+     * @param string   $documentRoot
      * @param bool     $disableOutput
      * @param callable $callback
      *
@@ -150,20 +238,15 @@ class WebServer implements
      *
      * @return void
      */
-    public function run($config, bool $disableOutput = true, callable $callback = null): void
+    public function run(string $documentRoot, bool $disableOutput = true, callable $callback = null): void
     {
-        $options = $this->resolveOptions($config);
-        $port    = $options['port'] ?? self::findBestPort();
-
-        if (! ctype_digit($port)) {
-            throw new InvalidArgumentException(sprintf('Port "%s" is not valid.', $port));
-        }
+        $address = sprintf('%s:%s', $this->getHostname(), $this->getPort());
 
         if ($this->isRunning()) {
-            throw new RuntimeException(sprintf('A process is already listening on http://%s:%s.', $options['hostname'], $port));
+            throw new RuntimeException(sprintf('A process is already listening on http://%s.', $address));
         }
 
-        $process = $this->createServerProcess($config);
+        $process = $this->createServerProcess($documentRoot);
 
         if ($disableOutput) {
             $process->disableOutput();
@@ -239,19 +322,11 @@ class WebServer implements
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
-    }
-
-    /**
      * Create a new Server process.
      *
-     * @return \Symfony\Component\Process\Process The process
+     * @return string $documentRoot
      */
-    private function createServerProcess(array $config): Process
+    private function createServerProcess(string $documentRoot): Process
     {
         $finder = new PhpExecutableFinder();
 
@@ -262,10 +337,10 @@ class WebServer implements
         $process = new Process([
             $binary,
             '-S',
-            sprintf('%s:%s', $config['host'], $config['hostname']),
-            $config['router_path'],
+            sprintf('%s:%s', $this->getHostname(), $this->getPort()),
+            $this->getRouter(),
         ]);
-        $process->setWorkingDirectory($config->getDocumentRoot());
+        $process->setWorkingDirectory($documentRoot);
         $process->setTimeout(null);
 
         return $process;
@@ -300,13 +375,15 @@ class WebServer implements
     /**
      * Finds the best port from 8000 to 8100.
      *
+     * @param string $hostname
+     *
      * @return int
      */
-    private static function findBestPort(): int
+    private static function findBestPort(string $hostname): int
     {
         $port = 8000;
 
-        while ($fp = @fsockopen($this->hostname, $port, $errno, $errstr, 1) !== false) {
+        while ($fp = @fsockopen($hostname, $port, $errno, $errstr, 1) !== false) {
             fclose($fp);
 
             if ($port++ >= 8100) {
