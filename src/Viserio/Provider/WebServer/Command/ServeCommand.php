@@ -55,24 +55,14 @@ class ServeCommand extends Command
             $output->success(sprintf('Server listening on http://%s:%s', $server->getHostname(), $server->getPort()));
             $this->comment('Quit the server with CONTROL-C.');
 
-            $exitCode = $server->run($documentRoot, $output->isQuiet(), $this->getErrorCallback($output->isQuiet()));
+            $server->run($documentRoot, $output->isQuiet(), $this->getErrorCallback($output->isQuiet()));
         } catch (Throwable $exception) {
             $this->error($exception->getMessage());
 
             return 1;
         }
 
-        return $exitCode;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getArguments(): array
-    {
-        return [
-            ['addressport', InputArgument::OPTIONAL, 'The address to listen to (can be address:port, address, or port).'],
-        ];
+        return 0;
     }
 
     /**
@@ -82,6 +72,8 @@ class ServeCommand extends Command
     {
         return [
             ['pidfile', null, InputOption::VALUE_REQUIRED, 'Path to the pidfile.'],
+            ['host', 'H', InputOption::VALUE_REQUIRED, 'The hostname to listen to.'],
+            ['port', 'p', InputOption::VALUE_REQUIRED, 'The port to listen to.'],
             ['docroot', 'd', InputOption::VALUE_REQUIRED, 'Path to the document root.'],
             ['router', 'r', InputOption::VALUE_REQUIRED, 'Path to custom router script.'],
             ['background', null, InputOption::VALUE_NONE, 'Starts the server as a background process.'],

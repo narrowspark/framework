@@ -102,7 +102,7 @@ class WebServer
             return $this->port;
         }
 
-        return self::findBestPort($this->getHostname());
+        return $this->port = self::findBestPort($this->getHostname());
     }
 
     /**
@@ -383,9 +383,11 @@ class WebServer
      */
     private static function findBestPort(string $hostname): int
     {
-        $port = 8000;
+        $port   = 8000;
+        $errno  = 0;
+        $errstr = '';
 
-        while ($fp = @fsockopen($hostname, $port, $errno, $errstr, 1) !== false) {
+        while (false !== $fp = @fsockopen($hostname, $port, $errno, $errstr, 1)) {
             fclose($fp);
 
             if ($port++ >= 8100) {
