@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Provider\WebServer\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
