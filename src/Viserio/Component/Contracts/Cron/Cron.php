@@ -223,8 +223,8 @@ interface Cron
     /**
      * Schedule the event to run twice monthly.
      *
-     * @param  int  $first
-     * @param  int  $second
+     * @param int $first
+     * @param int $second
      *
      * @return $this
      */
