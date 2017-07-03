@@ -471,6 +471,18 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
+    public function twiceMonthly(int $first = 1, int $second = 16): CronContract
+    {
+        $days = $first.','.$second;
+
+        return $this->spliceIntoPosition(1, 0)
+            ->spliceIntoPosition(2, 0)
+            ->spliceIntoPosition(3, $days);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function weekdays(): CronContract
     {
         return $this->spliceIntoPosition(5, '1-5');

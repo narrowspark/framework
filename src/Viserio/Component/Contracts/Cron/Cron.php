@@ -221,6 +221,16 @@ interface Cron
     public function twiceDaily(int $first = 1, int $second = 13): Cron;
 
     /**
+     * Schedule the event to run twice monthly.
+     *
+     * @param  int  $first
+     * @param  int  $second
+     *
+     * @return $this
+     */
+    public function twiceMonthly(int $first = 1, int $second = 16): Cron;
+
+    /**
      * Schedule the cron job to run only on weekdays.
      *
      * @return $this

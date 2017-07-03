@@ -200,6 +200,13 @@ class CronTest extends MockeryTestCase
         self::assertSame('0 1,13 * * * *', $cron->twiceDaily()->getExpression());
     }
 
+    public function testTwiceMonthly()
+    {
+        $cron = new Cron('');
+
+        $this->assertEquals('0 0 1,16 * * *', $cron->twiceMonthly(1, 16)->getExpression());
+    }
+
     public function testWeekdays()
     {
         $cron = new Cron('');
