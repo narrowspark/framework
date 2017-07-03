@@ -473,7 +473,7 @@ class Cron implements CronContract
      */
     public function twiceMonthly(int $first = 1, int $second = 16): CronContract
     {
-        $days = $first.','.$second;
+        $days = $first . ',' . $second;
 
         return $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, 0)
