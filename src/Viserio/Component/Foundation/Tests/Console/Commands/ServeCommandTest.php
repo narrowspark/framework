@@ -6,29 +6,24 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Foundation\Console\Command\UpCommand;
+use Viserio\Component\Foundation\Console\Command\ServeCommand;
 
-class UpCommandTest extends MockeryTestCase
+class ServeCommandTest extends MockeryTestCase
 {
     public function testCommand()
     {
-        $framework = __DIR__ . '/../../Fixtures/framework';
-        $down      = $framework . '/down';
-
-        mkdir($framework);
-        file_put_contents($down, 'test');
+        $root = __DIR__ . '/../../notfound/';
 
         $kernel = $this->mock(ConsoleKernelContract::class);
-        $kernel->shouldReceive('storagePath')
+        $kernel->shouldReceive('getPublicPath')
             ->once()
-            ->with('framework/down')
-            ->andReturn($down);
+            ->andReturn($root);
 
         $container = new ArrayContainer([
             ConsoleKernelContract::class => $kernel,
         ]);
 
-        $command = new UpCommand();
+        $command = new ServeCommand();
         $command->setContainer($container);
 
         $tester = new CommandTester($command);
@@ -36,8 +31,6 @@ class UpCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("Application is now live.\n", $output);
-
-        rmdir($framework);
+        self::assertEquals("The document root directory [".$root."] does not exist.\n", $output);
     }
 }

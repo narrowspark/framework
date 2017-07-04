@@ -35,6 +35,8 @@ elif [[ "$PHPUNIT" = true ]]; then
                 TESTSUITE="Narrowspark $SLUG Component Test Suite";
             elif [[ "$TYPE" = "Bridge" ]]; then
                 TESTSUITE="Narrowspark $SLUG Bridge Test Suite";
+            elif [[ "$TYPE" = "Provider" ]]; then
+                TESTSUITE="Narrowspark $SLUG Provider Test Suite";
             fi
 
             try
