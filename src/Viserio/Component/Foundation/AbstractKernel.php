@@ -63,7 +63,7 @@ abstract class AbstractKernel implements
     public const RELEASE_VERSION = 0;
 
     /**
-     * The current Framework "extra" version
+     * The current Framework "extra" version.
      *
      * @var string
      */
