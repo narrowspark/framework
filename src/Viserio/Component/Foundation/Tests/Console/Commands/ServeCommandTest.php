@@ -55,7 +55,7 @@ class ServeCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("Unable to find the controller under [".$root."] (file not found: app.php).\n", $output);
+        self::assertEquals('Unable to find the controller under [' . $root . "] (file not found: app.php).\n", $output);
     }
 
     /**
