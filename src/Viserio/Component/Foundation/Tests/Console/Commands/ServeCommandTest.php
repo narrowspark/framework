@@ -31,6 +31,6 @@ class ServeCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("The document root directory [".$root."] does not exist.\n", $output);
+        self::assertEquals('The document root directory [' . $root . "] does not exist.\n", $output);
     }
 }
