@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/doctrine-dbal-bridge",
-    "type"       : "library",
+    "type"       : "viserio-bridge",
     "description": "The Viserio Doctrine bridge.",
     "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "dbal", "bridge"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
+    "homepage"   : "http://narrowspark.com",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -18,37 +18,37 @@
         }
     ],
     "require": {
-        "php"                                    : "^7.1",
-        "ext-pdo"                                : "*",
-        "doctrine/dbal"                          : "^2.5",
-        "narrowspark/collection"                 : "^0.1",
-        "symfony/polyfill-mbstring"              : "^1.0"
+        "php"                                          : "^7.1",
+        "ext-pdo"                                      : "*",
+        "doctrine/dbal"                                : "^2.5",
+        "narrowspark/collection"                       : "^0.1",
+        "symfony/polyfill-mbstring"                    : "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider"     : "^0.3",
-        "phpunit/phpunit"                        : "^6.0",
-        "viserio/container"                      : "self.version"
+        "container-interop/service-provider"           : "^0.3",
+        "phpunit/phpunit"                              : "^6.0",
+        "viserio/container"                            : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Bridge\\Doctrine\\"        : ""
+            "Viserio\\Bridge\\Doctrine\\DBAL\\"        : ""
         },
-        "exclude-from-classmap"                  : ["/Tests/"]
+        "exclude-from-classmap"                        : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Bridge\\Doctrine\\Tests\\" : "Tests/"
+            "Viserio\\Bridge\\Doctrine\\DBAL\\Tests\\" : "Tests/"
         }
     },
     "suggest": {
-        "container-interop/service-provider"     : "Required to use service-provider (^0.3).",
-        "viserio/statical-proxy"                 : "Required to use the proxy instances (self.version).",
+        "container-interop/service-provider"           : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"                       : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                         : "1.0-dev"
+            "dev-master"                               : "1.0-dev"
         }
     },
-    "minimum-stability"                          : "dev",
-    "prefer-stable"                              : true
+    "minimum-stability"                                : "dev",
+    "prefer-stable"                                    : true
 }
