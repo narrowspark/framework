@@ -89,7 +89,7 @@ class ServeCommandTest extends MockeryTestCase
 
     public function testCommandWithRunningWebServer()
     {
-        $root = __DIR__ . '/../../Fixtures';
+        $root    = __DIR__ . '/../../Fixtures';
         $pidFile = getcwd() . '/.web-server-pid';
 
         file_put_contents($pidFile, '127.0.0.1:8000');
