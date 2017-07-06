@@ -2,15 +2,12 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.0/phpunit.xsd"
     backupGlobals="false"
-    backupStaticAttributes="false"
     bootstrap="./phpunit.php"
     colors="true"
-    stopOnError="false"
     syntaxCheck="true"
     verbose="true"
     failOnRisky="true"
     failOnWarning="true"
-    beStrictAboutTestsThatDoNotTestAnything="true"
     beStrictAboutTestsSize="true"
 >
     <php>

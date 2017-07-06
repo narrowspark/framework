@@ -28,25 +28,56 @@ abstract class AbstractKernel implements
     use OptionsResolverTrait;
 
     /**
-     * The kernel version.
+     * The current Framework full version.
      *
      * @var string
      */
     public const VERSION = '1.0.0-DEV';
 
     /**
-     * The kernel version id.
+     * The current Framework version id.
      *
      * @var int
      */
     public const VERSION_ID  = 10000;
 
     /**
-     * The kernel extra version.
+     * The current Framework "major" version.
+     *
+     * @var int
+     */
+    public const MAJOR_VERSION = 1;
+
+    /**
+     * The current Framework "minor" version.
+     *
+     * @var int
+     */
+    public const MINOR_VERSION = 0;
+
+    /**
+     * The current Framework "release" version.
+     *
+     * @var int
+     */
+    public const RELEASE_VERSION = 0;
+
+    /**
+     * The current Framework "extra" version.
      *
      * @var string
      */
     public const EXTRA_VERSION = 'DEV';
+
+    /**
+     * @var string
+     */
+    public const END_OF_MAINTENANCE = '?';
+
+    /**
+     * @var string
+     */
+    public const END_OF_LIFE = '?';
 
     /**
      * Container instance.
