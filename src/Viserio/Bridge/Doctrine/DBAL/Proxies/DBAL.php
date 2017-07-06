@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Proxies;
 
+use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
-class DB extends StaticalProxy
+class DBAL extends StaticalProxy
 {
     /**
      * {@inheritdoc}
@@ -13,6 +14,6 @@ class DB extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return 'db';
+        return Connection::class;
     }
 }

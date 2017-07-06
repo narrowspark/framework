@@ -18,22 +18,24 @@ class DatabaseServiceProviderDatabaseConnectionTest extends TestCase
         $container->instance('config', [
             'viserio' => [
                 'doctrine' => [
-                    'default'     => 'sqlite',
-                    'connections' => [
-                        'mysql' => [
-                            'driver'        => 'pdo_mysql',
-                            'host'          => 'DB_HOST',
-                            'port'          => 'DB_PORT',
-                            'database'      => 'DB_DATABASE_NAME',
-                            'username'      => 'DB_DATABASE_USER',
-                            'password'      => 'DB_DATABASE_PASSWORD',
-                            'charset'       => 'DB_CHARSET', 'UTF8',
-                            'driverOptions' => [1002 => 'SET NAMES utf8'],
-                        ],
-                        'sqlite' => [
-                            'driver'   => 'pdo_sqlite',
-                            'database' => __DIR__ . '/../Stub/database.sqlite',
-                            'memory'   => true,
+                    'dbal' => [
+                        'default'     => 'sqlite',
+                        'connections' => [
+                            'mysql' => [
+                                'driver'        => 'pdo_mysql',
+                                'host'          => 'DB_HOST',
+                                'port'          => 'DB_PORT',
+                                'database'      => 'DB_DATABASE_NAME',
+                                'username'      => 'DB_DATABASE_USER',
+                                'password'      => 'DB_DATABASE_PASSWORD',
+                                'charset'       => 'DB_CHARSET', 'UTF8',
+                                'driverOptions' => [1002 => 'SET NAMES utf8'],
+                            ],
+                            'sqlite' => [
+                                'driver'   => 'pdo_sqlite',
+                                'database' => __DIR__ . '/../Stub/database.sqlite',
+                                'memory'   => true,
+                            ],
                         ],
                     ],
                 ],

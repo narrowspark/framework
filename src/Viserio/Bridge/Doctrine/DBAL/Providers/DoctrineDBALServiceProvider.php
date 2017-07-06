@@ -11,11 +11,15 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class DoctrineDBALServiceProvider implements
     ServiceProvider,
-    RequiresComponentConfigContract
+    ProvidesDefaultOptionsContract,
+    RequiresComponentConfigContract,
+    RequiresMandatoryOptionsContract
 {
     use StaticOptionsResolverTrait;
 
@@ -45,7 +49,42 @@ class DoctrineDBALServiceProvider implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio', 'doctrine'];
+        return ['viserio', 'doctrine', 'dbal'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMandatoryOptions(): iterable
+    {
+        return [
+            'default',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(): iterable
+    {
+        return [
+            'connections' => [
+                'mysql' => [
+                    'driver'        => 'pdo_mysql',
+                    'host'          => 'DB_HOST',
+                    'port'          => 'DB_PORT',
+                    'database'      => 'DB_DATABASE_NAME',
+                    'username'      => 'DB_DATABASE_USER',
+                    'password'      => 'DB_DATABASE_PASSWORD',
+                    'charset'       => 'UTF8',
+                    'driverOptions' => [1002 => 'SET NAMES utf8'],
+                ],
+                'oci8' => [
+                    'driver'        => 'oci8',
+                ],
+            ],
+            'wrapperClass' => Connection::class
+        ];
     }
 
     /**
@@ -97,10 +136,6 @@ class DoctrineDBALServiceProvider implements
         if (mb_strpos($config['default'], 'sqlite') === false) {
             $config['user']   = $connections['username'];
             $config['dbname'] = $connections['database'];
-
-            if (empty($config['dbname'])) {
-                throw new DBALException('The "database" must be set in the config or container entry "database"');
-            }
         } else {
             if (isset($connections['username'])) {
                 $config['user'] = $connections['username'];
@@ -110,8 +145,6 @@ class DoctrineDBALServiceProvider implements
         }
 
         unset($config['default'], $config['connections'], $config['username'], $config['database']);
-
-        $config['wrapperClass'] = $config['wrapperClass'] ?? Connection::class;
 
         return $config;
     }
