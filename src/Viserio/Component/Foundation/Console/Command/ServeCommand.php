@@ -52,7 +52,16 @@ class ServeCommand extends Command
             return 1;
         }
 
-        $this->registerController($documentRoot);
+        $controller = $this->option('controller');
+        $file       = $documentRoot . '/' . $controller;
+
+        if (! file_exists($file)) {
+            $this->error(sprintf('Unable to find the controller under [%s] (file not found: %s).', $documentRoot, $controller));
+
+            return 1;
+        }
+
+        putenv('APP_WEBSERVER_CONTROLLER=' . $file);
 
         $this->configureCommand();
 
@@ -92,25 +101,6 @@ class ServeCommand extends Command
             ['port', 'p', InputOption::VALUE_REQUIRED, 'The port to listen to.', 8000],
             ['controller', null, InputOption::VALUE_REQUIRED, 'File name of controller.', 'index.php'],
         ];
-    }
-
-    /**
-     * Checks if controller exists and register it to env.
-     *
-     * @param string $documentRoot
-     *
-     * @return void
-     */
-    private function registerController(string $documentRoot): void
-    {
-        $controller = $this->option('controller');
-        $file       = $documentRoot . '/' . $controller;
-
-        if (! file_exists($file)) {
-            $this->error(sprintf('Unable to find the controller under "%s" (file not found: %s).', $documentRoot, $controller));
-        }
-
-        putenv('APP_WEBSERVER_CONTROLLER=' . $file);
     }
 
     /**
@@ -175,13 +165,13 @@ class ServeCommand extends Command
     private function configureCommand(): void
     {
         $this->hostname = $this->option('host');
-        $port           = $this->option('port');
+        $port           = (int) $this->option('port');
 
-        if (! ctype_digit((int) $port)) {
+        if (! ctype_digit($port)) {
             throw new InvalidArgumentException(sprintf('Port "%s" is not valid.', $port));
         }
 
-        $this->port = (int) $port;
+        $this->port = $port;
     }
 
     /**
