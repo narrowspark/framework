@@ -1,8 +1,8 @@
 {
-    "name"       : "viserio/bridge/doctrine",
+    "name"       : "viserio/doctrine-dbal-bridge",
     "type"       : "library",
     "description": "The Viserio Doctrine bridge.",
-    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations", "bridge"],
+    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "dbal", "bridge"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -21,9 +21,7 @@
         "php"                                    : "^7.1",
         "ext-pdo"                                : "*",
         "doctrine/dbal"                          : "^2.5",
-        "doctrine/migrations"                    : "^1.4",
         "narrowspark/collection"                 : "^0.1",
-        "ocramius/proxy-manager"                 : "^2.0",
         "symfony/polyfill-mbstring"              : "^1.0"
     },
     "require-dev": {

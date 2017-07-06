@@ -20,7 +20,7 @@
     "require": {
         "php"                                         : "^7.1",
         "cache/psr-6-doctrine-bridge"                 : "^3.0",
-        "doctrine/orm"                                : "^2.6",
+        "doctrine/orm"                                : "^2.5",
         "ext-pdo"                                     : "*",
         "ocramius/proxy-manager"                      : "^2.1",
         "viserio/cache"                               : "self.version",

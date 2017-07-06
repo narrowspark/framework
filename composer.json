@@ -109,7 +109,7 @@
         "cache/filesystem-adapter"            : "^0.4",
         "cache/namespaced-cache"              : "^0.1",
         "cache/session-handler"               : "^0.2",
-        "doctrine/dbal"                       : "^2.5",
+        "doctrine/orm"                        : "^2.5",
         "erusev/parsedown-extra"              : "^0.7",
         "filp/whoops"                         : "^2.0",
         "guzzlehttp/guzzle"                   : "^6.0",
