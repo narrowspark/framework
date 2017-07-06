@@ -12,9 +12,12 @@ use Symfony\Component\Process\Process;
 use Throwable;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ServeCommand extends Command
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -53,7 +56,7 @@ class ServeCommand extends Command
         }
 
         $controller = $this->option('controller');
-        $file       = $documentRoot . '/' . $controller;
+        $file       = self::normalizeDirectorySeparator($documentRoot . '/' . $controller);
 
         if (! file_exists($file)) {
             $this->error(sprintf('Unable to find the controller under [%s] (file not found: %s).', $documentRoot, $controller));
