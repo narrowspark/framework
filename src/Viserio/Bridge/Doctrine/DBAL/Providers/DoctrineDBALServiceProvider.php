@@ -5,14 +5,13 @@ namespace Viserio\Bridge\Doctrine\DBAL\Providers;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection as DoctrineConnection;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
+use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class DoctrineDBALServiceProvider implements
@@ -83,7 +82,7 @@ class DoctrineDBALServiceProvider implements
                     'driver'        => 'oci8',
                 ],
             ],
-            'wrapperClass' => Connection::class
+            'wrapperClass' => Connection::class,
         ];
     }
 
