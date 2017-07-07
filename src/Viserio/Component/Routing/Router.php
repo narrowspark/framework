@@ -267,7 +267,7 @@ class Router implements RouterContract, RequestMethodInterface
                     'show',
                     'store',
                     'update',
-                    'destroy'
+                    'destroy',
                 ],
             ],
             $options

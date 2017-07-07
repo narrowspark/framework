@@ -6,7 +6,6 @@ use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Routing\ResourceRegistrar;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
@@ -15,6 +14,7 @@ use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Generator\UrlGenerator;
+use Viserio\Component\Routing\ResourceRegistrar;
 use Viserio\Component\Routing\Router;
 
 class RoutingServiceProvider implements ServiceProvider

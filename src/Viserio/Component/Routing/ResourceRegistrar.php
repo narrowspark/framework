@@ -2,9 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use BadMethodCallException;
-use Closure;
-use InvalidArgumentException;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 
 class ResourceRegistrar
@@ -28,7 +25,7 @@ class ResourceRegistrar
         'show',
         'edit',
         'update',
-        'destroy'
+        'destroy',
     ];
 
     /**
@@ -59,7 +56,7 @@ class ResourceRegistrar
      */
     protected static $verbs = [
         'create' => 'create',
-        'edit' => 'edit',
+        'edit'   => 'edit',
     ];
 
     /**
@@ -72,4 +69,3 @@ class ResourceRegistrar
         $this->router = $router;
     }
 }
-

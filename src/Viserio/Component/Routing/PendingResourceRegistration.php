@@ -35,23 +35,33 @@ class PendingResourceRegistration
     /**
      * Create a new pending resource registration instance.
      *
-     * @param  \Viserio\Component\Routing\ResourceRegistrar  $registrar
-     * @param  string  $name
-     * @param  string  $controller
-     * @param  array  $options
+     * @param \Viserio\Component\Routing\ResourceRegistrar $registrar
+     * @param string                                       $name
+     * @param string                                       $controller
+     * @param array                                        $options
      */
     public function __construct(ResourceRegistrar $registrar, string $name, string $controller, array $options)
     {
-        $this->name = $name;
-        $this->options = $options;
-        $this->registrar = $registrar;
+        $this->name       = $name;
+        $this->options    = $options;
+        $this->registrar  = $registrar;
         $this->controller = $controller;
+    }
+
+    /**
+     * Handle the object's destruction.
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->registrar->register($this->name, $this->controller, $this->options);
     }
 
     /**
      * Set the methods the controller should apply to.
      *
-     * @param  array|string|dynamic  $methods
+     * @param array|string|dynamic $methods
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
@@ -65,7 +75,7 @@ class PendingResourceRegistration
     /**
      * Set the methods the controller should exclude.
      *
-     * @param  array|string|dynamic  $methods
+     * @param array|string|dynamic $methods
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
@@ -79,7 +89,7 @@ class PendingResourceRegistration
     /**
      * Set the route names for controller actions.
      *
-     * @param  array  $names
+     * @param array $names
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
@@ -93,8 +103,8 @@ class PendingResourceRegistration
     /**
      * Set the route name for a controller action.
      *
-     * @param  string  $method
-     * @param  string  $name
+     * @param string $method
+     * @param string $name
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
@@ -108,7 +118,7 @@ class PendingResourceRegistration
     /**
      * Override the route parameter names.
      *
-     * @param  array  $parameters
+     * @param array $parameters
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
@@ -122,8 +132,8 @@ class PendingResourceRegistration
     /**
      * Override a route parameter's name.
      *
-     * @param  string  $previous
-     * @param  string  $new
+     * @param string $previous
+     * @param string $new
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
@@ -137,7 +147,7 @@ class PendingResourceRegistration
     /**
      * Set a middleware to the resource.
      *
-     * @param  mixed  $middleware
+     * @param mixed $middleware
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
@@ -146,15 +156,5 @@ class PendingResourceRegistration
         $this->options['middleware'] = $middleware;
 
         return $this;
-    }
-
-    /**
-     * Handle the object's destruction.
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->registrar->register($this->name, $this->controller, $this->options);
     }
 }
