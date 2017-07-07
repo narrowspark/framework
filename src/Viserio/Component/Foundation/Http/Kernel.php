@@ -79,7 +79,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         $options = [
             'name'             => 'Narrowspark',
@@ -96,7 +96,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      *
      * @return $this
      */
-    public function prependMiddleware(string $middleware)
+    public function prependMiddleware(string $middleware): self
     {
         if (array_search($middleware, $this->middlewares) === false) {
             array_unshift($this->middlewares, $middleware);
@@ -112,7 +112,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      *
      * @return $this
      */
-    public function pushMiddleware(string $middleware)
+    public function pushMiddleware(string $middleware): self
     {
         if (array_search($middleware, $this->middlewares) === false) {
             $this->middlewares[] = $middleware;
@@ -223,8 +223,10 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      * Report the exception to the exception handler.
      *
      * @param \Throwable $exception
+     *
+     * @return void
      */
-    protected function reportException(Throwable $exception)
+    protected function reportException(Throwable $exception): void
     {
         $this->getContainer()->get(ExceptionHandlerContract::class)->report($exception);
     }

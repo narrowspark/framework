@@ -19,18 +19,17 @@ parameters:
     ignoreErrors:
         # They are array callables
         - '#callable of class Twig_Function constructor#'
-        - '#callable of class Twig_Filter constructor#'
         - '#callable of method Invoker\\InvokerInterface::call#'
 
         # Magic functions, call and static call
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
         - '#Access to an undefined property Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::\$protectedVariable#'
-        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FacadeStub#'
+        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FooStaticalProxyStub#'
         - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\MacroTest::#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Fixture\\MacroTest::#'
-        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionFacadeStub::arg#'
+        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionSaticalProxyStub::arg#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
         - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\Command\\ClosureCommandTest::comment#'
@@ -40,10 +39,10 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::getProtectedStatic#'
         - '#Call to an undefined method Viserio\\Component\\Mail\\Message::setBody#'
+        - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'
         - '#Cannot call method getTarget#'
         - '#Cannot call method getName#'
         - '#Swift_#'
-        - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'
 
         # Required file variables
         - '#Undefined variable: \$class#'
@@ -76,7 +75,6 @@ parameters:
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'
         - "#Casting to mixed[] something that's already mixed[]#"
         - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
-        - '#Call to function count\(\) with argument type iterable\(mixed\[\]\) will always result in number 1#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream() should return resource but returns mixed|string#'
         - '#set\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#setMultiple\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'

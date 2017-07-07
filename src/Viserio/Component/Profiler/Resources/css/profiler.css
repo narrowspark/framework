@@ -16,6 +16,14 @@
     --profiler-table-body-background-color-odd: #fff;
 }
 
+/***** Media query print: Do not print the profiler. *****/
+@media print {
+    .profiler {
+        display: none;
+        visibility: hidden;
+    }
+}
+
 .profiler {
     font: 11px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 

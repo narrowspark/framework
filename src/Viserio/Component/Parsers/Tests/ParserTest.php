@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Tests;
 
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parsers\Parser;
 use Viserio\Component\Parsers\Parser\IniParser;
 use Viserio\Component\Parsers\Parser\JsonParser;
@@ -14,7 +14,7 @@ use Viserio\Component\Parsers\Parser\XmlParser;
 use Viserio\Component\Parsers\Parser\YamlParser;
 use Viserio\Component\Parsers\Tests\Fixtures\TextParser;
 
-class ParserTest extends MockeryTestCase
+class ParserTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Parsers\Parser

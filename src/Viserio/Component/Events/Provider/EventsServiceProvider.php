@@ -21,7 +21,7 @@ class EventsServiceProvider implements ServiceProvider
             EventManager::class         => function (ContainerInterface $container) {
                 return $container->get(EventManagerContract::class);
             },
-            'events' => function (ContainerInterface $container) {
+            'events'                    => function (ContainerInterface $container) {
                 return $container->get(EventManagerContract::class);
             },
         ];

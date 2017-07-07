@@ -5,7 +5,6 @@ namespace Viserio\Component\Exception;
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
@@ -22,6 +21,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
+use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
@@ -42,7 +42,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['env'];
     }
@@ -50,7 +50,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return array_merge(
             parent::getDefaultOptions(),
@@ -150,7 +150,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         }
 
         $response = $this->getPreparedResponse(
-            $container,
+            $container->get(ServerRequestFactory::class)->createServerRequest('GET', '/exception'),
             $exception,
             $transformed
         );
@@ -166,7 +166,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         $exception = $this->prepareException($exception);
 
         return $this->getPreparedResponse(
-            $this->container,
+            $request,
             $exception,
             $this->getTransformed($exception)
         );
@@ -183,27 +183,27 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * Get a prepared response with the transformed exception.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param \Throwable                        $exception
-     * @param \Throwable                        $transformed
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Throwable                               $exception
+     * @param \Throwable                               $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getPreparedResponse(
-        ContainerInterface $container,
+        ServerRequestInterface $request,
         Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
         try {
             $response = $this->getResponse(
-                $container->get(ServerRequestInterface::class),
+                $request,
                 $exception,
                 $transformed
             );
         } catch (Throwable $exception) {
             $this->report($exception);
 
-            $response = $container->get(ResponseFactoryInterface::class)->createResponse();
+            $response = $this->container->get(ResponseFactoryInterface::class)->createResponse();
             $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
             $response = $response->withHeader('Content-Type', 'text/plain');
         }

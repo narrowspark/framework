@@ -11,7 +11,7 @@ class ConnectionMandatoryRecursiveContainerIdConfiguration implements RequiresCo
     /**
      * {@inheritdoc}.
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return new ArrayIterator(['doctrine', 'connection']);
     }
@@ -19,7 +19,7 @@ class ConnectionMandatoryRecursiveContainerIdConfiguration implements RequiresCo
     /**
      * {@inheritdoc}.
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return new ArrayIterator(['params' => ['user', 'dbname'], 'driverClass']);
     }

@@ -28,7 +28,7 @@ interface AliasLoader
      *
      * @return void
      */
-    public function removeAlias();
+    public function removeAlias(): void;
 
     /**
      * Resolves a plain alias.
@@ -47,7 +47,7 @@ interface AliasLoader
      *
      * @return void
      */
-    public function aliasPattern($patterns, string $translation = null);
+    public function aliasPattern($patterns, string $translation = null): void;
 
     /**
      * Removes an alias pattern.
@@ -57,7 +57,7 @@ interface AliasLoader
      *
      * @return void
      */
-    public function removeAliasPattern(string $pattern, string $translation = null);
+    public function removeAliasPattern(string $pattern, string $translation = null): void;
 
     /**
      * Adds a namespace alias.
@@ -67,7 +67,7 @@ interface AliasLoader
      *
      * @return void
      */
-    public function aliasNamespace(string $class, string $alias);
+    public function aliasNamespace(string $class, string $alias): void;
 
     /**
      * Resolves a namespace alias.
@@ -83,14 +83,14 @@ interface AliasLoader
      *
      * @return void
      */
-    public function removeNamespaceAlias();
+    public function removeNamespaceAlias(): void;
 
     /**
      * Register the loader on the auto-loader stack.
      *
      * @return void
      */
-    public function register();
+    public function register(): void;
 
     /**
      * Indicates if the loader has been registered.
@@ -104,7 +104,7 @@ interface AliasLoader
      *
      * @return void
      */
-    public function unregister();
+    public function unregister(): void;
 
     /**
      * Set the registered aliases.
@@ -113,7 +113,7 @@ interface AliasLoader
      *
      * @return void
      */
-    public function setAliases(array $aliases);
+    public function setAliases(array $aliases): void;
 
     /**
      * Get the registered aliases.

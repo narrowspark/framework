@@ -123,8 +123,10 @@ class ListenerPattern
      *
      * @param \Viserio\Component\Contracts\Events\EventManager $dispatcher
      * @param string                                           $eventName
+     *
+     * @return void
      */
-    public function bind(EventManagerContract $dispatcher, string $eventName)
+    public function bind(EventManagerContract $dispatcher, string $eventName): void
     {
         if (isset($this->events[$eventName])) {
             return;
@@ -139,8 +141,10 @@ class ListenerPattern
      * previously added.
      *
      * @param \Viserio\Component\Contracts\Events\EventManager $dispatcher
+     *
+     * @return void
      */
-    public function unbind(EventManagerContract $dispatcher)
+    public function unbind(EventManagerContract $dispatcher): void
     {
         foreach ($this->events as $eventName => $value) {
             $dispatcher->detach($eventName, $this->getListener());

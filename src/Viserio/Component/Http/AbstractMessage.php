@@ -213,8 +213,10 @@ abstract class AbstractMessage implements MessageInterface
      * Set validated headers.
      *
      * @param array $headers
+     *
+     * @return void
      */
-    protected function setHeaders(array $headers)
+    protected function setHeaders(array $headers): void
     {
         if (empty($headers)) {
             return;
@@ -279,8 +281,10 @@ abstract class AbstractMessage implements MessageInterface
      * @param string $version
      *
      * @throws \InvalidArgumentException on invalid HTTP protocol version
+     *
+     * @return void
      */
-    private function validateProtocolVersion(string $version)
+    private function validateProtocolVersion(string $version): void
     {
         if (empty($version)) {
             throw new InvalidArgumentException(sprintf(
@@ -353,9 +357,11 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param array $values
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
+     *
+     * @return void
      */
-    private function assertValidHeaderValue(array $values)
+    private function assertValidHeaderValue(array $values): void
     {
         array_walk($values, __NAMESPACE__ . '\HeaderSecurity::assertValid');
     }

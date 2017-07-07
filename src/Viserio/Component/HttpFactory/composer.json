@@ -23,7 +23,7 @@
         "viserio/http"                                 : "self.version"
     },
     "require-dev": {
-        "mockery/mockery"                              : "^1.0",
+        "mockery/mockery"                              : "^0.9",
         "narrowspark/testing-helper"                   : "^3.0",
         "phpunit/phpunit"                              : "^6.0"
     },

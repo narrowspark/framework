@@ -9,18 +9,17 @@ use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Log\Log;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer as MonologWriter;
-use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class LoggerServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    use StaticOptionsResolverTrait;
+    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -51,7 +50,7 @@ class LoggerServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'log'];
     }
@@ -59,7 +58,7 @@ class LoggerServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'env',
@@ -96,13 +95,5 @@ class LoggerServiceProvider implements
         }
 
         return $logger;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
     }
 }

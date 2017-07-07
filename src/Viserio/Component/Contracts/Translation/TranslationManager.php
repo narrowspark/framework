@@ -4,4 +4,14 @@ namespace Viserio\Component\Contracts\Translation;
 
 interface TranslationManager
 {
+    /**
+     * Get a language translator instance.
+     *
+     * @param string|null $locale
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Viserio\Component\Contracts\Translation\Translator
+     */
+    public function getTranslator(string $locale = null): Translator;
 }

@@ -45,8 +45,7 @@
         "psr/container-implementation"              : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"        : "Required to use service-provider (^0.3).",
-        "viserio/statical-proxy"                    : "Required to use the proxy instances (self.version)."
+        "container-interop/service-provider"        : "Required to use service-provider (^0.3)."
     },
     "extra": {
         "branch-alias": {

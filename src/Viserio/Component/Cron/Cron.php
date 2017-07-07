@@ -149,7 +149,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function setPath(string $path)
+    public function setPath(string $path): CronContract
     {
         $this->path = $path;
 
@@ -471,6 +471,18 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
+    public function twiceMonthly(int $first = 1, int $second = 16): CronContract
+    {
+        $days = $first . ',' . $second;
+
+        return $this->spliceIntoPosition(1, 0)
+            ->spliceIntoPosition(2, 0)
+            ->spliceIntoPosition(3, $days);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function weekdays(): CronContract
     {
         return $this->spliceIntoPosition(5, '1-5');
@@ -784,8 +796,10 @@ class Cron implements CronContract
 
     /**
      * Call all of the "before" callbacks for the cron job.
+     *
+     * @return void
      */
-    protected function callBeforeCallbacks()
+    protected function callBeforeCallbacks(): void
     {
         foreach ($this->beforeCallbacks as $callback) {
             $this->getInvoker()->call($callback);
@@ -794,8 +808,10 @@ class Cron implements CronContract
 
     /**
      * Call all of the "after" callbacks for the cron job.
+     *
+     * @return void
      */
-    protected function callAfterCallbacks()
+    protected function callAfterCallbacks(): void
     {
         foreach ($this->afterCallbacks as $callback) {
             $this->getInvoker()->call($callback);

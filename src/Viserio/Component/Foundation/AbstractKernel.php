@@ -11,7 +11,6 @@ use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -28,25 +27,56 @@ abstract class AbstractKernel implements
     use OptionsResolverTrait;
 
     /**
-     * The kernel version.
+     * The current Framework full version.
      *
      * @var string
      */
     public const VERSION = '1.0.0-DEV';
 
     /**
-     * The kernel version id.
+     * The current Framework version id.
      *
      * @var int
      */
     public const VERSION_ID  = 10000;
 
     /**
-     * The kernel extra version.
+     * The current Framework "major" version.
+     *
+     * @var int
+     */
+    public const MAJOR_VERSION = 1;
+
+    /**
+     * The current Framework "minor" version.
+     *
+     * @var int
+     */
+    public const MINOR_VERSION = 0;
+
+    /**
+     * The current Framework "release" version.
+     *
+     * @var int
+     */
+    public const RELEASE_VERSION = 0;
+
+    /**
+     * The current Framework "extra" version.
      *
      * @var string
      */
     public const EXTRA_VERSION = 'DEV';
+
+    /**
+     * @var string
+     */
+    public const END_OF_MAINTENANCE = '?';
+
+    /**
+     * @var string
+     */
+    public const END_OF_LIFE = '?';
 
     /**
      * Container instance.
@@ -100,7 +130,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'app'];
     }
@@ -108,7 +138,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'locale'          => 'en',
@@ -121,7 +151,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'env',
@@ -141,7 +171,7 @@ abstract class AbstractKernel implements
      */
     public function setKernelConfigurations($data): void
     {
-        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($data);
     }
 
     /**
@@ -410,13 +440,5 @@ abstract class AbstractKernel implements
     protected function initializeContainer(): void
     {
         $this->container = new Container();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

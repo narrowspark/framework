@@ -30,6 +30,7 @@
         "aws/aws-sdk-php"                       : "^3.0",
         "container-interop/service-provider"    : "^0.3",
         "guzzlehttp/guzzle"                     : "^6.0",
+        "mockery/mockery"                       : "^0.9",
         "narrowspark/testing-helper"            : "^3.0",
         "opis/closure"                          : "^3.0",
         "phpunit/phpunit"                       : "^6.0",

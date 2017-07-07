@@ -165,8 +165,10 @@ class EventManager implements EventManagerContract
      * Sort the listeners for a given event by priority.
      *
      * @param string $eventName
+     *
+     * @return void
      */
-    protected function sortListeners(string $eventName)
+    protected function sortListeners(string $eventName): void
     {
         $this->sorted[$eventName] = [];
 
@@ -199,8 +201,10 @@ class EventManager implements EventManagerContract
      * Binds all patterns that match the specified event name.
      *
      * @param string $eventName
+     *
+     * @return void
      */
-    protected function bindPatterns(string $eventName)
+    protected function bindPatterns(string $eventName): void
     {
         if (isset($this->syncedEvents[$eventName])) {
             return;
@@ -224,8 +228,10 @@ class EventManager implements EventManagerContract
      * dispatched.
      *
      * @param \Viserio\Component\Events\ListenerPattern $pattern
+     *
+     * @return void
      */
-    protected function addListenerPattern(ListenerPattern $pattern)
+    protected function addListenerPattern(ListenerPattern $pattern): void
     {
         $this->patterns[$pattern->getEventPattern()][] = $pattern;
 
@@ -245,8 +251,10 @@ class EventManager implements EventManagerContract
      *
      * @param string $eventPattern
      * @param mixed  $listener
+     *
+     * @return void
      */
-    protected function removeListenerPattern(string $eventPattern, $listener)
+    protected function removeListenerPattern(string $eventPattern, $listener): void
     {
         if (! isset($this->patterns[$eventPattern])) {
             return;

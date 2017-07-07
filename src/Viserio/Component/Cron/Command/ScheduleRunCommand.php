@@ -4,7 +4,6 @@ namespace Viserio\Component\Cron\Command;
 
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -28,7 +27,7 @@ class ScheduleRunCommand extends Command implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'cron'];
     }
@@ -36,7 +35,7 @@ class ScheduleRunCommand extends Command implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'env',
@@ -50,7 +49,7 @@ class ScheduleRunCommand extends Command implements
     public function handle()
     {
         $container = $this->getContainer();
-        $options   = $this->resolveOptions($container);
+        $options   = self::resolveOptions($container);
         $cronJobs  = $container->get(Schedule::class)->dueCronJobs(
             $options['env'],
             $options['maintenance']
@@ -73,13 +72,5 @@ class ScheduleRunCommand extends Command implements
         if (count($cronJobs) === 0 || $cronJobsRan === 0) {
             $this->info('No scheduled commands are ready to run.');
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

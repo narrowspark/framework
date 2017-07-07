@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
-use Psr\Cache\CacheItemPoolInterface;
+use Cache\Adapter\Common\PhpCachePool as PhpCachePoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use stdClass;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
-class PhpCacheTraceableCacheDecorator implements CacheInterface, CacheItemPoolInterface
+class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInterface
 {
     use SimpleTraceableCacheDecoratorTrait;
     use TraceableCacheItemDecoratorTrait;
@@ -75,6 +75,38 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, CacheItemPoolIn
         } finally {
             $event->end = microtime(true);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function invalidateTags(array $tags): bool
+    {
+        $event = $this->start(__FUNCTION__);
+
+        try {
+            $bool = $event->result = $this->pool->invalidateTags($tags);
+        } finally {
+            $event->end = microtime(true);
+        }
+
+        return $bool;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function invalidateTag($tag)
+    {
+        $event = $this->start(__FUNCTION__);
+
+        try {
+            $bool = $event->result = $this->pool->invalidateTag($tag);
+        } finally {
+            $event->end = microtime(true);
+        }
+
+        return $bool;
     }
 
     /**

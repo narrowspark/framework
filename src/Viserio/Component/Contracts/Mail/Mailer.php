@@ -9,16 +9,20 @@ interface Mailer
      *
      * @param string      $address
      * @param string|null $name
+     *
+     * @return void
      */
-    public function alwaysFrom(string $address, string $name = null);
+    public function alwaysFrom(string $address, string $name = null): void;
 
     /**
      * Set the global to address and name.
      *
      * @param string      $address
      * @param string|null $name
+     *
+     * @return void
      */
-    public function alwaysTo(string $address, string $name = null);
+    public function alwaysTo(string $address, string $name = null): void;
 
     /**
      * Send a new message when only a raw text part.

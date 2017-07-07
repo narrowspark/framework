@@ -10,7 +10,7 @@ class PackageDefaultOptionsConfiguration implements RequiresComponentConfigContr
     /**
      * {@inheritdoc}.
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['vendor', 'package'];
     }
@@ -18,7 +18,7 @@ class PackageDefaultOptionsConfiguration implements RequiresComponentConfigContr
     /**
      * {@inheritdoc}.
      */
-    public function getDefaultOptions(): array
+    public static function getDefaultOptions(): array
     {
         return [
             'minLength' => 2,

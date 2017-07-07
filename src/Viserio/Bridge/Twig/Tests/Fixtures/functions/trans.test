@@ -2,9 +2,9 @@
 "trans" functions
 --TEMPLATE--
 {{ trans('test') }}
-{{ trans('{0} There are no apples|{1} There is one apple', ['1']) }}
+{{ trans('{count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}', {'count' : '1'}) }}
 --DATA--
 return array()
 --EXPECT--
 test
-There is one apple
+Got one candy left

@@ -10,12 +10,12 @@ class ConnectionMandatoryConfiguration implements RequiresComponentConfigContrac
     /**
      * {@inheritdoc}.
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['doctrine', 'connection'];
     }
 
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['orm_default'];
     }

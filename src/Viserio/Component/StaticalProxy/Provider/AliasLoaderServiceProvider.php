@@ -4,11 +4,11 @@ namespace Viserio\Component\StaticalProxy\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
-use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\StaticalProxy\AliasLoader;
 
 class AliasLoaderServiceProvider implements
@@ -16,7 +16,7 @@ class AliasLoaderServiceProvider implements
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
-    use StaticOptionsResolverTrait;
+    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -37,7 +37,7 @@ class AliasLoaderServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'staticalproxy'];
     }
@@ -45,10 +45,12 @@ class AliasLoaderServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
-            'aliases' => [],
+            'aliases'         => [],
+            'cache_path'      => null,
+            'real_time_proxy' => false,
         ];
     }
 
@@ -63,14 +65,36 @@ class AliasLoaderServiceProvider implements
     {
         $options = self::resolveOptions($container);
 
-        return new AliasLoader($options['aliases']);
+        $loader    = new AliasLoader($options['aliases']);
+        $cachePath = self::getCachePath($container, $options);
+
+        if ($cachePath !== null) {
+            $loader->setCachePath($cachePath);
+
+            if ($options['real_time_proxy'] === true) {
+                $loader->enableRealTimeStaticalProxy();
+            }
+        }
+
+        return $loader;
     }
 
     /**
-     * {@inheritdoc}
+     * Get real-time proxy cache path.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     * @param array                             $options
+     *
+     * @return string|null
      */
-    protected static function getConfigClass(): RequiresConfigContract
+    private static function getCachePath(ContainerInterface $container, array $options): ?string
     {
-        return new self();
+        $cachePath = $options['cache_path'];
+
+        if ($cachePath === null && $container->has(KernelContract::class)) {
+            $cachePath = $container->get(KernelContract::class)->getStoragePath('staticalproxy');
+        }
+
+        return $cachePath;
     }
 }

@@ -15,5 +15,5 @@ interface RequiresMandatoryOptions
      *
      * @return iterable List with mandatory options, can be nested
      */
-    public function getMandatoryOptions(): iterable;
+    public static function getMandatoryOptions(): iterable;
 }

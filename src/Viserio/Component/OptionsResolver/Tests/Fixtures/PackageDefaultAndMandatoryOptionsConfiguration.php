@@ -11,7 +11,7 @@ class PackageDefaultAndMandatoryOptionsConfiguration implements RequiresComponen
     /**
      * {@inheritdoc}.
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['vendor', 'package'];
     }
@@ -19,7 +19,7 @@ class PackageDefaultAndMandatoryOptionsConfiguration implements RequiresComponen
     /**
      * {@inheritdoc}.
      */
-    public function getDefaultOptions(): array
+    public static function getDefaultOptions(): array
     {
         return [
             'minLength' => 2,
@@ -30,7 +30,7 @@ class PackageDefaultAndMandatoryOptionsConfiguration implements RequiresComponen
     /**
      * {@inheritdoc}.
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'callback',

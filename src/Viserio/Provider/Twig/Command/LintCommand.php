@@ -6,7 +6,6 @@ use Symfony\Component\Finder\Finder;
 use Viserio\Bridge\Twig\Command\LintCommand as BaseLintCommand;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
@@ -17,7 +16,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'view'];
     }
@@ -25,7 +24,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'engines' => [
@@ -128,20 +127,12 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
      */
     protected function getFinder(array $paths, string $file = null): iterable
     {
-        $options = $this->resolveOptions($this->getContainer());
+        $options = self::resolveOptions($this->getContainer());
 
         return Finder::create()
             ->files()
             ->in($paths)
             ->name(($file === null ? '*.' : $file . '.') . $options['engines']['twig']['file_extension'])
             ->getIterator();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

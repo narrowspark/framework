@@ -3,14 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Tests;
 
 use Mockery as Mock;
+use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\StaticalProxy\StaticalProxy;
-use Viserio\Component\StaticalProxy\Tests\Fixture\ExceptionFacadeStub;
-use Viserio\Component\StaticalProxy\Tests\Fixture\FacadeObjectStub;
-use Viserio\Component\StaticalProxy\Tests\Fixture\FacadeStub;
-use Viserio\Component\StaticalProxy\Tests\Fixture\ProxyStub;
+use Viserio\Component\StaticalProxy\Tests\Fixture\ExceptionSaticalProxyStub;
+use Viserio\Component\StaticalProxy\Tests\Fixture\FooStaticalProxyStub;
+use Viserio\Component\StaticalProxy\Tests\Fixture\StaticalProxyObjectStub;
+use Viserio\Component\StaticalProxy\Tests\Fixture\StaticalProxyStub;
 
 class StaticalProxyTest extends MockeryTestCase
 {
@@ -22,38 +23,42 @@ class StaticalProxyTest extends MockeryTestCase
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->andReturn(new stdClass());
-        FacadeStub::setContainer($container);
+
+        FooStaticalProxyStub::setContainer($container);
     }
 
     public function testSwap()
     {
-        ProxyStub::swap(new FacadeStub());
-        self::assertEquals(new FacadeStub(), ProxyStub::getResolvedInstance()['baz']);
+        StaticalProxyStub::swap(new FooStaticalProxyStub());
 
-        ProxyStub::clearResolvedInstance('baz');
-        self::assertTrue(empty(ProxyStub::getResolvedInstance()['baz']));
+        self::assertEquals(new FooStaticalProxyStub(), StaticalProxyStub::getResolvedInstance()['baz']);
+
+        StaticalProxyStub::clearResolvedInstance('baz');
+
+        self::assertTrue(empty(StaticalProxyStub::getResolvedInstance()['baz']));
     }
 
-    public function testgetInstance()
+    public function testGetInstance()
     {
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('baz')->andReturn(new stdClass());
-        ProxyStub::setContainer($container);
+        StaticalProxyStub::setContainer($container);
 
-        self::assertEquals(new stdClass(), ProxyStub::getInstance());
+        self::assertEquals(new stdClass(), StaticalProxyStub::getInstance());
     }
 
     public function testCallStatic()
     {
         $container = $this->mock(ContainerInterface::class);
-        $container->shouldReceive('get')->with('foo')->andReturn(new ProxyStub());
-        FacadeStub::setContainer($container);
+        $container->shouldReceive('get')->with('foo')->andReturn(new StaticalProxyStub());
 
-        self::assertEquals(1, FacadeStub::oneArg(1));
-        self::assertEquals(2, FacadeStub::twoArg(1, 1));
-        self::assertEquals(3, FacadeStub::threeArg(1, 1, 1));
-        self::assertEquals(4, FacadeStub::fourArg(1, 1, 1, 1));
-        self::assertEquals(5, FacadeStub::moreArg(1, 1, 1, 1, 1));
+        FooStaticalProxyStub::setContainer($container);
+
+        self::assertEquals(1, FooStaticalProxyStub::oneArg(1));
+        self::assertEquals(2, FooStaticalProxyStub::twoArg(1, 1));
+        self::assertEquals(3, FooStaticalProxyStub::threeArg(1, 1, 1));
+        self::assertEquals(4, FooStaticalProxyStub::fourArg(1, 1, 1, 1));
+        self::assertEquals(5, FooStaticalProxyStub::moreArg(1, 1, 1, 1, 1));
     }
 
     /**
@@ -63,10 +68,11 @@ class StaticalProxyTest extends MockeryTestCase
     public function testCallStaticToThrowException()
     {
         $container = $this->mock(ContainerInterface::class);
-        $container->shouldReceive('get')->with('foo')->andReturn(new ProxyStub());
-        ExceptionFacadeStub::setContainer($container);
+        $container->shouldReceive('get')->with('foo')->andReturn(new StaticalProxyStub());
 
-        self::assertEquals(1, ExceptionFacadeStub::arg(1));
+        ExceptionSaticalProxyStub::setContainer($container);
+
+        self::assertEquals(1, ExceptionSaticalProxyStub::arg(1));
     }
 
     /**
@@ -75,12 +81,12 @@ class StaticalProxyTest extends MockeryTestCase
      */
     public function testGetInstanceIdentifier()
     {
-        ExceptionFacadeStub::getInstanceIdentifier();
+        ExceptionSaticalProxyStub::getInstanceIdentifier();
     }
 
     public function testGetStaticalProxyRoot()
     {
-        self::assertEquals(new stdClass(), FacadeObjectStub::getStaticalProxyRoot());
+        self::assertEquals(new stdClass(), StaticalProxyObjectStub::getStaticalProxyRoot());
     }
 
     public function testFacadeCallsUnderlyingApplication()
@@ -90,8 +96,9 @@ class StaticalProxyTest extends MockeryTestCase
         $mock->shouldReceive('bar')->once()->andReturn('baz');
         $container->shouldReceive('get')->once()->andReturn($mock);
 
-        FacadeStub::setContainer($container);
-        self::assertEquals('baz', FacadeStub::bar());
+        FooStaticalProxyStub::setContainer($container);
+
+        self::assertEquals('baz', FooStaticalProxyStub::bar());
     }
 
     public function testShouldReceiveReturnsAMockeryMock()
@@ -99,11 +106,11 @@ class StaticalProxyTest extends MockeryTestCase
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('foo')->andReturn(new stdClass());
 
-        FacadeStub::setContainer($container);
+        FooStaticalProxyStub::setContainer($container);
 
         self::assertInstanceOf(
-            'Mockery\MockInterface',
-            FacadeStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
+            MockInterface::class,
+            FooStaticalProxyStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
         );
     }
 
@@ -112,22 +119,22 @@ class StaticalProxyTest extends MockeryTestCase
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('foo')->andReturn(new stdClass());
 
-        FacadeStub::setContainer($container);
+        FooStaticalProxyStub::setContainer($container);
 
         self::assertInstanceOf(
-            'Mockery\MockInterface',
-            $mock = FacadeStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
+            MockInterface::class,
+            $mock = FooStaticalProxyStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
         );
         self::assertInstanceOf(
-            'Mockery\MockInterface',
-            $mock = FacadeStub::shouldReceive('foo2')->with('bar2')->andReturn('baz2')->getMock()
+            MockInterface::class,
+            $mock = FooStaticalProxyStub::shouldReceive('foo2')->with('bar2')->andReturn('baz2')->getMock()
         );
     }
 
     public function testCanBeMockedWithoutUnderlyingInstance()
     {
-        FacadeStub::shouldReceive('foo')->andReturn('bar');
+        FooStaticalProxyStub::shouldReceive('foo')->andReturn('bar');
 
-        self::assertEquals('bar', FacadeStub::foo());
+        self::assertEquals('bar', FooStaticalProxyStub::foo());
     }
 }

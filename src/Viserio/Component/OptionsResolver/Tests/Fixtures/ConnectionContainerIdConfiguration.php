@@ -9,7 +9,7 @@ class ConnectionContainerIdConfiguration implements RequiresComponentConfigIdCon
     /**
      * {@inheritdoc}.
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['doctrine', 'connection'];
     }

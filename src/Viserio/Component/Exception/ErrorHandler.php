@@ -10,6 +10,7 @@ use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -21,7 +22,6 @@ use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\CommandLineTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
@@ -74,15 +74,17 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
 
         if ($this->container->has(LoggerInterface::class)) {
             $this->logger = $this->container->get(LoggerInterface::class);
+        } else {
+            $this->logger = new NullLogger();
         }
 
-        $this->resolvedOptions = $this->resolveOptions($this->container);
+        $this->resolvedOptions = self::resolveOptions($this->container);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -90,7 +92,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             // A list of the exception types that should not be reported.
@@ -144,9 +146,10 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $level = $this->getLevel($exception);
         $id    = $this->exceptionIdentifier->identify($exception);
 
-        if ($this->logger !== null) {
-            $this->getLogger()->{$level}($exception, ['identification' => ['id' => $id]]);
-        }
+        $this->getLogger()->{$level}(
+            $exception->getMessage(),
+            ['exception' => $exception, 'identification' => ['id' => $id]]
+        );
     }
 
     /**
@@ -232,9 +235,10 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $this->report($exception);
 
         $transformed = $this->getTransformed($exception);
-        $container   = $this->container;
 
         if (PHP_SAPI === 'cli') {
+            $container = $this->container;
+
             if ($container->has(ConsoleApplication::class)) {
                 $container->get(ConsoleApplication::class)
                     ->renderException($transformed, new ConsoleOutput());
@@ -243,7 +247,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             }
         }
 
-        throw $exception;
+        throw $transformed;
     }
 
     /**
@@ -358,7 +362,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      *
      * @return \Throwable
      */
-    protected function getTransformed(Throwable $exception)
+    protected function getTransformed(Throwable $exception): Throwable
     {
         $container    = $this->container;
         $transformers = array_merge(
@@ -420,13 +424,5 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         }
 
         return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

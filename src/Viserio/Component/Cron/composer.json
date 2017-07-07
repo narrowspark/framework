@@ -31,6 +31,7 @@
     },
     "require-dev": {
         "container-interop/service-provider"    : "^0.3",
+        "mockery/mockery"                       : "^0.9",
         "narrowspark/testing-helper"            : "^3.0",
         "phpunit/phpunit"                       : "^6.0",
         "viserio/cache"                         : "self.version",

@@ -78,7 +78,7 @@ class TimeDataCollector extends AbstractDataCollector
             'end'          => $this->requestEndTime,
             'duration'     => $this->getRequestDuration(),
             'duration_str' => $this->formatDuration($this->getRequestDuration()),
-            'measures'     => array_values($this->measures),
+            'measures'     => $this->measures,
         ];
     }
 

@@ -15,7 +15,7 @@ class AwsS3Connector extends AbstractConnector
      */
     protected function getAuth(array $config): array
     {
-        $this->checkForKeyinConfigArray($config);
+        $this->checkForKeyInConfigArray($config);
 
         $auth = [
             'region'      => $config['region'],
@@ -85,7 +85,7 @@ class AwsS3Connector extends AbstractConnector
      *
      * @throws \InvalidArgumentException
      */
-    private function checkForKeyinConfigArray(array $config)
+    private function checkForKeyInConfigArray(array $config)
     {
         if (! array_key_exists('key', $config) || ! array_key_exists('secret', $config)) {
             throw new InvalidArgumentException('The awss3 connector requires authentication.');

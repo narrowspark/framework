@@ -6,6 +6,7 @@ use ErrorException;
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -73,11 +74,12 @@ class HandlerTest extends MockeryTestCase
 
     public function testReportError()
     {
-        $exception = new Exception();
+        $exception = new Exception('Exception message');
 
         $log = $this->mock(LoggerInterface::class);
         $log->shouldReceive('error')
-            ->once();
+            ->once()
+            ->withArgs(['Exception message', Mockery::hasKey('exception')]);
         $log->shouldReceive('critical')
             ->never();
         $container = $this->getContainer();
