@@ -11,7 +11,6 @@ declare(strict_types=1);
  |
  | See: http://www.php.net/manual/en/features.commandline.webserver.php
  |
- | @codeCoverageIgnore
  */
 
 if (is_file($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $_SERVER['SCRIPT_NAME'])) {
