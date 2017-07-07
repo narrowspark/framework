@@ -6,7 +6,6 @@ use Closure;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Support\Manager as ManagerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -47,7 +46,7 @@ abstract class AbstractManager implements
      */
     public function __construct($data)
     {
-        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($data);
     }
 
     /**
@@ -66,15 +65,15 @@ abstract class AbstractManager implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
-        return ['viserio', $this->getConfigName()];
+        return ['viserio', static::getConfigName()];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['drivers'];
     }
@@ -197,17 +196,9 @@ abstract class AbstractManager implements
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
-    }
-
-    /**
      * Get the configuration name.
      *
      * @return string
      */
-    abstract protected function getConfigName(): string;
+    abstract protected static function getConfigName(): string;
 }

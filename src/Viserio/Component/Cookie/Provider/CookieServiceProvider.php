@@ -7,10 +7,9 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cookie\CookieJar;
-use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class CookieServiceProvider implements
     ServiceProvider,
@@ -18,7 +17,7 @@ class CookieServiceProvider implements
     ProvidesDefaultOptionsContract,
     RequiresMandatoryOptionsContract
 {
-    use StaticOptionsResolverTrait;
+    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -39,7 +38,7 @@ class CookieServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'cookie'];
     }
@@ -47,7 +46,7 @@ class CookieServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['path', 'domain'];
     }
@@ -55,7 +54,7 @@ class CookieServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'secure' => true,
@@ -78,13 +77,5 @@ class CookieServiceProvider implements
             $options['domain'],
             $options['secure']
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
     }
 }

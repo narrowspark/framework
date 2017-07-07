@@ -11,7 +11,6 @@ use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -131,7 +130,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'app'];
     }
@@ -139,7 +138,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'locale'          => 'en',
@@ -152,7 +151,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'env',
@@ -172,7 +171,7 @@ abstract class AbstractKernel implements
      */
     public function setKernelConfigurations($data): void
     {
-        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($data);
     }
 
     /**
@@ -441,13 +440,5 @@ abstract class AbstractKernel implements
     protected function initializeContainer(): void
     {
         $this->container = new Container();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

@@ -21,7 +21,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'default' => 'local',
@@ -92,7 +92,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     /**
      * {@inheritdoc}
      */
-    protected function getConfigName(): string
+    protected static function getConfigName(): string
     {
         return 'filesystem';
     }

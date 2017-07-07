@@ -8,17 +8,17 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 
 class ConnectionDefaultOptionsMandatoryContainetIdConfiguration implements RequiresComponentConfigIdContract, RequiresMandatoryOptionsContract, ProvidesDefaultOptionsContract
 {
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['doctrine', 'connection'];
     }
 
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['driverClass'];
     }
 
-    public function getDefaultOptions(): array
+    public static function getDefaultOptions(): array
     {
         return [
             'params' => [

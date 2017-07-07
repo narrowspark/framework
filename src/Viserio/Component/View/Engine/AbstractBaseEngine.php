@@ -24,7 +24,7 @@ abstract class AbstractBaseEngine implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'view'];
     }
@@ -32,7 +32,7 @@ abstract class AbstractBaseEngine implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'paths',

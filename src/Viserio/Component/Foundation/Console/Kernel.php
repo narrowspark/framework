@@ -71,7 +71,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         $options = [
             'url'          => 'http://localhost',
