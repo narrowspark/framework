@@ -15,10 +15,7 @@ class UpCommandTest extends MockeryTestCase
         $framework = __DIR__ . '/../../Fixtures/framework';
         $down      = $framework . '/down';
 
-        if (! is_dir($framework)) {
-            mkdir($framework);
-        }
-
+        mkdir($framework);
         file_put_contents($down, 'test');
 
         $kernel = $this->mock(ConsoleKernelContract::class);
@@ -41,8 +38,6 @@ class UpCommandTest extends MockeryTestCase
 
         self::assertEquals("Application is now live.\n", $output);
 
-        if (is_dir($framework)) {
-            rmdir($framework);
-        }
+        rmdir($framework);
     }
 }

@@ -4,9 +4,12 @@ namespace Viserio\Component\Foundation\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Process\Process;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Console\Command\DownCommand;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
+use Viserio\Component\Foundation\Console\Command\ServeCommand;
 use Viserio\Component\Foundation\Console\Command\UpCommand;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
@@ -37,8 +40,15 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
             $console->addCommands([
                 new DownCommand(),
                 new UpCommand(),
-                new KeyGenerateCommand(),
             ]);
+
+            if ($container->has(KernelContract::class) && $container->get(KernelContract::class)->isLocal()) {
+                $console->add(new KeyGenerateCommand());
+
+                if (class_exists(Process::class)) {
+                    $console->add(new ServeCommand());
+                }
+            }
         }
 
         return $console;
