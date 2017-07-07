@@ -7,12 +7,12 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 
 class ConnectionDefaultOptionsConfiguration implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['doctrine', 'connection'];
     }
 
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'params' => [

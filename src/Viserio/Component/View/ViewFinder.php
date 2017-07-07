@@ -5,7 +5,6 @@ namespace Viserio\Component\View;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -66,7 +65,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     public function __construct(FilesystemContract $files, $data)
     {
         $this->files = $files;
-        $options     = $this->resolveOptions($data);
+        $options     = self::resolveOptions($data);
 
         $this->paths = $options['paths'];
 
@@ -78,7 +77,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'view'];
     }
@@ -86,7 +85,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'paths',
@@ -325,13 +324,5 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
                 'file'      => str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
         }, $this->extensions);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

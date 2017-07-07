@@ -37,7 +37,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'default'         => 'array',
@@ -232,7 +232,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * {@inheritdoc}
      */
-    protected function getConfigName(): string
+    protected static function getConfigName(): string
     {
         return 'session';
     }

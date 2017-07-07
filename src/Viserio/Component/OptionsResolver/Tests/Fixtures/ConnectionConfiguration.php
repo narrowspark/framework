@@ -9,7 +9,7 @@ class ConnectionConfiguration implements RequiresComponentConfigContract
     /**
      * {@inheritdoc}.
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['doctrine', 'connection'];
     }

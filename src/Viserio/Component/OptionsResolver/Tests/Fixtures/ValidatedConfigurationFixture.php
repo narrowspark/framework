@@ -13,7 +13,7 @@ class ValidatedConfigurationFixture implements RequiresComponentConfigContract, 
     /**
      * {@inheritdoc}.
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['vendor', 'package'];
     }
@@ -21,7 +21,7 @@ class ValidatedConfigurationFixture implements RequiresComponentConfigContract, 
     /**
      * {@inheritdoc}.
      */
-    public function getDefaultOptions(): array
+    public static function getDefaultOptions(): array
     {
         return [
             'minLength' => 2,
@@ -31,7 +31,7 @@ class ValidatedConfigurationFixture implements RequiresComponentConfigContract, 
     /**
      * {@inheritdoc}.
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['maxLength'];
     }
@@ -39,7 +39,7 @@ class ValidatedConfigurationFixture implements RequiresComponentConfigContract, 
     /**
      * {@inheritdoc}.
      */
-    public function getOptionValidators(): array
+    public static function getOptionValidators(): array
     {
         return [
             'minLength' => function ($value) {

@@ -5,7 +5,6 @@ namespace Viserio\Provider\Twig\Command;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
@@ -26,7 +25,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'view'];
     }
@@ -34,7 +33,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'engines' => [
@@ -53,7 +52,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     public function handle()
     {
         $container = $this->getContainer();
-        $options   = $this->resolveOptions($container);
+        $options   = self::resolveOptions($container);
 
         $files    = $container->get(FilesystemContract::class);
         $cacheDir = $options['engines']['twig']['options']['cache'];
@@ -65,13 +64,5 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
         } else {
             $this->info('Twig cache cleaned.');
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }
