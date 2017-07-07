@@ -13,7 +13,7 @@ class ValidatedDimensionalConfigurationFixture implements RequiresComponentConfi
     /**
      * {@inheritdoc}.
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['vendor', 'package'];
     }
@@ -21,7 +21,7 @@ class ValidatedDimensionalConfigurationFixture implements RequiresComponentConfi
     /**
      * {@inheritdoc}.
      */
-    public function getDefaultOptions(): array
+    public static function getDefaultOptions(): array
     {
         return [
             'minLength' => 2,
@@ -31,7 +31,7 @@ class ValidatedDimensionalConfigurationFixture implements RequiresComponentConfi
     /**
      * {@inheritdoc}.
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'foo' => [
@@ -43,7 +43,7 @@ class ValidatedDimensionalConfigurationFixture implements RequiresComponentConfi
     /**
      * {@inheritdoc}.
      */
-    public function getOptionValidators(): array
+    public static function getOptionValidators(): array
     {
         return [
             'minLength' => function ($value) {

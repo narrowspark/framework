@@ -6,7 +6,6 @@ use Closure;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\Support\ConnectionManager as ConnectionManagerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -47,7 +46,7 @@ abstract class AbstractConnectionManager implements
      */
     public function __construct($data)
     {
-        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($data);
     }
 
     /**
@@ -66,15 +65,15 @@ abstract class AbstractConnectionManager implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
-        return ['viserio', $this->getConfigName()];
+        return ['viserio', static::getConfigName()];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['connections'];
     }
@@ -203,14 +202,6 @@ abstract class AbstractConnectionManager implements
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
-    }
-
-    /**
      * Call a custom connection creator.
      *
      * @param string $connection
@@ -228,5 +219,5 @@ abstract class AbstractConnectionManager implements
      *
      * @return string
      */
-    abstract protected function getConfigName(): string;
+    abstract protected static function getConfigName(): string;
 }

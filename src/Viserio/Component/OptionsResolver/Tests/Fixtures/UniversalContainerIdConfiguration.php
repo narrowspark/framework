@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
+use ArrayIterator;
+use ArrayObject;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
@@ -13,16 +15,25 @@ class UniversalContainerIdConfiguration implements RequiresComponentConfigIdCont
     public const TYPE_ARRAY_ARRAY    = 2;
     public const TYPE_ONLY_ITERATOR  = 3;
 
+    /**
+     * @var array
+     */
     private static $dimensions = [
         'doctrine',
         'universal',
     ];
 
+    /**
+     * @var array
+     */
     private static $getMandatoryOptions = [
         'params' => ['user', 'dbname'],
         'driverClass',
     ];
 
+    /**
+     * @var array
+     */
     private static $getDefaultOptions = [
         'params' => [
             'host' => 'awesomehost',
@@ -30,36 +41,39 @@ class UniversalContainerIdConfiguration implements RequiresComponentConfigIdCont
         ],
     ];
 
-    private $type;
+    /**
+     * @var int
+     */
+    private static $type;
 
     public function __construct(int $type)
     {
-        $this->type = $type;
+        self::$type = $type;
     }
 
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
-        return $this->getData('dimensions');
+        return self::getData('dimensions');
     }
 
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
-        return $this->getData('getMandatoryOptions');
+        return self::getData('getMandatoryOptions');
     }
 
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
-        return $this->getData('getDefaultOptions');
+        return self::getData('getDefaultOptions');
     }
 
-    private function getData($name)
+    private static function getData($name)
     {
-        switch ($this->type) {
+        switch (self::$type) {
             case self::TYPE_ARRAY_ITERATOR:
-                return new \ArrayIterator(self::$$name);
+                return new ArrayIterator(self::$$name);
                 break;
             case self::TYPE_ARRAY_OBJECT:
-                return new \ArrayObject(self::$$name);
+                return new ArrayObject(self::$$name);
                 break;
             case self::TYPE_ONLY_ITERATOR:
                 return new OnlyIterator(self::$$name);

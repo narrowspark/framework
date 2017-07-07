@@ -21,7 +21,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'default' => 'local',
@@ -184,7 +184,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @return string
      */
-    protected function getConfigName(): string
+    protected static function getConfigName(): string
     {
         return 'mail';
     }

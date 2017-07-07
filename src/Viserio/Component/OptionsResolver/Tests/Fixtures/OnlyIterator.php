@@ -5,8 +5,6 @@ namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 class OnlyIterator implements \Iterator
 {
     /**
-     * data.
-     *
      * @var array
      */
     private $data;

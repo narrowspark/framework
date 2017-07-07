@@ -11,7 +11,6 @@ use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
@@ -71,7 +70,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     public function __construct(Swift_Mailer $swiftMailer, $data)
     {
-        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($data);
 
         // If a "from" address is set, we will set it on the mailer so that all mail
         // messages sent by the applications will utilize the same "from" address
@@ -94,7 +93,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'mail'];
     }
@@ -362,13 +361,5 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         }
 
         return vsprintf($view, $data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

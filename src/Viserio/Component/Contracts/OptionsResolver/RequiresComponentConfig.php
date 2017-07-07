@@ -20,5 +20,5 @@ interface RequiresComponentConfig extends RequiresConfig
      *
      * @return iterable
      */
-    public function getDimensions(): iterable;
+    public static function getDimensions(): iterable;
 }

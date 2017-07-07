@@ -9,28 +9,28 @@ class OptionsResolver
 {
     use OptionsResolverTrait;
 
-    protected $configClass;
+    protected static $configClass;
 
-    protected $data;
+    protected static $data;
 
-    public function configure(RequiresConfigContract $configClass, $data): self
+    public function configure($configClass, $data): self
     {
-        $this->configClass = $configClass;
-        $this->data        = $data;
+        self::$configClass = get_class($configClass);
+        self::$data        = $data;
 
         return $this;
     }
 
     public function resolve(string $configId = null): array
     {
-        return self::resolveOptions($this->data, $configId);
+        return self::resolveOptions(self::$data, $configId);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getConfigClass(): RequiresConfigContract
+    protected static function getConfigClass(): string
     {
-        return $this->configClass;
+        return self::$configClass;
     }
 }

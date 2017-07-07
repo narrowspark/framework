@@ -42,7 +42,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['env'];
     }
@@ -50,7 +50,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return array_merge(
             parent::getDefaultOptions(),

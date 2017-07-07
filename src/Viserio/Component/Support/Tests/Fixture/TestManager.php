@@ -32,7 +32,7 @@ class TestManager extends AbstractManager
      *
      * @return string
      */
-    protected function getConfigName(): string
+    protected static function getConfigName(): string
     {
         return 'test';
     }
