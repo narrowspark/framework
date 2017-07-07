@@ -10,6 +10,7 @@ use Viserio\Component\Foundation\Console\Command\DownCommand;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 use Viserio\Component\Foundation\Console\Command\ServeCommand;
 use Viserio\Component\Foundation\Console\Command\UpCommand;
+use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider
 {
@@ -39,11 +40,14 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
             $console->addCommands([
                 new DownCommand(),
                 new UpCommand(),
-                new KeyGenerateCommand(),
             ]);
 
-            if (class_exists(Process::class)) {
-                $console->add(new ServeCommand());
+            if ($container->has(KernelContract::class) && $container->get(KernelContract::class)->isLocal()) {
+                $console->add(new KeyGenerateCommand());
+
+                if (class_exists(Process::class)) {
+                    $console->add(new ServeCommand());
+                }
             }
         }
 
