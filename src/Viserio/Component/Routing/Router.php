@@ -60,12 +60,14 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * Create a new Router instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Dispatcher $dispatcher
+     * @param \Viserio\Component\Contracts\Routing\Dispatcher   $dispatcher
+     * @param \Viserio\Component\Routing\ResourceRegistrar|null $registrar
      */
-    public function __construct(DispatcherContract $dispatcher)
+    public function __construct(DispatcherContract $dispatcher, ResourceRegistrar $registrar = null)
     {
         $this->dispatcher = $dispatcher;
         $this->routes     = new RouteCollection();
+        $this->registrar  = $registrar ?? new ResourceRegistrar($this);
     }
 
     /**
@@ -212,6 +214,66 @@ class Router implements RouterContract, RequestMethodInterface
     public function getParameters(): array
     {
         return $this->globalParameterConditions;
+    }
+
+    /**
+     * Register an array of resource controllers.
+     *
+     * @param array $resources
+     *
+     * @return void
+     */
+    public function resources(array $resources): void
+    {
+        foreach ($resources as $name => $controller) {
+            $this->resource($name, $controller);
+        }
+    }
+
+    /**
+     * Route a resource to a controller.
+     *
+     * @param string $name
+     * @param string $controller
+     * @param array  $options
+     *
+     * @return void
+     */
+    public function resource(string $name, string $controller, array $options = []): PendingResourceRegistration
+    {
+        return new PendingResourceRegistration(
+            $this->registrar,
+            $name,
+            $controller,
+            $options
+        );
+    }
+
+    /**
+     * Route an api resource to a controller.
+     *
+     * @param string $name
+     * @param string $controller
+     * @param array  $options
+     *
+     * @return void
+     */
+    public function apiResource(string $name, string $controller, array $options = []): void
+    {
+        $options = array_merge(
+            [
+                'only' => [
+                    'index',
+                    'show',
+                    'store',
+                    'update',
+                    'destroy'
+                ],
+            ],
+            $options
+        );
+
+        $this->resource($name, $controller, $options);
     }
 
     /**

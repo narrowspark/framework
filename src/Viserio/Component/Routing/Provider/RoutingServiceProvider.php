@@ -6,6 +6,7 @@ use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Routing\ResourceRegistrar;
 use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
@@ -76,7 +77,13 @@ class RoutingServiceProvider implements ServiceProvider
      */
     public static function createRouter(ContainerInterface $container): RouterContract
     {
-        $router = new Router($container->get(DispatcherContract::class));
+        $registrar = null;
+
+        if ($container->has(ResourceRegistrar::class)) {
+            $registrar = $container->get(ResourceRegistrar::class);
+        }
+
+        $router = new Router($container->get(DispatcherContract::class), $registrar);
 
         $router->setContainer($container);
 
