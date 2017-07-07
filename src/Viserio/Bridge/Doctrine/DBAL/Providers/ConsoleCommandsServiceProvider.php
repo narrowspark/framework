@@ -20,7 +20,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Application::class => [self::class, 'createConsoleCommands'],
+            Application::class => [self::class, 'extendsConsoleWithCommands'],
         ];
     }
 
@@ -32,8 +32,10 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
      *
      * @return null|\Viserio\Component\Console\Application
      */
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
-    {
+    public static function extendsConsoleWithCommands(
+        ContainerInterface $container,
+        ?callable $getPrevious = null
+    ): ?Application {
         $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($console !== null) {

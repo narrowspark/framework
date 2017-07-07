@@ -42,6 +42,7 @@
         }
     },
     "suggest": {
+        "cakephp/chronos"                                    : "Required to use Chronos types (Alternative to DateTime) (^1.0)",
         "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "gedmo/doctrine-extensions"                          : "Behavioral Doctrine2 extensions (^2.4)",
         "beberlei/DoctrineExtensions"                        : "Query/Type Doctrine2 extensions (^1.0)"

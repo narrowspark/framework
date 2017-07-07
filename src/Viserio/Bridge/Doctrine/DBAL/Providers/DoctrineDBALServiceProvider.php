@@ -12,7 +12,7 @@ use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class DoctrineDBALServiceProvider implements
     ServiceProvider,
@@ -20,7 +20,7 @@ class DoctrineDBALServiceProvider implements
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    use StaticOptionsResolverTrait;
+    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -46,7 +46,7 @@ class DoctrineDBALServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'doctrine', 'dbal'];
     }
@@ -54,7 +54,7 @@ class DoctrineDBALServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'default',
@@ -64,7 +64,7 @@ class DoctrineDBALServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'connections' => [
@@ -120,14 +120,6 @@ class DoctrineDBALServiceProvider implements
     public static function createEventManager(): EventManager
     {
         return new EventManager();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
     }
 
     /**

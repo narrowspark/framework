@@ -34,7 +34,7 @@ class ExtensionsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'doctrine', 'extensions'];
     }
@@ -42,7 +42,7 @@ class ExtensionsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'all_mappings' => false,
@@ -59,23 +59,17 @@ class ExtensionsServiceProvider implements
      */
     public static function registerExtensions(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
-        if ($getPrevious !== null) {
-            self::resolveOptions($container);
+        $events = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+
+        if ($events !== null) {
+            $options = self::resolveOptions($container);
 
             $events = $getPrevious();
 
             return $events;
         }
 
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
+        return $events;
     }
 
     /**
@@ -159,6 +153,6 @@ class ExtensionsServiceProvider implements
      */
     private static function needsAllMappings(): bool
     {
-        return self::$options['all_mappings'] !== false;
+        return self::$options['all_mappings'] === true;
     }
 }
