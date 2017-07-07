@@ -36,7 +36,7 @@ class ExtensionsServiceProvider implements
      */
     public function getDimensions(): iterable
     {
-        return ['viserio', 'doctrine', 'gedmo'];
+        return ['viserio', 'doctrine', 'extensions'];
     }
 
     /**

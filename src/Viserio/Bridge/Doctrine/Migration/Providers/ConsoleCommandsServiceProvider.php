@@ -16,18 +16,14 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\OptionsResolver;
+use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    /**
-     * Resolved cached options.
-     *
-     * @var array
-     */
-    private static $options;
+    use StaticOptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -65,9 +61,9 @@ class ConsoleCommandsServiceProvider implements
      */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
-        if ($getPrevious !== null) {
-            $console = $getPrevious();
+        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
+        if ($console !== null) {
             $console->addCommands(self::createMigrationsCommands($container));
 
             return $console;
@@ -125,18 +121,10 @@ class ConsoleCommandsServiceProvider implements
     }
 
     /**
-     * Resolve component options.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    private static function resolveOptions(ContainerInterface $container): void
+    protected static function getConfigClass(): RequiresConfigContract
     {
-        if (self::$options === null) {
-            self::$options = $container->get(OptionsResolver::class)
-                ->configure(new static(), $container)
-                ->resolve();
-        }
+        return new self();
     }
 }

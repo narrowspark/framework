@@ -147,4 +147,12 @@ class DoctrineDBALServiceProvider implements
 
         return $config;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
+    }
 }

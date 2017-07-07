@@ -34,9 +34,9 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
      */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
-        if ($getPrevious !== null) {
-            $console = $getPrevious();
+        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
+        if ($console !== null) {
             $console->setHelperSet(new HelperSet([
                 'db' => new ConnectionHelper($container->get(Connection::class)),
             ]));
@@ -50,6 +50,6 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
             return $console;
         }
 
-        return null;
+        return $console;
     }
 }
