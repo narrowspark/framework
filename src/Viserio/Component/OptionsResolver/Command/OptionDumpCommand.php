@@ -156,25 +156,25 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
         foreach (get_declared_classes() as $className) {
             $reflectionClass = new ReflectionClass($className);
-            $interfaces      = $reflectionClass->getInterfaceNames();
+            $interfaces      = array_flip($reflectionClass->getInterfaceNames());
 
-            if (! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract() && in_array(RequiresConfigContract::class, $interfaces, true)) {
+            if (! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract() && isset($interfaces[RequiresConfigContract::class])) {
                 $factory          = $reflectionClass->newInstanceWithoutConstructor();
                 $dimensions       = [];
                 $mandatoryOptions = [];
                 $defaultOptions   = [];
                 $key              = null;
 
-                if (in_array(RequiresComponentConfigContract::class, $interfaces, true)) {
+                if (isset($interfaces[RequiresComponentConfigContract::class])) {
                     $dimensions = (array) $factory->getDimensions();
                     $key        = end($dimensions);
                 }
 
-                if (in_array(ProvidesDefaultOptionsContract::class, $interfaces, true)) {
+                if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
                     $defaultOptions = (array) $factory->getDefaultOptions();
                 }
 
-                if (in_array(RequiresMandatoryOptionsContract::class, $interfaces, true)) {
+                if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
                     $mandatoryOptions = $this->readMandatoryOption($factory->getMandatoryOptions());
                 }
 
