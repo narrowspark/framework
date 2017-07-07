@@ -15,9 +15,9 @@ use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
+use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 
 class EntityManagerFactory implements
     RequiresComponentConfigIdContract,
@@ -375,6 +375,14 @@ class EntityManagerFactory implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getConfigClass(): RequiresConfigContract
+    {
+        return $this;
+    }
+
+    /**
      * Map our config style to the dortrine config style.
      *
      * @param array $configs
@@ -396,13 +404,5 @@ class EntityManagerFactory implements
         }
 
         return $configs;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

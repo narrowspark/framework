@@ -123,6 +123,14 @@ class DoctrineDBALServiceProvider implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
+    }
+
+    /**
      * Map our config style to doctrine config.
      *
      * @return array
@@ -146,13 +154,5 @@ class DoctrineDBALServiceProvider implements
         unset($config['default'], $config['connections'], $config['username'], $config['database']);
 
         return $config;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
     }
 }

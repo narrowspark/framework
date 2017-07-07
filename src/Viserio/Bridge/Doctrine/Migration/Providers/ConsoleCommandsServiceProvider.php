@@ -15,7 +15,6 @@ use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\OptionsResolver;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class ConsoleCommandsServiceProvider implements
@@ -73,6 +72,14 @@ class ConsoleCommandsServiceProvider implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): RequiresConfigContract
+    {
+        return new self();
+    }
+
+    /**
      * Create and configure migrations commands.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -118,13 +125,5 @@ class ConsoleCommandsServiceProvider implements
         }
 
         return $commands;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
     }
 }
