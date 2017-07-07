@@ -10,7 +10,6 @@ use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 

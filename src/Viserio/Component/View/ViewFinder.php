@@ -5,7 +5,6 @@ namespace Viserio\Component\View;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;

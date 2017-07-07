@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use ArrayObject;
 use ArrayIterator;
+use ArrayObject;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;

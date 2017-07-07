@@ -22,7 +22,6 @@ use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\CommandLineTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;

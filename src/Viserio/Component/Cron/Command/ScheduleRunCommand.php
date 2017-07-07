@@ -4,7 +4,6 @@ namespace Viserio\Component\Cron\Command;
 
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;

@@ -11,7 +11,6 @@ use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;

@@ -19,14 +19,14 @@ use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionMandatoryRecursiv
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionMandatoryRecursiveContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\FlexibleConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\InvalidValidatedConfigurationFixture;
+use Viserio\Component\OptionsResolver\Tests\Fixtures\OptionsResolver;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\PackageDefaultAndMandatoryOptionsConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\PackageDefaultOptionsConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\PlainConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\UniversalContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedConfigurationFixture;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedDimensionalConfigurationFixture;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidateDefaultValueOnOverwriteFixture;
-use  Viserio\Component\OptionsResolver\Tests\Fixtures\OptionsResolver;
+use  Viserio\Component\OptionsResolver\Tests\Fixtures\ValidateDefaultValueOnOverwriteFixture;
 
 /**
  * Code in this test is taken from interop-config.

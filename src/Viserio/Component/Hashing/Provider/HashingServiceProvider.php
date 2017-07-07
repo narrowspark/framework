@@ -6,7 +6,6 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Hashing\Password as PasswordContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Hashing\Password;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;

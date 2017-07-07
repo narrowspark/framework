@@ -6,13 +6,12 @@ use OutOfBoundsException;
 use Throwable;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 
 class OptionNotFoundException extends OutOfBoundsException
 {
     /**
-     * Create a new
+     * Create a new.
      *
      * @param string          $class
      * @param mixed           $currentDimension Current configuration key
@@ -27,9 +26,9 @@ class OptionNotFoundException extends OutOfBoundsException
         int $code = 0,
         Throwable $previous = null
     ) {
-        $position   = [];
-        $interfaces = class_implements($class);
-        $dimensions = isset($interfaces[RequiresComponentConfigContract::class]) ? $class::getDimensions() : [];
+        $position             = [];
+        $interfaces           = class_implements($class);
+        $dimensions           = isset($interfaces[RequiresComponentConfigContract::class]) ? $class::getDimensions() : [];
         $hasConfigIdInterface = (
             isset($interfaces[RequiresConfigIdContract::class]) ||
             isset($interfaces[RequiresComponentConfigIdContract::class])

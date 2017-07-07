@@ -7,7 +7,6 @@ use RuntimeException;
 use Twig\Environment;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\View\Engine\AbstractBaseEngine;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsContract

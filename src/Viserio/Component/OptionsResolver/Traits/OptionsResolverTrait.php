@@ -15,7 +15,6 @@ use Viserio\Component\Contracts\OptionsResolver\Exception\UnexpectedValueExcepti
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
@@ -37,7 +36,7 @@ trait OptionsResolverTrait
      * The \Viserio\Component\Contracts\OptionsResolver\RequiresConfigId interface is supported.
      *
      * @param mixed       $config
-     * @param null|string $configId                                                                    Config name, must be provided if factory uses RequiresConfigId interface
+     * @param null|string $configId Config name, must be provided if factory uses RequiresConfigId interface
      *
      * @throws \InvalidArgumentException                                                               If the $configId parameter is provided but factory does not support it
      * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\UnexpectedValueException         If the $config parameter has the wrong type
