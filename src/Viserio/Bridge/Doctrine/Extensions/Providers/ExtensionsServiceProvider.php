@@ -11,7 +11,6 @@ use LaravelDoctrine\Fluent\FluentDriver;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
 
 class ExtensionsServiceProvider implements

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace LaravelDoctrine\Migrations\Naming;
 
 use Doctrine\DBAL\Migrations\Finder\MigrationFinderInterface;
@@ -33,6 +33,6 @@ class DefaultNamingStrategy implements NamingStrategy
      */
     public function getFinder(): MigrationFinderInterface
     {
-        return new RecursiveRegexFinder;
+        return new RecursiveRegexFinder();
     }
 }
