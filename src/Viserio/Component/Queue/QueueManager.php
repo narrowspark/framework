@@ -224,7 +224,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * {@inheritdoc}
      */
-    protected function getConfigName(): string
+    protected static function getConfigName(): string
     {
         return 'queue';
     }

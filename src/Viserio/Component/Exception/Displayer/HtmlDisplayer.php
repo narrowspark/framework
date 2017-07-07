@@ -60,13 +60,13 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
 
-        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($data);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -74,7 +74,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'template_path' => __DIR__ . '/../Resources/error.html',
@@ -138,13 +138,5 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
         }
 
         return $content;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

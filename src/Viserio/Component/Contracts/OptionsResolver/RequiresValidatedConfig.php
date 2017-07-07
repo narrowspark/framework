@@ -10,5 +10,5 @@ interface RequiresValidatedConfig extends RequiresConfig
      *
      * @return array
      */
-    public function getOptionValidators(): array;
+    public static function getOptionValidators(): array;
 }

@@ -131,7 +131,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'app'];
     }
@@ -139,7 +139,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'locale'          => 'en',
@@ -152,7 +152,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'env',
@@ -172,7 +172,7 @@ abstract class AbstractKernel implements
      */
     public function setKernelConfigurations($data): void
     {
-        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($data);
     }
 
     /**
@@ -441,13 +441,5 @@ abstract class AbstractKernel implements
     protected function initializeContainer(): void
     {
         $this->container = new Container();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

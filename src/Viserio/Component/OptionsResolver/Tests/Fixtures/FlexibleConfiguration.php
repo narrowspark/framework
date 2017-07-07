@@ -6,7 +6,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 
 class FlexibleConfiguration implements RequiresComponentConfigContract
 {
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['one', 'two', 'three', 'four'];
     }

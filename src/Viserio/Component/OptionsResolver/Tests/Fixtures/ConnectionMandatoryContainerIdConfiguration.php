@@ -10,7 +10,7 @@ class ConnectionMandatoryContainerIdConfiguration implements RequiresComponentCo
     /**
      * {@inheritdoc}.
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['doctrine', 'connection'];
     }
@@ -18,7 +18,7 @@ class ConnectionMandatoryContainerIdConfiguration implements RequiresComponentCo
     /**
      * {@inheritdoc}.
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['driverClass', 'params'];
     }

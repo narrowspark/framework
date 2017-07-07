@@ -50,7 +50,7 @@ class CacheManager extends AbstractManager implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'default'   => 'array',
@@ -231,7 +231,7 @@ class CacheManager extends AbstractManager implements
      *
      * @return string
      */
-    protected function getConfigName(): string
+    protected static function getConfigName(): string
     {
         return 'cache';
     }

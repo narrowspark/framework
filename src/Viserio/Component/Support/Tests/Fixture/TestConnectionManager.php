@@ -26,7 +26,7 @@ class TestConnectionManager extends AbstractConnectionManager
      *
      * @return string
      */
-    protected function getConfigName(): string
+    protected static function getConfigName(): string
     {
         return 'connection';
     }

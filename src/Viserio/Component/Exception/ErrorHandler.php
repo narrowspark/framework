@@ -79,13 +79,13 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             $this->logger = new NullLogger();
         }
 
-        $this->resolvedOptions = $this->resolveOptions($this->container);
+        $this->resolvedOptions = self::resolveOptions($this->container);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -93,7 +93,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             // A list of the exception types that should not be reported.
@@ -425,13 +425,5 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         }
 
         return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

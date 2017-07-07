@@ -13,14 +13,14 @@ use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\DataCollector\FilesLoadedCollector;
 use Viserio\Component\Foundation\DataCollector\NarrowsparkDataCollector;
 use Viserio\Component\Foundation\DataCollector\ViserioHttpDataCollector;
-use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class FoundationDataCollectorServiceProvider implements
     ServiceProvider,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
-    use StaticOptionsResolverTrait;
+    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class FoundationDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'profiler'];
     }
@@ -43,7 +43,7 @@ class FoundationDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'collector' => [
@@ -90,13 +90,5 @@ class FoundationDataCollectorServiceProvider implements
         }
 
         return $profiler;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
     }
 }

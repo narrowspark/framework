@@ -16,7 +16,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Log\Writer;
-use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ConfigureLoggingServiceProvider implements
     ServiceProvider,
@@ -25,7 +25,7 @@ class ConfigureLoggingServiceProvider implements
     RequiresMandatoryOptionsContract
 {
     use ParseLevelTrait;
-    use StaticOptionsResolverTrait;
+    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class ConfigureLoggingServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'app'];
     }
@@ -48,7 +48,7 @@ class ConfigureLoggingServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'name',
@@ -58,7 +58,7 @@ class ConfigureLoggingServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'log'  => [
@@ -90,14 +90,6 @@ class ConfigureLoggingServiceProvider implements
         }
 
         return $log;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
     }
 
     /**

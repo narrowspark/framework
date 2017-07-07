@@ -28,13 +28,13 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
      */
     public function __construct($data)
     {
-        $this->resolvedOptions = $this->resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($data);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -42,7 +42,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['debug'];
     }
@@ -66,13 +66,5 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
         }
 
         return array_values($displayers);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfigClass(): RequiresConfigContract
-    {
-        return $this;
     }
 }

@@ -16,5 +16,5 @@ interface ProvidesDefaultOptions
      *
      * @return iterable list with default options and values, can be nested
      */
-    public function getDefaultOptions(): iterable;
+    public static function getDefaultOptions(): iterable;
 }
