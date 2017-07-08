@@ -58,8 +58,8 @@
         "container-interop/service-provider"         : "Required to use service-provider (^0.3).",
         "filp/whoops"                                : "Enables use of the whoops displayer (^2.0).",
         "symfony/console"                            : "Required to use renderForConsole function (~3.3).",
-        "narrowspark/http"                           : "Enables use of the json displayer (self.version).",
-        "narrowspark/view"                           : "Enables use of the view displayer (self.version)."
+        "viserio/http"                               : "Enables use of the json displayer (self.version).",
+        "viserio/view"                               : "Enables use of the view displayer (self.version)."
     },
     "extra": {
         "branch-alias": {
