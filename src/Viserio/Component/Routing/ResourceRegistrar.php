@@ -115,7 +115,7 @@ class ResourceRegistrar
      */
     public function getResourceUri(string $resource): string
     {
-        if (strpos($resource, '.') === false) {
+        if (mb_strpos($resource, '.') === false) {
             return $resource;
         }
 
