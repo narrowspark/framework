@@ -61,10 +61,23 @@ class Router implements RouterContract, RequestMethodInterface
     protected $patterns = [];
 
     /**
+     * Create a new Router instance.
+     *
+     * @param \Viserio\Component\Contracts\Routing\Dispatcher   $dispatcher
+     * @param \Viserio\Component\Routing\ResourceRegistrar|null $registrar
+     */
+    public function __construct(DispatcherContract $dispatcher, ResourceRegistrar $registrar = null)
+    {
+        $this->dispatcher = $dispatcher;
+        $this->routes     = new RouteCollection();
+        $this->registrar  = $registrar ?? new ResourceRegistrar($this);
+    }
+
+    /**
      * Dynamically handle calls into the router instance.
      *
      * @param string $method
-     * @param array $parameters
+     * @param array  $parameters
      *
      * @throws \InvalidArgumentException
      * @throws \BadMethodCallException
@@ -78,19 +91,6 @@ class Router implements RouterContract, RequestMethodInterface
         }
 
         return (new Registrar($this))->attribute($method, $parameters[0]);
-    }
-
-    /**
-     * Create a new Router instance.
-     *
-     * @param \Viserio\Component\Contracts\Routing\Dispatcher   $dispatcher
-     * @param \Viserio\Component\Routing\ResourceRegistrar|null $registrar
-     */
-    public function __construct(DispatcherContract $dispatcher, ResourceRegistrar $registrar = null)
-    {
-        $this->dispatcher = $dispatcher;
-        $this->routes     = new RouteCollection();
-        $this->registrar  = $registrar ?? new ResourceRegistrar($this);
     }
 
     /**

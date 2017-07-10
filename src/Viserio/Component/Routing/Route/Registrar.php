@@ -74,6 +74,27 @@ class Registrar
     }
 
     /**
+     * Dynamically handle calls into the route registrar.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return \Viserio\Component\Contracts\Routing\Route|$this
+     */
+    public function __call($method, $parameters)
+    {
+        if (isset($this->passthru[$method])) {
+            return $this->registerRoute($method, ...$parameters);
+        }
+
+        if (isset($this->allowedAttributes[$method])) {
+            return $this->attribute($method, $parameters[0]);
+        }
+
+        throw new BadMethodCallException(sprintf('Method [%s] does not exist.', $method));
+    }
+
+    /**
      * Set the value for a given attribute.
      *
      * @param string $key
@@ -86,7 +107,7 @@ class Registrar
     public function attribute(string $key, $value): self
     {
         if (! isset($this->allowedAttributes[$key])) {
-            throw new InvalidArgumentException(sprintf("Attribute [%s] does not exist.", $key));
+            throw new InvalidArgumentException(sprintf('Attribute [%s] does not exist.', $key));
         }
 
         $alias                    = $this->aliases[$key] ?? $key;
@@ -138,9 +159,9 @@ class Registrar
     /**
      * Register a new route with the router.
      *
-     * @param string                      $method
-     * @param string                      $uri
-     * @param \Closure|array|string|null  $action
+     * @param string                     $method
+     * @param string                     $uri
+     * @param \Closure|array|string|null $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -171,26 +192,5 @@ class Registrar
         }
 
         return array_merge($this->attributes, $action);
-    }
-
-    /**
-     * Dynamically handle calls into the route registrar.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return \Viserio\Component\Contracts\Routing\Route|$this
-     */
-    public function __call($method, $parameters)
-    {
-        if (isset($this->passthru[$method])) {
-            return $this->registerRoute($method, ...$parameters);
-        }
-
-        if (isset($this->allowedAttributes[$method])) {
-            return $this->attribute($method, $parameters[0]);
-        }
-
-        throw new BadMethodCallException(sprintf("Method [%s] does not exist.", $method));
     }
 }
