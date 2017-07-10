@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Engine;
 
-use Viserio\Component\Contracts\View\Engine as EngineContract;
+use Viserio\Component\Contract\View\Engine as EngineContract;
 
 class FileEngine implements EngineContract
 {
@@ -13,6 +13,6 @@ class FileEngine implements EngineContract
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        return file_get_contents($fileInfo['path']);
+        return \file_get_contents($fileInfo['path']);
     }
 }

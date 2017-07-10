@@ -12,7 +12,7 @@ use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testGetServices()
+    public function testGetServices(): void
     {
         $container = new Container();
         $container->register(new RoutingServiceProvider());

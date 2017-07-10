@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 
 class ServerRequest extends Request implements ServerRequestInterface
 {
@@ -39,7 +39,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @var array
      */
-    private $serverParams = [];
+    private $serverParams;
 
     /**
      * List of uploaded files.
@@ -51,10 +51,10 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * Create a new server request instance.
      *
-     * @param null|string|\Psr\Http\Message\UriInterface             $uri          uRI for the request
-     * @param string|null                                            $method       hTTP method for the request
+     * @param null|\Psr\Http\Message\UriInterface|string             $uri          uRI for the request
+     * @param null|string                                            $method       hTTP method for the request
      * @param array                                                  $headers      headers for the message
-     * @param string|null|resource|\Psr\Http\Message\StreamInterface $body         message body
+     * @param null|\Psr\Http\Message\StreamInterface|resource|string $body         message body
      * @param string                                                 $version      hTTP protocol version
      * @param array                                                  $serverParams Typically the $_SERVER superglobal
      */
@@ -170,7 +170,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getAttribute($attribute, $default = null)
     {
-        if (! array_key_exists($attribute, $this->attributes)) {
+        if (! \array_key_exists($attribute, $this->attributes)) {
             return $default;
         }
 
@@ -193,7 +193,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withoutAttribute($attribute): ServerRequestInterface
     {
-        if (! array_key_exists($attribute, $this->attributes)) {
+        if (! \array_key_exists($attribute, $this->attributes)) {
             return $this;
         }
 
@@ -208,13 +208,14 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @param array $uploadedFiles
      *
-     * @throws \InvalidArgumentException if any leaf is not an UploadedFileInterface instance
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if any leaf is not an UploadedFileInterface instance
      */
-    private function validateUploadedFiles(array $uploadedFiles)
+    private function validateUploadedFiles(array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $file) {
-            if (is_array($file)) {
+            if (\is_array($file)) {
                 $this->validateUploadedFiles($file);
+
                 continue;
             }
 

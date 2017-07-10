@@ -7,13 +7,13 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connector\RabbitMQQueue;
 use Viserio\Component\Queue\Job\RabbitMQJob;
 
 class RabbitMQQueueTest extends MockeryTestCase
 {
-    public function testPushProperlyPushesJobOnToRabbitMQ()
+    public function testPushProperlyPushesJobOnToRabbitMQ(): void
     {
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
@@ -69,7 +69,7 @@ class RabbitMQQueueTest extends MockeryTestCase
         $queue->push('foo', ['someData'], 'stack');
     }
 
-    public function testDelayedPushProperlyPushesJobOnToRabbitMQ()
+    public function testDelayedPushProperlyPushesJobOnToRabbitMQ(): void
     {
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
@@ -123,7 +123,7 @@ class RabbitMQQueueTest extends MockeryTestCase
         $queue->later(5, 'foo', ['someData']);
     }
 
-    public function testPopProperlyPopsJobOffOfBeanstalkd()
+    public function testPopProperlyPopsJobOffOfBeanstalkd(): void
     {
         $job = $this->mock(RabbitMQJob::class);
 

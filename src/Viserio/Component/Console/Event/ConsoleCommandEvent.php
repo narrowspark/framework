@@ -40,7 +40,7 @@ class ConsoleCommandEvent extends ConsoleEvent
      *
      * @return bool
      */
-    public function disableCommand()
+    public function disableCommand(): bool
     {
         return $this->commandShouldRun = false;
     }
@@ -50,7 +50,7 @@ class ConsoleCommandEvent extends ConsoleEvent
      *
      * @return bool
      */
-    public function enableCommand()
+    public function enableCommand(): bool
     {
         return $this->commandShouldRun = true;
     }
@@ -60,7 +60,7 @@ class ConsoleCommandEvent extends ConsoleEvent
      *
      * @return bool
      */
-    public function commandShouldRun()
+    public function commandShouldRun(): bool
     {
         return $this->commandShouldRun;
     }

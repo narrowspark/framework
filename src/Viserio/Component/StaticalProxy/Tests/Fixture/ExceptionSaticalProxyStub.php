@@ -6,8 +6,8 @@ use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class ExceptionSaticalProxyStub extends StaticalProxy
 {
-    public static function getStaticalProxyRoot()
+    public static function getStaticalProxyRoot(): ?object
     {
-        return '';
+        return null;
     }
 }

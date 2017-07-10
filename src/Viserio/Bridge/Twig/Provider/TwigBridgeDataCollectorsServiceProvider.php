@@ -2,19 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Twig\Environment as TwigEnvironment;
 use Twig\Extension\ProfilerExtension;
 use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class TwigBridgeDataCollectorsServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
@@ -23,14 +23,23 @@ class TwigBridgeDataCollectorsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             Profile::class => function (): Profile {
                 return new Profile();
             },
-            TwigEnvironment::class       => [self::class, 'extendTwigEnvironment'],
-            ProfilerContract::class      => [self::class, 'createProfiler'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [
+            TwigEnvironment::class  => [self::class, 'extendTwigEnvironment'],
+            ProfilerContract::class => [self::class, 'extendProfiler'],
         ];
     }
 
@@ -57,16 +66,16 @@ class TwigBridgeDataCollectorsServiceProvider implements
     /**
      * Extend viserio profiler with data collector.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface                  $container
+     * @param null|\Viserio\Component\Contract\Profiler\Profiler $profiler
      *
-     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
+     * @return null|\Viserio\Component\Contract\Profiler\Profiler
      */
-    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
-    {
-        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
-        if ($getPrevious !== null) {
+    public static function extendProfiler(
+        ContainerInterface $container,
+        ?ProfilerContract $profiler = null
+    ): ?ProfilerContract {
+        if ($profiler !== null) {
             $options = self::resolveOptions($container);
 
             if ($options['collector']['twig'] === true) {
@@ -84,14 +93,12 @@ class TwigBridgeDataCollectorsServiceProvider implements
      * Wrap Twig Environment.
      *
      * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param null|\Twig\Environment            $twig
      *
      * @return null|\Twig\Environment
      */
-    public static function extendTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
+    public static function extendTwigEnvironment(ContainerInterface $container, ?TwigEnvironment $twig = null): ?TwigEnvironment
     {
-        $twig = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
         if ($twig !== null) {
             $options = self::resolveOptions($container);
 

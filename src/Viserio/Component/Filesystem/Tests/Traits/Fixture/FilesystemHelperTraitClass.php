@@ -12,12 +12,12 @@ class FilesystemHelperTraitClass
 
     public function has(string $path)
     {
-        return file_exists($path);
+        return \file_exists($path);
     }
 
     public function isDirectory(string $dirname)
     {
-        return is_dir($dirname);
+        return \is_dir($dirname);
     }
 
     /**
@@ -30,7 +30,7 @@ class FilesystemHelperTraitClass
     protected function getNormalizedOrPrefixedPath(string $path): string
     {
         if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+            $prefix = \method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
 
             return $prefix . $path;
         }

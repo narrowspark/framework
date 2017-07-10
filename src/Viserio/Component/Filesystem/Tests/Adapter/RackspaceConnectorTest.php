@@ -11,7 +11,7 @@ class RackspaceConnectorTest extends TestCase
     /**
      * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
      */
-    public function testConnect()
+    public function testConnect(): void
     {
         $connector = new RackspaceConnector();
 
@@ -32,7 +32,7 @@ class RackspaceConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The rackspace connector requires endpoint configuration.
      */
-    public function testConnectWithoutEndpoint()
+    public function testConnectWithoutEndpoint(): void
     {
         $connector = new RackspaceConnector();
 
@@ -48,7 +48,7 @@ class RackspaceConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The rackspace connector requires region configuration.
      */
-    public function testConnectWithoutRegion()
+    public function testConnectWithoutRegion(): void
     {
         $connector = new RackspaceConnector();
 
@@ -64,7 +64,7 @@ class RackspaceConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The rackspace connector requires authentication.
      */
-    public function testConnectWithoutUsername()
+    public function testConnectWithoutUsername(): void
     {
         $connector = new RackspaceConnector();
 
@@ -80,7 +80,7 @@ class RackspaceConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The rackspace connector requires authentication.
      */
-    public function testConnectWithoutApiKey()
+    public function testConnectWithoutApiKey(): void
     {
         $connector = new RackspaceConnector();
 
@@ -96,7 +96,7 @@ class RackspaceConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The rackspace connector requires container configuration.
      */
-    public function testConnectWithoutContainer()
+    public function testConnectWithoutContainer(): void
     {
         $connector = new RackspaceConnector();
 
@@ -112,7 +112,7 @@ class RackspaceConnectorTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage [OpenCloud\ObjectStore\Service::getContainer] expects only stdClass or null.
      */
-    public function testConnectWithWrongContainer()
+    public function testConnectWithWrongContainer(): void
     {
         $connector = new RackspaceConnector();
 
@@ -128,7 +128,7 @@ class RackspaceConnectorTest extends TestCase
     /**
      * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
      */
-    public function testConnectWithInternal()
+    public function testConnectWithInternal(): void
     {
         $connector = new RackspaceConnector();
 
@@ -149,7 +149,7 @@ class RackspaceConnectorTest extends TestCase
     /**
      * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
      */
-    public function testConnectWithInternalFalse()
+    public function testConnectWithInternalFalse(): void
     {
         $connector = new RackspaceConnector();
 

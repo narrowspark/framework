@@ -28,13 +28,15 @@ final class VarExporter
             return 'null';
         }
 
-        if (is_array($value)) {
+        if (\is_array($value)) {
             if (empty($value)) {
                 return '[]';
-            } elseif (count($value) === 1) {
-                reset($value);
+            }
 
-                return '[' . self::export(key($value)) . ' => ' . self::export(current($value)) . ']';
+            if (\count($value) === 1) {
+                \reset($value);
+
+                return '[' . self::export(\key($value)) . ' => ' . self::export(\current($value)) . ']';
             }
 
             $code = '[';
@@ -46,17 +48,17 @@ final class VarExporter
                 $code .= ',';
             }
 
-            $code .= ']';
+            return $code . ']';
+        }
 
-            return $code;
-        } elseif (is_object($value) && $value instanceof stdClass) {
+        if (\is_object($value) && $value instanceof stdClass) {
             return '(object)' . self::export((array) $value);
         }
 
-        if (is_scalar($value)) {
-            return var_export($value, true);
+        if (\is_scalar($value)) {
+            return \var_export($value, true);
         }
 
-        return 'unserialize(' . var_export(serialize($value), true) . ')';
+        return 'unserialize(' . \var_export(\serialize($value), true) . ')';
     }
 }

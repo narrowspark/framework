@@ -9,7 +9,7 @@ use Viserio\Component\Routing\Matcher\StaticMatcher;
 
 class CompoundMatcherTest extends TestCase
 {
-    public function testGetConditionExpression()
+    public function testGetConditionExpression(): void
     {
         $matcher = new CompoundMatcher([
             new StaticMatcher('test', [1]),
@@ -19,7 +19,7 @@ class CompoundMatcherTest extends TestCase
         self::assertSame('test === \'test\' && test !== \'\'', $matcher->getConditionExpression('test', 2));
     }
 
-    public function testGetMatchedParameterExpressions()
+    public function testGetMatchedParameterExpressions(): void
     {
         $matcher = new CompoundMatcher([
             new StaticMatcher('test', [1]),
@@ -29,7 +29,7 @@ class CompoundMatcherTest extends TestCase
         self::assertSame([1 => 'test', 0 => 'test'], $matcher->getMatchedParameterExpressions('test', 2));
     }
 
-    public function testGetHash()
+    public function testGetHash(): void
     {
         $matcher = new CompoundMatcher([
             new StaticMatcher('test', [1]),
@@ -39,7 +39,7 @@ class CompoundMatcherTest extends TestCase
         self::assertSame('Viserio\Component\Routing\Matcher\CompoundMatcher:Viserio\Component\Routing\Matcher\StaticMatcher:test::Viserio\Component\Routing\Matcher\AnyMatcher:', $matcher->getHash());
     }
 
-    public function testCompoundSegmentMatcher()
+    public function testCompoundSegmentMatcher(): void
     {
         $matcher1 = new CompoundMatcher([new StaticMatcher('a'), new StaticMatcher('b', [0])]);
         $matcher2 = new CompoundMatcher([new StaticMatcher('a', [0]), new StaticMatcher('c', [1])]);

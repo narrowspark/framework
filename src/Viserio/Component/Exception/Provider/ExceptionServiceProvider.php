@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
+use Psr\Log\LoggerInterface;
+use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
+use Viserio\Component\Contract\Exception\Handler as HandlerContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
@@ -23,12 +23,12 @@ use Viserio\Component\Exception\Transformer\CommandLineTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 
-class ExceptionServiceProvider implements ServiceProvider
+class ExceptionServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             ExceptionInfoContract::class                  => [self::class, 'createExceptionInfo'],
@@ -61,9 +61,17 @@ class ExceptionServiceProvider implements ServiceProvider
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
+    }
+
+    /**
      * Create a new ExceptionInfo instance.
      *
-     * @return \Viserio\Component\Contracts\Exception\ExceptionInfo
+     * @return \Viserio\Component\Contract\Exception\ExceptionInfo
      */
     public static function createExceptionInfo(): ExceptionInfoContract
     {
@@ -75,11 +83,19 @@ class ExceptionServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Exception\Handler
+     * @return \Viserio\Component\Contract\Exception\Handler
      */
     public static function createExceptionHandler(ContainerInterface $container): HandlerContract
     {
-        return new Handler($container);
+        $handler = new Handler(
+            $container,
+            $container->get(ResponseFactoryInterface::class),
+            $container->get(LoggerInterface::class)
+        );
+
+        $handler->setContainer($container);
+
+        return $handler;
     }
 
     /**
@@ -94,7 +110,6 @@ class ExceptionServiceProvider implements ServiceProvider
         return new HtmlDisplayer(
             $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class),
-            $container->get(StreamFactoryInterface::class),
             $container
         );
     }
@@ -110,8 +125,7 @@ class ExceptionServiceProvider implements ServiceProvider
     {
         return new JsonDisplayer(
             $container->get(ExceptionInfoContract::class),
-            $container->get(ResponseFactoryInterface::class),
-            $container->get(StreamFactoryInterface::class)
+            $container->get(ResponseFactoryInterface::class)
         );
     }
 
@@ -127,7 +141,6 @@ class ExceptionServiceProvider implements ServiceProvider
         return new ViewDisplayer(
             $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class),
-            $container->get(StreamFactoryInterface::class),
             $container->get(FactoryContract::class)
         );
     }
@@ -135,11 +148,13 @@ class ExceptionServiceProvider implements ServiceProvider
     /**
      * Create a new WhoopsDisplayer instance.
      *
+     * @param \Psr\Container\ContainerInterface $container
+     *
      * @return \Viserio\Component\Exception\Displayer\WhoopsDisplayer
      */
-    public static function createWhoopsDisplayer(): WhoopsDisplayer
+    public static function createWhoopsDisplayer(ContainerInterface $container): WhoopsDisplayer
     {
-        return new WhoopsDisplayer();
+        return new WhoopsDisplayer($container->get(ResponseFactoryInterface::class));
     }
 
     /**

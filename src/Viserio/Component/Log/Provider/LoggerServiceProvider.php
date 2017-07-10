@@ -2,20 +2,20 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Log\Log;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Log\Log;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Writer as MonologWriter;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class LoggerServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
@@ -24,7 +24,7 @@ class LoggerServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             MonologWriter::class => [self::class, 'createMonologWriter'],
@@ -45,6 +45,14 @@ class LoggerServiceProvider implements
                 return $container->get(MonologWriter::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     /**

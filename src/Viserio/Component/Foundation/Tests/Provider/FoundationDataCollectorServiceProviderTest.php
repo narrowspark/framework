@@ -6,18 +6,18 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\Provider\FoundationDataCollectorServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
 class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
 {
-    public function testGetServices()
+    public function testGetServices(): void
     {
         $route  = $this->mock(RouteContract::class);
         $router = $this->mock(RouterContract::class);
@@ -59,11 +59,11 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
 
         self::assertInstanceOf(ProfilerContract::class, $profiler);
 
-        self::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
-        self::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));
-        self::assertTrue(array_key_exists('narrowspark', $profiler->getCollectors()));
-        self::assertTrue(array_key_exists('viserio-http-data-collector', $profiler->getCollectors()));
-        self::assertTrue(array_key_exists('files-loaded-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('time-data-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('memory-data-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('narrowspark', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('viserio-http-data-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('files-loaded-collector', $profiler->getCollectors()));
     }
 
     private function getRequest()

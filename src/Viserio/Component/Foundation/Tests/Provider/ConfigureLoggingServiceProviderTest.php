@@ -8,8 +8,8 @@ use Monolog\Handler\SyslogHandler;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Provider\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\HandlerParser;
@@ -17,7 +17,7 @@ use Viserio\Component\Log\Writer;
 
 class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 {
-    public function testGetServicesWithSingle()
+    public function testGetServicesWithSingle(): void
     {
         $container = new Container();
 
@@ -45,7 +45,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
-    public function testGetServicesWithDaily()
+    public function testGetServicesWithDaily(): void
     {
         $container = new Container();
 
@@ -74,7 +74,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
-    public function testGetServicesWithErrorlog()
+    public function testGetServicesWithErrorlog(): void
     {
         $container = new Container();
 
@@ -112,7 +112,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
-    public function testGetServicesWithSyslog()
+    public function testGetServicesWithSyslog(): void
     {
         $container = new Container();
 

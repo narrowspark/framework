@@ -7,8 +7,6 @@
     <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
 </p>
 
-
-
 > **Note:** This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework). <br> If you want to build an application using Narrowspark, visit the main [source](https://github.com/narrowspark/framework).
 
 Installation

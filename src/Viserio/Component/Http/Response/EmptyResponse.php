@@ -18,7 +18,7 @@ class EmptyResponse extends Response
         parent::__construct(
             $status,
             $headers,
-            new Stream(fopen('php://temp', 'r'))
+            new Stream(\fopen('php://temp', 'rb'))
         );
     }
 }

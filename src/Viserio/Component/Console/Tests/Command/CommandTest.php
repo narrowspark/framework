@@ -23,10 +23,10 @@ class CommandTest extends TestCase
      */
     private $invoker;
 
-    public function setUp()
+    public function setUp(): void
     {
         $container = new ArrayContainer([
-            'foo' => function (OutputInterface $output) {
+            'foo' => function (OutputInterface $output): void {
                 $output->write('hello');
             },
         ]);
@@ -37,17 +37,17 @@ class CommandTest extends TestCase
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
-            ->setContainer($this->application->getContainer());
+            ->setContainer($container);
     }
 
-    public function testGetNormalVerbosity()
+    public function testGetNormalVerbosity(): void
     {
         $command = new ViserioSecCommand();
 
         self::assertSame(32, $command->getVerbosity());
     }
 
-    public function testGetVerbosityLevelFromCommand()
+    public function testGetVerbosityLevelFromCommand(): void
     {
         $command = new ViserioSecCommand();
 
@@ -58,7 +58,7 @@ class CommandTest extends TestCase
         self::assertSame(128, $command->getVerbosity('vv'));
     }
 
-    public function testSetVerbosityLevelToCommand()
+    public function testSetVerbosityLevelToCommand(): void
     {
         $command = new ViserioSecCommand();
         $command->setVerbosity(256);
@@ -66,7 +66,7 @@ class CommandTest extends TestCase
         self::assertSame(256, $command->getVerbosity());
     }
 
-    public function testGetOptionFromCommand()
+    public function testGetOptionFromCommand(): void
     {
         $command = new ViserioSecCommand();
         $command->setApplication($this->application);
@@ -93,7 +93,7 @@ class CommandTest extends TestCase
         self::assertInternalType('array', $command->option());
     }
 
-    public function testGetArgumentFromCommand()
+    public function testGetArgumentFromCommand(): void
     {
         $command = new ViserioSecCommand();
         $command->setApplication($this->application);
@@ -101,7 +101,7 @@ class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        self::assertSame(null, $command->argument('name'));
+        self::assertNull($command->argument('name'));
         self::assertInternalType('array', $command->argument());
     }
 }

@@ -7,14 +7,14 @@ use Viserio\Component\Routing\Matcher\AnyMatcher;
 
 class AnyMatcherTest extends TestCase
 {
-    public function testGetConditionExpression()
+    public function testGetConditionExpression(): void
     {
         $matcher = new AnyMatcher([0]);
 
         self::assertSame('segment/[test] !== \'\'', $matcher->getConditionExpression('segment/[test]'));
     }
 
-    public function testAnyMergingParameterKeys()
+    public function testAnyMergingParameterKeys(): void
     {
         $matcher1 = new AnyMatcher([123]);
         $matcher2 = new AnyMatcher([12, 3]);

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
-use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
+use Viserio\Component\Contract\Console\Exception\InvalidArgumentException;
 
 /**
  * Code in this class it taken from silly.
@@ -32,8 +32,8 @@ class StringCommand extends BaseCommand
         $this->setDescription($description);
 
         foreach ($argumentAndOptionDescriptions as $name => $value) {
-            if (mb_strpos($name, '--') === 0) {
-                $argument = $definition->getOption(mb_substr($name, 2));
+            if (\mb_strpos($name, '--') === 0) {
+                $argument = $definition->getOption(\mb_substr($name, 2));
 
                 if ($argument instanceof InputOption) {
                     $argument->setDescription($value);
@@ -55,6 +55,9 @@ class StringCommand extends BaseCommand
      *
      * @param array $defaults default argument values
      *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidArgumentException
+     *
      * @return $this
      */
     public function defaults(array $defaults = []): self
@@ -67,7 +70,7 @@ class StringCommand extends BaseCommand
             } elseif ($definition->hasOption($name)) {
                 $input = $definition->getOption($name);
             } else {
-                throw new InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(\sprintf(
                     'Unable to set default for [%s]. It does not exist as an argument or option.',
                     $name
                 ));

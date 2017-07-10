@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Support\VarExporter;
 
@@ -57,7 +57,7 @@ class RouteTreeCompiler
 
         $this->compileNotFound($rootRouteCode);
 
-        return $this->createRouterClassTemplate(mb_substr($rootRouteCode->code, 0, -mb_strlen(PHP_EOL)), $code->code);
+        return $this->createRouterClassTemplate(\mb_substr($rootRouteCode->code, 0, -\mb_strlen(PHP_EOL)), $code->code);
     }
 
     /**
@@ -83,7 +83,7 @@ return function ($method, $uri) {
 };
 PHP;
 
-        return strtr($template, ['{root_route}' => $rootRoute, '{body}' => $body]);
+        return \strtr($template, ['{root_route}' => $rootRoute, '{body}' => $body]);
     }
 
     /**
@@ -92,7 +92,7 @@ PHP;
      * @param mixed $code
      * @param array $routeTree
      */
-    protected function compileRouteTree($code, array $routeTree)
+    protected function compileRouteTree($code, array $routeTree): void
     {
         $code->appendLine('switch (count($segments)) {');
 
@@ -109,7 +109,7 @@ PHP;
                 $segmentVariables[$i] = '$s' . $i;
             }
 
-            $code->appendLine('list(' . implode(', ', $segmentVariables) . ') = $segments;');
+            $code->appendLine('[' . \implode(', ', $segmentVariables) . '] = $segments;');
 
             $this->compileSegmentNodes($code, $nodes, $segmentVariables);
             $this->compileDisallowedHttpMethodOrNotFound($code);
@@ -142,25 +142,25 @@ PHP;
      * @param array                  $parameters
      */
     protected function compileSegmentNodes(
-        $code,
+        object $code,
         ChildrenNodeCollection $nodes,
         array $segmentVariables,
         array $parameters = []
-    ) {
+    ): void {
         $originalParameters = $parameters;
 
         foreach ($nodes->getChildren() as $node) {
             $parameters       = $originalParameters;
             $segmentMatchers  = $node->getMatchers();
             $conditions       = [];
-            $currentParameter = empty($parameters) ? 0 : max(array_keys($parameters)) + 1;
+            $currentParameter = empty($parameters) ? 0 : \max(\array_keys($parameters)) + 1;
             $count            = $currentParameter;
 
             foreach ($segmentMatchers as $segmentDepth => $matcher) {
                 $conditions[] = $matcher->getConditionExpression($segmentVariables[$segmentDepth], $count++);
             }
 
-            $code->appendLine('if (' . implode(' && ', $conditions) . ') {');
+            $code->appendLine('if (' . \implode(' && ', $conditions) . ') {');
 
             ++$code->indent;
 
@@ -198,14 +198,14 @@ PHP;
      * @param MatchedRouteDataMap $routeDataMap
      * @param array               $parameters
      */
-    protected function compiledRouteHttpMethodMatch($code, MatchedRouteDataMap $routeDataMap, array $parameters)
+    protected function compiledRouteHttpMethodMatch(object $code, MatchedRouteDataMap $routeDataMap, array $parameters): void
     {
         $code->appendLine('switch ($method) {');
 
         ++$code->indent;
 
         foreach ($routeDataMap->getHttpMethodRouteDataMap() as $item) {
-            list($httpMethods, $routeData) = $item;
+            [$httpMethods, $routeData] = $item;
 
             foreach ($httpMethods as $httpMethod) {
                 $code->appendLine('case ' . VarExporter::export($httpMethod) . ':');
@@ -239,7 +239,7 @@ PHP;
      *
      * @param object $code
      */
-    protected function compileNotFound($code)
+    protected function compileNotFound(object $code): void
     {
         $code->appendLine('return [' . VarExporter::export(DispatcherContract::NOT_FOUND) . '];');
     }
@@ -249,7 +249,7 @@ PHP;
      *
      * @param object $code
      */
-    protected function compileDisallowedHttpMethodOrNotFound($code)
+    protected function compileDisallowedHttpMethodOrNotFound(object $code): void
     {
         $code->appendLine(
             'return ' .
@@ -272,7 +272,7 @@ PHP;
      * @param array  $foundRoute
      * @param array  $parameterExpressions
      */
-    protected function compileFoundRoute($code, array $foundRoute, array $parameterExpressions)
+    protected function compileFoundRoute(object $code, array $foundRoute, array $parameterExpressions): void
     {
         $parameters = '[';
 
@@ -280,8 +280,8 @@ PHP;
             $parameters .= VarExporter::export($parameterName) . ' => ' . $parameterExpressions[$index] . ', ';
         }
 
-        if (mb_strlen($parameters) > 2) {
-            $parameters = mb_substr($parameters, 0, -2);
+        if (\mb_strlen($parameters) > 2) {
+            $parameters = \mb_substr($parameters, 0, -2);
         }
 
         $parameters .= ']';
@@ -302,7 +302,7 @@ PHP;
      *
      * @return object
      */
-    private function phpBuilder()
+    private function phpBuilder(): object
     {
         return new class() {
             /**
@@ -324,11 +324,11 @@ PHP;
              *
              * @param string $code
              */
-            public function append(string $code)
+            public function append(string $code): void
             {
-                $indent = str_repeat(' ', 4 * $this->indent);
+                $indent = \str_repeat(' ', 4 * $this->indent);
 
-                $this->code .= $indent . str_replace(PHP_EOL, PHP_EOL . $indent, $code);
+                $this->code .= $indent . \str_replace(PHP_EOL, PHP_EOL . $indent, $code);
             }
 
             /**
@@ -336,7 +336,7 @@ PHP;
              *
              * @param string $code
              */
-            public function appendLine(string $code = '')
+            public function appendLine(string $code = ''): void
             {
                 $this->append($code);
                 $this->code .= PHP_EOL;

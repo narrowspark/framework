@@ -9,7 +9,7 @@ use Viserio\Component\Routing\Tests\Fixture\Controller;
 
 class CollectionTest extends TestCase
 {
-    public function testMatch()
+    public function testMatch(): void
     {
         $route = new Route('GET', '/collection', null);
 
@@ -24,7 +24,7 @@ class CollectionTest extends TestCase
         self::assertSame([$route], $collection->getRoutes());
     }
 
-    public function testHasNamedRouteAndGetByName()
+    public function testHasNamedRouteAndGetByName(): void
     {
         $route = new Route('GET', '/collection', ['as' => 'test']);
 
@@ -41,7 +41,7 @@ class CollectionTest extends TestCase
         self::assertNull($collection->getByName('dont'));
     }
 
-    public function testGetByAction()
+    public function testGetByAction(): void
     {
         $route = new Route('GET', '/collection', ['controller' => Controller::class]);
 
@@ -49,7 +49,7 @@ class CollectionTest extends TestCase
 
         self::assertInstanceOf(Route::class, $collection->add($route));
 
-        self::assertInstanceOf(Route::class, $collection->getByAction(trim(Controller::class, '\\')));
+        self::assertInstanceOf(Route::class, $collection->getByAction(\trim(Controller::class, '\\')));
 
         self::assertFalse($collection->hasNamedRoute('dont'));
 

@@ -5,8 +5,8 @@ namespace Viserio\Component\Routing;
 use Closure;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
-use Viserio\Component\Contracts\Container\Factory as FactoryContract;
+use Viserio\Component\Contract\Container\Factory as FactoryContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
 use Viserio\Component\Pipeline\Pipeline as BasePipeline;
 
 class Pipeline extends BasePipeline
@@ -33,20 +33,28 @@ class Pipeline extends BasePipeline
     }
 
     /**
-     * {@inheritdoc}
+     * Resolve from container.
+     *
+     * @param mixed  $traveler
+     * @param mixed  $stack
+     * @param string $stage
+     *
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
+     *
+     * @return mixed
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
-        list($name, $parameters) = $this->parseStageString($stage);
-        $parameters              = array_merge([$traveler, $stack], $parameters);
-        $class                   = null;
+        [$name, $parameters] = $this->parseStageString($stage);
+        $parameters          = \array_merge([$traveler, $stack], $parameters);
+        $class               = null;
 
         if ($this->container->has($name)) {
             $class = $this->container->get($name);
         } elseif ($this->container instanceof FactoryContract) {
             $class = $this->container->resolve($name);
         } else {
-            throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.', $name));
+            throw new RuntimeException(\sprintf('Class [%s] is not being managed by the container.', $name));
         }
 
         return $this->getInvoker()->call([$class, $this->method], $parameters);
@@ -57,9 +65,9 @@ class Pipeline extends BasePipeline
      *
      * @param callable $middleware
      *
-     * @return object
+     * @return \Interop\Http\ServerMiddleware\DelegateInterface
      */
-    private function getDelegateMiddleware(callable $middleware)
+    private function getDelegateMiddleware(callable $middleware): DelegateInterface
     {
         return new class($middleware) implements DelegateInterface {
             /**
@@ -82,7 +90,7 @@ class Pipeline extends BasePipeline
              */
             public function process(ServerRequestInterface $request)
             {
-                return call_user_func($this->middleware, $request);
+                return \call_user_func($this->middleware, $request);
             }
         };
     }

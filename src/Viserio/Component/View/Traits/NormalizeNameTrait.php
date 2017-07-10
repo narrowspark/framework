@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Traits;
 
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 
 trait NormalizeNameTrait
 {
@@ -17,12 +17,12 @@ trait NormalizeNameTrait
     {
         $delimiter = FinderContract::HINT_PATH_DELIMITER;
 
-        if (mb_strpos($name, $delimiter) === false) {
-            return str_replace('/', '.', $name);
+        if (\mb_strpos($name, $delimiter) === false) {
+            return \str_replace('/', '.', $name);
         }
 
-        list($namespace, $name) = explode($delimiter, $name);
+        [$namespace, $name] = \explode($delimiter, $name);
 
-        return $namespace . $delimiter . str_replace('/', '.', $name);
+        return $namespace . $delimiter . \str_replace('/', '.', $name);
     }
 }

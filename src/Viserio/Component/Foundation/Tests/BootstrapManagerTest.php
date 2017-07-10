@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\BootstrapManager;
 
 class BootstrapManagerTest extends MockeryTestCase
 {
-    public function testBootstrapWith()
+    public function testBootstrapWith(): void
     {
         $container = $this->mock(ContainerContract::class);
         $kernel    = $this->mock(KernelContract::class);
@@ -40,7 +40,7 @@ class BootstrapManagerTest extends MockeryTestCase
         self::assertTrue($boot->hasBeenBootstrapped());
     }
 
-    public function testAfterAndBeforeBootstrap()
+    public function testAfterAndBeforeBootstrap(): void
     {
         $_SERVER['test'] = 0;
 
@@ -65,11 +65,11 @@ class BootstrapManagerTest extends MockeryTestCase
 
         $boot = new BootstrapManager($container);
 
-        $boot->addBeforeBootstrapping(ConfigureKernel::class, function () {
+        $boot->addBeforeBootstrapping(ConfigureKernel::class, function (): void {
             $_SERVER['test'] = 1;
         });
 
-        $boot->addAfterBootstrapping(ConfigureKernel::class, function () {
+        $boot->addAfterBootstrapping(ConfigureKernel::class, function (): void {
             $_SERVER['test'] = 3;
         });
 

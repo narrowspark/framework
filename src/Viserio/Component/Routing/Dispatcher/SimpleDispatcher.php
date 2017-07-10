@@ -6,10 +6,11 @@ use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Routing\Event\RouteMatchedEvent;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
@@ -18,13 +19,13 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class SimpleDispatcher implements DispatcherContract
 {
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * The currently dispatched route instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\Route
+     * @var \Viserio\Component\Contract\Routing\Route
      */
     protected $current;
 
@@ -89,13 +90,16 @@ class SimpleDispatcher implements DispatcherContract
      */
     public function handle(RouteCollectionContract $routes, ServerRequestInterface $request): ResponseInterface
     {
-        if (! file_exists($this->path) || $this->refreshCache === true) {
-            static::createCacheFolder($this->path);
+        $cacheFile = $this->getCachePath();
+        $dir       = \pathinfo($cacheFile, PATHINFO_DIRNAME);
+
+        if ($this->refreshCache === true || ! \file_exists($cacheFile)) {
+            self::generateDirectory($dir);
 
             $this->generateRouterFile($routes);
         }
 
-        $router = require $this->path;
+        $router = require $cacheFile;
 
         $match = $router($request->getMethod(), $this->prepareUriPath($request->getUri()->getPath()));
 
@@ -103,17 +107,17 @@ class SimpleDispatcher implements DispatcherContract
             return $this->handleFound($routes, $request, $match[1], $match[2]);
         }
 
-        $requestPath = '/' . ltrim($request->getUri()->getPath(), '/');
+        $requestPath = '/' . \ltrim($request->getUri()->getPath(), '/');
 
         if ($match[0] === self::HTTP_METHOD_NOT_ALLOWED) {
-            throw new MethodNotAllowedException(sprintf(
+            throw new MethodNotAllowedException(\sprintf(
                 '405 Method [%s] Not Allowed: For requested route [%s].',
-                implode(',', $match[1]),
+                \implode(',', $match[1]),
                 $requestPath
             ));
         }
 
-        throw new NotFoundException(sprintf(
+        throw new NotFoundException(\sprintf(
             '404 Not Found: Requested route [%s].',
             $requestPath
         ));
@@ -122,10 +126,10 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Handle dispatching of a found route.
      *
-     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface             $request
-     * @param string                                               $identifier
-     * @param array                                                $segments
+     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
+     * @param \Psr\Http\Message\ServerRequestInterface            $request
+     * @param string                                              $identifier
+     * @param array                                               $segments
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -138,7 +142,7 @@ class SimpleDispatcher implements DispatcherContract
         $route = $routes->match($identifier);
 
         foreach ($segments as $key => $value) {
-            $route->setParameter($key, rawurldecode($value));
+            $route->addParameter($key, \rawurldecode($value));
         }
 
         // Add route to the request's attributes in case a middleware or handler needs access to the route.
@@ -146,8 +150,8 @@ class SimpleDispatcher implements DispatcherContract
 
         $this->current = $route;
 
-        if ($this->events !== null) {
-            $this->getEventManager()->trigger(new RouteMatchedEvent($this, $route, $request));
+        if ($this->eventManager !== null) {
+            $this->eventManager->trigger(new RouteMatchedEvent($this, $route, $request));
         }
 
         return $this->runRoute($route, $request);
@@ -156,8 +160,8 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Run the given route.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -175,10 +179,10 @@ class SimpleDispatcher implements DispatcherContract
      */
     protected function prepareUriPath(string $path): string
     {
-        $path = '/' . ltrim($path, '/');
+        $path = '/' . \ltrim($path, '/');
 
-        if (mb_strlen($path) !== 1 && mb_substr($path, -1) === '/') {
-            $path = substr_replace($path, '', -1);
+        if (\mb_strlen($path) !== 1 && \mb_substr($path, -1) === '/') {
+            $path = \substr_replace($path, '', -1);
         }
 
         return $path;
@@ -187,7 +191,7 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Generates a router file with all routes.
      *
-     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
+     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
      *
      * @return void
      */
@@ -196,34 +200,29 @@ class SimpleDispatcher implements DispatcherContract
         $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
         $closure        = $routerCompiler->compile($routes->getRoutes());
 
-        file_put_contents($this->path, $closure, LOCK_EX);
+        \file_put_contents($this->path, $closure, LOCK_EX);
     }
 
     /**
-     * Make a nested path, creating directories down the path recursion.
+     * Generate a cache directory.
      *
-     * @param string $path
+     * @param string $dir
      *
-     * @return bool
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
+     *
+     * @return void
      */
-    protected static function createCacheFolder(string $path): bool
+    private static function generateDirectory(string $dir): void
     {
-        $dir = pathinfo($path, PATHINFO_DIRNAME);
-
-        if (is_dir($dir)) {
-            return true;
+        if (\is_dir($dir) && \is_writable($dir)) {
+            return;
         }
 
-        if (static::createCacheFolder($dir)) {
-            if (mkdir($dir)) {
-                chmod($dir, 0777);
-
-                return true;
-            }
+        if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
+            throw new RuntimeException(sprintf(
+                'Route cache directory [%s] cannot be created or is write protected.',
+                $dir
+            ));
         }
-
-        // @codeCoverageIgnoreStart
-        return false;
-        // @codeCoverageIgnoreEnd
     }
 }

@@ -10,7 +10,7 @@ use Swift_Transport;
 
 class FailingSwiftMailerStub extends Swift_Mailer
 {
-    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
     {
         $failedRecipients[] = 'info@narrowspark.de';
 

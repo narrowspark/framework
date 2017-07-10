@@ -5,6 +5,8 @@ namespace Viserio\Component\Routing\Tests\Router;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use Symfony\Component\Filesystem\Filesystem;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
@@ -12,9 +14,17 @@ use Viserio\Component\Routing\Router;
 
 abstract class AbstractRouterBaseTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Contract\Routing\Router
+     */
     protected $router;
 
-    public function setUp()
+    /**
+     * @var \Mockery\MockInterface|\Psr\Container\ContainerInterface
+     */
+    protected $containerMock;
+
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -25,19 +35,22 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $dispatcher->refreshCache(true);
         $dispatcher->setEventManager(new EventManager());
 
-        $router = new Router($dispatcher);
-        $router->setContainer($this->mock(ContainerInterface::class));
+        $this->containerMock = $this->mock(ContainerInterface::class);
 
-        $this->definitions($router);
+        $router = new Router($dispatcher);
+        $router->setContainer($this->containerMock);
 
         $this->router = $router;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
+        $dir = __DIR__ . '/../Cache/';
 
-        $this->delTree(__DIR__ . '/../Cache');
+        if (is_dir($dir)) {
+            (new Filesystem())->remove($dir);
+        }
     }
 
     /**
@@ -48,8 +61,10 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
      * @param mixed $expectedResult
      * @param mixed $status
      */
-    public function testRouter($httpMethod, $uri, $expectedResult, $status = 200)
+    public function testRouter($httpMethod, $uri, $expectedResult, $status = 200): void
     {
+        $this->definitions($this->router);
+
         $actualResult = $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
@@ -58,16 +73,5 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         self::assertSame($status, $actualResult->getStatusCode());
     }
 
-    abstract protected function definitions($routes);
-
-    private function delTree($dir)
-    {
-        $files = array_diff(scandir($dir), ['.', '..']);
-
-        foreach ($files as $file) {
-            is_dir("$dir/$file") ? $this->delTree("$dir/$file") : unlink("$dir/$file");
-        }
-
-        return rmdir($dir);
-    }
+    abstract protected function definitions(RouterContract $router);
 }

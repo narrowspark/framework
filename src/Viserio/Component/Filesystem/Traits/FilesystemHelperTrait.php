@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Traits;
 
-use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
 
 trait FilesystemHelperTrait
 {
@@ -11,7 +11,7 @@ trait FilesystemHelperTrait
      *
      * @param string $path
      *
-     * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
      */
@@ -31,7 +31,7 @@ trait FilesystemHelperTrait
      *
      * @param string $path
      *
-     * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
      *
@@ -57,7 +57,7 @@ trait FilesystemHelperTrait
      */
     public function isWritable(string $path): bool
     {
-        return is_writable($this->getNormalizedOrPrefixedPath($path));
+        return \is_writable($this->getNormalizedOrPrefixedPath($path));
     }
 
     /**
@@ -69,7 +69,7 @@ trait FilesystemHelperTrait
      */
     public function isFile(string $file): bool
     {
-        return is_file($this->getNormalizedOrPrefixedPath($file));
+        return \is_file($this->getNormalizedOrPrefixedPath($file));
     }
 
     /**
@@ -78,7 +78,7 @@ trait FilesystemHelperTrait
      * @param string $target
      * @param string $link
      *
-     * @return bool|null
+     * @return null|bool
      *
      * @codeCoverageIgnore
      */
@@ -88,12 +88,15 @@ trait FilesystemHelperTrait
         $link   = $this->getNormalizedOrPrefixedPath($link);
 
         if (! $this->isWindows()) {
-            return symlink($target, $link);
+            return \symlink($target, $link);
         }
 
-        $mode = $this->isDirectory($target) ? 'J' : 'H';
+        $mode   = $this->isDirectory($target) ? 'J' : 'H';
+        $output = $return = false;
 
-        exec("mklink /{$mode} \"{$link}\" \"{$target}\"");
+        \exec("mklink /{$mode} \"{$link}\" \"{$target}\"", $output, $return);
+
+        return $return;
     }
 
     /**
@@ -117,9 +120,9 @@ trait FilesystemHelperTrait
     /**
      * Fix directory separators for windows and linux.
      *
-     * @param string|array $paths
+     * @param array|string $paths
      *
-     * @return string|array
+     * @return array|string
      */
     abstract protected function normalizeDirectorySeparator($paths);
 
@@ -132,7 +135,7 @@ trait FilesystemHelperTrait
      */
     protected function isWindows(): bool
     {
-        return mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        return \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
     }
 
     /**

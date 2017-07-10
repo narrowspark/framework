@@ -12,12 +12,12 @@ class EnvironmentDetectorTest extends TestCase
      */
     private $env;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->env = new EnvironmentDetector();
     }
 
-    public function testClosureCanBeUsedForCustomEnvironmentDetection()
+    public function testClosureCanBeUsedForCustomEnvironmentDetection(): void
     {
         $result = $this->env->detect(function () {
             return 'foobar';
@@ -32,7 +32,7 @@ class EnvironmentDetectorTest extends TestCase
         self::assertEquals('foobar', $result);
     }
 
-    public function testConsoleEnvironmentDetection()
+    public function testConsoleEnvironmentDetection(): void
     {
         $result = $this->env->detect(function () {
             return 'foobar';
@@ -41,27 +41,27 @@ class EnvironmentDetectorTest extends TestCase
         self::assertEquals('foobar', $result);
     }
 
-    public function testAbilityToCollectCodeCoverageCanBeAssessed()
+    public function testAbilityToCollectCodeCoverageCanBeAssessed(): void
     {
         self::assertInternalType('boolean', $this->env->canCollectCodeCoverage());
     }
 
-    public function testCanBeDetected()
+    public function testCanBeDetected(): void
     {
         self::assertInternalType('boolean', $this->env->isPHP());
     }
 
-    public function testXdebugCanBeDetected()
+    public function testXdebugCanBeDetected(): void
     {
         self::assertInternalType('boolean', $this->env->hasXdebug());
     }
 
-    public function testVersionCanBeRetrieved()
+    public function testVersionCanBeRetrieved(): void
     {
         self::assertInternalType('string', $this->env->getVersion());
     }
 
-    public function testIsRunningInConsole()
+    public function testIsRunningInConsole(): void
     {
         self::assertInternalType('boolean', $this->env->runningInConsole());
     }

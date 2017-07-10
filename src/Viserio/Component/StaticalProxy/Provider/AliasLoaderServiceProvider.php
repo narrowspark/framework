@@ -2,17 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\StaticalProxy\AliasLoader as AliasLoaderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\StaticalProxy\AliasLoader;
 
 class AliasLoaderServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
@@ -21,7 +21,7 @@ class AliasLoaderServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             AliasLoaderContract::class => [self::class, 'createAliasLoader'],
@@ -32,6 +32,14 @@ class AliasLoaderServiceProvider implements
                 return $container->get(AliasLoaderContract::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     /**
@@ -59,7 +67,7 @@ class AliasLoaderServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\StaticalProxy\AliasLoader
+     * @return \Viserio\Component\Contract\StaticalProxy\AliasLoader
      */
     public static function createAliasLoader(ContainerInterface $container): AliasLoaderContract
     {
@@ -85,7 +93,7 @@ class AliasLoaderServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param array                             $options
      *
-     * @return string|null
+     * @return null|string
      */
     private static function getCachePath(ContainerInterface $container, array $options): ?string
     {

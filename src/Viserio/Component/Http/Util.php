@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use RuntimeException;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 
 /**
  * Some code in this class it taken from zend-diactoros.
@@ -35,7 +35,7 @@ final class Util
      * @param string $filename File to open
      * @param string $mode     Mode used to open the file
      *
-     * @throws \RuntimeException if the file cannot be opened
+     * @throws \Viserio\Component\Contract\Http\Exception\\RuntimeException if the file cannot be opened
      *
      * @return resource
      */
@@ -43,20 +43,20 @@ final class Util
     {
         $ex = null;
 
-        set_error_handler(function () use ($filename, $mode, &$ex) {
-            $ex = new RuntimeException(sprintf(
+        \set_error_handler(function () use ($filename, $mode, &$ex): void {
+            $ex = new RuntimeException(\sprintf(
                 'Unable to open [%s] using mode %s: %s',
                 $filename,
                 $mode,
-                func_get_args()[1]
+                \func_get_args()[1]
             ));
         });
 
-        $handle = fopen($filename, $mode);
-        restore_error_handler();
+        $handle = \fopen($filename, $mode);
+        \restore_error_handler();
 
         if ($ex) {
-            /* @var $ex \RuntimeException */
+            // @var $ex \RuntimeException
             throw $ex;
         }
 
@@ -102,7 +102,7 @@ final class Util
             }
 
             $buffer .= $buf;
-            $len = mb_strlen($buffer);
+            $len = \mb_strlen($buffer);
         }
 
         return $buffer;
@@ -123,7 +123,7 @@ final class Util
         StreamInterface $source,
         StreamInterface $dest,
         int $maxLen = -1
-    ) {
+    ): void {
         if ($maxLen === -1) {
             while (! $source->eof()) {
                 if (! $dest->write($source->read(1048576))) {
@@ -146,8 +146,8 @@ final class Util
             $remaining = $maxLen;
 
             while ($remaining > 0 && ! $source->eof()) {
-                $buf = $source->read(min($bufferSize, $remaining));
-                $len = mb_strlen($buf);
+                $buf = $source->read(\min($bufferSize, $remaining));
+                $len = \mb_strlen($buf);
 
                 if (! $len) {
                     break;
@@ -164,7 +164,7 @@ final class Util
      *
      * @param array $files A array which respect $_FILES structure
      *
-     * @throws \InvalidArgumentException for unrecognized values
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException for unrecognized values
      *
      * @return array
      */
@@ -174,10 +174,11 @@ final class Util
         foreach ($files as $key => $value) {
             if ($value instanceof UploadedFileInterface) {
                 $normalized[$key] = $value;
-            } elseif (is_array($value) && isset($value['tmp_name'])) {
+            } elseif (\is_array($value) && isset($value['tmp_name'])) {
                 $normalized[$key] = self::createUploadedFileFromSpec($value);
-            } elseif (is_array($value)) {
+            } elseif (\is_array($value)) {
                 $normalized[$key] = self::normalizeFiles($value);
+
                 continue;
             } else {
                 throw new InvalidArgumentException('Invalid value in files specification');
@@ -199,7 +200,7 @@ final class Util
      */
     private static function createUploadedFileFromSpec(array $value)
     {
-        if (is_array($value['tmp_name'])) {
+        if (\is_array($value['tmp_name'])) {
             return self::normalizeNestedFileSpec($value);
         }
 
@@ -226,7 +227,7 @@ final class Util
     {
         $normalizedFiles = [];
 
-        foreach (array_keys($files['tmp_name']) as $key) {
+        foreach (\array_keys($files['tmp_name']) as $key) {
             $spec = [
                 'tmp_name' => $files['tmp_name'][$key],
                 'size'     => $files['size'][$key],

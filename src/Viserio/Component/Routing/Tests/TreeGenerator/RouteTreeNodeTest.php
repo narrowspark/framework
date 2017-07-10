@@ -11,7 +11,7 @@ use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 
 class RouteTreeNodeTest extends MockeryTestCase
 {
-    public function testMaintainsMatcherOrder()
+    public function testMaintainsMatcherOrder(): void
     {
         $matcher1 = $this->mock(AbstractMatcher::class);
         $matcher2 = $this->mock(AbstractMatcher::class);
@@ -22,7 +22,7 @@ class RouteTreeNodeTest extends MockeryTestCase
         self::assertSame($matcher1, $node->getFirstMatcher());
     }
 
-    public function testParentRouteTreeNode()
+    public function testParentRouteTreeNode(): void
     {
         $matcher  = $this->mock(AbstractMatcher::class);
         $contents = new ChildrenNodeCollection();
@@ -35,7 +35,7 @@ class RouteTreeNodeTest extends MockeryTestCase
         self::assertFalse($node->isLeafNode());
     }
 
-    public function testLeafRouteTreeNode()
+    public function testLeafRouteTreeNode(): void
     {
         $matcher  = $this->mock(AbstractMatcher::class);
         $contents = new MatchedRouteDataMap();
@@ -48,7 +48,7 @@ class RouteTreeNodeTest extends MockeryTestCase
         self::assertFalse($node->isParentNode());
     }
 
-    public function testChildrenCollectionOperations()
+    public function testChildrenCollectionOperations(): void
     {
         $matcher1 = $this->mock(AbstractMatcher::class);
         $matcher2 = $this->mock(AbstractMatcher::class);
@@ -73,10 +73,10 @@ class RouteTreeNodeTest extends MockeryTestCase
         self::assertSame($child, $node->getContents()->getChild($child->getFirstMatcher()));
     }
 
-    public function testMatchedRouteDataMapOperations()
+    public function testMatchedRouteDataMapOperations(): void
     {
         $node = new RouteTreeNode([$this->mock(AbstractMatcher::class)], new MatchedRouteDataMap());
-        $node->getContents()->addRoute((new Route(['GET', 'POST'], '', null)), []);
+        $node->getContents()->addRoute(new Route(['GET', 'POST'], '', null), []);
 
         self::assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->allowedHttpMethods());
         self::assertEquals(
@@ -86,7 +86,7 @@ class RouteTreeNodeTest extends MockeryTestCase
             $node->getContents()->getHttpMethodRouteDataMap()
         );
 
-        $node->getContents()->addRoute((new Route('PATCH', '', null)), [0 => 'param']);
+        $node->getContents()->addRoute(new Route('PATCH', '', null), [0 => 'param']);
 
         self::assertSame(['GET', 'POST', 'HEAD', 'PATCH'], $node->getContents()->allowedHttpMethods());
         self::assertEquals(
@@ -102,7 +102,7 @@ class RouteTreeNodeTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Cannot construct [Viserio\Component\Routing\TreeGenerator\RouteTreeNode], matchers must not be empty.
      */
-    public function testThrowsExceptionForEmptyMatchers()
+    public function testThrowsExceptionForEmptyMatchers(): void
     {
         new RouteTreeNode([], new ChildrenNodeCollection([]));
     }

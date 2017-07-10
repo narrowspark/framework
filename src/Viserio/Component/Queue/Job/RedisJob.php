@@ -57,13 +57,13 @@ class RedisJob extends AbstractJob
         $this->job       = $job;
         $this->reserved  = $reserved;
         $this->queue     = $queue;
-        $this->decoded   = json_decode($job, true);
+        $this->decoded   = \json_decode($job, true);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(): void
     {
         $this->resolveAndRun($this->decoded);
     }
@@ -79,7 +79,7 @@ class RedisJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function delete()
+    public function delete(): void
     {
         parent::delete();
 
@@ -89,7 +89,7 @@ class RedisJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function release(int $delay = 0)
+    public function release(int $delay = 0): void
     {
         parent::release($delay);
 

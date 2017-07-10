@@ -7,13 +7,13 @@ use Twig\Environment;
 use Twig\Lexer;
 use Viserio\Bridge\Twig\Provider\TwigBridgeServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
 
 class TwigBridgeServiceProviderTest extends MockeryTestCase
 {
-    public function testProviderIsNull()
+    public function testProviderIsNull(): void
     {
         $container = new Container();
         $container->register(new TwigBridgeServiceProvider());

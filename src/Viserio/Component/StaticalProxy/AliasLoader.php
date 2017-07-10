@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy;
 
 use RuntimeException;
-use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
+use Viserio\Component\Contract\StaticalProxy\AliasLoader as AliasLoaderContract;
 use Viserio\Component\StaticalProxy\Traits\ExistTrait;
 
 class AliasLoader implements AliasLoaderContract
@@ -27,7 +27,7 @@ class AliasLoader implements AliasLoaderContract
     /**
      * Path to the real-time statical proxies cache folder.
      *
-     * @var string|null
+     * @var null|string
      */
     private $cachePath;
 
@@ -99,7 +99,7 @@ class AliasLoader implements AliasLoaderContract
      */
     public function setCachePath(string $path): void
     {
-        $this->cachePath = rtrim($path, DIRECTORY_SEPARATOR);
+        $this->cachePath = \rtrim($path, DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -107,7 +107,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @throws \RuntimeException If real-time statical proxy is active and no cache path is given
      *
-     * @return string|null
+     * @return null|string
      */
     public function getCachePath(): ?string
     {
@@ -134,7 +134,7 @@ class AliasLoader implements AliasLoaderContract
     public function load(string $alias): bool
     {
         if ($this->realTimeStaticalProxyActivated === true &&
-            mb_strpos($alias, $this->staticalProxyNamespace) === 0
+            \mb_strpos($alias, $this->staticalProxyNamespace) === 0
         ) {
             $this->loadStaticalProxy($alias);
 
@@ -142,7 +142,7 @@ class AliasLoader implements AliasLoaderContract
         }
 
         // Skip recursive aliases if defined
-        if (in_array($alias, $this->resolving)) {
+        if (\in_array($alias, $this->resolving, true)) {
             return false;
         }
 
@@ -165,14 +165,14 @@ class AliasLoader implements AliasLoaderContract
         }
 
         // Remove the resolving class
-        array_pop($this->resolving);
+        \array_pop($this->resolving);
 
         if (! $this->exists($class)) {
             return false;
         }
 
         // Create the actual alias
-        class_alias($class, $alias);
+        \class_alias($class, $alias);
 
         if (! isset(self::$cache[$alias])) {
             self::$cache[$alias] = $class;
@@ -186,8 +186,8 @@ class AliasLoader implements AliasLoaderContract
      */
     public function alias($classes, string $alias = null): AliasLoaderContract
     {
-        if (is_array($classes)) {
-            $this->aliases = array_merge($this->aliases, $classes);
+        if (\is_array($classes)) {
+            $this->aliases = \array_merge($this->aliases, $classes);
 
             return $this;
         }
@@ -202,7 +202,7 @@ class AliasLoader implements AliasLoaderContract
      */
     public function removeAlias(): void
     {
-        $class = func_get_args();
+        $class = \func_get_args();
 
         foreach ($class as $alias) {
             if (isset($this->aliases[$alias])) {
@@ -218,7 +218,7 @@ class AliasLoader implements AliasLoaderContract
     {
         if (
             isset($this->aliases[$alias]) &&
-            $this->exists($this->aliases[$alias], true)
+            $this->exists($this->aliases[$alias])
         ) {
             return $this->aliases[$alias];
         }
@@ -231,7 +231,7 @@ class AliasLoader implements AliasLoaderContract
      */
     public function aliasPattern($patterns, string $translation = null): void
     {
-        if (! is_array($patterns)) {
+        if (! \is_array($patterns)) {
             $patterns = [$patterns => $translation];
         }
 
@@ -249,7 +249,7 @@ class AliasLoader implements AliasLoaderContract
      */
     public function removeAliasPattern(string $pattern, string $translation = null): void
     {
-        foreach (array_keys($this->patterns) as $patternKey) {
+        foreach (\array_keys($this->patterns) as $patternKey) {
             if ($this->patterns[$patternKey]->matches($pattern, $translation)) {
                 unset($this->patterns[$patternKey]);
             }
@@ -261,8 +261,8 @@ class AliasLoader implements AliasLoaderContract
      */
     public function aliasNamespace(string $class, string $alias): void
     {
-        $class = trim($class, '\\');
-        $alias = trim($alias, '\\');
+        $class = \trim($class, '\\');
+        $alias = \trim($alias, '\\');
 
         $this->namespaces[] = [$class, $alias];
     }
@@ -273,18 +273,18 @@ class AliasLoader implements AliasLoaderContract
     public function resolveNamespaceAlias(string $alias)
     {
         foreach ($this->namespaces as $namespace) {
-            list($nsClass, $nsAlias) = $namespace;
+            [$nsClass, $nsAlias] = $namespace;
 
-            if (! $nsAlias || mb_strpos($alias, (string) $nsAlias) === 0) {
+            if (! $nsAlias || \mb_strpos($alias, (string) $nsAlias) === 0) {
                 if ($nsAlias) {
-                    $alias = mb_substr($alias, mb_strlen($nsAlias) + 1);
+                    $alias = \mb_substr($alias, \mb_strlen($nsAlias) + 1);
                 }
 
                 $class             = $nsClass . '\\' . $alias;
                 $this->resolving[] = $class;
 
-                if ($this->exists($class, true)) {
-                    array_pop($this->resolving);
+                if ($this->exists($class)) {
+                    \array_pop($this->resolving);
 
                     return $class;
                 }
@@ -299,12 +299,12 @@ class AliasLoader implements AliasLoaderContract
      */
     public function removeNamespaceAlias(): void
     {
-        $class  = func_get_args();
+        $class  = \func_get_args();
         $filter = function ($namespace) use ($class) {
-            return ! in_array($namespace[0], $class);
+            return ! \in_array($namespace[0], $class, true);
         };
 
-        $this->namespaces = array_filter($this->namespaces, $filter);
+        $this->namespaces = \array_filter($this->namespaces, $filter);
     }
 
     /**
@@ -313,7 +313,7 @@ class AliasLoader implements AliasLoaderContract
     public function register(): void
     {
         if (! $this->registered) {
-            spl_autoload_register([$this, 'load'], true, true);
+            \spl_autoload_register([$this, 'load'], true, true);
 
             $this->registered = true;
         }
@@ -325,7 +325,7 @@ class AliasLoader implements AliasLoaderContract
     public function unregister(): void
     {
         if ($this->registered) {
-            spl_autoload_unregister([$this, 'load']);
+            \spl_autoload_unregister([$this, 'load']);
 
             $this->registered = false;
         }
@@ -364,7 +364,7 @@ class AliasLoader implements AliasLoaderContract
      */
     public function setStaticalProxyNamespace(string $namespace): void
     {
-        $this->staticalProxyNamespace = rtrim($namespace, '\\') . '\\';
+        $this->staticalProxyNamespace = \rtrim($namespace, '\\') . '\\';
     }
 
     /**
@@ -404,24 +404,23 @@ class AliasLoader implements AliasLoaderContract
     /**
      * Ensure that the given alias has an existing real-time statical proxy class.
      *
-     * @param string $class
      * @param string $alias
      *
      * @return string
      */
     protected function ensureStaticalProxyExists(string $alias): string
     {
-        $path = $this->getCachePath() . DIRECTORY_SEPARATOR . 'staticalproxy-' . sha1($alias) . '.php';
+        $path = $this->getCachePath() . DIRECTORY_SEPARATOR . 'staticalproxy-' . \sha1($alias) . '.php';
 
-        if (file_exists($path)) {
+        if (\file_exists($path)) {
             return $path;
         }
 
-        file_put_contents(
+        \file_put_contents(
             $path,
             $this->formatStaticalProxyStub(
                 $alias,
-                file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'Stubs' . DIRECTORY_SEPARATOR . 'StaticalProxy.stub')
+                \file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'Stubs' . DIRECTORY_SEPARATOR . 'StaticalProxy.stub')
             )
         );
 
@@ -439,12 +438,12 @@ class AliasLoader implements AliasLoaderContract
     protected function formatStaticalProxyStub(string $alias, string $stub): string
     {
         $replacements = [
-            str_replace('/', '\\', dirname(str_replace('\\', '/', $alias))),
+            \str_replace('/', '\\', \dirname(\str_replace('\\', '/', $alias))),
             self::getClassBasename($alias),
-            mb_substr($alias, mb_strlen($this->staticalProxyNamespace)),
+            \mb_substr($alias, \mb_strlen($this->staticalProxyNamespace)),
         ];
 
-        return str_replace(
+        return \str_replace(
             ['DummyNamespace', 'DummyClass', 'DummyTarget'],
             $replacements,
             $stub
@@ -460,6 +459,6 @@ class AliasLoader implements AliasLoaderContract
      */
     private static function getClassBasename(string $class): string
     {
-        return basename(str_replace('\\', '/', $class));
+        return \basename(\str_replace('\\', '/', $class));
     }
 }

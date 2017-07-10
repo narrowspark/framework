@@ -8,30 +8,30 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 use Viserio\Bridge\Twig\TokenParser\TransTokenParser;
-use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 
 class TranslatorExtension extends AbstractExtension
 {
     /**
      * Translation instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\TranslationManager|null
+     * @var null|\Viserio\Component\Contract\Translation\TranslationManager
      */
     protected $translationManager;
 
     /**
      * A instance of NodeVisitorInterface.
      *
-     * @var \Twig\NodeVisitor\NodeVisitorInterface|null
+     * @var \Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor
      */
     private $translationNodeVisitor;
 
     /**
      * Create a new translator extension.
      *
-     * @param \Viserio\Component\Contracts\Translation\TranslationManager $translationManager
-     * @param \Twig\NodeVisitor\NodeVisitorInterface|null                 $translationNodeVisitor
+     * @param \Viserio\Component\Contract\Translation\TranslationManager                                          $translationManager
+     * @param null|\Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor $translationNodeVisitor
      */
     public function __construct(TranslationManagerContract $translationManager, ?NodeVisitorInterface $translationNodeVisitor = null)
     {
@@ -117,11 +117,11 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Get a language translator instance.
      *
-     * @param string|null $locale
+     * @param null|string $locale
      *
      * @throws \RuntimeException
      *
-     * @return \Viserio\Component\Contracts\Translation\Translator
+     * @return \Viserio\Component\Contract\Translation\Translator
      */
     public function getTranslator(?string $locale = null): TranslatorContract
     {
@@ -134,9 +134,10 @@ class TranslatorExtension extends AbstractExtension
      * @param string      $id         The message id
      * @param mixed       $parameters An array of parameters for the message
      * @param string      $domain     The domain for the message or null to use the default
-     * @param string|null $local      The locale to change the translator language
+     * @param null|string $locale     The locale to change the translator language
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
+     * @throws \RuntimeException         If no translator found
      *
      * @return string The translated string
      */
@@ -146,7 +147,7 @@ class TranslatorExtension extends AbstractExtension
         string $domain = 'messages',
         ?string $locale = null
     ): string {
-        if (is_numeric($parameters)) {
+        if (\is_numeric($parameters)) {
             $parameters = ['count' => $parameters];
         }
 

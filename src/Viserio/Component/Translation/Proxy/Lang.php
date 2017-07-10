@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Proxy;
 
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Lang extends StaticalProxy

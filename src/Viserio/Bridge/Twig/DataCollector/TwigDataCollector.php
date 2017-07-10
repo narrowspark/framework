@@ -8,9 +8,9 @@ use Twig\Environment;
 use Twig\Markup;
 use Twig\Profiler\Dumper\HtmlDumper;
 use Twig\Profiler\Profile;
-use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\AssetAware as AssetAwareContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class TwigDataCollector extends AbstractDataCollector implements
@@ -37,7 +37,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      *
      * @var array
      */
-    private $computed;
+    private $computed = [];
 
     /**
      * Create new twig collector instance.
@@ -56,6 +56,21 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
+        $this->data['template_paths'] = [];
+
+        $templateFinder = function (Profile $profile) use (&$templateFinder) {
+            if ($profile->isTemplate() &&
+                $template = $this->twigEnvironment->load($profile->getName())->getSourceContext()->getPath()
+            ) {
+                $this->data['template_paths'][$profile->getName()] = $template;
+            }
+
+            foreach ($profile as $p) {
+                $templateFinder($p);
+            }
+        };
+
+        $templateFinder($this->profile);
     }
 
     /**
@@ -119,19 +134,29 @@ class TwigDataCollector extends AbstractDataCollector implements
     }
 
     /**
+     * List of twig file paths.
+     *
+     * @return array
+     */
+    public function getTemplatePaths()
+    {
+        return $this->data['template_paths'];
+    }
+
+    /**
      * Get a html call graph.
      *
      * @return \Twig\Markup
      *
      * @codeCoverageIgnore
      */
-    public function getHtmlCallGraph()
+    public function getHtmlCallGraph(): Markup
     {
         $dumper = new HtmlDumper();
         $dump   = $dumper->dump($this->getProfile());
 
         // needed to remove the hardcoded CSS styles
-        $dump = str_replace([
+        $dump = \str_replace([
             '<span style="background-color: #ffd">',
             '<span style="color: #d44">',
             '<span style="background-color: #dfd">',
@@ -172,8 +197,14 @@ class TwigDataCollector extends AbstractDataCollector implements
             'Twig Metrics'
         );
 
+        $templates = [];
+
+        foreach ($this->getTemplates() as $template => $count) {
+            $templates[$template] = $count;
+        }
+
         $twigHtml .= $this->createTable(
-            $this->getTemplates(),
+            $templates,
             [
                 'name'      => 'Rendered Templates',
                 'headers'   => ['Template Name', 'Render Count'],
@@ -186,8 +217,8 @@ class TwigDataCollector extends AbstractDataCollector implements
         $twigHtml .= '</div>';
         $extensions = $this->twigEnvironment->getExtensions();
         $data[]     = ['name' => 'Twig <span class="counter">' . $this->getTemplateCount() . '</span>', 'content' => $twigHtml];
-        $data[]     = ['name' => 'Twig Extensions <span class="counter">' . count($extensions) . '</span>', 'content' => $this->createTable(
-            array_keys($extensions),
+        $data[]     = ['name' => 'Twig Extensions <span class="counter">' . \count($extensions) . '</span>', 'content' => $this->createTable(
+            \array_keys($extensions),
             ['headers' => ['Extension'], 'vardumper' => false]
         )];
 
@@ -200,7 +231,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon'  => file_get_contents(__DIR__ . '/Resources/icons/ic_view_quilt_white_24px.svg'),
+            'icon'  => \file_get_contents(__DIR__ . '/Resources/icons/ic_view_quilt_white_24px.svg'),
             'label' => 'Twig',
             'value' => '',
         ];
@@ -219,6 +250,17 @@ class TwigDataCollector extends AbstractDataCollector implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->profile->reset();
+
+        $this->computed = [];
+        $this->data     = [];
+    }
+
+    /**
      * Get computed data.
      *
      * @param string $index
@@ -227,7 +269,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     private function getComputedData(string $index)
     {
-        if ($this->computed === null) {
+        if (count($this->computed) === 0) {
             $this->computed = $this->generateComputeData($this->getProfile());
         }
 

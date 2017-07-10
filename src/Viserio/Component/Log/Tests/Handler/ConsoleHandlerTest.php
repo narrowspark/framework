@@ -25,14 +25,14 @@ use Viserio\Component\Log\Handler\ConsoleHandler;
  */
 class ConsoleHandlerTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $handler = new ConsoleHandler(null, false);
 
         self::assertFalse($handler->getBubble(), 'the bubble parameter gets propagated');
     }
 
-    public function testIsHandling()
+    public function testIsHandling(): void
     {
         $handler = new ConsoleHandler();
 
@@ -47,7 +47,7 @@ class ConsoleHandlerTest extends TestCase
      * @param mixed $isHandling
      * @param array $map
      */
-    public function testVerbosityMapping($verbosity, $level, $isHandling, array $map = [])
+    public function testVerbosityMapping($verbosity, $level, $isHandling, array $map = []): void
     {
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
         $output->expects($this->atLeastOnce())
@@ -64,17 +64,17 @@ class ConsoleHandlerTest extends TestCase
 
         // check that the handler actually outputs the record if it handles it
         $levelName = Logger::getLevelName($level);
-        $levelName = sprintf('%-9s', $levelName);
+        $levelName = \sprintf('%-9s', $levelName);
 
         $realOutput = $this->getMockBuilder(Output::class)
             ->setMethods(['doWrite'])
             ->getMock();
         $realOutput->setVerbosity($verbosity);
 
+        $log = "16:21:54 $levelName [app] My info message [] []\n";
+
         if ($realOutput->isDebug()) {
             $log = "16:21:54 $levelName [app] My info message\n[]\n[]\n";
-        } else {
-            $log = "16:21:54 $levelName [app] My info message [] []\n";
         }
 
         $realOutput
@@ -117,7 +117,7 @@ class ConsoleHandlerTest extends TestCase
         ];
     }
 
-    public function testVerbosityChanged()
+    public function testVerbosityChanged(): void
     {
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
         $output->expects($this->at(0))
@@ -139,7 +139,7 @@ class ConsoleHandlerTest extends TestCase
         );
     }
 
-    public function testGetFormatter()
+    public function testGetFormatter(): void
     {
         $handler = new ConsoleHandler();
 
@@ -150,7 +150,7 @@ class ConsoleHandlerTest extends TestCase
         );
     }
 
-    public function testWritingAndFormatting()
+    public function testWritingAndFormatting(): void
     {
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
         $output->expects($this->any())
@@ -176,7 +176,7 @@ class ConsoleHandlerTest extends TestCase
         self::assertTrue($handler->handle($infoRecord), 'The handler finished handling the log as bubble is false.');
     }
 
-    public function testLogsFromListeners()
+    public function testLogsFromListeners(): void
     {
         $output = new BufferedOutput();
         $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
@@ -187,19 +187,19 @@ class ConsoleHandlerTest extends TestCase
         $logger->pushHandler($handler);
 
         $dispatcher = new EventManager();
-        $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger) {
+        $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger): void {
             $logger->addInfo('Before command message.');
         });
-        $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger) {
+        $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger): void {
             $logger->addInfo('Before terminate message.');
         });
 
         $handler->registerEvents($dispatcher);
 
-        $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger) {
+        $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger): void {
             $logger->addInfo('After command message.');
         });
-        $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger) {
+        $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger): void {
             $logger->addInfo('After terminate message.');
         });
 

@@ -4,7 +4,7 @@ namespace Viserio\Component\Exception\Filter;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Filter as FilterContract;
+use Viserio\Component\Contract\Exception\Filter as FilterContract;
 
 class CanDisplayFilter implements FilterContract
 {
@@ -24,6 +24,6 @@ class CanDisplayFilter implements FilterContract
             }
         }
 
-        return array_values($displayers);
+        return \array_values($displayers);
     }
 }

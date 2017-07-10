@@ -3,9 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
 use Cake\Chronos\Chronos;
-use Narrowspark\Arr\Arr;
-use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 
 class CookieJar implements JarContract
 {
@@ -19,9 +18,9 @@ class CookieJar implements JarContract
     /**
      * The default domain (if specified).
      *
-     * @var string|null
+     * @var null|string
      */
-    protected $domain = null;
+    protected $domain;
 
     /**
      * The default secure setting.
@@ -50,7 +49,7 @@ class CookieJar implements JarContract
         bool $httpOnly = true,
         $sameSite = false
     ): CookieContract {
-        list($path, $domain, $secure) = $this->getPathAndDomain($path, $domain, $secure);
+        [$path, $domain, $secure] = $this->getPathAndDomain($path, $domain, $secure);
 
         $time = ($minutes === 0) ? 0 : Chronos::now()->getTimestamp() + ($minutes * 60);
 
@@ -96,7 +95,7 @@ class CookieJar implements JarContract
      */
     public function queued(string $key, $default = null): ?CookieContract
     {
-        return Arr::get($this->queued, $key, $default);
+        return $this->queued[$key] ?? $default;
     }
 
     /**
@@ -104,10 +103,10 @@ class CookieJar implements JarContract
      */
     public function queue(...$arguments): void
     {
-        if (reset($arguments) instanceof CookieContract) {
-            $cookie = reset($arguments);
+        if (\reset($arguments) instanceof CookieContract) {
+            $cookie = \reset($arguments);
         } else {
-            $cookie = call_user_func_array([$this, 'create'], $arguments);
+            $cookie = \call_user_func_array([$this, 'create'], $arguments);
         }
 
         $this->queued[$cookie->getName()] = $cookie;
@@ -130,9 +129,9 @@ class CookieJar implements JarContract
      *
      * @return $this
      */
-    public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): JarContract
+    public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): self
     {
-        list($this->path, $this->domain, $this->secure) = [$path, $domain, $secure];
+        [$this->path, $this->domain, $this->secure] = [$path, $domain, $secure];
 
         return $this;
     }
@@ -148,11 +147,11 @@ class CookieJar implements JarContract
     /**
      * Get the path and domain, or the default values.
      *
-     * @param string|null $path
-     * @param string|null $domain
+     * @param null|string $path
+     * @param null|string $domain
      * @param bool        $secure
      *
-     * @return string[]
+     * @return array
      */
     protected function getPathAndDomain(?string $path, ?string $domain, bool $secure = false): array
     {

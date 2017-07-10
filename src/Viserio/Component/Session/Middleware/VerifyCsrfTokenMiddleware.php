@@ -7,9 +7,9 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Session\Exception\SessionNotStartedException;
-use Viserio\Component\Contracts\Session\Exception\TokenMismatchException;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
+use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\SessionManager;
 
@@ -50,6 +50,9 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
+     * @throws \Viserio\Component\Contract\Session\Exception\TokenMismatchException
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
@@ -76,7 +79,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return php_sapi_name() == 'cli' && ($this->config['env'] ?? 'production') === 'testing';
+        return PHP_SAPI === 'cli' && ($this->config['env'] ?? 'production') === 'testing';
     }
 
     /**
@@ -92,14 +95,15 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('X-CSRF-TOKEN');
 
         if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
-            $token = $this->manager->getEncrypter()->decrypt($header);
+            $hiddenString = $this->manager->getEncrypter()->decrypt($header);
+            $token        = $hiddenString->getString();
         }
 
-        if (! is_string($sessionToken) || ! is_string($token)) {
+        if (! \is_string($sessionToken) || ! \is_string($token)) {
             return false;
         }
 
-        return hash_equals($sessionToken, $token);
+        return \hash_equals($sessionToken, $token);
     }
 
     /**
@@ -107,6 +111,8 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @throws \InvalidArgumentException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -140,6 +146,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function isReading(ServerRequestInterface $request): bool
     {
-        return in_array(mb_strtoupper($request->getMethod()), ['HEAD', 'GET', 'OPTIONS'], true);
+        return \in_array(\mb_strtoupper($request->getMethod()), ['HEAD', 'GET', 'OPTIONS'], true);
     }
 }

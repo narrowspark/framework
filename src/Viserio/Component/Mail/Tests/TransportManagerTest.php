@@ -7,7 +7,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Mail\Transport\LogTransport;
 use Viserio\Component\Mail\Transport\MailgunTransport;
@@ -18,7 +18,7 @@ use Viserio\Component\Mail\TransportManager;
 
 class TransportManagerTest extends MockeryTestCase
 {
-    public function testLogTransporter()
+    public function testLogTransporter(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -44,7 +44,7 @@ class TransportManagerTest extends MockeryTestCase
         self::assertInstanceOf(LogTransport::class, $manager->getDriver('log'));
     }
 
-    public function testSendmailTransport()
+    public function testSendmailTransport(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -67,7 +67,7 @@ class TransportManagerTest extends MockeryTestCase
         self::assertInstanceOf(Swift_SendmailTransport::class, $manager->getDriver('sendmail'));
     }
 
-    public function testSmtpTransport()
+    public function testSmtpTransport(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -99,7 +99,7 @@ class TransportManagerTest extends MockeryTestCase
         self::assertInstanceOf(Swift_SmtpTransport::class, $manager->getDriver('smtp'));
     }
 
-    public function testMailgunTransport()
+    public function testMailgunTransport(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -127,7 +127,7 @@ class TransportManagerTest extends MockeryTestCase
         self::assertInstanceOf(MailgunTransport::class, $manager->getDriver('mailgun'));
     }
 
-    public function testMandrillTransport()
+    public function testMandrillTransport(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -154,7 +154,7 @@ class TransportManagerTest extends MockeryTestCase
         self::assertInstanceOf(MandrillTransport::class, $manager->getDriver('mandrill'));
     }
 
-    public function testSparkPostTransport()
+    public function testSparkPostTransport(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -181,7 +181,7 @@ class TransportManagerTest extends MockeryTestCase
         self::assertInstanceOf(SparkPostTransport::class, $manager->getDriver('sparkpost'));
     }
 
-    public function testSesTransport()
+    public function testSesTransport(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -210,7 +210,7 @@ class TransportManagerTest extends MockeryTestCase
         self::assertInstanceOf(SesTransport::class, $manager->getDriver('ses'));
     }
 
-    public function testArrayTransport()
+    public function testArrayTransport(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')

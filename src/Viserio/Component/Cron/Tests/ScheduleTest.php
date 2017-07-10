@@ -20,7 +20,7 @@ class ScheduleTest extends MockeryTestCase
      */
     protected $cache;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -29,7 +29,7 @@ class ScheduleTest extends MockeryTestCase
         $this->cache = $cache;
     }
 
-    public function testExecCreatesNewCommand()
+    public function testExecCreatesNewCommand(): void
     {
         $schedule = new Schedule(__DIR__);
         $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
@@ -58,21 +58,19 @@ class ScheduleTest extends MockeryTestCase
         self::assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
     }
 
-    public function testCommandCreatesNewCerebroCommand()
+    public function testCommandCreatesNewCerebroCommand(): void
     {
         $schedule = new Schedule(__DIR__, 'cerebro');
         $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
 
-        $schedule->command('clear:view');
-        $schedule->command('clear:view --tries=3');
-        $schedule->command('clear:view', ['--tries' => 3]);
+        $this->arrangeScheduleClearViewCommand($schedule);
 
         $cronJobs = $schedule->getCronJobs();
 
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . PHP_BINARY . $escape;
 
-        if (getenv('TRAVIS')) {
+        if (\getenv('TRAVIS')) {
             self::assertEquals($binary . ' \'cerebro\' clear:view', $cronJobs[0]->getCommand());
             self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[1]->getCommand());
             self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[2]->getCommand());
@@ -87,29 +85,27 @@ class ScheduleTest extends MockeryTestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage You need to set a console name or a path to a console, before you call command.
      */
-    public function testCommandThrowException()
+    public function testCommandThrowException(): void
     {
         $schedule = new Schedule(__DIR__);
 
         $schedule->command('clear:view');
     }
 
-    public function testCommandCreatesNewCerebroBinaryCommand()
+    public function testCommandCreatesNewCerebroBinaryCommand(): void
     {
-        define('CEREBRO_BINARY', 'cerebro');
+        \define('CEREBRO_BINARY', 'cerebro');
 
         $schedule = new Schedule(__DIR__);
 
-        $schedule->command('clear:view');
-        $schedule->command('clear:view --tries=3');
-        $schedule->command('clear:view', ['--tries' => 3]);
+        $this->arrangeScheduleClearViewCommand($schedule);
 
         $cronJobs = $schedule->getCronJobs();
 
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . PHP_BINARY . $escape;
 
-        if (getenv('TRAVIS')) {
+        if (\getenv('TRAVIS')) {
             self::assertEquals($binary . ' \'cerebro\' clear:view', $cronJobs[0]->getCommand());
             self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[1]->getCommand());
             self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[2]->getCommand());
@@ -120,7 +116,7 @@ class ScheduleTest extends MockeryTestCase
         }
     }
 
-    public function testCreateNewCerebroCommandUsingCommandClass()
+    public function testCreateNewCerebroCommandUsingCommandClass(): void
     {
         $schedule  = new Schedule(__DIR__, 'cerebro');
         $container = new ArrayContainer([
@@ -130,9 +126,9 @@ class ScheduleTest extends MockeryTestCase
         ]);
         $finder = (new PhpExecutableFinder())->find(false);
 
-        $binary = escapeshellarg($finder === false ? '' : $finder);
+        $binary = \escapeshellarg($finder === false ? '' : $finder);
 
-        if (getenv('TRAVIS')) {
+        if (\getenv('TRAVIS')) {
             $cron = new Cron($binary . ' \'cerebro\' foo:bar --force');
         } else {
             $cron = new Cron($binary . ' "cerebro" foo:bar --force');
@@ -149,7 +145,7 @@ class ScheduleTest extends MockeryTestCase
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . PHP_BINARY . $escape;
 
-        if (getenv('TRAVIS')) {
+        if (\getenv('TRAVIS')) {
             self::assertEquals($binary . ' \'cerebro\' foo:bar --force', $cronJobs[0]->getCommand());
         } else {
             self::assertEquals($binary . ' "cerebro" foo:bar --force', $cronJobs[0]->getCommand());
@@ -158,7 +154,7 @@ class ScheduleTest extends MockeryTestCase
         self::assertEquals([$cron], $schedule->dueCronJobs('test'));
     }
 
-    public function testCreateNewCerebroCommandUsingCallBack()
+    public function testCreateNewCerebroCommandUsingCallBack(): void
     {
         $schedule = new Schedule(__DIR__, 'cerebro');
         $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
@@ -171,5 +167,15 @@ class ScheduleTest extends MockeryTestCase
         $cronJobs = $schedule->getCronJobs();
 
         self::assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
+    }
+
+    /**
+     * @param $schedule
+     */
+    private function arrangeScheduleClearViewCommand($schedule): void
+    {
+        $schedule->command('clear:view');
+        $schedule->command('clear:view --tries=3');
+        $schedule->command('clear:view', ['--tries' => 3]);
     }
 }

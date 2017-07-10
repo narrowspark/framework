@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
-use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 class ParameterMatcher
 {
@@ -28,7 +28,7 @@ class ParameterMatcher
      */
     public function __construct($names, string $regex)
     {
-        $this->names = is_array($names) ? $names : [$names];
+        $this->names = (array) $names;
         $this->regex = $regex;
     }
 
@@ -37,11 +37,11 @@ class ParameterMatcher
      *
      * @param array $parameterIndexNameMap
      *
-     * @return \Viserio\Component\Contracts\Routing\SegmentMatcher
+     * @return \Viserio\Component\Contract\Routing\SegmentMatcher
      */
     public function getMatcher(array &$parameterIndexNameMap): SegmentMatcherContract
     {
-        $parameterKey         = empty($parameterIndexNameMap) ? 0 : max(array_keys($parameterIndexNameMap)) + 1;
+        $parameterKey         = empty($parameterIndexNameMap) ? 0 : \max(\array_keys($parameterIndexNameMap)) + 1;
         $parameterKeyGroupMap = [];
         $group                = 0;
 

@@ -10,7 +10,7 @@ use Viserio\Component\Mail\Transport\PostmarkTransport;
 
 class PostmarkTransportTest extends TestCase
 {
-    public function testSend()
+    public function testSend(): void
     {
         $message = new Swift_Message('Is alive!', 'Spark');
         $message->setFrom('me@example.com', 'Me #5');
@@ -37,7 +37,7 @@ class PostmarkTransportTest extends TestCase
             ->setMethods(['post'])
             ->getMock();
 
-        $version = phpversion() ?? 'Unknown PHP version';
+        $version = PHP_VERSION ?? 'Unknown PHP version';
         $os      = PHP_OS ?? 'Unknown OS';
 
         $client->expects($this->once())
@@ -84,7 +84,7 @@ class PostmarkTransportTest extends TestCase
         $transport->send($message);
     }
 
-    public function testSetAndGetServerToken()
+    public function testSetAndGetServerToken(): void
     {
         $client = $this->getMockBuilder(HttpClient::class)
             ->getMock();

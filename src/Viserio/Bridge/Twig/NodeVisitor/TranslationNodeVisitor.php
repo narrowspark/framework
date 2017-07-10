@@ -86,8 +86,8 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
         }
 
         if ($node instanceof FilterExpression &&
-            $node->getNode('filter')->getAttribute('value') === 'trans' &&
-            $node->getNode('node') instanceof ConstantExpression
+            $node->getNode('node') instanceof ConstantExpression &&
+            $node->getNode('filter')->getAttribute('value') === 'trans'
         ) {
             // extract constant nodes with a trans filter
             $this->messages[] = [
@@ -117,7 +117,7 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
      * @param \Twig\Node\Node $arguments
      * @param int             $index
      *
-     * @return string|null
+     * @return null|string
      */
     private function getReadDomainFromArguments(Node $arguments, int $index): ?string
     {
@@ -135,7 +135,7 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     /**
      * @param \Twig\Node\Node $node
      *
-     * @return string|null
+     * @return null|string
      */
     private function getReadDomainFromNode(Node $node): ?string
     {

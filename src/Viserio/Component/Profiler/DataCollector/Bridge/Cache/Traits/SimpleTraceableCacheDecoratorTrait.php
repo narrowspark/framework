@@ -7,17 +7,24 @@ use Traversable;
 trait SimpleTraceableCacheDecoratorTrait
 {
     /**
+     * Instance of stdClass.
+     *
+     * @var \stdClass
+     */
+    private $miss;
+
+    /**
      * {@inheritdoc}
      */
     public function get($key, $default = null)
     {
-        $miss  = null !== $default && is_object($default) ? $default : $this->miss;
+        $miss  = null !== $default && \is_object($default) ? $default : $this->miss;
         $event = $this->start(__FUNCTION__);
 
         try {
             $value = $this->pool->get($key, $miss);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
 
         if ($event->result[$key] = $miss !== $value) {
@@ -40,7 +47,7 @@ trait SimpleTraceableCacheDecoratorTrait
         try {
             return $event->result[$key] = $this->pool->has($key);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -54,7 +61,7 @@ trait SimpleTraceableCacheDecoratorTrait
         try {
             return $event->result[$key] = $this->pool->delete($key);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -68,7 +75,7 @@ trait SimpleTraceableCacheDecoratorTrait
         try {
             return $event->result[$key] = $this->pool->set($key, $value, $ttl);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -89,29 +96,29 @@ trait SimpleTraceableCacheDecoratorTrait
                 }
             };
             $values = $values();
-        } elseif (is_array($values)) {
-            $event->result['keys'] = array_keys($values);
+        } elseif (\is_array($values)) {
+            $event->result['keys'] = \array_keys($values);
         }
 
         try {
             return $event->result['result'] = $this->pool->setMultiple($values, $ttl);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getMultiple($keys, $default = null)
+    public function getMultiple($keys, $default = null): \Generator
     {
-        $miss  = null !== $default && is_object($default) ? $default : $this->miss;
+        $miss  = null !== $default && \is_object($default) ? $default : $this->miss;
         $event = $this->start(__FUNCTION__);
 
         try {
             $result = $this->pool->getMultiple($keys, $miss);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
 
         $f = function () use ($result, $event, $miss, $default) {
@@ -138,7 +145,7 @@ trait SimpleTraceableCacheDecoratorTrait
         $event = $this->start(__FUNCTION__);
 
         if ($keys instanceof Traversable) {
-            $keys = $event->result['keys'] = iterator_to_array($keys, false);
+            $keys = $event->result['keys'] = \iterator_to_array($keys, false);
         } else {
             $event->result['keys'] = $keys;
         }
@@ -146,7 +153,7 @@ trait SimpleTraceableCacheDecoratorTrait
         try {
             return $event->result['result'] = $this->pool->deleteMultiple($keys);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 }

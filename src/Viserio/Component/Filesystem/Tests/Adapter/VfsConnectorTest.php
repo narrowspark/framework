@@ -8,7 +8,7 @@ use Viserio\Component\Filesystem\Adapter\VfsConnector;
 
 class VfsConnectorTest extends TestCase
 {
-    public function testConnectStandard()
+    public function testConnectStandard(): void
     {
         $connector = new VfsConnector();
 

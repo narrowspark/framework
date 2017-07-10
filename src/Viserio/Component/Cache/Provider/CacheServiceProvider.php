@@ -2,24 +2,22 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cache\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Cache\CacheManager;
-use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 
-class CacheServiceProvider implements ServiceProvider
+class CacheServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
-            CacheManagerContract::class   => function (ContainerInterface $container): CacheManagerContract {
-                return new CacheManager($container);
-            },
+            CacheManagerContract::class   => [self::class, 'createCacheManager'],
             CacheManager::class           => function (ContainerInterface $container): CacheManagerContract {
                 return $container->get(CacheManagerContract::class);
             },
@@ -35,6 +33,14 @@ class CacheServiceProvider implements ServiceProvider
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
+    }
+
+    /**
      * A instance of the default driver.
      *
      * @param \Psr\Container\ContainerInterface $container
@@ -44,5 +50,20 @@ class CacheServiceProvider implements ServiceProvider
     public static function registerDefaultCache(ContainerInterface $container)
     {
         return $container->get(CacheManager::class)->getDriver();
+    }
+
+    /**
+     * Create a cache manger instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contract\Cache\Manager
+     */
+    public static function createCacheManager(ContainerInterface $container): CacheManagerContract
+    {
+        $cache = new CacheManager($container);
+        $cache->setContainer($container);
+
+        return $cache;
     }
 }

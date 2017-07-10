@@ -4,14 +4,15 @@ namespace Viserio\Component\Routing\Dispatcher;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Routing\MiddlewareNameResolver;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\SortedMiddleware;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 
-class MiddlewareBasedDispatcher extends SimpleDispatcher
+class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAwareContract
 {
     use ContainerAwareTrait;
     use MiddlewareAwareTrait;
@@ -37,9 +38,11 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
      *
      * @codeCoverageIgnore
      */
-    public function withoutMiddleware($middlewares = null)
+    public function withoutMiddleware($middlewares = null): MiddlewareAwareContract
     {
         // not used!
+
+        return $this;
     }
 
     /**
@@ -90,8 +93,8 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     /**
      * Run the given route within a Stack "onion" instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -100,7 +103,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
         $pipeline = new Pipeline();
 
         if ($this->container !== null) {
-            $pipeline->setContainer($this->getContainer());
+            $pipeline->setContainer($this->container);
         }
 
         return $pipeline->send($request)
@@ -113,7 +116,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     /**
      * Gather the middleware for the given route.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return array
      */
@@ -121,10 +124,10 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     {
         $middlewares = [];
 
-        self::map($route->gatherMiddleware(), function ($nameOrObject) use (&$middlewares, $route) {
+        self::map($route->gatherMiddleware(), function ($nameOrObject) use (&$middlewares, $route): void {
             $bypass = $route->gatherDisabledMiddlewares();
 
-            if (is_object($nameOrObject) && ! isset($bypass[get_class($nameOrObject)])) {
+            if (\is_object($nameOrObject) && ! isset($bypass[\get_class($nameOrObject)])) {
                 $middlewares[] = $nameOrObject;
             } else {
                 $middlewares[] = MiddlewareNameResolver::resolve(
@@ -157,7 +160,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
         foreach ($array as $key => $item) {
             $result = $callback($item, $key);
 
-            $newArray = array_merge_recursive($array, (array) $result);
+            $newArray = \array_merge_recursive($array, (array) $result);
         }
 
         return $newArray;
@@ -166,8 +169,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     /**
      * Convert a multi-dimensional array into a single-dimensional array without keys.
      *
-     * @param array  $array
-     * @param string $prepend
+     * @param array $array
      *
      * @return array
      */
@@ -176,8 +178,8 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
         $flattened = [];
 
         foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $flattened = array_merge($flattened, static::flatten($value));
+            if (\is_array($value)) {
+                $flattened = \array_merge($flattened, static::flatten($value));
             } else {
                 $flattened[] = $value;
             }

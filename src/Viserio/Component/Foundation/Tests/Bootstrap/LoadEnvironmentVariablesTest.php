@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
 class LoadEnvironmentVariablesTest extends MockeryTestCase
 {
-    public function testDontLoadIfCached()
+    public function testDontLoadIfCached(): void
     {
         $bootstraper = new LoadEnvironmentVariables();
 
@@ -25,7 +25,7 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
         $bootstraper->bootstrap($kernel);
     }
 
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         $bootstraper = new LoadEnvironmentVariables();
 
@@ -47,9 +47,9 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
         $bootstraper->bootstrap($kernel);
     }
 
-    public function testBootstrapWithAppEnv()
+    public function testBootstrapWithAppEnv(): void
     {
-        putenv('APP_ENV=production');
+        \putenv('APP_ENV=production');
 
         $bootstraper = new LoadEnvironmentVariables();
 
@@ -74,11 +74,11 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
         $bootstraper->bootstrap($kernel);
 
         // remove APP_ENV
-        putenv('APP_ENV=');
-        putenv('APP_ENV');
+        \putenv('APP_ENV=');
+        \putenv('APP_ENV');
     }
 
-    public function testBootstrapWithArgv()
+    public function testBootstrapWithArgv(): void
     {
         $_SERVER['argv'] = [
             'load',
@@ -108,7 +108,7 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
         $bootstraper->bootstrap($kernel);
 
         foreach (['load', '--env=local'] as $i => $value) {
-            if (($key = array_search($value, $_SERVER['argv'])) !== false) {
+            if (($key = \array_search($value, $_SERVER['argv'], true)) !== false) {
                 unset($_SERVER['argv'][$key]);
             }
         }

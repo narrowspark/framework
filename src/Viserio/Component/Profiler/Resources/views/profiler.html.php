@@ -7,13 +7,13 @@ if (! isset($token, $menus, $icons, $panels)) {
 ?>
 <div id="profiler" data-token="profiler-<?php echo TemplateManager::escape($token); ?>" class="profiler">
     <a class="profiler-show-button" title="Show Profiler" tabindex="-1">
-        <?php echo file_get_contents($icons['ic_narrowspark_white_24px.svg']); ?>
+        <?php echo \file_get_contents($icons['ic_narrowspark_white_24px.svg']); ?>
     </a>
     <div class="profiler-header">
-        <?php if (count($menus) !== 0): ?>
+        <?php if (\count($menus) !== 0): ?>
         <div class="profiler-menus">
             <a class="profiler-hide-button" title="Close Profiler" tabindex="-1">
-                <?php echo file_get_contents($icons['ic_clear_white_24px.svg']); ?>
+                <?php echo \file_get_contents($icons['ic_clear_white_24px.svg']); ?>
             </a>
             <?php foreach ($menus as $name => $menu):
                 $tooltip = false;
@@ -31,7 +31,7 @@ if (! isset($token, $menus, $icons, $panels)) {
                 <div class="profiler-menu-content">
                     <?php if (isset($menu['menu']['icon'])): ?>
                     <span class="profiler-menu-icon">
-                        <?php echo isset($icons[$menu['menu']['icon']]) ? file_get_contents($icons[$menu['menu']['icon']]) : $menu['menu']['icon']; ?>
+                        <?php echo isset($icons[$menu['menu']['icon']]) ? \file_get_contents($icons[$menu['menu']['icon']]) : $menu['menu']['icon']; ?>
                     </span>
                     <?php endif; ?>
                     <span class="profiler-menu-label">
@@ -54,10 +54,10 @@ if (! isset($token, $menus, $icons, $panels)) {
     <div class="profiler-body">
         <div class="profiler-body-menu">
             <a class="profiler-body-close-panel"  title="Close panel" tabindex="-1">
-                <?php echo file_get_contents($icons['ic_clear_white_24px.svg']); ?>
+                <?php echo \file_get_contents($icons['ic_clear_white_24px.svg']); ?>
             </a>
             <a class="profiler-body-resize-panel"  title="Resize body" tabindex="-1">
-                <?php echo file_get_contents($icons['ic_keyboard_arrow_up_white_24px.svg']); ?>
+                <?php echo \file_get_contents($icons['ic_keyboard_arrow_up_white_24px.svg']); ?>
             </a>
         </div>
         <?php foreach ($panels as $name => $panel): ?>

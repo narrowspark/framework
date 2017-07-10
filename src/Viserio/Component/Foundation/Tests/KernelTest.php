@@ -4,14 +4,14 @@ namespace Viserio\Component\Foundation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\EnvironmentDetector;
 
 class KernelTest extends MockeryTestCase
 {
-    public function testIsLocal()
+    public function testIsLocal(): void
     {
         $container = new Container();
 
@@ -27,7 +27,7 @@ class KernelTest extends MockeryTestCase
         self::assertFalse($kernel->isLocal());
     }
 
-    public function testIsRunningUnitTests()
+    public function testIsRunningUnitTests(): void
     {
         $container = new Container();
 
@@ -43,21 +43,21 @@ class KernelTest extends MockeryTestCase
         self::assertFalse($kernel->isRunningUnitTests());
     }
 
-    public function testisRunningInConsole()
+    public function testisRunningInConsole(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
         self::assertTrue($kernel->isRunningInConsole());
     }
 
-    public function testIsDownForMaintenance()
+    public function testIsDownForMaintenance(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
         self::assertFalse($kernel->isDownForMaintenance());
     }
 
-    public function testGetAppPath()
+    public function testGetAppPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
@@ -65,7 +65,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame('/app/test', $kernel->getAppPath('test'));
     }
 
-    public function testGetConfigPath()
+    public function testGetConfigPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
@@ -73,7 +73,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame('/config/test', $kernel->getConfigPath('test'));
     }
 
-    public function testGetDatabasePath()
+    public function testGetDatabasePath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
@@ -81,7 +81,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame('/database/test', $kernel->getDatabasePath('test'));
     }
 
-    public function testGetPublicPath()
+    public function testGetPublicPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
@@ -89,7 +89,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame('/public/test', $kernel->getPublicPath('test'));
     }
 
-    public function testGetStoragePath()
+    public function testGetStoragePath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
@@ -97,7 +97,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame('/storage/test', $kernel->getStoragePath('test'));
     }
 
-    public function testGetResourcePath()
+    public function testGetResourcePath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
@@ -105,21 +105,21 @@ class KernelTest extends MockeryTestCase
         self::assertSame('/resources/test', $kernel->getResourcePath('test'));
     }
 
-    public function testGetLangPath()
+    public function testGetLangPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
         self::assertSame('/resources/lang', $kernel->getLangPath());
     }
 
-    public function testGetRoutesPath()
+    public function testGetRoutesPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
         self::assertSame('/routes', $kernel->getRoutesPath());
     }
 
-    public function testEnvironmentPathAndFile()
+    public function testEnvironmentPathAndFile(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
@@ -138,7 +138,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame('/test/.test', $kernel->getEnvironmentFilePath());
     }
 
-    public function testDetectEnvironment()
+    public function testDetectEnvironment(): void
     {
         $container = new Container();
         $container->singleton(EnvironmentContract::class, EnvironmentDetector::class);

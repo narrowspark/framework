@@ -3,15 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
 use Psr\SimpleCache\CacheInterface;
-use stdClass;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 
 /**
  * Ported from.
  *
- * @link Symfony\Component\Cache\Simple\TraceableCache
+ * @see \Symfony\Component\Cache\Simple\TraceableCache
  */
-class SimpleTraceableCacheDecorator implements CacheInterface
+final class SimpleTraceableCacheDecorator implements CacheInterface
 {
     use SimpleTraceableCacheDecoratorTrait;
 
@@ -21,13 +20,6 @@ class SimpleTraceableCacheDecorator implements CacheInterface
      * @var \Psr\SimpleCache\CacheInterface
      */
     private $pool;
-
-    /**
-     * Instance of stdClass.
-     *
-     * @var \stdClass
-     */
-    private $miss;
 
     /**
      * List of event calls.
@@ -51,8 +43,7 @@ class SimpleTraceableCacheDecorator implements CacheInterface
     public function __construct(CacheInterface $pool)
     {
         $this->pool = $pool;
-        $this->name = get_class($pool);
-        $this->miss = new stdClass();
+        $this->name = \get_class($pool);
     }
 
     /**
@@ -68,14 +59,14 @@ class SimpleTraceableCacheDecorator implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): ?bool
     {
         $event = $this->start(__FUNCTION__);
 
         try {
             return $event->result = $this->pool->clear();
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -100,7 +91,7 @@ class SimpleTraceableCacheDecorator implements CacheInterface
      *
      * @return object
      */
-    private function start(string $name)
+    private function start(string $name): object
     {
         $this->calls[] = $event = new class() {
             public $name;
@@ -112,7 +103,7 @@ class SimpleTraceableCacheDecorator implements CacheInterface
         };
 
         $event->name  = $name;
-        $event->start = microtime(true);
+        $event->start = \microtime(true);
 
         return $event;
     }

@@ -4,9 +4,9 @@ namespace Viserio\Component\Routing;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Container\Factory as FactoryContract;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Container\Factory as FactoryContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Routing\Route\Action as RouteAction;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
@@ -72,16 +72,16 @@ class Route implements RouteContract
      *
      * @param array|string        $methods
      * @param string              $uri
-     * @param \Closure|array|null $action
+     * @param null|array|\Closure $action
      */
     public function __construct($methods, string $uri, $action)
     {
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
-        $this->httpMethods = array_map('strtoupper', (array) $methods);
+        $this->httpMethods = \array_map('strtoupper', (array) $methods);
         $this->action      = RouteAction::parse($uri, $action);
 
-        if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
+        if (\in_array('GET', $this->httpMethods, true) && ! \in_array('HEAD', $this->httpMethods, true)) {
             $this->httpMethods[] = 'HEAD';
         }
 
@@ -113,7 +113,7 @@ class Route implements RouteContract
      */
     public function getIdentifier(): string
     {
-        return implode($this->httpMethods, '|') . $this->getDomain() . $this->uri;
+        return \implode($this->httpMethods, '|') . $this->getDomain() . $this->uri;
     }
 
     /**
@@ -122,7 +122,7 @@ class Route implements RouteContract
     public function getDomain(): ?string
     {
         if (isset($this->action['domain'])) {
-            return str_replace(['http://', 'https://'], '', $this->action['domain']);
+            return \str_replace(['http://', 'https://'], '', $this->action['domain']);
         }
 
         return null;
@@ -179,16 +179,13 @@ class Route implements RouteContract
      */
     public function gatherMiddleware(): array
     {
-        $middlewares = [];
-
         if (isset($this->action['middlewares'])) {
-            $middlewares = (array) $this->action['middlewares'];
+            $this->withMiddleware($this->action['middlewares']);
         }
 
-        return array_unique(
-            array_merge(
+        return \array_unique(
+            \array_merge(
                 $this->middlewares,
-                $middlewares,
                 $this->getControllerMiddlewares()
             ),
             SORT_REGULAR
@@ -200,17 +197,14 @@ class Route implements RouteContract
      */
     public function gatherDisabledMiddlewares(): array
     {
-        $bypass = [];
-
         if (isset($this->action['bypass'])) {
-            $bypass = (array) $this->action['bypass'];
+            $this->withoutMiddleware($this->action['bypass']);
         }
 
-        return array_unique(array_merge(
+        return \array_merge(
             $this->bypassedMiddlewares,
-            $bypass,
             $this->getControllerDisabledMiddlewares()
-        ), SORT_REGULAR);
+        );
     }
 
     /**
@@ -218,7 +212,7 @@ class Route implements RouteContract
      */
     public function isHttpOnly(): bool
     {
-        return in_array('http', $this->action, true);
+        return \in_array('http', $this->action, true);
     }
 
     /**
@@ -226,7 +220,7 @@ class Route implements RouteContract
      */
     public function isHttpsOnly(): bool
     {
-        return in_array('https', $this->action, true);
+        return \in_array('https', $this->action, true);
     }
 
     /**
@@ -260,9 +254,9 @@ class Route implements RouteContract
      */
     public function addPrefix(string $prefix): RouteContract
     {
-        $uri = rtrim($prefix, '/') . '/' . ltrim($this->uri, '/');
+        $uri = \rtrim($prefix, '/') . '/' . \ltrim($this->uri, '/');
 
-        $this->uri = trim($uri, '/');
+        $this->uri = \trim($uri, '/');
 
         return $this;
     }
@@ -280,9 +274,9 @@ class Route implements RouteContract
      */
     public function addSuffix(string $suffix): RouteContract
     {
-        $uri = rtrim($this->uri) . ltrim($suffix);
+        $uri = \rtrim($this->uri) . \ltrim($suffix);
 
-        $this->uri = trim($uri);
+        $this->uri = \trim($uri);
 
         return $this;
     }
@@ -298,7 +292,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function setParameter($name, $value): RouteContract
+    public function addParameter($name, $value): RouteContract
     {
         $this->parameters[$name] = $value;
 
@@ -356,11 +350,11 @@ class Route implements RouteContract
      */
     public function getController()
     {
-        list($class) = explode('@', $this->action['uses']);
+        [$class] = \explode('@', $this->action['uses']);
 
         if ($this->controller === null) {
             if ($this->container !== null) {
-                $container = $this->getContainer();
+                $container = $this->container;
 
                 if ($container->has($class)) {
                     $this->controller = $container->get($class);
@@ -381,7 +375,10 @@ class Route implements RouteContract
     public function run(ServerRequestInterface $serverRequest): ResponseInterface
     {
         if ($this->isControllerAction()) {
-            return $this->getController()->{$this->getControllerMethod()}();
+            return $this->getInvoker()->call(
+                [$this->getController(), $this->getControllerMethod()],
+                [$serverRequest]
+            );
         }
 
         return $this->getInvoker()->call(
@@ -394,13 +391,13 @@ class Route implements RouteContract
      * Parse arguments to the where method into an array.
      *
      * @param array|string $name
-     * @param string|null  $expression
+     * @param null|string  $expression
      *
      * @return array
      */
     protected function parseWhere($name, ?string $expression): array
     {
-        if (is_string($name)) {
+        if (\is_string($name)) {
             return [$name => $expression];
         }
 
@@ -426,7 +423,7 @@ class Route implements RouteContract
 
         $controller = $this->getController();
 
-        if (method_exists($controller, 'gatherMiddleware')) {
+        if (\method_exists($controller, 'gatherMiddleware')) {
             return $controller->gatherMiddleware();
         }
 
@@ -446,7 +443,7 @@ class Route implements RouteContract
 
         $controller = $this->getController();
 
-        if (method_exists($controller, 'gatherDisabledMiddlewares')) {
+        if (\method_exists($controller, 'gatherDisabledMiddlewares')) {
             return $controller->gatherDisabledMiddlewares();
         }
 
@@ -460,7 +457,7 @@ class Route implements RouteContract
      */
     protected function isControllerAction(): bool
     {
-        return is_string($this->action['uses']);
+        return \is_string($this->action['uses']);
     }
 
     /**
@@ -470,6 +467,6 @@ class Route implements RouteContract
      */
     protected function getControllerMethod(): string
     {
-        return explode('@', $this->action['uses'])[1];
+        return \explode('@', $this->action['uses'])[1];
     }
 }

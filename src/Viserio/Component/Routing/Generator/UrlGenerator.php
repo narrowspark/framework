@@ -5,16 +5,16 @@ namespace Viserio\Component\Routing\Generator;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Viserio\Component\Contracts\Routing\Exception\RouteNotFoundException;
-use Viserio\Component\Contracts\Routing\Exception\UrlGenerationException;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Component\Support\Traits\MacroableTrait;
+use Spatie\Macroable\Macroable;
+use Viserio\Component\Contract\Routing\Exception\RouteNotFoundException;
+use Viserio\Component\Contract\Routing\Exception\UrlGenerationException;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 
 class UrlGenerator implements UrlGeneratorContract
 {
-    use MacroableTrait;
+    use Macroable;
 
     /**
      * The named parameter defaults.
@@ -26,7 +26,7 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * The route collection.
      *
-     * @var \Viserio\Component\Contracts\Routing\RouteCollection
+     * @var \Viserio\Component\Contract\Routing\RouteCollection
      */
     protected $routes;
 
@@ -81,9 +81,9 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Create a new URL Generator instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface             $request
-     * @param \Interop\Http\Factory\UriFactoryInterface            $uriFactory
+     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
+     * @param \Psr\Http\Message\ServerRequestInterface            $request
+     * @param \Interop\Http\Factory\UriFactoryInterface           $uriFactory
      */
     public function __construct(
         RouteCollectionContract $routes,
@@ -121,12 +121,12 @@ class UrlGenerator implements UrlGeneratorContract
             return '';
         }
 
-        $sourceDirs = explode('/', isset($basePath[0]) && '/' === $basePath[0] ? mb_substr($basePath, 1) : $basePath);
-        $targetDirs = explode('/', isset($targetPath[0]) && '/' === $targetPath[0] ? mb_substr($targetPath, 1) : $targetPath);
+        $sourceDirs = \explode('/', isset($basePath[0]) && '/' === $basePath[0] ? \mb_substr($basePath, 1) : $basePath);
+        $targetDirs = \explode('/', isset($targetPath[0]) && '/' === $targetPath[0] ? \mb_substr($targetPath, 1) : $targetPath);
 
-        array_pop($sourceDirs);
+        \array_pop($sourceDirs);
 
-        $targetFile = array_pop($targetDirs);
+        $targetFile = \array_pop($targetDirs);
 
         foreach ($sourceDirs as $i => $dir) {
             if (isset($targetDirs[$i]) && $dir === $targetDirs[$i]) {
@@ -137,14 +137,14 @@ class UrlGenerator implements UrlGeneratorContract
         }
 
         $targetDirs[] = $targetFile;
-        $path         = str_repeat('../', count($sourceDirs)) . implode('/', $targetDirs);
+        $path         = \str_repeat('../', \count($sourceDirs)) . \implode('/', $targetDirs);
 
         // A reference to the same base directory or an empty subdirectory must be prefixed with "./".
         // This also applies to a segment with a colon character (e.g., "file:colon") that cannot be used
         // as the first segment of a relative-path reference, as it would be mistaken for a scheme name
         // (see http://tools.ietf.org/html/rfc3986#section-4.2).
         return '' === $path || '/' === $path[0]
-            || false !== ($colonPos = mb_strpos($path, ':')) && ($colonPos < ($slashPos = mb_strpos($path, '/')) || false === $slashPos)
+            || false !== ($colonPos = \mb_strpos($path, ':')) && ($colonPos < ($slashPos = \mb_strpos($path, '/')) || false === $slashPos)
             ? "./$path" : $path;
     }
 
@@ -159,24 +159,22 @@ class UrlGenerator implements UrlGeneratorContract
             return $this->toRoute($route, $parameters, $referenceType);
         }
 
-        throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named/action route [%s] as such route does not exist.', $name));
+        throw new RouteNotFoundException(\sprintf('Unable to generate a URL for the named/action route [%s] as such route does not exist.', $name));
     }
 
     /**
      * Get the URL for a given route instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
-     * @param array                                      $parameters
-     * @param int                                        $referenceType
-     *
-     * @throws \Viserio\Component\Routing\Exception\UrlGenerationException
+     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param array                                     $parameters
+     * @param int                                       $referenceType
      *
      * @return string
      */
     protected function toRoute(RouteContract $route, array $parameters, int $referenceType): string
     {
         $path = $this->prepareRoutePath($route, $parameters);
-        $uri  = $this->uriFactory->createUri('/' . ltrim($path, '/'));
+        $uri  = $this->uriFactory->createUri('/' . \ltrim($path, '/'));
 
         if (($host = $route->getDomain()) !== null) {
             $uri = $uri->withHost($host);
@@ -192,7 +190,9 @@ class UrlGenerator implements UrlGeneratorContract
 
         if ($referenceType === self::ABSOLUTE_URL || $requiredSchemes) {
             return (string) $uri;
-        } elseif ($referenceType === self::NETWORK_PATH) {
+        }
+
+        if ($referenceType === self::NETWORK_PATH) {
             $uri = $uri->withScheme('');
 
             return (string) $uri;
@@ -204,14 +204,14 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Prepare route patch with all parameters and encode the path.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
-     * @param array                                      $parameters
+     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param array                                     $parameters
      *
      * @return string
      */
     protected function prepareRoutePath(RouteContract $route, array $parameters): string
     {
-        $parameters = array_replace($route->getParameters(), $parameters);
+        $parameters = \array_replace($route->getParameters(), $parameters);
 
         // First we will construct the entire URI including the root and query string. Once it
         // has been constructed, we'll make sure we don't have any missing parameters or we
@@ -221,7 +221,7 @@ class UrlGenerator implements UrlGeneratorContract
             $parameters
         );
 
-        preg_match("/\{(.*?)\}/", $path, $matches);
+        \preg_match("/\{(.*?)\}/", $path, $matches);
 
         if (isset($matches[1]) && $matches[1] !== '') {
             throw new UrlGenerationException($route);
@@ -231,13 +231,13 @@ class UrlGenerator implements UrlGeneratorContract
 
         // Once we have ensured that there are no missing parameters in the URI we will encode
         // the URI and prepare it for returning to the developer.
-        return strtr(rawurlencode($path), self::$dontEncode);
+        return \strtr(\rawurlencode($path), self::$dontEncode);
     }
 
     /**
      * Check if a scheme is required.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return bool
      */
@@ -266,12 +266,12 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function replacePathSegments(string $path): string
     {
-        $path = strtr($path, ['/../' => '/%2E%2E/', '/./' => '/%2E/']);
+        $path = \strtr($path, ['/../' => '/%2E%2E/', '/./' => '/%2E/']);
 
-        if ('/..' === mb_substr($path, -3)) {
-            $path = mb_substr($path, 0, -2) . '%2E%2E';
-        } elseif ('/.' === mb_substr($path, -2)) {
-            $path = mb_substr($path, 0, -1) . '%2E';
+        if ('/..' === \mb_substr($path, -3)) {
+            $path = \mb_substr($path, 0, -2) . '%2E%2E';
+        } elseif ('/.' === \mb_substr($path, -2)) {
+            $path = \mb_substr($path, 0, -1) . '%2E';
         }
 
         return $path;
@@ -280,8 +280,8 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Add the port and scheme to the uri if necessary.
      *
-     * @param \Psr\Http\Message\UriInterface             $uri
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Psr\Http\Message\UriInterface            $uri
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return \Psr\Http\Message\UriInterface
      */
@@ -317,15 +317,15 @@ class UrlGenerator implements UrlGeneratorContract
     {
         $path = $this->replaceNamedParameters($path, $parameters);
 
-        $path = preg_replace_callback('/\{.*?\}/', function ($match) use (&$parameters) {
-            if (empty($parameters) && ! (mb_substr($match[0], -mb_strlen('?}')) === '?}')) {
+        $path = \preg_replace_callback('/\{.*?\}/', function ($match) use (&$parameters) {
+            if (empty($parameters) && ! (\mb_substr($match[0], -\mb_strlen('?}')) === '?}')) {
                 return $match[0];
             }
 
-            return array_shift($parameters);
+            return \array_shift($parameters);
         }, $path);
 
-        return trim(preg_replace('/\{.*?\?\}/', '', $path), '/');
+        return \trim(\preg_replace('/\{.*?\?\}/', '', $path), '/');
     }
 
     /**
@@ -338,7 +338,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function replaceNamedParameters(string $path, array &$parameters): string
     {
-        return preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
+        return \preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
             if (isset($parameters[$m[1]]) && ! empty($parameters[$m[1]])) {
                 $parameter = $parameters[$m[1]] ?? null;
 
@@ -366,17 +366,17 @@ class UrlGenerator implements UrlGeneratorContract
         // If the URI has a fragment we will move it to the end of this URI since it will
         // need to come after any query string that may be added to the URL else it is
         // not going to be available. We will remove it then append it back on here.
-        if (! is_null($fragment = parse_url($uri, PHP_URL_FRAGMENT))) {
-            $uri = preg_replace('/#.*/', '', $uri);
+        if (null !== ($fragment = \parse_url($uri, PHP_URL_FRAGMENT))) {
+            $uri = \preg_replace('/#.*/', '', $uri);
         }
 
         $uri .= $this->getRouteQueryString($parameters);
 
-        if (is_null($fragment)) {
+        if (null === $fragment) {
             return $uri;
         }
 
-        return $uri . '#' . strtr(rawurlencode($fragment), ['%2F' => '/', '%3F' => '?']);
+        return $uri . '#' . \strtr(\rawurlencode($fragment), ['%2F' => '/', '%3F' => '?']);
     }
 
     /**
@@ -391,11 +391,11 @@ class UrlGenerator implements UrlGeneratorContract
         // First we will get all of the string parameters that are remaining after we
         // have replaced the route wildcards. We'll then build a query string from
         // these string parameters then use it as a starting point for the rest.
-        if (count($parameters) == 0 || in_array(null, $parameters, true)) {
+        if (\count($parameters) === 0 || \in_array(null, $parameters, true)) {
             return '';
         }
 
-        $query = http_build_query(
+        $query = \http_build_query(
             $keyed = $this->getStringParameters($parameters),
             '',
             '&',
@@ -405,8 +405,8 @@ class UrlGenerator implements UrlGeneratorContract
         // Lastly, if there are still parameters remaining, we will fetch the numeric
         // parameters that are in the array and add them to the query string or we
         // will make the initial query string if it wasn't started with strings.
-        if (count($keyed) < count($parameters)) {
-            $query .= '&' . implode(
+        if (\count($keyed) < \count($parameters)) {
+            $query .= '&' . \implode(
                 '&',
                 $this->getNumericParameters($parameters)
             );
@@ -414,7 +414,7 @@ class UrlGenerator implements UrlGeneratorContract
 
         // "/" and "?" can be left decoded for better user experience, see
         // http://tools.ietf.org/html/rfc3986#section-3.4
-        return '?' . trim(strtr($query, ['%2F' => '/']), '&');
+        return '?' . \trim(\strtr($query, ['%2F' => '/']), '&');
     }
 
     /**
@@ -426,7 +426,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function getStringParameters(array $parameters): array
     {
-        return array_filter($parameters, 'is_string', ARRAY_FILTER_USE_KEY);
+        return \array_filter($parameters, 'is_string', ARRAY_FILTER_USE_KEY);
     }
 
     /**
@@ -438,6 +438,6 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function getNumericParameters(array $parameters): array
     {
-        return array_filter($parameters, 'is_numeric', ARRAY_FILTER_USE_KEY);
+        return \array_filter($parameters, 'is_numeric', ARRAY_FILTER_USE_KEY);
     }
 }

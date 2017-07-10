@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Constraint;
 
-use PHPUnit\Framework\Assert as Assert;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint as PHPUnitConstraint;
 
 /**
@@ -28,7 +28,7 @@ class HttpProtocolVersion extends PHPUnitConstraint
      * @param string $protocolVersion
      * @param string $message
      */
-    public static function assertValid($protocolVersion, $message = '')
+    public static function assertValid($protocolVersion, $message = ''): void
     {
         Assert::assertThat($protocolVersion, new self(), $message);
     }
@@ -38,12 +38,12 @@ class HttpProtocolVersion extends PHPUnitConstraint
         return 'is a valid HTTP protocol version number';
     }
 
-    protected function matches($other)
+    protected function matches($other): bool
     {
-        if (! is_string($other)) {
+        if (! \is_string($other)) {
             return false;
         }
 
-        return in_array($other, $this->validHttpProtocolVersion, true);
+        return \in_array($other, $this->validHttpProtocolVersion, true);
     }
 }

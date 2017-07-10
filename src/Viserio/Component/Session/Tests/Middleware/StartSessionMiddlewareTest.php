@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
-use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -21,20 +21,29 @@ use Viserio\Component\Session\SessionManager;
 class StartSessionMiddlewareTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Filesystem\Filesystem|null
+     * @var null|\Viserio\Component\Filesystem\Filesystem
      */
     private $files;
 
-    public function setUp()
+    /**
+     * @var \Viserio\Component\Encryption\Key
+     */
+    private $key;
+
+    public function setUp(): void
     {
         parent::setUp();
 
+        $pw  = \random_bytes(32);
+        $key = KeyFactory::generateKey($pw);
+
+        $this->key   = $key;
         $this->files = new Filesystem();
 
         $this->files->createDirectory(__DIR__ . '/stubs');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
         $this->files = null;
@@ -42,7 +51,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         parent::tearDown();
     }
 
-    public function testAddSessionToResponse()
+    public function testAddSessionToResponse(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -70,11 +79,12 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                     'secure'          => false,
                 ],
             ]);
+
         $manager = new SessionManager(
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-                EncrypterContract::class  => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+                EncrypterContract::class  => new Encrypter($this->key),
             ])
         );
 
@@ -89,10 +99,10 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
     }
 
-    public function testAddSessionToCookie()
+    public function testAddSessionToCookie(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -127,7 +137,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
                 JarContract::class        => $jar,
-                EncrypterContract::class  => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+                EncrypterContract::class  => new Encrypter($this->key),
             ])
         );
 

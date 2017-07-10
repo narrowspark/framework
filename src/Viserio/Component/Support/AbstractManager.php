@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use InvalidArgumentException;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\Support\Manager as ManagerContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Support\Manager as ManagerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractManager implements
@@ -42,7 +42,7 @@ abstract class AbstractManager implements
     /**
      * Create a new manager instance.
      *
-     * @param \Psr\Container\ContainerInterface|iterable $data
+     * @param iterable|\Psr\Container\ContainerInterface $data
      */
     public function __construct($data)
     {
@@ -59,7 +59,7 @@ abstract class AbstractManager implements
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array([$this->getDriver(), $method], $parameters);
+        return \call_user_func_array([$this->getDriver(), $method], $parameters);
     }
 
     /**
@@ -144,7 +144,7 @@ abstract class AbstractManager implements
     {
         $method = 'create' . Str::studly($driver) . 'Driver';
 
-        return method_exists($this, $method) || isset($this->extensions[$driver]);
+        return \method_exists($this, $method) || isset($this->extensions[$driver]);
     }
 
     /**
@@ -156,7 +156,7 @@ abstract class AbstractManager implements
 
         $drivers = $this->resolvedOptions['drivers'] ?? [];
 
-        if (isset($drivers[$name]) && is_array($drivers[$name])) {
+        if (isset($drivers[$name]) && \is_array($drivers[$name])) {
             $config         = $drivers[$name];
             $config['name'] = $name;
 
@@ -175,11 +175,13 @@ abstract class AbstractManager implements
 
         if (isset($this->extensions[$config['name']])) {
             return $this->callCustomCreator($config['name'], $config);
-        } elseif (method_exists($this, $method)) {
+        }
+
+        if (\method_exists($this, $method)) {
             return $this->$method($config);
         }
 
-        throw new InvalidArgumentException(sprintf('Driver [%s] not supported.', $config['name']));
+        throw new InvalidArgumentException(\sprintf('Driver [%s] not supported.', $config['name']));
     }
 
     /**

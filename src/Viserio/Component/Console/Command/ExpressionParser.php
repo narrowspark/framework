@@ -4,25 +4,29 @@ namespace Viserio\Component\Console\Command;
 
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression;
+use Viserio\Component\Contract\Console\Exception\InvalidCommandExpression;
 
 final class ExpressionParser
 {
     /**
+     * Parse given command string.
+     *
      * @param string $expression
+     *
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
      *
      * @return array
      */
     public static function parse(string $expression): array
     {
-        preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
+        \preg_match_all('/^\S*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
 
-        if (trim($expression) === '') {
+        if (\trim($expression) === '') {
             throw new InvalidCommandExpression('The expression was empty.');
         }
 
-        $tokens    = array_values(array_filter(array_map('trim', $matches[0])));
-        $name      = array_shift($tokens);
+        $tokens    = \array_values(\array_filter(\array_map('trim', $matches[0])));
+        $name      = \array_shift($tokens);
         $arguments = [];
         $options   = [];
 
@@ -62,25 +66,27 @@ final class ExpressionParser
      *
      * @param string $token
      *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     *
      * @return \Viserio\Component\Console\Input\InputArgument
      */
     private static function parseArgument(string $token): InputArgument
     {
-        list($token, $description) = static::extractDescription($token);
+        [$token, $description] = static::extractDescription($token);
 
         switch (true) {
             case self::endsWith($token, '=*]'):
-                return new InputArgument(trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
+                return new InputArgument(\trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
             case self::endsWith($token, '=*'):
-                return new InputArgument(trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
+                return new InputArgument(\trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
             case self::endsWith($token, '?'):
-                return new InputArgument(trim($token, '?'), InputArgument::OPTIONAL, $description);
-            case preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
-                return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
-            case preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
+                return new InputArgument(\trim($token, '?'), InputArgument::OPTIONAL, $description);
+            case \preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
+                return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, \preg_split('/,\s?/', $matches[2]));
+            case \preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
                 return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
             case self::startsWith($token, '[') && self::endsWith($token, ']'):
-                return new InputArgument(trim($token, '[]'), InputArgument::OPTIONAL, $description);
+                return new InputArgument(\trim($token, '[]'), InputArgument::OPTIONAL, $description);
             default:
                 return new InputArgument($token, InputArgument::REQUIRED, $description);
         }
@@ -91,31 +97,33 @@ final class ExpressionParser
      *
      * @param string $token
      *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     *
      * @return \Viserio\Component\Console\Input\InputOption
      */
     private static function parseOption(string $token): InputOption
     {
-        list($token, $description) = static::extractDescription(trim($token, '[]'));
+        [$token, $description] = static::extractDescription(\trim($token, '[]'));
 
         // Shortcut [-y|--yell]
-        if (mb_strpos($token, '|') !== false) {
-            list($shortcut, $token) = explode('|', $token, 2);
-            $shortcut               = ltrim($shortcut, '-');
+        if (\mb_strpos($token, '|') !== false) {
+            [$shortcut, $token] = \explode('|', $token, 2);
+            $shortcut           = \ltrim($shortcut, '-');
         } else {
             $shortcut = null;
         }
 
-        $name    = ltrim($token, '-');
+        $name    = \ltrim($token, '-');
         $default = null;
 
         switch (true) {
             case self::endsWith($token, '=*'):
-                return new InputOption(rtrim($name, '=*'), $shortcut, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, $description);
+                return new InputOption(\rtrim($name, '=*'), $shortcut, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, $description);
             case self::endsWith($token, '='):
-                return new InputOption(rtrim($name, '='), $shortcut, InputOption::VALUE_REQUIRED, $description);
-            case preg_match('/(.+)\=\*(.+)/', $token, $matches):
-                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
-            case preg_match('/(.+)\=(.+)/', $token, $matches):
+                return new InputOption(\rtrim($name, '='), $shortcut, InputOption::VALUE_REQUIRED, $description);
+            case \preg_match('/(.+)\=\*(.+)/', $token, $matches):
+                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, \preg_split('/,\s?/', $matches[2]));
+            case \preg_match('/(.+)\=(.+)/', $token, $matches):
                 return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
             default:
                 return new InputOption($token, $shortcut, InputOption::VALUE_NONE, $description);
@@ -131,9 +139,9 @@ final class ExpressionParser
      */
     private static function extractDescription(string $token): array
     {
-        preg_match('/(.*)\s:(\s+.*(?<!]))(.*)/', trim($token), $parts);
+        \preg_match('/(.*)\s:(\s+.*(?<!]))(.*)/', \trim($token), $parts);
 
-        return count($parts) === 4 ? [$parts[1] . $parts[3], trim($parts[2])] : [$token, ''];
+        return \count($parts) === 4 ? [$parts[1] . $parts[3], \trim($parts[2])] : [$token, ''];
     }
 
     /**
@@ -146,11 +154,7 @@ final class ExpressionParser
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        if ($needle != '' && mb_substr($haystack, 0, mb_strlen($needle)) === $needle) {
-            return true;
-        }
-
-        return false;
+        return $needle !== '' && \mb_strrpos($haystack, $needle) === 0;
     }
 
     /**
@@ -163,10 +167,6 @@ final class ExpressionParser
      */
     private static function endsWith(string $haystack, string $needle): bool
     {
-        if (mb_substr($haystack, -mb_strlen($needle)) === $needle) {
-            return true;
-        }
-
-        return false;
+        return \mb_substr($haystack, -\mb_strlen($needle)) === $needle;
     }
 }

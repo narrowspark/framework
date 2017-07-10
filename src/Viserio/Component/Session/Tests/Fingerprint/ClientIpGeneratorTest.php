@@ -8,7 +8,7 @@ use Viserio\Component\Session\Fingerprint\ClientIpGenerator;
 
 class ClientIpGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
@@ -31,6 +31,6 @@ class ClientIpGeneratorTest extends MockeryTestCase
 
         $generator = new ClientIpGenerator($request);
 
-        self::assertSame(40, mb_strlen($generator->generate()));
+        self::assertSame(40, \mb_strlen($generator->generate()));
     }
 }

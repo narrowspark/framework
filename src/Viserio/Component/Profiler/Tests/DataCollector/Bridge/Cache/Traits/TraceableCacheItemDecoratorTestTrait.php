@@ -4,7 +4,7 @@ namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits;
 
 trait TraceableCacheItemDecoratorTestTrait
 {
-    public function testGetItemMissTrace()
+    public function testGetItemMissTrace(): void
     {
         $pool = $this->createCachePool();
         $pool->getItem('k');
@@ -22,7 +22,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testGetItemHitTrace()
+    public function testGetItemHitTrace(): void
     {
         $pool = $this->createCachePool();
         $item = $pool->getItem('k')->set('foo');
@@ -38,7 +38,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertEquals(0, $call->misses);
     }
 
-    public function testGetItemsMissTrace()
+    public function testGetItemsMissTrace(): void
     {
         $pool  = $this->createCachePool();
         $arg   = ['k0', 'k1'];
@@ -60,7 +60,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testHasItemMissTrace()
+    public function testHasItemMissTrace(): void
     {
         $pool = $this->createCachePool();
         $pool->hasItem('k');
@@ -76,7 +76,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testHasItemHitTrace()
+    public function testHasItemHitTrace(): void
     {
         $pool = $this->createCachePool();
         $item = $pool->getItem('k')->set('foo');
@@ -94,7 +94,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testDeleteItemTrace()
+    public function testDeleteItemTrace(): void
     {
         $pool = $this->createCachePool();
         $pool->deleteItem('k');
@@ -112,7 +112,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testDeleteItemsTrace()
+    public function testDeleteItemsTrace(): void
     {
         $pool = $this->createCachePool();
         $arg  = ['k0', 'k1'];
@@ -133,7 +133,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testSaveTrace()
+    public function testSaveTrace(): void
     {
         $pool = $this->createCachePool();
         $item = $pool->getItem('k')->set('foo');
@@ -152,7 +152,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testSaveDeferredTrace()
+    public function testSaveDeferredTrace(): void
     {
         $pool = $this->createCachePool();
         $item = $pool->getItem('k')->set('foo');
@@ -171,7 +171,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testCommitTrace()
+    public function testCommitTrace(): void
     {
         $pool = $this->createCachePool();
         $pool->commit();
@@ -190,7 +190,7 @@ trait TraceableCacheItemDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testClear()
+    public function testClear(): void
     {
         $pool = $this->createCachePool();
         $pool->clear();

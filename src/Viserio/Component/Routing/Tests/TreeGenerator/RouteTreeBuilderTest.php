@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
-use Fig\Http\Message\RequestMethodInterface;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Contract\Routing\Pattern;
+use Viserio\Component\Contract\Routing\Router;
 use Viserio\Component\Routing\Matcher\RegexMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 use Viserio\Component\Routing\Route;
@@ -16,31 +16,31 @@ use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 class RouteTreeBuilderTest extends TestCase
 {
     private const HTTP_METHOD_VARS = [
-        RequestMethodInterface::METHOD_HEAD,
-        RequestMethodInterface::METHOD_GET,
-        RequestMethodInterface::METHOD_POST,
-        RequestMethodInterface::METHOD_PUT,
-        RequestMethodInterface::METHOD_PATCH,
-        RequestMethodInterface::METHOD_DELETE,
-        RequestMethodInterface::METHOD_PURGE,
-        RequestMethodInterface::METHOD_OPTIONS,
-        RequestMethodInterface::METHOD_TRACE,
-        RequestMethodInterface::METHOD_CONNECT,
-        RequestMethodInterface::METHOD_TRACE,
-        'LINK',
-        'UNLINK',
+        Router::METHOD_HEAD,
+        Router::METHOD_GET,
+        Router::METHOD_POST,
+        Router::METHOD_PUT,
+        Router::METHOD_PATCH,
+        Router::METHOD_DELETE,
+        Router::METHOD_PURGE,
+        Router::METHOD_OPTIONS,
+        Router::METHOD_TRACE,
+        Router::METHOD_CONNECT,
+        Router::METHOD_TRACE,
+        Router::METHOD_LINK,
+        Router::METHOD_UNLINK,
     ];
 
     public function routeTreeBuilderCases()
     {
         return [
             [
-                [(new Route(self::HTTP_METHOD_VARS, '', null))],
+                [new Route(self::HTTP_METHOD_VARS, '', null)],
                 new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK']]]),
                 [],
             ],
             [
-                [(new Route(self::HTTP_METHOD_VARS, '/', null))],
+                [new Route(self::HTTP_METHOD_VARS, '/', null)],
                 null,
                 [
                     1 => new ChildrenNodeCollection([
@@ -67,7 +67,7 @@ class RouteTreeBuilderTest extends TestCase
             ],
             [
                 [
-                    (new Route(['GET'], '/first/{param1}', null)),
+                    new Route(['GET'], '/first/{param1}', null),
                     (new Route(['GET'], '/{param1}/{param2}', null))->where(['param1', 'param2'], Pattern::ALPHA),
                 ],
                 null,
@@ -100,15 +100,15 @@ class RouteTreeBuilderTest extends TestCase
             ],
             [
                 [
-                    (new Route(self::HTTP_METHOD_VARS, '', null)),
-                    (new Route(self::HTTP_METHOD_VARS, '/main', null)),
-                    (new Route(['GET'], '/main/place', null)),
-                    (new Route(['POST'], '/main/place', null)),
-                    (new Route(self::HTTP_METHOD_VARS, '/main/thing', null)),
-                    (new Route(self::HTTP_METHOD_VARS, '/main/thing/abc', null)),
+                    new Route(self::HTTP_METHOD_VARS, '', null),
+                    new Route(self::HTTP_METHOD_VARS, '/main', null),
+                    new Route(['GET'], '/main/place', null),
+                    new Route(['POST'], '/main/place', null),
+                    new Route(self::HTTP_METHOD_VARS, '/main/thing', null),
+                    new Route(self::HTTP_METHOD_VARS, '/main/thing/abc', null),
                     (new Route(self::HTTP_METHOD_VARS, '/user/{name}', null))->where('name', Pattern::ANY),
                     (new Route(self::HTTP_METHOD_VARS, '/user/{name}/edit', null))->where('name', Pattern::ANY),
-                    (new Route(self::HTTP_METHOD_VARS, '/user/create', null))->setParameter('user.create', ''),
+                    (new Route(self::HTTP_METHOD_VARS, '/user/create', null))->addParameter('user.create', ''),
                 ],
                 new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK']]]),
                 [
@@ -173,9 +173,9 @@ class RouteTreeBuilderTest extends TestCase
      * @param mixed $rootRoute
      * @param mixed $segmentDepthNodesMap
      */
-    public function testRouteTreeBuilder($routes, $rootRoute, $segmentDepthNodesMap)
+    public function testRouteTreeBuilder($routes, $rootRoute, $segmentDepthNodesMap): void
     {
-        list($rootRouteData, $segmentDepthNodeMap) = (new RouteTreeBuilder())->build($routes);
+        [$rootRouteData, $segmentDepthNodeMap] = (new RouteTreeBuilder())->build($routes);
 
         self::assertSame($rootRoute !== null, $rootRouteData !== null);
         self::assertEquals($rootRoute, $rootRouteData);

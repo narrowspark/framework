@@ -3,21 +3,32 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Http\Exception\LogicException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 
 class FnStreamTest extends TestCase
 {
+    public function testDoNotAllowUnserialization()
+    {
+        $this->expectException(LogicException::class);
+
+        $a = new FnStream([]);
+        $b = \serialize($a);
+
+        \unserialize($b);
+    }
+
     /**
      * @expectedException \BadMethodCallException
      * @expectedExceptionMessage seek() is not implemented in the FnStream
      */
-    public function testThrowsWhenNotImplemented()
+    public function testThrowsWhenNotImplemented(): void
     {
         (new FnStream([]))->seek(1);
     }
 
-    public function testProxiesToFunction()
+    public function testProxiesToFunction(): void
     {
         $stream = new FnStream([
             'read' => function ($len) {
@@ -30,12 +41,12 @@ class FnStreamTest extends TestCase
         self::assertEquals('foo', $stream->read(3));
     }
 
-    public function testCanCloseOnDestruct()
+    public function testCanCloseOnDestruct(): void
     {
         $called = false;
 
         $stream = new FnStream([
-            'close' => function () use (&$called) {
+            'close' => function () use (&$called): void {
                 $called = true;
             },
         ]);
@@ -44,19 +55,19 @@ class FnStreamTest extends TestCase
         self::assertTrue($called);
     }
 
-    public function doesNotRequireClose()
+    public function doesNotRequireClose(): void
     {
         $stream = new FnStream([]);
         unset($stream);
     }
 
-    public function testDecoratesStream()
+    public function testDecoratesStream(): void
     {
         $body   = 'foo';
-        $stream = fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
-        fwrite($stream, $body);
-        fseek($stream, 0);
+        \fwrite($stream, $body);
+        \fseek($stream, 0);
         $stream1 = new Stream($stream);
         $stream2 = FnStream::decorate($stream1, []);
 
@@ -82,15 +93,15 @@ class FnStreamTest extends TestCase
         $stream2->close();
     }
 
-    public function testDecoratesWithCustomizations()
+    public function testDecoratesWithCustomizations(): void
     {
         $called = false;
 
         $body   = 'foo';
-        $stream = fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
-        fwrite($stream, $body);
-        fseek($stream, 0);
+        \fwrite($stream, $body);
+        \fseek($stream, 0);
 
         $stream1 = new Stream($stream);
         $stream2 = FnStream::decorate($stream1, [

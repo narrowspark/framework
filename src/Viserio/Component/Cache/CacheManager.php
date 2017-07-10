@@ -12,19 +12,17 @@ use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
-use Defuse\Crypto\Key;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use Redis;
-use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
 
 class CacheManager extends AbstractManager implements
@@ -37,14 +35,13 @@ class CacheManager extends AbstractManager implements
     /**
      * Create a new cache manager instance.
      *
-     * @param \Psr\Container\ContainerInterface $container
+     * @param iterable|\Psr\Container\ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
         parent::__construct($container);
 
-        $this->container = $container;
-        $this->logger    = new NullLogger();
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -67,9 +64,12 @@ class CacheManager extends AbstractManager implements
         $driver    = parent::createDriver($config);
         $namespace = $this->resolvedOptions['namespace'];
 
-        $driver->setLogger($this->getLogger());
+        $driver->setLogger($this->logger);
 
-        if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
+        if ($namespace !== false &&
+            $driver instanceof HierarchicalPoolInterface &&
+            \class_exists(NamespacedCachePool::class)
+        ) {
             $driver = $this->getNamespacedPool($driver, $namespace);
         }
 
@@ -93,6 +93,9 @@ class CacheManager extends AbstractManager implements
      *
      * @param array $config
      *
+     * @throws \MongoDB\Driver\Exception\RuntimeException
+     * @throws \MongoDB\Driver\Exception\InvalidArgumentException
+     *
      * @return \Cache\Adapter\MongoDB\MongoDBCachePool
      *
      * @codeCoverageIgnore
@@ -100,7 +103,7 @@ class CacheManager extends AbstractManager implements
     protected function createMongodbDriver(array $config): MongoDBCachePool
     {
         if (isset($config['username'], $config['password'])) {
-            $dns = sprintf(
+            $dns = \sprintf(
                 'mongodb://%s:%s@%s:%s',
                 $config['username'],
                 $config['password'],
@@ -108,7 +111,7 @@ class CacheManager extends AbstractManager implements
                 $config['port']
             );
         } else {
-            $dns = sprintf('mongodb://%s:%s', $config['server'], $config['port']);
+            $dns = \sprintf('mongodb://%s:%s', $config['server'], $config['port']);
         }
 
         $collection = MongoDBCachePool::createCollection(
@@ -148,7 +151,7 @@ class CacheManager extends AbstractManager implements
      */
     protected function createPredisDriver(array $config): PredisCachePool
     {
-        $client = new PredisClient(sprintf('tcp:/%s:%s', $config['server'], $config['port']));
+        $client = new PredisClient(\sprintf('tcp:/%s:%s', $config['server'], $config['port']));
 
         return new PredisCachePool($client);
     }
@@ -162,7 +165,7 @@ class CacheManager extends AbstractManager implements
      */
     protected function createFilesystemDriver(array $config): FilesystemCachePool
     {
-        $adapter = $this->getContainer()->get($config['connection']);
+        $adapter = $this->container->get($config['connection']);
 
         return new FilesystemCachePool(new Flysystem($adapter));
     }

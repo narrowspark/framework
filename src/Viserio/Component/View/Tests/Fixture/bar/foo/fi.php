@@ -1,3 +1,6 @@
 <?php declare(strict_types=1);
-echo $__env->create('layout', \Narrowspark\Arr\StaticArr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+$vars = \get_defined_vars();
+$data = $vars['__data'] ?? null;
+$path = $vars['__path'] ?? null;
+echo $__env->create('layout', [$data, $path])->render(); ?>
 <?php throw new Exception('section exception message'); ?>

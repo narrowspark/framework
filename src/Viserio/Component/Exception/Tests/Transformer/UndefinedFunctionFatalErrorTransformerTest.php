@@ -9,7 +9,7 @@ use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransform
 
 class UndefinedFunctionFatalErrorTransformerTest extends TestCase
 {
-    public function testExceptionIsWrapped()
+    public function testExceptionIsWrapped(): void
     {
         $transformer = new UndefinedFunctionFatalErrorTransformer();
         $exception   = $transformer->transform(
@@ -23,7 +23,7 @@ class UndefinedFunctionFatalErrorTransformerTest extends TestCase
         self::assertSame('Attempted to call function "test_namespaced_function" from the global namespace.', $exception->getMessage());
     }
 
-    public function testExceptionIsNotWrapped()
+    public function testExceptionIsNotWrapped(): void
     {
         $transformer = new UndefinedFunctionFatalErrorTransformer();
         $exception   = $transformer->transform(

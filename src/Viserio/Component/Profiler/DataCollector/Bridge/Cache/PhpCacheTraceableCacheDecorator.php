@@ -4,11 +4,10 @@ namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
 use Cache\Adapter\Common\PhpCachePool as PhpCachePoolInterface;
 use Psr\SimpleCache\CacheInterface;
-use stdClass;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
-class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInterface
+final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInterface
 {
     use SimpleTraceableCacheDecoratorTrait;
     use TraceableCacheItemDecoratorTrait;
@@ -16,16 +15,9 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     /**
      * A instance of psr16 cache.
      *
-     * @var \Psr\SimpleCache\CacheInterface|\Psr\Cache\CacheItemPoolInterface
+     * @var \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface
      */
     private $pool;
-
-    /**
-     * Instance of stdClass.
-     *
-     * @var \stdClass
-     */
-    private $miss;
 
     /**
      * List of event calls.
@@ -44,13 +36,12 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     /**
      * Create new Php Cache Traceable Cache Decorator instance.
      *
-     * @param \Psr\SimpleCache\CacheInterface|\Psr\Cache\CacheItemPoolInterface $pool
+     * @param \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface $pool
      */
     public function __construct($pool)
     {
         $this->pool = $pool;
-        $this->name = get_class($pool);
-        $this->miss = new stdClass();
+        $this->name = \get_class($pool);
     }
 
     /**
@@ -66,14 +57,14 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): ?bool
     {
         $event = $this->start(__FUNCTION__);
 
         try {
             return $event->result = $this->pool->clear();
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -87,7 +78,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
         try {
             $bool = $event->result = $this->pool->invalidateTags($tags);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
 
         return $bool;
@@ -103,7 +94,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
         try {
             $bool = $event->result = $this->pool->invalidateTag($tag);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
 
         return $bool;
@@ -130,7 +121,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
      *
      * @return object
      */
-    private function start(string $name)
+    private function start(string $name): object
     {
         $this->calls[] = $event = new class() {
             public $name;
@@ -142,7 +133,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
         };
 
         $event->name  = $name;
-        $event->start = microtime(true);
+        $event->start = \microtime(true);
 
         return $event;
     }

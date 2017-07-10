@@ -9,7 +9,7 @@ class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
-    public function testNormalizeDirectorySeparator()
+    public function testNormalizeDirectorySeparator(): void
     {
         if (DIRECTORY_SEPARATOR !== '/') {
             self::assertSame('path/to/test', self::normalizeDirectorySeparator('path\to\test'));
@@ -31,7 +31,7 @@ class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testNormalizePathToThrowException()
+    public function testNormalizePathToThrowException(): void
     {
         self::normalizePath('..//../test/');
     }
@@ -42,7 +42,7 @@ class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
      * @param mixed $input
      * @param mixed $expected
      */
-    public function testNormalizePath($input, $expected)
+    public function testNormalizePath($input, $expected): void
     {
         $result = self::normalizePath($input);
 

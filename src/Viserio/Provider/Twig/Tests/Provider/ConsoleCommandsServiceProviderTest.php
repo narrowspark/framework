@@ -13,7 +13,7 @@ use Viserio\Provider\Twig\Provider\ConsoleCommandsServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testGetServices()
+    public function testGetServices(): void
     {
         $container = new Container();
         $container->register(new ConsoleServiceProvider());

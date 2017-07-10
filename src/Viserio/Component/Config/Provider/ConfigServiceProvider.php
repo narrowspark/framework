@@ -2,28 +2,36 @@
 declare(strict_types=1);
 namespace Viserio\Component\Config\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\Repository;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 
-class ConfigServiceProvider implements ServiceProvider
+class ConfigServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             RepositoryContract::class => [self::class, 'createRepository'],
             Repository::class         => function (ContainerInterface $container) {
                 return $container->get(RepositoryContract::class);
             },
-            'config' => function (ContainerInterface $container) {
+            'config'                  => function (ContainerInterface $container) {
                 return $container->get(RepositoryContract::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     /**
@@ -31,7 +39,7 @@ class ConfigServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Config\Repository
+     * @return \Viserio\Component\Contract\Config\Repository
      */
     public static function createRepository(ContainerInterface $container): RepositoryContract
     {

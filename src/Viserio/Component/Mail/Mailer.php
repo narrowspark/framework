@@ -4,27 +4,28 @@ namespace Viserio\Component\Mail;
 
 use Closure;
 use InvalidArgumentException;
+use Spatie\Macroable\Macroable;
 use Swift_Mailer;
 use Swift_Mime_SimpleMessage;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
-use Viserio\Component\Contracts\Mail\Message as MessageContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\Mail\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Mail\Mailer as MailerContract;
+use Viserio\Component\Contract\Mail\Message as MessageContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
-use Viserio\Component\Support\Traits\MacroableTrait;
 
 class Mailer implements MailerContract, RequiresComponentConfigContract
 {
     use ContainerAwareTrait;
-    use OptionsResolverTrait;
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
     use InvokerAwareTrait;
-    use MacroableTrait;
+    use Macroable;
+    use OptionsResolverTrait;
     use ViewAwareTrait;
 
     /**
@@ -66,7 +67,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      * Create a new Mailer instance.
      *
      * @param \Swift_Mailer                              $swiftMailer
-     * @param \Psr\Container\ContainerInterface|iterable $data
+     * @param iterable|\Psr\Container\ContainerInterface $data
      */
     public function __construct(Swift_Mailer $swiftMailer, $data)
     {
@@ -77,13 +78,13 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         // on each one, which makes the developer's life a lot more convenient.
         $from = $this->resolvedOptions['from'] ?? null;
 
-        if (is_array($from) && isset($from['address'], $from['name'])) {
+        if (\is_array($from) && isset($from['address'], $from['name'])) {
             $this->alwaysFrom($from['address'], $from['name']);
         }
 
         $to = $this->resolvedOptions['to'] ?? null;
 
-        if (is_array($to) && isset($to['address'], $to['name'])) {
+        if (\is_array($to) && isset($to['address'], $to['name'])) {
             $this->alwaysTo($to['address'], $to['name']);
         }
 
@@ -103,7 +104,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     public function alwaysFrom(string $address, string $name = null): void
     {
-        $this->from = compact('address', 'name');
+        $this->from = \compact('address', 'name');
     }
 
     /**
@@ -111,7 +112,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     public function alwaysTo(string $address, string $name = null): void
     {
-        $this->to = compact('address', 'name');
+        $this->to = \compact('address', 'name');
     }
 
     /**
@@ -138,7 +139,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         // First we need to parse the view, which could either be a string or an array
         // containing both an HTML and plain text versions of the view which should
         // be used when sending an e-mail. We will extract both of them out here.
-        list($view, $plain, $raw) = $this->parseView($view);
+        [$view, $plain, $raw] = $this->parseView($view);
 
         $data['message'] = $message = $this->createMessage();
 
@@ -155,14 +156,14 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         // any recipient addresses previously set and use this one instead.
         if (isset($this->to['address'])) {
             $message->to($this->to['address'], $this->to['name'], true);
-            $message->cc($this->to['address'], $this->to['name'], true);
-            $message->bcc($this->to['address'], $this->to['name'], true);
+            $message->cc(null, null, true);
+            $message->bcc(null, null, true);
         }
 
         $recipients = $this->sendSwiftMessage($message->getSwiftMessage());
 
-        if ($this->events !== null) {
-            $this->events->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $recipients));
+        if ($this->eventManager !== null) {
+            $this->eventManager->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $recipients));
         }
 
         return $recipients;
@@ -181,7 +182,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      *
      * @param \Swift_Mailer $swift
      */
-    public function setSwiftMailer(Swift_Mailer $swift)
+    public function setSwiftMailer(Swift_Mailer $swift): void
     {
         $this->swift = $swift;
     }
@@ -191,7 +192,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      *
      * @return \Swift_Mailer
      */
-    public function getSwiftMailer()
+    public function getSwiftMailer(): Swift_Mailer
     {
         return $this->swift;
     }
@@ -199,27 +200,29 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Parse the given view name or array.
      *
-     * @param string|array $view
+     * @param array|string $view
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Mail\Exception\UnexpectedValueException
      *
      * @return array
      */
     protected function parseView($view): array
     {
-        if (is_string($view)) {
+        if (\is_string($view)) {
             return [$view, null, null];
         }
 
         // If the given view is an array with numeric keys, we will just assume that
         // both a "pretty" and "plain" view were provided, so we will return this
         // array as is, since must should contain both views with numeric keys.
-        if (is_array($view) && isset($view[0])) {
+        if (\is_array($view) && isset($view[0])) {
             return [$view[0], $view[1], null];
-            // If the view is an array, but doesn't contain numeric keys, we will assume
-            // the the views are being explicitly specified and will extract them via
-            // named keys instead, allowing the developers to use one or the other.
-        } elseif (is_array($view)) {
+        }
+
+        // If the view is an array, but doesn't contain numeric keys, we will assume
+        // the the views are being explicitly specified and will extract them via
+        // named keys instead, allowing the developers to use one or the other.
+        if (\is_array($view)) {
             return [
                 $view['html'] ?? null,
                 $view['text'] ?? null,
@@ -227,19 +230,19 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
             ];
         }
 
-        throw new InvalidArgumentException('Invalid view.');
+        throw new UnexpectedValueException('Invalid view.');
     }
 
     /**
      * Add the content to a given message.
      *
-     * @param \Viserio\Component\Mail\Message $message
-     * @param string|null                     $view
-     * @param string|null                     $plain
-     * @param string|null                     $raw
-     * @param array                           $data
+     * @param \Viserio\Component\Contract\Mail\Message $message
+     * @param null|string                              $view
+     * @param null|string                              $plain
+     * @param null|string                              $raw
+     * @param array                                    $data
      */
-    protected function addContent(MessageContract $message, ?string $view, ?string $plain, ?string $raw, array $data)
+    protected function addContent(MessageContract $message, ?string $view, ?string $plain, ?string $raw, array $data): void
     {
         if ($view !== null) {
             $message->setBody($this->createView($view, $data), 'text/html');
@@ -287,11 +290,11 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     protected function shouldSendMessage(Swift_Mime_SimpleMessage $message): bool
     {
-        if (! $this->events) {
+        if (! $this->eventManager) {
             return true;
         }
 
-        return $this->events->trigger(new MessageSendingEvent($this, $message)) !== false;
+        return $this->eventManager->trigger(new MessageSendingEvent($this, $message)) !== false;
     }
 
     /**
@@ -301,7 +304,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      *
      * @return void
      */
-    protected function forceReconnecting()
+    protected function forceReconnecting(): void
     {
         $this->swift->getTransport()->stop();
     }
@@ -309,11 +312,11 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Create a new message instance.
      *
-     * @return \Viserio\Component\Mail\Message
+     * @return \Viserio\Component\Contract\Mail\Message
      */
     protected function createMessage(): MessageContract
     {
-        $message = new Message($this->swift->createMessage('message'));
+        $message = new Message($this->swift->createMessage());
 
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
@@ -328,18 +331,20 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Call the provided message builder.
      *
-     * @param \Closure|string|null            $callback
-     * @param \Viserio\Component\Mail\Message $message
+     * @param null|\Closure|string                     $callback
+     * @param \Viserio\Component\Contract\Mail\Message $message
      *
      * @throws \InvalidArgumentException
      *
      * @return mixed
      */
-    protected function callMessageBuilder($callback, $message)
+    protected function callMessageBuilder($callback, MessageContract $message)
     {
         if ($callback instanceof Closure) {
             return $callback($message);
-        } elseif ($this->container !== null) {
+        }
+
+        if ($this->container !== null) {
             return $this->getInvoker()->call($callback)->mail($message);
         }
 
@@ -356,10 +361,10 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     protected function createView(string $view, array $data): string
     {
-        if ($this->views !== null) {
-            return $this->getViewFactory()->create($view, $data)->render();
+        if ($this->viewFactory !== null) {
+            return $this->viewFactory->create($view, $data)->render();
         }
 
-        return vsprintf($view, $data);
+        return \vsprintf($view, $data);
     }
 }

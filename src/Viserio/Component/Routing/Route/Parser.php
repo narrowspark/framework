@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
-use Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException;
-use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException;
+use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 
@@ -26,14 +26,14 @@ final class Parser
      * @param string   $route
      * @param string[] $conditions
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      *
      * @return array
      */
     public static function parse(string $route, array $conditions): array
     {
-        if (mb_strlen($route) > 1 && $route[0] !== '/') {
-            throw new InvalidRoutePatternException(sprintf(
+        if (\mb_strlen($route) > 1 && $route[0] !== '/') {
+            throw new InvalidRoutePatternException(\sprintf(
                 'Invalid route pattern: non-root route must be prefixed with \'/\', \'%s\' given.',
                 $route
             ));
@@ -42,9 +42,9 @@ final class Parser
         $segments        = [];
         $matches         = [];
         $names           = [];
-        $patternSegments = explode('/', $route);
+        $patternSegments = \explode('/', $route);
 
-        array_shift($patternSegments);
+        \array_shift($patternSegments);
 
         foreach ($patternSegments as $key => $patternSegment) {
             if (self::matchRouteParameters($route, $patternSegment, $conditions, $matches, $names)) {
@@ -61,13 +61,15 @@ final class Parser
     }
 
     /**
-     * Validate and match uri paramters.
+     * Validate and match uri parameters.
      *
      * @param string $route
      * @param string $patternSegment
      * @param array  &$conditions
      * @param array  &$matches
      * @param array  &$names
+     *
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      *
      * @return bool
      */
@@ -84,12 +86,12 @@ final class Parser
         $current          = '';
         $inParameter      = false;
 
-        foreach (str_split($patternSegment) as $character) {
+        foreach (\str_split($patternSegment) as $character) {
             if ($inParameter) {
                 if ($character === '}') {
-                    if (mb_strpos($current, ':') !== false) {
-                        $regex                = mb_substr($current, mb_strpos($current, ':') + 1);
-                        $current              = mb_substr($current, 0, mb_strpos($current, ':'));
+                    if (\mb_strpos($current, ':') !== false) {
+                        $regex                = \mb_substr($current, \mb_strpos($current, ':') + 1);
+                        $current              = \mb_substr($current, 0, \mb_strpos($current, ':'));
                         $conditions[$current] = $regex;
                     }
 
@@ -100,8 +102,10 @@ final class Parser
                     $matchedParameter = true;
 
                     continue;
-                } elseif ($character === '{') {
-                    throw new InvalidRoutePatternException(sprintf(
+                }
+
+                if ($character === '{') {
+                    throw new InvalidRoutePatternException(\sprintf(
                         'Invalid route uri; Cannot contain nested \'{\', \'%s\' given.',
                         $route
                     ));
@@ -113,8 +117,10 @@ final class Parser
                     $inParameter = true;
 
                     continue;
-                } elseif ($character === '}') {
-                    throw new InvalidRoutePatternException(sprintf(
+                }
+
+                if ($character === '}') {
+                    throw new InvalidRoutePatternException(\sprintf(
                         'Invalid route uri; Cannot contain \'}\' before opening \'{\', \'%s\' given.',
                         $route
                     ));
@@ -125,11 +131,13 @@ final class Parser
         }
 
         if ($inParameter) {
-            throw new InvalidRoutePatternException(sprintf(
+            throw new InvalidRoutePatternException(\sprintf(
                 'Invalid route uri: cannot contain \'{\' without closing \'}\', \'%s\' given',
                 $route
             ));
-        } elseif ($current !== '') {
+        }
+
+        if ($current !== '') {
             $matches[] = [self::STATIC_PART, $current];
         }
 
@@ -148,10 +156,10 @@ final class Parser
     {
         $regex = '/^';
         foreach ($matches as $match) {
-            list($type, $part) = $match;
+            [$type, $part] = $match;
 
             if ($type === self::STATIC_PART) {
-                $regex .= preg_quote($part, '/');
+                $regex .= \preg_quote($part, '/');
             } else {
                 // Parameter, $part is the parameter name
                 $pattern = $parameterPatterns[$part] ?? Pattern::ANY;

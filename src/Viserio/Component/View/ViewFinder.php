@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\View;
 
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -14,13 +14,6 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
 {
     use NormalizePathAndDirectorySeparatorTrait;
     use OptionsResolverTrait;
-
-    /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
-     */
-    protected $files;
 
     /**
      * The array of active view paths.
@@ -48,7 +41,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      *
      * @var array
      */
-    protected $extensions = [
+    protected static $extensions = [
         'php',
         'phtml',
         'css',
@@ -57,20 +50,28 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     ];
 
     /**
+     * The filesystem instance.
+     *
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
+     */
+    private $files;
+
+    /**
      * Create a new file view loader instance.
      *
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
-     * @param \Psr\Container\ContainerInterface|iterable         $data
+     * @param \Viserio\Component\Contract\Filesystem\Filesystem $files
+     * @param iterable|\Psr\Container\ContainerInterface        $data
      */
     public function __construct(FilesystemContract $files, $data)
     {
         $this->files = $files;
         $options     = self::resolveOptions($data);
-
         $this->paths = $options['paths'];
 
-        if (isset($options['extensions']) && is_array($options['extensions'])) {
-            $this->extensions = array_merge($this->extensions, $options['extensions']);
+        if (isset($options['extensions']) && \is_array($options['extensions'])) {
+            foreach ($options['extensions'] as $extension) {
+                $this->addExtension($extension);
+            }
         }
     }
 
@@ -101,7 +102,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
             return $this->views[$name];
         }
 
-        if ($this->hasHintInformation($name = trim($name))) {
+        if ($this->hasHintInformation($name = \trim($name))) {
             return $this->views[$name] = $this->findNamedPathView($name);
         }
 
@@ -121,9 +122,9 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * {@inheritdoc}
      */
-    public function prependLocation(string $location)
+    public function prependLocation(string $location): void
     {
-        array_unshift($this->paths, $location);
+        \array_unshift($this->paths, $location);
     }
 
     /**
@@ -134,7 +135,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         $hints = (array) $hints;
 
         if (isset($this->hints[$namespace])) {
-            $hints = array_merge($this->hints[$namespace], $hints);
+            $hints = \array_merge($this->hints[$namespace], $hints);
         }
 
         $this->hints[$namespace] = $hints;
@@ -150,7 +151,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         $hints = (array) $hints;
 
         if (isset($this->hints[$namespace])) {
-            $hints = array_merge($hints, $this->hints[$namespace]);
+            $hints = \array_merge($hints, $this->hints[$namespace]);
         }
 
         $this->hints[$namespace] = $hints;
@@ -163,11 +164,11 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function addExtension(string $extension): FinderContract
     {
-        if (($index = array_search($extension, $this->extensions, true)) !== false) {
-            unset($this->extensions[$index]);
+        if (($index = \array_search($extension, self::$extensions, true)) !== false) {
+            unset(self::$extensions[$index]);
         }
 
-        array_unshift($this->extensions, $extension);
+        \array_unshift(self::$extensions, $extension);
 
         return $this;
     }
@@ -177,7 +178,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function hasHintInformation(string $name): bool
     {
-        return mb_strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
+        return \mb_strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
     }
 
     /**
@@ -219,7 +220,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function getExtensions(): array
     {
-        return $this->extensions;
+        return self::$extensions;
     }
 
     /**
@@ -251,7 +252,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     protected function findNamedPathView(string $name): array
     {
-        list($namespace, $view) = $this->getNamespaceSegments($name);
+        [$namespace, $view] = $this->getNamespaceSegments($name);
 
         return $this->findInPaths($view, $this->hints[$namespace]);
     }
@@ -267,14 +268,14 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     protected function getNamespaceSegments(string $name): array
     {
-        $segments = explode(FinderContract::HINT_PATH_DELIMITER, $name);
+        $segments = \explode(FinderContract::HINT_PATH_DELIMITER, $name);
 
-        if (count($segments) !== 2) {
-            throw new InvalidArgumentException(sprintf('View [%s] has an invalid name.', $name));
+        if (\count($segments) !== 2) {
+            throw new InvalidArgumentException(\sprintf('View [%s] has an invalid name.', $name));
         }
 
         if (! isset($this->hints[$segments[0]])) {
-            throw new InvalidArgumentException(sprintf('No hint path defined for [%s].', $segments[0]));
+            throw new InvalidArgumentException(\sprintf('No hint path defined for [%s].', $segments[0]));
         }
 
         return $segments;
@@ -306,7 +307,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
             }
         }
 
-        throw new InvalidArgumentException(sprintf('View [%s] not found.', $name));
+        throw new InvalidArgumentException(\sprintf('View [%s] not found.', $name));
     }
 
     /**
@@ -318,11 +319,11 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     protected function getPossibleViewFiles(string $name): array
     {
-        return array_map(function ($extension) use ($name) {
+        return \array_map(function ($extension) use ($name) {
             return [
                 'extension' => $extension,
-                'file'      => str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
+                'file'      => \str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
-        }, $this->extensions);
+        }, self::$extensions);
     }
 }

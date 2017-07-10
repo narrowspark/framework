@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
-use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
+use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\StaticalProxy\AliasLoader as AliasLoaderContract;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class RegisterStaticalProxys implements BootstrapContract

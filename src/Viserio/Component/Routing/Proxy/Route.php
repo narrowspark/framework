@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Proxy;
 
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Route extends StaticalProxy

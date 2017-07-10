@@ -6,7 +6,7 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Symfony\Component\Debug\FatalErrorHandler\UndefinedMethodFatalErrorHandler;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
+use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 
 class UndefinedMethodFatalErrorTransformer implements TransformerContract
 {

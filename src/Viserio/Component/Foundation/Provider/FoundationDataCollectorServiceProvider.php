@@ -2,20 +2,20 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\DataCollector\FilesLoadedCollector;
 use Viserio\Component\Foundation\DataCollector\NarrowsparkDataCollector;
 use Viserio\Component\Foundation\DataCollector\ViserioHttpDataCollector;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class FoundationDataCollectorServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
@@ -24,7 +24,15 @@ class FoundationDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
             ProfilerContract::class => [self::class, 'extendProfiler'],
@@ -56,15 +64,13 @@ class FoundationDataCollectorServiceProvider implements
     /**
      * Extend viserio profiler with data collector.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface                  $container
+     * @param null|\Viserio\Component\Contract\Profiler\Profiler $profiler
      *
-     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
+     * @return null|\Viserio\Component\Contract\Profiler\Profiler
      */
-    public static function extendProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
+    public static function extendProfiler(ContainerInterface $container, ?ProfilerContract $profiler = null): ?ProfilerContract
     {
-        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
         if ($profiler !== null) {
             $options = self::resolveOptions($container);
             $kernel  = $container->get(KernelContract::class);

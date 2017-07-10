@@ -4,13 +4,13 @@ namespace Viserio\Component\Routing\Tests\Events;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Routing\Event\RouteMatchedEvent;
 
 class RouteMatchedEventTest extends MockeryTestCase
 {
-    public function testGetServerRequest()
+    public function testGetServerRequest(): void
     {
         $event = new RouteMatchedEvent(
             $this->mock(DispatcherContract::class),
@@ -21,7 +21,7 @@ class RouteMatchedEventTest extends MockeryTestCase
         self::assertInstanceOf(ServerRequestInterface::class, $event->getServerRequest());
     }
 
-    public function testGetRoute()
+    public function testGetRoute(): void
     {
         $event = new RouteMatchedEvent(
             $this->mock(DispatcherContract::class),

@@ -6,6 +6,6 @@ class SanitizerFixture
 {
     public function foo($data)
     {
-        return strrev($data);
+        return \strrev($data);
     }
 }

@@ -4,7 +4,7 @@ namespace Viserio\Component\Exception;
 
 use InvalidArgumentException;
 use Narrowspark\HttpStatus\HttpStatus;
-use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
+use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 
 class ExceptionInfo implements ExceptionInfoContract
 {

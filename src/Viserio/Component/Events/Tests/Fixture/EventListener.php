@@ -9,22 +9,22 @@ class EventListener
     public $onCoreRequestInvoked = 0;
     public $onExceptionInvoked   = 0;
 
-    public function onAny($event = null)
+    public function onAny($event = null): void
     {
         ++$this->onAnyInvoked;
     }
 
-    public function onCore($event = null)
+    public function onCore($event = null): void
     {
         ++$this->onCoreInvoked;
     }
 
-    public function onCoreRequest($event = null)
+    public function onCoreRequest($event = null): void
     {
         ++$this->onCoreRequestInvoked;
     }
 
-    public function onException($event = null)
+    public function onException($event = null): void
     {
         ++$this->onExceptionInvoked;
     }

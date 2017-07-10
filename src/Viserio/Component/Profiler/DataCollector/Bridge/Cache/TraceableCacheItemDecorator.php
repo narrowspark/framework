@@ -8,7 +8,7 @@ use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheI
 /**
  * Ported from.
  *
- * @link Symfony\Component\Cache\Adapter\TraceableAdapter
+ * @see \Symfony\Component\Cache\Adapter\TraceableAdapter
  */
 final class TraceableCacheItemDecorator implements CacheItemPoolInterface
 {
@@ -42,7 +42,7 @@ final class TraceableCacheItemDecorator implements CacheItemPoolInterface
      */
     public function __construct(CacheItemPoolInterface $pool)
     {
-        $this->name = get_class($pool);
+        $this->name = \get_class($pool);
         $this->pool = $pool;
     }
 
@@ -59,14 +59,14 @@ final class TraceableCacheItemDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): ?bool
     {
         $event = $this->start(__FUNCTION__);
 
         try {
             return $event->result = $this->pool->clear();
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -91,7 +91,7 @@ final class TraceableCacheItemDecorator implements CacheItemPoolInterface
      *
      * @return object
      */
-    private function start(string $name)
+    private function start(string $name): object
     {
         $this->calls[] = $event = new class() {
             public $name;
@@ -103,7 +103,7 @@ final class TraceableCacheItemDecorator implements CacheItemPoolInterface
         };
 
         $event->name  = $name;
-        $event->start = microtime(true);
+        $event->start = \microtime(true);
 
         return $event;
     }

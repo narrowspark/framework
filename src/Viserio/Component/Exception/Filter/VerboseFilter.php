@@ -4,9 +4,9 @@ namespace Viserio\Component\Exception\Filter;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Filter as FilterContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Exception\Filter as FilterContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class VerboseFilter implements FilterContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
@@ -23,7 +23,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     /**
      * Create a new verbose filter instance.
      *
-     * @param \Psr\Container\ContainerInterface|iterable $data
+     * @param iterable|\Psr\Container\ContainerInterface $data
      */
     public function __construct($data)
     {
@@ -64,6 +64,6 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
             }
         }
 
-        return array_values($displayers);
+        return \array_values($displayers);
     }
 }

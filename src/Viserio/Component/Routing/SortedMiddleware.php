@@ -44,11 +44,11 @@ class SortedMiddleware
      */
     protected function doSortMiddleware(array $priorityMap, array $middlewares): array
     {
-        $lastIndex = 0;
+        $lastIndex = $lastPriorityIndex = 0;
 
         foreach ($middlewares as $index => $middleware) {
-            if (in_array($middleware, $priorityMap)) {
-                $priorityIndex = array_search($middleware, $priorityMap);
+            if (\in_array($middleware, $priorityMap, true)) {
+                $priorityIndex = \array_search($middleware, $priorityMap, true);
 
                 // This middleware is in the priority map. If we have encountered another middleware
                 // that was also in the priority map and was at a lower priority than the current
@@ -56,7 +56,7 @@ class SortedMiddleware
                 if (isset($lastPriorityIndex) && $priorityIndex < $lastPriorityIndex) {
                     return $this->doSortMiddleware(
                         $priorityMap,
-                        array_values(
+                        \array_values(
                             $this->moveMiddleware($middlewares, $index, $lastIndex)
                         )
                     );
@@ -70,7 +70,7 @@ class SortedMiddleware
             }
         }
 
-        return array_values(array_unique($middlewares, SORT_REGULAR));
+        return \array_values(\array_unique($middlewares, SORT_REGULAR));
     }
 
     /**
@@ -84,7 +84,7 @@ class SortedMiddleware
      */
     protected function moveMiddleware(array $middlewares, int $from, int $to): array
     {
-        array_splice($middlewares, $to, 0, $middlewares[$from]);
+        \array_splice($middlewares, $to, 0, $middlewares[$from]);
         unset($middlewares[$from + 1]);
 
         return $middlewares;

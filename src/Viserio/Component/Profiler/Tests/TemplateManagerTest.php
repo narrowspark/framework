@@ -15,7 +15,7 @@ use Viserio\Component\Profiler\TemplateManager;
 
 class TemplateManagerTest extends MockeryTestCase
 {
-    public function testEscape()
+    public function testEscape(): void
     {
         $original = "This is a <a href=''>Foo</a> test string";
 
@@ -25,20 +25,20 @@ class TemplateManagerTest extends MockeryTestCase
         );
     }
 
-    public function testEscapeBrokenUtf8()
+    public function testEscapeBrokenUtf8(): void
     {
         // The following includes an illegal utf-8 sequence to test.
         // Encoded in base64 to survive possible encoding changes of this file.
-        $original = base64_decode('VGhpcyBpcyBhbiBpbGxlZ2FsIHV0Zi04IHNlcXVlbmNlOiDD');
+        $original = \base64_decode('VGhpcyBpcyBhbiBpbGxlZ2FsIHV0Zi04IHNlcXVlbmNlOiDD', true);
 
         // Test that the escaped string is kinda similar in length, not empty
         self::assertLessThan(
             10,
-            abs(mb_strlen($original) - mb_strlen(TemplateManager::escape($original)))
+            \abs(\mb_strlen($original) - \mb_strlen(TemplateManager::escape($original)))
         );
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $assets   = new AssetsRenderer();
         $template = new TemplateManager(
@@ -49,12 +49,12 @@ class TemplateManagerTest extends MockeryTestCase
         );
 
         self::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profile.html')),
+            $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profile.html')),
             $this->removeId($template->render())
         );
     }
 
-    public function testRenderWithCollector()
+    public function testRenderWithCollector(): void
     {
         $collector = new PhpInfoDataCollector();
         $collector->collect(
@@ -82,7 +82,7 @@ class TemplateManagerTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithAjaxRequestsDataCollector()
+    public function testRenderWithAjaxRequestsDataCollector(): void
     {
         $collector = new AjaxRequestsDataCollector();
         $collector->collect(
@@ -103,12 +103,12 @@ class TemplateManagerTest extends MockeryTestCase
         );
 
         self::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html.php')),
+            $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html.php')),
             $this->removeId($template->render())
         );
     }
 
-    public function testRenderWithAPanelCollector()
+    public function testRenderWithAPanelCollector(): void
     {
         $collector = new SwiftMailDataCollector(
             new Swift_Mailer(new Swift_SmtpTransport('smtp.example.org', 25))
@@ -131,15 +131,15 @@ class TemplateManagerTest extends MockeryTestCase
         );
 
         self::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html.php')),
+            $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html.php')),
             $this->removeId($template->render())
         );
     }
 
     private function removeId(string $html): string
     {
-        $html = preg_replace('/[ \t]+/', ' ', preg_replace('/[\r\n]+/', "\n", $html));
+        $html = \preg_replace('/[ \t]+/', ' ', \preg_replace('/[\r\n]+/', "\n", $html));
 
-        return trim(preg_replace('/="profiler-(.*?)"/', '', $html));
+        return \trim(\preg_replace('/="profiler-(.*?)"/', '', $html));
     }
 }

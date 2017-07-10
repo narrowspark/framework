@@ -16,43 +16,43 @@ class ClosureCommandTest extends TestCase
      */
     private $application;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->application = new Application('1.0.0');
+        $this->application = new Application();
     }
 
-    public function testCommand()
+    public function testCommand(): void
     {
-        $command = new ClosureCommand('demo', function () {
+        $command = new ClosureCommand('demo', function (): void {
             $this->comment('hello');
         });
 
         $this->application->add($command);
 
         self::assertSame($command, $this->application->get('demo'));
-        self::assertOutputIs('demo', 'hello' . "\n");
+        $this->assertOutputIs('demo', 'hello' . "\n");
     }
 
-    public function testCommandWithParam()
+    public function testCommandWithParam(): void
     {
         $this->application->setContainer(new ArrayContainer([
             'name' => ' daniel',
         ]));
-        $command = new ClosureCommand('demo', function ($name) {
+        $command = new ClosureCommand('demo', function ($name): void {
             $this->comment('hello' . $name);
         });
 
         $this->application->add($command);
 
         self::assertSame($command, $this->application->get('demo'));
-        self::assertOutputIs('demo', 'hello daniel' . "\n");
+        $this->assertOutputIs('demo', 'hello daniel' . "\n");
     }
 
     /**
      * @param string $command
      * @param string $expected
      */
-    private function assertOutputIs($command, $expected)
+    private function assertOutputIs($command, $expected): void
     {
         $output = new SpyOutput();
 

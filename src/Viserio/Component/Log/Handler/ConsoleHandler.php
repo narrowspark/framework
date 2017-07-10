@@ -18,8 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Log\Formatter\ConsoleFormatter;
 
 /**
@@ -41,12 +41,12 @@ use Viserio\Component\Log\Formatter\ConsoleFormatter;
  */
 class ConsoleHandler extends AbstractProcessingHandler
 {
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
 
     /**
      * A output instance.
      *
-     * @var \Symfony\Component\Console\Output\OutputInterface|null
+     * @var null|\Symfony\Component\Console\Output\OutputInterface
      */
     private $output;
 
@@ -66,7 +66,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * Constructor.
      *
-     * @param OutputInterface|null $output            The console output to use (the handler remains disabled when passing null
+     * @param null|OutputInterface $output            The console output to use (the handler remains disabled when passing null
      *                                                until the output is set, e.g. by using console events)
      * @param bool                 $bubble            Whether the messages that are handled can bubble up the stack
      * @param array                $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
@@ -78,7 +78,7 @@ class ConsoleHandler extends AbstractProcessingHandler
 
         $this->output = $output;
 
-        if (count($verbosityLevelMap) !== 0) {
+        if (\count($verbosityLevelMap) !== 0) {
             $this->verbosityLevelMap = $verbosityLevelMap;
         }
     }
@@ -86,7 +86,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function isHandling(array $record)
+    public function isHandling(array $record): bool
     {
         return $this->updateLevel() && parent::isHandling($record);
     }
@@ -94,7 +94,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(array $record)
+    public function handle(array $record): bool
     {
         // we have to update the logging level each time because the verbosity of the
         // console output might have changed in the meantime (it is not immutable)
@@ -106,7 +106,7 @@ class ConsoleHandler extends AbstractProcessingHandler
      *
      * @param OutputInterface $output The console output to use
      */
-    public function setOutput(OutputInterface $output)
+    public function setOutput(OutputInterface $output): void
     {
         $this->output = $output;
     }
@@ -114,7 +114,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * Disables the output.
      */
-    public function close()
+    public function close(): void
     {
         $this->output = null;
 
@@ -124,7 +124,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * Register needed events to event manager.
      *
-     * @param \Viserio\Component\Contracts\Events\EventManager
+     * @param \Viserio\Component\Contract\Events\EventManager
      * @param EventManagerContract $eventManager
      *
      * @return void
@@ -135,7 +135,7 @@ class ConsoleHandler extends AbstractProcessingHandler
         // is set in order to know where to write the logs.
         $eventManager->attach(
             ConsoleEvents::COMMAND,
-            function (ConsoleCommandEvent $event) {
+            function (ConsoleCommandEvent $event): void {
                 $output = $event->getOutput();
 
                 if ($output instanceof ConsoleOutputInterface) {
@@ -150,7 +150,7 @@ class ConsoleHandler extends AbstractProcessingHandler
         // After a command has been executed, it disables the output.
         $eventManager->attach(
             ConsoleEvents::TERMINATE,
-            function (ConsoleTerminateEvent $event) {
+            function (ConsoleTerminateEvent $event): void {
                 $this->close();
             },
             -255
@@ -160,7 +160,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record)
+    protected function write(array $record): void
     {
         // at this point we've determined for sure that we want to output the record, so use the output's own verbosity
         $this->output->write((string) $record['formatted'], false, $this->output->getVerbosity());
@@ -186,7 +186,7 @@ class ConsoleHandler extends AbstractProcessingHandler
      *
      * @return bool Whether the handler is enabled and verbosity is not set to quiet
      */
-    private function updateLevel()
+    private function updateLevel(): bool
     {
         if (null === $this->output) {
             return false;

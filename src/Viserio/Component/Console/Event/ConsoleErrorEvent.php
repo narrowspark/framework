@@ -13,7 +13,7 @@ class ConsoleErrorEvent extends ConsoleEvent
     /**
      * A exception instance.
      *
-     * @var \Throwable|null
+     * @var null|\Throwable
      */
     private $error;
 
@@ -27,7 +27,7 @@ class ConsoleErrorEvent extends ConsoleEvent
     /**
      * Create a new console error event.
      *
-     * @param \Symfony\Component\Console\Command\Command|null   $command
+     * @param null|\Symfony\Component\Console\Command\Command   $command
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Throwable                                        $error
@@ -65,8 +65,7 @@ class ConsoleErrorEvent extends ConsoleEvent
      *
      * This exception will be thrown if no response is set in the event.
      *
-     * @param \Throwable $exception The thrown exception
-     * @param Throwable  $error
+     * @param \Throwable $error
      *
      * @return void
      */

@@ -4,7 +4,7 @@ namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits;
 
 trait SimpleTraceableCacheDecoratorTestTrait
 {
-    public function testGetMissTrace()
+    public function testGetMissTrace(): void
     {
         $pool = $this->createSimpleCache();
         $pool->get('k');
@@ -22,7 +22,7 @@ trait SimpleTraceableCacheDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testGetHitTrace()
+    public function testGetHitTrace(): void
     {
         $pool = $this->createSimpleCache();
         $pool->set('k', 'foo');
@@ -37,7 +37,7 @@ trait SimpleTraceableCacheDecoratorTestTrait
         self::assertSame(0, $call->misses);
     }
 
-    public function testGetMultipleMissTrace()
+    public function testGetMultipleMissTrace(): void
     {
         $pool = $this->createSimpleCache();
         $pool->set('k1', 123);
@@ -60,7 +60,7 @@ trait SimpleTraceableCacheDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testHasMissTrace()
+    public function testHasMissTrace(): void
     {
         $pool = $this->createSimpleCache();
         $pool->has('k');
@@ -77,7 +77,7 @@ trait SimpleTraceableCacheDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testHasHitTrace()
+    public function testHasHitTrace(): void
     {
         $pool = $this->createSimpleCache();
         $pool->set('k', 'foo');
@@ -95,7 +95,7 @@ trait SimpleTraceableCacheDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testDeleteTrace()
+    public function testDeleteTrace(): void
     {
         $pool = $this->createSimpleCache();
         $pool->delete('k');
@@ -114,7 +114,7 @@ trait SimpleTraceableCacheDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testDeleteMultipleTrace()
+    public function testDeleteMultipleTrace(): void
     {
         $pool = $this->createSimpleCache();
         $arg  = ['k0', 'k1'];
@@ -135,7 +135,7 @@ trait SimpleTraceableCacheDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testTraceSetTrace()
+    public function testTraceSetTrace(): void
     {
         $pool = $this->createSimpleCache();
         $pool->set('k', 'foo');
@@ -154,7 +154,7 @@ trait SimpleTraceableCacheDecoratorTestTrait
         self::assertNotEmpty($call->end);
     }
 
-    public function testSetMultipleTrace()
+    public function testSetMultipleTrace(): void
     {
         $pool = $this->createSimpleCache();
         $pool->setMultiple(['k' => 'foo']);

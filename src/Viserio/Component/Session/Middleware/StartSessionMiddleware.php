@@ -7,7 +7,7 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\Fingerprint\ClientIpGenerator;
@@ -98,7 +98,7 @@ class StartSessionMiddleware implements MiddlewareInterface
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return \Viserio\Component\Contracts\Session\Store
+     * @return \Viserio\Component\Contract\Session\Store
      */
     protected function startSession(ServerRequestInterface $request): StoreContract
     {
@@ -126,10 +126,10 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Store the current URL for the request if necessary.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
-     * @param \Viserio\Component\Contracts\Session\Store $session
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
+     * @param \Viserio\Component\Contract\Session\Store $session
      *
-     * @return \Viserio\Component\Contracts\Session\Store
+     * @return \Viserio\Component\Contract\Session\Store
      */
     protected function storeCurrentUrl(ServerRequestInterface $request, StoreContract $session): StoreContract
     {
@@ -146,12 +146,12 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Remove the garbage from the session if necessary.
      *
-     * @param \Viserio\Component\Contracts\Session\Store $session
+     * @param \Viserio\Component\Contract\Session\Store $session
      */
-    protected function collectGarbage(StoreContract $session)
+    protected function collectGarbage(StoreContract $session): void
     {
         $lottery     = $this->config['lottery'];
-        $hitsLottery = random_int(1, $lottery[1]) <= $lottery[0];
+        $hitsLottery = \random_int(1, $lottery[1]) <= $lottery[0];
 
         // Here we will see if this request hits the garbage collection lottery by hitting
         // the odds needed to perform garbage collection on any given request. If we do
@@ -164,9 +164,9 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Add the session cookie to the application response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
-     * @param \Psr\Http\Message\ResponseInterface        $response
-     * @param \Viserio\Component\Contracts\Session\Store $session
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
+     * @param \Psr\Http\Message\ResponseInterface       $response
+     * @param \Viserio\Component\Contract\Session\Store $session
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -211,7 +211,7 @@ class StartSessionMiddleware implements MiddlewareInterface
      *
      * @param array $config
      *
-     * @return int|\Cake\Chronos\Chronos
+     * @return \Cake\Chronos\Chronos|int
      */
     protected function getCookieExpirationDate(array $config)
     {

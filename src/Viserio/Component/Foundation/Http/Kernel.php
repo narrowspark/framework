@@ -5,12 +5,12 @@ namespace Viserio\Component\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
-use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
+use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
@@ -19,12 +19,11 @@ use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
-use Viserio\Component\Foundation\Http\Event\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
+use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
-use Viserio\Component\Routing\Pipeline;
-use Viserio\Component\Routing\Router;
+use Viserio\Component\Routing\Pipeline as RoutingPipeline;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
@@ -86,7 +85,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
             'skip_middlewares' => false,
         ];
 
-        return array_merge(parent::getDefaultOptions(), $options);
+        return \array_merge(parent::getDefaultOptions(), $options);
     }
 
     /**
@@ -98,8 +97,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function prependMiddleware(string $middleware): self
     {
-        if (array_search($middleware, $this->middlewares) === false) {
-            array_unshift($this->middlewares, $middleware);
+        if (\in_array($middleware, $this->middlewares, true) === false) {
+            \array_unshift($this->middlewares, $middleware);
         }
 
         return $this;
@@ -114,7 +113,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function pushMiddleware(string $middleware): self
     {
-        if (array_search($middleware, $this->middlewares) === false) {
+        if (\in_array($middleware, $this->middlewares, true) === false) {
             $this->middlewares[] = $middleware;
         }
 
@@ -126,7 +125,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function handle(ServerRequestInterface $serverRequest): ResponseInterface
     {
-        $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) ob_get_level());
+        $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) \ob_get_level());
 
         $this->bootstrap();
 
@@ -138,14 +137,14 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         // Passes the request to the container
         $container->instance(ServerRequestInterface::class, $serverRequest);
 
-        if (class_exists(StaticalProxy::class)) {
+        if (\class_exists(StaticalProxy::class)) {
             StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
         }
 
         $response = $this->handleRequest($serverRequest, $events);
 
         // Stop PHP sending a Content-Type automatically.
-        ini_set('default_mimetype', '');
+        \ini_set('default_mimetype', '');
 
         return $response;
     }
@@ -159,9 +158,10 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
             return;
         }
 
-        $this->getContainer()->get(EventManagerContract::class)->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
+        $this->getContainer()->get(EventManagerContract::class)
+            ->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
 
-        restore_error_handler();
+        \restore_error_handler();
     }
 
     /**
@@ -193,8 +193,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * Convert request into response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface         $serverRequest
-     * @param \Viserio\Component\Contracts\Events\EventManager $events
+     * @param \Psr\Http\Message\ServerRequestInterface        $serverRequest
+     * @param \Viserio\Component\Contract\Events\EventManager $events
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -204,10 +204,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
             $events->trigger(new KernelFinishRequestEvent($this, $serverRequest));
 
             $response = $this->sendRequestThroughRouter($serverRequest);
-
-            $events->trigger($event = new KernelResponseEvent($this, $serverRequest, $response));
-
-            $response = $event->getResponse();
         } catch (Throwable $exception) {
             $this->reportException($exception);
 
@@ -262,7 +258,30 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $dispatcher->setCachePath($this->getStoragePath('framework/routes.cache.php'));
         $dispatcher->refreshCache($this->resolvedOptions['env'] !== 'production');
 
-        return (new Pipeline())
+        if (\class_exists(Pipeline::class)) {
+            return $this->pipeRequestThroughMiddlewaresAndRouter($request, $router);
+        }
+
+        $container->instance(ServerRequestInterface::class, $request);
+
+        return $router->dispatch($request);
+    }
+
+    /**
+     * Pipes the request through given middlewares and dispatch a response.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Viserio\Component\Contract\Routing\Router $router
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function pipeRequestThroughMiddlewaresAndRouter(
+        ServerRequestInterface $request,
+        RouterContract $router
+    ): ResponseInterface {
+        $container = $this->getContainer();
+
+        return (new RoutingPipeline())
             ->setContainer($container)
             ->send($request)
             ->through($this->resolvedOptions['skip_middlewares'] ? [] : $this->middlewares)

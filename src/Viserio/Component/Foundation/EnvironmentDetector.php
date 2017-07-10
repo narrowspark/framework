@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
 use Closure;
-use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
+use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 
 class EnvironmentDetector implements EnvironmentContract
 {
@@ -40,7 +40,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function hasXdebug(): bool
     {
-        return $this->isPHP() && extension_loaded('xdebug');
+        return $this->isPHP() && \extension_loaded('xdebug');
     }
 
     /**
@@ -48,7 +48,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function isPHP(): bool
     {
-        return ! defined('HHVM_VERSION');
+        return ! \defined('HHVM_VERSION');
     }
 
     /**
@@ -56,7 +56,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function runningInConsole(): bool
     {
-        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
+        return PHP_SAPI == 'cli' || PHP_SAPI == 'phpdbg';
     }
 
     /**
@@ -75,9 +75,9 @@ class EnvironmentDetector implements EnvironmentContract
         $value = $this->getEnvironmentArgument($args);
 
         if ($value !== null) {
-            $arr = array_slice(explode('=', $value), 1);
+            $arr = \array_slice(\explode('=', $value), 1);
 
-            return reset($arr);
+            return \reset($arr);
         }
 
         return $this->detectWebEnvironment($callback);
@@ -92,7 +92,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     protected function detectWebEnvironment(Closure $callback): string
     {
-        return call_user_func($callback);
+        return $callback();
     }
 
     /**
@@ -100,16 +100,16 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @param array $args
      *
-     * @return string|null
+     * @return null|string
      */
     protected function getEnvironmentArgument(array $args): ?string
     {
-        $callback = function ($k, $v) {
+        $callback = function ($v) {
             return self::startsWith($v, '--env');
         };
 
         foreach ($args as $key => $value) {
-            if ($callback($key, $value)) {
+            if ($callback($value)) {
                 return $value;
             }
         }
@@ -127,10 +127,6 @@ class EnvironmentDetector implements EnvironmentContract
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        if ($needle != '' && mb_substr($haystack, 0, mb_strlen($needle)) === $needle) {
-            return true;
-        }
-
-        return false;
+        return $needle !== '' && \mb_strpos($haystack, $needle) === 0;
     }
 }

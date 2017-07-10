@@ -43,7 +43,7 @@ class HeaderSecurityTest extends TestCase
      * @param mixed $value
      * @param mixed $expected
      */
-    public function testFiltersValuesPerRfc7230($value, $expected)
+    public function testFiltersValuesPerRfc7230($value, $expected): void
     {
         self::assertEquals($expected, HeaderSecurity::filter($value));
     }
@@ -75,7 +75,7 @@ class HeaderSecurityTest extends TestCase
      * @param mixed $value
      * @param mixed $assertion
      */
-    public function testValidatesValuesPerRfc7230($value, $assertion)
+    public function testValidatesValuesPerRfc7230($value, $assertion): void
     {
         $this->{$assertion}(HeaderSecurity::isValid($value));
     }
@@ -104,7 +104,7 @@ class HeaderSecurityTest extends TestCase
      *
      * @param mixed $value
      */
-    public function testAssertValidRaisesExceptionForInvalidValue($value)
+    public function testAssertValidRaisesExceptionForInvalidValue($value): void
     {
         HeaderSecurity::assertValid($value);
     }

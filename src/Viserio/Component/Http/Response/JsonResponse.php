@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Response;
 
-use InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Response\Traits\InjectContentTypeTrait;
 use Viserio\Component\Http\Stream;
@@ -39,7 +40,7 @@ class JsonResponse extends Response
      * @param array $headers         array of headers to use at initialization
      * @param int   $encodingOptions jSON encoding options to use
      *
-     * @throws InvalidArgumentException if unable to encode the $data to JSON
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      */
     public function __construct(
         $data,
@@ -47,7 +48,7 @@ class JsonResponse extends Response
         array $headers = [],
         int $encodingOptions = self::DEFAULT_JSON_FLAGS
     ) {
-        $body = new Stream(fopen('php://temp', 'wb+'));
+        $body = new Stream(\fopen('php://temp', 'wb+'));
         $body->write($this->jsonEncode($data, $encodingOptions));
         $body->rewind();
 
@@ -62,26 +63,27 @@ class JsonResponse extends Response
      * @param mixed $data
      * @param int   $encodingOptions
      *
-     * @throws InvalidArgumentException if unable to encode the $data to JSON
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException         if unable to encode the $data to JSON
      *
      * @return string
      */
-    private function jsonEncode($data, $encodingOptions)
+    private function jsonEncode($data, $encodingOptions): string
     {
-        if (is_resource($data)) {
-            throw new InvalidArgumentException('Cannot JSON encode resources');
+        if (\is_resource($data)) {
+            throw new InvalidArgumentException('Cannot JSON encode resources.');
         }
 
         // Clear json_last_error()
-        json_encode(null);
+        \json_encode(null);
 
-        $json = json_encode($data, $encodingOptions);
+        $json = \json_encode($data, $encodingOptions);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new InvalidArgumentException(sprintf(
+        if (JSON_ERROR_NONE !== \json_last_error()) {
+            throw new RuntimeException(\sprintf(
                 'Unable to encode data to JSON in %s: %s',
                 __CLASS__,
-                json_last_error_msg()
+                \json_last_error_msg()
             ));
         }
 

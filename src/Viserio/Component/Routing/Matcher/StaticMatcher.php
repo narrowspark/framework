@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
-use RuntimeException;
+use Viserio\Component\Contract\Routing\Exception\InvalidArgumentException;
 use Viserio\Component\Support\VarExporter;
 
 class StaticMatcher extends AbstractMatcher
@@ -18,13 +18,15 @@ class StaticMatcher extends AbstractMatcher
      * Create a new satic segment matcher instance.
      *
      * @param string     $segment
-     * @param array|null $parameterKeys
+     * @param null|array $parameterKeys
+     *
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
      */
     public function __construct(string $segment, array $parameterKeys = null)
     {
-        if (mb_strpos($segment, '/') !== false) {
-            throw new RuntimeException(
-                sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given', __CLASS__, $segment)
+        if (\mb_strpos($segment, '/') !== false) {
+            throw new InvalidArgumentException(
+                \sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given.', __CLASS__, $segment)
             );
         }
 
@@ -47,7 +49,7 @@ class StaticMatcher extends AbstractMatcher
     {
         $keys = $this->parameterKeys;
 
-        if (count($keys) > 0) {
+        if (\count($keys) > 0) {
             return [$keys[0] => $segmentVariable];
         }
 

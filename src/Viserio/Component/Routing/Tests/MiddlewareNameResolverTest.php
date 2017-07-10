@@ -8,7 +8,7 @@ use Viserio\Component\Routing\MiddlewareNameResolver;
 
 class MiddlewareNameResolverTest extends TestCase
 {
-    public function testResolveMiddleware()
+    public function testResolveMiddleware(): void
     {
         $map = [
             'test' => new stdClass(),
@@ -19,7 +19,7 @@ class MiddlewareNameResolverTest extends TestCase
         self::assertSame('dontexists', MiddlewareNameResolver::resolve('dontexists', $map, $middlewareGroups, []));
     }
 
-    public function testResolveWithBypassMiddleware()
+    public function testResolveWithBypassMiddleware(): void
     {
         $map = [
             'test' => new stdClass(),
@@ -29,7 +29,7 @@ class MiddlewareNameResolverTest extends TestCase
         self::assertSame([], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups, ['test']));
     }
 
-    public function testResolveWithBypassMiddlewareOnGroup()
+    public function testResolveWithBypassMiddlewareOnGroup(): void
     {
         $test2 = new stdClass();
         $map   = [
@@ -46,7 +46,7 @@ class MiddlewareNameResolverTest extends TestCase
         self::assertSame([$test2], MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, ['test']));
     }
 
-    public function testResolveMiddlewareGroup()
+    public function testResolveMiddlewareGroup(): void
     {
         $map = [
             'test'  => new stdClass(),
@@ -59,10 +59,10 @@ class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
+        self::assertSame(\array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 
-    public function testResolveMiddlewareGroupWitNestedGroup()
+    public function testResolveMiddlewareGroupWitNestedGroup(): void
     {
         $map = [
             'test'     => new stdClass(),
@@ -80,6 +80,6 @@ class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        self::assertSame(array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
+        self::assertSame(\array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 }

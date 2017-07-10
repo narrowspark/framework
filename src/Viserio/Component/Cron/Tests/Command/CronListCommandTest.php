@@ -10,7 +10,7 @@ use Viserio\Component\Cron\Schedule;
 
 class CronListCommandTest extends MockeryTestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         $schedule = new Schedule(__DIR__);
         $schedule->call(function () {

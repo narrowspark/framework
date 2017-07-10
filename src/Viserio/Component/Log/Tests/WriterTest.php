@@ -7,7 +7,7 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Log\Log as LogContract;
+use Viserio\Component\Contract\Log\Log as LogContract;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
@@ -16,14 +16,14 @@ use Viserio\Component\Log\Writer;
 
 class WriterTest extends MockeryTestCase
 {
-    public function testGetMonolog()
+    public function testGetMonolog(): void
     {
         $writer = new Writer(new HandlerParser(new Logger('name')));
 
         self::assertInstanceOf(Logger::class, $writer->getMonolog());
     }
 
-    public function testCallToMonolog()
+    public function testCallToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -37,7 +37,7 @@ class WriterTest extends MockeryTestCase
         $writer->getName();
     }
 
-    public function testFileHandlerCanBeAdded()
+    public function testFileHandlerCanBeAdded(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -53,7 +53,7 @@ class WriterTest extends MockeryTestCase
         $writer->useFiles(__DIR__);
     }
 
-    public function testRotatingFileHandlerCanBeAdded()
+    public function testRotatingFileHandlerCanBeAdded(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -69,7 +69,7 @@ class WriterTest extends MockeryTestCase
         $writer->useDailyFiles(__DIR__, 5);
     }
 
-    public function testMethodsPassErrorAdditionsToMonolog()
+    public function testMethodsPassErrorAdditionsToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -85,7 +85,7 @@ class WriterTest extends MockeryTestCase
         $writer->error('foo');
     }
 
-    public function testMethodsPassEmergencyAdditionsToMonolog()
+    public function testMethodsPassEmergencyAdditionsToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -101,7 +101,7 @@ class WriterTest extends MockeryTestCase
         $writer->emergency('foo');
     }
 
-    public function testMethodsPassAlertAdditionsToMonolog()
+    public function testMethodsPassAlertAdditionsToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -117,7 +117,7 @@ class WriterTest extends MockeryTestCase
         $writer->alert('foo');
     }
 
-    public function testMethodsPassCriticalAdditionsToMonolog()
+    public function testMethodsPassCriticalAdditionsToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -133,7 +133,7 @@ class WriterTest extends MockeryTestCase
         $writer->critical('foo');
     }
 
-    public function testMethodsPassWarningAdditionsToMonolog()
+    public function testMethodsPassWarningAdditionsToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -149,7 +149,7 @@ class WriterTest extends MockeryTestCase
         $writer->warning('foo');
     }
 
-    public function testMethodsPassNoticeAdditionsToMonolog()
+    public function testMethodsPassNoticeAdditionsToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -165,7 +165,7 @@ class WriterTest extends MockeryTestCase
         $writer->notice('foo');
     }
 
-    public function testMethodsPassInfoAdditionsToMonolog()
+    public function testMethodsPassInfoAdditionsToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -181,7 +181,7 @@ class WriterTest extends MockeryTestCase
         $writer->info('foo');
     }
 
-    public function testMethodsPassDebugAdditionsToMonolog()
+    public function testMethodsPassDebugAdditionsToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -197,7 +197,7 @@ class WriterTest extends MockeryTestCase
         $writer->debug('foo');
     }
 
-    public function testMethodsPassDebugWithLogAdditionsToMonolog()
+    public function testMethodsPassDebugWithLogAdditionsToMonolog(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog
@@ -213,12 +213,12 @@ class WriterTest extends MockeryTestCase
         $writer->log('debug', 'foo');
     }
 
-    public function testWriterTriggerEventManager()
+    public function testWriterTriggerEventManager(): void
     {
         $events = new EventManager();
         $events->attach(
             LogContract::MESSAGE,
-            function ($event) {
+            function ($event): void {
                 $_SERVER['__log.level'] = $event->getLevel();
                 $_SERVER['__log.message'] = $event->getMessage();
                 $_SERVER['__log.context'] = $event->getContext();
@@ -253,7 +253,7 @@ class WriterTest extends MockeryTestCase
         unset($_SERVER['__log.context']);
     }
 
-    public function testMessageInput()
+    public function testMessageInput(): void
     {
         $monolog = $this->mock(Logger::class);
         $monolog->shouldReceive('pushProcessor')
@@ -262,10 +262,10 @@ class WriterTest extends MockeryTestCase
             ->once();
         $monolog->shouldReceive('warning')
             ->once()
-            ->with('{"message": true}', []);
+            ->with(\json_encode(['message' => true], JSON_PRETTY_PRINT), []);
         $monolog->shouldReceive('debug')
             ->once()
-            ->with(var_export((new ArrayableClass())->toArray(), true), []);
+            ->with(\var_export((new ArrayableClass())->toArray(), true), []);
 
         $writer = new Writer(new HandlerParser($monolog));
         $writer->log('info', ['message' => true]);

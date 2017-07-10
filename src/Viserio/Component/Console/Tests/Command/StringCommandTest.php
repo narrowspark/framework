@@ -18,14 +18,14 @@ class StringCommandTest extends TestCase
      */
     private $command;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->application = new Application('1.0.0');
-        $this->command     = $this->application->command('greet [name] [--yell] [--times=]', function () {
+        $this->command     = $this->application->command('greet [name] [--yell] [--times=]', function (): void {
         });
     }
 
-    public function testAllowsToDefineDescriptions()
+    public function testAllowsToDefineDescriptions(): void
     {
         $this->command->descriptions('Greet someone', [
             'name'    => 'Who?',
@@ -40,7 +40,7 @@ class StringCommandTest extends TestCase
         self::assertEquals('# of times to greet?', $definition->getOption('times')->getDescription());
     }
 
-    public function testAllowsToDefineDefaultValues()
+    public function testAllowsToDefineDefaultValues(): void
     {
         $this->command->defaults([
             'name'  => 'John',
@@ -52,25 +52,25 @@ class StringCommandTest extends TestCase
         self::assertEquals('1', $definition->getOption('times')->getDefault());
     }
 
-    public function testAllowsDefaultValuesToBeInferredFromClosureParameters()
+    public function testAllowsDefaultValuesToBeInferredFromClosureParameters(): void
     {
-        $command = $this->application->command('greet [name] [--yell] [--times=]', function ($times = 15) {
+        $command = $this->application->command('greet [name] [--yell] [--times=]', function ($times = 15): void {
         });
         $definition = $command->getDefinition();
 
         self::assertEquals(15, $definition->getOption('times')->getDefault());
     }
 
-    public function testAllowsDefaultValuesToBeInferredFromCamelCaseParameters()
+    public function testAllowsDefaultValuesToBeInferredFromCamelCaseParameters(): void
     {
-        $command = $this->application->command('greet [name] [--yell] [--number-of-times=]', function ($numberOfTimes = 15) {
+        $command = $this->application->command('greet [name] [--yell] [--number-of-times=]', function ($numberOfTimes = 15): void {
         });
         $definition = $command->getDefinition();
 
         self::assertEquals(15, $definition->getOption('number-of-times')->getDefault());
     }
 
-    public function testAllowsDefaultValuesToBeInferredFromCallbleParameters()
+    public function testAllowsDefaultValuesToBeInferredFromCallbleParameters(): void
     {
         $command    = $this->application->command('greet [name] [--yell] [--times=]', [new GreetCommand(), 'greet']);
         $definition = $command->getDefinition();
@@ -78,7 +78,7 @@ class StringCommandTest extends TestCase
         self::assertEquals(15, $definition->getOption('times')->getDefault());
     }
 
-    public function testSettingDefaultsFallsBackToOptionsWhenNoArgumentExists()
+    public function testSettingDefaultsFallsBackToOptionsWhenNoArgumentExists(): void
     {
         $this->command->defaults([
             'times' => '5',
@@ -91,14 +91,14 @@ class StringCommandTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSettingUnknownDefaultsThrowsAnException()
+    public function testSettingUnknownDefaultsThrowsAnException(): void
     {
         $this->command->defaults([
             'doesnotexist' => '0',
         ]);
     }
 
-    public function testReflectingDefaultsForNonexistantInputsDoesNotThrowAnException()
+    public function testReflectingDefaultsForNonexistantInputsDoesNotThrowAnException(): void
     {
         $this->application->command('greet [name]', [new GreetCommand(), 'greet']);
         // An exception was thrown previously about the argument / option `times` not existing.
@@ -109,7 +109,7 @@ class StringCommandTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testCommandWithAnInvalidStaticCallableShowThrowAnException()
+    public function testCommandWithAnInvalidStaticCallableShowThrowAnException(): void
     {
         $this->application->command('greet [name]', [GreetCommand::class, 'greet']);
     }

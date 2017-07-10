@@ -3,27 +3,24 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayer;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
-use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
+use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
+use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
     use OptionsResolverTrait;
     use ResponseFactoryAwareTrait;
-    use StreamFactoryAwareTrait;
 
     /**
      * The exception info instance.
      *
-     * @var \Viserio\Component\Contracts\Exception\ExceptionInfo
+     * @var \Viserio\Component\Contract\Exception\ExceptionInfo
      */
     protected $info;
 
@@ -44,21 +41,17 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Contracts\Exception\ExceptionInfo $info
-     * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
-     * @param \Interop\Http\Factory\StreamFactoryInterface         $streamFactory
-     * @param \Psr\Container\ContainerInterface|iterable           $data
+     * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
+     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
+     * @param iterable|\Psr\Container\ContainerInterface          $data
      */
     public function __construct(
         ExceptionInfoContract $info,
         ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface $streamFactory,
         $data
     ) {
         $this->info            = $info;
         $this->responseFactory = $responseFactory;
-        $this->streamFactory   = $streamFactory;
-
         $this->resolvedOptions = self::resolveOptions($data);
     }
 
@@ -85,16 +78,17 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      */
     public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
     {
-        $info = $this->info->generate($id, $code);
+        $response = $this->responseFactory->createResponse($code);
 
-        $response = $this->getResponseFactory()->createResponse($code);
-        $stream   = $this->getStreamFactory()->createStream($this->render($info));
-
-        foreach (array_merge($headers, ['Content-Type' => $this->contentType()]) as $header => $value) {
+        foreach (\array_merge($headers, ['Content-Type' => $this->contentType()]) as $header => $value) {
             $response = $response->withAddedHeader($header, $value);
         }
 
-        return $response->withBody($stream);
+        $body = $response->getBody();
+        $body->write($this->render($this->info->generate($id, $code)));
+        $body->rewind();
+
+        return $response->withBody($body);
     }
 
     /**
@@ -130,10 +124,10 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      */
     protected function render(array $info): string
     {
-        $content = file_get_contents($this->resolvedOptions['template_path']);
+        $content = \file_get_contents($this->resolvedOptions['template_path']);
 
         foreach ($info as $key => $val) {
-            $content = str_replace("{{ $$key }}", $val, $content);
+            $content = \str_replace("{{ $$key }}", $val, $content);
         }
 
         return $content;

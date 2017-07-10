@@ -2,22 +2,22 @@
 declare(strict_types=1);
 namespace Viserio\Component\Pagination\Presenter;
 
-use Viserio\Component\Contracts\Pagination\Paginator as PaginatorContract;
-use Viserio\Component\Contracts\Pagination\Presenter as PresenterContract;
+use Viserio\Component\Contract\Pagination\Paginator as PaginatorContract;
+use Viserio\Component\Contract\Pagination\Presenter as PresenterContract;
 
 class Foundation6 implements PresenterContract
 {
     /**
      * Paginator instance.
      *
-     * @var \Viserio\Component\Contracts\Pagination\Paginator
+     * @var \Viserio\Component\Contract\Pagination\Paginator
      */
     protected $paginator;
 
     /**
      * Create a new Foundation 6 presenter.
      *
-     * @param \Viserio\Component\Contracts\Pagination\Paginator $paginator
+     * @param \Viserio\Component\Contract\Pagination\Paginator $paginator
      */
     public function __construct(PaginatorContract $paginator)
     {
@@ -41,7 +41,7 @@ class Foundation6 implements PresenterContract
                 $pagination .= '<li class="pagination-previous"><a href="' . $paginator->getPreviousPageUrl() . '" rel="prev">&laquo;</a></li>';
             }
 
-            if (method_exists($paginator, 'getElements')) {
+            if (\method_exists($paginator, 'getElements')) {
                 $this->getPaginationsLinks($paginator->getElements(), $pagination);
             }
 
@@ -66,16 +66,16 @@ class Foundation6 implements PresenterContract
      * @param array  $items
      * @param string $pagination
      */
-    private function getPaginationsLinks(array $items, $pagination)
+    private function getPaginationsLinks(array $items, $pagination): void
     {
         foreach ($items as $item) {
             // "Three Dots" Separator
-            if (is_string($item)) {
+            if (\is_string($item)) {
                 $pagination .= '<li class="ellipsis"></li>';
             }
 
             // Array Of Links
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 foreach ($item as $page => $url) {
                     if ($this->paginator->getCurrentPage() == $page) {
                         $pagination .= '<li class="current">' . $page . '</li>';

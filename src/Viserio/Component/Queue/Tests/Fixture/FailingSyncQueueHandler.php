@@ -6,12 +6,12 @@ use Exception;
 
 class FailingSyncQueueHandler
 {
-    public function run($job, $data)
+    public function run($job, $data): void
     {
         throw new Exception();
     }
 
-    public function failed()
+    public function failed(): void
     {
         $_SERVER['__sync.failed'] = true;
     }

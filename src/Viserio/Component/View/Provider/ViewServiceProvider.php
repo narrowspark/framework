@@ -2,26 +2,26 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Parsedown;
 use ParsedownExtra;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\View\Engine\EngineResolver;
 use Viserio\Component\View\Engine\FileEngine;
 use Viserio\Component\View\Engine\MarkdownEngine;
 use Viserio\Component\View\Engine\PhpEngine;
-use Viserio\Component\View\Factory;
+use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
 
-class ViewServiceProvider implements ServiceProvider
+class ViewServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             EngineResolver::class  => [self::class, 'createEngineResolver'],
@@ -35,14 +35,22 @@ class ViewServiceProvider implements ServiceProvider
             'view.finder'          => function (ContainerInterface $container) {
                 return $container->get(FinderContract::class);
             },
-            FactoryContract::class  => [self::class, 'createViewFactory'],
-            Factory::class          => function (ContainerInterface $container) {
+            FactoryContract::class      => [self::class, 'createViewFactory'],
+            ViewFactory::class          => function (ContainerInterface $container) {
                 return $container->get(FactoryContract::class);
             },
             'view'                  => function (ContainerInterface $container) {
                 return $container->get(FactoryContract::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     public static function createEngineResolver(ContainerInterface $container): EngineResolver
@@ -53,7 +61,7 @@ class ViewServiceProvider implements ServiceProvider
         // environment can resolve the engines it needs for various views based
         // on the extension of view files. We call a method for each engines.
         foreach (['file', 'php', 'markdown'] as $engineClass) {
-            self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
+            self::{'register' . \ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
         return $engines;
@@ -66,7 +74,7 @@ class ViewServiceProvider implements ServiceProvider
 
     public static function createViewFactory(ContainerInterface $container): FactoryContract
     {
-        $view = new Factory(
+        $view = new ViewFactory(
             $container->get(EngineResolver::class),
             $container->get(ViewFinder::class)
         );

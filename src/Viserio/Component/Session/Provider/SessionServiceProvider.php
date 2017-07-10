@@ -2,21 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\SessionManager;
 
-class SessionServiceProvider implements ServiceProvider
+class SessionServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             SessionManager::class       => [self::class, 'createSessionManager'],
@@ -24,6 +24,15 @@ class SessionServiceProvider implements ServiceProvider
                 return $container->get(SessionManager::class);
             },
             'session.store'             => [self::class, 'createSessionStore'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [
             EventManagerContract::class => [self::class, 'extendEventManager'],
         ];
     }
@@ -31,17 +40,17 @@ class SessionServiceProvider implements ServiceProvider
     /**
      * Extend viserio events with data collector.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface                    $container
+     * @param null|\Viserio\Component\Contract\Events\EventManager $eventManager
      *
-     * @return null|\Viserio\Component\Contracts\Events\EventManager
+     * @return null|\Viserio\Component\Contract\Events\EventManager
      */
-    public static function extendEventManager(ContainerInterface $container, ?callable $getPrevious = null): ?EventManagerContract
-    {
-        $eventManager = $getPrevious();
-
+    public static function extendEventManager(
+        ContainerInterface $container,
+        ?EventManagerContract $eventManager = null
+    ): ?EventManagerContract {
         if ($eventManager !== null) {
-            $eventManager->attach(TerminableContract::TERMINATE, function (EventContract $event) {
+            $eventManager->attach(TerminableContract::TERMINATE, function (EventContract $event): void {
                 $driver = $event->getTarget()->getContainer()->get(SessionManager::class)->getDriver();
 
                 if (! $driver->getHandler() instanceof CookieSessionHandler) {
@@ -70,7 +79,7 @@ class SessionServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Session\Store
+     * @return \Viserio\Component\Contract\Session\Store
      */
     public static function createSessionStore(ContainerInterface $container): StoreContract
     {

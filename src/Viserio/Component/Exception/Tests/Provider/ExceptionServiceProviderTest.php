@@ -5,8 +5,8 @@ namespace Viserio\Component\Exception\Tests\Provider;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
@@ -22,17 +22,19 @@ use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransform
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
+use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\View\Provider\ViewServiceProvider;
 
 class ExceptionServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new ExceptionServiceProvider());
         $container->register(new ConfigServiceProvider());
         $container->register(new ViewServiceProvider());
         $container->register(new FilesServiceProvider());
+        $container->register(new LoggerServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->get(RepositoryContract::class)->setArray(['viserio' => [
                 'exception' => [
@@ -42,6 +44,9 @@ class ExceptionServiceProviderTest extends TestCase
                 ],
                 'view' => [
                     'paths' => [],
+                ],
+                'log' => [
+                    'env'  => 'dev',
                 ],
             ],
         ]);

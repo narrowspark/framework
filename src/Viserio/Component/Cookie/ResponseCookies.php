@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
 use Cake\Chronos\Chronos;
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
 
 final class ResponseCookies extends AbstractCookieCollector
 {
@@ -14,15 +14,15 @@ final class ResponseCookies extends AbstractCookieCollector
      *
      * @param array $cookies
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function __construct(array $cookies = [])
     {
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof CookieContract)) {
-                throw new InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(\sprintf(
                     'The object [%s] must implement [%s].',
-                    get_class($cookie),
+                    \get_class($cookie),
                     CookieContract::class
                 ));
             }
@@ -36,11 +36,13 @@ final class ResponseCookies extends AbstractCookieCollector
      *
      * @param \Psr\Http\Message\ResponseInterface $response
      *
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     *
      * @return self
      */
     public static function fromResponse(ResponseInterface $response): self
     {
-        return new static(array_map(function ($setCookieString) {
+        return new static(\array_map(function ($setCookieString) {
             return self::fromStringCookie($setCookieString);
         }, $response->getHeader('Set-Cookie')));
     }
@@ -68,48 +70,55 @@ final class ResponseCookies extends AbstractCookieCollector
      *
      * @param string $string
      *
-     * @return \Viserio\Component\Contracts\Cookie\Cookie
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
     protected static function fromStringCookie(string $string): CookieContract
     {
         $rawAttributes = self::splitOnAttributeDelimiter($string);
 
-        list($cookieName, $cookieValue) = self::splitCookiePair(array_shift($rawAttributes));
+        [$cookieName, $cookieValue] = self::splitCookiePair(\array_shift($rawAttributes));
 
         $cookie = new SetCookie($cookieName);
 
-        if (! is_null($cookieValue)) {
+        if (null !== $cookieValue) {
             $cookie = $cookie->withValue($cookieValue);
         }
 
         foreach ($rawAttributes as $value) {
-            $rawAttributePair = explode('=', $value, 2);
+            $rawAttributePair = \explode('=', $value, 2);
             $attributeKey     = $rawAttributePair[0];
-            $attributeValue   = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
-            $attributeKey     = mb_strtolower($attributeKey);
+            $attributeValue   = \count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
+            $attributeKey     = \mb_strtolower($attributeKey);
 
             switch ($attributeKey) {
                 case 'expires':
                     $cookie = $cookie->withExpires(new Chronos($attributeValue));
+
                     break;
                 case 'max-age':
-                    $age    = is_numeric($attributeValue) ? (int) $attributeValue : null;
+                    $age    = \is_numeric($attributeValue) ? (int) $attributeValue : null;
                     $cookie = $cookie->withMaxAge($age);
+
                     break;
                 case 'domain':
                     $cookie = $cookie->withDomain($attributeValue);
+
                     break;
                 case 'path':
-                    $cookie = $cookie->withPath($attributeValue);
+                    $cookie = $cookie->withPath($attributeValue ?? '/');
+
                     break;
                 case 'secure':
                     $cookie = $cookie->withSecure(true);
+
                     break;
                 case 'httponly':
                     $cookie = $cookie->withHttpOnly(true);
+
                     break;
                 case 'samesite':
                     $cookie = $cookie->withSameSite($attributeValue);
+
                     break;
             }
         }

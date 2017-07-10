@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_Plugins_MessageLogger;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class SwiftMailDataCollector extends AbstractDataCollector implements PanelAwareContract
@@ -46,7 +46,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements PanelAware
         }
 
         $this->data = [
-            'count' => count($mails),
+            'count' => \count($mails),
             'mails' => $mails,
         ];
     }
@@ -77,7 +77,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements PanelAware
     /**
      * Format to from message.
      *
-     * @param array|null $to
+     * @param null|array $to
      *
      * @return string
      */
@@ -93,6 +93,6 @@ class SwiftMailDataCollector extends AbstractDataCollector implements PanelAware
             $f[] = (empty($v) ? '' : "$v ") . "<$k>";
         }
 
-        return implode(', ', $f);
+        return \implode(', ', $f);
     }
 }

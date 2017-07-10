@@ -9,38 +9,38 @@ class LazyOpenStreamTest extends TestCase
 {
     private $fname;
 
-    public function setup()
+    public function setup(): void
     {
-        mkdir(__DIR__ . '/tmp');
+        \mkdir(__DIR__ . '/tmp');
 
-        $this->fname = tempnam(__DIR__ . '/tmp', 'tfile');
+        $this->fname = \tempnam(__DIR__ . '/tmp', 'tfile');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        if (file_exists($this->fname)) {
-            unlink($this->fname);
+        if (\file_exists($this->fname)) {
+            \unlink($this->fname);
         }
 
-        rmdir(__DIR__ . '/tmp');
+        \rmdir(__DIR__ . '/tmp');
 
         parent::tearDown();
     }
 
-    public function testOpensLazily()
+    public function testOpensLazily(): void
     {
         $lazy = new LazyOpenStream($this->fname, 'w+');
         $lazy->write('foo');
 
         self::assertInternalType('array', $lazy->getMetadata());
         self::assertFileExists($this->fname);
-        self::assertEquals('foo', file_get_contents($this->fname));
+        self::assertStringEqualsFile($this->fname, 'foo');
         self::assertEquals('foo', (string) $lazy);
     }
 
-    public function testProxiesToFile()
+    public function testProxiesToFile(): void
     {
-        file_put_contents($this->fname, 'foo');
+        \file_put_contents($this->fname, 'foo');
         $lazy = new LazyOpenStream($this->fname, 'r');
 
         self::assertEquals('foo', $lazy->read(4));
@@ -60,17 +60,17 @@ class LazyOpenStreamTest extends TestCase
         $lazy->close();
     }
 
-    public function testDetachesUnderlyingStream()
+    public function testDetachesUnderlyingStream(): void
     {
-        file_put_contents($this->fname, 'foo');
+        \file_put_contents($this->fname, 'foo');
         $lazy = new LazyOpenStream($this->fname, 'r');
         $r    = $lazy->detach();
 
         self::assertInternalType('resource', $r);
-        fseek($r, 0);
+        \fseek($r, 0);
 
-        self::assertEquals('foo', stream_get_contents($r));
+        self::assertEquals('foo', \stream_get_contents($r));
 
-        fclose($r);
+        \fclose($r);
     }
 }

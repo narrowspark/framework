@@ -2,8 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
-use BadMethodCallException;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contract\Http\Exception\BadMethodCallException;
+use Viserio\Component\Contract\Http\Exception\LogicException;
 
 /**
  * Compose stream implementations based on a hash of functions.
@@ -23,21 +24,12 @@ class FnStream implements StreamInterface
         'isReadable', 'read', 'getContents', 'getMetadata', ];
 
     /**
-     * Hash of method name to a callable.
-     *
-     * @var array
-     */
-    private $methods;
-
-    /**
      * Create a new fn stream instance.
      *
      * @param array $methods
      */
     public function __construct(array $methods)
     {
-        $this->methods = $methods;
-
         // Create the functions on the class
         foreach ($methods as $name => $fn) {
             $this->{'_fn_' . $name} = $fn;
@@ -46,11 +38,13 @@ class FnStream implements StreamInterface
 
     /**
      * The close method is called on the underlying stream only if possible.
+     *
+     * @return void
      */
     public function __destruct()
     {
         if (isset($this->_fn_close)) {
-            call_user_func($this->_fn_close);
+            \call_user_func($this->_fn_close);
         }
     }
 
@@ -59,12 +53,14 @@ class FnStream implements StreamInterface
      *
      * @param mixed $name
      *
-     * @throws \BadMethodCallException
+     * @throws \Viserio\Component\Contract\Http\Exception\BadMethodCallException
+     *
+     * @return void
      */
-    public function __get($name)
+    public function __get($name): void
     {
         throw new BadMethodCallException(
-            str_replace('_fn_', '', $name) . '() is not implemented in the FnStream'
+            \str_replace('_fn_', '', $name) . '() is not implemented in the FnStream'
         );
     }
 
@@ -73,7 +69,17 @@ class FnStream implements StreamInterface
      */
     public function __toString()
     {
-        return call_user_func($this->_fn___toString);
+        return \call_user_func($this->_fn___toString);
+    }
+
+    /**
+     * An unserialize would allow the __destruct to run when the unserialized value goes out of scope.
+     *
+     * @throws \Viserio\Component\Contract\Http\Exception\LogicException
+     */
+    public function __wakeup()
+    {
+        throw new LogicException('FnStream should never be unserialized');
     }
 
     /**
@@ -83,13 +89,13 @@ class FnStream implements StreamInterface
      * @param StreamInterface $stream  Stream to decorate
      * @param array           $methods Hash of method name to a closure
      *
-     * @return FnStream
+     * @return \Viserio\Component\Http\Stream\FnStream
      */
-    public static function decorate(StreamInterface $stream, array $methods)
+    public static function decorate(StreamInterface $stream, array $methods): self
     {
         // If any of the required methods were not provided, then simply
         // proxy to the decorated stream.
-        foreach (array_diff(self::SLOTS, array_keys($methods)) as $diff) {
+        foreach (\array_diff(self::SLOTS, \array_keys($methods)) as $diff) {
             $methods[$diff] = [$stream, $diff];
         }
 
@@ -99,9 +105,9 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
-        call_user_func($this->_fn_close);
+        \call_user_func($this->_fn_close);
     }
 
     /**
@@ -109,95 +115,95 @@ class FnStream implements StreamInterface
      */
     public function detach()
     {
-        return call_user_func($this->_fn_detach);
+        return \call_user_func($this->_fn_detach);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
-        return call_user_func($this->_fn_getSize);
+        return \call_user_func($this->_fn_getSize);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
-        return call_user_func($this->_fn_tell);
+        return \call_user_func($this->_fn_tell);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
-        return call_user_func($this->_fn_eof);
+        return \call_user_func($this->_fn_eof);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
-        return call_user_func($this->_fn_isSeekable);
+        return \call_user_func($this->_fn_isSeekable);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
-        call_user_func($this->_fn_rewind);
+        \call_user_func($this->_fn_rewind);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
-        call_user_func($this->_fn_seek, $offset, $whence);
+        \call_user_func($this->_fn_seek, $offset, $whence);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
-        return call_user_func($this->_fn_isWritable);
+        return \call_user_func($this->_fn_isWritable);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): int
     {
-        return call_user_func($this->_fn_write, $string);
+        return \call_user_func($this->_fn_write, $string);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
-        return call_user_func($this->_fn_isReadable);
+        return \call_user_func($this->_fn_isReadable);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
-        return call_user_func($this->_fn_read, $length);
+        return \call_user_func($this->_fn_read, $length);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
-        return call_user_func($this->_fn_getContents);
+        return \call_user_func($this->_fn_getContents);
     }
 
     /**
@@ -205,6 +211,6 @@ class FnStream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        return call_user_func($this->_fn_getMetadata, $key);
+        return \call_user_func($this->_fn_getMetadata, $key);
     }
 }

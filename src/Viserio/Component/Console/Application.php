@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Console;
 
 use Closure;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
@@ -26,42 +27,15 @@ use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleErrorEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Console\Exception\LogicException;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Support\Invoker;
 
 class Application extends SymfonyConsole
 {
     use ContainerAwareTrait;
-    use EventsAwareTrait;
-
-    /**
-     * Console name.
-     *
-     * @var string
-     */
-    public $name = 'UNKNOWN';
-
-    /**
-     * Console version.
-     *
-     * @var string
-     */
-    public $version = 'UNKNOWN';
-
-    /**
-     * The output from the previous command.
-     *
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    protected $lastOutput;
-
-    /**
-     * Invoker instance.
-     *
-     * @var \Viserio\Component\Support\Invoker
-     */
-    protected $invoker;
+    use EventManagerAwareTrait;
 
     /**
      * The console application bootstrappers.
@@ -71,11 +45,39 @@ class Application extends SymfonyConsole
     protected static $bootstrappers = [];
 
     /**
+     * Console name.
+     *
+     * @var string
+     */
+    private $name = 'UNKNOWN';
+
+    /**
+     * Console version.
+     *
+     * @var string
+     */
+    private $version = 'UNKNOWN';
+
+    /**
+     * The output from the previous command.
+     *
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
+    private $lastOutput;
+
+    /**
      * Invoker instance.
+     *
+     * @var \Viserio\Component\Support\Invoker
+     */
+    private $invoker;
+
+    /**
+     * Symfony terminal instance.
      *
      * @var \Symfony\Component\Console\Terminal
      */
-    protected $terminal;
+    private $terminal;
 
     /**
      * Create a new Cerebro console application.
@@ -110,7 +112,7 @@ class Application extends SymfonyConsole
     {
         if ($command instanceof ViserioCommand) {
             if ($this->container !== null) {
-                $command->setContainer($this->getContainer());
+                $command->setContainer($this->container);
             }
 
             $command->setInvoker($this->getInvoker());
@@ -123,7 +125,7 @@ class Application extends SymfonyConsole
      * Add a command to the console.
      *
      * @param string                $expression defines the arguments and options of the command
-     * @param callable|string|array $callable   Called when the command is called.
+     * @param array|callable|string $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
@@ -155,7 +157,7 @@ class Application extends SymfonyConsole
 
         $this->setCatchExceptions(false);
 
-        array_unshift($parameters, $command);
+        \array_unshift($parameters, $command);
 
         $result = $this->run(new ArrayInput($parameters), $this->lastOutput);
 
@@ -171,7 +173,7 @@ class Application extends SymfonyConsole
      */
     public function output(): string
     {
-        if (method_exists($this->lastOutput, 'fetch')) {
+        if (\method_exists($this->lastOutput, 'fetch')) {
             return $this->lastOutput->fetch();
         }
 
@@ -195,26 +197,6 @@ class Application extends SymfonyConsole
             $argument = $commandDefinition->getArgument($name);
             $argument->setDefault($default);
         }
-    }
-
-    /**
-     * Get console version.
-     *
-     * @return string
-     */
-    public function getVersion(): string
-    {
-        return $this->version;
-    }
-
-    /**
-     * Get console name.
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     /**
@@ -248,7 +230,7 @@ class Application extends SymfonyConsole
     {
         $finder = (new PhpExecutableFinder())->find(false);
 
-        return escapeshellarg($finder === false ? '' : $finder);
+        return \escapeshellarg($finder === false ? '' : $finder);
     }
 
     /**
@@ -258,9 +240,9 @@ class Application extends SymfonyConsole
      */
     public static function cerebroBinary(): string
     {
-        $constant = defined('CEREBRO_BINARY') ? constant('CEREBRO_BINARY') : null;
+        $constant = \defined('CEREBRO_BINARY') ? \constant('CEREBRO_BINARY') : null;
 
-        return  $constant !== null ? escapeshellarg($constant) : 'cerebro';
+        return  $constant !== null ? \escapeshellarg($constant) : 'cerebro';
     }
 
     /**
@@ -272,7 +254,23 @@ class Application extends SymfonyConsole
      */
     public static function formatCommandString(string $string): string
     {
-        return sprintf('%s %s %s', static::phpBinary(), static::cerebroBinary(), $string);
+        return \sprintf('%s %s %s', static::phpBinary(), static::cerebroBinary(), $string);
+    }
+
+    /**
+     * Get the container instance.
+     *
+     * @throws \Viserio\Component\Contract\Console\Exception\LogicException
+     *
+     * @return \Psr\Container\ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        if (! $this->container) {
+            throw new LogicException('Container is not set up.');
+        }
+
+        return $this->container;
     }
 
     /**
@@ -280,8 +278,8 @@ class Application extends SymfonyConsole
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        putenv('LINES=' . $this->terminal->getHeight());
-        putenv('COLUMNS=' . $this->terminal->getWidth());
+        \putenv('LINES=' . $this->terminal->getHeight());
+        \putenv('COLUMNS=' . $this->terminal->getWidth());
 
         if ($input === null) {
             $input = new ArgvInput();
@@ -300,33 +298,8 @@ class Application extends SymfonyConsole
             $exception = new FatalThrowableError($changeableException);
         }
 
-        if ($changeableException !== null && $this->events !== null) {
-            $command = null;
-
-            if ($this->has($commandName = $this->getCommandName($input))) {
-                $command = $this->find($commandName);
-            }
-
-            $event = new ConsoleErrorEvent(
-                $command,
-                $input,
-                $output,
-                $changeableException,
-                $changeableException->getCode()
-            );
-
-            $this->events->trigger($event);
-
-            $changeableException = $event->getError();
-
-            if ($event->isErrorHandled()) {
-                $changeableException = null;
-                $exitCode            = 0;
-            } else {
-                $exitCode = $changeableException->getCode();
-            }
-
-            $this->events->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        if ($changeableException !== null && $this->eventManager !== null) {
+            [$changeableException, $exitCode] = $this->changeExceptionOnEventTrigger($input, $output, $changeableException);
         }
 
         if ($changeableException !== null) {
@@ -342,7 +315,7 @@ class Application extends SymfonyConsole
 
             $exitCode = $changeableException->getCode();
 
-            if (is_numeric($exitCode)) {
+            if (\is_numeric($exitCode)) {
                 $exitCode = (int) $exitCode;
 
                 if ($exitCode === 0) {
@@ -374,6 +347,8 @@ class Application extends SymfonyConsole
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
+     * @throws \Symfony\Component\Debug\Exception\FatalThrowableError
+     *
      * @return int 0 if everything went fine, or an error code
      */
     protected function doRunCommand(SymfonyCommand $command, InputInterface $input, OutputInterface $output): int
@@ -384,7 +359,7 @@ class Application extends SymfonyConsole
             }
         }
 
-        if ($this->events === null) {
+        if ($this->eventManager === null) {
             try {
                 return $command->run($input, $output);
             } catch (Throwable $e) {
@@ -400,12 +375,10 @@ class Application extends SymfonyConsole
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
 
-        $this->getEventManager()->trigger($event = new ConsoleCommandEvent($command, $input, $output));
-
-        $exitCode = 0;
+        $this->eventManager->trigger($event = new ConsoleCommandEvent($command, $input, $output));
 
         if ($event->commandShouldRun()) {
-            $e = $x = null;
+            $x = null;
 
             try {
                 $exitCode = $command->run($input, $output);
@@ -416,7 +389,7 @@ class Application extends SymfonyConsole
             $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
         }
 
-        $this->events->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        $this->eventManager->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
 
         return $event->getExitCode();
     }
@@ -438,6 +411,8 @@ class Application extends SymfonyConsole
 
     /**
      * Get the global environment option for the definition.
+     *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      *
      * @return \Viserio\Component\Console\Input\InputOption
      */
@@ -461,7 +436,7 @@ class Application extends SymfonyConsole
                 ->injectByParameterName(true);
 
             if ($this->container !== null) {
-                $invoker->setContainer($this->getContainer());
+                $invoker->setContainer($this->container);
             }
 
             $this->invoker = $invoker;
@@ -480,5 +455,44 @@ class Application extends SymfonyConsole
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
         }
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param $changeableException
+     *
+     * @return array
+     */
+    private function changeExceptionOnEventTrigger(InputInterface $input, OutputInterface $output, $changeableException): array
+    {
+        $command = null;
+
+        if ($this->has($commandName = $this->getCommandName($input))) {
+            $command = $this->find($commandName);
+        }
+
+        $event = new ConsoleErrorEvent(
+            $command,
+            $input,
+            $output,
+            $changeableException,
+            $changeableException->getCode()
+        );
+
+        $this->eventManager->trigger($event);
+
+        $changeableException = $event->getError();
+
+        if ($event->isErrorHandled()) {
+            $changeableException = null;
+            $exitCode            = 0;
+        } else {
+            $exitCode = $changeableException->getCode();
+        }
+
+        $this->eventManager->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+
+        return [$changeableException, $exitCode];
     }
 }

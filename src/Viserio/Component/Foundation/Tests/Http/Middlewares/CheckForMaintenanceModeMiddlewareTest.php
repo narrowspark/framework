@@ -6,12 +6,12 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
+use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Foundation\Http\Middlewares\CheckForMaintenanceModeMiddleware;
 
 class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $server = $this->mock(ServerRequestInterface::class);
         $config = $this->mock(HttpKernelContract::class);
@@ -36,7 +36,7 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Foundation\Http\Exception\MaintenanceModeException
      * @expectedExceptionMessage test
      */
-    public function testProcessWithMaintenance()
+    public function testProcessWithMaintenance(): void
     {
         $server = $this->mock(ServerRequestInterface::class);
         $kernel = $this->mock(HttpKernelContract::class);

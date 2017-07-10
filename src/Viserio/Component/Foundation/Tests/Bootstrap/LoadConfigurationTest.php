@@ -5,20 +5,23 @@ namespace Viserio\Component\Foundation\Tests\Bootstrap;
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LoadConfigurationTest extends MockeryTestCase
 {
-    public function testBootstrap()
+    use NormalizePathAndDirectorySeparatorTrait;
+
+    public function testBootstrap(): void
     {
         $bootstraper = new LoadConfiguration();
         $config      = $this->mock(RepositoryContract::class);
         $config->shouldReceive('import')
             ->once()
-            ->with(realpath(__DIR__ . '/../Fixtures/Config/app.php'));
+            ->with(self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/Config/app.php'));
         $config->shouldReceive('get')
             ->once()
             ->with('viserio.app.timezone', 'UTC')
@@ -46,12 +49,12 @@ class LoadConfigurationTest extends MockeryTestCase
             ->andReturn('');
         $kernel->shouldReceive('getConfigPath')
             ->once()
-            ->andReturn(realpath(__DIR__ . '/../Fixtures/Config'));
+            ->andReturn(self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/Config'));
 
         $bootstraper->bootstrap($kernel);
     }
 
-    public function testBootstrapWithCachedData()
+    public function testBootstrapWithCachedData(): void
     {
         $bootstraper = new LoadConfiguration();
         $config      = $this->mock(RepositoryContract::class);
@@ -84,7 +87,7 @@ class LoadConfigurationTest extends MockeryTestCase
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('config.cache')
-            ->andReturn(__DIR__ . '/../Fixtures/Config/app.php');
+            ->andReturn(self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/Config/app.php'));
         $kernel->shouldReceive('getConfigPath')
             ->never();
 

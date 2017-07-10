@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Engine;
 
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\View\Engine as EngineContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\View\Engine as EngineContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractBaseEngine implements

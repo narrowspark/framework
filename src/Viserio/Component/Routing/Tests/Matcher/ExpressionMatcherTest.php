@@ -8,14 +8,14 @@ use Viserio\Component\Routing\Matcher\StaticMatcher;
 
 class ExpressionMatcherTest extends TestCase
 {
-    public function testGetExpression()
+    public function testGetExpression(): void
     {
         $matcher = new ExpressionMatcher('ctype_digit({segment})', [1]);
 
         self::assertSame('ctype_digit({segment})', $matcher->getExpression());
     }
 
-    public function testGetConditionExpression()
+    public function testGetConditionExpression(): void
     {
         $matcher = new ExpressionMatcher('ctype_digit({segment})', [1]);
 
@@ -23,10 +23,10 @@ class ExpressionMatcherTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Cannot merge parameters: matchers must be equivalent, [Viserio\Component\Routing\Matcher\StaticMatcher:two] expected, [Viserio\Component\Routing\Matcher\ExpressionMatcher:ctype_digit({segment})] given.
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Cannot merge parameters: Matcher's must be equivalent, [Viserio\Component\Routing\Matcher\StaticMatcher:two] expected, [Viserio\Component\Routing\Matcher\ExpressionMatcher:ctype_digit({segment})] given.
      */
-    public function testMergeParameterKeys()
+    public function testMergeParameterKeysWithTwoDifferentMatcher(): void
     {
         $matcher  = new ExpressionMatcher('ctype_digit({segment})', [1]);
         $matcher2 = new StaticMatcher('two', [3]);
