@@ -115,7 +115,7 @@ class ResourceRegistrar
      */
     public function getResourceUri(string $resource): string
     {
-        if (! Str::contains($resource, '.')) {
+        if (strpos($resource, '.') === false) {
             return $resource;
         }
 
