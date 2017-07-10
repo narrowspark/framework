@@ -13,6 +13,7 @@ use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContra
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
+use Viserio\Component\Routing\Route\Registrar;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
@@ -20,7 +21,9 @@ class Router implements RouterContract, RequestMethodInterface
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
-    use MacroableTrait;
+    use MacroableTrait {
+        __call as macroCall;
+    }
 
     /**
      * The route collection instance.
@@ -56,6 +59,26 @@ class Router implements RouterContract, RequestMethodInterface
      * @var array
      */
     protected $patterns = [];
+
+    /**
+     * Dynamically handle calls into the router instance.
+     *
+     * @param string $method
+     * @param array $parameters
+     *
+     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $parameters);
+        }
+
+        return (new Registrar($this))->attribute($method, $parameters[0]);
+    }
 
     /**
      * Create a new Router instance.
@@ -237,7 +260,7 @@ class Router implements RouterContract, RequestMethodInterface
      * @param string $controller
      * @param array  $options
      *
-     * @return void
+     * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
     public function resource(string $name, string $controller, array $options = []): PendingResourceRegistration
     {
@@ -527,7 +550,7 @@ class Router implements RouterContract, RequestMethodInterface
 
         if (! $trimmed) {
             return '/';
-        } elseif (mb_substr($trimmed, 0, 1) === '/') {
+        } elseif (mb_strpos($trimmed, '/') === 0) {
             return $trimmed;
         }
 
