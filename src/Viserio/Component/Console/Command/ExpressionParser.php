@@ -66,7 +66,7 @@ final class ExpressionParser
      */
     private static function parseArgument(string $token): InputArgument
     {
-        list($token, $description) = static::extractDescription($token);
+        [$token, $description] = static::extractDescription($token);
 
         switch (true) {
             case self::endsWith($token, '=*]'):
@@ -95,11 +95,11 @@ final class ExpressionParser
      */
     private static function parseOption(string $token): InputOption
     {
-        list($token, $description) = static::extractDescription(trim($token, '[]'));
+        [$token, $description] = static::extractDescription(trim($token, '[]'));
 
         // Shortcut [-y|--yell]
         if (mb_strpos($token, '|') !== false) {
-            list($shortcut, $token) = explode('|', $token, 2);
+            [$shortcut, $token] = explode('|', $token, 2);
             $shortcut               = ltrim($shortcut, '-');
         } else {
             $shortcut = null;

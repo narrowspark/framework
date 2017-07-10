@@ -40,21 +40,15 @@ class Str
      * @param string  $name
      * @param mixed[] $arguments
      *
-     * @throws \BadMethodCallException
-     *
      * @return mixed
      */
     public static function __callStatic($name, $arguments)
     {
-        if (class_exists(StaticStringy::class)) {
-            try {
-                return self::macroableCallStatic($name, $arguments);
-            } catch (BadMethodCallException $exception) {
-                return forward_static_call_array([StaticStringy::class, $name], $arguments);
-            }
+        try {
+            return self::macroableCallStatic($name, $arguments);
+        } catch (BadMethodCallException $exception) {
+            return forward_static_call_array([StaticStringy::class, $name], $arguments);
         }
-
-        return self::macroableCallStatic($name, $arguments);
     }
 
     /**
@@ -147,6 +141,18 @@ class Str
     }
 
     /**
+     * Convert a string to kebab case.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public static function kebab(string $value): string
+    {
+        return static::snake($value, '-');
+    }
+
+    /**
      * Convert a string to snake case.
      *
      * @link https://en.wikipedia.org/wiki/Snake_case
@@ -193,6 +199,86 @@ class Str
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
         return static::$studlyCache[$key] = str_replace(' ', '', $value);
+    }
+
+    /**
+     * Get the plural form of an English word.
+     *
+     * @param string $value
+     * @param int    $count
+     *
+     * @return string
+     */
+    public static function plural(string $value, int $count = 2): string
+    {
+        return Pluralizer::plural($value, $count);
+    }
+
+    /**
+     * Get the singular form of an English word.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public static function singular(string $value): string
+    {
+        return Pluralizer::singular($value);
+    }
+
+    /**
+     * Replace the first occurrence of a given value in the string.
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     *
+     * @return string
+     */
+    public static function replaceFirst(string $search, string $replace, string $subject): string
+    {
+        if ($search === '') {
+            return $subject;
+        }
+
+        $position = mb_strpos($subject, $search);
+
+        return self::replaceByPosition($subject, $replace, $position, $search);
+    }
+
+    /**
+     * Replace the last occurrence of a given value in the string.
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     *
+     * @return string
+     */
+    public static function replaceLast(string $search, string $replace, string $subject): string
+    {
+        $position = mb_strrpos($subject, $search);
+
+        return self::replaceByPosition($subject, $replace, $position, $search);
+    }
+
+    /**
+     * Helper function for replaceLast and replaceFirst.
+     *
+     * @param string   $subject
+     * @param string   $replace
+     * @param int|bool $position
+     * @param string   $search
+     *
+     * @return string
+     */
+    private static function replaceByPosition(string $subject, string $replace, $position, string $search): string
+    {
+        if ($position !== false) {
+            return substr_replace($subject, $replace, $position, mb_strlen($search));
+        }
+
+        return $subject;
     }
 
     /**

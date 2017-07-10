@@ -193,7 +193,7 @@ class Validator implements ValidatorContract
             return $this->createNegativeOrOptionalValidator('?', $optionalRules);
         }
 
-        list($method, $parameters) = $this->parseStringRule($rules[0]);
+        [$method, $parameters] = $this->parseStringRule($rules[0]);
 
         unset($rules[0]);
 
@@ -210,7 +210,7 @@ class Validator implements ValidatorContract
      */
     protected function createNegativeOrOptionalValidator(string $filter, array $rules): RespectValidator
     {
-        list($method, $parameters) = $this->parseStringRule($rules[0]);
+        [$method, $parameters] = $this->parseStringRule($rules[0]);
 
         unset($rules[0]);
 
@@ -251,7 +251,7 @@ class Validator implements ValidatorContract
             }
 
             return array_reduce(explode('.', $chain), function ($validator, $method) {
-                list($method, $parameters) = $this->parseStringRule($method);
+                [$method, $parameters] = $this->parseStringRule($method);
 
                 $method = str_replace(['!', '?'], '', $method);
 
@@ -277,7 +277,7 @@ class Validator implements ValidatorContract
         // easy {rule}:{parameters} formatting convention. For instance the
         // rule "Min:3" states that the value may only be three letters.
         if (mb_strpos($rules, ':') !== false) {
-            list($rules, $parameter) = explode(':', $rules, 2);
+            [$rules, $parameter] = explode(':', $rules, 2);
 
             $parameters = $this->parseParameters($rules, $parameter);
         }

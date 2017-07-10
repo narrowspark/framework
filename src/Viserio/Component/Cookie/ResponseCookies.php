@@ -74,7 +74,7 @@ final class ResponseCookies extends AbstractCookieCollector
     {
         $rawAttributes = self::splitOnAttributeDelimiter($string);
 
-        list($cookieName, $cookieValue) = self::splitCookiePair(array_shift($rawAttributes));
+        [$cookieName, $cookieValue] = self::splitCookiePair(array_shift($rawAttributes));
 
         $cookie = new SetCookie($cookieName);
 

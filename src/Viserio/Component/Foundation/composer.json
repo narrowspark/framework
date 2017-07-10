@@ -49,6 +49,7 @@
         "mockery/mockery"                             : "^0.9",
         "narrowspark/testing-helper"                  : "^2.0",
         "phpunit/phpunit"                             : "^6.0",
+        "symfony/process"                             : "~3.3",
         "viserio/config"                              : "self.version",
         "viserio/console"                             : "self.version",
         "viserio/exception"                           : "self.version",
@@ -78,6 +79,7 @@
     "suggest": {
         "cakephp/chronos"                             : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0)",
         "http-interop/http-factory"                   : "Required to use SetRequestForConsole (^0.3).",
+        "symfony/process"                             : "Required to use the Serve Command (~3.3).",
         "vlucas/phpdotenv"                            : "Required to use LoadEnvironmentVariables bootstrap class (^2.3).",
         "viserio/config"                              : "Required to use the LoadConfiguration bootstrap class (self.version).",
         "viserio/console"                             : "Required to use the Console Kernel (self.version).",

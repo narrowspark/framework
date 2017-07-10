@@ -175,7 +175,7 @@ class RouteTreeBuilderTest extends TestCase
      */
     public function testRouteTreeBuilder($routes, $rootRoute, $segmentDepthNodesMap)
     {
-        list($rootRouteData, $segmentDepthNodeMap) = (new RouteTreeBuilder())->build($routes);
+        [$rootRouteData, $segmentDepthNodeMap] = (new RouteTreeBuilder())->build($routes);
 
         self::assertSame($rootRoute !== null, $rootRouteData !== null);
         self::assertEquals($rootRoute, $rootRouteData);

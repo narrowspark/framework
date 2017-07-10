@@ -5,6 +5,7 @@ namespace Viserio\Component\Log;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Psr\Log\LoggerTrait;
+use Psr\Log\LogLevel;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Log\Log as LogContract;
 use Viserio\Component\Contracts\Support\Arrayable;
@@ -12,7 +13,7 @@ use Viserio\Component\Contracts\Support\Jsonable;
 use Viserio\Component\Log\Event\MessageLoggedEvent;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 
-class Writer implements LogContract
+class Writer extends LogLevel implements LogContract
 {
     use ParseLevelTrait;
     use EventsAwareTrait;

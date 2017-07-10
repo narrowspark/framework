@@ -839,9 +839,10 @@ class Cron implements CronContract
     protected function inTimeInterval(string $startTime, string $endTime): Closure
     {
         return function () use ($startTime, $endTime) {
-            $now = Chronos::now()->getTimestamp();
-
-            return $now >= strtotime($startTime) && $now <= strtotime($endTime);
+            return Chronos::now($this->timezone)->between(
+                Chronos::parse($startTime, $this->timezone),
+                Chronos::parse($endTime, $this->timezone)
+            );
         };
     }
 }

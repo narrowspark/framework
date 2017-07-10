@@ -33,6 +33,7 @@
             <exclude>
                 <directory>./vendor</directory>
                 <directory>./Tests</directory>
+                <file>./Console/Resources/router.php</file>
             </exclude>
         </whitelist>
     </filter>

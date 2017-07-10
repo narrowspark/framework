@@ -136,7 +136,11 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     {
         $exception = $this->prepareException($exception);
 
-        $this->report($exception);
+        try {
+            $this->report($exception);
+        } catch (Throwable $exception) {
+            // If handler can't report exception just render it
+        }
 
         $transformed = $this->getTransformed($exception);
         $container   = $this->container;

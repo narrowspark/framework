@@ -185,7 +185,7 @@ final class CommandResolver
             $container = $this->console->getContainer();
         } catch (RuntimeException $e) {
             if ($this->isStaticCallToNonStaticMethod($callable)) {
-                list($class, $method) = $callable;
+                [$class, $method] = $callable;
 
                 $message  = "['{$class}', '{$method}'] is not a callable because '{$method}' is a static method.";
                 $message .= " Either use [new {$class}(), '{$method}'] or configure a dependency injection container that supports autowiring.";
@@ -205,7 +205,7 @@ final class CommandResolver
     private function isStaticCallToNonStaticMethod($callable): bool
     {
         if (is_array($callable) && is_string($callable[0])) {
-            list($class, $method) = $callable;
+            [$class, $method] = $callable;
 
             $reflection = new ReflectionMethod($class, $method);
 

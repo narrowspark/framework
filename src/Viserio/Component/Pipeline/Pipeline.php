@@ -135,7 +135,7 @@ class Pipeline implements PipelineContract
      */
     protected function parseStageString(string $stage): array
     {
-        list($name, $parameters) = array_pad(explode(':', $stage, 2), 2, []);
+        [$name, $parameters] = array_pad(explode(':', $stage, 2), 2, []);
 
         if (is_string($parameters)) {
             $parameters = explode(',', $parameters);
@@ -157,7 +157,7 @@ class Pipeline implements PipelineContract
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
-        list($name, $parameters) = $this->parseStageString($stage);
+        [$name, $parameters] = $this->parseStageString($stage);
         $parameters              = array_merge([$traveler, $stack], $parameters);
 
         $class = null;

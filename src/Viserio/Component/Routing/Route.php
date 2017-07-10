@@ -356,7 +356,7 @@ class Route implements RouteContract
      */
     public function getController()
     {
-        list($class) = explode('@', $this->action['uses']);
+        [$class] = explode('@', $this->action['uses']);
 
         if ($this->controller === null) {
             if ($this->container !== null) {

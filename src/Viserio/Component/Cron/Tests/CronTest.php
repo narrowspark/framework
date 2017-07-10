@@ -363,6 +363,7 @@ class CronTest extends MockeryTestCase
         Chronos::setTestNow(Chronos::now()->startOfDay()->addHours(9));
 
         $cron = new Cron('php foo');
+        $cron->setTimezone('UTC');
 
         self::assertTrue($cron->between('8:00', '10:00')->filtersPass());
         self::assertTrue($cron->between('9:00', '9:00')->filtersPass());

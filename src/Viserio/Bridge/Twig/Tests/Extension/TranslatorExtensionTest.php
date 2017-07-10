@@ -68,6 +68,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      *
      * @param mixed $template
      * @param mixed $expected
+     * @param array $variables
      */
     public function testTransa($template, $expected, array $variables = [])
     {

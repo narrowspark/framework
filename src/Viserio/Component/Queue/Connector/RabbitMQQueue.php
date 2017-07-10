@@ -95,9 +95,9 @@ class RabbitMQQueue extends AbstractQueue
         $this->declareQueue($queue);
 
         if (isset($options['delay']) && $options['delay'] > 0) {
-            list($queue, $exchange) = $this->declareDelayedQueue($queue, $options['delay']);
+            [$queue, $exchange] = $this->declareDelayedQueue($queue, $options['delay']);
         } else {
-            list($queue, $exchange) = $this->declareQueue($queue);
+            [$queue, $exchange] = $this->declareQueue($queue);
         }
 
         $headers = [

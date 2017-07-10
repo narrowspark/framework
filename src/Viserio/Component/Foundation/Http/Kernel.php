@@ -21,10 +21,10 @@ use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
+use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
-use Viserio\Component\Routing\Pipeline;
-use Viserio\Component\Routing\Router;
+use Viserio\Component\Routing\Pipeline as RoutingPipeline;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
@@ -262,7 +262,30 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $dispatcher->setCachePath($this->getStoragePath('framework/routes.cache.php'));
         $dispatcher->refreshCache($this->resolvedOptions['env'] !== 'production');
 
-        return (new Pipeline())
+        if (class_exists(Pipeline::class)) {
+            return $this->pipeRequestThroughMiddlewaresAndRouter($request, $router);
+        }
+
+        $container->instance(ServerRequestInterface::class, $request);
+
+        return $router->dispatch($request);
+    }
+
+    /**
+     * Pipes the request through given middlewares and dispatch a response.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface    $request
+     * @param \Viserio\Component\Contracts\Routing\Router $router
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function pipeRequestThroughMiddlewaresAndRouter(
+        ServerRequestInterface $request,
+        RouterContract $router
+    ): ResponseInterface {
+        $container = $this->getContainer();
+
+        return (new RoutingPipeline())
             ->setContainer($container)
             ->send($request)
             ->through($this->resolvedOptions['skip_middlewares'] ? [] : $this->middlewares)

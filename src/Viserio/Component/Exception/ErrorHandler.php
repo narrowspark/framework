@@ -10,6 +10,7 @@ use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Console\Application as ConsoleApplication;
@@ -98,13 +99,13 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             // A list of the exception types that should not be reported.
             'dont_report' => [],
             'levels'      => [
-                FatalThrowableError::class          => 'critical',
-                FatalErrorException::class          => 'error',
-                Throwable::class                    => 'error',
-                Exception::class                    => 'error',
-                NotFoundException::class            => 'notice',
-                AbstractClientErrorException::class => 'notice',
-                AbstractServerErrorException::class => 'error',
+                FatalThrowableError::class          => LogLevel::CRITICAL,
+                FatalErrorException::class          => LogLevel::ERROR,
+                Throwable::class                    => LogLevel::ERROR,
+                Exception::class                    => LogLevel::ERROR,
+                NotFoundException::class            => LogLevel::NOTICE,
+                AbstractClientErrorException::class => LogLevel::NOTICE,
+                AbstractServerErrorException::class => LogLevel::ERROR,
             ],
             // Exception transformers.
             'transformers' => [
@@ -400,7 +401,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             }
         }
 
-        return 'error';
+        return LogLevel::ERROR;
     }
 
     /**
