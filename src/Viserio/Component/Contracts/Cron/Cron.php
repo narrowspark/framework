@@ -39,7 +39,7 @@ interface Cron
     public function setEnvironments($environments): Cron;
 
     /**
-     * Determine if the event runs in the given environment.
+     * Determine if the cron runs in the given environment.
      *
      * @param string $environment
      *
@@ -221,7 +221,7 @@ interface Cron
     public function twiceDaily(int $first = 1, int $second = 13): Cron;
 
     /**
-     * Schedule the event to run twice monthly.
+     * Schedule the cron to run twice monthly.
      *
      * @param int $first
      * @param int $second
@@ -369,7 +369,7 @@ interface Cron
     public function setDescription(string $description): Cron;
 
     /**
-     * Get the summary of the event for display.
+     * Get the summary of the cron for display.
      *
      * @return string
      */
@@ -385,7 +385,7 @@ interface Cron
     public function setTimezone(string $timezone): Cron;
 
     /**
-     * Determine if the filters pass for the event.
+     * Determine if the filters pass for the cron.
      *
      * @return bool
      */
