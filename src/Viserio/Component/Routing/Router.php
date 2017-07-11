@@ -240,11 +240,7 @@ class Router implements RouterContract, RequestMethodInterface
     }
 
     /**
-     * Register an array of resource controllers.
-     *
-     * @param array $resources
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function resources(array $resources): void
     {
@@ -273,13 +269,7 @@ class Router implements RouterContract, RequestMethodInterface
     }
 
     /**
-     * Route an api resource to a controller.
-     *
-     * @param string $name
-     * @param string $controller
-     * @param array  $options
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function apiResource(string $name, string $controller, array $options = []): void
     {

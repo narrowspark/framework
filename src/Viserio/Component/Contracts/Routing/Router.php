@@ -149,6 +149,26 @@ interface Router
     public function getParameters(): array;
 
     /**
+     * Register an array of resource controllers.
+     *
+     * @param array $resources
+     *
+     * @return void
+     */
+    public function resources(array $resources): void;
+
+    /**
+     * Route an api resource to a controller.
+     *
+     * @param string $name
+     * @param string $controller
+     * @param array  $options
+     *
+     * @return void
+     */
+    public function apiResource(string $name, string $controller, array $options = []): void;
+
+    /**
      * Create a route group with shared attributes.
      *
      * @param array           $attributes
