@@ -69,7 +69,7 @@ class Pluralizer
      */
     public static function plural(string $value, int $count = 2): string
     {
-        if ((int) $count === 1 || static::uncountable($value)) {
+        if ($count === 1 || static::uncountable($value)) {
             return $value;
         }
 
