@@ -180,6 +180,7 @@
         "cache/mongodb-adapter"              : "Required to use the Mongodb cache (^0.3).",
         "cache/predis-adapter"               : "Required to use the Predis cache (^0.5).",
         "cache/session-handler"              : "Required to use the Session cache (^0.1).",
+        "doctrine/inflector"                 : "Required to use the Pluralizer, Str::plural and Str::singular (~1.0).",
         "guzzlehttp/guzzle"                  : "Required to use the Mailgun and Mandrill mail drivers and the ping methods on schedules (^6.0).",
         "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 adapter (^1.0).",
         "league/flysystem-cached-adapter"    : "Required to use the Flysystem Caching adapter (^1.0.3).",
