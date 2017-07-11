@@ -40,21 +40,15 @@ class Str
      * @param string  $name
      * @param mixed[] $arguments
      *
-     * @throws \BadMethodCallException
-     *
      * @return mixed
      */
     public static function __callStatic($name, $arguments)
     {
-        if (class_exists(StaticStringy::class)) {
-            try {
-                return self::macroableCallStatic($name, $arguments);
-            } catch (BadMethodCallException $exception) {
-                return forward_static_call_array([StaticStringy::class, $name], $arguments);
-            }
+        try {
+            return self::macroableCallStatic($name, $arguments);
+        } catch (BadMethodCallException $exception) {
+            return forward_static_call_array([StaticStringy::class, $name], $arguments);
         }
-
-        return self::macroableCallStatic($name, $arguments);
     }
 
     /**

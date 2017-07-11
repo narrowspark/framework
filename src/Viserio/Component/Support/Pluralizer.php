@@ -11,7 +11,7 @@ class Pluralizer
      *
      * @var array
      */
-    public static $uncountable = [
+    private static $uncountable = [
         'audio',
         'bison',
         'chassis',
@@ -57,6 +57,16 @@ class Pluralizer
      */
     private function __construct()
     {
+    }
+
+    /**
+     * Returns a list of uncountable words.
+     *
+     * @return array
+     */
+    public static function getUncountable(): array
+    {
+        return self::$uncountable;
     }
 
     /**

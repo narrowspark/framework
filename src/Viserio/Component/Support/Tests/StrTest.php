@@ -7,16 +7,6 @@ use Viserio\Component\Support\Str;
 
 class StrTest extends TestCase
 {
-    public function testMacro()
-    {
-        Str::macro('string', function ($value) {
-            return $value;
-        });
-
-        self::assertTrue(Str::hasMacro('string'));
-        self::assertSame('macro', Str::string('macro'));
-    }
-
     public function testStringCanBeLimitedByWords()
     {
         self::assertEquals('Narrowspark...', Str::words('Narrowspark Viserio', 1));

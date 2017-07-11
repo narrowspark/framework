@@ -4,9 +4,15 @@ namespace Viserio\Component\Support\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Support\Str;
+use Viserio\Component\Support\Pluralizer;
 
 class PluralizerTest extends TestCase
 {
+    public function testGetUncountable()
+    {
+        self::assertInternalType('array', Pluralizer::getUncountable());
+    }
+
     public function testBasicSingular()
     {
         self::assertEquals('child', Str::singular('children'));
@@ -14,6 +20,7 @@ class PluralizerTest extends TestCase
 
     public function testBasicPlural()
     {
+        self::assertEquals('audio', Str::plural('audio', 1));
         self::assertEquals('children', Str::plural('child'));
     }
 
