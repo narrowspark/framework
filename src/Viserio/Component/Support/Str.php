@@ -149,7 +149,7 @@ class Str
     /**
      * Convert a string to kebab case.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -210,8 +210,8 @@ class Str
     /**
      * Get the plural form of an English word.
      *
-     * @param  string  $value
-     * @param  int     $count
+     * @param string $value
+     * @param int    $count
      *
      * @return string
      */
@@ -223,7 +223,7 @@ class Str
     /**
      * Get the singular form of an English word.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -235,9 +235,9 @@ class Str
     /**
      * Replace the first occurrence of a given value in the string.
      *
-     * @param  string  $search
-     * @param  string  $replace
-     * @param  string  $subject
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
      *
      * @return string
      */
@@ -247,7 +247,7 @@ class Str
             return $subject;
         }
 
-        $position = strpos($subject, $search);
+        $position = mb_strpos($subject, $search);
 
         return self::replaceByPosition($subject, $replace, $position, $search);
     }
@@ -255,15 +255,15 @@ class Str
     /**
      * Replace the last occurrence of a given value in the string.
      *
-     * @param  string  $search
-     * @param  string  $replace
-     * @param  string  $subject
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
      *
      * @return string
      */
     public static function replaceLast(string $search, string $replace, string $subject): string
     {
-        $position = strrpos($subject, $search);
+        $position = mb_strrpos($subject, $search);
 
         return self::replaceByPosition($subject, $replace, $position, $search);
     }
@@ -281,7 +281,7 @@ class Str
     private static function replaceByPosition(string $subject, string $replace, $position, string $search): string
     {
         if ($position !== false) {
-            return substr_replace($subject, $replace, $position, strlen($search));
+            return substr_replace($subject, $replace, $position, mb_strlen($search));
         }
 
         return $subject;

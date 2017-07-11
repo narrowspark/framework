@@ -62,8 +62,8 @@ class Pluralizer
     /**
      * Get the plural form of an English word.
      *
-     * @param  string  $value
-     * @param  int     $count
+     * @param string $value
+     * @param int    $count
      *
      * @return string
      */
@@ -81,7 +81,7 @@ class Pluralizer
     /**
      * Get the singular form of an English word.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -95,20 +95,20 @@ class Pluralizer
     /**
      * Determine if the given value is uncountable.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return bool
      */
     protected static function uncountable(string $value): bool
     {
-        return in_array(strtolower($value), static::$uncountable, true);
+        return in_array(mb_strtolower($value), static::$uncountable, true);
     }
 
     /**
      * Attempt to match the case on two strings.
      *
-     * @param  string  $value
-     * @param  string  $comparison
+     * @param string $value
+     * @param string $comparison
      *
      * @return string
      */

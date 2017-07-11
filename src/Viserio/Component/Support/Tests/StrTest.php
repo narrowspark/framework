@@ -9,7 +9,7 @@ class StrTest extends TestCase
 {
     public function testMacro()
     {
-        Str::macro('string', function($value){
+        Str::macro('string', function ($value) {
             return $value;
         });
 
