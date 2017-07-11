@@ -107,9 +107,7 @@ class AbstractManagerTest extends MockeryTestCase
             ->andReturn([
                 'test' => [
                     'default' => 'test',
-                    'drivers' => [
-                        'call' => [''],
-                    ],
+                    'drivers' => [],
                 ],
             ]);
 
@@ -122,6 +120,10 @@ class AbstractManagerTest extends MockeryTestCase
         $driver = $manager->getDriver('call');
 
         self::assertInstanceOf(ArrayContainer::class, $driver);
+
+        $manager->set('test', 'test');
+
+        self::assertSame('test', $manager->get('test'));
     }
 
     public function testCustomDriverClosureBoundObjectIsCacheManager()

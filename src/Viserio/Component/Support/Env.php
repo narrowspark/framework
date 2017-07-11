@@ -7,6 +7,15 @@ use Closure;
 class Env
 {
     /**
+     * Private constructor; non-instantiable.
+     *
+     * @codeCoverageIgnore
+     */
+    private function __construct()
+    {
+    }
+
+    /**
      * Gets the value of an environment variable. Supports boolean, empty, null and base64 prefix.
      *
      * @param string $key
