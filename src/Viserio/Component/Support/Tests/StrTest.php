@@ -7,6 +7,16 @@ use Viserio\Component\Support\Str;
 
 class StrTest extends TestCase
 {
+    public function testMacro()
+    {
+        Str::macro('string', function($value){
+            return $value;
+        });
+
+        self::assertTrue(Str::hasMacro('string'));
+        self::assertSame('macro', Str::string('macro'));
+    }
+
     public function testStringCanBeLimitedByWords()
     {
         self::assertEquals('Narrowspark...', Str::words('Narrowspark Viserio', 1));
@@ -113,15 +123,15 @@ class StrTest extends TestCase
 
     public function testKebabCase()
     {
-        self::assertEquals('foo-bar', Str::snake('Foo Bar', '-'));
-        self::assertEquals('foo-bar', Str::snake('foo bar', '-'));
-        self::assertEquals('foo-bar', Str::snake('FooBar', '-'));
-        self::assertEquals('foo-bar', Str::snake('fooBar', '-'));
-        self::assertEquals('foo-bar', Str::snake('foo-bar', '-'));
-        self::assertEquals('foo-bar', Str::snake('foo_bar', '-'));
-        self::assertEquals('foo-bar', Str::snake('FOO_BAR', '-'));
-        self::assertEquals('foo-bar', Str::snake('fooBar', '-'));
-        self::assertEquals('foo-bar', Str::snake('fooBar', '-')); // test cache
+        self::assertEquals('foo-bar', Str::kebab('Foo Bar'));
+        self::assertEquals('foo-bar', Str::kebab('foo bar'));
+        self::assertEquals('foo-bar', Str::kebab('FooBar'));
+        self::assertEquals('foo-bar', Str::kebab('fooBar'));
+        self::assertEquals('foo-bar', Str::kebab('foo-bar'));
+        self::assertEquals('foo-bar', Str::kebab('foo_bar'));
+        self::assertEquals('foo-bar', Str::kebab('FOO_BAR'));
+        self::assertEquals('foo-bar', Str::kebab('fooBar'));
+        self::assertEquals('foo-bar', Str::kebab('fooBar')); // test cache
     }
 
     public function testStudlyCase()
@@ -138,5 +148,23 @@ class StrTest extends TestCase
         self::assertEquals('FooBar', Str::studly('foo_bar')); // test cache
         self::assertEquals('FooBarBaz', Str::studly('foo-barBaz'));
         self::assertEquals('FooBarBaz', Str::studly('foo-bar_baz'));
+    }
+
+    public function testReplaceFirst()
+    {
+        self::assertEquals('fooqux foobar', Str::replaceFirst('bar', 'qux', 'foobar foobar'));
+        self::assertEquals('foo/qux? foo/bar?', Str::replaceFirst('bar?', 'qux?', 'foo/bar? foo/bar?'));
+        self::assertEquals('foo foobar', Str::replaceFirst('bar', '', 'foobar foobar'));
+        self::assertEquals('foobar foobar', Str::replaceFirst('xxx', 'yyy', 'foobar foobar'));
+        self::assertEquals('foobar foobar', Str::replaceFirst('', 'yyy', 'foobar foobar'));
+    }
+
+    public function testReplaceLast()
+    {
+        self::assertEquals('foobar fooqux', Str::replaceLast('bar', 'qux', 'foobar foobar'));
+        self::assertEquals('foo/bar? foo/qux?', Str::replaceLast('bar?', 'qux?', 'foo/bar? foo/bar?'));
+        self::assertEquals('foobar foo', Str::replaceLast('bar', '', 'foobar foobar'));
+        self::assertEquals('foobar foobar', Str::replaceLast('xxx', 'yyy', 'foobar foobar'));
+        self::assertEquals('foobar foobar', Str::replaceLast('', 'yyy', 'foobar foobar'));
     }
 }

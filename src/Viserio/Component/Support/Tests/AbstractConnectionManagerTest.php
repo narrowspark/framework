@@ -87,6 +87,14 @@ class AbstractConnectionManagerTest extends MockeryTestCase
 
     public function testGetConnectionConfig()
     {
+        $configArray = [
+            'default'     => 'pdo',
+            'connections' => [
+                'pdo' => [
+                    'servers' => 'localhost',
+                ],
+            ],
+        ];
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
             ->once()
@@ -96,14 +104,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
             ->once()
             ->with('viserio')
             ->andReturn([
-                'connection' => [
-                    'default'     => 'pdo',
-                    'connections' => [
-                        'pdo' => [
-                            'servers' => 'localhost',
-                        ],
-                    ],
-                ],
+                'connection' => $configArray,
             ]);
 
         $manager = new TestConnectionManager(new ArrayContainer([
@@ -111,6 +112,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         ]));
 
         self::assertTrue(is_array($manager->getConnectionConfig('pdo')));
+        self::assertSame($configArray, $manager->getConfig());
     }
 
     public function testCall()
@@ -143,6 +145,14 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         self::assertSame('manager', $return);
         self::assertArrayHasKey('foo', $manager->getConnections());
         self::assertTrue($manager->hasConnection('foo'));
+
+        $manager->extend('call', function () {
+            return new ArrayContainer();
+        });
+        $manager->setDefaultConnection('call');
+        $manager->set('test', 'test');
+
+        self::assertSame('test', $manager->get('test'));
     }
 
     public function testDefaultConnection()
