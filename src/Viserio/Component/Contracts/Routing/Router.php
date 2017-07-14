@@ -151,8 +151,10 @@ interface Router
      * Removes the global expression associated with the supplied parameter name.
      *
      * @param string $name
+     *
+     * @return void
      */
-    public function removeParameter(string $name);
+    public function removeParameter(string $name): void;
 
     /**
      * Get all global parameters for all routes.
@@ -162,32 +164,14 @@ interface Router
     public function getParameters(): array;
 
     /**
-     * Register an array of resource controllers.
-     *
-     * @param array $resources
-     *
-     * @return void
-     */
-    public function resources(array $resources): void;
-
-    /**
-     * Route an api resource to a controller.
-     *
-     * @param string $name
-     * @param string $controller
-     * @param array  $options
-     *
-     * @return void
-     */
-    public function apiResource(string $name, string $controller, array $options = []): void;
-
-    /**
      * Create a route group with shared attributes.
      *
      * @param array           $attributes
      * @param \Closure|string $routes
+     *
+     * @return void
      */
-    public function group(array $attributes, $routes);
+    public function group(array $attributes, $routes): void;
 
     /**
      * Merge the given array with the last group stack.
@@ -231,7 +215,7 @@ interface Router
      *
      * @return \Viserio\Component\Contracts\Routing\Route|null
      */
-    public function getCurrentRoute();
+    public function getCurrentRoute(): ?Route;
 
     /**
      * Dispatch router for HTTP request.

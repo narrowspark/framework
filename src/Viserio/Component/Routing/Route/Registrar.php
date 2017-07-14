@@ -30,7 +30,7 @@ class Registrar
      *
      * @var array
      */
-    protected $passthru = [
+    protected static $passthru = [
         'get',
         'post',
         'put',
@@ -45,7 +45,7 @@ class Registrar
      *
      * @var array
      */
-    protected $allowedAttributes = [
+    protected static $allowedAttributes = [
         'as',
         'domain',
         'middleware',
@@ -79,15 +79,18 @@ class Registrar
      * @param string $method
      * @param array  $parameters
      *
+     * @throws \BadMethodCallException
+     * @throws \InvalidArgumentException
+     *
      * @return \Viserio\Component\Contracts\Routing\Route|$this
      */
     public function __call($method, $parameters)
     {
-        if (isset($this->passthru[$method])) {
+        if (isset(self::$passthru[$method])) {
             return $this->registerRoute($method, ...$parameters);
         }
 
-        if (isset($this->allowedAttributes[$method])) {
+        if (isset(self::$allowedAttributes[$method])) {
             return $this->attribute($method, $parameters[0]);
         }
 
@@ -106,7 +109,7 @@ class Registrar
      */
     public function attribute(string $key, $value): self
     {
-        if (! isset($this->allowedAttributes[$key])) {
+        if (! isset(self::$allowedAttributes[$key])) {
             throw new InvalidArgumentException(sprintf('Attribute [%s] does not exist.', $key));
         }
 
@@ -183,7 +186,7 @@ class Registrar
      */
     protected function compileAction($action): array
     {
-        if (is_null($action)) {
+        if ($action === null) {
             return $this->attributes;
         }
 

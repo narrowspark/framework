@@ -60,6 +60,13 @@ class Router implements RouterContract
     protected $patterns = [];
 
     /**
+     * Route registrar instance.
+     *
+     * @var \Viserio\Component\Routing\ResourceRegistrar
+     */
+    private $registrar;
+
+    /**
      * Create a new Router instance.
      *
      * @param \Viserio\Component\Contracts\Routing\Dispatcher   $dispatcher
@@ -225,7 +232,7 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function removeParameter(string $name)
+    public function removeParameter(string $name): void
     {
         unset($this->globalParameterConditions[$name]);
     }
@@ -268,9 +275,15 @@ class Router implements RouterContract
     }
 
     /**
-     * {@inheritdoc}
+     * Route an api resource to a controller.
+     *
+     * @param string $name
+     * @param string $controller
+     * @param array  $options
+     *
+     * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
-    public function apiResource(string $name, string $controller, array $options = []): void
+    public function apiResource(string $name, string $controller, array $options = []): PendingResourceRegistration
     {
         $options = array_merge(
             [
@@ -285,13 +298,13 @@ class Router implements RouterContract
             $options
         );
 
-        $this->resource($name, $controller, $options);
+        return $this->resource($name, $controller, $options);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function group(array $attributes, $routes)
+    public function group(array $attributes, $routes): void
     {
         $this->updateGroupStack($attributes);
 
@@ -361,7 +374,7 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function getCurrentRoute()
+    public function getCurrentRoute(): ?RouteContract
     {
         return $this->dispatcher->getCurrentRoute();
     }
