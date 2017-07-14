@@ -99,7 +99,7 @@ final class ExpressionParser
 
         // Shortcut [-y|--yell]
         if (mb_strpos($token, '|') !== false) {
-            [$shortcut, $token] = explode('|', $token, 2);
+            [$shortcut, $token]     = explode('|', $token, 2);
             $shortcut               = ltrim($shortcut, '-');
         } else {
             $shortcut = null;
