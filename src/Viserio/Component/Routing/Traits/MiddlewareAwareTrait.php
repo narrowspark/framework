@@ -147,7 +147,9 @@ trait MiddlewareAwareTrait
     private function validateMiddlewareClass($middlewares): void
     {
         $middlewareCheck = function ($middleware) {
-            if (! in_array(MiddlewareInterface::class, class_implements($middleware))) {
+            $interfaces = class_implements($middleware);
+
+            if (! isset($interfaces[MiddlewareInterface::class])) {
                 throw new LogicException(
                     sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
                 );

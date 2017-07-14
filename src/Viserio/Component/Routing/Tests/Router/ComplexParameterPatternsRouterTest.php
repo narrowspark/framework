@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -83,7 +84,7 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions($router)
+    protected function definitions(RouterContract $router)
     {
         $router->get('/a/prefix:{param}', function ($request, $args) {
             return (new ResponseFactory())

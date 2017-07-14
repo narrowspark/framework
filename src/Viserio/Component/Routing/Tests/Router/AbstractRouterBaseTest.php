@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
@@ -58,7 +59,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         self::assertSame($status, $actualResult->getStatusCode());
     }
 
-    abstract protected function definitions($routes);
+    abstract protected function definitions(RouterContract $router);
 
     private function delTree($dir)
     {

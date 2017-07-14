@@ -151,7 +151,7 @@ class PendingResourceRegistration
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
-    public function middleware($middleware): self
+    public function setMiddleware($middleware): self
     {
         $this->options['middleware'] = $middleware;
 

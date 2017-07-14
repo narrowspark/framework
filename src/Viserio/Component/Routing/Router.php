@@ -390,6 +390,14 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
+    public function getDispatcher(): DispatcherContract
+    {
+        return $this->dispatcher;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
         $dispatcher = $this->dispatcher;

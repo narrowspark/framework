@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\Pattern;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -138,7 +139,7 @@ class ComplexShopRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    protected function definitions($router)
+    protected function definitions(RouterContract $router)
     {
         $router->pattern('post_slug', Pattern::ALPHA_NUM_DASH);
         $router->pattern('category_id', Pattern::DIGITS);

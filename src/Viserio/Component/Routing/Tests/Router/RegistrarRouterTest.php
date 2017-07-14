@@ -2,10 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Tests\Fixture\RouteRegistrarControllerFixture;
 
 class RegistrarRouterTest extends AbstractRouterBaseTest
 {
+    public function routerMatchingProvider(): array
+    {
+        return [
+            ['DELETE', 'users/1', 'deleted'],
+        ];
+    }
+
     /**
      * @dataProvider routerMatchingProvider
      *
@@ -29,9 +37,8 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
         }
     }
 
-    protected function definitions($routes)
+    protected function definitions(RouterContract $router)
     {
-        $routes->middleware('resource-middleware')
-            ->resource('users', RouteRegistrarControllerFixture::class);
+        $router->resource('users', RouteRegistrarControllerFixture::class)->withMiddleware('resource-middleware');
     }
 }

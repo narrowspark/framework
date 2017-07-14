@@ -211,7 +211,7 @@ class ResourceRegistrar
      */
     protected function prefixedResource(string $name, string $controller, array $options): void
     {
-        list($name, $prefix) = $this->getResourcePrefix($name);
+        [$name, $prefix] = $this->getResourcePrefix($name);
 
         // We need to extract the base resource from the resource name. Nested resources
         // are supported in the framework, but we need to know what name to use for a

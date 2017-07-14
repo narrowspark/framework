@@ -218,6 +218,13 @@ interface Router
     public function getCurrentRoute(): ?Route;
 
     /**
+     * Get the router dispatcher.
+     *
+     * @return \Viserio\Component\Contracts\Routing\Dispatcher
+     */
+    public function getDispatcher(): Dispatcher;
+
+    /**
      * Dispatch router for HTTP request.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
