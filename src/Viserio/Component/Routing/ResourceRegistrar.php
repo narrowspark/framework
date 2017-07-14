@@ -99,7 +99,7 @@ class ResourceRegistrar
         // are supported in the framework, but we need to know what name to use for a
         // place-holder on the route parameters, which should be the base resources.
         $baseResource  = explode('.', $name);
-        $base = $this->getResourceWildcard(end($baseResource));
+        $base          = $this->getResourceWildcard(end($baseResource));
 
         $defaults = $this->resourceDefaults;
 
