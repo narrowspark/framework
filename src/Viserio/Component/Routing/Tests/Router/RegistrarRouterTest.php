@@ -6,19 +6,14 @@ use Viserio\Component\Routing\Tests\Fixture\RouteRegistrarControllerFixture;
 
 class RegistrarRouterTest extends AbstractRouterBaseTest
 {
-    protected function definitions($routes)
-    {
-        $routes->middleware('resource-middleware')
-            ->resource('users', RouteRegistrarControllerFixture::class);
-    }
-
     /**
      * @dataProvider routerMatchingProvider
      *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     * @param mixed $expectedResult
-     * @param mixed $status
+     * @param mixed      $httpMethod
+     * @param mixed      $uri
+     * @param mixed      $expectedResult
+     * @param mixed      $status
+     * @param null|mixed $middleware
      */
     public function testRouter($httpMethod, $uri, $expectedResult, $status = 200, $middleware = null)
     {
@@ -32,5 +27,11 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
         if ($middleware !== null) {
             self::assertEquals($middleware, $this->router->getCurrentRoute()->getMiddlewares()[0]);
         }
+    }
+
+    protected function definitions($routes)
+    {
+        $routes->middleware('resource-middleware')
+            ->resource('users', RouteRegistrarControllerFixture::class);
     }
 }
