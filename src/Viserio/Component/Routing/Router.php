@@ -17,7 +17,7 @@ use Viserio\Component\Routing\Route\Registrar;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
-class Router implements RouterContract, RequestMethodInterface
+class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
@@ -167,8 +167,8 @@ class Router implements RouterContract, RequestMethodInterface
                 self::METHOD_TRACE,
                 self::METHOD_CONNECT,
                 self::METHOD_TRACE,
-                'LINK',
-                'UNLINK',
+                self::METHOD_LINK,
+                self::METHOD_UNLINK,
             ],
             $uri,
             $action

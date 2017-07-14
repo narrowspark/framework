@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
-use Fig\Http\Message\RequestMethodInterface;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Contracts\Routing\Router;
 use Viserio\Component\Routing\Matcher\RegexMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 use Viserio\Component\Routing\Route;
@@ -16,19 +16,19 @@ use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 class RouteTreeBuilderTest extends TestCase
 {
     private const HTTP_METHOD_VARS = [
-        RequestMethodInterface::METHOD_HEAD,
-        RequestMethodInterface::METHOD_GET,
-        RequestMethodInterface::METHOD_POST,
-        RequestMethodInterface::METHOD_PUT,
-        RequestMethodInterface::METHOD_PATCH,
-        RequestMethodInterface::METHOD_DELETE,
-        RequestMethodInterface::METHOD_PURGE,
-        RequestMethodInterface::METHOD_OPTIONS,
-        RequestMethodInterface::METHOD_TRACE,
-        RequestMethodInterface::METHOD_CONNECT,
-        RequestMethodInterface::METHOD_TRACE,
-        'LINK',
-        'UNLINK',
+        Router::METHOD_HEAD,
+        Router::METHOD_GET,
+        Router::METHOD_POST,
+        Router::METHOD_PUT,
+        Router::METHOD_PATCH,
+        Router::METHOD_DELETE,
+        Router::METHOD_PURGE,
+        Router::METHOD_OPTIONS,
+        Router::METHOD_TRACE,
+        Router::METHOD_CONNECT,
+        Router::METHOD_TRACE,
+        Router::METHOD_LINK,
+        Router::METHOD_UNLINK,
     ];
 
     public function routeTreeBuilderCases()

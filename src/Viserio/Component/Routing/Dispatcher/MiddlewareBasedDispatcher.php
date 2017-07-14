@@ -166,8 +166,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     /**
      * Convert a multi-dimensional array into a single-dimensional array without keys.
      *
-     * @param array  $array
-     * @param string $prepend
+     * @param array $array
      *
      * @return array
      */

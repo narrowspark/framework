@@ -4,6 +4,7 @@ namespace Viserio\Component\Routing;
 
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Support\Str;
 
 class ResourceRegistrar
 {
