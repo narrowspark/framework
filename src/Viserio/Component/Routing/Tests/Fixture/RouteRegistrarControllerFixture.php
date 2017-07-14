@@ -26,4 +26,14 @@ class RouteRegistrarControllerFixture
                     ->createStream('deleted')
             );
     }
+
+    public function show()
+    {
+        return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                    ->createStream('show')
+            );
+    }
 }
