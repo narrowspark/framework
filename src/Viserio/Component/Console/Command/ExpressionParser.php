@@ -154,7 +154,7 @@ final class ExpressionParser
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        return ($needle !== '' && mb_substr($haystack, 0, mb_strlen($needle)) === $needle);
+        return $needle !== '' && mb_substr($haystack, 0, mb_strlen($needle)) === $needle;
     }
 
     /**
