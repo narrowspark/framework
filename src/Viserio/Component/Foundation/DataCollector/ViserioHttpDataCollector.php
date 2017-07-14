@@ -312,7 +312,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $result = array_merge($result, $action);
 
         if (isset($action['controller']) && mb_strpos($action['controller'], '@') !== false) {
-            list($controller, $method) = explode('@', $action['controller']);
+            [$controller, $method] = explode('@', $action['controller']);
 
             if (class_exists($controller) && method_exists($controller, $method)) {
                 $reflector = new ReflectionMethod($controller, $method);

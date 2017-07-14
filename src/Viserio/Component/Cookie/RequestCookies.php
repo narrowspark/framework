@@ -81,7 +81,7 @@ final class RequestCookies extends AbstractCookieCollector
      */
     protected static function oneFromCookiePair(string $string): Cookie
     {
-        list($name, $value) = self::splitCookiePair($string);
+        [$name, $value] = self::splitCookiePair($string);
 
         $cookie = new Cookie($name);
 

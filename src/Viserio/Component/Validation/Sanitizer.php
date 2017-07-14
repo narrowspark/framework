@@ -38,7 +38,7 @@ class Sanitizer
      */
     public function sanitize(array $rules, array $data): array
     {
-        list($data, $rules) = $this->runGlobalSanitizers($rules, $data);
+        [$data, $rules] = $this->runGlobalSanitizers($rules, $data);
 
         $availableRules = array_intersect_key($rules, array_flip(array_keys($data)));
 
@@ -100,7 +100,7 @@ class Sanitizer
             $parametersSet = [];
 
             if (strpos($rule, ':') !== false) {
-                list($rule, $parameters) = explode(':', $rule);
+                [$rule, $parameters] = explode(':', $rule);
 
                 $parametersSet = explode(',', $parameters);
             }

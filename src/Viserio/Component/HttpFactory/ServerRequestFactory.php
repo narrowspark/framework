@@ -144,7 +144,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
                     $exploded = explode(':', base64_decode(mb_substr($authorizationHeader, 6)), 2);
 
                     if (count($exploded) == 2) {
-                        list($headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']) = $exploded;
+                        [$headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']] = $exploded;
                     }
                 } elseif (empty($server['PHP_AUTH_DIGEST']) && (0 === mb_stripos($authorizationHeader, 'digest '))) {
                     // In some circumstances PHP_AUTH_DIGEST needs to be set

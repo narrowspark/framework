@@ -21,7 +21,7 @@ trait NormalizeNameTrait
             return str_replace('/', '.', $name);
         }
 
-        list($namespace, $name) = explode($delimiter, $name);
+        [$namespace, $name] = explode($delimiter, $name);
 
         return $namespace . $delimiter . str_replace('/', '.', $name);
     }

@@ -251,7 +251,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     protected function findNamedPathView(string $name): array
     {
-        list($namespace, $view) = $this->getNamespaceSegments($name);
+        [$namespace, $view] = $this->getNamespaceSegments($name);
 
         return $this->findInPaths($view, $this->hints[$namespace]);
     }

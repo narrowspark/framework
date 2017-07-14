@@ -96,7 +96,7 @@ end
 return {job, reserved}
 LUA;
 
-        list($job, $reserved) = $this->redis->eval(
+        [$job, $reserved] = $this->redis->eval(
             $script,
             3,
             $queue,

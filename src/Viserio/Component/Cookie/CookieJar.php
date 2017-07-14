@@ -50,7 +50,7 @@ class CookieJar implements JarContract
         bool $httpOnly = true,
         $sameSite = false
     ): CookieContract {
-        list($path, $domain, $secure) = $this->getPathAndDomain($path, $domain, $secure);
+        [$path, $domain, $secure] = $this->getPathAndDomain($path, $domain, $secure);
 
         $time = ($minutes === 0) ? 0 : Chronos::now()->getTimestamp() + ($minutes * 60);
 
@@ -132,7 +132,7 @@ class CookieJar implements JarContract
      */
     public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): JarContract
     {
-        list($this->path, $this->domain, $this->secure) = [$path, $domain, $secure];
+        [$this->path, $this->domain, $this->secure] = [$path, $domain, $secure];
 
         return $this;
     }

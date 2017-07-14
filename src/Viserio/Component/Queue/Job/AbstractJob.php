@@ -106,7 +106,7 @@ abstract class AbstractJob implements JobContract
     {
         $payload = json_decode($this->getRawBody(), true);
 
-        list($class, $method) = $this->parseJob($payload['job']);
+        [$class, $method] = $this->parseJob($payload['job']);
 
         $this->instance = $this->getContainer()->get($class);
 
@@ -155,7 +155,7 @@ abstract class AbstractJob implements JobContract
      */
     protected function resolveAndRun(array $payload)
     {
-        list($class, $method) = $this->parseJob($payload['job']);
+        [$class, $method] = $this->parseJob($payload['job']);
 
         $this->instance = $this->getContainer()->get($class);
 

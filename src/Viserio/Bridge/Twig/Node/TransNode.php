@@ -63,7 +63,7 @@ class TransNode extends Node
             $vars     = null;
         }
 
-        list($msg, $defaults) = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
+        [$msg, $defaults] = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
 
         $locale = null;
 

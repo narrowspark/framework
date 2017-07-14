@@ -109,7 +109,7 @@ PHP;
                 $segmentVariables[$i] = '$s' . $i;
             }
 
-            $code->appendLine('list(' . implode(', ', $segmentVariables) . ') = $segments;');
+            $code->appendLine('[' . implode(', ', $segmentVariables) . '] = $segments;');
 
             $this->compileSegmentNodes($code, $nodes, $segmentVariables);
             $this->compileDisallowedHttpMethodOrNotFound($code);
@@ -205,7 +205,7 @@ PHP;
         ++$code->indent;
 
         foreach ($routeDataMap->getHttpMethodRouteDataMap() as $item) {
-            list($httpMethods, $routeData) = $item;
+            [$httpMethods, $routeData] = $item;
 
             foreach ($httpMethods as $httpMethod) {
                 $code->appendLine('case ' . VarExporter::export($httpMethod) . ':');

@@ -148,7 +148,7 @@ final class Parser
     {
         $regex = '/^';
         foreach ($matches as $match) {
-            list($type, $part) = $match;
+            [$type, $part] = $match;
 
             if ($type === self::STATIC_PART) {
                 $regex .= preg_quote($part, '/');

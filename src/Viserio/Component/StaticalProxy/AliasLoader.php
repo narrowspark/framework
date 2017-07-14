@@ -273,7 +273,7 @@ class AliasLoader implements AliasLoaderContract
     public function resolveNamespaceAlias(string $alias)
     {
         foreach ($this->namespaces as $namespace) {
-            list($nsClass, $nsAlias) = $namespace;
+            [$nsClass, $nsAlias] = $namespace;
 
             if (! $nsAlias || mb_strpos($alias, (string) $nsAlias) === 0) {
                 if ($nsAlias) {
