@@ -36,4 +36,14 @@ class RouteRegistrarControllerFixture
                     ->createStream('show')
             );
     }
+
+    public function update()
+    {
+        return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                    ->createStream('update')
+            );
+    }
 }

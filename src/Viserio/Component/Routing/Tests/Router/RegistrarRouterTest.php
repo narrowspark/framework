@@ -15,6 +15,8 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
             ['DELETE', 'members/1', 'deleted'],
             ['GET', 'members/1', 'show'],
             ['GET', 'members', 'controller'],
+            ['DELETE', 'blogs/1', 'deleted'],
+            ['PUT', '/blogs/1', 'update'],
         ];
     }
 
@@ -28,6 +30,28 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
     /**
      * @dataProvider routerMatching405Provider
      * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
+     *
+     * @param mixed $httpMethod
+     * @param mixed $uri
+     */
+    public function testRouter405($httpMethod, $uri)
+    {
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
+        );
+    }
+
+    public function routerMatching404Provider()
+    {
+        return [
+            ['GET', '/blogs'],
+            ['POST', '/blogs/1/edit'],
+        ];
+    }
+
+    /**
+     * @dataProvider routerMatching404Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
      *
      * @param mixed $httpMethod
      * @param mixed $uri
@@ -52,7 +76,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
 
         $router->resource('members', RouteRegistrarControllerFixture::class)
             ->only('index', 'show', 'destroy');
-        $router->resource('blog', RouteRegistrarControllerFixture::class)
+        $router->resource('blogs', RouteRegistrarControllerFixture::class)
             ->except(['index', 'create', 'store', 'show', 'edit']);
     }
 }
