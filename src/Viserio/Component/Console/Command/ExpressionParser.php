@@ -9,7 +9,11 @@ use Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression;
 final class ExpressionParser
 {
     /**
+     * Parse given command string.
+     *
      * @param string $expression
+     *
+     * @throws \Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression
      *
      * @return array
      */
@@ -62,6 +66,8 @@ final class ExpressionParser
      *
      * @param string $token
      *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     *
      * @return \Viserio\Component\Console\Input\InputArgument
      */
     private static function parseArgument(string $token): InputArgument
@@ -91,6 +97,8 @@ final class ExpressionParser
      *
      * @param string $token
      *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     *
      * @return \Viserio\Component\Console\Input\InputOption
      */
     private static function parseOption(string $token): InputOption
@@ -99,8 +107,8 @@ final class ExpressionParser
 
         // Shortcut [-y|--yell]
         if (mb_strpos($token, '|') !== false) {
-            [$shortcut, $token]     = explode('|', $token, 2);
-            $shortcut               = ltrim($shortcut, '-');
+            [$shortcut, $token] = explode('|', $token, 2);
+            $shortcut           = ltrim($shortcut, '-');
         } else {
             $shortcut = null;
         }
@@ -146,11 +154,7 @@ final class ExpressionParser
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        if ($needle != '' && mb_substr($haystack, 0, mb_strlen($needle)) === $needle) {
-            return true;
-        }
-
-        return false;
+        return ($needle !== '' && mb_substr($haystack, 0, mb_strlen($needle)) === $needle);
     }
 
     /**
@@ -163,10 +167,6 @@ final class ExpressionParser
      */
     private static function endsWith(string $haystack, string $needle): bool
     {
-        if (mb_substr($haystack, -mb_strlen($needle)) === $needle) {
-            return true;
-        }
-
-        return false;
+        return mb_substr($haystack, -mb_strlen($needle)) === $needle;
     }
 }

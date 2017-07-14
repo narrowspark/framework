@@ -37,9 +37,9 @@ class Pipeline extends BasePipeline
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
-        [$name, $parameters]     = $this->parseStageString($stage);
-        $parameters              = array_merge([$traveler, $stack], $parameters);
-        $class                   = null;
+        [$name, $parameters] = $this->parseStageString($stage);
+        $parameters          = array_merge([$traveler, $stack], $parameters);
+        $class               = null;
 
         if ($this->container->has($name)) {
             $class = $this->container->get($name);
