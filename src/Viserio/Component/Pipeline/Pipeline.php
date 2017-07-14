@@ -157,7 +157,7 @@ class Pipeline implements PipelineContract
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
-        [$name, $parameters] = $this->parseStageString($stage);
+        [$name, $parameters]     = $this->parseStageString($stage);
         $parameters              = array_merge([$traveler, $stack], $parameters);
 
         $class = null;
