@@ -272,7 +272,7 @@ class ResourceRegistrar
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
-    protected function addResourceIndex($name, $base, $controller, $options)
+    protected function addResourceIndex(string $name, string $base, string $controller, array $options)
     {
         $uri = $this->getResourceUri($name);
 
@@ -291,7 +291,7 @@ class ResourceRegistrar
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
-    protected function addResourceCreate($name, $base, $controller, $options)
+    protected function addResourceCreate(string $name, string $base, string $controller, array $options)
     {
         $uri = $this->getResourceUri($name) . '/' . static::$verbs['create'];
 
@@ -310,7 +310,7 @@ class ResourceRegistrar
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
-    protected function addResourceStore($name, $base, $controller, $options): RouteContract
+    protected function addResourceStore(string $name, string $base, string $controller, array $options): RouteContract
     {
         $uri = $this->getResourceUri($name);
 
@@ -430,6 +430,10 @@ class ResourceRegistrar
 
         if (isset($options['middleware'])) {
             $action['middleware'] = $options['middleware'];
+        }
+
+        if (isset($options['bypass'])) {
+            $action['bypass'] = $options['bypass'];
         }
 
         return $action;

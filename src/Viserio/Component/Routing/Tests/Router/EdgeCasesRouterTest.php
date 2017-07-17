@@ -84,7 +84,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'])
                 );
-        })->setParameter('name', 'middle-param');
+        })->addParameter('name', 'middle-param');
         $router->get('/123/{param}/bar', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -92,7 +92,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'])
                 );
-        })->where('param', '.*')->setParameter('name', 'all-middle-param');
+        })->where('param', '.*')->addParameter('name', 'all-middle-param');
         $router->get('/string', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -113,7 +113,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'])
                 );
-        })->setParameter('name', 'http-method-fallback.static');
+        })->addParameter('name', 'http-method-fallback.static');
         $router->any('/http/method/fallback', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -121,7 +121,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'])
                 );
-        })->setParameter('name', 'http-method-fallback.static.fallback');
+        })->addParameter('name', 'http-method-fallback.static.fallback');
         $router->post('/http/method/{parameter}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -129,7 +129,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | parameter = ' . $args['parameter'])
                 );
-        })->setParameter('name', 'http-method-fallback.dynamic');
+        })->addParameter('name', 'http-method-fallback.dynamic');
         $router->any('/http/method/{parameter}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -137,7 +137,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | parameter = ' . $args['parameter'])
                 );
-        })->setParameter('name', 'http-method-fallback.dynamic.fallback');
+        })->addParameter('name', 'http-method-fallback.dynamic.fallback');
 
         // Should detect allowed HTTP methods
         $router->get('/allowed-methods/foo', function ($request, $args) {
@@ -147,7 +147,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'])
                 );
-        })->setParameter('name', 'allowed-methods.static');
+        })->addParameter('name', 'allowed-methods.static');
         $router->post('/allowed-methods/{parameter}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -155,7 +155,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | parameter = ' . $args['parameter'])
                 );
-        })->setParameter('name', 'allowed-methods.dynamic');
+        })->addParameter('name', 'allowed-methods.dynamic');
         $router->get('/complex-methods/{param}/foo/bar', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -163,7 +163,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'])
                 );
-        })->where('param', Pattern::DIGITS)->setParameter('name', 'complex-methods.first');
+        })->where('param', Pattern::DIGITS)->addParameter('name', 'complex-methods.first');
         $router->post('/complex-methods/{param}/foo/{param2}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -171,7 +171,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'] . ' | param2 = ' . $args['param2'])
                 );
-        })->where('param', Pattern::ALPHA_NUM)->setParameter('name', 'complex-methods.second');
+        })->where('param', Pattern::ALPHA_NUM)->addParameter('name', 'complex-methods.second');
         $router->post('/complex-methods/{param}/{param2}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -179,6 +179,6 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'] . ' | param2 = ' . $args['param2'])
                 );
-        })->where('param', Pattern::ALPHA_NUM)->setParameter('name', 'complex-methods.second');
+        })->where('param', Pattern::ALPHA_NUM)->addParameter('name', 'complex-methods.second');
     }
 }

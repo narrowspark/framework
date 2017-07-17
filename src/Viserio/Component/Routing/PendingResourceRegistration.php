@@ -122,7 +122,7 @@ class PendingResourceRegistration
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
-    public function parameters(array $parameters): self
+    public function setParameters(array $parameters): self
     {
         $this->options['parameters'] = $parameters;
 
@@ -137,7 +137,7 @@ class PendingResourceRegistration
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
-    public function parameter(string $previous, string $new): self
+    public function addParameter(string $previous, string $new): self
     {
         $this->options['parameters'][$previous] = $new;
 

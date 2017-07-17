@@ -11,11 +11,19 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
     public function routerMatchingProvider(): array
     {
         return [
-            ['DELETE', 'users/1', 'deleted'],
-            ['DELETE', 'members/1', 'deleted'],
-            ['GET', 'members/1', 'show'],
-            ['GET', 'members', 'controller'],
-            ['DELETE', 'blogs/1', 'deleted'],
+            ['GET', '/users', 'controller'],
+            ['GET', '/users/2', 'show'],
+            ['GET', '/users/2/edit', 'edit'],
+            ['POST', '/users', 'store'],
+            ['PUT', '/users/1', 'update'],
+            ['PATCH', '/users/1', 'update'],
+            ['DELETE', '/users/1', 'deleted'],
+
+            ['GET', '/members', 'controller'],
+            ['GET', '/members/1', 'show'],
+            ['DELETE', '/members/1', 'deleted'],
+
+            ['DELETE', '/blogs/1', 'deleted'],
             ['PUT', '/blogs/1', 'update'],
         ];
     }
@@ -45,7 +53,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
     {
         return [
             ['GET', '/blogs'],
-            ['POST', '/blogs/1/edit'],
+            ['GET', '/blogs/1/edit'],
         ];
     }
 
@@ -76,7 +84,10 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
 
         $router->resource('members', RouteRegistrarControllerFixture::class)
             ->only('index', 'show', 'destroy');
+
         $router->resource('blogs', RouteRegistrarControllerFixture::class)
             ->except(['index', 'create', 'store', 'show', 'edit']);
+
+        $router->resources(['/prefix' => RouteRegistrarControllerFixture::class]);
     }
 }

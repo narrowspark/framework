@@ -138,7 +138,7 @@ class SimpleDispatcher implements DispatcherContract
         $route = $routes->match($identifier);
 
         foreach ($segments as $key => $value) {
-            $route->setParameter($key, rawurldecode($value));
+            $route->addParameter($key, rawurldecode($value));
         }
 
         // Add route to the request's attributes in case a middleware or handler needs access to the route.

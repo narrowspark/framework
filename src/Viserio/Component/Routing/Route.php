@@ -298,7 +298,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function setParameter($name, $value): RouteContract
+    public function addParameter($name, $value): RouteContract
     {
         $this->parameters[$name] = $value;
 

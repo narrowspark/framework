@@ -152,7 +152,7 @@ interface Route
      *
      * @return $this
      */
-    public function setParameter($name, $value): Route;
+    public function addParameter($name, $value): Route;
 
     /**
      * Get a given parameter from the route.

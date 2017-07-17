@@ -106,8 +106,8 @@ class RouteTest extends TestCase
     public function testParametersFunctions()
     {
         $route = new Route('GET', '/test/{param1}/{param2}', null);
-        $route->setParameter('test1', 'test1');
-        $route->setParameter('test2', 'test2');
+        $route->addParameter('test1', 'test1');
+        $route->addParameter('test2', 'test2');
 
         self::assertTrue($route->hasParameter('test1'));
         self::assertSame(['test1' => 'test1', 'test2' => 'test2'], $route->getParameters());

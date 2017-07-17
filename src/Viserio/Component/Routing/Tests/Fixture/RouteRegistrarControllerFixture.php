@@ -37,6 +37,26 @@ class RouteRegistrarControllerFixture
             );
     }
 
+    public function store()
+    {
+        return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                    ->createStream('store')
+            );
+    }
+
+    public function edit()
+    {
+        return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                    ->createStream('edit')
+            );
+    }
+
     public function update()
     {
         return (new ResponseFactory())

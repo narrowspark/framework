@@ -62,7 +62,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('Hello')
                 );
-        })->setParameter('name', 'root');
+        })->addParameter('name', 'root');
 
         $router->get('/', function ($request, $args) {
             return (new ResponseFactory())
@@ -71,7 +71,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('Hello')
                 );
-        })->setParameter('name', 'root');
+        })->addParameter('name', 'root');
 
         $router->get('/', function ($request, $args) {
             return (new ResponseFactory())
@@ -80,7 +80,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('Hello')
                 );
-        })->setParameter('name', 'root-slash');
+        })->addParameter('name', 'root-slash');
 
         $router->get('foo/bar/%C3%A5%CE%B1%D1%84', function ($request, $args) {
             return (new ResponseFactory())
@@ -89,7 +89,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('Hello')
                 );
-        })->setParameter('name', 'root-slash');
+        })->addParameter('name', 'root-slash');
 
         $router->getContainer()->shouldReceive('has')
             ->with(FakeMiddleware::class)
@@ -105,7 +105,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('Middleware')
                 );
-        }])->setParameter('name', 'middleware');
+        }])->addParameter('name', 'middleware');
 
         $router->get('/middleware2', ['middlewares' => FakeMiddleware::class, 'uses' => function ($request, $args) {
             return (new ResponseFactory())
@@ -114,7 +114,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('Middleware')
                 );
-        }])->setParameter('name', 'middleware2');
+        }])->addParameter('name', 'middleware2');
 
         $router->getContainer()->shouldReceive('has')
             ->with(ControllerClosureMiddleware::class)
@@ -138,13 +138,13 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
         $router->get('/middleware3', [
             'uses'        => RouteTestClosureMiddlewareController::class . '@index',
             'middlewares' => FooMiddleware::class,
-        ])->setParameter('name', 'middleware3');
+        ])->addParameter('name', 'middleware3');
 
         $router->get('/middleware4', [
             'uses'        => RouteTestClosureMiddlewareController::class . '@index',
             'middlewares' => FooMiddleware::class,
             'bypass'      => FooMiddleware::class,
-        ])->setParameter('name', 'middleware4');
+        ])->addParameter('name', 'middleware4');
 
         $router->getContainer()->shouldReceive('has')
             ->with(InvokableActionFixture::class)

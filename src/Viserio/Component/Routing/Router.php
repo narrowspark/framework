@@ -222,7 +222,7 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function setParameter(string $parameterName, string $expression): RouterContract
+    public function addParameter(string $parameterName, string $expression): RouterContract
     {
         $this->globalParameterConditions[$parameterName] = $expression;
 
@@ -456,7 +456,7 @@ class Router implements RouterContract
         $this->addWhereClausesToRoute($route);
 
         foreach ($this->globalParameterConditions as $key => $value) {
-            $route->setParameter($key, $value);
+            $route->addParameter($key, $value);
         }
 
         return $route;

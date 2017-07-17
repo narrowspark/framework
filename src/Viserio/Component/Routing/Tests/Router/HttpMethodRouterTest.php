@@ -31,7 +31,7 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream('name = ' . $args['name'])
             );
-        })->setParameter('name', 'home.get');
+        })->addParameter('name', 'home.get');
 
         $router->match(['POST', 'PATCH'], '/', function ($request, $args) {
             return (new ResponseFactory())
@@ -40,7 +40,7 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream('name = ' . $args['name'])
             );
-        })->setParameter('name', 'home.post-or-patch');
+        })->addParameter('name', 'home.post-or-patch');
 
         $router->delete('/', function ($request, $args) {
             return (new ResponseFactory())
@@ -49,7 +49,7 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream('name = ' . $args['name'])
             );
-        })->setParameter('name', 'home.delete');
+        })->addParameter('name', 'home.delete');
 
         $router->any('/', function ($request, $args) {
             return (new ResponseFactory())
@@ -58,6 +58,6 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream('name = ' . $args['name'])
             );
-        })->setParameter('name', 'home.fallback');
+        })->addParameter('name', 'home.fallback');
     }
 }

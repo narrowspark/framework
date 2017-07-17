@@ -335,7 +335,7 @@ class RouterTest extends MockeryTestCase
     public function testSetRemoveAndGetParameters()
     {
         $router = $this->router;
-        $router->setParameter('foo', 'bar');
+        $router->addParameter('foo', 'bar');
 
         self::assertSame(['foo' => 'bar'], $router->getParameters());
 

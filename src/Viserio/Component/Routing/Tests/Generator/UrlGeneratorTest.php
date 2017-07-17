@@ -170,7 +170,7 @@ class UrlGeneratorTest extends MockeryTestCase
     public function testNoTrailingSlashForMultipleOptionalParameters()
     {
         $route = new Route('GET', '/category/{slug1}/{slug2}/{slug3}', ['as' => 'testing']);
-        $route->setParameter('slug2', null)->setParameter('slug3', null);
+        $route->addParameter('slug2', null)->addParameter('slug3', null);
 
         $routes = $this->getRoutes($route);
 
@@ -180,7 +180,7 @@ class UrlGeneratorTest extends MockeryTestCase
     public function testWithAnIntegerAsADefaultValue()
     {
         $route = new Route('GET', '/{default}', ['as' => 'testing']);
-        $route->setParameter('default', 0);
+        $route->addParameter('default', 0);
 
         $routes = $this->getRoutes($route);
 
@@ -190,7 +190,7 @@ class UrlGeneratorTest extends MockeryTestCase
     public function testNullForOptionalParameterIsIgnored()
     {
         $route = new Route('GET', '/test/{default}', ['as' => 'testing']);
-        $route->setParameter('default', 0);
+        $route->addParameter('default', 0);
 
         $routes = $this->getRoutes($route);
 
@@ -209,7 +209,7 @@ class UrlGeneratorTest extends MockeryTestCase
     public function testQueryParamSameAsDefault()
     {
         $route = new Route('GET', '/test', ['as' => 'testing']);
-        $route->setParameter('page', 1);
+        $route->addParameter('page', 1);
 
         $routes = $this->getRoutes($route);
 
@@ -222,7 +222,7 @@ class UrlGeneratorTest extends MockeryTestCase
     public function testArrayQueryParamSameAsDefault()
     {
         $route = new Route('GET', '/test', ['as' => 'testing']);
-        $route->setParameter('array', ['foo', 'bar']);
+        $route->addParameter('array', ['foo', 'bar']);
 
         $routes = $this->getRoutes($route);
 
@@ -258,7 +258,7 @@ class UrlGeneratorTest extends MockeryTestCase
     public function testVariableWithNoRealSeparator()
     {
         $route = new Route('GET', '/get{what}', ['as' => 'test']);
-        $route->setParameter('what', 'All');
+        $route->addParameter('what', 'All');
 
         $routes    = $this->getRoutes($route);
         $generator = $this->getGenerator($routes);

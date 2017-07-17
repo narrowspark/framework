@@ -145,7 +145,7 @@ interface Router
      *
      * @return $this
      */
-    public function setParameter(string $parameterName, string $expression): Router;
+    public function addParameter(string $parameterName, string $expression): Router;
 
     /**
      * Removes the global expression associated with the supplied parameter name.

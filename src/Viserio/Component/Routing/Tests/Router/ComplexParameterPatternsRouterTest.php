@@ -93,7 +93,7 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | param = ' . $args['param'])
             );
-        })->setParameter('name', 'prefix');
+        })->addParameter('name', 'prefix');
         $router->get('/b/{param}:suffix', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -101,7 +101,7 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | param = ' . $args['param'])
             );
-        })->setParameter('name', 'suffix');
+        })->addParameter('name', 'suffix');
         $router->get('/c/prefix:{param}:suffix', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -109,7 +109,7 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | param = ' . $args['param'])
             );
-        })->setParameter('name', 'prefix-and-suffix');
+        })->addParameter('name', 'prefix-and-suffix');
         $router->get('/d/{param1}-{param2}:{param3}', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -117,7 +117,7 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | param1 = ' . $args['param1'] . ' | param2 = ' . $args['param2'] . ' | param3 = ' . $args['param3'])
             );
-        })->setParameter('name', 'multi-param');
+        })->addParameter('name', 'multi-param');
         $router->get('/e/{digits}-{alpha}:{exclaim}', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -129,7 +129,7 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
             ->where('digits', Pattern::DIGITS)
             ->where('alpha', Pattern::ALPHA)
             ->where('exclaim', '!{3,5}')
-            ->setParameter('routename', 'filtered-multi-param');
+            ->addParameter('routename', 'filtered-multi-param');
         $router->get('/f/{name}-is-awesome-at-{thing}', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -139,6 +139,6 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
             );
         })->where('name', '[A-Z]?[a-z]+')
             ->where('thing', Pattern::ALPHA_LOWER)
-            ->setParameter('routename', 'sentence-multi-param');
+            ->addParameter('routename', 'sentence-multi-param');
     }
 }

@@ -108,7 +108,7 @@ class RouteTreeBuilderTest extends TestCase
                     (new Route(self::HTTP_METHOD_VARS, '/main/thing/abc', null)),
                     (new Route(self::HTTP_METHOD_VARS, '/user/{name}', null))->where('name', Pattern::ANY),
                     (new Route(self::HTTP_METHOD_VARS, '/user/{name}/edit', null))->where('name', Pattern::ANY),
-                    (new Route(self::HTTP_METHOD_VARS, '/user/create', null))->setParameter('user.create', ''),
+                    (new Route(self::HTTP_METHOD_VARS, '/user/create', null))->addParameter('user.create', ''),
                 ],
                 new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK']]]),
                 [
