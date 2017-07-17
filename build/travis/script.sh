@@ -23,6 +23,17 @@ function catch () {
     return $ex_code
 }
 
+# Check all composer.json files if there are valid.
+for f in ./src/Viserio/*/*; do
+    if [[ -d "$f" && ! -L "$f" ]]; then
+        try
+            composer validate --strict
+        catch || {
+            exit 1
+        }
+    fi
+done
+
 if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
     bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
 elif [[ "$PHPUNIT" = true ]]; then
