@@ -27,12 +27,14 @@ function catch () {
 for f in ./src/Viserio/*/*; do
     if [[ -d "$f" && ! -L "$f" ]]; then
         try
-            $f composer validate --strict
+            cd $f && composer validate --strict
         catch || {
             exit 1
         }
     fi
 done
+
+cd ./src
 
 if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
     bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
