@@ -34,7 +34,7 @@
         "ext-openssl"                         : "*",
         "cache/array-adapter"                 : "^0.5",
         "cache/void-adapter"                  : "^0.4",
-        "cakephp/chronos"                     : "^1.0",
+        "cakephp/chronos"                     : "~1.1",
         "container-interop/service-provider"  : "^0.3",
         "danielstjules/stringy"               : "^3.0",
         "defuse/php-encryption"               : "^2.0",
