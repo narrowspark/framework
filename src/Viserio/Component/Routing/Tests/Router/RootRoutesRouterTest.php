@@ -26,6 +26,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
             ['GET', '/foo/bar/åαф', 'Hello'],
             ['GET', '/middleware3', 'index-foo-middleware-controller-closure'],
             ['GET', '/middleware4', 'index--controller-closure'],
+            ['GET', '/middleware5', 'index--controller-closure'],
             ['HEAD', '/all/users', 'all-users'],
             ['HEAD', '/noslash/users', 'all-users'],
             ['HEAD', '/slash/users', 'all-users'],
@@ -145,6 +146,12 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
             'middlewares' => FooMiddleware::class,
             'bypass'      => FooMiddleware::class,
         ])->addParameter('name', 'middleware4');
+
+        $router->get('/middleware5', [
+            'uses'        => RouteTestClosureMiddlewareController::class . '@index',
+            'middlewares' => [FooMiddleware::class, FakeMiddleware::class],
+            'bypass'      => [FooMiddleware::class, FakeMiddleware::class],
+        ])->addParameter('name', 'middleware5');
 
         $router->getContainer()->shouldReceive('has')
             ->with(InvokableActionFixture::class)

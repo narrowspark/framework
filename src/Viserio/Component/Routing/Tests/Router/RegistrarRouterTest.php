@@ -83,7 +83,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
         $router->resources(['users' => RouteRegistrarControllerFixture::class]);
 
         $router->resource('members', RouteRegistrarControllerFixture::class)
-            ->only('index', 'show', 'destroy');
+            ->only(['index', 'show', 'destroy']);
 
         $router->resource('blogs', RouteRegistrarControllerFixture::class)
             ->except(['index', 'create', 'store', 'show', 'edit']);

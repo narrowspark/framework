@@ -428,8 +428,8 @@ class ResourceRegistrar
 
         $action = ['as' => $name, 'uses' => $controller . '@' . $method];
 
-        if (isset($options['middleware'])) {
-            $action['middleware'] = $options['middleware'];
+        if (isset($options['middlewares'])) {
+            $action['middlewares'] = $options['middlewares'];
         }
 
         if (isset($options['bypass'])) {

@@ -47,7 +47,7 @@ class MiddlewareAwareTraitTest extends TestCase
 
         $this->withoutMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class], $this->bypassedMiddlewares);
+        self::assertSame([FooMiddleware::class => true], $this->bypassedMiddlewares);
     }
 
     public function testWithoutMiddlewareWithArray()
@@ -57,7 +57,7 @@ class MiddlewareAwareTraitTest extends TestCase
 
         $this->withoutMiddleware([FooMiddleware::class, FooMiddleware::class]);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class], $this->bypassedMiddlewares);
+        self::assertSame([FooMiddleware::class => true], $this->bypassedMiddlewares);
     }
 
     public function testWithoutMiddlewareWithNull()

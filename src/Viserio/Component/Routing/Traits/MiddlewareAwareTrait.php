@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use LogicException;
 use RuntimeException;
 
 trait MiddlewareAwareTrait
 {
+    use MiddlewareValidatorTrait;
+
     /**
      * All middlewares.
      *
@@ -62,7 +62,7 @@ trait MiddlewareAwareTrait
      */
     public function withMiddleware($middlewares)
     {
-        $this->validateMiddlewareInput($middlewares);
+        $this->validateInput($middlewares);
         $this->validateMiddlewareClass($middlewares);
 
         if (is_string($middlewares) || is_object($middlewares)) {
@@ -101,72 +101,24 @@ trait MiddlewareAwareTrait
             return $this;
         }
 
-        $this->validateMiddlewareInput($middlewares);
+        $this->validateInput($middlewares);
         $this->validateMiddlewareClass($middlewares);
 
-        if (is_string($middlewares)) {
-            $this->bypassedMiddlewares[$middlewares] = $middlewares;
+        if (is_object($middlewares) || is_string($middlewares)) {
+            $name = is_object($middlewares) ? get_class($middlewares) : $middlewares;
+
+            $this->bypassedMiddlewares[$name] = true;
 
             return $this;
         }
 
-        foreach ($middlewares as $middleware) {
-            $this->bypassedMiddlewares[$middleware] = $middleware;
+        foreach ($middlewares as $name => $middleware) {
+            $middleware = is_object($middleware) ? get_class($middleware) : $middleware;
+            $name       = is_numeric($name) ? $middleware : $name;
+
+            $this->bypassedMiddlewares[$name] = true;
         }
 
         return $this;
-    }
-
-    /**
-     * Check if given input is a string, object or array.
-     *
-     * @param string|object|array $middlewares
-     *
-     * @throws \RuntimeException
-     *
-     * @return void
-     */
-    private function validateMiddlewareInput($middlewares): void
-    {
-        if (is_array($middlewares) || is_string($middlewares) || is_object($middlewares)) {
-            return;
-        }
-
-        throw new RuntimeException(sprintf('Expected string, object or array; received [%s].', gettype($middlewares)));
-    }
-
-    /**
-     * Check if given middleware class has \Interop\Http\ServerMiddleware\MiddlewareInterface implemented.
-     *
-     * @param string|object|array $middlewares
-     *
-     * @throws \LogicException
-     *
-     * @return void
-     */
-    private function validateMiddlewareClass($middlewares): void
-    {
-        $middlewareCheck = function ($middleware) {
-            $interfaces = class_implements($middleware);
-
-            if (! isset($interfaces[MiddlewareInterface::class])) {
-                throw new LogicException(
-                    sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
-                );
-            }
-        };
-
-        if (
-            (is_string($middlewares) && ! isset($this->middlewares[$middlewares])) ||
-            is_object($middlewares)
-        ) {
-            $middlewareCheck($middlewares);
-        } elseif (is_array($middlewares)) {
-            foreach ($middlewares as $name => $middleware) {
-                if (! isset($this->middlewares[$middleware])) {
-                    $middlewareCheck($middleware);
-                }
-            }
-        }
     }
 }

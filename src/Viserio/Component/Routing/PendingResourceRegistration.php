@@ -2,8 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
+use Viserio\Component\Routing\Traits\MiddlewareValidatorTrait;
+
 class PendingResourceRegistration
 {
+    use MiddlewareValidatorTrait;
+
     /**
      * The resource registrar.
      *
@@ -61,13 +65,13 @@ class PendingResourceRegistration
     /**
      * Set the methods the controller should apply to.
      *
-     * @param array|string|dynamic $methods
+     * @param string[] $methods
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
-    public function only($methods): self
+    public function only(array $methods): self
     {
-        $this->options['only'] = is_array($methods) ? $methods : func_get_args();
+        $this->options['only'] = $methods;
 
         return $this;
     }
@@ -75,13 +79,13 @@ class PendingResourceRegistration
     /**
      * Set the methods the controller should exclude.
      *
-     * @param array|string|dynamic $methods
+     * @param string[] $methods
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
-    public function except($methods): self
+    public function except(array $methods): self
     {
-        $this->options['except'] = is_array($methods) ? $methods : func_get_args();
+        $this->options['except'] = $methods;
 
         return $this;
     }
@@ -89,11 +93,11 @@ class PendingResourceRegistration
     /**
      * Set the route names for controller actions.
      *
-     * @param array $names
+     * @param string[] $names
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
-    public function names(array $names): self
+    public function addNames(array $names): self
     {
         $this->options['names'] = $names;
 
@@ -108,7 +112,7 @@ class PendingResourceRegistration
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
-    public function name(string $method, string $name): self
+    public function setName(string $method, string $name): self
     {
         $this->options['names'][$method] = $name;
 
@@ -147,13 +151,15 @@ class PendingResourceRegistration
     /**
      * Set a middleware to the resource.
      *
-     * @param mixed $middleware
+     * @param mixed $middlewares
      *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
-    public function setMiddleware($middleware): self
+    public function setMiddlewares($middlewares): self
     {
-        $this->options['middleware'] = $middleware;
+        self::validateMiddlewareClass($middlewares);
+
+        $this->options['middlewares'] = $middlewares;
 
         return $this;
     }
