@@ -27,7 +27,7 @@ function catch () {
 for f in ./src/Viserio/*/*; do
     if [[ -d "$f" && ! -L "$f" ]]; then
         try
-            composer validate --strict
+            $f composer validate --strict
         catch || {
             exit 1
         }
