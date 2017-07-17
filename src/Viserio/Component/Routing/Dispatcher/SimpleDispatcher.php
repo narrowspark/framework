@@ -96,7 +96,7 @@ class SimpleDispatcher implements DispatcherContract
         $dir       = pathinfo($cacheFile, PATHINFO_DIRNAME);
 
         if (! file_exists($cacheFile) || $this->refreshCache === true) {
-            if ((!@mkdir($dir, 0777, true) && !is_dir($dir)) || !is_writable($dir)) {
+            if ((! @mkdir($dir, 0777, true) && ! is_dir($dir)) || ! is_writable($dir)) {
                 throw new InvalidArgumentException(sprintf(
                     'Route cache directory [%s] cannot be created or is write protected.',
                     $dir
