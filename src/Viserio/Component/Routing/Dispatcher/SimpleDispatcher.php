@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Dispatcher;
 
+use InvalidArgumentException;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
@@ -86,16 +87,26 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException if cache folder cant be created
      */
     public function handle(RouteCollectionContract $routes, ServerRequestInterface $request): ResponseInterface
     {
-        if (! file_exists($this->path) || $this->refreshCache === true) {
-            static::createCacheFolder($this->path);
+        $cacheFile = $this->getCachePath();
+        $dir       = pathinfo($cacheFile, PATHINFO_DIRNAME);
+
+        if (! file_exists($cacheFile) || $this->refreshCache === true) {
+            if ((!@mkdir($dir, 0777, true) && !is_dir($dir)) || !is_writable($dir)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Route cache directory [%s] cannot be created or is write protected.',
+                    $dir
+                ));
+            }
 
             $this->generateRouterFile($routes);
         }
 
-        $router = require $this->path;
+        $router = require $cacheFile;
 
         $match = $router($request->getMethod(), $this->prepareUriPath($request->getUri()->getPath()));
 
@@ -197,33 +208,5 @@ class SimpleDispatcher implements DispatcherContract
         $closure        = $routerCompiler->compile($routes->getRoutes());
 
         file_put_contents($this->path, $closure, LOCK_EX);
-    }
-
-    /**
-     * Make a nested path, creating directories down the path recursion.
-     *
-     * @param string $path
-     *
-     * @return bool
-     */
-    protected static function createCacheFolder(string $path): bool
-    {
-        $dir = pathinfo($path, PATHINFO_DIRNAME);
-
-        if (is_dir($dir)) {
-            return true;
-        }
-
-        if (static::createCacheFolder($dir)) {
-            if (mkdir($dir)) {
-                chmod($dir, 0777);
-
-                return true;
-            }
-        }
-
-        // @codeCoverageIgnoreStart
-        return false;
-        // @codeCoverageIgnoreEnd
     }
 }
