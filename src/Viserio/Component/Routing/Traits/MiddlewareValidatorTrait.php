@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use LogicException;
 use RuntimeException;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
 
 trait MiddlewareValidatorTrait
 {
-
     /**
      * Check if given middleware class has \Interop\Http\ServerMiddleware\MiddlewareInterface implemented.
      *
