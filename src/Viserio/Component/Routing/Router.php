@@ -62,7 +62,7 @@ class Router implements RouterContract
     /**
      * Create a new Router instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Dispatcher   $dispatcher
+     * @param \Viserio\Component\Contracts\Routing\Dispatcher $dispatcher
      */
     public function __construct(DispatcherContract $dispatcher)
     {
