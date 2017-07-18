@@ -171,7 +171,8 @@
         }
     },
     "scripts": {
-        "coverage": "sh vendor/bin/phpunit --coverage-html=\"build/logs\""
+        "coverage": "sh vendor/bin/phpunit --coverage-html=\"build/logs\"",
+        "cs": "sh vendor/bin/php-cs-fixer fix"
     },
     "suggest": {
         "alcaeus/mongo-php-adapter"          : "Required to use the ext-mongo interface on ext-mongodb interface (^1.0).",
