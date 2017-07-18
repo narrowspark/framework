@@ -12,7 +12,7 @@ use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContra
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
-use Viserio\Component\Routing\Route\Registrar;
+use Viserio\Component\Routing\Route\Registrar as RouteRegistrar;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
@@ -96,7 +96,7 @@ class Router implements RouterContract
             return $this->macroCall($method, $parameters);
         }
 
-        return (new Registrar($this))->attribute($method, $parameters[0]);
+        return (new RouteRegistrar($this))->attribute($method, $parameters[0]);
     }
 
     /**
