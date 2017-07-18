@@ -76,6 +76,13 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
 
     public function testCanNameRoutesOnRegisteredResource()
     {
+        $this->router->getContainer()->shouldReceive('has')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(true);
+        $this->router->getContainer()->shouldReceive('get')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(new RouteRegistrarControllerFixture());
+
         $this->router->resource('users', RouteRegistrarControllerFixture::class)
             ->only(['create', 'store'])->addNames([
                 'create' => 'user.build',
@@ -98,21 +105,35 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
 
     public function testCanOverrideParametersOnRegisteredResource()
     {
-        $this->router->resource('users', RouteRegistrarControllerFixture::class)
-            ->setParameters(['users' => 'admin_user']);
-        $this->router->resource('posts', RouteRegistrarControllerFixture::class)
-            ->addParameter('posts', 'topic');
+        $this->router->getContainer()->shouldReceive('has')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(true);
+        $this->router->getContainer()->shouldReceive('get')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(new RouteRegistrarControllerFixture());
 
-        self::assertTrue($this->router->getRoutes()->getByName('users.show')->hasParameter('admin_user'));
-        self::assertTrue($this->router->getRoutes()->getByName('posts.show')->hasParameter('topic'));
+        $this->router->resource('admin', RouteRegistrarControllerFixture::class)
+            ->setParameters(['admin' => 'admin_user']);
+        $this->router->resource('spark', RouteRegistrarControllerFixture::class)
+            ->addParameter('spark', 'topic');
+
+        self::assertSame('/admin/{admin_user}', $this->router->getRoutes()->getByName('admin.show')->getUri());
+        self::assertSame('/spark/{topic}', $this->router->getRoutes()->getByName('spark.show')->getUri());
 
         $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest('GET', '/users')
+            (new ServerRequestFactory())->createServerRequest('GET', '/admin')
         );
     }
 
     public function testCanSetMiddlewareOnRegisteredResource()
     {
+        $this->router->getContainer()->shouldReceive('has')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(true);
+        $this->router->getContainer()->shouldReceive('get')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(new RouteRegistrarControllerFixture());
+
         $this->router->getContainer()->shouldReceive('has')
             ->with(FakeMiddleware::class)
             ->andReturn(true);
@@ -130,6 +151,13 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
 
     public function testResourceRouting()
     {
+        $this->router->getContainer()->shouldReceive('has')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(true);
+        $this->router->getContainer()->shouldReceive('get')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(new RouteRegistrarControllerFixture());
+
         $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['only' => ['show', 'destroy']]);
         $routes = $this->router->getRoutes();
 
@@ -143,7 +171,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
         $this->router->resource('baz-bars', RouteRegistrarControllerFixture::class, ['only' => ['show']]);
         $routes = $this->router->getRoutes();
 
-        self::assertEquals('/baz-bars/{foo_bar}', $routes->match('GET|HEAD/baz-bars/{foo_bar}')->getUri());
+        self::assertEquals('/baz-bars/{baz_bar}', $routes->match('GET|HEAD/baz-bars/{baz_bar}')->getUri());
 
         $this->router->resource('user-bars', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'wildcards' => ['user-bars' => 'foo_bar_id']]);
         $routes = $this->router->getRoutes();

@@ -60,23 +60,14 @@ class Router implements RouterContract
     protected $patterns = [];
 
     /**
-     * Route registrar instance.
-     *
-     * @var \Viserio\Component\Routing\ResourceRegistrar
-     */
-    private $registrar;
-
-    /**
      * Create a new Router instance.
      *
      * @param \Viserio\Component\Contracts\Routing\Dispatcher   $dispatcher
-     * @param \Viserio\Component\Routing\ResourceRegistrar|null $registrar
      */
-    public function __construct(DispatcherContract $dispatcher, ResourceRegistrar $registrar = null)
+    public function __construct(DispatcherContract $dispatcher)
     {
         $this->dispatcher = $dispatcher;
         $this->routes     = new RouteCollection();
-        $this->registrar  = $registrar ?? new ResourceRegistrar($this);
     }
 
     /**
@@ -267,7 +258,7 @@ class Router implements RouterContract
     public function resource(string $name, string $controller, array $options = []): PendingResourceRegistration
     {
         return new PendingResourceRegistration(
-            $this->registrar,
+            new ResourceRegistrar($this),
             $name,
             $controller,
             $options

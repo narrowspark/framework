@@ -153,11 +153,13 @@ class PendingResourceRegistration
      *
      * @param mixed $middlewares
      *
+     * @throws \LogicException
+     *
      * @return \Viserio\Component\Routing\PendingResourceRegistration
      */
     public function setMiddlewares($middlewares): self
     {
-        self::validateMiddlewareClass($middlewares);
+        $this->validateMiddlewareClass($middlewares);
 
         $this->options['middlewares'] = $middlewares;
 

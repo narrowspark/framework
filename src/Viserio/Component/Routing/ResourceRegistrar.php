@@ -38,13 +38,6 @@ class ResourceRegistrar
     protected $parameters = [];
 
     /**
-     * The global parameter mapping.
-     *
-     * @var array
-     */
-    protected static $parameterMap = [];
-
-    /**
      * Singular global parameters.
      *
      * @var bool
@@ -82,7 +75,7 @@ class ResourceRegistrar
      */
     public function register(string $name, string $controller, array $options = []): void
     {
-        if (isset($options['parameters']) && ! isset($this->parameters)) {
+        if (isset($options['parameters']) && count($this->parameters) === 0) {
             $this->parameters = $options['parameters'];
         }
 
@@ -159,8 +152,6 @@ class ResourceRegistrar
     {
         if (isset($this->parameters[$value])) {
             $value = $this->parameters[$value];
-        } elseif (isset(static::$parameterMap[$value])) {
-            $value = static::$parameterMap[$value];
         } elseif ($this->parameters === 'singular' || static::$singularParameters) {
             $value = Str::singular($value);
         }
@@ -178,28 +169,6 @@ class ResourceRegistrar
     public static function singularParameters(bool $singular = true): void
     {
         static::$singularParameters = (bool) $singular;
-    }
-
-    /**
-     * Get the global parameter map.
-     *
-     * @return array
-     */
-    public static function getParameters(): array
-    {
-        return static::$parameterMap;
-    }
-
-    /**
-     * Set the global parameter mapping.
-     *
-     * @param array $parameters
-     *
-     * @return void
-     */
-    public static function setParameters(array $parameters = []): void
-    {
-        static::$parameterMap = $parameters;
     }
 
     /**
