@@ -40,6 +40,8 @@ elif [[ "$PHPUNIT" = true ]]; then
             fi
 
             try
+                composer validate "$f/composer.json" --strict
+
                 tfold "$TESTSUITE" "$TEST -c ./phpunit.xml.dist --verbose --testsuite=\"$TESTSUITE\"";
             catch || {
                 exit 1
