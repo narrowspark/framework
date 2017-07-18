@@ -79,7 +79,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
         $this->router->resource('users', RouteRegistrarControllerFixture::class)
             ->only(['create', 'store'])->addNames([
                 'create' => 'user.build',
-                'store' => 'user.save',
+                'store'  => 'user.save',
             ]);
         $this->router->resource('posts', RouteRegistrarControllerFixture::class)
             ->only(['create', 'destroy'])
@@ -130,42 +130,42 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
 
     public function testResourceRouting()
     {
-        $this->router->resource('foo', RouteRegistrarControllerFixture::class, array('only' => array('show', 'destroy')));
+        $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['only' => ['show', 'destroy']]);
         $routes = $this->router->getRoutes();
 
         self::assertCount(15, $routes);
 
-        $this->router->resource('foo', RouteRegistrarControllerFixture::class, array('except' => array('show', 'destroy')));
+        $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['except' => ['show', 'destroy']]);
         $routes = $this->router->getRoutes();
 
         self::assertCount(20, $routes);
 
-        $this->router->resource('baz-bars', RouteRegistrarControllerFixture::class, array('only' => array('show')));
+        $this->router->resource('baz-bars', RouteRegistrarControllerFixture::class, ['only' => ['show']]);
         $routes = $this->router->getRoutes();
 
         self::assertEquals('/baz-bars/{foo_bar}', $routes->match('GET|HEAD/baz-bars/{foo_bar}')->getUri());
 
-        $this->router->resource('user-bars', RouteRegistrarControllerFixture::class, array('only' => array('show'), 'wildcards' => array('user-bars' => 'foo_bar_id')));
+        $this->router->resource('user-bars', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'wildcards' => ['user-bars' => 'foo_bar_id']]);
         $routes = $this->router->getRoutes();
 
         self::assertEquals('/user-bars/{foo_bar_id}', $routes->match('GET|HEAD/user-bars/{foo_bar_id}')->getUri());
 
-        $this->router->resource('member-bars.foo-bazs', RouteRegistrarControllerFixture::class, array('only' => array('show')));
+        $this->router->resource('member-bars.foo-bazs', RouteRegistrarControllerFixture::class, ['only' => ['show']]);
         $routes = $this->router->getRoutes();
 
         self::assertEquals('/member-bars/{member_bar}/foo-bazs/{foo_baz}', $routes->match('GET|HEAD/member-bars/{member_bar}/foo-bazs/{foo_baz}')->getUri());
 
-        $this->router->resource('test-bars.test-bazs', RouteRegistrarControllerFixture::class, array('only' => array('show'), 'wildcards' => array('test-bars' => 'test_bar_id')));
+        $this->router->resource('test-bars.test-bazs', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'wildcards' => ['test-bars' => 'test_bar_id']]);
         $routes = $this->router->getRoutes();
 
         self::assertEquals('/test-bars/{test_bar_id}/test-bazs/{test_baz}', $routes->match('GET|HEAD/test-bars/{test_bar_id}/test-bazs/{test_baz}')->getUri());
 
-        $this->router->resource('foo-bars.foo-bazs', RouteRegistrarControllerFixture::class, array('only' => array('show'), 'wildcards' => array('foo-bars' => 'foo_bar_id', 'foo-bazs' => 'foo_baz_id')));
+        $this->router->resource('foo-bars.foo-bazs', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'wildcards' => ['foo-bars' => 'foo_bar_id', 'foo-bazs' => 'foo_baz_id']]);
         $routes = $this->router->getRoutes();
 
         self::assertEquals('/foo-bars/{foo_bar_id}/foo-bazs/{foo_baz_id}', $routes->match('GET|HEAD/foo-bars/{foo_bar_id}/foo-bazs/{foo_baz_id}')->getUri());
 
-        $this->router->resource('narrow-bars', RouteRegistrarControllerFixture::class, array('only' => array('show'), 'as' => 'prefix'));
+        $this->router->resource('narrow-bars', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'as' => 'prefix']);
         $routes = $this->router->getRoutes();
 
         self::assertEquals('/narrow-bars/{narrow_bar}', $routes->match('GET|HEAD/narrow-bars/{narrow_bar}')->getUri());

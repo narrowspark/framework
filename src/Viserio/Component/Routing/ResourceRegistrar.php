@@ -145,7 +145,7 @@ class ResourceRegistrar
             $resource = $options['wildcards'][$resource];
         }
 
-        return str_replace('/{'.$this->getResourceWildcard($resource).'}', '', $uri);
+        return str_replace('/{' . $this->getResourceWildcard($resource) . '}', '', $uri);
     }
 
     /**
@@ -425,7 +425,7 @@ class ResourceRegistrar
         // We will spin through the segments and create a place-holder for each of the
         // resource segments, as well as the resource itself. Then we should get an
         // entire string for the resource URI that contains all nested resources.
-        return implode('/', array_map(function($s) use ($options) {
+        return implode('/', array_map(function ($s) use ($options) {
             $wildcard = $s;
 
             //If a wildcard for a resource has been set to be overridden
