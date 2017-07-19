@@ -54,7 +54,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions(RouterContract $router)
+    protected function definitions(RouterContract $router): void
     {
         $router->any('/', function ($request, $args) {
             return (new ResponseFactory())

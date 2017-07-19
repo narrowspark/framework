@@ -84,7 +84,7 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions(RouterContract $router)
+    protected function definitions(RouterContract $router): void
     {
         $router->get('/a/prefix:{param}', function ($request, $args) {
             return (new ResponseFactory())

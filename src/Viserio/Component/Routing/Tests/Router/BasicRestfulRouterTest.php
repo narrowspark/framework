@@ -87,7 +87,7 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    protected function definitions(RouterContract $router)
+    protected function definitions(RouterContract $router): void
     {
         $router->pattern('id', Pattern::DIGITS);
         $router->addParameter('digits', Pattern::DIGITS);

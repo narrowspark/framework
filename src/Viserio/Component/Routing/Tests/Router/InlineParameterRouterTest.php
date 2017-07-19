@@ -72,7 +72,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    protected function definitions(RouterContract $router)
+    protected function definitions(RouterContract $router): void
     {
         $router->get('/', function ($request, $args) {
             return (new ResponseFactory())

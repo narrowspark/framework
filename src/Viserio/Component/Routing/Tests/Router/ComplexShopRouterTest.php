@@ -139,7 +139,7 @@ class ComplexShopRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    protected function definitions(RouterContract $router)
+    protected function definitions(RouterContract $router): void
     {
         $router->pattern('post_slug', Pattern::ALPHA_NUM_DASH);
         $router->pattern('category_id', Pattern::DIGITS);

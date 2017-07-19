@@ -95,7 +95,7 @@ class RoutingServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Routing\UrlGenerator|null
+     * @return null|\Viserio\Component\Contracts\Routing\UrlGenerator
      */
     public static function createUrlGenerator(ContainerInterface $container): ?UrlGeneratorContract
     {

@@ -82,7 +82,7 @@ class Registrar
      * @throws \BadMethodCallException
      * @throws \InvalidArgumentException
      *
-     * @return \Viserio\Component\Contracts\Routing\Route|$this
+     * @return $this|\Viserio\Component\Contracts\Routing\Route
      */
     public function __call($method, $parameters)
     {
@@ -150,7 +150,7 @@ class Registrar
      *
      * @param array|string               $methods
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -164,7 +164,7 @@ class Registrar
      *
      * @param string                     $method
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -180,7 +180,7 @@ class Registrar
     /**
      * Compile the action into an array including the attributes.
      *
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return array
      */

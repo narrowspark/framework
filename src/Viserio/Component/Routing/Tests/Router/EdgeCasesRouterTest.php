@@ -75,7 +75,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    protected function definitions(RouterContract $router)
+    protected function definitions(RouterContract $router): void
     {
         $router->get('/abc/{param}/bar', function ($request, $args) {
             return (new ResponseFactory())

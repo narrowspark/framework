@@ -45,7 +45,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter405($httpMethod, $uri)
+    public function testRouter405($httpMethod, $uri): void
     {
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
@@ -67,14 +67,14 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter404($httpMethod, $uri)
+    public function testRouter404($httpMethod, $uri): void
     {
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
     }
 
-    public function testCanNameRoutesOnRegisteredResource()
+    public function testCanNameRoutesOnRegisteredResource(): void
     {
         $this->router->getContainer()->shouldReceive('has')
             ->with(RouteRegistrarControllerFixture::class)
@@ -103,7 +103,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    public function testCanOverrideParametersOnRegisteredResource()
+    public function testCanOverrideParametersOnRegisteredResource(): void
     {
         $this->router->getContainer()->shouldReceive('has')
             ->with(RouteRegistrarControllerFixture::class)
@@ -125,7 +125,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    public function testCanSetMiddlewareOnRegisteredResource()
+    public function testCanSetMiddlewareOnRegisteredResource(): void
     {
         $this->router->getContainer()->shouldReceive('has')
             ->with(RouteRegistrarControllerFixture::class)
@@ -149,7 +149,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    public function testResourceRouting()
+    public function testResourceRouting(): void
     {
         $this->router->getContainer()->shouldReceive('has')
             ->with(RouteRegistrarControllerFixture::class)
@@ -204,7 +204,7 @@ class RegistrarRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    protected function definitions(RouterContract $router)
+    protected function definitions(RouterContract $router): void
     {
         $router->getContainer()->shouldReceive('has')
             ->with(RouteRegistrarControllerFixture::class)

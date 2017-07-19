@@ -11,7 +11,7 @@ trait MiddlewareValidatorTrait
     /**
      * Check if given middleware class has \Interop\Http\ServerMiddleware\MiddlewareInterface implemented.
      *
-     * @param string|object|array $middlewares
+     * @param array|object|string $middlewares
      *
      * @throws \LogicException
      *
@@ -34,7 +34,7 @@ trait MiddlewareValidatorTrait
     /**
      * Check if given input is a string, object or array.
      *
-     * @param string|object|array $middlewares
+     * @param array|object|string $middlewares
      *
      * @throws \RuntimeException
      *
@@ -52,7 +52,7 @@ trait MiddlewareValidatorTrait
     /**
      * Validates if given object or string has a middleware interface.
      *
-     * @param string|object $middleware
+     * @param object|string $middleware
      *
      * @throws \LogicException
      *
@@ -72,7 +72,7 @@ trait MiddlewareValidatorTrait
     /**
      * Check if input is a class name.
      *
-     * @param string|object|array $middlewares
+     * @param array|object|string $middlewares
      *
      * @return bool
      */

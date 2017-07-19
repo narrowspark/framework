@@ -44,7 +44,7 @@ class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions(RouterContract $router)
+    protected function definitions(RouterContract $router): void
     {
         $router->pattern('p2', Pattern::ALPHA);
 

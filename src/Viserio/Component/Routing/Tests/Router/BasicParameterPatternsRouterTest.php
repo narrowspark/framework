@@ -120,7 +120,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions(RouterContract $router)
+    protected function definitions(RouterContract $router): void
     {
         $router->get('/digits/{param}', function ($request, $args) {
             return (new ResponseFactory())
