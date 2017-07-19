@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 use Viserio\Component\Parsers\Dumper;
 
-class OptionDumpCommandTest extends MockeryTestCase
+class OptionDumpCommandTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

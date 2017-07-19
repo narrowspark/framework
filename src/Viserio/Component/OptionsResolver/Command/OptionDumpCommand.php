@@ -44,16 +44,18 @@ class OptionDumpCommand extends Command
         if ($dumper === null && $format !== 'php') {
             $this->error('Only the php format is supported; use composer req viserio/parsers to get json, xml, yml output.');
 
-            return;
+            return 1;
         }
 
-        if (! \is_dir($dirPath)) {
-            \mkdir($dirPath);
+        if ((! @mkdir($dirPath, 0777, true) && ! is_dir($dirPath)) || ! is_writable($dirPath)) {
+            throw new InvalidArgumentException(sprintf(
+                'Config directory [%s] cannot be created or is write protected.',
+                $dirPath
+            ));
         }
 
         foreach ($configs as $key => $config) {
-            $content = '';
-            $file    = $dirPath . '\\' . $key . '.' . $format;
+            $file = $dirPath . '\\' . $key . '.' . $format;
 
             if ($this->hasOption('merge') && \file_exists($file)) {
                 $existingConfig = (array) include $file;
@@ -148,17 +150,19 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     /**
      * Return a array full of declared class options.
      *
+     * @throws \ReflectionException
+     *
      * @return array
      */
     private function getOptionsFromDeclaredClasses(): array
     {
         $configs = [];
 
-        foreach (\get_declared_classes() as $className) {
+        foreach (get_declared_classes() as $className) {
             $reflectionClass = new ReflectionClass($className);
             $interfaces      = \array_flip($reflectionClass->getInterfaceNames());
 
-            if (! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract() && isset($interfaces[RequiresConfigContract::class])) {
+            if (isset($interfaces[RequiresConfigContract::class]) && ! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract()) {
                 $factory          = $reflectionClass->newInstanceWithoutConstructor();
                 $dimensions       = [];
                 $mandatoryOptions = [];
