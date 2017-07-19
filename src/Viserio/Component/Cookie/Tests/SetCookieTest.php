@@ -30,7 +30,7 @@ class SetCookieTest extends TestCase
      *
      * @param mixed $name
      */
-    public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name)
+    public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name): void
     {
         new SetCookie($name);
     }
@@ -55,12 +55,12 @@ class SetCookieTest extends TestCase
      *
      * @param mixed $value
      */
-    public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value)
+    public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value): void
     {
         $cookie = new SetCookie('MyCookie', $value);
     }
 
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $value  = 'MyValue';
         $cookie = new SetCookie('MyCookie', $value);
@@ -69,7 +69,7 @@ class SetCookieTest extends TestCase
         self::assertTrue($cookie->hasValue(), '->hasValue() returns true if the value exist');
     }
 
-    public function testWithValue()
+    public function testWithValue(): void
     {
         $value  = 'MyValue';
         $cookie = new SetCookie('MyCookie');
@@ -78,7 +78,7 @@ class SetCookieTest extends TestCase
         self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
-    public function testGetPatchAndWithPath()
+    public function testGetPatchAndWithPath(): void
     {
         $cookie = new SetCookie('foo', 'bar');
 
@@ -89,7 +89,7 @@ class SetCookieTest extends TestCase
         self::assertSame('/tests', $cookie->getPath(), '->getPath() returns / as the default path');
     }
 
-    public function testMatchPath()
+    public function testMatchPath(): void
     {
         $cookie = new SetCookie('foo', 'bar', 0, '/');
 
@@ -100,7 +100,7 @@ class SetCookieTest extends TestCase
         );
     }
 
-    public function testMatchCookie()
+    public function testMatchCookie(): void
     {
         $cookie  = new SetCookie('foo', 'bar', 0, '/');
         $cookie2 = new SetCookie('bar', 'foo', 0, '/');
@@ -112,7 +112,7 @@ class SetCookieTest extends TestCase
         );
     }
 
-    public function testHasAndGetMaxAge()
+    public function testHasAndGetMaxAge(): void
     {
         $cookie = new SetCookie('MyCookie', 'MyValue');
         self::assertTrue($cookie->hasMaxAge(), '->hasMaxAge() returns true if max age is not empty');
@@ -129,14 +129,14 @@ class SetCookieTest extends TestCase
         self::assertEquals(3600, $cookie->getMaxAge(), '->getMaxAge() returns max age value if is set');
     }
 
-    public function testWithMaxAge()
+    public function testWithMaxAge(): void
     {
         $cookie = new SetCookie('Cookie', 'Value');
         $cookie = $cookie->withMaxAge(3600);
         self::assertEquals(3600, $cookie->getMaxAge(), '->getMaxAge() returns max age value if is set');
     }
 
-    public function testWithExpires()
+    public function testWithExpires(): void
     {
         $expire = Chronos::now();
         $expire = $expire->addDay(1);
@@ -144,38 +144,38 @@ class SetCookieTest extends TestCase
         $cookie = $cookie->withExpires($expire);
 
         self::assertEquals(
-            strtotime($expire->toCookieString()),
+            \strtotime($expire->toCookieString()),
             $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date'
         );
     }
 
-    public function testConstructorWithDateTime()
+    public function testConstructorWithDateTime(): void
     {
         $expire = Chronos::now();
         $cookie = new SetCookie('foo', 'bar', $expire);
 
         self::assertEquals(
-            strtotime($expire->toCookieString()),
+            \strtotime($expire->toCookieString()),
             $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date'
         );
     }
 
-    public function testGetExpiresTimeWithStringValue()
+    public function testGetExpiresTimeWithStringValue(): void
     {
         $expire = new Chronos('+1 day');
         $cookie = new SetCookie('foo', 'bar', $expire);
 
         self::assertEquals(
-            strtotime($expire->toCookieString()),
+            \strtotime($expire->toCookieString()),
             $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date',
             1
         );
     }
 
-    public function testWithDomain()
+    public function testWithDomain(): void
     {
         $cookie = new SetCookie('foo', 'bar', 0, '/', '.MyFooDoMaiN.cOm');
         $cookie = $cookie->withDomain('google.com');
@@ -187,7 +187,7 @@ class SetCookieTest extends TestCase
         );
     }
 
-    public function testGetHasDomain()
+    public function testGetHasDomain(): void
     {
         $cookie = new SetCookie('foo', 'bar', 0, '/', '.MyFooDoMaiN.cOm');
 
@@ -204,7 +204,7 @@ class SetCookieTest extends TestCase
         self::assertFalse($cookie->hasDomain(), '->hasDomain() returns false if domain is not set');
     }
 
-    public function testMatchDomain()
+    public function testMatchDomain(): void
     {
         $cookie = new SetCookie('foo', 'bar', 0, '/', '.MyFooDoMaiN.com');
 
@@ -218,14 +218,14 @@ class SetCookieTest extends TestCase
         );
     }
 
-    public function testMatchDomainToReturnFalseIfIp()
+    public function testMatchDomainToReturnFalseIfIp(): void
     {
         $cookie = new SetCookie('foo', 'bar', 0, '/', '.myfoodomain.com');
 
         self::assertFalse($cookie->matchDomain('127.0.0.1'), '->matchDomain() returns false if match is a IP');
     }
 
-    public function testIsSecure()
+    public function testIsSecure(): void
     {
         $cookie = new SetCookie('foo', 'bar', 0, '/', '.myfoodomain.com', true);
 
@@ -236,7 +236,7 @@ class SetCookieTest extends TestCase
         self::assertFalse($cookie->isSecure(), '->isSecure() returns whether the cookie is transmitted over HTTPS');
     }
 
-    public function testIsHttpOnly()
+    public function testIsHttpOnly(): void
     {
         $cookie = new SetCookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true);
 
@@ -253,7 +253,7 @@ class SetCookieTest extends TestCase
         );
     }
 
-    public function testIsSameSite()
+    public function testIsSameSite(): void
     {
         $cookie = new SetCookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true, SetCookie::SAMESITE_STRICT);
 
@@ -270,7 +270,7 @@ class SetCookieTest extends TestCase
         );
     }
 
-    public function testGetSameSite()
+    public function testGetSameSite(): void
     {
         $cookie = new SetCookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true, SetCookie::SAMESITE_STRICT);
 
@@ -289,7 +289,7 @@ class SetCookieTest extends TestCase
         );
     }
 
-    public function testCookieIsNotExpired()
+    public function testCookieIsNotExpired(): void
     {
         $cookie = new SetCookie('foo', 'bar', new DateTime('+360 day'));
 
@@ -297,26 +297,26 @@ class SetCookieTest extends TestCase
         self::assertTrue($cookie->hasExpires(), '->hasExpires() returns true if the cookie has a expire time set');
     }
 
-    public function testCookieIsExpired()
+    public function testCookieIsExpired(): void
     {
         $cookie = new SetCookie('foo', 'bar', -100);
 
         self::assertTrue($cookie->isExpired(), '->isExpired() returns true if the cookie has expired');
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $time   = new DateTime('Fri, 20-May-2011 15:25:52 GMT');
         $cookie = new SetCookie('foo', 'bar', $time, '/', '.myfoodomain.com', true, true, SetCookie::SAMESITE_STRICT);
         self::assertEquals(
-            'foo=bar; Expires=Friday, 20-May-2011 15:25:52 ' . date_default_timezone_get() . '; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
+            'foo=bar; Expires=Friday, 20-May-2011 15:25:52 ' . \date_default_timezone_get() . '; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
             $cookie->__toString(),
             '->__toString() returns string representation of the cookie'
         );
 
         $cookie = new SetCookie('foo', null, 1, '/admin/', '.myfoodomain.com', false, true);
         self::assertEquals(
-            'foo=deleted; Expires=' . (new Chronos(gmdate(
+            'foo=deleted; Expires=' . (new Chronos(\gmdate(
                 'D, d-M-Y H:i:s T',
                 Chronos::now()->getTimestamp() - 31536001
             )))->toCookieString() . '; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
@@ -326,7 +326,7 @@ class SetCookieTest extends TestCase
 
         $cookie = new SetCookie('foo');
         self::assertEquals(
-            'foo=deleted; Expires=' . (new Chronos(gmdate(
+            'foo=deleted; Expires=' . (new Chronos(\gmdate(
                 'D, d-M-Y H:i:s T',
                 Chronos::now()->getTimestamp() - 31536001
             )))->toCookieString() . '; Path=/',

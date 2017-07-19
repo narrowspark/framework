@@ -11,7 +11,7 @@ use Viserio\Component\Profiler\DataCollector\Bridge\SwiftMailDataCollector;
 
 class SwiftMailDataCollectorTest extends MockeryTestCase
 {
-    public function testGetMenu()
+    public function testGetMenu(): void
     {
         $collector = $this->getSwiftDataCollector();
 

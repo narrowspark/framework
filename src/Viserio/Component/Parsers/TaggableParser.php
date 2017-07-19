@@ -38,7 +38,7 @@ class TaggableParser extends Parser
     public function parse(string $payload): array
     {
         if (! $this->tagKey) {
-            /* @var $method self */
+            // @var $method self
             return parent::parse($payload);
         }
 
@@ -58,7 +58,7 @@ class TaggableParser extends Parser
         $taggedData = [];
 
         foreach ($data as $key => $value) {
-            $name = sprintf(
+            $name = \sprintf(
                 '%s' . self::TAG_DELIMITER . '%s',
                 $tag,
                 $key

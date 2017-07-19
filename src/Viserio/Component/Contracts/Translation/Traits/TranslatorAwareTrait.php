@@ -10,7 +10,7 @@ trait TranslatorAwareTrait
     /**
      * Translation instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\Translator|null
+     * @var null|\Viserio\Component\Contracts\Translation\Translator
      */
     protected $translator;
 

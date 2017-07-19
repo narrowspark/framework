@@ -60,7 +60,7 @@ class ProfilerMonologDataCollectorServiceProvider implements
      */
     public static function extendLogger(ContainerInterface $container, ?callable $getPrevious = null)
     {
-        $log = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $log = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($log !== null) {
             $log->pushProcessor(new DebugProcessor());
@@ -79,7 +79,7 @@ class ProfilerMonologDataCollectorServiceProvider implements
      */
     public static function extendProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
-        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $profiler = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($profiler !== null) {
             $options = self::resolveOptions($container);

@@ -26,7 +26,7 @@ class CookieTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectExceptionMessage The name cannot be empty.
      */
-    public function testInstantiationThrowsExceptionIfCookieNameIsEmpty()
+    public function testInstantiationThrowsExceptionIfCookieNameIsEmpty(): void
     {
         new Cookie('');
     }
@@ -36,7 +36,7 @@ class CookieTest extends TestCase
      *
      * @param mixed $name
      */
-    public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name)
+    public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name): void
     {
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage('Cookie name [' . $name . '] must not contain invalid characters: ASCII Control characters (0-31;127), space, tab and the following characters: ()<>@,;:\"/[]?={}');
@@ -64,12 +64,12 @@ class CookieTest extends TestCase
      *
      * @param mixed $value
      */
-    public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value)
+    public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value): void
     {
         $cookie = new Cookie('MyCookie', $value);
     }
 
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $value  = 'MyValue';
         $cookie = new Cookie('MyCookie', $value);
@@ -77,7 +77,7 @@ class CookieTest extends TestCase
         self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
-    public function testWithValue()
+    public function testWithValue(): void
     {
         $value  = 'MyValue';
         $cookie = new Cookie('MyCookie');
@@ -86,7 +86,7 @@ class CookieTest extends TestCase
         self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $cookie = new Cookie('MyCookie', 'MyValue');
 

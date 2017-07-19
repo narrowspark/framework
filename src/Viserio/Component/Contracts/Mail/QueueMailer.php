@@ -26,10 +26,10 @@ interface QueueMailer extends Mailer
     /**
      * Queue a new e-mail message for sending.
      *
-     * @param string|array    $view
+     * @param array|string    $view
      * @param array           $data
      * @param \Closure|string $callback
-     * @param string|null     $queue
+     * @param null|string     $queue
      *
      * @return mixed
      */
@@ -39,7 +39,7 @@ interface QueueMailer extends Mailer
      * Queue a new e-mail message for sending on the given queue.
      *
      * @param string          $queue
-     * @param string|array    $view
+     * @param array|string    $view
      * @param array           $data
      * @param \Closure|string $callback
      *
@@ -51,10 +51,10 @@ interface QueueMailer extends Mailer
      * Queue a new e-mail message for sending after (n) seconds.
      *
      * @param int             $delay
-     * @param string|array    $view
+     * @param array|string    $view
      * @param array           $data
      * @param \Closure|string $callback
-     * @param string|null     $queue
+     * @param null|string     $queue
      *
      * @return mixed
      */
@@ -71,7 +71,7 @@ interface QueueMailer extends Mailer
      *
      * @param string          $queue
      * @param int             $delay
-     * @param string|array    $view
+     * @param array|string    $view
      * @param array           $data
      * @param \Closure|string $callback
      *

@@ -30,14 +30,14 @@ class ContainerTest extends MockeryTestCase
     /**
      * @var \Viserio\Component\Container\Container
      */
-    protected $container = null;
+    protected $container;
 
     /**
      * @var array
      */
     protected $services = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -45,7 +45,7 @@ class ContainerTest extends MockeryTestCase
 
         $this->services = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
 
-        foreach (array_keys($this->services) as $id) {
+        foreach (\array_keys($this->services) as $id) {
             $service     = new stdClass();
             $service->id = $id;
 
@@ -54,7 +54,7 @@ class ContainerTest extends MockeryTestCase
         }
     }
 
-    public function testClosureResolution()
+    public function testClosureResolution(): void
     {
         $container = $this->container;
         $container->bind('name', function () {
@@ -64,7 +64,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('Narrowspark', $container->resolve('name'));
     }
 
-    public function testBindIfDoesntRegisterIfServiceAlreadyRegistered()
+    public function testBindIfDoesntRegisterIfServiceAlreadyRegistered(): void
     {
         $container = new Container();
 
@@ -79,7 +79,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('Narrowspark', $container->resolve('name'));
     }
 
-    public function testSharedClosureResolution()
+    public function testSharedClosureResolution(): void
     {
         $container = $this->container;
         $class     = new stdClass();
@@ -91,21 +91,21 @@ class ContainerTest extends MockeryTestCase
         self::assertSame($class, $container->resolve('class'));
     }
 
-    public function testAutoConcreteResolution()
+    public function testAutoConcreteResolution(): void
     {
         $container = $this->container;
 
         self::assertInstanceOf(ContainerConcreteFixture::class, $container->resolve(ContainerConcreteFixture::class));
     }
 
-    public function testResolveMethod()
+    public function testResolveMethod(): void
     {
         $container = new Container();
 
         self::assertEquals('Hello', $container->resolve(FactoryClass::class . '::create'));
     }
 
-    public function testResolveMethodFromString()
+    public function testResolveMethodFromString(): void
     {
         $container = new Container();
 
@@ -113,7 +113,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('Hello', $container->resolveMethod(FactoryClass::class . '::staticCreateWitArg', ['name' => 'Hello']));
     }
 
-    public function testSharedConcreteResolution()
+    public function testSharedConcreteResolution(): void
     {
         $container = $this->container;
         $container->singleton(ContainerConcreteFixture::class);
@@ -124,7 +124,7 @@ class ContainerTest extends MockeryTestCase
         self::assertSame($var1, $var2);
     }
 
-    public function testParametersCanOverrideDependencies()
+    public function testParametersCanOverrideDependencies(): void
     {
         $container = new Container();
         $mock      = $this->mock(ContainerContractFixtureInterface::class);
@@ -135,7 +135,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals($mock, $resolved->inner->impl);
     }
 
-    public function testResolveNonBoundWithClosure()
+    public function testResolveNonBoundWithClosure(): void
     {
         $container = new Container();
 
@@ -146,7 +146,7 @@ class ContainerTest extends MockeryTestCase
         self::assertInstanceOf(Container::class, $class);
     }
 
-    public function testAbstractToConcreteResolution()
+    public function testAbstractToConcreteResolution(): void
     {
         $container = new Container();
         $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
@@ -155,7 +155,7 @@ class ContainerTest extends MockeryTestCase
         self::assertInstanceOf(ContainerImplementationFixture::class, $class->impl);
     }
 
-    public function testNestedDependencyResolution()
+    public function testNestedDependencyResolution(): void
     {
         $container = new Container();
         $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
@@ -165,7 +165,7 @@ class ContainerTest extends MockeryTestCase
         self::assertInstanceOf(ContainerImplementationFixture::class, $class->inner->impl);
     }
 
-    public function testContainerIsPassedToResolvers()
+    public function testContainerIsPassedToResolvers(): void
     {
         $container = $this->container;
         $container->bind('something', function ($c) {
@@ -177,7 +177,7 @@ class ContainerTest extends MockeryTestCase
         self::assertSame($c, $container);
     }
 
-    public function testArrayAccess()
+    public function testArrayAccess(): void
     {
         $container              = $this->container;
         $container['something'] = function () {
@@ -197,7 +197,7 @@ class ContainerTest extends MockeryTestCase
         self::assertSame($result, $container->resolve('foo'));
     }
 
-    public function testAliases()
+    public function testAliases(): void
     {
         $container        = new Container();
         $container['foo'] = 'bar';
@@ -209,7 +209,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('bar', $container->resolve('bat'));
     }
 
-    public function testBindingsCanBeOverridden()
+    public function testBindingsCanBeOverridden(): void
     {
         $container        = $this->container;
         $container['foo'] = 'bar';
@@ -219,7 +219,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('baz', $container['foo']);
     }
 
-    public function testExtendedBindings()
+    public function testExtendedBindings(): void
     {
         $container        = $this->container;
         $container['foo'] = 'foo';
@@ -246,7 +246,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('viserio', $result->oldName);
     }
 
-    public function testMultipleExtends()
+    public function testMultipleExtends(): void
     {
         $container        = $this->container;
         $container['foo'] = 'foo';
@@ -262,7 +262,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('foobarbaz', $container->resolve('foo'));
     }
 
-    public function testExtendInstancesArePreserved()
+    public function testExtendInstancesArePreserved(): void
     {
         $container = new Container();
         $container->bind('foo', function () {
@@ -292,7 +292,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('foo', $container->resolve('foo')->baz);
     }
 
-    public function testExtendCanBeCalledBeforeBind()
+    public function testExtendCanBeCalledBeforeBind(): void
     {
         $container = $this->container;
         $container->extend('foo', function ($old, $container) {
@@ -303,7 +303,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('foobar', $container->resolve('foo'));
     }
 
-    public function testParametersCanBePassedThroughToClosure()
+    public function testParametersCanBePassedThroughToClosure(): void
     {
         $container = $this->container;
         $container->bind('foo', function ($container, $a, $b, $c) {
@@ -313,7 +313,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals([1, 2, 3], $container->resolve('foo', [1, 2, 3]));
     }
 
-    public function testResolutionOfDefaultParameters()
+    public function testResolutionOfDefaultParameters(): void
     {
         $container = new Container();
         $instance  = $container->resolve(ContainerDefaultValueFixture::class);
@@ -322,7 +322,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('narrowspark', $instance->default);
     }
 
-    public function testUnsetRemoveBoundInstances()
+    public function testUnsetRemoveBoundInstances(): void
     {
         $container = new Container();
         $container->instance('object', new stdClass());
@@ -340,7 +340,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\ContainerException
      * @expectedExceptionMessage The name parameter must be of type string, [stdClass] given.
      */
-    public function testHasToThrowExceptionOnNoStringType()
+    public function testHasToThrowExceptionOnNoStringType(): void
     {
         $container = new Container();
 
@@ -351,7 +351,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\ContainerException
      * @expectedExceptionMessage The id parameter must be of type string, [stdClass] given.
      */
-    public function testGetToThrowExceptionOnNoStringType()
+    public function testGetToThrowExceptionOnNoStringType(): void
     {
         $container = new Container();
 
@@ -362,14 +362,14 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\NotFoundException
      * @expectedExceptionMessage Abstract [test] is not being managed by the container.
      */
-    public function testGetToThrowExceptionOnNotFoundId()
+    public function testGetToThrowExceptionOnNotFoundId(): void
     {
         $container = new Container();
 
         self::assertFalse($container->get('test'));
     }
 
-    public function testBoundInstanceAndAliasCheckViaArrayAccess()
+    public function testBoundInstanceAndAliasCheckViaArrayAccess(): void
     {
         $container = new Container();
         $container->instance('object', new stdClass());
@@ -383,7 +383,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\CyclicDependencyException
      * @expectedExceptionMessage Circular reference found while resolving [Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubD].
      */
-    public function testCircularReferenceCheck()
+    public function testCircularReferenceCheck(): void
     {
         // Since the dependency is ( D -> F -> E -> D ), the exception
         // message should state that the issue starts in class D
@@ -395,7 +395,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\CyclicDependencyException
      * @expectedExceptionMessage Circular reference found while resolving [Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubB].
      */
-    public function testCircularReferenceCheckDetectCycleStartLocation()
+    public function testCircularReferenceCheckDetectCycleStartLocation(): void
     {
         // Since the dependency is ( A -> B -> C -> B ), the exception
         // message should state that the issue starts in class B
@@ -403,7 +403,7 @@ class ContainerTest extends MockeryTestCase
         $container->resolve(ContainerCircularReferenceStubA::class);
     }
 
-    public function testContainerCanInjectSimpleVariable()
+    public function testContainerCanInjectSimpleVariable(): void
     {
         $container = new Container();
         $container->when(ContainerInjectVariableFixture::class)
@@ -424,7 +424,7 @@ class ContainerTest extends MockeryTestCase
         self::assertInstanceOf(ContainerConcreteFixture::class, $instance->something);
     }
 
-    public function testContainerCanInjectSimpleVariableToBinding()
+    public function testContainerCanInjectSimpleVariableToBinding(): void
     {
         $container = new Container();
         $container->bind(ContainerInjectVariableFixture::class);
@@ -441,7 +441,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage Parameter [something] cannot be injected in [Viserio\Component\Container\Tests\Fixture\ContainerInjectVariableFixture].
      */
-    public function testContainerWhenNeedsGiveToThrowException()
+    public function testContainerWhenNeedsGiveToThrowException(): void
     {
         $container = new Container();
 
@@ -458,7 +458,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\ContainerTestNotResolvable] is not resolvable.
      */
-    public function testContainerCantInjectObjectIsNotResolvable()
+    public function testContainerCantInjectObjectIsNotResolvable(): void
     {
         $container = new Container();
 
@@ -474,7 +474,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\Fixture\ContainerTestNoConstructor] must have a constructor.
      */
-    public function testContainerCantInjectObjectWithoutConstructor()
+    public function testContainerCantInjectObjectWithoutConstructor(): void
     {
         $container = new Container();
 
@@ -486,7 +486,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals(100, $instance->something);
     }
 
-    public function testContainerCanInjectDifferentImplementationsDependingOnContext()
+    public function testContainerCanInjectDifferentImplementationsDependingOnContext(): void
     {
         $container = new Container();
         $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
@@ -505,9 +505,7 @@ class ContainerTest extends MockeryTestCase
         self::assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
         self::assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
 
-        /*
-         * Test With Closures
-         */
+        // Test With Closures
         $container = new Container();
         $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
         $container->when(ContainerTestContextInjectOneFixture::class)
@@ -530,7 +528,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage Unresolvable dependency resolving [Parameter #0 [ <required> $first ]] in [Viserio\Component\Container\Tests\Fixture\ContainerMixedPrimitiveFixture]
      */
-    public function testInternalClassWithDefaultParameters()
+    public function testInternalClassWithDefaultParameters(): void
     {
         $container = new Container();
         $container->resolve(ContainerMixedPrimitiveFixture::class);
@@ -540,7 +538,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage Unable to reflect on the class [string], does the class exist and is it properly autoloaded?
      */
-    public function testUnableToReflectClass()
+    public function testUnableToReflectClass(): void
     {
         $container = new Container();
         $container->resolve(ContainerPrivateConstructor::class);
@@ -550,7 +548,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\Fixture\ContainerContractFixtureInterface] is not resolvable. Build stack : []
      */
-    public function testBindingResolutionExceptionMessage()
+    public function testBindingResolutionExceptionMessage(): void
     {
         $container = new Container();
         $container->resolve(ContainerContractFixtureInterface::class);
@@ -560,13 +558,13 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\Fixture\ContainerContractFixtureInterface] is not resolvable. Build stack : [Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixture]
      */
-    public function testBindingResolutionExceptionMessageIncludesBuildStack()
+    public function testBindingResolutionExceptionMessageIncludesBuildStack(): void
     {
         $container = new Container();
         $container->resolve(ContainerTestContextInjectOneFixture::class);
     }
 
-    public function testDelegateContainer()
+    public function testDelegateContainer(): void
     {
         $picotainer = new Picotainer([
             'instance' => function () {
@@ -583,7 +581,7 @@ class ContainerTest extends MockeryTestCase
         self::assertFalse($container->hasInDelegate('instance3'));
     }
 
-    public function testExtendedBindingsKeptTypes()
+    public function testExtendedBindingsKeptTypes(): void
     {
         $container = new Container();
 
@@ -611,7 +609,7 @@ class ContainerTest extends MockeryTestCase
         self::assertNotSame($container->resolve('bar'), $container->resolve('bar'));
     }
 
-    public function testExtendIsLazyInitialized()
+    public function testExtendIsLazyInitialized(): void
     {
         ContainerLazyExtendFixture::$initialized = false;
 
@@ -630,7 +628,7 @@ class ContainerTest extends MockeryTestCase
         self::assertTrue(ContainerLazyExtendFixture::$initialized);
     }
 
-    public function testContextualBindingWorksForExistingInstancedBindings()
+    public function testContextualBindingWorksForExistingInstancedBindings(): void
     {
         $container = new Container();
 
@@ -646,7 +644,7 @@ class ContainerTest extends MockeryTestCase
         );
     }
 
-    public function testContextualBindingWorksForNewlyInstancedBindings()
+    public function testContextualBindingWorksForNewlyInstancedBindings(): void
     {
         $container = new Container();
 
@@ -662,7 +660,7 @@ class ContainerTest extends MockeryTestCase
         );
     }
 
-    public function testContextualBindingWorksOnExistingAliasedInstances()
+    public function testContextualBindingWorksOnExistingAliasedInstances(): void
     {
         $container = new Container();
 
@@ -679,7 +677,7 @@ class ContainerTest extends MockeryTestCase
         );
     }
 
-    public function testContextualBindingWorksOnNewAliasedInstances()
+    public function testContextualBindingWorksOnNewAliasedInstances(): void
     {
         $container = new Container();
 
@@ -696,7 +694,7 @@ class ContainerTest extends MockeryTestCase
         );
     }
 
-    public function testContextualBindingWorksOnNewAliasedBindings()
+    public function testContextualBindingWorksOnNewAliasedBindings(): void
     {
         $container = new Container();
 
@@ -713,7 +711,7 @@ class ContainerTest extends MockeryTestCase
         );
     }
 
-    public function testContextualBindingDoesntOverrideNonContextualResolution()
+    public function testContextualBindingDoesntOverrideNonContextualResolution(): void
     {
         $container = new Container();
 
@@ -735,7 +733,7 @@ class ContainerTest extends MockeryTestCase
         );
     }
 
-    public function testContextuallyBoundInstancesAreNotUnnecessarilyRecreated()
+    public function testContextuallyBoundInstancesAreNotUnnecessarilyRecreated(): void
     {
         ContainerTestContextInjectInstantiationsFixture::$instantiations = 0;
 
@@ -762,7 +760,7 @@ class ContainerTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage Parameter [stub] cannot be injected in [Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixture].
      */
-    public function testContextualBindingNotWorksOnBoundAlias()
+    public function testContextualBindingNotWorksOnBoundAlias(): void
     {
         $container = new Container();
 

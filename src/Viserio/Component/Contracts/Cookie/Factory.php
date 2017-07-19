@@ -8,13 +8,13 @@ interface Factory
      * Create a new cookie instance.
      *
      * @param string           $name
-     * @param string|null      $value
+     * @param null|string      $value
      * @param int              $minutes
-     * @param string|null      $path
-     * @param string|null      $domain
+     * @param null|string      $path
+     * @param null|string      $domain
      * @param bool             $secure
      * @param bool             $httpOnly
-     * @param string|bool|null $sameSite
+     * @param null|bool|string $sameSite
      *
      * @return \Viserio\Component\Contracts\Cookie\Cookie
      */
@@ -33,12 +33,12 @@ interface Factory
      * Create a cookie that lasts "forever" (five years).
      *
      * @param string           $name
-     * @param string|null      $value
-     * @param string|null      $path
-     * @param string|null      $domain
+     * @param null|string      $value
+     * @param null|string      $path
+     * @param null|string      $domain
      * @param bool             $secure
      * @param bool             $httpOnly
-     * @param string|bool|null $sameSite
+     * @param null|bool|string $sameSite
      *
      * @return \Viserio\Component\Contracts\Cookie\Cookie
      */
@@ -56,8 +56,8 @@ interface Factory
      * Expire the given cookie.
      *
      * @param string      $name
-     * @param string|null $path
-     * @param string|null $domain
+     * @param null|string $path
+     * @param null|string $domain
      *
      * @return \Viserio\Component\Contracts\Cookie\Cookie
      */

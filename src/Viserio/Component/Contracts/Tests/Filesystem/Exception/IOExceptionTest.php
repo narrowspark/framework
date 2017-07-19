@@ -7,7 +7,7 @@ use Viserio\Component\Contracts\Filesystem\Exception\IOException;
 
 class IOExceptionTest extends TestCase
 {
-    public function testGetPath()
+    public function testGetPath(): void
     {
         $e = new IOException('', 0, null, '/foo');
 

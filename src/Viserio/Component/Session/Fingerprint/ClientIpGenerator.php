@@ -30,6 +30,6 @@ class ClientIpGenerator implements FingerprintContract
      */
     public function generate(): string
     {
-        return hash('ripemd160', $this->clientIp ?? '');
+        return \hash('ripemd160', $this->clientIp ?? '');
     }
 }

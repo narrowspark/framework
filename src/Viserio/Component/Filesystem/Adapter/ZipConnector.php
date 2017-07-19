@@ -35,15 +35,15 @@ class ZipConnector implements ConnectorContract
      */
     protected function getConfig(array $config): array
     {
-        if (! array_key_exists('path', $config)) {
+        if (! \array_key_exists('path', $config)) {
             throw new InvalidArgumentException('The zip connector requires path configuration.');
         }
 
-        if (! array_key_exists('archive', $config)) {
+        if (! \array_key_exists('archive', $config)) {
             $config['archive'] = new ZipArchive();
         }
 
-        if (! array_key_exists('prefix', $config)) {
+        if (! \array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 

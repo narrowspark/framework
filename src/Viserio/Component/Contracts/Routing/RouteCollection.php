@@ -38,7 +38,7 @@ interface RouteCollection
      *
      * @param string $name
      *
-     * @return \Viserio\Component\Contracts\Routing\Route|null
+     * @return null|\Viserio\Component\Contracts\Routing\Route
      */
     public function getByName(string $name): ?Route;
 
@@ -47,7 +47,7 @@ interface RouteCollection
      *
      * @param string $action
      *
-     * @return \Viserio\Component\Contracts\Routing\Route|null
+     * @return null|\Viserio\Component\Contracts\Routing\Route
      */
     public function getByAction(string $action): ?Route;
 

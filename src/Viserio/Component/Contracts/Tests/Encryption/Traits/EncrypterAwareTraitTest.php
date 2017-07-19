@@ -10,7 +10,7 @@ class EncrypterAwareTraitTest extends MockeryTestCase
 {
     use EncrypterAwareTrait;
 
-    public function testGetAndSetEncrypter()
+    public function testGetAndSetEncrypter(): void
     {
         $this->setEncrypter($this->mock(Encrypter::class));
 
@@ -21,7 +21,7 @@ class EncrypterAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Encrypter is not set up.
      */
-    public function testGetEncrypterThrowExceptionIfEncrypterIsNotSet()
+    public function testGetEncrypterThrowExceptionIfEncrypterIsNotSet(): void
     {
         $this->getEncrypter();
     }

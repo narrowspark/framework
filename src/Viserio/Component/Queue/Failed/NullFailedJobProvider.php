@@ -9,7 +9,7 @@ class NullFailedJobProvider implements FailedJobProviderContract
     /**
      * {@inheritdoc}
      */
-    public function log(string $connection, string $queue, string $payload)
+    public function log(string $connection, string $queue, string $payload): void
     {
     }
 
@@ -39,7 +39,7 @@ class NullFailedJobProvider implements FailedJobProviderContract
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): void
     {
     }
 }

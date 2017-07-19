@@ -131,7 +131,7 @@ class TwigDataCollector extends AbstractDataCollector implements
         $dump   = $dumper->dump($this->getProfile());
 
         // needed to remove the hardcoded CSS styles
-        $dump = str_replace([
+        $dump = \str_replace([
             '<span style="background-color: #ffd">',
             '<span style="color: #d44">',
             '<span style="background-color: #dfd">',
@@ -186,8 +186,8 @@ class TwigDataCollector extends AbstractDataCollector implements
         $twigHtml .= '</div>';
         $extensions = $this->twigEnvironment->getExtensions();
         $data[]     = ['name' => 'Twig <span class="counter">' . $this->getTemplateCount() . '</span>', 'content' => $twigHtml];
-        $data[]     = ['name' => 'Twig Extensions <span class="counter">' . count($extensions) . '</span>', 'content' => $this->createTable(
-            array_keys($extensions),
+        $data[]     = ['name' => 'Twig Extensions <span class="counter">' . \count($extensions) . '</span>', 'content' => $this->createTable(
+            \array_keys($extensions),
             ['headers' => ['Extension'], 'vardumper' => false]
         )];
 
@@ -200,7 +200,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon'  => file_get_contents(__DIR__ . '/Resources/icons/ic_view_quilt_white_24px.svg'),
+            'icon'  => \file_get_contents(__DIR__ . '/Resources/icons/ic_view_quilt_white_24px.svg'),
             'label' => 'Twig',
             'value' => '',
         ];

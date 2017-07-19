@@ -10,7 +10,7 @@ trait ParserAwareTrait
     /**
      * loader instance.
      *
-     * @var \Viserio\Component\Contracts\Parsers\Loader|null
+     * @var null|\Viserio\Component\Contracts\Parsers\Loader
      */
     protected $loader;
 

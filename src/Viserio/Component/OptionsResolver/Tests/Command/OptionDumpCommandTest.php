@@ -16,12 +16,12 @@ class OptionDumpCommandTest extends MockeryTestCase
      */
     private $root;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->root = vfsStream::setup();
     }
 
-    public function testCommand()
+    public function testCommand(): void
     {
         $command = new OptionDumpCommand();
 
@@ -45,7 +45,7 @@ return [
         );
     }
 
-    public function testCommandShowError()
+    public function testCommandShowError(): void
     {
         $command = new OptionDumpCommand();
 
@@ -57,7 +57,7 @@ return [
         self::assertSame("Only the php format is supported; use composer req viserio/parsers to get json, xml, yml output.\n", $output);
     }
 
-    public function testCommandWithDumper()
+    public function testCommandWithDumper(): void
     {
         $container = new ArrayContainer([Dumper::class => new Dumper()]);
         $command   = new OptionDumpCommand();

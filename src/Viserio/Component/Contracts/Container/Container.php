@@ -22,8 +22,8 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
     /**
      * Register a binding with the container.
      *
-     * @param string|array         $abstract
-     * @param \Closure|string|null $concrete
+     * @param array|string         $abstract
+     * @param null|\Closure|string $concrete
      *
      * @return void
      */
@@ -33,7 +33,7 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      * Register a binding if it hasn't already been registered.
      *
      * @param string               $abstract
-     * @param \Closure|string|null $concrete
+     * @param null|\Closure|string $concrete
      *
      * @return void
      */
@@ -43,7 +43,7 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      * Register a shared binding in the container.
      *
      * @param string               $abstract
-     * @param \Closure|string|null $concrete
+     * @param null|\Closure|string $concrete
      *
      * @return void
      */
@@ -110,7 +110,7 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
     /**
      * Resolve a non bound type.
      *
-     * @param string|\Closure $abstract
+     * @param \Closure|string $abstract
      * @param array           $parameters
      *
      * @return mixed

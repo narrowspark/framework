@@ -21,7 +21,7 @@ class CronListCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $container = $this->getContainer();
         $cronJobs  = $container->get(Schedule::class)->getCronJobs();

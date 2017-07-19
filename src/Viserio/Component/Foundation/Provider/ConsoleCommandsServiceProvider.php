@@ -34,7 +34,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
      */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
-        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $console = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($console !== null) {
             $console->addCommands([
@@ -45,7 +45,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
             if ($container->has(KernelContract::class) && $container->get(KernelContract::class)->isLocal()) {
                 $console->add(new KeyGenerateCommand());
 
-                if (class_exists(Process::class)) {
+                if (\class_exists(Process::class)) {
                     $console->add(new ServeCommand());
                 }
             }

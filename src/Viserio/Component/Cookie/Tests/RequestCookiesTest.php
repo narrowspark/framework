@@ -15,12 +15,12 @@ class RequestCookiesTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The object [Viserio\Component\Cookie\SetCookie] must be an instance of [Viserio\Component\Cookie\Cookie].
      */
-    public function testRequestCookiesToThrowException()
+    public function testRequestCookiesToThrowException(): void
     {
         new RequestCookies([new SetCookie('test', 'test')]);
     }
 
-    public function testAddCookieToHeaderAndBack()
+    public function testAddCookieToHeaderAndBack(): void
     {
         $cookie  = new Cookie('encrypted', 'jiafs89320jadfa');
         $cookie2 = new Cookie('encrypted2', 'jiafs89320jadfa');
@@ -48,7 +48,7 @@ class RequestCookiesTest extends MockeryTestCase
      * @param mixed $cookieString
      * @param array $expectedCookies
      */
-    public function testFromCookieHeaderWithoutExpire($cookieString, array $expectedCookies)
+    public function testFromCookieHeaderWithoutExpire($cookieString, array $expectedCookies): void
     {
         $request = $this->mock(Request::class);
         $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
@@ -68,7 +68,7 @@ class RequestCookiesTest extends MockeryTestCase
      * @param string $cookieName
      * @param Cookie $expectedCookie
      */
-    public function testItGetsCookieByName(string $cookieString, string $cookieName, Cookie $expectedCookie)
+    public function testItGetsCookieByName(string $cookieString, string $cookieName, Cookie $expectedCookie): void
     {
         $request = $this->mock(Request::class);
         $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
@@ -85,7 +85,7 @@ class RequestCookiesTest extends MockeryTestCase
      * @param string $setCookieStrings
      * @param array  $expectedSetCookies
      */
-    public function testItKnowsWhichCookiesAreAvailable(string $setCookieStrings, array $expectedSetCookies)
+    public function testItKnowsWhichCookiesAreAvailable(string $setCookieStrings, array $expectedSetCookies): void
     {
         $request = $this->mock(Request::class);
         $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($setCookieStrings);

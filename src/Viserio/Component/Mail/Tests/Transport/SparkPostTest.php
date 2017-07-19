@@ -10,7 +10,7 @@ use Viserio\Component\Mail\Transport\SparkPostTransport;
 
 class SparkPostTest extends TestCase
 {
-    public function testSetAndGetKey()
+    public function testSetAndGetKey(): void
     {
         $client = $this->getMockBuilder(HttpClient::class)
             ->getMock();
@@ -20,7 +20,7 @@ class SparkPostTest extends TestCase
         self::assertSame('test', $transport->getKey());
     }
 
-    public function testSetAndGetOptions()
+    public function testSetAndGetOptions(): void
     {
         $client = $this->getMockBuilder(HttpClient::class)
             ->getMock();
@@ -30,7 +30,7 @@ class SparkPostTest extends TestCase
         self::assertSame(['key' => 'test'], $transport->getOptions());
     }
 
-    public function testSend()
+    public function testSend(): void
     {
         $message = new Swift_Message('Foo subject', 'Bar body');
         $message->setSender('myself@example.com');

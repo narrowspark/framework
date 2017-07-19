@@ -21,7 +21,7 @@ class CachedFactory
     /**
      * Instance of CacheManager.
      *
-     * @var \Viserio\Component\Contracts\Cache\Manager|null
+     * @var null|\Viserio\Component\Contracts\Cache\Manager
      */
     protected $cacheManager;
 
@@ -29,7 +29,7 @@ class CachedFactory
      * Create a new cached factory instance.
      *
      * @param \Viserio\Component\Filesystem\FilesystemManager $manager
-     * @param \Viserio\Component\Contracts\Cache\Manager|null $cacheManager
+     * @param null|\Viserio\Component\Contracts\Cache\Manager $cacheManager
      */
     public function __construct(FilesystemManager $manager, CacheManagerContract $cacheManager = null)
     {
@@ -86,6 +86,6 @@ class CachedFactory
             );
         }
 
-        throw new InvalidArgumentException(sprintf('Unsupported driver [%s].', $cacheConfig['driver']));
+        throw new InvalidArgumentException(\sprintf('Unsupported driver [%s].', $cacheConfig['driver']));
     }
 }

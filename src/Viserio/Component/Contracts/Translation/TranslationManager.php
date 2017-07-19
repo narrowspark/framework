@@ -7,7 +7,7 @@ interface TranslationManager
     /**
      * Get a language translator instance.
      *
-     * @param string|null $locale
+     * @param null|string $locale
      *
      * @throws \RuntimeException
      *

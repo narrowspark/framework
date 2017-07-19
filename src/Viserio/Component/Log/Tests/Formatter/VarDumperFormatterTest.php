@@ -9,7 +9,7 @@ use Viserio\Component\Log\Formatter\VarDumperFormatter;
 
 class VarDumperFormatterTest extends TestCase
 {
-    public function testFormat()
+    public function testFormat(): void
     {
         $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
@@ -20,7 +20,7 @@ class VarDumperFormatterTest extends TestCase
         );
     }
 
-    public function testFormatBatch()
+    public function testFormatBatch(): void
     {
         $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);

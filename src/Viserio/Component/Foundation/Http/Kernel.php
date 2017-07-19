@@ -86,7 +86,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
             'skip_middlewares' => false,
         ];
 
-        return array_merge(parent::getDefaultOptions(), $options);
+        return \array_merge(parent::getDefaultOptions(), $options);
     }
 
     /**
@@ -98,8 +98,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function prependMiddleware(string $middleware): self
     {
-        if (array_search($middleware, $this->middlewares) === false) {
-            array_unshift($this->middlewares, $middleware);
+        if (\array_search($middleware, $this->middlewares, true) === false) {
+            \array_unshift($this->middlewares, $middleware);
         }
 
         return $this;
@@ -114,7 +114,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function pushMiddleware(string $middleware): self
     {
-        if (array_search($middleware, $this->middlewares) === false) {
+        if (\array_search($middleware, $this->middlewares, true) === false) {
             $this->middlewares[] = $middleware;
         }
 
@@ -126,7 +126,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function handle(ServerRequestInterface $serverRequest): ResponseInterface
     {
-        $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) ob_get_level());
+        $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) \ob_get_level());
 
         $this->bootstrap();
 
@@ -138,14 +138,14 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         // Passes the request to the container
         $container->instance(ServerRequestInterface::class, $serverRequest);
 
-        if (class_exists(StaticalProxy::class)) {
+        if (\class_exists(StaticalProxy::class)) {
             StaticalProxy::clearResolvedInstance(ServerRequestInterface::class);
         }
 
         $response = $this->handleRequest($serverRequest, $events);
 
         // Stop PHP sending a Content-Type automatically.
-        ini_set('default_mimetype', '');
+        \ini_set('default_mimetype', '');
 
         return $response;
     }
@@ -161,7 +161,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
         $this->getContainer()->get(EventManagerContract::class)->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
 
-        restore_error_handler();
+        \restore_error_handler();
     }
 
     /**
@@ -262,7 +262,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $dispatcher->setCachePath($this->getStoragePath('framework/routes.cache.php'));
         $dispatcher->refreshCache($this->resolvedOptions['env'] !== 'production');
 
-        if (class_exists(Pipeline::class)) {
+        if (\class_exists(Pipeline::class)) {
             return $this->pipeRequestThroughMiddlewaresAndRouter($request, $router);
         }
 

@@ -15,7 +15,7 @@ class MessageLoggedEvent implements EventContract
      *
      * @param \Viserio\Component\Contracts\Log\Log $log
      * @param string                               $level
-     * @param string|mixed|int|float|bool|null     $message
+     * @param null|bool|float|int|mixed|string     $message
      * @param array                                $context
      */
     public function __construct(LogContract $log, $level, $message, array $context = [])
@@ -38,7 +38,7 @@ class MessageLoggedEvent implements EventContract
     /**
      * The log message.
      *
-     * @var string|mixed|int|float|bool|null
+     * @var null|bool|float|int|mixed|string
      */
     public function getMessage()
     {

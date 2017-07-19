@@ -18,9 +18,9 @@ final class RequestCookies extends AbstractCookieCollector
     {
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof Cookie)) {
-                throw new InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(\sprintf(
                     'The object [%s] must be an instance of [%s].',
-                    get_class($cookie),
+                    \get_class($cookie),
                     Cookie::class
                 ));
             }
@@ -50,7 +50,7 @@ final class RequestCookies extends AbstractCookieCollector
      */
     public function renderIntoCookieHeader(ServerRequestInterface $request): ServerRequestInterface
     {
-        $cookieString = implode('; ', $this->cookies);
+        $cookieString = \implode('; ', $this->cookies);
         $request      = $request->withHeader('Cookie', $cookieString);
 
         return $request;
@@ -67,7 +67,7 @@ final class RequestCookies extends AbstractCookieCollector
     {
         $cookies = self::splitOnAttributeDelimiter($string);
 
-        return array_map(function ($cookiePair) {
+        return \array_map(function ($cookiePair) {
             return self::oneFromCookiePair($cookiePair);
         }, $cookies);
     }

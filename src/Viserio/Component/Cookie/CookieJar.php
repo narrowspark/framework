@@ -19,9 +19,9 @@ class CookieJar implements JarContract
     /**
      * The default domain (if specified).
      *
-     * @var string|null
+     * @var null|string
      */
-    protected $domain = null;
+    protected $domain;
 
     /**
      * The default secure setting.
@@ -104,10 +104,10 @@ class CookieJar implements JarContract
      */
     public function queue(...$arguments): void
     {
-        if (reset($arguments) instanceof CookieContract) {
-            $cookie = reset($arguments);
+        if (\reset($arguments) instanceof CookieContract) {
+            $cookie = \reset($arguments);
         } else {
-            $cookie = call_user_func_array([$this, 'create'], $arguments);
+            $cookie = \call_user_func_array([$this, 'create'], $arguments);
         }
 
         $this->queued[$cookie->getName()] = $cookie;
@@ -148,8 +148,8 @@ class CookieJar implements JarContract
     /**
      * Get the path and domain, or the default values.
      *
-     * @param string|null $path
-     * @param string|null $domain
+     * @param null|string $path
+     * @param null|string $domain
      * @param bool        $secure
      *
      * @return string[]

@@ -8,18 +8,18 @@ use Viserio\Component\Parsers\Parser\QueryStrParser;
 
 class QueryStrTest extends TestCase
 {
-    public function testParse()
+    public function testParse(): void
     {
         $parsed = (new QueryStrParser())->parse('status=123&message=hello world');
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
     }
 
-    public function testDump()
+    public function testDump(): void
     {
         $expected = ['status' => 123, 'message' => 'hello world'];
-        $payload  = http_build_query($expected);
+        $payload  = \http_build_query($expected);
         $dump     = (new QueryStrDumper())->dump($expected);
 
         self::assertEquals($payload, $dump);

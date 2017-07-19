@@ -35,7 +35,7 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter404($httpMethod, $uri)
+    public function testRouter404($httpMethod, $uri): void
     {
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
@@ -83,7 +83,7 @@ class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions($router)
+    protected function definitions($router): void
     {
         $router->get('/a/prefix:{param}', function ($request, $args) {
             return (new ResponseFactory())

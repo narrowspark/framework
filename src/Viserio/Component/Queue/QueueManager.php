@@ -46,7 +46,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * {@inheritdoc}
      */
-    public function failing($callback)
+    public function failing($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.job.failed', $callback);
     }
@@ -54,7 +54,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * {@inheritdoc}
      */
-    public function stopping($callback)
+    public function stopping($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.worker.stopping', $callback);
     }
@@ -62,7 +62,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * {@inheritdoc}
      */
-    public function exceptionOccurred($callback)
+    public function exceptionOccurred($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.job.exception.occurred', $callback);
     }
@@ -72,7 +72,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param mixed $callback
      */
-    public function before($callback)
+    public function before($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.job.processing', $callback);
     }
@@ -82,7 +82,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param mixed $callback
      */
-    public function after($callback)
+    public function after($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.job.processed', $callback);
     }
@@ -161,7 +161,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     protected function createSqsConnection(array $config): SqsQueue
     {
-        $config = array_merge([
+        $config = \array_merge([
             'version' => 'latest',
             'http'    => [
                 'timeout'         => 60,

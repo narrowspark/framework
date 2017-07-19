@@ -94,7 +94,7 @@ class BeanstalkdQueue extends AbstractQueue
      * @param string $queue
      * @param int    $id
      */
-    public function deleteMessage(string $queue, int $id)
+    public function deleteMessage(string $queue, int $id): void
     {
         $this->pheanstalk->useTube($this->getQueue($queue))->delete($id);
     }

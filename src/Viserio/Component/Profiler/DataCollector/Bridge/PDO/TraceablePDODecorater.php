@@ -71,7 +71,7 @@ class TraceablePDODecorater extends PDO
      */
     public function exec($statement)
     {
-        return $this->profileCall('exec', $statement, func_get_args());
+        return $this->profileCall('exec', $statement, \func_get_args());
     }
 
     /**
@@ -111,7 +111,7 @@ class TraceablePDODecorater extends PDO
      */
     public function query($statement)
     {
-        return $this->profileCall('query', $statement, func_get_args());
+        return $this->profileCall('query', $statement, \func_get_args());
     }
 
     /**
@@ -143,7 +143,7 @@ class TraceablePDODecorater extends PDO
      *
      * @param \Viserio\Component\Profiler\DataCollector\Bridge\PDO\TracedStatement $stmt
      */
-    public function addExecutedStatement(TracedStatement $stmt)
+    public function addExecutedStatement(TracedStatement $stmt): void
     {
         $this->executedStatements[] = $stmt;
     }
@@ -155,7 +155,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getAccumulatedStatementsDuration(): int
     {
-        return array_reduce($this->executedStatements, function ($v, $s) {
+        return \array_reduce($this->executedStatements, function ($v, $s) {
             return $v + $s->getDuration();
         });
     }
@@ -167,7 +167,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getMemoryUsage(): int
     {
-        return array_reduce($this->executedStatements, function ($v, $s) {
+        return \array_reduce($this->executedStatements, function ($v, $s) {
             return $v + $s->getMemoryUsage();
         });
     }
@@ -179,7 +179,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getPeakMemoryUsage(): int
     {
-        return array_reduce($this->executedStatements, function ($v, $s) {
+        return \array_reduce($this->executedStatements, function ($v, $s) {
             $m = $s->getEndMemory();
 
             return $m > $v ? $m : $v;
@@ -203,7 +203,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getFailedExecutedStatements(): array
     {
-        return array_filter($this->executedStatements, function ($s) {
+        return \array_filter($this->executedStatements, function ($s) {
             return ! $s->isSuccess();
         });
     }
@@ -226,7 +226,7 @@ class TraceablePDODecorater extends PDO
         $result = null;
 
         try {
-            $result = call_user_func_array([$this->pdo, $method], $args);
+            $result = \call_user_func_array([$this->pdo, $method], $args);
         } catch (PDOException $e) {
             $ex = $e;
         }

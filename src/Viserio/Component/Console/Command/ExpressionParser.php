@@ -19,14 +19,14 @@ final class ExpressionParser
      */
     public static function parse(string $expression): array
     {
-        preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
+        \preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
 
-        if (trim($expression) === '') {
+        if (\trim($expression) === '') {
             throw new InvalidCommandExpression('The expression was empty.');
         }
 
-        $tokens    = array_values(array_filter(array_map('trim', $matches[0])));
-        $name      = array_shift($tokens);
+        $tokens    = \array_values(\array_filter(\array_map('trim', $matches[0])));
+        $name      = \array_shift($tokens);
         $arguments = [];
         $options   = [];
 
@@ -76,17 +76,17 @@ final class ExpressionParser
 
         switch (true) {
             case self::endsWith($token, '=*]'):
-                return new InputArgument(trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
+                return new InputArgument(\trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
             case self::endsWith($token, '=*'):
-                return new InputArgument(trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
+                return new InputArgument(\trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
             case self::endsWith($token, '?'):
-                return new InputArgument(trim($token, '?'), InputArgument::OPTIONAL, $description);
-            case preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
-                return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
-            case preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
+                return new InputArgument(\trim($token, '?'), InputArgument::OPTIONAL, $description);
+            case \preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
+                return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, \preg_split('/,\s?/', $matches[2]));
+            case \preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
                 return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
             case self::startsWith($token, '[') && self::endsWith($token, ']'):
-                return new InputArgument(trim($token, '[]'), InputArgument::OPTIONAL, $description);
+                return new InputArgument(\trim($token, '[]'), InputArgument::OPTIONAL, $description);
             default:
                 return new InputArgument($token, InputArgument::REQUIRED, $description);
         }
@@ -103,27 +103,27 @@ final class ExpressionParser
      */
     private static function parseOption(string $token): InputOption
     {
-        [$token, $description] = static::extractDescription(trim($token, '[]'));
+        [$token, $description] = static::extractDescription(\trim($token, '[]'));
 
         // Shortcut [-y|--yell]
-        if (mb_strpos($token, '|') !== false) {
-            [$shortcut, $token] = explode('|', $token, 2);
-            $shortcut           = ltrim($shortcut, '-');
+        if (\mb_strpos($token, '|') !== false) {
+            [$shortcut, $token] = \explode('|', $token, 2);
+            $shortcut           = \ltrim($shortcut, '-');
         } else {
             $shortcut = null;
         }
 
-        $name    = ltrim($token, '-');
+        $name    = \ltrim($token, '-');
         $default = null;
 
         switch (true) {
             case self::endsWith($token, '=*'):
-                return new InputOption(rtrim($name, '=*'), $shortcut, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, $description);
+                return new InputOption(\rtrim($name, '=*'), $shortcut, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, $description);
             case self::endsWith($token, '='):
-                return new InputOption(rtrim($name, '='), $shortcut, InputOption::VALUE_REQUIRED, $description);
-            case preg_match('/(.+)\=\*(.+)/', $token, $matches):
-                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
-            case preg_match('/(.+)\=(.+)/', $token, $matches):
+                return new InputOption(\rtrim($name, '='), $shortcut, InputOption::VALUE_REQUIRED, $description);
+            case \preg_match('/(.+)\=\*(.+)/', $token, $matches):
+                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, \preg_split('/,\s?/', $matches[2]));
+            case \preg_match('/(.+)\=(.+)/', $token, $matches):
                 return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
             default:
                 return new InputOption($token, $shortcut, InputOption::VALUE_NONE, $description);
@@ -139,9 +139,9 @@ final class ExpressionParser
      */
     private static function extractDescription(string $token): array
     {
-        preg_match('/(.*)\s:(\s+.*(?<!]))(.*)/', trim($token), $parts);
+        \preg_match('/(.*)\s:(\s+.*(?<!]))(.*)/', \trim($token), $parts);
 
-        return count($parts) === 4 ? [$parts[1] . $parts[3], trim($parts[2])] : [$token, ''];
+        return \count($parts) === 4 ? [$parts[1] . $parts[3], \trim($parts[2])] : [$token, ''];
     }
 
     /**
@@ -154,7 +154,7 @@ final class ExpressionParser
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        return $needle !== '' && mb_substr($haystack, 0, mb_strlen($needle)) === $needle;
+        return $needle !== '' && \mb_substr($haystack, 0, \mb_strlen($needle)) === $needle;
     }
 
     /**
@@ -167,6 +167,6 @@ final class ExpressionParser
      */
     private static function endsWith(string $haystack, string $needle): bool
     {
-        return mb_substr($haystack, -mb_strlen($needle)) === $needle;
+        return \mb_substr($haystack, -\mb_strlen($needle)) === $needle;
     }
 }

@@ -111,7 +111,7 @@ class Pluralizer
      */
     protected static function uncountable(string $value): bool
     {
-        return in_array(mb_strtolower($value), static::$uncountable, true);
+        return \in_array(\mb_strtolower($value), static::$uncountable, true);
     }
 
     /**

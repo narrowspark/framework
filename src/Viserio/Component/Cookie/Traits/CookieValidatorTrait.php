@@ -13,19 +13,19 @@ trait CookieValidatorTrait
      *
      * @throws \InvalidArgumentException
      *
-     * @link http://tools.ietf.org/search/rfc2616#section-2.2
+     * @see http://tools.ietf.org/search/rfc2616#section-2.2
      *
      * @return void
      */
     protected function validateName(string $name): void
     {
-        if (mb_strlen($name) < 1) {
+        if (\mb_strlen($name) < 1) {
             throw new InvalidArgumentException('The name cannot be empty');
         }
 
         // Name attribute is a token as per spec in RFC 2616
-        if (preg_match('/[\x00-\x20\x22\x28-\x29\x2c\x2f\x3a-\x40\x5b-\x5d\x7b\x7d\x7f]/', $name)) {
-            throw new InvalidArgumentException(sprintf(
+        if (\preg_match('/[\x00-\x20\x22\x28-\x29\x2c\x2f\x3a-\x40\x5b-\x5d\x7b\x7d\x7f]/', $name)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Cookie name [%s] must not contain invalid characters: ASCII Control characters (0-31;127), space, tab and the following characters: ()<>@,;:\"/[]?={}',
                 $name
             ));
@@ -35,20 +35,20 @@ trait CookieValidatorTrait
     /**
      * Validates a value.
      *
-     * @param string|null $value
+     * @param null|string $value
      *
      * @throws \InvalidArgumentException
      *
-     * @link http://tools.ietf.org/html/rfc6265#section-4.1.1
+     * @see http://tools.ietf.org/html/rfc6265#section-4.1.1
      *
      * @return void
      */
     protected function validateValue(?string $value = null): void
     {
         if (isset($value)) {
-            if (preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {
+            if (\preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {
                 throw new InvalidArgumentException(
-                    sprintf(
+                    \sprintf(
                         'The cookie value [%s] contains invalid characters.',
                         $value
                     )

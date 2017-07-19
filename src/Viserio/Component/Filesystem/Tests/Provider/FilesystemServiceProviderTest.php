@@ -16,7 +16,7 @@ use Viserio\Component\Filesystem\Provider\FilesystemServiceProvider;
 
 class FilesystemServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new ConfigServiceProvider());

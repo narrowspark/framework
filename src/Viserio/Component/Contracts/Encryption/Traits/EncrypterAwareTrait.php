@@ -10,7 +10,7 @@ trait EncrypterAwareTrait
     /**
      * Encrypter instance.
      *
-     * @var \Viserio\Component\Contracts\Encryption\Encrypter|null
+     * @var null|\Viserio\Component\Contracts\Encryption\Encrypter
      */
     protected $encrypter;
 

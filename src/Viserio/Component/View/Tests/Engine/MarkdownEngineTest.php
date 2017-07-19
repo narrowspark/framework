@@ -9,14 +9,14 @@ use Viserio\Component\View\Engine\MarkdownEngine;
 
 class MarkdownEngineTest extends TestCase
 {
-    public function testGetWithParsedown()
+    public function testGetWithParsedown(): void
     {
         $parser = new MarkdownEngine(new Parsedown());
 
         self::assertSame('<p><a href="google.com">test</a></p>', $parser->get(['path' => __DIR__ . '/../Fixture/foo.md']));
     }
 
-    public function testGetWithParsedownExtra()
+    public function testGetWithParsedownExtra(): void
     {
         $parser = new MarkdownEngine(new ParsedownExtra());
 

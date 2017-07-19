@@ -13,8 +13,8 @@ class PhpParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        if (! file_exists($payload)) {
-            throw new ParseException(['message' => sprintf('No such file [%s] found.', $payload)]);
+        if (! \file_exists($payload)) {
+            throw new ParseException(['message' => \sprintf('No such file [%s] found.', $payload)]);
         }
 
         try {
@@ -22,7 +22,7 @@ class PhpParser implements ParserContract
         } catch (Throwable $exception) {
             throw new ParseException(
                 [
-                    'message'   => sprintf('An exception was thrown by file [%s].', $payload),
+                    'message'   => \sprintf('An exception was thrown by file [%s].', $payload),
                     'exception' => $exception,
                 ]
             );

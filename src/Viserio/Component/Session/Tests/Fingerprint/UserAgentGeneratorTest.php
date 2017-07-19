@@ -8,7 +8,7 @@ use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 
 class UserAgentGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
@@ -16,7 +16,7 @@ class UserAgentGeneratorTest extends MockeryTestCase
             ->andReturn(['REMOTE_ADDR' => 'test']);
         $generator = new UserAgentGenerator($request);
 
-        self::assertSame(40, mb_strlen($generator->generate()));
+        self::assertSame(40, \mb_strlen($generator->generate()));
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
@@ -25,6 +25,6 @@ class UserAgentGeneratorTest extends MockeryTestCase
 
         $generator = new UserAgentGenerator($request);
 
-        self::assertSame(40, mb_strlen($generator->generate()));
+        self::assertSame(40, \mb_strlen($generator->generate()));
     }
 }

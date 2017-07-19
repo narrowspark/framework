@@ -21,11 +21,11 @@ use Viserio\Component\Session\SessionManager;
 class StartSessionMiddlewareTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Filesystem\Filesystem|null
+     * @var null|\Viserio\Component\Filesystem\Filesystem
      */
     private $files;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         $this->files->createDirectory(__DIR__ . '/stubs');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
         $this->files = null;
@@ -42,7 +42,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         parent::tearDown();
     }
 
-    public function testAddSessionToResponse()
+    public function testAddSessionToResponse(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -89,10 +89,10 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
     }
 
-    public function testAddSessionToCookie()
+    public function testAddSessionToCookie(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')

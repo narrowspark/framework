@@ -6,7 +6,7 @@ class ContainerLazyExtendFixture
 {
     public static $initialized = false;
 
-    public function init()
+    public function init(): void
     {
         static::$initialized = true;
     }

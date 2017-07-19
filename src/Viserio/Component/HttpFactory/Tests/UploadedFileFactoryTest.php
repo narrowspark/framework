@@ -12,55 +12,55 @@ class UploadedFileFactoryTest extends TestCase
 
     private $factory;
 
-    public function setup()
+    public function setup(): void
     {
-        mkdir(__DIR__ . '/tmp');
+        \mkdir(__DIR__ . '/tmp');
 
         $this->factory = new UploadedFileFactory();
 
-        $this->fname = tempnam(__DIR__ . '/tmp', 'tfile');
+        $this->fname = \tempnam(__DIR__ . '/tmp', 'tfile');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        if (file_exists($this->fname)) {
-            unlink($this->fname);
+        if (\file_exists($this->fname)) {
+            \unlink($this->fname);
         }
 
-        rmdir(__DIR__ . '/tmp');
+        \rmdir(__DIR__ . '/tmp');
 
         parent::tearDown();
     }
 
-    public function testCreateUploadedFileWithString()
+    public function testCreateUploadedFileWithString(): void
     {
-        $filename = tempnam(sys_get_temp_dir(), 'http-factory-test');
+        $filename = \tempnam(\sys_get_temp_dir(), 'http-factory-test');
         $content  = 'i made this!';
-        $size     = mb_strlen($content);
+        $size     = \mb_strlen($content);
 
-        file_put_contents($filename, $content);
+        \file_put_contents($filename, $content);
 
         $file = $this->factory->createUploadedFile($filename);
 
         self::assertUploadedFile($file, $content, $size);
 
-        unlink($filename);
+        \unlink($filename);
     }
 
-    public function testCreateUploadedFileWithClientFilenameAndMediaType()
+    public function testCreateUploadedFileWithClientFilenameAndMediaType(): void
     {
         $tmpfname        = $this->fname;
-        $upload          = fopen($tmpfname, 'w+');
+        $upload          = \fopen($tmpfname, 'w+');
         $content         = 'this is your capitan speaking';
         $error           = \UPLOAD_ERR_OK;
         $clientFilename  = 'test.txt';
         $clientMediaType = 'text/plain';
 
-        fwrite($upload, $content);
+        \fwrite($upload, $content);
 
         $file = $this->factory->createUploadedFile(
             $tmpfname,
-            mb_strlen($content),
+            \mb_strlen($content),
             $error,
             $clientFilename,
             $clientMediaType
@@ -69,9 +69,9 @@ class UploadedFileFactoryTest extends TestCase
         self::assertUploadedFile($file, $content, null, $error, $clientFilename, $clientMediaType);
     }
 
-    public function testCreateUploadedFileWithError()
+    public function testCreateUploadedFileWithError(): void
     {
-        $upload = tmpfile();
+        $upload = \tmpfile();
         $error  = \UPLOAD_ERR_NO_FILE;
         $file   = $this->factory->createUploadedFile($upload, null, $error);
 
@@ -88,10 +88,10 @@ class UploadedFileFactoryTest extends TestCase
         $error = null,
         $clientFilename = null,
         $clientMediaType = null
-    ) {
+    ): void {
         self::assertInstanceOf(UploadedFileInterface::class, $file);
         self::assertSame($content, (string) $file->getStream());
-        self::assertSame($size ?: mb_strlen($content), $file->getSize());
+        self::assertSame($size ?: \mb_strlen($content), $file->getSize());
         self::assertSame($error ?: UPLOAD_ERR_OK, $file->getError());
         self::assertSame($clientFilename, $file->getClientFilename());
         self::assertSame($clientMediaType, $file->getClientMediaType());

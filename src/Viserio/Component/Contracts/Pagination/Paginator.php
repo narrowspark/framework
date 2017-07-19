@@ -7,7 +7,7 @@ interface Paginator
     /**
      * Render the pagination using the given view.
      *
-     * @param string|null $view
+     * @param null|string $view
      *
      * @return string
      */
@@ -26,7 +26,7 @@ interface Paginator
     /**
      * Get the URL for the next page.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getNextPageUrl(): ?string;
 
@@ -42,7 +42,7 @@ interface Paginator
     /**
      * Get the URL for the previous page.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPreviousPageUrl(): ?string;
 
@@ -68,7 +68,7 @@ interface Paginator
     /**
      * Get the URL fragment to be appended to URLs.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getFragment(): ?string;
 
@@ -76,7 +76,7 @@ interface Paginator
      * Add a set of query string values to the paginator.
      *
      * @param array|string $key
-     * @param string|null  $value
+     * @param null|string  $value
      *
      * @return $this
      */

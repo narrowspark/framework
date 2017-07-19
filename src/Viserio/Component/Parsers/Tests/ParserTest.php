@@ -21,21 +21,21 @@ class ParserTest extends TestCase
      */
     private $parser;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->parser = new Parser();
     }
 
-    public function testParser()
+    public function testParser(): void
     {
         self::assertEquals([], $this->parser->parse(''));
 
-        self::assertTrue(is_array($this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts')));
-        self::assertTrue(is_array($this->parser->parse(json_encode(['foo' => 'bar']))));
-        self::assertTrue(is_array($this->parser->parse(file_get_contents(__DIR__ . '/Fixtures/xliff/encoding_xliff_v1.xlf'))));
+        self::assertTrue(\is_array($this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts')));
+        self::assertTrue(\is_array($this->parser->parse(\json_encode(['foo' => 'bar']))));
+        self::assertTrue(\is_array($this->parser->parse(\file_get_contents(__DIR__ . '/Fixtures/xliff/encoding_xliff_v1.xlf'))));
     }
 
-    public function testAddNewParser()
+    public function testAddNewParser(): void
     {
         $this->parser->addMimeType('text/plain', 'txt');
         $this->parser->addParser(new TextParser(), 'txt');
@@ -44,7 +44,7 @@ class ParserTest extends TestCase
         self::assertInstanceOf(TextParser::class, $this->parser->getParser('text/plain'));
     }
 
-    public function testGetParser()
+    public function testGetParser(): void
     {
         self::assertInstanceOf(IniParser::class, $this->parser->getParser('ini'));
         self::assertInstanceOf(JsonParser::class, $this->parser->getParser('json'));
@@ -71,7 +71,7 @@ class ParserTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
      * @expectedExceptionMessage Given extension or mime type [inia] is not supported.
      */
-    public function testGetParserToThrowException()
+    public function testGetParserToThrowException(): void
     {
         $this->parser->getParser('inia');
     }

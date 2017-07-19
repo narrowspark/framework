@@ -117,7 +117,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         array $parameters = [],
         string $domain = 'messages'
     ): string {
-        if (preg_match("/^(.*?)(\[.*?\])$/", $id, $match)) {
+        if (\preg_match("/^(.*?)(\[.*?\])$/", $id, $match)) {
             $id = $match[1];
         }
 
@@ -181,7 +181,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     {
         $helpers = $this->filterHelpersFromString($translation);
 
-        if (count($this->helpers) === 0 || count($helpers) === 0) {
+        if (\count($this->helpers) === 0 || \count($helpers) === 0) {
             return $translation;
         }
 
@@ -190,9 +190,9 @@ class Translator implements TranslatorContract, LoggerAwareInterface
                 return $translation;
             }
 
-            array_unshift($helper['arguments'], $translation);
+            \array_unshift($helper['arguments'], $translation);
 
-            $translation = call_user_func_array($this->helpers[$helper['name']], $helper['arguments']);
+            $translation = \call_user_func_array($this->helpers[$helper['name']], $helper['arguments']);
         }
 
         return $translation;
@@ -209,16 +209,16 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     {
         $helpers = [];
 
-        if (preg_match("/^(.*?)\[(.*?)\]$/", $translation, $match)) {
+        if (\preg_match("/^(.*?)\[(.*?)\]$/", $translation, $match)) {
             $translation = $match[1];
-            $helpers     = explode('|', $match[2]);
-            $helpers     = array_map(function ($helper) {
+            $helpers     = \explode('|', $match[2]);
+            $helpers     = \array_map(function ($helper) {
                 $name = $helper;
                 $arguments = [];
 
-                if (preg_match('/^(.*?)\:(.*)$/', $helper, $match)) {
+                if (\preg_match('/^(.*?)\:(.*)$/', $helper, $match)) {
                     $name = $match[1];
-                    $arguments = explode(':', $match[2]);
+                    $arguments = \explode(':', $match[2]);
                 }
 
                 return [
@@ -283,7 +283,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * Collect messages about all translations.
      *
-     * @param string|null $locale
+     * @param null|string $locale
      * @param string      $domain
      * @param string      $id
      * @param string      $translation
@@ -309,6 +309,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
             while ($fallbackCatalogue) {
                 if ($fallbackCatalogue->defines($id, $domain)) {
                     $locale = $fallbackCatalogue->getLocale();
+
                     break;
                 }
 

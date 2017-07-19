@@ -22,7 +22,7 @@ class IniTest extends TestCase
 
     private $iniArray;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->file     = new Filesystem();
         $this->root     = vfsStream::setup();
@@ -53,7 +53,7 @@ class IniTest extends TestCase
         ];
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = vfsStream::newFile('temp.ini')
             ->withContent('
@@ -83,11 +83,11 @@ urls[git] = "http://git.php.net"')
 
         $parsed = (new IniParser())->parse((string) $this->file->read($file->url()));
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame($this->iniArray, $parsed);
     }
 
-    public function testParseWithSection()
+    public function testParseWithSection(): void
     {
         $file = vfsStream::newFile('temp.ini')->withContent(
             '
@@ -102,7 +102,7 @@ value=5'
 
         $parsed = (new IniParser())->parse((string) $this->file->read($file->url()));
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame(
             ['main' => ['explore' => true], 'main.sub' => [], 'main.sub.sub' => ['value' => 5]],
             $parsed
@@ -112,12 +112,12 @@ value=5'
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      */
-    public function testParseToThrowException()
+    public function testParseToThrowException(): void
     {
         (new IniParser())->parse('nonexistfile');
     }
 
-    public function testDump()
+    public function testDump(): void
     {
         $dump = (new IniDumper())->dump($this->iniArray);
         $file = vfsStream::newFile('temp.ini')
@@ -143,6 +143,6 @@ urls[svn]="http://svn.php.net"
 urls[git]="http://git.php.net"')
             ->at($this->root);
 
-        self::assertEquals(preg_replace('/^\s+|\n|\r|\s+$/m', '', $this->file->read($file->url())), preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
+        self::assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', $this->file->read($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
     }
 }

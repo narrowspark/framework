@@ -38,7 +38,7 @@ class Pipeline extends BasePipeline
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
         [$name, $parameters] = $this->parseStageString($stage);
-        $parameters          = array_merge([$traveler, $stack], $parameters);
+        $parameters          = \array_merge([$traveler, $stack], $parameters);
         $class               = null;
 
         if ($this->container->has($name)) {
@@ -46,7 +46,7 @@ class Pipeline extends BasePipeline
         } elseif ($this->container instanceof FactoryContract) {
             $class = $this->container->resolve($name);
         } else {
-            throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.', $name));
+            throw new RuntimeException(\sprintf('Class [%s] is not being managed by the container.', $name));
         }
 
         return $this->getInvoker()->call([$class, $this->method], $parameters);
@@ -82,7 +82,7 @@ class Pipeline extends BasePipeline
              */
             public function process(ServerRequestInterface $request)
             {
-                return call_user_func($this->middleware, $request);
+                return \call_user_func($this->middleware, $request);
             }
         };
     }

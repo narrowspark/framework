@@ -21,13 +21,13 @@ class DownCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
-        file_put_contents(
+        \file_put_contents(
             $kernel->storagePath('framework/down'),
-            json_encode($this->getDownPayload(), JSON_PRETTY_PRINT)
+            \json_encode($this->getDownPayload(), JSON_PRETTY_PRINT)
         );
 
         $this->comment('Application is now in maintenance mode.');
@@ -50,12 +50,12 @@ class DownCommand extends Command
     /**
      * Get the number of seconds the client should wait before retrying their request.
      *
-     * @return int|null
+     * @return null|int
      */
     protected function getRetryTime(): ?int
     {
         $retry = $this->option('retry');
 
-        return is_numeric($retry) && $retry > 0 ? (int) $retry : null;
+        return \is_numeric($retry) && $retry > 0 ? (int) $retry : null;
     }
 }

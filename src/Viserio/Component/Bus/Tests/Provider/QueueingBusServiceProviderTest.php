@@ -10,7 +10,7 @@ use Viserio\Component\Contracts\Bus\QueueingDispatcher as QueueingDispatcherCont
 
 class QueueingBusServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new QueueingBusServiceProvider());

@@ -8,7 +8,7 @@ use Viserio\Component\Support\Invoker;
 
 class InvokerTest extends TestCase
 {
-    public function testCall()
+    public function testCall(): void
     {
         $invoker = (new Invoker())
             ->injectByTypeHint(true)

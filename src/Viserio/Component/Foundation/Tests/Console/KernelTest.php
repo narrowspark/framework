@@ -22,15 +22,15 @@ use Viserio\Component\Foundation\Console\Kernel;
 
 class KernelTest extends MockeryTestCase
 {
-    public function testIfClassHasConsoleAndTerminableContracts()
+    public function testIfClassHasConsoleAndTerminableContracts(): void
     {
-        $interfaces = class_implements(new Kernel());
+        $interfaces = \class_implements(new Kernel());
 
         self::assertTrue(isset($interfaces[TerminableContract::class]));
         self::assertTrue(isset($interfaces[ConsoleKernelContract::class]));
     }
 
-    public function testConsoleHandle()
+    public function testConsoleHandle(): void
     {
         $container = $this->mock(ContainerContract::class);
 
@@ -90,7 +90,7 @@ class KernelTest extends MockeryTestCase
         $kernel->handle(new ArgvInput(), new ConsoleOutput());
     }
 
-    public function testHandleWithException()
+    public function testHandleWithException(): void
     {
         $container = $this->mock(ContainerContract::class);
 
@@ -148,7 +148,7 @@ class KernelTest extends MockeryTestCase
         $kernel->handle(new ArgvInput(), new ConsoleOutput());
     }
 
-    public function testTerminate()
+    public function testTerminate(): void
     {
         $argv      = new ArgvInput();
         $container = $this->mock(ContainerContract::class);
@@ -204,7 +204,7 @@ class KernelTest extends MockeryTestCase
         $kernel->terminate($argv, 0);
     }
 
-    public function testGetAll()
+    public function testGetAll(): void
     {
         $container = $this->mock(ContainerContract::class);
 
@@ -244,10 +244,10 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        self::assertTrue(is_array($kernel->getAll()));
+        self::assertTrue(\is_array($kernel->getAll()));
     }
 
-    public function testGetOutput()
+    public function testGetOutput(): void
     {
         $container = $this->mock(ContainerContract::class);
 
@@ -290,7 +290,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame('test', $kernel->getOutput());
     }
 
-    public function testCommandCall()
+    public function testCommandCall(): void
     {
         $container = $this->mock(ContainerContract::class);
 
@@ -334,7 +334,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame(0, $kernel->call('foo'));
     }
 
-    public function testCommand()
+    public function testCommand(): void
     {
         $container = $this->mock(ContainerContract::class);
         $function  = function () {
@@ -347,7 +347,7 @@ class KernelTest extends MockeryTestCase
         self::assertEquals($command, $kernel->command('foo', $function));
     }
 
-    public function testRegisterCommand()
+    public function testRegisterCommand(): void
     {
         $container = $this->mock(ContainerContract::class);
 
@@ -390,7 +390,7 @@ class KernelTest extends MockeryTestCase
         $kernel->registerCommand($command);
     }
 
-    private function getBootstrap($container)
+    private function getBootstrap($container): void
     {
         $setRequestForConsole = $this->mock(SetRequestForConsole::class);
         $setRequestForConsole->shouldReceive('bootstrap')

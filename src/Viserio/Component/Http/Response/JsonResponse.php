@@ -47,7 +47,7 @@ class JsonResponse extends Response
         array $headers = [],
         int $encodingOptions = self::DEFAULT_JSON_FLAGS
     ) {
-        $body = new Stream(fopen('php://temp', 'wb+'));
+        $body = new Stream(\fopen('php://temp', 'wb+'));
         $body->write($this->jsonEncode($data, $encodingOptions));
         $body->rewind();
 
@@ -68,20 +68,20 @@ class JsonResponse extends Response
      */
     private function jsonEncode($data, $encodingOptions)
     {
-        if (is_resource($data)) {
+        if (\is_resource($data)) {
             throw new InvalidArgumentException('Cannot JSON encode resources');
         }
 
         // Clear json_last_error()
-        json_encode(null);
+        \json_encode(null);
 
-        $json = json_encode($data, $encodingOptions);
+        $json = \json_encode($data, $encodingOptions);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new InvalidArgumentException(sprintf(
+        if (JSON_ERROR_NONE !== \json_last_error()) {
+            throw new InvalidArgumentException(\sprintf(
                 'Unable to encode data to JSON in %s: %s',
                 __CLASS__,
-                json_last_error_msg()
+                \json_last_error_msg()
             ));
         }
 

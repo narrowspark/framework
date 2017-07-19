@@ -10,7 +10,7 @@ use Viserio\Component\StaticalProxy\Provider\AliasLoaderServiceProvider;
 
 class AliasLoaderServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new AliasLoaderServiceProvider());
@@ -28,7 +28,7 @@ class AliasLoaderServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(AliasLoader::class, $container->get('alias'));
     }
 
-    public function testProviderWithKernelCachePath()
+    public function testProviderWithKernelCachePath(): void
     {
         $container = new Container();
         $container->register(new AliasLoaderServiceProvider());

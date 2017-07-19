@@ -21,7 +21,7 @@ class Store implements StoreContract
     /**
      * The session ID.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $id;
 
@@ -56,9 +56,9 @@ class Store implements StoreContract
     /**
      * Number of requests after which id is regenerated.
      *
-     * @var int|null
+     * @var null|int
      */
-    private $idRequestsLimit = null;
+    private $idRequestsLimit;
 
     /**
      * The number of seconds the session should be valid.
@@ -70,21 +70,21 @@ class Store implements StoreContract
     /**
      * Last (id) regeneration (Unix timestamp).
      *
-     * @var int|null
+     * @var null|int
      */
     private $regenerationTrace;
 
     /**
      * First trace (Unix timestamp), time when session was created.
      *
-     * @var int|null
+     * @var null|int
      */
     private $firstTrace;
 
     /**
      * Last trace (Unix timestamp).
      *
-     * @var int|null
+     * @var null|int
      */
     private $lastTrace;
 
@@ -208,7 +208,7 @@ class Store implements StoreContract
             return true;
         }
 
-        return $lastTrace + $this->getTtl() < time();
+        return $lastTrace + $this->getTtl() < \time();
     }
 
     /**
@@ -461,7 +461,7 @@ class Store implements StoreContract
      */
     public function keep($keys = null): void
     {
-        $keys = is_array($keys) ? $keys : func_get_args();
+        $keys = \is_array($keys) ? $keys : \func_get_args();
 
         $this->mergeNewFlashes($keys);
 
@@ -495,7 +495,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function setRequestOnHandler(ServerRequestInterface $request)
+    public function setRequestOnHandler(ServerRequestInterface $request): void
     {
         if ($this->handlerNeedsRequest()) {
             $this->handler->setRequest($request);
@@ -535,7 +535,7 @@ class Store implements StoreContract
      */
     public function regenerateToken(): void
     {
-        $this->set('_token', bin2hex(Str::random(40)));
+        $this->set('_token', \bin2hex(Str::random(40)));
     }
 
     /**
@@ -563,7 +563,7 @@ class Store implements StoreContract
      */
     protected function isValidId($id): bool
     {
-        return is_string($id) && preg_match('/^[a-f0-9]{40}$/', $id);
+        return \is_string($id) && \preg_match('/^[a-f0-9]{40}$/', $id);
     }
 
     /**
@@ -583,7 +583,7 @@ class Store implements StoreContract
      */
     protected function generateSessionId(): string
     {
-        return hash('ripemd160', uniqid(Str::random(23), true) . Str::random(25) . microtime(true));
+        return \hash('ripemd160', \uniqid(Str::random(23), true) . Str::random(25) . \microtime(true));
     }
 
     /**
@@ -609,7 +609,7 @@ class Store implements StoreContract
      */
     private function mergeNewFlashes(array $keys): void
     {
-        $values = array_unique(array_merge($this->get('_flash.new', []), $keys));
+        $values = \array_unique(\array_merge($this->get('_flash.new', []), $keys));
 
         $this->set('_flash.new', $values);
     }
@@ -623,7 +623,7 @@ class Store implements StoreContract
      */
     private function removeFromOldFlashData(array $keys): void
     {
-        $this->set('_flash.old', array_diff($this->get('_flash.old', []), $keys));
+        $this->set('_flash.old', \array_diff($this->get('_flash.old', []), $keys));
     }
 
     /**
@@ -667,7 +667,7 @@ class Store implements StoreContract
         $this->requestsCount     = $metadata['requestsCount'];
         $this->fingerprint       = $metadata['fingerprint'];
 
-        $this->values = array_merge($this->values, $values);
+        $this->values = \array_merge($this->values, $values);
 
         return true;
     }
@@ -682,7 +682,7 @@ class Store implements StoreContract
         $data = $this->handler->read($this->id);
 
         if ($data) {
-            return json_decode($this->encrypter->decrypt($data), true);
+            return \json_decode($this->encrypter->decrypt($data), true);
         }
 
         return [];
@@ -707,7 +707,7 @@ class Store implements StoreContract
 
         $this->handler->write(
             $this->id,
-            $this->encrypter->encrypt(json_encode($values, \JSON_PRESERVE_ZERO_FRACTION))
+            $this->encrypter->encrypt(\json_encode($values, \JSON_PRESERVE_ZERO_FRACTION))
         );
     }
 

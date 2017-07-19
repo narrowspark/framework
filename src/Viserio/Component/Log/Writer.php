@@ -46,7 +46,7 @@ class Writer extends LogLevel implements LogContract
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array([$this->getMonolog(), $method], $parameters);
+        return \call_user_func_array([$this->getMonolog(), $method], $parameters);
     }
 
     /**
@@ -126,20 +126,20 @@ class Writer extends LogLevel implements LogContract
      *
      * @param mixed $message
      *
-     * @return string|object|int|float|null|bool
+     * @return null|bool|float|int|object|string
      */
     protected function formatMessage($message)
     {
-        if (is_array($message)) {
-            return var_export($message, true);
-        // @codeCoverageIgnoreStart
+        if (\is_array($message)) {
+            return \var_export($message, true);
+            // @codeCoverageIgnoreStart
         } elseif ($message instanceof Jsonable) {
             // @codeCoverageIgnoreEnd
             return $message->toJson();
-        // @codeCoverageIgnoreStart
+            // @codeCoverageIgnoreStart
         } elseif ($message instanceof Arrayable) {
             // @codeCoverageIgnoreEnd
-            return var_export($message->toArray(), true);
+            return \var_export($message->toArray(), true);
         }
 
         return $message;

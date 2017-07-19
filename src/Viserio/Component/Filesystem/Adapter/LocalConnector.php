@@ -34,19 +34,19 @@ class LocalConnector implements ConnectorContract
      */
     protected function getConfig(array $config): array
     {
-        if (! array_key_exists('path', $config)) {
+        if (! \array_key_exists('path', $config)) {
             throw new InvalidArgumentException('The local connector requires path configuration.');
         }
 
-        if (! array_key_exists('write_flags', $config)) {
+        if (! \array_key_exists('write_flags', $config)) {
             $config['write_flags'] = LOCK_EX;
         }
 
-        if (! array_key_exists('link_handling', $config)) {
+        if (! \array_key_exists('link_handling', $config)) {
             $config['link_handling'] = Local::DISALLOW_LINKS;
         }
 
-        if (! array_key_exists('permissions', $config)) {
+        if (! \array_key_exists('permissions', $config)) {
             $config['permissions'] = [];
         }
 

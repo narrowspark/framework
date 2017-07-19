@@ -15,7 +15,7 @@ class OptionsResolver
 
     public function configure($configClass, $data): self
     {
-        self::$configClass = get_class($configClass);
+        self::$configClass = \get_class($configClass);
         self::$data        = $data;
 
         return $this;

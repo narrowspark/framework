@@ -98,10 +98,10 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         // Successful 2xx
         if ($statusCode >= 200 && $statusCode <= 226) {
             $status = 'response-status-green';
-        // Redirection 3xx
+            // Redirection 3xx
         } elseif ($statusCode >= 300 && $statusCode <= 308) {
             $status = 'response-status-yellow';
-        // Client Error 4xx
+            // Client Error 4xx
         } elseif ($statusCode >= 400 && $statusCode <= 511) {
             $status = 'response-status-red';
         }
@@ -113,7 +113,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         ];
 
         if ($this->route !== null && $this->route->getName() !== null) {
-            return array_merge(
+            return \array_merge(
                 $tabInfos,
                 [
                     'label' => '@',
@@ -121,10 +121,10 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 ]
             );
         } elseif ($this->route !== null) {
-            return array_merge(
+            return \array_merge(
                 $tabInfos,
                 [
-                    'value'  => implode(' | ', $this->route->getMethods()),
+                    'value'  => \implode(' | ', $this->route->getMethods()),
                 ]
             );
         }
@@ -164,9 +164,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         if ($session !== null) {
             $sessionMeta = [
-                'Created'           => date(DATE_RFC2822, $session->getFirstTrace()),
-                'Last used'         => date(DATE_RFC2822, $session->getLastTrace()),
-                'Last regeneration' => date(DATE_RFC2822, $session->getRegenerationTrace()),
+                'Created'           => \date(DATE_RFC2822, $session->getFirstTrace()),
+                'Last used'         => \date(DATE_RFC2822, $session->getLastTrace()),
+                'Last regeneration' => \date(DATE_RFC2822, $session->getRegenerationTrace()),
                 'requestsCount'     => $session->getRequestsCount(),
                 'fingerprint'       => $session->getFingerprint(),
             ];
@@ -258,7 +258,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): array
     {
-        if (! (class_exists(RequestCookies::class) && class_exists(ResponseCookies::class))) {
+        if (! (\class_exists(RequestCookies::class) && \class_exists(ResponseCookies::class))) {
             return [];
         }
 
@@ -299,22 +299,22 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     protected function getRouteInformation(RouteContract $route): array
     {
-        $routesPath = realpath($this->routeDirPath);
+        $routesPath = \realpath($this->routeDirPath);
         $action     = $route->getAction();
 
         $result = [
            'uri'     => $route->getUri() ?: '-',
-           'methods' => count($route->getMethods()) > 1 ?
-                implode(' | ', $route->getMethods()) :
+           'methods' => \count($route->getMethods()) > 1 ?
+                \implode(' | ', $route->getMethods()) :
                 $route->getMethods(),
         ];
 
-        $result = array_merge($result, $action);
+        $result = \array_merge($result, $action);
 
-        if (isset($action['controller']) && mb_strpos($action['controller'], '@') !== false) {
-            [$controller, $method] = explode('@', $action['controller']);
+        if (isset($action['controller']) && \mb_strpos($action['controller'], '@') !== false) {
+            [$controller, $method] = \explode('@', $action['controller']);
 
-            if (class_exists($controller) && method_exists($controller, $method)) {
+            if (\class_exists($controller) && \method_exists($controller, $method)) {
                 $reflector = new ReflectionMethod($controller, $method);
             }
 
@@ -325,12 +325,12 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         }
 
         if (isset($reflector)) {
-            $filename       = ltrim(str_replace($routesPath, '', $reflector->getFileName()), '/');
+            $filename       = \ltrim(\str_replace($routesPath, '', $reflector->getFileName()), '/');
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
-        $result['middlewares']         = implode(', ', $route->gatherMiddleware());
-        $result['without_middlewares'] = implode(', ', $route->gatherDisabledMiddlewares());
+        $result['middlewares']         = \implode(', ', $route->gatherMiddleware());
+        $result['without_middlewares'] = \implode(', ', $route->gatherDisabledMiddlewares());
 
         return $result;
     }
@@ -348,7 +348,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         foreach ($attributes as $key => $value) {
             if ($key === '_route') {
-                if (is_object($value)) {
+                if (\is_object($value)) {
                     $value = [
                         'Uri'        => $value->getUri(),
                         'Parameters' => $value->getParameters(),
@@ -378,7 +378,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $preparedHeaders = [];
 
         foreach ($headers as $key => $value) {
-            if (count($value) === 1) {
+            if (\count($value) === 1) {
                 $preparedHeaders[$key] = $value[0];
             } else {
                 $preparedHeaders[$key] = $value;
@@ -401,7 +401,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $preparedParams = [];
 
         foreach ($params as $key => $value) {
-            if (preg_match('/(_KEY|_PASSWORD|_PW|_SECRET)/s', $key)) {
+            if (\preg_match('/(_KEY|_PASSWORD|_PW|_SECRET)/s', $key)) {
                 $preparedParams[$key] = '******';
             } else {
                 $preparedParams[$key] = $value;

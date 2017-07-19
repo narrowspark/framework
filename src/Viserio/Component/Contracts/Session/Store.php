@@ -43,7 +43,7 @@ interface Store extends JsonSerializable
     /**
      * Returns the session ID.
      *
-     * @return string|null the session ID
+     * @return null|string the session ID
      */
     public function getId(): ?string;
 
@@ -206,21 +206,21 @@ interface Store extends JsonSerializable
     /**
      * Gets last trace timestamp.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getLastTrace(): ?int;
 
     /**
      * Gets first trace timestamp.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getFirstTrace(): ?int;
 
     /**
      * Gets last (id) regeneration timestamp.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getRegenerationTrace(): ?int;
 
@@ -298,7 +298,7 @@ interface Store extends JsonSerializable
      *
      * @return void
      */
-    public function setRequestOnHandler(ServerRequestInterface $request);
+    public function setRequestOnHandler(ServerRequestInterface $request): void;
 
     /**
      * Get the encrypter instance.
@@ -333,7 +333,7 @@ interface Store extends JsonSerializable
     /**
      * Get the previous URL from the session.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPreviousUrl(): ?string;
 }

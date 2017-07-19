@@ -17,30 +17,30 @@ class PhpInputStreamTest extends TestCase
      */
     protected $stream;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->file   = dirname(__DIR__) . '/Fixture/php-input-stream.txt';
+        $this->file   = \dirname(__DIR__) . '/Fixture/php-input-stream.txt';
         $this->stream = new PhpInputStream($this->file);
     }
 
     public function getFileContents()
     {
-        return file_get_contents($this->file);
+        return \file_get_contents($this->file);
     }
 
-    public function assertStreamContents($test, $message = null)
+    public function assertStreamContents($test, $message = null): void
     {
         $content = $this->getFileContents();
 
         self::assertEquals($content, $test, $message);
     }
 
-    public function testStreamIsNeverWritable()
+    public function testStreamIsNeverWritable(): void
     {
         self::assertFalse($this->stream->isWritable());
     }
 
-    public function testCanReadStreamIteratively()
+    public function testCanReadStreamIteratively(): void
     {
         $body = '';
 
@@ -51,23 +51,23 @@ class PhpInputStreamTest extends TestCase
         self::assertStreamContents($body);
     }
 
-    public function testGetContentsReturnsRemainingContentsOfStream()
+    public function testGetContentsReturnsRemainingContentsOfStream(): void
     {
         $start     = $this->stream->read(128);
         $remainder = $this->stream->getContents();
         $contents  = $this->getFileContents();
 
-        self::assertEquals(mb_substr($contents, 128), $remainder);
+        self::assertEquals(\mb_substr($contents, 128), $remainder);
     }
 
-    public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads()
+    public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads(): void
     {
         $start = $this->stream->read(128);
 
         self::assertStreamContents($this->stream->__toString());
     }
 
-    public function testMultipleCastsToStringReturnSameContentsEvenIfReadsOccur()
+    public function testMultipleCastsToStringReturnSameContentsEvenIfReadsOccur(): void
     {
         $first  = (string) $this->stream;
         $read   = $this->stream->read(128);

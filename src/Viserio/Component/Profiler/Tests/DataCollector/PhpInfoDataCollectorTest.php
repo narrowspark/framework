@@ -9,7 +9,7 @@ use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 
 class PhpInfoDataCollectorTest extends MockeryTestCase
 {
-    public function testCollect()
+    public function testCollect(): void
     {
         $collect = new PhpInfoDataCollector();
         $collect->collect(
@@ -17,13 +17,13 @@ class PhpInfoDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        self::assertRegExp('~^' . preg_quote($collect->getPhpVersion(), '~') . '~', PHP_VERSION);
-        self::assertRegExp('~' . preg_quote((string) $collect->getPhpVersionExtra(), '~') . '$~', PHP_VERSION);
+        self::assertRegExp('~^' . \preg_quote($collect->getPhpVersion(), '~') . '~', PHP_VERSION);
+        self::assertRegExp('~' . \preg_quote((string) $collect->getPhpVersionExtra(), '~') . '$~', PHP_VERSION);
         self::assertSame(PHP_INT_SIZE * 8, $collect->getPhpArchitecture());
-        self::assertSame(date_default_timezone_get(), $collect->getPhpTimezone());
+        self::assertSame(\date_default_timezone_get(), $collect->getPhpTimezone());
     }
 
-    public function testGetMenu()
+    public function testGetMenu(): void
     {
         $collect = new PhpInfoDataCollector();
         $collect->collect(

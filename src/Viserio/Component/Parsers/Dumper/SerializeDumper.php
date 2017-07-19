@@ -11,6 +11,6 @@ class SerializeDumper implements DumperContract
      */
     public function dump(array $data): string
     {
-        return serialize($data);
+        return \serialize($data);
     }
 }

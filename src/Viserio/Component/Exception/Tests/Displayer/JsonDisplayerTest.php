@@ -12,31 +12,31 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class JsonDisplayerTest extends TestCase
 {
-    public function testServerError()
+    public function testServerError(): void
     {
         $displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
 
         $response = $displayer->display(new Exception(), 'foo', 500, []);
         $expected = '{"errors":[{"id":"foo","status":500,"title":"Internal Server Error","detail":"An error has occurred and this resource cannot be displayed."}]}';
 
-        self::assertSame(trim($expected), (string) $response->getBody());
+        self::assertSame(\trim($expected), (string) $response->getBody());
         self::assertSame(500, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
-    public function testClientError()
+    public function testClientError(): void
     {
         $displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
 
         $response = $displayer->display(new Exception(), 'bar', 401, []);
         $expected = '{"errors":[{"id":"bar","status":401,"title":"Unauthorized","detail":"Authentication is required and has failed or has not yet been provided."}]}';
 
-        self::assertSame(trim($expected), (string) $response->getBody());
+        self::assertSame(\trim($expected), (string) $response->getBody());
         self::assertSame(401, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
 

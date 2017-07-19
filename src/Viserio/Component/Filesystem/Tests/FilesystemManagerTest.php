@@ -16,7 +16,7 @@ use Viserio\Component\Filesystem\FilesystemManager;
 
 class FilesystemManagerTest extends MockeryTestCase
 {
-    public function testAwsS3ConnectorDriver()
+    public function testAwsS3ConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -52,7 +52,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testDropboxConnectorDriver()
+    public function testDropboxConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -84,9 +84,9 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testFtpConnectorDriver()
+    public function testFtpConnectorDriver(): void
     {
-        if (! defined('FTP_BINARY')) {
+        if (! \defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
@@ -123,7 +123,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testLocalConnectorDriver()
+    public function testLocalConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -155,7 +155,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testNullConnectorDriver()
+    public function testNullConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -185,7 +185,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testRackspaceConnectorDriver()
+    public function testRackspaceConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -227,7 +227,7 @@ class FilesystemManagerTest extends MockeryTestCase
         }
     }
 
-    public function testSftpConnectorDriver()
+    public function testSftpConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -262,7 +262,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testVfsConnectorDriver()
+    public function testVfsConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -292,7 +292,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testWebDavConnectorDriver()
+    public function testWebDavConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -326,7 +326,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testZipConnectorDriver()
+    public function testZipConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -358,7 +358,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testgetFlysystemAdapter()
+    public function testgetFlysystemAdapter(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -390,7 +390,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testCachedAdapter()
+    public function testCachedAdapter(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -436,7 +436,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testGetCryptedConnection()
+    public function testGetCryptedConnection(): void
     {
         $key    = Key::createNewRandomKey();
         $config = $this->mock(RepositoryContract::class);

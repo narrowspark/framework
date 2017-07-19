@@ -16,12 +16,12 @@ class MockerContainerTest extends TestCase
      */
     private $services = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->container = new MockContainer();
         $this->services  = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
 
-        foreach (array_keys($this->services) as $id) {
+        foreach (\array_keys($this->services) as $id) {
             $service     = new stdClass();
             $service->id = $id;
 
@@ -34,7 +34,7 @@ class MockerContainerTest extends TestCase
      * As the mocks are never cleared during the execution
      * we have to do it manually.
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $reflection = new ReflectionClass(MockContainer::class);
 
@@ -45,7 +45,7 @@ class MockerContainerTest extends TestCase
         parent::tearDown();
     }
 
-    public function testThatBehaviorDoesNotChangeByDefault()
+    public function testThatBehaviorDoesNotChangeByDefault(): void
     {
         self::assertTrue($this->container->has('test.service_1'));
         self::assertTrue($this->container->has('test.service_2'));
@@ -56,7 +56,7 @@ class MockerContainerTest extends TestCase
         self::assertSame($this->services['test.service_3'], $this->container->get('test.service_3'));
     }
 
-    public function testThatServiceCanBeMocked()
+    public function testThatServiceCanBeMocked(): void
     {
         $mock = $this->container->mock('test.service_1', stdClass::class);
 
@@ -69,12 +69,12 @@ class MockerContainerTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Cannot mock a non-existent service: [test.new_service]
      */
-    public function testThatServiceCannotBeMockedIfItDoesNotExist()
+    public function testThatServiceCannotBeMockedIfItDoesNotExist(): void
     {
         $this->container->mock('test.new_service', stdClass::class);
     }
 
-    public function testThatMockedServicesAreAccessible()
+    public function testThatMockedServicesAreAccessible(): void
     {
         $mock1          = $this->container->mock('test.service_1', stdClass::class);
         $mock2          = $this->container->mock('test.service_2', stdClass::class);
@@ -83,7 +83,7 @@ class MockerContainerTest extends TestCase
         self::assertEquals(['mock::test.service_1' => $mock1, 'mock::test.service_2' => $mock2], $mockedServices);
     }
 
-    public function testThatServiceCanBeMockedOnce()
+    public function testThatServiceCanBeMockedOnce(): void
     {
         $mock1 = $this->container->mock('test.service_1', stdClass::class);
         $mock2 = $this->container->mock('test.service_1', stdClass::class);
@@ -92,7 +92,7 @@ class MockerContainerTest extends TestCase
         self::assertSame($mock2, $this->container->get('test.service_1'));
     }
 
-    public function testThatMockCanBeRemovedAndContainerFallsBackToTheOriginalService()
+    public function testThatMockCanBeRemovedAndContainerFallsBackToTheOriginalService(): void
     {
         $mock = $this->container->mock('test.service_1', stdClass::class);
         $this->container->unmock('test.service_1');

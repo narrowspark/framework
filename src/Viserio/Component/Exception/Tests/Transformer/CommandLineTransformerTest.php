@@ -9,7 +9,7 @@ use Viserio\Component\Exception\Transformer\CommandLineTransformer;
 
 class CommandLineTransformerTest extends TestCase
 {
-    public function testHandleErrorsReturnsValidErrorMessage()
+    public function testHandleErrorsReturnsValidErrorMessage(): void
     {
         $exception = new ErrorException('test message', 0, E_ERROR, 'test.php', 15);
 
@@ -21,14 +21,14 @@ class CommandLineTransformerTest extends TestCase
         self::assertEquals($expected, $format->getMessage());
     }
 
-    public function testHandleExceptionsReturnsValidErrorMessage()
+    public function testHandleExceptionsReturnsValidErrorMessage(): void
     {
         $exception = new Exception('test message');
 
         $transformer = new CommandLineTransformer();
         $format      = $transformer->transform($exception);
 
-        self::assertTrue(mb_strlen($format->getMessage()) > 0);
-        self::assertTrue((mb_strpos($format->getMessage(), 'UNHANDLED EXCEPTION') !== false));
+        self::assertTrue(\mb_strlen($format->getMessage()) > 0);
+        self::assertTrue((\mb_strpos($format->getMessage(), 'UNHANDLED EXCEPTION') !== false));
     }
 }

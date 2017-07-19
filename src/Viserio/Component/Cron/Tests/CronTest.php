@@ -27,29 +27,29 @@ class CronTest extends MockeryTestCase
      */
     protected $cache;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->defaultTimezone = date_default_timezone_get();
+        $this->defaultTimezone = \date_default_timezone_get();
 
-        date_default_timezone_set('UTC');
+        \date_default_timezone_set('UTC');
 
         $cache = $this->mock(CacheItemPoolInterface::class);
 
         $this->cache = $cache;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        date_default_timezone_set($this->defaultTimezone);
+        \date_default_timezone_set($this->defaultTimezone);
 
         Chronos::setTestNow(null);
 
         parent::tearDown();
     }
 
-    public function testBasicCronCompilation()
+    public function testBasicCronCompilation(): void
     {
         $cron = new Cron('php foo');
 
@@ -75,7 +75,7 @@ class CronTest extends MockeryTestCase
         })->filtersPass());
     }
 
-    public function testCronChainedRulesShouldBeCommutative()
+    public function testCronChainedRulesShouldBeCommutative(): void
     {
         $cronA = new Cron('php foo');
         $cronB = new Cron('php foo');
@@ -94,14 +94,14 @@ class CronTest extends MockeryTestCase
         );
     }
 
-    public function testGetExpression()
+    public function testGetExpression(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * * *', $cron->getExpression());
     }
 
-    public function testCron()
+    public function testCron(): void
     {
         $cron = new Cron('');
         $cron->cron('*');
@@ -109,168 +109,168 @@ class CronTest extends MockeryTestCase
         self::assertSame('*', $cron->getExpression());
     }
 
-    public function testHourly()
+    public function testHourly(): void
     {
         $cron = new Cron('');
 
         self::assertSame('0 * * * * *', $cron->hourly()->getExpression());
     }
 
-    public function testDaily()
+    public function testDaily(): void
     {
         $cron = new Cron('');
 
         self::assertSame('0 0 * * * *', $cron->daily()->getExpression());
     }
 
-    public function testMonthly()
+    public function testMonthly(): void
     {
         $cron = new Cron('');
 
         self::assertSame('0 0 1 * * *', $cron->monthly()->getExpression());
     }
 
-    public function testYearly()
+    public function testYearly(): void
     {
         $cron = new Cron('');
 
         self::assertSame('0 0 1 1 * *', $cron->yearly()->getExpression());
     }
 
-    public function testQuarterly()
+    public function testQuarterly(): void
     {
         $cron = new Cron('');
 
         self::assertSame('0 0 1 */3 * *', $cron->quarterly()->getExpression());
     }
 
-    public function testEveryMinute()
+    public function testEveryMinute(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * * *', $cron->everyMinute()->getExpression());
     }
 
-    public function testEveryFiveMinutes()
+    public function testEveryFiveMinutes(): void
     {
         $cron = new Cron('');
 
         self::assertSame('*/5 * * * * *', $cron->everyFiveMinutes()->getExpression());
     }
 
-    public function testEveryTenMinutes()
+    public function testEveryTenMinutes(): void
     {
         $cron = new Cron('');
 
         self::assertSame('*/10 * * * * *', $cron->everyTenMinutes()->getExpression());
     }
 
-    public function testEveryThirtyMinutes()
+    public function testEveryThirtyMinutes(): void
     {
         $cron = new Cron('');
 
         self::assertSame('0,30 * * * * *', $cron->everyThirtyMinutes()->getExpression());
     }
 
-    public function testDays()
+    public function testDays(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * 1 *', $cron->days(1)->getExpression());
     }
 
-    public function testMonthlyOn()
+    public function testMonthlyOn(): void
     {
         $cron = new Cron('');
 
         self::assertSame('0 15 4 * * *', $cron->monthlyOn(4, '15:00')->getExpression());
     }
 
-    public function testDailyAt()
+    public function testDailyAt(): void
     {
         $cron = new Cron('');
 
         self::assertSame('30 10 * * * *', $cron->dailyAt('10:30')->getExpression());
     }
 
-    public function testTwiceDaily()
+    public function testTwiceDaily(): void
     {
         $cron = new Cron('');
 
         self::assertSame('0 1,13 * * * *', $cron->twiceDaily()->getExpression());
     }
 
-    public function testTwiceMonthly()
+    public function testTwiceMonthly(): void
     {
         $cron = new Cron('');
 
         $this->assertEquals('0 0 1,16 * * *', $cron->twiceMonthly(1, 16)->getExpression());
     }
 
-    public function testWeekdays()
+    public function testWeekdays(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * 1-5 *', $cron->weekdays()->getExpression());
     }
 
-    public function testMondays()
+    public function testMondays(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * 1 *', $cron->mondays()->getExpression());
     }
 
-    public function testTuesdays()
+    public function testTuesdays(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * 2 *', $cron->tuesdays()->getExpression());
     }
 
-    public function testWednesdays()
+    public function testWednesdays(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * 3 *', $cron->wednesdays()->getExpression());
     }
 
-    public function testThursdays()
+    public function testThursdays(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * 4 *', $cron->thursdays()->getExpression());
     }
 
-    public function testFridays()
+    public function testFridays(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * 5 *', $cron->fridays()->getExpression());
     }
 
-    public function testSaturdays()
+    public function testSaturdays(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * 6 *', $cron->saturdays()->getExpression());
     }
 
-    public function testSundays()
+    public function testSundays(): void
     {
         $cron = new Cron('');
 
         self::assertSame('* * * * 0 *', $cron->sundays()->getExpression());
     }
 
-    public function testWeekly()
+    public function testWeekly(): void
     {
         $cron = new Cron('');
 
         self::assertSame('0 0 * * 0 *', $cron->weekly()->getExpression());
     }
 
-    public function testWeeklyOn()
+    public function testWeeklyOn(): void
     {
         $cron = new Cron('');
 
@@ -280,12 +280,12 @@ class CronTest extends MockeryTestCase
     /**
      * @covers ::ensureCorrectUser
      */
-    public function testBuildCommand()
+    public function testBuildCommand(): void
     {
         $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
 
         $cron          = new Cron('php -i');
-        $isWindows     = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        $isWindows     = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
         $defaultOutput = $isWindows ? 'NUL' : '/dev/null';
         $windows       = $isWindows ? 'start /B ' : '';
         $background    = $isWindows ? '' : ' &';
@@ -293,21 +293,21 @@ class CronTest extends MockeryTestCase
         self::assertSame("{$windows}php -i > {$quote}{$defaultOutput}{$quote} 2>&1{$background}", $cron->buildCommand());
     }
 
-    public function testGetAndSetUser()
+    public function testGetAndSetUser(): void
     {
         $cron = new Cron('');
 
         self::assertSame('root', $cron->setUser('root')->getUser());
     }
 
-    public function testGetAndSetPath()
+    public function testGetAndSetPath(): void
     {
         $cron = new Cron('');
 
         self::assertSame(__DIR__, $cron->setPath(__DIR__)->getPath());
     }
 
-    public function testEnvironments()
+    public function testEnvironments(): void
     {
         $cron = new Cron('');
 
@@ -316,10 +316,10 @@ class CronTest extends MockeryTestCase
         self::assertTrue($cron->runsInEnvironment('dev'));
     }
 
-    public function testBuildCommandSendOutputTo()
+    public function testBuildCommandSendOutputTo(): void
     {
         $quote         = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
-        $isWindows     = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        $isWindows     = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
         $windows       = $isWindows ? 'start /B ' : '';
         $background    = $isWindows ? '' : ' &';
 
@@ -334,10 +334,10 @@ class CronTest extends MockeryTestCase
         self::assertSame("{$windows}php -i > {$quote}/my folder/foo.log{$quote} 2>&1{$background}", $cron->buildCommand());
     }
 
-    public function testBuildCommandAppendOutput()
+    public function testBuildCommandAppendOutput(): void
     {
         $quote         = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
-        $isWindows     = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        $isWindows     = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
         $windows       = $isWindows ? 'start /B ' : '';
         $background    = $isWindows ? '' : ' &';
 
@@ -347,7 +347,7 @@ class CronTest extends MockeryTestCase
         self::assertSame("{$windows}php -i >> {$quote}/dev/null{$quote} 2>&1{$background}", $cron->buildCommand());
     }
 
-    public function testGetSummaryForDisplay()
+    public function testGetSummaryForDisplay(): void
     {
         $cron = new Cron('php -i');
 
@@ -358,7 +358,7 @@ class CronTest extends MockeryTestCase
         self::assertSame('test', $cron->getSummaryForDisplay());
     }
 
-    public function testTimeBetweenChecks()
+    public function testTimeBetweenChecks(): void
     {
         Chronos::setTestNow(Chronos::now()->startOfDay()->addHours(9));
 
@@ -372,7 +372,7 @@ class CronTest extends MockeryTestCase
         self::assertTrue($cron->unlessBetween('10:00', '11:00')->isDue('test'));
     }
 
-    public function testCronJobIsDueCheck()
+    public function testCronJobIsDueCheck(): void
     {
         Chronos::setTestNow(Chronos::create(2015, 1, 1, 0, 0, 0));
 
@@ -389,16 +389,16 @@ class CronTest extends MockeryTestCase
         self::assertTrue($cron->isDue('test', true));
     }
 
-    public function testCronRun()
+    public function testCronRun(): void
     {
         $_SERVER['test'] = false;
 
         $cron = new Cron('php -i');
 
-        $cron->before(function () {
+        $cron->before(function (): void {
             $_SERVER['test'] = 'before';
         });
-        $cron->after(function () {
+        $cron->after(function (): void {
             $_SERVER['test'] = $_SERVER['test'] . ' after';
         });
 
@@ -410,7 +410,7 @@ class CronTest extends MockeryTestCase
         unset($_SERVER['test']);
     }
 
-    public function testCronRunInBackground()
+    public function testCronRunInBackground(): void
     {
         $cron = new Cron('ls -lsa');
         $cron->runInBackground();
@@ -419,9 +419,9 @@ class CronTest extends MockeryTestCase
         self::assertSame(0, $cron->run());
     }
 
-    public function testCronRunWithoutOverlapping()
+    public function testCronRunWithoutOverlapping(): void
     {
-        $name = 'schedule-' . sha1('* * * * * *' . 'ls -lsa');
+        $name = 'schedule-' . \sha1('* * * * * *' . 'ls -lsa');
         $item = $this->mock(CacheItemInterface::class);
         $item->shouldReceive('set')
             ->once()
@@ -449,7 +449,7 @@ class CronTest extends MockeryTestCase
         self::assertSame(0, $cron->run());
     }
 
-    public function testFrequencyMacro()
+    public function testFrequencyMacro(): void
     {
         $cron = new Cron('php foo');
 

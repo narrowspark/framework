@@ -7,21 +7,21 @@ use Viserio\Component\StaticalProxy\Resolver;
 
 class ResolverTest extends TestCase
 {
-    public function testResolveWithoutRegex()
+    public function testResolveWithoutRegex(): void
     {
         $resolver = new Resolver('pattern', 'stdClass');
 
         self::assertSame('stdClass', $resolver->resolve('pattern'));
     }
 
-    public function testResolveWithRegex()
+    public function testResolveWithRegex(): void
     {
         $resolver = new Resolver('Pattern\*', '$1');
 
         self::assertSame('stdClass', $resolver->resolve('Pattern\stdClass'));
     }
 
-    public function testFailingResolve()
+    public function testFailingResolve(): void
     {
         $resolver = new Resolver('pattern', 'translation');
 
@@ -29,7 +29,7 @@ class ResolverTest extends TestCase
         self::assertFalse((bool) $resolver->resolve('pattern'));
     }
 
-    public function testMatches()
+    public function testMatches(): void
     {
         $resolver = new Resolver('pattern', 'translation');
 

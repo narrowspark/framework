@@ -52,7 +52,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public static function getDefaultOptions(): iterable
     {
-        return array_merge(
+        return \array_merge(
             parent::getDefaultOptions(),
             [
                 'displayers'        => [],
@@ -70,7 +70,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function addDisplayer(DisplayerContract $displayer): HandlerContract
     {
-        $this->displayers[get_class($displayer)] = $displayer;
+        $this->displayers[\get_class($displayer)] = $displayer;
 
         return $this;
     }
@@ -88,7 +88,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function addFilter(FilterContract $filter): HandlerContract
     {
-        $this->filters[get_class($filter)] = $filter;
+        $this->filters[\get_class($filter)] = $filter;
 
         return $this;
     }
@@ -106,7 +106,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function register(): void
     {
-        error_reporting(E_ALL);
+        \error_reporting(E_ALL);
 
         // The DebugClassLoader attempts to throw more helpful exceptions
         // when a class isn't found by the registered autoloaders.
@@ -126,7 +126,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function unregister(): void
     {
-        restore_error_handler();
+        \restore_error_handler();
     }
 
     /**
@@ -258,7 +258,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         Throwable $transformed,
         int $code
     ): DisplayerContract {
-        $displayers = array_merge(
+        $displayers = \array_merge(
             $this->displayers,
             $this->resolvedOptions['displayers']
         );
@@ -267,7 +267,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
             return $filtered[0];
         }
 
-        if (is_object($this->resolvedOptions['default_displayer'])) {
+        if (\is_object($this->resolvedOptions['default_displayer'])) {
             return $this->resolvedOptions['default_displayer'];
         }
 
@@ -292,17 +292,17 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         Throwable $transformed,
         int $code
     ): array {
-        $filters = array_merge(
+        $filters = \array_merge(
             $this->filters,
             $this->resolvedOptions['filters']
         );
 
         foreach ($filters as $filter) {
-            $filterClass = is_object($filter) ? $filter : $this->container->get($filter);
+            $filterClass = \is_object($filter) ? $filter : $this->container->get($filter);
 
             $displayers  = $filterClass->filter($displayers, $request, $original, $transformed, $code);
         }
 
-        return array_values($displayers);
+        return \array_values($displayers);
     }
 }

@@ -11,7 +11,7 @@ class ContainerInjectVariableFixture
         $this->something = $something;
     }
 
-    public function set(ContainerConcreteFixture $concrete)
+    public function set(ContainerConcreteFixture $concrete): void
     {
         $this->something = $something;
     }

@@ -29,7 +29,7 @@ interface Cookie
     /**
      * Returns the value.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getValue(): ?string;
 
@@ -43,7 +43,7 @@ interface Cookie
     /**
      * Sets the max age.
      *
-     * @param int|null $maxAge
+     * @param null|int $maxAge
      *
      * @return $this
      */
@@ -52,7 +52,7 @@ interface Cookie
     /**
      * Returns the max age.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getMaxAge(): ?int;
 
@@ -66,7 +66,7 @@ interface Cookie
     /**
      * Sets the expires.
      *
-     * @param int|string|\DateTimeInterface|null $expires
+     * @param null|\DateTimeInterface|int|string $expires
      *
      * @return $this
      */
@@ -96,7 +96,7 @@ interface Cookie
     /**
      * Sets the domain.
      *
-     * @param string|null $domain
+     * @param null|string $domain
      *
      * @return $this
      */
@@ -105,7 +105,7 @@ interface Cookie
     /**
      * Returns the domain.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDomain(): ?string;
 
@@ -167,7 +167,7 @@ interface Cookie
     /**
      * Whether the cookie will be available for cross-site requests.
      *
-     * @param string|bool $sameSite
+     * @param bool|string $sameSite
      *
      * @return $this
      */
@@ -183,7 +183,7 @@ interface Cookie
     /**
      * Gets the SameSite attribute.
      *
-     * @return string|bool|null
+     * @return null|bool|string
      */
     public function getSameSite();
 
@@ -194,7 +194,7 @@ interface Cookie
      *
      * @return bool
      *
-     * @link http://tools.ietf.org/html/rfc6265#section-5.1.4
+     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
      */
     public function matchPath(string $path): bool;
 
@@ -214,7 +214,7 @@ interface Cookie
      *
      * @return bool
      *
-     * @link http://tools.ietf.org/html/rfc6265#section-5.1.3
+     * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
      */
     public function matchDomain(string $domain): bool;
 }

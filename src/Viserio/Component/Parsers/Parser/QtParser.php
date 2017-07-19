@@ -10,8 +10,8 @@ use Viserio\Component\Parsers\Utils\XmlUtils;
 /**
  * For more infos.
  *
- * @link http://doc.qt.io/qt-5/linguist-ts-file-Parser.html
- * @link http://svn.ez.no/svn/ezcomponents/trunk/Translation/docs/linguist-Parser.txt
+ * @see http://doc.qt.io/qt-5/linguist-ts-file-Parser.html
+ * @see http://svn.ez.no/svn/ezcomponents/trunk/Translation/docs/linguist-Parser.txt
  */
 class QtParser implements ParserContract
 {
@@ -31,11 +31,11 @@ class QtParser implements ParserContract
             ]);
         }
 
-        $internalErrors = libxml_use_internal_errors(true);
+        $internalErrors = \libxml_use_internal_errors(true);
 
-        libxml_clear_errors();
+        \libxml_clear_errors();
 
-        $xpath  = simplexml_import_dom($dom);
+        $xpath  = \simplexml_import_dom($dom);
         $nodes  = $xpath->xpath('//TS/context');
         $datas  = [];
 
@@ -46,7 +46,7 @@ class QtParser implements ParserContract
             foreach ($node->message as $message) {
                 $translation           = $message->translation;
                 $translationAttributes = (array) $translation->attributes();
-                $attributes            = reset($translationAttributes);
+                $attributes            = \reset($translationAttributes);
 
                 $datas[$name][] = [
                     'source'      => (string) $message->source,
@@ -58,7 +58,7 @@ class QtParser implements ParserContract
             }
         }
 
-        libxml_use_internal_errors($internalErrors);
+        \libxml_use_internal_errors($internalErrors);
 
         return $datas;
     }

@@ -13,7 +13,7 @@ class AssetsRendererTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
-    public function testSetndGetIcon()
+    public function testSetndGetIcon(): void
     {
         $assets = new AssetsRenderer();
 
@@ -22,7 +22,7 @@ class AssetsRendererTest extends MockeryTestCase
         self::assertSame(self::normalizePath(__DIR__ . 'Fixture/Icons/ic_clear_white_24px.svg'), $assets->getIcons()['ic_clear_white_24px.svg']);
     }
 
-    public function testSetAndGetIgnoredCollectors()
+    public function testSetAndGetIgnoredCollectors(): void
     {
         $assets = new AssetsRenderer();
 
@@ -31,7 +31,7 @@ class AssetsRendererTest extends MockeryTestCase
         self::assertSame('test', $assets->getIgnoredCollectors()[0]);
     }
 
-    public function testGetAssets()
+    public function testGetAssets(): void
     {
         $profiler = $this->mock(ProfilerContract::class);
         $profiler->shouldReceive('getCollectors')
@@ -53,7 +53,7 @@ class AssetsRendererTest extends MockeryTestCase
         self::assertSame($jsAssets, $assets->getAssets('js'));
     }
 
-    public function testGetAssetsFromCollectors()
+    public function testGetAssetsFromCollectors(): void
     {
         $profiler = $this->mock(ProfilerContract::class);
         $profiler->shouldReceive('getCollectors')
@@ -70,17 +70,17 @@ class AssetsRendererTest extends MockeryTestCase
         $cssAssets = [
             __DIR__ . '/css/profiler.css',
             __DIR__ . '/css/profiler-grid.css',
-            str_replace('Tests', 'DataCollector', __DIR__) . '/../Resources/css/ajax-requests.css',
+            \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resources/css/ajax-requests.css',
         ];
         $jsAssets = [
             __DIR__ . '/js/profiler.js',
-            str_replace('Tests', 'DataCollector', __DIR__) . '/../Resources/js/ajaxHandler.js',
+            \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resources/js/ajaxHandler.js',
         ];
 
         self::assertSame([$cssAssets, $jsAssets], $assets->getAssets());
     }
 
-    public function testRenderWithUrlGenerator()
+    public function testRenderWithUrlGenerator(): void
     {
         $generator = $this->mock(UrlGenerator::class);
         $generator->shouldReceive('generate')

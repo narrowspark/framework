@@ -18,7 +18,7 @@ class HtmlResponse extends Response
      * Produces an HTML response with a Content-Type of text/html and a default
      * status of 200.
      *
-     * @param string|StreamInterface $html    hTML or stream for the message body
+     * @param StreamInterface|string $html    hTML or stream for the message body
      * @param int                    $status  integer status code for the response; 200 by default
      * @param array                  $headers array of headers to use at initialization
      *
@@ -36,7 +36,7 @@ class HtmlResponse extends Response
     /**
      * Create the message body.
      *
-     * @param string|StreamInterface $html
+     * @param StreamInterface|string $html
      *
      * @throws InvalidArgumentException if $html is neither a string or stream
      *
@@ -48,15 +48,15 @@ class HtmlResponse extends Response
             return $html;
         }
 
-        if (! is_string($html)) {
-            throw new InvalidArgumentException(sprintf(
+        if (! \is_string($html)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Invalid content (%s) provided to %s',
-                (is_object($html) ? get_class($html) : gettype($html)),
+                (\is_object($html) ? \get_class($html) : \gettype($html)),
                 __CLASS__
             ));
         }
 
-        $body = new Stream(fopen('php://temp', 'wb+'));
+        $body = new Stream(\fopen('php://temp', 'wb+'));
         $body->write($html);
         $body->rewind();
 

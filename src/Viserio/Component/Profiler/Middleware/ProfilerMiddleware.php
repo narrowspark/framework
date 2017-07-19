@@ -14,7 +14,7 @@ class ProfilerMiddleware implements MiddlewareInterface
     /**
      * The Profiler instance.
      *
-     * @var \Viserio\Component\Contracts\Profiler\Profiler|null
+     * @var null|\Viserio\Component\Contracts\Profiler\Profiler
      */
     protected $profiler;
 
@@ -40,10 +40,10 @@ class ProfilerMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
         $server    = $request->getServerParams();
-        $startTime = $server['REQUEST_TIME_FLOAT'] ?? microtime(true);
+        $startTime = $server['REQUEST_TIME_FLOAT'] ?? \microtime(true);
 
         $response = $delegate->process($request);
-        $response = $response->withHeader('X-Response-Time', sprintf('%2.3fms', (microtime(true) - $startTime) * 1000));
+        $response = $response->withHeader('X-Response-Time', \sprintf('%2.3fms', (\microtime(true) - $startTime) * 1000));
 
         if ($this->profiler === null) {
             return $response;

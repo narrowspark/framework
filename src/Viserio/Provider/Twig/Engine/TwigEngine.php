@@ -24,7 +24,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
      * Create a new engine instance.
      *
      * @param \Twig\Environment                          $twig
-     * @param \Psr\Container\ContainerInterface|iterable $data
+     * @param iterable|\Psr\Container\ContainerInterface $data
      */
     public function __construct(Environment $twig, $data)
     {
@@ -41,7 +41,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
      */
     public static function getMandatoryOptions(): iterable
     {
-        return array_merge(
+        return \array_merge(
             parent::getMandatoryOptions(),
             [
                 'engines' => [
@@ -90,14 +90,14 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
      */
     protected function addExtensions(Environment $twig, array $config): Environment
     {
-        if (isset($config['extensions']) && is_array($config['extensions'])) {
+        if (isset($config['extensions']) && \is_array($config['extensions'])) {
             foreach ($config['extensions'] as $extension) {
-                if ($this->container !== null && is_string($extension) && $this->container->has($extension)) {
+                if ($this->container !== null && \is_string($extension) && $this->container->has($extension)) {
                     $twig->addExtension($this->container->get($extension));
-                } elseif (is_object($extension)) {
+                } elseif (\is_object($extension)) {
                     $twig->addExtension($extension);
                 } else {
-                    throw new RuntimeException(sprintf(
+                    throw new RuntimeException(\sprintf(
                         'Twig extension [%s] is not a object.',
                         (string) $extension
                     ));

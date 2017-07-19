@@ -24,19 +24,19 @@ class FtpConnector implements ConnectorContract
      */
     protected function getConfig(array $config)
     {
-        if (! array_key_exists('host', $config)) {
+        if (! \array_key_exists('host', $config)) {
             throw new InvalidArgumentException('The sftp connector requires host configuration.');
         }
 
-        if (! array_key_exists('port', $config)) {
+        if (! \array_key_exists('port', $config)) {
             throw new InvalidArgumentException('The sftp connector requires port configuration.');
         }
 
-        if (! array_key_exists('username', $config)) {
+        if (! \array_key_exists('username', $config)) {
             throw new InvalidArgumentException('The sftp connector requires username configuration.');
         }
 
-        if (! array_key_exists('password', $config)) {
+        if (! \array_key_exists('password', $config)) {
             throw new InvalidArgumentException('The sftp connector requires password configuration.');
         }
 

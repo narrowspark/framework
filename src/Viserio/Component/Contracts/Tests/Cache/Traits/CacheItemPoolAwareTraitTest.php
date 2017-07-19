@@ -10,7 +10,7 @@ class CacheItemPoolAwareTraitTest extends MockeryTestCase
 {
     use CacheItemPoolAwareTrait;
 
-    public function testGetAndSetCache()
+    public function testGetAndSetCache(): void
     {
         $this->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
 
@@ -21,7 +21,7 @@ class CacheItemPoolAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Instance implementing [\Psr\Cache\CacheItemPoolInterface] is not set up.
      */
-    public function testGetCacheItemPoolThrowExceptionIfCacheItemPoolIsNotSet()
+    public function testGetCacheItemPoolThrowExceptionIfCacheItemPoolIsNotSet(): void
     {
         $this->getCacheItemPool();
     }

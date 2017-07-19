@@ -16,9 +16,9 @@ use Viserio\Component\Queue\Tests\Fixture\InteractsWithQueue;
 
 class CallQueuedHandlerTest extends MockeryTestCase
 {
-    public function testCall()
+    public function testCall(): void
     {
-        $command = serialize(new stdClass());
+        $command = \serialize(new stdClass());
 
         $job = $this->mock(JobContract::class);
         $job->shouldReceive('isDeletedOrReleased')
@@ -54,7 +54,7 @@ class CallQueuedHandlerTest extends MockeryTestCase
         $callHandler->call($job, ['command' => $command]);
     }
 
-    public function testFailed()
+    public function testFailed(): void
     {
         $redisContainer = $this->mock(ContainerInterface::class);
         $redisContainer->shouldReceive('get');
@@ -62,12 +62,12 @@ class CallQueuedHandlerTest extends MockeryTestCase
         $job = new RedisJob(
             $redisContainer,
             $this->mock(RedisQueue::class),
-            json_encode(['job' => 'foo', 'data' => ['data'], 'attempts' => 1]),
-            json_encode(['job' => 'foo', 'data' => ['data'], 'attempts' => 2]),
+            \json_encode(['job' => 'foo', 'data' => ['data'], 'attempts' => 1]),
+            \json_encode(['job' => 'foo', 'data' => ['data'], 'attempts' => 2]),
             'default'
         );
 
-        $command = serialize($job);
+        $command = \serialize($job);
 
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('decrypt')
@@ -88,9 +88,9 @@ class CallQueuedHandlerTest extends MockeryTestCase
         $callHandler->failed(['command' => $command]);
     }
 
-    public function testCallWithInteractsWithQueue()
+    public function testCallWithInteractsWithQueue(): void
     {
-        $command = serialize(new InteractsWithQueue());
+        $command = \serialize(new InteractsWithQueue());
 
         $job = $this->mock(JobContract::class);
         $job->shouldReceive('isDeletedOrReleased')

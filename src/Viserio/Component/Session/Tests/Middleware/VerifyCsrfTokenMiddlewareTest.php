@@ -27,11 +27,11 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     private $files;
 
     /**
-     * @var \Viserio\Component\Encryption\Encrypter|null
+     * @var null|\Viserio\Component\Encryption\Encrypter
      */
     private $encrypter;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $this->encrypter = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
         $this->files = $this->encrypter = null;
@@ -49,7 +49,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         parent::tearDown();
     }
 
-    public function testSessionCsrfMiddlewareSetCookie()
+    public function testSessionCsrfMiddlewareSetCookie(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -105,10 +105,10 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
     }
 
-    public function testSessionCsrfMiddlewareReadsXCSRFTOKEN()
+    public function testSessionCsrfMiddlewareReadsXCSRFTOKEN(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -164,10 +164,10 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
     }
 
-    public function testSessionCsrfMiddlewareReadsXXSRFTOKEN()
+    public function testSessionCsrfMiddlewareReadsXXSRFTOKEN(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -226,13 +226,13 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
     }
 
     /**
      * @expectedException \Viserio\Component\Contracts\Session\Exception\TokenMismatchException
      */
-    public function testSessionCsrfMiddlewareToThrowException()
+    public function testSessionCsrfMiddlewareToThrowException(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -283,7 +283,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
     }
 
     private function getSessionManager($config)

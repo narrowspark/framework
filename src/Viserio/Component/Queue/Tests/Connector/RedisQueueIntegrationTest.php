@@ -28,7 +28,7 @@ class RedisQueueIntegrationTest extends MockeryTestCase
      */
     private $encrypter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->redis = new Client([
             'servers' => [
@@ -56,7 +56,7 @@ class RedisQueueIntegrationTest extends MockeryTestCase
         $this->queue->setEncrypter($this->encrypter);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->redis->flushdb();
 
@@ -65,7 +65,7 @@ class RedisQueueIntegrationTest extends MockeryTestCase
         $this->allowMockingNonExistentMethods(true);
     }
 
-    public function testExpiredJobsArePopped()
+    public function testExpiredJobsArePopped(): void
     {
         $jobs = [
             new RedisQueueIntegrationJob(0),
@@ -79,9 +79,9 @@ class RedisQueueIntegrationTest extends MockeryTestCase
         $this->queue->later(-300, $jobs[2]);
         $this->queue->later(-100, $jobs[3]);
 
-        self::assertEquals($jobs[2], unserialize(base64_decode($this->encrypter->decrypt(json_decode($this->queue->pop()->getRawBody())->data->command64))));
-        self::assertEquals($jobs[1], unserialize(base64_decode($this->encrypter->decrypt(json_decode($this->queue->pop()->getRawBody())->data->command64))));
-        self::assertEquals($jobs[3], unserialize(base64_decode($this->encrypter->decrypt(json_decode($this->queue->pop()->getRawBody())->data->command64))));
+        self::assertEquals($jobs[2], \unserialize(\base64_decode($this->encrypter->decrypt(\json_decode($this->queue->pop()->getRawBody())->data->command64), true)));
+        self::assertEquals($jobs[1], \unserialize(\base64_decode($this->encrypter->decrypt(\json_decode($this->queue->pop()->getRawBody())->data->command64), true)));
+        self::assertEquals($jobs[3], \unserialize(\base64_decode($this->encrypter->decrypt(\json_decode($this->queue->pop()->getRawBody())->data->command64), true)));
         self::assertNull($this->queue->pop());
         self::assertEquals(1, $this->redis->zcard('queues:default:delayed'));
         self::assertEquals(3, $this->redis->zcard('queues:default:reserved'));

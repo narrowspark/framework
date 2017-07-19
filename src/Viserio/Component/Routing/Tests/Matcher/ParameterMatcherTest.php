@@ -9,7 +9,7 @@ use Viserio\Component\Routing\Matcher\RegexMatcher;
 
 class ParameterMatcherTest extends TestCase
 {
-    public function testMatcher()
+    public function testMatcher(): void
     {
         foreach ([
             new ParameterMatcher('param', Pattern::ANY),

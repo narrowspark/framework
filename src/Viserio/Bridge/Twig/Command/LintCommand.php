@@ -47,14 +47,14 @@ class LintCommand extends Command
         $files = $this->getFiles((array) $this->option('files'), (array) $this->option('directories'));
 
         // If no files are found.
-        if (count($files) === 0) {
+        if (\count($files) === 0) {
             throw new RuntimeException('No twig files found.');
         }
 
         $details = [];
 
         foreach ($files as $file) {
-            $details[] = $this->validate(file_get_contents($file), $file);
+            $details[] = $this->validate(\file_get_contents($file), $file);
         }
 
         return $this->display($details, $this->option('format'));
@@ -73,7 +73,7 @@ class LintCommand extends Command
         $foundFiles = [];
 
         foreach ($this->getFinder($directories) as $file) {
-            if (count($files) !== 0 && ! in_array($file->getFilename(), $files, true)) {
+            if (\count($files) !== 0 && ! \in_array($file->getFilename(), $files, true)) {
                 continue;
             }
 
@@ -129,7 +129,7 @@ class LintCommand extends Command
      * Get a finder instance of Twig files in the specified directories.
      *
      * @param array       $paths paths to search for files in
-     * @param string|null $file
+     * @param null|string $file
      *
      * @return iterable
      */
@@ -139,7 +139,7 @@ class LintCommand extends Command
         $baseDir      = (array) $this->argument('dir');
 
         foreach ($baseDir as $dir) {
-            if (count($paths) !== 0) {
+            if (\count($paths) !== 0) {
                 foreach ($paths as $path) {
                     $this->findTwigFiles($this->normalizeDirectorySeparator($dir . '/' . $path), $foundFiles);
                 }
@@ -210,7 +210,7 @@ class LintCommand extends Command
             case 'json':
                 return $this->displayJson($details);
             default:
-                throw new InvalidArgumentException(sprintf('The format [%s] is not supported.', $format));
+                throw new InvalidArgumentException(\sprintf('The format [%s] is not supported.', $format));
         }
     }
 
@@ -237,12 +237,12 @@ class LintCommand extends Command
         }
 
         if ($errors === 0) {
-            $this->comment(sprintf('All %d Twig files contain valid syntax.', count($details)));
+            $this->comment(\sprintf('All %d Twig files contain valid syntax.', \count($details)));
         } else {
-            $this->warn(sprintf('%d Twig files have valid syntax and %d contain errors.', count($details) - $errors, $errors));
+            $this->warn(\sprintf('%d Twig files have valid syntax and %d contain errors.', \count($details) - $errors, $errors));
         }
 
-        return min($errors, 1);
+        return \min($errors, 1);
     }
 
     /**
@@ -256,9 +256,9 @@ class LintCommand extends Command
     {
         $errors = 0;
 
-        array_walk(
+        \array_walk(
             $details,
-            function (&$info) use (&$errors) {
+            function (&$info) use (&$errors): void {
                 $info['file'] = (string) $info['file'];
 
                 unset($info['template']);
@@ -273,9 +273,9 @@ class LintCommand extends Command
             }
         );
 
-        $this->line(json_encode($details, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->line(\json_encode($details, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
-        return min($errors, 1);
+        return \min($errors, 1);
     }
 
     /**
@@ -292,11 +292,11 @@ class LintCommand extends Command
         $line      = $exception->getTemplateLine();
         $lines     = $this->getContext($info['template'], $line);
 
-        $this->line(sprintf('<error>Fail</error> in %s (line %s)', $info['file'], $line));
+        $this->line(\sprintf('<error>Fail</error> in %s (line %s)', $info['file'], $line));
 
         foreach ($lines as $no => $code) {
             $this->line(
-                sprintf(
+                \sprintf(
                     '%s %-6s %s',
                     $no == $line ? '<error>>></error>' : '  ',
                     $no,
@@ -305,7 +305,7 @@ class LintCommand extends Command
             );
 
             if ($no == $line) {
-                $this->line(sprintf('<error>>> %s</error> ', $exception->getRawMessage()));
+                $this->line(\sprintf('<error>>> %s</error> ', $exception->getRawMessage()));
             }
         }
     }
@@ -314,16 +314,16 @@ class LintCommand extends Command
      * Grabs the surrounding lines around the exception.
      *
      * @param string     $template contents of Twig template
-     * @param string|int $line     line where the exception occurred
+     * @param int|string $line     line where the exception occurred
      * @param int        $context  number of lines around the line where the exception occurred
      *
      * @return array
      */
     protected function getContext(string $template, $line, int $context = 3): array
     {
-        $lines    = explode("\n", $template);
-        $position = max(0, $line - $context);
-        $max      = min(count($lines), $line - 1 + $context);
+        $lines    = \explode("\n", $template);
+        $position = \max(0, $line - $context);
+        $max      = \min(\count($lines), $line - 1 + $context);
         $result   = [];
 
         while ($position < $max) {
@@ -356,7 +356,7 @@ class LintCommand extends Command
         }
 
         foreach ($iterator as $file) {
-            if (pathinfo($file->getRealPath(), PATHINFO_EXTENSION) === 'twig') {
+            if (\pathinfo($file->getRealPath(), PATHINFO_EXTENSION) === 'twig') {
                 $foundFiles[] = $file;
             }
         }

@@ -12,13 +12,13 @@ use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 
 class LoadConfigurationTest extends MockeryTestCase
 {
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         $bootstraper = new LoadConfiguration();
         $config      = $this->mock(RepositoryContract::class);
         $config->shouldReceive('import')
             ->once()
-            ->with(realpath(__DIR__ . '/../Fixtures/Config/app.php'));
+            ->with(\realpath(__DIR__ . '/../Fixtures/Config/app.php'));
         $config->shouldReceive('get')
             ->once()
             ->with('viserio.app.timezone', 'UTC')
@@ -46,12 +46,12 @@ class LoadConfigurationTest extends MockeryTestCase
             ->andReturn('');
         $kernel->shouldReceive('getConfigPath')
             ->once()
-            ->andReturn(realpath(__DIR__ . '/../Fixtures/Config'));
+            ->andReturn(\realpath(__DIR__ . '/../Fixtures/Config'));
 
         $bootstraper->bootstrap($kernel);
     }
 
-    public function testBootstrapWithCachedData()
+    public function testBootstrapWithCachedData(): void
     {
         $bootstraper = new LoadConfiguration();
         $config      = $this->mock(RepositoryContract::class);

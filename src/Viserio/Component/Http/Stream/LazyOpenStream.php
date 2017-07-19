@@ -52,7 +52,7 @@ class LazyOpenStream implements StreamInterface
             return $this->stream;
         }
 
-        throw new UnexpectedValueException(sprintf('%s not found on class', $name));
+        throw new UnexpectedValueException(\sprintf('%s not found on class', $name));
     }
 
     /**
@@ -68,7 +68,7 @@ class LazyOpenStream implements StreamInterface
             return $this->getContents();
         } catch (Throwable $e) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            trigger_error('StreamDecorator::__toString exception: '
+            \trigger_error('StreamDecorator::__toString exception: '
                 . (string) $e, E_USER_ERROR);
 
             return '';
@@ -86,7 +86,7 @@ class LazyOpenStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
         $this->stream->close();
     }
@@ -158,7 +158,7 @@ class LazyOpenStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek(0);
     }
@@ -166,7 +166,7 @@ class LazyOpenStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         $this->stream->seek($offset, $whence);
     }

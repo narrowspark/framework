@@ -10,7 +10,7 @@ class LoggerAwareTraitTest extends MockeryTestCase
 {
     use LoggerAwareTrait;
 
-    public function testGetAndSetLogger()
+    public function testGetAndSetLogger(): void
     {
         $this->setLogger($this->mock(PsrLoggerInterface::class));
 
@@ -21,7 +21,7 @@ class LoggerAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Logger is not set up.
      */
-    public function testGetLoggerThrowExceptionIfLoggerIsNotSet()
+    public function testGetLoggerThrowExceptionIfLoggerIsNotSet(): void
     {
         $this->getLogger();
     }

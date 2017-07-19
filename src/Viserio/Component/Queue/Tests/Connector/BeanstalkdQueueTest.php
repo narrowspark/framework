@@ -12,7 +12,7 @@ use Viserio\Component\Queue\Job\BeanstalkdJob;
 
 class BeanstalkdQueueTest extends MockeryTestCase
 {
-    public function testPushProperlyPushesJobOntoBeanstalkd()
+    public function testPushProperlyPushesJobOntoBeanstalkd(): void
     {
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
@@ -31,13 +31,13 @@ class BeanstalkdQueueTest extends MockeryTestCase
             ->andReturn($pheanstalk);
         $pheanstalk->shouldReceive('put')
             ->twice()
-            ->with(json_encode(['job' => 'foo', 'data' => ['someData']]), 1024, 0, 90);
+            ->with(\json_encode(['job' => 'foo', 'data' => ['someData']]), 1024, 0, 90);
 
         $queue->push('foo', ['someData'], 'stack');
         $queue->push('foo', ['someData']);
     }
 
-    public function testDelayedPushProperlyPushesJobOntoBeanstalkd()
+    public function testDelayedPushProperlyPushesJobOntoBeanstalkd(): void
     {
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
@@ -57,7 +57,7 @@ class BeanstalkdQueueTest extends MockeryTestCase
         $pheanstalk->shouldReceive('put')
             ->twice()
             ->with(
-                json_encode(['job' => 'foo', 'data' => ['someData']]),
+                \json_encode(['job' => 'foo', 'data' => ['someData']]),
                 Pheanstalk::DEFAULT_PRIORITY,
                 5,
                 90
@@ -67,7 +67,7 @@ class BeanstalkdQueueTest extends MockeryTestCase
         $queue->later(5, 'foo', ['someData']);
     }
 
-    public function testDeleteProperlyRemoveJobsOffBeanstalkd()
+    public function testDeleteProperlyRemoveJobsOffBeanstalkd(): void
     {
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
@@ -86,7 +86,7 @@ class BeanstalkdQueueTest extends MockeryTestCase
         $queue->deleteMessage('default', 1);
     }
 
-    public function testPopProperlyPopsJobOffOfBeanstalkd()
+    public function testPopProperlyPopsJobOffOfBeanstalkd(): void
     {
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');

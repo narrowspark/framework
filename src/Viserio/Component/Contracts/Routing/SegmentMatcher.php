@@ -15,7 +15,7 @@ interface SegmentMatcher
      * Get a matched parameter key back,.
      *
      * @param string   $segmentVariable
-     * @param int|null $uniqueKey
+     * @param null|int $uniqueKey
      *
      * @return string[]
      */
@@ -32,7 +32,7 @@ interface SegmentMatcher
      * Get a ready to use condition expression from a segment.
      *
      * @param string   $segmentVariable
-     * @param int|null $uniqueKey
+     * @param null|int $uniqueKey
      *
      * @return string
      */

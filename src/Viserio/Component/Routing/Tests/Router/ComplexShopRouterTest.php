@@ -75,7 +75,7 @@ class ComplexShopRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter404($httpMethod, $uri)
+    public function testRouter404($httpMethod, $uri): void
     {
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
@@ -131,14 +131,14 @@ class ComplexShopRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter405($httpMethod, $uri)
+    public function testRouter405($httpMethod, $uri): void
     {
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
     }
 
-    protected function definitions($router)
+    protected function definitions($router): void
     {
         $router->pattern('post_slug', Pattern::ALPHA_NUM_DASH);
         $router->pattern('category_id', Pattern::DIGITS);

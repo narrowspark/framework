@@ -24,6 +24,6 @@ class CanDisplayFilter implements FilterContract
             }
         }
 
-        return array_values($displayers);
+        return \array_values($displayers);
     }
 }

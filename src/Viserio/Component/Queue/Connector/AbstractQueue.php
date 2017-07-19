@@ -56,7 +56,7 @@ abstract class AbstractQueue implements QueueConnectorContract
      *
      * @codeCoverageIgnore
      */
-    public function bulk(array $jobs, $data = '', string $queue = null)
+    public function bulk(array $jobs, $data = '', string $queue = null): void
     {
         foreach ($jobs as $job) {
             $this->push($job, $data, $queue);
@@ -76,7 +76,7 @@ abstract class AbstractQueue implements QueueConnectorContract
      *
      * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
      */
-    public function setEncrypter(EncrypterContract $encrypter)
+    public function setEncrypter(EncrypterContract $encrypter): void
     {
         $this->encrypter = $encrypter;
     }
@@ -84,14 +84,14 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * Calculate the number of seconds with the given delay.
      *
-     * @param int|\DateTimeInterface $delay
+     * @param \DateTimeInterface|int $delay
      *
      * @return int
      */
     protected function getSeconds($delay): int
     {
         if ($delay instanceof DateTimeInterface) {
-            return max(0, $delay->getTimestamp() - $this->getTime());
+            return \max(0, $delay->getTimestamp() - $this->getTime());
         }
 
         return (int) $delay;
@@ -112,31 +112,31 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * Create a payload string from the given job and data.
      *
-     * @param string|object|\Closure $job
+     * @param \Closure|object|string $job
      * @param mixed                  $data
-     * @param string|null            $queue
+     * @param null|string            $queue
      *
      * @return string
      */
     protected function createPayload($job, $data = '', string $queue = null): string
     {
         if ($job instanceof Closure) {
-            return json_encode($this->createClosurePayload($job, $data));
+            return \json_encode($this->createClosurePayload($job, $data));
         }
 
         $encrypter = $this->getEncrypter();
 
-        if (is_object($job)) {
-            return json_encode([
-                'job'  => sprintf('%s@call', CallQueuedHandler::class),
+        if (\is_object($job)) {
+            return \json_encode([
+                'job'  => \sprintf('%s@call', CallQueuedHandler::class),
                 'data' => [
-                    'commandName' => $encrypter->encrypt(get_class($job)),
-                    'command64'   => $encrypter->encrypt(base64_encode(serialize(clone $job))),
+                    'commandName' => $encrypter->encrypt(\get_class($job)),
+                    'command64'   => $encrypter->encrypt(\base64_encode(\serialize(clone $job))),
                 ],
             ]);
         }
 
-        return json_encode($this->createPlainPayload($job, $data));
+        return \json_encode($this->createPlainPayload($job, $data));
     }
 
     /**
@@ -163,10 +163,10 @@ abstract class AbstractQueue implements QueueConnectorContract
     protected function createClosurePayload(Closure $job, $data): array
     {
         $closure = $this->getEncrypter()->encrypt(
-            serialize(new SerializableClosure($job))
+            \serialize(new SerializableClosure($job))
         );
 
-        return ['job' => QueueClosure::class, 'data' => compact('closure')];
+        return ['job' => QueueClosure::class, 'data' => \compact('closure')];
     }
 
     /**

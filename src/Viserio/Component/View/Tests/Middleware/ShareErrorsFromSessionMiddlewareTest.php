@@ -13,7 +13,7 @@ use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
 
 class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $session = $this->mock(StoreContract::class);
         $session->shouldReceive('get')

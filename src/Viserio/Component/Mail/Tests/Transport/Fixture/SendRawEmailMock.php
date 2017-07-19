@@ -4,7 +4,7 @@ namespace Viserio\Component\Mail\Tests\Transport\Fixture;
 
 class SendRawEmailMock
 {
-    protected $getResponse = null;
+    protected $getResponse;
 
     public function __construct($responseValue)
     {

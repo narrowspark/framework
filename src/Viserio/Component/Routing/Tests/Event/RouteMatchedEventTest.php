@@ -10,7 +10,7 @@ use Viserio\Component\Routing\Event\RouteMatchedEvent;
 
 class RouteMatchedEventTest extends MockeryTestCase
 {
-    public function testGetServerRequest()
+    public function testGetServerRequest(): void
     {
         $event = new RouteMatchedEvent(
             $this->mock(DispatcherContract::class),
@@ -21,7 +21,7 @@ class RouteMatchedEventTest extends MockeryTestCase
         self::assertInstanceOf(ServerRequestInterface::class, $event->getServerRequest());
     }
 
-    public function testGetRoute()
+    public function testGetRoute(): void
     {
         $event = new RouteMatchedEvent(
             $this->mock(DispatcherContract::class),

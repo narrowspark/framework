@@ -15,7 +15,7 @@ use Viserio\Bridge\Twig\TokenParser\DumpTokenParser;
  *
  * Based on the Symfony Twig Bridge Dump Extension
  *
- * @link https://github.com/symfony/symfony/blob/2.6/src/Symfony/Bridge/Twig/Extension/DumpExtension.php
+ * @see https://github.com/symfony/symfony/blob/2.6/src/Symfony/Bridge/Twig/Extension/DumpExtension.php
  *
  * @author Nicolas Grekas <p@tchwork.com>
  * @copyright Copyright (c) 2004-2017 Fabien Potencier
@@ -77,7 +77,7 @@ class DumpExtension extends AbstractExtension
             return;
         }
 
-        if (func_num_args() === 2) {
+        if (\func_num_args() === 2) {
             $vars = [];
 
             foreach ($context as $key => $value) {
@@ -88,12 +88,12 @@ class DumpExtension extends AbstractExtension
 
             $vars = [$vars];
         } else {
-            $vars = func_get_args();
+            $vars = \func_get_args();
 
             unset($vars[0], $vars[1]);
         }
 
-        $dump   = fopen('php://memory', 'r+b');
+        $dump   = \fopen('php://memory', 'r+b');
         $dumper = new HtmlDumper($dump);
         $dumper->setCharset($env->getCharset());
 
@@ -101,8 +101,8 @@ class DumpExtension extends AbstractExtension
             $dumper->dump($this->cloner->cloneVar($value));
         }
 
-        rewind($dump);
+        \rewind($dump);
 
-        return stream_get_contents($dump);
+        return \stream_get_contents($dump);
     }
 }

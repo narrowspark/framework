@@ -65,7 +65,7 @@ class MessageCatalogue implements MessageCatalogueContract
      */
     public function getDomains(): array
     {
-        return array_keys($this->messages);
+        return \array_keys($this->messages);
     }
 
     /**
@@ -153,7 +153,7 @@ class MessageCatalogue implements MessageCatalogueContract
         if (! isset($this->messages[$domain])) {
             $this->messages[$domain] = $messages;
         } else {
-            $this->messages[$domain] = array_replace($this->messages[$domain], $messages);
+            $this->messages[$domain] = \array_replace($this->messages[$domain], $messages);
         }
     }
 
@@ -163,7 +163,7 @@ class MessageCatalogue implements MessageCatalogueContract
     public function addCatalogue(MessageCatalogueContract $catalogue): void
     {
         if ($catalogue->getLocale() !== $this->locale) {
-            throw new LogicException(sprintf(
+            throw new LogicException(\sprintf(
                 'Cannot add a catalogue for locale [%s] as the current locale for this catalogue is [%s].',
                 $catalogue->getLocale(),
                 $this->locale
@@ -185,7 +185,7 @@ class MessageCatalogue implements MessageCatalogueContract
 
         do {
             if ($circular->getLocale() === $catalogue->getLocale()) {
-                throw new LogicException(sprintf(
+                throw new LogicException(\sprintf(
                     'Circular reference detected when adding a fallback catalogue for locale [%s].',
                     $catalogue->getLocale()
                 ));

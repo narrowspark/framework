@@ -32,10 +32,10 @@ class UnexpectedValueException extends PhpUnexpectedValueException
         }
 
         parent::__construct(
-            sprintf(
+            \sprintf(
                 'Configuration must either be of type [array] or implement [\ArrayAccess]. ' .
                 'Configuration position is [%s].',
-                rtrim(implode('.', $position), '.')
+                \rtrim(\implode('.', $position), '.')
             ),
             $code,
             $previous

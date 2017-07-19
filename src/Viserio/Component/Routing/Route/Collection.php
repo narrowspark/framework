@@ -37,7 +37,7 @@ class Collection implements Countable, RouteCollectionContract
     {
         $domainAndUri = $route->getDomain() . $route->getUri();
 
-        $this->allRoutes[implode($route->getMethods(), '|') . $domainAndUri] = $route;
+        $this->allRoutes[\implode($route->getMethods(), '|') . $domainAndUri] = $route;
 
         $this->addLookups($route);
 
@@ -61,7 +61,7 @@ class Collection implements Countable, RouteCollectionContract
      */
     public function hasNamedRoute(string $name): bool
     {
-        return ! is_null($this->getByName($name));
+        return null !== $this->getByName($name);
     }
 
     /**
@@ -85,7 +85,7 @@ class Collection implements Countable, RouteCollectionContract
      */
     public function getRoutes(): array
     {
-        return array_values($this->allRoutes);
+        return \array_values($this->allRoutes);
     }
 
     /**
@@ -95,7 +95,7 @@ class Collection implements Countable, RouteCollectionContract
      */
     public function count(): int
     {
-        return count($this->allRoutes);
+        return \count($this->allRoutes);
     }
 
     /**
@@ -120,7 +120,7 @@ class Collection implements Countable, RouteCollectionContract
         // is used by the route. This will let us reverse route to controllers while
         // processing a request and easily generate URLs to the given controllers.
         if (isset($action['controller'])) {
-            $this->actionList[trim($action['controller'], '\\')] = $route;
+            $this->actionList[\trim($action['controller'], '\\')] = $route;
         }
     }
 }

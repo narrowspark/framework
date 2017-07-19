@@ -14,7 +14,7 @@ use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
 class ProfilerPsr6Psr16CacheBridgeServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->instance(CacheItemPoolInterface::class, $this->mock(CacheItemPoolInterface::class));

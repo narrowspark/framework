@@ -63,8 +63,8 @@ final class RouteTreeOptimizer
             $contents = $this->optimizeNodes($node->getContents());
             $children = $contents->getChildren();
 
-            if (count($children) === 1) {
-                $childNode = reset($children);
+            if (\count($children) === 1) {
+                $childNode = \reset($children);
                 $matchers  = MatcherOptimizer::mergeMatchers($node->getMatchers(), $childNode->getMatchers());
                 $contents  = $childNode->getContents();
             }
@@ -86,12 +86,12 @@ final class RouteTreeOptimizer
     {
         $nodes = $nodeCollection->getChildren();
 
-        if (count($nodes) <= 1) {
+        if (\count($nodes) <= 1) {
             return $nodeCollection;
         }
 
         $children = [];
-        $previous = array_shift($nodes);
+        $previous = \array_shift($nodes);
 
         foreach ($nodes as $node) {
             $parent = $this->extractCommonParentNode($previous, $node);
@@ -115,15 +115,15 @@ final class RouteTreeOptimizer
      * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node1
      * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node2
      *
-     * @return \Viserio\Component\Routing\TreeGenerator\RouteTreeNode|null
+     * @return null|\Viserio\Component\Routing\TreeGenerator\RouteTreeNode
      */
     private function extractCommonParentNode(RouteTreeNode $node1, RouteTreeNode $node2): ?RouteTreeNode
     {
         $matcherCompare = function (SegmentMatcherContract $matcher, SegmentMatcherContract $matcher2) {
-            return strcmp($matcher->getHash(), $matcher2->getHash());
+            return \strcmp($matcher->getHash(), $matcher2->getHash());
         };
 
-        $commonMatchers = array_uintersect_assoc($node1->getMatchers(), $node2->getMatchers(), $matcherCompare);
+        $commonMatchers = \array_uintersect_assoc($node1->getMatchers(), $node2->getMatchers(), $matcherCompare);
 
         if (empty($commonMatchers)) {
             return null;
@@ -133,8 +133,8 @@ final class RouteTreeOptimizer
         $nodes    = [$node1, $node2];
 
         foreach ($nodes as $node) {
-            $specificMatchers  = array_udiff_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
-            $duplicateMatchers = array_uintersect_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
+            $specificMatchers  = \array_udiff_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
+            $duplicateMatchers = \array_uintersect_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
 
             foreach ($duplicateMatchers as $segmentDepth => $matcher) {
                 $commonMatchers[$segmentDepth]->mergeParameterKeys($matcher);

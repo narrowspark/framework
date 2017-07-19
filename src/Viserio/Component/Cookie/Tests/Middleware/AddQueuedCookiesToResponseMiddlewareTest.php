@@ -12,12 +12,12 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($_SERVER['SERVER_ADDR']);
     }
 
-    public function testAddQueuedCookiesToResponseMiddleware()
+    public function testAddQueuedCookiesToResponseMiddleware(): void
     {
         $jar = new CookieJar();
         $jar->queue('test', 'test-v', 4);

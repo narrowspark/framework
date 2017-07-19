@@ -20,13 +20,13 @@ class XmlTest extends TestCase
      */
     private $file;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = vfsStream::newFile('temp.xml')->withContent(
             '<?xml version="1.0"?>
@@ -47,12 +47,12 @@ class XmlTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage [ERROR 4] Start tag expected, '<' not found (in n/a - line 1, column 1)
      */
-    public function testParseToThrowException()
+    public function testParseToThrowException(): void
     {
         (new XmlParser())->parse('nonexistfile');
     }
 
-    public function testDump()
+    public function testDump(): void
     {
         $array = [
             'Good guy' => [
@@ -68,17 +68,18 @@ class XmlTest extends TestCase
         $file = vfsStream::newFile('temp.xml')->withContent(
             '<?xml version="1.0"?>
 <root><Good_guy><name>Luke Skywalker</name><weapon>Lightsaber</weapon></Good_guy><Bad_guy><name>Sauron</name><weapon>Evil Eye</weapon></Bad_guy></root>
-')->at($this->root);
+'
+        )->at($this->root);
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        self::assertEquals(str_replace("\r\n", '', $this->file->read($file->url())), str_replace("\r\n", '', $this->file->read($dump->url())));
+        self::assertEquals(\str_replace("\r\n", '', $this->file->read($file->url())), \str_replace("\r\n", '', $this->file->read($dump->url())));
     }
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\DumpException
      */
-    public function testDumpToThrowException()
+    public function testDumpToThrowException(): void
     {
         (new XmlDumper())->dump(['one', 'two', 'three']);
     }

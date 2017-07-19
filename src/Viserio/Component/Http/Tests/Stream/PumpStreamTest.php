@@ -10,9 +10,9 @@ use Viserio\Component\Http\Stream\PumpStream;
 
 class PumpStreamTest extends TestCase
 {
-    public function testHasMetadataAndSize()
+    public function testHasMetadataAndSize(): void
     {
-        $pump = new PumpStream(function () {
+        $pump = new PumpStream(function (): void {
         }, [
             'metadata' => ['foo' => 'bar'],
             'size'     => 100,
@@ -23,7 +23,7 @@ class PumpStreamTest extends TestCase
         self::assertEquals(100, $pump->getSize());
     }
 
-    public function testCanReadFromCallable()
+    public function testCanReadFromCallable(): void
     {
         $pump = new PumpStream(function ($size) {
             return 'a';
@@ -35,7 +35,7 @@ class PumpStreamTest extends TestCase
         self::assertEquals(6, $pump->tell());
     }
 
-    public function testStoresExcessDataInBuffer()
+    public function testStoresExcessDataInBuffer(): void
     {
         $called = [];
 
@@ -52,7 +52,7 @@ class PumpStreamTest extends TestCase
         self::assertEquals([1, 9, 3], $called);
     }
 
-    public function testInifiniteStreamWrappedInLimitStream()
+    public function testInifiniteStreamWrappedInLimitStream(): void
     {
         $pump = new PumpStream(function () {
             return 'a';
@@ -62,9 +62,9 @@ class PumpStreamTest extends TestCase
         self::assertEquals('aaaaa', (string) $s);
     }
 
-    public function testDescribesCapabilities()
+    public function testDescribesCapabilities(): void
     {
-        $pump = new PumpStream(function () {
+        $pump = new PumpStream(function (): void {
         });
 
         self::assertTrue($pump->isReadable());
@@ -86,7 +86,7 @@ class PumpStreamTest extends TestCase
         }
     }
 
-    public function testCanCreateCallableBasedStream()
+    public function testCanCreateCallableBasedStream(): void
     {
         $resource = new ArrayIterator(['foo', 'bar', '123']);
 

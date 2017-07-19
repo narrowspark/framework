@@ -10,7 +10,7 @@ class RequestFactoryAwareTraitTest extends MockeryTestCase
 {
     use RequestFactoryAwareTrait;
 
-    public function testSetAndGetRequestFactory()
+    public function testSetAndGetRequestFactory(): void
     {
         $this->setRequestFactory($this->mock(RequestFactoryInterface::class));
 
@@ -21,7 +21,7 @@ class RequestFactoryAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\RequestFactoryInterface] is not set up.
      */
-    public function testGetRequestFactoryThrowExceptionIfEventsDispatcherIsNotSet()
+    public function testGetRequestFactoryThrowExceptionIfEventsDispatcherIsNotSet(): void
     {
         $this->getRequestFactory();
     }

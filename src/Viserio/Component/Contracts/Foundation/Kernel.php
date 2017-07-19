@@ -12,14 +12,14 @@ interface Kernel
      *
      * @throws \RuntimeException
      *
-     * @return \Viserio\Component\Contracts\Container\Container|null
+     * @return null|\Viserio\Component\Contracts\Container\Container
      */
     public function getContainer(): ?ContainerContract;
 
     /**
      * Set the kernel configuration.
      *
-     * @param \Psr\Container\ContainerInterface|iterable $data
+     * @param iterable|\Psr\Container\ContainerInterface $data
      *
      * @return void
      */

@@ -30,9 +30,9 @@ class QueueClosure
      * @param \Viserio\Component\Contracts\Queue\Job $job
      * @param array                                  $data
      */
-    public function run(JobContract $job, array $data)
+    public function run(JobContract $job, array $data): void
     {
-        $closure = unserialize($this->crypt->decrypt($data['closure']));
+        $closure = \unserialize($this->crypt->decrypt($data['closure']));
 
         $closure($job);
     }

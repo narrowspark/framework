@@ -14,7 +14,7 @@ interface Event
     /**
      * Get target/context from which event was triggered.
      *
-     * @return null|string|object
+     * @return null|object|string
      */
     public function getTarget();
 

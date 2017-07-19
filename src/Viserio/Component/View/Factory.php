@@ -107,7 +107,7 @@ class Factory implements FactoryContract
      */
     public function file(string $path, array $data = [], array $mergeData = []): ViewContract
     {
-        $data   = array_merge($mergeData, $this->parseData($data));
+        $data   = \array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
 
         return $this->getView($this, $engine, $path, ['path' => $path], $data);
@@ -130,7 +130,7 @@ class Factory implements FactoryContract
             $this->getEngineFromPath($fileInfo['path']),
             $view,
             $fileInfo,
-            array_merge($mergeData, $this->parseData($data))
+            \array_merge($mergeData, $this->parseData($data))
         );
     }
 
@@ -172,7 +172,7 @@ class Factory implements FactoryContract
         // If is actually data in the array, we will loop through the data and append
         // an instance of the partial view to the final result HTML passing in the
         // iterated value of this data array, allowing the views to access them.
-        if (count($data) > 0) {
+        if (\count($data) > 0) {
             foreach ($data as $key => $value) {
                 $data = ['key' => $key, $iterator => $value];
                 $result .= $this->create($view, $data)->render();
@@ -190,11 +190,11 @@ class Factory implements FactoryContract
      */
     public function getEngineFromPath(string $path): EngineContract
     {
-        $engine = explode('|', $path);
-        $path   = isset($engine[1]) ? $engine[1] : $path;
+        $engine = \explode('|', $path);
+        $path   = $engine[1] ?? $path;
 
         if (! $extension = $this->getExtension($path)) {
-            throw new InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
+            throw new InvalidArgumentException(\sprintf('Unrecognized extension in file: [%s]', $path));
         }
 
         return $this->engines->resolve($this->extensions[$extension]);
@@ -205,7 +205,7 @@ class Factory implements FactoryContract
      */
     public function share($key, $value = null)
     {
-        $keys = is_array($key) ? $key : [$key => $value];
+        $keys = \is_array($key) ? $key : [$key => $value];
 
         foreach ($keys as $key => $value) {
             $this->shared[$key] = $value;
@@ -265,7 +265,7 @@ class Factory implements FactoryContract
     /**
      * Flush the cache of views located by the finder.
      */
-    public function flushFinderCache()
+    public function flushFinderCache(): void
     {
         $this->getFinder()->flush();
     }
@@ -285,7 +285,7 @@ class Factory implements FactoryContract
             unset($this->extensions[$extension]);
         }
 
-        $this->extensions = array_merge([$extension => $engine], $this->extensions);
+        $this->extensions = \array_merge([$extension => $engine], $this->extensions);
 
         return $this;
     }
@@ -355,11 +355,11 @@ class Factory implements FactoryContract
      *
      * @param string $path
      *
-     * @return string|null
+     * @return null|string
      */
     protected function getExtension(string $path)
     {
-        $extensions = array_keys($this->extensions);
+        $extensions = \array_keys($this->extensions);
 
         return Arr::first($extensions, function ($key, $value) use ($path) {
             return $this->endsWith($path, $value);
@@ -397,12 +397,12 @@ class Factory implements FactoryContract
      */
     private function endsWith(string $haystack, string $needle): bool
     {
-        $length = mb_strlen($needle);
+        $length = \mb_strlen($needle);
 
         if ($length == 0) {
             return true;
         }
 
-        return mb_substr($haystack, -$length) === $needle;
+        return \mb_substr($haystack, -$length) === $needle;
     }
 }

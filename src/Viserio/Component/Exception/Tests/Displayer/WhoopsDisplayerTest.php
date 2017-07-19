@@ -8,7 +8,7 @@ use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
 
 class WhoopsDisplayerTest extends TestCase
 {
-    public function testServerError()
+    public function testServerError(): void
     {
         $displayer = new WhoopsDisplayer();
         $response  = $displayer->display(new Exception(), 'foo', 503, []);
@@ -18,7 +18,7 @@ class WhoopsDisplayerTest extends TestCase
         self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
-    public function testClientError()
+    public function testClientError(): void
     {
         $displayer = new WhoopsDisplayer();
         $response  = $displayer->display(new Exception(), 'bar', 403, []);
@@ -28,7 +28,7 @@ class WhoopsDisplayerTest extends TestCase
         self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $exception = new Exception();
         $displayer = new WhoopsDisplayer();

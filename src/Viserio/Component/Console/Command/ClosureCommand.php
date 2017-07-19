@@ -40,7 +40,7 @@ class ClosureCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $inputs     = array_merge($input->getArguments(), $input->getOptions());
+        $inputs     = \array_merge($input->getArguments(), $input->getOptions());
         $parameters = [];
 
         foreach ((new ReflectionFunction($this->callback))->getParameters() as $parameter) {

@@ -13,6 +13,6 @@ class AccessDeniedException extends RuntimeException
      */
     public function __construct($path)
     {
-        parent::__construct(sprintf('The file %s could not be accessed', $path));
+        parent::__construct(\sprintf('The file %s could not be accessed', $path));
     }
 }

@@ -58,7 +58,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $path = self::normalizeDirectorySeparator($path);
 
         if ($this->isFile($path) && $this->has($path)) {
-            return file_get_contents($path);
+            return \file_get_contents($path);
         }
 
         throw new FileNotFoundException($path);
@@ -75,7 +75,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             throw new FileNotFoundException($path);
         }
 
-        $stream = @fopen($path, 'rb');
+        $stream = @\fopen($path, 'rb');
 
         return $stream;
     }
@@ -88,7 +88,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
-        if (! is_int(@file_put_contents($path, $contents, $lock))) {
+        if (! \is_int(@\file_put_contents($path, $contents, $lock))) {
             return false;
         }
 
@@ -106,7 +106,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         Util::rewindStream($resource);
 
-        $contents = stream_get_contents($resource);
+        $contents = \stream_get_contents($resource);
 
         return $this->write($path, $contents, $config);
     }
@@ -119,11 +119,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
-        if (is_resource($contents)) {
+        if (\is_resource($contents)) {
             return $this->writeStream($path, $contents, $config);
         }
 
-        return is_int(@file_put_contents($path, $contents, $lock));
+        return \is_int(@\file_put_contents($path, $contents, $lock));
     }
 
     /**
@@ -167,7 +167,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
 
         $flags = $config['flags'] ?? 0;
 
-        return is_int(@file_put_contents($path, $contents, $flags));
+        return \is_int(@\file_put_contents($path, $contents, $flags));
     }
 
     /**
@@ -177,7 +177,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         Util::rewindStream($resource);
 
-        $contents = stream_get_contents($resource);
+        $contents = \stream_get_contents($resource);
 
         return $this->update($path, $contents, $config);
     }
@@ -188,8 +188,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function getVisibility(string $path): string
     {
         $path = self::normalizeDirectorySeparator($path);
-        clearstatcache(false, $path);
-        $permissions = octdec(mb_substr(sprintf('%o', fileperms($path)), -4));
+        \clearstatcache(false, $path);
+        $permissions = \octdec(\mb_substr(\sprintf('%o', \fileperms($path)), -4));
 
         return $permissions & 0044 ?
             FilesystemContract::VISIBILITY_PUBLIC :
@@ -240,7 +240,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $from = self::normalizeDirectorySeparator($from);
         $to   = self::normalizeDirectorySeparator($to);
 
-        return rename($from, $to);
+        return \rename($from, $to);
     }
 
     /**
@@ -250,7 +250,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $path = self::normalizeDirectorySeparator($path);
 
-        return filesize($path);
+        return \filesize($path);
     }
 
     /**
@@ -264,10 +264,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             throw new FileNotFoundException($path);
         }
 
-        $explode = explode('.', $path);
+        $explode = \explode('.', $path);
 
-        if ($extension = end($explode)) {
-            $extension = mb_strtolower($extension);
+        if ($extension = \end($explode)) {
+            $extension = \mb_strtolower($extension);
         }
 
         return MimeType::detectByFileExtension($extension);
@@ -284,7 +284,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             throw new FileNotFoundException($path);
         }
 
-        return date('F d Y H:i:s', filemtime($path));
+        return \date('F d Y H:i:s', \filemtime($path));
     }
 
     /**
@@ -318,13 +318,13 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $directory = self::normalizeDirectorySeparator($directory);
 
-        $files = array_diff(scandir($directory), ['..', '.']);
+        $files = \array_diff(\scandir($directory), ['..', '.']);
 
         // To get the appropriate files, we'll simply scan the directory and filter
         // out any "files" that are not truly files so we do not end up with any
         // directories in our list, but only true files within the directory.
-        return array_filter($files, function ($file) use ($directory) {
-            return filetype(self::normalizeDirectorySeparator($directory . '/' . $file)) == 'file';
+        return \array_filter($files, function ($file) use ($directory) {
+            return \filetype(self::normalizeDirectorySeparator($directory . '/' . $file)) == 'file';
         });
     }
 
@@ -383,7 +383,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function allDirectories(string $directory): array
     {
-        return iterator_to_array(Finder::create()->directories()->in($directory), false);
+        return \iterator_to_array(Finder::create()->directories()->in($directory), false);
     }
 
     /**
@@ -437,7 +437,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $dirname = self::normalizeDirectorySeparator($dirname);
 
-        return is_dir($dirname);
+        return \is_dir($dirname);
     }
 
     /**
@@ -477,7 +477,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             }
         }
 
-        if (@rename($directory, $destination) !== true) {
+        if (@\rename($directory, $destination) !== true) {
             return false;
         }
 
@@ -500,19 +500,19 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      * Parse the given visibility value.
      *
      * @param string      $path
-     * @param string|null $visibility
+     * @param null|string $visibility
      *
      * @throws \InvalidArgumentException
      *
-     * @return int|null
+     * @return null|int
      */
     private function parseVisibility(string $path, string $visibility = null): ?int
     {
         $type = '';
 
-        if (is_file($path)) {
+        if (\is_file($path)) {
             $type = 'file';
-        } elseif (is_dir($path)) {
+        } elseif (\is_dir($path)) {
             $type = 'dir';
         }
 

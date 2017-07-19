@@ -60,7 +60,7 @@ interface AssetsRenderer extends RenderableContract
     /**
      * Returns the list of asset files.
      *
-     * @param string|null $type Only return css or js files
+     * @param null|string $type Only return css or js files
      *
      * @return array
      */

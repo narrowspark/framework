@@ -11,7 +11,7 @@ use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 
 class HandleExceptionsTest extends MockeryTestCase
 {
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         $bootstraper = new HandleExceptions();
         $handler     = $this->mock(HandlerContract::class);

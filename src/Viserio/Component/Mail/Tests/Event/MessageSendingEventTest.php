@@ -14,7 +14,7 @@ class MessageSendingEventTest extends MockeryTestCase
      */
     private $event;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->event = new MessageSendingEvent(
             $this->mock(MailerContract::class),
@@ -22,7 +22,7 @@ class MessageSendingEventTest extends MockeryTestCase
         );
     }
 
-    public function testGetMessage()
+    public function testGetMessage(): void
     {
         self::assertInstanceOf(Swift_Mime_SimpleMessage::class, $this->event->getMessage());
     }

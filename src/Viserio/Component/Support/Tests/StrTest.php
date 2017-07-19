@@ -7,40 +7,40 @@ use Viserio\Component\Support\Str;
 
 class StrTest extends TestCase
 {
-    public function testStringCanBeLimitedByWords()
+    public function testStringCanBeLimitedByWords(): void
     {
         self::assertEquals('Narrowspark...', Str::words('Narrowspark Viserio', 1));
         self::assertEquals('Narrowspark___', Str::words('Narrowspark Viserio', 1, '___'));
         self::assertEquals('Narrowspark Viserio', Str::words('Narrowspark Viserio', 3));
     }
 
-    public function testStringWithoutWordsDoesntProduceError()
+    public function testStringWithoutWordsDoesntProduceError(): void
     {
-        $nbsp = chr(0xC2) . chr(0xA0);
+        $nbsp = \chr(0xC2) . \chr(0xA0);
         self::assertEquals(' ', Str::words(' '));
         self::assertEquals($nbsp, Str::words($nbsp));
     }
 
-    public function testStringTrimmedOnlyWhereNecessary()
+    public function testStringTrimmedOnlyWhereNecessary(): void
     {
         self::assertEquals(' Narrowspark Viserio ', Str::words(' Narrowspark Viserio ', 3));
         self::assertEquals(' Narrowspark...', Str::words(' Narrowspark Viserio ', 1));
     }
 
-    public function testParseCallback()
+    public function testParseCallback(): void
     {
         self::assertEquals(['Class', 'method'], Str::parseCallback('Class@method', 'foo'));
         self::assertEquals(['Class', 'foo'], Str::parseCallback('Class', 'foo'));
     }
 
-    public function testStrFinish()
+    public function testStrFinish(): void
     {
         self::assertEquals('test/string/', Str::finish('test/string', '/'));
         self::assertEquals('test/string/', Str::finish('test/string/', '/'));
         self::assertEquals('test/string/', Str::finish('test/string//', '/'));
     }
 
-    public function testStrLimit()
+    public function testStrLimit(): void
     {
         $string = 'Narrowspark Framework for Creative People.';
 
@@ -51,19 +51,19 @@ class StrTest extends TestCase
         self::assertEquals('这是一...', Str::limit('这是一段中文', 6));
     }
 
-    public function testRandom()
+    public function testRandom(): void
     {
-        self::assertEquals(64, mb_strlen(Str::random()));
-        $randomInteger = mt_rand(1, 100);
-        self::assertEquals($randomInteger, mb_strlen(Str::random($randomInteger)));
+        self::assertEquals(64, \mb_strlen(Str::random()));
+        $randomInteger = \mt_rand(1, 100);
+        self::assertEquals($randomInteger, \mb_strlen(Str::random($randomInteger)));
         self::assertInternalType('string', Str::random());
 
         $result = Str::random(20);
-        self::assertTrue(is_string($result));
-        self::assertEquals(20, mb_strlen($result));
+        self::assertTrue(\is_string($result));
+        self::assertEquals(20, \mb_strlen($result));
     }
 
-    public function testSubstr()
+    public function testSubstr(): void
     {
         self::assertEquals('Ё', Str::substr('БГДЖИЛЁ', -1));
         self::assertEquals('ЛЁ', Str::substr('БГДЖИЛЁ', -2));
@@ -78,7 +78,7 @@ class StrTest extends TestCase
         self::assertEmpty(Str::substr('Б', 2));
     }
 
-    public function testSnakeCase()
+    public function testSnakeCase(): void
     {
         self::assertEquals('narrowspark_p_h_p_framework', Str::snake('NarrowsparkPHPFramework'));
         self::assertEquals('narrowspark_php_framework', Str::snake('NarrowsparkPhpFramework'));
@@ -111,7 +111,7 @@ class StrTest extends TestCase
         self::assertEquals('foo_bar', Str::snake('fooBar')); // test cache
     }
 
-    public function testKebabCase()
+    public function testKebabCase(): void
     {
         self::assertEquals('foo-bar', Str::kebab('Foo Bar'));
         self::assertEquals('foo-bar', Str::kebab('foo bar'));
@@ -124,7 +124,7 @@ class StrTest extends TestCase
         self::assertEquals('foo-bar', Str::kebab('fooBar')); // test cache
     }
 
-    public function testStudlyCase()
+    public function testStudlyCase(): void
     {
         //StudlyCase <=> PascalCase
         self::assertEquals('FooBar', Str::studly('Foo Bar'));
@@ -140,7 +140,7 @@ class StrTest extends TestCase
         self::assertEquals('FooBarBaz', Str::studly('foo-bar_baz'));
     }
 
-    public function testReplaceFirst()
+    public function testReplaceFirst(): void
     {
         self::assertEquals('fooqux foobar', Str::replaceFirst('bar', 'qux', 'foobar foobar'));
         self::assertEquals('foo/qux? foo/bar?', Str::replaceFirst('bar?', 'qux?', 'foo/bar? foo/bar?'));
@@ -149,7 +149,7 @@ class StrTest extends TestCase
         self::assertEquals('foobar foobar', Str::replaceFirst('', 'yyy', 'foobar foobar'));
     }
 
-    public function testReplaceLast()
+    public function testReplaceLast(): void
     {
         self::assertEquals('foobar fooqux', Str::replaceLast('bar', 'qux', 'foobar foobar'));
         self::assertEquals('foo/bar? foo/qux?', Str::replaceLast('bar?', 'qux?', 'foo/bar? foo/bar?'));

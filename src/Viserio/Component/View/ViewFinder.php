@@ -60,7 +60,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      * Create a new file view loader instance.
      *
      * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
-     * @param \Psr\Container\ContainerInterface|iterable         $data
+     * @param iterable|\Psr\Container\ContainerInterface         $data
      */
     public function __construct(FilesystemContract $files, $data)
     {
@@ -69,8 +69,8 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
 
         $this->paths = $options['paths'];
 
-        if (isset($options['extensions']) && is_array($options['extensions'])) {
-            $this->extensions = array_merge($this->extensions, $options['extensions']);
+        if (isset($options['extensions']) && \is_array($options['extensions'])) {
+            $this->extensions = \array_merge($this->extensions, $options['extensions']);
         }
     }
 
@@ -101,7 +101,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
             return $this->views[$name];
         }
 
-        if ($this->hasHintInformation($name = trim($name))) {
+        if ($this->hasHintInformation($name = \trim($name))) {
             return $this->views[$name] = $this->findNamedPathView($name);
         }
 
@@ -121,9 +121,9 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * {@inheritdoc}
      */
-    public function prependLocation(string $location)
+    public function prependLocation(string $location): void
     {
-        array_unshift($this->paths, $location);
+        \array_unshift($this->paths, $location);
     }
 
     /**
@@ -134,7 +134,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         $hints = (array) $hints;
 
         if (isset($this->hints[$namespace])) {
-            $hints = array_merge($this->hints[$namespace], $hints);
+            $hints = \array_merge($this->hints[$namespace], $hints);
         }
 
         $this->hints[$namespace] = $hints;
@@ -150,7 +150,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         $hints = (array) $hints;
 
         if (isset($this->hints[$namespace])) {
-            $hints = array_merge($hints, $this->hints[$namespace]);
+            $hints = \array_merge($hints, $this->hints[$namespace]);
         }
 
         $this->hints[$namespace] = $hints;
@@ -163,11 +163,11 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function addExtension(string $extension): FinderContract
     {
-        if (($index = array_search($extension, $this->extensions, true)) !== false) {
+        if (($index = \array_search($extension, $this->extensions, true)) !== false) {
             unset($this->extensions[$index]);
         }
 
-        array_unshift($this->extensions, $extension);
+        \array_unshift($this->extensions, $extension);
 
         return $this;
     }
@@ -177,7 +177,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function hasHintInformation(string $name): bool
     {
-        return mb_strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
+        return \mb_strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
     }
 
     /**
@@ -267,14 +267,14 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     protected function getNamespaceSegments(string $name): array
     {
-        $segments = explode(FinderContract::HINT_PATH_DELIMITER, $name);
+        $segments = \explode(FinderContract::HINT_PATH_DELIMITER, $name);
 
-        if (count($segments) !== 2) {
-            throw new InvalidArgumentException(sprintf('View [%s] has an invalid name.', $name));
+        if (\count($segments) !== 2) {
+            throw new InvalidArgumentException(\sprintf('View [%s] has an invalid name.', $name));
         }
 
         if (! isset($this->hints[$segments[0]])) {
-            throw new InvalidArgumentException(sprintf('No hint path defined for [%s].', $segments[0]));
+            throw new InvalidArgumentException(\sprintf('No hint path defined for [%s].', $segments[0]));
         }
 
         return $segments;
@@ -306,7 +306,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
             }
         }
 
-        throw new InvalidArgumentException(sprintf('View [%s] not found.', $name));
+        throw new InvalidArgumentException(\sprintf('View [%s] not found.', $name));
     }
 
     /**
@@ -318,10 +318,10 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     protected function getPossibleViewFiles(string $name): array
     {
-        return array_map(function ($extension) use ($name) {
+        return \array_map(function ($extension) use ($name) {
             return [
                 'extension' => $extension,
-                'file'      => str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
+                'file'      => \str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
         }, $this->extensions);
     }

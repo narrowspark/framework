@@ -25,13 +25,13 @@ class FilesystemTest extends TestCase
     /**
      * Setup the environment.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->root  = vfsStream::setup();
         $this->files = new Filesystem();
     }
 
-    public function testReadRetrievesFiles()
+    public function testReadRetrievesFiles(): void
     {
         $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
 
@@ -41,7 +41,7 @@ class FilesystemTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testReadStreamToThrowException()
+    public function testReadStreamToThrowException(): void
     {
         $this->files->readStream('foo/bar/tmp/file.php');
     }
@@ -49,12 +49,12 @@ class FilesystemTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testReadToThrowException()
+    public function testReadToThrowException(): void
     {
         $this->files->read('foo/bar/tmp/file.php');
     }
 
-    public function testUpdateStoresFiles()
+    public function testUpdateStoresFiles(): void
     {
         $file = vfsStream::newFile('temp.txt')->at($this->root);
 
@@ -64,7 +64,7 @@ class FilesystemTest extends TestCase
         self::assertStringEqualsFile($file->url(), 'Hello World2');
     }
 
-    public function testPutStoresFiles()
+    public function testPutStoresFiles(): void
     {
         $file = vfsStream::newFile('temp.txt')->at($this->root);
 
@@ -76,28 +76,28 @@ class FilesystemTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testUpdateToThrowException()
+    public function testUpdateToThrowException(): void
     {
         $this->files->update('foo/bar/tmp/file.php', 'Hello World');
     }
 
-    public function testDeleteDirectory()
+    public function testDeleteDirectory(): void
     {
         $this->root->addChild(new vfsStreamDirectory('temp'));
 
         $dir  = $this->root->getChild('temp');
         $file = vfsStream::newFile('bar.txt')->withContent('bar')->at($dir);
 
-        self::assertTrue(is_dir($dir->url()));
+        self::assertTrue(\is_dir($dir->url()));
         self::assertFalse($this->files->deleteDirectory($file->url()));
 
         $this->files->deleteDirectory($dir->url());
 
-        self::assertFalse(is_dir(vfsStream::url('root/temp')));
+        self::assertFalse(\is_dir(vfsStream::url('root/temp')));
         self::assertFileNotExists($file->url());
     }
 
-    public function testCleanDirectory()
+    public function testCleanDirectory(): void
     {
         $this->root->addChild(new vfsStreamDirectory('tempdir'));
 
@@ -107,11 +107,11 @@ class FilesystemTest extends TestCase
         self::assertFalse($this->files->cleanDirectory($file->url()));
         $this->files->cleanDirectory($dir->url());
 
-        self::assertTrue(is_dir(vfsStream::url('root/tempdir')));
+        self::assertTrue(\is_dir(vfsStream::url('root/tempdir')));
         self::assertFileNotExists($file->url());
     }
 
-    public function testDeleteRemovesFiles()
+    public function testDeleteRemovesFiles(): void
     {
         $file = vfsStream::newFile('unlucky.txt')->withContent('So sad')->at($this->root);
 
@@ -122,7 +122,7 @@ class FilesystemTest extends TestCase
         self::assertFalse($this->files->has($file->url()));
     }
 
-    public function testMoveMovesFiles()
+    public function testMoveMovesFiles(): void
     {
         $file = vfsStream::newFile('pop.txt')->withContent('pop')->at($this->root);
         $rock = $this->root->url() . '/rock.txt';
@@ -134,16 +134,16 @@ class FilesystemTest extends TestCase
         self::assertFileNotExists($this->root->url() . '/pop.txt');
     }
 
-    public function testGetExtensionReturnsExtension()
+    public function testGetExtensionReturnsExtension(): void
     {
         $file = vfsStream::newFile('rock.csv')->withContent('pop,rock')->at($this->root);
 
         self::assertEquals('csv', $this->files->getExtension($file->url()));
     }
 
-    public function testGetMimeTypeOutputsMimeType()
+    public function testGetMimeTypeOutputsMimeType(): void
     {
-        if (! class_exists('Finfo')) {
+        if (! \class_exists('Finfo')) {
             $this->markTestSkipped('The PHP extension fileinfo is not installed.');
         }
 
@@ -152,7 +152,7 @@ class FilesystemTest extends TestCase
         self::assertEquals('text/plain', $this->files->getMimetype($file->url()));
     }
 
-    public function testGetSizeOutputsSize()
+    public function testGetSizeOutputsSize(): void
     {
         $content = LargeFileContent::withKilobytes(2);
         $file    = vfsStream::newFile('2kb.txt')->withContent($content)->at($this->root);
@@ -160,7 +160,7 @@ class FilesystemTest extends TestCase
         self::assertEquals($file->size(), $this->files->getSize($file->url()));
     }
 
-    public function testIsDirectory()
+    public function testIsDirectory(): void
     {
         $this->root->addChild(new vfsStreamDirectory('assets'));
         $dir  = $this->root->getChild('assets');
@@ -170,7 +170,7 @@ class FilesystemTest extends TestCase
         self::assertFalse($this->files->isDirectory($file->url()));
     }
 
-    public function testAllFilesFindsFiles()
+    public function testAllFilesFindsFiles(): void
     {
         $this->root->addChild(new vfsStreamDirectory('languages'));
 
@@ -184,7 +184,7 @@ class FilesystemTest extends TestCase
         self::assertContains($file2->getName(), $allFiles[1]);
     }
 
-    public function testDirectoriesFindsDirectories()
+    public function testDirectoriesFindsDirectories(): void
     {
         $this->root->addChild(new vfsStreamDirectory('languages'));
         $this->root->addChild(new vfsStreamDirectory('music'));
@@ -195,11 +195,11 @@ class FilesystemTest extends TestCase
         self::assertContains('vfs://root' . DIRECTORY_SEPARATOR . 'music', $directories[1]);
     }
 
-    public function testCreateDirectory()
+    public function testCreateDirectory(): void
     {
         $this->files->createDirectory($this->root->url() . '/test');
 
-        self::assertTrue(is_dir(vfsStream::url('root/test')));
+        self::assertTrue(\is_dir(vfsStream::url('root/test')));
         self::assertEquals(0755, $this->root->getChild('test')->getPermissions());
 
         $this->files->createDirectory($this->root->url() . '/test2', ['visibility' => 'private']);
@@ -207,7 +207,7 @@ class FilesystemTest extends TestCase
         self::assertEquals(0700, $this->root->getChild('test2')->getPermissions());
     }
 
-    public function testCopy()
+    public function testCopy(): void
     {
         $this->root->addChild(new vfsStreamDirectory('copy'));
         $this->root->addChild(new vfsStreamDirectory('copy2'));
@@ -234,7 +234,7 @@ class FilesystemTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\IOException
      */
-    public function testCopyToThrowIOException()
+    public function testCopyToThrowIOException(): void
     {
         $file = vfsStream::newFile('copy.txt', 0000)
             ->withContent('copy1')
@@ -251,7 +251,7 @@ class FilesystemTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testCopyToThrowFileNotFoundException()
+    public function testCopyToThrowFileNotFoundException(): void
     {
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
@@ -261,7 +261,7 @@ class FilesystemTest extends TestCase
         );
     }
 
-    public function testGetAndSetVisibility()
+    public function testGetAndSetVisibility(): void
     {
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
@@ -288,7 +288,7 @@ class FilesystemTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSetVisibilityToThrowInvalidArgumentException()
+    public function testSetVisibilityToThrowInvalidArgumentException(): void
     {
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
@@ -297,7 +297,7 @@ class FilesystemTest extends TestCase
         $this->files->setVisibility($dir->url(), 'exception');
     }
 
-    public function testWrite()
+    public function testWrite(): void
     {
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
@@ -317,32 +317,32 @@ class FilesystemTest extends TestCase
         self::assertSame('private', $this->files->getVisibility($file->url()));
     }
 
-    public function testWriteStreamAndReadStream()
+    public function testWriteStreamAndReadStream(): void
     {
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
         $file = vfsStream::newFile('copy.txt')
             ->at($this->root->getChild('copy'));
 
-        $temp = tmpfile();
-        fwrite($temp, 'dummy');
-        rewind($temp);
+        $temp = \tmpfile();
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
 
         $this->files->writeStream($file->url(), $temp);
 
         $stream = $this->files->readStream($file->url());
 
-        $contents = stream_get_contents($stream);
+        $contents = \stream_get_contents($stream);
         $size     = Util::getStreamSize($stream);
 
-        fclose($stream);
+        \fclose($stream);
 
         self::assertSame(5, $size);
         self::assertSame('dummy', $contents);
         self::assertInternalType('resource', $this->files->readStream($file->url()));
     }
 
-    public function testUpdateStream()
+    public function testUpdateStream(): void
     {
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
@@ -352,10 +352,10 @@ class FilesystemTest extends TestCase
 
         self::assertSame('copy', $this->files->read($file->url()));
 
-        $temp = tmpfile();
+        $temp = \tmpfile();
 
-        fwrite($temp, 'dummy');
-        rewind($temp);
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
 
         self::assertTrue($this->files->updateStream(
             $file->url(),
@@ -365,16 +365,16 @@ class FilesystemTest extends TestCase
 
         $stream = $this->files->readStream($file->url());
 
-        $contents = stream_get_contents($stream);
+        $contents = \stream_get_contents($stream);
         $size     = Util::getStreamSize($stream);
 
-        fclose($stream);
+        \fclose($stream);
 
         self::assertSame(5, $size);
         self::assertSame('dummy', $contents);
     }
 
-    public function testGetMimetype()
+    public function testGetMimetype(): void
     {
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
@@ -390,12 +390,12 @@ class FilesystemTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testGetMimetypeToThrowFileNotFoundException()
+    public function testGetMimetypeToThrowFileNotFoundException(): void
     {
         $this->files->getMimetype(vfsStream::url('foo/bar/tmp/file.php'));
     }
 
-    public function testGetTimestamp()
+    public function testGetTimestamp(): void
     {
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
@@ -405,18 +405,18 @@ class FilesystemTest extends TestCase
             ->withContent('copy')
             ->at($dir);
 
-        self::assertSame(date('F d Y H:i:s', filemtime($file->url())), $this->files->getTimestamp($file->url()));
+        self::assertSame(\date('F d Y H:i:s', \filemtime($file->url())), $this->files->getTimestamp($file->url()));
     }
 
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testGetTimestampToThrowFileNotFoundException()
+    public function testGetTimestampToThrowFileNotFoundException(): void
     {
         $this->files->getTimestamp(vfsStream::url('foo/bar/tmp/file.php'));
     }
 
-    public function testMoveDirectoryMovesEntireDirectory()
+    public function testMoveDirectoryMovesEntireDirectory(): void
     {
         $this->root->addChild(new vfsStreamDirectory('tmp'));
         $this->root->addChild(new vfsStreamDirectory('tmp2'));
@@ -440,15 +440,15 @@ class FilesystemTest extends TestCase
 
         $this->files->moveDirectory($dir->url(), $temp2->url());
 
-        self::assertTrue(is_dir(vfsStream::url('root/tmp2')));
+        self::assertTrue(\is_dir(vfsStream::url('root/tmp2')));
         self::assertFileExists(vfsStream::url('root/tmp2') . '/foo.txt');
         self::assertFileExists(vfsStream::url('root/tmp2') . '/bar.txt');
-        self::assertTrue(is_dir(vfsStream::url('root/tmp2') . '/nested'));
+        self::assertTrue(\is_dir(vfsStream::url('root/tmp2') . '/nested'));
         self::assertFileExists(vfsStream::url('root/tmp2') . '/nested/baz.txt');
-        self::assertFalse(is_dir(vfsStream::url('root/tmp')));
+        self::assertFalse(\is_dir(vfsStream::url('root/tmp')));
     }
 
-    public function testMoveDirectoryMovesEntireDirectoryAndOverwrites()
+    public function testMoveDirectoryMovesEntireDirectoryAndOverwrites(): void
     {
         $this->root->addChild(new vfsStreamDirectory('tmp'));
         $this->root->addChild(new vfsStreamDirectory('tmp2'));
@@ -479,22 +479,22 @@ class FilesystemTest extends TestCase
 
         $this->files->moveDirectory($dir->url(), $temp2->url(), ['overwrite' => true]);
 
-        self::assertTrue(is_dir(vfsStream::url('root/tmp2')));
+        self::assertTrue(\is_dir(vfsStream::url('root/tmp2')));
         self::assertFileExists(vfsStream::url('root/tmp2') . '/foo.txt');
         self::assertFileExists(vfsStream::url('root/tmp2') . '/bar.txt');
-        self::assertTrue(is_dir(vfsStream::url('root/tmp2') . '/nested'));
+        self::assertTrue(\is_dir(vfsStream::url('root/tmp2') . '/nested'));
         self::assertFileExists(vfsStream::url('root/tmp2') . '/nested/baz.txt');
         self::assertFileNotExists(vfsStream::url('root/tmp2') . '/foo2.txt');
         self::assertFileNotExists(vfsStream::url('root/tmp2') . '/bar2.txt');
-        self::assertFalse(is_dir(vfsStream::url('root/tmp')));
+        self::assertFalse(\is_dir(vfsStream::url('root/tmp')));
     }
 
-    public function testCopyDirectoryReturnsFalseIfSourceIsntDirectory()
+    public function testCopyDirectoryReturnsFalseIfSourceIsntDirectory(): void
     {
         self::assertFalse($this->files->copyDirectory('/foo/bar/baz/breeze/boom', 'foo'));
     }
 
-    public function testCopyDirectoryMovesEntireDirectory()
+    public function testCopyDirectoryMovesEntireDirectory(): void
     {
         $this->root->addChild(new vfsStreamDirectory('tmp'));
         $this->root->addChild(new vfsStreamDirectory('tmp2'));
@@ -518,14 +518,14 @@ class FilesystemTest extends TestCase
 
         $this->files->copyDirectory($dir->url(), $temp2->url());
 
-        self::assertTrue(is_dir(vfsStream::url('root/tmp2')));
+        self::assertTrue(\is_dir(vfsStream::url('root/tmp2')));
         self::assertFileExists(vfsStream::url('root/tmp2') . '/foo.txt');
         self::assertFileExists(vfsStream::url('root/tmp2') . '/bar.txt');
-        self::assertTrue(is_dir(vfsStream::url('root/tmp2') . '/nested'));
+        self::assertTrue(\is_dir(vfsStream::url('root/tmp2') . '/nested'));
         self::assertFileExists(vfsStream::url('root/tmp2') . '/nested/baz.txt');
     }
 
-    public function testFiles()
+    public function testFiles(): void
     {
         $this->root->addChild(new vfsStreamDirectory('tmp'));
 
@@ -545,12 +545,12 @@ class FilesystemTest extends TestCase
             ->withContent('baz')
             ->at($dir2);
 
-        self::assertTrue(in_array('bar.txt', $this->files->files($dir->url())));
-        self::assertTrue(in_array('foo.txt', $this->files->files($dir->url())));
-        self::assertFalse(in_array('foo2.txt', $this->files->files($dir->url())));
+        self::assertTrue(\in_array('bar.txt', $this->files->files($dir->url()), true));
+        self::assertTrue(\in_array('foo.txt', $this->files->files($dir->url()), true));
+        self::assertFalse(\in_array('foo2.txt', $this->files->files($dir->url()), true));
     }
 
-    public function testAllDirectories()
+    public function testAllDirectories(): void
     {
         $this->root->addChild(new vfsStreamDirectory('tmp'));
         $this->root->addChild(new vfsStreamDirectory('tmp2'));
@@ -560,7 +560,7 @@ class FilesystemTest extends TestCase
         self::assertInstanceOf(SplFileInfo::class, $arr[0]);
     }
 
-    public function testAppendOnExistingFile()
+    public function testAppendOnExistingFile(): void
     {
         $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
 
@@ -569,7 +569,7 @@ class FilesystemTest extends TestCase
         self::assertEquals('Foo Bar test', $this->files->read($file->url()));
     }
 
-    public function testAppend()
+    public function testAppend(): void
     {
         $url  = $this->root->url() . '/file.php';
 
@@ -578,44 +578,44 @@ class FilesystemTest extends TestCase
         self::assertEquals('test', $this->files->read($url));
     }
 
-    public function testAppendStreamOnExistingFile()
+    public function testAppendStreamOnExistingFile(): void
     {
         $file = vfsStream::newFile('copy.txt')->withContent('Foo Bar')->at($this->root);
-        $temp = tmpfile();
+        $temp = \tmpfile();
 
-        fwrite($temp, ' dummy');
-        rewind($temp);
+        \fwrite($temp, ' dummy');
+        \rewind($temp);
 
         $this->files->appendStream($file->url(), $temp);
 
         $stream = $this->files->readStream($file->url());
 
-        $contents = stream_get_contents($stream);
+        $contents = \stream_get_contents($stream);
         $size     = Util::getStreamSize($stream);
 
-        fclose($stream);
+        \fclose($stream);
 
         self::assertSame(13, $size);
         self::assertSame('Foo Bar dummy', $contents);
         self::assertInternalType('resource', $this->files->readStream($file->url()));
     }
 
-    public function testAppendStream()
+    public function testAppendStream(): void
     {
         $url  = $this->root->url() . '/file.php';
-        $temp = tmpfile();
+        $temp = \tmpfile();
 
-        fwrite($temp, 'dummy');
-        rewind($temp);
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
 
         $this->files->appendStream($url, $temp);
 
         $stream = $this->files->readStream($url);
 
-        $contents = stream_get_contents($stream);
+        $contents = \stream_get_contents($stream);
         $size     = Util::getStreamSize($stream);
 
-        fclose($stream);
+        \fclose($stream);
 
         self::assertSame(5, $size);
         self::assertSame('dummy', $contents);

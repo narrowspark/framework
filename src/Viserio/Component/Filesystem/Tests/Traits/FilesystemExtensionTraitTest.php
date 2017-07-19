@@ -20,12 +20,12 @@ class FilesystemExtensionTraitTest extends TestCase
     /**
      * Setup the environment.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->root = vfsStream::setup();
     }
 
-    public function testWithoutExtension()
+    public function testWithoutExtension(): void
     {
         $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
 
@@ -36,14 +36,14 @@ class FilesystemExtensionTraitTest extends TestCase
         self::assertSame('temp', $this->withoutExtension($file->url()));
     }
 
-    public function testGetExtensionReturnsExtension()
+    public function testGetExtensionReturnsExtension(): void
     {
         $file = vfsStream::newFile('rock.csv')->withContent('pop,rock')->at($this->root);
 
         self::assertEquals('csv', $this->getExtension($file->url()));
     }
 
-    public function testChangeExtension()
+    public function testChangeExtension(): void
     {
         $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
 
@@ -66,7 +66,7 @@ class FilesystemExtensionTraitTest extends TestCase
     protected function getNormalizedOrPrefixedPath(string $path): string
     {
         if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+            $prefix = \method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
 
             return $prefix . $path;
         }

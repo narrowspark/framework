@@ -46,12 +46,12 @@ class ValidatedDimensionalConfigurationFixture implements RequiresComponentConfi
     public static function getOptionValidators(): array
     {
         return [
-            'minLength' => function ($value) {
+            'minLength' => function ($value): void {
                 throw new Exception('Dont throw exception on default values');
             },
             'foo' => [
-                'maxLength' => function ($value) {
-                    if (! is_int($value)) {
+                'maxLength' => function ($value): void {
+                    if (! \is_int($value)) {
                         throw new Exception('Value is not a int.');
                     }
                 },

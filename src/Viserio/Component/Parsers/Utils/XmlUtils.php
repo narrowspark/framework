@@ -36,20 +36,20 @@ final class XmlUtils
     {
         $errors = [];
 
-        foreach (libxml_get_errors() as $error) {
-            $errors[] = sprintf(
+        foreach (\libxml_get_errors() as $error) {
+            $errors[] = \sprintf(
                 '[%s %s] %s (in %s - line %d, column %d)',
                 $error->level == LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
                 $error->code,
-                trim($error->message),
+                \trim($error->message),
                 $error->file ?: 'n/a',
                 $error->line,
                 $error->column
             );
         }
 
-        libxml_clear_errors();
-        libxml_use_internal_errors($internalErrors);
+        \libxml_clear_errors();
+        \libxml_use_internal_errors($internalErrors);
 
         return $errors;
     }
@@ -58,7 +58,7 @@ final class XmlUtils
      * Loads an XML file.
      *
      * @param string               $file             An XML file path
-     * @param string|callable|null $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
+     * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
      * @throws \InvalidArgumentException When loading of XML file returns error
      * @throws \RuntimeException         When no file was found
@@ -67,18 +67,18 @@ final class XmlUtils
      */
     public static function loadFile(string $file, $schemaOrCallable = null): DOMDocument
     {
-        if (! file_exists($file)) {
-            throw new RuntimeException(sprintf('No such file [%s] found.', $file));
+        if (! \file_exists($file)) {
+            throw new RuntimeException(\sprintf('No such file [%s] found.', $file));
         }
 
-        return self::loadString(@file_get_contents($file), $schemaOrCallable);
+        return self::loadString(@\file_get_contents($file), $schemaOrCallable);
     }
 
     /**
      * Loads an XML string.
      *
      * @param string               $content          An XML string content
-     * @param string|callable|null $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
+     * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
      * @throws \InvalidArgumentException When loading of XML file returns error
      *
@@ -86,28 +86,28 @@ final class XmlUtils
      */
     public static function loadString(string $content, $schemaOrCallable = null): DOMDocument
     {
-        if (trim($content) === '') {
+        if (\trim($content) === '') {
             throw new InvalidArgumentException('Content does not contain valid XML, it is empty.');
         }
 
-        $internalErrors  = libxml_use_internal_errors(true);
-        $disableEntities = libxml_disable_entity_loader(true);
+        $internalErrors  = \libxml_use_internal_errors(true);
+        $disableEntities = \libxml_disable_entity_loader(true);
 
-        libxml_clear_errors();
+        \libxml_clear_errors();
 
         $dom                  = new DOMDocument();
         $dom->validateOnParse = true;
 
-        if (! $dom->loadXML($content, LIBXML_NONET | (defined('LIBXML_COMPACT') ? LIBXML_COMPACT : 0))) {
-            libxml_disable_entity_loader($disableEntities);
+        if (! $dom->loadXML($content, LIBXML_NONET | (\defined('LIBXML_COMPACT') ? LIBXML_COMPACT : 0))) {
+            \libxml_disable_entity_loader($disableEntities);
 
-            throw new InvalidArgumentException(implode("\n", self::getXmlErrors($internalErrors)));
+            throw new InvalidArgumentException(\implode("\n", self::getXmlErrors($internalErrors)));
         }
 
         $dom->normalizeDocument();
 
-        libxml_use_internal_errors($internalErrors);
-        libxml_disable_entity_loader($disableEntities);
+        \libxml_use_internal_errors($internalErrors);
+        \libxml_disable_entity_loader($disableEntities);
 
         foreach ($dom->childNodes as $child) {
             if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
@@ -119,8 +119,8 @@ final class XmlUtils
             self::validateXmlDom($dom, $schemaOrCallable);
         }
 
-        libxml_clear_errors();
-        libxml_use_internal_errors($internalErrors);
+        \libxml_clear_errors();
+        \libxml_use_internal_errors($internalErrors);
 
         return $dom;
     }
@@ -143,7 +143,7 @@ final class XmlUtils
      * @param \DomElement $element     A \DomElement instance
      * @param bool        $checkPrefix Check prefix in an element or an attribute name
      *
-     * @return array|string|null A PHP array
+     * @return null|array|string A PHP array
      */
     public static function convertDomElementToArray(DOMElement $element, bool $checkPrefix = true)
     {
@@ -152,7 +152,7 @@ final class XmlUtils
         $config = [];
 
         foreach ($element->attributes as $name => $node) {
-            if ($checkPrefix && ! in_array((string) $node->prefix, ['', $prefix], true)) {
+            if ($checkPrefix && ! \in_array((string) $node->prefix, ['', $prefix], true)) {
                 continue;
             }
 
@@ -164,8 +164,8 @@ final class XmlUtils
 
         foreach ($element->childNodes as $node) {
             if ($node instanceof DOMText) {
-                if (trim($node->nodeValue) !== '') {
-                    $nodeValue = trim($node->nodeValue);
+                if (\trim($node->nodeValue) !== '') {
+                    $nodeValue = \trim($node->nodeValue);
                     $empty     = false;
                 }
             } elseif ($checkPrefix && $prefix != (string) $node->prefix) {
@@ -175,7 +175,7 @@ final class XmlUtils
                 $key   = $node->localName;
 
                 if (isset($config[$key])) {
-                    if (! is_array($config[$key]) || ! is_int(key($config[$key]))) {
+                    if (! \is_array($config[$key]) || ! \is_int(\key($config[$key]))) {
                         $config[$key] = [$config[$key]];
                     }
 
@@ -191,7 +191,7 @@ final class XmlUtils
         if ($nodeValue !== false) {
             $value = self::phpize($nodeValue);
 
-            if (count($config)) {
+            if (\count($config)) {
                 $config['value'] = $value;
             } else {
                 $config = $value;
@@ -211,32 +211,32 @@ final class XmlUtils
     public static function phpize($value)
     {
         $value          = (string) $value;
-        $lowercaseValue = mb_strtolower($value);
+        $lowercaseValue = \mb_strtolower($value);
 
         switch (true) {
             case 'null' === $lowercaseValue:
                 return;
-            case ctype_digit($value):
+            case \ctype_digit($value):
                 $raw  = $value;
                 $cast = (int) $value;
 
-                return '0' == $value[0] ? octdec($value) : (($raw === (string) $cast) ? $cast : $raw);
-            case isset($value[1]) && '-' === $value[0] && ctype_digit(mb_substr($value, 1)):
+                return '0' == $value[0] ? \octdec($value) : (($raw === (string) $cast) ? $cast : $raw);
+            case isset($value[1]) && '-' === $value[0] && \ctype_digit(\mb_substr($value, 1)):
                 $raw  = $value;
                 $cast = (int) $value;
 
-                return '0' == $value[1] ? octdec($value) : (($raw === (string) $cast) ? $cast : $raw);
+                return '0' == $value[1] ? \octdec($value) : (($raw === (string) $cast) ? $cast : $raw);
             case 'true' === $lowercaseValue:
                 return true;
             case 'false' === $lowercaseValue:
                 return false;
             case isset($value[1]) && '0b' == $value[0] . $value[1]:
-                return bindec($value);
-            case is_numeric($value):
-                return '0x' === $value[0] . $value[1] ? hexdec($value) : (float) $value;
-            case preg_match('/^0x[0-9a-f]++$/i', $value):
-                return hexdec($value);
-            case preg_match('/^(-|\+)?[0-9]+(\.[0-9]+)?$/', $value):
+                return \bindec($value);
+            case \is_numeric($value):
+                return '0x' === $value[0] . $value[1] ? \hexdec($value) : (float) $value;
+            case \preg_match('/^0x[0-9a-f]++$/i', $value):
+                return \hexdec($value);
+            case \preg_match('/^(-|\+)?[0-9]+(\.[0-9]+)?$/', $value):
                 return (float) $value;
             default:
                 return $value;
@@ -253,22 +253,22 @@ final class XmlUtils
      */
     private static function validateXmlDom(DOMDocument $dom, $schemaOrCallable): void
     {
-        $internalErrors = libxml_use_internal_errors(true);
-        libxml_clear_errors();
+        $internalErrors = \libxml_use_internal_errors(true);
+        \libxml_clear_errors();
 
         $exception = null;
 
-        if (is_callable($schemaOrCallable)) {
+        if (\is_callable($schemaOrCallable)) {
             try {
-                $valid = call_user_func($schemaOrCallable, $dom, $internalErrors);
+                $valid = \call_user_func($schemaOrCallable, $dom, $internalErrors);
             } catch (Throwable $exception) {
                 $valid = false;
             }
-        } elseif (! is_array($schemaOrCallable) && is_file((string) $schemaOrCallable)) {
-            $schemaSource = file_get_contents((string) $schemaOrCallable);
+        } elseif (! \is_array($schemaOrCallable) && \is_file((string) $schemaOrCallable)) {
+            $schemaSource = \file_get_contents((string) $schemaOrCallable);
             $valid        = @$dom->schemaValidateSource($schemaSource);
         } else {
-            libxml_use_internal_errors($internalErrors);
+            \libxml_use_internal_errors($internalErrors);
 
             throw new InvalidArgumentException('The schemaOrCallable argument has to be a valid path to XSD file or callable.');
         }
@@ -280,7 +280,7 @@ final class XmlUtils
                 $messages = ['The XML file is not valid.'];
             }
 
-            throw new InvalidArgumentException(implode("\n", $messages), 0, $exception);
+            throw new InvalidArgumentException(\implode("\n", $messages), 0, $exception);
         }
     }
 }

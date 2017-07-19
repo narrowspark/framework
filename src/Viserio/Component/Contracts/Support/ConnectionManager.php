@@ -16,7 +16,7 @@ interface ConnectionManager
     /**
      * Get a connection instance.
      *
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return mixed
      */
@@ -25,7 +25,7 @@ interface ConnectionManager
     /**
      * Reconnect to the given connection.
      *
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return object
      */
@@ -34,7 +34,7 @@ interface ConnectionManager
     /**
      * Disconnect from the given connection.
      *
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return void
      */

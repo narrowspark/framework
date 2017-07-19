@@ -10,7 +10,7 @@ class TranslationAwareTraitTest extends MockeryTestCase
 {
     use TranslatorAwareTrait;
 
-    public function testGetAndSetTranslator()
+    public function testGetAndSetTranslator(): void
     {
         $this->setTranslator($this->mock(TranslatorContract::class));
 
@@ -21,7 +21,7 @@ class TranslationAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Translator is not set up.
      */
-    public function testGetTranslatorThrowExceptionIfTranslatorIsNotSet()
+    public function testGetTranslatorThrowExceptionIfTranslatorIsNotSet(): void
     {
         $this->getTranslator();
     }

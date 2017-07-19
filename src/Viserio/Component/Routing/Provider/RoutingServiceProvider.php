@@ -52,9 +52,9 @@ class RoutingServiceProvider implements ServiceProvider
      */
     public static function createRouteDispatcher(ContainerInterface $container, ?callable $getPrevious = null): DispatcherContract
     {
-        if (is_callable($getPrevious)) {
+        if (\is_callable($getPrevious)) {
             $dispatcher = $getPrevious();
-        } elseif (class_exists(Pipeline::class)) {
+        } elseif (\class_exists(Pipeline::class)) {
             $dispatcher = new MiddlewareBasedDispatcher();
         } else {
             $dispatcher = new SimpleDispatcher();

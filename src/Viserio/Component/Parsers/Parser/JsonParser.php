@@ -12,12 +12,12 @@ class JsonParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        $json = json_decode(trim($payload), true);
+        $json = \json_decode(\trim($payload), true);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (\json_last_error() !== JSON_ERROR_NONE) {
             throw new ParseException([
-                'message' => json_last_error_msg(),
-                'type'    => json_last_error(),
+                'message' => \json_last_error_msg(),
+                'type'    => \json_last_error(),
                 'file'    => $payload,
             ]);
         }

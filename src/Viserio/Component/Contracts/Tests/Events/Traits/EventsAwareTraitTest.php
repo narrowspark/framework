@@ -10,7 +10,7 @@ class EventsAwareTraitTest extends MockeryTestCase
 {
     use EventsAwareTrait;
 
-    public function testGetAndsetEventManager()
+    public function testGetAndsetEventManager(): void
     {
         $this->setEventManager($this->mock(EventManagerContract::class));
 
@@ -21,7 +21,7 @@ class EventsAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage EventManager is not set up.
      */
-    public function testgetEventManagerThrowExceptionIfEventsDispatcherIsNotSet()
+    public function testgetEventManagerThrowExceptionIfEventsDispatcherIsNotSet(): void
     {
         $this->getEventManager();
     }

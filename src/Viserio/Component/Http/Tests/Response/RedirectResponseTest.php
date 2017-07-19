@@ -8,7 +8,7 @@ use Viserio\Component\Http\Uri;
 
 class RedirectResponseTest extends TestCase
 {
-    public function testConstructorAcceptsStringUriAndProduces302ResponseWithLocationHeader()
+    public function testConstructorAcceptsStringUriAndProduces302ResponseWithLocationHeader(): void
     {
         $response = new RedirectResponse('/foo/bar');
 
@@ -17,7 +17,7 @@ class RedirectResponseTest extends TestCase
         self::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
     }
 
-    public function testConstructorAcceptsUriInstanceAndProduces302ResponseWithLocationHeader()
+    public function testConstructorAcceptsUriInstanceAndProduces302ResponseWithLocationHeader(): void
     {
         $uri      = Uri::createFromString('https://example.com:10082/foo/bar');
         $response = new RedirectResponse($uri);
@@ -27,7 +27,7 @@ class RedirectResponseTest extends TestCase
         self::assertEquals((string) $uri, $response->getHeaderLine('Location'));
     }
 
-    public function testConstructorAllowsSpecifyingAlternateStatusCode()
+    public function testConstructorAllowsSpecifyingAlternateStatusCode(): void
     {
         $response = new RedirectResponse('/foo/bar', 301);
 
@@ -36,7 +36,7 @@ class RedirectResponseTest extends TestCase
         self::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
     }
 
-    public function testConstructorAllowsSpecifyingHeaders()
+    public function testConstructorAllowsSpecifyingHeaders(): void
     {
         $response = new RedirectResponse('/foo/bar', 302, ['X-Foo' => ['Bar']]);
 
@@ -68,7 +68,7 @@ class RedirectResponseTest extends TestCase
      *
      * @param mixed $uri
      */
-    public function testConstructorRaisesExceptionOnInvalidUri($uri)
+    public function testConstructorRaisesExceptionOnInvalidUri($uri): void
     {
         $response = new RedirectResponse($uri);
     }

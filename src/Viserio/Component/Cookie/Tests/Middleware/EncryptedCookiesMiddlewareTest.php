@@ -17,12 +17,12 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($_SERVER['SERVER_ADDR']);
     }
 
-    public function testEncryptedCookieRequest()
+    public function testEncryptedCookieRequest(): void
     {
         $encrypter = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
 
@@ -53,7 +53,7 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
         $dispatcher->dispatch($request);
     }
 
-    public function testEncryptedCookieResponse()
+    public function testEncryptedCookieResponse(): void
     {
         $encrypter = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
 

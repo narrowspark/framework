@@ -37,7 +37,7 @@ class Message implements MessageContract
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array([$this->swift, $method], $parameters);
+        return \call_user_func_array([$this->swift, $method], $parameters);
     }
 
     /**
@@ -189,7 +189,7 @@ class Message implements MessageContract
     /**
      * Add a recipient to the message.
      *
-     * @param string|array $address
+     * @param array|string $address
      * @param string       $name
      * @param string       $type
      *
@@ -197,11 +197,11 @@ class Message implements MessageContract
      */
     protected function addAddresses($address, string $name, string $type): MessageContract
     {
-        if (is_array($address)) {
-            $set = sprintf('set%s', $type);
+        if (\is_array($address)) {
+            $set = \sprintf('set%s', $type);
             $this->swift->$set($address, $name);
         } else {
-            $add = sprintf('add%s', $type);
+            $add = \sprintf('add%s', $type);
             $this->swift->$add($address, $name);
         }
 

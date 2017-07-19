@@ -16,7 +16,7 @@ class LoadEnvironmentVariables implements BootstrapContract
      */
     public function bootstrap(KernelContract $kernel): void
     {
-        if (file_exists($kernel->getStoragePath('config.cache'))) {
+        if (\file_exists($kernel->getStoragePath('config.cache'))) {
             return;
         }
 
@@ -66,7 +66,7 @@ class LoadEnvironmentVariables implements BootstrapContract
      */
     protected function setEnvironmentFilePath(KernelContract $kernel, string $file): void
     {
-        if (file_exists($kernel->getEnvironmentPath() . '/' . $file)) {
+        if (\file_exists($kernel->getEnvironmentPath() . '/' . $file)) {
             $kernel->loadEnvironmentFrom($file);
         }
     }

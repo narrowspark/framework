@@ -8,7 +8,7 @@ class JsonableClass implements Jsonable
 {
     public function toJson(int $options = 0): string
     {
-        return json_encode([
+        return \json_encode([
             'message' => true,
         ], JSON_PRETTY_PRINT);
     }

@@ -13,7 +13,7 @@ use Viserio\Component\Cron\Provider\ConsoleCommandsServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testConsoleCommands()
+    public function testConsoleCommands(): void
     {
         $container = new Container();
         $container->register(new CacheServiceProvider());
@@ -37,7 +37,7 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertInstanceOf(ScheduleRunCommand::class, $commands['cron:run']);
     }
 
-    public function testConsoleCommandsWithNoConsole()
+    public function testConsoleCommandsWithNoConsole(): void
     {
         $container = new Container();
         $container->register(new ConsoleCommandsServiceProvider());

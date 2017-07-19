@@ -52,7 +52,7 @@ class JsonDisplayer implements DisplayerContract
         return new JsonResponse(
             ['errors' => [$error]],
             $code,
-            array_merge($headers, ['Content-Type' => $this->contentType()])
+            \array_merge($headers, ['Content-Type' => $this->contentType()])
         );
     }
 

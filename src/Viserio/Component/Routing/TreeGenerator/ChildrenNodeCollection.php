@@ -54,7 +54,7 @@ final class ChildrenNodeCollection
     /**
      * @param \Viserio\Component\Contracts\Routing\SegmentMatcher $matcher
      *
-     * @return \Viserio\Component\Routing\TreeGenerator\RouteTreeNode|null
+     * @return null|\Viserio\Component\Routing\TreeGenerator\RouteTreeNode
      */
     public function getChild(SegmentMatcherContract $matcher)
     {
@@ -64,7 +64,7 @@ final class ChildrenNodeCollection
     /**
      * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node
      */
-    public function addChild(RouteTreeNode $node)
+    public function addChild(RouteTreeNode $node): void
     {
         $hash = $node->getFirstMatcher()->getHash();
 

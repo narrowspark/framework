@@ -19,13 +19,13 @@ class RepositoryTest extends TestCase
      */
     private $fileloader;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->root       = vfsStream::setup();
         $this->fileloader = new FileLoader();
     }
 
-    public function testConstructorInjection()
+    public function testConstructorInjection(): void
     {
         $values = ['param' => 'value'];
         $config = new Repository();
@@ -35,7 +35,7 @@ class RepositoryTest extends TestCase
         self::assertSame($values['param'], $config['param']);
     }
 
-    public function testGetAndSetLoader()
+    public function testGetAndSetLoader(): void
     {
         $config = new Repository();
         $config->setLoader($this->fileloader);
@@ -43,7 +43,7 @@ class RepositoryTest extends TestCase
         self::assertInstanceOf(FileLoader::class, $config->getLoader());
     }
 
-    public function testSetArray()
+    public function testSetArray(): void
     {
         $config = new Repository();
 
@@ -58,7 +58,7 @@ class RepositoryTest extends TestCase
         self::assertTrue($config->has('123'));
     }
 
-    public function testImport()
+    public function testImport(): void
     {
         $config = new Repository();
         $config->setLoader($this->fileloader);
@@ -80,7 +80,7 @@ class RepositoryTest extends TestCase
         self::assertTrue($config->has('c'));
     }
 
-    public function testImportWithAPhpFile()
+    public function testImportWithAPhpFile(): void
     {
         $config = new Repository();
 
@@ -105,13 +105,13 @@ return [
      * @expectedException \RuntimeException
      * @expectedExceptionMessage File [test.php] not found.
      */
-    public function testImportWithAPhpFileThrowsException()
+    public function testImportWithAPhpFileThrowsException(): void
     {
         $config = new Repository();
         $config->import('test.php');
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $config = new Repository();
 
@@ -132,7 +132,7 @@ return [
         self::assertSame('func', $config->get('func'));
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $config = new Repository();
 
@@ -143,7 +143,7 @@ return [
         self::assertTrue($config->has('bar'));
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $config = new Repository();
 
@@ -156,7 +156,7 @@ return [
         self::assertFalse($config->has('foo'));
     }
 
-    public function testFlattenArray()
+    public function testFlattenArray(): void
     {
         $repository = new Repository();
 
@@ -171,7 +171,7 @@ return [
         self::assertArrayHasKey('123.456.789', $repository->getAllFlat());
     }
 
-    public function testMergeArray()
+    public function testMergeArray(): void
     {
         // test 1 - keys are string
         $original = [
@@ -244,7 +244,7 @@ return [
         self::assertEquals($expected, $repository->getAll());
     }
 
-    public function testSetAndGet()
+    public function testSetAndGet(): void
     {
         $repository = new Repository();
 
@@ -253,7 +253,7 @@ return [
         self::assertEquals($repository['foo'], 'bar');
     }
 
-    public function testGetKeys()
+    public function testGetKeys(): void
     {
         $repository = new Repository();
 
@@ -269,7 +269,7 @@ return [
         self::assertEquals($keys[1], 'bar.baz');
     }
 
-    public function testWithNamespacedKey()
+    public function testWithNamespacedKey(): void
     {
         $repository = new Repository();
 
@@ -282,7 +282,7 @@ return [
         self::assertEquals('My Value', $repository['my.namespaced.keyname']);
     }
 
-    public function testWithString()
+    public function testWithString(): void
     {
         $repository = new Repository();
 
@@ -291,7 +291,7 @@ return [
         self::assertEquals('My Value', $repository['keyname']);
     }
 
-    public function testIsset()
+    public function testIsset(): void
     {
         $repository = new Repository();
 
@@ -301,7 +301,7 @@ return [
         self::assertFalse(isset($repository['non_existent']));
     }
 
-    public function testUnset()
+    public function testUnset(): void
     {
         $repository = new Repository();
 
@@ -323,7 +323,7 @@ return [
         self::assertFalse(isset($repository['foo']));
     }
 
-    public function testGetIterator()
+    public function testGetIterator(): void
     {
         $repository = new Repository();
 

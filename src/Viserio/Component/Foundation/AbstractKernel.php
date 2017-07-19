@@ -81,7 +81,7 @@ abstract class AbstractKernel implements
     /**
      * Container instance.
      *
-     * @var \Viserio\Component\Contracts\Container\Container|null
+     * @var null|\Viserio\Component\Contracts\Container\Container
      */
     protected $container;
 
@@ -203,7 +203,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningInConsole(): bool
     {
-        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
+        return PHP_SAPI == 'cli' || PHP_SAPI == 'phpdbg';
     }
 
     /**
@@ -211,7 +211,7 @@ abstract class AbstractKernel implements
      */
     public function isDownForMaintenance(): bool
     {
-        return file_exists($this->getStoragePath('framework/down'));
+        return \file_exists($this->getStoragePath('framework/down'));
     }
 
     /**
@@ -221,14 +221,14 @@ abstract class AbstractKernel implements
     {
         if ($this->projectDir === null) {
             $reflection = new ReflectionObject($this);
-            $dir        = $rootDir        = dirname($reflection->getFileName());
+            $dir        = $rootDir        = \dirname($reflection->getFileName());
 
-            while (! file_exists($dir . '/composer.json')) {
-                if (dirname($dir) === $dir) {
+            while (! \file_exists($dir . '/composer.json')) {
+                if (\dirname($dir) === $dir) {
                     return $this->projectDir = $rootDir;
                 }
 
-                $dir = dirname($dir);
+                $dir = \dirname($dir);
             }
 
             $this->projectDir = $dir;
@@ -392,7 +392,7 @@ abstract class AbstractKernel implements
     {
         $providers = $kernel->getConfigPath('/serviceproviders.php');
 
-        if (file_exists($providers)) {
+        if (\file_exists($providers)) {
             return require_once $providers;
         }
 

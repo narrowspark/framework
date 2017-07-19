@@ -58,7 +58,7 @@ final class CommandResolver
      * Resolve a command from expression.
      *
      * @param string                $expression Defines the arguments and options of the command
-     * @param callable|string|array $callable   Called when the command is called.
+     * @param array|callable|string $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
@@ -70,7 +70,7 @@ final class CommandResolver
         self::assertCallableIsValid($callable);
 
         $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
-            $parameters = array_merge(
+            $parameters = \array_merge(
                 [
                     // Injection by parameter name
                     'input'  => $input,
@@ -94,7 +94,7 @@ final class CommandResolver
                 return $this->invoker->addResolver(new HyphenatedInputResolver())->call($callable, $parameters);
             } catch (InvocationException $exception) {
                 throw new RuntimeException(
-                    sprintf(
+                    \sprintf(
                         "Impossible to call the '%s' command: %s",
                         $input->getFirstArgument(),
                         $exception->getMessage()
@@ -142,7 +142,7 @@ final class CommandResolver
      */
     private function defaultsViaReflection(StringCommand $command, $callable): array
     {
-        if (! is_callable($callable)) {
+        if (! \is_callable($callable)) {
             return [];
         }
 
@@ -204,7 +204,7 @@ final class CommandResolver
      */
     private function isStaticCallToNonStaticMethod($callable): bool
     {
-        if (is_array($callable) && is_string($callable[0])) {
+        if (\is_array($callable) && \is_string($callable[0])) {
             [$class, $method] = $callable;
 
             $reflection = new ReflectionMethod($class, $method);

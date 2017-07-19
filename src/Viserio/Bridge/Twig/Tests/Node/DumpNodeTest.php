@@ -12,7 +12,7 @@ use Viserio\Bridge\Twig\Node\DumpNode;
 
 class DumpNodeTest extends TestCase
 {
-    public function testNoVar()
+    public function testNoVar(): void
     {
         $node     = new DumpNode('bar', null, 7);
         $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
@@ -33,7 +33,7 @@ EOTXT;
         self::assertSame($expected, $compiler->compile($node)->getSource());
     }
 
-    public function testIndented()
+    public function testIndented(): void
     {
         $node     = new DumpNode('bar', null, 7);
         $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
@@ -54,7 +54,7 @@ EOTXT;
         self::assertSame($expected, $compiler->compile($node, 1)->getSource());
     }
 
-    public function testOneVar()
+    public function testOneVar(): void
     {
         $vars = new Node([
             new NameExpression('foo', 7),
@@ -69,12 +69,12 @@ if ($this->env->isDebug()) {
 }
 
 EOTXT;
-        $expected = preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
+        $expected = \preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
 
         self::assertSame($expected, $compiler->compile($node)->getSource());
     }
 
-    public function testMultiVars()
+    public function testMultiVars(): void
     {
         $vars = new Node([
             new NameExpression('foo', 7),
@@ -93,7 +93,7 @@ if ($this->env->isDebug()) {
 }
 
 EOTXT;
-        $expected = preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
+        $expected = \preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
 
         self::assertSame($expected, $compiler->compile($node)->getSource());
     }

@@ -9,7 +9,7 @@ use Viserio\Component\Profiler\DataCollector\MemoryDataCollector;
 
 class MemoryDataCollectorTest extends MockeryTestCase
 {
-    public function testGetMenu()
+    public function testGetMenu(): void
     {
         $collect = new MemoryDataCollector();
         $collect->collect(
@@ -30,7 +30,7 @@ class MemoryDataCollectorTest extends MockeryTestCase
         );
     }
 
-    public function testGetTooltip()
+    public function testGetTooltip(): void
     {
         $collect = new MemoryDataCollector();
         $collect->collect(

@@ -69,7 +69,7 @@ class CacheManager extends AbstractManager implements
 
         $driver->setLogger($this->getLogger());
 
-        if (class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
+        if (\class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
             $driver = $this->getNamespacedPool($driver, $namespace);
         }
 
@@ -100,7 +100,7 @@ class CacheManager extends AbstractManager implements
     protected function createMongodbDriver(array $config): MongoDBCachePool
     {
         if (isset($config['username'], $config['password'])) {
-            $dns = sprintf(
+            $dns = \sprintf(
                 'mongodb://%s:%s@%s:%s',
                 $config['username'],
                 $config['password'],
@@ -108,7 +108,7 @@ class CacheManager extends AbstractManager implements
                 $config['port']
             );
         } else {
-            $dns = sprintf('mongodb://%s:%s', $config['server'], $config['port']);
+            $dns = \sprintf('mongodb://%s:%s', $config['server'], $config['port']);
         }
 
         $collection = MongoDBCachePool::createCollection(
@@ -148,7 +148,7 @@ class CacheManager extends AbstractManager implements
      */
     protected function createPredisDriver(array $config): PredisCachePool
     {
-        $client = new PredisClient(sprintf('tcp:/%s:%s', $config['server'], $config['port']));
+        $client = new PredisClient(\sprintf('tcp:/%s:%s', $config['server'], $config['port']));
 
         return new PredisCachePool($client);
     }

@@ -38,7 +38,7 @@ class TestQueue
      *
      * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
      */
-    public function setEncrypter(EncrypterContract $encrypter)
+    public function setEncrypter(EncrypterContract $encrypter): void
     {
         $this->encrypter = $encrypter;
     }

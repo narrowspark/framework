@@ -27,7 +27,7 @@ use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 
 class KernelTest extends MockeryTestCase
 {
-    public function testPrependMiddleware()
+    public function testPrependMiddleware(): void
     {
         $kernel = new class() extends Kernel {
             /**
@@ -49,7 +49,7 @@ class KernelTest extends MockeryTestCase
         self::assertSame(['test_2', 'test_1'], $kernel->middlewares);
     }
 
-    public function testPushMiddleware()
+    public function testPushMiddleware(): void
     {
         $kernel = new class() extends Kernel {
             /**
@@ -67,14 +67,14 @@ class KernelTest extends MockeryTestCase
         self::assertSame(['test_2', 'test_1', 'test_3'], $kernel->middlewares);
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $response = $this->mock(ResponseInterface::class);
 
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('withAddedHeader')
             ->once()
-            ->with('X-Php-Ob-Level', (string) ob_get_level())
+            ->with('X-Php-Ob-Level', (string) \ob_get_level())
             ->andReturn($serverRequest);
 
         $container = $this->mock(ContainerContract::class);
@@ -149,7 +149,7 @@ class KernelTest extends MockeryTestCase
         self::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
 
-    public function testHandleWithException()
+    public function testHandleWithException(): void
     {
         $container = $this->mock(ContainerContract::class);
 
@@ -159,7 +159,7 @@ class KernelTest extends MockeryTestCase
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('withAddedHeader')
             ->once()
-            ->with('X-Php-Ob-Level', (string) ob_get_level())
+            ->with('X-Php-Ob-Level', (string) \ob_get_level())
             ->andReturn($serverRequest);
 
         $router = $this->mock(RouterContract::class);
@@ -244,7 +244,7 @@ class KernelTest extends MockeryTestCase
         self::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
 
-    public function testTerminate()
+    public function testTerminate(): void
     {
         $response      = $this->mock(ResponseInterface::class);
         $serverRequest = $this->mock(ServerRequestInterface::class);
@@ -295,7 +295,7 @@ class KernelTest extends MockeryTestCase
         $kernel->terminate($serverRequest, $response);
     }
 
-    private function registerBaseProvider($container)
+    private function registerBaseProvider($container): void
     {
         $container->shouldReceive('register')
             ->once()

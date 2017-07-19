@@ -7,21 +7,21 @@ use Viserio\Component\Translation\MessageCatalogue;
 
 class MessageCatalogueTest extends TestCase
 {
-    public function testGetLocale()
+    public function testGetLocale(): void
     {
         $catalogue = new MessageCatalogue('en');
 
         self::assertEquals('en', $catalogue->getLocale());
     }
 
-    public function testGetDomains()
+    public function testGetDomains(): void
     {
         $catalogue = new MessageCatalogue('en', ['domain1' => [], 'domain2' => []]);
 
         self::assertEquals(['domain1', 'domain2'], $catalogue->getDomains());
     }
 
-    public function testGetAll()
+    public function testGetAll(): void
     {
         $catalogue = new MessageCatalogue('en', $messages = [
             'domain1' => ['foo' => 'foo'],
@@ -33,7 +33,7 @@ class MessageCatalogueTest extends TestCase
         self::assertEquals($messages, $catalogue->getAll());
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $catalogue = new MessageCatalogue('en', [
             'domain1' => ['foo' => 'foo'],
@@ -45,7 +45,7 @@ class MessageCatalogueTest extends TestCase
         self::assertFalse($catalogue->has('foo', 'domain88'));
     }
 
-    public function testHasWithFallback()
+    public function testHasWithFallback(): void
     {
         $catalogue = new MessageCatalogue('en_US', [
             'domain1' => ['foo' => 'foo'],
@@ -57,7 +57,7 @@ class MessageCatalogueTest extends TestCase
         self::assertTrue($catalogue->has('foo1', 'domain1'));
     }
 
-    public function testDefines($value = '')
+    public function testDefines($value = ''): void
     {
         $catalogue = new MessageCatalogue('en_US', [
             'domain1' => ['foo' => 'foo'],
@@ -67,7 +67,7 @@ class MessageCatalogueTest extends TestCase
         self::assertTrue($catalogue->defines('foo', 'domain1'));
     }
 
-    public function testGetSet()
+    public function testGetSet(): void
     {
         $catalogue = new MessageCatalogue('en', [
             'domain1' => ['foo' => 'foo'],
@@ -80,7 +80,7 @@ class MessageCatalogueTest extends TestCase
         self::assertEquals('id', $catalogue->get('id', 'domain'));
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $catalogue = new MessageCatalogue('en', [
             'domain1' => ['foo' => 'foo'],
@@ -101,7 +101,7 @@ class MessageCatalogueTest extends TestCase
         self::assertEquals('bar', $catalogue->get('foo', 'domain88'));
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $catalogue = new MessageCatalogue('en', [
             'domain1' => ['foo' => 'test'],
@@ -115,7 +115,7 @@ class MessageCatalogueTest extends TestCase
         self::assertEquals('foo', $catalogue->get('foo', 'domain1'));
     }
 
-    public function testReplace()
+    public function testReplace(): void
     {
         $catalogue = new MessageCatalogue('en', [
             'domain1' => ['foo' => 'foo'],
@@ -126,7 +126,7 @@ class MessageCatalogueTest extends TestCase
         self::assertEquals($messages, $catalogue->getAll('domain1'));
     }
 
-    public function testAddCatalogue()
+    public function testAddCatalogue(): void
     {
         $catalogue = new MessageCatalogue('en', [
             'domain1' => ['foo' => 'foo'],
@@ -139,7 +139,7 @@ class MessageCatalogueTest extends TestCase
         self::assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
     }
 
-    public function testAddFallbackCatalogue()
+    public function testAddFallbackCatalogue(): void
     {
         $catalogue = new MessageCatalogue('en_US', [
             'domain1' => ['foo' => 'foo'],
@@ -158,7 +158,7 @@ class MessageCatalogueTest extends TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Circular reference detected when adding a fallback catalogue for locale [fr_FR].
      */
-    public function testAddFallbackCatalogueWithCircularReference()
+    public function testAddFallbackCatalogueWithCircularReference(): void
     {
         $main     = new MessageCatalogue('en_US');
         $fallback = new MessageCatalogue('fr_FR');
@@ -170,7 +170,7 @@ class MessageCatalogueTest extends TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot add a catalogue for locale [fr] as the current locale for this catalogue is [en].
      */
-    public function testAddCatalogueWhenLocaleIsNotTheSameAsTheCurrentOne()
+    public function testAddCatalogueWhenLocaleIsNotTheSameAsTheCurrentOne(): void
     {
         $catalogue = new MessageCatalogue('en');
         $catalogue->addCatalogue(new MessageCatalogue('fr', []));
@@ -181,7 +181,7 @@ class MessageCatalogueTest extends TestCase
      *
      * @param mixed $locale
      */
-    public function testSetValidLocale($locale)
+    public function testSetValidLocale($locale): void
     {
         $message = new MessageCatalogue($locale);
 

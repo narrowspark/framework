@@ -55,8 +55,8 @@ class XliffParser implements ParserContract
      */
     private function extractXliffVersion1(DOMDocument $dom): array
     {
-        $xml       = simplexml_import_dom($dom);
-        $encoding  = mb_strtoupper($dom->encoding);
+        $xml       = \simplexml_import_dom($dom);
+        $encoding  = \mb_strtoupper($dom->encoding);
         $datas     = [
             'version'         => '1.2',
             'source-language' => '',
@@ -111,7 +111,7 @@ class XliffParser implements ParserContract
      * Parse xliff notes.
      *
      * @param \SimpleXMLElement $noteElement
-     * @param string|null       $encoding
+     * @param null|string       $encoding
      *
      * @return array
      */
@@ -147,8 +147,8 @@ class XliffParser implements ParserContract
      */
     private function extractXliffVersion2(DOMDocument $dom): array
     {
-        $xml      = simplexml_import_dom($dom);
-        $encoding = mb_strtoupper($dom->encoding);
+        $xml      = \simplexml_import_dom($dom);
+        $encoding = \mb_strtoupper($dom->encoding);
         $datas    = [
             'version'  => '2.0',
             'srcLang'  => '',
@@ -165,7 +165,7 @@ class XliffParser implements ParserContract
 
         foreach ($xml->xpath('//xliff:unit') as $unit) {
             $unitAttr = (array) $unit->attributes();
-            $unitAttr = reset($unitAttr);
+            $unitAttr = \reset($unitAttr);
             $source   = (string) $unit->segment->source;
             $target   = null;
             $id       = $unitAttr['id'];
@@ -212,11 +212,11 @@ class XliffParser implements ParserContract
             }
 
             if ($namespace = $xliff->namespaceURI) {
-                if (substr_compare('urn:oasis:names:tc:xliff:document:', $namespace, 0, 34) !== 0) {
-                    throw new InvalidArgumentException(sprintf('Not a valid XLIFF namespace "%s"', $namespace));
+                if (\substr_compare('urn:oasis:names:tc:xliff:document:', $namespace, 0, 34) !== 0) {
+                    throw new InvalidArgumentException(\sprintf('Not a valid XLIFF namespace "%s"', $namespace));
                 }
 
-                return mb_substr($namespace, 34);
+                return \mb_substr($namespace, 34);
             }
         }
 
@@ -236,27 +236,27 @@ class XliffParser implements ParserContract
      */
     private static function validateSchema($file, DOMDocument $dom, string $schema): void
     {
-        $internalErrors  = libxml_use_internal_errors(true);
-        $disableEntities = libxml_disable_entity_loader(false);
+        $internalErrors  = \libxml_use_internal_errors(true);
+        $disableEntities = \libxml_disable_entity_loader(false);
 
         if (! @$dom->schemaValidateSource($schema)) {
-            libxml_disable_entity_loader($disableEntities);
+            \libxml_disable_entity_loader($disableEntities);
 
             throw new InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'Invalid resource provided: "%s"; Errors: %s',
                     $file,
-                    implode("\n", XmlUtils::getXmlErrors($internalErrors))
+                    \implode("\n", XmlUtils::getXmlErrors($internalErrors))
                 )
             );
         }
 
-        libxml_disable_entity_loader($disableEntities);
+        \libxml_disable_entity_loader($disableEntities);
 
         $dom->normalizeDocument();
 
-        libxml_clear_errors();
-        libxml_use_internal_errors($internalErrors);
+        \libxml_clear_errors();
+        \libxml_use_internal_errors($internalErrors);
     }
 
     /**
@@ -277,24 +277,24 @@ class XliffParser implements ParserContract
             $xmlUri       = 'informativeCopiesOf3rdPartySchemas/w3c/xml.xsd';
             $schemaSource = self::normalizeDirectorySeparator(__DIR__ . '/../Schemas/xliff-core/xliff-core-2.0.xsd');
         } else {
-            throw new InvalidArgumentException(sprintf('No support implemented for loading XLIFF version "%s".', $xliffVersion));
+            throw new InvalidArgumentException(\sprintf('No support implemented for loading XLIFF version "%s".', $xliffVersion));
         }
 
-        return self::fixXmlLocation(file_get_contents($schemaSource), $xmlUri);
+        return self::fixXmlLocation(\file_get_contents($schemaSource), $xmlUri);
     }
 
     /**
      * Convert a UTF8 string to the specified encoding.
      *
      * @param string      $content  String to decode
-     * @param string|null $encoding Target encoding
+     * @param null|string $encoding Target encoding
      *
      * @return string
      */
     private static function utf8ToCharset(string $content, string $encoding = null): string
     {
         if ($encoding !== 'UTF-8' && ! empty($encoding)) {
-            return mb_convert_encoding($content, $encoding, 'UTF-8');
+            return \mb_convert_encoding($content, $encoding, 'UTF-8');
         }
 
         return $content;
@@ -310,19 +310,19 @@ class XliffParser implements ParserContract
      */
     private static function fixXmlLocation(string $schemaSource, string $xmlUri): string
     {
-        $newPath = str_replace('\\', '/', realpath(__DIR__ . '/../Schemas/xliff-core/xml.xsd'));
-        $parts   = explode('/', $newPath);
+        $newPath = \str_replace('\\', '/', \realpath(__DIR__ . '/../Schemas/xliff-core/xml.xsd'));
+        $parts   = \explode('/', $newPath);
 
-        if (mb_stripos($newPath, 'phar://') === 0) {
-            if ($tmpfile = tempnam(sys_get_temp_dir(), 'narrowspark')) {
-                copy($newPath, $tmpfile);
-                $parts = explode('/', str_replace('\\', '/', $tmpfile));
+        if (\mb_stripos($newPath, 'phar://') === 0) {
+            if ($tmpfile = \tempnam(\sys_get_temp_dir(), 'narrowspark')) {
+                \copy($newPath, $tmpfile);
+                $parts = \explode('/', \str_replace('\\', '/', $tmpfile));
             }
         }
 
-        $drive   = '\\' === DIRECTORY_SEPARATOR ? array_shift($parts) . '/' : '';
-        $newPath = 'file:///' . $drive . implode('/', array_map('rawurlencode', $parts));
+        $drive   = '\\' === DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';
+        $newPath = 'file:///' . $drive . \implode('/', \array_map('rawurlencode', $parts));
 
-        return str_replace($xmlUri, $newPath, $schemaSource);
+        return \str_replace($xmlUri, $newPath, $schemaSource);
     }
 }
