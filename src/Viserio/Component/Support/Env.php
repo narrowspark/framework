@@ -50,7 +50,8 @@ class Env
                 '(on)',
                 'off',
                 '(off)',
-            ], true
+            ],
+            true
         )) {
             $value = \str_replace(['(', ')'], '', $value);
 

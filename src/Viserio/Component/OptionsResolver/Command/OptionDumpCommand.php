@@ -47,8 +47,8 @@ class OptionDumpCommand extends Command
             return 1;
         }
 
-        if ((! @mkdir($dirPath, 0777, true) && ! is_dir($dirPath)) || ! is_writable($dirPath)) {
-            throw new InvalidArgumentException(sprintf(
+        if ((! @\mkdir($dirPath, 0777, true) && ! \is_dir($dirPath)) || ! \is_writable($dirPath)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Config directory [%s] cannot be created or is write protected.',
                 $dirPath
             ));
