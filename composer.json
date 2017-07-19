@@ -123,7 +123,7 @@
         "league/flysystem-ziparchive"         : "^1.0",
         "mikey179/vfsStream"                  : "^1.6",
         "mouf/picotainer"                     : "^1.0",
-        "narrowspark/php-cs-fixer-config"     : "^2.0",
+        "narrowspark/php-cs-fixer-config"     : "^2.1",
         "narrowspark/testing-helper"          : "^3.0",
         "nikic/fast-route"                    : "^1.2",
         "mockery/mockery"                     : "^0.9",

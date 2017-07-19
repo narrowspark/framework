@@ -25,10 +25,6 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
         $this->dispatcher = $dispatcher;
     }
 
-    public function tearDown()
-    {
-    }
-
     public function testMiddlewareFunc()
     {
         $dispatcher = $this->dispatcher;
