@@ -295,7 +295,6 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-
     public function group(array $attributes, $routes): void
     {
         $this->updateGroupStack($attributes);
