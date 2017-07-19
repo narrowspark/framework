@@ -11,7 +11,7 @@ class RedisQueueIntegrationJob
         $this->i = $i;
     }
 
-    public function handle()
+    public function handle(): void
     {
     }
 }

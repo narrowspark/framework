@@ -10,19 +10,19 @@ class PasswordTest extends TestCase
 {
     private $password;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->password = new Password(Key::createNewRandomKey()->saveToAsciiSafeString());
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $hash = $this->password->create('totally-insecure-but-lengthy-password');
 
-        self::assertEquals(288, mb_strlen($hash));
+        self::assertEquals(288, \mb_strlen($hash));
     }
 
-    public function testVerify()
+    public function testVerify(): void
     {
         $password      = 'totally-insecure-but-lengthy-password';
         $otherPassword = 'totally-awesome-password';
@@ -33,7 +33,7 @@ class PasswordTest extends TestCase
         self::assertEquals(true, $this->password->verify($password, $hash));
     }
 
-    public function testShouldRecreate()
+    public function testShouldRecreate(): void
     {
         $hash = $this->password->create('totally-insecure-but-lengthy-password');
 

@@ -76,10 +76,10 @@ class ListenerPattern
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
-        if (is_callable($listener) ||
+        if (\is_callable($listener) ||
             $listener instanceof Closure ||
-            is_array($listener) ||
-            is_string($listener)
+            \is_array($listener) ||
+            \is_string($listener)
         ) {
             $this->provider = $listener;
         } else {
@@ -162,7 +162,7 @@ class ListenerPattern
      */
     final public function test(string $eventName): bool
     {
-        return (bool) preg_match($this->regex, $eventName);
+        return (bool) \preg_match($this->regex, $eventName);
     }
 
     /**
@@ -174,10 +174,10 @@ class ListenerPattern
      */
     private function createRegex(string $eventPattern): string
     {
-        return sprintf('/^%s$/', preg_replace(
-            array_keys($this->wildcardsSeparators),
-            array_values($this->wildcardsSeparators),
-            preg_quote($eventPattern, '/')
+        return \sprintf('/^%s$/', \preg_replace(
+            \array_keys($this->wildcardsSeparators),
+            \array_values($this->wildcardsSeparators),
+            \preg_quote($eventPattern, '/')
         ));
     }
 }

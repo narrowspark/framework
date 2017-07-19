@@ -27,7 +27,7 @@ class LimitStream extends AbstractStreamDecorator
      * @param StreamInterface $stream Stream to wrap
      * @param int             $limit  Total number of bytes to allow to be read
      *                                from the stream. Pass -1 for no limit.
-     * @param int|null        $offset position to seek to before reading (only
+     * @param null|int        $offset position to seek to before reading (only
      *                                works on seekable streams)
      */
     public function __construct(
@@ -72,7 +72,7 @@ class LimitStream extends AbstractStreamDecorator
             return $length - $this->offset;
         }
 
-        return min($this->limit, $length - $this->offset);
+        return \min($this->limit, $length - $this->offset);
     }
 
     /**
@@ -80,10 +80,10 @@ class LimitStream extends AbstractStreamDecorator
      *
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         if ($whence !== SEEK_SET || $offset < 0) {
-            throw new RuntimeException(sprintf(
+            throw new RuntimeException(\sprintf(
                 'Cannot seek to offset %s with whence %s',
                 $offset,
                 $whence
@@ -127,7 +127,7 @@ class LimitStream extends AbstractStreamDecorator
             if ($this->stream->isSeekable()) {
                 $this->stream->seek($offset);
             } elseif ($current > $offset) {
-                throw new RuntimeException(sprintf('Could not seek to stream offset %s', $offset));
+                throw new RuntimeException(\sprintf('Could not seek to stream offset %s', $offset));
             } else {
                 $this->stream->read($offset - $current);
             }
@@ -166,7 +166,7 @@ class LimitStream extends AbstractStreamDecorator
         if ($remaining > 0) {
             // Only return the amount of requested data, ensuring that the byte
             // limit is not exceeded
-            return $this->stream->read(min($remaining, $length));
+            return $this->stream->read(\min($remaining, $length));
         }
 
         return '';

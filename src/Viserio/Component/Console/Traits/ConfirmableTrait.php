@@ -11,23 +11,23 @@ trait ConfirmableTrait
      * Confirm before proceeding with the action.
      *
      * @param string             $warning
-     * @param \Closure|bool|null $callback
+     * @param null|bool|\Closure $callback
      *
      * @return bool
      */
     public function confirmToProceed(string $warning = 'Application is in Production mode!', $callback = null): bool
     {
-        $callback      = is_null($callback) ? $this->getDefaultConfirmCallback() : $callback;
-        $shouldConfirm = $callback instanceof Closure ? call_user_func($callback) : $callback;
+        $callback      = null === $callback ? $this->getDefaultConfirmCallback() : $callback;
+        $shouldConfirm = $callback instanceof Closure ? \call_user_func($callback) : $callback;
 
         if ($shouldConfirm) {
             if ($this->option('force')) {
                 return true;
             }
 
-            $this->comment(str_repeat('*', mb_strlen($warning) + 12));
+            $this->comment(\str_repeat('*', \mb_strlen($warning) + 12));
             $this->comment('*     ' . $warning . '     *');
-            $this->comment(str_repeat('*', mb_strlen($warning) + 12));
+            $this->comment(\str_repeat('*', \mb_strlen($warning) + 12));
             $this->output->writeln('');
 
             $confirmed = $this->confirm('Do you really wish to run this command?');
@@ -45,9 +45,9 @@ trait ConfirmableTrait
     /**
      * Get the value of a command option.
      *
-     * @param string|null $key
+     * @param null|string $key
      *
-     * @return string|array
+     * @return array|string
      */
     abstract public function option($key = null);
 
@@ -67,7 +67,7 @@ trait ConfirmableTrait
      * @param string $question
      * @param bool   $default
      *
-     * @return string|bool
+     * @return bool|string
      */
     abstract public function confirm(string $question, bool $default = false);
 

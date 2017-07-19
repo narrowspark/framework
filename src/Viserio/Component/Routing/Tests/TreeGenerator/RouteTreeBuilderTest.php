@@ -173,7 +173,7 @@ class RouteTreeBuilderTest extends TestCase
      * @param mixed $rootRoute
      * @param mixed $segmentDepthNodesMap
      */
-    public function testRouteTreeBuilder($routes, $rootRoute, $segmentDepthNodesMap)
+    public function testRouteTreeBuilder($routes, $rootRoute, $segmentDepthNodesMap): void
     {
         [$rootRouteData, $segmentDepthNodeMap] = (new RouteTreeBuilder())->build($routes);
 

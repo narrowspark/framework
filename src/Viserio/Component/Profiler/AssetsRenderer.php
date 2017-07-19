@@ -84,7 +84,7 @@ class AssetsRenderer implements AssetsRendererContract
      * Create a new file javascript renderer instance.
      *
      * @param bool        $jqueryIsUsed
-     * @param string|null $rootPath
+     * @param null|string $rootPath
      */
     public function __construct(bool $jqueryIsUsed = false, string $rootPath = null)
     {
@@ -151,13 +151,13 @@ class AssetsRenderer implements AssetsRendererContract
                 'v' => $this->getModifiedTime('js'),
             ]);
 
-            $html = sprintf(
+            $html = \sprintf(
                 '<link rel="stylesheet" type="text/css" property="stylesheet" href="%s">',
-                preg_replace('/\Ahttps?:/', '', $cssRoute)
+                \preg_replace('/\Ahttps?:/', '', $cssRoute)
             );
-            $html .= sprintf(
+            $html .= \sprintf(
                 '<script type="text/javascript" src="%s"></script>',
-                preg_replace('/\Ahttps?:/', '', $jsRoute)
+                \preg_replace('/\Ahttps?:/', '', $jsRoute)
             );
 
             return $html;
@@ -175,7 +175,7 @@ class AssetsRenderer implements AssetsRendererContract
         $content = '';
 
         foreach ($files as $file) {
-            $content .= file_get_contents($file) . "\n";
+            $content .= \file_get_contents($file) . "\n";
         }
 
         return $content;
@@ -186,30 +186,30 @@ class AssetsRenderer implements AssetsRendererContract
      */
     public function getAssets(?string $type = null): array
     {
-        $cssFiles = array_map(
+        $cssFiles = \array_map(
             function ($css) {
-                return rtrim($this->rootPath, '/') . '/' . $css;
+                return \rtrim($this->rootPath, '/') . '/' . $css;
             },
             $this->cssFiles
         );
 
         if ($this->jqueryIsUsed) {
-            $this->jsFiles = array_diff($this->jsFiles, ['js/zepto.min.js']);
+            $this->jsFiles = \array_diff($this->jsFiles, ['js/zepto.min.js']);
         }
 
-        $jsFiles = array_map(
+        $jsFiles = \array_map(
             function ($js) {
-                return rtrim($this->rootPath, '/') . '/' . $js;
+                return \rtrim($this->rootPath, '/') . '/' . $js;
             },
             $this->jsFiles
         );
 
-        $additionalAssets = array_filter(
-            array_map(
+        $additionalAssets = \array_filter(
+            \array_map(
                 function ($collector) {
                     $collector = $collector['collector'];
 
-                    if ($collector instanceof AssetAwareContract && ! in_array($collector->getName(), $this->ignoredCollectors)) {
+                    if ($collector instanceof AssetAwareContract && ! \in_array($collector->getName(), $this->ignoredCollectors, true)) {
                         return $collector->getAssets();
                     }
                 },
@@ -219,11 +219,11 @@ class AssetsRenderer implements AssetsRendererContract
 
         foreach ($additionalAssets as $assets) {
             if (isset($assets['css'])) {
-                $cssFiles = array_merge($cssFiles, (array) $assets['css']);
+                $cssFiles = \array_merge($cssFiles, (array) $assets['css']);
             }
 
             if (isset($assets['js'])) {
-                $jsFiles = array_merge($jsFiles, (array) $assets['js']);
+                $jsFiles = \array_merge($jsFiles, (array) $assets['js']);
             }
         }
 
@@ -237,8 +237,8 @@ class AssetsRenderer implements AssetsRendererContract
      */
     protected function renderIntoHtml(): string
     {
-        $html = sprintf('<style>%s</style>', $this->dumpAssetsToString('css'));
-        $html .= sprintf('<script type="text/javascript">%s</script>', $this->dumpAssetsToString('js'));
+        $html = \sprintf('<style>%s</style>', $this->dumpAssetsToString('css'));
+        $html .= \sprintf('<script type="text/javascript">%s</script>', $this->dumpAssetsToString('js'));
 
         return $html;
     }
@@ -247,14 +247,14 @@ class AssetsRenderer implements AssetsRendererContract
      * Filters a tuple of (css, js) assets according to $type.
      *
      * @param array       $array
-     * @param string|null $type  'css', 'js' or null for both
+     * @param null|string $type  'css', 'js' or null for both
      *
      * @return array
      */
     protected function filterAssetArray(array $array, ?string $type = null): array
     {
-        if (is_string($type)) {
-            $type = mb_strtolower($type);
+        if (\is_string($type)) {
+            $type = \mb_strtolower($type);
 
             if ($type === 'css') {
                 return $array[0];
@@ -281,7 +281,7 @@ class AssetsRenderer implements AssetsRendererContract
         $latest = 0;
 
         foreach ($files as $file) {
-            $mtime = filemtime($file);
+            $mtime = \filemtime($file);
 
             if ($mtime > $latest) {
                 $latest = $mtime;

@@ -78,12 +78,12 @@ class ConfigureLoggingServiceProvider implements
      */
     public static function createConfiguredWriter(ContainerInterface $container, ?callable $getPrevious = null): ?Writer
     {
-        $log = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $log = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($log !== null) {
             // Configure the Monolog handlers for the application.
             $options = self::resolveOptions($container);
-            $method  = 'configure' . ucfirst($options['log']['handler']) . 'Handler';
+            $method  = 'configure' . \ucfirst($options['log']['handler']) . 'Handler';
 
             self::{$method}($container, $log, $options);
         }

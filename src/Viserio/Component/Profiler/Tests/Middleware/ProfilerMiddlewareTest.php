@@ -15,7 +15,7 @@ use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester;
 
 class ProfilerMiddlewareTest extends MockeryTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $assets   = new AssetsRenderer();
         $profiler = new ProfilerTester($assets);
@@ -52,11 +52,11 @@ class ProfilerMiddlewareTest extends MockeryTestCase
 
     private function removeId(string $html): string
     {
-        return trim(
-            str_replace(
+        return \trim(
+            \str_replace(
                 "\r\n",
                 '',
-                preg_replace('/="profiler-(.*?)"/', '', $html)
+                \preg_replace('/="profiler-(.*?)"/', '', $html)
             )
         );
     }

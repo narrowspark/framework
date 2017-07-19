@@ -7,7 +7,7 @@ use Viserio\Component\Http\Response\HtmlResponse;
 
 class HtmlResponseTest extends TestCase
 {
-    public function testConstructorAcceptsHtmlString()
+    public function testConstructorAcceptsHtmlString(): void
     {
         $body     = '<html>Uh oh not found</html>';
         $response = new HtmlResponse($body);
@@ -16,7 +16,7 @@ class HtmlResponseTest extends TestCase
         self::assertEquals(200, $response->getStatusCode());
     }
 
-    public function testConstructorAllowsPassingStatus()
+    public function testConstructorAllowsPassingStatus(): void
     {
         $body     = '<html>Uh oh not found</html>';
         $status   = 404;
@@ -26,7 +26,7 @@ class HtmlResponseTest extends TestCase
         self::assertSame($body, (string) $response->getBody());
     }
 
-    public function testConstructorAllowsPassingHeaders()
+    public function testConstructorAllowsPassingHeaders(): void
     {
         $body    = '<html>Uh oh not found</html>';
         $status  = 404;
@@ -41,7 +41,7 @@ class HtmlResponseTest extends TestCase
         self::assertSame($body, (string) $response->getBody());
     }
 
-    public function testAllowsStreamsForResponseBody()
+    public function testAllowsStreamsForResponseBody(): void
     {
         $stream   = $this->getMockBuilder('Psr\Http\Message\StreamInterface')->getMock();
         $response = new HtmlResponse($stream);
@@ -70,12 +70,12 @@ class HtmlResponseTest extends TestCase
      *
      * @param mixed $body
      */
-    public function testRaisesExceptionforNonStringNonStreamBodyContent($body)
+    public function testRaisesExceptionforNonStringNonStreamBodyContent($body): void
     {
         $response = new HtmlResponse($body);
     }
 
-    public function testConstructorRewindsBodyStream()
+    public function testConstructorRewindsBodyStream(): void
     {
         $html     = '<p>test data</p>';
         $response = new HtmlResponse($html);

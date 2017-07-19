@@ -16,12 +16,12 @@ class XliffTest extends TestCase
      */
     private $file;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->file   = new Filesystem();
     }
 
-    public function testParseXliffV1()
+    public function testParseXliffV1(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv1.xlf'));
 
@@ -30,7 +30,7 @@ class XliffTest extends TestCase
         self::assertEquals($excepted, $datas);
     }
 
-    public function testParseXliffV1WithEmptySource()
+    public function testParseXliffV1WithEmptySource(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/translated.xlf'));
 
@@ -91,14 +91,14 @@ class XliffTest extends TestCase
         ], $datas);
     }
 
-    public function testParseXliffV2()
+    public function testParseXliffV2(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv2.xlf'));
 
-        self::assertSame(unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv2.xlf')), $datas);
+        self::assertSame(\unserialize($this->file->read(__DIR__ . '/../Fixtures/xliff/output_xliffv2.xlf')), $datas);
     }
 
-    public function testParseEncodingV1()
+    public function testParseEncodingV1(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v1.xlf'));
 
@@ -124,7 +124,7 @@ class XliffTest extends TestCase
         ], $datas);
     }
 
-    public function testParseEncodingV2()
+    public function testParseEncodingV2(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf'));
 
@@ -146,7 +146,7 @@ class XliffTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      */
-    public function testParseXliffV1NoVersion()
+    public function testParseXliffV1NoVersion(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version.xlf'));
     }
@@ -155,7 +155,7 @@ class XliffTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage No support implemented for loading XLIFF version "3.0".
      */
-    public function testParseXliffV1NoVersionAndNamespace()
+    public function testParseXliffV1NoVersionAndNamespace(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_namespace.xlf'));
     }
@@ -164,7 +164,7 @@ class XliffTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage Not a valid XLIFF namespace "urn:oasis:names:tc:xliff:"
      */
-    public function testParseXliffV1NoVersionAndInvalidNamespace()
+    public function testParseXliffV1NoVersionAndInvalidNamespace(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_invalid_namespace.xlf'));
     }
@@ -172,7 +172,7 @@ class XliffTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      */
-    public function testParseXliffV1NoVersionAndNoNamespace()
+    public function testParseXliffV1NoVersionAndNoNamespace(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_no_namespace.xlf'));
     }
@@ -181,12 +181,12 @@ class XliffTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage Content does not contain valid XML, it is empty.
      */
-    public function testParseWithEmptyContent()
+    public function testParseWithEmptyContent(): void
     {
         $datas = (new XliffParser())->parse('');
     }
 
-    public function testDumpXliffV1()
+    public function testDumpXliffV1(): void
     {
         $datas = [
             'version'         => '1.2',
@@ -225,7 +225,7 @@ class XliffTest extends TestCase
         );
     }
 
-    public function testDumpXliffV2()
+    public function testDumpXliffV2(): void
     {
         $datas = [
             'version'  => '2.0',
@@ -259,7 +259,7 @@ class XliffTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\DumpException
      * @expectedExceptionMessage No support implemented for dumping XLIFF version [3.0].
      */
-    public function testDumpWithWrongVersion()
+    public function testDumpWithWrongVersion(): void
     {
         $datas = (new XliffDumper())->dump(['version' => '3.0']);
     }

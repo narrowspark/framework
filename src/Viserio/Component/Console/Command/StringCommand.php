@@ -32,8 +32,8 @@ class StringCommand extends BaseCommand
         $this->setDescription($description);
 
         foreach ($argumentAndOptionDescriptions as $name => $value) {
-            if (mb_strpos($name, '--') === 0) {
-                $argument = $definition->getOption(mb_substr($name, 2));
+            if (\mb_strpos($name, '--') === 0) {
+                $argument = $definition->getOption(\mb_substr($name, 2));
 
                 if ($argument instanceof InputOption) {
                     $argument->setDescription($value);
@@ -67,7 +67,7 @@ class StringCommand extends BaseCommand
             } elseif ($definition->hasOption($name)) {
                 $input = $definition->getOption($name);
             } else {
-                throw new InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(\sprintf(
                     'Unable to set default for [%s]. It does not exist as an argument or option.',
                     $name
                 ));

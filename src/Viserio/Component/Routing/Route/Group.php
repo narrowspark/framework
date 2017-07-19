@@ -18,7 +18,7 @@ class Group
             unset($old['domain']);
         }
 
-        $new = array_merge(static::formatAs($new, $old), [
+        $new = \array_merge(static::formatAs($new, $old), [
             'namespace' => static::formatNamespace($new, $old),
             'prefix'    => static::formatGroupPrefix($new, $old),
             'where'     => static::formatWhere($new, $old),
@@ -31,7 +31,7 @@ class Group
             }
         }
 
-        return array_merge_recursive($old, $new);
+        return \array_merge_recursive($old, $new);
     }
 
     /**
@@ -40,18 +40,18 @@ class Group
      * @param array $new
      * @param array $old
      *
-     * @return string|null
+     * @return null|string
      */
     protected static function formatNamespace(array $new, array $old): ?string
     {
         if (isset($new['namespace'])) {
-            if (mb_strpos($new['namespace'], '\\') === 0) {
-                return trim($new['namespace'], '\\');
+            if (\mb_strpos($new['namespace'], '\\') === 0) {
+                return \trim($new['namespace'], '\\');
             }
 
             return isset($old['namespace']) ?
-                trim($old['namespace'], '\\') . '\\' . trim($new['namespace'], '\\') :
-                trim($new['namespace'], '\\');
+                \trim($old['namespace'], '\\') . '\\' . \trim($new['namespace'], '\\') :
+                \trim($new['namespace'], '\\');
         }
 
         return $old['namespace'] ?? null;
@@ -63,14 +63,14 @@ class Group
      * @param array $new
      * @param array $old
      *
-     * @return string|null
+     * @return null|string
      */
     protected static function formatGroupPrefix(array $new, array $old): ?string
     {
         $oldPrefix = $old['prefix'] ?? null;
 
         if (isset($new['prefix'])) {
-            return trim($oldPrefix, '/') . '/' . trim($new['prefix'], '/');
+            return \trim($oldPrefix, '/') . '/' . \trim($new['prefix'], '/');
         }
 
         return $oldPrefix;
@@ -82,14 +82,14 @@ class Group
      * @param array $new
      * @param array $old
      *
-     * @return string|null
+     * @return null|string
      */
     protected static function formatGroupSuffix(array $new, array $old): ?string
     {
         $oldSuffix = $old['suffix'] ?? null;
 
         if (isset($new['suffix'])) {
-            return trim($new['suffix']) . trim($oldSuffix);
+            return \trim($new['suffix']) . \trim($oldSuffix);
         }
 
         return $oldSuffix;
@@ -105,7 +105,7 @@ class Group
      */
     protected static function formatWhere(array $new, array $old): array
     {
-        return array_merge(
+        return \array_merge(
             $old['where'] ?? [],
             $new['where'] ?? []
         );

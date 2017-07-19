@@ -29,11 +29,11 @@ class WebDavConnector implements ConnectorContract
      */
     protected function getClient(array $config)
     {
-        if (! array_key_exists('baseUri', $config)) {
+        if (! \array_key_exists('baseUri', $config)) {
             throw new InvalidArgumentException('The WebDav connector requires baseUri configuration.');
         }
 
-        if (! array_key_exists('prefix', $config)) {
+        if (! \array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 

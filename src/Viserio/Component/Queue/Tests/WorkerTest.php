@@ -47,14 +47,14 @@ class WorkerTest extends MockeryTestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testJobIsReleasedWhenExceptionIsThrown()
+    public function testJobIsReleasedWhenExceptionIsThrown(): void
     {
         $worker = new Worker($this->mock(QueueManager::class));
 
         $job = $this->mock(JobContract::class);
         $job->shouldReceive('run')
             ->once()
-            ->andReturnUsing(function () {
+            ->andReturnUsing(function (): void {
                 throw new RuntimeException();
             });
         $job->shouldReceive('isDeleted')->once()->andReturn(false);
@@ -66,12 +66,12 @@ class WorkerTest extends MockeryTestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testJobIsNotReleasedWhenExceptionIsThrownButJobIsDeleted()
+    public function testJobIsNotReleasedWhenExceptionIsThrownButJobIsDeleted(): void
     {
         $worker = new Worker($this->mock(QueueManager::class));
 
         $job = $this->mock(JobContract::class);
-        $job->shouldReceive('run')->once()->andReturnUsing(function () {
+        $job->shouldReceive('run')->once()->andReturnUsing(function (): void {
             throw new RuntimeException();
         });
         $job->shouldReceive('isDeleted')->once()->andReturn(true);
@@ -80,7 +80,7 @@ class WorkerTest extends MockeryTestCase
         $worker->process('connection', $job, 0, 5);
     }
 
-    public function testWorkerLogsJobToFailedQueueIfMaxTriesHasBeenExceeded()
+    public function testWorkerLogsJobToFailedQueueIfMaxTriesHasBeenExceeded(): void
     {
         $worker = new Worker(
             $this->mock(QueueManager::class),

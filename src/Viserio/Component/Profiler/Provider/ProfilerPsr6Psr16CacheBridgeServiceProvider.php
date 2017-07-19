@@ -37,7 +37,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
      */
     public static function createCacheItemPoolDecorator(ContainerInterface $container, ?callable $getPrevious = null): ?CacheItemPoolInterface
     {
-        $cache = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $cache = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($cache !== null) {
             if ($cache instanceof PhpCachePoolInterface) {
@@ -60,7 +60,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
      */
     public static function createSimpleTraceableCacheDecorator(ContainerInterface $container, ?callable $getPrevious = null): ?CacheInterface
     {
-        $cache = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $cache = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($cache !== null) {
             if ($cache instanceof PhpCachePoolInterface) {
@@ -83,7 +83,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
      */
     public static function extendsProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
-        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $profiler = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($profiler !== null) {
             $collector = new Psr6Psr16CacheDataCollector();

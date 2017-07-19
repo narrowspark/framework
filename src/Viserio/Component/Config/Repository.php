@@ -39,9 +39,9 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function import(string $filepath, array $options = null): RepositoryContract
     {
-        if ($this->loader === null && pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
-            if (! file_exists($filepath)) {
-                throw new RuntimeException(sprintf('File [%s] not found.', $filepath));
+        if ($this->loader === null && \pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
+            if (! \file_exists($filepath)) {
+                throw new RuntimeException(\sprintf('File [%s] not found.', $filepath));
             }
 
             $config = (array) require $filepath;
@@ -123,7 +123,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function getKeys(): array
     {
-        return array_keys(Arr::flatten($this->data, '.'));
+        return \array_keys(Arr::flatten($this->data, '.'));
     }
 
     /**

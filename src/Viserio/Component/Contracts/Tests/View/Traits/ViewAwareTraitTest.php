@@ -10,7 +10,7 @@ class ViewAwareTraitTest extends MockeryTestCase
 {
     use ViewAwareTrait;
 
-    public function testGetAndSetViewFactory()
+    public function testGetAndSetViewFactory(): void
     {
         $this->setViewFactory($this->mock(ViewFactoryContract::class));
 
@@ -21,7 +21,7 @@ class ViewAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage View factory is not set up.
      */
-    public function testGetViewFactoryThrowExceptionIfViewFactoryIsNotSet()
+    public function testGetViewFactoryThrowExceptionIfViewFactoryIsNotSet(): void
     {
         $this->getViewFactory();
     }

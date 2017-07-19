@@ -85,7 +85,7 @@ class AliasLoaderServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param array                             $options
      *
-     * @return string|null
+     * @return null|string
      */
     private static function getCachePath(ContainerInterface $container, array $options): ?string
     {

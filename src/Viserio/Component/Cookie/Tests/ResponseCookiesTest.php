@@ -16,7 +16,7 @@ class ResponseCookiesTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement [Viserio\Component\Contracts\Cookie\Cookie].
      */
-    public function testRequestCookiesToThrowException()
+    public function testRequestCookiesToThrowException(): void
     {
         new ResponseCookies([new Cookie('test', 'test')]);
     }
@@ -27,7 +27,7 @@ class ResponseCookiesTest extends MockeryTestCase
      * @param array $cookieStrings
      * @param array $expectedCookies
      */
-    public function testFromSetCookieHeader(array $cookieStrings, array $expectedCookies)
+    public function testFromSetCookieHeader(array $cookieStrings, array $expectedCookies): void
     {
         $response = $this->mock(Response::class);
         $response->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieStrings);
@@ -47,7 +47,7 @@ class ResponseCookiesTest extends MockeryTestCase
      * @param array $cookieStrings
      * @param array $expectedCookies
      */
-    public function testFromSetCookieHeaderWithoutExpire(array $cookieStrings, array $expectedCookies)
+    public function testFromSetCookieHeaderWithoutExpire(array $cookieStrings, array $expectedCookies): void
     {
         $response = $this->mock(Response::class);
         $response->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieStrings);
@@ -233,7 +233,7 @@ class ResponseCookiesTest extends MockeryTestCase
         ];
     }
 
-    public function testGetsAndUpdatesSetCookieValueOnResponse()
+    public function testGetsAndUpdatesSetCookieValueOnResponse(): void
     {
         $response = (new ResponseFactory())->createResponse();
         $response = $response->withAddedHeader('Set-Cookie', 'theme=light');
@@ -244,14 +244,14 @@ class ResponseCookiesTest extends MockeryTestCase
 
         $decryptedSessionToken = $setCookies->get('sessionToken');
         $decryptedValue        = $decryptedSessionToken->getValue();
-        $encryptedValue        = str_rot13($decryptedValue);
+        $encryptedValue        = \str_rot13($decryptedValue);
         $encryptedSessionToken = $decryptedSessionToken->withValue($encryptedValue);
 
         $setCookies = $setCookies->add($encryptedSessionToken);
         $setCookies = $setCookies->forget('hello');
 
         self::assertFalse($setCookies->has('hello'));
-        self::assertTrue(is_null($setCookies->get('hello')));
+        self::assertTrue(null === $setCookies->get('hello'));
 
         $response = $setCookies->renderIntoSetCookieHeader($response);
 
@@ -261,6 +261,6 @@ class ResponseCookiesTest extends MockeryTestCase
 
     protected function splitOnAttributeDelimiter(string $string): array
     {
-        return array_filter(preg_split('@\s*[;]\s*@', $string));
+        return \array_filter(\preg_split('@\s*[;]\s*@', $string));
     }
 }

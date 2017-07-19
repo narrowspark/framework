@@ -126,7 +126,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     public function addShouldntReport(Throwable $exception): self
     {
-        $this->dontReport[get_class($exception)] = $exception;
+        $this->dontReport[\get_class($exception)] = $exception;
 
         return $this;
     }
@@ -162,7 +162,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     public function addTransformer(TransformerContract $transformer): self
     {
-        $this->transformers[get_class($transformer)] = $transformer;
+        $this->transformers[\get_class($transformer)] = $transformer;
 
         return $this;
     }
@@ -189,7 +189,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      * @param string     $file      The absolute path to the affected file
      * @param int        $line      The line number of the error in the affected file
      * @param null       $context
-     * @param array|null $backtrace
+     * @param null|array $backtrace
      *
      * @throws \ErrorException
      *
@@ -207,7 +207,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     ): void {
         // Level is the current error reporting level to manage silent error.
         // Strong errors are not authorized to be silenced.
-        $level = error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
+        $level = \error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
 
         if ($level) {
             throw new ErrorException($message, 0, $level, $file, $line);
@@ -256,12 +256,12 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      *
      * @internal
      */
-    public function handleShutdown()
+    public function handleShutdown(): void
     {
         // If an error has occurred that has not been displayed, we will create a fatal
         // error exception instance and pass it into the regular exception handling
         // code so it can be displayed back out to the developer for information.
-        $error = error_get_last();
+        $error = \error_get_last();
 
         if ($error !== null && $this->isFatal($error['type'])) {
             $this->handleException(
@@ -289,7 +289,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function isFatal(int $type): bool
     {
-        return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE], true);
+        return \in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE], true);
     }
 
     /**
@@ -299,7 +299,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function registerErrorHandler(): void
     {
-        set_error_handler([$this, 'handleError']);
+        \set_error_handler([$this, 'handleError']);
     }
 
     /**
@@ -309,14 +309,14 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function registerExceptionHandler(): void
     {
-        if (php_sapi_name() != 'cli' || php_sapi_name() != 'phpdbg') {
-            ini_set('display_errors', '0');
-        } elseif (! ini_get('log_errors') || ini_get('error_log')) {
+        if (PHP_SAPI != 'cli' || PHP_SAPI != 'phpdbg') {
+            \ini_set('display_errors', '0');
+        } elseif (! \ini_get('log_errors') || \ini_get('error_log')) {
             // CLI - display errors only if they're not already logged to STDERR
-            ini_set('display_errors', '1');
+            \ini_set('display_errors', '1');
         }
 
-        set_exception_handler([$this, 'handleException']);
+        \set_exception_handler([$this, 'handleException']);
     }
 
     /**
@@ -326,7 +326,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function registerShutdownHandler(): void
     {
-        register_shutdown_function([$this, 'handleShutdown']);
+        \register_shutdown_function([$this, 'handleShutdown']);
     }
 
     /**
@@ -334,7 +334,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      *
      * @param \Throwable $exception
      *
-     * @return \Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|\Throwable|\Error
+     * @return \Error|\Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|\Throwable
      */
     protected function prepareException(Throwable $exception)
     {
@@ -366,18 +366,18 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     protected function getTransformed(Throwable $exception): Throwable
     {
         $container    = $this->container;
-        $transformers = array_merge(
+        $transformers = \array_merge(
             $this->transformers,
             $this->resolvedOptions['transformers']
         );
 
         foreach ($transformers as $transformer) {
-            if (is_object($transformer)) {
+            if (\is_object($transformer)) {
                 $transformerClass = $transformer;
             } elseif ($container->has($transformer)) {
                 $transformerClass = $container->get($transformer);
             } else {
-                throw new RuntimeException(sprintf('Transformer [%s] not found.', (string) $transformer));
+                throw new RuntimeException(\sprintf('Transformer [%s] not found.', (string) $transformer));
             }
 
             $exception = $transformerClass->transform($exception);
@@ -413,7 +413,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function shouldntReport(Throwable $exception): bool
     {
-        $dontReport = array_merge(
+        $dontReport = \array_merge(
             $this->dontReport,
             $this->resolvedOptions['dont_report']
         );

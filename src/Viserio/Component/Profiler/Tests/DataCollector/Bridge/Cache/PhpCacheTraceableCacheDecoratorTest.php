@@ -13,7 +13,7 @@ class PhpCacheTraceableCacheDecoratorTest extends TestCase
     use TraceableCacheItemDecoratorTestTrait;
     use SimpleTraceableCacheDecoratorTestTrait;
 
-    public function testInvalidateTags()
+    public function testInvalidateTags(): void
     {
         $pool = $this->createCachePool();
         $pool->invalidateTags(['k']);
@@ -31,7 +31,7 @@ class PhpCacheTraceableCacheDecoratorTest extends TestCase
         self::assertNotEmpty($call->end);
     }
 
-    public function testInvalidateTag()
+    public function testInvalidateTag(): void
     {
         $pool = $this->createCachePool();
         $pool->invalidateTag('k');

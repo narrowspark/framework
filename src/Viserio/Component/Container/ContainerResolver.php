@@ -29,12 +29,12 @@ class ContainerResolver
             return $this->resolveFunction($subject, $parameters);
         }
 
-        $subject = is_object($subject) ? get_class($subject) : $subject;
+        $subject = \is_object($subject) ? \get_class($subject) : $subject;
 
-        throw new BindingResolutionException(sprintf(
+        throw new BindingResolutionException(\sprintf(
             '[%s] is not resolvable. Build stack : [%s]',
             $subject,
-            implode(', ', $this->buildStack)
+            \implode(', ', $this->buildStack)
         ));
     }
 
@@ -52,14 +52,14 @@ class ContainerResolver
 
         if (! $reflectionClass->isInstantiable()) {
             throw new BindingResolutionException(
-                sprintf(
+                \sprintf(
                     'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
-                    is_object($class) ? get_class($class) : gettype($class)
+                    \is_object($class) ? \get_class($class) : \gettype($class)
                 )
             );
         }
 
-        if (in_array($class, $this->buildStack, true)) {
+        if (\in_array($class, $this->buildStack, true)) {
             $this->buildStack[] = $class;
 
             throw new CyclicDependencyException($class, $this->buildStack);
@@ -67,14 +67,14 @@ class ContainerResolver
 
         $reflectionMethod = $reflectionClass->getConstructor();
 
-        array_push($this->buildStack, $reflectionClass->name);
+        \array_push($this->buildStack, $reflectionClass->name);
 
         if ($reflectionMethod) {
             $reflectionParameters = $reflectionMethod->getParameters();
             $parameters           = $this->resolveParameters($reflectionParameters, $parameters);
         }
 
-        array_pop($this->buildStack);
+        \array_pop($this->buildStack);
 
         return $reflectionClass->newInstanceArgs($parameters);
     }
@@ -82,7 +82,7 @@ class ContainerResolver
     /**
      * Resolve a method.
      *
-     * @param string|array $method
+     * @param array|string $method
      * @param array        $parameters
      *
      * @return mixed
@@ -92,11 +92,11 @@ class ContainerResolver
         $reflectionMethod     = $this->getMethodReflector($method);
         $reflectionParameters = $reflectionMethod->getParameters();
 
-        array_push($this->buildStack, $reflectionMethod->name);
+        \array_push($this->buildStack, $reflectionMethod->name);
 
         $resolvedParameters = $this->resolveParameters($reflectionParameters, $parameters);
 
-        array_pop($this->buildStack);
+        \array_pop($this->buildStack);
 
         return $method(...$resolvedParameters);
     }
@@ -104,7 +104,7 @@ class ContainerResolver
     /**
      * Resolve a closure / function.
      *
-     * @param string|callable $function
+     * @param callable|string $function
      * @param array           $parameters
      *
      * @return mixed
@@ -114,11 +114,11 @@ class ContainerResolver
         $reflectionFunction   = new ReflectionFunction($function);
         $reflectionParameters = $reflectionFunction->getParameters();
 
-        array_push($this->buildStack, $reflectionFunction->name);
+        \array_push($this->buildStack, $reflectionFunction->name);
 
         $resolvedParameters = $this->resolveParameters($reflectionParameters, $parameters);
 
-        array_pop($this->buildStack);
+        \array_pop($this->buildStack);
 
         return $reflectionFunction->invokeArgs($resolvedParameters);
     }
@@ -128,7 +128,7 @@ class ContainerResolver
      *
      * @param mixed $subject
      *
-     * @return \ReflectionClass|\ReflectionMethod|\ReflectionFunction|null
+     * @return null|\ReflectionClass|\ReflectionFunction|\ReflectionMethod
      *
      * @codeCoverageIgnore
      */
@@ -172,10 +172,10 @@ class ContainerResolver
             return $parameter->getDefaultValue();
         }
 
-        throw new BindingResolutionException(sprintf(
+        throw new BindingResolutionException(\sprintf(
             'Unresolvable dependency resolving [%s] in [%s]',
             $parameter,
-            end($this->buildStack)
+            \end($this->buildStack)
         ));
     }
 
@@ -201,13 +201,13 @@ class ContainerResolver
     /**
      * Get the reflection object for a method.
      *
-     * @param string|array $method
+     * @param array|string $method
      *
      * @return \ReflectionMethod
      */
     protected function getMethodReflector($method): ReflectionMethod
     {
-        if (is_string($method)) {
+        if (\is_string($method)) {
             return new ReflectionMethod($method);
         }
 
@@ -223,7 +223,7 @@ class ContainerResolver
      */
     protected function isClass($value): bool
     {
-        return is_string($value) && class_exists($value);
+        return \is_string($value) && \class_exists($value);
     }
 
     /**
@@ -235,7 +235,7 @@ class ContainerResolver
      */
     protected function isMethod($value): bool
     {
-        return is_callable($value) && ! $this->isFunction($value);
+        return \is_callable($value) && ! $this->isFunction($value);
     }
 
     /**
@@ -247,7 +247,7 @@ class ContainerResolver
      */
     protected function isFunction($value): bool
     {
-        return is_callable($value) && ($value instanceof Closure || is_string($value) && function_exists($value));
+        return \is_callable($value) && ($value instanceof Closure || \is_string($value) && \function_exists($value));
     }
 
     /**
@@ -261,7 +261,7 @@ class ContainerResolver
     private function mergeParameters(array $rootParameters, array $parameters = []): array
     {
         foreach ($parameters as $key => $value) {
-            if (! isset($rootParameters[$key]) && is_int($key)) {
+            if (! isset($rootParameters[$key]) && \is_int($key)) {
                 $rootParameters[$key] = $value;
             }
         }

@@ -14,7 +14,7 @@ use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester as Profiler;
 
 class ProfilerTest extends MockeryTestCase
 {
-    public function testSetAndGetUrlGenerator()
+    public function testSetAndGetUrlGenerator(): void
     {
         $profiler = $this->getProfiler();
 
@@ -23,7 +23,7 @@ class ProfilerTest extends MockeryTestCase
         self::assertInstanceOf(UrlGeneratorContract::class, $profiler->getUrlGenerator());
     }
 
-    public function testSetAndGetTemplate()
+    public function testSetAndGetTemplate(): void
     {
         $profiler = $this->getProfiler();
 
@@ -32,7 +32,7 @@ class ProfilerTest extends MockeryTestCase
         self::assertSame(__DIR__, $profiler->getTemplate());
     }
 
-    public function testAddHasAndGetCollectors()
+    public function testAddHasAndGetCollectors(): void
     {
         $profiler  = $this->getProfiler();
         $collector = new PhpInfoDataCollector();
@@ -56,7 +56,7 @@ class ProfilerTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage [php-info-data-collector] is already a registered collector.
      */
-    public function testAddCollectorThrowsException()
+    public function testAddCollectorThrowsException(): void
     {
         $profiler  = $this->getProfiler();
         $collector = new PhpInfoDataCollector();
@@ -65,7 +65,7 @@ class ProfilerTest extends MockeryTestCase
         $profiler->addCollector($collector);
     }
 
-    public function testModifyResponse()
+    public function testModifyResponse(): void
     {
         $assets   = new AssetsRenderer();
         $profiler = new Profiler($assets);
@@ -97,7 +97,7 @@ class ProfilerTest extends MockeryTestCase
         );
     }
 
-    public function testModifyResponseWithOldContent()
+    public function testModifyResponseWithOldContent(): void
     {
         $assets   = new AssetsRenderer();
         $profiler = new Profiler($assets);
@@ -134,7 +134,7 @@ class ProfilerTest extends MockeryTestCase
         );
     }
 
-    public function testDontModifyResponse()
+    public function testDontModifyResponse(): void
     {
         $assets   = new AssetsRenderer();
         $profiler = new Profiler($assets);
@@ -156,7 +156,7 @@ class ProfilerTest extends MockeryTestCase
 
     private function removeId(string $html): string
     {
-        return trim(preg_replace('/="profiler-(.*?)"/', '', $html));
+        return \trim(\preg_replace('/="profiler-(.*?)"/', '', $html));
     }
 
     private function getProfiler()

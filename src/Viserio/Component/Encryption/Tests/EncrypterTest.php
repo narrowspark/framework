@@ -8,7 +8,7 @@ use Viserio\Component\Encryption\Encrypter;
 
 class EncrypterTest extends TestCase
 {
-    public function testCompareEncryptedValues()
+    public function testCompareEncryptedValues(): void
     {
         $e          = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
         $encrypted1 = $e->encrypt('foo');
@@ -19,7 +19,7 @@ class EncrypterTest extends TestCase
         self::assertFalse($e->compare($encrypted1, $encrypted3));
     }
 
-    public function testEncryptionAndDecrypt()
+    public function testEncryptionAndDecrypt(): void
     {
         $e = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
 

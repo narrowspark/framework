@@ -10,7 +10,7 @@ interface Repository extends ArrayAccess
      * Import configuration from file.
      *
      * @param string     $filepath
-     * @param array|null $options  Supports tag or group
+     * @param null|array $options  Supports tag or group
      *
      * @throws \RuntimeException                                             if the php file is not found
      * @throws \Viserio\Component\Contracts\Parsers\Exception\ParseException
@@ -34,7 +34,7 @@ interface Repository extends ArrayAccess
      * Gets a configuration setting using a simple or nested key.
      *
      * @param string     $key
-     * @param mixed|null $default
+     * @param null|mixed $default
      *
      * @return mixed The value of a setting
      */

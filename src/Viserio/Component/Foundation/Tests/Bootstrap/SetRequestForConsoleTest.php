@@ -10,7 +10,7 @@ use Viserio\Component\Foundation\Console\Kernel;
 
 class SetRequestForConsoleTest extends MockeryTestCase
 {
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         $kernel = new class() extends Kernel {
             /**

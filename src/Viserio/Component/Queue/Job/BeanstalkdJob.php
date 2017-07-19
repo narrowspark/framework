@@ -45,9 +45,9 @@ class BeanstalkdJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(): void
     {
-        $this->resolveAndRun(json_decode($this->getRawBody(), true));
+        $this->resolveAndRun(\json_decode($this->getRawBody(), true));
     }
 
     /**
@@ -61,7 +61,7 @@ class BeanstalkdJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function delete()
+    public function delete(): void
     {
         parent::delete();
 
@@ -71,7 +71,7 @@ class BeanstalkdJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function release(int $delay = 0)
+    public function release(int $delay = 0): void
     {
         parent::release($delay);
 
@@ -83,7 +83,7 @@ class BeanstalkdJob extends AbstractJob
     /**
      * Bury the job in the queue.
      */
-    public function bury()
+    public function bury(): void
     {
         $this->release();
 

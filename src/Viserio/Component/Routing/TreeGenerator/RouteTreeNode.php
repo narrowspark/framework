@@ -32,7 +32,7 @@ final class RouteTreeNode
     public function __construct(array $matchers, $contents)
     {
         if (empty($matchers)) {
-            throw new RuntimeException(sprintf('Cannot construct [%s], matchers must not be empty.', __CLASS__));
+            throw new RuntimeException(\sprintf('Cannot construct [%s], matchers must not be empty.', __CLASS__));
         }
 
         $this->checkForNodeClass($contents);
@@ -58,7 +58,7 @@ final class RouteTreeNode
      */
     public function getFirstMatcher(): SegmentMatcherContract
     {
-        return $this->matchers[min(array_keys($this->matchers))];
+        return $this->matchers[\min(\array_keys($this->matchers))];
     }
 
     /**
@@ -133,7 +133,7 @@ final class RouteTreeNode
             return;
         }
 
-        throw new RuntimeException(sprintf(
+        throw new RuntimeException(\sprintf(
             'RouteTreeNode needs "Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection" or "Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap" but %s given.',
             $contents
         ));

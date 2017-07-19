@@ -10,12 +10,12 @@ use Viserio\Component\Cron\Schedule;
 
 class ScheduleRunCommandTest extends MockeryTestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         $_SERVER['test'] = false;
 
         $schedule = new Schedule(__DIR__);
-        $schedule->call(function () {
+        $schedule->call(function (): void {
             $_SERVER['test'] = true;
         });
 
@@ -45,7 +45,7 @@ class ScheduleRunCommandTest extends MockeryTestCase
         unset($_SERVER['test']);
     }
 
-    public function testCommandWithNoJobs()
+    public function testCommandWithNoJobs(): void
     {
         $schedule = new Schedule(__DIR__);
 
@@ -72,7 +72,7 @@ class ScheduleRunCommandTest extends MockeryTestCase
         self::assertEquals("No scheduled commands are ready to run.\n", $output);
     }
 
-    public function testCommandWithFalseFilter()
+    public function testCommandWithFalseFilter(): void
     {
         $schedule = new Schedule(__DIR__);
         $schedule->call(function () {

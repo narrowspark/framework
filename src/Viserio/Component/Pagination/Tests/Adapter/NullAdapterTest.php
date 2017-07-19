@@ -7,14 +7,14 @@ use Viserio\Component\Pagination\Adapter\NullAdapter;
 
 class NullAdapterTest extends TestCase
 {
-    public function testGetItems()
+    public function testGetItems(): void
     {
         $adapter = new NullAdapter();
 
         self::assertSame([], $adapter->getItems());
     }
 
-    public function testGetItemsPerPage()
+    public function testGetItemsPerPage(): void
     {
         $adapter = new NullAdapter();
 

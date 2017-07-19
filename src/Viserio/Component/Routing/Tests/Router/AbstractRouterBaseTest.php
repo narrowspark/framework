@@ -15,7 +15,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
 {
     protected $router;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $this->router = $router;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -49,7 +49,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
      * @param mixed $expectedResult
      * @param mixed $status
      */
-    public function testRouter($httpMethod, $uri, $expectedResult, $status = 200)
+    public function testRouter($httpMethod, $uri, $expectedResult, $status = 200): void
     {
         $actualResult = $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
@@ -63,12 +63,12 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
 
     private function delTree($dir)
     {
-        $files = array_diff(scandir($dir), ['.', '..']);
+        $files = \array_diff(\scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {
-            is_dir("$dir/$file") ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+            \is_dir("$dir/$file") ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
         }
 
-        return rmdir($dir);
+        return \rmdir($dir);
     }
 }

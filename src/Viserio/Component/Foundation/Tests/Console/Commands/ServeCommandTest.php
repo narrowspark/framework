@@ -13,7 +13,7 @@ class ServeCommandTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
-    public function testCommandWithNoExistentFolder()
+    public function testCommandWithNoExistentFolder(): void
     {
         $root = __DIR__ . '/../../notfound';
 
@@ -37,7 +37,7 @@ class ServeCommandTest extends MockeryTestCase
         self::assertSame('The document root directory [' . $root . "] does not exist.\n", $output);
     }
 
-    public function testCommandWithNoExistentController()
+    public function testCommandWithNoExistentController(): void
     {
         $root = __DIR__ . '/../../Fixtures';
 
@@ -65,7 +65,7 @@ class ServeCommandTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Port "0" is not valid.
      */
-    public function testCommandWithInvalidPort()
+    public function testCommandWithInvalidPort(): void
     {
         $root = __DIR__ . '/../../Fixtures';
 
@@ -87,12 +87,12 @@ class ServeCommandTest extends MockeryTestCase
         $tester->getDisplay();
     }
 
-    public function testCommandWithRunningWebServer()
+    public function testCommandWithRunningWebServer(): void
     {
         $root    = __DIR__ . '/../../Fixtures';
-        $pidFile = getcwd() . '/.web-server-pid';
+        $pidFile = \getcwd() . '/.web-server-pid';
 
-        file_put_contents($pidFile, '127.0.0.1:8000');
+        \file_put_contents($pidFile, '127.0.0.1:8000');
 
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getPublicPath')
@@ -111,9 +111,9 @@ class ServeCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertSame(self::normalizeDirectorySeparator($root . '/index.php'), getenv('APP_WEBSERVER_CONTROLLER'));
+        self::assertSame(self::normalizeDirectorySeparator($root . '/index.php'), \getenv('APP_WEBSERVER_CONTROLLER'));
         self::assertSame("The web server is already running (listening on http://127.0.0.1:8000).\n", $output);
 
-        unlink($pidFile);
+        \unlink($pidFile);
     }
 }

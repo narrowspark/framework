@@ -37,7 +37,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
      *
      * @codeCoverageIgnore
      */
-    public function withoutMiddleware($middlewares = null)
+    public function withoutMiddleware($middlewares = null): void
     {
         // not used!
     }
@@ -121,10 +121,10 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     {
         $middlewares = [];
 
-        self::map($route->gatherMiddleware(), function ($nameOrObject) use (&$middlewares, $route) {
+        self::map($route->gatherMiddleware(), function ($nameOrObject) use (&$middlewares, $route): void {
             $bypass = $route->gatherDisabledMiddlewares();
 
-            if (is_object($nameOrObject) && ! isset($bypass[get_class($nameOrObject)])) {
+            if (\is_object($nameOrObject) && ! isset($bypass[\get_class($nameOrObject)])) {
                 $middlewares[] = $nameOrObject;
             } else {
                 $middlewares[] = MiddlewareNameResolver::resolve(
@@ -157,7 +157,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
         foreach ($array as $key => $item) {
             $result = $callback($item, $key);
 
-            $newArray = array_merge_recursive($array, (array) $result);
+            $newArray = \array_merge_recursive($array, (array) $result);
         }
 
         return $newArray;
@@ -175,8 +175,8 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
         $flattened = [];
 
         foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $flattened = array_merge($flattened, static::flatten($value));
+            if (\is_array($value)) {
+                $flattened = \array_merge($flattened, static::flatten($value));
             } else {
                 $flattened[] = $value;
             }

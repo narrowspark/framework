@@ -12,7 +12,7 @@ use Viserio\Component\Translation\TranslationManager;
 
 class TranslatorExtensionTest extends MockeryTestCase
 {
-    public function testGetFunctions()
+    public function testGetFunctions(): void
     {
         $extension = new TranslatorExtension($this->getTranslationManager());
         $functions = $extension->getFunctions();
@@ -21,7 +21,7 @@ class TranslatorExtensionTest extends MockeryTestCase
         self::assertEquals('trans', $functions[0]->getCallable()[1]);
     }
 
-    public function testGetFilters()
+    public function testGetFilters(): void
     {
         $extension = new TranslatorExtension($this->getTranslationManager());
         $filter    = $extension->getFilters();
@@ -30,7 +30,7 @@ class TranslatorExtensionTest extends MockeryTestCase
         self::assertEquals('trans', $filter[0]->getCallable()[1]);
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         self::assertEquals(
             'Viserio_Bridge_Twig_Extension_Translator',
@@ -38,7 +38,7 @@ class TranslatorExtensionTest extends MockeryTestCase
         );
     }
 
-    public function testEscaping()
+    public function testEscaping(): void
     {
         $output = $this->getTemplate('{% trans %}Percent: {value}% ({msg}){% endtrans %}')->render(['value' => 12, 'msg' => 'approx.']);
 
@@ -49,7 +49,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      * @expectedException        \Twig\Error\SyntaxError
      * @expectedExceptionMessage A message inside a trans tag must be a simple text in "index" at line 2.
      */
-    public function testTransComplexBody()
+    public function testTransComplexBody(): void
     {
         $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render();
     }
@@ -58,7 +58,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      * @expectedException        \Twig\Error\SyntaxError
      * @expectedExceptionMessage A message inside a trans tag must be a simple text in "index" at line 2.
      */
-    public function testTransComplexBodyWithCount()
+    public function testTransComplexBodyWithCount(): void
     {
         $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render();
     }
@@ -70,7 +70,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      * @param mixed $expected
      * @param array $variables
      */
-    public function testTransa($template, $expected, array $variables = [])
+    public function testTransa($template, $expected, array $variables = []): void
     {
         if ($expected != $this->getTemplate($template)->render($variables)) {
             echo $template . "\n";
@@ -122,7 +122,7 @@ class TranslatorExtensionTest extends MockeryTestCase
     {
         $translator = $this->getTranslationManager();
 
-        if (is_array($template)) {
+        if (\is_array($template)) {
             $loader = new TwigArrayLoader($template);
         } else {
             $loader = new TwigArrayLoader(['index' => $template]);

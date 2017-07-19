@@ -93,10 +93,10 @@ class SimpleDispatcher implements DispatcherContract
     public function handle(RouteCollectionContract $routes, ServerRequestInterface $request): ResponseInterface
     {
         $cacheFile = $this->getCachePath();
-        $dir       = pathinfo($cacheFile, PATHINFO_DIRNAME);
+        $dir       = \pathinfo($cacheFile, PATHINFO_DIRNAME);
 
         if (! file_exists($cacheFile) || $this->refreshCache === true) {
-            if ((! @mkdir($dir, 0777, true) && ! is_dir($dir)) || ! is_writable($dir)) {
+            if ((! @\mkdir($dir, 0777, true) && ! \is_dir($dir)) || ! \is_writable($dir)) {
                 throw new InvalidArgumentException(sprintf(
                     'Route cache directory [%s] cannot be created or is write protected.',
                     $dir
@@ -114,17 +114,17 @@ class SimpleDispatcher implements DispatcherContract
             return $this->handleFound($routes, $request, $match[1], $match[2]);
         }
 
-        $requestPath = '/' . ltrim($request->getUri()->getPath(), '/');
+        $requestPath = '/' . \ltrim($request->getUri()->getPath(), '/');
 
         if ($match[0] === self::HTTP_METHOD_NOT_ALLOWED) {
-            throw new MethodNotAllowedException(sprintf(
+            throw new MethodNotAllowedException(\sprintf(
                 '405 Method [%s] Not Allowed: For requested route [%s].',
-                implode(',', $match[1]),
+                \implode(',', $match[1]),
                 $requestPath
             ));
         }
 
-        throw new NotFoundException(sprintf(
+        throw new NotFoundException(\sprintf(
             '404 Not Found: Requested route [%s].',
             $requestPath
         ));
@@ -149,7 +149,7 @@ class SimpleDispatcher implements DispatcherContract
         $route = $routes->match($identifier);
 
         foreach ($segments as $key => $value) {
-            $route->addParameter($key, rawurldecode($value));
+            $route->setParameter($key, \rawurldecode($value));
         }
 
         // Add route to the request's attributes in case a middleware or handler needs access to the route.
@@ -186,10 +186,10 @@ class SimpleDispatcher implements DispatcherContract
      */
     protected function prepareUriPath(string $path): string
     {
-        $path = '/' . ltrim($path, '/');
+        $path = '/' . \ltrim($path, '/');
 
-        if (mb_strlen($path) !== 1 && mb_substr($path, -1) === '/') {
-            $path = substr_replace($path, '', -1);
+        if (\mb_strlen($path) !== 1 && \mb_substr($path, -1) === '/') {
+            $path = \substr_replace($path, '', -1);
         }
 
         return $path;
@@ -207,6 +207,6 @@ class SimpleDispatcher implements DispatcherContract
         $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
         $closure        = $routerCompiler->compile($routes->getRoutes());
 
-        file_put_contents($this->path, $closure, LOCK_EX);
+        \file_put_contents($this->path, $closure, LOCK_EX);
     }
 }

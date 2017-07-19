@@ -12,7 +12,7 @@ final class HtmlDumperOutput
     /**
      * Output of the dump.
      *
-     * @var string|null
+     * @var null|string
      */
     private $output;
 
@@ -22,19 +22,19 @@ final class HtmlDumperOutput
      * @param int $line
      * @param int $depth
      */
-    public function __invoke($line, $depth)
+    public function __invoke($line, $depth): void
     {
         // A negative depth means "end of dump"
         if ($depth >= 0) {
             // Adds a two spaces indentation to the line
-            $this->output .= str_repeat('  ', $depth) . $line . "\n";
+            $this->output .= \str_repeat('  ', $depth) . $line . "\n";
         }
     }
 
     /**
      * Get the dump output.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getOutput(): ?string
     {

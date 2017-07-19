@@ -26,7 +26,7 @@ trait MiddlewareAwareTrait
      * Register a short-hand name for a middleware.
      *
      * @param string        $name
-     * @param string|object $middleware
+     * @param object|string $middleware
      *
      * @throws \RuntimeException if wrong type is given or alias exists
      * @throws \LogicException
@@ -36,10 +36,10 @@ trait MiddlewareAwareTrait
     public function aliasMiddleware(string $name, $middleware)
     {
         if (isset($this->middlewares[$name])) {
-            throw new RuntimeException(sprintf('Alias [%s] already exists.', $name));
+            throw new RuntimeException(\sprintf('Alias [%s] already exists.', $name));
         }
 
-        if (is_string($middleware) || is_object($middleware)) {
+        if (\is_string($middleware) || \is_object($middleware)) {
             $this->validateMiddlewareClass($middleware);
 
             $this->middlewares[$name] = $middleware;
@@ -47,13 +47,13 @@ trait MiddlewareAwareTrait
             return $this;
         }
 
-        throw new RuntimeException(sprintf('Expected string or object; received [%s].', gettype($middleware)));
+        throw new RuntimeException(\sprintf('Expected string or object; received [%s].', \gettype($middleware)));
     }
 
     /**
      * Set the middlewares to the route.
      *
-     * @param string|array|object $middlewares
+     * @param array|object|string $middlewares
      *
      * @throws \RuntimeException if wrong type is given
      * @throws \LogicException
@@ -65,8 +65,8 @@ trait MiddlewareAwareTrait
         $this->validateInput($middlewares);
         $this->validateMiddlewareClass($middlewares);
 
-        if (is_string($middlewares) || is_object($middlewares)) {
-            $name = is_object($middlewares) ? get_class($middlewares) : $middlewares;
+        if (\is_string($middlewares) || \is_object($middlewares)) {
+            $name = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
 
             $this->middlewares[$name] = $middlewares;
 
@@ -74,7 +74,7 @@ trait MiddlewareAwareTrait
         }
 
         foreach ($middlewares as $middleware) {
-            $name = is_object($middleware) ? get_class($middleware) : $middleware;
+            $name = \is_object($middleware) ? \get_class($middleware) : $middleware;
 
             $this->middlewares[$name] = $middleware;
         }
@@ -86,7 +86,7 @@ trait MiddlewareAwareTrait
      * Remove the given middlewares from the route/controller.
      * If no middleware is passed, all middlewares will be removed.
      *
-     * @param string|array|null $middlewares
+     * @param null|array|string $middlewares
      *
      * @throws \RuntimeException
      * @throws \LogicException
@@ -104,7 +104,7 @@ trait MiddlewareAwareTrait
         $this->validateInput($middlewares);
         $this->validateMiddlewareClass($middlewares);
 
-        if (is_object($middlewares) || is_string($middlewares)) {
+        if (\is_object($middlewares) || \is_string($middlewares)) {
             $name = is_object($middlewares) ? get_class($middlewares) : $middlewares;
 
             $this->bypassedMiddlewares[$name] = true;

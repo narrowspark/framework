@@ -177,7 +177,7 @@ class Router implements RouterContract
      */
     public function match($methods, string $uri, $action = null): RouteContract
     {
-        return $this->addRoute(array_map('strtoupper', (array) $methods), $uri, $action);
+        return $this->addRoute(\array_map('strtoupper', (array) $methods), $uri, $action);
     }
 
     /**
@@ -295,6 +295,7 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
+
     public function group(array $attributes, $routes): void
     {
         $this->updateGroupStack($attributes);
@@ -307,7 +308,7 @@ class Router implements RouterContract
             require $routes;
         }
 
-        array_pop($this->groupStack);
+        \array_pop($this->groupStack);
     }
 
     /**
@@ -315,7 +316,7 @@ class Router implements RouterContract
      */
     public function mergeWithLastGroup(array $new): array
     {
-        return RouteGroup::merge($new, end($this->groupStack));
+        return RouteGroup::merge($new, \end($this->groupStack));
     }
 
     /**
@@ -324,7 +325,7 @@ class Router implements RouterContract
     public function getLastGroupSuffix(): string
     {
         if (! empty($this->groupStack)) {
-            $last = end($this->groupStack);
+            $last = \end($this->groupStack);
 
             return $last['suffix'] ?? '';
         }
@@ -338,7 +339,7 @@ class Router implements RouterContract
     public function getLastGroupPrefix(): string
     {
         if (! empty($this->groupStack)) {
-            $last = end($this->groupStack);
+            $last = \end($this->groupStack);
 
             return $last['prefix'] ?? '';
         }
@@ -393,7 +394,7 @@ class Router implements RouterContract
     {
         $dispatcher = $this->dispatcher;
 
-        if ($this->container !== null && method_exists($dispatcher, 'setContainer')) {
+        if ($this->container !== null && \method_exists($dispatcher, 'setContainer')) {
             $dispatcher->setContainer($this->getContainer());
         }
 
@@ -405,7 +406,7 @@ class Router implements RouterContract
      *
      * @param array|string               $methods
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -463,7 +464,7 @@ class Router implements RouterContract
     protected function addWhereClausesToRoute(RouteContract $route): void
     {
         $where   = $route->getAction()['where'] ?? [];
-        $pattern = array_merge($this->patterns, $where);
+        $pattern = \array_merge($this->patterns, $where);
 
         foreach ($pattern as $name => $value) {
             $route->where($name, $value);
@@ -487,7 +488,7 @@ class Router implements RouterContract
     /**
      * Determine if the action is routing to a controller.
      *
-     * @param string|array|\Closure $action
+     * @param array|\Closure|string $action
      *
      * @return bool
      */
@@ -497,7 +498,7 @@ class Router implements RouterContract
             return false;
         }
 
-        return is_string($action) || (isset($action['uses']) && is_string($action['uses']));
+        return \is_string($action) || (isset($action['uses']) && \is_string($action['uses']));
     }
 
     /**
@@ -509,7 +510,7 @@ class Router implements RouterContract
      */
     protected function convertToControllerAction($action): array
     {
-        if (is_string($action)) {
+        if (\is_string($action)) {
             $action = ['uses' => $action];
         }
 
@@ -531,9 +532,9 @@ class Router implements RouterContract
      */
     protected function prependGroupNamespace(string $uses): string
     {
-        $group = end($this->groupStack);
+        $group = \end($this->groupStack);
 
-        return isset($group['namespace']) && mb_strpos($uses, '\\') !== 0 ?
+        return isset($group['namespace']) && \mb_strpos($uses, '\\') !== 0 ?
             $group['namespace'] . '\\' . $uses :
             $uses;
     }
@@ -547,11 +548,11 @@ class Router implements RouterContract
      */
     protected function prefix(string $uri): string
     {
-        $trimmed = trim($this->getLastGroupPrefix(), '/') . '/' . trim($uri, '/');
+        $trimmed = \trim($this->getLastGroupPrefix(), '/') . '/' . \trim($uri, '/');
 
         if (! $trimmed) {
             return '/';
-        } elseif (mb_strpos($trimmed, '/') === 0) {
+        } elseif (\mb_strpos($trimmed, '/') === 0) {
             return $trimmed;
         }
 
@@ -567,7 +568,7 @@ class Router implements RouterContract
      */
     protected function suffix(string $uri): string
     {
-        return trim($uri) . trim($this->getLastGroupSuffix());
+        return \trim($uri) . \trim($this->getLastGroupSuffix());
     }
 
     /**
@@ -580,7 +581,7 @@ class Router implements RouterContract
     protected function updateGroupStack(array $attributes): void
     {
         if (! empty($this->groupStack)) {
-            $attributes = RouteGroup::merge($attributes, end($this->groupStack));
+            $attributes = RouteGroup::merge($attributes, \end($this->groupStack));
         }
 
         $this->groupStack[] = $attributes;

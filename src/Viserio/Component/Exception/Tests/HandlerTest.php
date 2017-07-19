@@ -26,7 +26,7 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class HandlerTest extends MockeryTestCase
 {
-    public function testAddAndGetDisplayer()
+    public function testAddAndGetDisplayer(): void
     {
         $container = $this->getContainer();
         $container->shouldReceive('get')
@@ -41,10 +41,10 @@ class HandlerTest extends MockeryTestCase
         $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
         $handler->addDisplayer(new WhoopsDisplayer());
 
-        self::assertSame(3, count($handler->getDisplayers()));
+        self::assertSame(3, \count($handler->getDisplayers()));
     }
 
-    public function testAddAndGetTransformer()
+    public function testAddAndGetTransformer(): void
     {
         $container = $this->getContainer();
         $container->shouldReceive('get')
@@ -55,10 +55,10 @@ class HandlerTest extends MockeryTestCase
         $handler->addTransformer(new CommandLineTransformer());
         $handler->addTransformer(new CommandLineTransformer());
 
-        self::assertSame(1, count($handler->getTransformers()));
+        self::assertSame(1, \count($handler->getTransformers()));
     }
 
-    public function testAddAndGetFilter()
+    public function testAddAndGetFilter(): void
     {
         $container = $this->getContainer();
         $container->shouldReceive('get')
@@ -69,10 +69,10 @@ class HandlerTest extends MockeryTestCase
         $handler->addFilter(new VerboseFilter($container));
         $handler->addFilter(new VerboseFilter($container));
 
-        self::assertSame(1, count($handler->getFilters()));
+        self::assertSame(1, \count($handler->getFilters()));
     }
 
-    public function testReportError()
+    public function testReportError(): void
     {
         $exception = new Exception('Exception message');
 
@@ -92,7 +92,7 @@ class HandlerTest extends MockeryTestCase
         $handler->report($exception);
     }
 
-    public function testReportCritical()
+    public function testReportCritical(): void
     {
         $exception = new FatalThrowableError(new Exception());
 
@@ -112,7 +112,7 @@ class HandlerTest extends MockeryTestCase
         $handler->report($exception);
     }
 
-    public function testShouldntReport()
+    public function testShouldntReport(): void
     {
         $exception = new FatalThrowableError(new Exception());
         $id        = (new ExceptionIdentifier())->identify($exception);
@@ -132,7 +132,7 @@ class HandlerTest extends MockeryTestCase
         $handler->report($exception);
     }
 
-    public function testHandleError()
+    public function testHandleError(): void
     {
         $container = $this->getContainer();
         $container->shouldReceive('get')

@@ -7,7 +7,7 @@ use Viserio\Component\Routing\SortedMiddleware;
 
 class SortedMiddlewareTest extends TestCase
 {
-    public function testMiddlewareCanBeSortedByPriority()
+    public function testMiddlewareCanBeSortedByPriority(): void
     {
         $priority = [
             'First',
@@ -40,7 +40,7 @@ class SortedMiddlewareTest extends TestCase
         self::assertEquals(['First'], (new SortedMiddleware(['First'], ['First']))->getAll());
         self::assertEquals(['First', 'Second'], (new SortedMiddleware(['First', 'Second'], ['Second', 'First']))->getAll());
 
-        $closure = function () {
+        $closure = function (): void {
         };
         self::assertEquals(['Second', $closure], (new SortedMiddleware(['First', 'Second'], ['Second', $closure]))->getAll());
     }

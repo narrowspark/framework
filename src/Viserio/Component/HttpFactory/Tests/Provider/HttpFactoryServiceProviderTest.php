@@ -20,7 +20,7 @@ use Viserio\Component\HttpFactory\UriFactory;
 
 class HttpFactoryServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new HttpFactoryServiceProvider());

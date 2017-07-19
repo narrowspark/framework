@@ -12,11 +12,11 @@ class MiddlewareNameResolver
      * @param array  $middlewareGroups
      * @param array  $disabledMiddlewares
      *
-     * @return string|array
+     * @return array|string
      */
     public static function resolve(string $name, array $map, array $middlewareGroups, array $disabledMiddlewares)
     {
-        if (isset($disabledMiddlewares[$name]) || in_array($name, $disabledMiddlewares, true)) {
+        if (isset($disabledMiddlewares[$name]) || \in_array($name, $disabledMiddlewares, true)) {
             return [];
         } elseif (isset($middlewareGroups[$name])) {
             return self::parseMiddlewareGroup($name, $map, $middlewareGroups, $disabledMiddlewares);
@@ -40,17 +40,17 @@ class MiddlewareNameResolver
         $results = [];
 
         foreach ($middlewareGroups[$name] as $middleware) {
-            $name = is_object($middleware) ? get_class($middleware) : $middleware;
+            $name = \is_object($middleware) ? \get_class($middleware) : $middleware;
 
-            if (isset($disabledMiddlewares[$name]) || in_array($name, $disabledMiddlewares)) {
+            if (isset($disabledMiddlewares[$name]) || \in_array($name, $disabledMiddlewares, true)) {
                 continue;
             }
 
             // If the middleware is another middleware group we will pull in the group and
             // merge its middleware into the results. This allows groups to conveniently
             // reference other groups without needing to repeat all their middlewares.
-            if (is_string($middleware) && isset($middlewareGroups[$middleware])) {
-                $results = array_merge(
+            if (\is_string($middleware) && isset($middlewareGroups[$middleware])) {
+                $results = \array_merge(
                     $results,
                     self::parseMiddlewareGroup($middleware, $map, $middlewareGroups, $disabledMiddlewares)
                 );

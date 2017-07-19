@@ -8,7 +8,7 @@ use Viserio\Component\Filesystem\Adapter\DropboxConnector;
 
 class DropboxConnectorTest extends TestCase
 {
-    public function testConnectStandard()
+    public function testConnectStandard(): void
     {
         $connector = new DropboxConnector();
 
@@ -19,7 +19,7 @@ class DropboxConnectorTest extends TestCase
         self::assertInstanceOf(DropboxAdapter::class, $return);
     }
 
-    public function testConnectWithPrefix()
+    public function testConnectWithPrefix(): void
     {
         $connector = new DropboxConnector();
 
@@ -35,7 +35,7 @@ class DropboxConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The dropbox connector requires authentication token.
      */
-    public function testConnectWithoutSecret()
+    public function testConnectWithoutSecret(): void
     {
         $connector = new DropboxConnector();
 

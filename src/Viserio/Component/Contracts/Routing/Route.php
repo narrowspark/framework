@@ -10,7 +10,7 @@ interface Route
     /**
      * Get the domain defined for the route.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDomain(): ?string;
 
@@ -24,7 +24,7 @@ interface Route
     /**
      * Get the name of the route instance.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getName(): ?string;
 
@@ -48,7 +48,7 @@ interface Route
      * Set a regular expression requirement on the route.
      *
      * @param array|string $name
-     * @param string|null  $expression
+     * @param null|string  $expression
      *
      * @return $this
      */
@@ -140,7 +140,7 @@ interface Route
     /**
      * Get the suffix of the route instance.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getSuffix(): ?string;
 
@@ -160,7 +160,7 @@ interface Route
      * @param string $name
      * @param mixed  $default
      *
-     * @return string|object
+     * @return object|string
      */
     public function getParameter(string $name, $default = null);
 
@@ -189,7 +189,7 @@ interface Route
      *
      * @return void
      */
-    public function forgetParameter(string $name);
+    public function forgetParameter(string $name): void;
 
     /**
      * The regular expression requirements.

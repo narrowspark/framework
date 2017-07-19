@@ -12,7 +12,7 @@ use Viserio\Component\Log\HandlerParser;
 
 class HandlerParserTest extends MockeryTestCase
 {
-    public function testGetMonolog()
+    public function testGetMonolog(): void
     {
         $handler = new HandlerParser($this->getMonologger());
 
@@ -22,20 +22,17 @@ class HandlerParserTest extends MockeryTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testParseHandlerToThrowExceptionForLog()
+    public function testParseHandlerToThrowExceptionForLog(): void
     {
         $handler = new HandlerParser($this->getMonologger());
 
-        self::assertInstanceOf(
-            HandlerInterface::class,
-            $handler->parseHandler('chromePHP', '')
-        );
+        $handler->parseHandler('chromePHP', '');
     }
 
     /**
      * @expectedException \RuntimeException
      */
-    public function testParseHandlerToThrowExceptionForHandler()
+    public function testParseHandlerToThrowExceptionForHandler(): void
     {
         $handler = new HandlerParser($this->getMonologger());
 
@@ -45,14 +42,14 @@ class HandlerParserTest extends MockeryTestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testParseHandlerToThrowExceptionForHandlerWithObject()
+    public function testParseHandlerToThrowExceptionForHandlerWithObject(): void
     {
         $handler = new HandlerParser($this->getMonologger());
 
         $handler->parseHandler($handler, '', 'debug');
     }
 
-    public function testParseHandler()
+    public function testParseHandler(): void
     {
         $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')
@@ -63,7 +60,7 @@ class HandlerParserTest extends MockeryTestCase
         $handler->parseHandler('chromePHP', '', 'info');
     }
 
-    public function testParseHandlerWithProcessors()
+    public function testParseHandlerWithProcessors(): void
     {
         $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')
@@ -86,7 +83,7 @@ class HandlerParserTest extends MockeryTestCase
         );
     }
 
-    public function testParseHandlerWithProcessor()
+    public function testParseHandlerWithProcessor(): void
     {
         $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')
@@ -106,7 +103,7 @@ class HandlerParserTest extends MockeryTestCase
         );
     }
 
-    public function testParseHandlerWithObjectFormatter()
+    public function testParseHandlerWithObjectFormatter(): void
     {
         $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')
@@ -130,7 +127,7 @@ class HandlerParserTest extends MockeryTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testParseHandlerWithFormatterTothrowException()
+    public function testParseHandlerWithFormatterTothrowException(): void
     {
         $logger  = $this->getMonologger();
         $handler = $this->mock(HandlerInterface::class);
@@ -150,7 +147,7 @@ class HandlerParserTest extends MockeryTestCase
      *
      * @param mixed $formatter
      */
-    public function testParseHandlerWithFormatterWithDataProvider($formatter)
+    public function testParseHandlerWithFormatterWithDataProvider($formatter): void
     {
         $logger = $this->getMonologger();
         $logger->shouldReceive('pushHandler')

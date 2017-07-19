@@ -17,7 +17,7 @@ use Viserio\Component\Session\SessionManager;
 
 class SessionManagerTest extends MockeryTestCase
 {
-    public function testCookieStore()
+    public function testCookieStore(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -48,7 +48,7 @@ class SessionManagerTest extends MockeryTestCase
         self::assertTrue($session->handlerNeedsRequest());
     }
 
-    public function testArrayStore()
+    public function testArrayStore(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')

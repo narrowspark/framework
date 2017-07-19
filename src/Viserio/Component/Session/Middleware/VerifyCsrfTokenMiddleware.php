@@ -76,7 +76,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return php_sapi_name() == 'cli' && ($this->config['env'] ?? 'production') === 'testing';
+        return PHP_SAPI == 'cli' && ($this->config['env'] ?? 'production') === 'testing';
     }
 
     /**
@@ -95,11 +95,11 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
             $token = $this->manager->getEncrypter()->decrypt($header);
         }
 
-        if (! is_string($sessionToken) || ! is_string($token)) {
+        if (! \is_string($sessionToken) || ! \is_string($token)) {
             return false;
         }
 
-        return hash_equals($sessionToken, $token);
+        return \hash_equals($sessionToken, $token);
     }
 
     /**
@@ -140,6 +140,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function isReading(ServerRequestInterface $request): bool
     {
-        return in_array(mb_strtoupper($request->getMethod()), ['HEAD', 'GET', 'OPTIONS'], true);
+        return \in_array(\mb_strtoupper($request->getMethod()), ['HEAD', 'GET', 'OPTIONS'], true);
     }
 }

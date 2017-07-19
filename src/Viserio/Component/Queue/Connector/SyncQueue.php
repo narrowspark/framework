@@ -43,7 +43,7 @@ class SyncQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function pushRaw(string $payload, string $queue = null, array $options = [])
+    public function pushRaw(string $payload, string $queue = null, array $options = []): void
     {
     }
 
@@ -58,7 +58,7 @@ class SyncQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function pop(string $queue = null)
+    public function pop(string $queue = null): void
     {
     }
 
@@ -67,7 +67,7 @@ class SyncQueue extends AbstractQueue
      *
      * @param \Viserio\Component\Contracts\Queue\Job $job
      */
-    protected function raiseBeforeJobEvent(JobContract $job)
+    protected function raiseBeforeJobEvent(JobContract $job): void
     {
         if ($this->container->has('events')) {
             $this->container->get('events')->trigger(
@@ -75,7 +75,7 @@ class SyncQueue extends AbstractQueue
                 [
                     'connection' => 'sync',
                     'job'        => $job,
-                    'data'       => json_decode($job->getRawBody(), true),
+                    'data'       => \json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -86,7 +86,7 @@ class SyncQueue extends AbstractQueue
      *
      * @param \Viserio\Component\Contracts\Queue\Job $job
      */
-    protected function raiseAfterJobEvent(JobContract $job)
+    protected function raiseAfterJobEvent(JobContract $job): void
     {
         if ($this->container->has('events')) {
             $this->container->get('events')->trigger(
@@ -94,7 +94,7 @@ class SyncQueue extends AbstractQueue
                 [
                     'connection' => 'sync',
                     'job'        => $job,
-                    'data'       => json_decode($job->getRawBody(), true),
+                    'data'       => \json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -106,7 +106,7 @@ class SyncQueue extends AbstractQueue
      * @param \Viserio\Component\Contracts\Queue\Job $job
      * @param \Throwable                             $exception
      */
-    protected function raiseExceptionOccurredJobEvent(JobContract $job, Throwable $exception)
+    protected function raiseExceptionOccurredJobEvent(JobContract $job, Throwable $exception): void
     {
         if ($this->container->has('events')) {
             $this->container->get('events')->trigger(
@@ -114,7 +114,7 @@ class SyncQueue extends AbstractQueue
                 [
                     'connection' => 'sync',
                     'job'        => $job,
-                    'data'       => json_decode($job->getRawBody(), true),
+                    'data'       => \json_decode($job->getRawBody(), true),
                     'exception'  => $exception,
                 ]
             );
@@ -126,7 +126,7 @@ class SyncQueue extends AbstractQueue
      *
      * @param \Viserio\Component\Contracts\Queue\Job $job
      */
-    protected function handleFailedJob(JobContract $job)
+    protected function handleFailedJob(JobContract $job): void
     {
         $job->failed();
 
@@ -136,15 +136,16 @@ class SyncQueue extends AbstractQueue
                 [
                     'connection' => 'sync',
                     'job'        => $job,
-                    'data'       => json_decode($job->getRawBody(), true),
-                ]);
+                    'data'       => \json_decode($job->getRawBody(), true),
+                ]
+            );
         }
     }
 
     /**
      * Get a ErrorException instance.
      *
-     * @param \ParseError|\TypeError|\Throwable $exception
+     * @param \ParseError|\Throwable|\TypeError $exception
      *
      * @return \ErrorException
      */

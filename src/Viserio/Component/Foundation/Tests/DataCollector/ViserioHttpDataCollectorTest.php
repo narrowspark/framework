@@ -11,7 +11,7 @@ use Viserio\Component\Foundation\DataCollector\ViserioHttpDataCollector;
 
 class ViserioHttpDataCollectorTest extends MockeryTestCase
 {
-    public function testGetMenuAndPosition()
+    public function testGetMenuAndPosition(): void
     {
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('getAttributes')

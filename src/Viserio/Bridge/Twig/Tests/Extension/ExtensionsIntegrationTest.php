@@ -19,7 +19,7 @@ use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
  */
 class ExtensionsIntegrationTest extends IntegrationTestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

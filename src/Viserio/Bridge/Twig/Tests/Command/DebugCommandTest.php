@@ -16,7 +16,7 @@ use Viserio\Component\View\ViewFinder;
 
 class DebugCommandTest extends MockeryTestCase
 {
-    public function testThrowErrorIfTwigIsNotSet()
+    public function testThrowErrorIfTwigIsNotSet(): void
     {
         $config = [
             'config' => [
@@ -35,7 +35,7 @@ class DebugCommandTest extends MockeryTestCase
 
         $application = new Application('1');
         $application->setContainer(new ArrayContainer(
-            array_merge(
+            \array_merge(
                 $config,
                 [
                     FinderContract::class       => $finder,
@@ -49,23 +49,23 @@ class DebugCommandTest extends MockeryTestCase
 
         $tester->execute([], ['decorated' => false]);
 
-        self::assertSame('The Twig environment needs to be set.', trim($tester->getDisplay(true)));
+        self::assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
     }
 
-    public function testDebug()
+    public function testDebug(): void
     {
         $tester   = $this->createCommandTester();
         $ret      = $tester->execute([], ['decorated' => false]);
 
-        self::assertTrue(is_string($tester->getDisplay(true)));
+        self::assertTrue(\is_string($tester->getDisplay(true)));
     }
 
-    public function testDebugJsonFormat()
+    public function testDebugJsonFormat(): void
     {
         $tester   = $this->createCommandTester();
         $ret      = $tester->execute(['--format' => 'json'], ['decorated' => false]);
 
-        self::assertTrue(is_string($tester->getDisplay(true)));
+        self::assertTrue(\is_string($tester->getDisplay(true)));
     }
 
     /**
@@ -90,7 +90,7 @@ class DebugCommandTest extends MockeryTestCase
 
         $application = new Application('1');
         $application->setContainer(new ArrayContainer(
-            array_merge(
+            \array_merge(
                 $config,
                 [
                     Environment::class          => $twig,

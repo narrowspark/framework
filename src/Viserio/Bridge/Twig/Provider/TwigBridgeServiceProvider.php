@@ -39,14 +39,14 @@ class TwigBridgeServiceProvider implements ServiceProvider
      */
     public static function extendTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
     {
-        $twig = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $twig = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($twig !== null) {
             if ($container->has(Lexer::class)) {
                 $twig->setLexer($container->get(Lexer::class));
             }
 
-            if ($twig->isDebug() && class_exists(VarCloner::class)) {
+            if ($twig->isDebug() && \class_exists(VarCloner::class)) {
                 $twig->addExtension(new DumpExtension());
             }
 
@@ -70,7 +70,7 @@ class TwigBridgeServiceProvider implements ServiceProvider
             $twig->addExtension(new TranslatorExtension($container->get(TranslationManagerContract::class)));
         }
 
-        if (class_exists(Str::class)) {
+        if (\class_exists(Str::class)) {
             $twig->addExtension(new StrExtension());
         }
 

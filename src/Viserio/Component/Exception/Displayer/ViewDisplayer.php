@@ -63,7 +63,7 @@ class ViewDisplayer implements DisplayerContract
         return new HtmlResponse(
             (string) $view,
             $code,
-            array_merge($headers, ['Content-Type' => $this->contentType()])
+            \array_merge($headers, ['Content-Type' => $this->contentType()])
         );
     }
 

@@ -11,7 +11,7 @@ use Viserio\Provider\Twig\Loader;
 
 class LoaderTest extends MockeryTestCase
 {
-    public function testExists()
+    public function testExists(): void
     {
         $file = $this->mock(FilesystemContract::class);
         $file->shouldReceive('has')
@@ -50,7 +50,7 @@ class LoaderTest extends MockeryTestCase
         self::assertFalse($loader->exists('test.twig'));
     }
 
-    public function testGetSourceContext()
+    public function testGetSourceContext(): void
     {
         $file = $this->mock(FilesystemContract::class);
         $file->shouldReceive('has')
@@ -78,7 +78,7 @@ class LoaderTest extends MockeryTestCase
      * @expectedException \Twig_Error_Loader
      * @expectedExceptionMessage Twig file [test.twig] was not found.
      */
-    public function testGetSourceContextFileNotFound()
+    public function testGetSourceContextFileNotFound(): void
     {
         $file = $this->mock(FilesystemContract::class);
         $file->shouldReceive('has')
@@ -106,10 +106,10 @@ class LoaderTest extends MockeryTestCase
         $loader->getSourceContext('test.twig');
     }
 
-    public function testIsFresh()
+    public function testIsFresh(): void
     {
         $path = __DIR__ . '/Fixtures/twightml.twig.html';
-        $date = date('F d Y H:i:s', filemtime($path));
+        $date = \date('F d Y H:i:s', \filemtime($path));
         $file = $this->mock(FilesystemContract::class);
         $file->shouldReceive('has')
             ->once()
@@ -129,7 +129,7 @@ class LoaderTest extends MockeryTestCase
         self::assertTrue($loader->isFresh($path, $date));
     }
 
-    public function testFindTemplate()
+    public function testFindTemplate(): void
     {
         $file = $this->mock(FilesystemContract::class);
         $file->shouldReceive('has')

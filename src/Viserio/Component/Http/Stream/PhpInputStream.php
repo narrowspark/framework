@@ -24,11 +24,11 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * Create a new php input stream instance.
      *
-     * @param string|resource $stream
+     * @param resource|string $stream
      */
     public function __construct($stream = 'php://input')
     {
-        if (is_string($stream)) {
+        if (\is_string($stream)) {
             $stream = Util::tryFopen($stream, 'r');
         }
 

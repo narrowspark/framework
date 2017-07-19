@@ -13,10 +13,10 @@ final class StreamFactory implements StreamFactoryInterface
      */
     public function createStream($content = ''): StreamInterface
     {
-        $stream = fopen('php://memory', 'r+');
+        $stream = \fopen('php://memory', 'r+');
 
-        fwrite($stream, $content);
-        fseek($stream, 0);
+        \fwrite($stream, $content);
+        \fseek($stream, 0);
 
         return new Stream($stream);
     }
@@ -26,7 +26,7 @@ final class StreamFactory implements StreamFactoryInterface
      */
     public function createStreamFromFile($filename, $mode = 'r'): StreamInterface
     {
-        $resource = fopen($filename, $mode);
+        $resource = \fopen($filename, $mode);
 
         return new Stream($resource);
     }

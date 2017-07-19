@@ -39,7 +39,7 @@ interface View extends Renderable
     /**
      * Add a piece of data to the view.
      *
-     * @param string|array $key
+     * @param array|string $key
      * @param mixed        $value
      *
      * @return $this
@@ -49,7 +49,7 @@ interface View extends Renderable
     /**
      * Get the string contents of the view.
      *
-     * @param callable|null $callback
+     * @param null|callable $callback
      *
      * @return string
      */

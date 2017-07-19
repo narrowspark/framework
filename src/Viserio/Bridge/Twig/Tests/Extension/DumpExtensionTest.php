@@ -20,7 +20,7 @@ class DumpExtensionTest extends TestCase
      * @param mixed $expectedOutput
      * @param mixed $expectedDumped
      */
-    public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped)
+    public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped): void
     {
         $twig = new Environment(new ArrayLoader(['template' => $template]), [
             'debug'         => $debug,
@@ -31,7 +31,7 @@ class DumpExtensionTest extends TestCase
 
         $dumped     = null;
         $exception  = null;
-        $prevDumper = VarDumper::setHandler(function ($var) use (&$dumped) {
+        $prevDumper = VarDumper::setHandler(function ($var) use (&$dumped): void {
             $dumped = $var;
         });
 
@@ -66,7 +66,7 @@ class DumpExtensionTest extends TestCase
      * @param mixed $expectedOutput
      * @param mixed $debug
      */
-    public function testDump($context, $args, $expectedOutput, $debug = true)
+    public function testDump($context, $args, $expectedOutput, $debug = true): void
     {
         $extension = new DumpExtension();
         $twig      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock(), [
@@ -75,15 +75,15 @@ class DumpExtensionTest extends TestCase
             'optimizations' => 0,
         ]);
 
-        array_unshift($args, $context);
-        array_unshift($args, $twig);
+        \array_unshift($args, $context);
+        \array_unshift($args, $twig);
 
-        $dump = call_user_func_array([$extension, 'dump'], $args);
+        $dump = \call_user_func_array([$extension, 'dump'], $args);
 
         if ($debug) {
             self::assertStringStartsWith('<script>', $dump);
-            $dump = preg_replace('/^.*?<pre/', '<pre', $dump);
-            $dump = preg_replace('/sf-dump-\d+/', 'sf-dump', $dump);
+            $dump = \preg_replace('/^.*?<pre/', '<pre', $dump);
+            $dump = \preg_replace('/sf-dump-\d+/', 'sf-dump', $dump);
         }
 
         self::assertEquals($expectedOutput, $dump);
@@ -111,7 +111,7 @@ class DumpExtensionTest extends TestCase
         ];
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         self::assertEquals('Viserio_Bridge_Twig_Extension_Dump', (new DumpExtension())->getName());
     }

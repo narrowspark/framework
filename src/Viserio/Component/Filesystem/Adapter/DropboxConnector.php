@@ -14,7 +14,7 @@ class DropboxConnector extends AbstractConnector
      */
     protected function getAuth(array $config): array
     {
-        if (! array_key_exists('token', $config)) {
+        if (! \array_key_exists('token', $config)) {
             throw new InvalidArgumentException('The dropbox connector requires authentication token.');
         }
 
@@ -34,7 +34,7 @@ class DropboxConnector extends AbstractConnector
      */
     protected function getConfig(array $config): array
     {
-        if (! array_key_exists('prefix', $config)) {
+        if (! \array_key_exists('prefix', $config)) {
             $config['prefix'] = '';
         }
 

@@ -12,14 +12,14 @@ class ActionTest extends TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Route for [/] has no action.
      */
-    public function testParserMissingAction()
+    public function testParserMissingAction(): void
     {
         $parser = Action::parse('/', null);
 
         $parser['uses']();
     }
 
-    public function testParserWithAction()
+    public function testParserWithAction(): void
     {
         $parser = Action::parse('/', function () {
             return true;
@@ -28,7 +28,7 @@ class ActionTest extends TestCase
         self::assertTrue($parser['uses']());
     }
 
-    public function testParserFindAction()
+    public function testParserFindAction(): void
     {
         $parser = Action::parse('/', ['bar' => 'foo', function () {
             return true;
@@ -41,12 +41,12 @@ class ActionTest extends TestCase
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Invalid route action: [foo].
      */
-    public function testParserNoInvokeFound()
+    public function testParserNoInvokeFound(): void
     {
         Action::parse('/', ['uses' => 'foo']);
     }
 
-    public function testParserWithInvoke()
+    public function testParserWithInvoke(): void
     {
         $parser = Action::parse('/', ['uses' => InvokableActionFixture::class]);
 

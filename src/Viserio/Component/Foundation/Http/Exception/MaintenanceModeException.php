@@ -33,9 +33,9 @@ class MaintenanceModeException extends ServiceUnavailableException
      * Create a new MaintenanceModeException instance.
      *
      * @param int             $time
-     * @param int|null        $retryAfter
-     * @param string|null     $message
-     * @param \Throwable|null $previous
+     * @param null|int        $retryAfter
+     * @param null|string     $message
+     * @param null|\Throwable $previous
      */
     public function __construct(
         int $time,

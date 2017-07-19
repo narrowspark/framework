@@ -7,41 +7,41 @@ use Viserio\Component\Profiler\Tests\Fixture\FixtureDataCollector;
 
 class DataCollectorTest extends TestCase
 {
-    public function testGetName()
+    public function testGetName(): void
     {
         $collector = new FixtureDataCollector();
 
         self::assertSame('fixture-data-collector', $collector->getName());
     }
 
-    public function testGetMenuPosition()
+    public function testGetMenuPosition(): void
     {
         self::assertSame('left', (new FixtureDataCollector())->getMenuPosition());
     }
 
-    public function testCreateTableDefault()
+    public function testCreateTableDefault(): void
     {
         $collector    = new FixtureDataCollector();
-        $defaultTable = file_get_contents(__DIR__ . '/../Fixture/View/default_table.html');
+        $defaultTable = \file_get_contents(__DIR__ . '/../Fixture/View/default_table.html');
 
         self::assertSame(
-            $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $defaultTable)),
-            $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $collector->getTableDefault()))
+            $this->removeSymfonyVarDumper(\preg_replace('/(\r\n|\n\r|\r)/', "\n", $defaultTable)),
+            $this->removeSymfonyVarDumper(\preg_replace('/(\r\n|\n\r|\r)/', "\n", $collector->getTableDefault()))
         );
     }
 
-    public function testCreateTableArray()
+    public function testCreateTableArray(): void
     {
         $collector    = new FixtureDataCollector();
-        $defaultTable = file_get_contents(__DIR__ . '/../Fixture/View/array_table.html');
+        $defaultTable = \file_get_contents(__DIR__ . '/../Fixture/View/array_table.html');
 
         self::assertSame(
-            $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $defaultTable)),
-            $this->removeSymfonyVarDumper(preg_replace('/(\r\n|\n\r|\r)/', "\n", $collector->getTableArray()))
+            $this->removeSymfonyVarDumper(\preg_replace('/(\r\n|\n\r|\r)/', "\n", $defaultTable)),
+            $this->removeSymfonyVarDumper(\preg_replace('/(\r\n|\n\r|\r)/', "\n", $collector->getTableArray()))
         );
     }
 
-    public function testCreateTooltipGroupDefault()
+    public function testCreateTooltipGroupDefault(): void
     {
         $collector = new FixtureDataCollector();
 
@@ -51,7 +51,7 @@ class DataCollectorTest extends TestCase
         );
     }
 
-    public function testCreateTooltipGroupDefaultWithLink()
+    public function testCreateTooltipGroupDefaultWithLink(): void
     {
         $collector = new FixtureDataCollector();
 
@@ -61,7 +61,7 @@ class DataCollectorTest extends TestCase
         );
     }
 
-    public function testCreateTooltipGroupArray()
+    public function testCreateTooltipGroupArray(): void
     {
         $collector = new FixtureDataCollector();
 
@@ -71,7 +71,7 @@ class DataCollectorTest extends TestCase
         );
     }
 
-    public function testCreateTabs()
+    public function testCreateTabs(): void
     {
         $collector = new FixtureDataCollector();
 
@@ -81,7 +81,7 @@ class DataCollectorTest extends TestCase
         );
     }
 
-    public function testCreateDropdownMenuContent()
+    public function testCreateDropdownMenuContent(): void
     {
         $collector = new FixtureDataCollector();
 
@@ -93,19 +93,19 @@ class DataCollectorTest extends TestCase
 
     private function removeSymfonyVarDumper(string $html): string
     {
-        $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/', '', $html);
-        $html = preg_replace('/<style\b[^>]*>(.*?)<\/style>/', '', $html);
+        $html = \preg_replace('/<script\b[^>]*>(.*?)<\/script>/', '', $html);
+        $html = \preg_replace('/<style\b[^>]*>(.*?)<\/style>/', '', $html);
 
-        return trim(preg_replace('/id=sf-dump-(?:\d+) /', '', $html));
+        return \trim(\preg_replace('/id=sf-dump-(?:\d+) /', '', $html));
     }
 
     private function removeTabId(string $html): string
     {
-        return trim(preg_replace('/="tab-0(.*?)"/', '', $html));
+        return \trim(\preg_replace('/="tab-0(.*?)"/', '', $html));
     }
 
     private function removeDropdownMenuId(string $html): string
     {
-        return trim(preg_replace('/="content-dropdown(.*?)"/', '', $html));
+        return \trim(\preg_replace('/="content-dropdown(.*?)"/', '', $html));
     }
 }

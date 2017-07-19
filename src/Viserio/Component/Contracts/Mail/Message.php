@@ -8,7 +8,7 @@ interface Message
      * Add a "from" address to the message.
      *
      * @param string      $address
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return $this
      */
@@ -18,7 +18,7 @@ interface Message
      * Set the "sender" of the message.
      *
      * @param string      $address
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return $this
      */
@@ -36,8 +36,8 @@ interface Message
     /**
      * Add a recipient to the message.
      *
-     * @param string|array $address
-     * @param string|null  $name
+     * @param array|string $address
+     * @param null|string  $name
      * @param bool         $override Will force ignoring the previous recipients
      *
      * @return $this
@@ -47,8 +47,8 @@ interface Message
     /**
      * Add a Chronos copy to the message.
      *
-     * @param string|array $address
-     * @param string|null  $name
+     * @param array|string $address
+     * @param null|string  $name
      * @param bool         $override Will force ignoring the previous recipients
      *
      * @return $this
@@ -58,8 +58,8 @@ interface Message
     /**
      * Add a blind Chronos copy to the message.
      *
-     * @param string|array $address
-     * @param string|null  $name
+     * @param array|string $address
+     * @param null|string  $name
      * @param bool         $override Will force ignoring the previous recipients
      *
      * @return $this
@@ -70,7 +70,7 @@ interface Message
      * Add a reply to address to the message.
      *
      * @param string      $address
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return $this
      */
@@ -129,7 +129,7 @@ interface Message
      *
      * @param string      $data
      * @param string      $name
-     * @param string|null $contentType
+     * @param null|string $contentType
      *
      * @return string
      */

@@ -15,7 +15,7 @@ final class Cookie implements StringableContract
     protected $name;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     protected $value;
 
@@ -23,7 +23,7 @@ final class Cookie implements StringableContract
      * Create a new cookie instance.
      *
      * @param string      $name  the name of the cookie
-     * @param string|null $value the value of the cookie
+     * @param null|string $value the value of the cookie
      *
      * @throws \InvalidArgumentException
      */
@@ -43,9 +43,9 @@ final class Cookie implements StringableContract
      */
     public function __toString()
     {
-        $name  = urlencode($this->name) . '=';
+        $name  = \urlencode($this->name) . '=';
 
-        return $name . urlencode($this->getValue());
+        return $name . \urlencode($this->getValue());
     }
 
     /**
@@ -61,7 +61,7 @@ final class Cookie implements StringableContract
     /**
      * Sets the value.
      *
-     * @param string|null $value
+     * @param null|string $value
      *
      * @return $this
      */

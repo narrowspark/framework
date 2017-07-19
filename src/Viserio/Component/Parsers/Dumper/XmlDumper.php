@@ -16,7 +16,7 @@ class XmlDumper implements DumperContract
     public function dump(array $data): string
     {
         // @codeCoverageIgnoreStart
-        if (! class_exists(ArrayToXml::class)) {
+        if (! \class_exists(ArrayToXml::class)) {
             throw new RuntimeException('Unable to dump XML, the ArrayToXml dumper is not installed.');
         }
         // @codeCoverageIgnoreEnd

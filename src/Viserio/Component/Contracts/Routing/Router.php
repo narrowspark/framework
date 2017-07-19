@@ -24,7 +24,7 @@ interface Router
      * Register a new GET route with the router.
      *
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -34,7 +34,7 @@ interface Router
      * Register a new POST route with the router.
      *
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -44,7 +44,7 @@ interface Router
      * Register a new PUT route with the router.
      *
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -54,7 +54,7 @@ interface Router
      * Register a new PATCH route with the router.
      *
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -64,7 +64,7 @@ interface Router
      * Register a new HEAD route with the router.
      *
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -74,7 +74,7 @@ interface Router
      * Register a new DELETE route with the router.
      *
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -84,7 +84,7 @@ interface Router
      * Register a new OPTIONS route with the router.
      *
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -94,7 +94,7 @@ interface Router
      * Register a new route responding to all verbs.
      *
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -105,7 +105,7 @@ interface Router
      *
      * @param array|string               $methods
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */
@@ -213,7 +213,7 @@ interface Router
     /**
      * Get the currently dispatched route instance.
      *
-     * @return \Viserio\Component\Contracts\Routing\Route|null
+     * @return null|\Viserio\Component\Contracts\Routing\Route
      */
     public function getCurrentRoute(): ?Route;
 

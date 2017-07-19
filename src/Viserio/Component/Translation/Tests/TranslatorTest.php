@@ -13,7 +13,7 @@ class TranslatorTest extends MockeryTestCase
 {
     private $translator;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -35,13 +35,13 @@ class TranslatorTest extends MockeryTestCase
         );
     }
 
-    public function testGetFormatterAndCatalogue()
+    public function testGetFormatterAndCatalogue(): void
     {
         self::assertInstanceOf(MessageCatalogue::class, $this->translator->getCatalogue());
         self::assertInstanceOf(MessageFormatterContract::class, $this->translator->getFormatter());
     }
 
-    public function testTrans()
+    public function testTrans(): void
     {
         self::assertSame('bar', $this->translator->trans('foo'));
 
@@ -70,17 +70,17 @@ class TranslatorTest extends MockeryTestCase
         );
     }
 
-    public function testTransWithDomain()
+    public function testTransWithDomain(): void
     {
         self::assertSame('foo', $this->translator->trans('foo', [], 'admin'));
     }
 
-    public function testTransWithVars()
+    public function testTransWithVars(): void
     {
         self::assertSame('Hallo Daniel', $this->translator->trans('Hallo {name}', ['name' => 'Daniel']));
     }
 
-    public function testSetAndGetLogger()
+    public function testSetAndGetLogger(): void
     {
         $logger = $this->mock(LoggerInterface::class);
         $logger
@@ -112,13 +112,13 @@ class TranslatorTest extends MockeryTestCase
         self::assertSame('salat', $this->translator->trans('wurst'));
     }
 
-    public function testTranslateAddHelper()
+    public function testTranslateAddHelper(): void
     {
         $this->translator->addHelper('firstUpper', function ($translation) {
-            return ucfirst($translation);
+            return \ucfirst($translation);
         });
         $this->translator->addHelper('truncate', function ($translation, $length) {
-            return mb_substr($translation, 0, (int) $length);
+            return \mb_substr($translation, 0, (int) $length);
         });
 
         self::assertSame('He', $this->translator->trans('hello[truncate:2|firstUpper]'));
@@ -132,10 +132,10 @@ class TranslatorTest extends MockeryTestCase
         );
     }
 
-    public function testTranslateAddFilter()
+    public function testTranslateAddFilter(): void
     {
         $this->translator->addFilter(function ($message) {
-            return strrev($message);
+            return \strrev($message);
         });
 
         self::assertSame('olleh', $this->translator->trans('hello'));

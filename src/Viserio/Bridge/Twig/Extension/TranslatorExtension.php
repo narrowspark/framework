@@ -16,14 +16,14 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Translation instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\TranslationManager|null
+     * @var null|\Viserio\Component\Contracts\Translation\TranslationManager
      */
     protected $translationManager;
 
     /**
      * A instance of NodeVisitorInterface.
      *
-     * @var \Twig\NodeVisitor\NodeVisitorInterface|null
+     * @var null|\Twig\NodeVisitor\NodeVisitorInterface
      */
     private $translationNodeVisitor;
 
@@ -31,7 +31,7 @@ class TranslatorExtension extends AbstractExtension
      * Create a new translator extension.
      *
      * @param \Viserio\Component\Contracts\Translation\TranslationManager $translationManager
-     * @param \Twig\NodeVisitor\NodeVisitorInterface|null                 $translationNodeVisitor
+     * @param null|\Twig\NodeVisitor\NodeVisitorInterface                 $translationNodeVisitor
      */
     public function __construct(TranslationManagerContract $translationManager, ?NodeVisitorInterface $translationNodeVisitor = null)
     {
@@ -117,7 +117,7 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Get a language translator instance.
      *
-     * @param string|null $locale
+     * @param null|string $locale
      *
      * @throws \RuntimeException
      *
@@ -134,7 +134,7 @@ class TranslatorExtension extends AbstractExtension
      * @param string      $id         The message id
      * @param mixed       $parameters An array of parameters for the message
      * @param string      $domain     The domain for the message or null to use the default
-     * @param string|null $locale     The locale to change the translator language
+     * @param null|string $locale     The locale to change the translator language
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *
@@ -146,7 +146,7 @@ class TranslatorExtension extends AbstractExtension
         string $domain = 'messages',
         ?string $locale = null
     ): string {
-        if (is_numeric($parameters)) {
+        if (\is_numeric($parameters)) {
             $parameters = ['count' => $parameters];
         }
 

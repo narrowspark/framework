@@ -40,9 +40,9 @@ class SqsJob extends AbstractJob
         $this->container = $container;
     }
 
-    public function run()
+    public function run(): void
     {
-        $this->resolveAndrun(json_decode($this->getRawBody(), true));
+        $this->resolveAndrun(\json_decode($this->getRawBody(), true));
     }
 
     /**
@@ -56,7 +56,7 @@ class SqsJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function delete()
+    public function delete(): void
     {
         parent::delete();
 
@@ -68,7 +68,7 @@ class SqsJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function release(int $delay = 0)
+    public function release(int $delay = 0): void
     {
         parent::release($delay);
 

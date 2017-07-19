@@ -11,6 +11,6 @@ class QueryStrDumper implements DumperContract
      */
     public function dump(array $data): string
     {
-        return http_build_query($data);
+        return \http_build_query($data);
     }
 }

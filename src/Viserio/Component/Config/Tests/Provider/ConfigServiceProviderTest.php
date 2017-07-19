@@ -12,7 +12,7 @@ use Viserio\Component\Parsers\FileLoader;
 
 class ConfigServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->instance(LoaderContract::class, new FileLoader());

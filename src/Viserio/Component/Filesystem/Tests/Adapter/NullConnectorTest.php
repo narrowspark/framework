@@ -8,7 +8,7 @@ use Viserio\Component\Filesystem\Adapter\NullConnector;
 
 class NullConnectorTest extends TestCase
 {
-    public function testConnect()
+    public function testConnect(): void
     {
         $connector = new NullConnector();
 

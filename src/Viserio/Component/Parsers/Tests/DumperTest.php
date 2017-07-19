@@ -26,18 +26,18 @@ class DumperTest extends TestCase
      */
     private $dumper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->dumper = new Dumper();
         $this->parser = new Parser();
     }
 
-    public function testDumper()
+    public function testDumper(): void
     {
-        self::assertTrue(is_string($this->dumper->dump($this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts'), 'ts')));
+        self::assertTrue(\is_string($this->dumper->dump($this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts'), 'ts')));
     }
 
-    public function testAddNewDumper()
+    public function testAddNewDumper(): void
     {
         $this->dumper->addMimeType('text/plain', 'txt');
         $this->dumper->addDumper(new TextDumper(), 'txt');
@@ -45,7 +45,7 @@ class DumperTest extends TestCase
         self::assertEquals('test', $this->dumper->dump(['test'], 'text/plain'));
     }
 
-    public function testGetParser()
+    public function testGetParser(): void
     {
         self::assertInstanceOf(IniDumper::class, $this->dumper->getDumper('ini'));
         self::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('json'));
@@ -71,7 +71,7 @@ class DumperTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
      * @expectedExceptionMessage Given extension or mime type [inia] is not supported.
      */
-    public function testGetParserToThrowException()
+    public function testGetParserToThrowException(): void
     {
         $this->dumper->getDumper('inia');
     }

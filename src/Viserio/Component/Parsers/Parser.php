@@ -116,11 +116,11 @@ class Parser
         if ($format !== 'php') {
             $fileName = self::normalizeDirectorySeparator($payload);
 
-            if (is_file($fileName)) {
-                $payload  = file_get_contents($fileName);
+            if (\is_file($fileName)) {
+                $payload  = \file_get_contents($fileName);
 
                 if ($payload === false) {
-                    throw new RuntimeException(sprintf('A error occurred during reading [%s]', $fileName));
+                    throw new RuntimeException(\sprintf('A error occurred during reading [%s]', $fileName));
                 }
             }
         }
@@ -144,14 +144,14 @@ class Parser
         } elseif (isset(self::$supportedMimeTypes[$type])) {
             $class = self::$supportedParsers[self::$supportedMimeTypes[$type]];
 
-            if (is_object($class)) {
+            if (\is_object($class)) {
                 return $class;
             }
 
             return new $class();
         }
 
-        throw new NotSupportedException(sprintf('Given extension or mime type [%s] is not supported.', $type));
+        throw new NotSupportedException(\sprintf('Given extension or mime type [%s] is not supported.', $type));
     }
 
     /**
@@ -165,13 +165,13 @@ class Parser
     {
         $format = '';
 
-        if (is_file($file = self::normalizeDirectorySeparator($payload))) {
-            $format = pathinfo($file, PATHINFO_EXTENSION);
-        } elseif (is_string($payload)) {
+        if (\is_file($file = self::normalizeDirectorySeparator($payload))) {
+            $format = \pathinfo($file, PATHINFO_EXTENSION);
+        } elseif (\is_string($payload)) {
             // try if content is json
-            json_decode($payload);
+            \json_decode($payload);
 
-            if (json_last_error() === JSON_ERROR_NONE) {
+            if (\json_last_error() === JSON_ERROR_NONE) {
                 return 'json';
             }
 

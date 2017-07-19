@@ -64,7 +64,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
      */
     public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {
-        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $profiler = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($getPrevious !== null) {
             $options = self::resolveOptions($container);
@@ -90,7 +90,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
      */
     public static function extendTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
     {
-        $twig = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $twig = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($twig !== null) {
             $options = self::resolveOptions($container);

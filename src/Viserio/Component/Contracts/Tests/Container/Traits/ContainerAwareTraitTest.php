@@ -11,7 +11,7 @@ class ContainerAwareTraitTest extends TestCase
 {
     use ContainerAwareTrait;
 
-    public function testGetAndSetContainer()
+    public function testGetAndSetContainer(): void
     {
         $this->setContainer(new ArrayContainer());
 
@@ -22,7 +22,7 @@ class ContainerAwareTraitTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Container is not set up.
      */
-    public function testGetContainerThrowExceptionIfContainerIsNotSet()
+    public function testGetContainerThrowExceptionIfContainerIsNotSet(): void
     {
         $this->getContainer();
     }

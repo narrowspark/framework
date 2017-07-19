@@ -64,16 +64,16 @@ class KeyGenerateCommand extends Command
         $container  = $this->getContainer();
         $currentKey = $container->get(RepositoryContract::class)->get('viserio.app.key', '');
 
-        if (mb_strlen($currentKey) !== 0 && (! $this->confirmToProceed())) {
+        if (\mb_strlen($currentKey) !== 0 && (! $this->confirmToProceed())) {
             return false;
         }
 
         $env = $container->get(ConsoleKernelContract::class)->getEnvironmentFilePath();
 
-        file_put_contents($env, str_replace(
+        \file_put_contents($env, \str_replace(
             'APP_KEY=' . $currentKey,
             'APP_KEY=' . $key,
-            file_get_contents($env)
+            \file_get_contents($env)
         ));
 
         return true;

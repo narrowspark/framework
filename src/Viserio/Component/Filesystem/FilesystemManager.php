@@ -32,7 +32,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Get a crypted aware connection instance.
      *
      * @param \Defuse\Crypto\Key $key
-     * @param string|null        $name
+     * @param null|string        $name
      *
      * @return \Viserio\Component\Filesystem\Encryption\EncryptionWrapper
      */
@@ -44,7 +44,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     /**
      * Get the clean flysystem adapter.
      *
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -82,7 +82,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     {
         $config = parent::getConnectionConfig($name);
 
-        if (is_string($cacheName = Arr::get($config, 'cache'))) {
+        if (\is_string($cacheName = Arr::get($config, 'cache'))) {
             $config['cache'] = $this->getCacheConfig($cacheName);
         }
 
@@ -110,8 +110,8 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     {
         $cache = $this->resolvedOptions['cached'];
 
-        if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
-            throw new InvalidArgumentException(sprintf('Cache [%s] not configured.', $name));
+        if (! \is_array($config = Arr::get($cache, $name)) && ! $config) {
+            throw new InvalidArgumentException(\sprintf('Cache [%s] not configured.', $name));
         }
 
         $config['name'] = $name;
@@ -129,7 +129,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     protected function adapt(AdapterInterface $adapter, array $config): FilesystemContract
     {
-        if (isset($config['cache']) && is_array($config['cache'])) {
+        if (isset($config['cache']) && \is_array($config['cache'])) {
             $cacheFactory = new CachedFactory($this, $this->getCacheManager());
 
             $adapter = new CachedAdapter($adapter, $cacheFactory->getConnection($config));

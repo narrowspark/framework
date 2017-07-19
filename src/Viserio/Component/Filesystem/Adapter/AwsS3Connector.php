@@ -23,19 +23,19 @@ class AwsS3Connector extends AbstractConnector
             'credentials' => Arr::only($config, ['key', 'secret']),
         ];
 
-        if (array_key_exists('bucket_endpoint', $config)) {
+        if (\array_key_exists('bucket_endpoint', $config)) {
             $auth['bucket_endpoint'] = $config['bucket_endpoint'];
         }
 
-        if (array_key_exists('calculate_md5', $config)) {
+        if (\array_key_exists('calculate_md5', $config)) {
             $auth['calculate_md5'] = $config['calculate_md5'];
         }
 
-        if (array_key_exists('scheme', $config)) {
+        if (\array_key_exists('scheme', $config)) {
             $auth['scheme'] = $config['scheme'];
         }
 
-        if (array_key_exists('endpoint', $config)) {
+        if (\array_key_exists('endpoint', $config)) {
             $auth['endpoint'] = $config['endpoint'];
         }
 
@@ -55,15 +55,15 @@ class AwsS3Connector extends AbstractConnector
      */
     protected function getConfig(array $config): array
     {
-        if (! array_key_exists('prefix', $config)) {
+        if (! \array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 
-        if (! array_key_exists('bucket', $config)) {
+        if (! \array_key_exists('bucket', $config)) {
             throw new InvalidArgumentException('The awss3 connector requires a bucket configuration.');
         }
 
-        if (! array_key_exists('options', $config)) {
+        if (! \array_key_exists('options', $config)) {
             $config['options'] = [];
         }
 
@@ -85,17 +85,17 @@ class AwsS3Connector extends AbstractConnector
      *
      * @throws \InvalidArgumentException
      */
-    private function checkForKeyInConfigArray(array $config)
+    private function checkForKeyInConfigArray(array $config): void
     {
-        if (! array_key_exists('key', $config) || ! array_key_exists('secret', $config)) {
+        if (! \array_key_exists('key', $config) || ! \array_key_exists('secret', $config)) {
             throw new InvalidArgumentException('The awss3 connector requires authentication.');
         }
 
-        if (! array_key_exists('version', $config)) {
+        if (! \array_key_exists('version', $config)) {
             throw new InvalidArgumentException('The awss3 connector requires version configuration.');
         }
 
-        if (! array_key_exists('region', $config)) {
+        if (! \array_key_exists('region', $config)) {
             throw new InvalidArgumentException('The awss3 connector requires region configuration.');
         }
     }

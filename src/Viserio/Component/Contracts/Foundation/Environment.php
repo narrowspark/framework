@@ -10,7 +10,7 @@ interface Environment
      * Detect the application's current environment.
      *
      * @param \Closure   $callback
-     * @param array|null $consoleArgs
+     * @param null|array $consoleArgs
      *
      * @return string
      */

@@ -24,7 +24,7 @@ class FileSessionHandlerTest extends TestCase
      */
     private $files;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->root    = vfsStream::setup();
         $this->files   = new Filesystem();
@@ -37,28 +37,28 @@ class FileSessionHandlerTest extends TestCase
         $this->files->createDirectory(__DIR__ . '/stubs');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
 
         parent::tearDown();
     }
 
-    public function testOpenReturnsTrue()
+    public function testOpenReturnsTrue(): void
     {
         $handler = $this->handler;
 
         self::assertTrue($handler->open($this->root->url(), 'temp'));
     }
 
-    public function testCloseReturnsTrue()
+    public function testCloseReturnsTrue(): void
     {
         $handler = $this->handler;
 
         self::assertTrue($handler->close());
     }
 
-    public function testReadExistingSessionReturnsTheData()
+    public function testReadExistingSessionReturnsTheData(): void
     {
         vfsStream::newFile('temp')->withContent('Foo Bar')->at($this->root);
 
@@ -67,7 +67,7 @@ class FileSessionHandlerTest extends TestCase
         self::assertSame('Foo Bar', $handler->read('temp'));
     }
 
-    public function testReadMissingSessionReturnsAnEmptyString()
+    public function testReadMissingSessionReturnsAnEmptyString(): void
     {
         vfsStream::newFile('temp')->withContent('Foo Bar')->at($this->root);
 
@@ -76,7 +76,7 @@ class FileSessionHandlerTest extends TestCase
         self::assertSame('', $handler->read('12'));
     }
 
-    public function testWriteSuccessfullyReturnsTrue()
+    public function testWriteSuccessfullyReturnsTrue(): void
     {
         $handler = new FileSessionHandler(
             $this->files,
@@ -84,12 +84,12 @@ class FileSessionHandlerTest extends TestCase
             120
         );
 
-        self::assertTrue($handler->write('write.sess', json_encode(['user_id' => 1])));
+        self::assertTrue($handler->write('write.sess', \json_encode(['user_id' => 1])));
     }
 
-    public function testGcSuccessfullyReturnsTrue()
+    public function testGcSuccessfullyReturnsTrue(): void
     {
-        if (getenv('TRAVIS')) {
+        if (\getenv('TRAVIS')) {
             $this->markTestSkipped('FileSessionHandler::gc() dont work on travis. ');
         }
 
@@ -98,17 +98,17 @@ class FileSessionHandlerTest extends TestCase
             __DIR__ . '/stubs',
             120
         );
-        $handler->write('temp.sess', json_encode(['user_id' => 1]));
+        $handler->write('temp.sess', \json_encode(['user_id' => 1]));
 
         self::assertSame('{"user_id":1}', $handler->read('temp.sess'));
 
-        sleep(2);
+        \sleep(2);
 
         self::assertTrue($handler->gc(2));
         self::assertSame('', $handler->read('temp.sess'));
     }
 
-    public function testDestroySuccessfullReturnsTrue()
+    public function testDestroySuccessfullReturnsTrue(): void
     {
         vfsStream::newFile('destroy.sess')->withContent('Foo Bar')->at($this->root);
 

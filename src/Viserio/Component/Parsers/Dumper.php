@@ -118,13 +118,13 @@ class Dumper
         } elseif (isset(self::$supportedMimeTypes[$type])) {
             $class = self::$supportedDumper[self::$supportedMimeTypes[$type]];
 
-            if (is_object($class)) {
+            if (\is_object($class)) {
                 return $class;
             }
 
             return new $class();
         }
 
-        throw new NotSupportedException(sprintf('Given extension or mime type [%s] is not supported.', $type));
+        throw new NotSupportedException(\sprintf('Given extension or mime type [%s] is not supported.', $type));
     }
 }

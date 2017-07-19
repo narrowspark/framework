@@ -50,7 +50,7 @@ interface EventManager
      * and returns false.
      *
      * @param string|\Viserio\Component\Contracts\Events\Event $event
-     * @param object|string|null                               $target
+     * @param null|object|string                               $target
      * @param array                                            $argv
      *
      * @return bool

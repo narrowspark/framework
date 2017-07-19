@@ -85,7 +85,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function hasHeader($header): bool
     {
-        return isset($this->headerNames[mb_strtolower($header)]);
+        return isset($this->headerNames[\mb_strtolower($header)]);
     }
 
     /**
@@ -97,10 +97,10 @@ abstract class AbstractMessage implements MessageInterface
             return [];
         }
 
-        $header = mb_strtolower($header);
+        $header = \mb_strtolower($header);
         $header = $this->headerNames[$header];
         $value  = $this->headers[$header];
-        $value  = is_array($value) ? $value : [$value];
+        $value  = \is_array($value) ? $value : [$value];
 
         return $value;
     }
@@ -116,7 +116,7 @@ abstract class AbstractMessage implements MessageInterface
             return '';
         }
 
-        return implode(',', $value);
+        return \implode(',', $value);
     }
 
     /**
@@ -127,8 +127,8 @@ abstract class AbstractMessage implements MessageInterface
         $value = $this->checkHeaderData($header, $value);
 
         $value      = $this->trimHeaderValues($value);
-        $header     = trim($header);
-        $normalized = mb_strtolower($header);
+        $header     = \trim($header);
+        $normalized = \mb_strtolower($header);
         $new        = clone $this;
 
         // Remove the header lines.
@@ -149,12 +149,12 @@ abstract class AbstractMessage implements MessageInterface
     public function withAddedHeader($header, $value): self
     {
         $value      = $this->checkHeaderData($header, $value);
-        $normalized = mb_strtolower($header);
+        $normalized = \mb_strtolower($header);
         $new        = clone $this;
 
         if (isset($new->headerNames[$normalized])) {
             $header                = $this->headerNames[$normalized];
-            $new->headers[$header] = array_merge($this->headers[$header], $value);
+            $new->headers[$header] = \array_merge($this->headers[$header], $value);
         } else {
             $new->headerNames[$normalized] = $header;
             $new->headers[$header]         = $value;
@@ -168,7 +168,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withoutHeader($header): self
     {
-        $normalized = mb_strtolower($header);
+        $normalized = \mb_strtolower($header);
 
         if (! isset($this->headerNames[$normalized])) {
             return $this;
@@ -188,7 +188,7 @@ abstract class AbstractMessage implements MessageInterface
     public function getBody(): StreamInterface
     {
         if (! $this->stream) {
-            $this->stream = new Stream(fopen('php://temp', 'r+'));
+            $this->stream = new Stream(\fopen('php://temp', 'r+'));
         }
 
         return $this->stream;
@@ -225,16 +225,16 @@ abstract class AbstractMessage implements MessageInterface
         $this->headerNames = $this->headers = [];
 
         foreach ($headers as $header => $value) {
-            if (! is_array($value)) {
+            if (! \is_array($value)) {
                 $value = [$value];
             }
 
             $value      = $this->trimHeaderValues($this->filterHeaderValue($value));
-            $normalized = mb_strtolower($header);
+            $normalized = \mb_strtolower($header);
 
             if (isset($this->headerNames[$normalized])) {
                 $header                 = $this->headerNames[$normalized];
-                $this->headers[$header] = array_merge($this->headers[$header], $value);
+                $this->headers[$header] = \array_merge($this->headers[$header], $value);
             } else {
                 $this->headerNames[$normalized] = $header;
                 $this->headers[$header]         = $value;
@@ -245,7 +245,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Create a new stream based on the input type.
      *
-     * @param string|null|resource|\Psr\Http\Message\StreamInterface $body
+     * @param null|\Psr\Http\Message\StreamInterface|resource|string $body
      *
      * @throws \InvalidArgumentException if the $resource arg is not valid
      *
@@ -253,26 +253,26 @@ abstract class AbstractMessage implements MessageInterface
      */
     protected function createStream($body): StreamInterface
     {
-        $type = gettype($body);
+        $type = \gettype($body);
 
         if ($body instanceof StreamInterface) {
             return $body;
-        } elseif (is_string($body)) {
-            $stream = fopen('php://temp', 'r+');
+        } elseif (\is_string($body)) {
+            $stream = \fopen('php://temp', 'r+');
 
             if ($body !== '') {
-                fwrite($stream, $body);
-                fseek($stream, 0);
+                \fwrite($stream, $body);
+                \fseek($stream, 0);
             }
 
             return new Stream($stream);
         } elseif ($type === 'NULL') {
-            return new Stream(fopen('php://temp', 'r+'));
+            return new Stream(\fopen('php://temp', 'r+'));
         } elseif ($type === 'resource') {
             return new Stream($body);
         }
 
-        throw new InvalidArgumentException('Invalid resource type: ' . gettype($body));
+        throw new InvalidArgumentException('Invalid resource type: ' . \gettype($body));
     }
 
     /**
@@ -287,7 +287,7 @@ abstract class AbstractMessage implements MessageInterface
     private function validateProtocolVersion(string $version): void
     {
         if (empty($version)) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'HTTP protocol version can not be empty'
             ));
         }
@@ -295,7 +295,7 @@ abstract class AbstractMessage implements MessageInterface
         if (! isset(self::$validProtocolVersions[$version])) {
             throw new InvalidArgumentException(
                 'Invalid HTTP version. Must be one of: '
-                . implode(', ', array_keys(self::$validProtocolVersions))
+                . \implode(', ', \array_keys(self::$validProtocolVersions))
             );
         }
     }
@@ -304,13 +304,13 @@ abstract class AbstractMessage implements MessageInterface
      * Check all header values and header name.
      *
      * @param string       $header
-     * @param string|array $value
+     * @param array|string $value
      *
      * @return array
      */
     private function checkHeaderData(string $header, $value): array
     {
-        if (is_string($value)) {
+        if (\is_string($value)) {
             $value = [$value];
         }
 
@@ -320,7 +320,7 @@ abstract class AbstractMessage implements MessageInterface
             );
         }
 
-        HeaderSecurity::assertValidName(trim($header));
+        HeaderSecurity::assertValidName(\trim($header));
 
         $this->assertValidHeaderValue($value);
 
@@ -340,20 +340,20 @@ abstract class AbstractMessage implements MessageInterface
     {
         // Test if a value is a string.
         $filterStringValue = function (bool $carry, $item) {
-            if (! is_string($item)) {
+            if (! \is_string($item)) {
                 return false;
             }
 
             return $carry;
         };
 
-        return array_reduce($array, $filterStringValue, true);
+        return \array_reduce($array, $filterStringValue, true);
     }
 
     /**
      * Assert that the provided header values are valid.
      *
-     * @link http://tools.ietf.org/html/rfc7230#section-3.2
+     * @see http://tools.ietf.org/html/rfc7230#section-3.2
      *
      * @param array $values
      *
@@ -363,7 +363,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     private function assertValidHeaderValue(array $values): void
     {
-        array_walk($values, __NAMESPACE__ . '\HeaderSecurity::assertValid');
+        \array_walk($values, __NAMESPACE__ . '\HeaderSecurity::assertValid');
     }
 
     /**
@@ -375,11 +375,11 @@ abstract class AbstractMessage implements MessageInterface
      */
     private function filterHeaderValue(array $values): array
     {
-        $values = array_filter($values, function ($value) {
-            return ! is_null($value);
+        $values = \array_filter($values, function ($value) {
+            return null !== $value;
         });
 
-        return array_map([HeaderSecurity::class, 'filter'], array_values($values));
+        return \array_map([HeaderSecurity::class, 'filter'], \array_values($values));
     }
 
     /**
@@ -390,7 +390,7 @@ abstract class AbstractMessage implements MessageInterface
      * header-field = field-name ":" OWS field-value OWS
      * OWS          = *( SP / HTAB )
      *
-     * @link https://tools.ietf.org/html/rfc7230#section-3.2.4
+     * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
      *
      * @param array $values Header values
      *
@@ -398,8 +398,8 @@ abstract class AbstractMessage implements MessageInterface
      */
     private function trimHeaderValues(array $values): array
     {
-        return array_map(function ($value) {
-            return trim($value, " \t");
+        return \array_map(function ($value) {
+            return \trim($value, " \t");
         }, $values);
     }
 }

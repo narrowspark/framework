@@ -136,7 +136,7 @@ class ProfilerServiceProvider implements
      */
     public static function registerProfilerAssetsControllers(ContainerInterface $container, ?callable $getPrevious = null): RouterContract
     {
-        $router = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $router = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($router !== null) {
             $router->group(
@@ -144,7 +144,7 @@ class ProfilerServiceProvider implements
                     'namespace' => 'Viserio\Component\Profiler\Controller',
                     'prefix'    => 'profiler',
                 ],
-                function ($router) {
+                function ($router): void {
                     $router->get('assets/stylesheets', [
                         'uses' => 'AssetController@css',
                         'as'   => 'profiler.assets.css',

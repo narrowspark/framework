@@ -55,7 +55,7 @@ final class BootstrapManager
      */
     public function addBeforeBootstrapping(string $bootstrapper, callable $callback): void
     {
-        $key = 'bootstrapping: ' . str_replace('\\', '', $bootstrapper);
+        $key = 'bootstrapping: ' . \str_replace('\\', '', $bootstrapper);
 
         $this->bootstrappingCallbacks[$key][] = $callback;
     }
@@ -70,7 +70,7 @@ final class BootstrapManager
      */
     public function addAfterBootstrapping(string $bootstrapper, callable $callback): void
     {
-        $key = 'bootstrapped: ' . str_replace('\\', '', $bootstrapper);
+        $key = 'bootstrapped: ' . \str_replace('\\', '', $bootstrapper);
 
         $this->bootstrappedCallbacks[$key][] = $callback;
     }
@@ -134,7 +134,7 @@ final class BootstrapManager
         string $bootstrap
     ): void {
         foreach ($this->bootstrappedCallbacks as $name => $callbacks) {
-            if ($type . str_replace('\\', '', $bootstrap) === $name) {
+            if ($type . \str_replace('\\', '', $bootstrap) === $name) {
                 foreach ($callbacks as $callback) {
                     $callback($kernel);
                 }

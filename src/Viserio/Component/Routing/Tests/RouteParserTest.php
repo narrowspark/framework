@@ -17,7 +17,7 @@ class RouteParserTest extends TestCase
      * @param array $conditions
      * @param array $expectedSegments
      */
-    public function testRouteParser($pattern, array $conditions, array $expectedSegments)
+    public function testRouteParser($pattern, array $conditions, array $expectedSegments): void
     {
         self::assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
     }
@@ -139,7 +139,7 @@ class RouteParserTest extends TestCase
      *
      * @expectedException \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
      */
-    public function testInvalidRouteParsing($uri)
+    public function testInvalidRouteParsing($uri): void
     {
         RouteParser::parse($uri, []);
     }

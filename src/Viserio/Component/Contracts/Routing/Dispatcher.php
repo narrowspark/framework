@@ -57,7 +57,7 @@ interface Dispatcher
     /**
      * Get the currently dispatched route instance.
      *
-     * @return \Viserio\Component\Contracts\Routing\Route|null
+     * @return null|\Viserio\Component\Contracts\Routing\Route
      */
     public function getCurrentRoute(): ?Route;
 

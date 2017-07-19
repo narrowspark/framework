@@ -8,23 +8,23 @@ use Viserio\Component\Parsers\Parser\SerializeParser;
 
 class SerializeTest extends TestCase
 {
-    public function testParse()
+    public function testParse(): void
     {
         $parsed = (new SerializeParser())->parse('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}');
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame(['status' => 123, 'message' => 'hello world'], $parsed);
     }
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      */
-    public function testParseToThrowException()
+    public function testParseToThrowException(): void
     {
         (new SerializeParser())->parse('asdgfg<-.<fsdw|df>24hg2=');
     }
 
-    public function testDump()
+    public function testDump(): void
     {
         $dump = (new SerializeDumper())->dump(['status' => 123, 'message' => 'hello world']);
 

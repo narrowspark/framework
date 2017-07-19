@@ -13,7 +13,7 @@ class PipelineTest extends TestCase
 {
     protected $container;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->container = new ArrayContainer([
             'PipelineTestPipeOne'       => new PipelineTestPipeOne(),
@@ -21,7 +21,7 @@ class PipelineTest extends TestCase
         ]);
     }
 
-    public function testPipelineBasicUsage()
+    public function testPipelineBasicUsage(): void
     {
         $pipeTwo = function ($piped, $next) {
             $_SERVER['__test.pipe.two'] = $piped;
@@ -44,14 +44,14 @@ class PipelineTest extends TestCase
         unset($_SERVER['__test.pipe.one'], $_SERVER['__test.pipe.two']);
     }
 
-    public function testPipelineUsageWithParameters()
+    public function testPipelineUsageWithParameters(): void
     {
         $parameters = ['one', 'two'];
 
         $result = (new Pipeline())
             ->setContainer($this->container)
             ->send('foo')
-            ->through('PipelineTestParameterPipe:' . implode(',', $parameters))
+            ->through('PipelineTestParameterPipe:' . \implode(',', $parameters))
             ->then(function ($piped) {
                 return $piped;
             });
@@ -62,7 +62,7 @@ class PipelineTest extends TestCase
         unset($_SERVER['__test.pipe.parameters']);
     }
 
-    public function testPipelineViaChangesTheMethodBeingCalledOnThePipes()
+    public function testPipelineViaChangesTheMethodBeingCalledOnThePipes(): void
     {
         $result = (new Pipeline())
             ->setContainer($this->container)
@@ -80,7 +80,7 @@ class PipelineTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Class [Controller] is not being managed by the container.
      */
-    public function testPipelineViaContainerToThrowException()
+    public function testPipelineViaContainerToThrowException(): void
     {
         (new Pipeline())
             ->setContainer($this->container)
@@ -92,7 +92,7 @@ class PipelineTest extends TestCase
             });
     }
 
-    public function testPipelineViaObject()
+    public function testPipelineViaObject(): void
     {
         $result = (new Pipeline())
             ->send('foo')
@@ -107,7 +107,7 @@ class PipelineTest extends TestCase
         unset($_SERVER['__test.pipe.one']);
     }
 
-    public function testPipelineInvoke()
+    public function testPipelineInvoke(): void
     {
         $parameters = ['one', 'two'];
 

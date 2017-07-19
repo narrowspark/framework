@@ -24,7 +24,7 @@ class SqsQueue extends AbstractQueue
     /**
      * The job creator callback.
      *
-     * @var callable|null
+     * @var null|callable
      */
     protected $jobCreator;
 
@@ -85,9 +85,9 @@ class SqsQueue extends AbstractQueue
             ['QueueUrl' => $queue, 'AttributeNames' => ['ApproximateReceiveCount']]
         );
 
-        if (count($response['Messages']) > 0) {
+        if (\count($response['Messages']) > 0) {
             if ($this->jobCreator) {
-                return call_user_func($this->jobCreator, $this->container, $this->sqs, $queue, $response);
+                return \call_user_func($this->jobCreator, $this->container, $this->sqs, $queue, $response);
             }
 
             return new SqsJob($this->container, $this->sqs, $queue, $response['Messages'][0]);
@@ -101,11 +101,11 @@ class SqsQueue extends AbstractQueue
     {
         $queue = parent::getQueue($queue);
 
-        if (filter_var($queue, FILTER_VALIDATE_URL) !== false) {
+        if (\filter_var($queue, FILTER_VALIDATE_URL) !== false) {
             return $queue;
         }
 
-        return rtrim($this->prefix, '/') . '/' . ($queue);
+        return \rtrim($this->prefix, '/') . '/' . ($queue);
     }
 
     /**

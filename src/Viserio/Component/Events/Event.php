@@ -16,7 +16,7 @@ class Event implements EventContract
      * Create a new event instance.
      *
      * @param string             $eventName  event name
-     * @param string|object|null $target     event context, object or classname
+     * @param null|object|string $target     event context, object or classname
      * @param array              $parameters event parameters
      *
      * @throws InvalidArgumentException if event name is invalid

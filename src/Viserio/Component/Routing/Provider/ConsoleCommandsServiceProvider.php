@@ -30,7 +30,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
      */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
-        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $console = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($console !== null && $container->has(RouterContract::class)) {
             $console->addCommands([

@@ -45,7 +45,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon'  => file_get_contents(__DIR__ . '/Resources/icons/ic_translate_white_24px.svg'),
+            'icon'  => \file_get_contents(__DIR__ . '/Resources/icons/ic_translate_white_24px.svg'),
             'label' => '',
             'value' => $this->data['counted'][TranslatorContract::MESSAGE_DEFINED],
         ];
@@ -83,7 +83,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                     $this->data['counted'][TranslatorContract::MESSAGE_DEFINED] .
                     '</span>',
                 'content' => $this->createTable(
-                    array_values($sortedMessages[TranslatorContract::MESSAGE_DEFINED]),
+                    \array_values($sortedMessages[TranslatorContract::MESSAGE_DEFINED]),
                     [
                         'name'       => 'These messages are correctly translated into the given locale.',
                         'headers'    => $tableHeaders,
@@ -96,7 +96,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                     $this->data['counted'][TranslatorContract::MESSAGE_EQUALS_FALLBACK] .
                     '</span>',
                 'content' => $this->createTable(
-                    array_values($sortedMessages[TranslatorContract::MESSAGE_EQUALS_FALLBACK]),
+                    \array_values($sortedMessages[TranslatorContract::MESSAGE_EQUALS_FALLBACK]),
                     [
                         'name'       => 'These messages are not available for the given locale but Narrowspark found them in the fallback locale catalog.',
                         'headers'    => $tableHeaders,
@@ -109,7 +109,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                     $this->data['counted'][TranslatorContract::MESSAGE_MISSING] .
                     '</span>',
                 'content' => $this->createTable(
-                    array_values($sortedMessages[TranslatorContract::MESSAGE_MISSING]),
+                    \array_values($sortedMessages[TranslatorContract::MESSAGE_MISSING]),
                     [
                         'name' => 'These messages are not available for the given locale and cannot be found in the fallback locales.' .
                         ' <br> Add them to the translation catalogue to avoid Narrowspark outputting untranslated contents.',

@@ -10,7 +10,7 @@ trait ContainerAwareTrait
     /**
      * Container instance.
      *
-     * @var \Psr\Container\ContainerInterface|null
+     * @var null|\Psr\Container\ContainerInterface
      */
     protected $container;
 

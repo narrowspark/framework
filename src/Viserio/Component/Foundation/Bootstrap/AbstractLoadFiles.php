@@ -18,7 +18,7 @@ abstract class AbstractLoadFiles
         $files = [];
 
         foreach (Finder::create()->files()->name('*.php')->in($path) as $file) {
-            $files[basename($file->getRealPath(), '.php')] = $file->getRealPath();
+            $files[\basename($file->getRealPath(), '.php')] = $file->getRealPath();
         }
 
         return $files;

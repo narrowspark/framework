@@ -42,7 +42,7 @@ interface Finder
      * Add a namespace hint to the finder.
      *
      * @param string       $namespace
-     * @param string|array $hints
+     * @param array|string $hints
      *
      * @return $this
      */
@@ -52,7 +52,7 @@ interface Finder
      * Prepend a namespace hint to the finder.
      *
      * @param string       $namespace
-     * @param string|array $hints
+     * @param array|string $hints
      *
      * @return $this
      */
@@ -117,7 +117,7 @@ interface Finder
      * Replace the namespace hints for the given namespace.
      *
      * @param string       $namespace
-     * @param string|array $hints
+     * @param array|string $hints
      *
      * @return $this
      */

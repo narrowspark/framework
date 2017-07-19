@@ -16,7 +16,7 @@ use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 
 class ProfilerServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
@@ -32,7 +32,7 @@ class ProfilerServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
-    public function testRouteGroups()
+    public function testRouteGroups(): void
     {
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());

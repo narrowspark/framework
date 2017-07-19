@@ -7,14 +7,14 @@ use Viserio\Component\Pagination\Adapter\ArrayAdapter;
 
 class ArrayAdapterTest extends TestCase
 {
-    public function testGetItems()
+    public function testGetItems(): void
     {
         $adapter = new ArrayAdapter(['test'], 1);
 
         self::assertSame(['test'], $adapter->getItems());
     }
 
-    public function testGetItemsPerPage()
+    public function testGetItemsPerPage(): void
     {
         $adapter = new ArrayAdapter(['test'], 1);
 

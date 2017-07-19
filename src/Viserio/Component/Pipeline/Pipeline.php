@@ -50,7 +50,7 @@ class Pipeline implements PipelineContract
      */
     public function through($stages): PipelineContract
     {
-        $this->stages = is_array($stages) ? $stages : func_get_args();
+        $this->stages = \is_array($stages) ? $stages : \func_get_args();
 
         return $this;
     }
@@ -72,9 +72,9 @@ class Pipeline implements PipelineContract
     {
         $firstSlice = $this->getInitialSlice($destination);
 
-        $stages = array_reverse($this->stages);
+        $stages = \array_reverse($this->stages);
 
-        $callable = array_reduce($stages, $this->getSlice(), $firstSlice);
+        $callable = \array_reduce($stages, $this->getSlice(), $firstSlice);
 
         return $callable($this->traveler);
     }
@@ -91,12 +91,12 @@ class Pipeline implements PipelineContract
                 // If the $stage is an instance of a Closure, we will just call it directly.
                 if ($stage instanceof Closure) {
                     return $stage($traveler, $stack);
-                // Otherwise we'll resolve the stages out of the container and call it with
+                    // Otherwise we'll resolve the stages out of the container and call it with
                 // the appropriate method and arguments, returning the results back out.
-                } elseif ($this->container && ! is_object($stage) && is_string($stage)) {
+                } elseif ($this->container && ! \is_object($stage) && \is_string($stage)) {
                     return $this->sliceThroughContainer($traveler, $stack, $stage);
-                } elseif (is_array($stage)) {
-                    $reflectionClass = new ReflectionClass(array_shift($stage));
+                } elseif (\is_array($stage)) {
+                    $reflectionClass = new ReflectionClass(\array_shift($stage));
                     $parameters      = [$traveler, $stack];
 
                     return $reflectionClass->newInstanceArgs($stage)(...$parameters);
@@ -135,10 +135,10 @@ class Pipeline implements PipelineContract
      */
     protected function parseStageString(string $stage): array
     {
-        [$name, $parameters] = array_pad(explode(':', $stage, 2), 2, []);
+        [$name, $parameters] = \array_pad(\explode(':', $stage, 2), 2, []);
 
-        if (is_string($parameters)) {
-            $parameters = explode(',', $parameters);
+        if (\is_string($parameters)) {
+            $parameters = \explode(',', $parameters);
         }
 
         return [$name, $parameters];
@@ -158,14 +158,14 @@ class Pipeline implements PipelineContract
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
         [$name, $parameters] = $this->parseStageString($stage);
-        $parameters          = array_merge([$traveler, $stack], $parameters);
+        $parameters          = \array_merge([$traveler, $stack], $parameters);
 
         $class = null;
 
         if ($this->container->has($name)) {
             $class = $this->container->get($name);
         } else {
-            throw new RuntimeException(sprintf('Class [%s] is not being managed by the container.', $name));
+            throw new RuntimeException(\sprintf('Class [%s] is not being managed by the container.', $name));
         }
 
         return $this->getInvoker()->call(

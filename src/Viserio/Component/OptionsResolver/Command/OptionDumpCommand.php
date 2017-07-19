@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
+use InvalidArgumentException;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -44,20 +45,22 @@ class OptionDumpCommand extends Command
         if ($dumper === null && $format !== 'php') {
             $this->error('Only the php format is supported; use composer req viserio/parsers to get json, xml, yml output.');
 
-            return;
+            return 1;
         }
 
-        if (! is_dir($dirPath)) {
-            mkdir($dirPath);
+        if ((! @\mkdir($dirPath, 0777, true) && ! \is_dir($dirPath)) || ! \is_writable($dirPath)) {
+            throw new InvalidArgumentException(\sprintf(
+                'Config directory [%s] cannot be created or is write protected.',
+                $dirPath
+            ));
         }
 
         foreach ($configs as $key => $config) {
-            $content = '';
-            $file    = $dirPath . '\\' . $key . '.' . $format;
+            $file = $dirPath . '\\' . $key . '.' . $format;
 
-            if ($this->hasOption('merge') && file_exists($file)) {
+            if ($this->hasOption('merge') && \file_exists($file)) {
                 $existingConfig = (array) include $file;
-                $config         = array_replace_recursive($existingConfig, $config);
+                $config         = \array_replace_recursive($existingConfig, $config);
             }
 
             if ($dumper !== null) {
@@ -72,22 +75,22 @@ return ' . $this->getPrettyPrintArray($config) . ';';
             if ($this->hasOption('show')) {
                 $this->info("Merged array:\n\n" . $content);
 
-                if ($this->confirm(sprintf('Write content to "%s"?', $file)) === false) {
+                if ($this->confirm(\sprintf('Write content to "%s"?', $file)) === false) {
                     continue;
                 }
             }
 
-            if ($this->hasOption('overwrite') || ! file_exists($file)) {
-                file_put_contents($file, $content);
+            if ($this->hasOption('overwrite') || ! \file_exists($file)) {
+                \file_put_contents($file, $content);
             } else {
                 if ($this->hasOption('merge')) {
                     $confirmed = true;
                 } else {
-                    $confirmed = $this->confirm(sprintf('Do you really wish to overwrite %s', $key));
+                    $confirmed = $this->confirm(\sprintf('Do you really wish to overwrite %s', $key));
                 }
 
                 if ($confirmed) {
-                    file_put_contents($file, $content);
+                    \file_put_contents($file, $content);
                 } else {
                     continue;
                 }
@@ -148,6 +151,8 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     /**
      * Return a array full of declared class options.
      *
+     * @throws \ReflectionException
+     *
      * @return array
      */
     private function getOptionsFromDeclaredClasses(): array
@@ -156,9 +161,9 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
         foreach (get_declared_classes() as $className) {
             $reflectionClass = new ReflectionClass($className);
-            $interfaces      = array_flip($reflectionClass->getInterfaceNames());
+            $interfaces      = \array_flip($reflectionClass->getInterfaceNames());
 
-            if (! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract() && isset($interfaces[RequiresConfigContract::class])) {
+            if (isset($interfaces[RequiresConfigContract::class]) && ! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract()) {
                 $factory          = $reflectionClass->newInstanceWithoutConstructor();
                 $dimensions       = [];
                 $mandatoryOptions = [];
@@ -167,7 +172,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
                 if (isset($interfaces[RequiresComponentConfigContract::class])) {
                     $dimensions = (array) $factory->getDimensions();
-                    $key        = end($dimensions);
+                    $key        = \end($dimensions);
                 }
 
                 if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
@@ -178,11 +183,11 @@ return ' . $this->getPrettyPrintArray($config) . ';';
                     $mandatoryOptions = $this->readMandatoryOption($factory->getMandatoryOptions());
                 }
 
-                $options = array_merge_recursive($defaultOptions, $mandatoryOptions);
+                $options = \array_merge_recursive($defaultOptions, $mandatoryOptions);
                 $config  = $this->buildMultidimensionalArray($dimensions, $options);
 
                 if ($key !== null && isset($configs[$key])) {
-                    $config = array_replace_recursive($configs[$key], $config);
+                    $config = \array_replace_recursive($configs[$key], $config);
                 }
 
                 $configs[$key] = $config;
@@ -204,13 +209,13 @@ return ' . $this->getPrettyPrintArray($config) . ';';
         $options = [];
 
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
-            if (! is_scalar($mandatoryOption)) {
+            if (! \is_scalar($mandatoryOption)) {
                 $options[$key] = $this->readMandatoryOption($mandatoryOptions[$key]);
 
                 continue;
             }
 
-            $options[$mandatoryOption] = $this->ask(sprintf('Pleas enter the mandatory value for %s', $mandatoryOption));
+            $options[$mandatoryOption] = $this->ask(\sprintf('Pleas enter the mandatory value for %s', $mandatoryOption));
         }
 
         return $options;
@@ -227,7 +232,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     private function buildMultidimensionalArray(iterable $dimensions, $value): array
     {
         $config = [];
-        $index  = array_shift($dimensions);
+        $index  = \array_shift($dimensions);
 
         if (! isset($dimensions[0])) {
             $config[$index] = $value;

@@ -10,7 +10,7 @@ use Viserio\Component\Encryption\Provider\EncrypterServiceProvider;
 
 class EncrypterServiceProviderTest extends TestCase
 {
-    public function testProviderWithoutConfigManager()
+    public function testProviderWithoutConfigManager(): void
     {
         $container = new Container();
         $container->register(new EncrypterServiceProvider());

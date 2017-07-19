@@ -23,7 +23,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     /**
      * Create a new verbose filter instance.
      *
-     * @param \Psr\Container\ContainerInterface|iterable $data
+     * @param iterable|\Psr\Container\ContainerInterface $data
      */
     public function __construct($data)
     {
@@ -64,6 +64,6 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
             }
         }
 
-        return array_values($displayers);
+        return \array_values($displayers);
     }
 }

@@ -59,7 +59,7 @@ class EventManager implements EventManagerContract
      */
     public function trigger($event, $target = null, array $argv = []): bool
     {
-        if ((! is_object($event) && ! ($event instanceof EventContract)) && is_string($event)) {
+        if ((! \is_object($event) && ! ($event instanceof EventContract)) && \is_string($event)) {
             $event = new Event($event, $target, $argv);
         }
 
@@ -129,7 +129,7 @@ class EventManager implements EventManagerContract
         }
 
         foreach ($this->listeners[$eventName] as $priority => $listeners) {
-            if (($key = array_search($listener, $listeners, true)) !== false) {
+            if (($key = \array_search($listener, $listeners, true)) !== false) {
                 unset($this->listeners[$eventName][$priority][$key], $this->sorted[$eventName]);
 
                 return true;
@@ -158,7 +158,7 @@ class EventManager implements EventManagerContract
      */
     public function hasListeners(string $eventName): bool
     {
-        return (bool) count($this->getListeners($eventName));
+        return (bool) \count($this->getListeners($eventName));
     }
 
     /**
@@ -177,8 +177,8 @@ class EventManager implements EventManagerContract
         // sorted event listeners so we do not have to re-sort on every events.
 
         if (isset($this->listeners[$eventName])) {
-            krsort($this->listeners[$eventName]);
-            $this->sorted[$eventName] = call_user_func_array(
+            \krsort($this->listeners[$eventName]);
+            $this->sorted[$eventName] = \call_user_func_array(
                 'array_merge',
                 $this->listeners[$eventName]
             );
@@ -194,7 +194,7 @@ class EventManager implements EventManagerContract
      */
     protected function hasWildcards(string $subject): bool
     {
-        return mb_strpos($subject, '*') !== false || mb_strpos($subject, '#') !== false;
+        return \mb_strpos($subject, '*') !== false || \mb_strpos($subject, '#') !== false;
     }
 
     /**

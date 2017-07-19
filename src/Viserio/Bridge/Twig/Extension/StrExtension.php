@@ -53,10 +53,10 @@ class StrExtension extends AbstractExtension
             new TwigFunction(
                 'str_*',
                 function (string $name) {
-                    $arguments = array_slice(func_get_args(), 1);
+                    $arguments = \array_slice(\func_get_args(), 1);
                     $name      = ViserioStr::camelize($name);
 
-                    return call_user_func_array([$this->callback, (string) $name], $arguments);
+                    return \call_user_func_array([$this->callback, (string) $name], $arguments);
                 }
             ),
         ];
@@ -71,10 +71,10 @@ class StrExtension extends AbstractExtension
             new TwigFilter(
                 'str_*',
                 function (string $name) {
-                    $arguments = array_slice(func_get_args(), 1);
+                    $arguments = \array_slice(\func_get_args(), 1);
                     $name      = ViserioStr::camelize($name);
 
-                    return call_user_func_array([$this->callback, (string) $name], $arguments);
+                    return \call_user_func_array([$this->callback, (string) $name], $arguments);
                 }
             ),
         ];

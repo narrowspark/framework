@@ -98,11 +98,13 @@ class HandlerParser
     /**
      * Parse the handler into a Monolog constant.
      *
-     * @param string|object        $handler
+     * @param object|string        $handler
      * @param string               $path
      * @param string               $level
-     * @param object|string[]|null $processor
-     * @param object|string|null   $formatter
+     * @param null|object|string[] $processor
+     * @param null|object|string   $formatter
+     *
+     * @return void
      */
     public function parseHandler(
         $handler,
@@ -110,7 +112,7 @@ class HandlerParser
         string $level = '',
         $processor = null,
         $formatter = null
-    ) {
+    ): void {
         $customHandler = $this->validateHandler($handler, $path, $level);
 
         $customHandler = $this->parseProcessor($customHandler, $processor);
@@ -136,7 +138,7 @@ class HandlerParser
      * Parse Processor.
      *
      * @param \Monolog\Handler\HandlerInterface $handler
-     * @param array|object|null                 $processors
+     * @param null|array|object                 $processors
      *
      * @return \Monolog\Handler\HandlerInterface
      */
@@ -146,11 +148,11 @@ class HandlerParser
             return $handler;
         }
 
-        if (is_array($processors)) {
+        if (\is_array($processors)) {
             foreach ($processors as $processor => $settings) {
                 $handler->pushProcessor(new $processor($settings));
             }
-        } elseif (is_object($processors)) {
+        } elseif (\is_object($processors)) {
             $handler->pushProcessor($processors);
         }
 
@@ -168,7 +170,7 @@ class HandlerParser
      */
     protected function parseFormatter($formatter): FormatterInterface
     {
-        if (is_object($formatter) && $formatter instanceof FormatterInterface) {
+        if (\is_object($formatter) && $formatter instanceof FormatterInterface) {
             return $formatter;
         }
 
@@ -212,19 +214,19 @@ class HandlerParser
             'reset'  => "\033[0m",
         ];
 
-        $width     = getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
-        $separator = str_repeat('━', (int) $width); // A nice separator line
+        $width     = \getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
+        $separator = \str_repeat('━', (int) $width); // A nice separator line
 
         $format = $options['bold'];
         $format .= $options['green'] . '[%datetime%]';
         $format .= $options['white'] . '[%channel%.';
         $format .= $options['yellow'] . '%level_name%';
-        $format .= sprintf('%s]', $options['white']);
+        $format .= \sprintf('%s]', $options['white']);
         $format .= $options['blue'] . '[UID:%extra.uid%]';
         $format .= $options['purple'] . '[PID:%extra.process_id%]';
-        $format .= sprintf('%s:%s', $options['reset'], PHP_EOL);
+        $format .= \sprintf('%s:%s', $options['reset'], PHP_EOL);
         $format .= '%message%' . PHP_EOL;
-        $format .= sprintf('%s%s%s%s', $options['gray'], $separator, $options['reset'], PHP_EOL);
+        $format .= \sprintf('%s%s%s%s', $options['gray'], $separator, $options['reset'], PHP_EOL);
 
         return $format;
     }
@@ -232,7 +234,7 @@ class HandlerParser
     /**
      * Validate handler var.
      *
-     * @param string|object $handler
+     * @param object|string $handler
      * @param string        $path
      * @param string        $level
      *
@@ -242,17 +244,17 @@ class HandlerParser
      */
     protected function validateHandler($handler, string $path, string $level): HandlerInterface
     {
-        if (is_object($handler) && $handler instanceof HandlerInterface) {
+        if (\is_object($handler) && $handler instanceof HandlerInterface) {
             return $handler;
-        } elseif (is_string($handler) && isset($this->handler[$handler])) {
+        } elseif (\is_string($handler) && isset($this->handler[$handler])) {
             return new $this->handler[$handler]($path, self::parseLevel($level));
         }
 
         throw new RuntimeException(
-            sprintf(
+            \sprintf(
                 'Handler [%s] dont exist.',
-                is_object($handler) ?
-                get_class($handler) :
+                \is_object($handler) ?
+                \get_class($handler) :
                 $handler
             )
         );

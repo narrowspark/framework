@@ -65,7 +65,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
         $this->buffer = '';
     }
@@ -73,7 +73,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function detach()
+    public function detach(): void
     {
         $this->close();
     }
@@ -83,7 +83,7 @@ class BufferStream implements StreamInterface
      */
     public function getSize()
     {
-        return mb_strlen($this->buffer);
+        return \mb_strlen($this->buffer);
     }
 
     /**
@@ -113,7 +113,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek(0);
     }
@@ -121,7 +121,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         throw new RuntimeException('Cannot seek a BufferStream');
     }
@@ -131,13 +131,13 @@ class BufferStream implements StreamInterface
      */
     public function eof()
     {
-        return mb_strlen($this->buffer) === 0;
+        return \mb_strlen($this->buffer) === 0;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): void
     {
         throw new RuntimeException('Cannot determine the position of a BufferStream');
     }
@@ -149,7 +149,7 @@ class BufferStream implements StreamInterface
      */
     public function read($length)
     {
-        $currentLength = mb_strlen($this->buffer);
+        $currentLength = \mb_strlen($this->buffer);
 
         if ($length >= $currentLength) {
             // No need to slice the buffer because we don't have enough data.
@@ -157,8 +157,8 @@ class BufferStream implements StreamInterface
             $this->buffer = '';
         } else {
             // Slice up the result to provide a subset of the buffer.
-            $result       = mb_substr($this->buffer, 0, $length);
-            $this->buffer = mb_substr($this->buffer, $length);
+            $result       = \mb_substr($this->buffer, 0, $length);
+            $this->buffer = \mb_substr($this->buffer, $length);
         }
 
         return $result;
@@ -173,11 +173,11 @@ class BufferStream implements StreamInterface
     {
         $this->buffer .= $string;
 
-        if (mb_strlen($this->buffer) >= $this->hwm) {
+        if (\mb_strlen($this->buffer) >= $this->hwm) {
             return 0;
         }
 
-        return mb_strlen($string);
+        return \mb_strlen($string);
     }
 
     /**

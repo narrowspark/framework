@@ -66,12 +66,12 @@ class Validator implements ValidatorContract
             $data = $preparedData[$fieldName] ?? $preparedData;
 
             try {
-                if (is_array($data)) {
+                if (\is_array($data)) {
                     foreach ($data as $value) {
-                        $rule->setName(ucfirst($fieldName))->assert($value);
+                        $rule->setName(\ucfirst($fieldName))->assert($value);
                     }
                 } else {
-                    $rule->setName(ucfirst($fieldName))->assert($data);
+                    $rule->setName(\ucfirst($fieldName))->assert($data);
                 }
 
                 $this->validRules[$fieldName] = true;
@@ -127,7 +127,7 @@ class Validator implements ValidatorContract
         $newData = [];
 
         foreach ($data as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 return $this->parseData($value);
             }
             $newData[$key] = $value;
@@ -148,17 +148,17 @@ class Validator implements ValidatorContract
         $notRules      = [];
         $optionalRules = [];
 
-        if (is_string($rules)) {
+        if (\is_string($rules)) {
             // remove duplicate
-            $rules = array_unique(explode('|', $rules));
+            $rules = \array_unique(\explode('|', $rules));
         }
 
         foreach ($rules as $key => $rule) {
-            if (mb_strpos($rule, '!') !== false) {
+            if (\mb_strpos($rule, '!') !== false) {
                 $notRules[] = $rule;
 
                 unset($rules[$key]);
-            } elseif (mb_strpos($rule, '?') !== false) {
+            } elseif (\mb_strpos($rule, '?') !== false) {
                 $optionalRules[] = $rule;
 
                 unset($rules[$key]);
@@ -166,7 +166,7 @@ class Validator implements ValidatorContract
         }
 
         // reset keys
-        $rules     = array_values($rules);
+        $rules     = \array_values($rules);
         $validator = $this->createValidator($rules, $notRules, $optionalRules);
 
         return $this->createChainableValidators($validator, $rules);
@@ -185,11 +185,11 @@ class Validator implements ValidatorContract
      */
     protected function createValidator(array &$rules, array $notRules, array $optionalRules): RespectValidator
     {
-        if (count($notRules) !== 0 && count($optionalRules) !== 0) {
+        if (\count($notRules) !== 0 && \count($optionalRules) !== 0) {
             throw new RuntimeException('Not (!) and optional (?) cant be used at the same time.');
-        } elseif (count($notRules) !== 0) {
+        } elseif (\count($notRules) !== 0) {
             return $this->createNegativeOrOptionalValidator('!', $notRules);
-        } elseif (count($optionalRules) !== 0) {
+        } elseif (\count($optionalRules) !== 0) {
             return $this->createNegativeOrOptionalValidator('?', $optionalRules);
         }
 
@@ -197,7 +197,7 @@ class Validator implements ValidatorContract
 
         unset($rules[0]);
 
-        return call_user_func_array([RespectValidator::class, $method], $parameters);
+        return \call_user_func_array([RespectValidator::class, $method], $parameters);
     }
 
     /**
@@ -214,8 +214,8 @@ class Validator implements ValidatorContract
 
         unset($rules[0]);
 
-        $validator = call_user_func_array(
-            [RespectValidator::class, str_replace($filter, '', $method)],
+        $validator = \call_user_func_array(
+            [RespectValidator::class, \str_replace($filter, '', $method)],
             $parameters
         );
 
@@ -237,9 +237,9 @@ class Validator implements ValidatorContract
     protected function createChainableValidators(RespectValidator $class, array $rules): RespectValidator
     {
         // reset keys
-        $rules = array_values($rules);
+        $rules = \array_values($rules);
 
-        if (count($rules) !== 0) {
+        if (\count($rules) !== 0) {
             $chain = '';
 
             foreach ($rules as $rule) {
@@ -250,12 +250,12 @@ class Validator implements ValidatorContract
                 }
             }
 
-            return array_reduce(explode('.', $chain), function ($validator, $method) {
+            return \array_reduce(\explode('.', $chain), function ($validator, $method) {
                 [$method, $parameters] = $this->parseStringRule($method);
 
-                $method = str_replace(['!', '?'], '', $method);
+                $method = \str_replace(['!', '?'], '', $method);
 
-                return call_user_func_array([$validator, $method], $parameters);
+                return \call_user_func_array([$validator, $method], $parameters);
             }, $class);
         }
 
@@ -276,13 +276,13 @@ class Validator implements ValidatorContract
         // The format for specifying validation rules and parameters follows an
         // easy {rule}:{parameters} formatting convention. For instance the
         // rule "Min:3" states that the value may only be three letters.
-        if (mb_strpos($rules, ':') !== false) {
-            [$rules, $parameter] = explode(':', $rules, 2);
+        if (\mb_strpos($rules, ':') !== false) {
+            [$rules, $parameter] = \explode(':', $rules, 2);
 
             $parameters = $this->parseParameters($rules, $parameter);
         }
 
-        return [trim($rules), $parameters];
+        return [\trim($rules), $parameters];
     }
 
     /**
@@ -295,10 +295,10 @@ class Validator implements ValidatorContract
      */
     protected function parseParameters(string $rule, string $parameter): array
     {
-        if (mb_strtolower($rule) == 'regex') {
+        if (\mb_strtolower($rule) == 'regex') {
             return [$parameter];
         }
 
-        return str_getcsv($parameter);
+        return \str_getcsv($parameter);
     }
 }

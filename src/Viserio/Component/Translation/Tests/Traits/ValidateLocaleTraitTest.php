@@ -16,7 +16,7 @@ class ValidateLocaleTraitTest extends TestCase
      *
      * @param mixed $locale
      */
-    public function testAssertValidLocaleToThrowException($locale)
+    public function testAssertValidLocaleToThrowException($locale): void
     {
         self::assertValidLocale($locale);
     }

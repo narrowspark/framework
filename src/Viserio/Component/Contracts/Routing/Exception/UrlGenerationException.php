@@ -15,7 +15,7 @@ class UrlGenerationException extends InvalidArgumentException
     public function __construct(RouteContract $route)
     {
         parent::__construct(
-            sprintf(
+            \sprintf(
                 'Missing required parameters for [Route: %s] [URI: %s].',
                 $route->getName(),
                 $route->getUri()

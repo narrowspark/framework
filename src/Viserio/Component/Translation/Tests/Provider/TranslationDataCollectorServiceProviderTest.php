@@ -16,7 +16,7 @@ use Viserio\Component\Translation\Translator;
 
 class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $catalogue = new MessageCatalogue('en', [
             'messages' => [
@@ -54,7 +54,7 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
-    public function testProviderProfilerIsNull()
+    public function testProviderProfilerIsNull(): void
     {
         $container = new Container();
         $container->register(new TranslationDataCollectorServiceProvider());

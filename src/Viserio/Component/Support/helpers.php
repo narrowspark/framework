@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Viserio\Component\Support\Debug\Dumper;
 use Viserio\Component\Support\Env;
 
-if (! function_exists('env')) {
+if (! \function_exists('env')) {
     /**
      * Gets the value of an environment variable. Supports boolean, empty and null.
      *
@@ -19,7 +19,7 @@ if (! function_exists('env')) {
     }
 }
 
-if (! function_exists('dd')) {
+if (! \function_exists('dd')) {
     /**
      * Dump the passed variables and end the script.
      *
@@ -37,7 +37,7 @@ if (! function_exists('dd')) {
     }
 }
 
-if (! function_exists('retry')) {
+if (! \function_exists('retry')) {
     /**
      * Retry an operation a given number of times.
      *
@@ -64,7 +64,7 @@ if (! function_exists('retry')) {
             --$times;
 
             if ($sleep) {
-                usleep($sleep * 1000);
+                \usleep($sleep * 1000);
             }
 
             goto beginning;

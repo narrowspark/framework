@@ -22,14 +22,14 @@ class MockContainer extends Container
      */
     public function mock(...$args)
     {
-        $id = array_shift($args);
+        $id = \array_shift($args);
 
         if (! $this->has($id)) {
-            throw new InvalidArgumentException(sprintf('Cannot mock a non-existent service: [%s]', $id));
+            throw new InvalidArgumentException(\sprintf('Cannot mock a non-existent service: [%s]', $id));
         }
 
         if (! isset($this->mockedServices['mock::' . $id])) {
-            $this->mockedServices['mock::' . $id] = call_user_func_array([Mockery::class, 'mock'], $args);
+            $this->mockedServices['mock::' . $id] = \call_user_func_array([Mockery::class, 'mock'], $args);
         }
 
         return $this->mockedServices['mock::' . $id];
@@ -40,7 +40,7 @@ class MockContainer extends Container
      *
      * @param string $id
      */
-    public function unmock(string $id)
+    public function unmock(string $id): void
     {
         unset($this->mockedServices['mock::' . $id]);
     }
@@ -78,7 +78,7 @@ class MockContainer extends Container
      *
      * @param string $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->bindings[$offset], $this->mockedServices['mock::' . $offset]);
     }

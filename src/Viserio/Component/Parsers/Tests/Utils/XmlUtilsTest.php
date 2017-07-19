@@ -28,7 +28,7 @@ class XmlUtilsTest extends TestCase
      */
     private $root;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->root         = vfsStream::setup();
         $this->fixturesPath = self::normalizeDirectorySeparator(__DIR__ . '/../Fixtures/Utils/');
@@ -38,12 +38,12 @@ class XmlUtilsTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage No such file [nonexistfile] found.
      */
-    public function testLoadFileToThrowException()
+    public function testLoadFileToThrowException(): void
     {
         XmlUtils::loadFile('nonexistfile');
     }
 
-    public function testLoadFileWithError77()
+    public function testLoadFileWithError77(): void
     {
         $file = vfsStream::newFile('invalid.xml')->withContent(
             '<?xml version="1.0" encoding="UTF-8"?>
@@ -59,7 +59,7 @@ class XmlUtilsTest extends TestCase
         }
     }
 
-    public function testLoadFileWithDocumentTypes()
+    public function testLoadFileWithDocumentTypes(): void
     {
         $file = vfsStream::newFile('document_type.xml')->withContent(
             '<?xml version="1.0" encoding="UTF-8"?>
@@ -76,7 +76,7 @@ class XmlUtilsTest extends TestCase
         }
     }
 
-    public function testLoadFileWithError1845()
+    public function testLoadFileWithError1845(): void
     {
         $file = vfsStream::newFile('invalid_schema.xml')->withContent(
             '<?xml version="1.0" encoding="UTF-8"?>
@@ -105,7 +105,7 @@ class XmlUtilsTest extends TestCase
         }
     }
 
-    public function testLoadFileWithInvalidCallback()
+    public function testLoadFileWithInvalidCallback(): void
     {
         $file = vfsStream::newFile('invalid_schema.xml')->withContent(
             '<?xml version="1.0" encoding="UTF-8"?>
@@ -121,7 +121,7 @@ class XmlUtilsTest extends TestCase
         }
     }
 
-    public function testLoadFileWithValidCallback()
+    public function testLoadFileWithValidCallback(): void
     {
         $file = vfsStream::newFile('valid.xml')->withContent(
             '<?xml version="1.0" encoding="UTF-8"?>
@@ -141,10 +141,10 @@ class XmlUtilsTest extends TestCase
         }
 
         self::assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url(), [$mock, 'validate']));
-        self::assertSame([], libxml_get_errors());
+        self::assertSame([], \libxml_get_errors());
     }
 
-    public function testLoadFileWithInternalErrorsEnabled()
+    public function testLoadFileWithInternalErrorsEnabled(): void
     {
         $file = vfsStream::newFile('invalid_schema.xml')->withContent(
             '<?xml version="1.0" encoding="UTF-8"?>
@@ -152,14 +152,14 @@ class XmlUtilsTest extends TestCase
             '
         )->at($this->root);
 
-        $internalErrors = libxml_use_internal_errors(true);
+        $internalErrors = \libxml_use_internal_errors(true);
 
-        self::assertSame([], libxml_get_errors());
+        self::assertSame([], \libxml_get_errors());
         self::assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url()));
-        self::assertSame([], libxml_get_errors());
+        self::assertSame([], \libxml_get_errors());
 
-        libxml_clear_errors();
-        libxml_use_internal_errors($internalErrors);
+        \libxml_clear_errors();
+        \libxml_use_internal_errors($internalErrors);
     }
 
     /**
@@ -170,7 +170,7 @@ class XmlUtilsTest extends TestCase
      * @param mixed $root
      * @param mixed $checkPrefix
      */
-    public function testConvertDomToArray($expected, $xml, $root = false, $checkPrefix = true)
+    public function testConvertDomToArray($expected, $xml, $root = false, $checkPrefix = true): void
     {
         $dom = new DOMDocument();
         $dom->loadXML($root ? $xml : '<root>' . $xml . '</root>');
@@ -207,7 +207,7 @@ class XmlUtilsTest extends TestCase
      * @param mixed $expected
      * @param mixed $value
      */
-    public function testPhpize($expected, $value)
+    public function testPhpize($expected, $value): void
     {
         self::assertSame($expected, XmlUtils::phpize($value));
     }
@@ -245,7 +245,7 @@ class XmlUtilsTest extends TestCase
         ];
     }
 
-    public function testLoadEmptyXmlFile()
+    public function testLoadEmptyXmlFile(): void
     {
         $file = vfsStream::newFile('foo.xml')->withContent(
             '
@@ -259,16 +259,16 @@ class XmlUtilsTest extends TestCase
     }
 
     // test for issue https://github.com/symfony/symfony/issues/9731
-    public function testLoadWrongEmptyXMLWithErrorHandler()
+    public function testLoadWrongEmptyXMLWithErrorHandler(): void
     {
         $file = vfsStream::newFile('foo.xml')->withContent(
             '
             '
         )->at($this->root);
-        $originalDisableEntities = libxml_disable_entity_loader(false);
-        $errorReporting          = error_reporting(-1);
+        $originalDisableEntities = \libxml_disable_entity_loader(false);
+        $errorReporting          = \error_reporting(-1);
 
-        set_error_handler(function ($errno, $errstr) {
+        \set_error_handler(function ($errno, $errstr): void {
             throw new Exception($errstr, $errno);
         });
 
@@ -280,14 +280,14 @@ class XmlUtilsTest extends TestCase
                 self::assertEquals('Content does not contain valid XML, it is empty.', $e->getMessage());
             }
         } finally {
-            restore_error_handler();
-            error_reporting($errorReporting);
+            \restore_error_handler();
+            \error_reporting($errorReporting);
         }
 
-        $disableEntities = libxml_disable_entity_loader(true);
-        libxml_disable_entity_loader($disableEntities);
+        $disableEntities = \libxml_disable_entity_loader(true);
+        \libxml_disable_entity_loader($disableEntities);
 
-        libxml_disable_entity_loader($originalDisableEntities);
+        \libxml_disable_entity_loader($originalDisableEntities);
 
         self::assertFalse($disableEntities);
 

@@ -47,7 +47,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      * @param \Viserio\Component\Contracts\Exception\ExceptionInfo $info
      * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface         $streamFactory
-     * @param \Psr\Container\ContainerInterface|iterable           $data
+     * @param iterable|\Psr\Container\ContainerInterface           $data
      */
     public function __construct(
         ExceptionInfoContract $info,
@@ -90,7 +90,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
         $response = $this->getResponseFactory()->createResponse($code);
         $stream   = $this->getStreamFactory()->createStream($this->render($info));
 
-        foreach (array_merge($headers, ['Content-Type' => $this->contentType()]) as $header => $value) {
+        foreach (\array_merge($headers, ['Content-Type' => $this->contentType()]) as $header => $value) {
             $response = $response->withAddedHeader($header, $value);
         }
 
@@ -130,10 +130,10 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      */
     protected function render(array $info): string
     {
-        $content = file_get_contents($this->resolvedOptions['template_path']);
+        $content = \file_get_contents($this->resolvedOptions['template_path']);
 
         foreach ($info as $key => $val) {
-            $content = str_replace("{{ $$key }}", $val, $content);
+            $content = \str_replace("{{ $$key }}", $val, $content);
         }
 
         return $content;

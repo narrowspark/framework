@@ -33,7 +33,7 @@ interface Loader
      * Load the given file path.
      *
      * @param string     $file
-     * @param array|null $options
+     * @param null|array $options
      *
      * @throws \RuntimeException                                               if wrong options are given
      * @throws \Viserio\Component\Contracts\Parsers\Exception\LoadingException
@@ -47,7 +47,7 @@ interface Loader
      *
      * @param string $file
      *
-     * @return string|bool
+     * @return bool|string
      */
     public function exists(string $file);
 }

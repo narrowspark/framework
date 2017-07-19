@@ -57,7 +57,7 @@ class XliffDumper implements DumperContract
             return self::dumpXliffVersion2($data);
         }
 
-        throw new DumpException(sprintf('No support implemented for dumping XLIFF version [%s].', $version));
+        throw new DumpException(\sprintf('No support implemented for dumping XLIFF version [%s].', $version));
     }
 
     /**
@@ -89,10 +89,10 @@ class XliffDumper implements DumperContract
         $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:1.2');
 
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
-        $xliffFile->setAttribute('source-language', str_replace('_', '-', $sourceLanguage));
+        $xliffFile->setAttribute('source-language', \str_replace('_', '-', $sourceLanguage));
 
         if ($targetLanguage !== '') {
-            $xliffFile->setAttribute('target-language', str_replace('_', '-', $targetLanguage));
+            $xliffFile->setAttribute('target-language', \str_replace('_', '-', $targetLanguage));
         }
 
         $xliffFile->setAttribute('datatype', 'plaintext');
@@ -102,7 +102,7 @@ class XliffDumper implements DumperContract
 
         foreach ($data as $resname => $translation) {
             $unit = $dom->createElement('trans-unit');
-            $unit->setAttribute('id', $translation['id'] ?? md5($resname));
+            $unit->setAttribute('id', $translation['id'] ?? \md5($resname));
             $unit->setAttribute('resname', $resname);
 
             $source = $unit->appendChild($dom->createElement('source'));
@@ -119,7 +119,7 @@ class XliffDumper implements DumperContract
             $target = $unit->appendChild($targetElement);
 
             // Does the target contain characters requiring a CDATA section?
-            if (preg_match('/[&<>]/', $translation['target']) === 1) {
+            if (\preg_match('/[&<>]/', $translation['target']) === 1) {
                 $target->appendChild($dom->createCDATASection($translation['target']));
             } else {
                 $target->appendChild($dom->createTextNode($translation['target']));
@@ -174,13 +174,13 @@ class XliffDumper implements DumperContract
         $xliff = $dom->appendChild($dom->createElement('xliff'));
         $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:2.0');
         $xliff->setAttribute('version', '2.0');
-        $xliff->setAttribute('srcLang', str_replace('_', '-', $sourceLanguage));
-        $xliff->setAttribute('trgLang', str_replace('_', '-', $targetLanguage));
+        $xliff->setAttribute('srcLang', \str_replace('_', '-', $sourceLanguage));
+        $xliff->setAttribute('trgLang', \str_replace('_', '-', $targetLanguage));
 
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
         $xliffFile->setAttribute(
             'id',
-            'translation_' . mb_strtolower(str_replace('-', '_', $sourceLanguage . '_to_' . $targetLanguage))
+            'translation_' . \mb_strtolower(\str_replace('-', '_', $sourceLanguage . '_to_' . $targetLanguage))
         );
 
         foreach ($data as $id => $translation) {
@@ -202,7 +202,7 @@ class XliffDumper implements DumperContract
             $target = $segmentElement->appendChild($targetElement);
 
             // Does the target contain characters requiring a CDATA section?
-            if (preg_match('/[&<>]/', $translation['target']) === 1) {
+            if (\preg_match('/[&<>]/', $translation['target']) === 1) {
                 $target->appendChild($dom->createCDATASection($translation['target']));
             } else {
                 $target->appendChild($dom->createTextNode($translation['target']));

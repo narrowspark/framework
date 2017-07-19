@@ -142,14 +142,14 @@ class SparkPostTransport extends AbstractTransport
      *
      * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return string|null
+     * @return null|string
      */
     protected function getTransmissionId(ResponseInterface $response): ?string
     {
-        $object = json_decode($response->getBody()->getContents());
+        $object = \json_decode($response->getBody()->getContents());
 
         foreach (['results', 'id'] as $segment) {
-            if (! is_object($object) || ! isset($object->{$segment})) {
+            if (! \is_object($object) || ! isset($object->{$segment})) {
                 return null;
             }
 
@@ -173,15 +173,15 @@ class SparkPostTransport extends AbstractTransport
         $recipients = [];
 
         foreach ((array) $message->getTo() as $email => $name) {
-            $recipients[] = ['address' => compact('name', 'email')];
+            $recipients[] = ['address' => \compact('name', 'email')];
         }
 
         foreach ((array) $message->getCc() as $email => $name) {
-            $recipients[] = ['address' => compact('name', 'email')];
+            $recipients[] = ['address' => \compact('name', 'email')];
         }
 
         foreach ((array) $message->getBcc() as $email => $name) {
-            $recipients[] = ['address' => compact('name', 'email')];
+            $recipients[] = ['address' => \compact('name', 'email')];
         }
 
         return $recipients;

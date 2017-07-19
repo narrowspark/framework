@@ -24,7 +24,7 @@ class TranslationManagerTest extends MockeryTestCase
      */
     private $root;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -32,7 +32,7 @@ class TranslationManagerTest extends MockeryTestCase
         $this->manager = new TranslationManager(new IntlMessageFormatter());
     }
 
-    public function testSetAndGetDirectories()
+    public function testSetAndGetDirectories(): void
     {
         $this->manager->setDirectories([
             __DIR__ . '/stubs',
@@ -44,7 +44,7 @@ class TranslationManagerTest extends MockeryTestCase
         );
     }
 
-    public function testSetAndGetLoader()
+    public function testSetAndGetLoader(): void
     {
         $this->manager->setLoader($this->mock(LoaderContract::class));
 
@@ -54,7 +54,7 @@ class TranslationManagerTest extends MockeryTestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testImportToThrowException()
+    public function testImportToThrowException(): void
     {
         vfsStream::newFile('invalid.php')->withContent("<?php
 declare(strict_types=1); return [
@@ -71,7 +71,7 @@ declare(strict_types=1); return [
         $this->manager->import('invalid.php');
     }
 
-    public function testImport()
+    public function testImport(): void
     {
         vfsStream::newFile('en.php')->withContent("<?php
 declare(strict_types=1); return [
@@ -93,7 +93,7 @@ declare(strict_types=1); return [
         self::assertSame('en', $this->manager->getTranslator()->getLocale());
     }
 
-    public function testImportWithDefaultFallback()
+    public function testImportWithDefaultFallback(): void
     {
         vfsStream::newFile('fr.php')->withContent("<?php
 declare(strict_types=1); return [
@@ -121,7 +121,7 @@ declare(strict_types=1); return [
         $this->manager->import('fr.php');
     }
 
-    public function testImportWithLanguageFallback()
+    public function testImportWithLanguageFallback(): void
     {
         vfsStream::newFile('de.php')->withContent("<?php
 declare(strict_types=1); return [
@@ -152,33 +152,33 @@ declare(strict_types=1); return [
     /**
      * @expectedException \RuntimeException
      */
-    public function testGetTranslator()
+    public function testGetTranslator(): void
     {
         $this->manager->getTranslator('jp');
     }
 
-    public function testSetAndGetDefaultFallback()
+    public function testSetAndGetDefaultFallback(): void
     {
         $this->manager->setDefaultFallback($this->mock(MessageCatalogueContract::class));
 
         self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
     }
 
-    public function testSetAndLanguageFallback()
+    public function testSetAndLanguageFallback(): void
     {
         $this->manager->setLanguageFallback('de', $this->mock(MessageCatalogueContract::class));
 
         self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
     }
 
-    public function testSetAndGetLocale()
+    public function testSetAndGetLocale(): void
     {
         $this->manager->setLocale('de');
 
         self::assertSame('de', $this->manager->getLocale());
     }
 
-    public function testSetAndGetLogger()
+    public function testSetAndGetLogger(): void
     {
         $this->manager->setLogger($this->mock(LoggerInterface::class));
 

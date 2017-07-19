@@ -32,7 +32,7 @@ class MandatoryOptionNotFoundException extends OutOfBoundsException
         }
 
         parent::__construct(
-            sprintf(
+            \sprintf(
                 'Mandatory option [%s] was not set for configuration [%s].',
                 $option,
                 $depth

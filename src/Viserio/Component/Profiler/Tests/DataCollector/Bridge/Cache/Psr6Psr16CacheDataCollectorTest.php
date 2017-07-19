@@ -11,7 +11,7 @@ use Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDeco
 
 class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
 {
-    public function testGetMenu()
+    public function testGetMenu(): void
     {
         $collector = $this->getPsr6CacheDataCollector();
 
@@ -25,7 +25,7 @@ class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
         );
     }
 
-    public function testGetTooltip()
+    public function testGetTooltip(): void
     {
         $collector = $this->getPsr6CacheDataCollector();
 
@@ -37,7 +37,7 @@ class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
 
     private function removeTabId(string $html): string
     {
-        return trim(preg_replace('/="tab-0(.*?)"/', '', $html));
+        return \trim(\preg_replace('/="tab-0(.*?)"/', '', $html));
     }
 
     private function getPsr6CacheDataCollector()
@@ -54,9 +54,9 @@ class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
 
     private function removeSymfonyVarDumper(string $html): string
     {
-        $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/', '', $html);
-        $html = preg_replace('/<style\b[^>]*>(.*?)<\/style>/', '', $html);
+        $html = \preg_replace('/<script\b[^>]*>(.*?)<\/script>/', '', $html);
+        $html = \preg_replace('/<style\b[^>]*>(.*?)<\/style>/', '', $html);
 
-        return $this->removeTabId(preg_replace('/id=sf-dump-(?:\d+) /', '', $html));
+        return $this->removeTabId(\preg_replace('/id=sf-dump-(?:\d+) /', '', $html));
     }
 }

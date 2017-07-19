@@ -10,7 +10,7 @@ use Viserio\Component\Pagination\Paginator;
 
 class SemanticUiTest extends MockeryTestCase
 {
-    public function testPaginatorRenderSematicUi()
+    public function testPaginatorRenderSematicUi(): void
     {
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
 

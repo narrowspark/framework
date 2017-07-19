@@ -8,7 +8,7 @@ use Viserio\Component\Filesystem\Adapter\WebDavConnector;
 
 class WebDavConnectorTest extends TestCase
 {
-    public function testConnect()
+    public function testConnect(): void
     {
         $connector = new WebDavConnector();
 
@@ -21,7 +21,7 @@ class WebDavConnectorTest extends TestCase
         self::assertInstanceOf(WebDAVAdapter::class, $return);
     }
 
-    public function testConnectWithPrefix()
+    public function testConnectWithPrefix(): void
     {
         $connector = new WebDavConnector();
 
@@ -39,7 +39,7 @@ class WebDavConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The WebDav connector requires baseUri configuration.
      */
-    public function testConnectWithoutBaseUri()
+    public function testConnectWithoutBaseUri(): void
     {
         $connector = new WebDavConnector();
 

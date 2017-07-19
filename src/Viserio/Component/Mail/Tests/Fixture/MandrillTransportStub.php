@@ -8,7 +8,7 @@ class MandrillTransportStub extends MandrillTransport
 {
     protected $client;
 
-    public function setHttpClient($client)
+    public function setHttpClient($client): void
     {
         $this->client = $client;
     }

@@ -23,16 +23,16 @@ class RedirectResponse extends Response
      */
     public function __construct($uri, int $status = 302, array $headers = [])
     {
-        if (! is_string($uri) && ! $uri instanceof UriInterface) {
-            throw new InvalidArgumentException(sprintf(
+        if (! \is_string($uri) && ! $uri instanceof UriInterface) {
+            throw new InvalidArgumentException(\sprintf(
                 'Uri provided to %s MUST be a string or Psr\Http\Message\UriInterface instance; received [%s]',
                 __CLASS__,
-                (is_object($uri) ? get_class($uri) : gettype($uri))
+                (\is_object($uri) ? \get_class($uri) : \gettype($uri))
             ));
         }
 
         $headers['location'] = [(string) $uri];
 
-        parent::__construct($status, $headers, new Stream(fopen('php://temp', 'r+')));
+        parent::__construct($status, $headers, new Stream(\fopen('php://temp', 'r+')));
     }
 }

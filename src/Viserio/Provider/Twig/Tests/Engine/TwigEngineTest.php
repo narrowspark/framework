@@ -13,7 +13,7 @@ use Viserio\Provider\Twig\Engine\TwigEngine;
 
 class TwigEngineTest extends MockeryTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -52,7 +52,7 @@ class TwigEngineTest extends MockeryTestCase
 
         $template = $engine->get(['name' => 'twightml.twig.html']);
 
-        self::assertSame(trim('<!DOCTYPE html>
+        self::assertSame(\trim('<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -63,12 +63,12 @@ class TwigEngineTest extends MockeryTestCase
 <body>
     hallo
 </body>
-</html>'), trim($template));
+</html>'), \trim($template));
 
         $this->delTree(__DIR__ . '/../Cache');
     }
 
-    public function testAddTwigExtensions()
+    public function testAddTwigExtensions(): void
     {
         $repository = $this->mock(RepositoryContract::class);
         $repository->shouldReceive('has')
@@ -110,7 +110,7 @@ class TwigEngineTest extends MockeryTestCase
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
 
-        self::assertEquals(trim('<!DOCTYPE html>
+        self::assertEquals(\trim('<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -122,7 +122,7 @@ class TwigEngineTest extends MockeryTestCase
     test_t_e_s_t
     OK
 </body>
-</html>'), trim($template));
+</html>'), \trim($template));
 
         $this->delTree(__DIR__ . '/../Cache');
     }
@@ -131,7 +131,7 @@ class TwigEngineTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Twig extension [Viserio\Bridge\Twig\Extension\ConfigExtension] is not a object.
      */
-    public function testTwigExtensionsToThrowException()
+    public function testTwigExtensionsToThrowException(): void
     {
         $config =  [
             'viserio' => [
@@ -169,12 +169,12 @@ class TwigEngineTest extends MockeryTestCase
 
     private function delTree($dir)
     {
-        $files = array_diff(scandir($dir), ['.', '..']);
+        $files = \array_diff(\scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+            (\is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
         }
 
-        return rmdir($dir);
+        return \rmdir($dir);
     }
 }

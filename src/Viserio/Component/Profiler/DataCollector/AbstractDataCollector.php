@@ -64,9 +64,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     public function getName(): string
     {
-        $namespace = mb_substr(get_called_class(), 0, mb_strrpos(get_called_class(), '\\'));
+        $namespace = \mb_substr(\get_called_class(), 0, \mb_strrpos(\get_called_class(), '\\'));
 
-        return Str::snake(str_replace($namespace . '\\', '', get_class($this)), '-');
+        return Str::snake(\str_replace($namespace . '\\', '', \get_class($this)), '-');
     }
 
     /**
@@ -91,12 +91,12 @@ abstract class AbstractDataCollector implements DataCollectorContract
     protected function formatDuration(float $seconds): string
     {
         if ($seconds < 0.001) {
-            return round($seconds * 1000000) . 'μs';
+            return \round($seconds * 1000000) . 'μs';
         } elseif ($seconds < 1) {
-            return round($seconds * 1000, 2) . 'ms';
+            return \round($seconds * 1000, 2) . 'ms';
         }
 
-        return round($seconds, 2) . 's';
+        return \round($seconds, 2) . 's';
     }
 
     /**
@@ -114,29 +114,33 @@ abstract class AbstractDataCollector implements DataCollectorContract
             return -1;
         }
 
-        $memoryLimit = mb_strtolower($memoryLimit);
-        $max         = mb_strtolower(ltrim($memoryLimit, '+'));
+        $memoryLimit = \mb_strtolower($memoryLimit);
+        $max         = \mb_strtolower(\ltrim($memoryLimit, '+'));
 
-        if (mb_strpos($max, '0x') === 0) {
-            $max = intval($max, 16);
-        } elseif (mb_strpos($max, '0') === 0) {
-            $max = intval($max, 8);
+        if (\mb_strpos($max, '0x') === 0) {
+            $max = \intval($max, 16);
+        } elseif (\mb_strpos($max, '0') === 0) {
+            $max = \intval($max, 8);
         } else {
             $max = (int) $max;
         }
 
-        switch (mb_substr($memoryLimit, -1)) {
+        switch (\mb_substr($memoryLimit, -1)) {
             case 't':
                 $max *= 1024;
+
                 break;
             case 'g':
                 $max *= 1024;
+
                 break;
             case 'm':
                 $max *= 1024;
+
                 break;
             case 'k':
                 $max *= 1024;
+
                 break;
         }
 
@@ -163,7 +167,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         foreach ($data as $strong => $infos) {
             $tooltip .= '<div class="profiler-menu-tooltip-group-piece">';
 
-            if (is_array($infos)) {
+            if (\is_array($infos)) {
                 $tooltip .= '<b>' . $strong . '</b>';
 
                 foreach ($infos as $info) {
@@ -171,7 +175,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
                     $tooltip .= '<span' . $class . '>' . $info['value'] . '</span>';
                 }
-            } elseif (is_int($strong) && is_string($infos)) {
+            } elseif (\is_int($strong) && \is_string($infos)) {
                 $tooltip .= $infos;
             } else {
                 $tooltip .= '<b>' . $strong . '</b><span>' . $infos . '</span>';
@@ -201,7 +205,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $html = '<div class="profiler-tabs row">';
 
         foreach ($data as $key => $value) {
-            $id = uniqid($key . '-');
+            $id = \uniqid($key . '-');
 
             $html .= '<div class="profiler-tabs-tab col">';
             $html .= '<input type="radio" name="tabgroup" id="tab-' . $id . '">';
@@ -226,7 +230,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     protected function createTable(array $data, array $settings = []): string
     {
-        $options = array_merge([
+        $options = \array_merge([
             'name'       => null,
             'headers'    => ['Key', 'Value'],
             'vardumper'  => true,
@@ -235,30 +239,30 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
         $html = $options['name'] !== null ? '<h3>' . $options['name'] . '</h3>' : '';
 
-        if (count($data) !== 0) {
+        if (\count($data) !== 0) {
             $html .= '<table><thead><tr>';
 
             foreach ((array) $options['headers'] as $header) {
-                $html .= '<th scope="col" class="' . mb_strtolower($header) . '">' . $header . '</th>';
+                $html .= '<th scope="col" class="' . \mb_strtolower($header) . '">' . $header . '</th>';
             }
 
             $html .= '</tr></thead><tbody>';
 
             foreach ($data as $key => $values) {
-                if (is_string($key)) {
+                if (\is_string($key)) {
                     $html .= '<tr>';
                     $html .= '<th>' . $key . '</th>';
-                    $html .= sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($values) : $values));
+                    $html .= \sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($values) : $values));
                     $html .= '</tr>';
                 } else {
                     $html .= '<tr>';
 
-                    if (is_array($values)) {
+                    if (\is_array($values)) {
                         foreach ($values as $key => $value) {
-                            $html .= sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($value) : $value));
+                            $html .= \sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($value) : $value));
                         }
                     } else {
-                        $html .= sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($values) : $values));
+                        $html .= \sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($values) : $values));
                     }
 
                     $html .= '</tr>';
@@ -267,7 +271,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
             $html .= '</tbody></table>';
         } else {
-            $html .= sprintf('<div class="empty">%s</div>', $options['empty_text']);
+            $html .= \sprintf('<div class="empty">%s</div>', $options['empty_text']);
         }
 
         return $html;
@@ -286,7 +290,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $selected = false;
 
         foreach ($data as $key => $value) {
-            $id = 'content-' . $key . '-' . uniqid('');
+            $id = 'content-' . $key . '-' . \uniqid('');
 
             $selected = $selected === false ? $selected = 'selected' : '';
 
@@ -313,7 +317,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      * Create a metrics.
      *
      * @param array       $data
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return string
      */
@@ -400,8 +404,8 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     private function decorateVar($var)
     {
-        if (is_array($var)) {
-            if (isset($var[0], $var[1]) && is_callable($var)) {
+        if (\is_array($var)) {
+            if (isset($var[0], $var[1]) && \is_callable($var)) {
                 return ClassStub::wrapCallable($var);
             }
 
@@ -414,23 +418,23 @@ abstract class AbstractDataCollector implements DataCollectorContract
             return $var;
         }
 
-        if (is_string($var)) {
+        if (\is_string($var)) {
             if (isset(self::$stubsCache[$var])) {
                 return self::$stubsCache[$var];
             }
 
-            if (mb_strpos($var, '\\') !== false) {
-                $i = mb_strpos($var, '::');
-                $c = ($i !== false) ? mb_substr($var, 0, $i) : $var;
+            if (\mb_strpos($var, '\\') !== false) {
+                $i = \mb_strpos($var, '::');
+                $c = ($i !== false) ? \mb_substr($var, 0, $i) : $var;
 
-                if (class_exists($c, false) || interface_exists($c, false) || trait_exists($c, false)) {
+                if (\class_exists($c, false) || \interface_exists($c, false) || \trait_exists($c, false)) {
                     return self::$stubsCache[$var] = new ClassStub($var);
                 }
             }
 
-            if (mb_strpos($var, DIRECTORY_SEPARATOR) !== false &&
-                mb_strpos($var, '://') !== false &&
-                mb_strpos($var, "\0") && @is_file($var) === false
+            if (\mb_strpos($var, DIRECTORY_SEPARATOR) !== false &&
+                \mb_strpos($var, '://') !== false &&
+                \mb_strpos($var, "\0") && @\is_file($var) === false
             ) {
                 return self::$stubsCache[$var] = new LinkStub($var);
             }

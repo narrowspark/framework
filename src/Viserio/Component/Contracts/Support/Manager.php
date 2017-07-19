@@ -32,7 +32,7 @@ interface Manager
     /**
      * Get a driver instance.
      *
-     * @param string|null $driver
+     * @param null|string $driver
      *
      * @return mixed
      */

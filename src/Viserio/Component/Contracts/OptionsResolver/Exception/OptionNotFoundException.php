@@ -15,7 +15,7 @@ class OptionNotFoundException extends OutOfBoundsException
      *
      * @param string          $class
      * @param mixed           $currentDimension Current configuration key
-     * @param string|null     $configId
+     * @param null|string     $configId
      * @param int             $code
      * @param null|\Throwable $previous
      */
@@ -27,7 +27,7 @@ class OptionNotFoundException extends OutOfBoundsException
         Throwable $previous = null
     ) {
         $position             = [];
-        $interfaces           = class_implements($class);
+        $interfaces           = \class_implements($class);
         $dimensions           = isset($interfaces[RequiresComponentConfigContract::class]) ? $class::getDimensions() : [];
         $hasConfigIdInterface = (
             isset($interfaces[RequiresConfigIdContract::class]) ||
@@ -46,14 +46,14 @@ class OptionNotFoundException extends OutOfBoundsException
             }
         }
 
-        if ($hasConfigIdInterface && $configId === null && count($dimensions) === count($position)) {
+        if ($hasConfigIdInterface && $configId === null && \count($dimensions) === \count($position)) {
             $message = 'The configuration [%s] needs a config id in class [%s].';
         } else {
             $message = 'No options set for configuration [%s] in class [%s].';
         }
 
         parent::__construct(
-            sprintf($message, rtrim(implode('.', $position), '.'), $class),
+            \sprintf($message, \rtrim(\implode('.', $position), '.'), $class),
             $code,
             $previous
         );

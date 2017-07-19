@@ -7,14 +7,14 @@ use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 
 class IntlMessageFormatterTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
-        if (! extension_loaded('intl')) {
+        if (! \extension_loaded('intl')) {
             self::markTestSkipped('The Intl extension is not available.');
         }
     }
 
-    public function testFormatWithEmptyString()
+    public function testFormatWithEmptyString(): void
     {
         self::assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
     }
@@ -23,7 +23,7 @@ class IntlMessageFormatterTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Translation\Exception\CannotInstantiateFormatterException
      * @expectedExceptionMessage Constructor failed
      */
-    public function testFormatToThrowException()
+    public function testFormatToThrowException(): void
     {
         self::assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
   male {He avoids bugs}
@@ -34,7 +34,7 @@ female {She avoids bugs} }', 'en', [1]));
      * @expectedException \Viserio\Component\Contracts\Translation\Exception\CannotFormatException
      * @expectedExceptionMessage The argument for key 'catchDate' cannot be used as a date or time: U_ILLEGAL_ARGUMENT_ERROR
      */
-    public function testFormatToThrowExceptionOnFormat()
+    public function testFormatToThrowExceptionOnFormat(): void
     {
         self::assertSame('', (new IntlMessageFormatter())->format('Caught on { catchDate, date, short }', 'en', ['catchDate' => '1/1/1']));
     }
@@ -46,9 +46,9 @@ female {She avoids bugs} }', 'en', [1]));
      * @param mixed $message
      * @param mixed $arguments
      */
-    public function testFormat($expected, $message, $arguments)
+    public function testFormat($expected, $message, $arguments): void
     {
-        self::assertEquals($expected, trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
+        self::assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
     }
 
     public function provideDataForFormat()
@@ -67,9 +67,9 @@ female {She avoids bugs} }', 'en', [1]));
         ];
     }
 
-    public function testFormatWithNamedArguments()
+    public function testFormatWithNamedArguments(): void
     {
-        if (version_compare(INTL_ICU_VERSION, '4.8', '<')) {
+        if (\version_compare(INTL_ICU_VERSION, '4.8', '<')) {
             $this->markTestSkipped('Format with named arguments can only be run with ICU 4.8 or higher and PHP >= 5.5');
         }
 

@@ -99,7 +99,7 @@ interface Profiler
     /**
      * Get a url generator instance.
      *
-     * @return \Viserio\Component\Contracts\Routing\UrlGenerator|null
+     * @return null|\Viserio\Component\Contracts\Routing\UrlGenerator
      */
     public function getUrlGenerator(): ?UrlGeneratorContract;
 }

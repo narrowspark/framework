@@ -15,7 +15,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
      */
     private $handler;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -25,21 +25,21 @@ class CookieSessionHandlerTest extends MockeryTestCase
         );
     }
 
-    public function testOpenReturnsTrue()
+    public function testOpenReturnsTrue(): void
     {
         $handler = $this->handler;
 
         self::assertTrue($handler->open('test', 'temp'));
     }
 
-    public function testCloseReturnsTrue()
+    public function testCloseReturnsTrue(): void
     {
         $handler = $this->handler;
 
         self::assertTrue($handler->close());
     }
 
-    public function testReadExistingSessionReturnsTheData()
+    public function testReadExistingSessionReturnsTheData(): void
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request
@@ -55,7 +55,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
         self::assertSame('Foo Bar', $handler->read('temp'));
     }
 
-    public function testReadMissingSessionReturnsAnEmptyString()
+    public function testReadMissingSessionReturnsAnEmptyString(): void
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request
@@ -68,14 +68,14 @@ class CookieSessionHandlerTest extends MockeryTestCase
         self::assertSame('', $handler->read('12'));
     }
 
-    public function testWriteSuccessfullyReturnsTrue()
+    public function testWriteSuccessfullyReturnsTrue(): void
     {
         $jar = $this->mock(JarContract::class);
         $jar->shouldReceive('queue')
             ->once()
             ->with(
                 'write.sess',
-                json_encode(
+                \json_encode(
                     [
                         'data'    => ['user_id' => 1],
                         'expires' => Chronos::now()->addSeconds(300)->getTimestamp(),
@@ -92,14 +92,14 @@ class CookieSessionHandlerTest extends MockeryTestCase
         self::assertTrue($handler->write('write.sess', ['user_id' => 1]));
     }
 
-    public function testGcSuccessfullyReturnsTrue()
+    public function testGcSuccessfullyReturnsTrue(): void
     {
         $handler = $this->handler;
 
         self::assertTrue($handler->gc(2));
     }
 
-    public function testDestroySuccessfullReturnsTrue()
+    public function testDestroySuccessfullReturnsTrue(): void
     {
         $jar = $this->mock(JarContract::class);
         $jar->shouldReceive('queue')

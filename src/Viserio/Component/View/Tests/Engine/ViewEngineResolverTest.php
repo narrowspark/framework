@@ -8,7 +8,7 @@ use Viserio\Component\View\Engine\EngineResolver;
 
 class ViewEngineResolverTest extends MockeryTestCase
 {
-    public function testResolversMayBeResolved()
+    public function testResolversMayBeResolved(): void
     {
         $resolver = new EngineResolver();
         $resolver->register(
@@ -18,14 +18,14 @@ class ViewEngineResolverTest extends MockeryTestCase
             }
         );
         $result = $resolver->resolve('foo');
-        self::assertEquals(spl_object_hash($result), spl_object_hash($resolver->resolve('foo')));
+        self::assertEquals(\spl_object_hash($result), \spl_object_hash($resolver->resolve('foo')));
     }
 
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Engine [foo] not found.
      */
-    public function testResolverThrowsExceptionOnUnknownEngine()
+    public function testResolverThrowsExceptionOnUnknownEngine(): void
     {
         $resolver = new EngineResolver();
         $resolver->resolve('foo');

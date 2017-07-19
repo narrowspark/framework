@@ -23,7 +23,7 @@ class EncryptionWrapperTest extends TestCase
     /**
      * Setup the environment.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->root = __DIR__ . '/stubs';
 
@@ -38,30 +38,30 @@ class EncryptionWrapperTest extends TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->delTree($this->root);
 
         parent::tearDown();
     }
 
-    public function testWriteStream()
+    public function testWriteStream(): void
     {
-        $temp = tmpfile();
-        fwrite($temp, 'dummy');
-        rewind($temp);
+        $temp = \tmpfile();
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
 
         self::assertTrue($this->adapter->writeStream('encrypt.txt', $temp));
-        self::assertSame('dummy', stream_get_contents($this->adapter->readStream('encrypt.txt')));
+        self::assertSame('dummy', \stream_get_contents($this->adapter->readStream('encrypt.txt')));
     }
 
-    public function testWrite()
+    public function testWrite(): void
     {
         self::assertTrue($this->adapter->write('encrypt.txt', 'dummy'));
         self::assertSame('dummy', $this->adapter->read('encrypt.txt'));
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         self::assertTrue($this->adapter->write('encrypt_update.txt', 'dummy'));
         self::assertTrue($this->adapter->update('encrypt_update.txt', 'file'));
@@ -69,14 +69,14 @@ class EncryptionWrapperTest extends TestCase
         self::assertSame('file', $this->adapter->read('encrypt_update.txt'));
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         self::assertTrue($this->adapter->put('encrypt_put.txt', 'file'));
         self::assertSame('file', $this->adapter->read('encrypt_put.txt'));
 
-        $temp = tmpfile();
-        fwrite($temp, 'dummy');
-        rewind($temp);
+        $temp = \tmpfile();
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
 
         self::assertTrue($this->adapter->put('encrypt_put.txt', $temp));
         self::assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
@@ -85,18 +85,18 @@ class EncryptionWrapperTest extends TestCase
         self::assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
     }
 
-    public function testUpdateStream()
+    public function testUpdateStream(): void
     {
-        $temp = tmpfile();
-        fwrite($temp, 'dummy');
-        rewind($temp);
+        $temp = \tmpfile();
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
 
         self::assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
         self::assertSame('dummy', $this->adapter->read('encrypt_u_stream.txt'));
 
-        $temp = tmpfile();
-        fwrite($temp, 'file');
-        rewind($temp);
+        $temp = \tmpfile();
+        \fwrite($temp, 'file');
+        \rewind($temp);
 
         self::assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
         self::assertSame('file', $this->adapter->read('encrypt_u_stream.txt'));
@@ -105,7 +105,7 @@ class EncryptionWrapperTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testRead()
+    public function testRead(): void
     {
         $this->adapter->read('dont.txt');
     }
@@ -113,19 +113,19 @@ class EncryptionWrapperTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testReadStream()
+    public function testReadStream(): void
     {
         $this->adapter->readStream('dont.txt');
     }
 
     private function delTree($dir)
     {
-        $files = array_diff(scandir($dir), ['.', '..']);
+        $files = \array_diff(\scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+            (\is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
         }
 
-        return rmdir($dir);
+        return \rmdir($dir);
     }
 }

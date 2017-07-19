@@ -15,7 +15,7 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
-    public function setUp()
+    public function setUp(): void
     {
         $dispatcher  = new SimpleDispatcher();
         $dispatcher->setCachePath(__DIR__ . '/../Cache/SimpleDispatcherTest.cache');
@@ -24,7 +24,7 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
         $this->dispatcher = $dispatcher;
     }
 
-    public function testHandleFound()
+    public function testHandleFound(): void
     {
         $path = __DIR__ . '/../Cache/SimpleDispatcherTest.cache';
 

@@ -7,9 +7,9 @@ interface QueueConnector
     /**
      * Push a new job onto the queue.
      *
-     * @param string|object|\Closure $job
+     * @param \Closure|object|string $job
      * @param mixed                  $data
-     * @param string|null            $queue
+     * @param null|string            $queue
      *
      * @return mixed
      */
@@ -19,7 +19,7 @@ interface QueueConnector
      * Push a raw payload onto the queue.
      *
      * @param string      $payload
-     * @param string|null $queue
+     * @param null|string $queue
      * @param array       $options
      *
      * @return mixed
@@ -30,9 +30,9 @@ interface QueueConnector
      * Push a new job onto the queue after a delay.
      *
      * @param \DateTime|int          $delay
-     * @param string|object|\Closure $job
+     * @param \Closure|object|string $job
      * @param mixed                  $data
-     * @param string|null            $queue
+     * @param null|string            $queue
      *
      * @return mixed
      */
@@ -41,9 +41,9 @@ interface QueueConnector
     /**
      * Pop the next job off of the queue.
      *
-     * @param string|null $queue
+     * @param null|string $queue
      *
-     * @return \Viserio\Component\Contracts\Queue\Job|null
+     * @return null|\Viserio\Component\Contracts\Queue\Job
      */
     public function pop(string $queue = null);
 
@@ -51,7 +51,7 @@ interface QueueConnector
      * Push a new job onto the queue.
      *
      * @param string                 $queue
-     * @param string|object|\Closure $job
+     * @param \Closure|object|string $job
      * @param mixed                  $data
      *
      * @return mixed
@@ -63,7 +63,7 @@ interface QueueConnector
      *
      * @param string                 $queue
      * @param \DateTime|int          $delay
-     * @param string|object|\Closure $job
+     * @param \Closure|object|string $job
      * @param mixed                  $data
      *
      * @return mixed
@@ -75,7 +75,7 @@ interface QueueConnector
      *
      * @param array       $jobs
      * @param mixed       $data
-     * @param string|null $queue
+     * @param null|string $queue
      *
      * @return mixed
      */
@@ -84,7 +84,7 @@ interface QueueConnector
     /**
      * Get the queue or return the default.
      *
-     * @param string|null $queue
+     * @param null|string $queue
      *
      * @return string
      */

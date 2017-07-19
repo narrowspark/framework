@@ -49,7 +49,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $container = $this->getContainer();
         $options   = self::resolveOptions($container);

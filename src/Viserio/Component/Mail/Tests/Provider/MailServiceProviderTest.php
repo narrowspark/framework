@@ -19,7 +19,7 @@ use Viserio\Component\View\Provider\ViewServiceProvider;
 
 class MailServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new ConfigServiceProvider());
@@ -58,7 +58,7 @@ class MailServiceProviderTest extends TestCase
         self::assertInstanceOf(Swift_Mailer::class, $container->get(Swift_Mailer::class));
     }
 
-    public function testProviderWithQueue()
+    public function testProviderWithQueue(): void
     {
         $container = new Container();
         $container->register(new ConfigServiceProvider());

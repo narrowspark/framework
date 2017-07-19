@@ -14,7 +14,7 @@ use Viserio\Component\Parsers\TaggableParser;
 
 class ParsersServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new ParsersServiceProvider());

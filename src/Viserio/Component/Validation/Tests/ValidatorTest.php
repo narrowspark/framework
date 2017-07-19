@@ -8,7 +8,7 @@ use Viserio\Component\Validation\Validator;
 
 class ValidatorTest extends TestCase
 {
-    public function testValidate()
+    public function testValidate(): void
     {
         $validator = new Validator();
         $validate  = $validator->validate(
@@ -34,7 +34,7 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function testValidateWithRegex()
+    public function testValidateWithRegex(): void
     {
         $validator = new Validator();
         $validate  = $validator->validate(
@@ -57,7 +57,7 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function testNotValidate()
+    public function testNotValidate(): void
     {
         $validator = new Validator();
         $validate  = $validator->validate(
@@ -88,7 +88,7 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function testNotValidateWith2DatasAndOneRule()
+    public function testNotValidateWith2DatasAndOneRule(): void
     {
         $validator = new Validator();
         $validate  = $validator->validate(
@@ -114,7 +114,7 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function testOptionalValidate()
+    public function testOptionalValidate(): void
     {
         $validator = new Validator();
         $validate  = $validator->validate(
@@ -137,7 +137,7 @@ class ValidatorTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Not (!) and optional (?) cant be used at the same time.
      */
-    public function testThrowExceptionOnUseNotAndOptionalOnSameRuleValidate()
+    public function testThrowExceptionOnUseNotAndOptionalOnSameRuleValidate(): void
     {
         $validator = new Validator();
         $validator->validate(

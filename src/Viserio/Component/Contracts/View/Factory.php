@@ -93,7 +93,7 @@ interface Factory
     /**
      * Add a piece of shared data to the environment.
      *
-     * @param string|array $key
+     * @param array|string $key
      * @param mixed        $value
      *
      * @return mixed
@@ -113,7 +113,7 @@ interface Factory
      * Add a new namespace to the loader.
      *
      * @param string       $namespace
-     * @param string|array $hints
+     * @param array|string $hints
      *
      * @return $this
      */
@@ -123,7 +123,7 @@ interface Factory
      * Replace the namespace hints for the given namespace.
      *
      * @param string       $namespace
-     * @param string|array $hints
+     * @param array|string $hints
      *
      * @return $this
      */
@@ -133,7 +133,7 @@ interface Factory
      * Prepend a new namespace to the loader.
      *
      * @param string       $namespace
-     * @param string|array $hints
+     * @param array|string $hints
      *
      * @return $this
      */
@@ -144,7 +144,7 @@ interface Factory
      *
      * @param string        $extension
      * @param string        $engine
-     * @param \Closure|null $resolver
+     * @param null|\Closure $resolver
      *
      * @return $this
      */

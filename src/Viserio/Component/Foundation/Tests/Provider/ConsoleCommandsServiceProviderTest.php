@@ -15,7 +15,7 @@ use Viserio\Component\Foundation\Provider\ConsoleCommandsServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends MockeryTestCase
 {
-    public function testGetServices()
+    public function testGetServices(): void
     {
         $container = new Container();
         $container->register(new ConsoleServiceProvider());

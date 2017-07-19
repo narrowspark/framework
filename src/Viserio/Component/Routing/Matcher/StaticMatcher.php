@@ -18,13 +18,13 @@ class StaticMatcher extends AbstractMatcher
      * Create a new satic segment matcher instance.
      *
      * @param string     $segment
-     * @param array|null $parameterKeys
+     * @param null|array $parameterKeys
      */
     public function __construct(string $segment, array $parameterKeys = null)
     {
-        if (mb_strpos($segment, '/') !== false) {
+        if (\mb_strpos($segment, '/') !== false) {
             throw new RuntimeException(
-                sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given', __CLASS__, $segment)
+                \sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given', __CLASS__, $segment)
             );
         }
 
@@ -47,7 +47,7 @@ class StaticMatcher extends AbstractMatcher
     {
         $keys = $this->parameterKeys;
 
-        if (count($keys) > 0) {
+        if (\count($keys) > 0) {
             return [$keys[0] => $segmentVariable];
         }
 

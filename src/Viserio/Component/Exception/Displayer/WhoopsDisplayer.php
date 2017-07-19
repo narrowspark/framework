@@ -20,7 +20,7 @@ class WhoopsDisplayer implements DisplayerContract
 
         return new Response(
             $code,
-            array_merge($headers, ['Content-Type' => $this->contentType()]),
+            \array_merge($headers, ['Content-Type' => $this->contentType()]),
             $content ?? ''
         );
     }
@@ -38,7 +38,7 @@ class WhoopsDisplayer implements DisplayerContract
      */
     public function canDisplay(Throwable $original, Throwable $transformed, int $code): bool
     {
-        return class_exists(Whoops::class);
+        return \class_exists(Whoops::class);
     }
 
     /**

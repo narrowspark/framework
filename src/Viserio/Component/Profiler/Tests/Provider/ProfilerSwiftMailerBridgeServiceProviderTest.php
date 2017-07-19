@@ -14,7 +14,7 @@ use Viserio\Component\Profiler\Provider\ProfilerSwiftMailerBridgeServiceProvider
 
 class ProfilerSwiftMailerBridgeServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());

@@ -11,7 +11,7 @@ use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 
 class RouteTest extends TestCase
 {
-    public function testGetMethods()
+    public function testGetMethods(): void
     {
         $route = new Route('GET', '/test', ['uses' => Controller::class . '@string']);
 
@@ -26,7 +26,7 @@ class RouteTest extends TestCase
         self::assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
     }
 
-    public function testGetDomain()
+    public function testGetDomain(): void
     {
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
@@ -41,14 +41,14 @@ class RouteTest extends TestCase
         self::assertSame('test.com', $route->getDomain());
     }
 
-    public function testGetAndSetUri()
+    public function testGetAndSetUri(): void
     {
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
         self::assertSame('/test', $route->getUri());
     }
 
-    public function testGetAndSetName()
+    public function testGetAndSetName(): void
     {
         $route = new Route('GET', '/test', ['as' => 'test']);
 
@@ -64,7 +64,7 @@ class RouteTest extends TestCase
         self::assertSame('test', $route->getName());
     }
 
-    public function testHttpAndHttps()
+    public function testHttpAndHttps(): void
     {
         $route = new Route('GET', '/test', ['http']);
 
@@ -75,7 +75,7 @@ class RouteTest extends TestCase
         self::assertTrue($route->isHttpsOnly());
     }
 
-    public function testSetAndGetPrefix()
+    public function testSetAndGetPrefix(): void
     {
         $route = new Route('GET', '/test', ['prefix' => 'test']);
 
@@ -92,7 +92,7 @@ class RouteTest extends TestCase
         self::assertSame('test/foo/test', $route->getUri());
     }
 
-    public function testWhere()
+    public function testWhere(): void
     {
         $route = new Route('GET', '/test/{param1}/{param2}', null);
         $route->where(['param1', 'param2'], Pattern::ANY);
@@ -103,7 +103,7 @@ class RouteTest extends TestCase
         self::assertEquals(new ParameterMatcher('param2', '/^(.+)$/'), $segments[2]);
     }
 
-    public function testParametersFunctions()
+    public function testParametersFunctions(): void
     {
         $route = new Route('GET', '/test/{param1}/{param2}', null);
         $route->addParameter('test1', 'test1');
@@ -118,7 +118,7 @@ class RouteTest extends TestCase
         self::assertFalse($route->hasParameter('test1'));
     }
 
-    public function testSetAndGetAction()
+    public function testSetAndGetAction(): void
     {
         $route = new Route('GET', '/test/{param1}/{param2}', null);
         $route->setAction([
@@ -127,7 +127,7 @@ class RouteTest extends TestCase
         ]);
 
         self::assertSame('test.com', $route->getDomain());
-        self::assertTrue(is_array($route->getAction()));
+        self::assertTrue(\is_array($route->getAction()));
         self::assertSame('routeController', $route->getActionName());
 
         $route->setAction([

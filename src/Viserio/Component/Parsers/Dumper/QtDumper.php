@@ -8,8 +8,8 @@ use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
 /**
  * For more infos.
  *
- * @link http://doc.qt.io/qt-5/linguist-ts-file-format.html
- * @link http://svn.ez.no/svn/ezcomponents/trunk/Translation/docs/linguist-format.txt
+ * @see http://doc.qt.io/qt-5/linguist-ts-file-format.html
+ * @see http://svn.ez.no/svn/ezcomponents/trunk/Translation/docs/linguist-format.txt
  */
 class QtDumper implements DumperContract
 {
@@ -41,7 +41,7 @@ class QtDumper implements DumperContract
                 $translation = $dom->createElement('translation', $value['translation']['content']);
                 $attributes  = $value['translation']['attributes'];
 
-                if (is_array($attributes)) {
+                if (\is_array($attributes)) {
                     foreach ($attributes as $key => $value) {
                         $translation->setAttribute($key, $value);
                     }

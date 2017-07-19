@@ -26,7 +26,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     /**
      * The request URI object.
      *
-     * @var \Psr\Http\Message\UriInterface|null
+     * @var null|\Psr\Http\Message\UriInterface
      */
     protected $uri;
 
@@ -34,9 +34,9 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      * Create a new request instance.
      *
      * @param null|string|UriInterface                               $uri     uri for the request
-     * @param string|null                                            $method  http method for the request
+     * @param null|string                                            $method  http method for the request
      * @param array                                                  $headers headers for the message
-     * @param string|null|resource|\Psr\Http\Message\StreamInterface $body    message body
+     * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    message body
      * @param string                                                 $version http protocol version
      */
     public function __construct(
@@ -87,7 +87,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      */
     public function withRequestTarget($requestTarget): RequestInterface
     {
-        if (preg_match('#\s#', $requestTarget)) {
+        if (\preg_match('#\s#', $requestTarget)) {
             throw new InvalidArgumentException(
                 'Invalid request target provided; cannot contain whitespace'
             );
@@ -191,10 +191,10 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
             return self::METHOD_GET;
         }
 
-        $method = mb_strtoupper($method);
+        $method = \mb_strtoupper($method);
 
-        if (! preg_match("/^[!#$%&'*+.^_`|~0-9a-z-]+$/i", $method)) {
-            throw new InvalidArgumentException(sprintf(
+        if (! \preg_match("/^[!#$%&'*+.^_`|~0-9a-z-]+$/i", $method)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Unsupported HTTP method [%s].',
                 $method
             ));
@@ -227,7 +227,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
             return $uri;
         }
 
-        if (is_string($uri)) {
+        if (\is_string($uri)) {
             return Uri::createFromString($uri);
         }
 

@@ -48,20 +48,20 @@ trait OptionsResolverTrait
     public static function resolveOptions($config, string $configId = null): array
     {
         $configClass = self::getConfigClass();
-        $interfaces  = class_implements($configClass);
+        $interfaces  = \class_implements($configClass);
         $config      = self::resolveConfiguration($config);
         $dimensions  = [];
 
         if (isset($interfaces[RequiresComponentConfigContract::class])) {
             $dimensions  = $configClass::getDimensions();
-            $dimensions  = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
+            $dimensions  = $dimensions instanceof Iterator ? \iterator_to_array($dimensions) : $dimensions;
         }
 
         if (isset($interfaces[RequiresConfigIdContract::class]) || isset($interfaces[RequiresComponentConfigIdContract::class])) {
             $dimensions[] = $configId;
         } elseif ($configId !== null) {
             throw new InvalidArgumentException(
-                sprintf('The factory [%s] does not support multiple instances.', $configClass)
+                \sprintf('The factory [%s] does not support multiple instances.', $configClass)
             );
         }
 
@@ -85,8 +85,8 @@ trait OptionsResolverTrait
 
         if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
             $options = $configClass::getDefaultOptions();
-            $config  = array_replace_recursive(
-                $options instanceof Iterator ? iterator_to_array($options) : (array) $options,
+            $config  = \array_replace_recursive(
+                $options instanceof Iterator ? \iterator_to_array($options) : (array) $options,
                 (array) $config
             );
         }
@@ -97,7 +97,7 @@ trait OptionsResolverTrait
     /**
      * Resolve the configuration from given data.
      *
-     * @param \Psr\Container\ContainerInterface|\ArrayAccess|array $data
+     * @param array|\ArrayAccess|\Psr\Container\ContainerInterface $data
      *
      * @throws \RuntimeException is thrown if config cant be resolved
      *
@@ -105,7 +105,7 @@ trait OptionsResolverTrait
      */
     protected static function resolveConfiguration($data)
     {
-        if (is_iterable($data)) {
+        if (\is_iterable($data)) {
             return $data;
         } elseif ($data instanceof ContainerInterface && $data->has(RepositoryContract::class)) {
             return $data->get(RepositoryContract::class);
@@ -147,7 +147,7 @@ trait OptionsResolverTrait
         array $interfaces
     ): void {
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
-            $useRecursion = ! is_scalar($mandatoryOption);
+            $useRecursion = ! \is_scalar($mandatoryOption);
 
             if (! $useRecursion && isset($config[$mandatoryOption])) {
                 continue;
@@ -171,6 +171,7 @@ trait OptionsResolverTrait
      * @param iterable    $config
      * @param string      $configClass
      * @param null|string $configId
+     * @param array       $interfaces
      *
      * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException
      *
@@ -214,12 +215,12 @@ trait OptionsResolverTrait
     private static function validateOptions(array $validators, iterable $config, string $configClass): void
     {
         foreach ($validators as $key => $value) {
-            $useRecursion = ! is_scalar($value);
+            $useRecursion = ! \is_scalar($value);
 
             if (! $useRecursion && isset($config[$value])) {
                 continue;
             } elseif ($useRecursion && isset($config[$key])) {
-                if (is_callable($value)) {
+                if (\is_callable($value)) {
                     $value($config[$key]);
 
                     return;
@@ -228,10 +229,10 @@ trait OptionsResolverTrait
                 self::validateOptions($value, $config[$key], $configClass);
 
                 return;
-            } elseif (! is_callable($value)) {
-                throw new InvalidValidatorException(sprintf(
+            } elseif (! \is_callable($value)) {
+                throw new InvalidValidatorException(\sprintf(
                     'The validator must be of type callable, [%s] given, in %s.',
-                    is_object($value) ? get_class($value) : gettype($value),
+                    \is_object($value) ? \get_class($value) : \gettype($value),
                     $configClass
                 ));
             }

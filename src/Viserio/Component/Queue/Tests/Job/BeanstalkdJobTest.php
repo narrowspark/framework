@@ -12,7 +12,7 @@ use Viserio\Component\Queue\Tests\Fixture\BeanstalkdJobTestFailed;
 
 class BeanstalkdJobTest extends MockeryTestCase
 {
-    public function testBuryProperlyBuryTheJobFromBeanstalkd()
+    public function testBuryProperlyBuryTheJobFromBeanstalkd(): void
     {
         $pheanstalk = $this->mock(Pheanstalk::class);
         $pheanstalk->shouldReceive('release');
@@ -30,7 +30,7 @@ class BeanstalkdJobTest extends MockeryTestCase
         $job->bury();
     }
 
-    public function testDeleteRemovesTheJobFromBeanstalkd()
+    public function testDeleteRemovesTheJobFromBeanstalkd(): void
     {
         $job = $this->getJob();
         $job->getPheanstalk()->shouldReceive('delete')
@@ -39,12 +39,12 @@ class BeanstalkdJobTest extends MockeryTestCase
         $job->delete();
     }
 
-    public function testFailedProperlyCallsTheJobHandler()
+    public function testFailedProperlyCallsTheJobHandler(): void
     {
         $job = $this->getJob();
         $job->getPheanstalkJob()->shouldReceive('getData')
             ->once()
-            ->andReturn(json_encode(['job' => 'foo', 'data' => ['data']]));
+            ->andReturn(\json_encode(['job' => 'foo', 'data' => ['data']]));
         $job->getContainer()->shouldReceive('get')
             ->once()
             ->with('foo')
@@ -57,12 +57,12 @@ class BeanstalkdJobTest extends MockeryTestCase
         $job->failed();
     }
 
-    public function testRunProperlyCallsTheJobHandler()
+    public function testRunProperlyCallsTheJobHandler(): void
     {
         $job = $this->getJob();
         $job->getPheanstalkJob()->shouldReceive('getData')
             ->once()
-            ->andReturn(json_encode(['job' => 'foo', 'data' => ['data']]));
+            ->andReturn(\json_encode(['job' => 'foo', 'data' => ['data']]));
         $job->getContainer()->shouldReceive('get')
             ->once()
             ->with('foo')

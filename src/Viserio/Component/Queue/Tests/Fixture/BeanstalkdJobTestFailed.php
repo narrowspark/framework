@@ -4,7 +4,7 @@ namespace Viserio\Component\Queue\Tests\Fixture;
 
 class BeanstalkdJobTestFailed
 {
-    public function failed(array $data)
+    public function failed(array $data): void
     {
     }
 }

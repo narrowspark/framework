@@ -89,11 +89,11 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
         try {
             $source = $this->files->read($template);
         } catch (FileNotFoundException $exception) {
-            throw new LoaderError(sprintf('Twig file [%s] was not found.', $exception->getMessage()));
+            throw new LoaderError(\sprintf('Twig file [%s] was not found.', $exception->getMessage()));
         }
 
         if ($source === false) {
-            throw new LoaderError(sprintf('A error occurred during template [%s] reading', $name));
+            throw new LoaderError(\sprintf('A error occurred during template [%s] reading', $name));
         }
 
         return new Source($source, $name, $template);
@@ -158,7 +158,7 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
     protected function normalizeName(string $name): string
     {
         if ($this->files->getExtension($name) === $this->extension) {
-            $name = mb_substr($name, 0, -(mb_strlen($this->extension) + 1));
+            $name = \mb_substr($name, 0, -(\mb_strlen($this->extension) + 1));
         }
 
         return $name;

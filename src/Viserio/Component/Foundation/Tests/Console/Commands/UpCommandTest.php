@@ -10,13 +10,13 @@ use Viserio\Component\Foundation\Console\Command\UpCommand;
 
 class UpCommandTest extends MockeryTestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         $framework = __DIR__ . '/../../Fixtures/framework';
         $down      = $framework . '/down';
 
-        mkdir($framework);
-        file_put_contents($down, 'test');
+        \mkdir($framework);
+        \file_put_contents($down, 'test');
 
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('storagePath')
@@ -38,6 +38,6 @@ class UpCommandTest extends MockeryTestCase
 
         self::assertEquals("Application is now live.\n", $output);
 
-        rmdir($framework);
+        \rmdir($framework);
     }
 }

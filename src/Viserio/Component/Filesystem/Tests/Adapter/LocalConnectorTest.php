@@ -8,7 +8,7 @@ use Viserio\Component\Filesystem\Adapter\LocalConnector;
 
 class LocalConnectorTest extends TestCase
 {
-    public function testConnectStandard()
+    public function testConnectStandard(): void
     {
         $connector = new LocalConnector();
 
@@ -17,7 +17,7 @@ class LocalConnectorTest extends TestCase
         self::assertInstanceOf(Local::class, $return);
     }
 
-    public function testConnectWithPrefix()
+    public function testConnectWithPrefix(): void
     {
         $connector = new LocalConnector();
 
@@ -30,7 +30,7 @@ class LocalConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The local connector requires path configuration.
      */
-    public function testConnectWithoutPath()
+    public function testConnectWithoutPath(): void
     {
         $connector = new LocalConnector();
 

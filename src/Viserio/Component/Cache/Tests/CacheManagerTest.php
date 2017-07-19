@@ -14,7 +14,7 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class CacheManagerTest extends MockeryTestCase
 {
-    public function testArrayPoolCall()
+    public function testArrayPoolCall(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -39,7 +39,7 @@ class CacheManagerTest extends MockeryTestCase
         self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
-    public function testArrayPoolCallWithLog()
+    public function testArrayPoolCallWithLog(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -67,7 +67,7 @@ class CacheManagerTest extends MockeryTestCase
         self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
-    public function testNamespacedArrayPoolCall()
+    public function testNamespacedArrayPoolCall(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -93,7 +93,7 @@ class CacheManagerTest extends MockeryTestCase
         self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('array'));
     }
 
-    public function testNamespacedNullPoolCall()
+    public function testNamespacedNullPoolCall(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -119,7 +119,7 @@ class CacheManagerTest extends MockeryTestCase
         self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
     }
 
-    public function testFilesystem()
+    public function testFilesystem(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')

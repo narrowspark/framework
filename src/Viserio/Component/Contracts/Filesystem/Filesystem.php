@@ -34,7 +34,7 @@ interface Filesystem
      *
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|false the file contents or false on failure
+     * @return false|string the file contents or false on failure
      */
     public function read(string $path);
 
@@ -45,7 +45,7 @@ interface Filesystem
      *
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return resource|bool
+     * @return bool|resource
      */
     public function readStream(string $path);
 
@@ -75,7 +75,7 @@ interface Filesystem
      * Write the contents of a file.
      *
      * @param string          $path
-     * @param string|resource $contents
+     * @param resource|string $contents
      * @param array           $config   an optional configuration array
      *
      * @return bool
@@ -180,7 +180,7 @@ interface Filesystem
      *
      * @param string $path the path to the file
      *
-     * @return int|bool the file size or false on failure
+     * @return bool|int the file size or false on failure
      */
     public function getSize(string $path);
 
@@ -191,7 +191,7 @@ interface Filesystem
      *
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|bool the file mime-type or false on failure
+     * @return bool|string the file mime-type or false on failure
      */
     public function getMimetype(string $path);
 
@@ -202,7 +202,7 @@ interface Filesystem
      *
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|bool the timestamp or false on failure
+     * @return bool|string the timestamp or false on failure
      */
     public function getTimestamp(string $path);
 
@@ -256,7 +256,7 @@ interface Filesystem
      * Returns the filename without the extension from a file path.
      *
      * @param string      $path      The path string
-     * @param string|null $extension If specified, only that extension is cut off
+     * @param null|string $extension If specified, only that extension is cut off
      *                               (may contain leading dot)
      *
      * @return string Filename without extension

@@ -53,7 +53,7 @@ class Listener
     /**
      * The output handler callback.
      *
-     * @var \Closure|null
+     * @var null|\Closure
      */
     protected $outputHandler;
 
@@ -79,7 +79,7 @@ class Listener
      * @param string $memory
      * @param int    $timeout
      */
-    public function listen(string $connection, string $queue, string $delay, string $memory, int $timeout = 60)
+    public function listen(string $connection, string $queue, string $delay, string $memory, int $timeout = 60): void
     {
         $process = $this->createProcess($connection, $queue, $delay, $memory, $timeout);
 
@@ -94,9 +94,9 @@ class Listener
      * @param \Symfony\Component\Process\Process $process
      * @param int                                $memory
      */
-    public function runProcess(Process $process, int $memory)
+    public function runProcess(Process $process, int $memory): void
     {
-        $process->run(function ($type, $line) {
+        $process->run(function ($type, $line): void {
             $this->handleWorkerOutput($type, $line);
         });
 
@@ -132,16 +132,16 @@ class Listener
         // workers will run under the specified environment. Otherwise, they will
         // just run under the production environment which is not always right.
         if (isset($this->environment)) {
-            $string .= ' --env=' . escapeshellarg($this->environment);
+            $string .= ' --env=' . \escapeshellarg($this->environment);
         }
 
         // Next, we will just format out the worker commands with all of the various
         // options available for the command. This will produce the final command
         // line that we will pass into a Symfony process object for processing.
-        $command = sprintf(
+        $command = \sprintf(
             $string,
-            escapeshellarg($connection),
-            escapeshellarg($queue),
+            \escapeshellarg($connection),
+            \escapeshellarg($queue),
             $delay,
             $memory,
             $this->sleep,
@@ -160,7 +160,7 @@ class Listener
      */
     public function memoryExceeded(int $memoryLimit): bool
     {
-        return (memory_get_usage() / 1024 / 1024) >= $memoryLimit;
+        return (\memory_get_usage() / 1024 / 1024) >= $memoryLimit;
     }
 
     /**
@@ -169,7 +169,7 @@ class Listener
      *
      * @codeCoverageIgnore
      */
-    public function stop()
+    public function stop(): void
     {
         die;
     }
@@ -179,7 +179,7 @@ class Listener
      *
      * @param \Closure $outputHandler
      */
-    public function setOutputHandler(Closure $outputHandler)
+    public function setOutputHandler(Closure $outputHandler): void
     {
         $this->outputHandler = $outputHandler;
     }
@@ -199,7 +199,7 @@ class Listener
      *
      * @param string $environment
      */
-    public function setEnvironment(string $environment)
+    public function setEnvironment(string $environment): void
     {
         $this->environment = $environment;
     }
@@ -221,7 +221,7 @@ class Listener
      *
      * @param int $sleep
      */
-    public function setSleep(int $sleep)
+    public function setSleep(int $sleep): void
     {
         $this->sleep = $sleep;
     }
@@ -231,7 +231,7 @@ class Listener
      *
      * @param int $tries
      */
-    public function setMaxTries(int $tries)
+    public function setMaxTries(int $tries): void
     {
         $this->maxTries = $tries;
     }
@@ -243,9 +243,9 @@ class Listener
      */
     protected function buildWorkerCommand(): string
     {
-        $binary = escapeshellarg((new PhpExecutableFinder())->find(false));
+        $binary = \escapeshellarg((new PhpExecutableFinder())->find(false));
 
-        $console = escapeshellarg($this->consoleName);
+        $console = \escapeshellarg($this->consoleName);
         $command = 'queue:work %s --queue=%s --delay=%s --memory=%s --sleep=%s --tries=%s';
 
         return "{$binary} {$console} {$command}";
@@ -257,10 +257,10 @@ class Listener
      * @param int    $type
      * @param string $line
      */
-    protected function handleWorkerOutput(int $type, string $line)
+    protected function handleWorkerOutput(int $type, string $line): void
     {
         if (isset($this->outputHandler)) {
-            call_user_func($this->outputHandler, $type, $line);
+            \call_user_func($this->outputHandler, $type, $line);
         }
     }
 }

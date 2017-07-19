@@ -89,7 +89,7 @@ class TwigServiceProvider implements
      */
     public static function extendViewFactory(ContainerInterface $container, ?callable $getPrevious = null): ?FactoryContract
     {
-        $view = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $view = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($view !== null) {
             $view->addExtension('twig', 'twig');
@@ -108,7 +108,7 @@ class TwigServiceProvider implements
      */
     public static function extendEngineResolver(ContainerInterface $container, ?callable $getPrevious = null): ?EngineResolver
     {
-        $engines = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $engines = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($engines !== null) {
             $engines->register('twig', function () use ($container) {
@@ -166,12 +166,12 @@ class TwigServiceProvider implements
 
         $loaders[] = $loader;
 
-        if (isset($twigOptions['templates']) && is_array($twigOptions['templates'])) {
+        if (isset($twigOptions['templates']) && \is_array($twigOptions['templates'])) {
             $loaders[] = new ArrayLoader($twigOptions['templates']);
         }
 
-        if (isset($twigOptions['loaders']) && is_array($twigOptions['loaders'])) {
-            $loaders = array_merge($loaders, $twigOptions['loaders']);
+        if (isset($twigOptions['loaders']) && \is_array($twigOptions['loaders'])) {
+            $loaders = \array_merge($loaders, $twigOptions['loaders']);
         }
 
         return new ChainLoader($loaders);

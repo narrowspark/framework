@@ -20,13 +20,13 @@ class PhpTest extends TestCase
      */
     private $file;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
@@ -37,7 +37,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 
         $parsed = (new PhpParser())->parse($file->url());
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
@@ -45,7 +45,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage No such file [nonexistfile] found.
      */
-    public function testParseToThrowException()
+    public function testParseToThrowException(): void
     {
         (new PhpParser())->parse('nonexistfile');
     }
@@ -54,7 +54,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage An exception was thrown by file
      */
-    public function testParseToThrowExceptionWithInFileException()
+    public function testParseToThrowExceptionWithInFileException(): void
     {
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
@@ -65,7 +65,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
         (new PhpParser())->parse($file->url());
     }
 
-    public function testDumpFile()
+    public function testDumpFile(): void
     {
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
