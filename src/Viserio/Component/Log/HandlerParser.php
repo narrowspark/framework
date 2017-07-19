@@ -103,6 +103,8 @@ class HandlerParser
      * @param string               $level
      * @param null|object|string[] $processor
      * @param null|object|string   $formatter
+     *
+     * @return void
      */
     public function parseHandler(
         $handler,

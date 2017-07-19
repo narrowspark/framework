@@ -148,6 +148,10 @@ class PumpStream implements StreamInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     *
+     * @return void
      */
     public function write($string): void
     {

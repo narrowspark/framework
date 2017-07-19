@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
 use ReflectionClass;
+use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Viserio\Component\Console\Command\Command;
