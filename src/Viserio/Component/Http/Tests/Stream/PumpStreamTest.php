@@ -80,7 +80,7 @@ class PumpStreamTest extends TestCase
         self::assertTrue($pump->eof());
 
         try {
-            self::assertFalse((bool) $pump->write('aa'));
+            $pump->write('aa');
             $this->fail();
         } catch (RuntimeException $e) {
         }
