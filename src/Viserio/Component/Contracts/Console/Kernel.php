@@ -12,7 +12,7 @@ interface Kernel extends BaseKernel
      * Handle an incoming console command.
      *
      * @param \Symfony\Component\Console\Input\InputInterface        $input
-     * @param \Symfony\Component\Console\Output\OutputInterface|null $output
+     * @param null|\Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return int
      */

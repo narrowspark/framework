@@ -35,7 +35,7 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter404($httpMethod, $uri)
+    public function testRouter404($httpMethod, $uri): void
     {
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
@@ -67,14 +67,14 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter405($httpMethod, $uri)
+    public function testRouter405($httpMethod, $uri): void
     {
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
     }
 
-    protected function definitions($router)
+    protected function definitions($router): void
     {
         $router->get('/abc/{param}/bar', function ($request, $args) {
             return (new ResponseFactory())
@@ -97,7 +97,8 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('some-string'));
+                    ->createStream('some-string')
+                );
         });
 
         // Order of precedence:

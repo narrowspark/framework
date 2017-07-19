@@ -31,7 +31,7 @@ class LoadServiceProvider implements BootstrapContract
     {
         $providers = $kernel->getConfigPath('/serviceproviders.php');
 
-        if (file_exists($providers)) {
+        if (\file_exists($providers)) {
             return require_once $providers;
         }
 

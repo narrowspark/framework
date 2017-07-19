@@ -8,7 +8,7 @@ use Viserio\Component\Filesystem\Adapter\SftpConnector;
 
 class SftpConnectorTest extends TestCase
 {
-    public function testConnect()
+    public function testConnect(): void
     {
         $connector = new SftpConnector();
 
@@ -26,7 +26,7 @@ class SftpConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The sftp connector requires host configuration.
      */
-    public function testConnectWithoutHost()
+    public function testConnectWithoutHost(): void
     {
         $connector = new SftpConnector();
 
@@ -37,7 +37,7 @@ class SftpConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The sftp connector requires port configuration.
      */
-    public function testConnectWithoutPort()
+    public function testConnectWithoutPort(): void
     {
         $connector = new SftpConnector();
 
@@ -50,7 +50,7 @@ class SftpConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The sftp connector requires username configuration.
      */
-    public function testConnectWithoutUsername()
+    public function testConnectWithoutUsername(): void
     {
         $connector = new SftpConnector();
 
@@ -64,7 +64,7 @@ class SftpConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The sftp connector requires password or privateKey configuration.
      */
-    public function testConnectWithoutPassword()
+    public function testConnectWithoutPassword(): void
     {
         $connector = new SftpConnector();
 

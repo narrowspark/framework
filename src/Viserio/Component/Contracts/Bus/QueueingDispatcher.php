@@ -10,7 +10,7 @@ interface QueueingDispatcher
      * Dispatch a command to its appropriate handler.
      *
      * @param mixed         $command
-     * @param \Closure|null $afterResolving
+     * @param null|\Closure $afterResolving
      *
      * @return mixed
      */

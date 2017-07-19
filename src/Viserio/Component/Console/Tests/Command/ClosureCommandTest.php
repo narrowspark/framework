@@ -16,14 +16,14 @@ class ClosureCommandTest extends TestCase
      */
     private $application;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->application = new Application('1.0.0');
     }
 
-    public function testCommand()
+    public function testCommand(): void
     {
-        $command = new ClosureCommand('demo', function () {
+        $command = new ClosureCommand('demo', function (): void {
             $this->comment('hello');
         });
 
@@ -33,12 +33,12 @@ class ClosureCommandTest extends TestCase
         self::assertOutputIs('demo', 'hello' . "\n");
     }
 
-    public function testCommandWithParam()
+    public function testCommandWithParam(): void
     {
         $this->application->setContainer(new ArrayContainer([
             'name' => ' daniel',
         ]));
-        $command = new ClosureCommand('demo', function ($name) {
+        $command = new ClosureCommand('demo', function ($name): void {
             $this->comment('hello' . $name);
         });
 
@@ -52,7 +52,7 @@ class ClosureCommandTest extends TestCase
      * @param string $command
      * @param string $expected
      */
-    private function assertOutputIs($command, $expected)
+    private function assertOutputIs($command, $expected): void
     {
         $output = new SpyOutput();
 

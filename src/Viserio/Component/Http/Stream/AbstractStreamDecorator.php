@@ -38,7 +38,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
             return $this->getContents();
         } catch (Throwable $e) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            trigger_error('StreamDecorator::__toString exception: '
+            \trigger_error('StreamDecorator::__toString exception: '
                 . (string) $e, E_USER_ERROR);
 
             return '';
@@ -55,7 +55,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
      */
     public function __call($method, array $args)
     {
-        $result = call_user_func_array([$this->stream, $method], $args);
+        $result = \call_user_func_array([$this->stream, $method], $args);
 
         // Always return the wrapped object if the result is a return $this
         return $result === $this->stream ? $this : $result;
@@ -72,7 +72,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
         $this->stream->close();
     }
@@ -144,7 +144,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek(0);
     }
@@ -152,7 +152,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         $this->stream->seek($offset, $whence);
     }

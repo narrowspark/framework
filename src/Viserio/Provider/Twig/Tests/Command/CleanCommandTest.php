@@ -10,7 +10,7 @@ use Viserio\Provider\Twig\Command\CleanCommand;
 
 class CleanCommandTest extends MockeryTestCase
 {
-    public function testFailed()
+    public function testFailed(): void
     {
         $files = $this->mock(FilesystemContract::class);
         $files->shouldReceive('deleteDirectory')
@@ -48,7 +48,7 @@ class CleanCommandTest extends MockeryTestCase
         self::assertContains('Twig cache failed to be cleaned.', $output);
     }
 
-    public function testSuccess()
+    public function testSuccess(): void
     {
         $files = $this->mock(FilesystemContract::class);
         $files->shouldReceive('deleteDirectory')

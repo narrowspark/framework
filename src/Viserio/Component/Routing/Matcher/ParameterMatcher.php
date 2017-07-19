@@ -28,7 +28,7 @@ class ParameterMatcher
      */
     public function __construct($names, string $regex)
     {
-        $this->names = is_array($names) ? $names : [$names];
+        $this->names = \is_array($names) ? $names : [$names];
         $this->regex = $regex;
     }
 
@@ -41,7 +41,7 @@ class ParameterMatcher
      */
     public function getMatcher(array &$parameterIndexNameMap): SegmentMatcherContract
     {
-        $parameterKey         = empty($parameterIndexNameMap) ? 0 : max(array_keys($parameterIndexNameMap)) + 1;
+        $parameterKey         = empty($parameterIndexNameMap) ? 0 : \max(\array_keys($parameterIndexNameMap)) + 1;
         $parameterKeyGroupMap = [];
         $group                = 0;
 

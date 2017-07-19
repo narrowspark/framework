@@ -40,13 +40,13 @@ class CallQueuedHandler
      * @param \Viserio\Component\Contracts\Queue\Job $job
      * @param array                                  $data
      */
-    public function call(JobContract $job, array $data)
+    public function call(JobContract $job, array $data): void
     {
         $command = $this->setJobInstanceIfNecessary(
             $job,
-            unserialize(
+            \unserialize(
                 $this->encrypter->decrypt(
-                    array_key_exists('command64', $data) ? $data['command64'] : $data['command']
+                    \array_key_exists('command64', $data) ? $data['command64'] : $data['command']
                 )
             )
         );
@@ -63,15 +63,15 @@ class CallQueuedHandler
      *
      * @param array $data
      */
-    public function failed(array $data)
+    public function failed(array $data): void
     {
-        $command = unserialize(
+        $command = \unserialize(
             $this->encrypter->decrypt(
-                array_key_exists('command64', $data) ? $data['command64'] : $data['command']
+                \array_key_exists('command64', $data) ? $data['command64'] : $data['command']
             )
         );
 
-        if (method_exists($command, 'failed')) {
+        if (\method_exists($command, 'failed')) {
             $command->failed();
         }
     }
@@ -82,11 +82,11 @@ class CallQueuedHandler
      * @param \Viserio\Component\Contracts\Queue\Job $job
      * @param mixed                                  $instance
      *
-     * @return int|float|string|null|array|bool|resource|object
+     * @return null|array|bool|float|int|object|resource|string
      */
     protected function setJobInstanceIfNecessary(JobContract $job, $instance)
     {
-        if (is_object($instance) && is_subclass_of($instance, AbstractInteractsWithQueue::class)) {
+        if (\is_object($instance) && \is_subclass_of($instance, AbstractInteractsWithQueue::class)) {
             $instance->setJob($job);
         }
 

@@ -15,7 +15,7 @@ abstract class ConsoleEvent implements EventContract
     /**
      * Gets the command that is executed.
      *
-     * @return \Symfony\Component\Console\Command\Command|null A Command instance
+     * @return null|\Symfony\Component\Console\Command\Command A Command instance
      */
     public function getCommand(): ?Command
     {

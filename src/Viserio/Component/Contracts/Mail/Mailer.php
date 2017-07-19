@@ -8,7 +8,7 @@ interface Mailer
      * Set the global from address and name.
      *
      * @param string      $address
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return void
      */
@@ -18,7 +18,7 @@ interface Mailer
      * Set the global to address and name.
      *
      * @param string      $address
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return void
      */
@@ -48,9 +48,9 @@ interface Mailer
     /**
      * Send a new message using a view.
      *
-     * @param string|array         $view
+     * @param array|string         $view
      * @param array                $data
-     * @param \Closure|string|null $callback
+     * @param null|\Closure|string $callback
      *
      * @return int
      */

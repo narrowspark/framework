@@ -123,7 +123,7 @@ class Application extends SymfonyConsole
      * Add a command to the console.
      *
      * @param string                $expression defines the arguments and options of the command
-     * @param callable|string|array $callable   Called when the command is called.
+     * @param array|callable|string $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
@@ -155,7 +155,7 @@ class Application extends SymfonyConsole
 
         $this->setCatchExceptions(false);
 
-        array_unshift($parameters, $command);
+        \array_unshift($parameters, $command);
 
         $result = $this->run(new ArrayInput($parameters), $this->lastOutput);
 
@@ -171,7 +171,7 @@ class Application extends SymfonyConsole
      */
     public function output(): string
     {
-        if (method_exists($this->lastOutput, 'fetch')) {
+        if (\method_exists($this->lastOutput, 'fetch')) {
             return $this->lastOutput->fetch();
         }
 
@@ -248,7 +248,7 @@ class Application extends SymfonyConsole
     {
         $finder = (new PhpExecutableFinder())->find(false);
 
-        return escapeshellarg($finder === false ? '' : $finder);
+        return \escapeshellarg($finder === false ? '' : $finder);
     }
 
     /**
@@ -258,9 +258,9 @@ class Application extends SymfonyConsole
      */
     public static function cerebroBinary(): string
     {
-        $constant = defined('CEREBRO_BINARY') ? constant('CEREBRO_BINARY') : null;
+        $constant = \defined('CEREBRO_BINARY') ? \constant('CEREBRO_BINARY') : null;
 
-        return  $constant !== null ? escapeshellarg($constant) : 'cerebro';
+        return  $constant !== null ? \escapeshellarg($constant) : 'cerebro';
     }
 
     /**
@@ -272,7 +272,7 @@ class Application extends SymfonyConsole
      */
     public static function formatCommandString(string $string): string
     {
-        return sprintf('%s %s %s', static::phpBinary(), static::cerebroBinary(), $string);
+        return \sprintf('%s %s %s', static::phpBinary(), static::cerebroBinary(), $string);
     }
 
     /**
@@ -280,8 +280,8 @@ class Application extends SymfonyConsole
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        putenv('LINES=' . $this->terminal->getHeight());
-        putenv('COLUMNS=' . $this->terminal->getWidth());
+        \putenv('LINES=' . $this->terminal->getHeight());
+        \putenv('COLUMNS=' . $this->terminal->getWidth());
 
         if ($input === null) {
             $input = new ArgvInput();
@@ -342,7 +342,7 @@ class Application extends SymfonyConsole
 
             $exitCode = $changeableException->getCode();
 
-            if (is_numeric($exitCode)) {
+            if (\is_numeric($exitCode)) {
                 $exitCode = (int) $exitCode;
 
                 if ($exitCode === 0) {

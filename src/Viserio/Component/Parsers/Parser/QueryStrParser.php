@@ -11,7 +11,7 @@ class QueryStrParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        parse_str(trim($payload), $querystr);
+        \parse_str(\trim($payload), $querystr);
 
         return $querystr;
     }

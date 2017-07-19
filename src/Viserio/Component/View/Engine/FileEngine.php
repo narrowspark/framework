@@ -13,6 +13,6 @@ class FileEngine implements EngineContract
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        return file_get_contents($fileInfo['path']);
+        return \file_get_contents($fileInfo['path']);
     }
 }

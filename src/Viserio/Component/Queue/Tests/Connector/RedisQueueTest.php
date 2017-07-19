@@ -10,7 +10,7 @@ use Viserio\Component\Queue\Connector\RedisQueue;
 
 class RedisQueueTest extends MockeryTestCase
 {
-    public function testDelayedPushWithDateTimeProperlyPushesJobOntoRedis()
+    public function testDelayedPushWithDateTimeProperlyPushesJobOntoRedis(): void
     {
         $date      = Chronos::now();
         $encrypter = $this->mock(EncrypterContract::class);
@@ -22,7 +22,7 @@ class RedisQueueTest extends MockeryTestCase
             ->with(
                 'queues:default:delayed',
                 2,
-                json_encode(['job' => 'foo', 'data' => ['data'], 'id' => 'foo', 'attempts' => '1'])
+                \json_encode(['job' => 'foo', 'data' => ['data'], 'id' => 'foo', 'attempts' => '1'])
             );
 
         $queue = $this->getMockBuilder(RedisQueue::class)
@@ -44,7 +44,7 @@ class RedisQueueTest extends MockeryTestCase
         $queue->later($date, 'foo', ['data']);
     }
 
-    public function testPushProperlyPushesJobOntoRedis()
+    public function testPushProperlyPushesJobOntoRedis(): void
     {
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
@@ -61,7 +61,7 @@ class RedisQueueTest extends MockeryTestCase
             ->once()
             ->with(
                 'queues:default',
-                json_encode(['job' => 'foo', 'data' => ['data'], 'id' => 'foo', 'attempts' => '1'])
+                \json_encode(['job' => 'foo', 'data' => ['data'], 'id' => 'foo', 'attempts' => '1'])
             );
 
         $id = $queue->push('foo', ['data']);
@@ -69,7 +69,7 @@ class RedisQueueTest extends MockeryTestCase
         self::assertEquals('foo', $id);
     }
 
-    public function testDelayedPushProperlyPushesJobOntoRedis()
+    public function testDelayedPushProperlyPushesJobOntoRedis(): void
     {
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
@@ -80,7 +80,7 @@ class RedisQueueTest extends MockeryTestCase
             ->with(
                 'queues:default:delayed',
                 2,
-                json_encode(['job' => 'foo', 'data' => ['data'], 'id' => 'foo', 'attempts' => '1'])
+                \json_encode(['job' => 'foo', 'data' => ['data'], 'id' => 'foo', 'attempts' => '1'])
             );
 
         $queue = $this->getMockBuilder(RedisQueue::class)

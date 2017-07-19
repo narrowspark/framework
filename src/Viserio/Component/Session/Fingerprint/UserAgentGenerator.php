@@ -36,6 +36,6 @@ class UserAgentGenerator implements FingerprintContract
      */
     public function generate(): string
     {
-        return hash('ripemd160', $this->userAgent);
+        return \hash('ripemd160', $this->userAgent);
     }
 }

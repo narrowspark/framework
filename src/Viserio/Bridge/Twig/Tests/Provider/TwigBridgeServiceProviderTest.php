@@ -13,7 +13,7 @@ use Viserio\Component\Contracts\Translation\TranslationManager as TranslationMan
 
 class TwigBridgeServiceProviderTest extends MockeryTestCase
 {
-    public function testProviderIsNull()
+    public function testProviderIsNull(): void
     {
         $container = new Container();
         $container->register(new TwigBridgeServiceProvider());

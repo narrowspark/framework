@@ -56,9 +56,9 @@ class RabbitMQJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(): void
     {
-        $this->resolveAndRun(json_decode($this->message->body, true));
+        $this->resolveAndRun(\json_decode($this->message->body, true));
     }
 
     /**
@@ -72,7 +72,7 @@ class RabbitMQJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function delete()
+    public function delete(): void
     {
         parent::delete();
 
@@ -82,14 +82,14 @@ class RabbitMQJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function release(int $delay = 0)
+    public function release(int $delay = 0): void
     {
         $this->delete();
 
         $body     = $this->message->body;
-        $body     = json_decode($body, true);
+        $body     = \json_decode($body, true);
         $attempts = $this->attempts();
-        $job      = unserialize($body['data']['command']);
+        $job      = \unserialize($body['data']['command']);
 
         // write attempts to job
         $job->attempts = $attempts + 1;
@@ -107,10 +107,10 @@ class RabbitMQJob extends AbstractJob
      */
     public function attempts(): int
     {
-        $body = json_decode($this->message->body, true);
-        $job  = unserialize($body['data']['command']);
+        $body = \json_decode($this->message->body, true);
+        $job  = \unserialize($body['data']['command']);
 
-        if (is_object($job) && property_exists($job, 'attempts')) {
+        if (\is_object($job) && \property_exists($job, 'attempts')) {
             return (int) $job->attempts;
         }
 

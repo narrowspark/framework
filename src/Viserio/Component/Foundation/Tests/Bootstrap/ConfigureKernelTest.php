@@ -9,7 +9,7 @@ use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 
 class ConfigureKernelTest extends MockeryTestCase
 {
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         $bootstraper = new ConfigureKernel();
         $container   = $this->mock(ContainerContract::class);

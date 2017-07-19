@@ -18,13 +18,13 @@ class TaggableParserTest extends TestCase
      */
     private $parser;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->root   = vfsStream::setup();
         $this->parser = new TaggableParser();
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
@@ -37,11 +37,11 @@ class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->parse($file->url());
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame(['a' => 1, 'e' => 5], $parsed);
     }
 
-    public function testParseTag()
+    public function testParseTag(): void
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
@@ -54,7 +54,7 @@ class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->setTag('foo')->parse($file->url());
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
     }
 }

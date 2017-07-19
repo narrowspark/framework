@@ -10,7 +10,7 @@ use Viserio\Component\Pipeline\Provider\PipelineServiceProvider;
 
 class PipelineServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new PipelineServiceProvider());

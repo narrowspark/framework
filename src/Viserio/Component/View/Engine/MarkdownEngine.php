@@ -19,7 +19,7 @@ class MarkdownEngine implements EngineContract
     /**
      * Create a new markdown engine instance.
      *
-     * @param \Parsedown|\ParsedownExtra|null
+     * @param null|\Parsedown|\ParsedownExtra
      * @param null|Parsedown $markdown
      *
      * @throws \RuntimeException
@@ -28,9 +28,9 @@ class MarkdownEngine implements EngineContract
     {
         // @codeCoverageIgnoreStart
         if ($markdown === null) {
-            if (class_exists(ParsedownExtra::class)) {
+            if (\class_exists(ParsedownExtra::class)) {
                 $markdown =  new ParsedownExtra();
-            } elseif (class_exists(Parsedown::class)) {
+            } elseif (\class_exists(Parsedown::class)) {
                 $markdown = new Parsedown();
             }
         }
@@ -48,6 +48,6 @@ class MarkdownEngine implements EngineContract
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        return $this->markdown->text(file_get_contents($fileInfo['path']));
+        return $this->markdown->text(\file_get_contents($fileInfo['path']));
     }
 }

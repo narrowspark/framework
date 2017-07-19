@@ -55,16 +55,16 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         $hints             = $finder->getHints();
         $searchDirectories = [];
 
-        if (is_array($hints) && count($hints) !== 0) {
-            $paths = array_reduce($hints, function ($package, $paths) {
-                return array_merge($paths, $package);
+        if (\is_array($hints) && \count($hints) !== 0) {
+            $paths = \array_reduce($hints, function ($package, $paths) {
+                return \array_merge($paths, $package);
             }, $paths);
         }
 
-        if (count($directories) !== 0) {
+        if (\count($directories) !== 0) {
             foreach ($directories as $directory) {
                 foreach ($paths as $path) {
-                    if (is_dir($this->normalizeDirectorySeparator($path . '/' . $directory))) {
+                    if (\is_dir($this->normalizeDirectorySeparator($path . '/' . $directory))) {
                         $searchDirectories[] = $this->normalizeDirectorySeparator($path . '/' . $directory);
                     } else {
                         $this->warn('Path "' . $this->normalizeDirectorySeparator($path . '/' . $directory) . '" is not a directory.');
@@ -72,7 +72,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
                 }
             }
 
-            if (count($searchDirectories) !== 0 && count($files) === 0) {
+            if (\count($searchDirectories) !== 0 && \count($files) === 0) {
                 // Get those files from the search directory
                 foreach ($this->getFinder($searchDirectories) as $file) {
                     $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
@@ -80,12 +80,12 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
             }
         }
 
-        if (count($files) !== 0) {
-            $search = array_merge($search, $this->findArgumentFiles($paths, $searchDirectories, $files));
+        if (\count($files) !== 0) {
+            $search = \array_merge($search, $this->findArgumentFiles($paths, $searchDirectories, $files));
         }
 
         // If no files passed, use the view paths
-        if (count($search) === 0) {
+        if (\count($search) === 0) {
             foreach ($this->getFinder($paths) as $file) {
                 $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
             }
@@ -108,7 +108,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         $search = [];
 
         foreach ($files as $fileName) {
-            if (count($searchDirectories) !== 0) {
+            if (\count($searchDirectories) !== 0) {
                 foreach ($this->getFinder($searchDirectories, $fileName) as $file) {
                     $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
                 }

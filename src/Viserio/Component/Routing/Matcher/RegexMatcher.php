@@ -30,18 +30,18 @@ class RegexMatcher extends AbstractMatcher
      */
     public function __construct(string $regex, $parameterKeyGroupMap)
     {
-        if ((mb_strpos($regex, '/^(') !== false && mb_strpos($regex, ')$/') !== false) ||
-            (mb_strpos($regex, '/^') !== false && mb_strpos($regex, '$/') !== false)
+        if ((\mb_strpos($regex, '/^(') !== false && \mb_strpos($regex, ')$/') !== false) ||
+            (\mb_strpos($regex, '/^') !== false && \mb_strpos($regex, '$/') !== false)
         ) {
             $this->regex = $regex;
         } else {
             $this->regex = '/^(' . $regex . ')$/';
         }
 
-        $map = is_array($parameterKeyGroupMap) ? $parameterKeyGroupMap : [$parameterKeyGroupMap => 0];
+        $map = \is_array($parameterKeyGroupMap) ? $parameterKeyGroupMap : [$parameterKeyGroupMap => 0];
 
         $this->parameterKeyGroupMap = $map;
-        $this->parameterKeys        = array_keys($map);
+        $this->parameterKeys        = \array_keys($map);
     }
 
     /**
@@ -51,7 +51,7 @@ class RegexMatcher extends AbstractMatcher
      */
     public function getGroupCount(): int
     {
-        return count(array_unique($this->parameterKeyGroupMap, SORT_NUMERIC));
+        return \count(\array_unique($this->parameterKeyGroupMap, SORT_NUMERIC));
     }
 
     /**
@@ -107,12 +107,12 @@ class RegexMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function mergeParameterKeys(SegmentMatcherContract $matcher)
+    public function mergeParameterKeys(SegmentMatcherContract $matcher): void
     {
         parent::mergeParameterKeys($matcher);
 
-        if (! method_exists($matcher, 'getParameterKeyGroupMap')) {
-            throw new RuntimeException(sprintf('%s::getParameterKeyGroupMap is needed for this function.', get_class($this)));
+        if (! \method_exists($matcher, 'getParameterKeyGroupMap')) {
+            throw new RuntimeException(\sprintf('%s::getParameterKeyGroupMap is needed for this function.', \get_class($this)));
         }
 
         $this->parameterKeyGroupMap += $matcher->getParameterKeyGroupMap();

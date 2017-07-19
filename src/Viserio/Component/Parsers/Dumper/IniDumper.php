@@ -32,10 +32,10 @@ class IniDumper implements DumperContract
         $output      = '[' . $section . ']' . PHP_EOL;
 
         foreach ($array as $key => $value) {
-            if (is_array($value) || is_object($value)) {
-                $subsections[$key] = is_array($value) ? $value : (array) $value;
+            if (\is_array($value) || \is_object($value)) {
+                $subsections[$key] = \is_array($value) ? $value : (array) $value;
             } else {
-                $output .= str_replace('=', '_', $key) . '=';
+                $output .= \str_replace('=', '_', $key) . '=';
                 $output .= self::export($value);
                 $output .= PHP_EOL;
             }
@@ -45,9 +45,9 @@ class IniDumper implements DumperContract
             $output .= PHP_EOL;
 
             foreach ($subsections as $section => $data) {
-                if (is_array($data)) {
+                if (\is_array($data)) {
                     foreach ($data as $key => $value) {
-                        $output .= $section . '[' . (is_string($key) ? $key : '') . ']=' . self::export($value);
+                        $output .= $section . '[' . (\is_string($key) ? $key : '') . ']=' . self::export($value);
                     }
                 } else {
                     $output .= $section . '[]=' . $data;
@@ -67,14 +67,14 @@ class IniDumper implements DumperContract
      */
     private static function export($value): string
     {
-        if (is_null($value)) {
+        if (null === $value) {
             return 'null';
-        } elseif (is_bool($value)) {
+        } elseif (\is_bool($value)) {
             return $value ? 'true' : 'false';
-        } elseif (is_numeric($value)) {
+        } elseif (\is_numeric($value)) {
             return '"' . $value . '"';
         }
 
-        return sprintf('"%s"', $value);
+        return \sprintf('"%s"', $value);
     }
 }

@@ -41,7 +41,7 @@ class SemanticUi implements PresenterContract
                 $pagination .= '<a class="icon item" href="' . $paginator->getPreviousPageUrl() . '" rel="prev"><i class="left chevron icon"></i></a>';
             }
 
-            if (method_exists($paginator, 'getElements')) {
+            if (\method_exists($paginator, 'getElements')) {
                 $this->getPaginationsLinks($paginator->getElements(), $pagination);
             }
 
@@ -66,15 +66,15 @@ class SemanticUi implements PresenterContract
      * @param array  $items
      * @param string $pagination
      */
-    private function getPaginationsLinks(array $items, $pagination)
+    private function getPaginationsLinks(array $items, $pagination): void
     {
         foreach ($items as $item) {
-            if (is_string($item)) {
+            if (\is_string($item)) {
                 $pagination .= '<a class="icon item disabled">' . $item . '</a>';
             }
 
             // Array Of Links
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 foreach ($item as $page => $url) {
                     if ($this->paginator->getCurrentPage() == $page) {
                         $pagination .= '<a class="item active">' . $page . '</a>';

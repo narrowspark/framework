@@ -19,7 +19,7 @@ class QtTest extends TestCase
      */
     private $data;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->file   = new Filesystem();
         $this->data   = [
@@ -60,7 +60,7 @@ class QtTest extends TestCase
         ];
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         self::assertSame(
             $this->data,
@@ -72,12 +72,12 @@ class QtTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage Content does not contain valid XML, it is empty.
      */
-    public function testParseWithEmptyContent()
+    public function testParseWithEmptyContent(): void
     {
         (new QtParser())->parse('');
     }
 
-    public function testDump()
+    public function testDump(): void
     {
         self::assertXmlStringEqualsXmlFile(
             __DIR__ . '/../Fixtures/qt/resources.ts',

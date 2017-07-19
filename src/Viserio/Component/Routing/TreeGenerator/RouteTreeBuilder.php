@@ -22,7 +22,7 @@ final class RouteTreeBuilder
         $groupedRoutes = [];
 
         foreach ($routes as $route) {
-            $groupedRoutes[count($route->getSegments())][] = $route;
+            $groupedRoutes[\count($route->getSegments())][] = $route;
         }
 
         if (isset($groupedRoutes[0])) {
@@ -38,7 +38,7 @@ final class RouteTreeBuilder
             foreach ($group as $route) {
                 $parameterIndexNameMap = [];
                 $segments              = $route->getSegments();
-                $segmentMatcher        = $this->getMatcher(array_shift($segments), $parameterIndexNameMap);
+                $segmentMatcher        = $this->getMatcher(\array_shift($segments), $parameterIndexNameMap);
                 $firstSegmentHash      = $segmentMatcher->getHash();
 
                 if (! isset($groupNodes[$firstSegmentHash])) {
@@ -72,14 +72,14 @@ final class RouteTreeBuilder
         array $segments,
         int $segmentDepth,
         array $parameterIndexNameMap
-    ) {
+    ): void {
         if (empty($segments)) {
             $node->getContents()->addRoute($route, $parameterIndexNameMap);
 
             return;
         }
 
-        $childSegmentMatcher = $this->getMatcher(array_shift($segments), $parameterIndexNameMap);
+        $childSegmentMatcher = $this->getMatcher(\array_shift($segments), $parameterIndexNameMap);
 
         if ($node->getContents()->hasChildFor($childSegmentMatcher)) {
             $child = $node->getContents()->getChild($childSegmentMatcher);

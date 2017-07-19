@@ -137,7 +137,7 @@ abstract class Command extends BaseCommand
     /**
      * Set the verbosity level.
      *
-     * @param string|int $level
+     * @param int|string $level
      *
      * @return void
      */
@@ -149,7 +149,7 @@ abstract class Command extends BaseCommand
     /**
      * Get the verbosity level in terms of Symfony's OutputInterface level.
      *
-     * @param null|string|int $level
+     * @param null|int|string $level
      *
      * @return int
      */
@@ -195,9 +195,9 @@ abstract class Command extends BaseCommand
     /**
      * Get the value of a command argument.
      *
-     * @param string|null $key
+     * @param null|string $key
      *
-     * @return string|array
+     * @return array|string
      */
     public function argument(?string $key = null)
     {
@@ -211,9 +211,9 @@ abstract class Command extends BaseCommand
     /**
      * Get the value of a command option.
      *
-     * @param string|null $key
+     * @param null|string $key
      *
-     * @return string|array
+     * @return array|string
      */
     public function option($key = null)
     {
@@ -242,7 +242,7 @@ abstract class Command extends BaseCommand
      * @param string $question
      * @param bool   $default
      *
-     * @return string|bool
+     * @return bool|string
      */
     public function confirm(string $question, bool $default = false)
     {
@@ -253,10 +253,10 @@ abstract class Command extends BaseCommand
      * Prompt the user for input.
      *
      * @param string        $question
-     * @param string|null   $default
-     * @param callable|null $validator
+     * @param null|string   $default
+     * @param null|callable $validator
      *
-     * @return string|null
+     * @return null|string
      */
     public function ask(string $question, ?string $default = null, ?callable $validator = null): ?string
     {
@@ -270,7 +270,7 @@ abstract class Command extends BaseCommand
      * @param array  $choices
      * @param string $default
      *
-     * @return string|null
+     * @return null|string
      */
     public function anticipate(string $question, array $choices, string $default = null): ?string
     {
@@ -282,9 +282,9 @@ abstract class Command extends BaseCommand
      *
      * @param string      $question
      * @param array       $choices
-     * @param string|null $default
+     * @param null|string $default
      *
-     * @return string|null
+     * @return null|string
      */
     public function askWithCompletion(string $question, array $choices, ?string $default = null): ?string
     {
@@ -317,11 +317,11 @@ abstract class Command extends BaseCommand
      *
      * @param string      $question
      * @param array       $choices
-     * @param string|null $default
+     * @param null|string $default
      * @param mixed       $attempts
      * @param bool        $multiple
      *
-     * @return string|null
+     * @return null|string
      */
     public function choice(
         string $question,
@@ -361,7 +361,7 @@ abstract class Command extends BaseCommand
      * Write a string as standard output.
      *
      * @param string          $string
-     * @param string|null     $style          The output style of the string
+     * @param null|string     $style          The output style of the string
      * @param null|int|string $verbosityLevel
      *
      * @return void
@@ -505,11 +505,11 @@ abstract class Command extends BaseCommand
         // set them all on the base command instance. This specifies what can get
         // passed into these commands as "parameters" to control the execution.
         foreach ($this->getArguments() as $arguments) {
-            call_user_func_array([$this, 'addArgument'], $arguments);
+            \call_user_func_array([$this, 'addArgument'], $arguments);
         }
 
         foreach ($this->getOptions() as $options) {
-            call_user_func_array([$this, 'addOption'], $options);
+            \call_user_func_array([$this, 'addOption'], $options);
         }
     }
 }

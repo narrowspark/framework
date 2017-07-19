@@ -51,8 +51,8 @@ class Worker implements WorkerContract
      * Create a new queue worker.
      *
      * @param \Viserio\Component\Queue\QueueManager                     $manager
-     * @param \Viserio\Component\Contracts\Queue\FailedJobProvider|null $failed
-     * @param \Viserio\Component\Contracts\Events\EventManager|null     $events
+     * @param null|\Viserio\Component\Contracts\Queue\FailedJobProvider $failed
+     * @param null|\Viserio\Component\Contracts\Events\EventManager     $events
      */
     public function __construct(
         QueueManager $manager,
@@ -75,7 +75,7 @@ class Worker implements WorkerContract
         int $timeout = 60,
         int $sleep = 3,
         int $maxTries = 0
-    ) {
+    ): void {
         while (true) {
             if ($this->daemonShouldRun()) {
                 $this->runNextJobForDaemon(
@@ -156,13 +156,13 @@ class Worker implements WorkerContract
      */
     public function memoryExceeded(int $memoryLimit): bool
     {
-        return (memory_get_usage() / 1024 / 1024) >= $memoryLimit;
+        return (\memory_get_usage() / 1024 / 1024) >= $memoryLimit;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function stop()
+    public function stop(): void
     {
         if ($this->events !== null) {
             $this->events->trigger('viserio.worker.stopping');
@@ -174,9 +174,9 @@ class Worker implements WorkerContract
     /**
      * {@inheritdoc}
      */
-    public function sleep(int $seconds)
+    public function sleep(int $seconds): void
     {
-        sleep($seconds);
+        \sleep($seconds);
     }
 
     /**
@@ -216,7 +216,7 @@ class Worker implements WorkerContract
         $timeout,
         $sleep,
         $maxTries
-    ) {
+    ): void {
         if ($processId = pcntl_fork()) {
             $this->waitForChildProcess($processId, $timeout);
         } else {
@@ -236,9 +236,9 @@ class Worker implements WorkerContract
      * Get the next job from the queue connection.
      *
      * @param \Viserio\Component\Contracts\Queue\QueueConnector $connection
-     * @param string|null                                       $queue
+     * @param null|string                                       $queue
      *
-     * @return \Viserio\Component\Contracts\Queue\Job|null
+     * @return null|\Viserio\Component\Contracts\Queue\Job
      */
     protected function getNextJob(QueueConnectorContract $connection, string $queue)
     {
@@ -246,8 +246,8 @@ class Worker implements WorkerContract
             return $connection->pop();
         }
 
-        foreach (explode(',', $queue) as $queue) {
-            if (! is_null($job = $connection->pop($queue))) {
+        foreach (\explode(',', $queue) as $queue) {
+            if (null !== ($job = $connection->pop($queue))) {
                 return $job;
             }
         }
@@ -273,16 +273,16 @@ class Worker implements WorkerContract
      * @param int $processId
      * @param int $timeout
      */
-    protected function waitForChildProcess(int $processId, int $timeout)
+    protected function waitForChildProcess(int $processId, int $timeout): void
     {
         declare(ticks=1) {
-            pcntl_signal(SIGALRM, function () use ($processId, $timeout) {
+            pcntl_signal(SIGALRM, function () use ($processId, $timeout): void {
                 posix_kill($processId, SIGKILL);
 
                 if ($this->exceptions) {
                     $this->exceptions->report(
                         new TimeoutException(
-                            sprintf('Queue child process timed out after %s seconds.', $timeout)
+                            \sprintf('Queue child process timed out after %s seconds.', $timeout)
                         )
                     );
                 }
@@ -302,7 +302,7 @@ class Worker implements WorkerContract
      * @param string                                 $connection
      * @param \Viserio\Component\Contracts\Queue\Job $job
      *
-     * @return void|null
+     * @return null|void
      */
     protected function logFailedJob(string $connection, JobContract $job)
     {
@@ -322,7 +322,7 @@ class Worker implements WorkerContract
                 [
                     'connection' => $connection,
                     'job'        => $job,
-                    'data'       => json_decode($job->getRawBody(), true),
+                    'data'       => \json_decode($job->getRawBody(), true),
                     'failedId'   => $failedId,
                 ]
             );
@@ -335,7 +335,7 @@ class Worker implements WorkerContract
      * @param string                                 $connection
      * @param \Viserio\Component\Contracts\Queue\Job $job
      */
-    protected function raiseBeforeJobEvent(string $connection, JobContract $job)
+    protected function raiseBeforeJobEvent(string $connection, JobContract $job): void
     {
         if ($this->events !== null) {
             $this->events->trigger(
@@ -343,7 +343,7 @@ class Worker implements WorkerContract
                 [
                     'connection' => $connection,
                     'job'        => $job,
-                    'data'       => json_decode($job->getRawBody(), true),
+                    'data'       => \json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -355,7 +355,7 @@ class Worker implements WorkerContract
      * @param string                                 $connection
      * @param \Viserio\Component\Contracts\Queue\Job $job
      */
-    protected function raiseAfterJobEvent(string $connection, JobContract $job)
+    protected function raiseAfterJobEvent(string $connection, JobContract $job): void
     {
         if ($this->events !== null) {
             $this->events->trigger(
@@ -363,7 +363,7 @@ class Worker implements WorkerContract
                 [
                     'connection' => $connection,
                     'job'        => $job,
-                    'data'       => json_decode($job->getRawBody(), true),
+                    'data'       => \json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -379,7 +379,7 @@ class Worker implements WorkerContract
      *
      * @throws \Throwable
      */
-    protected function handleJobException(string $connection, JobContract $job, int $delay, Throwable $exception)
+    protected function handleJobException(string $connection, JobContract $job, int $delay, Throwable $exception): void
     {
         // If we catch an exception, we will attempt to release the job back onto the queue
         // so it is not lost entirely. This'll let the job be retried at a later time by
@@ -391,7 +391,7 @@ class Worker implements WorkerContract
                     [
                         'connection' => $connection,
                         'job'        => $job,
-                        'data'       => json_decode($job->getRawBody(), true),
+                        'data'       => \json_decode($job->getRawBody(), true),
                         'exception'  => $exception,
                     ]
                 );
@@ -408,7 +408,7 @@ class Worker implements WorkerContract
     /**
      * Get a ErrorException instance.
      *
-     * @param \ParseError|\TypeError|\Throwable $exception
+     * @param \ParseError|\Throwable|\TypeError $exception
      *
      * @return \ErrorException
      */

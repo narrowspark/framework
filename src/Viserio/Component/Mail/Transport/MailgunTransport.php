@@ -141,7 +141,7 @@ class MailgunTransport extends AbstractTransport
      */
     protected function getTo(Swift_Mime_SimpleMessage $message): string
     {
-        return $this->formatAddress(is_null($message->getTo()) ? [] : $message->getTo());
+        return $this->formatAddress(null === $message->getTo() ? [] : $message->getTo());
     }
 
     /**
@@ -153,7 +153,7 @@ class MailgunTransport extends AbstractTransport
      */
     protected function getCc(Swift_Mime_SimpleMessage $message): string
     {
-        return $this->formatAddress(is_null($message->getCc()) ? [] : $message->getCc());
+        return $this->formatAddress(null === $message->getCc() ? [] : $message->getCc());
     }
 
     /**
@@ -165,7 +165,7 @@ class MailgunTransport extends AbstractTransport
      */
     protected function getBcc(Swift_Mime_SimpleMessage $message): string
     {
-        return $this->formatAddress(is_null($message->getBcc()) ? [] : $message->getBcc());
+        return $this->formatAddress(null === $message->getBcc() ? [] : $message->getBcc());
     }
 
     /**
@@ -180,9 +180,9 @@ class MailgunTransport extends AbstractTransport
         $formatted = [];
 
         foreach ($contacts as $address => $display) {
-            $formatted[] = $display ? $display . sprintf('<%s>', $address) : $address;
+            $formatted[] = $display ? $display . \sprintf('<%s>', $address) : $address;
         }
 
-        return implode(',', $formatted);
+        return \implode(',', $formatted);
     }
 }

@@ -28,7 +28,7 @@ class HttpProtocolVersion extends PHPUnitConstraint
      * @param string $protocolVersion
      * @param string $message
      */
-    public static function assertValid($protocolVersion, $message = '')
+    public static function assertValid($protocolVersion, $message = ''): void
     {
         Assert::assertThat($protocolVersion, new self(), $message);
     }
@@ -40,10 +40,10 @@ class HttpProtocolVersion extends PHPUnitConstraint
 
     protected function matches($other)
     {
-        if (! is_string($other)) {
+        if (! \is_string($other)) {
             return false;
         }
 
-        return in_array($other, $this->validHttpProtocolVersion, true);
+        return \in_array($other, $this->validHttpProtocolVersion, true);
     }
 }

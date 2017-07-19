@@ -15,7 +15,7 @@ class EventTest extends TestCase
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->event = new Event('test', $this, ['invoker' => $this]);
     }
@@ -23,7 +23,7 @@ class EventTest extends TestCase
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->event = null;
     }
@@ -32,7 +32,7 @@ class EventTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Event name cant be empty.
      */
-    public function testSetName()
+    public function testSetName(): void
     {
         new Event('', $this, ['invoker' => $this]);
     }
@@ -41,29 +41,29 @@ class EventTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The event name must only contain the characters A-Z, a-z, 0-9, _, and '.'.
      */
-    public function testSetNameWithInvalidName()
+    public function testSetNameWithInvalidName(): void
     {
         new Event('te-st', $this, ['invoker' => $this]);
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         self::assertSame('test', $this->event->getName());
     }
 
-    public function testGetTarget()
+    public function testGetTarget(): void
     {
         self::assertEquals($this, $this->event->getTarget());
     }
 
-    public function testGetParams()
+    public function testGetParams(): void
     {
         $p = $this->event->getParams();
 
         self::assertArrayHasKey('invoker', $p);
     }
 
-    public function testStopPropagation()
+    public function testStopPropagation(): void
     {
         self::assertFalse($this->event->isPropagationStopped());
 

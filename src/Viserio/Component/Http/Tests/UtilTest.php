@@ -10,13 +10,13 @@ use Viserio\Component\Http\Util;
 
 class UtilTest extends TestCase
 {
-    public function testCopiesToString()
+    public function testCopiesToString(): void
     {
         $body   = 'foobaz';
-        $stream = fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'r+');
 
-        fwrite($stream, $body);
-        fseek($stream, 0);
+        \fwrite($stream, $body);
+        \fseek($stream, 0);
 
         $s = new Stream($stream);
         self::assertEquals('foobaz', Util::copyToString($s));
@@ -27,13 +27,13 @@ class UtilTest extends TestCase
         self::assertEquals('', Util::copyToString($s));
     }
 
-    public function testCopiesToStringStopsWhenReadFails()
+    public function testCopiesToStringStopsWhenReadFails(): void
     {
         $body   = 'foobaz';
-        $stream = fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'r+');
 
-        fwrite($stream, $body);
-        fseek($stream, 0);
+        \fwrite($stream, $body);
+        \fseek($stream, 0);
 
         $s1 = new Stream($stream);
         $s1 = FnStream::decorate($s1, [
@@ -46,20 +46,20 @@ class UtilTest extends TestCase
         self::assertEquals('', $result);
     }
 
-    public function testCopiesToStream()
+    public function testCopiesToStream(): void
     {
         $body   = 'foobaz';
-        $stream = fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'r+');
 
-        fwrite($stream, $body);
-        fseek($stream, 0);
+        \fwrite($stream, $body);
+        \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(fopen('php://temp', 'r+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+'));
         Util::copyToStream($s1, $s2);
         self::assertEquals('foobaz', (string) $s2);
 
-        $s2 = new Stream(fopen('php://temp', 'r+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+'));
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
@@ -69,7 +69,7 @@ class UtilTest extends TestCase
         self::assertEquals('foobaz', (string) $s2);
     }
 
-    public function testCopyToStreamReadsInChunksInsteadOfAllInMemory()
+    public function testCopyToStreamReadsInChunksInsteadOfAllInMemory(): void
     {
         $sizes = [];
 
@@ -80,31 +80,31 @@ class UtilTest extends TestCase
             'read' => function ($size) use (&$sizes) {
                 $sizes[] = $size;
 
-                return str_repeat('.', $size);
+                return \str_repeat('.', $size);
             },
         ]);
 
-        $s2 = new Stream(fopen('php://temp', 'r+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+'));
 
         Util::copyToStream($s1, $s2, 16394);
         $s2->seek(0);
 
-        self::assertEquals(16394, mb_strlen($s2->getContents()));
+        self::assertEquals(16394, \mb_strlen($s2->getContents()));
         self::assertEquals(8192, $sizes[0]);
         self::assertEquals(8192, $sizes[1]);
         self::assertEquals(10, $sizes[2]);
     }
 
-    public function testStopsCopyToStreamWhenWriteFails()
+    public function testStopsCopyToStreamWhenWriteFails(): void
     {
         $body   = 'foobaz';
-        $stream = fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'r+');
 
-        fwrite($stream, $body);
-        fseek($stream, 0);
+        \fwrite($stream, $body);
+        \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(fopen('php://temp', 'r+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+'));
         $s2 = FnStream::decorate($s2, ['write' => function () {
             return 0;
         }]);
@@ -113,16 +113,16 @@ class UtilTest extends TestCase
         self::assertEquals('', (string) $s2);
     }
 
-    public function testStopsCopyToSteamWhenWriteFailsWithMaxLen()
+    public function testStopsCopyToSteamWhenWriteFailsWithMaxLen(): void
     {
         $body   = 'foobaz';
-        $stream = fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'r+');
 
-        fwrite($stream, $body);
-        fseek($stream, 0);
+        \fwrite($stream, $body);
+        \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(fopen('php://temp', 'r+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+'));
         $s2 = FnStream::decorate($s2, ['write' => function () {
             return 0;
         }]);
@@ -131,36 +131,36 @@ class UtilTest extends TestCase
         self::assertEquals('', (string) $s2);
     }
 
-    public function testStopsCopyToSteamWhenReadFailsWithMaxLen()
+    public function testStopsCopyToSteamWhenReadFailsWithMaxLen(): void
     {
         $body   = 'foobaz';
-        $stream = fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'r+');
 
-        fwrite($stream, $body);
-        fseek($stream, 0);
+        \fwrite($stream, $body);
+        \fseek($stream, 0);
 
         $s1 = new Stream($stream);
         $s1 = FnStream::decorate($s1, ['read' => function () {
             return '';
         }]);
-        $s2 = new Stream(fopen('php://temp', 'r+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+'));
 
         Util::copyToStream($s1, $s2, 10);
         self::assertEquals('', (string) $s2);
     }
 
-    public function testOpensFilesSuccessfully()
+    public function testOpensFilesSuccessfully(): void
     {
         $r = Util::tryFopen(__FILE__, 'r');
         self::assertInternalType('resource', $r);
-        fclose($r);
+        \fclose($r);
     }
 
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Unable to open [/path/to/does/not/exist] using mode r
      */
-    public function testThrowsExceptionNotWarning()
+    public function testThrowsExceptionNotWarning(): void
     {
         Util::tryFopen('/path/to/does/not/exist', 'r');
     }
@@ -415,7 +415,7 @@ class UtilTest extends TestCase
      * @param mixed $files
      * @param mixed $expected
      */
-    public function testNormalizeFiles($files, $expected)
+    public function testNormalizeFiles($files, $expected): void
     {
         $result = Util::normalizeFiles($files);
         self::assertEquals($expected, $result);
@@ -425,7 +425,7 @@ class UtilTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid value in files specification
      */
-    public function testNormalizeFilesRaisesException()
+    public function testNormalizeFilesRaisesException(): void
     {
         Util::normalizeFiles(['test' => 'something']);
     }

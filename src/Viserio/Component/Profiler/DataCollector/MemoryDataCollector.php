@@ -22,7 +22,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
     {
         $this->data = [
             'memory'       => 0,
-            'memory_limit' => $this->convertToBytes(ini_get('memory_limit')),
+            'memory_limit' => $this->convertToBytes(\ini_get('memory_limit')),
         ];
     }
 
@@ -65,8 +65,8 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
     /**
      * Updates the memory usage data.
      */
-    public function updateMemoryUsage()
+    public function updateMemoryUsage(): void
     {
-        $this->data['memory'] = memory_get_peak_usage(true);
+        $this->data['memory'] = \memory_get_peak_usage(true);
     }
 }

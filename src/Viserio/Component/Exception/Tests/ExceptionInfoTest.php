@@ -7,7 +7,7 @@ use Viserio\Component\Exception\ExceptionInfo;
 
 class ExceptionInfoTest extends TestCase
 {
-    public function testBadError()
+    public function testBadError(): void
     {
         $info = (new ExceptionInfo())->generate('test', 666);
 
@@ -22,7 +22,7 @@ class ExceptionInfoTest extends TestCase
         self::assertSame($expected, $info);
     }
 
-    public function testHiddenError()
+    public function testHiddenError(): void
     {
         $info = (new ExceptionInfo())->generate('hi', 503);
 

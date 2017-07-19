@@ -23,11 +23,11 @@ final class ExtensionGuesser
      */
     private function __construct()
     {
-        if (DIRECTORY_SEPARATOR !== '\\' && function_exists('passthru') && function_exists('escapeshellarg')) {
+        if (DIRECTORY_SEPARATOR !== '\\' && \function_exists('passthru') && \function_exists('escapeshellarg')) {
             self::register([self::class, 'getFileBinaryMimeTypeGuess']);
         }
 
-        if (function_exists('finfo_open')) {
+        if (\function_exists('finfo_open')) {
             self::register([self::class, 'getFileBinaryMimeTypeGuess']);
         }
     }
@@ -43,7 +43,7 @@ final class ExtensionGuesser
      */
     public static function register(callable $guesser): void
     {
-        array_unshift(self::$guessers, $guesser);
+        \array_unshift(self::$guessers, $guesser);
     }
 
     /**
@@ -65,26 +65,26 @@ final class ExtensionGuesser
      *                     with the file name to guess.
      *                     The command output must start with the mime type of the file.
      *
-     * @return string|null
+     * @return null|string
      */
     public static function getFileBinaryMimeTypeGuess(
         string $path,
         string $cmd = 'file -b --mime %s 2>/dev/null'
     ): ?string {
-        ob_start();
+        \ob_start();
 
         // need to use --mime instead of -i. see #6641
-        passthru(sprintf($cmd, escapeshellarg($path)), $return);
+        \passthru(\sprintf($cmd, \escapeshellarg($path)), $return);
 
         if ($return > 0) {
-            ob_end_clean();
+            \ob_end_clean();
 
             return null;
         }
 
-        $type = trim(ob_get_clean());
+        $type = \trim(\ob_get_clean());
 
-        if (! preg_match('#^([a-z0-9\-]+/[a-z0-9\-\.]+)#i', $type, $match)) {
+        if (! \preg_match('#^([a-z0-9\-]+/[a-z0-9\-\.]+)#i', $type, $match)) {
             // it's not a type, but an error message
             return null;
         }
@@ -96,9 +96,9 @@ final class ExtensionGuesser
      * Guesses the mime type using the PECL extension FileInfo.
      *
      * @param string      $path
-     * @param string|null $magicFile
+     * @param null|string $magicFile
      *
-     * @return string|null
+     * @return null|string
      */
     public static function getFileinfoMimeTypeGuess(string $path): ?string
     {
@@ -123,22 +123,22 @@ final class ExtensionGuesser
      * @throws \Viserio\Component\Http\Exception\AccessDeniedException If the file could not be read
      * @throws \LogicException                                         If no guesser found
      *
-     * @return string|null The guessed extension or NULL, if none could be guessed
+     * @return null|string The guessed extension or NULL, if none could be guessed
      */
     public static function guess(string $path): ?string
     {
-        if (! is_file($path)) {
+        if (! \is_file($path)) {
             throw new FileNotFoundException($path);
         }
 
-        if (! is_readable($path)) {
+        if (! \is_readable($path)) {
             throw new AccessDeniedException($path);
         }
 
         if (! self::$guessers) {
             $msg = 'Unable to guess the mime type as no guessers are available';
 
-            if (! function_exists('finfo_open')) {
+            if (! \function_exists('finfo_open')) {
                 $msg .= ' (Did you enable the php_fileinfo extension?)';
             }
 
@@ -146,7 +146,7 @@ final class ExtensionGuesser
         }
 
         foreach (self::$guessers as $guesser) {
-            if (null !== $extension = call_user_func($guesser, $path)) {
+            if (null !== $extension = \call_user_func($guesser, $path)) {
                 return $extension;
             }
         }

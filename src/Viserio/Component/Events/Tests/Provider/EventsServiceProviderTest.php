@@ -10,7 +10,7 @@ use Viserio\Component\Events\Provider\EventsServiceProvider;
 
 class EventsServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new EventsServiceProvider());

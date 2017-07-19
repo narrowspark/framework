@@ -35,7 +35,7 @@ class ProfilerPDOBridgeServiceProvider implements ServiceProvider
      */
     public static function createTraceablePDODecorater(ContainerInterface $container, ?callable $getPrevious = null): ?TraceablePDODecorater
     {
-        $pdo = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $pdo = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($pdo !== null) {
             return new TraceablePDODecorater($pdo);

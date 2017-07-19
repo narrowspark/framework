@@ -17,7 +17,7 @@ class PoParser implements ParserContract
      */
     public function __construct()
     {
-        if (! class_exists(SepiaPoParser::class)) {
+        if (! \class_exists(SepiaPoParser::class)) {
             throw new RuntimeException(
                 'Loading translations from the Po Parser requires the Sepia PoParser component.'
             );
@@ -31,7 +31,7 @@ class PoParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        if (! file_exists($payload)) {
+        if (! \file_exists($payload)) {
             throw new ParseException([
                 'message' => 'File not found.',
             ]);

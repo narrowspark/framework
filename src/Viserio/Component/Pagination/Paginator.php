@@ -155,7 +155,7 @@ class Paginator extends AbstractPaginator
      */
     public function toJson(int $options = 0): string
     {
-        return json_encode($this->jsonSerialize(), $options);
+        return \json_encode($this->jsonSerialize(), $options);
     }
 
     /**
@@ -201,7 +201,7 @@ class Paginator extends AbstractPaginator
      */
     protected function checkForMorePages(): void
     {
-        $this->hasMore = count($this->items) > ($this->itemCountPerPage);
+        $this->hasMore = \count($this->items) > ($this->itemCountPerPage);
 
         $this->items = $this->items->slice(0, $this->itemCountPerPage);
     }

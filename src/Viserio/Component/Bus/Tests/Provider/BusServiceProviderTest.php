@@ -10,7 +10,7 @@ use Viserio\Component\Contracts\Bus\Dispatcher as DispatcherContract;
 
 class BusServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new BusServiceProvider());

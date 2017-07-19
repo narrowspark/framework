@@ -14,7 +14,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Connection [fail] not supported.
      */
-    public function testConnectionToThrowRuntimeException()
+    public function testConnectionToThrowRuntimeException(): void
     {
         $manager = new TestConnectionManager(new ArrayContainer([
             'config' => [
@@ -29,7 +29,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         $manager->getConnection('fail');
     }
 
-    public function testConnection()
+    public function testConnection(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -53,10 +53,10 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         ]));
 
         self::assertTrue($manager->getConnection());
-        self::assertTrue(is_array($manager->getConnections()));
+        self::assertTrue(\is_array($manager->getConnections()));
     }
 
-    public function testExtend()
+    public function testExtend(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -85,7 +85,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         self::assertInstanceOf(stdClass::class, $manager->getConnection('test'));
     }
 
-    public function testGetConnectionConfig()
+    public function testGetConnectionConfig(): void
     {
         $configArray = [
             'default'     => 'pdo',
@@ -111,11 +111,11 @@ class AbstractConnectionManagerTest extends MockeryTestCase
             RepositoryContract::class => $config,
         ]));
 
-        self::assertTrue(is_array($manager->getConnectionConfig('pdo')));
+        self::assertTrue(\is_array($manager->getConnectionConfig('pdo')));
         self::assertSame($configArray, $manager->getConfig());
     }
 
-    public function testCall()
+    public function testCall(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -155,7 +155,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         self::assertSame('test', $manager->get('test'));
     }
 
-    public function testDefaultConnection()
+    public function testDefaultConnection(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -183,7 +183,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         self::assertSame('new', $manager->getDefaultConnection());
     }
 
-    public function testExtensionsConnection()
+    public function testExtensionsConnection(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')

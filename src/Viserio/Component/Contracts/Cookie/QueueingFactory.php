@@ -33,9 +33,9 @@ interface QueueingFactory extends Factory
      * Get a queued cookie instance.
      *
      * @param string     $key
-     * @param mixed|null $default
+     * @param null|mixed $default
      *
-     * @return \Viserio\Component\Contracts\Cookie\Cookie|null
+     * @return null|\Viserio\Component\Contracts\Cookie\Cookie
      */
     public function queued(string $key, $default = null): ?Cookie;
 

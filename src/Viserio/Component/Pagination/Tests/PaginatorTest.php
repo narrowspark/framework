@@ -11,7 +11,7 @@ use Viserio\Component\Pagination\Paginator;
 
 class PaginatorTest extends MockeryTestCase
 {
-    public function testToJson()
+    public function testToJson(): void
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
@@ -29,7 +29,7 @@ class PaginatorTest extends MockeryTestCase
         self::assertJson($pagi->toJson());
     }
 
-    public function testJsonSerialize()
+    public function testJsonSerialize(): void
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
@@ -44,10 +44,10 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertTrue(is_array($pagi->jsonSerialize()));
+        self::assertTrue(\is_array($pagi->jsonSerialize()));
     }
 
-    public function testSetAndGetPath()
+    public function testSetAndGetPath(): void
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
@@ -71,7 +71,7 @@ class PaginatorTest extends MockeryTestCase
         self::assertSame('http://example.com/test', $pagi->getPath());
     }
 
-    public function testSetAndGetDefaultPresenter()
+    public function testSetAndGetDefaultPresenter(): void
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
@@ -93,7 +93,7 @@ class PaginatorTest extends MockeryTestCase
         self::assertSame('foundation5', $pagi->getDefaultPresenter());
     }
 
-    public function testPaginatorGeneratesUrlsWithoutTrailingSlash()
+    public function testPaginatorGeneratesUrlsWithoutTrailingSlash(): void
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
@@ -111,7 +111,7 @@ class PaginatorTest extends MockeryTestCase
         self::assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
     }
 
-    public function testPaginatorRemovesTrailingSlashes()
+    public function testPaginatorRemovesTrailingSlashes(): void
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
@@ -129,7 +129,7 @@ class PaginatorTest extends MockeryTestCase
         self::assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
     }
 
-    public function testSimplePaginatorReturnsRelevantContextInformation()
+    public function testSimplePaginatorReturnsRelevantContextInformation(): void
     {
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
 
@@ -154,7 +154,7 @@ class PaginatorTest extends MockeryTestCase
         ], $pagi->toArray());
     }
 
-    public function testPaginatorWithNullAdapter()
+    public function testPaginatorWithNullAdapter(): void
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')

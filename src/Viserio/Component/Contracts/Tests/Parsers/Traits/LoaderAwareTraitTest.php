@@ -10,7 +10,7 @@ class LoaderAwareTraitTest extends MockeryTestCase
 {
     use ParserAwareTrait;
 
-    public function testGetAndSetLoader()
+    public function testGetAndSetLoader(): void
     {
         $this->setLoader($this->mock(LoaderContract::class));
 
@@ -21,7 +21,7 @@ class LoaderAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Loader is not set up.
      */
-    public function testGetLoaderThrowExceptionIfLoaderIsNotSet()
+    public function testGetLoaderThrowExceptionIfLoaderIsNotSet(): void
     {
         $this->getLoader();
     }

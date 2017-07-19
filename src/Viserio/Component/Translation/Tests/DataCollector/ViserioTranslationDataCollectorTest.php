@@ -12,7 +12,7 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
 {
     private $translator;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -34,13 +34,13 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
         );
     }
 
-    public function testGetMenu()
+    public function testGetMenu(): void
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
         self::assertEquals(
             [
-            'icon'      => file_get_contents(__DIR__ . '/../../DataCollector/Resources/icons/ic_translate_white_24px.svg'),
+            'icon'      => \file_get_contents(__DIR__ . '/../../DataCollector/Resources/icons/ic_translate_white_24px.svg'),
                 'label' => '',
                 'value' => null,
             ],
@@ -48,7 +48,7 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
         );
     }
 
-    public function testGetTooltip()
+    public function testGetTooltip(): void
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
@@ -57,11 +57,11 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
 
     private function removeId(string $html): string
     {
-        $html = preg_replace('/[ \t]+/', ' ', preg_replace('/[\r\n]+/', "\n", $html));
-        $html = preg_replace('/id=sf-dump-(?:\d+) /', '', $html);
-        $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/', '', $html);
-        $html = preg_replace('/<style\b[^>]*>(.*?)<\/style>/', '', $html);
+        $html = \preg_replace('/[ \t]+/', ' ', \preg_replace('/[\r\n]+/', "\n", $html));
+        $html = \preg_replace('/id=sf-dump-(?:\d+) /', '', $html);
+        $html = \preg_replace('/<script\b[^>]*>(.*?)<\/script>/', '', $html);
+        $html = \preg_replace('/<style\b[^>]*>(.*?)<\/style>/', '', $html);
 
-        return trim(preg_replace('/="tab-(.*?)"/', '', $html));
+        return \trim(\preg_replace('/="tab-(.*?)"/', '', $html));
     }
 }

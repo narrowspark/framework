@@ -19,13 +19,13 @@ class TomlTest extends TestCase
      */
     private $file;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
     }
 
-    public function testParses()
+    public function testParses(): void
     {
         $file = vfsStream::newFile('temp.toml')->withContent(
             "
@@ -35,7 +35,7 @@ class TomlTest extends TestCase
 
         $parsed = (new TomlParser())->parse((string) $this->file->read($file->url()));
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
     }
 
@@ -43,7 +43,7 @@ class TomlTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage Unable to parse the TOML string.
      */
-    public function testParseToThrowException()
+    public function testParseToThrowException(): void
     {
         (new TomlParser())->parse('nonexistfile');
     }

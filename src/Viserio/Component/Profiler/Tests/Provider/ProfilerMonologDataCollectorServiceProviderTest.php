@@ -13,7 +13,7 @@ use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
 class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());

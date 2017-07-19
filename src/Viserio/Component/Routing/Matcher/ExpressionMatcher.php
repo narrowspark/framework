@@ -38,7 +38,7 @@ class ExpressionMatcher extends AbstractMatcher
      */
     public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string
     {
-        return str_replace('{segment}', $segmentVariable, $this->expression);
+        return \str_replace('{segment}', $segmentVariable, $this->expression);
     }
 
     /**

@@ -58,13 +58,13 @@ interface Dispatcher
      *
      * @return void
      */
-    public function mapUsing(Closure $mapper);
+    public function mapUsing(Closure $mapper): void;
 
     /**
      * Dispatch a command to its appropriate handler.
      *
      * @param mixed         $command
-     * @param \Closure|null $afterResolving
+     * @param null|\Closure $afterResolving
      *
      * @return mixed
      */

@@ -17,9 +17,9 @@ class XmlParser implements ParserContract
         try {
             $dom  = XmlUtils::loadString($payload);
             // Work around to accept xml input
-            $data = json_decode(json_encode((array) simplexml_import_dom($dom)), true);
-            $data = str_replace(':{}', ':null', $data);
-            $data = str_replace(':[]', ':null', $data);
+            $data = \json_decode(\json_encode((array) \simplexml_import_dom($dom)), true);
+            $data = \str_replace(':{}', ':null', $data);
+            $data = \str_replace(':[]', ':null', $data);
         } catch (InvalidArgumentException $exception) {
             throw new ParseException([
                 'message' => $exception->getMessage(),

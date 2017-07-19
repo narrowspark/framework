@@ -61,9 +61,9 @@ abstract class AbstractPaginator implements
     /**
      * The URL fragment to add to all URLs.
      *
-     * @var string|null
+     * @var null|string
      */
-    protected $fragment = null;
+    protected $fragment;
 
     /**
      * The query string variable used to store the page.
@@ -135,13 +135,13 @@ abstract class AbstractPaginator implements
         // Extra information like sortings storage.
         $parameters = [$this->pageName => $page];
 
-        if (count($this->query) > 0) {
-            $parameters = array_merge($this->query, $parameters);
+        if (\count($this->query) > 0) {
+            $parameters = \array_merge($this->query, $parameters);
         }
 
         $url = $this->path;
-        $url .= (mb_strpos($this->path, '?') !== false ? '&' : '?');
-        $url .= http_build_query($parameters, '', '&');
+        $url .= (\mb_strpos($this->path, '?') !== false ? '&' : '?');
+        $url .= \http_build_query($parameters, '', '&');
         $url .= $this->buildFragment();
 
         return $url;
@@ -198,7 +198,7 @@ abstract class AbstractPaginator implements
      */
     public function appends($key, string $value = null): PaginatorContract
     {
-        if (is_array($key)) {
+        if (\is_array($key)) {
             return $this->appendArray($key);
         }
 
@@ -232,7 +232,7 @@ abstract class AbstractPaginator implements
      */
     public function setPath(string $path): PaginatorContract
     {
-        $this->path = $path != '/' ? rtrim($path, '/') : $path;
+        $this->path = $path != '/' ? \rtrim($path, '/') : $path;
 
         return $this;
     }
@@ -290,7 +290,7 @@ abstract class AbstractPaginator implements
      */
     public function getFirstItem(): int
     {
-        if (count($this->items) === 0) {
+        if (\count($this->items) === 0) {
             return 0;
         }
 
@@ -302,7 +302,7 @@ abstract class AbstractPaginator implements
      */
     public function getLastItem(): int
     {
-        if (count($this->items) === 0) {
+        if (\count($this->items) === 0) {
             return 0;
         }
 
@@ -409,7 +409,7 @@ abstract class AbstractPaginator implements
      *
      * @codeCoverageIgnore
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         $this->items->put($key, $value);
     }
@@ -421,7 +421,7 @@ abstract class AbstractPaginator implements
      *
      * @codeCoverageIgnore
      */
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
         $this->items->forget($key);
     }
@@ -461,7 +461,7 @@ abstract class AbstractPaginator implements
      */
     protected function isValidPageNumber(int $page): bool
     {
-        return $page >= 1 && filter_var($page, FILTER_VALIDATE_INT) !== false;
+        return $page >= 1 && \filter_var($page, FILTER_VALIDATE_INT) !== false;
     }
 
     /**
@@ -473,11 +473,11 @@ abstract class AbstractPaginator implements
     {
         $query = $this->request->getQueryParams();
 
-        if (array_key_exists($this->pageName, $query)) {
+        if (\array_key_exists($this->pageName, $query)) {
             $query = $this->secureInput($query);
             $page  = $query[$this->pageName];
 
-            if (filter_var($page, FILTER_VALIDATE_INT) !== false && (int) $page >= 1) {
+            if (\filter_var($page, FILTER_VALIDATE_INT) !== false && (int) $page >= 1) {
                 return (int) $page;
             }
         }
@@ -495,17 +495,17 @@ abstract class AbstractPaginator implements
      */
     private function secureInput(array $query): array
     {
-        $secure = function (&$v) {
-            if (! is_string($v) && ! is_numeric($v)) {
+        $secure = function (&$v): void {
+            if (! \is_string($v) && ! \is_numeric($v)) {
                 $v = '';
-            } elseif (mb_strpos($v, "\0") !== false) {
+            } elseif (\mb_strpos($v, "\0") !== false) {
                 $v = '';
-            } elseif (! mb_check_encoding($v, 'UTF-8')) {
+            } elseif (! \mb_check_encoding($v, 'UTF-8')) {
                 $v = '';
             }
         };
 
-        array_walk_recursive($query, $secure);
+        \array_walk_recursive($query, $secure);
 
         return $query;
     }

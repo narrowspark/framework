@@ -4,7 +4,7 @@ namespace Viserio\Component\Console\Tests\Fixture;
 
 class GreetCommand
 {
-    public function greet($times = 15)
+    public function greet($times = 15): void
     {
     }
 }

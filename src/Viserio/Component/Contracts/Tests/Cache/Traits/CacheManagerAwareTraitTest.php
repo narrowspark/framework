@@ -10,7 +10,7 @@ class CacheManagerAwareTraitTest extends MockeryTestCase
 {
     use CacheManagerAwareTrait;
 
-    public function testGetAndSetCache()
+    public function testGetAndSetCache(): void
     {
         $this->setCacheManager($this->mock(Manager::class));
 
@@ -21,7 +21,7 @@ class CacheManagerAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Cache Manager is not set up.
      */
-    public function testGetCacheThrowExceptionIfCacheIsNotSet()
+    public function testGetCacheThrowExceptionIfCacheIsNotSet(): void
     {
         $this->getCacheManager();
     }

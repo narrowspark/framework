@@ -10,7 +10,7 @@ interface Worker
      * Listen to the given queue in a loop.
      *
      * @param string      $connectionName
-     * @param string|null $queue
+     * @param null|string $queue
      * @param int         $delay
      * @param int         $memory
      * @param int         $timeout
@@ -43,7 +43,7 @@ interface Worker
      * Run the next job on the queue.
      *
      * @param string      $connectionName
-     * @param string|null $queue
+     * @param null|string $queue
      * @param int         $delay
      * @param int         $sleep
      * @param int         $maxTries

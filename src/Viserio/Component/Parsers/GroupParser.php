@@ -31,7 +31,7 @@ class GroupParser extends Parser
     public function parse(string $payload): array
     {
         if (! $this->groupKey) {
-            /* @var $method self */
+            // @var $method self
             return parent::parse($payload);
         }
 

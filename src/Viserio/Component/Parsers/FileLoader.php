@@ -60,7 +60,7 @@ class FileLoader implements LoaderContract
      */
     public function addDirectory(string $directory): LoaderContract
     {
-        if (! in_array($directory, $this->directories)) {
+        if (! \in_array($directory, $this->directories, true)) {
             $this->directories[] = self::normalizeDirectorySeparator($directory);
         }
 
@@ -96,7 +96,7 @@ class FileLoader implements LoaderContract
      */
     public function exists(string $file): string
     {
-        $key = str_replace('/', '', $file);
+        $key = \str_replace('/', '', $file);
 
         // Finally, we can simply check if this file exists. We will also cache
         // the value in an array so we don't have to go through this process
@@ -108,11 +108,11 @@ class FileLoader implements LoaderContract
 
         $file = self::normalizeDirectorySeparator($this->getPath($file) . $file);
 
-        if (file_exists($file)) {
+        if (\file_exists($file)) {
             return $this->exists[$key] = $file;
         }
 
-        throw new LoadingException(sprintf('File [%s] not found.', $file));
+        throw new LoadingException(\sprintf('File [%s] not found.', $file));
     }
 
     /**
@@ -127,7 +127,7 @@ class FileLoader implements LoaderContract
         foreach ($this->directories as $directory) {
             $dirFile = self::normalizeDirectorySeparator($directory . '/' . $file);
 
-            if (file_exists($dirFile)) {
+            if (\file_exists($dirFile)) {
                 return self::normalizeDirectorySeparator($directory) . '/';
             }
         }
@@ -138,7 +138,7 @@ class FileLoader implements LoaderContract
     /**
      * Check if the right option are given.
      *
-     * @param array|null $options
+     * @param null|array $options
      *
      * @throws \RuntimeException
      *

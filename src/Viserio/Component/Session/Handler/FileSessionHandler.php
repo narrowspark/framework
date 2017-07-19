@@ -70,7 +70,7 @@ class FileSessionHandler implements SessionHandlerInterface
         if ($this->files->has($path)) {
             $chronos = Chronos::now()->subSeconds($this->lifetime);
 
-            if (strtotime($this->files->getTimestamp($path)) >= $chronos->getTimestamp()) {
+            if (\strtotime($this->files->getTimestamp($path)) >= $chronos->getTimestamp()) {
                 return (string) $this->files->read($path);
             }
         }
@@ -111,6 +111,6 @@ class FileSessionHandler implements SessionHandlerInterface
             $boolArray[] = $this->files->delete([$file->getRealPath()]);
         }
 
-        return ! in_array('false', $boolArray, true);
+        return ! \in_array('false', $boolArray, true);
     }
 }

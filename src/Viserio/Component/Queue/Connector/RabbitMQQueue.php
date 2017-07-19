@@ -152,7 +152,7 @@ class RabbitMQQueue extends AbstractQueue
      *
      * @param int $count
      */
-    public function setAttempts(int $count)
+    public function setAttempts(int $count): void
     {
         $this->attempts = $count;
     }

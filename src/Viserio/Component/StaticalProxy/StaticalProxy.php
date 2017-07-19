@@ -46,7 +46,7 @@ class StaticalProxy
      *
      * @param ContainerInterface $container The Container that provides the real Proxy Subject
      */
-    public static function setContainer(ContainerInterface $container)
+    public static function setContainer(ContainerInterface $container): void
     {
         static::$container = $container;
     }
@@ -66,11 +66,11 @@ class StaticalProxy
      *
      * @throws \BadMethodCallException if the method has not been implemented by a subclass
      *
-     * @return string|object
+     * @return object|string
      */
     public static function getInstanceIdentifier()
     {
-        throw new BadMethodCallException(sprintf('The [%s] method must be implemented by a subclass.', __METHOD__));
+        throw new BadMethodCallException(\sprintf('The [%s] method must be implemented by a subclass.', __METHOD__));
     }
 
     /**
@@ -78,7 +78,7 @@ class StaticalProxy
      *
      * @param mixed $instance
      */
-    public static function swap($instance)
+    public static function swap($instance): void
     {
         static::$resolvedInstance[static::getInstanceIdentifier()] = $instance;
     }
@@ -98,7 +98,7 @@ class StaticalProxy
             $mock = static::createFreshMockInstance($name);
         }
 
-        return call_user_func_array([$mock, 'shouldReceive'], func_get_args());
+        return \call_user_func_array([$mock, 'shouldReceive'], \func_get_args());
     }
 
     /**
@@ -116,7 +116,7 @@ class StaticalProxy
      *
      * @param string $name
      */
-    public static function clearResolvedInstance(string $name)
+    public static function clearResolvedInstance(string $name): void
     {
         unset(static::$resolvedInstance[$name]);
     }
@@ -124,7 +124,7 @@ class StaticalProxy
     /**
      * Clear all of the resolved instances.
      */
-    public static function clearResolvedInstances()
+    public static function clearResolvedInstances(): void
     {
         static::$resolvedInstance = [];
     }
@@ -138,7 +138,7 @@ class StaticalProxy
      */
     protected static function resolveStaticalProxyInstance($name)
     {
-        if (is_object($name)) {
+        if (\is_object($name)) {
             return $name;
         }
 
@@ -173,7 +173,7 @@ class StaticalProxy
     protected static function createMock(): MockInterface
     {
         if ($root = static::getStaticalProxyRoot()) {
-            return Mockery::mock(get_class($root));
+            return Mockery::mock(\get_class($root));
         }
         // @codeCoverageIgnoreStart
         return Mockery::mock();

@@ -22,7 +22,7 @@ class ViserioSecCommand extends Command
      */
     protected $description = 'Greet someone';
 
-    public function handle()
+    public function handle(): void
     {
         $this->addArgument(
                 'name',

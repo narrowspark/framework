@@ -10,7 +10,7 @@ class MacroableTraitTest extends TestCase
 {
     use MacroableTrait;
 
-    public function testRegisterMacro()
+    public function testRegisterMacro(): void
     {
         $macroable = new self();
 
@@ -21,7 +21,7 @@ class MacroableTraitTest extends TestCase
         self::assertEquals('Macro', $macroable::{__CLASS__}());
     }
 
-    public function testRegisterMacroAndCallWithoutStatic()
+    public function testRegisterMacroAndCallWithoutStatic(): void
     {
         $macroable = new self();
 
@@ -32,7 +32,7 @@ class MacroableTraitTest extends TestCase
         self::assertEquals('Macro', $macroable->{__CLASS__}());
     }
 
-    public function testWhenCallingMacroClosureIsBoundToObject()
+    public function testWhenCallingMacroClosureIsBoundToObject(): void
     {
         MacroTest::macro('tryInstance', function () {
             return $this->protectedVariable;
@@ -56,7 +56,7 @@ class MacroableTraitTest extends TestCase
      * @expectedException \BadMethodCallException
      * @expectedExceptionMessage Method dontExist does not exist.
      */
-    public function testBadFunctionCall()
+    public function testBadFunctionCall(): void
     {
         $instance = new MacroTest();
         $instance->dontExist();
@@ -66,7 +66,7 @@ class MacroableTraitTest extends TestCase
      * @expectedException \BadMethodCallException
      * @expectedExceptionMessage Method [dontExist] does not exist.
      */
-    public function testBadStaticFunctionCall()
+    public function testBadStaticFunctionCall(): void
     {
         MacroTest::dontExist();
     }

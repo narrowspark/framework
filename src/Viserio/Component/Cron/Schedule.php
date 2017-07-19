@@ -24,7 +24,7 @@ class Schedule
     /**
      * Console path or console name that should be called.
      *
-     * @var string|null
+     * @var null|string
      */
     private $console;
 
@@ -50,7 +50,7 @@ class Schedule
     /**
      * Add a new callback cron job to the schedule.
      *
-     * @param string|callable $callback
+     * @param callable|string $callback
      * @param array           $parameters
      *
      * @return \Viserio\Component\Cron\CallbackCron
@@ -88,13 +88,13 @@ class Schedule
             $command = $this->getContainer()->get($command)->getName();
         }
 
-        if (defined('CEREBRO_BINARY')) {
+        if (\defined('CEREBRO_BINARY')) {
             return $this->exec(Application::formatCommandString($command), $parameters);
         } elseif ($this->console !== null) {
-            $binary  = escapeshellarg((string) (new PhpExecutableFinder())->find(false));
-            $console = escapeshellarg($this->console);
+            $binary  = \escapeshellarg((string) (new PhpExecutableFinder())->find(false));
+            $console = \escapeshellarg($this->console);
 
-            return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);
+            return $this->exec(\sprintf('%s %s %s', $binary, $console, $command), $parameters);
         }
 
         throw new LogicException('You need to set a console name or a path to a console, before you call command.');
@@ -110,7 +110,7 @@ class Schedule
      */
     public function exec(string $command, array $parameters = []): CronContract
     {
-        if (count($parameters)) {
+        if (\count($parameters)) {
             $command .= ' ' . $this->compileParameters($parameters);
         }
 
@@ -151,7 +151,7 @@ class Schedule
      */
     public function dueCronJobs(string $environment, bool $isMaintenance = false): array
     {
-        return array_filter($this->jobs, function ($job) use ($environment, $isMaintenance) {
+        return \array_filter($this->jobs, function ($job) use ($environment, $isMaintenance) {
             return $job->isDue($environment, $isMaintenance);
         });
     }
@@ -165,22 +165,22 @@ class Schedule
      */
     protected function compileParameters(array $parameters): string
     {
-        $keys = array_keys($parameters);
+        $keys = \array_keys($parameters);
 
-        $items = array_map(function ($value, $key) {
-            if (is_array($value)) {
-                $value = array_map(function ($value) {
-                    return escapeshellarg($value);
+        $items = \array_map(function ($value, $key) {
+            if (\is_array($value)) {
+                $value = \array_map(function ($value) {
+                    return \escapeshellarg($value);
                 }, $value);
 
-                $value = implode(' ', $value);
-            } elseif (! is_numeric($value) && ! preg_match('/^(-.$|--.*)/i', $value)) {
-                $value = escapeshellarg($value);
+                $value = \implode(' ', $value);
+            } elseif (! \is_numeric($value) && ! \preg_match('/^(-.$|--.*)/i', $value)) {
+                $value = \escapeshellarg($value);
             }
 
-            return is_numeric($key) ? $value : sprintf('%s=%s', $key, $value);
+            return \is_numeric($key) ? $value : \sprintf('%s=%s', $key, $value);
         }, $parameters, $keys);
 
-        return implode(' ', array_combine($keys, $items));
+        return \implode(' ', \array_combine($keys, $items));
     }
 }

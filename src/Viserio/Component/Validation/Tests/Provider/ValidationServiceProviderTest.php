@@ -10,7 +10,7 @@ use Viserio\Component\Validation\Validator;
 
 class ValidationServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new ValidationServiceProvider());

@@ -9,7 +9,7 @@ use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceable
 /**
  * Ported from.
  *
- * @link Symfony\Component\Cache\Simple\TraceableCache
+ * @see Symfony\Component\Cache\Simple\TraceableCache
  */
 class SimpleTraceableCacheDecorator implements CacheInterface
 {
@@ -51,7 +51,7 @@ class SimpleTraceableCacheDecorator implements CacheInterface
     public function __construct(CacheInterface $pool)
     {
         $this->pool = $pool;
-        $this->name = get_class($pool);
+        $this->name = \get_class($pool);
         $this->miss = new stdClass();
     }
 
@@ -75,7 +75,7 @@ class SimpleTraceableCacheDecorator implements CacheInterface
         try {
             return $event->result = $this->pool->clear();
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -112,7 +112,7 @@ class SimpleTraceableCacheDecorator implements CacheInterface
         };
 
         $event->name  = $name;
-        $event->start = microtime(true);
+        $event->start = \microtime(true);
 
         return $event;
     }

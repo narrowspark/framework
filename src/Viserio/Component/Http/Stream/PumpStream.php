@@ -18,7 +18,7 @@ class PumpStream implements StreamInterface
     /**
      * Source of the stream data.
      *
-     * @var callable|null
+     * @var null|callable
      */
     private $source;
 
@@ -56,8 +56,8 @@ class PumpStream implements StreamInterface
     public function __construct(callable $source, array $options = [])
     {
         $this->source   = $source;
-        $this->size     = isset($options['size']) ? $options['size'] : null;
-        $this->metadata = isset($options['metadata']) ? $options['metadata'] : [];
+        $this->size     = $options['size'] ?? null;
+        $this->metadata = $options['metadata'] ?? [];
         $this->buffer   = new BufferStream();
     }
 
@@ -76,7 +76,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
         $this->detach();
     }
@@ -84,7 +84,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function detach()
+    public function detach(): void
     {
         $this->tellPos = 0;
         $this->source  = null;
@@ -125,7 +125,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek(0);
     }
@@ -133,7 +133,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         throw new RuntimeException('Cannot seek a PumpStream');
     }
@@ -148,8 +148,12 @@ class PumpStream implements StreamInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     *
+     * @return void
      */
-    public function write($string)
+    public function write($string): void
     {
         throw new RuntimeException('Cannot write to a PumpStream');
     }
@@ -168,14 +172,14 @@ class PumpStream implements StreamInterface
     public function read($length)
     {
         $data    = $this->buffer->read($length);
-        $readLen = mb_strlen($data);
+        $readLen = \mb_strlen($data);
         $this->tellPos += $readLen;
         $remaining = $length - $readLen;
 
         if ($remaining) {
             $this->pump($remaining);
             $data .= $this->buffer->read($remaining);
-            $this->tellPos += mb_strlen($data) - $readLen;
+            $this->tellPos += \mb_strlen($data) - $readLen;
         }
 
         return $data;
@@ -209,13 +213,13 @@ class PumpStream implements StreamInterface
     /**
      * @param int $length
      *
-     * @return void|null
+     * @return null|void
      */
     private function pump($length)
     {
         if ($this->source) {
             do {
-                $data = call_user_func($this->source, $length);
+                $data = \call_user_func($this->source, $length);
 
                 if ($data === false || $data === null) {
                     $this->source = null;
@@ -225,7 +229,7 @@ class PumpStream implements StreamInterface
 
                 $this->buffer->write($data);
 
-                $length -= mb_strlen($data);
+                $length -= \mb_strlen($data);
             } while ($length > 0);
         }
     }

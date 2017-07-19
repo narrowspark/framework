@@ -13,7 +13,7 @@ class ViewFinderTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
-    public function testBasicViewFinding()
+    public function testBasicViewFinding(): void
     {
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
 
@@ -34,7 +34,7 @@ class ViewFinderTest extends MockeryTestCase
         );
     }
 
-    public function testCascadingFileLoading()
+    public function testCascadingFileLoading(): void
     {
         $path  = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.phtml');
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
@@ -57,7 +57,7 @@ class ViewFinderTest extends MockeryTestCase
         );
     }
 
-    public function testDirectoryCascadingFileLoading()
+    public function testDirectoryCascadingFileLoading(): void
     {
         $path  = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'Nested/foo.php');
@@ -105,7 +105,7 @@ class ViewFinderTest extends MockeryTestCase
         );
     }
 
-    public function testNamespacedBasicFileLoading()
+    public function testNamespacedBasicFileLoading(): void
     {
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
 
@@ -126,7 +126,7 @@ class ViewFinderTest extends MockeryTestCase
         );
     }
 
-    public function testCascadingNamespacedFileLoading()
+    public function testCascadingNamespacedFileLoading(): void
     {
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
 
@@ -151,7 +151,7 @@ class ViewFinderTest extends MockeryTestCase
         );
     }
 
-    public function testDirectoryCascadingNamespacedFileLoading()
+    public function testDirectoryCascadingNamespacedFileLoading(): void
     {
         $path  = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'bar/bar/baz.php');
@@ -209,7 +209,7 @@ class ViewFinderTest extends MockeryTestCase
         );
     }
 
-    public function testSetAndGetPaths()
+    public function testSetAndGetPaths(): void
     {
         $finder = $this->getFinder();
         $finder->setPaths(['test', 'foo']);
@@ -221,7 +221,7 @@ class ViewFinderTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage View [foo] not found.
      */
-    public function testExceptionThrownWhenViewNotFound()
+    public function testExceptionThrownWhenViewNotFound(): void
     {
         $finder = $this->getFinder();
         $finder->getFilesystem()
@@ -256,7 +256,7 @@ class ViewFinderTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage View [foo::foo::] has an invalid name.
      */
-    public function testExceptionThrownWhenViewHasAInvalidName()
+    public function testExceptionThrownWhenViewHasAInvalidName(): void
     {
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
 
@@ -279,7 +279,7 @@ class ViewFinderTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage No hint path defined for [name].
      */
-    public function testExceptionThrownOnInvalidViewName()
+    public function testExceptionThrownOnInvalidViewName(): void
     {
         $finder = $this->getFinder();
         $finder->find('name::');
@@ -289,22 +289,22 @@ class ViewFinderTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage No hint path defined for [name].
      */
-    public function testExceptionThrownWhenNoHintPathIsRegistered()
+    public function testExceptionThrownWhenNoHintPathIsRegistered(): void
     {
         $finder = $this->getFinder();
         $finder->find('name::foo');
     }
 
-    public function testAddingExtensionPrependsNotAppends()
+    public function testAddingExtensionPrependsNotAppends(): void
     {
         $finder = $this->getFinder();
         $finder->addExtension('baz');
         $extensions = $finder->getExtensions();
 
-        self::assertEquals('baz', reset($extensions));
+        self::assertEquals('baz', \reset($extensions));
     }
 
-    public function testAddingExtensionsReplacesOldOnes()
+    public function testAddingExtensionsReplacesOldOnes(): void
     {
         $finder = $this->getFinder();
         $finder->addExtension('baz');
@@ -313,7 +313,7 @@ class ViewFinderTest extends MockeryTestCase
         self::assertCount(6, $finder->getExtensions());
     }
 
-    public function testPrependNamespace()
+    public function testPrependNamespace(): void
     {
         $finder = $this->getFinder();
         $finder->prependNamespace('test', 'foo');
@@ -323,28 +323,28 @@ class ViewFinderTest extends MockeryTestCase
         self::assertCount(2, $finder->getHints());
     }
 
-    public function testPassingViewWithHintReturnsTrue()
+    public function testPassingViewWithHintReturnsTrue(): void
     {
         $finder = $this->getFinder();
 
         self::assertTrue($finder->hasHintInformation('hint::foo.bar'));
     }
 
-    public function testPassingViewWithoutHintReturnsFalse()
+    public function testPassingViewWithoutHintReturnsFalse(): void
     {
         $finder = $this->getFinder();
 
         self::assertFalse($finder->hasHintInformation('foo.bar'));
     }
 
-    public function testPassingViewWithFalseHintReturnsFalse()
+    public function testPassingViewWithFalseHintReturnsFalse(): void
     {
         $finder = $this->getFinder();
 
         self::assertFalse($finder->hasHintInformation('::foo.bar'));
     }
 
-    public function testPrependLocation()
+    public function testPrependLocation(): void
     {
         $finder = $this->getFinder();
         $finder->prependLocation('test');

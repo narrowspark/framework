@@ -75,7 +75,7 @@ class View implements ArrayAccess, ViewContract
      * @param string $key
      * @param mixed  $value
      */
-    public function __set($key, $value)
+    public function __set($key, $value): void
     {
         $this->with($key, $value);
     }
@@ -97,7 +97,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @param string $key
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function __unset($key)
     {
@@ -117,10 +117,10 @@ class View implements ArrayAccess, ViewContract
     public function __call(string $method, array $parameters)
     {
         if (Str::startsWith($method, 'with')) {
-            return $this->with(Str::snake(mb_substr($method, 4)), $parameters[0]);
+            return $this->with(Str::snake(\mb_substr($method, 4)), $parameters[0]);
         }
 
-        throw new BadMethodCallException(sprintf('Method [%s] does not exist on view.', $method));
+        throw new BadMethodCallException(\sprintf('Method [%s] does not exist on view.', $method));
     }
 
     /**
@@ -141,7 +141,7 @@ class View implements ArrayAccess, ViewContract
         try {
             $contents = $this->getContents();
 
-            $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
+            $response = isset($callback) ? \call_user_func($callback, $this, $contents) : null;
 
             return $response !== null ? $response : $contents;
         } catch (Throwable $exception) {
@@ -154,8 +154,8 @@ class View implements ArrayAccess, ViewContract
      */
     public function with($key, $value = null): ViewContract
     {
-        if (is_array($key)) {
-            $this->data = array_merge($this->data, $key);
+        if (\is_array($key)) {
+            $this->data = \array_merge($this->data, $key);
         } else {
             $this->data[$key] = $value;
         }
@@ -240,7 +240,7 @@ class View implements ArrayAccess, ViewContract
      */
     public function offsetExists($key)
     {
-        return array_key_exists($key, $this->data);
+        return \array_key_exists($key, $this->data);
     }
 
     /**
@@ -261,7 +261,7 @@ class View implements ArrayAccess, ViewContract
      * @param string $key
      * @param mixed  $value
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         $this->with($key, $value);
     }
@@ -271,7 +271,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @param string $key
      */
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
         unset($this->data[$key]);
     }
@@ -305,13 +305,13 @@ class View implements ArrayAccess, ViewContract
      */
     protected function gatherData(): array
     {
-        $data = array_merge($this->factory->getShared(), $this->data);
+        $data = \array_merge($this->factory->getShared(), $this->data);
 
         foreach ($data as $key => $value) {
             if ($value instanceof Renderable) {
                 $data[$key] = $value->render();
             } elseif ($value instanceof Closure) {
-                $data[$key] = call_user_func($value);
+                $data[$key] = \call_user_func($value);
             }
         }
 

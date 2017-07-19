@@ -13,10 +13,10 @@ trait ValidateLocaleTrait
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */
-    protected function assertValidLocale(string $locale)
+    protected function assertValidLocale(string $locale): void
     {
-        if (preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale) !== 1) {
-            throw new InvalidArgumentException(sprintf('Invalid [%s] locale.', $locale));
+        if (\preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale) !== 1) {
+            throw new InvalidArgumentException(\sprintf('Invalid [%s] locale.', $locale));
         }
     }
 }

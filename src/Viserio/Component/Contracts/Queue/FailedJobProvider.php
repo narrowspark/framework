@@ -11,7 +11,7 @@ interface FailedJobProvider
      * @param string $queue
      * @param string $payload
      *
-     * @return int|null
+     * @return null|int
      */
     public function log(string $connection, string $queue, string $payload);
 

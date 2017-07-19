@@ -22,7 +22,7 @@ class TranslationNodeVisitorTest extends TestCase
      * @param Node  $node
      * @param array $expectedMessages
      */
-    public function testMessagesExtraction(Node $node, array $expectedMessages)
+    public function testMessagesExtraction(Node $node, array $expectedMessages): void
     {
         $env     = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock(), ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
         $visitor = new TranslationNodeVisitor();
@@ -33,7 +33,7 @@ class TranslationNodeVisitorTest extends TestCase
         self::assertEquals($expectedMessages, $visitor->getMessages());
     }
 
-    public function testMessageExtractionWithInvalidDomainNode()
+    public function testMessageExtractionWithInvalidDomainNode(): void
     {
         $message = 'new key';
         $node    = new FilterExpression(

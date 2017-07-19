@@ -20,13 +20,13 @@ class JsonTest extends TestCase
      */
     private $file;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
@@ -42,19 +42,19 @@ class JsonTest extends TestCase
 
         $parsed = (new JsonParser())->parse((string) $this->file->read($file->url()));
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      */
-    public function testParseToThrowException()
+    public function testParseToThrowException(): void
     {
         (new JsonParser())->parse('nonexistfile');
     }
 
-    public function testDump()
+    public function testDump(): void
     {
         $book = [
             'title'   => 'bar',

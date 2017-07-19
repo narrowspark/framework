@@ -23,7 +23,7 @@ interface MessageCatalogue
      *
      * If $domain is null, it returns all messages.
      *
-     * @param string|null $domain The domain name
+     * @param null|string $domain The domain name
      *
      * @return array An array of messages
      */
@@ -130,7 +130,7 @@ interface MessageCatalogue
     /**
      * Gets the fallback catalogue.
      *
-     * @return \Viserio\Component\Contracts\Translation\MessageCatalogue|null A MessageCatalogue instance or null when no fallback has been set
+     * @return null|\Viserio\Component\Contracts\Translation\MessageCatalogue A MessageCatalogue instance or null when no fallback has been set
      */
     public function getFallbackCatalogue(): ?MessageCatalogue;
 

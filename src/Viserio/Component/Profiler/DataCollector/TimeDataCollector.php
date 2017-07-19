@@ -48,7 +48,7 @@ class TimeDataCollector extends AbstractDataCollector
         } elseif ($requestTime = $serverRequest->getHeaderLine('REQUEST_TIME') !== '') {
             $time = $requestTime;
         } else {
-            $time = microtime(true);
+            $time = \microtime(true);
         }
 
         $this->requestStartTime = $time;
@@ -59,13 +59,13 @@ class TimeDataCollector extends AbstractDataCollector
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        $this->requestEndTime = microtime(true);
+        $this->requestEndTime = \microtime(true);
 
-        foreach (array_keys($this->startedMeasures) as $name) {
+        foreach (\array_keys($this->startedMeasures) as $name) {
             $this->stopMeasure($name);
         }
 
-        usort($this->measures, function ($a, $b) {
+        \usort($this->measures, function ($a, $b) {
             if ($a['start'] == $b['start']) {
                 return 0;
             }
@@ -113,21 +113,21 @@ class TimeDataCollector extends AbstractDataCollector
             return $this->requestEndTime - $this->requestStartTime;
         }
 
-        return microtime(true) - $this->requestStartTime;
+        return \microtime(true) - $this->requestStartTime;
     }
 
     /**
      * Starts a measure.
      *
      * @param string      $name      Internal name, used to stop the measure
-     * @param string|null $label     Public name
-     * @param string|null $collector The source of the collector
+     * @param null|string $label     Public name
+     * @param null|string $collector The source of the collector
      *
      * @return void
      */
     public function startMeasure(string $name, string $label = null, string $collector = null): void
     {
-        $start = microtime(true);
+        $start = \microtime(true);
 
         $this->startedMeasures[$name] = [
             'label'     => $label ?? $name,
@@ -160,10 +160,10 @@ class TimeDataCollector extends AbstractDataCollector
      */
     public function stopMeasure(string $name, array $params = []): void
     {
-        $end = microtime(true);
+        $end = \microtime(true);
 
         if (! $this->hasStartedMeasure($name)) {
-            throw new RuntimeException(sprintf(
+            throw new RuntimeException(\sprintf(
                 'Failed stopping measure [%s] because it hasn\'t been started.',
                 $name
             ));
@@ -187,7 +187,7 @@ class TimeDataCollector extends AbstractDataCollector
      * @param float       $start
      * @param float       $end
      * @param array       $params
-     * @param string|null $collector
+     * @param null|string $collector
      *
      * @return void
      */

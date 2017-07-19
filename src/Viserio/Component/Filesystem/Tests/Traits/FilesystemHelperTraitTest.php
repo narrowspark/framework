@@ -22,7 +22,7 @@ class FilesystemHelperTraitTest extends TestCase
     /**
      * Setup the environment.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->root  = vfsStream::setup();
         $this->trait = new FilesystemHelperTraitClass();
@@ -31,12 +31,12 @@ class FilesystemHelperTraitTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testGetRequireThrowsExceptionOnexisitingFile()
+    public function testGetRequireThrowsExceptionOnexisitingFile(): void
     {
         $this->trait->getRequire(vfsStream::url('foo/bar/tmp/file.php'));
     }
 
-    public function testGetRequire()
+    public function testGetRequire(): void
     {
         $file = vfsStream::newFile('pop.php')->withContent('<?php
 declare(strict_types=1); return "pop"; ?>')->at($this->root);
@@ -46,7 +46,7 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
         self::assertSame('pop', $pop);
     }
 
-    public function testIsWritable()
+    public function testIsWritable(): void
     {
         $file = vfsStream::newFile('foo.txt', 0444)->withContent('foo')->at($this->root);
 
@@ -57,7 +57,7 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
         self::assertTrue($this->trait->isWritable($file->url()));
     }
 
-    public function testIsFile()
+    public function testIsFile(): void
     {
         $this->root->addChild(new vfsStreamDirectory('assets'));
         $dir  = $this->root->getChild('assets');

@@ -7,7 +7,7 @@ use Viserio\Component\Profiler\Util\HtmlDumperOutput;
 
 class HtmlDumperOutputTest extends TestCase
 {
-    public function testOutput()
+    public function testOutput(): void
     {
         $htmlDumperOutput = new HtmlDumperOutput();
         $htmlDumperOutput('first line', 0);
@@ -21,7 +21,7 @@ string;
         self::assertSame($expectedOutput, $htmlDumperOutput->getOutput());
     }
 
-    public function testClear()
+    public function testClear(): void
     {
         $htmlDumperOutput = new HtmlDumperOutput();
         $htmlDumperOutput('first line', 0);

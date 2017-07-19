@@ -9,7 +9,7 @@ use Viserio\Component\Container\Tests\Fixture\SimpleFixtureServiceProvider;
 
 class ServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());
@@ -18,7 +18,7 @@ class ServiceProviderTest extends TestCase
         self::assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
-    public function testProviderWithRegisterMethod()
+    public function testProviderWithRegisterMethod(): void
     {
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider(), [
@@ -30,7 +30,7 @@ class ServiceProviderTest extends TestCase
         self::assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
-    public function testExtendingValue()
+    public function testExtendingValue(): void
     {
         $container = new Container();
         $container->instance('previous', 'foo');
@@ -39,7 +39,7 @@ class ServiceProviderTest extends TestCase
         self::assertEquals('foo', $container->get('previous'));
     }
 
-    public function testExtendingNothing()
+    public function testExtendingNothing(): void
     {
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());

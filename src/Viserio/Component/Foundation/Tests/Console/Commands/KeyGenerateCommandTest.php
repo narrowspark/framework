@@ -11,12 +11,12 @@ use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 
 class KeyGenerateCommandTest extends MockeryTestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         $file = __DIR__ . '/../../Fixtures/.env.key';
 
-        if (! file_exists($file)) {
-            file_put_contents($file, 'APP_KEY=');
+        if (! \file_exists($file)) {
+            \file_put_contents($file, 'APP_KEY=');
         }
 
         $config = $this->mock(RepositoryContract::class);
@@ -47,10 +47,10 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         self::assertRegExp("/Application key \[(.*)\] set successfully/", $output);
 
-        @unlink($file);
+        @\unlink($file);
     }
 
-    public function testCommandWithShowOption()
+    public function testCommandWithShowOption(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
@@ -77,10 +77,10 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertTrue(is_string($output));
+        self::assertTrue(\is_string($output));
     }
 
-    public function testCommandNotInProduction()
+    public function testCommandNotInProduction(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
@@ -105,7 +105,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
              * Confirm before proceeding with the action.
              *
              * @param string             $warning
-             * @param \Closure|bool|null $callback
+             * @param null|bool|\Closure $callback
              *
              * @return bool
              */

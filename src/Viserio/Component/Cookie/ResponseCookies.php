@@ -20,9 +20,9 @@ final class ResponseCookies extends AbstractCookieCollector
     {
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof CookieContract)) {
-                throw new InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(\sprintf(
                     'The object [%s] must implement [%s].',
-                    get_class($cookie),
+                    \get_class($cookie),
                     CookieContract::class
                 ));
             }
@@ -40,7 +40,7 @@ final class ResponseCookies extends AbstractCookieCollector
      */
     public static function fromResponse(ResponseInterface $response): self
     {
-        return new static(array_map(function ($setCookieString) {
+        return new static(\array_map(function ($setCookieString) {
             return self::fromStringCookie($setCookieString);
         }, $response->getHeader('Set-Cookie')));
     }
@@ -74,42 +74,49 @@ final class ResponseCookies extends AbstractCookieCollector
     {
         $rawAttributes = self::splitOnAttributeDelimiter($string);
 
-        [$cookieName, $cookieValue] = self::splitCookiePair(array_shift($rawAttributes));
+        [$cookieName, $cookieValue] = self::splitCookiePair(\array_shift($rawAttributes));
 
         $cookie = new SetCookie($cookieName);
 
-        if (! is_null($cookieValue)) {
+        if (null !== $cookieValue) {
             $cookie = $cookie->withValue($cookieValue);
         }
 
         foreach ($rawAttributes as $value) {
-            $rawAttributePair = explode('=', $value, 2);
+            $rawAttributePair = \explode('=', $value, 2);
             $attributeKey     = $rawAttributePair[0];
-            $attributeValue   = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
-            $attributeKey     = mb_strtolower($attributeKey);
+            $attributeValue   = \count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
+            $attributeKey     = \mb_strtolower($attributeKey);
 
             switch ($attributeKey) {
                 case 'expires':
                     $cookie = $cookie->withExpires(new Chronos($attributeValue));
+
                     break;
                 case 'max-age':
-                    $age    = is_numeric($attributeValue) ? (int) $attributeValue : null;
+                    $age    = \is_numeric($attributeValue) ? (int) $attributeValue : null;
                     $cookie = $cookie->withMaxAge($age);
+
                     break;
                 case 'domain':
                     $cookie = $cookie->withDomain($attributeValue);
+
                     break;
                 case 'path':
                     $cookie = $cookie->withPath($attributeValue);
+
                     break;
                 case 'secure':
                     $cookie = $cookie->withSecure(true);
+
                     break;
                 case 'httponly':
                     $cookie = $cookie->withHttpOnly(true);
+
                     break;
                 case 'samesite':
                     $cookie = $cookie->withSameSite($attributeValue);
+
                     break;
             }
         }

@@ -21,7 +21,7 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions($router)
+    protected function definitions($router): void
     {
         $router->get('/', function ($request, $args) {
             return (new ResponseFactory())

@@ -17,7 +17,7 @@ use Viserio\Component\Log\Writer;
 
 class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 {
-    public function testGetServicesWithSingle()
+    public function testGetServicesWithSingle(): void
     {
         $container = new Container();
 
@@ -45,7 +45,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
-    public function testGetServicesWithDaily()
+    public function testGetServicesWithDaily(): void
     {
         $container = new Container();
 
@@ -74,7 +74,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
-    public function testGetServicesWithErrorlog()
+    public function testGetServicesWithErrorlog(): void
     {
         $container = new Container();
 
@@ -112,7 +112,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(Writer::class, $container->get(Writer::class));
     }
 
-    public function testGetServicesWithSyslog()
+    public function testGetServicesWithSyslog(): void
     {
         $container = new Container();
 

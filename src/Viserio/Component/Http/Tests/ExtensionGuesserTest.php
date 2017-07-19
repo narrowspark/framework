@@ -8,17 +8,17 @@ use Viserio\Component\Http\ExtensionGuesser;
 
 class ExtensionGuesserTest extends TestCase
 {
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $path = __DIR__ . '/Fixture/to_delete';
 
-        if (file_exists($path)) {
-            @chmod($path, 0666);
-            @unlink($path);
+        if (\file_exists($path)) {
+            @\chmod($path, 0666);
+            @\unlink($path);
         }
     }
 
-    public function testRegisterNewGuesser()
+    public function testRegisterNewGuesser(): void
     {
         $file    = __DIR__ . '/Fixture/test';
         $guesser = $this->createMockGuesser($file, 'gif');
@@ -28,7 +28,7 @@ class ExtensionGuesserTest extends TestCase
         $this->assertEquals('gif', ExtensionGuesser::guess($file));
     }
 
-    public function testGuessExtensionIsBasedOnMimeType()
+    public function testGuessExtensionIsBasedOnMimeType(): void
     {
         $this->assertEquals('gif', ExtensionGuesser::guess(__DIR__ . '/Fixture/test'));
     }
@@ -36,7 +36,7 @@ class ExtensionGuesserTest extends TestCase
     /**
      * @requires extension fileinfo
      */
-    public function testGuessExtensionWithFileinfo()
+    public function testGuessExtensionWithFileinfo(): void
     {
         $this->assertEquals(
             'inode/x-empty',
@@ -53,7 +53,7 @@ class ExtensionGuesserTest extends TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Unable to guess the mime type as no guessers are available.
      */
-    public function testGuessWithIncorrectPath()
+    public function testGuessWithIncorrectPath(): void
     {
         ExtensionGuesser::flush();
 
@@ -63,12 +63,12 @@ class ExtensionGuesserTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Http\Exception\FileNotFoundException
      */
-    public function testGuessExtensionToThrowExceptionIfNoFileFound()
+    public function testGuessExtensionToThrowExceptionIfNoFileFound(): void
     {
         ExtensionGuesser::guess(__DIR__ . '/Fixture/test---');
     }
 
-    public function testGuessFileWithUnknownExtension()
+    public function testGuessFileWithUnknownExtension(): void
     {
         ExtensionGuesser::register([ExtensionGuesser::class, 'getFileBinaryMimeTypeGuess']);
         ExtensionGuesser::register([ExtensionGuesser::class, 'getFileinfoMimeTypeGuess']);
@@ -78,21 +78,21 @@ class ExtensionGuesserTest extends TestCase
         ExtensionGuesser::flush();
     }
 
-    public function testGuessWithNonReadablePath()
+    public function testGuessWithNonReadablePath(): void
     {
         if ('\\' === DIRECTORY_SEPARATOR) {
             $this->markTestSkipped('Can not verify chmod operations on Windows');
         }
 
-        if (! getenv('USER') || 'root' === getenv('USER')) {
+        if (! \getenv('USER') || 'root' === \getenv('USER')) {
             $this->markTestSkipped('This test will fail if run under superuser');
         }
 
         $path = __DIR__ . '/Fixture/to_delete';
-        touch($path);
-        @chmod($path, 0333);
+        \touch($path);
+        @\chmod($path, 0333);
 
-        if (mb_substr(sprintf('%o', fileperms($path)), -4) == '0333') {
+        if (\mb_substr(\sprintf('%o', \fileperms($path)), -4) == '0333') {
             $this->expectException(AccessDeniedException::class);
 
             ExtensionGuesser::register([ExtensionGuesser::class, 'getFileBinaryMimeTypeGuess']);

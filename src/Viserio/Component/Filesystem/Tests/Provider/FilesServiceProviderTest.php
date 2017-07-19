@@ -10,7 +10,7 @@ use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 
 class FilesServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new FilesServiceProvider());

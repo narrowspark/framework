@@ -27,17 +27,17 @@ abstract class AbstractMatcher implements SegmentMatcherContract
      */
     public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
     {
-        return array_fill_keys($this->parameterKeys, $segmentVariable);
+        return \array_fill_keys($this->parameterKeys, $segmentVariable);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function mergeParameterKeys(SegmentMatcherContract $matcher)
+    public function mergeParameterKeys(SegmentMatcherContract $matcher): void
     {
         if ($matcher->getHash() !== $this->getHash()) {
             throw new RuntimeException(
-                sprintf(
+                \sprintf(
                     'Cannot merge parameters: matchers must be equivalent, [%s] expected, [%s] given.',
                     $matcher->getHash(),
                     $this->getHash()
@@ -45,8 +45,8 @@ abstract class AbstractMatcher implements SegmentMatcherContract
             );
         }
 
-        $this->parameterKeys = array_unique(
-            array_merge($this->parameterKeys, $matcher->getParameterKeys()),
+        $this->parameterKeys = \array_unique(
+            \array_merge($this->parameterKeys, $matcher->getParameterKeys()),
             SORT_NUMERIC
         );
     }
@@ -56,7 +56,7 @@ abstract class AbstractMatcher implements SegmentMatcherContract
      */
     public function getHash(): string
     {
-        return get_class($this) . ':' . $this->getMatchHash();
+        return \get_class($this) . ':' . $this->getMatchHash();
     }
 
     /**

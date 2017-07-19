@@ -8,7 +8,7 @@ use Viserio\Component\Mail\Transport\ArrayTransport;
 
 class ArrayTransportTest extends TestCase
 {
-    public function testSend()
+    public function testSend(): void
     {
         $message = new Swift_Message('Foo subject', 'Bar body');
         $message->setSender('myself@example.com');
@@ -18,11 +18,11 @@ class ArrayTransportTest extends TestCase
         $transport = new ArrayTransport();
         $transport->send($message);
 
-        self::assertSame(1, count($transport->getMessages()));
+        self::assertSame(1, \count($transport->getMessages()));
         self::assertSame($message, $transport->getMessages()[0]);
 
         $transport->flush();
 
-        self::assertSame(0, count($transport->getMessages()));
+        self::assertSame(0, \count($transport->getMessages()));
     }
 }

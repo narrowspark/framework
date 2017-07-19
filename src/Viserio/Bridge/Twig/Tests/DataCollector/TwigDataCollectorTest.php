@@ -13,13 +13,13 @@ use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 
 class TwigDataCollectorTest extends MockeryTestCase
 {
-    public function testGetMenuAndPosition()
+    public function testGetMenuAndPosition(): void
     {
         $collect = $this->getTwigDataCollector();
 
         self::assertSame(
             [
-                'icon'  => file_get_contents(__DIR__ . '/../../DataCollector/Resources/icons/ic_view_quilt_white_24px.svg'),
+                'icon'  => \file_get_contents(__DIR__ . '/../../DataCollector/Resources/icons/ic_view_quilt_white_24px.svg'),
                 'label' => 'Twig',
                 'value' => '',
             ],
@@ -28,7 +28,7 @@ class TwigDataCollectorTest extends MockeryTestCase
         self::assertSame('left', $collect->getMenuPosition());
     }
 
-    public function testGetTooltip()
+    public function testGetTooltip(): void
     {
         $collect = $this->getTwigDataCollector();
         $collect->collect(
@@ -39,7 +39,7 @@ class TwigDataCollectorTest extends MockeryTestCase
         self::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Template calls</b><span>1</span></div><div class="profiler-menu-tooltip-group-piece"><b>Block calls</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Macro calls</b><span>0</span></div></div>', $collect->getTooltip());
     }
 
-    public function testGetProfile()
+    public function testGetProfile(): void
     {
         $collect = $this->getTwigDataCollector();
 
@@ -48,7 +48,7 @@ class TwigDataCollectorTest extends MockeryTestCase
 
     private function removeTabId(string $html): string
     {
-        return trim(preg_replace('/="tab-(.*?)"/', '', $html));
+        return \trim(\preg_replace('/="tab-(.*?)"/', '', $html));
     }
 
     private function getTwigDataCollector()
@@ -77,11 +77,11 @@ class TwigDataCollectorTest extends MockeryTestCase
     private function formatDuration(float $seconds): string
     {
         if ($seconds < 0.001) {
-            return round($seconds * 1000000) . 'μs';
+            return \round($seconds * 1000000) . 'μs';
         } elseif ($seconds < 1) {
-            return round($seconds * 1000, 2) . 'ms';
+            return \round($seconds * 1000, 2) . 'ms';
         }
 
-        return round($seconds, 2) . 's';
+        return \round($seconds, 2) . 's';
     }
 }

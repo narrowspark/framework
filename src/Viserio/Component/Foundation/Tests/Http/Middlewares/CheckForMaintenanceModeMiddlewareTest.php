@@ -11,7 +11,7 @@ use Viserio\Component\Foundation\Http\Middlewares\CheckForMaintenanceModeMiddlew
 
 class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $server = $this->mock(ServerRequestInterface::class);
         $config = $this->mock(HttpKernelContract::class);
@@ -36,7 +36,7 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Foundation\Http\Exception\MaintenanceModeException
      * @expectedExceptionMessage test
      */
-    public function testProcessWithMaintenance()
+    public function testProcessWithMaintenance(): void
     {
         $server = $this->mock(ServerRequestInterface::class);
         $kernel = $this->mock(HttpKernelContract::class);

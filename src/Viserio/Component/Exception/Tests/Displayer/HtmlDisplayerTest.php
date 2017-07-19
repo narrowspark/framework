@@ -13,11 +13,11 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class HtmlDisplayerTest extends MockeryTestCase
 {
-    public function testServerError()
+    public function testServerError(): void
     {
         $displayer = $this->getDisplayer();
         $response  = $displayer->display(new Exception(), 'foo', 502, []);
-        $expected  = file_get_contents(__DIR__ . '/../../Resources/error.html');
+        $expected  = \file_get_contents(__DIR__ . '/../../Resources/error.html');
         $infos     = [
             'code'    => '502',
             'summary' => 'Houston, We Have A Problem.',
@@ -27,7 +27,7 @@ class HtmlDisplayerTest extends MockeryTestCase
         ];
 
         foreach ($infos as $key => $val) {
-            $expected = str_replace("{{ $$key }}", $val, $expected);
+            $expected = \str_replace("{{ $$key }}", $val, $expected);
         }
 
         self::assertSame($expected, (string) $response->getBody());
@@ -35,11 +35,11 @@ class HtmlDisplayerTest extends MockeryTestCase
         self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
-    public function testClientError()
+    public function testClientError(): void
     {
         $displayer = $this->getDisplayer();
         $response  = $displayer->display(new Exception(), 'bar', 404, []);
-        $expected  = file_get_contents(__DIR__ . '/../../Resources/error.html');
+        $expected  = \file_get_contents(__DIR__ . '/../../Resources/error.html');
         $infos     = [
             'code'    => '404',
             'summary' => 'Houston, We Have A Problem.',
@@ -49,7 +49,7 @@ class HtmlDisplayerTest extends MockeryTestCase
         ];
 
         foreach ($infos as $key => $val) {
-            $expected = str_replace("{{ $$key }}", $val, $expected);
+            $expected = \str_replace("{{ $$key }}", $val, $expected);
         }
 
         self::assertSame($expected, (string) $response->getBody());
@@ -57,7 +57,7 @@ class HtmlDisplayerTest extends MockeryTestCase
         self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $displayer = $this->getDisplayer();
         $exception = new Exception();

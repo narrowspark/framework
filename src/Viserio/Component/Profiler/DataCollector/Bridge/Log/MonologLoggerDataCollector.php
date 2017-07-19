@@ -34,16 +34,16 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
         if ($logger instanceof Logger || $logger instanceof Writer) {
             $this->logger = $logger;
         } else {
-            throw new RuntimeException(sprintf(
+            throw new RuntimeException(\sprintf(
                 'Class [%s] or [%s] is required; Instance of [%s] given.',
                 Logger::class,
                 Writer::class,
-                get_class($logger)
+                \get_class($logger)
             ));
         }
 
         if ($this->getDebugLogger() === null) {
-            throw new RuntimeException(sprintf('Processor %s is missing from %s', DebugProcessor::class, get_class($logger)));
+            throw new RuntimeException(\sprintf('Processor %s is missing from %s', DebugProcessor::class, \get_class($logger)));
         }
     }
 
@@ -99,7 +99,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
 
         $html = $this->createTabs([
             [
-                'name'    => 'Info. & Errors <span class="counter">' . count($logs['info_error']) . '</span>',
+                'name'    => 'Info. & Errors <span class="counter">' . \count($logs['info_error']) . '</span>',
                 'content' => $this->createTable(
                     $logs['info_error'],
                     [
@@ -117,7 +117,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
                     ]
                 ),
             ], [
-                'name'    => 'Debug <span class="counter">' . count($logs['debug']) . '</span>',
+                'name'    => 'Debug <span class="counter">' . \count($logs['debug']) . '</span>',
                 'content' => $this->createTable(
                     $logs['debug'],
                     [
@@ -126,7 +126,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
                     ]
                 ),
             ], [
-                'name'    => 'Silenced PHP Notices <span class="counter">' . count($logs['silenced']) . '</span>',
+                'name'    => 'Silenced PHP Notices <span class="counter">' . \count($logs['silenced']) . '</span>',
                 'content' => $this->createTable(
                     $logs['silenced'],
                     [
@@ -148,7 +148,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
         $data = $this->getComputedErrorsCount();
 
         $data['logs']    = $this->sanitizeLogs($this->getLogs());
-        $data['counted'] = count($data['logs']);
+        $data['counted'] = \count($data['logs']);
 
         $this->data = $data;
     }
@@ -230,7 +230,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     /**
      * Returns a DebugProcessor instance if one is registered with this logger.
      *
-     * @return Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor|null
+     * @return null|Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor
      */
     private function getDebugLogger(): ?DebugProcessor
     {
@@ -257,11 +257,12 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
         foreach ($logs as $log) {
             if (! $this->isSilencedOrDeprecationErrorLog($log)) {
                 $sanitizedLogs[] = $log;
+
                 continue;
             }
 
             $exception = $log['context']['exception'];
-            $errorId   = md5("{$exception->getSeverity()}/{$exception->getLine()}/{$exception->getFile()}\0{$log['message']}", true);
+            $errorId   = \md5("{$exception->getSeverity()}/{$exception->getLine()}/{$exception->getFile()}\0{$log['message']}", true);
 
             if (isset($sanitizedLogs[$errorId])) {
                 ++$sanitizedLogs[$errorId]['errorCount'];
@@ -275,7 +276,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
             }
         }
 
-        return array_values($sanitizedLogs);
+        return \array_values($sanitizedLogs);
     }
 
     /**
@@ -297,7 +298,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
             return true;
         }
 
-        if ($exception instanceof ErrorException && in_array($exception->getSeverity(), [E_DEPRECATED, E_USER_DEPRECATED], true)) {
+        if ($exception instanceof ErrorException && \in_array($exception->getSeverity(), [E_DEPRECATED, E_USER_DEPRECATED], true)) {
             return true;
         }
 
@@ -348,7 +349,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
             }
         }
 
-        ksort($count['priorities']);
+        \ksort($count['priorities']);
 
         return $count;
     }
@@ -367,14 +368,14 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
 
         $formatLog = function ($log) {
             return[
-                $log['priorityName'] . '<br>' . '<div class="text-muted">' . date('H:i:s', $log['timestamp']) . '</div>',
+                $log['priorityName'] . '<br>' . '<div class="text-muted">' . \date('H:i:s', $log['timestamp']) . '</div>',
                 $log['channel'],
                 $log['message'] . '<br>' . (! empty($log['context']) ? $this->cloneVar($log['context']) : ''),
             ];
         };
 
         foreach ($this->data['logs'] as $log) {
-            if (isset($log['priority']) && (in_array($log['priority'], [Logger::ERROR, Logger::INFO]))) {
+            if (isset($log['priority']) && (\in_array($log['priority'], [Logger::ERROR, Logger::INFO], true))) {
                 $infoAndErrorLogs[] = $formatLog($log);
             } elseif (isset($log['priority']) && $log['priority'] === Logger::DEBUG) {
                 $debugLogs[] = $formatLog($log);

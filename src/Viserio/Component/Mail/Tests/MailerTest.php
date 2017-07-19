@@ -20,7 +20,7 @@ use Viserio\Component\Mail\Mailer;
 
 class MailerTest extends MockeryTestCase
 {
-    public function testMailerSendSendsMessageWithProperViewContent()
+    public function testMailerSendSendsMessageWithProperViewContent(): void
     {
         unset($_SERVER['__mailer.test']);
 
@@ -74,14 +74,14 @@ class MailerTest extends MockeryTestCase
             ->once()
             ->with($mimeMessage, [])
             ->andReturn(1);
-        $mailer->send('foo', ['data'], function ($mail) {
+        $mailer->send('foo', ['data'], function ($mail): void {
             $_SERVER['__mailer.test'] = $mail;
         });
 
         unset($_SERVER['__mailer.test']);
     }
 
-    public function testMailerSendSendsMessageWithProperPlainViewContent()
+    public function testMailerSendSendsMessageWithProperPlainViewContent(): void
     {
         unset($_SERVER['__mailer.test']);
 
@@ -135,14 +135,14 @@ class MailerTest extends MockeryTestCase
             ->once()
             ->with($mimeMessage, [])
             ->andReturn(1);
-        $mailer->send(['foo', 'bar'], ['data'], function ($mail) {
+        $mailer->send(['foo', 'bar'], ['data'], function ($mail): void {
             $_SERVER['__mailer.test'] = $mail;
         });
 
         unset($_SERVER['__mailer.test']);
     }
 
-    public function testMailerSendSendsMessageWithProperPlainViewContentWhenExplicit()
+    public function testMailerSendSendsMessageWithProperPlainViewContentWhenExplicit(): void
     {
         unset($_SERVER['__mailer.test']);
 
@@ -196,14 +196,14 @@ class MailerTest extends MockeryTestCase
             ->once()
             ->with($mimeMessage, [])
             ->andReturn(1);
-        $mailer->send(['html' => 'foo', 'text' => 'bar'], ['data'], function ($m) {
+        $mailer->send(['html' => 'foo', 'text' => 'bar'], ['data'], function ($m): void {
             $_SERVER['__mailer.test'] = $m;
         });
 
         unset($_SERVER['__mailer.test']);
     }
 
-    public function testMailerRawSend()
+    public function testMailerRawSend(): void
     {
         unset($_SERVER['__mailer.test']);
 
@@ -232,7 +232,7 @@ class MailerTest extends MockeryTestCase
             ->once()
             ->andReturn($mimeMessage);
 
-        $callback = function ($mail) {
+        $callback = function ($mail): void {
             $_SERVER['__mailer.test'] = $mail;
         };
 
@@ -245,7 +245,7 @@ class MailerTest extends MockeryTestCase
         unset($_SERVER['__mailer.test']);
     }
 
-    public function testMailerPlainSend()
+    public function testMailerPlainSend(): void
     {
         unset($_SERVER['__mailer.test']);
         $event  = $this->mock(EventManagerContract::class);
@@ -288,7 +288,7 @@ class MailerTest extends MockeryTestCase
             ->once()
             ->with($mimeMessage, [])
             ->andReturn(1);
-        $mailer->plain('foo', [], function ($mail) {
+        $mailer->plain('foo', [], function ($mail): void {
             $_SERVER['__mailer.test'] = $mail;
         });
 
@@ -299,7 +299,7 @@ class MailerTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid view.
      */
-    public function testMailerToThrowExceptionOnView()
+    public function testMailerToThrowExceptionOnView(): void
     {
         $mailer = new Mailer(
             $this->mock(Swift_Mailer::class),
@@ -313,7 +313,7 @@ class MailerTest extends MockeryTestCase
      * @expectedException \Invoker\Exception\NotCallableException
      * @expectedExceptionMessage Instance of stdClass is not a callable
      */
-    public function testMailerToThrowExceptionOnCallbackWithContainer()
+    public function testMailerToThrowExceptionOnCallbackWithContainer(): void
     {
         $swift = $this->mock(Swift_Mailer::class);
         $swift->shouldReceive('createMessage')
@@ -331,7 +331,7 @@ class MailerTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Callback is not valid.
      */
-    public function testMailerToThrowExceptionOnCallback()
+    public function testMailerToThrowExceptionOnCallback(): void
     {
         $swift = $this->mock(Swift_Mailer::class);
         $swift->shouldReceive('createMessage')
@@ -344,7 +344,7 @@ class MailerTest extends MockeryTestCase
         $mailer->send('test', [], new stdClass());
     }
 
-    public function testSendWithFailedEvent()
+    public function testSendWithFailedEvent(): void
     {
         $event  = $this->mock(EventManagerContract::class);
         $mailer = $this->getMockBuilder(Mailer::class)
@@ -394,7 +394,7 @@ class MailerTest extends MockeryTestCase
         self::assertSame(0, $mailer->send([], []));
     }
 
-    public function testMacroable()
+    public function testMacroable(): void
     {
         Mailer::macro('foo', function () {
             return 'bar';

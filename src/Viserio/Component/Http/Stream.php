@@ -23,7 +23,7 @@ class Stream implements StreamInterface
      *
      * @var array
      *
-     * @link http://php.net/manual/function.fopen.php
+     * @see http://php.net/manual/function.fopen.php
      */
     public const READABLE_MODES = [
         'r'   => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
@@ -102,7 +102,7 @@ class Stream implements StreamInterface
      */
     public function __construct($stream, array $options = [])
     {
-        if (! is_resource($stream) || get_resource_type($stream) !== 'stream') {
+        if (! \is_resource($stream) || \get_resource_type($stream) !== 'stream') {
             throw new InvalidArgumentException(
                 'Invalid stream provided; must be a string stream identifier or stream resource'
             );
@@ -114,11 +114,10 @@ class Stream implements StreamInterface
             $this->size = (int) $options['size'];
         }
 
-        $this->meta = isset($options['metadata'])
-            ? $options['metadata']
-            : [];
+        $this->meta = $options['metadata']
+            ?? [];
 
-        $meta = stream_get_meta_data($this->stream);
+        $meta = \stream_get_meta_data($this->stream);
 
         $this->seekable = $meta['seekable'];
         $this->readable = isset(self::READABLE_MODES[$meta['mode']]);
@@ -162,7 +161,7 @@ class Stream implements StreamInterface
             throw new RuntimeException('Stream is detached');
         }
 
-        $contents = stream_get_contents($this->stream);
+        $contents = \stream_get_contents($this->stream);
 
         if ($contents === false) {
             throw new RuntimeException('Unable to read stream contents');
@@ -177,8 +176,8 @@ class Stream implements StreamInterface
     public function close(): void
     {
         if (isset($this->stream)) {
-            if (is_resource($this->stream)) {
-                fclose($this->stream);
+            if (\is_resource($this->stream)) {
+                \fclose($this->stream);
             }
 
             $this->detach();
@@ -220,10 +219,10 @@ class Stream implements StreamInterface
 
         // Clear the stat cache if the stream has a URI
         if ($this->uri) {
-            clearstatcache(true, $this->uri);
+            \clearstatcache(true, $this->uri);
         }
 
-        $stats = fstat($this->stream);
+        $stats = \fstat($this->stream);
 
         if (isset($stats['size'])) {
             $this->size = (int) $stats['size'];
@@ -265,7 +264,7 @@ class Stream implements StreamInterface
             throw new RuntimeException('Stream is detached');
         }
 
-        return feof($this->stream);
+        return \feof($this->stream);
     }
 
     /**
@@ -277,7 +276,7 @@ class Stream implements StreamInterface
             throw new RuntimeException('Stream is detached');
         }
 
-        $result = ftell($this->stream);
+        $result = \ftell($this->stream);
 
         if ($result === false) {
             throw new RuntimeException('Unable to determine stream position');
@@ -307,10 +306,10 @@ class Stream implements StreamInterface
             throw new RuntimeException('Stream is not seekable');
         }
 
-        if (fseek($this->stream, $offset, $whence) === -1) {
+        if (\fseek($this->stream, $offset, $whence) === -1) {
             throw new RuntimeException(
                 'Unable to seek to stream position '
-                . $offset . ' with whence ' . var_export($whence, true)
+                . $offset . ' with whence ' . \var_export($whence, true)
             );
         }
     }
@@ -360,7 +359,7 @@ class Stream implements StreamInterface
 
         // We can't know the size after writing anything
         $this->size = null;
-        $result     = fwrite($this->stream, $string);
+        $result     = \fwrite($this->stream, $string);
 
         if ($result === false) {
             throw new RuntimeException('Unable to write to stream');
@@ -377,13 +376,13 @@ class Stream implements StreamInterface
         if (! isset($this->stream)) {
             return $key ? null : [];
         } elseif (! $key) {
-            return $this->meta + stream_get_meta_data($this->stream);
+            return $this->meta + \stream_get_meta_data($this->stream);
         } elseif (isset($this->meta[$key])) {
             return $this->meta[$key];
         }
 
-        $meta = stream_get_meta_data($this->stream);
+        $meta = \stream_get_meta_data($this->stream);
 
-        return isset($meta[$key]) ? $meta[$key] : null;
+        return $meta[$key] ?? null;
     }
 }

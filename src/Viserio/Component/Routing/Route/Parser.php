@@ -32,8 +32,8 @@ final class Parser
      */
     public static function parse(string $route, array $conditions): array
     {
-        if (mb_strlen($route) > 1 && $route[0] !== '/') {
-            throw new InvalidRoutePatternException(sprintf(
+        if (\mb_strlen($route) > 1 && $route[0] !== '/') {
+            throw new InvalidRoutePatternException(\sprintf(
                 'Invalid route pattern: non-root route must be prefixed with \'/\', \'%s\' given.',
                 $route
             ));
@@ -42,9 +42,9 @@ final class Parser
         $segments        = [];
         $matches         = [];
         $names           = [];
-        $patternSegments = explode('/', $route);
+        $patternSegments = \explode('/', $route);
 
-        array_shift($patternSegments);
+        \array_shift($patternSegments);
 
         foreach ($patternSegments as $key => $patternSegment) {
             if (self::matchRouteParameters($route, $patternSegment, $conditions, $matches, $names)) {
@@ -84,12 +84,12 @@ final class Parser
         $current          = '';
         $inParameter      = false;
 
-        foreach (str_split($patternSegment) as $character) {
+        foreach (\str_split($patternSegment) as $character) {
             if ($inParameter) {
                 if ($character === '}') {
-                    if (mb_strpos($current, ':') !== false) {
-                        $regex                = mb_substr($current, mb_strpos($current, ':') + 1);
-                        $current              = mb_substr($current, 0, mb_strpos($current, ':'));
+                    if (\mb_strpos($current, ':') !== false) {
+                        $regex                = \mb_substr($current, \mb_strpos($current, ':') + 1);
+                        $current              = \mb_substr($current, 0, \mb_strpos($current, ':'));
                         $conditions[$current] = $regex;
                     }
 
@@ -101,7 +101,7 @@ final class Parser
 
                     continue;
                 } elseif ($character === '{') {
-                    throw new InvalidRoutePatternException(sprintf(
+                    throw new InvalidRoutePatternException(\sprintf(
                         'Invalid route uri; Cannot contain nested \'{\', \'%s\' given.',
                         $route
                     ));
@@ -114,7 +114,7 @@ final class Parser
 
                     continue;
                 } elseif ($character === '}') {
-                    throw new InvalidRoutePatternException(sprintf(
+                    throw new InvalidRoutePatternException(\sprintf(
                         'Invalid route uri; Cannot contain \'}\' before opening \'{\', \'%s\' given.',
                         $route
                     ));
@@ -125,7 +125,7 @@ final class Parser
         }
 
         if ($inParameter) {
-            throw new InvalidRoutePatternException(sprintf(
+            throw new InvalidRoutePatternException(\sprintf(
                 'Invalid route uri: cannot contain \'{\' without closing \'}\', \'%s\' given',
                 $route
             ));
@@ -151,7 +151,7 @@ final class Parser
             [$type, $part] = $match;
 
             if ($type === self::STATIC_PART) {
-                $regex .= preg_quote($part, '/');
+                $regex .= \preg_quote($part, '/');
             } else {
                 // Parameter, $part is the parameter name
                 $pattern = $parameterPatterns[$part] ?? Pattern::ANY;

@@ -13,7 +13,7 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 
 class CacheServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new CacheServiceProvider());

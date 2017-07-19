@@ -27,7 +27,7 @@ class SqsQueueTest extends MockeryTestCase
     private $mockedSendMessageResponseModel;
     private $mockedReceiveMessageResponseModel;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -42,14 +42,14 @@ class SqsQueueTest extends MockeryTestCase
 
         $this->mockedJob           = 'foo';
         $this->mockedData          = ['data'];
-        $this->mockedPayload       = json_encode(['job' => $this->mockedJob, 'data' => $this->mockedData]);
+        $this->mockedPayload       = \json_encode(['job' => $this->mockedJob, 'data' => $this->mockedData]);
         $this->mockedDelay         = 10;
         $this->mockedMessageId     = 'e3cd03ee-59a3-4ad8-b0aa-ee2e3808ac81';
         $this->mockedReceiptHandle = '0NNAq8PwvXuWv5gMtS9DJ8qEdyiUwbAjpp45w2m6M4SJ1Y+PxCh7R930NRB8ylSacEmoSnW18bgd4nK\/O6ctE+VFVul4eD23mA07vVoSnPI4F\/voI1eNCp6Iax0ktGmhlNVzBwaZHEr91BRtqTRM3QKd2ASF8u+IQaSwyl\/DGK+P1+dqUOodvOVtExJwdyDLy1glZVgm85Yw9Jf5yZEEErqRwzYz\/qSigdvW4sm2l7e4phRol\/+IjMtovOyH\/ukueYdlVbQ4OshQLENhUKe7RNN5i6bE\/e5x9bnPhfj2gbM';
 
         $this->mockedSendMessageResponseModel = new Result([
             'Body'          => $this->mockedPayload,
-            'MD5OfBody'     => md5($this->mockedPayload),
+            'MD5OfBody'     => \md5($this->mockedPayload),
             'ReceiptHandle' => $this->mockedReceiptHandle,
             'MessageId'     => $this->mockedMessageId,
             'Attributes'    => ['ApproximateReceiveCount' => 1],
@@ -57,7 +57,7 @@ class SqsQueueTest extends MockeryTestCase
         $this->mockedReceiveMessageResponseModel = new Result([
             'Messages' => [0 => [
                 'Body'              => $this->mockedPayload,
-                    'MD5OfBody'     => md5($this->mockedPayload),
+                    'MD5OfBody'     => \md5($this->mockedPayload),
                     'ReceiptHandle' => $this->mockedReceiptHandle,
                     'MessageId'     => $this->mockedMessageId,
                 ],
@@ -65,14 +65,14 @@ class SqsQueueTest extends MockeryTestCase
         ]);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
         $this->allowMockingNonExistentMethods(true);
     }
 
-    public function testPopProperlyPopsJobOffOfSqs()
+    public function testPopProperlyPopsJobOffOfSqs(): void
     {
         $queue = $this->getMockBuilder(SqsQueue::class)
             ->setMethods(['getQueue'])
@@ -94,7 +94,7 @@ class SqsQueueTest extends MockeryTestCase
         self::assertInstanceOf(SqsJob::class, $result);
     }
 
-    public function testDelayedPushWithDateTimeProperlyPushesJobOntoSqs()
+    public function testDelayedPushWithDateTimeProperlyPushesJobOntoSqs(): void
     {
         $now = Chronos::now();
         $now->addSeconds(5);
@@ -126,7 +126,7 @@ class SqsQueueTest extends MockeryTestCase
         self::assertEquals($this->mockedMessageId, $id);
     }
 
-    public function testPopProperlyPopsJobOffOfSqsWithCustomJobCreator()
+    public function testPopProperlyPopsJobOffOfSqsWithCustomJobCreator(): void
     {
         $queue = $this->getMockBuilder(SqsQueue::class)
             ->setMethods(['getQueue'])
@@ -151,7 +151,7 @@ class SqsQueueTest extends MockeryTestCase
         self::assertEquals('job!', $result);
     }
 
-    public function testDelayedPushProperlyPushesJobOntoSqs()
+    public function testDelayedPushProperlyPushesJobOntoSqs(): void
     {
         $queue = $this->getMockBuilder(SqsQueue::class)
             ->setMethods(['createPayload', 'getSeconds', 'getQueue'])
@@ -180,7 +180,7 @@ class SqsQueueTest extends MockeryTestCase
         self::assertEquals($this->mockedMessageId, $id);
     }
 
-    public function testPushProperlyPushesJobOntoSqs()
+    public function testPushProperlyPushesJobOntoSqs(): void
     {
         $queue = $this->getMockBuilder(SqsQueue::class)
             ->setMethods(['createPayload', 'getQueue'])
@@ -205,7 +205,7 @@ class SqsQueueTest extends MockeryTestCase
         self::assertEquals($this->mockedMessageId, $id);
     }
 
-    public function testGetQueueProperlyResolvesUrlWithPrefix()
+    public function testGetQueueProperlyResolvesUrlWithPrefix(): void
     {
         $queue = new SqsQueue($this->sqs, $this->queueName, $this->prefix);
 
@@ -216,7 +216,7 @@ class SqsQueueTest extends MockeryTestCase
         self::assertEquals($queueUrl, $queue->getQueue('test'));
     }
 
-    public function testGetQueueProperlyResolvesUrlWithoutPrefix()
+    public function testGetQueueProperlyResolvesUrlWithoutPrefix(): void
     {
         $queue = new SqsQueue($this->sqs, $this->queueUrl);
 

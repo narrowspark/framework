@@ -50,7 +50,7 @@ class RouteListCommand extends Command
      */
     public function handle()
     {
-        if (count($this->routes) == 0) {
+        if (\count($this->routes) == 0) {
             $this->error("Your application doesn't have any routes.");
 
             return 1;
@@ -83,10 +83,10 @@ class RouteListCommand extends Command
         }
 
         if ($this->option('reverse')) {
-            $routes = array_reverse($routes);
+            $routes = \array_reverse($routes);
         }
 
-        return array_filter($routes);
+        return \array_filter($routes);
     }
 
     /**
@@ -94,16 +94,16 @@ class RouteListCommand extends Command
      *
      * @param \Viserio\Component\Contracts\Routing\Route $route
      *
-     * @return array|null
+     * @return null|array
      */
     protected function getRouteInformation(RouteContract $route): ?array
     {
-        $actions = explode('@', $route->getActionName());
+        $actions = \explode('@', $route->getActionName());
 
         return $this->filterRoute([
-            'method'     => implode('|', $route->getMethods()),
+            'method'     => \implode('|', $route->getMethods()),
             'uri'        => $route->getUri(),
-            'name'       => is_string($route->getName()) ? "<fg=green>{$route->getName()}</>" : '-',
+            'name'       => \is_string($route->getName()) ? "<fg=green>{$route->getName()}</>" : '-',
             'controller' => isset($actions[0]) ? "<fg=cyan>{$actions[0]}</>" : '-',
             'action'     => isset($actions[1]) ? "<fg=red>{$actions[1]}</>" : '-',
         ]);
@@ -114,13 +114,13 @@ class RouteListCommand extends Command
      *
      * @param array $route
      *
-     * @return array|null
+     * @return null|array
      */
     protected function filterRoute(array $route): ?array
     {
-        if ($this->option('name') && mb_strpos($route['name'], $this->option('name')) === false ||
-            $this->option('path') && mb_strpos($route['uri'], $this->option('path')) === false ||
-            $this->option('method') && mb_strpos($route['method'], mb_strtoupper($this->option('method'))) === false) {
+        if ($this->option('name') && \mb_strpos($route['name'], $this->option('name')) === false ||
+            $this->option('path') && \mb_strpos($route['uri'], $this->option('path')) === false ||
+            $this->option('method') && \mb_strpos($route['method'], \mb_strtoupper($this->option('method'))) === false) {
             return null;
         }
 
@@ -143,9 +143,9 @@ class RouteListCommand extends Command
             $results[$key] = $callback($value, $key);
         }
 
-        asort($results, SORT_REGULAR);
+        \asort($results, SORT_REGULAR);
 
-        foreach (array_keys($results) as $key) {
+        foreach (\array_keys($results) as $key) {
             $results[$key] = $array[$key];
         }
 

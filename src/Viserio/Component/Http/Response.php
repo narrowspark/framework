@@ -24,7 +24,7 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
      *
      * @param int                                                    $status  status code for the response, if any
      * @param array                                                  $headers headers for the response, if any
-     * @param string|resource|\Psr\Http\Message\StreamInterface|null $body    Stream identifier and/or actual stream resource
+     * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    Stream identifier and/or actual stream resource
      * @param string                                                 $version protocol version
      *
      * @throws InvalidArgumentException on any invalid element

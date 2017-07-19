@@ -34,7 +34,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     {
         $this->data = [
             'routes'  => $this->routes->getRoutes(),
-            'counted' => count($this->routes->getRoutes()),
+            'counted' => \count($this->routes->getRoutes()),
         ];
     }
 
@@ -44,7 +44,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     public function getMenu(): array
     {
         return [
-            'icon'  => file_get_contents(__DIR__ . '/Resources/icons/ic_directions_white_24px.svg'),
+            'icon'  => \file_get_contents(__DIR__ . '/Resources/icons/ic_directions_white_24px.svg'),
             'label' => 'Routes',
             'value' => $this->data['counted'],
         ];
@@ -60,12 +60,12 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
 
         foreach ($this->data['routes'] as $route) {
             $routeData = [
-                0 => implode(' | ', $route->getMethods()),
+                0 => \implode(' | ', $route->getMethods()),
                 2 => $route->getUri(),
                 3 => $route->getName() ?? '-',
                 4 => $route->getActionName(),
-                5 => implode(', ', $route->gatherMiddleware()),
-                6 => implode(', ', $route->gatherDisabledMiddlewares()),
+                5 => \implode(', ', $route->gatherMiddleware()),
+                6 => \implode(', ', $route->gatherDisabledMiddlewares()),
             ];
 
             if ($route->getDomain() !== null) {
@@ -79,8 +79,8 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
             $headers[1] = 'Domain';
         }
 
-        sort($data, SORT_NUMERIC);
-        sort($headers, SORT_NUMERIC);
+        \sort($data, SORT_NUMERIC);
+        \sort($headers, SORT_NUMERIC);
 
         return $this->createTable(
             $data,

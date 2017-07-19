@@ -10,7 +10,7 @@ trait CacheManagerAwareTrait
     /**
      * Cache Manager instance.
      *
-     * @var \Viserio\Component\Contracts\Cache\Manager|null
+     * @var null|\Viserio\Component\Contracts\Cache\Manager
      */
     protected $cacheManager;
 

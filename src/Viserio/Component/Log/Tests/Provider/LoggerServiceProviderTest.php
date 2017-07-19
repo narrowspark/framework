@@ -15,7 +15,7 @@ use Viserio\Component\Log\Writer as MonologWriter;
 
 class LoggerServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new EventsServiceProvider());

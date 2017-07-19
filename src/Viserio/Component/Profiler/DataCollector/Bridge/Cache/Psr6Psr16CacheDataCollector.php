@@ -13,7 +13,7 @@ use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 /**
  * Ported from.
  *
- * @link https://github.com/php-cache/cache-bundle/blob/master/src/DataCollector/CacheDataCollector.php
+ * @see https://github.com/php-cache/cache-bundle/blob/master/src/DataCollector/CacheDataCollector.php
  */
 class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     TooltipAwareContract,
@@ -29,7 +29,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     /**
      * Create a new cache data collector.
      *
-     * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator $cache
+     * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator $cache
      *
      * @throws \InvalidArgumentException
      *
@@ -46,9 +46,9 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
             return;
         }
 
-        throw new InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(\sprintf(
             'The object [%s] must be an instance of [%s] or [%s].',
-            get_class($cache),
+            \get_class($cache),
             TraceableCacheItemDecorator::class,
             SimpleTraceableCacheDecorator::class
         ));
@@ -230,7 +230,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
 
             if ($statistics[$name]['reads']) {
                 $statistics[$name]['hits'] =
-                    round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
+                    \round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
             } else {
                 $statistics[$name]['hits'] = 0;
             }
@@ -261,7 +261,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
         }
 
         if ($totals['reads']) {
-            $totals['hits'] = round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
+            $totals['hits'] = \round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
         } else {
             $totals['hits'] = 0;
         }

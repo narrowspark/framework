@@ -18,7 +18,7 @@ use Viserio\Provider\Twig\Provider\TwigServiceProvider;
 
 class TwigServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new FilesServiceProvider());

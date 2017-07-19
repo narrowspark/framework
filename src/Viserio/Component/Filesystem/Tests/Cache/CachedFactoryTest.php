@@ -16,7 +16,7 @@ class CachedFactoryTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage A driver must be specified.
      */
-    public function testConnectionThrowsInvalidArgumentException()
+    public function testConnectionThrowsInvalidArgumentException(): void
     {
         $cache = new CachedFactory($this->mock(FilesystemManager::class));
 
@@ -27,7 +27,7 @@ class CachedFactoryTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unsupported driver [local].
      */
-    public function testCreateConnectorThrowsInvalidArgumentException()
+    public function testCreateConnectorThrowsInvalidArgumentException(): void
     {
         $manager = $this->mock(FilesystemManager::class);
         $manager->shouldReceive('hasConnection')
@@ -41,7 +41,7 @@ class CachedFactoryTest extends MockeryTestCase
         ]);
     }
 
-    public function testConnectionWithFilesystemManager()
+    public function testConnectionWithFilesystemManager(): void
     {
         $manager = $this->mock(FilesystemManager::class);
         $manager->shouldReceive('hasConnection')
@@ -66,7 +66,7 @@ class CachedFactoryTest extends MockeryTestCase
         self::assertInstanceOf(CacheInterface::class, $adapter);
     }
 
-    public function testConnectionWithFilesystemManagerAndCacheManager()
+    public function testConnectionWithFilesystemManagerAndCacheManager(): void
     {
         $manager      = $this->mock(FilesystemManager::class);
         $cacheManager = $this->mock(CacheManagerContract::class);

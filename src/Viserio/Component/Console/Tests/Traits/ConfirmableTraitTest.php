@@ -17,7 +17,7 @@ class ConfirmableTraitTest extends TestCase
      */
     private $application;
 
-    public function setUp()
+    public function setUp(): void
     {
         $container = new ArrayContainer([
             'env' => 'production',
@@ -27,7 +27,7 @@ class ConfirmableTraitTest extends TestCase
         $this->application->setContainer($container);
     }
 
-    public function testConfirmableCommandWithTrue()
+    public function testConfirmableCommandWithTrue(): void
     {
         $this->application->add(new ViserioConfirmableTrueCommand());
 
@@ -41,7 +41,7 @@ class ConfirmableTraitTest extends TestCase
         );
     }
 
-    public function testConfirmableCommandWithFalse()
+    public function testConfirmableCommandWithFalse(): void
     {
         $this->application->add(new ViserioConfirmableFalseCommand());
 
@@ -56,7 +56,7 @@ Command Cancelled!
         );
     }
 
-    public function testConfirmableCommandWithFalseAndForce()
+    public function testConfirmableCommandWithFalseAndForce(): void
     {
         $this->application->add(new ViserioConfirmableFalseCommand());
 
@@ -68,9 +68,9 @@ Command Cancelled!
 
     /**
      * @param string      $command
-     * @param string|null $expected
+     * @param null|string $expected
      */
-    private function assertOutputIs(string $command, $expected)
+    private function assertOutputIs(string $command, $expected): void
     {
         $output = new SpyOutput();
 

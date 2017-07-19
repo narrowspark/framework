@@ -49,8 +49,8 @@ class ServeCommand extends Command
     {
         $documentRoot = $kernel->getPublicPath();
 
-        if (! is_dir($documentRoot)) {
-            $this->error(sprintf('The document root directory [%s] does not exist.', $documentRoot));
+        if (! \is_dir($documentRoot)) {
+            $this->error(\sprintf('The document root directory [%s] does not exist.', $documentRoot));
 
             return 1;
         }
@@ -58,13 +58,13 @@ class ServeCommand extends Command
         $controller = $this->option('controller');
         $file       = self::normalizeDirectorySeparator($documentRoot . '/' . $controller);
 
-        if (! file_exists($file)) {
-            $this->error(sprintf('Unable to find the controller under [%s] (file not found: %s).', $documentRoot, $controller));
+        if (! \file_exists($file)) {
+            $this->error(\sprintf('Unable to find the controller under [%s] (file not found: %s).', $documentRoot, $controller));
 
             return 1;
         }
 
-        putenv('APP_WEBSERVER_CONTROLLER=' . $file);
+        \putenv('APP_WEBSERVER_CONTROLLER=' . $file);
 
         $this->configureCommand();
 
@@ -72,16 +72,16 @@ class ServeCommand extends Command
         $output   = $this->getOutput();
 
         try {
-            if (file_exists($pidFilePath = $this->getDefaultPidFile())) {
-                $this->error(sprintf(
+            if (\file_exists($pidFilePath = $this->getDefaultPidFile())) {
+                $this->error(\sprintf(
                     'The web server is already running (listening on http://%s).',
-                    file_get_contents($pidFilePath)
+                    \file_get_contents($pidFilePath)
                 ));
 
                 return 1;
             }
 
-            $output->success(sprintf('Server listening on http://%s:%s', $this->hostname, $this->port));
+            $output->success(\sprintf('Server listening on http://%s:%s', $this->hostname, $this->port));
             $this->comment('Quit the server with CONTROL-C.');
 
             $this->runServer($documentRoot, $output->isQuiet(), $this->getErrorCallback($output->isQuiet()));
@@ -111,7 +111,7 @@ class ServeCommand extends Command
      *
      * @param string        $documentRoot
      * @param bool          $disableOutput
-     * @param callable|null $callback
+     * @param null|callable $callback
      *
      * @throws \RuntimeException Server terminated unexpected
      *
@@ -155,7 +155,7 @@ class ServeCommand extends Command
      */
     private function getDefaultPidFile(): string
     {
-        return getcwd() . '/.web-server-pid';
+        return \getcwd() . '/.web-server-pid';
     }
 
     /**
@@ -170,8 +170,8 @@ class ServeCommand extends Command
         $this->hostname = $this->option('host');
         $port           = (int) $this->option('port');
 
-        if (! ctype_digit($port)) {
-            throw new InvalidArgumentException(sprintf('Port "%s" is not valid.', $port));
+        if (! \ctype_digit($port)) {
+            throw new InvalidArgumentException(\sprintf('Port "%s" is not valid.', $port));
         }
 
         $this->port = $port;
@@ -182,7 +182,7 @@ class ServeCommand extends Command
      *
      * @param bool $quiet
      *
-     * @return callable|null
+     * @return null|callable
      */
     private function getErrorCallback(bool $quiet)
     {
@@ -192,7 +192,7 @@ class ServeCommand extends Command
 
         $output = $this->getOutput();
 
-        return function ($type, $buffer) use ($output) {
+        return function ($type, $buffer) use ($output): void {
             if (Process::ERR === $type && $output instanceof ConsoleOutputInterface) {
                 $output = $output->getErrorOutput();
             }
@@ -221,7 +221,7 @@ class ServeCommand extends Command
         $process = new Process([
             $binary,
             '-S',
-            sprintf('%s:%s', $this->hostname, $this->port),
+            \sprintf('%s:%s', $this->hostname, $this->port),
             __DIR__ . '/../Resources/router.php',
         ]);
         $process->setWorkingDirectory($documentRoot);

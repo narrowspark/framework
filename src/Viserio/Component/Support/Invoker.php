@@ -97,7 +97,7 @@ class Invoker implements InvokerInterface
     private function getInvoker(): InvokerInterface
     {
         if ($this->invoker === null) {
-            $resolvers = array_merge([
+            $resolvers = \array_merge([
                 new AssociativeArrayResolver(),
                 new NumericArrayResolver(),
                 new TypeHintResolver(),

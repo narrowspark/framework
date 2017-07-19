@@ -9,7 +9,7 @@ use Viserio\Component\Profiler\DataCollector\TimeDataCollector;
 
 class TimeDataCollectorTest extends MockeryTestCase
 {
-    public function testGetMenuAndPosition()
+    public function testGetMenuAndPosition(): void
     {
         $collect = $this->getTimeDataCollector();
         $data    = $collect->getData();
@@ -25,7 +25,7 @@ class TimeDataCollectorTest extends MockeryTestCase
         );
     }
 
-    public function testGetRequestDuration()
+    public function testGetRequestDuration(): void
     {
         $collect = $this->getTimeDataCollector();
         $data    = $collect->getData();
@@ -43,10 +43,10 @@ class TimeDataCollectorTest extends MockeryTestCase
             ->andReturn('');
         $collect = new TimeDataCollector($request);
 
-        self::assertTrue(is_float($collect->getRequestDuration()));
+        self::assertTrue(\is_float($collect->getRequestDuration()));
     }
 
-    public function testStartHasStopMeasure()
+    public function testStartHasStopMeasure(): void
     {
         $collect = $this->getTimeDataCollector();
 
@@ -73,7 +73,7 @@ class TimeDataCollectorTest extends MockeryTestCase
         ];
 
         foreach ($keysExistCheck as $key => $value) {
-            self::assertTrue(array_key_exists($value, $measure));
+            self::assertTrue(\array_key_exists($value, $measure));
         }
     }
 
@@ -81,7 +81,7 @@ class TimeDataCollectorTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Failed stopping measure [dontexist] because it hasn't been started.
      */
-    public function testStopMeasureThrowsException()
+    public function testStopMeasureThrowsException(): void
     {
         $collect = $this->getTimeDataCollector();
         $collect->stopMeasure('dontexist');

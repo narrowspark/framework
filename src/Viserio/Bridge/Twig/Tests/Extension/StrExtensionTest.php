@@ -15,7 +15,7 @@ class StrExtensionTest extends MockeryTestCase
         'studly_case',
     ];
 
-    public function testCallback()
+    public function testCallback(): void
     {
         $string = $this->getString();
 
@@ -26,12 +26,12 @@ class StrExtensionTest extends MockeryTestCase
         self::assertEquals('FooBar', $string->getCallback());
     }
 
-    public function testName()
+    public function testName(): void
     {
         self::assertInternalType('string', $this->getString()->getName());
     }
 
-    public function testFunctionCallback()
+    public function testFunctionCallback(): void
     {
         $mock = $this->mock(Str::class);
         $mock->shouldReceive('fooBar')
@@ -42,18 +42,18 @@ class StrExtensionTest extends MockeryTestCase
 
         self::assertInternalType('array', $string->getFunctions());
 
-        call_user_func($string->getFunctions()[0]->getCallable(), 'foo_bar');
+        \call_user_func($string->getFunctions()[0]->getCallable(), 'foo_bar');
     }
 
-    public function testFunctionIsNotSafe()
+    public function testFunctionIsNotSafe(): void
     {
         $string   = $this->getString();
         $function = $string->getFunctions()[0];
 
-        self::assertFalse(in_array('html', $function->getSafe($this->mock(Node::class))));
+        self::assertFalse(\in_array('html', $function->getSafe($this->mock(Node::class)), true));
     }
 
-    public function testCustomFilters()
+    public function testCustomFilters(): void
     {
         $string  = $this->getString();
         $filters = $string->getFilters();
@@ -61,7 +61,7 @@ class StrExtensionTest extends MockeryTestCase
         self::assertInternalType('array', $filters);
 
         foreach ($filters as $filter) {
-            if (! in_array($filter->getName(), $this->customFilters)) {
+            if (! \in_array($filter->getName(), $this->customFilters, true)) {
                 continue;
             }
 
@@ -69,7 +69,7 @@ class StrExtensionTest extends MockeryTestCase
         }
     }
 
-    public function testWildcardFilters()
+    public function testWildcardFilters(): void
     {
         $mock = $this->mock(Str::class);
         $mock->shouldReceive('fooBar')->once();
@@ -80,11 +80,11 @@ class StrExtensionTest extends MockeryTestCase
         $filters = $string->getFilters();
 
         foreach ($filters as $filter) {
-            if (in_array($filter->getName(), $this->customFilters)) {
+            if (\in_array($filter->getName(), $this->customFilters, true)) {
                 continue;
             }
 
-            call_user_func($filter->getCallable(), 'foo_bar');
+            \call_user_func($filter->getCallable(), 'foo_bar');
         }
     }
 

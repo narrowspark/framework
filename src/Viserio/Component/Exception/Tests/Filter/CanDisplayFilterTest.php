@@ -11,7 +11,7 @@ use Viserio\Component\Exception\Filter\CanDisplayFilter;
 
 class CanDisplayFilterTest extends MockeryTestCase
 {
-    public function testFirstIsRemoved()
+    public function testFirstIsRemoved(): void
     {
         $request   = $this->mock(ServerRequestInterface::class);
         $exception = new Exception();
@@ -35,7 +35,7 @@ class CanDisplayFilterTest extends MockeryTestCase
         self::assertSame([$json], $displayers);
     }
 
-    public function testNoChange()
+    public function testNoChange(): void
     {
         $request   = $this->mock(ServerRequestInterface::class);
         $exception = new Exception();

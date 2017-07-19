@@ -50,7 +50,7 @@ class FnStream implements StreamInterface
     public function __destruct()
     {
         if (isset($this->_fn_close)) {
-            call_user_func($this->_fn_close);
+            \call_user_func($this->_fn_close);
         }
     }
 
@@ -61,10 +61,10 @@ class FnStream implements StreamInterface
      *
      * @throws \BadMethodCallException
      */
-    public function __get($name)
+    public function __get($name): void
     {
         throw new BadMethodCallException(
-            str_replace('_fn_', '', $name) . '() is not implemented in the FnStream'
+            \str_replace('_fn_', '', $name) . '() is not implemented in the FnStream'
         );
     }
 
@@ -73,7 +73,7 @@ class FnStream implements StreamInterface
      */
     public function __toString()
     {
-        return call_user_func($this->_fn___toString);
+        return \call_user_func($this->_fn___toString);
     }
 
     /**
@@ -89,7 +89,7 @@ class FnStream implements StreamInterface
     {
         // If any of the required methods were not provided, then simply
         // proxy to the decorated stream.
-        foreach (array_diff(self::SLOTS, array_keys($methods)) as $diff) {
+        foreach (\array_diff(self::SLOTS, \array_keys($methods)) as $diff) {
             $methods[$diff] = [$stream, $diff];
         }
 
@@ -99,9 +99,9 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
-        call_user_func($this->_fn_close);
+        \call_user_func($this->_fn_close);
     }
 
     /**
@@ -109,7 +109,7 @@ class FnStream implements StreamInterface
      */
     public function detach()
     {
-        return call_user_func($this->_fn_detach);
+        return \call_user_func($this->_fn_detach);
     }
 
     /**
@@ -117,7 +117,7 @@ class FnStream implements StreamInterface
      */
     public function getSize()
     {
-        return call_user_func($this->_fn_getSize);
+        return \call_user_func($this->_fn_getSize);
     }
 
     /**
@@ -125,7 +125,7 @@ class FnStream implements StreamInterface
      */
     public function tell()
     {
-        return call_user_func($this->_fn_tell);
+        return \call_user_func($this->_fn_tell);
     }
 
     /**
@@ -133,7 +133,7 @@ class FnStream implements StreamInterface
      */
     public function eof()
     {
-        return call_user_func($this->_fn_eof);
+        return \call_user_func($this->_fn_eof);
     }
 
     /**
@@ -141,23 +141,23 @@ class FnStream implements StreamInterface
      */
     public function isSeekable()
     {
-        return call_user_func($this->_fn_isSeekable);
+        return \call_user_func($this->_fn_isSeekable);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
-        call_user_func($this->_fn_rewind);
+        \call_user_func($this->_fn_rewind);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
-        call_user_func($this->_fn_seek, $offset, $whence);
+        \call_user_func($this->_fn_seek, $offset, $whence);
     }
 
     /**
@@ -165,7 +165,7 @@ class FnStream implements StreamInterface
      */
     public function isWritable()
     {
-        return call_user_func($this->_fn_isWritable);
+        return \call_user_func($this->_fn_isWritable);
     }
 
     /**
@@ -173,7 +173,7 @@ class FnStream implements StreamInterface
      */
     public function write($string)
     {
-        return call_user_func($this->_fn_write, $string);
+        return \call_user_func($this->_fn_write, $string);
     }
 
     /**
@@ -181,7 +181,7 @@ class FnStream implements StreamInterface
      */
     public function isReadable()
     {
-        return call_user_func($this->_fn_isReadable);
+        return \call_user_func($this->_fn_isReadable);
     }
 
     /**
@@ -189,7 +189,7 @@ class FnStream implements StreamInterface
      */
     public function read($length)
     {
-        return call_user_func($this->_fn_read, $length);
+        return \call_user_func($this->_fn_read, $length);
     }
 
     /**
@@ -197,7 +197,7 @@ class FnStream implements StreamInterface
      */
     public function getContents()
     {
-        return call_user_func($this->_fn_getContents);
+        return \call_user_func($this->_fn_getContents);
     }
 
     /**
@@ -205,6 +205,6 @@ class FnStream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        return call_user_func($this->_fn_getMetadata, $key);
+        return \call_user_func($this->_fn_getMetadata, $key);
     }
 }

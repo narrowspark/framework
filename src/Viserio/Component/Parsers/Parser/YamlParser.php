@@ -16,7 +16,7 @@ class YamlParser implements ParserContract
     public function __construct()
     {
         // @codeCoverageIgnoreStart
-        if (! class_exists('Symfony\\Component\\Yaml\\Yaml')) {
+        if (! \class_exists('Symfony\\Component\\Yaml\\Yaml')) {
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
         // @codeCoverageIgnoreEnd
@@ -28,7 +28,7 @@ class YamlParser implements ParserContract
     public function parse(string $payload): array
     {
         try {
-            return SymfonyYaml::parse(trim(preg_replace('/\t+/', '', $payload)));
+            return SymfonyYaml::parse(\trim(\preg_replace('/\t+/', '', $payload)));
         } catch (YamlParseException $exception) {
             throw new ParseException([
                 'message'   => $exception->getMessage(),

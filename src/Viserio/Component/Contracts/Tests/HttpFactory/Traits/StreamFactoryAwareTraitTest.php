@@ -10,7 +10,7 @@ class StreamFactoryAwareTraitTest extends MockeryTestCase
 {
     use StreamFactoryAwareTrait;
 
-    public function testSetAndGetStreamFactory()
+    public function testSetAndGetStreamFactory(): void
     {
         $this->setStreamFactory($this->mock(StreamFactoryInterface::class));
 
@@ -21,7 +21,7 @@ class StreamFactoryAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\StreamFactoryInterface] is not set up.
      */
-    public function testGetStreamFactoryThrowExceptionIfEventsDispatcherIsNotSet()
+    public function testGetStreamFactoryThrowExceptionIfEventsDispatcherIsNotSet(): void
     {
         $this->getStreamFactory();
     }

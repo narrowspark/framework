@@ -9,7 +9,7 @@ use Viserio\Component\Mail\Transport\LogTransport;
 
 class LogTransportTest extends MockeryTestCase
 {
-    public function testSend()
+    public function testSend(): void
     {
         $message = new Swift_Message('Foo subject', 'Bar body');
         $message->setSender('myself@example.com');

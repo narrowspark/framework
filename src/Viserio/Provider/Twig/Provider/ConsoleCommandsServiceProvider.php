@@ -31,12 +31,12 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
      */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
-        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $console = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($console !== null) {
             $console->add(new CleanCommand());
 
-            if (class_exists(DebugCommand::class)) {
+            if (\class_exists(DebugCommand::class)) {
                 $console->addCommands([
                     new DebugCommand(),
                     new LintCommand(),

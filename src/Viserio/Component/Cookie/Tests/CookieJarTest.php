@@ -9,7 +9,7 @@ use Viserio\Component\Cookie\CookieJar;
 
 class CookieJarTest extends MockeryTestCase
 {
-    public function testCookiesAreCreatedWithProperOptions()
+    public function testCookiesAreCreatedWithProperOptions(): void
     {
         $cookie = $this->getCreator();
         $cookie->setDefaultPathAndDomain('foo', 'bar');
@@ -33,7 +33,7 @@ class CookieJarTest extends MockeryTestCase
         self::assertNotEquals($c3->getExpiresTime(), Chronos::now()->getTimestamp());
     }
 
-    public function testCookiesAreCreatedWithProperOptionsUsingDefaultPathAndDomain()
+    public function testCookiesAreCreatedWithProperOptionsUsingDefaultPathAndDomain(): void
     {
         $cookie = $this->getCreator();
         $cookie->setDefaultPathAndDomain('/path', '/domain');
@@ -46,7 +46,7 @@ class CookieJarTest extends MockeryTestCase
         self::assertEquals('/path', $c->getPath());
     }
 
-    public function testQueuedCookies()
+    public function testQueuedCookies(): void
     {
         $cookie = $this->getCreator();
         self::assertEmpty($cookie->getQueuedCookies());
@@ -63,7 +63,7 @@ class CookieJarTest extends MockeryTestCase
         self::assertInstanceOf(CookieContract::class, $cookie->queued('qu'));
     }
 
-    public function testUnqueue()
+    public function testUnqueue(): void
     {
         $cookie = $this->getCreator();
         $cookie->queue($cookie->create('foo', 'bar'));

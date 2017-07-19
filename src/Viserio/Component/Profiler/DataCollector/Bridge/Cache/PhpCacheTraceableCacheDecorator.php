@@ -16,7 +16,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     /**
      * A instance of psr16 cache.
      *
-     * @var \Psr\SimpleCache\CacheInterface|\Psr\Cache\CacheItemPoolInterface
+     * @var \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface
      */
     private $pool;
 
@@ -44,12 +44,12 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     /**
      * Create new Php Cache Traceable Cache Decorator instance.
      *
-     * @param \Psr\SimpleCache\CacheInterface|\Psr\Cache\CacheItemPoolInterface $pool
+     * @param \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface $pool
      */
     public function __construct($pool)
     {
         $this->pool = $pool;
-        $this->name = get_class($pool);
+        $this->name = \get_class($pool);
         $this->miss = new stdClass();
     }
 
@@ -73,7 +73,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
         try {
             return $event->result = $this->pool->clear();
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -87,7 +87,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
         try {
             $bool = $event->result = $this->pool->invalidateTags($tags);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
 
         return $bool;
@@ -103,7 +103,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
         try {
             $bool = $event->result = $this->pool->invalidateTag($tag);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
 
         return $bool;
@@ -142,7 +142,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
         };
 
         $event->name  = $name;
-        $event->start = microtime(true);
+        $event->start = \microtime(true);
 
         return $event;
     }

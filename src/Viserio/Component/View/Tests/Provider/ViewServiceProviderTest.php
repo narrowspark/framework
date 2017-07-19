@@ -13,7 +13,7 @@ use Viserio\Component\View\ViewFinder;
 
 class ViewServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new FilesServiceProvider());

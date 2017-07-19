@@ -14,7 +14,7 @@ class SerializeParser implements ParserContract
     public function parse(string $payload): array
     {
         try {
-            return unserialize(trim($payload));
+            return \unserialize(\trim($payload));
         } catch (Throwable $exception) {
             throw new ParseException([
                 'message' => 'Failed to parse serialized Data',

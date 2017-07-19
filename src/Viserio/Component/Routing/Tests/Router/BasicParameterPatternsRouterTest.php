@@ -61,7 +61,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter404($httpMethod, $uri)
+    public function testRouter404($httpMethod, $uri): void
     {
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
@@ -119,7 +119,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions($router)
+    protected function definitions($router): void
     {
         $router->get('/digits/{param}', function ($request, $args) {
             return (new ResponseFactory())

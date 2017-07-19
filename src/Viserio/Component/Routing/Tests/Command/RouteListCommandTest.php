@@ -11,7 +11,7 @@ use Viserio\Component\Routing\Route;
 
 class RouteListCommandTest extends MockeryTestCase
 {
-    public function testCommandWithNoRoutes()
+    public function testCommandWithNoRoutes(): void
     {
         $collection = $this->mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
@@ -32,7 +32,7 @@ class RouteListCommandTest extends MockeryTestCase
         self::assertEquals("Your application doesn't have any routes.\n", $output);
     }
 
-    public function testCommand()
+    public function testCommand(): void
     {
         $collection = $this->mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
@@ -53,7 +53,7 @@ class RouteListCommandTest extends MockeryTestCase
         self::assertEquals("+----------+-------------------------+------+------------+--------+\n| method   | uri                     | name | controller | action |\n+----------+-------------------------+------+------------+--------+\n| GET|HEAD | /test/{param1}/{param2} | -    | Closure    | -      |\n+----------+-------------------------+------+------------+--------+\n", $output);
     }
 
-    public function testCommandWithMethodFilter()
+    public function testCommandWithMethodFilter(): void
     {
         $collection = $this->mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
@@ -74,7 +74,7 @@ class RouteListCommandTest extends MockeryTestCase
         self::assertEquals("+--------+-------------------------+------+------------+--------+\n| method | uri                     | name | controller | action |\n+--------+-------------------------+------+------------+--------+\n| PUT    | /test/{param1}/{param2} | -    | Closure    | -      |\n+--------+-------------------------+------+------------+--------+\n", $output);
     }
 
-    public function testCommandWithNameFilter()
+    public function testCommandWithNameFilter(): void
     {
         $collection = $this->mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
@@ -95,7 +95,7 @@ class RouteListCommandTest extends MockeryTestCase
         self::assertEquals("+----------+-------------------------+------+------------+--------+\n| method   | uri                     | name | controller | action |\n+----------+-------------------------+------+------------+--------+\n| GET|HEAD | /test/{param1}/{param2} | test | Closure    | -      |\n+----------+-------------------------+------+------------+--------+\n", $output);
     }
 
-    public function testCommandWithPathFilter()
+    public function testCommandWithPathFilter(): void
     {
         $collection = $this->mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
@@ -116,7 +116,7 @@ class RouteListCommandTest extends MockeryTestCase
         self::assertEquals("+----------+------------------------+------+------------+--------+\n| method   | uri                    | name | controller | action |\n+----------+------------------------+------+------------+--------+\n| GET|HEAD | /foo/{param1}/{param2} | test | Closure    | -      |\n+----------+------------------------+------+------------+--------+\n", $output);
     }
 
-    public function testCommandWithReverseFilter()
+    public function testCommandWithReverseFilter(): void
     {
         $collection = $this->mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
@@ -137,7 +137,7 @@ class RouteListCommandTest extends MockeryTestCase
         self::assertEquals("+----------+------------------------+------+------------+--------+\n| method   | uri                    | name | controller | action |\n+----------+------------------------+------+------------+--------+\n| PUT      | /test2                 | -    | Closure    | -      |\n| GET|HEAD | /foo/{param1}/{param2} | test | Closure    | -      |\n+----------+------------------------+------+------------+--------+\n", $output);
     }
 
-    public function testCommandWithSortFilter()
+    public function testCommandWithSortFilter(): void
     {
         $collection = $this->mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')

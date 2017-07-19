@@ -44,7 +44,7 @@ abstract class AbstractJob implements JobContract
     /**
      * {@inheritdoc}
      */
-    public function delete()
+    public function delete(): void
     {
         $this->deleted = true;
     }
@@ -65,7 +65,7 @@ abstract class AbstractJob implements JobContract
     /**
      * {@inheritdoc}
      */
-    public function release(int $delay = 0)
+    public function release(int $delay = 0): void
     {
         $this->released = true;
     }
@@ -96,21 +96,21 @@ abstract class AbstractJob implements JobContract
      */
     public function getName(): string
     {
-        return json_decode($this->getRawBody(), true)['job'];
+        return \json_decode($this->getRawBody(), true)['job'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function failed()
+    public function failed(): void
     {
-        $payload = json_decode($this->getRawBody(), true);
+        $payload = \json_decode($this->getRawBody(), true);
 
         [$class, $method] = $this->parseJob($payload['job']);
 
         $this->instance = $this->getContainer()->get($class);
 
-        if (method_exists($this->instance, 'failed')) {
+        if (\method_exists($this->instance, 'failed')) {
             $this->instance->failed($payload['data']);
         }
     }
@@ -139,9 +139,9 @@ abstract class AbstractJob implements JobContract
     public function resolveName(): string
     {
         $name    = $this->getName();
-        $payload = json_decode($this->getRawBody(), true);
+        $payload = \json_decode($this->getRawBody(), true);
 
-        if ($name === sprintf('%s@call', CallQueuedHandler::class)) {
+        if ($name === \sprintf('%s@call', CallQueuedHandler::class)) {
             return Arr::get($payload, 'data.commandName', $name);
         }
 
@@ -153,7 +153,7 @@ abstract class AbstractJob implements JobContract
      *
      * @param array $payload
      */
-    protected function resolveAndRun(array $payload)
+    protected function resolveAndRun(array $payload): void
     {
         [$class, $method] = $this->parseJob($payload['job']);
 
@@ -171,9 +171,9 @@ abstract class AbstractJob implements JobContract
      */
     protected function parseJob(string $job): array
     {
-        $segments = explode('@', $job);
+        $segments = \explode('@', $job);
 
-        return count($segments) > 1 ? $segments : [$segments[0], 'run'];
+        return \count($segments) > 1 ? $segments : [$segments[0], 'run'];
     }
 
     /**
@@ -186,7 +186,7 @@ abstract class AbstractJob implements JobContract
     protected function getSeconds($delay): int
     {
         if ($delay instanceof DateTime) {
-            return max(0, $delay->getTimestamp() - $this->getTime());
+            return \max(0, $delay->getTimestamp() - $this->getTime());
         }
 
         return (int) $delay;

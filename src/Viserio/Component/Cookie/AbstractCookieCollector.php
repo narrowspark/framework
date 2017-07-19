@@ -30,7 +30,7 @@ abstract class AbstractCookieCollector
      *
      * @param string $name
      *
-     * @return \Viserio\Component\Cookie\Cookie|\Viserio\Component\Contracts\Cookie\Cookie|null
+     * @return null|\Viserio\Component\Contracts\Cookie\Cookie|\Viserio\Component\Cookie\Cookie
      */
     public function get(string $name)
     {
@@ -48,13 +48,13 @@ abstract class AbstractCookieCollector
      */
     public function getAll(): array
     {
-        return array_values($this->cookies);
+        return \array_values($this->cookies);
     }
 
     /**
      * Add a request cookie to the stack.
      *
-     * @param \Viserio\Component\Cookie\Cookie|\Viserio\Component\Contracts\Cookie\Cookie $cookie
+     * @param \Viserio\Component\Contracts\Cookie\Cookie|\Viserio\Component\Cookie\Cookie $cookie
      *
      * @throws \InvalidArgumentException
      *
@@ -69,9 +69,9 @@ abstract class AbstractCookieCollector
             return $clone;
         }
 
-        throw new InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(\sprintf(
             'The object [%s] must be an instance of [%s] or [%s].',
-            get_class($cookie),
+            \get_class($cookie),
             Cookie::class,
             SetCookie::class
         ));
@@ -106,7 +106,7 @@ abstract class AbstractCookieCollector
      */
     protected static function splitOnAttributeDelimiter(string $string): array
     {
-        return array_filter(preg_split('@\s*[;]\s*@', $string));
+        return \array_filter(\preg_split('@\s*[;]\s*@', $string));
     }
 
     /**
@@ -118,18 +118,18 @@ abstract class AbstractCookieCollector
      */
     protected static function splitCookiePair(string $string): array
     {
-        $pairParts = explode('=', $string, 2);
+        $pairParts = \explode('=', $string, 2);
 
-        if (count($pairParts) === 1) {
+        if (\count($pairParts) === 1) {
             $pairParts[1] = '';
         }
 
-        return array_map(function ($part) {
+        return \array_map(function ($part) {
             if ($part === null) {
                 return '';
             }
 
-            return urldecode($part);
+            return \urldecode($part);
         }, $pairParts);
     }
 }

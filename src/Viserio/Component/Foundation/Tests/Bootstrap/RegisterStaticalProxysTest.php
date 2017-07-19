@@ -10,7 +10,7 @@ use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxys;
 
 class RegisterStaticalProxysTest extends MockeryTestCase
 {
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         $bootstraper = new RegisterStaticalProxys();
 

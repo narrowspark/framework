@@ -10,7 +10,7 @@ trait ConfigAwareTrait
     /**
      * Config instance.
      *
-     * @var \Viserio\Component\Contracts\Config\Repository|null
+     * @var null|\Viserio\Component\Contracts\Config\Repository
      */
     protected $config;
 

@@ -26,7 +26,7 @@ trait MiddlewareAwareTrait
      * Register a short-hand name for a middleware.
      *
      * @param string        $name
-     * @param string|object $middleware
+     * @param object|string $middleware
      *
      * @throws \RuntimeException if wrong type is given or alias exists
      * @throws \LogicException
@@ -36,10 +36,10 @@ trait MiddlewareAwareTrait
     public function aliasMiddleware(string $name, $middleware)
     {
         if (isset($this->middlewares[$name])) {
-            throw new RuntimeException(sprintf('Alias [%s] already exists.', $name));
+            throw new RuntimeException(\sprintf('Alias [%s] already exists.', $name));
         }
 
-        if (is_string($middleware) || is_object($middleware)) {
+        if (\is_string($middleware) || \is_object($middleware)) {
             $this->validateMiddlewareClass($middleware);
 
             $this->middlewares[$name] = $middleware;
@@ -47,13 +47,13 @@ trait MiddlewareAwareTrait
             return $this;
         }
 
-        throw new RuntimeException(sprintf('Expected string or object; received [%s].', gettype($middleware)));
+        throw new RuntimeException(\sprintf('Expected string or object; received [%s].', \gettype($middleware)));
     }
 
     /**
      * Set the middlewares to the route.
      *
-     * @param string|array|object $middlewares
+     * @param array|object|string $middlewares
      *
      * @throws \RuntimeException if wrong type is given
      * @throws \LogicException
@@ -65,8 +65,8 @@ trait MiddlewareAwareTrait
         $this->validateMiddlewareInput($middlewares);
         $this->validateMiddlewareClass($middlewares);
 
-        if (is_string($middlewares) || is_object($middlewares)) {
-            $name = is_object($middlewares) ? get_class($middlewares) : $middlewares;
+        if (\is_string($middlewares) || \is_object($middlewares)) {
+            $name = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
 
             $this->middlewares[$name] = $middlewares;
 
@@ -74,7 +74,7 @@ trait MiddlewareAwareTrait
         }
 
         foreach ($middlewares as $middleware) {
-            $name = is_object($middleware) ? get_class($middleware) : $middleware;
+            $name = \is_object($middleware) ? \get_class($middleware) : $middleware;
 
             $this->middlewares[$name] = $middleware;
         }
@@ -86,7 +86,7 @@ trait MiddlewareAwareTrait
      * Remove the given middlewares from the route/controller.
      * If no middleware is passed, all middlewares will be removed.
      *
-     * @param string|array|null $middlewares
+     * @param null|array|string $middlewares
      *
      * @throws \RuntimeException
      * @throws \LogicException
@@ -104,7 +104,7 @@ trait MiddlewareAwareTrait
         $this->validateMiddlewareInput($middlewares);
         $this->validateMiddlewareClass($middlewares);
 
-        if (is_string($middlewares)) {
+        if (\is_string($middlewares)) {
             $this->bypassedMiddlewares[$middlewares] = $middlewares;
 
             return $this;
@@ -120,7 +120,7 @@ trait MiddlewareAwareTrait
     /**
      * Check if given input is a string, object or array.
      *
-     * @param string|object|array $middlewares
+     * @param array|object|string $middlewares
      *
      * @throws \RuntimeException
      *
@@ -128,17 +128,17 @@ trait MiddlewareAwareTrait
      */
     private function validateMiddlewareInput($middlewares): void
     {
-        if (is_array($middlewares) || is_string($middlewares) || is_object($middlewares)) {
+        if (\is_array($middlewares) || \is_string($middlewares) || \is_object($middlewares)) {
             return;
         }
 
-        throw new RuntimeException(sprintf('Expected string, object or array; received [%s].', gettype($middlewares)));
+        throw new RuntimeException(\sprintf('Expected string, object or array; received [%s].', \gettype($middlewares)));
     }
 
     /**
      * Check if given middleware class has \Interop\Http\ServerMiddleware\MiddlewareInterface implemented.
      *
-     * @param string|object|array $middlewares
+     * @param array|object|string $middlewares
      *
      * @throws \LogicException
      *
@@ -146,20 +146,20 @@ trait MiddlewareAwareTrait
      */
     private function validateMiddlewareClass($middlewares): void
     {
-        $middlewareCheck = function ($middleware) {
-            if (! in_array(MiddlewareInterface::class, class_implements($middleware))) {
+        $middlewareCheck = function ($middleware): void {
+            if (! \in_array(MiddlewareInterface::class, \class_implements($middleware), true)) {
                 throw new LogicException(
-                    sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
+                    \sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
                 );
             }
         };
 
         if (
-            (is_string($middlewares) && ! isset($this->middlewares[$middlewares])) ||
-            is_object($middlewares)
+            (\is_string($middlewares) && ! isset($this->middlewares[$middlewares])) ||
+            \is_object($middlewares)
         ) {
             $middlewareCheck($middlewares);
-        } elseif (is_array($middlewares)) {
+        } elseif (\is_array($middlewares)) {
             foreach ($middlewares as $name => $middleware) {
                 if (! isset($this->middlewares[$middleware])) {
                     $middlewareCheck($middleware);

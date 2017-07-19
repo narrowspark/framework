@@ -11,7 +11,7 @@ class MiddlewareAwareTraitTest extends TestCase
 {
     use MiddlewareAwareTrait;
 
-    public function testWithMiddlewareObject()
+    public function testWithMiddlewareObject(): void
     {
         $object = new FooMiddleware();
 
@@ -20,7 +20,7 @@ class MiddlewareAwareTraitTest extends TestCase
         self::assertSame([FooMiddleware::class => $object], $this->middlewares);
     }
 
-    public function testWithMiddlewareString()
+    public function testWithMiddlewareString(): void
     {
         //reset
         $this->middlewares = [];
@@ -30,7 +30,7 @@ class MiddlewareAwareTraitTest extends TestCase
         self::assertSame([FooMiddleware::class => FooMiddleware::class], $this->middlewares);
     }
 
-    public function testWithMiddlewareArray()
+    public function testWithMiddlewareArray(): void
     {
         //reset
         $this->middlewares = [];
@@ -40,7 +40,7 @@ class MiddlewareAwareTraitTest extends TestCase
         self::assertSame([FooMiddleware::class => FooMiddleware::class, FakeMiddleware::class => FakeMiddleware::class], $this->middlewares);
     }
 
-    public function testWithoutMiddlewareWithString()
+    public function testWithoutMiddlewareWithString(): void
     {
         //reset
         $this->bypassedMiddlewares = [];
@@ -50,7 +50,7 @@ class MiddlewareAwareTraitTest extends TestCase
         self::assertSame([FooMiddleware::class => FooMiddleware::class], $this->bypassedMiddlewares);
     }
 
-    public function testWithoutMiddlewareWithArray()
+    public function testWithoutMiddlewareWithArray(): void
     {
         //reset
         $this->bypassedMiddlewares = [];
@@ -60,7 +60,7 @@ class MiddlewareAwareTraitTest extends TestCase
         self::assertSame([FooMiddleware::class => FooMiddleware::class], $this->bypassedMiddlewares);
     }
 
-    public function testWithoutMiddlewareWithNull()
+    public function testWithoutMiddlewareWithNull(): void
     {
         //reset
         $this->middlewares         = [];
@@ -73,7 +73,7 @@ class MiddlewareAwareTraitTest extends TestCase
         self::assertSame([], $this->bypassedMiddlewares);
     }
 
-    public function testAliasMiddleware()
+    public function testAliasMiddleware(): void
     {
         //reset
         $this->middlewares = [];
@@ -96,7 +96,7 @@ class MiddlewareAwareTraitTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Alias [foo] already exists.
      */
-    public function testAliasMiddlewareThrowException()
+    public function testAliasMiddlewareThrowException(): void
     {
         //reset
         $this->middlewares = [];
@@ -109,7 +109,7 @@ class MiddlewareAwareTraitTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Expected string or object; received [NULL].
      */
-    public function testAliasMiddlewareThrowExceptionWithWrongType()
+    public function testAliasMiddlewareThrowExceptionWithWrongType(): void
     {
         //reset
         $this->middlewares = [];
@@ -121,7 +121,7 @@ class MiddlewareAwareTraitTest extends TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [Viserio\Component\Routing\Tests\Traits\MiddlewareAwareTraitTest].
      */
-    public function testWithWrongMiddleware()
+    public function testWithWrongMiddleware(): void
     {
         $this->withMiddleware(MiddlewareAwareTraitTest::class);
     }
@@ -130,7 +130,7 @@ class MiddlewareAwareTraitTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Expected string, object or array; received [NULL].
      */
-    public function testWithWrongType()
+    public function testWithWrongType(): void
     {
         $this->withMiddleware(null);
     }

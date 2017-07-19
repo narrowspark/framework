@@ -7,7 +7,7 @@ use Viserio\Component\Foundation\DataCollector\FilesLoadedCollector;
 
 class FilesLoadedCollectorTest extends MockeryTestCase
 {
-    public function testGetMenu()
+    public function testGetMenu(): void
     {
         $collector = new FilesLoadedCollector(__DIR__);
 

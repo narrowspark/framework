@@ -31,7 +31,7 @@ abstract class AbstractTransport implements Swift_Transport
      *
      * @codeCoverageIgnore
      */
-    public function start()
+    public function start(): void
     {
     }
 
@@ -40,7 +40,7 @@ abstract class AbstractTransport implements Swift_Transport
      *
      * @codeCoverageIgnore
      */
-    public function stop()
+    public function stop(): void
     {
     }
 
@@ -53,7 +53,7 @@ abstract class AbstractTransport implements Swift_Transport
      */
     public function registerPlugin(Swift_Events_EventListener $plugin): void
     {
-        array_push($this->plugins, $plugin);
+        \array_push($this->plugins, $plugin);
     }
 
     /**
@@ -68,7 +68,7 @@ abstract class AbstractTransport implements Swift_Transport
         $event = new Swift_Events_SendEvent($this, $message);
 
         foreach ($this->plugins as $plugin) {
-            if (method_exists($plugin, 'beforeSendPerformed')) {
+            if (\method_exists($plugin, 'beforeSendPerformed')) {
                 $plugin->beforeSendPerformed($event);
             }
         }
@@ -83,11 +83,11 @@ abstract class AbstractTransport implements Swift_Transport
      */
     protected function numberOfRecipients(Swift_Mime_SimpleMessage $message): int
     {
-        $to  = is_null($message->getTo()) ? [] : $message->getTo();
-        $cc  = is_null($message->getCc()) ? [] : $message->getCc();
-        $bcc = is_null($message->getBcc()) ? [] : $message->getBcc();
+        $to  = null === $message->getTo() ? [] : $message->getTo();
+        $cc  = null === $message->getCc() ? [] : $message->getCc();
+        $bcc = null === $message->getBcc() ? [] : $message->getBcc();
 
-        return count(array_merge($to, $cc, $bcc));
+        return \count(\array_merge($to, $cc, $bcc));
     }
 
     /**
@@ -102,7 +102,7 @@ abstract class AbstractTransport implements Swift_Transport
         $event = new Swift_Events_SendEvent($this, $message);
 
         foreach ($this->plugins as $plugin) {
-            if (method_exists($plugin, 'sendPerformed')) {
+            if (\method_exists($plugin, 'sendPerformed')) {
                 $plugin->sendPerformed($event);
             }
         }

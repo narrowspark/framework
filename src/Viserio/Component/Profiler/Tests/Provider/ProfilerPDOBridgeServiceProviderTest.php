@@ -14,7 +14,7 @@ use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
 class ProfilerPDOBridgeServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->instance(PDO::class, new PDO('sqlite:' . __DIR__ . '/../Stub/database.sqlite'));

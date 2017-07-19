@@ -15,7 +15,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     /**
      * The queue resolver callback.
      *
-     * @var \Closure|null
+     * @var null|\Closure
      */
     protected $queueResolver;
 
@@ -23,7 +23,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
      * Create a new queue command dispatcher instance.
      *
      * @param \Psr\Container\ContainerInterface $container
-     * @param \Closure|null                     $queueResolver
+     * @param null|\Closure                     $queueResolver
      */
     public function __construct(ContainerInterface $container, Closure $queueResolver = null)
     {
@@ -50,13 +50,13 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     public function dispatchToQueue($command)
     {
         $connection = isset($command->connection) ? $command->connection : null;
-        $queue      = call_user_func($this->queueResolver, $connection);
+        $queue      = \call_user_func($this->queueResolver, $connection);
 
         if (! $queue instanceof QueueContract) {
             throw new RuntimeException('Queue resolver did not return a Queue implementation.');
         }
 
-        if (method_exists($command, 'queue')) {
+        if (\method_exists($command, 'queue')) {
             return $command->queue($queue, $command);
         }
 

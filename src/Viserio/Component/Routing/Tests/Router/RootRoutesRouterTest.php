@@ -38,7 +38,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter404($httpMethod, $uri)
+    public function testRouter404($httpMethod, $uri): void
     {
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
@@ -52,7 +52,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions($router)
+    protected function definitions($router): void
     {
         $router->any('/', function ($request, $args) {
             return (new ResponseFactory())

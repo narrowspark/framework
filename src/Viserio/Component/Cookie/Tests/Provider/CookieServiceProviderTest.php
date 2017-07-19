@@ -9,7 +9,7 @@ use Viserio\Component\Cookie\Provider\CookieServiceProvider;
 
 class CookieServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new CookieServiceProvider());

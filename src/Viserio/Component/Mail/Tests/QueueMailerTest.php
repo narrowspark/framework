@@ -20,7 +20,7 @@ use Viserio\Component\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
 class QueueMailerTest extends MockeryTestCase
 {
-    public function testMailerCanResolveMailerClasses()
+    public function testMailerCanResolveMailerClasses(): void
     {
         $message = $this->mock(MessageContract::class);
 
@@ -82,7 +82,7 @@ class QueueMailerTest extends MockeryTestCase
         $mailer->send('foo', ['data'], 'FooMailer');
     }
 
-    public function testGlobalFromIsRespectedOnAllMessages()
+    public function testGlobalFromIsRespectedOnAllMessages(): void
     {
         unset($_SERVER['__mailer.test']);
 
@@ -115,11 +115,11 @@ class QueueMailerTest extends MockeryTestCase
 
                 return 1;
             });
-        $mailer->send('foo', ['data'], function ($mail) {
+        $mailer->send('foo', ['data'], function ($mail): void {
         });
     }
 
-    public function testFailedRecipientsAreAppendedAndCanBeRetrieved()
+    public function testFailedRecipientsAreAppendedAndCanBeRetrieved(): void
     {
         unset($_SERVER['__mailer.test']);
 
@@ -144,7 +144,7 @@ class QueueMailerTest extends MockeryTestCase
         $swift = new FailingSwiftMailerStub($this->mock(Swift_Transport::class));
 
         $mailer->setSwiftMailer($swift);
-        $mailer->send('foo', ['data'], function ($m) {
+        $mailer->send('foo', ['data'], function ($m): void {
         });
 
         self::assertEquals(['info@narrowspark.de'], $mailer->failures());

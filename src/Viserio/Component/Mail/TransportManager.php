@@ -157,7 +157,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
         ];
 
         if (isset($config['key'], $config['secret'])) {
-            $config['credentials'] = array_intersect_key($config, array_flip(['key', 'secret']));
+            $config['credentials'] = \array_intersect_key($config, \array_flip(['key', 'secret']));
         }
 
         return new SesTransport(new SesClient($config));

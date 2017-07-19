@@ -8,7 +8,7 @@ interface AliasLoader
      * Add an alias to the loader.
      *
      * @param string|string[] $classes
-     * @param string|null     $alias
+     * @param null|string     $alias
      *
      * @return $this
      */
@@ -35,7 +35,7 @@ interface AliasLoader
      *
      * @param string $alias
      *
-     * @return string|bool
+     * @return bool|string
      */
     public function resolveAlias(string $alias);
 
@@ -43,7 +43,7 @@ interface AliasLoader
      * Registers a class alias.
      *
      * @param string|string[] $patterns
-     * @param string|null     $translation
+     * @param null|string     $translation
      *
      * @return void
      */
@@ -53,7 +53,7 @@ interface AliasLoader
      * Removes an alias pattern.
      *
      * @param string      $pattern
-     * @param string|null $translation
+     * @param null|string $translation
      *
      * @return void
      */
@@ -74,7 +74,7 @@ interface AliasLoader
      *
      * @param string $alias Alias
      *
-     * @return string|bool Class name when resolved
+     * @return bool|string Class name when resolved
      */
     public function resolveNamespaceAlias(string $alias);
 

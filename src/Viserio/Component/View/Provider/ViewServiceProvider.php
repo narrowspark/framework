@@ -53,7 +53,7 @@ class ViewServiceProvider implements ServiceProvider
         // environment can resolve the engines it needs for various views based
         // on the extension of view files. We call a method for each engines.
         foreach (['file', 'php', 'markdown'] as $engineClass) {
-            self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
+            self::{'register' . \ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
         return $engines;

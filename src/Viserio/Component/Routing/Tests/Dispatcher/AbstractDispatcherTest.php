@@ -15,7 +15,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
 {
     protected $dispatcher;
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -26,7 +26,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
      * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
      * @expectedExceptionMessage 404 Not Found: Requested route [/].
      */
-    public function testHandleNotFound()
+    public function testHandleNotFound(): void
     {
         $collection = new RouteCollection();
 
@@ -36,7 +36,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
         );
     }
 
-    public function testHandleStrictMatching()
+    public function testHandleStrictMatching(): void
     {
         $collection = new RouteCollection();
         $collection->add(new Route(
@@ -70,7 +70,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
      * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
      * @expectedExceptionMessage 405 Method [GET,HEAD] Not Allowed: For requested route [/].
      */
-    public function testHandleMethodNotAllowed()
+    public function testHandleMethodNotAllowed(): void
     {
         $collection = new RouteCollection();
         $collection->add(new Route(
@@ -91,12 +91,12 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
 
     private function delTree($dir)
     {
-        $files = array_diff(scandir($dir), ['.', '..']);
+        $files = \array_diff(\scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {
-            is_dir("$dir/$file") ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+            \is_dir("$dir/$file") ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
         }
 
-        return rmdir($dir);
+        return \rmdir($dir);
     }
 }

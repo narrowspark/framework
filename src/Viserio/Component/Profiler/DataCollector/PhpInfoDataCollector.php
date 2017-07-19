@@ -15,11 +15,11 @@ class PhpInfoDataCollector extends AbstractDataCollector
         $this->data = [
             'php_version'      => PHP_VERSION,
             'php_architecture' => PHP_INT_SIZE * 8,
-            'php_timezone'     => date_default_timezone_get(),
+            'php_timezone'     => \date_default_timezone_get(),
             'sapi_name'        => PHP_SAPI,
         ];
 
-        if (preg_match('~^(\d+(?:\.\d+)*)(.+)?$~', $this->data['php_version'], $matches) && isset($matches[2])) {
+        if (\preg_match('~^(\d+(?:\.\d+)*)(.+)?$~', $this->data['php_version'], $matches) && isset($matches[2])) {
             // @codeCoverageIgnoreStart
             $this->data['php_version']       = $matches[1];
             $this->data['php_version_extra'] = $matches[2];
@@ -41,7 +41,7 @@ class PhpInfoDataCollector extends AbstractDataCollector
     /**
      * Gets the PHP version.
      *
-     * @return string|null The PHP version
+     * @return null|string The PHP version
      */
     public function getPhpVersion(): ?string
     {
@@ -51,7 +51,7 @@ class PhpInfoDataCollector extends AbstractDataCollector
     /**
      * Gets the PHP version extra part.
      *
-     * @return string|null The extra part
+     * @return null|string The extra part
      */
     public function getPhpVersionExtra(): ?string
     {
@@ -61,7 +61,7 @@ class PhpInfoDataCollector extends AbstractDataCollector
     /**
      * The PHP architecture as number of bits (e.g. 32 or 64).
      *
-     * @return int|null
+     * @return null|int
      */
     public function getPhpArchitecture(): ?int
     {

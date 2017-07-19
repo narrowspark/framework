@@ -39,7 +39,7 @@ class MessagesDataCollector extends AbstractDataCollector
         $messages = $this->getMessages();
 
         $this->data = [
-            'counted'  => count($messages),
+            'counted'  => \count($messages),
             'messages' => $messages,
         ];
     }
@@ -67,14 +67,14 @@ class MessagesDataCollector extends AbstractDataCollector
      */
     public function addMessage($message, string $label = 'info'): void
     {
-        if (! is_string($message)) {
+        if (! \is_string($message)) {
             $message = $this->cloneVar($message);
         }
 
         $this->messages[] = [
-            'message' => is_string($message) ? $message : $this->cloneVar($message),
+            'message' => \is_string($message) ? $message : $this->cloneVar($message),
             'label'   => $label,
-            'time'    => microtime(true),
+            'time'    => \microtime(true),
         ];
     }
 
@@ -88,7 +88,7 @@ class MessagesDataCollector extends AbstractDataCollector
         $messages = $this->messages;
 
         // sort messages by their timestamp
-        usort($messages, function ($a, $b) {
+        \usort($messages, function ($a, $b) {
             if ($a['time'] === $b['time']) {
                 return 0;
             }

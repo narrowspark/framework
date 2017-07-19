@@ -12,10 +12,10 @@ class IniParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        $ini = parse_ini_string($payload, true, INI_SCANNER_RAW);
+        $ini = \parse_ini_string($payload, true, INI_SCANNER_RAW);
 
         if (! $ini) {
-            $errors = error_get_last();
+            $errors = \error_get_last();
 
             if ($errors === null) {
                 $errors['message'] = 'Invalid INI provided.';
@@ -36,12 +36,12 @@ class IniParser implements ParserContract
      *
      * @param mixed $value
      *
-     * @return bool|int|null|string|array
+     * @return null|array|bool|int|string
      */
     private static function normalize($value)
     {
         // Normalize array values
-        if (is_array($value)) {
+        if (\is_array($value)) {
             foreach ($value as &$subValue) {
                 $subValue = self::normalize($subValue);
             }
@@ -50,7 +50,7 @@ class IniParser implements ParserContract
         }
 
         // Don't normalize non-string value
-        if (! is_string($value)) {
+        if (! \is_string($value)) {
             return $value;
         }
 
@@ -70,11 +70,11 @@ class IniParser implements ParserContract
         }
 
         // Normalize numeric value
-        if (is_numeric($value)) {
+        if (\is_numeric($value)) {
             $numericValue = $value + 0;
 
-            if ((is_int($numericValue) && (int) $value === $numericValue)
-                || (is_float($numericValue) && (float) $value === $numericValue)
+            if ((\is_int($numericValue) && (int) $value === $numericValue)
+                || (\is_float($numericValue) && (float) $value === $numericValue)
             ) {
                 $value = $numericValue;
             }
@@ -94,7 +94,7 @@ class IniParser implements ParserContract
     private static function compareValues(string $value, array $comparisons): bool
     {
         foreach ($comparisons as $comparison) {
-            if (strcasecmp($value, $comparison) === 0) {
+            if (\strcasecmp($value, $comparison) === 0) {
                 return true;
             }
         }

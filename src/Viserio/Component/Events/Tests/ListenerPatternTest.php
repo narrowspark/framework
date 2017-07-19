@@ -15,21 +15,21 @@ class ListenerPatternTest extends TestCase
      * @param array $expectedMatches
      * @param array $expectedMisses
      */
-    public function testPatternMatching($eventPattern, array $expectedMatches, array $expectedMisses)
+    public function testPatternMatching($eventPattern, array $expectedMatches, array $expectedMisses): void
     {
         $pattern = new ListenerPattern($eventPattern, null);
 
         foreach ($expectedMatches as $eventName) {
             self::assertTrue(
                 $pattern->test($eventName),
-                sprintf('Pattern [%s] should match event [%s]', $eventPattern, $eventName)
+                \sprintf('Pattern [%s] should match event [%s]', $eventPattern, $eventName)
             );
         }
 
         foreach ($expectedMisses as $eventName) {
             self::assertFalse(
                 $pattern->test($eventName),
-                sprintf('Pattern [%s] should not match event [%s]', $eventPattern, $eventName)
+                \sprintf('Pattern [%s] should not match event [%s]', $eventPattern, $eventName)
             );
         }
     }
@@ -80,7 +80,7 @@ class ListenerPatternTest extends TestCase
         ];
     }
 
-    public function testEventManagerBinding()
+    public function testEventManagerBinding(): void
     {
         $listener = function () {
             return 'callback';

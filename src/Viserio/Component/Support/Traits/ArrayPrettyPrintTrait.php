@@ -14,29 +14,29 @@ trait ArrayPrettyPrintTrait
      */
     protected function getPrettyPrintArray(array $config, int $indentLevel = 1): string
     {
-        $indent  = str_repeat(' ', $indentLevel * 4);
+        $indent  = \str_repeat(' ', $indentLevel * 4);
         $entries = [];
 
         foreach ($config as $key => $value) {
-            if (! is_int($key)) {
-                if (is_string($key) && (class_exists($key) || interface_exists($key)) && ctype_upper($key[0])) {
-                    $key = sprintf('\\%s::class', ltrim($key, '\\'));
+            if (! \is_int($key)) {
+                if (\is_string($key) && (\class_exists($key) || \interface_exists($key)) && \ctype_upper($key[0])) {
+                    $key = \sprintf('\\%s::class', \ltrim($key, '\\'));
                 } else {
-                    $key = sprintf("'%s'", $key);
+                    $key = \sprintf("'%s'", $key);
                 }
             }
 
-            $entries[] = sprintf(
+            $entries[] = \sprintf(
                 '%s%s%s,',
                 $indent,
-                sprintf('%s => ', $key),
+                \sprintf('%s => ', $key),
                 $this->createValue($value, $indentLevel)
             );
         }
 
-        $outerIndent = str_repeat(' ', ($indentLevel - 1) * 4);
+        $outerIndent = \str_repeat(' ', ($indentLevel - 1) * 4);
 
-        return sprintf("[\n%s\n%s]", implode("\n", $entries), $outerIndent);
+        return \sprintf("[\n%s\n%s]", \implode("\n", $entries), $outerIndent);
     }
 
     /**
@@ -49,18 +49,18 @@ trait ArrayPrettyPrintTrait
      */
     protected function createValue($value, int $indentLevel): string
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             return $this->getPrettyPrintArray($value, $indentLevel + 1);
         }
 
-        if (is_string($value) && (class_exists($value) || interface_exists($value)) && ctype_upper($value[0])) {
-            return sprintf('\\%s::class', ltrim($value, '\\'));
+        if (\is_string($value) && (\class_exists($value) || \interface_exists($value)) && \ctype_upper($value[0])) {
+            return \sprintf('\\%s::class', \ltrim($value, '\\'));
         }
 
-        if (is_numeric($value)) {
+        if (\is_numeric($value)) {
             return (string) $value;
         }
 
-        return var_export($value, true);
+        return \var_export($value, true);
     }
 }

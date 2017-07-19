@@ -80,7 +80,7 @@ class Dispatcher implements DispatcherContract
      */
     public function resolveHandler($command)
     {
-        if (method_exists($command, $this->method)) {
+        if (\method_exists($command, $this->method)) {
             return $command;
         }
 
@@ -92,8 +92,8 @@ class Dispatcher implements DispatcherContract
      */
     public function getHandlerClass($command): string
     {
-        if (method_exists($command, $this->method)) {
-            return get_class($command);
+        if (\method_exists($command, $this->method)) {
+            return \get_class($command);
         }
 
         return $this->inflectSegment($command, 0);
@@ -104,7 +104,7 @@ class Dispatcher implements DispatcherContract
      */
     public function getHandlerMethod($command): string
     {
-        if (method_exists($command, $this->method)) {
+        if (\method_exists($command, $this->method)) {
             return $this->method;
         }
 
@@ -116,7 +116,7 @@ class Dispatcher implements DispatcherContract
      */
     public function maps(array $commands): void
     {
-        $this->mappings = array_merge($this->mappings, $commands);
+        $this->mappings = \array_merge($this->mappings, $commands);
     }
 
     /**
@@ -133,17 +133,17 @@ class Dispatcher implements DispatcherContract
     public function dispatch($command, Closure $afterResolving = null)
     {
         return $this->pipeline->send($command)->through($this->pipes)->then(function ($command) use ($afterResolving) {
-            if (method_exists($command, $this->method)) {
+            if (\method_exists($command, $this->method)) {
                 return $this->getInvoker()->call([$command, $this->method]);
             }
 
             $handler = $this->resolveHandler($command);
 
             if ($afterResolving) {
-                call_user_func($afterResolving, $handler);
+                \call_user_func($afterResolving, $handler);
             }
 
-            return call_user_func([$handler, $this->getHandlerMethod($command)], $command);
+            return \call_user_func([$handler, $this->getHandlerMethod($command)], $command);
         });
     }
 
@@ -169,18 +169,18 @@ class Dispatcher implements DispatcherContract
      */
     protected function inflectSegment($command, int $segment): string
     {
-        $className = get_class($command);
+        $className = \get_class($command);
 
         // Get the given segment from a given class handler.
         if (isset($this->mappings[$className])) {
-            return explode('@', $this->mappings[$className])[$segment];
+            return \explode('@', $this->mappings[$className])[$segment];
         }
 
         // Get the given segment from a given class handler using the custom mapper.
         if ($this->mapper) {
-            return explode('@', call_user_func($this->mapper, [$command]))[$segment];
+            return \explode('@', \call_user_func($this->mapper, [$command]))[$segment];
         }
 
-        throw new InvalidArgumentException(sprintf('No handler registered for command [%s].', $className));
+        throw new InvalidArgumentException(\sprintf('No handler registered for command [%s].', $className));
     }
 }

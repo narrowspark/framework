@@ -7,7 +7,7 @@ interface Factory
     /**
      * Get a connection instance.
      *
-     * @param string|null $name
+     * @param null|string $name
      *
      * @return mixed
      */

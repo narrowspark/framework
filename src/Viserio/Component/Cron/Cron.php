@@ -219,7 +219,7 @@ class Cron implements CronContract
      */
     public function setEnvironments($environments): CronContract
     {
-        $this->environments = is_array($environments) ? $environments : func_get_args();
+        $this->environments = \is_array($environments) ? $environments : \func_get_args();
 
         return $this;
     }
@@ -229,7 +229,7 @@ class Cron implements CronContract
      */
     public function runsInEnvironment(string $environment): bool
     {
-        return empty($this->environments) || in_array($environment, $this->environments);
+        return empty($this->environments) || \in_array($environment, $this->environments, true);
     }
 
     /**
@@ -273,7 +273,7 @@ class Cron implements CronContract
      */
     public function buildCommand(): string
     {
-        $output    = escapeshellarg($this->output);
+        $output    = \escapeshellarg($this->output);
         $redirect  = $this->shouldAppendOutput ? ' >> ' : ' > ';
         $command   = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
 
@@ -287,7 +287,7 @@ class Cron implements CronContract
     {
         $this->withoutOverlapping = true;
 
-        return $this->after(function () {
+        return $this->after(function (): void {
             $this->cachePool->deleteItem($this->getMutexName());
         })->skip(function () {
             return $this->cachePool->hasItem($this->getMutexName());
@@ -431,9 +431,9 @@ class Cron implements CronContract
      */
     public function days($days): CronContract
     {
-        $days = is_array($days) ? $days : func_get_args();
+        $days = \is_array($days) ? $days : \func_get_args();
 
-        return $this->spliceIntoPosition(5, implode(',', $days));
+        return $this->spliceIntoPosition(5, \implode(',', $days));
     }
 
     /**
@@ -451,10 +451,10 @@ class Cron implements CronContract
      */
     public function dailyAt(string $time): CronContract
     {
-        $segments = explode(':', $time);
+        $segments = \explode(':', $time);
 
         return $this->spliceIntoPosition(2, (int) $segments[0])
-            ->spliceIntoPosition(1, count($segments) == 2 ? (int) $segments[1] : 0);
+            ->spliceIntoPosition(1, \count($segments) == 2 ? (int) $segments[1] : 0);
     }
 
     /**
@@ -635,7 +635,7 @@ class Cron implements CronContract
      */
     public function getSummaryForDisplay(): string
     {
-        if (is_string($this->description)) {
+        if (\is_string($this->description)) {
             return $this->description;
         }
 
@@ -679,7 +679,7 @@ class Cron implements CronContract
      */
     protected function isWindows(): bool
     {
-        return mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        return \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
     }
 
     /**
@@ -720,10 +720,10 @@ class Cron implements CronContract
      */
     protected function spliceIntoPosition(int $position, $value): CronContract
     {
-        $segments                = explode(' ', $this->expression);
+        $segments                = \explode(' ', $this->expression);
         $segments[$position - 1] = $value;
 
-        return $this->cron(implode(' ', $segments));
+        return $this->cron(\implode(' ', $segments));
     }
 
     /**
@@ -762,7 +762,7 @@ class Cron implements CronContract
         $this->callBeforeCallbacks();
 
         $process = new Process(
-            trim($this->buildCommand(), ' &'),
+            \trim($this->buildCommand(), ' &'),
             $this->path,
             null,
             null,
@@ -825,7 +825,7 @@ class Cron implements CronContract
      */
     protected function getMutexName(): string
     {
-        return 'schedule-' . sha1($this->expression . $this->command);
+        return 'schedule-' . \sha1($this->expression . $this->command);
     }
 
     /**

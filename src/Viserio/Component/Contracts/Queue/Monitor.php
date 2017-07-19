@@ -25,5 +25,5 @@ interface Monitor
      *
      * @return void
      */
-    public function exceptionOccurred($callback);
+    public function exceptionOccurred($callback): void;
 }

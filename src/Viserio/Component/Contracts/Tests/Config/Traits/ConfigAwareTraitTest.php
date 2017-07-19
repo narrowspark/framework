@@ -10,7 +10,7 @@ class ConfigAwareTraitTest extends MockeryTestCase
 {
     use ConfigAwareTrait;
 
-    public function testGetAndSetConfig()
+    public function testGetAndSetConfig(): void
     {
         $this->setConfig($this->mock(RepositoryContract::class));
 
@@ -21,7 +21,7 @@ class ConfigAwareTraitTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Config is not set up.
      */
-    public function testGetConfigThrowExceptionIfConfigIsNotSet()
+    public function testGetConfigThrowExceptionIfConfigIsNotSet(): void
     {
         $this->getConfig();
     }

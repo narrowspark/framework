@@ -8,7 +8,7 @@ use Viserio\Component\Routing\Route\Collection as RouteCollection;
 
 class RouteCollectionTest extends TestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $collection = new RouteCollection();
         $route      = new Route('GET', '/test', ['domain' => 'test.com']);
@@ -16,7 +16,7 @@ class RouteCollectionTest extends TestCase
         self::assertInstanceOf(Route::class, $collection->add($route));
     }
 
-    public function testMatch()
+    public function testMatch(): void
     {
         $collection = new RouteCollection();
         $collection->add($route1 = new Route('GET', '/test', null));
@@ -32,13 +32,13 @@ class RouteCollectionTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Route not found, looks like your route cache is stale.
      */
-    public function testMatchToThrowException()
+    public function testMatchToThrowException(): void
     {
         $collection = new RouteCollection();
         $collection->match('PATCH/test2');
     }
 
-    public function testHasNamedRoute()
+    public function testHasNamedRoute(): void
     {
         $collection = new RouteCollection();
         $collection->add(new Route('GET', '/test', ['as' => 'narrowspark']));
@@ -47,7 +47,7 @@ class RouteCollectionTest extends TestCase
         self::assertFalse($collection->hasNamedRoute('PATCH/test2'));
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
         $collection = new RouteCollection();
         $collection->add($route = new Route('GET', '/test', ['as' => 'narrowspark']));
@@ -56,7 +56,7 @@ class RouteCollectionTest extends TestCase
         self::assertNull($collection->getByName('PATCH/test2'));
     }
 
-    public function testGetByAction()
+    public function testGetByAction(): void
     {
         $collection = new RouteCollection();
         $collection->add($route = new Route('GET', '/test', ['controller' => 'narrowspark']));

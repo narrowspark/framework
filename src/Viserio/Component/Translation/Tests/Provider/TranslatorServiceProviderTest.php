@@ -20,7 +20,7 @@ class TranslatorServiceProviderTest extends MockeryTestCase
 
     private $file;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -39,14 +39,14 @@ return [
         )->at($this->root);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
         $this->allowMockingNonExistentMethods(true);
     }
 
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->instance(PsrLoggerInterface::class, $this->mock(PsrLoggerInterface::class));

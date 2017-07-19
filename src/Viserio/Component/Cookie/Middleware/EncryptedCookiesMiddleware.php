@@ -145,6 +145,6 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
      */
     protected function isDisabled(string $name): bool
     {
-        return in_array($name, $this->except);
+        return \in_array($name, $this->except, true);
     }
 }

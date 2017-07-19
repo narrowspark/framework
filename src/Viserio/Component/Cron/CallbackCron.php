@@ -11,7 +11,7 @@ class CallbackCron extends Cron
     /**
      * The callback to call.
      *
-     * @var string|callable
+     * @var callable|string
      */
     protected $callback;
 
@@ -25,14 +25,14 @@ class CallbackCron extends Cron
     /**
      * Create a new callback cron instance.
      *
-     * @param string|callable $callback
+     * @param callable|string $callback
      * @param array           $parameters
      *
      * @throws \InvalidArgumentException
      */
     public function __construct($callback, array $parameters = [])
     {
-        if (! is_string($callback) && ! is_callable($callback)) {
+        if (! \is_string($callback) && ! \is_callable($callback)) {
             throw new InvalidArgumentException(
                 'Invalid scheduled callback cron job. Must be string or callable.'
             );
@@ -102,11 +102,11 @@ class CallbackCron extends Cron
      */
     public function getSummaryForDisplay(): string
     {
-        if (is_string($this->description)) {
+        if (\is_string($this->description)) {
             return $this->description;
         }
 
-        return is_string($this->callback) ? $this->callback : 'Closure';
+        return \is_string($this->callback) ? $this->callback : 'Closure';
     }
 
     /**
@@ -116,6 +116,6 @@ class CallbackCron extends Cron
      */
     protected function getMutexName(): string
     {
-        return 'schedule-' . sha1($this->expression . $this->description);
+        return 'schedule-' . \sha1($this->expression . $this->description);
     }
 }

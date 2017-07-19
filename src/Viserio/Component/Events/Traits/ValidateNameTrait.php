@@ -17,9 +17,9 @@ trait ValidateNameTrait
      */
     protected function validateEventName(string $eventName): void
     {
-        preg_match_all('/([a-zA-Z0-9_\\.]+)/', $eventName, $matches);
+        \preg_match_all('/([a-zA-Z0-9_\\.]+)/', $eventName, $matches);
 
-        if (count($matches[0]) >= 2) {
+        if (\count($matches[0]) >= 2) {
             throw new InvalidArgumentException(
                 'The event name must only contain the characters A-Z, a-z, 0-9, _, and \'.\'.'
             );

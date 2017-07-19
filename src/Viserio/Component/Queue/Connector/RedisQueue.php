@@ -52,7 +52,7 @@ class RedisQueue extends AbstractQueue
     {
         $this->redis->rpush($this->getQueue($queue), $payload);
 
-        return Arr::get(json_decode($payload, true), 'id');
+        return Arr::get(\json_decode($payload, true), 'id');
     }
 
     /**
@@ -66,7 +66,7 @@ class RedisQueue extends AbstractQueue
 
         $this->redis->zadd($this->getQueue($queue) . ':delayed', $this->getTime() + $delay, $payload);
 
-        return Arr::get(json_decode($payload, true), 'id');
+        return Arr::get(\json_decode($payload, true), 'id');
     }
 
     /**
@@ -80,7 +80,7 @@ class RedisQueue extends AbstractQueue
 
         $this->migrateExpiredJobs($queue . ':delayed', $queue);
 
-        if (! is_null($this->expire)) {
+        if (null !== $this->expire) {
             $this->migrateExpiredJobs($queue . ':reserved', $queue);
         }
 
@@ -115,7 +115,7 @@ LUA;
      * @param string $queue
      * @param string $job
      */
-    public function deleteReserved(string $queue, string $job)
+    public function deleteReserved(string $queue, string $job): void
     {
         $this->redis->zrem($this->getQueue($queue) . ':reserved', $job);
     }
@@ -127,7 +127,7 @@ LUA;
      * @param string $job
      * @param int    $delay
      */
-    public function deleteAndRelease(string $queue, string $job, int $delay)
+    public function deleteAndRelease(string $queue, string $job, int $delay): void
     {
         $queue  = $this->getQueue($queue);
         $script = <<<'LUA'
@@ -151,7 +151,7 @@ LUA;
      * @param string $from
      * @param string $to
      */
-    public function migrateExpiredJobs(string $from, string $to)
+    public function migrateExpiredJobs(string $from, string $to): void
     {
         $script = <<<'LUA'
 local val = redis.call('zrangebyscore', KEYS[1], '-inf', KEYS[3])
@@ -202,15 +202,15 @@ LUA;
      *
      * @param string     $payload
      * @param string     $key
-     * @param string|int $value
+     * @param int|string $value
      *
      * @return string
      */
     protected function setMeta(string $payload, string $key, $value): string
     {
-        $payload = json_decode($payload, true);
+        $payload = \json_decode($payload, true);
 
-        return json_encode(Arr::set($payload, $key, (string) $value));
+        return \json_encode(Arr::set($payload, $key, (string) $value));
     }
 
     /**

@@ -14,7 +14,7 @@ use Viserio\Component\Routing\Router;
 
 class RoutingServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new RoutingServiceProvider());

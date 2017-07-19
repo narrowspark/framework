@@ -16,7 +16,7 @@ class CallbackCronTest extends MockeryTestCase
      */
     protected $cache;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -27,7 +27,7 @@ class CallbackCronTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid scheduled callback cron job. Must be string or callable.
      */
-    public function testCallbackCronToThrowException()
+    public function testCallbackCronToThrowException(): void
     {
         new CallbackCron(new CallbackCron('tests'));
     }
@@ -36,13 +36,13 @@ class CallbackCronTest extends MockeryTestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage A scheduled cron job description is required to prevent overlapping. Use the 'description' method before 'withoutOverlapping'.
      */
-    public function testWithoutOverlappingToThrowException()
+    public function testWithoutOverlappingToThrowException(): void
     {
         $cron = new CallbackCron('tests');
         $cron->withoutOverlapping();
     }
 
-    public function testBasicCronCompilation()
+    public function testBasicCronCompilation(): void
     {
         $_SERVER['test'] = false;
 
@@ -62,7 +62,7 @@ class CallbackCronTest extends MockeryTestCase
         $cache->shouldReceive('deleteItem')
             ->once();
 
-        $cron = new CallbackCron(function () {
+        $cron = new CallbackCron(function (): void {
             $_SERVER['test'] = true;
         });
         $cron->setCacheItemPool($cache);
@@ -76,7 +76,7 @@ class CallbackCronTest extends MockeryTestCase
 
         $_SERVER['test'] = false;
 
-        $cron = new CallbackCron(function () {
+        $cron = new CallbackCron(function (): void {
             $_SERVER['test'] = true;
         });
         $cron->setCacheItemPool($cache);
@@ -90,9 +90,9 @@ class CallbackCronTest extends MockeryTestCase
         unset($_SERVER['test']);
     }
 
-    public function testCronRunWithoutOverlappinga()
+    public function testCronRunWithoutOverlappinga(): void
     {
-        $name = 'schedule-' . sha1('* * * * * *' . 'test');
+        $name = 'schedule-' . \sha1('* * * * * *' . 'test');
         $item = $this->mock(CacheItemInterface::class);
         $item->shouldReceive('set')
             ->once()
@@ -113,7 +113,7 @@ class CallbackCronTest extends MockeryTestCase
 
         $_SERVER['test'] = false;
 
-        $cron = new CallbackCron(function () {
+        $cron = new CallbackCron(function (): void {
             $_SERVER['test'] = true;
         });
         $cron->setCacheItemPool($cache)

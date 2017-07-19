@@ -44,7 +44,7 @@ class MatchedRouteDataMap
             }
         }
 
-        return array_values($allowedHttpMethods);
+        return \array_values($allowedHttpMethods);
     }
 
     /**
@@ -53,7 +53,7 @@ class MatchedRouteDataMap
      * @param \Viserio\Component\Contracts\Routing\Route $route
      * @param array                                      $parameterIndexNameMap
      */
-    public function addRoute(RouteContract $route, array $parameterIndexNameMap)
+    public function addRoute(RouteContract $route, array $parameterIndexNameMap): void
     {
         $this->httpMethodRouteMap[] = [$route->getMethods(), [$parameterIndexNameMap, $route->getIdentifier()]];
     }

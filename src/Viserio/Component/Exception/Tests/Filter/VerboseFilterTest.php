@@ -19,7 +19,7 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class VerboseFilterTest extends MockeryTestCase
 {
-    public function testDebugStaysOnTop()
+    public function testDebugStaysOnTop(): void
     {
         $request    = $this->mock(ServerRequestInterface::class);
         $exception  = new Exception();
@@ -30,7 +30,7 @@ class VerboseFilterTest extends MockeryTestCase
         self::assertSame([$verbose, $standard], $displayers);
     }
 
-    public function testDebugIsRemoved()
+    public function testDebugIsRemoved(): void
     {
         $request    = $this->mock(ServerRequestInterface::class);
         $exception  = new Exception();
@@ -41,7 +41,7 @@ class VerboseFilterTest extends MockeryTestCase
         self::assertSame([$standard], $displayers);
     }
 
-    public function testNoChangeInDebugMode()
+    public function testNoChangeInDebugMode(): void
     {
         $request    = $this->mock(ServerRequestInterface::class);
         $exception  = new Exception();
@@ -52,7 +52,7 @@ class VerboseFilterTest extends MockeryTestCase
         self::assertSame([$json, $html], $displayers);
     }
 
-    public function testNoChangeNotInDebugMode()
+    public function testNoChangeNotInDebugMode(): void
     {
         $request    = $this->mock(ServerRequestInterface::class);
         $exception  = new Exception();

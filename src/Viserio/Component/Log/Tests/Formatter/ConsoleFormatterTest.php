@@ -9,17 +9,17 @@ use Viserio\Component\Log\Formatter\ConsoleFormatter;
 
 class ConsoleFormatterTest extends TestCase
 {
-    public function testFormat()
+    public function testFormat(): void
     {
         $formater = new ConsoleFormatter(['colors' => false]);
 
         self::assertEquals(
             "16:21:54 <fg=cyan>WARNING  </> <comment>[test]</> {\"foo\":\"bar\"} [] []\n",
-            $formater->format($this->getRecord(Logger::WARNING, json_encode(['foo' => 'bar'])))
+            $formater->format($this->getRecord(Logger::WARNING, \json_encode(['foo' => 'bar'])))
         );
     }
 
-    public function testFormatBatch()
+    public function testFormatBatch(): void
     {
         $formater = new ConsoleFormatter(['colors' => false]);
 

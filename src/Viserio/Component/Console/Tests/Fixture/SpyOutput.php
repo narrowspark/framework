@@ -9,7 +9,7 @@ class SpyOutput extends Output implements OutputInterface
 {
     public $output;
 
-    protected function doWrite($message, $newline)
+    protected function doWrite($message, $newline): void
     {
         $this->output .= $message . ($newline ? "\n" : '');
     }

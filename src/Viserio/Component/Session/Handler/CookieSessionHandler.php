@@ -66,8 +66,8 @@ class CookieSessionHandler implements SessionHandlerInterface
         $cookies = $this->request->getCookieParams();
 
         if (isset($cookies[$sessionId]) &&
-            ! is_null($decoded = json_decode($cookies[$sessionId], true)) &&
-            is_array($decoded)
+            null !== ($decoded = \json_decode($cookies[$sessionId], true)) &&
+            \is_array($decoded)
         ) {
             if (isset($decoded['expires']) && Chronos::now()->getTimestamp() <= $decoded['expires']) {
                 return $decoded['data'];
@@ -84,7 +84,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     {
         $this->cookie->queue(
             $sessionId,
-            json_encode(
+            \json_encode(
                 [
                     'data'    => $data,
                     'expires' => Chronos::now()->addSeconds($this->lifetime)->getTimestamp(),
@@ -120,7 +120,7 @@ class CookieSessionHandler implements SessionHandlerInterface
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      */
-    public function setRequest(ServerRequestInterface $request)
+    public function setRequest(ServerRequestInterface $request): void
     {
         $this->request = $request;
     }

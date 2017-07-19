@@ -17,22 +17,22 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected $name;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     protected $value;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     protected $domain;
 
     /**
-     * @var int|null
+     * @var null|int
      */
     protected $expires;
 
     /**
-     * @var int|null
+     * @var null|int
      */
     protected $maxAge;
 
@@ -52,7 +52,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected $httpOnly;
 
     /**
-     * @var string|bool|null
+     * @var null|bool|string
      */
     protected $sameSite;
 
@@ -145,7 +145,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     public function isExpired(): bool
     {
         return $this->expires !== 0 &&
-            Chronos::parse(gmdate('D, d-M-Y H:i:s', $this->expires)) < Chronos::now();
+            Chronos::parse(\gmdate('D, d-M-Y H:i:s', $this->expires)) < Chronos::now();
     }
 
     /**
@@ -264,7 +264,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function matchPath(string $path): bool
     {
-        return $this->path === $path || (mb_strpos($path, $this->path . '/') === 0);
+        return $this->path === $path || (\mb_strpos($path, $this->path . '/') === 0);
     }
 
     /**
@@ -283,28 +283,28 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     public function matchDomain(string $domain): bool
     {
         // Domain is not set or exact match
-        if (! $this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
+        if (! $this->hasDomain() || \strcasecmp($domain, $this->getDomain()) === 0) {
             return true;
         }
 
         // Domain is not an IP address
-        if (filter_var($domain, FILTER_VALIDATE_IP)) {
+        if (\filter_var($domain, FILTER_VALIDATE_IP)) {
             return false;
         }
 
-        return (bool) preg_match('/\b' . preg_quote($this->getDomain()) . '$/i', $domain);
+        return (bool) \preg_match('/\b' . \preg_quote($this->getDomain()) . '$/i', $domain);
     }
 
     /**
      * Validate SameSite value.
      *
-     * @param string|bool $sameSite
+     * @param bool|string $sameSite
      *
-     * @return string|bool
+     * @return bool|string
      */
     protected function validateSameSite($sameSite)
     {
-        if (! in_array($sameSite, [self::SAMESITE_STRICT, self::SAMESITE_LAX])) {
+        if (! \in_array($sameSite, [self::SAMESITE_STRICT, self::SAMESITE_LAX], true)) {
             return false;
         }
 
@@ -314,7 +314,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * Normalizes the expiration value.
      *
-     * @param int|string|\DateTimeInterface|null $expiration
+     * @param null|\DateTimeInterface|int|string $expiration
      *
      * @return int
      */
@@ -322,7 +322,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     {
         $expires = null;
 
-        if (is_int($expiration)) {
+        if (\is_int($expiration)) {
             $expires = Chronos::now()->addSeconds($expiration)->toCookieString();
         } elseif ($expiration instanceof DateTimeInterface) {
             $expires = $expiration->format(DateTime::COOKIE);
@@ -330,11 +330,11 @@ abstract class AbstractCookie implements StringableContract, CookieContract
 
         $tsExpires = $expires;
 
-        if (is_string($expires)) {
-            $tsExpires = strtotime($expires);
+        if (\is_string($expires)) {
+            $tsExpires = \strtotime($expires);
 
             // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
-            if (! is_int($tsExpires) && PHP_INT_SIZE === 4) {
+            if (! \is_int($tsExpires) && PHP_INT_SIZE === 4) {
                 $dateTime = new Chronos($expires);
 
                 if ($dateTime->format('Y') > 2038) {
@@ -343,7 +343,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
             }
         }
 
-        if (! is_int($tsExpires) || $tsExpires < 0) {
+        if (! \is_int($tsExpires) || $tsExpires < 0) {
             throw new InvalidArgumentException('Invalid expires time specified.');
         }
 
@@ -353,18 +353,18 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * Remove the leading '.' and lowercase the domain as per spec in RFC 6265.
      *
-     * @param string|null $domain
+     * @param null|string $domain
      *
-     * @return string|null
+     * @return null|string
      *
-     * @link http://tools.ietf.org/html/rfc6265#section-4.1.2.3
-     * @link http://tools.ietf.org/html/rfc6265#section-5.1.3
-     * @link http://tools.ietf.org/html/rfc6265#section-5.2.3
+     * @see http://tools.ietf.org/html/rfc6265#section-4.1.2.3
+     * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
+     * @see http://tools.ietf.org/html/rfc6265#section-5.2.3
      */
     protected function normalizeDomain(string $domain = null)
     {
         if (isset($domain)) {
-            $domain = ltrim(mb_strtolower($domain), '.');
+            $domain = \ltrim(\mb_strtolower($domain), '.');
         }
 
         return $domain;
@@ -377,14 +377,14 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      *
      * @return string
      *
-     * @link http://tools.ietf.org/html/rfc6265#section-5.1.4
-     * @link http://tools.ietf.org/html/rfc6265#section-5.2.4
+     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
+     * @see http://tools.ietf.org/html/rfc6265#section-5.2.4
      */
     protected function normalizePath(string $path): string
     {
-        $path = rtrim($path, '/');
+        $path = \rtrim($path, '/');
 
-        if (empty($path) || mb_substr($path, 0, 1) !== '/') {
+        if (empty($path) || \mb_substr($path, 0, 1) !== '/') {
             $path = '/';
         }
 
@@ -393,17 +393,17 @@ abstract class AbstractCookie implements StringableContract, CookieContract
 
     protected function appendFormattedNameAndValuePartIfSet(array $cookieStringParts)
     {
-        $name = urlencode($this->name) . '=';
+        $name = \urlencode($this->name) . '=';
 
         if ($this->getValue() === null) {
             $time = Chronos::now()->getTimestamp() - 31536001;
 
-            $cookieStringParts[] .= $name . 'deleted; Expires=' . (new Chronos(gmdate('D, d-M-Y H:i:s', $time)))->toCookieString();
+            $cookieStringParts[] .= $name . 'deleted; Expires=' . (new Chronos(\gmdate('D, d-M-Y H:i:s', $time)))->toCookieString();
         } else {
-            $cookieStringParts[] .= $name . urlencode($this->getValue());
+            $cookieStringParts[] .= $name . \urlencode($this->getValue());
 
-            if (! is_null($this->getExpiresTime())) {
-                $cookieStringParts[] .= 'Expires=' . (new Chronos(gmdate('D, d-M-Y H:i:s', $this->getExpiresTime())))->toCookieString();
+            if (null !== $this->getExpiresTime()) {
+                $cookieStringParts[] .= 'Expires=' . (new Chronos(\gmdate('D, d-M-Y H:i:s', $this->getExpiresTime())))->toCookieString();
             }
         }
 
@@ -413,7 +413,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected function appendFormattedDomainPartIfSet(array $cookieStringParts)
     {
         if ($this->domain !== null) {
-            $cookieStringParts[] = sprintf('Domain=%s', $this->domain);
+            $cookieStringParts[] = \sprintf('Domain=%s', $this->domain);
         }
 
         return $cookieStringParts;
@@ -422,7 +422,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected function appendFormattedPathPartIfSet(array $cookieStringParts)
     {
         if ($this->path !== null) {
-            $cookieStringParts[] = sprintf('Path=%s', $this->path);
+            $cookieStringParts[] = \sprintf('Path=%s', $this->path);
         }
 
         return $cookieStringParts;
@@ -431,7 +431,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected function appendFormattedMaxAgePartIfSet(array $cookieStringParts)
     {
         if ($this->maxAge) {
-            $cookieStringParts[] = sprintf('Max-Age=%s', $this->maxAge);
+            $cookieStringParts[] = \sprintf('Max-Age=%s', $this->maxAge);
         }
 
         return $cookieStringParts;
@@ -458,7 +458,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected function appendFormattedSameSitePartIfSet(array $cookieStringParts)
     {
         if ($this->sameSite) {
-            $cookieStringParts[] = sprintf('SameSite=%s', $this->sameSite);
+            $cookieStringParts[] = \sprintf('SameSite=%s', $this->sameSite);
         }
 
         return $cookieStringParts;

@@ -46,7 +46,7 @@ class ScheduleRunCommand extends Command implements
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $container = $this->getContainer();
         $options   = self::resolveOptions($container);
@@ -69,7 +69,7 @@ class ScheduleRunCommand extends Command implements
             ++$cronJobsRan;
         }
 
-        if (count($cronJobs) === 0 || $cronJobsRan === 0) {
+        if (\count($cronJobs) === 0 || $cronJobsRan === 0) {
             $this->info('No scheduled commands are ready to run.');
         }
     }

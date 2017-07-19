@@ -31,7 +31,7 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
      * Detect the Uploaded file size.
      *
      * @param mixed    $file
-     * @param int|null $size
+     * @param null|int $size
      *
      * @return int
      */
@@ -41,10 +41,10 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
             return $size;
         }
 
-        if (is_string($file)) {
-            return filesize($file);
+        if (\is_string($file)) {
+            return \filesize($file);
         }
 
-        return fstat($file)['size'];
+        return \fstat($file)['size'];
     }
 }

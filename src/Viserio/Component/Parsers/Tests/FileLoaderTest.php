@@ -21,13 +21,13 @@ class FileLoaderTest extends TestCase
      */
     private $fileloader;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->root       = vfsStream::setup();
         $this->fileloader = new FileLoader();
     }
 
-    public function testLoad()
+    public function testLoad(): void
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
@@ -46,7 +46,7 @@ class FileLoaderTest extends TestCase
         self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
     }
 
-    public function testLoadWithTagOption()
+    public function testLoadWithTagOption(): void
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
@@ -65,7 +65,7 @@ class FileLoaderTest extends TestCase
         self::assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
     }
 
-    public function testLoadWithGroupOption()
+    public function testLoadWithGroupOption(): void
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
@@ -88,14 +88,14 @@ class FileLoaderTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Only the options "tag" or "group" is supported.
      */
-    public function testLoadWithWrongOption()
+    public function testLoadWithWrongOption(): void
     {
         $file = vfsStream::newFile('temp.json')->withContent('')->at($this->root);
 
         $data = $this->fileloader->load($file->url(), ['foo' => 'Test']);
     }
 
-    public function testExistsWithCache()
+    public function testExistsWithCache(): void
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
@@ -120,12 +120,12 @@ class FileLoaderTest extends TestCase
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\LoadingException
      * @expectedExceptionMessage File [no/file] not found.
      */
-    public function testExistsWithFalsePath()
+    public function testExistsWithFalsePath(): void
     {
         $exist = $this->fileloader->exists('no/file');
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $file = vfsStream::newFile('temp.json')->withContent('{"a":1 }')->at($this->root);
 
@@ -139,7 +139,7 @@ class FileLoaderTest extends TestCase
         self::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
     }
 
-    public function testGetSetAndAddDirectories()
+    public function testGetSetAndAddDirectories(): void
     {
         $this->fileloader->setDirectories([
             'foo/bar/',

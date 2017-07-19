@@ -15,14 +15,14 @@ class PhpEngine implements EngineContract
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        $obLevel = ob_get_level();
+        $obLevel = \ob_get_level();
 
-        ob_start();
+        \ob_start();
 
         // We'll evaluate the contents of the view inside a try/catch block so we can
         // clear out any stray output that might get out before an error occurs or
         // an exception is thrown. This prevents any partial views from leaking.
-        extract($data, EXTR_PREFIX_SAME, 'narrowspark');
+        \extract($data, EXTR_PREFIX_SAME, 'narrowspark');
 
         try {
             require $fileInfo['path'];
@@ -35,7 +35,7 @@ class PhpEngine implements EngineContract
 
         // @codeCoverageIgnoreStart
         // Return temporary output buffer content, destroy output buffer
-        return ltrim(ob_get_clean());
+        return \ltrim(\ob_get_clean());
         // @codeCoverageIgnoreEnd
     }
 
@@ -47,10 +47,10 @@ class PhpEngine implements EngineContract
      *
      * @throws \Throwable
      */
-    protected function handleViewException(Throwable $exception, int $obLevel)
+    protected function handleViewException(Throwable $exception, int $obLevel): void
     {
-        while (ob_get_level() > $obLevel) {
-            ob_end_clean();
+        while (\ob_get_level() > $obLevel) {
+            \ob_end_clean();
         }
 
         throw $exception;
@@ -59,7 +59,7 @@ class PhpEngine implements EngineContract
     /**
      * Get a ErrorException instance.
      *
-     * @param \ParseError|\TypeError|\Throwable $exception
+     * @param \ParseError|\Throwable|\TypeError $exception
      *
      * @return \ErrorException
      */

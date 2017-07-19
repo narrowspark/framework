@@ -19,7 +19,7 @@ class Resolver
     protected $pattern;
 
     /**
-     * @var string|callable
+     * @var callable|string
      */
     protected $translation;
 
@@ -32,12 +32,12 @@ class Resolver
      * Create a new Resolver instance.
      *
      * @param string          $pattern
-     * @param string|callable $translation
+     * @param callable|string $translation
      */
     public function __construct(string $pattern, $translation)
     {
-        $regex             = preg_quote($pattern, '#');
-        $this->regex       = '#^' . str_replace('\\*', '(.*)', $regex) . '$#uD';
+        $regex             = \preg_quote($pattern, '#');
+        $this->regex       = '#^' . \str_replace('\\*', '(.*)', $regex) . '$#uD';
         $this->pattern     = $pattern;
         $this->translation = $translation;
     }
@@ -52,20 +52,20 @@ class Resolver
     public function resolve(string $alias)
     {
         // Check wether the alias matches the pattern
-        if (! preg_match($this->regex, $alias, $matches)) {
+        if (! \preg_match($this->regex, $alias, $matches)) {
             return false;
         }
 
         // Get the translation
         $translation = $this->translation;
 
-        if (mb_strpos($translation, '$') === false) {
+        if (\mb_strpos($translation, '$') === false) {
             $class = $translation;
         } else {
             // Make sure namespace seperators are escaped
-            $translation = str_replace('\\', '\\\\', $translation);
+            $translation = \str_replace('\\', '\\\\', $translation);
             // Resolve the replacement
-            $class = preg_replace($this->regex, $translation, $alias);
+            $class = \preg_replace($this->regex, $translation, $alias);
         }
 
         // Check wether the class exists
@@ -80,7 +80,7 @@ class Resolver
      * Checks whether the resolver matches a given pattern and optional translation.
      *
      * @param string      $pattern
-     * @param string|null $translation
+     * @param null|string $translation
      *
      * @return bool
      */

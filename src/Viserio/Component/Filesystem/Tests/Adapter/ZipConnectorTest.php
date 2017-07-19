@@ -8,7 +8,7 @@ use Viserio\Component\Filesystem\Adapter\ZipConnector;
 
 class ZipConnectorTest extends TestCase
 {
-    public function testConnectStandard()
+    public function testConnectStandard(): void
     {
         $connector = new ZipConnector();
 
@@ -17,7 +17,7 @@ class ZipConnectorTest extends TestCase
         self::assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 
-    public function testConnectWithPrefix()
+    public function testConnectWithPrefix(): void
     {
         $connector = new ZipConnector();
 
@@ -30,7 +30,7 @@ class ZipConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The zip connector requires path configuration.
      */
-    public function testConnectWithoutPath()
+    public function testConnectWithoutPath(): void
     {
         $connector = new ZipConnector();
 

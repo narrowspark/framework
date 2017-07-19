@@ -19,13 +19,13 @@ class YamlTest extends TestCase
      */
     private $file;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->file   = new Filesystem();
         $this->root   = vfsStream::setup();
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = vfsStream::newFile('temp.yaml')->withContent(
             '
@@ -39,7 +39,7 @@ linting: true
 
         $parsed = (new YamlParser())->parse((string) $this->file->read($file->url()));
 
-        self::assertTrue(is_array($parsed));
+        self::assertTrue(\is_array($parsed));
         self::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
     }
 
@@ -47,7 +47,7 @@ linting: true
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
      * @expectedExceptionMessage Unable to parse at line 3 (near "  foo: bar").
      */
-    public function testParseToThrowException()
+    public function testParseToThrowException(): void
     {
         $file = vfsStream::newFile('temp.yaml')->withContent(
             '

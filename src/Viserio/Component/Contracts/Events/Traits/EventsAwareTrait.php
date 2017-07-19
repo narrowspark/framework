@@ -10,7 +10,7 @@ trait EventsAwareTrait
     /**
      * Event manager instance.
      *
-     * @var \Viserio\Component\Contracts\Events\EventManager|null
+     * @var null|\Viserio\Component\Contracts\Events\EventManager
      */
     protected $events;
 

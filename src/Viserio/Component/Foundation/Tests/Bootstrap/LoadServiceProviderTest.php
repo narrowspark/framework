@@ -10,7 +10,7 @@ use Viserio\Component\Foundation\Provider\ConfigureLoggingServiceProvider;
 
 class LoadServiceProviderTest extends MockeryTestCase
 {
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         $provider    = new ConfigureLoggingServiceProvider();
         $bootstraper = new LoadServiceProvider();
@@ -36,7 +36,7 @@ class LoadServiceProviderTest extends MockeryTestCase
         $bootstraper->bootstrap($kernel);
     }
 
-    public function testBootstrapWithFileNotFound()
+    public function testBootstrapWithFileNotFound(): void
     {
         $provider    = new ConfigureLoggingServiceProvider();
         $bootstraper = new LoadServiceProvider();

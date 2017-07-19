@@ -13,7 +13,7 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class ViewDisplayerTest extends MockeryTestCase
 {
-    public function testError()
+    public function testError(): void
     {
         $factory = $this->mock(Factory::class);
         $view    = $this->mock(View::class);
@@ -41,7 +41,7 @@ class ViewDisplayerTest extends MockeryTestCase
         self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
-    public function testPropertiesTrue()
+    public function testPropertiesTrue(): void
     {
         $factory = $this->mock(Factory::class);
         $factory
@@ -57,7 +57,7 @@ class ViewDisplayerTest extends MockeryTestCase
         self::assertSame('text/html', $displayer->contentType());
     }
 
-    public function testPropertiesFalse()
+    public function testPropertiesFalse(): void
     {
         $factory = $this->mock(Factory::class);
         $factory

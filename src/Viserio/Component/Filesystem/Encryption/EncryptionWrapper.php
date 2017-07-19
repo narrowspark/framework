@@ -48,7 +48,7 @@ class EncryptionWrapper
      */
     public function __call(string $method, array $arguments)
     {
-        return call_user_func_array([$this->adapter, $method], $arguments);
+        return \call_user_func_array([$this->adapter, $method], $arguments);
     }
 
     /**
@@ -58,7 +58,7 @@ class EncryptionWrapper
      *
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|bool the file contents or false on failure
+     * @return bool|string the file contents or false on failure
      */
     public function read(string $path)
     {
@@ -119,14 +119,14 @@ class EncryptionWrapper
      * Write the contents of a file.
      *
      * @param string          $path
-     * @param string|resource $contents
+     * @param resource|string $contents
      * @param array           $config   an optional configuration array
      *
      * @return bool
      */
     public function put(string $path, $contents, array $config = []): bool
     {
-        if (is_resource($contents)) {
+        if (\is_resource($contents)) {
             $contents = $this->encryptStream($contents);
         } else {
             $contents = $this->encryptString($contents);
@@ -178,11 +178,11 @@ class EncryptionWrapper
      */
     private function getStreamFromString(string $contents)
     {
-        $resource = fopen('php://memory', 'r+b');
+        $resource = \fopen('php://memory', 'r+b');
 
         File::writeBytes($resource, $contents);
 
-        rewind($resource);
+        \rewind($resource);
 
         return $resource;
     }
@@ -196,7 +196,7 @@ class EncryptionWrapper
      */
     private function decryptStream($resource)
     {
-        $out = fopen('php://memory', 'r+b');
+        $out = \fopen('php://memory', 'r+b');
 
         if ($resource != false) {
             File::decryptResource($resource, $out, $this->key);
@@ -204,7 +204,7 @@ class EncryptionWrapper
             $out = '';
         }
 
-        rewind($out);
+        \rewind($out);
 
         return $out;
     }
@@ -218,11 +218,11 @@ class EncryptionWrapper
      */
     private function encryptStream($resource)
     {
-        $out = fopen('php://temp', 'r+b');
+        $out = \fopen('php://temp', 'r+b');
 
         File::encryptResource($resource, $out, $this->key);
 
-        rewind($out);
+        \rewind($out);
 
         return $out;
     }
@@ -238,7 +238,7 @@ class EncryptionWrapper
     {
         $resource = $this->getStreamFromString($contents);
 
-        return (string) stream_get_contents($this->decryptStream($resource));
+        return (string) \stream_get_contents($this->decryptStream($resource));
     }
 
     /**
@@ -252,6 +252,6 @@ class EncryptionWrapper
     {
         $resource = $this->getStreamFromString($contents);
 
-        return (string) stream_get_contents($this->encryptStream($resource));
+        return (string) \stream_get_contents($this->encryptStream($resource));
     }
 }

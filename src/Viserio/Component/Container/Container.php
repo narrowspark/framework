@@ -63,7 +63,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * The concrete instance.
      *
-     * @var string|array
+     * @var array|string
      */
     protected $concrete;
 
@@ -84,7 +84,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * Invoker instance.
      *
-     * @var \Invoker\InvokerInterface|null
+     * @var null|\Invoker\InvokerInterface
      */
     private $invoker;
 
@@ -108,9 +108,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     {
         $concrete = ($concrete) ? $concrete : $abstract;
 
-        if (is_array($abstract)) {
-            $this->bindService(key($abstract), $concrete);
-            $this->alias(key($abstract), current($abstract));
+        if (\is_array($abstract)) {
+            $this->bindService(\key($abstract), $concrete);
+            $this->alias(\key($abstract), \current($abstract));
         } else {
             $this->bindService($abstract, $concrete);
         }
@@ -199,7 +199,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function resolve($subject, array $parameters = [])
     {
-        if (is_string($subject) && isset($this->contextualParameters[$subject])) {
+        if (\is_string($subject) && isset($this->contextualParameters[$subject])) {
             $contextualParameters = $this->contextualParameters[$subject];
 
             foreach ($contextualParameters as $key => $value) {
@@ -208,7 +208,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
                 }
             }
 
-            $parameters = array_replace($contextualParameters, $parameters);
+            $parameters = \array_replace($contextualParameters, $parameters);
         }
 
         if ($this->has($subject)) {
@@ -232,7 +232,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
         }
 
         if ($concrete instanceof Closure) {
-            array_unshift($parameters, $this);
+            \array_unshift($parameters, $this);
         }
 
         if ($bindingType === TypesContract::PLAIN) {
@@ -243,7 +243,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
             $resolved = $this->resolveSingleton($abstract, $parameters);
         }
 
-        if (is_string($abstract)) {
+        if (\is_string($abstract)) {
             $this->extendResolved($abstract, $resolved);
         }
 
@@ -256,17 +256,17 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     public function resolveNonBound($abstract, array $parameters = [])
     {
         if ($abstract instanceof Closure) {
-            array_unshift($parameters, $this);
+            \array_unshift($parameters, $this);
         }
 
-        if (is_string($abstract) && mb_strpos($abstract, '::')) {
-            $parts    = explode('::', $abstract, 2);
+        if (\is_string($abstract) && \mb_strpos($abstract, '::')) {
+            $parts    = \explode('::', $abstract, 2);
             $abstract = [$this->resolve($parts[0]), $parts[1]];
         }
 
         $resolved = parent::resolve($abstract, $parameters);
 
-        if (is_string($abstract)) {
+        if (\is_string($abstract)) {
             $this->extendResolved($abstract, $resolved);
         }
 
@@ -282,8 +282,8 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
         if (isset($this->bindings[$this->abstract])) {
             $this->concrete = $this->bindings[$this->abstract][TypesContract::VALUE];
-        } elseif (mb_strpos($this->abstract, '::')) {
-            $this->concrete = explode('::', $this->abstract, 2);
+        } elseif (\mb_strpos($this->abstract, '::')) {
+            $this->concrete = \explode('::', $this->abstract, 2);
         } else {
             $this->concrete = $this->abstract;
         }
@@ -299,7 +299,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
         $this->parameter = $abstract;
 
         if ($this->parameter[0] === '$') {
-            $this->parameter = mb_substr($this->parameter, 1);
+            $this->parameter = \mb_substr($this->parameter, 1);
         }
 
         return $this;
@@ -311,11 +311,11 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     public function give($implementation)
     {
         if (! ($reflector = $this->getReflector($this->concrete))) {
-            throw new UnresolvableDependencyException(sprintf('[%s] is not resolvable.', $this->concrete));
+            throw new UnresolvableDependencyException(\sprintf('[%s] is not resolvable.', $this->concrete));
         }
 
         if ($reflector instanceof ReflectionClass && ! ($reflector = $reflector->getConstructor())) {
-            throw new UnresolvableDependencyException(sprintf('[%s] must have a constructor.', $this->concrete));
+            throw new UnresolvableDependencyException(\sprintf('[%s] must have a constructor.', $this->concrete));
         }
 
         $reflectionParameters = $reflector->getParameters();
@@ -333,19 +333,19 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
             }
         }
 
-        $concrete = gettype($this->concrete);
+        $concrete = \gettype($this->concrete);
 
-        if (is_object($this->concrete)) {
-            $concrete = get_class($this->concrete);
-        } elseif (is_array($this->concrete)) {
+        if (\is_object($this->concrete)) {
+            $concrete = \get_class($this->concrete);
+        } elseif (\is_array($this->concrete)) {
             $concrete = $this->concrete[0];
-        } elseif (is_string($this->concrete)) {
+        } elseif (\is_string($this->concrete)) {
             $concrete = $this->concrete;
         }
 
-        throw new UnresolvableDependencyException(sprintf(
+        throw new UnresolvableDependencyException(\sprintf(
             'Parameter [%s] cannot be injected in [%s].',
-            is_object($this->parameter) ? get_class($this->parameter) : $this->parameter,
+            \is_object($this->parameter) ? \get_class($this->parameter) : $this->parameter,
             $concrete
         ));
     }
@@ -355,10 +355,10 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function get($id)
     {
-        if (! is_string($id)) {
-            throw new ContainerException(sprintf(
+        if (! \is_string($id)) {
+            throw new ContainerException(\sprintf(
                 'The id parameter must be of type string, [%s] given.',
-                is_object($id) ? get_class($id) : gettype($id)
+                \is_object($id) ? \get_class($id) : \gettype($id)
             ));
         }
 
@@ -369,7 +369,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
         }
 
         throw new NotFoundException(
-            sprintf('Abstract [%s] is not being managed by the container.', $id)
+            \sprintf('Abstract [%s] is not being managed by the container.', $id)
         );
     }
 
@@ -378,10 +378,10 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function has($id)
     {
-        if (! is_string($id)) {
-            throw new ContainerException(sprintf(
+        if (! \is_string($id)) {
+            throw new ContainerException(\sprintf(
                 'The name parameter must be of type string, [%s] given.',
-                is_object($id) ? get_class($id) : gettype($id)
+                \is_object($id) ? \get_class($id) : \gettype($id)
             ));
         }
 
@@ -455,9 +455,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * @param string $offset
      * @param mixed  $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
-        if (is_string($value)) {
+        if (\is_string($value)) {
             $this->bindPlain($offset, $value);
         } else {
             $this->bindService($offset, $value);
@@ -481,7 +481,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      *
      * @param string $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->bindings[$offset]);
     }
@@ -525,7 +525,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * @param string $abstract
      * @param mixed  $concrete
      */
-    protected function bindPlain(string $abstract, $concrete)
+    protected function bindPlain(string $abstract, $concrete): void
     {
         $this->bindings[$abstract] = [
             TypesContract::VALUE        => $concrete,
@@ -540,7 +540,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * @param string $abstract
      * @param mixed  $concrete
      */
-    protected function bindService(string $abstract, $concrete)
+    protected function bindService(string $abstract, $concrete): void
     {
         $this->bindings[$abstract] = [
             TypesContract::VALUE        => $concrete,
@@ -555,7 +555,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * @param string $abstract
      * @param mixed  $concrete
      */
-    protected function bindSingleton(string $abstract, $concrete)
+    protected function bindSingleton(string $abstract, $concrete): void
     {
         $this->bindings[$abstract] = [
             TypesContract::VALUE        => $concrete,
@@ -643,7 +643,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * @param string $abstract
      * @param mixed  &$resolved
      */
-    protected function extendResolved($abstract, &$resolved)
+    protected function extendResolved($abstract, &$resolved): void
     {
         if (! isset($this->extenders[$abstract])) {
             return;
@@ -678,7 +678,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * Format a class binding.
      *
-     * @param \Closure|string|object $implementation
+     * @param \Closure|object|string $implementation
      * @param \ReflectionClass       $parameterClass
      *
      * @return \Closure|object

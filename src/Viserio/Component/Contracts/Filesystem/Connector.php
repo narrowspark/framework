@@ -9,7 +9,7 @@ interface Connector
      *
      * @param array $config
      *
-     * @throws \RuntimeException|\InvalidArgumentException
+     * @throws \InvalidArgumentException|\RuntimeException
      *
      * @return object
      */

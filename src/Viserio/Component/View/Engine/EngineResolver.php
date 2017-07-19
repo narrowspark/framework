@@ -45,9 +45,9 @@ class EngineResolver implements EngineResolverContract
         }
 
         if (isset($this->resolvers[$engine])) {
-            return $this->resolved[$engine] = call_user_func($this->resolvers[$engine]);
+            return $this->resolved[$engine] = \call_user_func($this->resolvers[$engine]);
         }
 
-        throw new InvalidArgumentException(sprintf('Engine [%s] not found.', $engine));
+        throw new InvalidArgumentException(\sprintf('Engine [%s] not found.', $engine));
     }
 }

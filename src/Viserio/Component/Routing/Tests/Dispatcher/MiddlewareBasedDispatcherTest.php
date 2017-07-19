@@ -16,7 +16,7 @@ use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 
 class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         $dispatcher  = new MiddlewareBasedDispatcher();
         $dispatcher->setCachePath(__DIR__ . '/../Cache/MiddlewareBasedDispatcherTest.cache');
@@ -25,11 +25,11 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
         $this->dispatcher = $dispatcher;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
-    public function testMiddlewareFunc()
+    public function testMiddlewareFunc(): void
     {
         $dispatcher = $this->dispatcher;
 
@@ -42,7 +42,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
         self::assertSame([999 => FooMiddleware::class], $dispatcher->getMiddlewarePriorities());
     }
 
-    public function testHandleFound()
+    public function testHandleFound(): void
     {
         $collection = new RouteCollection();
         $collection->add(new Route(
@@ -73,7 +73,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Class [Viserio\Component\Routing\Tests\Fixture\FakeMiddleware] is not being managed by the container.
      */
-    public function testHandleFoundThrowExceptionClassNotManaged()
+    public function testHandleFoundThrowExceptionClassNotManaged(): void
     {
         $collection = new RouteCollection();
         $collection->add(new Route(
@@ -102,7 +102,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
         );
     }
 
-    public function testHandleFoundWithResolve()
+    public function testHandleFoundWithResolve(): void
     {
         $collection = new RouteCollection();
         $collection->add(new Route(

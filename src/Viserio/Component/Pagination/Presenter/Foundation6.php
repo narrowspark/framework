@@ -41,7 +41,7 @@ class Foundation6 implements PresenterContract
                 $pagination .= '<li class="pagination-previous"><a href="' . $paginator->getPreviousPageUrl() . '" rel="prev">&laquo;</a></li>';
             }
 
-            if (method_exists($paginator, 'getElements')) {
+            if (\method_exists($paginator, 'getElements')) {
                 $this->getPaginationsLinks($paginator->getElements(), $pagination);
             }
 
@@ -66,16 +66,16 @@ class Foundation6 implements PresenterContract
      * @param array  $items
      * @param string $pagination
      */
-    private function getPaginationsLinks(array $items, $pagination)
+    private function getPaginationsLinks(array $items, $pagination): void
     {
         foreach ($items as $item) {
             // "Three Dots" Separator
-            if (is_string($item)) {
+            if (\is_string($item)) {
                 $pagination .= '<li class="ellipsis"></li>';
             }
 
             // Array Of Links
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 foreach ($item as $page => $url) {
                     if ($this->paginator->getCurrentPage() == $page) {
                         $pagination .= '<li class="current">' . $page . '</li>';

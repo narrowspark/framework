@@ -109,7 +109,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      */
     public function addDirectory(string $directory): self
     {
-        if (! in_array($directory, $this->directories)) {
+        if (! \in_array($directory, $this->directories, true)) {
             $this->directories[] = self::normalizeDirectorySeparator($directory);
         }
 
@@ -133,7 +133,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
         $langFile = $loader->load($file);
 
         if (! isset($langFile['lang'])) {
-            throw new RuntimeException(sprintf('File [%s] cant be imported. Key for language is missing.', $file));
+            throw new RuntimeException(\sprintf('File [%s] cant be imported. Key for language is missing.', $file));
         }
 
         $this->addMessageCatalogue(new MessageCatalogue($langFile['lang'], $langFile));
@@ -213,7 +213,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @param string $lang
      *
-     * @return \Viserio\Component\Contracts\Translation\MessageCatalogue|null
+     * @return null|\Viserio\Component\Contracts\Translation\MessageCatalogue
      */
     public function getLanguageFallback(string $lang): ?MessageCatalogueContract
     {
@@ -261,6 +261,6 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
             return $this->translations[$lang];
         }
 
-        throw new RuntimeException(sprintf('Translator for [%s] dont exist.', $lang));
+        throw new RuntimeException(\sprintf('Translator for [%s] dont exist.', $lang));
     }
 }

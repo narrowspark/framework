@@ -13,7 +13,7 @@ use Viserio\Component\Session\SessionManager;
 
 class SessionServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new EncrypterServiceProvider());

@@ -11,7 +11,7 @@ use Viserio\Component\Log\Provider\LoggerServiceProvider;
 
 class HandleLoggerTest extends MockeryTestCase
 {
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         $bootstraper = new HandleLogger();
 
