@@ -6,6 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
+use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -17,6 +18,7 @@ use Viserio\Component\Routing\Router;
 class RouterTest extends MockeryTestCase
 {
     protected $router;
+    private $dir = __DIR__ . '/../Cache';
 
     public function setUp(): void
     {
@@ -24,7 +26,7 @@ class RouterTest extends MockeryTestCase
 
         $dispatcher  = new MiddlewareBasedDispatcher();
         $dispatcher->setContainer($this->mock(ContainerInterface::class));
-        $dispatcher->setCachePath(__DIR__ . '/../Cache/RouterTest.cache');
+        $dispatcher->setCachePath($this->dir . '/RouterTest.cache');
         $dispatcher->refreshCache(true);
 
         $router = new Router($dispatcher);
@@ -37,7 +39,9 @@ class RouterTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        $this->delTree(__DIR__ . '/../Cache/');
+        if (is_dir($this->dir)) {
+            (new Filesystem())->remove($this->dir);
+        }
     }
 
     /**
@@ -326,20 +330,5 @@ class RouterTest extends MockeryTestCase
         $router->removeParameter('foo', 'bar');
 
         self::assertSame([], $router->getParameters());
-    }
-
-    private function delTree($dir)
-    {
-        if (! \is_dir($dir)) {
-            return;
-        }
-
-        $files = \array_diff(\scandir($dir), ['.', '..']);
-
-        foreach ($files as $file) {
-            (\is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
-        }
-
-        return \rmdir($dir);
     }
 }

@@ -6,6 +6,7 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\Util;
 use org\bovigo\vfs\content\LargeFileContent;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Filesystem\Adapter\LocalConnector;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -42,9 +43,9 @@ class FilesystemAdapterTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->delTree($this->root);
-
         parent::tearDown();
+
+        (new Filesystem())->remove($this->root);
     }
 
     public function testGetDriver(): void
@@ -169,7 +170,8 @@ class FilesystemAdapterTest extends TestCase
         $adapter->write('tempdir/tempfoo.txt', 'tempfoo');
 
         self::assertFalse($adapter->cleanDirectory('tempdir/tempfoo.txt'));
-        $this->adapter->cleanDirectory('tempdir');
+
+        $adapter->cleanDirectory('tempdir');
 
         self::assertTrue(\is_dir($this->root . '/tempdir'));
         self::assertFileNotExists($this->root . '/tempfoo.txt');
@@ -516,16 +518,5 @@ class FilesystemAdapterTest extends TestCase
         self::assertSame(6, $size);
         self::assertSame(' dummy', $contents);
         self::assertInternalType('resource', $stream);
-    }
-
-    private function delTree($dir)
-    {
-        $files = \array_diff(\scandir($dir), ['.', '..']);
-
-        foreach ($files as $file) {
-            (\is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
-        }
-
-        return \rmdir($dir);
     }
 }

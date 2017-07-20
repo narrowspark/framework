@@ -18,7 +18,7 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
     public function setUp(): void
     {
         $dispatcher  = new SimpleDispatcher();
-        $dispatcher->setCachePath(__DIR__ . '/../Cache/SimpleDispatcherTest.cache');
+        $dispatcher->setCachePath($this->patch . '/SimpleDispatcherTest.cache');
         $dispatcher->refreshCache(true);
 
         $this->dispatcher = $dispatcher;
@@ -26,7 +26,7 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
 
     public function testHandleFound(): void
     {
-        $path = __DIR__ . '/../Cache/SimpleDispatcherTest.cache';
+        $path = $this->patch . '/SimpleDispatcherTest.cache';
 
         self::assertSame(self::normalizeDirectorySeparator($path), $this->dispatcher->getCachePath());
 

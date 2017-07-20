@@ -4,6 +4,7 @@ namespace Viserio\Provider\Twig\Tests\Engine;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Viserio\Bridge\Twig\Extension\ConfigExtension;
@@ -13,6 +14,16 @@ use Viserio\Provider\Twig\Engine\TwigEngine;
 
 class TwigEngineTest extends MockeryTestCase
 {
+    public function tearDown()
+    {
+        parent::tearDown();
+        $dir = __DIR__ . '/../Cache';
+
+        if (is_dir($dir)) {
+            (new Filesystem())->remove($dir);
+        }
+    }
+
     public function testGet(): void
     {
         $config = $this->mock(RepositoryContract::class);
@@ -64,8 +75,6 @@ class TwigEngineTest extends MockeryTestCase
     hallo
 </body>
 </html>'), \trim($template));
-
-        $this->delTree(__DIR__ . '/../Cache');
     }
 
     public function testAddTwigExtensions(): void
@@ -123,8 +132,6 @@ class TwigEngineTest extends MockeryTestCase
     OK
 </body>
 </html>'), \trim($template));
-
-        $this->delTree(__DIR__ . '/../Cache');
     }
 
     /**
@@ -165,16 +172,5 @@ class TwigEngineTest extends MockeryTestCase
         );
 
         $engine->get([]);
-    }
-
-    private function delTree($dir)
-    {
-        $files = \array_diff(\scandir($dir), ['.', '..']);
-
-        foreach ($files as $file) {
-            (\is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
-        }
-
-        return \rmdir($dir);
     }
 }

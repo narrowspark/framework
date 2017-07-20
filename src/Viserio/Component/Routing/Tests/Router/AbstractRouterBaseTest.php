@@ -5,6 +5,7 @@ namespace Viserio\Component\Routing\Tests\Router;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -37,8 +38,11 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        $dir = __DIR__ . '/../Cache/';
 
-        $this->delTree(__DIR__ . '/../Cache');
+        if (is_dir($dir)) {
+            (new Filesystem())->remove($dir);
+        }
     }
 
     /**
@@ -60,15 +64,4 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
     }
 
     abstract protected function definitions(RouterContract $router);
-
-    private function delTree($dir)
-    {
-        $files = \array_diff(\scandir($dir), ['.', '..']);
-
-        foreach ($files as $file) {
-            \is_dir("$dir/$file") ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
-        }
-
-        return \rmdir($dir);
-    }
 }

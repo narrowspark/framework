@@ -28,6 +28,7 @@
         "mockery/mockery"                                : "^0.9",
         "narrowspark/testing-helper"                     : "^3.0",
         "phpunit/phpunit"                                : "^6.0",
+        "symfony/filesystem"                             : "~3.3",
         "viserio/options-resolver"                       : "self.version"
     },
     "autoload": {

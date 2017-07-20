@@ -95,13 +95,8 @@ class SimpleDispatcher implements DispatcherContract
         $cacheFile = $this->getCachePath();
         $dir       = \pathinfo($cacheFile, PATHINFO_DIRNAME);
 
-        if (! file_exists($cacheFile) || $this->refreshCache === true) {
-            if ((! @\mkdir($dir, 0777, true) && ! \is_dir($dir)) || ! \is_writable($dir)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Route cache directory [%s] cannot be created or is write protected.',
-                    $dir
-                ));
-            }
+        if (! \file_exists($cacheFile) || $this->refreshCache === true) {
+            self::generateDirectory($dir);
 
             $this->generateRouterFile($routes);
         }
@@ -149,7 +144,7 @@ class SimpleDispatcher implements DispatcherContract
         $route = $routes->match($identifier);
 
         foreach ($segments as $key => $value) {
-            $route->setParameter($key, \rawurldecode($value));
+            $route->addParameter($key, \rawurldecode($value));
         }
 
         // Add route to the request's attributes in case a middleware or handler needs access to the route.
@@ -208,5 +203,28 @@ class SimpleDispatcher implements DispatcherContract
         $closure        = $routerCompiler->compile($routes->getRoutes());
 
         \file_put_contents($this->path, $closure, LOCK_EX);
+    }
+
+    /**
+     * Generate a cache directory.
+     *
+     * @param string $dir
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return void
+     */
+    private static function generateDirectory(string $dir): void
+    {
+        if (\is_dir($dir) && \is_writable($dir)) {
+            return;
+        }
+
+        if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
+            throw new InvalidArgumentException(sprintf(
+                'Route cache directory [%s] cannot be created or is write protected.',
+                $dir
+            ));
+        }
     }
 }

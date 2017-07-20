@@ -30,6 +30,8 @@ class OptionDumpCommand extends Command
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException if dir cant be created or is not writable
      */
     public function handle()
     {
@@ -48,12 +50,7 @@ class OptionDumpCommand extends Command
             return 1;
         }
 
-        if ((! @\mkdir($dirPath, 0777, true) && ! \is_dir($dirPath)) || ! \is_writable($dirPath)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Config directory [%s] cannot be created or is write protected.',
-                $dirPath
-            ));
-        }
+        self::generateDirectory($dirPath);
 
         foreach ($configs as $key => $config) {
             $file = $dirPath . '\\' . $key . '.' . $format;
@@ -241,5 +238,28 @@ return ' . $this->getPrettyPrintArray($config) . ';';
         }
 
         return $config;
+    }
+
+    /**
+     * Generate a config directory.
+     *
+     * @param string $dir
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return void
+     */
+    private static function generateDirectory(string $dir): void
+    {
+        if (\is_dir($dir) && \is_writable($dir)) {
+            return;
+        }
+
+        if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
+            throw new InvalidArgumentException(sprintf(
+                'Route cache directory [%s] cannot be created or is write protected.',
+                $dir
+            ));
+        }
     }
 }

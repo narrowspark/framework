@@ -42,11 +42,11 @@ class CronTest extends MockeryTestCase
 
     public function tearDown(): void
     {
+        parent::tearDown();
+
         \date_default_timezone_set($this->defaultTimezone);
 
         Chronos::setTestNow(null);
-
-        parent::tearDown();
     }
 
     public function testBasicCronCompilation(): void
