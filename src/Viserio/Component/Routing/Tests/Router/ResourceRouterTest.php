@@ -202,7 +202,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
 
         $verbs = [
             'create' => 'ajouter',
-            'edit' => 'modifier',
+            'edit'   => 'modifier',
         ];
         ResourceRegistrar::setVerbs($verbs);
 
@@ -298,7 +298,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
 
         $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['names' => [
             'index' => 'foo',
-            'show' => 'bar',
+            'show'  => 'bar',
         ]]);
 
         self::assertTrue($this->router->getRoutes()->hasNamedRoute('foo'));

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
-use RuntimeException;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Support\VarExporter;
 

@@ -161,7 +161,7 @@ class ResourceRegistrar
             $value = $this->parameters[$value];
         } elseif (isset(static::$parameterMap[$value])) {
             $value = static::$parameterMap[$value];
-        }  elseif ($this->parameters === 'singular' || static::$singularParameters) {
+        } elseif ($this->parameters === 'singular' || static::$singularParameters) {
             $value = Str::singular($value);
         }
 

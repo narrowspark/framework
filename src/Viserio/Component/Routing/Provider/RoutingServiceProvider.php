@@ -14,7 +14,6 @@ use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Generator\UrlGenerator;
-use Viserio\Component\Routing\ResourceRegistrar;
 use Viserio\Component\Routing\Router;
 
 class RoutingServiceProvider implements ServiceProvider
