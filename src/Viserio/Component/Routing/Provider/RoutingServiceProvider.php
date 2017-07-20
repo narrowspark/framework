@@ -53,6 +53,7 @@ class RoutingServiceProvider implements ServiceProvider
      */
     public static function createRouteDispatcher(ContainerInterface $container, ?callable $getPrevious = null): DispatcherContract
     {
+        // @codeCoverageIgnoreStart
         if (\is_callable($getPrevious)) {
             $dispatcher = $getPrevious();
         } elseif (\class_exists(Pipeline::class)) {
@@ -60,6 +61,7 @@ class RoutingServiceProvider implements ServiceProvider
         } else {
             $dispatcher = new SimpleDispatcher();
         }
+        // @codeCoverageIgnoreStop
 
         if ($container->has(EventManagerContract::class)) {
             $dispatcher->setEventManager($container->get(EventManagerContract::class));
@@ -77,13 +79,7 @@ class RoutingServiceProvider implements ServiceProvider
      */
     public static function createRouter(ContainerInterface $container): RouterContract
     {
-        $registrar = null;
-
-        if ($container->has(ResourceRegistrar::class)) {
-            $registrar = $container->get(ResourceRegistrar::class);
-        }
-
-        $router = new Router($container->get(DispatcherContract::class), $registrar);
+        $router = new Router($container->get(DispatcherContract::class));
 
         $router->setContainer($container);
 

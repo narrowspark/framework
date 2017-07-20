@@ -67,7 +67,7 @@ class PendingResourceRegistration
      *
      * @param string[] $methods
      *
-     * @return \Viserio\Component\Routing\PendingResourceRegistration
+     * @return $this
      */
     public function only(array $methods): self
     {
@@ -81,7 +81,7 @@ class PendingResourceRegistration
      *
      * @param string[] $methods
      *
-     * @return \Viserio\Component\Routing\PendingResourceRegistration
+     * @return $this
      */
     public function except(array $methods): self
     {
@@ -95,7 +95,7 @@ class PendingResourceRegistration
      *
      * @param string[] $names
      *
-     * @return \Viserio\Component\Routing\PendingResourceRegistration
+     * @return $this
      */
     public function addNames(array $names): self
     {
@@ -110,7 +110,7 @@ class PendingResourceRegistration
      * @param string $method
      * @param string $name
      *
-     * @return \Viserio\Component\Routing\PendingResourceRegistration
+     * @return $this
      */
     public function setName(string $method, string $name): self
     {
@@ -124,7 +124,7 @@ class PendingResourceRegistration
      *
      * @param array $parameters
      *
-     * @return \Viserio\Component\Routing\PendingResourceRegistration
+     * @return $this
      */
     public function setParameters(array $parameters): self
     {
@@ -139,7 +139,7 @@ class PendingResourceRegistration
      * @param string $previous
      * @param string $new
      *
-     * @return \Viserio\Component\Routing\PendingResourceRegistration
+     * @return $this
      */
     public function addParameter(string $previous, string $new): self
     {
@@ -149,19 +149,37 @@ class PendingResourceRegistration
     }
 
     /**
-     * Set a middleware to the resource.
+     * Adds a middleware or a array of middlewares to the route.
      *
      * @param mixed $middlewares
      *
      * @throws \LogicException
      *
-     * @return \Viserio\Component\Routing\PendingResourceRegistration
+     * @return $this
      */
-    public function setMiddlewares($middlewares): self
+    public function withMiddleware($middlewares): self
     {
         $this->validateMiddlewareClass($middlewares);
 
         $this->options['middlewares'] = $middlewares;
+
+        return $this;
+    }
+
+    /**
+     * Remove the given middlewares from the route/controller.
+     *
+     * @param mixed $middlewares
+     *
+     * @throws \LogicException
+     *
+     * @return $this
+     */
+    public function withoutMiddleware($middlewares): self
+    {
+        $this->validateMiddlewareClass($middlewares);
+
+        $this->options['bypass'] = $middlewares;
 
         return $this;
     }

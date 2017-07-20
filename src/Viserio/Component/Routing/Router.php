@@ -12,7 +12,6 @@ use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContra
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
-use Viserio\Component\Routing\Route\Registrar as RouteRegistrar;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
@@ -76,18 +75,13 @@ class Router implements RouterContract
      * @param string $method
      * @param array  $parameters
      *
-     * @throws \InvalidArgumentException
      * @throws \BadMethodCallException
      *
      * @return mixed
      */
     public function __call($method, $parameters)
     {
-        if (static::hasMacro($method)) {
-            return $this->macroCall($method, $parameters);
-        }
-
-        return (new RouteRegistrar($this))->attribute($method, $parameters[0]);
+        return $this->macroCall($method, $parameters);
     }
 
     /**
@@ -263,33 +257,6 @@ class Router implements RouterContract
             $controller,
             $options
         );
-    }
-
-    /**
-     * Route an api resource to a controller.
-     *
-     * @param string $name
-     * @param string $controller
-     * @param array  $options
-     *
-     * @return \Viserio\Component\Routing\PendingResourceRegistration
-     */
-    public function apiResource(string $name, string $controller, array $options = []): PendingResourceRegistration
-    {
-        $options = array_merge(
-            [
-                'only' => [
-                    'index',
-                    'show',
-                    'store',
-                    'update',
-                    'destroy',
-                ],
-            ],
-            $options
-        );
-
-        return $this->resource($name, $controller, $options);
     }
 
     /**

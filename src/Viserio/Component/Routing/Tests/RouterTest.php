@@ -7,6 +7,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
 use Symfony\Component\Filesystem\Filesystem;
+use Viserio\Component\Contracts\Routing\Dispatcher;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -17,7 +18,14 @@ use Viserio\Component\Routing\Router;
 
 class RouterTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Contracts\Routing\Router
+     */
     protected $router;
+
+    /**
+     * @var string
+     */
     private $dir = __DIR__ . '/../Cache';
 
     public function setUp(): void
@@ -42,6 +50,15 @@ class RouterTest extends MockeryTestCase
         if (is_dir($this->dir)) {
             (new Filesystem())->remove($this->dir);
         }
+    }
+
+    public function testMacroable(): void
+    {
+        Router::macro('foo', function () {
+            return 'bar';
+        });
+
+        $this->assertEquals('bar', $this->router->foo());
     }
 
     /**
@@ -74,6 +91,7 @@ class RouterTest extends MockeryTestCase
             (new ServerRequestFactory())->createServerRequest('GET', '/invalid')
         );
 
+        self::assertInstanceOf(Dispatcher::class, $router->getDispatcher());
         self::assertInstanceOf(Route::class, $router->getCurrentRoute());
     }
 

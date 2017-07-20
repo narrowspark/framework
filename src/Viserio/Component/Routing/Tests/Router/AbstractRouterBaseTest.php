@@ -14,6 +14,9 @@ use Viserio\Component\Routing\Router;
 
 abstract class AbstractRouterBaseTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Contracts\Routing\Router
+     */
     protected $router;
 
     public function setUp(): void

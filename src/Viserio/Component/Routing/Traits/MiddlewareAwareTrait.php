@@ -51,7 +51,7 @@ trait MiddlewareAwareTrait
     }
 
     /**
-     * Set the middlewares to the route.
+     * Adds a middleware or a array of middlewares to the route/controller.
      *
      * @param array|object|string $middlewares
      *
