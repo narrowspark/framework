@@ -20,7 +20,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
     protected $router;
 
     /**
-     * @var \Psr\Container\ContainerInterface
+     * @var \Psr\Container\ContainerInterface|\Mockery\MockInterface
      */
     protected $containerMock;
 
