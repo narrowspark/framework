@@ -4,7 +4,6 @@ namespace Viserio\Component\View;
 
 use Closure;
 use InvalidArgumentException;
-use Narrowspark\Arr\Arr;
 use Viserio\Component\Contracts\Support\Arrayable;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
 use Viserio\Component\Contracts\View\EngineResolver as EngineResolverContract;
