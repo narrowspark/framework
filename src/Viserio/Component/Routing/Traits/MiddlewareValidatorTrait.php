@@ -37,7 +37,8 @@ trait MiddlewareValidatorTrait
      */
     protected function validateMiddleware($middleware): void
     {
-        $interfaces = class_implements($middleware);
+        $middleware = $this->getMiddlewareClassName($middleware);
+        $interfaces = \class_implements($middleware);
 
         if (! isset($interfaces[MiddlewareInterface::class])) {
             throw new LogicException(
@@ -47,14 +48,14 @@ trait MiddlewareValidatorTrait
     }
 
     /**
-     * Check if input is a class name.
+     * If input is a object returns full class name else the given string input.
      *
-     * @param array|object|string $middlewares
+     * @param string|object $middleware
      *
-     * @return bool
+     * @return string
      */
-    protected function isClassName($middlewares): bool
+    protected function getMiddlewareClassName($middleware): string
     {
-        return is_string($middlewares) && class_exists($middlewares);
+        return \is_object($middleware) ? \get_class($middleware) : $middleware;
     }
 }

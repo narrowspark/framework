@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contracts\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
@@ -241,15 +242,9 @@ class Router implements RouterContract
     }
 
     /**
-     * Route a resource to a controller.
-     *
-     * @param string $name
-     * @param string $controller
-     * @param array  $options
-     *
-     * @return \Viserio\Component\Routing\PendingResourceRegistration
+     * {@inheritdoc}
      */
-    public function resource(string $name, string $controller, array $options = []): PendingResourceRegistration
+    public function resource(string $name, string $controller, array $options = []): PendingResourceRegistrationContract
     {
         return new PendingResourceRegistration(
             new ResourceRegistrar($this),

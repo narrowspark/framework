@@ -3,93 +3,83 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Traits;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 
 class MiddlewareAwareTraitTest extends TestCase
 {
-    use MiddlewareAwareTrait;
-
     public function testWithMiddlewareObject(): void
     {
-        $object = new FooMiddleware();
+        $middleware = new FooMiddleware();
+        $object = $this->getMiddlewareAwareObject(true);
 
-        $this->withMiddleware($object);
+        $object->withMiddleware($middleware);
 
-        self::assertSame([FooMiddleware::class => $object], $this->middlewares);
+        self::assertSame([FooMiddleware::class => $middleware], $object->getMiddlewares());
     }
 
     public function testWithMiddlewareString(): void
     {
-        //reset
-        $this->middlewares = [];
+        $object = $this->getMiddlewareAwareObject(true);
 
-        $this->withMiddleware(FooMiddleware::class);
+        $object->withMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class], $this->middlewares);
+        self::assertSame([FooMiddleware::class => FooMiddleware::class], $object->getMiddlewares());
     }
 
     public function testWithMiddlewareArray(): void
     {
-        //reset
-        $this->middlewares = [];
+        $object = $this->getMiddlewareAwareObject(true);
 
-        $this->withMiddleware([FooMiddleware::class, FakeMiddleware::class]);
+        $object->withMiddleware([FooMiddleware::class, FakeMiddleware::class]);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class, FakeMiddleware::class => FakeMiddleware::class], $this->middlewares);
+        self::assertSame([FooMiddleware::class => FooMiddleware::class, FakeMiddleware::class => FakeMiddleware::class], $object->getMiddlewares());
     }
 
     public function testWithoutMiddlewareWithString(): void
     {
-        //reset
-        $this->bypassedMiddlewares = [];
+        $object = $this->getMiddlewareAwareObject(true, true);
 
-        $this->withoutMiddleware(FooMiddleware::class);
+        $object->withoutMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => true], $this->bypassedMiddlewares);
+        self::assertSame([FooMiddleware::class => true], $object->getBypassedMiddlewares());
     }
 
     public function testWithoutMiddlewareWithArray(): void
     {
-        //reset
-        $this->bypassedMiddlewares = [];
+        $object = $this->getMiddlewareAwareObject(true, true);
 
-        $this->withoutMiddleware([FooMiddleware::class, FooMiddleware::class]);
+        $object->withoutMiddleware([FooMiddleware::class, FooMiddleware::class]);
 
-        self::assertSame([FooMiddleware::class => true], $this->bypassedMiddlewares);
+        self::assertSame([FooMiddleware::class => true], $object->getBypassedMiddlewares());
     }
 
     public function testWithoutMiddlewareWithNull(): void
     {
-        //reset
-        $this->middlewares         = [];
-        $this->bypassedMiddlewares = [];
+        $object = $this->getMiddlewareAwareObject(true, true);
 
-        $this->withMiddleware(FooMiddleware::class);
-        $this->withoutMiddleware();
+        $object->withMiddleware(FooMiddleware::class);
+        $object->withoutMiddleware(null);
 
-        self::assertSame([], $this->middlewares);
-        self::assertSame([], $this->bypassedMiddlewares);
+        self::assertSame([], $object->getMiddlewares());
+        self::assertSame([], $object->getBypassedMiddlewares());
     }
 
     public function testAliasMiddleware(): void
     {
-        //reset
-        $this->middlewares = [];
+        $object = $this->getMiddlewareAwareObject(true);
+        $object->aliasMiddleware('foo', FooMiddleware::class);
 
-        $this->aliasMiddleware('foo', FooMiddleware::class);
+        self::assertSame(['foo' => FooMiddleware::class], $object->getMiddlewares());
 
-        self::assertSame(['foo' => FooMiddleware::class], $this->middlewares);
+        $middleware = new FooMiddleware();
+        $object = $this->getMiddlewareAwareObject(true);
 
-        //reset
-        $this->middlewares = [];
+        $object->aliasMiddleware('bar', $middleware);
 
-        $object = new FooMiddleware();
-
-        $this->aliasMiddleware('bar', $object);
-
-        self::assertSame(['bar' => $object], $this->middlewares);
+        self::assertSame(['bar' => $middleware], $object->getMiddlewares());
     }
 
     /**
@@ -98,11 +88,10 @@ class MiddlewareAwareTraitTest extends TestCase
      */
     public function testAliasMiddlewareThrowException(): void
     {
-        //reset
-        $this->middlewares = [];
+        $object = $this->getMiddlewareAwareObject(true);
 
-        $this->aliasMiddleware('foo', FooMiddleware::class);
-        $this->aliasMiddleware('foo', FooMiddleware::class);
+        $object->aliasMiddleware('foo', FooMiddleware::class);
+        $object->aliasMiddleware('foo', FooMiddleware::class);
     }
 
     /**
@@ -111,10 +100,7 @@ class MiddlewareAwareTraitTest extends TestCase
      */
     public function testAliasMiddlewareThrowExceptionWithWrongType(): void
     {
-        //reset
-        $this->middlewares = [];
-
-        $this->aliasMiddleware('foo', null);
+        $this->getMiddlewareAwareObject(true)->aliasMiddleware('foo', null);
     }
 
     /**
@@ -123,7 +109,7 @@ class MiddlewareAwareTraitTest extends TestCase
      */
     public function testWithWrongMiddleware(): void
     {
-        $this->withMiddleware(MiddlewareAwareTraitTest::class);
+        $this->getMiddlewareAwareObject(true, true)->withMiddleware(MiddlewareAwareTraitTest::class);
     }
 
     /**
@@ -132,6 +118,47 @@ class MiddlewareAwareTraitTest extends TestCase
      */
     public function testWithWrongType(): void
     {
-        $this->withMiddleware(null);
+        $this->getMiddlewareAwareObject(true)->withMiddleware(null);
+    }
+
+    /**
+     * @param bool $resetMiddlewares
+     * @param bool $resetBypassedMiddlewares
+     *
+     * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
+     */
+    private function getMiddlewareAwareObject(bool $resetMiddlewares = false, bool $resetBypassedMiddlewares = false)
+    {
+        return new class($resetMiddlewares, $resetBypassedMiddlewares) implements MiddlewareAwareContract
+        {
+            use MiddlewareAwareTrait;
+
+            public function __construct($resetMiddlewares, $resetBypassedMiddlewares)
+            {
+                if ($resetMiddlewares) {
+                    $this->middlewares = [];
+                }
+
+                if ($resetBypassedMiddlewares) {
+                    $this->bypassedMiddlewares = [];
+                }
+            }
+
+            /**
+             * @return array
+             */
+            public function getMiddlewares(): array
+            {
+                return $this->middlewares;
+            }
+
+            /**
+             * @return array
+             */
+            public function getBypassedMiddlewares(): array
+            {
+                return $this->bypassedMiddlewares;
+            }
+        };
     }
 }

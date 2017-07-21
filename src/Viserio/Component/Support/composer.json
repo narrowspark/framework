@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "danielstjules/stringy"                    : "^3.0",
-        "doctrine/inflector"                       : "^1.0",
+        "doctrine/inflector"                       : "~1.1",
         "mikey179/vfsStream"                       : "^1.6",
         "mockery/mockery"                          : "^0.9",
         "narrowspark/testing-helper"               : "^3.0",

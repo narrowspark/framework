@@ -111,7 +111,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
         $this->router->resource('admin', RouteRegistrarControllerFixture::class)
             ->setParameters(['admin' => 'admin_user']);
         $this->router->resource('spark', RouteRegistrarControllerFixture::class)
-            ->addParameter('spark', 'topic');
+            ->setParameter('spark', 'topic');
 
         self::assertSame('/admin/{admin_user}', $this->router->getRoutes()->getByName('admin.show')->getUri());
         self::assertSame('/spark/{topic}', $this->router->getRoutes()->getByName('spark.show')->getUri());
@@ -143,7 +143,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
         self::assertCount(1, $route->gatherDisabledMiddlewares());
     }
 
-    public function testSingularParameters()
+    public function testSingularParameters(): void
     {
         ResourceRegistrar::singularParameters(false);
 
@@ -214,7 +214,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
         self::assertEquals('/foo/{foo}/modifier', $routes->getByName('foo.edit')->getUri());
     }
 
-    public function testResourceRoutingParameters()
+    public function testResourceRoutingParameters(): void
     {
         $this->router->getContainer()->shouldReceive('has')
             ->with(RouteRegistrarControllerFixture::class)
@@ -258,7 +258,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
         self::assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
     }
 
-    public function testResourceRouteNaming()
+    public function testResourceRouteNaming(): void
     {
         $this->router->getContainer()->shouldReceive('has')
             ->with(RouteRegistrarControllerFixture::class)

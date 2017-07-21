@@ -187,7 +187,7 @@ class ResourceRegistrar
      *
      * @return void
      */
-    public static function setVerbs(array $verbs)
+    public static function setVerbs(array $verbs): void
     {
         static::$verbs = array_merge(static::$verbs, $verbs);
     }

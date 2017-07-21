@@ -5,7 +5,7 @@ namespace Viserio\Component\Contracts\Routing;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-interface Route
+interface Route extends MiddlewareAware
 {
     /**
      * Get the domain defined for the route.

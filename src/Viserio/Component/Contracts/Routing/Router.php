@@ -239,4 +239,24 @@ interface Router
      * @return \Viserio\Component\Contracts\Routing\RouteCollection
      */
     public function getRoutes(): RouteCollection;
+
+    /**
+     * Register an array of resource controllers.
+     *
+     * @param array $resources
+     *
+     * @return void
+     */
+    public function resources(array $resources): void;
+
+    /**
+     * Route a resource to a controller.
+     *
+     * @param string $name
+     * @param string $controller
+     * @param array  $options
+     *
+     * @return \Viserio\Component\Contracts\Routing\PendingResourceRegistration
+     */
+    public function resource(string $name, string $controller, array $options = []): PendingResourceRegistration;
 }

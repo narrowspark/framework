@@ -2,9 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
+use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Component\Contracts\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
 use Viserio\Component\Routing\Traits\MiddlewareValidatorTrait;
 
-class PendingResourceRegistration
+class PendingResourceRegistration implements PendingResourceRegistrationContract
 {
     use MiddlewareValidatorTrait;
 
@@ -63,13 +65,9 @@ class PendingResourceRegistration
     }
 
     /**
-     * Set the methods the controller should apply to.
-     *
-     * @param string[] $methods
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function only(array $methods): self
+    public function only(array $methods): PendingResourceRegistrationContract
     {
         $this->options['only'] = $methods;
 
@@ -77,13 +75,9 @@ class PendingResourceRegistration
     }
 
     /**
-     * Set the methods the controller should exclude.
-     *
-     * @param string[] $methods
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function except(array $methods): self
+    public function except(array $methods): PendingResourceRegistrationContract
     {
         $this->options['except'] = $methods;
 
@@ -91,13 +85,9 @@ class PendingResourceRegistration
     }
 
     /**
-     * Set the route names for controller actions.
-     *
-     * @param string[] $names
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function addNames(array $names): self
+    public function addNames(array $names): PendingResourceRegistrationContract
     {
         $this->options['names'] = $names;
 
@@ -105,14 +95,9 @@ class PendingResourceRegistration
     }
 
     /**
-     * Set the route name for a controller action.
-     *
-     * @param string $method
-     * @param string $name
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function setName(string $method, string $name): self
+    public function setName(string $method, string $name): PendingResourceRegistrationContract
     {
         $this->options['names'][$method] = $name;
 
@@ -120,13 +105,9 @@ class PendingResourceRegistration
     }
 
     /**
-     * Override the route parameter names.
-     *
-     * @param array $parameters
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function setParameters(array $parameters): self
+    public function setParameters(array $parameters): PendingResourceRegistrationContract
     {
         $this->options['parameters'] = $parameters;
 
@@ -134,14 +115,9 @@ class PendingResourceRegistration
     }
 
     /**
-     * Override a route parameter's name.
-     *
-     * @param string $previous
-     * @param string $new
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function addParameter(string $previous, string $new): self
+    public function setParameter(string $previous, string $new): PendingResourceRegistrationContract
     {
         $this->options['parameters'][$previous] = $new;
 
@@ -149,22 +125,11 @@ class PendingResourceRegistration
     }
 
     /**
-     * Adds a middleware or a array of middlewares to the route.
-     *
-     * @param string|array|object $middlewares
-     *
-     * @throws \LogicException   if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
-     * @throws \RuntimeException
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function withMiddleware($middlewares): self
+    public function withMiddleware($middlewares): MiddlewareAwareContract
     {
-        $this->validateInput($middlewares);
-
-        if (is_array($middlewares)) {
-            $this->validateMiddleware($middlewares);
-        }
+        $this->validateGivenMiddleware($middlewares);
 
         $this->options['middlewares'] = $middlewares;
 
@@ -172,20 +137,38 @@ class PendingResourceRegistration
     }
 
     /**
-     * Remove the given middlewares from the route/controller.
-     *
-     * @param mixed $middlewares
-     *
-     * @throws \LogicException
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function withoutMiddleware($middlewares): self
+    public function withoutMiddleware($middlewares): MiddlewareAwareContract
     {
-        $this->validateMiddlewareClass($middlewares);
+        $this->validateGivenMiddleware($middlewares);
 
         $this->options['bypass'] = $middlewares;
 
         return $this;
+    }
+
+    /**
+     * First:  Validates the given input.
+     * Second: Checks if given middleware or list of middlewares have the right interface.
+     *
+     * @param array|object|string $middlewares
+     *
+     * @throws \RuntimeException if wrong input is given
+     * @throws \LogicException   if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
+     *
+     * @return void
+     */
+    private function validateGivenMiddleware($middlewares): void
+    {
+        $this->validateInput($middlewares);
+
+        if (is_array($middlewares)) {
+            foreach ($middlewares as $middleware) {
+                $this->validateMiddleware($middleware);
+            }
+        } else {
+            $this->validateMiddleware($middlewares);
+        }
     }
 }

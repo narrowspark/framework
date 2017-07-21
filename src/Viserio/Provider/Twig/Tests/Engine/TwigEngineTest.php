@@ -14,7 +14,7 @@ use Viserio\Provider\Twig\Engine\TwigEngine;
 
 class TwigEngineTest extends MockeryTestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $dir = __DIR__ . '/../Cache';

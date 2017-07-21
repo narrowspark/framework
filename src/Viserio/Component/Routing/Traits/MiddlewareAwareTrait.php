@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
 use RuntimeException;
+use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
 
 trait MiddlewareAwareTrait
 {
@@ -40,8 +41,10 @@ trait MiddlewareAwareTrait
         }
 
         if (\is_string($middleware) || \is_object($middleware)) {
-            if (class_exists($middleware)) {
-                $this->validateMiddleware($middleware);
+            $className = $this->getMiddlewareClassName($middleware);
+
+            if (\class_exists($className)) {
+                $this->validateMiddleware($className);
             }
 
             $this->middlewares[$name] = $middleware;
@@ -60,32 +63,32 @@ trait MiddlewareAwareTrait
      * @throws \RuntimeException if wrong type is given
      * @throws \LogicException
      *
-     * @return $this
+     * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
      */
-    public function withMiddleware($middlewares)
+    public function withMiddleware($middlewares): MiddlewareAwareContract
     {
         $this->validateInput($middlewares);
 
         if (\is_string($middlewares) || \is_object($middlewares)) {
-            $name = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
+            $className = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
 
-            if (class_exists($middlewares)) {
-                $this->validateMiddleware($middlewares);
+            if (class_exists($className)) {
+                $this->validateMiddleware($className);
             }
 
-            $this->middlewares[$name] = $middlewares;
+            $this->middlewares[$className] = $middlewares;
 
             return $this;
         }
 
         foreach ($middlewares as $middleware) {
-            $name = \is_object($middleware) ? \get_class($middleware) : $middleware;
+            $className = $this->getMiddlewareClassName($middleware);
 
-            if (class_exists($middleware)) {
-                $this->validateMiddleware($middleware);
+            if (class_exists($className)) {
+                $this->validateMiddleware($className);
             }
 
-            $this->middlewares[$name] = $middleware;
+            $this->middlewares[$className] = $middleware;
         }
 
         return $this;
@@ -98,11 +101,10 @@ trait MiddlewareAwareTrait
      * @param null|array|string $middlewares
      *
      * @throws \RuntimeException
-     * @throws \LogicException
      *
-     * @return $this
+     * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
      */
-    public function withoutMiddleware($middlewares = null)
+    public function withoutMiddleware($middlewares = null): MiddlewareAwareContract
     {
         if ($middlewares === null) {
             $this->middlewares = [];
@@ -121,8 +123,8 @@ trait MiddlewareAwareTrait
         }
 
         foreach ($middlewares as $name => $middleware) {
-            $middleware = is_object($middleware) ? get_class($middleware) : $middleware;
-            $name       = is_numeric($name) ? $middleware : $name;
+            $middleware = $this->getMiddlewareClassName($middleware);
+            $name       = \is_numeric($name) ? $middleware : $name;
 
             $this->bypassedMiddlewares[$name] = true;
         }

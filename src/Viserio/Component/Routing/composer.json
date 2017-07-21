@@ -30,7 +30,7 @@
     },
     "require-dev": {
         "container-interop/service-provider"       : "^0.3",
-        "doctrine/inflector"                       : "^1.0",
+        "doctrine/inflector"                       : "~1.1",
         "mockery/mockery"                          : "^0.9",
         "narrowspark/testing-helper"               : "^3.0",
         "phpunit/phpunit"                          : "^6.0",
@@ -59,7 +59,7 @@
     },
     "suggest": {
         "container-interop/service-provider"       : "Required to use service-provider (^0.3).",
-        "doctrine/inflector"                       : "Required to use the Resource with singular parameter (^1.0).",
+        "doctrine/inflector"                       : "Required to use the Resource routes (~1.1).",
         "http-interop/http-factory"                : "Required to use the UrlGenerator (^0.3).",
         "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version).",
         "viserio/pipeline"                         : "Required to use psr-15 middlewares (self.version).",
