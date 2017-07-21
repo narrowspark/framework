@@ -13,7 +13,7 @@ class MiddlewareAwareTraitTest extends TestCase
     public function testWithMiddlewareObject(): void
     {
         $middleware = new FooMiddleware();
-        $object = $this->getMiddlewareAwareObject(true);
+        $object     = $this->getMiddlewareAwareObject(true);
 
         $object->withMiddleware($middleware);
 
@@ -75,7 +75,7 @@ class MiddlewareAwareTraitTest extends TestCase
         self::assertSame(['foo' => FooMiddleware::class], $object->getMiddlewares());
 
         $middleware = new FooMiddleware();
-        $object = $this->getMiddlewareAwareObject(true);
+        $object     = $this->getMiddlewareAwareObject(true);
 
         $object->aliasMiddleware('bar', $middleware);
 
@@ -129,8 +129,7 @@ class MiddlewareAwareTraitTest extends TestCase
      */
     private function getMiddlewareAwareObject(bool $resetMiddlewares = false, bool $resetBypassedMiddlewares = false)
     {
-        return new class($resetMiddlewares, $resetBypassedMiddlewares) implements MiddlewareAwareContract
-        {
+        return new class($resetMiddlewares, $resetBypassedMiddlewares) implements MiddlewareAwareContract {
             use MiddlewareAwareTrait;
 
             public function __construct($resetMiddlewares, $resetBypassedMiddlewares)
