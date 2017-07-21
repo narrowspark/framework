@@ -319,7 +319,7 @@ class Factory implements FactoryContract
      */
     public function shared(string $key, $default = null)
     {
-        return Arr::get($this->shared, $key, $default);
+        return $this->shared[$key] ?? $default;
     }
 
     /**
@@ -357,13 +357,19 @@ class Factory implements FactoryContract
      *
      * @return null|string
      */
-    protected function getExtension(string $path)
+    protected function getExtension(string $path): ?string
     {
-        $extensions = \array_keys($this->extensions);
-
-        return Arr::first($extensions, function ($key, $value) use ($path) {
+        $callback = function ($value) use ($path) {
             return $this->endsWith($path, $value);
-        });
+        };
+
+        foreach (\array_keys($this->extensions) as $key => $value) {
+            if ($callback($value)) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -70,7 +70,7 @@ class ViewFactoryTest extends MockeryTestCase
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('layout')
-            ->andReturn(['path' => self::normalizeDirectorySeparator($this->getPath() . '/foo.php')]);
+            ->andReturn(['path' => self::normalizeDirectorySeparator($this->getPath() . '/Nested/foo.php')]);
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('view')
