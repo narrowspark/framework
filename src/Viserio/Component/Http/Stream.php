@@ -87,6 +87,13 @@ class Stream implements StreamInterface
     protected $uri;
 
     /**
+     * Is this stream a pipe?
+     *
+     * @var null|bool
+     */
+    protected $isPipe;
+
+    /**
      * This constructor accepts an associative array of options.
      *
      * - size: (int) If a read stream would otherwise have an indeterminate
@@ -114,16 +121,14 @@ class Stream implements StreamInterface
             $this->size = (int) $options['size'];
         }
 
-        $this->meta = $options['metadata']
-            ?? [];
+        $this->meta = $options['metadata'] ?? [];
 
         $meta = \stream_get_meta_data($this->stream);
 
-        $this->seekable = $meta['seekable'];
-        $this->readable = isset(self::READABLE_MODES[$meta['mode']]);
+        $this->seekable = ! $this->isPipe() && $meta['seekable'];
+        $this->readable = isset(self::READABLE_MODES[$meta['mode']]) || $this->isPipe();
         $this->writable = isset(self::WRITABLE_MODES[$meta['mode']]);
-
-        $this->uri = $this->getMetadata('uri');
+        $this->uri      = $this->getMetadata('uri');
     }
 
     /**
@@ -177,7 +182,11 @@ class Stream implements StreamInterface
     {
         if (isset($this->stream)) {
             if (\is_resource($this->stream)) {
-                \fclose($this->stream);
+                if ($this->isPipe()) {
+                    \pclose($this->stream);
+                } else {
+                    \fclose($this->stream);
+                }
             }
 
             $this->detach();
@@ -197,8 +206,8 @@ class Stream implements StreamInterface
 
         unset($this->stream);
 
-        $this->size     = null;
         $this->uri      = '';
+        $this->meta     = $this->size     = $this->isPipe     = null;
         $this->readable = $this->writable = $this->seekable = false;
 
         return $result;
@@ -224,11 +233,11 @@ class Stream implements StreamInterface
 
         $stats = \fstat($this->stream);
 
-        if (isset($stats['size'])) {
+        if (isset($stats['size']) && ! $this->isPipe()) {
             $this->size = (int) $stats['size'];
-
-            return $this->size;
         }
+
+        return $this->size;
     }
 
     /**
@@ -278,7 +287,7 @@ class Stream implements StreamInterface
 
         $result = \ftell($this->stream);
 
-        if ($result === false) {
+        if ($result === false || $this->isPipe()) {
             throw new RuntimeException('Unable to determine stream position');
         }
 
@@ -384,5 +393,24 @@ class Stream implements StreamInterface
         $meta = \stream_get_meta_data($this->stream);
 
         return $meta[$key] ?? null;
+    }
+
+    /**
+     * Returns whether or not the stream is a pipe.
+     *
+     * @return bool
+     */
+    private function isPipe()
+    {
+        if ($this->isPipe === null) {
+            $this->isPipe = false;
+
+            if (isset($this->stream)) {
+                $mode         = fstat($this->stream)['mode'];
+                $this->isPipe = ($mode & self::FSTAT_MODE_S_IFIFO) !== 0;
+            }
+        }
+
+        return $this->isPipe;
     }
 }

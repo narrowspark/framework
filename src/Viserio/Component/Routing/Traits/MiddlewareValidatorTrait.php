@@ -50,7 +50,7 @@ trait MiddlewareValidatorTrait
     /**
      * If input is a object returns full class name else the given string input.
      *
-     * @param string|object $middleware
+     * @param object|string $middleware
      *
      * @return string
      */

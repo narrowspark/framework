@@ -126,6 +126,7 @@
         "narrowspark/php-cs-fixer-config"     : "^2.0",
         "narrowspark/testing-helper"          : "^3.0",
         "nikic/fast-route"                    : "^1.2",
+        "nyholm/nsa"                          : "^1.1",
         "mockery/mockery"                     : "^0.9",
         "phpunit/phpunit"                     : "^6.0",
         "phpbench/phpbench"                   : "^0.12",

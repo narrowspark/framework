@@ -26,6 +26,7 @@
         "symfony/polyfill-mbstring"             : "^1.0"
     },
     "require-dev": {
+        "nyholm/nsa"                            : "^1.1",
         "mockery/mockery"                       : "^0.9",
         "narrowspark/testing-helper"            : "^3.0",
         "phpunit/phpunit"                       : "^6.0"
