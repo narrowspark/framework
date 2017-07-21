@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use BadMethodCallException;
+use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 
-abstract class AbstractController
+abstract class AbstractController implements MiddlewareAwareContract
 {
     use MiddlewareAwareTrait;
 

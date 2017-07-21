@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Dispatcher;
 
+use InvalidArgumentException;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
@@ -86,16 +87,21 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException if cache folder cant be created
      */
     public function handle(RouteCollectionContract $routes, ServerRequestInterface $request): ResponseInterface
     {
-        if (! \file_exists($this->path) || $this->refreshCache === true) {
-            static::createCacheFolder($this->path);
+        $cacheFile = $this->getCachePath();
+        $dir       = \pathinfo($cacheFile, PATHINFO_DIRNAME);
+
+        if (! \file_exists($cacheFile) || $this->refreshCache === true) {
+            self::generateDirectory($dir);
 
             $this->generateRouterFile($routes);
         }
 
-        $router = require $this->path;
+        $router = require $cacheFile;
 
         $match = $router($request->getMethod(), $this->prepareUriPath($request->getUri()->getPath()));
 
@@ -138,7 +144,7 @@ class SimpleDispatcher implements DispatcherContract
         $route = $routes->match($identifier);
 
         foreach ($segments as $key => $value) {
-            $route->setParameter($key, \rawurldecode($value));
+            $route->addParameter($key, \rawurldecode($value));
         }
 
         // Add route to the request's attributes in case a middleware or handler needs access to the route.
@@ -200,30 +206,25 @@ class SimpleDispatcher implements DispatcherContract
     }
 
     /**
-     * Make a nested path, creating directories down the path recursion.
+     * Generate a cache directory.
      *
-     * @param string $path
+     * @param string $dir
      *
-     * @return bool
+     * @throws \InvalidArgumentException
+     *
+     * @return void
      */
-    protected static function createCacheFolder(string $path): bool
+    private static function generateDirectory(string $dir): void
     {
-        $dir = \pathinfo($path, PATHINFO_DIRNAME);
-
-        if (\is_dir($dir)) {
-            return true;
+        if (\is_dir($dir) && \is_writable($dir)) {
+            return;
         }
 
-        if (static::createCacheFolder($dir)) {
-            if (\mkdir($dir)) {
-                \chmod($dir, 0777);
-
-                return true;
-            }
+        if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
+            throw new InvalidArgumentException(sprintf(
+                'Route cache directory [%s] cannot be created or is write protected.',
+                $dir
+            ));
         }
-
-        // @codeCoverageIgnoreStart
-        return false;
-        // @codeCoverageIgnoreEnd
     }
 }

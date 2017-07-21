@@ -35,4 +35,23 @@ class RoutingServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGenerator::class));
         self::assertInstanceOf(Router::class, $container->get('router'));
     }
+
+    public function testGetUrlGeneratorProvider(): void
+    {
+        $container = new Container();
+        $container->register(new RoutingServiceProvider());
+        $container->register(new EventsServiceProvider());
+        $container->instance(ServerRequestInterface::class, $this->mock(ServerRequestInterface::class));
+
+        $container->instance('config', [
+            'viserio' => [
+                'routing' => [
+                    'path' => '',
+                ],
+            ],
+        ]);
+
+        self::assertNull($container->get(UrlGeneratorContract::class));
+        self::assertNull($container->get(UrlGenerator::class));
+    }
 }

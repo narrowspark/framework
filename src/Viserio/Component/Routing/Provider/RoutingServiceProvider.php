@@ -32,7 +32,7 @@ class RoutingServiceProvider implements ServiceProvider
             'router'                    => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
             },
-            Router::class => function (ContainerInterface $container) {
+            Router::class               => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
             },
             UrlGeneratorContract::class => [self::class, 'createUrlGenerator'],
@@ -52,6 +52,7 @@ class RoutingServiceProvider implements ServiceProvider
      */
     public static function createRouteDispatcher(ContainerInterface $container, ?callable $getPrevious = null): DispatcherContract
     {
+        // @codeCoverageIgnoreStart
         if (\is_callable($getPrevious)) {
             $dispatcher = $getPrevious();
         } elseif (\class_exists(Pipeline::class)) {
@@ -59,6 +60,7 @@ class RoutingServiceProvider implements ServiceProvider
         } else {
             $dispatcher = new SimpleDispatcher();
         }
+        // @codeCoverageIgnoreStop
 
         if ($container->has(EventManagerContract::class)) {
             $dispatcher->setEventManager($container->get(EventManagerContract::class));
@@ -88,10 +90,14 @@ class RoutingServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Routing\UrlGenerator
+     * @return null|\Viserio\Component\Contracts\Routing\UrlGenerator
      */
-    public static function createUrlGenerator(ContainerInterface $container): UrlGeneratorContract
+    public static function createUrlGenerator(ContainerInterface $container): ?UrlGeneratorContract
     {
+        if (! $container->has(UriFactoryInterface::class)) {
+            return null;
+        }
+
         return new UrlGenerator(
             $container->get(RouterContract::class)->getRoutes(),
             $container->get(ServerRequestInterface::class),

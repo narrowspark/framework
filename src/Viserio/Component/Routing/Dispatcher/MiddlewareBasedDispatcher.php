@@ -5,13 +5,14 @@ namespace Viserio\Component\Routing\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Routing\MiddlewareNameResolver;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\SortedMiddleware;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 
-class MiddlewareBasedDispatcher extends SimpleDispatcher
+class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAwareContract
 {
     use ContainerAwareTrait;
     use MiddlewareAwareTrait;
@@ -37,9 +38,11 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
      *
      * @codeCoverageIgnore
      */
-    public function withoutMiddleware($middlewares = null): void
+    public function withoutMiddleware($middlewares = null): MiddlewareAwareContract
     {
         // not used!
+
+        return $this;
     }
 
     /**
@@ -166,8 +169,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher
     /**
      * Convert a multi-dimensional array into a single-dimensional array without keys.
      *
-     * @param array  $array
-     * @param string $prepend
+     * @param array $array
      *
      * @return array
      */

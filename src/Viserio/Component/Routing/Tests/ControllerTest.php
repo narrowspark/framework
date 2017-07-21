@@ -27,7 +27,7 @@ class ControllerTest extends TestCase
 
         $controller->withoutMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class], $controller->gatherDisabledMiddlewares());
+        self::assertSame([FooMiddleware::class => true], $controller->gatherDisabledMiddlewares());
     }
 
     /**

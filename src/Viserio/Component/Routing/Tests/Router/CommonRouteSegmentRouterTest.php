@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
 use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -43,7 +44,7 @@ class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions($router): void
+    protected function definitions(RouterContract $router): void
     {
         $router->pattern('p2', Pattern::ALPHA);
 
@@ -54,7 +55,7 @@ class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream($args['name'] . ' | p1 = ' . $args['p1'] . ' | p2 = ' . $args['p2'] . ' | p3 = ' . $args['p3'])
                 );
-        })->setParameter('name', 'route1');
+        })->addParameter('name', 'route1');
         $router->get('/route2/{p1}/{p2}/{p3}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -62,7 +63,7 @@ class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream($args['name'] . ' | p1 = ' . $args['p1'] . ' | p2 = ' . $args['p2'] . ' | p3 = ' . $args['p3'])
                 );
-        })->setParameter('name', 'route2');
+        })->addParameter('name', 'route2');
         $router->get('/route3/{p1}/{p2}/{p3}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -70,7 +71,7 @@ class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream($args['name'] . ' | p1 = ' . $args['p1'] . ' | p2 = ' . $args['p2'] . ' | p3 = ' . $args['p3'])
                 );
-        })->setParameter('name', 'route3');
+        })->addParameter('name', 'route3');
         $router->get('/route4/{p1}/{p2}/{p3}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -78,7 +79,7 @@ class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream($args['name'] . ' | p1 = ' . $args['p1'] . ' | p2 = ' . $args['p2'] . ' | p3 = ' . $args['p3'])
                 );
-        })->setParameter('name', 'route4');
+        })->addParameter('name', 'route4');
         $router->get('/route5/{p_1}/{p_2}/{p_3}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -86,7 +87,7 @@ class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream($args['name'] . ' | p_1 = ' . $args['p_1'] . ' | p_2 = ' . $args['p_2'] . ' | p_3 = ' . $args['p_3'])
                 );
-        })->setParameter('name', 'route5');
+        })->addParameter('name', 'route5');
         $router->get('/route6/{p_1}/{p2}/{p_3}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -94,6 +95,6 @@ class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream($args['name'] . ' | p_1 = ' . $args['p_1'] . ' | p2 = ' . $args['p2'] . ' | p_3 = ' . $args['p_3'])
                 );
-        })->setParameter('name', 'route6');
+        })->addParameter('name', 'route6');
     }
 }

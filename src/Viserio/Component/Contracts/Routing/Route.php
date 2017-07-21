@@ -5,7 +5,7 @@ namespace Viserio\Component\Contracts\Routing;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-interface Route
+interface Route extends MiddlewareAware
 {
     /**
      * Get the domain defined for the route.
@@ -152,7 +152,7 @@ interface Route
      *
      * @return $this
      */
-    public function setParameter($name, $value): Route;
+    public function addParameter($name, $value): Route;
 
     /**
      * Get a given parameter from the route.

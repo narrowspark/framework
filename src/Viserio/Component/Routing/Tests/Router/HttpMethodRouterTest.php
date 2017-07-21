@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
@@ -21,7 +22,7 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    protected function definitions($router): void
+    protected function definitions(RouterContract $router): void
     {
         $router->get('/', function ($request, $args) {
             return (new ResponseFactory())
@@ -30,7 +31,7 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream('name = ' . $args['name'])
             );
-        })->setParameter('name', 'home.get');
+        })->addParameter('name', 'home.get');
 
         $router->match(['POST', 'PATCH'], '/', function ($request, $args) {
             return (new ResponseFactory())
@@ -39,7 +40,7 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream('name = ' . $args['name'])
             );
-        })->setParameter('name', 'home.post-or-patch');
+        })->addParameter('name', 'home.post-or-patch');
 
         $router->delete('/', function ($request, $args) {
             return (new ResponseFactory())
@@ -48,7 +49,7 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream('name = ' . $args['name'])
             );
-        })->setParameter('name', 'home.delete');
+        })->addParameter('name', 'home.delete');
 
         $router->any('/', function ($request, $args) {
             return (new ResponseFactory())
@@ -57,6 +58,6 @@ class HttpMethodRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream('name = ' . $args['name'])
             );
-        })->setParameter('name', 'home.fallback');
+        })->addParameter('name', 'home.fallback');
     }
 }

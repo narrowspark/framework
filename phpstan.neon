@@ -44,6 +44,7 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::get#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::set#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::get#'
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Routing\\Router::foo#'
         - '#Cannot call method getTarget#'
         - '#Cannot call method getName#'
         - '#Swift_#'

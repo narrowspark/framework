@@ -4,6 +4,7 @@ namespace Viserio\Component\Filesystem\Tests\Encryption;
 
 use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Filesystem\Adapter\LocalConnector;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
@@ -40,9 +41,9 @@ class EncryptionWrapperTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->delTree($this->root);
-
         parent::tearDown();
+
+        (new Filesystem())->remove($this->root);
     }
 
     public function testWriteStream(): void
@@ -116,16 +117,5 @@ class EncryptionWrapperTest extends TestCase
     public function testReadStream(): void
     {
         $this->adapter->readStream('dont.txt');
-    }
-
-    private function delTree($dir)
-    {
-        $files = \array_diff(\scandir($dir), ['.', '..']);
-
-        foreach ($files as $file) {
-            (\is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
-        }
-
-        return \rmdir($dir);
     }
 }

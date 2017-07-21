@@ -7,6 +7,19 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface Router
 {
+    public const METHOD_HEAD    = 'HEAD';
+    public const METHOD_GET     = 'GET';
+    public const METHOD_POST    = 'POST';
+    public const METHOD_PUT     = 'PUT';
+    public const METHOD_PATCH   = 'PATCH';
+    public const METHOD_DELETE  = 'DELETE';
+    public const METHOD_PURGE   = 'PURGE';
+    public const METHOD_OPTIONS = 'OPTIONS';
+    public const METHOD_TRACE   = 'TRACE';
+    public const METHOD_CONNECT = 'CONNECT';
+    public const METHOD_LINK    = 'LINK';
+    public const METHOD_UNLINK  = 'UNLINK';
+
     /**
      * Register a new GET route with the router.
      *
@@ -132,14 +145,16 @@ interface Router
      *
      * @return $this
      */
-    public function setParameter(string $parameterName, string $expression): Router;
+    public function addParameter(string $parameterName, string $expression): Router;
 
     /**
      * Removes the global expression associated with the supplied parameter name.
      *
      * @param string $name
+     *
+     * @return void
      */
-    public function removeParameter(string $name);
+    public function removeParameter(string $name): void;
 
     /**
      * Get all global parameters for all routes.
@@ -153,8 +168,10 @@ interface Router
      *
      * @param array           $attributes
      * @param \Closure|string $routes
+     *
+     * @return void
      */
-    public function group(array $attributes, $routes);
+    public function group(array $attributes, $routes): void;
 
     /**
      * Merge the given array with the last group stack.
@@ -198,7 +215,14 @@ interface Router
      *
      * @return null|\Viserio\Component\Contracts\Routing\Route
      */
-    public function getCurrentRoute();
+    public function getCurrentRoute(): ?Route;
+
+    /**
+     * Get the router dispatcher.
+     *
+     * @return \Viserio\Component\Contracts\Routing\Dispatcher
+     */
+    public function getDispatcher(): Dispatcher;
 
     /**
      * Dispatch router for HTTP request.
@@ -215,4 +239,24 @@ interface Router
      * @return \Viserio\Component\Contracts\Routing\RouteCollection
      */
     public function getRoutes(): RouteCollection;
+
+    /**
+     * Register an array of resource controllers.
+     *
+     * @param array $resources
+     *
+     * @return void
+     */
+    public function resources(array $resources): void;
+
+    /**
+     * Route a resource to a controller.
+     *
+     * @param string $name
+     * @param string $controller
+     * @param array  $options
+     *
+     * @return \Viserio\Component\Contracts\Routing\PendingResourceRegistration
+     */
+    public function resource(string $name, string $controller, array $options = []): PendingResourceRegistration;
 }

@@ -179,16 +179,13 @@ class Route implements RouteContract
      */
     public function gatherMiddleware(): array
     {
-        $middlewares = [];
-
         if (isset($this->action['middlewares'])) {
-            $middlewares = (array) $this->action['middlewares'];
+            $this->withMiddleware($this->action['middlewares']);
         }
 
         return \array_unique(
             \array_merge(
                 $this->middlewares,
-                $middlewares,
                 $this->getControllerMiddlewares()
             ),
             SORT_REGULAR
@@ -200,17 +197,14 @@ class Route implements RouteContract
      */
     public function gatherDisabledMiddlewares(): array
     {
-        $bypass = [];
-
         if (isset($this->action['bypass'])) {
-            $bypass = (array) $this->action['bypass'];
+            $this->withoutMiddleware($this->action['bypass']);
         }
 
-        return \array_unique(\array_merge(
+        return \array_merge(
             $this->bypassedMiddlewares,
-            $bypass,
             $this->getControllerDisabledMiddlewares()
-        ), SORT_REGULAR);
+        );
     }
 
     /**
@@ -298,7 +292,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function setParameter($name, $value): RouteContract
+    public function addParameter($name, $value): RouteContract
     {
         $this->parameters[$name] = $value;
 

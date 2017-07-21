@@ -38,7 +38,7 @@
         "container-interop/service-provider"  : "^0.3",
         "danielstjules/stringy"               : "^3.0",
         "defuse/php-encryption"               : "^2.0",
-        "doctrine/inflector"                  : "~1.0",
+        "doctrine/inflector"                  : "~1.1",
         "egulias/email-validator"             : "^2.1",
         "fig/http-message-util"               : "^1.1",
         "http-interop/http-factory"           : "^0.3",
@@ -169,6 +169,11 @@
         "branch-alias": {
             "dev-master"                     : "1.0-dev"
         }
+    },
+    "scripts": {
+        "coverage": "sh vendor/bin/phpunit --coverage-html=\"build/logs\"",
+        "cs": "sh vendor/bin/php-cs-fixer fix",
+        "phpstan": "sh ./vendor/bin/phpstan analyse -c phpstan.neon -l 6 src/Viserio"
     },
     "suggest": {
         "alcaeus/mongo-php-adapter"          : "Required to use the ext-mongo interface on ext-mongodb interface (^1.0).",

@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
-use Fig\Http\Message\RequestMethodInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contracts\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
@@ -16,11 +16,13 @@ use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
-class Router implements RouterContract, RequestMethodInterface
+class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
-    use MacroableTrait;
+    use MacroableTrait {
+        __call as macroCall;
+    }
 
     /**
      * The route collection instance.
@@ -66,6 +68,21 @@ class Router implements RouterContract, RequestMethodInterface
     {
         $this->dispatcher = $dispatcher;
         $this->routes     = new RouteCollection();
+    }
+
+    /**
+     * Dynamically handle calls into the router instance.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->macroCall($method, $parameters);
     }
 
     /**
@@ -142,8 +159,8 @@ class Router implements RouterContract, RequestMethodInterface
                 self::METHOD_TRACE,
                 self::METHOD_CONNECT,
                 self::METHOD_TRACE,
-                'LINK',
-                'UNLINK',
+                self::METHOD_LINK,
+                self::METHOD_UNLINK,
             ],
             $uri,
             $action
@@ -191,7 +208,7 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * {@inheritdoc}
      */
-    public function setParameter(string $parameterName, string $expression): RouterContract
+    public function addParameter(string $parameterName, string $expression): RouterContract
     {
         $this->globalParameterConditions[$parameterName] = $expression;
 
@@ -212,6 +229,29 @@ class Router implements RouterContract, RequestMethodInterface
     public function getParameters(): array
     {
         return $this->globalParameterConditions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resources(array $resources): void
+    {
+        foreach ($resources as $name => $controller) {
+            $this->resource($name, $controller);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resource(string $name, string $controller, array $options = []): PendingResourceRegistrationContract
+    {
+        return new PendingResourceRegistration(
+            new ResourceRegistrar($this),
+            $name,
+            $controller,
+            $options
+        );
     }
 
     /**
@@ -287,7 +327,7 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * {@inheritdoc}
      */
-    public function getCurrentRoute()
+    public function getCurrentRoute(): ?RouteContract
     {
         return $this->dispatcher->getCurrentRoute();
     }
@@ -298,6 +338,14 @@ class Router implements RouterContract, RequestMethodInterface
     public function getRoutes(): RouteCollectionContract
     {
         return $this->routes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDispatcher(): DispatcherContract
+    {
+        return $this->dispatcher;
     }
 
     /**
@@ -361,7 +409,7 @@ class Router implements RouterContract, RequestMethodInterface
         $this->addWhereClausesToRoute($route);
 
         foreach ($this->globalParameterConditions as $key => $value) {
-            $route->setParameter($key, $value);
+            $route->addParameter($key, $value);
         }
 
         return $route;
@@ -465,7 +513,7 @@ class Router implements RouterContract, RequestMethodInterface
 
         if (! $trimmed) {
             return '/';
-        } elseif (\mb_substr($trimmed, 0, 1) === '/') {
+        } elseif (\mb_strpos($trimmed, '/') === 0) {
             return $trimmed;
         }
 

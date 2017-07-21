@@ -19,14 +19,10 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
     public function setUp(): void
     {
         $dispatcher  = new MiddlewareBasedDispatcher();
-        $dispatcher->setCachePath(__DIR__ . '/../Cache/MiddlewareBasedDispatcherTest.cache');
+        $dispatcher->setCachePath($this->patch . '/MiddlewareBasedDispatcherTest.cache');
         $dispatcher->refreshCache(true);
 
         $this->dispatcher = $dispatcher;
-    }
-
-    public function tearDown(): void
-    {
     }
 
     public function testMiddlewareFunc(): void

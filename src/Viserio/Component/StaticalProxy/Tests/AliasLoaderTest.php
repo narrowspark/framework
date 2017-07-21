@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\StaticalProxy\AliasLoader;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\StaticalProxy\Tests\Fixture\Foo;
@@ -193,17 +194,6 @@ class AliasLoaderTest extends TestCase
 
         self::assertSame(StaticalProxy::class, \get_parent_class($class));
 
-        $this->delTree($path);
-    }
-
-    private function delTree($dir)
-    {
-        $files = \array_diff(\scandir($dir), ['.', '..']);
-
-        foreach ($files as $file) {
-            (\is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : \unlink("$dir/$file");
-        }
-
-        return \rmdir($dir);
+        (new Filesystem())->remove($path);
     }
 }

@@ -7,7 +7,6 @@ use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config as FlyConfig;
-use Narrowspark\Arr\Arr;
 use RuntimeException;
 use Viserio\Component\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
@@ -565,29 +564,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * Filter directory contents by type.
-     *
-     * @param array  $contents
-     * @param string $type
-     *
-     * @return array
-     */
-    private function filterContentsByType(array $contents, string $type): array
-    {
-        $return = [];
-
-        foreach ($contents as $key => $value) {
-            if (Arr::get($contents, $key) === $value) {
-                if (isset($value['path'])) {
-                    $return[$key] = $value['path'];
-                }
-            }
-        }
-
-        return \array_values($return);
-    }
-
-    /**
      * Parse the given visibility value.
      *
      * @param null|string $visibility
@@ -626,5 +602,26 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $contents = $this->driver->listContents($directory, $recursive);
 
         return $this->filterContentsByType($contents, $typ);
+    }
+
+    /**
+     * Filter directory contents by type.
+     *
+     * @param array  $contents
+     * @param string $type
+     *
+     * @return array
+     */
+    private function filterContentsByType(array $contents, string $type): array
+    {
+        $return = [];
+
+        foreach ($contents as $key => $value) {
+            if (isset($value['type']) && $value['type'] === $type) {
+                $return[$key] = $value['path'];
+            }
+        }
+
+        return $return;
     }
 }

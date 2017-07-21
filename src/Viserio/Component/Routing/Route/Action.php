@@ -13,6 +13,9 @@ class Action
      * @param string $uri
      * @param mixed  $action
      *
+     * @throws \UnexpectedValueException if invalid route action
+     * @throws \LogicException           if no action found
+     *
      * @return array
      */
     public static function parse(string $uri, $action): array
@@ -20,7 +23,7 @@ class Action
         // If no action is passed in right away, we assume the user will make use of
         // fluent routing. In that case, we set a default closure, to be executed
         // if the user never explicitly sets an action to handle the given uri.
-        if (null === $action) {
+        if ($action === null) {
             return static::missingAction($uri);
         }
 
@@ -58,6 +61,8 @@ class Action
      * Get an action for a route that has no action.
      *
      * @param string $uri
+     *
+     * @throws \LogicException if no action found
      *
      * @return array
      */
