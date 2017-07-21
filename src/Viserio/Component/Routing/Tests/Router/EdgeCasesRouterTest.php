@@ -38,6 +38,8 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
      */
     public function testRouter404($httpMethod, $uri): void
     {
+        $this->definitions($this->router);
+
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
@@ -70,6 +72,8 @@ class EdgeCasesRouterTest extends AbstractRouterBaseTest
      */
     public function testRouter405($httpMethod, $uri): void
     {
+        $this->definitions($this->router);
+
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );

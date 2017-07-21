@@ -31,6 +31,8 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
      */
     public function testRouter404($httpMethod, $uri): void
     {
+        $this->definitions($this->router);
+
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
@@ -47,16 +49,6 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    public function routerMatching405Provider()
-    {
-        return [
-            ['DELETE', '/'],
-            ['PATCH', '/blog/post/123'],
-            ['GET', '/blog/post/another-123-post/comment'],
-            ['PUT', '/blog/post/another-123-post/comment'],
-        ];
-    }
-
     /**
      * @dataProvider routerMatching405Provider
      * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
@@ -66,10 +58,21 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
      */
     public function testRouter405($httpMethod, $uri): void
     {
+        $this->definitions($this->router);
+
         $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
-            (new ResponseFactory())->createResponse()
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
+    }
+
+    public function routerMatching405Provider()
+    {
+        return [
+            ['DELETE', '/'],
+            ['PATCH', '/blog/post/123'],
+            ['GET', '/blog/post/another-123-post/comment'],
+            ['PUT', '/blog/post/another-123-post/comment'],
+        ];
     }
 
     protected function definitions(RouterContract $router): void

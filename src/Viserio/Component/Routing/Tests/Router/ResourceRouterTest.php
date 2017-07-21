@@ -31,13 +31,6 @@ class ResourceRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    public function routerMatching405Provider()
-    {
-        return [
-            ['PUT', '/members'],
-        ];
-    }
-
     /**
      * @dataProvider routerMatching405Provider
      * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
@@ -47,6 +40,32 @@ class ResourceRouterTest extends AbstractRouterBaseTest
      */
     public function testRouter405($httpMethod, $uri): void
     {
+        $this->definitions($this->router);
+
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
+        );
+    }
+
+    public function routerMatching405Provider()
+    {
+        return [
+            ['PUT', '/members'],
+            ['PATCH', '/members'],
+        ];
+    }
+
+    /**
+     * @dataProvider routerMatching404Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
+     *
+     * @param mixed $httpMethod
+     * @param mixed $uri
+     */
+    public function testRouter404($httpMethod, $uri): void
+    {
+        $this->definitions($this->router);
+
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
@@ -60,28 +79,9 @@ class ResourceRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @dataProvider routerMatching404Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter404($httpMethod, $uri): void
-    {
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
-    }
-
     public function testCanNameRoutesOnRegisteredResource(): void
     {
-        $this->router->getContainer()->shouldReceive('has')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(true);
-        $this->router->getContainer()->shouldReceive('get')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(new RouteRegistrarControllerFixture());
+        $this->arrangeRegistrarController();
 
         $this->router->resource('users', RouteRegistrarControllerFixture::class)
             ->only(['create', 'store'])->addNames([
@@ -101,12 +101,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
 
     public function testCanOverrideParametersOnRegisteredResource(): void
     {
-        $this->router->getContainer()->shouldReceive('has')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(true);
-        $this->router->getContainer()->shouldReceive('get')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(new RouteRegistrarControllerFixture());
+        $this->arrangeRegistrarController();
 
         $this->router->resource('admin', RouteRegistrarControllerFixture::class)
             ->setParameters(['admin' => 'admin_user']);
@@ -119,17 +114,12 @@ class ResourceRouterTest extends AbstractRouterBaseTest
 
     public function testCanSetAndRemoveMiddlewareOnRegisteredResource(): void
     {
-        $this->router->getContainer()->shouldReceive('has')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(true);
-        $this->router->getContainer()->shouldReceive('get')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(new RouteRegistrarControllerFixture());
+        $this->arrangeRegistrarController();
 
-        $this->router->getContainer()->shouldReceive('has')
+        $this->containerMock->shouldReceive('has')
             ->with(FakeMiddleware::class)
             ->andReturn(true);
-        $this->router->getContainer()->shouldReceive('get')
+        $this->containerMock->shouldReceive('get')
             ->with(FakeMiddleware::class)
             ->andReturn(new FakeMiddleware());
 
@@ -157,22 +147,17 @@ class ResourceRouterTest extends AbstractRouterBaseTest
 
     public function testResourceRouting(): void
     {
-        $this->router->getContainer()->shouldReceive('has')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(true);
-        $this->router->getContainer()->shouldReceive('get')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(new RouteRegistrarControllerFixture());
+        $this->arrangeRegistrarController();
 
         $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['only' => ['show', 'destroy']]);
         $routes = $this->router->getRoutes();
 
-        self::assertCount(15, $routes);
+        self::assertCount(2, $routes);
 
         $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['except' => ['show', 'destroy']]);
         $routes = $this->router->getRoutes();
 
-        self::assertCount(20, $routes);
+        self::assertCount(7, $routes);
 
         $this->router->resource('user-bars', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'wildcards' => ['user-bars' => 'foo_bar_id']]);
         $routes = $this->router->getRoutes();
@@ -216,12 +201,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
 
     public function testResourceRoutingParameters(): void
     {
-        $this->router->getContainer()->shouldReceive('has')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(true);
-        $this->router->getContainer()->shouldReceive('get')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(new RouteRegistrarControllerFixture());
+        $this->arrangeRegistrarController();
 
         ResourceRegistrar::singularParameters();
 
@@ -260,12 +240,8 @@ class ResourceRouterTest extends AbstractRouterBaseTest
 
     public function testResourceRouteNaming(): void
     {
-        $this->router->getContainer()->shouldReceive('has')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(true);
-        $this->router->getContainer()->shouldReceive('get')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(new RouteRegistrarControllerFixture());
+        $this->arrangeRegistrarController();
+
         $this->router->resource('foo', RouteRegistrarControllerFixture::class);
 
         self::assertTrue($this->router->getRoutes()->hasNamedRoute('foo.index'));
@@ -317,12 +293,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
 
     protected function definitions(RouterContract $router): void
     {
-        $router->getContainer()->shouldReceive('has')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(true);
-        $router->getContainer()->shouldReceive('get')
-            ->with(RouteRegistrarControllerFixture::class)
-            ->andReturn(new RouteRegistrarControllerFixture());
+        $this->arrangeRegistrarController();
 
         $router->resources(['users' => RouteRegistrarControllerFixture::class]);
 
@@ -334,5 +305,15 @@ class ResourceRouterTest extends AbstractRouterBaseTest
 
         $router->resource('prefix/user', RouteRegistrarControllerFixture::class)
             ->only(['index']);
+    }
+
+    private function arrangeRegistrarController(): void
+    {
+        $this->containerMock->shouldReceive('has')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(true);
+        $this->containerMock->shouldReceive('get')
+            ->with(RouteRegistrarControllerFixture::class)
+            ->andReturn(new RouteRegistrarControllerFixture());
     }
 }

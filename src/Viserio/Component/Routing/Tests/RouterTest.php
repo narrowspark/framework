@@ -345,7 +345,7 @@ class RouterTest extends MockeryTestCase
 
         self::assertSame(['foo' => 'bar'], $router->getParameters());
 
-        $router->removeParameter('foo', 'bar');
+        $router->removeParameter('foo');
 
         self::assertSame([], $router->getParameters());
     }

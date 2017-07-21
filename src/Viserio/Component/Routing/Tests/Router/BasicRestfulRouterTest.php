@@ -37,6 +37,8 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
      */
     public function testRouter404($httpMethod, $uri): void
     {
+        $this->definitions($this->router);
+
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
@@ -59,6 +61,22 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
         ];
     }
 
+    /**
+     * @dataProvider routerMatching405Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
+     *
+     * @param mixed $httpMethod
+     * @param mixed $uri
+     */
+    public function testRouter405($httpMethod, $uri): void
+    {
+        $this->definitions($this->router);
+
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
+        );
+    }
+
     public function routerMatching405Provider()
     {
         return [
@@ -71,20 +89,6 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
             ['PATCH', '/user/1'],
             ['PATCH', '/user/123321'],
         ];
-    }
-
-    /**
-     * @dataProvider routerMatching405Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter405($httpMethod, $uri): void
-    {
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
     }
 
     protected function definitions(RouterContract $router): void

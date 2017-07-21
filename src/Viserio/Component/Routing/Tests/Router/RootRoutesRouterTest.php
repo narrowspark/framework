@@ -56,6 +56,8 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
 
     protected function definitions(RouterContract $router): void
     {
+        $this->arrangeMiddleware();
+
         $router->any('/', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -92,13 +94,6 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 );
         })->addParameter('name', 'root-slash');
 
-        $router->getContainer()->shouldReceive('has')
-            ->with(FakeMiddleware::class)
-            ->andReturn(true);
-        $router->getContainer()->shouldReceive('get')
-            ->with(FakeMiddleware::class)
-            ->andReturn(new FakeMiddleware());
-
         $router->get('/middleware', ['middlewares' => FakeMiddleware::class, function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -117,25 +112,6 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 );
         }])->addParameter('name', 'middleware2');
 
-        $router->getContainer()->shouldReceive('has')
-            ->with(ControllerClosureMiddleware::class)
-            ->andReturn(true);
-        $router->getContainer()->shouldReceive('get')
-            ->with(ControllerClosureMiddleware::class)
-            ->andReturn(new ControllerClosureMiddleware());
-        $router->getContainer()->shouldReceive('has')
-            ->with(RouteTestClosureMiddlewareController::class)
-            ->andReturn(true);
-        $router->getContainer()->shouldReceive('get')
-            ->with(RouteTestClosureMiddlewareController::class)
-            ->andReturn(new RouteTestClosureMiddlewareController());
-        $router->getContainer()->shouldReceive('has')
-            ->with(FooMiddleware::class)
-            ->andReturn(true);
-        $router->getContainer()->shouldReceive('get')
-            ->with(FooMiddleware::class)
-            ->andReturn(new FooMiddleware());
-
         $router->get('/middleware3', [
             'uses'        => RouteTestClosureMiddlewareController::class . '@index',
             'middlewares' => FooMiddleware::class,
@@ -153,10 +129,10 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
             'bypass'      => [FooMiddleware::class, FakeMiddleware::class],
         ])->addParameter('name', 'middleware5');
 
-        $router->getContainer()->shouldReceive('has')
+        $this->containerMock->shouldReceive('has')
             ->with(InvokableActionFixture::class)
             ->andReturn(true);
-        $router->getContainer()->shouldReceive('get')
+        $this->containerMock->shouldReceive('get')
             ->with(InvokableActionFixture::class)
             ->andReturn(new InvokableActionFixture());
 
@@ -165,5 +141,33 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
         $router->group(['prefix' => 'all/'], __DIR__ . '/../Fixture/routes.php');
         $router->group(['prefix' => 'noslash'], __DIR__ . '/../Fixture/routes.php');
         $router->group(['prefix' => '/slash'], __DIR__ . '/../Fixture/routes.php');
+    }
+
+    protected function arrangeMiddleware(): void
+    {
+        $this->containerMock->shouldReceive('has')
+            ->with(ControllerClosureMiddleware::class)
+            ->andReturn(true);
+        $this->containerMock->shouldReceive('get')
+            ->with(ControllerClosureMiddleware::class)
+            ->andReturn(new ControllerClosureMiddleware());
+        $this->containerMock->shouldReceive('has')
+            ->with(RouteTestClosureMiddlewareController::class)
+            ->andReturn(true);
+        $this->containerMock->shouldReceive('get')
+            ->with(RouteTestClosureMiddlewareController::class)
+            ->andReturn(new RouteTestClosureMiddlewareController());
+        $this->containerMock->shouldReceive('has')
+            ->with(FooMiddleware::class)
+            ->andReturn(true);
+        $this->containerMock->shouldReceive('get')
+            ->with(FooMiddleware::class)
+            ->andReturn(new FooMiddleware());
+        $this->containerMock->shouldReceive('has')
+            ->with(FakeMiddleware::class)
+            ->andReturn(true);
+        $this->containerMock->shouldReceive('get')
+            ->with(FakeMiddleware::class)
+            ->andReturn(new FakeMiddleware());
     }
 }

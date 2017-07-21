@@ -125,7 +125,7 @@ class MiddlewareAwareTraitTest extends TestCase
      * @param bool $resetMiddlewares
      * @param bool $resetBypassedMiddlewares
      *
-     * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
+     * @return object
      */
     private function getMiddlewareAwareObject(bool $resetMiddlewares = false, bool $resetBypassedMiddlewares = false)
     {

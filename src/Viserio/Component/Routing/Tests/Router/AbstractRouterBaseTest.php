@@ -19,6 +19,11 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
      */
     protected $router;
 
+    /**
+     * @var \Psr\Container\ContainerInterface
+     */
+    protected $containerMock;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -30,10 +35,10 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $dispatcher->refreshCache(true);
         $dispatcher->setEventManager(new EventManager());
 
-        $router = new Router($dispatcher);
-        $router->setContainer($this->mock(ContainerInterface::class));
+        $this->containerMock = $this->mock(ContainerInterface::class);
 
-        $this->definitions($router);
+        $router = new Router($dispatcher);
+        $router->setContainer($this->containerMock);
 
         $this->router = $router;
     }
@@ -58,6 +63,8 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
      */
     public function testRouter($httpMethod, $uri, $expectedResult, $status = 200): void
     {
+        $this->definitions($this->router);
+
         $actualResult = $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
