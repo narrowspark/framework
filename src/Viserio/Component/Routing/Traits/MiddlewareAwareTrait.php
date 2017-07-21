@@ -9,7 +9,7 @@ trait MiddlewareAwareTrait
     use MiddlewareValidatorTrait;
 
     /**
-     * All middlewares.
+     * List of registered middlewares.
      *
      * @var array
      */
@@ -40,7 +40,9 @@ trait MiddlewareAwareTrait
         }
 
         if (\is_string($middleware) || \is_object($middleware)) {
-            $this->validateMiddlewareClass($middleware);
+            if (class_exists($middleware)) {
+                $this->validateMiddleware($middleware);
+            }
 
             $this->middlewares[$name] = $middleware;
 
@@ -63,10 +65,13 @@ trait MiddlewareAwareTrait
     public function withMiddleware($middlewares)
     {
         $this->validateInput($middlewares);
-        $this->validateMiddlewareClass($middlewares);
 
         if (\is_string($middlewares) || \is_object($middlewares)) {
             $name = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
+
+            if (class_exists($middlewares)) {
+                $this->validateMiddleware($middlewares);
+            }
 
             $this->middlewares[$name] = $middlewares;
 
@@ -75,6 +80,10 @@ trait MiddlewareAwareTrait
 
         foreach ($middlewares as $middleware) {
             $name = \is_object($middleware) ? \get_class($middleware) : $middleware;
+
+            if (class_exists($middleware)) {
+                $this->validateMiddleware($middleware);
+            }
 
             $this->middlewares[$name] = $middleware;
         }
@@ -102,7 +111,6 @@ trait MiddlewareAwareTrait
         }
 
         $this->validateInput($middlewares);
-        $this->validateMiddlewareClass($middlewares);
 
         if (\is_object($middlewares) || \is_string($middlewares)) {
             $name = is_object($middlewares) ? get_class($middlewares) : $middlewares;

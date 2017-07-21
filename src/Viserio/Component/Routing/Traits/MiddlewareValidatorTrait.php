@@ -9,29 +9,6 @@ use RuntimeException;
 trait MiddlewareValidatorTrait
 {
     /**
-     * Check if given middleware class has \Interop\Http\ServerMiddleware\MiddlewareInterface implemented.
-     *
-     * @param array|object|string $middlewares
-     *
-     * @throws \LogicException
-     *
-     * @return void
-     */
-    protected function validateMiddlewareClass($middlewares): void
-    {
-        if ($this->isClassName($middlewares) || is_object($middlewares)
-        ) {
-            $this->validateMiddleware($middlewares);
-        } elseif (is_array($middlewares)) {
-            foreach ($middlewares as $name => $middleware) {
-                if (! isset($this->middlewares[$middleware], $this->middlewares[$name])) {
-                    $this->validateMiddleware($middleware);
-                }
-            }
-        }
-    }
-
-    /**
      * Check if given input is a string, object or array.
      *
      * @param array|object|string $middlewares
@@ -54,7 +31,7 @@ trait MiddlewareValidatorTrait
      *
      * @param object|string $middleware
      *
-     * @throws \LogicException
+     * @throws \LogicException if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
      *
      * @return void
      */
@@ -76,8 +53,8 @@ trait MiddlewareValidatorTrait
      *
      * @return bool
      */
-    private function isClassName($middlewares): bool
+    protected function isClassName($middlewares): bool
     {
-        return is_string($middlewares) && class_exists($middlewares) && ! isset($this->middlewares[$middlewares]);
+        return is_string($middlewares) && class_exists($middlewares);
     }
 }

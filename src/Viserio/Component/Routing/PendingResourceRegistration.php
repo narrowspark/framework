@@ -151,15 +151,20 @@ class PendingResourceRegistration
     /**
      * Adds a middleware or a array of middlewares to the route.
      *
-     * @param mixed $middlewares
+     * @param string|array|object $middlewares
      *
-     * @throws \LogicException
+     * @throws \LogicException   if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
+     * @throws \RuntimeException
      *
      * @return $this
      */
     public function withMiddleware($middlewares): self
     {
-        $this->validateMiddlewareClass($middlewares);
+        $this->validateInput($middlewares);
+
+        if (is_array($middlewares)) {
+            $this->validateMiddleware($middlewares);
+        }
 
         $this->options['middlewares'] = $middlewares;
 
