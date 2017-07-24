@@ -4,6 +4,7 @@ namespace Viserio\Component\OptionsResolver\Tests;
 
 use ArrayIterator;
 use ArrayObject;
+use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Exception;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
@@ -25,9 +26,8 @@ use Viserio\Component\OptionsResolver\Tests\Fixtures\PackageDefaultOptionsConfig
 use Viserio\Component\OptionsResolver\Tests\Fixtures\PlainConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\UniversalContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedConfigurationFixture;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedDimensionalConfigurationFixture;
-use  Viserio\Component\OptionsResolver\Tests\Fixtures\ValidateDefaultValueOnOverwriteFixture;
-use Doctrine\DBAL\Driver\PDOMySql\Driver;
+use  Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedDimensionalConfigurationFixture;
+use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidateDefaultValueOnOverwriteFixture;
 
 /**
  * Code in this test is taken from interop-config.

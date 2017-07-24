@@ -15,7 +15,7 @@ abstract class AbstractLoadFiles
      */
     protected function getFiles(string $path): array
     {
-        $files = [];
+        $files      = [];
         $foundFiles = (array) Finder::create()->files()->name('*.php')->in($path);
 
         foreach ($foundFiles as $file) {
