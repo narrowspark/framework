@@ -41,7 +41,7 @@ class SftpConnector implements ConnectorContract
         }
 
         if (! \array_key_exists('password', $config) && ! \array_key_exists('privateKey', $config)) {
-                throw new InvalidArgumentException('The sftp connector requires password or privateKey configuration.');
+            throw new InvalidArgumentException('The sftp connector requires password or privateKey configuration.');
         }
 
         return Arr::only($config, ['host', 'port', 'username', 'password', 'privateKey']);

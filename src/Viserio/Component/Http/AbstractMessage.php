@@ -16,17 +16,6 @@ abstract class AbstractMessage implements MessageInterface
     protected $protocol = '1.1';
 
     /**
-     * A map of valid protocol versions.
-     *
-     * @var array
-     */
-    private static $validProtocolVersions = [
-        '1.0' => true,
-        '1.1' => true,
-        '2.0' => true,
-    ];
-
-    /**
      * Map of all registered headers, as original name => array of values.
      *
      * @var array
@@ -46,6 +35,17 @@ abstract class AbstractMessage implements MessageInterface
      * @var \Psr\Http\Message\StreamInterface
      */
     protected $stream;
+
+    /**
+     * A map of valid protocol versions.
+     *
+     * @var array
+     */
+    private static $validProtocolVersions = [
+        '1.0' => true,
+        '1.1' => true,
+        '2.0' => true,
+    ];
 
     /**
      * {@inheritdoc}

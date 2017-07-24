@@ -63,9 +63,9 @@ class TranslationNodeVisitorTest extends TestCase
     }
 
     /**
-     * @param string $message
+     * @param string      $message
      * @param null|string $domain
-     * @param array|null $arguments
+     * @param array|null  $arguments
      *
      * @return \Twig\Node\Expression\FilterExpression
      */
@@ -87,7 +87,7 @@ class TranslationNodeVisitorTest extends TestCase
     }
 
     /**
-     * @param string $message
+     * @param string      $message
      * @param null|string $domain
      *
      * @return \Viserio\Bridge\Twig\Node\TransNode

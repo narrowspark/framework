@@ -16,13 +16,6 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     use OptionsResolverTrait;
 
     /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
-     */
-    private $files;
-
-    /**
      * The array of active view paths.
      *
      * @var array
@@ -55,6 +48,13 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         'js',
         'md',
     ];
+
+    /**
+     * The filesystem instance.
+     *
+     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     */
+    private $files;
 
     /**
      * Create a new file view loader instance.

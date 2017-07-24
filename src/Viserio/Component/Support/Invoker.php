@@ -19,13 +19,6 @@ class Invoker implements InvokerInterface
     use ContainerAwareTrait;
 
     /**
-     * Invoker instance.
-     *
-     * @var InvokerInterface
-     */
-    private $invoker;
-
-    /**
      * Inject settings.
      *
      * @var array
@@ -38,6 +31,13 @@ class Invoker implements InvokerInterface
      * @var array
      */
     protected $resolvers = [];
+
+    /**
+     * Invoker instance.
+     *
+     * @var InvokerInterface
+     */
+    private $invoker;
 
     /**
      * Inject by type hint.

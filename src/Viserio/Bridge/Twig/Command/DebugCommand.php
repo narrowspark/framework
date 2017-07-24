@@ -101,6 +101,22 @@ class DebugCommand extends Command
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getOptions(): array
+    {
+        return [
+            [
+                'format',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The output format (text or json)',
+                'text',
+            ],
+        ];
+    }
+
+    /**
      * Get twig metadata.
      *
      * @param string $type
@@ -170,22 +186,6 @@ class DebugCommand extends Command
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOptions(): array
-    {
-        return [
-            [
-                'format',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The output format (text or json)',
-                'text',
-            ],
-        ];
     }
 
     /**

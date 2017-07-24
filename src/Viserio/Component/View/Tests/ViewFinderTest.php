@@ -30,7 +30,6 @@ class ViewFinderTest extends MockeryTestCase
 
     public function setUp()
     {
-
         $this->path = self::normalizeDirectorySeparator(__DIR__ . '/' . 'Fixture');
 
         $config = $this->mock(RepositoryContract::class);
@@ -341,7 +340,6 @@ class ViewFinderTest extends MockeryTestCase
 
     public function testPassingViewWithFalseHintReturnsFalse(): void
     {
-
         self::assertFalse($this->finder->hasHintInformation('::foo.bar'));
     }
 

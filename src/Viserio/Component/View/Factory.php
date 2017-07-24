@@ -17,20 +17,6 @@ class Factory implements FactoryContract
     use NormalizeNameTrait;
 
     /**
-     * The engines instance.
-     *
-     * @var \Viserio\Component\Contracts\View\EngineResolver
-     */
-    private $engines;
-
-    /**
-     * The view finder implementation.
-     *
-     * @var \Viserio\Component\Contracts\View\Finder
-     */
-    private $finder;
-
-    /**
      * Array of registered view name aliases.
      *
      * @var array
@@ -70,6 +56,20 @@ class Factory implements FactoryContract
      * @var array
      */
     protected $shared = [];
+
+    /**
+     * The engines instance.
+     *
+     * @var \Viserio\Component\Contracts\View\EngineResolver
+     */
+    private $engines;
+
+    /**
+     * The view finder implementation.
+     *
+     * @var \Viserio\Component\Contracts\View\Finder
+     */
+    private $finder;
 
     /**
      * Create a new factory instance.

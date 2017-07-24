@@ -127,6 +127,6 @@ class EnvironmentDetector implements EnvironmentContract
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        return ($needle !== '' && \mb_strpos($haystack, $needle) === 0);
+        return $needle !== '' && \mb_strpos($haystack, $needle) === 0;
     }
 }
