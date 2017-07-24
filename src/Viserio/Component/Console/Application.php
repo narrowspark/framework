@@ -40,42 +40,42 @@ class Application extends SymfonyConsole
      *
      * @var string
      */
-    public $name = 'UNKNOWN';
+    private $name = 'UNKNOWN';
 
     /**
      * Console version.
      *
      * @var string
      */
-    public $version = 'UNKNOWN';
+    private $version = 'UNKNOWN';
 
     /**
      * The output from the previous command.
      *
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
-    protected $lastOutput;
+    private $lastOutput;
 
     /**
      * Invoker instance.
      *
      * @var \Viserio\Component\Support\Invoker
      */
-    protected $invoker;
+    private $invoker;
 
     /**
      * The console application bootstrappers.
      *
      * @var array
      */
-    protected static $bootstrappers = [];
+    private static $bootstrappers = [];
 
     /**
-     * Invoker instance.
+     * Symfony terminal instance.
      *
      * @var \Symfony\Component\Console\Terminal
      */
-    protected $terminal;
+    private $terminal;
 
     /**
      * Create a new Cerebro console application.

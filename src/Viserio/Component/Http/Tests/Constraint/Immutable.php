@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Constraint;
 
-use PHPUnit\Framework\Assert as Assert;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint as PHPUnitConstraint;
 
 class Immutable extends PHPUnitConstraint

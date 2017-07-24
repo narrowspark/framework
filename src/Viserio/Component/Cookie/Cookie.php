@@ -12,12 +12,12 @@ final class Cookie implements StringableContract
     /**
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * @var null|string
      */
-    protected $value;
+    private $value;
 
     /**
      * Create a new cookie instance.

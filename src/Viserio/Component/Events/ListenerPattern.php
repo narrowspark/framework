@@ -54,7 +54,7 @@ class ListenerPattern
      *
      * @var array
      */
-    private $wildcardsSeparators = [
+    private static $wildcardsSeparators = [
         // Trailing single-wildcard with separator prefix
         '/\\\\\.\\\\\*$/' => '(?:\.\w+)?',
         // Single-wildcard with separator prefix
@@ -110,7 +110,7 @@ class ListenerPattern
      */
     public function getListener()
     {
-        if (! isset($this->listener) && isset($this->provider)) {
+        if ($this->listener === null && $this->provider !== null) {
             $this->listener = $this->provider;
             $this->provider = null;
         }
@@ -175,8 +175,8 @@ class ListenerPattern
     private function createRegex(string $eventPattern): string
     {
         return \sprintf('/^%s$/', \preg_replace(
-            \array_keys($this->wildcardsSeparators),
-            \array_values($this->wildcardsSeparators),
+            \array_keys(self::$wildcardsSeparators),
+            \array_values(self::$wildcardsSeparators),
             \preg_quote($eventPattern, '/')
         ));
     }

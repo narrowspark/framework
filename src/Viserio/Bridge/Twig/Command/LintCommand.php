@@ -41,7 +41,7 @@ class LintCommand extends Command
         if (! $container->has(Environment::class)) {
             $this->error('The Twig environment needs to be set.');
 
-            return;
+            return 1;
         }
 
         $files = $this->getFiles((array) $this->option('files'), (array) $this->option('directories'));
@@ -77,7 +77,7 @@ class LintCommand extends Command
                 continue;
             }
 
-            $foundFiles[] = $this->normalizeDirectorySeparator($file->getRealPath());
+            $foundFiles[] = self::normalizeDirectorySeparator($file->getRealPath());
         }
 
         return $foundFiles;
@@ -141,10 +141,10 @@ class LintCommand extends Command
         foreach ($baseDir as $dir) {
             if (\count($paths) !== 0) {
                 foreach ($paths as $path) {
-                    $this->findTwigFiles($this->normalizeDirectorySeparator($dir . '/' . $path), $foundFiles);
+                    $this->findTwigFiles(self::normalizeDirectorySeparator($dir . '/' . $path), $foundFiles);
                 }
             } else {
-                $this->findTwigFiles($this->normalizeDirectorySeparator($dir), $foundFiles);
+                $this->findTwigFiles(self::normalizeDirectorySeparator($dir), $foundFiles);
             }
         }
 

@@ -103,7 +103,7 @@ final class ResponseCookies extends AbstractCookieCollector
 
                     break;
                 case 'path':
-                    $cookie = $cookie->withPath($attributeValue);
+                    $cookie = $cookie->withPath($attributeValue ?? '/');
 
                     break;
                 case 'secure':

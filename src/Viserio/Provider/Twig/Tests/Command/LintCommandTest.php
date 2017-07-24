@@ -32,10 +32,10 @@ class LintCommandTest extends MockeryTestCase
     {
         $tester   = $this->createCommandTester();
         $ret      = $tester->execute(['--files' => ['lintIncorrectFile']], ['decorated' => false]);
-        $file     = \realpath($this->normalizeDirectorySeparator(__DIR__ . '/../Fixtures/lintIncorrectFile.twig'));
+        $file     = \realpath(self::normalizeDirectorySeparator(__DIR__ . '/../Fixtures/lintIncorrectFile.twig'));
 
         self::assertSame(
-            \preg_replace('/(\r\n|\n\r|\r|\n)/', '', \trim('Fail in ' . $this->normalizeDirectorySeparator($file) . ' (line 1)
+            \preg_replace('/(\r\n|\n\r|\r|\n)/', '', \trim('Fail in ' . self::normalizeDirectorySeparator($file) . ' (line 1)
 >> 1      {{ foo
 >> Unclosed "variable".
     2
@@ -82,7 +82,7 @@ class LintCommandTest extends MockeryTestCase
     {
         $tester = $this->createCommandTester();
         $ret    = $tester->execute(['--directories' => ['twig'], '--files' => ['test'], '--format' => 'json'], ['decorated' => false]);
-        $file   = $this->normalizeDirectorySeparator(\realpath(__DIR__ . '/../Fixtures/twig/test.twig'));
+        $file   = self::normalizeDirectorySeparator(\realpath(__DIR__ . '/../Fixtures/twig/test.twig'));
 
         self::assertSame('[
     {

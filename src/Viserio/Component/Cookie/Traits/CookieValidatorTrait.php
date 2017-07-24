@@ -45,15 +45,13 @@ trait CookieValidatorTrait
      */
     protected function validateValue(?string $value = null): void
     {
-        if (isset($value)) {
-            if (\preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {
-                throw new InvalidArgumentException(
-                    \sprintf(
-                        'The cookie value [%s] contains invalid characters.',
-                        $value
-                    )
-                );
-            }
+        if ($value !== null && \preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {
+            throw new InvalidArgumentException(
+                \sprintf(
+                    'The cookie value [%s] contains invalid characters.',
+                    $value
+                )
+            );
         }
     }
 }

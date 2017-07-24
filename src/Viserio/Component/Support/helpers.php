@@ -30,7 +30,7 @@ if (! \function_exists('dd')) {
     function dd(...$args): void
     {
         foreach ($args as $x) {
-            (new Dumper())->dump($x);
+            Dumper::dump($x);
         }
 
         die(1);

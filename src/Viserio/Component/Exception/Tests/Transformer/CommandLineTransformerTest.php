@@ -29,6 +29,6 @@ class CommandLineTransformerTest extends TestCase
         $format      = $transformer->transform($exception);
 
         self::assertTrue(\mb_strlen($format->getMessage()) > 0);
-        self::assertTrue((\mb_strpos($format->getMessage(), 'UNHANDLED EXCEPTION') !== false));
+        self::assertTrue(\mb_strpos($format->getMessage(), 'UNHANDLED EXCEPTION') !== false);
     }
 }

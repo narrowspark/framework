@@ -20,7 +20,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      *
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem
      */
-    protected $files;
+    private $files;
 
     /**
      * The array of active view paths.
@@ -48,7 +48,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      *
      * @var array
      */
-    protected $extensions = [
+    protected static $extensions = [
         'php',
         'phtml',
         'css',
@@ -70,7 +70,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         $this->paths = $options['paths'];
 
         if (isset($options['extensions']) && \is_array($options['extensions'])) {
-            $this->extensions = \array_merge($this->extensions, $options['extensions']);
+            self::$extensions = \array_merge(self::$extensions, $options['extensions']);
         }
     }
 
@@ -163,11 +163,11 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function addExtension(string $extension): FinderContract
     {
-        if (($index = \array_search($extension, $this->extensions, true)) !== false) {
-            unset($this->extensions[$index]);
+        if (($index = \array_search($extension, self::$extensions, true)) !== false) {
+            unset(self::$extensions[$index]);
         }
 
-        \array_unshift($this->extensions, $extension);
+        \array_unshift(self::$extensions, $extension);
 
         return $this;
     }
@@ -219,7 +219,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function getExtensions(): array
     {
-        return $this->extensions;
+        return self::$extensions;
     }
 
     /**
@@ -323,6 +323,6 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
                 'extension' => $extension,
                 'file'      => \str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
-        }, $this->extensions);
+        }, self::$extensions);
     }
 }

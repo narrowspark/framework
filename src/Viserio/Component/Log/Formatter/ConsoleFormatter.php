@@ -106,10 +106,10 @@ class ConsoleFormatter implements FormatterInterface
 
             $this->outputBuffer = \fopen('php://memory', 'r+b');
 
+            $output = [$this, 'echoLine'];
+
             if ($this->options['multiline']) {
                 $output = $this->outputBuffer;
-            } else {
-                $output = [$this, 'echoLine'];
             }
 
             // Exits from VarDumper version >=3.3

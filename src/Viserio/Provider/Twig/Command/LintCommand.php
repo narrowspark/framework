@@ -64,10 +64,10 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         if (\count($directories) !== 0) {
             foreach ($directories as $directory) {
                 foreach ($paths as $path) {
-                    if (\is_dir($this->normalizeDirectorySeparator($path . '/' . $directory))) {
-                        $searchDirectories[] = $this->normalizeDirectorySeparator($path . '/' . $directory);
+                    if (\is_dir(self::normalizeDirectorySeparator($path . '/' . $directory))) {
+                        $searchDirectories[] = self::normalizeDirectorySeparator($path . '/' . $directory);
                     } else {
-                        $this->warn('Path "' . $this->normalizeDirectorySeparator($path . '/' . $directory) . '" is not a directory.');
+                        $this->warn('Path "' . self::normalizeDirectorySeparator($path . '/' . $directory) . '" is not a directory.');
                     }
                 }
             }
@@ -75,7 +75,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
             if (\count($searchDirectories) !== 0 && \count($files) === 0) {
                 // Get those files from the search directory
                 foreach ($this->getFinder($searchDirectories) as $file) {
-                    $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
+                    $search[] = self::normalizeDirectorySeparator($file->getRealPath());
                 }
             }
         }
@@ -87,7 +87,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         // If no files passed, use the view paths
         if (\count($search) === 0) {
             foreach ($this->getFinder($paths) as $file) {
-                $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
+                $search[] = self::normalizeDirectorySeparator($file->getRealPath());
             }
         }
 
@@ -110,11 +110,11 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         foreach ($files as $fileName) {
             if (\count($searchDirectories) !== 0) {
                 foreach ($this->getFinder($searchDirectories, $fileName) as $file) {
-                    $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
+                    $search[] = self::normalizeDirectorySeparator($file->getRealPath());
                 }
             } else {
                 foreach ($this->getFinder($paths, $fileName) as $file) {
-                    $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
+                    $search[] = self::normalizeDirectorySeparator($file->getRealPath());
                 }
             }
         }

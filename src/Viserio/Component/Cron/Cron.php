@@ -78,7 +78,7 @@ class Cron implements CronContract
     /**
      * The human readable description of the cron.
      *
-     * @var string
+     * @var null|string
      */
     protected $description;
 

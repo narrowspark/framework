@@ -242,7 +242,7 @@ abstract class AbstractKernel implements
      */
     public function getAppPath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/app' . ($path ? '/' . $path : $path)
         );
     }
@@ -252,7 +252,7 @@ abstract class AbstractKernel implements
      */
     public function getConfigPath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/config' . ($path ? '/' . $path : $path)
         );
     }
@@ -262,7 +262,7 @@ abstract class AbstractKernel implements
      */
     public function getDatabasePath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/database' . ($path ? '/' . $path : $path)
         );
     }
@@ -272,7 +272,7 @@ abstract class AbstractKernel implements
      */
     public function getPublicPath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/public' . ($path ? '/' . $path : $path)
         );
     }
@@ -282,7 +282,7 @@ abstract class AbstractKernel implements
      */
     public function getStoragePath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/storage' . ($path ? '/' . $path : $path)
         );
     }
@@ -292,7 +292,7 @@ abstract class AbstractKernel implements
      */
     public function getResourcePath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/resources' . ($path ? '/' . $path : $path)
         );
     }
@@ -310,7 +310,7 @@ abstract class AbstractKernel implements
      */
     public function getRoutesPath(): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/routes'
         );
     }
@@ -340,7 +340,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentPath(): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->environmentPath ?: $this->projectDir
         );
     }
@@ -358,7 +358,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentFilePath(): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->getEnvironmentPath() . '/' . $this->getEnvironmentFile()
         );
     }

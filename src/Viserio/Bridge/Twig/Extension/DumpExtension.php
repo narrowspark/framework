@@ -74,7 +74,7 @@ class DumpExtension extends AbstractExtension
     public function dump(Environment $env, $context)
     {
         if (! $env->isDebug()) {
-            return;
+            return '';
         }
 
         if (\func_num_args() === 2) {

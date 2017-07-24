@@ -24,7 +24,7 @@ class RouteListCommand extends Command
      *
      * @var array
      */
-    protected $headers = ['method', 'uri', 'name', 'controller', 'action'];
+    protected static $headers = ['method', 'uri', 'name', 'controller', 'action'];
 
     /**
      * An array of all the registered routes.
@@ -56,7 +56,7 @@ class RouteListCommand extends Command
             return 1;
         }
 
-        $this->table($this->headers, $this->getRoutes());
+        $this->table(self::$headers, $this->getRoutes());
 
         return 0;
     }

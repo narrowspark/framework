@@ -92,7 +92,7 @@ class UrlGeneratorTest extends MockeryTestCase
      */
     public function testRelativeUrlWithNotOptionalParameter(): void
     {
-        $routes = $this->getRoutes((new Route('GET', '/testing/{foo}/bar', ['as' => 'testing'])));
+        $routes = $this->getRoutes(new Route('GET', '/testing/{foo}/bar', ['as' => 'testing']));
 
         // This must raise an exception because the default requirement for "foo" is "[^/]+" which is not met with these params.
         // Generating path "/testing//bar" would be wrong as matching this route would fail.

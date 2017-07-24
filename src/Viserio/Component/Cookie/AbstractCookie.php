@@ -363,8 +363,8 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     protected function normalizeDomain(string $domain = null)
     {
-        if (isset($domain)) {
-            $domain = \ltrim(\mb_strtolower($domain), '.');
+        if ($domain !== null) {
+            $domain = \mb_strtolower(\ltrim($domain, '.'));
         }
 
         return $domain;
@@ -384,7 +384,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     {
         $path = \rtrim($path, '/');
 
-        if (empty($path) || \mb_substr($path, 0, 1) !== '/') {
+        if (empty($path) || \mb_strpos($path, '/')) {
             $path = '/';
         }
 

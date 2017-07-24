@@ -46,10 +46,10 @@ class OptionNotFoundException extends OutOfBoundsException
             }
         }
 
+        $message = 'No options set for configuration [%s] in class [%s].';
+
         if ($hasConfigIdInterface && $configId === null && \count($dimensions) === \count($position)) {
             $message = 'The configuration [%s] needs a config id in class [%s].';
-        } else {
-            $message = 'No options set for configuration [%s] in class [%s].';
         }
 
         parent::__construct(

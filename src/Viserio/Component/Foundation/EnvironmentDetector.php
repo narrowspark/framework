@@ -104,12 +104,12 @@ class EnvironmentDetector implements EnvironmentContract
      */
     protected function getEnvironmentArgument(array $args): ?string
     {
-        $callback = function ($k, $v) {
+        $callback = function ($v) {
             return self::startsWith($v, '--env');
         };
 
         foreach ($args as $key => $value) {
-            if ($callback($key, $value)) {
+            if ($callback($value)) {
                 return $value;
             }
         }
@@ -127,10 +127,6 @@ class EnvironmentDetector implements EnvironmentContract
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        if ($needle != '' && \mb_substr($haystack, 0, \mb_strlen($needle)) === $needle) {
-            return true;
-        }
-
-        return false;
+        return ($needle !== '' && \mb_strpos($haystack, $needle) === 0);
     }
 }

@@ -6,10 +6,11 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parsers\Dumper\XliffDumper;
 use Viserio\Component\Parsers\Parser\XliffParser;
+use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
 
 class XliffTest extends TestCase
 {
-    use \Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
+    use ArrayPrettyPrintTrait;
 
     /**
      * @var \Viserio\Component\Contracts\Filesystem\Filesystem

@@ -191,7 +191,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         \clearstatcache(false, $path);
         $permissions = \octdec(\mb_substr(\sprintf('%o', \fileperms($path)), -4));
 
-        return $permissions & 0044 ?
+        return ($permissions & 0044) ?
             FilesystemContract::VISIBILITY_PUBLIC :
             FilesystemContract::VISIBILITY_PRIVATE;
     }
@@ -471,17 +471,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $destination = self::normalizeDirectorySeparator($destination);
         $overwrite   = $options['overwrite'] ?? false;
 
-        if ($overwrite && $this->isDirectory($destination)) {
-            if (! $this->deleteDirectory($destination)) {
-                return false;
-            }
-        }
-
-        if (@\rename($directory, $destination) !== true) {
+        if ($overwrite && $this->isDirectory($destination) && ! $this->deleteDirectory($destination)) {
             return false;
         }
 
-        return true;
+        return @\rename($directory, $destination);
     }
 
     /**

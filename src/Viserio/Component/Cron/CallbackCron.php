@@ -64,7 +64,7 @@ class CallbackCron extends Cron
         try {
             $response = $this->getInvoker()->call($this->callback, $this->parameters);
         } finally {
-            if ($this->description) {
+            if ($this->description && $this->cachePool->hasItem($this->getMutexName())) {
                 $this->cachePool->deleteItem($this->getMutexName());
             }
         }
@@ -83,7 +83,7 @@ class CallbackCron extends Cron
      */
     public function withoutOverlapping(): CronContract
     {
-        if (! isset($this->description)) {
+        if ($this->description !== null) {
             throw new LogicException(
                 'A scheduled cron job description is required to prevent overlapping. ' .
                 "Use the 'description' method before 'withoutOverlapping'."

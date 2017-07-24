@@ -91,11 +91,11 @@ class LimitStream extends AbstractStreamDecorator
         }
 
         $offset += $this->offset;
-        if ($this->limit !== -1) {
-            if ($offset > $this->offset + $this->limit) {
-                $offset = $this->offset + $this->limit;
-            }
+
+        if ($this->limit !== -1 && $offset > $this->offset + $this->limit) {
+            $offset = $this->offset + $this->limit;
         }
+
         $this->stream->seek($offset);
     }
 

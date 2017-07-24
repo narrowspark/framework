@@ -164,7 +164,7 @@ class ContainerResolver
             return $parameters[$index];
         }
 
-        if (($class = $parameter->getClass())) {
+        if ($class = $parameter->getClass()) {
             return $this->resolve($class->name);
         }
 

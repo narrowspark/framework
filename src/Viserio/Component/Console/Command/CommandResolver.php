@@ -105,7 +105,7 @@ final class CommandResolver
             }
         };
 
-        $command = $this->createCommand($expression, $commandFunction);
+        $command = self::createCommand($expression, $commandFunction);
         $command->setAliases($aliases);
         $command->defaults($this->defaultsViaReflection($command, $callable));
 

@@ -106,7 +106,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function bind($abstract, $concrete = null): void
     {
-        $concrete = ($concrete) ? $concrete : $abstract;
+        $concrete = $concrete ?? $abstract;
 
         if (\is_array($abstract)) {
             $this->bindService(\key($abstract), $concrete);
@@ -141,7 +141,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function singleton(string $abstract, $concrete = null): void
     {
-        $concrete = ($concrete) ? $concrete : $abstract;
+        $concrete = $concrete ?? $abstract;
 
         $this->bindSingleton($abstract, $concrete);
     }

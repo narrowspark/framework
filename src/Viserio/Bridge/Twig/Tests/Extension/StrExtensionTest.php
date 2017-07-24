@@ -9,7 +9,7 @@ use Viserio\Component\Support\Str;
 
 class StrExtensionTest extends MockeryTestCase
 {
-    protected $customFilters = [
+    private static $customFilters = [
         'camel_case',
         'snake_case',
         'studly_case',
@@ -61,7 +61,7 @@ class StrExtensionTest extends MockeryTestCase
         self::assertInternalType('array', $filters);
 
         foreach ($filters as $filter) {
-            if (! \in_array($filter->getName(), $this->customFilters, true)) {
+            if (! \in_array($filter->getName(), self::$customFilters, true)) {
                 continue;
             }
 
@@ -80,7 +80,7 @@ class StrExtensionTest extends MockeryTestCase
         $filters = $string->getFilters();
 
         foreach ($filters as $filter) {
-            if (\in_array($filter->getName(), $this->customFilters, true)) {
+            if (\in_array($filter->getName(), self::$customFilters, true)) {
                 continue;
             }
 

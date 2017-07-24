@@ -35,12 +35,12 @@ class RouteTreeBuilderTest extends TestCase
     {
         return [
             [
-                [(new Route(self::HTTP_METHOD_VARS, '', null))],
+                [new Route(self::HTTP_METHOD_VARS, '', null)],
                 new MatchedRouteDataMap([[self::HTTP_METHOD_VARS, [[], 'HEAD|GET|POST|PUT|PATCH|DELETE|PURGE|OPTIONS|TRACE|CONNECT|TRACE|LINK|UNLINK']]]),
                 [],
             ],
             [
-                [(new Route(self::HTTP_METHOD_VARS, '/', null))],
+                [new Route(self::HTTP_METHOD_VARS, '/', null)],
                 null,
                 [
                     1 => new ChildrenNodeCollection([
@@ -67,7 +67,7 @@ class RouteTreeBuilderTest extends TestCase
             ],
             [
                 [
-                    (new Route(['GET'], '/first/{param1}', null)),
+                    new Route(['GET'], '/first/{param1}', null),
                     (new Route(['GET'], '/{param1}/{param2}', null))->where(['param1', 'param2'], Pattern::ALPHA),
                 ],
                 null,
@@ -100,12 +100,12 @@ class RouteTreeBuilderTest extends TestCase
             ],
             [
                 [
-                    (new Route(self::HTTP_METHOD_VARS, '', null)),
-                    (new Route(self::HTTP_METHOD_VARS, '/main', null)),
-                    (new Route(['GET'], '/main/place', null)),
-                    (new Route(['POST'], '/main/place', null)),
-                    (new Route(self::HTTP_METHOD_VARS, '/main/thing', null)),
-                    (new Route(self::HTTP_METHOD_VARS, '/main/thing/abc', null)),
+                    new Route(self::HTTP_METHOD_VARS, '', null),
+                    new Route(self::HTTP_METHOD_VARS, '/main', null),
+                    new Route(['GET'], '/main/place', null),
+                    new Route(['POST'], '/main/place', null),
+                    new Route(self::HTTP_METHOD_VARS, '/main/thing', null),
+                    new Route(self::HTTP_METHOD_VARS, '/main/thing/abc', null),
                     (new Route(self::HTTP_METHOD_VARS, '/user/{name}', null))->where('name', Pattern::ANY),
                     (new Route(self::HTTP_METHOD_VARS, '/user/{name}/edit', null))->where('name', Pattern::ANY),
                     (new Route(self::HTTP_METHOD_VARS, '/user/create', null))->addParameter('user.create', ''),

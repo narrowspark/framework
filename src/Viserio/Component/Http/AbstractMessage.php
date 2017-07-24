@@ -20,7 +20,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @var array
      */
-    protected static $validProtocolVersions = [
+    private static $validProtocolVersions = [
         '1.0' => true,
         '1.1' => true,
         '2.0' => true,

@@ -98,7 +98,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function prependMiddleware(string $middleware): self
     {
-        if (\array_search($middleware, $this->middlewares, true) === false) {
+        if (\in_array($middleware, $this->middlewares, true) === false) {
             \array_unshift($this->middlewares, $middleware);
         }
 
@@ -114,7 +114,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function pushMiddleware(string $middleware): self
     {
-        if (\array_search($middleware, $this->middlewares, true) === false) {
+        if (\in_array($middleware, $this->middlewares, true) === false) {
             $this->middlewares[] = $middleware;
         }
 

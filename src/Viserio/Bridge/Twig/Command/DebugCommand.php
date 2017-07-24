@@ -38,7 +38,7 @@ class DebugCommand extends Command
         if (! $container->has(Environment::class)) {
             $this->error('The Twig environment needs to be set.');
 
-            return;
+            return 1;
         }
 
         $twig = $container->get(Environment::class);
@@ -101,26 +101,12 @@ class DebugCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getOptions(): array
-    {
-        return [
-            [
-                'format',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The output format (text or json)',
-                'text',
-            ],
-        ];
-    }
-
-    /**
      * Get twig metadata.
      *
      * @param string $type
      * @param object $entity
+     *
+     * @throws \UnexpectedValueException
      *
      * @return mixed
      */
@@ -131,19 +117,19 @@ class DebugCommand extends Command
         }
 
         if ($type === 'tests') {
-            return;
+            return null;
         }
 
         if ($type === 'functions' || $type === 'filters') {
             $cb = $entity->getCallable();
 
             if ($cb === null) {
-                return;
+                return null;
             }
 
             if (\is_array($cb)) {
                 if (! \method_exists($cb[0], $cb[1])) {
-                    return;
+                    return null;
                 }
 
                 $refl = new ReflectionMethod($cb[0], $cb[1]);
@@ -182,6 +168,24 @@ class DebugCommand extends Command
 
             return $args;
         }
+
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getOptions(): array
+    {
+        return [
+            [
+                'format',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The output format (text or json)',
+                'text',
+            ],
+        ];
     }
 
     /**
@@ -223,5 +227,7 @@ class DebugCommand extends Command
         if ($type === 'filters') {
             return $meta ? '(' . \implode(', ', $meta) . ')' : '';
         }
+
+        return '';
     }
 }

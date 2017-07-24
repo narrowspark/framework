@@ -215,7 +215,7 @@ class OptionsResolverTest extends MockeryTestCase
             $config,
             'orm_default'
         );
-        $defaultOptions = $stub->getDefaultOptions();
+        $defaultOptions = ConnectionDefaultOptionsMandatoryContainetIdConfiguration::getDefaultOptions();
 
         self::assertCount(2, $options);
         self::assertArrayHasKey('params', $options);

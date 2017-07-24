@@ -170,7 +170,7 @@ class Store implements StoreContract
                     throw new SuspiciousOperationException();
                 }
                 $this->started = true;
-                $this->requestsCount += 1;
+                ++$this->requestsCount;
             }
         }
 

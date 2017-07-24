@@ -375,7 +375,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
         };
 
         foreach ($this->data['logs'] as $log) {
-            if (isset($log['priority']) && (\in_array($log['priority'], [Logger::ERROR, Logger::INFO], true))) {
+            if (isset($log['priority']) && \in_array($log['priority'], [Logger::ERROR, Logger::INFO], true)) {
                 $infoAndErrorLogs[] = $formatLog($log);
             } elseif (isset($log['priority']) && $log['priority'] === Logger::DEBUG) {
                 $debugLogs[] = $formatLog($log);

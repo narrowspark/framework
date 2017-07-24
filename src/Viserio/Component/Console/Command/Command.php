@@ -79,7 +79,7 @@ abstract class Command extends BaseCommand
     /**
      * The name and signature of the console command.
      *
-     * @var string
+     * @var null|string
      */
     protected $signature;
 
@@ -91,7 +91,7 @@ abstract class Command extends BaseCommand
         // We will go ahead and set the name, description, and parameters on console
         // commands just to make things a little easier on the developer. This is
         // so they don't have to all be manually specified in the constructors.
-        if (isset($this->signature)) {
+        if ($this->signature !== null) {
             $this->configureUsingFluentDefinition();
         } else {
             parent::__construct($this->name);
@@ -101,7 +101,7 @@ abstract class Command extends BaseCommand
 
         $this->setHidden($this->hidden);
 
-        if (! isset($this->signature)) {
+        if ($this->signature === null) {
             $this->specifyParameters();
         }
     }
@@ -482,7 +482,7 @@ abstract class Command extends BaseCommand
      */
     protected function configureUsingFluentDefinition(): void
     {
-        $arr = (new ExpressionParser())->parse($this->signature);
+        $arr = ExpressionParser::parse($this->signature);
 
         parent::__construct($arr['name']);
 

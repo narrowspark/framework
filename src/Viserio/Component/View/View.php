@@ -97,7 +97,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @param string $key
      *
-     * @return null|bool
+     * @return void
      */
     public function __unset($key)
     {

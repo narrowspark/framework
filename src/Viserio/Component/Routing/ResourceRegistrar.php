@@ -20,7 +20,7 @@ class ResourceRegistrar
      *
      * @var array
      */
-    protected $resourceDefaults = [
+    protected static $resourceDefaults = [
         'index',
         'create',
         'store',
@@ -82,7 +82,7 @@ class ResourceRegistrar
      */
     public function register(string $name, string $controller, array $options = []): void
     {
-        if (isset($options['parameters']) && count($this->parameters) === 0) {
+        if (isset($options['parameters']) && \count((array) $this->parameters) === 0) {
             $this->parameters = $options['parameters'];
         }
 
@@ -111,7 +111,7 @@ class ResourceRegistrar
         // the base resources.
         $base = $this->getResourceWildcard($resource);
 
-        $defaults = $this->resourceDefaults;
+        $defaults = self::$resourceDefaults;
 
         foreach ($this->getResourceMethods($defaults, $options) as $m) {
             $this->{'addResource' . ucfirst($m)}($name, $base, $controller, $options);

@@ -75,11 +75,11 @@ class Listener
      *
      * @param string $connection
      * @param string $queue
-     * @param string $delay
-     * @param string $memory
+     * @param int    $delay
+     * @param int    $memory
      * @param int    $timeout
      */
-    public function listen(string $connection, string $queue, string $delay, string $memory, int $timeout = 60): void
+    public function listen(string $connection, string $queue, int $delay, int $memory, int $timeout = 60): void
     {
         $process = $this->createProcess($connection, $queue, $delay, $memory, $timeout);
 

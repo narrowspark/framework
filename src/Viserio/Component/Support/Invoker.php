@@ -23,7 +23,7 @@ class Invoker implements InvokerInterface
      *
      * @var InvokerInterface
      */
-    protected $invoker;
+    private $invoker;
 
     /**
      * Inject settings.

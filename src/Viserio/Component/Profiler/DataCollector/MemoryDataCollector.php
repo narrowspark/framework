@@ -9,13 +9,6 @@ use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
 class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareContract
 {
     /**
-     * Collected data.
-     *
-     * @var array
-     */
-    protected $data;
-
-    /**
      * Create new memory data collector.
      */
     public function __construct()

@@ -519,10 +519,8 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $overwrite = $options['overwrite'] ?? false;
 
-        if ($overwrite && $this->isDirectory($destination)) {
-            if (! $this->deleteDirectory($destination)) {
-                return false;
-            }
+        if ($overwrite && $this->isDirectory($destination) && ! $this->deleteDirectory($destination)) {
+            return false;
         }
 
         $copy = $this->copyDirectory(
