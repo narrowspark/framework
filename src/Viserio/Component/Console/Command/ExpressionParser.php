@@ -19,7 +19,7 @@ final class ExpressionParser
      */
     public static function parse(string $expression): array
     {
-        \preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
+        \preg_match_all('/^\S*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
 
         if (\trim($expression) === '') {
             throw new InvalidCommandExpression('The expression was empty.');

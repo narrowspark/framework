@@ -236,7 +236,7 @@ final class XmlUtils
                 return '0x' === $value[0] . $value[1] ? \hexdec($value) : (float) $value;
             case \preg_match('/^0x[0-9a-f]++$/i', $value):
                 return \hexdec($value);
-            case \preg_match('/^(-|\+)?[0-9]+(\.[0-9]+)?$/', $value):
+            case \preg_match('/^(-|\+)?\d+(\.\d+)?$/', $value):
                 return (float) $value;
             default:
                 return $value;
@@ -260,7 +260,7 @@ final class XmlUtils
 
         if (\is_callable($schemaOrCallable)) {
             try {
-                $valid = \call_user_func($schemaOrCallable, $dom, $internalErrors);
+                $valid = $schemaOrCallable($dom, $internalErrors);
             } catch (Throwable $exception) {
                 $valid = false;
             }

@@ -17,7 +17,7 @@ class TomlParser implements ParserContract
      */
     public function __construct()
     {
-        if (! \class_exists('Yosymfony\\Toml\\Toml')) {
+        if (! \class_exists(YosymfonyToml::class)) {
             throw new RuntimeException('Unable to read toml, the Toml Parser is not installed.');
         }
     }

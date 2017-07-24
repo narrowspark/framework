@@ -207,7 +207,7 @@ class PumpStream implements StreamInterface
             return $this->metadata;
         }
 
-        return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
+        return $this->metadata[$key] ?? null;
     }
 
     /**

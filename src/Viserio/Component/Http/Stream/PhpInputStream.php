@@ -44,7 +44,11 @@ class PhpInputStream extends AbstractStreamDecorator
             return $this->cache;
         }
 
-        $this->getContents();
+        try {
+            $this->getContents();
+        } catch (RuntimeException) {
+            return '';
+        }
 
         return $this->cache;
     }

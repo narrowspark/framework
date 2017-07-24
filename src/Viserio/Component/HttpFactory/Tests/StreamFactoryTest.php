@@ -47,7 +47,7 @@ class StreamFactoryTest extends TestCase
 
     protected function createTemporaryFile()
     {
-        return \tempnam(\sys_get_temp_dir(), \uniqid());
+        return \tempnam(\sys_get_temp_dir(), \uniqid('', true));
     }
 
     protected function createTemporaryResource($content = null)

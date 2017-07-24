@@ -51,7 +51,7 @@ class EnvTest extends TestCase
         }));
         self::assertFalse(Env::get('TEST_FALSE'));
         self::assertFalse(Env::get('TEST_FALSE_2'));
-        self::assertSame(null, Env::get('TEST_NULL'));
+        self::assertNull(Env::get('TEST_NULL'));
         self::assertSame(25, Env::get('TEST_NUM'));
         self::assertSame('', Env::get('TEST_EMPTY'));
         self::assertSame('teststring', Env::get('TEST_NORMAL'));

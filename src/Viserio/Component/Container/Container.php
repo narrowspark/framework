@@ -13,7 +13,6 @@ use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
-use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionClass;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
@@ -97,7 +96,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
         $this->instance(Container::class, $this);
         $this->instance(ContainerContract::class, $this);
         $this->instance(ContainerInterface::class, $this);
-        $this->instance(PsrContainerInterface::class, $this);
         $this->instance(FactoryContract::class, $this);
     }
 

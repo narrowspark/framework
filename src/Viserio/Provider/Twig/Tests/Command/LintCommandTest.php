@@ -118,7 +118,7 @@ class LintCommandTest extends MockeryTestCase
                 'viserio' => [
                     'view' => [
                         'paths' => [
-                            $path ?? __DIR__ . '/../Fixtures/',
+                             __DIR__ . '/../Fixtures/',
                         ],
                     ],
                 ],
@@ -126,7 +126,6 @@ class LintCommandTest extends MockeryTestCase
         ];
         $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
         $loader = new Loader($finder);
-        $twig   = new Environment($loader);
 
         $application = new Application();
         $application->setContainer(new ArrayContainer(

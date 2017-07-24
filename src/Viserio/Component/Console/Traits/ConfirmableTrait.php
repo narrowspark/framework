@@ -17,8 +17,8 @@ trait ConfirmableTrait
      */
     public function confirmToProceed(string $warning = 'Application is in Production mode!', $callback = null): bool
     {
-        $callback      = null === $callback ? $this->getDefaultConfirmCallback() : $callback;
-        $shouldConfirm = $callback instanceof Closure ? \call_user_func($callback) : $callback;
+        $callback      = $callback ?? $this->getDefaultConfirmCallback();
+        $shouldConfirm = $callback instanceof Closure ? $callback() : $callback;
 
         if ($shouldConfirm) {
             if ($this->option('force')) {

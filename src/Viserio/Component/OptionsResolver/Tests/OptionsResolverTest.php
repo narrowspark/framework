@@ -27,6 +27,7 @@ use Viserio\Component\OptionsResolver\Tests\Fixtures\UniversalContainerIdConfigu
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedConfigurationFixture;
 use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedDimensionalConfigurationFixture;
 use  Viserio\Component\OptionsResolver\Tests\Fixtures\ValidateDefaultValueOnOverwriteFixture;
+use Doctrine\DBAL\Driver\PDOMySql\Driver;
 
 /**
  * Code in this test is taken from interop-config.
@@ -443,7 +444,7 @@ class OptionsResolverTest extends MockeryTestCase
         self::assertArrayHasKey('driverClass', $options);
         self::assertArrayHasKey('params', $options);
 
-        $driverClass = 'Doctrine\DBAL\Driver\PDOMySql\Driver';
+        $driverClass = Driver::class;
         $host        = 'localhost';
         $dbname      = 'database';
         $user        = 'username';
@@ -474,7 +475,7 @@ class OptionsResolverTest extends MockeryTestCase
                 // container id
                 'orm_default' => [
                     // mandatory params
-                    'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
+                    'driverClass' => Driver::class,
                     'params'      => [
                         'host'     => 'localhost',
                         'port'     => '3306',

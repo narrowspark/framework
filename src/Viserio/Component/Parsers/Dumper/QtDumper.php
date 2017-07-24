@@ -42,8 +42,8 @@ class QtDumper implements DumperContract
                 $attributes  = $value['translation']['attributes'];
 
                 if (\is_array($attributes)) {
-                    foreach ($attributes as $key => $value) {
-                        $translation->setAttribute($key, $value);
+                    foreach ($attributes as $k => $v) {
+                        $translation->setAttribute($k, $v);
                     }
                 }
 

@@ -350,7 +350,6 @@ class RequestTest extends AbstractMessageTest
             'MOVE'      => ['MOVE'],
             'LOCK'      => ['LOCK'],
             'UNLOCK'    => ['UNLOCK'],
-            'UNLOCK'    => ['UNLOCK'],
             // Arbitrary methods
             '#!ALPHA-1234&%' => ['#!ALPHA-1234&%'],
         ];

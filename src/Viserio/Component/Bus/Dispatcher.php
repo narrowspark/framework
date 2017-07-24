@@ -139,11 +139,11 @@ class Dispatcher implements DispatcherContract
 
             $handler = $this->resolveHandler($command);
 
-            if ($afterResolving) {
-                \call_user_func($afterResolving, $handler);
+            if ($afterResolving !== null) {
+                $afterResolving($handler);
             }
 
-            return \call_user_func([$handler, $this->getHandlerMethod($command)], $command);
+            return $handler->{$this->getHandlerMethod($command)}($command);
         });
     }
 

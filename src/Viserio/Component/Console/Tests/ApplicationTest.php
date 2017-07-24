@@ -164,7 +164,7 @@ class ApplicationTest extends MockeryTestCase
     public function testItShouldRunACommandWithAnOption(): void
     {
         $this->application->command('greet [-i|--iterations=]', function ($iterations, OutputInterface $output): void {
-            $output->write($iterations === null ? 'null' : $iterations);
+            $output->write($iterations ?? 'null');
         });
 
         self::assertOutputIs('greet', 'null');

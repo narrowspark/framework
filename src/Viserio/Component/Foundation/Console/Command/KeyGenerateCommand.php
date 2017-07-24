@@ -64,7 +64,7 @@ class KeyGenerateCommand extends Command
         $container  = $this->getContainer();
         $currentKey = $container->get(RepositoryContract::class)->get('viserio.app.key', '');
 
-        if (\mb_strlen($currentKey) !== 0 && (! $this->confirmToProceed())) {
+        if ($currentKey !== '' && (! $this->confirmToProceed())) {
             return false;
         }
 

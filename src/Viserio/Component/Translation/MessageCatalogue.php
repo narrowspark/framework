@@ -77,7 +77,7 @@ class MessageCatalogue implements MessageCatalogueContract
             return $this->messages;
         }
 
-        return isset($this->messages[$domain]) ? $this->messages[$domain] : [];
+        return $this->messages[$domain] ?? [];
     }
 
     /**

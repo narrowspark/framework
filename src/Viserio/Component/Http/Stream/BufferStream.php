@@ -48,7 +48,11 @@ class BufferStream implements StreamInterface
      */
     public function __toString()
     {
-        return $this->getContents();
+        try {
+            return $this->getContents();
+        } catch (RuntimeException) {
+            return '';
+        }
     }
 
     /**
@@ -131,7 +135,7 @@ class BufferStream implements StreamInterface
      */
     public function eof()
     {
-        return \mb_strlen($this->buffer) === 0;
+        return $this->buffer === '';
     }
 
     /**

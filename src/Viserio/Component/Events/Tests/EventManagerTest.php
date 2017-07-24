@@ -415,6 +415,6 @@ class EventManagerTest extends TestCase
     {
         $ee = $this->dispatcher;
 
-        return self::assertEquals($expected, \count($ee->getListeners($eventName)));
+        return self::assertCount($expected, $ee->getListeners($eventName));
     }
 }

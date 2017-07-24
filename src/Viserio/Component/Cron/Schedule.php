@@ -174,7 +174,7 @@ class Schedule
                 }, $value);
 
                 $value = \implode(' ', $value);
-            } elseif (! \is_numeric($value) && ! \preg_match('/^(-.$|--.*)/i', $value)) {
+            } elseif (! \is_numeric($value) && ! \preg_match('/^(-.$|--.*)/', $value)) {
                 $value = \escapeshellarg($value);
             }
 

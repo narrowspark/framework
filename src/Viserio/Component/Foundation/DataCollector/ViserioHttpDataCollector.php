@@ -401,7 +401,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $preparedParams = [];
 
         foreach ($params as $key => $value) {
-            if (\preg_match('/(_KEY|_PASSWORD|_PW|_SECRET)/s', $key)) {
+            if (\preg_match('/(_KEY|_PASSWORD|_PW|_SECRET)/', $key)) {
                 $preparedParams[$key] = '******';
             } else {
                 $preparedParams[$key] = $value;

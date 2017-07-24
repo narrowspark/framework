@@ -205,7 +205,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $html = '<div class="profiler-tabs row">';
 
         foreach ($data as $key => $value) {
-            $id = \uniqid($key . '-');
+            $id = \uniqid($key . '-', true);
 
             $html .= '<div class="profiler-tabs-tab col">';
             $html .= '<input type="radio" name="tabgroup" id="tab-' . $id . '">';
@@ -258,7 +258,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
                     $html .= '<tr>';
 
                     if (\is_array($values)) {
-                        foreach ($values as $key => $value) {
+                        foreach ($values as $k => $value) {
                             $html .= \sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($value) : $value));
                         }
                     } else {
@@ -290,7 +290,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $selected = false;
 
         foreach ($data as $key => $value) {
-            $id = 'content-' . $key . '-' . \uniqid('');
+            $id = 'content-' . $key . '-' . \uniqid('', true);
 
             $selected = $selected === false ? $selected = 'selected' : '';
 

@@ -24,7 +24,7 @@ class PhpCacheTraceableCacheDecoratorTest extends TestCase
         $call = $calls[0];
 
         self::assertSame('invalidateTags', $call->name);
-        self::assertSame(true, $call->result);
+        self::assertTrue($call->result);
         self::assertSame(0, $call->hits);
         self::assertSame(0, $call->misses);
         self::assertNotEmpty($call->start);
@@ -42,7 +42,7 @@ class PhpCacheTraceableCacheDecoratorTest extends TestCase
         $call = $calls[0];
 
         self::assertSame('invalidateTag', $call->name);
-        self::assertSame(true, $call->result);
+        self::assertTrue($call->result);
         self::assertSame(0, $call->hits);
         self::assertSame(0, $call->misses);
         self::assertNotEmpty($call->start);

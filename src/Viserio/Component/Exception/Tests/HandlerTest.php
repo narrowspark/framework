@@ -41,7 +41,7 @@ class HandlerTest extends MockeryTestCase
         $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
         $handler->addDisplayer(new WhoopsDisplayer());
 
-        self::assertSame(3, \count($handler->getDisplayers()));
+        self::assertCount(3, $handler->getDisplayers());
     }
 
     public function testAddAndGetTransformer(): void
@@ -55,7 +55,7 @@ class HandlerTest extends MockeryTestCase
         $handler->addTransformer(new CommandLineTransformer());
         $handler->addTransformer(new CommandLineTransformer());
 
-        self::assertSame(1, \count($handler->getTransformers()));
+        self::assertCount(1, $handler->getTransformers());
     }
 
     public function testAddAndGetFilter(): void
@@ -69,7 +69,7 @@ class HandlerTest extends MockeryTestCase
         $handler->addFilter(new VerboseFilter($container));
         $handler->addFilter(new VerboseFilter($container));
 
-        self::assertSame(1, \count($handler->getFilters()));
+        self::assertCount(1, $handler->getFilters());
     }
 
     public function testReportError(): void

@@ -92,7 +92,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     protected function detectWebEnvironment(Closure $callback): string
     {
-        return \call_user_func($callback);
+        return $callback();
     }
 
     /**

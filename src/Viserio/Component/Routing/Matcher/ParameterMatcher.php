@@ -28,7 +28,7 @@ class ParameterMatcher
      */
     public function __construct($names, string $regex)
     {
-        $this->names = \is_array($names) ? $names : [$names];
+        $this->names = (array) $names;
         $this->regex = $regex;
     }
 

@@ -23,7 +23,7 @@ class DebugCommandTest extends MockeryTestCase
                 'viserio' => [
                     'view' => [
                         'paths' => [
-                            $path ?? __DIR__ . '/../Fixtures/',
+                            __DIR__ . '/../Fixtures/',
                         ],
                     ],
                 ],
@@ -31,7 +31,6 @@ class DebugCommandTest extends MockeryTestCase
         ];
         $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
         $loader = new ArrayLoader([]);
-        $twig   = new Environment($loader);
 
         $application = new Application('1');
         $application->setContainer(new ArrayContainer(
@@ -55,7 +54,7 @@ class DebugCommandTest extends MockeryTestCase
     public function testDebug(): void
     {
         $tester   = $this->createCommandTester();
-        $ret      = $tester->execute([], ['decorated' => false]);
+        $tester->execute([], ['decorated' => false]);
 
         self::assertTrue(\is_string($tester->getDisplay(true)));
     }
@@ -63,7 +62,7 @@ class DebugCommandTest extends MockeryTestCase
     public function testDebugJsonFormat(): void
     {
         $tester   = $this->createCommandTester();
-        $ret      = $tester->execute(['--format' => 'json'], ['decorated' => false]);
+        $tester->execute(['--format' => 'json'], ['decorated' => false]);
 
         self::assertTrue(\is_string($tester->getDisplay(true)));
     }

@@ -141,9 +141,9 @@ class View implements ArrayAccess, ViewContract
         try {
             $contents = $this->getContents();
 
-            $response = isset($callback) ? \call_user_func($callback, $this, $contents) : null;
+            $response = isset($callback) ? $callback($this, $contents) : null;
 
-            return $response !== null ? $response : $contents;
+            return $response ?? $contents;
         } catch (Throwable $exception) {
             throw $exception;
         }
@@ -311,7 +311,7 @@ class View implements ArrayAccess, ViewContract
             if ($value instanceof Renderable) {
                 $data[$key] = $value->render();
             } elseif ($value instanceof Closure) {
-                $data[$key] = \call_user_func($value);
+                $data[$key] = $value();
             }
         }
 

@@ -18,11 +18,11 @@ class ArrayTransportTest extends TestCase
         $transport = new ArrayTransport();
         $transport->send($message);
 
-        self::assertSame(1, \count($transport->getMessages()));
+        self::assertCount(1, $transport->getMessages());
         self::assertSame($message, $transport->getMessages()[0]);
 
         $transport->flush();
 
-        self::assertSame(0, \count($transport->getMessages()));
+        self::assertCount(0, $transport->getMessages());
     }
 }

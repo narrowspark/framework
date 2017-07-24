@@ -67,7 +67,7 @@ class ViewTest extends MockeryTestCase
 
         $result = $view->nest('key', 'foo', ['data']);
 
-        self::assertInstanceOf('Viserio\Component\View\View', $result);
+        self::assertInstanceOf(View::class, $result);
     }
 
     public function testViewAcceptsArrayableImplementations(): void

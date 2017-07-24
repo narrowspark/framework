@@ -12,11 +12,13 @@ class YamlDumper implements DumperContract
 {
     /**
      * Create a new Yaml parser.
+     *
+     * @throws \RuntimeException
      */
     public function __construct()
     {
         // @codeCoverageIgnoreStart
-        if (! \class_exists('Symfony\\Component\\Yaml\\Yaml')) {
+        if (! \class_exists(SymfonyYaml::class)) {
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
         // @codeCoverageIgnoreEnd

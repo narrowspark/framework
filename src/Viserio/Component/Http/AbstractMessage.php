@@ -225,11 +225,7 @@ abstract class AbstractMessage implements MessageInterface
         $this->headerNames = $this->headers = [];
 
         foreach ($headers as $header => $value) {
-            if (! \is_array($value)) {
-                $value = [$value];
-            }
-
-            $value      = $this->trimHeaderValues($this->filterHeaderValue($value));
+            $value      = $this->trimHeaderValues($this->filterHeaderValue((array) $value));
             $normalized = \mb_strtolower($header);
 
             if (isset($this->headerNames[$normalized])) {

@@ -35,7 +35,7 @@ class StaticalProxyTest extends MockeryTestCase
 
         StaticalProxyStub::clearResolvedInstance('baz');
 
-        self::assertTrue(empty(StaticalProxyStub::getResolvedInstance()['baz']));
+        self::assertEmpty(StaticalProxyStub::getResolvedInstance()['baz']);
     }
 
     public function testGetInstance(): void

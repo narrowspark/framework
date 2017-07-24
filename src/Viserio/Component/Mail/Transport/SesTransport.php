@@ -32,9 +32,10 @@ class SesTransport extends AbstractTransport
         $this->beforeSendPerformed($message);
 
         $headers = $message->getHeaders();
+        $key     = $message->getSender() ?? $message->getFrom();
 
         $headers->addTextHeader('X-SES-Message-ID', $this->ses->sendRawEmail([
-            'Source'     => \key($message->getSender() ?? $message->getFrom()),
+            'Source'     => \key($key),
             'RawMessage' => [
                 'Data' => $message->toString(),
             ],

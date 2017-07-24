@@ -318,7 +318,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $directory = self::normalizeDirectorySeparator($directory);
 
-        $files = \array_diff(\scandir($directory), ['..', '.']);
+        $files = \array_diff(\scandir($directory), ['..', '.'], SCANDIR_SORT_ASCENDING);
 
         // To get the appropriate files, we'll simply scan the directory and filter
         // out any "files" that are not truly files so we do not end up with any

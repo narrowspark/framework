@@ -19,7 +19,7 @@ trait CookieValidatorTrait
      */
     protected function validateName(string $name): void
     {
-        if (\mb_strlen($name) < 1) {
+        if ($name === '') {
             throw new InvalidArgumentException('The name cannot be empty');
         }
 

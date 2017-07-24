@@ -111,7 +111,7 @@ class UploadedFileTest extends TestCase
         $upload->moveTo($to);
 
         self::assertFileExists($to);
-        self::assertEquals($stream->__toString(), \file_get_contents($to));
+        self::assertStringEqualsFile($to, $stream->__toString());
     }
 
     public function invalidMovePaths()
@@ -171,7 +171,7 @@ class UploadedFileTest extends TestCase
 
         $upload->moveTo($to);
 
-        self::assertTrue(\file_exists($to));
+        self::assertFileExists($to);
 
         $upload->moveTo($to);
     }
@@ -236,7 +236,7 @@ class UploadedFileTest extends TestCase
     {
         $uploadedFile = new UploadedFile('not ok', 0, $status);
 
-        $uploadedFile->moveTo(__DIR__ . '/' . \uniqid());
+        $uploadedFile->moveTo(__DIR__ . '/' . \uniqid('', true));
     }
 
     /**

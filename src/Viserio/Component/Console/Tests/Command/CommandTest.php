@@ -101,7 +101,7 @@ class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        self::assertSame(null, $command->argument('name'));
+        self::assertNull($command->argument('name'));
         self::assertInternalType('array', $command->argument());
     }
 }
