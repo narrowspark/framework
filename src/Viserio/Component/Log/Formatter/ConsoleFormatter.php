@@ -185,7 +185,7 @@ class ConsoleFormatter implements FormatterInterface
      *
      * @codeCoverageIgnore
      */
-    private function castObjectClass()
+    private function castObjectClass(): object
     {
         return new class($this->options) {
             /**

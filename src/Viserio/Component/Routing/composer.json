@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                      : "^7.1",
+        "php"                                      : "^7.2",
         "http-interop/http-middleware"             : "^0.4",
         "narrowspark/http-status"                  : "^3.0",
         "php-di/invoker"                           : "^2.0",

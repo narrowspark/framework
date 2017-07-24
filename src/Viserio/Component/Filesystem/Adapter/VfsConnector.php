@@ -10,7 +10,7 @@ class VfsConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $config)
+    protected function getClient(array $config): object
     {
         return new Vfs();
     }
@@ -31,7 +31,7 @@ class VfsConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): VfsAdapter
+    protected function getAdapter(object $client, array $config): object
     {
         return new VfsAdapter($client);
     }

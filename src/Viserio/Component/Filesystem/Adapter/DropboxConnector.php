@@ -24,7 +24,7 @@ class DropboxConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $auth)
+    protected function getClient(array $auth): object
     {
         return new Client($auth['token']);
     }
@@ -44,7 +44,7 @@ class DropboxConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): DropboxAdapter
+    protected function getAdapter(object $client, array $config): object
     {
         return new DropboxAdapter($client, $config['prefix']);
     }

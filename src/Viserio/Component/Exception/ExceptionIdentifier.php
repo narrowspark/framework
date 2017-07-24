@@ -36,7 +36,7 @@ class ExceptionIdentifier
         }
 
         // cleanup in preparation for the identification
-        if (\count($this->identification) >= 16) {
+        if (\count((array) $this->identification) >= 16) {
             \array_shift($this->identification);
         }
 

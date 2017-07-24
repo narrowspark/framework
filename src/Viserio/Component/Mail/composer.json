@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                   : "^7.1",
+        "php"                                   : "^7.2",
         "php-di/invoker"                        : "^2.0",
         "swiftmailer/swiftmailer"               : "^6.0",
         "symfony/polyfill-mbstring"             : "^1.0",

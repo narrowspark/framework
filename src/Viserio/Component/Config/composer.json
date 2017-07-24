@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                     : "^7.1",
+        "php"                                     : "^7.2",
         "narrowspark/arr"                         : "^2.1",
         "viserio/contracts"                       : "self.version"
     },

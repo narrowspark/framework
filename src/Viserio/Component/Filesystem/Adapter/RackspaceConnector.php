@@ -46,7 +46,7 @@ class RackspaceConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $auth)
+    protected function getClient(array $auth): object
     {
         $client = new Rackspace($auth['endpoint'], [
             'username' => $auth['username'],
@@ -66,7 +66,7 @@ class RackspaceConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): RackspaceAdapter
+    protected function getAdapter(object $client, array $config): object
     {
         return new RackspaceAdapter($client);
     }

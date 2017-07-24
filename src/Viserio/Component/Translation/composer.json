@@ -18,7 +18,8 @@
         }
     ],
     "require": {
-        "php"                                          : "^7.1",
+        "php"                                          : "^7.2",
+        "ext-intl"                                     : "*",
         "psr/log"                                      : "^1.0",
         "symfony/polyfill-mbstring"                    : "^1.0",
         "symfony/polyfill-intl-icu"                    : "^1.3",

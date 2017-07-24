@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                      : "^7.1",
+        "php"                                      : "^7.2",
         "paragonie/password_lock"                  : "^3.0",
         "viserio/contracts"                        : "self.version"
     },

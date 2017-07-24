@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                        : "^7.1",
+        "php"                                        : "^7.2",
         "http-interop/http-factory"                  : "^0.3",
         "narrowspark/http-status"                    : "^3.0",
         "psr/container"                              : "^1.0",

@@ -36,7 +36,7 @@ abstract class AbstractConnector implements ConnectorContract
      *
      * @return object
      */
-    abstract protected function getClient(array $auth);
+    abstract protected function getClient(array $auth): object;
 
     /**
      * Get the configuration.
@@ -57,5 +57,5 @@ abstract class AbstractConnector implements ConnectorContract
      *
      * @return object
      */
-    abstract protected function getAdapter($client, array $config);
+    abstract protected function getAdapter(object $client, array $config): object;
 }

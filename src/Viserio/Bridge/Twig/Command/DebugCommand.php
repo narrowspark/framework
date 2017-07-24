@@ -124,7 +124,7 @@ class DebugCommand extends Command
      *
      * @return mixed
      */
-    private function getMetadata(string $type, $entity)
+    private function getMetadata(string $type, object $entity)
     {
         if ($type === 'globals') {
             return $entity;
@@ -192,7 +192,7 @@ class DebugCommand extends Command
      *
      * @return string
      */
-    private function getPrettyMetadata(string $type, $entity): string
+    private function getPrettyMetadata(string $type, object $entity): string
     {
         if ($type === 'tests') {
             return '';

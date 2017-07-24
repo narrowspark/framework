@@ -45,7 +45,7 @@ class AwsS3Connector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $auth)
+    protected function getClient(array $auth): object
     {
         return new S3Client($auth);
     }
@@ -73,7 +73,7 @@ class AwsS3Connector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): AdapterInterface
+    protected function getAdapter(object $client, array $config): object
     {
         return new AwsS3v3($client, $config['bucket'], $config['prefix'], (array) $config['options']);
     }

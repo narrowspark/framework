@@ -18,7 +18,9 @@
         }
     ],
     "require": {
-        "php"                                   : "^7.1",
+        "php"                                   : "^7.2",
+        "ext-intl"                              : "*",
+        "ext-curl"                              : "*",
         "fig/http-message-util"                 : "^1.1",
         "league/uri"                            : "^5.0",
         "narrowspark/http-status"               : "^3.0",
