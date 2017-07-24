@@ -4,7 +4,6 @@ namespace Viserio\Component\Filesystem\Adapter;
 
 use Aws\S3\S3Client;
 use InvalidArgumentException;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
 use Narrowspark\Arr\Arr;
 
