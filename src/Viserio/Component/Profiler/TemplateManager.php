@@ -67,15 +67,9 @@ class TemplateManager implements RenderableContract
     {
         $flags = ENT_QUOTES;
 
-        // HHVM has all constants defined, but only ENT_IGNORE
-        // works at the moment
-        if (\defined('ENT_SUBSTITUTE') && ! \defined('HHVM_VERSION')) {
-            $flags |= ENT_SUBSTITUTE;
-        }
-
         $raw = \str_replace(\chr(9), '    ', $raw);
 
-        return \htmlspecialchars($raw, $flags, 'UTF-8');
+        return \htmlspecialchars($raw, $flags);
     }
 
     /**

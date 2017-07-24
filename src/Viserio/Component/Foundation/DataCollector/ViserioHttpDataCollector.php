@@ -304,7 +304,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         $result = [
            'uri'     => $route->getUri() ?: '-',
-           'methods' => \count($route->getMethods()) > 1 ?
+           'methods' => \count((array) $route->getMethods()) > 1 ?
                 \implode(' | ', $route->getMethods()) :
                 $route->getMethods(),
         ];
@@ -378,7 +378,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $preparedHeaders = [];
 
         foreach ($headers as $key => $value) {
-            if (\count($value) === 1) {
+            if (\count((array) $value) === 1) {
                 $preparedHeaders[$key] = $value[0];
             } else {
                 $preparedHeaders[$key] = $value;

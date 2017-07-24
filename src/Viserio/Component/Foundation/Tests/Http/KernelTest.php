@@ -69,8 +69,6 @@ class KernelTest extends MockeryTestCase
 
     public function testHandle(): void
     {
-        $response = $this->mock(ResponseInterface::class);
-
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('withAddedHeader')
             ->once()
@@ -152,9 +150,7 @@ class KernelTest extends MockeryTestCase
     public function testHandleWithException(): void
     {
         $container = $this->mock(ContainerContract::class);
-
         $exception = new Exception();
-        $response  = $this->mock(ResponseInterface::class);
 
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('withAddedHeader')
@@ -293,16 +289,6 @@ class KernelTest extends MockeryTestCase
         $kernel->bootstrap();
 
         $kernel->terminate($serverRequest, $response);
-    }
-
-    private function registerBaseProvider($container): void
-    {
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(EventsServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(RoutingServiceProvider::class));
     }
 
     private function getKernel($container)
