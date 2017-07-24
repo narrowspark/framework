@@ -20,16 +20,16 @@ addons:
 
 matrix:
   include:
-    - php: 7.1
+    - php: 7.2
       env: SETUP=basic SEND_COVERAGE=true PHPUNIT=true
-    - php: 7.1
+    - php: 7.2
       env: SETUP=basic PHPUNIT=true
-    - php: 7.1
+    - php: 7.2
       env: SETUP=stable PHPUNIT=true
-    - php: 7.1
+    - php: 7.2
       env: SETUP=lowest PHPUNIT=true
       # phpstan
-    - php: 7.1
+    - php: 7.2
       env: SETUP=basic PHPSTAN=true
       # Nightly
     - php: nightly
@@ -41,7 +41,7 @@ matrix:
   allow_failures:
     - php: nightly
     - env: SETUP=lowest PHPUNIT=true
-      php: 7.1
+      php: 7.2
   fast_finish: true
 
 cache:
