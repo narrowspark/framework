@@ -313,7 +313,7 @@ class ViewFinderTest extends MockeryTestCase
         $this->finder->addExtension('baz');
         $this->finder->addExtension('baz');
 
-        self::assertCount(6, $this->finder->getExtensions());
+        self::assertCount(8, $this->finder->getExtensions());
     }
 
     public function testPrependNamespace(): void

@@ -64,7 +64,7 @@ class CallbackCron extends Cron
         try {
             $response = $this->getInvoker()->call($this->callback, $this->parameters);
         } finally {
-            if ($this->description && $this->cachePool->hasItem($this->getMutexName())) {
+            if ($this->description) {
                 $this->cachePool->deleteItem($this->getMutexName());
             }
         }
