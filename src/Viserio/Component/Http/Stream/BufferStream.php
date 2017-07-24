@@ -50,7 +50,7 @@ class BufferStream implements StreamInterface
     {
         try {
             return $this->getContents();
-        } catch (RuntimeException) {
+        } catch (RuntimeException $exception) {
             return '';
         }
     }

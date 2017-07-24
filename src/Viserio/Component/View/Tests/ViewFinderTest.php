@@ -30,6 +30,8 @@ class ViewFinderTest extends MockeryTestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->path = self::normalizeDirectorySeparator(__DIR__ . '/' . 'Fixture');
 
         $config = $this->mock(RepositoryContract::class);
@@ -68,6 +70,7 @@ class ViewFinderTest extends MockeryTestCase
             $path,
             $this->finder->find('foo')['path']
         );
+        // cache test
         self::assertEquals(
             $path,
             $this->finder->find('foo')['path']
@@ -77,11 +80,10 @@ class ViewFinderTest extends MockeryTestCase
     public function testCascadingFileLoading(): void
     {
         $path  = self::normalizeDirectorySeparator($this->path . '/' . 'foo.phtml');
-        $path2 = self::normalizeDirectorySeparator($this->path . '/' . 'foo.php');
 
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with($path2)
+            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.php'))
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
@@ -96,41 +98,36 @@ class ViewFinderTest extends MockeryTestCase
 
     public function testDirectoryCascadingFileLoading(): void
     {
-        $path  = self::normalizeDirectorySeparator($this->path . '/' . 'foo.php');
-        $path2 = self::normalizeDirectorySeparator($this->path . '/' . 'Nested/foo.php');
-        $path3 = self::normalizeDirectorySeparator($this->path . '/' . 'foo.phtml');
-        $path4 = self::normalizeDirectorySeparator($this->path . '/' . 'foo.css');
-        $path5 = self::normalizeDirectorySeparator($this->path . '/' . 'foo.js');
-        $path6 = self::normalizeDirectorySeparator($this->path . '/' . 'foo.md');
+        $path = self::normalizeDirectorySeparator($this->path . '/' . 'Nested/foo.php');
 
         $this->finder->addLocation($this->path . '/' . 'Nested');
         $this->filesystem->shouldReceive('has')
             ->once()
+            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.php'))
+            ->andReturn(false);
+        $this->filesystem->shouldReceive('has')
+            ->once()
+            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.phtml'))
+            ->andReturn(false);
+        $this->filesystem->shouldReceive('has')
+            ->once()
+            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.css'))
+            ->andReturn(false);
+        $this->filesystem->shouldReceive('has')
+            ->once()
+            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.js'))
+            ->andReturn(false);
+        $this->filesystem->shouldReceive('has')
+            ->once()
+            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.md'))
+            ->andReturn(false);
+        $this->filesystem->shouldReceive('has')
+            ->once()
             ->with($path)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path3)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path4)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path5)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path6)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path2)
             ->andReturn(true);
 
         self::assertEquals(
-            $path2,
+            $path,
             $this->finder->find('foo')['path']
         );
     }
@@ -316,7 +313,7 @@ class ViewFinderTest extends MockeryTestCase
         $this->finder->addExtension('baz');
         $this->finder->addExtension('baz');
 
-        self::assertCount(6, $this->finder->getExtensions());
+        self::assertCount(8, $this->finder->getExtensions());
     }
 
     public function testPrependNamespace(): void

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
+use RuntimeException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Util;
 
@@ -46,7 +47,7 @@ class PhpInputStream extends AbstractStreamDecorator
 
         try {
             $this->getContents();
-        } catch (RuntimeException) {
+        } catch (RuntimeException $exception) {
             return '';
         }
 
