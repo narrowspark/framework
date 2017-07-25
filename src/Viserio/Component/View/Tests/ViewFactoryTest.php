@@ -4,10 +4,10 @@ namespace Viserio\Component\View\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\View\Engine;
+use Viserio\Component\Contracts\View\EngineResolver as EngineResolverContract;
 use Viserio\Component\Contracts\View\Finder;
 use Viserio\Component\Contracts\View\View as ViewContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\Component\Contracts\View\EngineResolver as EngineResolverContract;
 use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\Factory;
 
@@ -39,15 +39,14 @@ class ViewFactoryTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->path = self::normalizeDirectorySeparator(__DIR__ . '/' . 'Fixture');
+        $this->path               = self::normalizeDirectorySeparator(__DIR__ . '/' . 'Fixture');
         $this->engineResolverMock = $this->mock(EngineResolverContract::class);
-        $this->finderMock = $this->mock(Finder::class);
+        $this->finderMock         = $this->mock(Finder::class);
 
         $this->viewFactory = new Factory(
             $this->engineResolverMock,
             $this->finderMock
         );
-
     }
 
     public function testMakeCreatesNewViewInstanceWithProperPathAndEngine(): void
@@ -120,7 +119,7 @@ class ViewFactoryTest extends MockeryTestCase
 
     public function testRenderEachCreatesViewForEachItemInArray(): void
     {
-        $fileInfo = ['path' =>'foo.php', 'name' => 'foo', 'extension' => 'php',];
+        $fileInfo = ['path' =>'foo.php', 'name' => 'foo', 'extension' => 'php'];
 
         $factory = $this->mock('Viserio\Component\View\Factory[create]', $this->getFactoryArgs());
         $factory->shouldReceive('create')
@@ -143,11 +142,11 @@ class ViewFactoryTest extends MockeryTestCase
         $engine = $this->mock(Engine::class);
         $engine->shouldReceive('get')
             ->once()
-            ->with($fileInfo, ['__env' => $factory, 'key' => 'bar', 'value' => 'baz',])
+            ->with($fileInfo, ['__env' => $factory, 'key' => 'bar', 'value' => 'baz'])
             ->andReturn('');
         $engine->shouldReceive('get')
             ->once()
-            ->with($fileInfo, ['__env' => $factory, 'key' => 'breeze', 'value' => 'boom',])
+            ->with($fileInfo, ['__env' => $factory, 'key' => 'breeze', 'value' => 'boom'])
             ->andReturn('');
 
         $this->finderMock->shouldReceive('find')
@@ -207,7 +206,8 @@ class ViewFactoryTest extends MockeryTestCase
 
     public function testEnvironmentAddsExtensionWithCustomResolver(): void
     {
-        $resolver = function (): void {};
+        $resolver = function (): void {
+        };
         $this->finderMock->shouldReceive('addExtension')
             ->once()
             ->with('foo');

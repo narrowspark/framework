@@ -4,7 +4,6 @@ namespace Viserio\Component\Bus\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use stdClass;
 use Viserio\Component\Bus\Dispatcher;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherBasicCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSetCommand;
@@ -15,7 +14,8 @@ class DispatcherTest extends MockeryTestCase
     {
         $container = new ArrayContainer();
         $handler   = new class() {
-            public function handle() {
+            public function handle()
+            {
                 return 'foo';
             }
         };
@@ -37,11 +37,13 @@ class DispatcherTest extends MockeryTestCase
     {
         $container = new ArrayContainer();
         $handler   = new class() {
-            public function handle() {
+            public function handle()
+            {
                 return 'foo';
             }
 
-            public function after() {
+            public function after()
+            {
                 return true;
             }
         };
@@ -62,7 +64,8 @@ class DispatcherTest extends MockeryTestCase
     {
         $container = new ArrayContainer();
         $handler   = new class() {
-            public function test() {
+            public function test()
+            {
                 return 'foo';
             }
         };
@@ -140,11 +143,13 @@ class DispatcherTest extends MockeryTestCase
     {
         $container = new ArrayContainer();
         $handler   = new class() {
-            public function handle() {
+            public function handle()
+            {
                 return 'foo';
             }
 
-            public function test() {
+            public function test()
+            {
                 return 'bar';
             }
         };

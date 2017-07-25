@@ -36,6 +36,13 @@ class Application extends SymfonyConsole
     use EventsAwareTrait;
 
     /**
+     * The console application bootstrappers.
+     *
+     * @var array
+     */
+    protected static $bootstrappers = [];
+
+    /**
      * Console name.
      *
      * @var string
@@ -69,13 +76,6 @@ class Application extends SymfonyConsole
      * @var \Symfony\Component\Console\Terminal
      */
     private $terminal;
-
-    /**
-     * The console application bootstrappers.
-     *
-     * @var array
-     */
-    protected static $bootstrappers = [];
 
     /**
      * Create a new Cerebro console application.
@@ -350,8 +350,8 @@ class Application extends SymfonyConsole
      * If an event dispatcher has been attached to the application,
      * events are also dispatched during the life-cycle of the command.
      *
-     * @param \Symfony\Component\Console\Command\Command $command
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Command\Command        $command
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @throws \Symfony\Component\Debug\Exception\FatalThrowableError

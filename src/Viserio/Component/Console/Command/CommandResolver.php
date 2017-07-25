@@ -56,11 +56,11 @@ final class CommandResolver
     /**
      * Resolve a command from expression.
      *
-     * @param string $expression Defines the arguments and options of the command
-     * @param array|callable|string $callable Called when the command is called.
+     * @param string                $expression Defines the arguments and options of the command
+     * @param array|callable|string $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
-     * @param array $aliases an array of aliases for the command
+     * @param array                 $aliases    an array of aliases for the command
      *
      * @throws \RuntimeException
      *

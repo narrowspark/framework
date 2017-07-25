@@ -34,7 +34,7 @@ interface UrlGenerator
      * @param array  $parameters
      * @param int    $referenceType
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\RouteNotFoundException              If the named route doesn't exist
+     * @throws \Viserio\Component\Contracts\Routing\Exception\RouteNotFoundException If the named route doesn't exist
      *
      * @return string
      */

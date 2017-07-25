@@ -44,7 +44,7 @@ class ContainerResolver
      * Resolve a class.
      *
      * @param string $class
-     * @param array $parameters
+     * @param array  $parameters
      *
      * @throws \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contracts\Container\Exception\CyclicDependencyException
@@ -70,7 +70,7 @@ class ContainerResolver
             throw new CyclicDependencyException($class, $this->buildStack);
         }
 
-        $reflectionMethod = $reflectionClass->getConstructor();
+        $reflectionMethod   = $reflectionClass->getConstructor();
         $this->buildStack[] = $reflectionClass->name;
 
         if ($reflectionMethod) {
@@ -95,8 +95,8 @@ class ContainerResolver
     {
         $reflectionMethod     = $this->getMethodReflector($method);
         $reflectionParameters = $reflectionMethod->getParameters();
-        $this->buildStack[] = $reflectionMethod->name;
-        $resolvedParameters = $this->resolveParameters($reflectionParameters, $parameters);
+        $this->buildStack[]   = $reflectionMethod->name;
+        $resolvedParameters   = $this->resolveParameters($reflectionParameters, $parameters);
 
         \array_pop($this->buildStack);
 
@@ -115,8 +115,8 @@ class ContainerResolver
     {
         $reflectionFunction   = new ReflectionFunction($function);
         $reflectionParameters = $reflectionFunction->getParameters();
-        $this->buildStack[] = $reflectionFunction->name;
-        $resolvedParameters = $this->resolveParameters($reflectionParameters, $parameters);
+        $this->buildStack[]   = $reflectionFunction->name;
+        $resolvedParameters   = $this->resolveParameters($reflectionParameters, $parameters);
 
         \array_pop($this->buildStack);
 
@@ -151,7 +151,7 @@ class ContainerResolver
      * Resolve a parameter.
      *
      * @param \ReflectionParameter $parameter
-     * @param array $parameters
+     * @param array                $parameters
      *
      * @throws \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
      *

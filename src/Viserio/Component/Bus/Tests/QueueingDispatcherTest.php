@@ -22,7 +22,8 @@ class QueueingDispatcherTest extends MockeryTestCase
     {
         $container = new ArrayContainer();
         $handler   = new class() {
-            public function handle() {
+            public function handle()
+            {
                 return 'foo';
             }
         };
@@ -125,10 +126,13 @@ class QueueingDispatcherTest extends MockeryTestCase
     {
         $container = new ArrayContainer();
         $handler   = new class() {
-            public function handle() {
+            public function handle()
+            {
                 return 'foo';
             }
-            public function after() {
+
+            public function after()
+            {
                 return true;
             }
         };

@@ -8,7 +8,6 @@ use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Loader\ArrayLoader;
@@ -128,7 +127,7 @@ class LintCommand extends Command
     /**
      * Get a finder instance of Twig files in the specified directories.
      *
-     * @param array       $paths paths to search for files in
+     * @param array $paths paths to search for files in
      *
      * @return iterable
      */
