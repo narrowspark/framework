@@ -46,11 +46,6 @@ class TwigDataCollectorTest extends MockeryTestCase
         self::assertInstanceOf(Profile::class, $collect->getProfile());
     }
 
-    private function removeTabId(string $html): string
-    {
-        return \trim(\preg_replace('/="tab-(.*?)"/', '', $html));
-    }
-
     private function getTwigDataCollector()
     {
         $profile = new Profile();
@@ -63,25 +58,5 @@ class TwigDataCollectorTest extends MockeryTestCase
         $template->render([]);
 
         return new TwigDataCollector($profile, $env);
-    }
-
-    /**
-     * Add measurement to float time.
-     *
-     * @param float $seconds
-     *
-     * @return string
-     *
-     * @codeCoverageIgnore
-     */
-    private function formatDuration(float $seconds): string
-    {
-        if ($seconds < 0.001) {
-            return \round($seconds * 1000000) . 'μs';
-        } elseif ($seconds < 1) {
-            return \round($seconds * 1000, 2) . 'ms';
-        }
-
-        return \round($seconds, 2) . 's';
     }
 }

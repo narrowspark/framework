@@ -254,13 +254,12 @@ abstract class Command extends BaseCommand
      *
      * @param string        $question
      * @param null|string   $default
-     * @param null|callable $validator
      *
      * @return null|string
      */
-    public function ask(string $question, ?string $default = null, ?callable $validator = null): ?string
+    public function ask(string $question, ?string $default = null): ?string
     {
-        return $this->output->ask($question, $default, $validator);
+        return $this->output->ask($question, $default);
     }
 
     /**

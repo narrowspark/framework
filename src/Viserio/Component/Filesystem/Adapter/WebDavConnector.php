@@ -11,13 +11,9 @@ use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
 class WebDavConnector implements ConnectorContract
 {
     /**
-     * Establish an adapter connection.
-     *
-     * @param string[] $config
-     *
-     * @return \League\Flysystem\WebDAV\WebDAVAdapter
+     * {@inheritdoc}
      */
-    public function connect(array $config)
+    public function connect(array $config): object
     {
         $client = $this->getClient($config);
 

@@ -170,7 +170,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      *
      * @param string $key
      *
-     * @return $this
+     * @return \Viserio\Component\Contracts\Config\Repository
      */
     public function offsetUnset($key): RepositoryContract
     {

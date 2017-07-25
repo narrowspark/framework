@@ -105,7 +105,7 @@ abstract class AbstractConnectionManager implements
     /**
      * {@inheritdoc}
      */
-    public function reconnect(string $name = null)
+    public function reconnect(string $name = null): object
     {
         $name = $name ?? $this->getDefaultConnection();
 

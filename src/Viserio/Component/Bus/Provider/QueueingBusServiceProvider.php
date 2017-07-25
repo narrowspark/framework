@@ -31,7 +31,7 @@ class QueueingBusServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Bus\Dispatcher
+     * @return \Viserio\Component\Contracts\Bus\QueueingDispatcher
      */
     public static function registerBusDispatcher(ContainerInterface $container): QueueingDispatcherContract
     {

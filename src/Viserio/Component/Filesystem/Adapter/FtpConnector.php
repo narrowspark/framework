@@ -12,7 +12,7 @@ class FtpConnector implements ConnectorContract
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config)
+    public function connect(array $config): object
     {
         $config = $this->getConfig($config);
 

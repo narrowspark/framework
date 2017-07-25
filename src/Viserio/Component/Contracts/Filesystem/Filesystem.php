@@ -163,7 +163,7 @@ interface Filesystem
      *
      * @return bool
      */
-    public function copy($originFile, $targetFile, $override = false);
+    public function copy($originFile, $targetFile, $override = false): bool;
 
     /**
      * Move a file to a new location.

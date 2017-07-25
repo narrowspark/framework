@@ -79,7 +79,7 @@ class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['dir' => __DIR__ . '/../Fixtures', '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'json'], ['decorated' => false]);
 
-        $file   = self::normalizeDirectorySeparator(\realpath(__DIR__ . '/../Fixtures/twig/test.twig'));
+        $file = self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/twig/test.twig');
 
         self::assertSame('[
     {
@@ -124,7 +124,7 @@ class LintCommandTest extends MockeryTestCase
     /**
      * @return CommandTester
      */
-    private function createCommandTester()
+    private function createCommandTester(): \Symfony\Component\Console\Tester\CommandTester
     {
         $application = new Application();
         $application->setContainer(new ArrayContainer([

@@ -189,10 +189,11 @@ class Factory implements FactoryContract
      */
     public function getEngineFromPath(string $path): EngineContract
     {
-        $engine = \explode('|', $path);
-        $path   = $engine[1] ?? $path;
+        $engine    = \explode('|', $path);
+        $path      = $engine[1] ?? $path;
+        $extension = $this->getExtension($path);
 
-        if (! $extension = $this->getExtension($path)) {
+        if ($extension === null) {
             throw new InvalidArgumentException(\sprintf('Unrecognized extension in file: [%s]', $path));
         }
 

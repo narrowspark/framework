@@ -17,7 +17,7 @@ class ZipConnector implements ConnectorContract
      *
      * @return \League\Flysystem\ZipArchive\ZipArchiveAdapter
      */
-    public function connect(array $config)
+    public function connect(array $config): object
     {
         $config = $this->getConfig($config);
 

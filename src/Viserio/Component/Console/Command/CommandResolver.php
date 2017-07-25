@@ -8,7 +8,6 @@ use Invoker\Exception\InvocationException;
 use Invoker\Reflection\CallableReflection;
 use ReflectionMethod;
 use RuntimeException;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\Output;
@@ -57,11 +56,13 @@ final class CommandResolver
     /**
      * Resolve a command from expression.
      *
-     * @param string                $expression Defines the arguments and options of the command
-     * @param array|callable|string $callable   Called when the command is called.
+     * @param string $expression Defines the arguments and options of the command
+     * @param array|callable|string $callable Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
-     * @param array                 $aliases    an array of aliases for the command
+     * @param array $aliases an array of aliases for the command
+     *
+     * @throws \RuntimeException
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
@@ -120,7 +121,7 @@ final class CommandResolver
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
-    private static function createCommand(string $expression, callable $callable): SymfonyCommand
+    private static function createCommand(string $expression, callable $callable): StringCommand
     {
         $result = ExpressionParser::parse($expression);
 
@@ -135,8 +136,8 @@ final class CommandResolver
     /**
      * Reflect default values from callable.
      *
-     * @param Viserio\Component\Console\Command\StringCommand $command
-     * @param callable|string                                 $callable
+     * @param \Viserio\Component\Console\Command\StringCommand $command
+     * @param callable|string                                  $callable
      *
      * @return array
      */
@@ -177,12 +178,14 @@ final class CommandResolver
      *
      * @param mixed $callable
      *
+     * @throws \InvalidArgumentException
+     *
      * @return void
      */
     private function assertCallableIsValid($callable): void
     {
         try {
-            $container = $this->console->getContainer();
+            $this->console->getContainer();
         } catch (RuntimeException $e) {
             if ($this->isStaticCallToNonStaticMethod($callable)) {
                 [$class, $method] = $callable;

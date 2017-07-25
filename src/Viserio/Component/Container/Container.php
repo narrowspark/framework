@@ -362,7 +362,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
         if (isset($this->bindings[$id])) {
             return $this->resolve($id);
-        } elseif ($resolved = $this->getFromDelegate($id)) {
+        }
+
+        if ($resolved = $this->getFromDelegate($id)) {
             return $resolved;
         }
 
@@ -491,7 +493,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->has($offset);
     }

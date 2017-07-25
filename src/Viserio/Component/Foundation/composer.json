@@ -47,7 +47,7 @@
         "cakephp/chronos"                             : "^1.0",
         "http-interop/http-factory"                   : "^0.3",
         "mockery/mockery"                             : "^0.9",
-        "narrowspark/testing-helper"                  : "^2.0",
+        "narrowspark/testing-helper"                  : "^4.0",
         "phpunit/phpunit"                             : "^6.0",
         "symfony/process"                             : "~3.3",
         "viserio/config"                              : "self.version",

@@ -70,7 +70,7 @@ class DebugCommandTest extends MockeryTestCase
     /**
      * @return CommandTester
      */
-    private function createCommandTester()
+    private function createCommandTester(): \Symfony\Component\Console\Tester\CommandTester
     {
         $config = [
             'config' => [

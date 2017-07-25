@@ -9,6 +9,9 @@ use Viserio\Component\Container\MockContainer;
 
 class MockerContainerTest extends TestCase
 {
+    /**
+     * @var \Viserio\Component\Container\MockContainer
+     */
     private $container;
 
     /**
@@ -94,7 +97,7 @@ class MockerContainerTest extends TestCase
 
     public function testThatMockCanBeRemovedAndContainerFallsBackToTheOriginalService(): void
     {
-        $mock = $this->container->mock('test.service_1', stdClass::class);
+        $this->container->mock('test.service_1', stdClass::class);
         $this->container->unmock('test.service_1');
 
         self::assertTrue($this->container->has('test.service_1'));

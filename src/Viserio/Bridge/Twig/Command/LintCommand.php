@@ -8,7 +8,7 @@ use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Finder\Finder;
+
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Loader\ArrayLoader;
@@ -129,11 +129,10 @@ class LintCommand extends Command
      * Get a finder instance of Twig files in the specified directories.
      *
      * @param array       $paths paths to search for files in
-     * @param null|string $file
      *
      * @return iterable
      */
-    protected function getFinder(array $paths, string $file = null): iterable
+    protected function getFinder(array $paths): iterable
     {
         $foundFiles   = [];
         $baseDir      = (array) $this->argument('dir');
@@ -227,7 +226,7 @@ class LintCommand extends Command
         $errors = 0;
 
         foreach ($details as $info) {
-            if ($info['valid'] && $verbose) {
+            if ($verbose && $info['valid']) {
                 $file = ' in ' . $info['file'];
                 $this->line('<info>OK</info>' . $file);
             } elseif (! $info['valid']) {

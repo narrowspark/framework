@@ -124,7 +124,7 @@
         "league/flysystem-ziparchive"         : "^1.0",
         "mikey179/vfsStream"                  : "^1.6",
         "mouf/picotainer"                     : "^1.0",
-        "narrowspark/testing-helper"          : "^3.0",
+        "narrowspark/testing-helper"          : "^4.0",
         "nikic/fast-route"                    : "^1.2",
         "nyholm/nsa"                          : "^1.1",
         "mockery/mockery"                     : "^0.9",

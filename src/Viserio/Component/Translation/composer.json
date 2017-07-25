@@ -30,7 +30,7 @@
         "container-interop/service-provider"           : "^0.3",
         "mikey179/vfsStream"                           : "^1.6",
         "mockery/mockery"                              : "^0.9",
-        "narrowspark/testing-helper"                   : "^3.0",
+        "narrowspark/testing-helper"                   : "^4.0",
         "phpunit/phpunit"                              : "^6.0",
         "viserio/container"                            : "self.version",
         "viserio/log"                                  : "self.version",

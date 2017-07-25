@@ -22,6 +22,8 @@ interface EngineResolver
      *
      * @param string $engine
      *
+     * @throws \InvalidArgumentException if no engine found
+     *
      * @return \Viserio\Component\Contracts\View\Engine
      */
     public function resolve(string $engine): Engine;

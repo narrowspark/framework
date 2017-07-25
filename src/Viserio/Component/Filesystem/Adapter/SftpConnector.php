@@ -10,13 +10,9 @@ use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
 class SftpConnector implements ConnectorContract
 {
     /**
-     * Establish an adapter connection.
-     *
-     * @param string[] $config
-     *
-     * @return SftpAdapter
+     * {@inheritdoc}
      */
-    public function connect(array $config)
+    public function connect(array $config): object
     {
         $config = $this->getConfig($config);
 

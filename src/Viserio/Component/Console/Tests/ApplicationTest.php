@@ -609,7 +609,9 @@ class ApplicationTest extends MockeryTestCase
     {
         $exception = new Exception('', 4);
 
-        $application = $this->getMockBuilder(Application::class)->setConstructorArgs(['1'])->setMethods(['doRun'])->getMock();
+        $application = $this->getMockBuilder(Application::class)
+            ->setMethods(['doRun'])
+            ->getMock();
         $application->setCatchExceptions(true);
         $application->expects($this->once())
             ->method('doRun')

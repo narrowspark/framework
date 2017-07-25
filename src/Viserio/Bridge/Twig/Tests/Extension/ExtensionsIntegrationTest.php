@@ -27,7 +27,7 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
         Mock::close();
     }
 
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return [
             new SessionExtension($this->getSessionMock()),
@@ -38,14 +38,14 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
         ];
     }
 
-    public function getFixturesDir()
+    public function getFixturesDir(): string
     {
         return __DIR__ . '/../Fixtures/';
     }
 
     public function getLegacyTests()
     {
-        return $this->getTests('testLegacyIntegration', false);
+        return $this->getTests('testLegacyIntegration');
     }
 
     private function getSessionMock()

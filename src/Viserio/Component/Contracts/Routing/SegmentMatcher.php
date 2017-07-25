@@ -25,8 +25,10 @@ interface SegmentMatcher
      * Merge parameters keys from same matcher.
      *
      * @param \Viserio\Component\Contracts\Routing\SegmentMatcher $matcher
+     *
+     * @return void
      */
-    public function mergeParameterKeys(SegmentMatcher $matcher);
+    public function mergeParameterKeys(SegmentMatcher $matcher): void;
 
     /**
      * Get a ready to use condition expression from a segment.

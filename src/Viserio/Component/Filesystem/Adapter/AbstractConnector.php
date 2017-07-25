@@ -9,7 +9,7 @@ abstract class AbstractConnector implements ConnectorContract
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config)
+    public function connect(array $config): object
     {
         $auth   = $this->getAuth($config);
         $client = $this->getClient($auth);

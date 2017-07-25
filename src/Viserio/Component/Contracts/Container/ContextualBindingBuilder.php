@@ -17,6 +17,10 @@ interface ContextualBindingBuilder
      * Define the implementation for the contextual binding.
      *
      * @param \Closure|string $implementation
+     *
+     * @throws \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
+     *
+     * @return void
      */
     public function give($implementation);
 }

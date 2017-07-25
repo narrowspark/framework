@@ -10,13 +10,9 @@ use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
 class LocalConnector implements ConnectorContract
 {
     /**
-     * Establish an adapter connection.
-     *
-     * @param array $config
-     *
-     * @return \League\Flysystem\Adapter\Local
+     * {@inheritdoc}
      */
-    public function connect(array $config): Local
+    public function connect(array $config): object
     {
         $config = $this->getConfig($config);
 

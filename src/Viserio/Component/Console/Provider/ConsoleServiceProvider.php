@@ -13,7 +13,7 @@ class ConsoleServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             Application::class         => [self::class, 'createCerebro'],

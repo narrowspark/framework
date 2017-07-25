@@ -22,7 +22,7 @@ class TwigBridgeServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             TwigEnvironment::class => [self::class, 'extendTwigEnvironment'],

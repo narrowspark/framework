@@ -22,7 +22,7 @@ interface Factory
      * @param array  $data
      * @param array  $mergeData
      *
-     * @return \Viserio\Component\View\View
+     * @return \Viserio\Component\Contracts\View\View
      */
     public function file(string $path, array $data = [], array $mergeData = []): View;
 
@@ -33,7 +33,7 @@ interface Factory
      * @param array  $data
      * @param array  $mergeData
      *
-     * @return \Viserio\Component\View\View
+     * @return \Viserio\Component\Contracts\View\View
      */
     public function create(string $view, array $data = [], array $mergeData = []): View;
 
@@ -43,7 +43,7 @@ interface Factory
      * @param string   $view
      * @param string[] $data
      *
-     * @return \Viserio\Component\View\View
+     * @return \Viserio\Component\Contracts\View\View
      */
     public function of(string $view, array $data = []): View;
 

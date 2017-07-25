@@ -39,7 +39,7 @@
     "require-dev": {
         "container-interop/service-provider"       : "^0.3",
         "mikey179/vfsStream"                       : "^1.6",
-        "narrowspark/testing-helper"               : "^3.0",
+        "narrowspark/testing-helper"               : "^4.0",
         "phpunit/phpunit"                          : "^6.0",
         "sepia/po-parser"                          : "^4.2",
         "symfony/polyfill-xml"                     : "^1.3",

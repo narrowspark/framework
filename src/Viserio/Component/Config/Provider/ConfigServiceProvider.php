@@ -13,14 +13,14 @@ class ConfigServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             RepositoryContract::class => [self::class, 'createRepository'],
             Repository::class         => function (ContainerInterface $container) {
                 return $container->get(RepositoryContract::class);
             },
-            'config' => function (ContainerInterface $container) {
+            'config'                  => function (ContainerInterface $container) {
                 return $container->get(RepositoryContract::class);
             },
         ];

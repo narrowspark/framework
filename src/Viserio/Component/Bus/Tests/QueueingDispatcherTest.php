@@ -21,11 +21,11 @@ class QueueingDispatcherTest extends MockeryTestCase
     public function testDispatchNowShouldNeverQueue(): void
     {
         $container = new ArrayContainer();
-
-        $handler = $this->mock(stdClass::class);
-        $handler->shouldReceive('handle')
-            ->once()
-            ->andReturn('foo');
+        $handler   = new class() {
+            public function handle() {
+                return 'foo';
+            }
+        };
 
         $container->set('Handler', $handler);
 
@@ -124,9 +124,14 @@ class QueueingDispatcherTest extends MockeryTestCase
     public function testDispatchShouldCallAfterResolvingIfCommandNotQueued(): void
     {
         $container = new ArrayContainer();
-
-        $handler = $this->mock(stdClass::class)->shouldIgnoreMissing();
-        $handler->shouldReceive('after')->once();
+        $handler   = new class() {
+            public function handle() {
+                return 'foo';
+            }
+            public function after() {
+                return true;
+            }
+        };
 
         $container->set('Handler', $handler);
 
@@ -136,7 +141,7 @@ class QueueingDispatcherTest extends MockeryTestCase
         });
 
         $dispatcher->dispatch(new BusDispatcherBasicCommand(), function ($handler): void {
-            $handler->after();
+            self::assertTrue($handler->after());
         });
     }
 

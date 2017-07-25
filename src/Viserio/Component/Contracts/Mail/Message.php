@@ -138,7 +138,7 @@ interface Message
     /**
      * Get the underlying Swift Message instance.
      *
-     * @return \Swift_Mime_Message
+     * @return \Swift_Mime_SimpleMessage
      */
     public function getSwiftMessage();
 }

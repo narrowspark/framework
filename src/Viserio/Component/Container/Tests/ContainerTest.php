@@ -204,9 +204,9 @@ class ContainerTest extends MockeryTestCase
         $container->alias('foo', 'baz');
         $container->alias('baz', 'bat');
 
-        self::assertEquals('bar', $container->resolve('foo'));
-        self::assertEquals('bar', $container->resolve('baz'));
-        self::assertEquals('bar', $container->resolve('bat'));
+        self::assertSame('bar', $container->resolve('foo'));
+        self::assertSame('bar', $container->resolve('baz'));
+        self::assertSame('bar', $container->resolve('bat'));
     }
 
     public function testBindingsCanBeOverridden(): void
@@ -214,9 +214,12 @@ class ContainerTest extends MockeryTestCase
         $container        = $this->container;
         $container['foo'] = 'bar';
         $foo              = $container['foo'];
+
+        self::assertSame('bar', $foo);
+
         $container['foo'] = 'baz';
 
-        self::assertEquals('baz', $container['foo']);
+        self::assertSame('baz', $container['foo']);
     }
 
     public function testExtendedBindings(): void
@@ -227,7 +230,7 @@ class ContainerTest extends MockeryTestCase
             return $old . 'bar';
         });
 
-        self::assertEquals('foobar', $container->resolve('foo'));
+        self::assertSame('foobar', $container->resolve('foo'));
 
         $container        = $this->container;
         $container['foo'] = function () {
@@ -242,8 +245,8 @@ class ContainerTest extends MockeryTestCase
 
         $result = $container->resolve('foo');
 
-        self::assertEquals('narrowspark', $result->name);
-        self::assertEquals('viserio', $result->oldName);
+        self::assertSame('narrowspark', $result->name);
+        self::assertSame('viserio', $result->oldName);
     }
 
     public function testMultipleExtends(): void

@@ -23,7 +23,7 @@ class TranslatorExtension extends AbstractExtension
     /**
      * A instance of NodeVisitorInterface.
      *
-     * @var null|\Twig\NodeVisitor\NodeVisitorInterface
+     * @var null|\Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor
      */
     private $translationNodeVisitor;
 

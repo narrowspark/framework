@@ -40,7 +40,7 @@ class DumpExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction(
@@ -55,7 +55,7 @@ class DumpExtension extends AbstractExtension
         ];
     }
 
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [new DumpTokenParser()];
     }
@@ -69,9 +69,12 @@ class DumpExtension extends AbstractExtension
     }
 
     /**
-     * {inheritdoc}.
+     * @param \Twig\Environment $env
+     * @param array             $context
+     *
+     * @return string
      */
-    public function dump(Environment $env, $context)
+    public function dump(Environment $env, array $context): string
     {
         if (! $env->isDebug()) {
             return '';
@@ -103,6 +106,12 @@ class DumpExtension extends AbstractExtension
 
         \rewind($dump);
 
-        return \stream_get_contents($dump);
+        $content = \stream_get_contents($dump);
+
+        if (is_bool($content)) {
+            return '';
+        }
+
+        return $content;
     }
 }

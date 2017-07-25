@@ -7,6 +7,9 @@ use RuntimeException;
 
 class IOException extends RuntimeException
 {
+    /**
+     * @var string|null
+     */
     private $path;
 
     /**
@@ -15,9 +18,9 @@ class IOException extends RuntimeException
      * @param string         $message
      * @param mixed          $code
      * @param null|Exception $previous
-     * @param null|mixed     $path
+     * @param null|string    $path
      */
-    public function __construct(string $message, $code = 0, Exception $previous = null, $path = null)
+    public function __construct(string $message, $code = 0, Exception $previous = null, string $path = null)
     {
         $this->path = $path;
 
@@ -27,9 +30,9 @@ class IOException extends RuntimeException
     /**
      * Get the file path.
      *
-     * @return string
+     * @return null|string
      */
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }

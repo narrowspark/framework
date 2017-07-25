@@ -65,8 +65,7 @@ class ConsoleErrorEvent extends ConsoleEvent
      *
      * This exception will be thrown if no response is set in the event.
      *
-     * @param \Throwable $exception The thrown exception
-     * @param Throwable  $error
+     * @param \Throwable $error
      *
      * @return void
      */

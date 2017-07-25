@@ -64,18 +64,18 @@ class Application extends SymfonyConsole
     private $invoker;
 
     /**
-     * The console application bootstrappers.
-     *
-     * @var array
-     */
-    private static $bootstrappers = [];
-
-    /**
      * Symfony terminal instance.
      *
      * @var \Symfony\Component\Console\Terminal
      */
     private $terminal;
+
+    /**
+     * The console application bootstrappers.
+     *
+     * @var array
+     */
+    protected static $bootstrappers = [];
 
     /**
      * Create a new Cerebro console application.
@@ -195,26 +195,6 @@ class Application extends SymfonyConsole
             $argument = $commandDefinition->getArgument($name);
             $argument->setDefault($default);
         }
-    }
-
-    /**
-     * Get console version.
-     *
-     * @return string
-     */
-    public function getVersion(): string
-    {
-        return $this->version;
-    }
-
-    /**
-     * Get console name.
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     /**
@@ -370,9 +350,11 @@ class Application extends SymfonyConsole
      * If an event dispatcher has been attached to the application,
      * events are also dispatched during the life-cycle of the command.
      *
-     * @param \Symfony\Component\Console\Command\Command        $command
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Command\Command $command
+     * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @throws \Symfony\Component\Debug\Exception\FatalThrowableError
      *
      * @return int 0 if everything went fine, or an error code
      */
@@ -402,10 +384,8 @@ class Application extends SymfonyConsole
 
         $this->getEventManager()->trigger($event = new ConsoleCommandEvent($command, $input, $output));
 
-        $exitCode = 0;
-
         if ($event->commandShouldRun()) {
-            $e = $x = null;
+            $x = null;
 
             try {
                 $exitCode = $command->run($input, $output);

@@ -251,7 +251,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
-    public function copy($originFile, $targetFile, $override = false)
+    public function copy($originFile, $targetFile, $override = false): bool
     {
         if (! $this->has($originFile)) {
             throw new FileNotFoundException($originFile);

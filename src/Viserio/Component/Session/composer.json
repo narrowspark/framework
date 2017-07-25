@@ -33,7 +33,7 @@
         "cache/session-handler"                    : "^0.2",
         "container-interop/service-provider"       : "^0.3",
         "mockery/mockery"                          : "^0.9",
-        "narrowspark/testing-helper"               : "^2.0",
+        "narrowspark/testing-helper"               : "^4.0",
         "mikey179/vfsStream"                       : "^1.6",
         "phpunit/phpunit"                          : "^6.0",
         "http-interop/http-middleware"             : "^0.4",

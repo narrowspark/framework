@@ -10,7 +10,7 @@ class NullConnector implements ConnectorContract
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config)
+    public function connect(array $config): object
     {
         return new NullAdapter();
     }

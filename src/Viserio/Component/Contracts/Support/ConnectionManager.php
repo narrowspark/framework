@@ -29,7 +29,7 @@ interface ConnectionManager
      *
      * @return object
      */
-    public function reconnect(string $name = null);
+    public function reconnect(string $name = null): object;
 
     /**
      * Disconnect from the given connection.

@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 
 class SimpleFixtureServiceProvider implements ServiceProvider
 {
-    public function getServices()
+    public function getServices(): array
     {
         return [
             'param'   => [SimpleFixtureServiceProvider::class, 'getParam'],

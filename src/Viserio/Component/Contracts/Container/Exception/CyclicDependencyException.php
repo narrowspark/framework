@@ -34,7 +34,7 @@ class CyclicDependencyException extends Exception implements ContainerExceptionI
      *
      * @codeCoverageIgnore
      */
-    public function getBuildStack()
+    public function getBuildStack(): array
     {
         return $this->buildStack;
     }
