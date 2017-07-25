@@ -157,6 +157,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Dropbox connection.
      *
      * @param array $config
+     *
      * @return object
      */
     protected function createDropboxConnection(array $config): object
@@ -168,6 +169,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Ftp connection.
      *
      * @param array $config
+     *
      * @return object
      */
     protected function createFtpConnection(array $config): object
@@ -179,6 +181,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Local connection.
      *
      * @param array $config
+     *
      * @return object
      */
     protected function createLocalConnection(array $config): object
@@ -190,6 +193,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Null connection.
      *
      * @param array $config
+     *
      * @return object
      */
     protected function createNullConnection(array $config): object
@@ -201,6 +205,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Rackspace connection.
      *
      * @param array $config
+     *
      * @return object
      */
     protected function createRackspaceConnection(array $config): object
@@ -212,6 +217,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Sftp connection.
      *
      * @param array $config
+     *
      * @return object
      */
     protected function createSftpConnection(array $config): object
@@ -223,6 +229,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Vfs connection.
      *
      * @param array $config
+     *
      * @return object
      */
     protected function createVfsConnection(array $config): object
@@ -234,6 +241,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the WebDav connection.
      *
      * @param array $config
+     *
      * @return object
      */
     protected function createWebdavConnection(array $config): object
@@ -245,6 +253,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Zip connection.
      *
      * @param array $config
+     *
      * @return object
      */
     protected function createZipConnection(array $config): object
