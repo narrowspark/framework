@@ -26,128 +26,12 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class HandlerTest extends MockeryTestCase
 {
-    public function testAddAndGetDisplayer(): void
-    {
-        $container = $this->getContainer();
-        $container->shouldReceive('get')
-            ->with(LoggerInterface::class)
-            ->andReturn($this->mock(LoggerInterface::class));
-        $handler = new Handler($container);
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
-        $info = $this->mock(ExceptionInfo::class);
-
-        $handler->addDisplayer(new HtmlDisplayer($info, new ResponseFactory(), new StreamFactory(), $container));
-        $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
-        $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
-        $handler->addDisplayer(new WhoopsDisplayer());
-
-        self::assertCount(3, $handler->getDisplayers());
-    }
-
-    public function testAddAndGetTransformer(): void
-    {
-        $container = $this->getContainer();
-        $container->shouldReceive('get')
-            ->with(LoggerInterface::class)
-            ->andReturn($this->mock(LoggerInterface::class));
-        $handler = new Handler($container);
-
-        $handler->addTransformer(new CommandLineTransformer());
-        $handler->addTransformer(new CommandLineTransformer());
-
-        self::assertCount(1, $handler->getTransformers());
-    }
-
-    public function testAddAndGetFilter(): void
-    {
-        $container = $this->getContainer();
-        $container->shouldReceive('get')
-            ->with(LoggerInterface::class)
-            ->andReturn($this->mock(LoggerInterface::class));
-        $handler = new Handler($container);
-
-        $handler->addFilter(new VerboseFilter($container));
-        $handler->addFilter(new VerboseFilter($container));
-
-        self::assertCount(1, $handler->getFilters());
-    }
-
-    public function testReportError(): void
-    {
-        $exception = new Exception('Exception message');
-
-        $log = $this->mock(LoggerInterface::class);
-        $log->shouldReceive('error')
-            ->once()
-            ->withArgs(['Exception message', Mockery::hasKey('exception')]);
-        $log->shouldReceive('critical')
-            ->never();
-        $container = $this->getContainer();
-        $container->shouldReceive('get')
-            ->with(LoggerInterface::class)
-            ->andReturn($log);
-
-        $handler = new Handler($container);
-
-        $handler->report($exception);
-    }
-
-    public function testReportCritical(): void
-    {
-        $exception = new FatalThrowableError(new Exception());
-
-        $log = $this->mock(LoggerInterface::class);
-        $log->shouldReceive('error')
-            ->never();
-        $log->shouldReceive('critical')
-            ->once();
-
-        $container = $this->getContainer();
-        $container->shouldReceive('get')
-            ->with(LoggerInterface::class)
-            ->andReturn($log);
-
-        $handler = new Handler($container);
-
-        $handler->report($exception);
-    }
-
-    public function testShouldntReport(): void
-    {
-        $exception = new FatalThrowableError(new Exception());
-        $id        = (new ExceptionIdentifier())->identify($exception);
-
-        $log = $this->mock(LoggerInterface::class);
-        $log->shouldReceive('critical')
-            ->never();
-
-        $container = $this->getContainer();
-        $container->shouldReceive('get')
-            ->with(LoggerInterface::class)
-            ->andReturn($log);
-        $handler = new Handler($container);
-
-        $handler->addShouldntReport($exception);
-
-        $handler->report($exception);
-    }
-
-    public function testHandleError(): void
-    {
-        $container = $this->getContainer();
-        $container->shouldReceive('get')
-            ->with(LoggerInterface::class)
-            ->andReturn($this->mock(LoggerInterface::class));
-        $handler = new Handler($container);
-
-        try {
-            $handler->handleError(E_PARSE, 'test', '', 0, null);
-        } catch (ErrorException $e) {
-            self::assertInstanceOf(ErrorException::class, $e);
-        }
-    }
-
-    private function getContainer()
+    public function setUp()
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -163,32 +47,152 @@ class HandlerTest extends MockeryTestCase
                     'debug'             => false,
                 ],
             ]);
-        $container = $this->mock(ContainerInterface::class);
-        $container->shouldReceive('has')
+        $this->container = $this->mock(ContainerInterface::class);
+        $this->container->shouldReceive('has')
             ->with(RepositoryContract::class)
             ->andReturn(true);
-        $container->shouldReceive('get')
+        $this->container->shouldReceive('get')
             ->with(RepositoryContract::class)
             ->andReturn($config);
-        $container->shouldReceive('has')
-            ->with(LoggerInterface::class)
-            ->andReturn(true);
-        $container->shouldReceive('get')
+        $this->container->shouldReceive('get')
             ->with(ExceptionIdentifier::class)
             ->andReturn(new ExceptionIdentifier());
-        $container->shouldReceive('get')
+        $this->container->shouldReceive('get')
             ->with(ResponseFactoryInterface::class)
             ->andReturn($this->mock(ResponseFactoryInterface::class));
-        $container->shouldReceive('get')
+        $this->container->shouldReceive('get')
             ->with(ServerRequestInterface::class)
             ->andReturn($this->mock(ServerRequestInterface::class));
-        $container->shouldReceive('get')
+        $this->container->shouldReceive('get')
             ->with(StreamFactoryInterface::class)
             ->andReturn($this->mock(StreamFactoryInterface::class));
-        $container->shouldReceive('get')
+        $this->container->shouldReceive('get')
             ->with(ExceptionInfo::class)
-            ->andReturn($this->mock(ExceptionInfo::class));
+            ->andReturn(new ExceptionInfo());
+    }
 
-        return $container;
+    public function testAddAndGetDisplayer(): void
+    {
+        $this->container->shouldReceive('has')
+            ->with(LoggerInterface::class)
+            ->andReturn(false);
+        $handler = new Handler($this->container);
+
+        $info = $this->container->get(ExceptionInfo::class);
+
+        $handler->addDisplayer(new HtmlDisplayer($info, new ResponseFactory(), new StreamFactory(), $this->container));
+        $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
+        $handler->addDisplayer(new JsonDisplayer($info, new ResponseFactory(), new StreamFactory()));
+        $handler->addDisplayer(new WhoopsDisplayer());
+
+        self::assertCount(3, $handler->getDisplayers());
+    }
+
+    public function testAddAndGetTransformer(): void
+    {
+        $this->container->shouldReceive('has')
+            ->with(LoggerInterface::class)
+            ->andReturn(false);
+        $handler = new Handler($this->container);
+
+        $handler->addTransformer(new CommandLineTransformer());
+        $handler->addTransformer(new CommandLineTransformer());
+
+        self::assertCount(1, $handler->getTransformers());
+    }
+
+    public function testAddAndGetFilter(): void
+    {
+        $this->container->shouldReceive('has')
+            ->with(LoggerInterface::class)
+            ->andReturn(false);
+        $handler = new Handler($this->container);
+
+        $handler->addFilter(new VerboseFilter($this->container));
+        $handler->addFilter(new VerboseFilter($this->container));
+
+        self::assertCount(1, $handler->getFilters());
+    }
+
+    public function testReportError(): void
+    {
+        $exception = new Exception('Exception message');
+
+        $this->container->shouldReceive('has')
+            ->with(LoggerInterface::class)
+            ->andReturn(true);
+        $log = $this->mock(LoggerInterface::class);
+        $log->shouldReceive('error')
+            ->once()
+            ->withArgs(['Exception message', Mockery::hasKey('exception')]);
+        $log->shouldReceive('critical')
+            ->never();
+        $this->container->shouldReceive('get')
+            ->with(LoggerInterface::class)
+            ->andReturn($log);
+
+        $handler = new Handler($this->container);
+
+        $handler->report($exception);
+    }
+
+    public function testReportCritical(): void
+    {
+        $exception = new FatalThrowableError(new Exception());
+
+        $this->container->shouldReceive('has')
+            ->with(LoggerInterface::class)
+            ->andReturn(true);
+        $log = $this->mock(LoggerInterface::class);
+        $log->shouldReceive('error')
+            ->never();
+        $log->shouldReceive('critical')
+            ->once();
+
+        $this->container->shouldReceive('get')
+            ->with(LoggerInterface::class)
+            ->andReturn($log);
+
+        $handler = new Handler($this->container);
+
+        $handler->report($exception);
+    }
+
+    public function testShouldntReport(): void
+    {
+        $exception = new FatalThrowableError(new Exception());
+
+        $this->container->shouldReceive('has')
+            ->with(LoggerInterface::class)
+            ->andReturn(true);
+        $log = $this->mock(LoggerInterface::class);
+        $log->shouldReceive('critical')
+            ->never();
+
+        $this->container->shouldReceive('has')
+            ->with(LoggerInterface::class)
+            ->andReturn(true);
+        $this->container->shouldReceive('get')
+            ->with(LoggerInterface::class)
+            ->andReturn($log);
+        $handler = new Handler($this->container);
+
+        $handler->addShouldntReport($exception);
+
+        $handler->report($exception);
+    }
+
+    public function testHandleError(): void
+    {
+        $this->container->shouldReceive('has')
+            ->with(LoggerInterface::class)
+            ->andReturn(false);
+        $handler = new Handler($this->container);
+
+        try {
+            $handler->handleError(E_PARSE, 'test', '', 0, null);
+        } catch (ErrorException $e) {
+            self::assertInstanceOf(ErrorException::class, $e);
+        }
     }
 }

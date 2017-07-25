@@ -57,7 +57,7 @@ class SetCookieTest extends TestCase
      */
     public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value): void
     {
-        $cookie = new SetCookie('MyCookie', $value);
+        new SetCookie('MyCookie', $value);
     }
 
     public function testGetValue(): void

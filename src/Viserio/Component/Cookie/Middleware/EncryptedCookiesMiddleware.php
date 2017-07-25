@@ -64,6 +64,7 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     {
         $cookies = RequestCookies::fromRequest($request);
 
+        /** @var Cookie $cookie */
         foreach ($cookies->getAll() as $cookie) {
             $name = $cookie->getName();
 
@@ -95,6 +96,7 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     {
         $cookies = ResponseCookies::fromResponse($response);
 
+        /** @var SetCookie $cookie */
         foreach ($cookies->getAll() as $cookie) {
             $name = $cookie->getName();
 

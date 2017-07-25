@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception;
 
-use Ramsey\Uuid\Uuid;
 use Throwable;
 
 class ExceptionIdentifier
@@ -21,8 +20,6 @@ class ExceptionIdentifier
      * Identify the given exception.
      *
      * @param \Throwable $exception
-     *
-     * @throws \Ramsey\Uuid\Exception\UnsatisfiedDependencyException
      *
      * @return string
      */

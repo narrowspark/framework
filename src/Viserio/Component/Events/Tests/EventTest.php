@@ -10,7 +10,7 @@ class EventTest extends TestCase
     /**
      * @var Event
      */
-    private $object;
+    private $event;
 
     /**
      * Prepares the environment before running a test.

@@ -54,6 +54,7 @@ class ResponseCookiesTest extends MockeryTestCase
 
         $setCookies = ResponseCookies::fromResponse($response);
 
+        /** @var SetCookie $cookie */
         foreach ($setCookies->getAll() as $name => $cookie) {
             self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
             self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());

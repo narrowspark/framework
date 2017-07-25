@@ -30,6 +30,7 @@ class RequestCookiesTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        /** @var RequestCookies $cookies */
         $cookies = RequestCookies::fromRequest($request);
         $cookies = $cookies->add($cookie);
         $cookies = $cookies->add($cookie2);
@@ -55,6 +56,7 @@ class RequestCookiesTest extends MockeryTestCase
 
         $cookies = RequestCookies::fromRequest($request);
 
+        /** @var Cookie $cookie */
         foreach ($cookies->getAll() as $name => $cookie) {
             self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
             self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());

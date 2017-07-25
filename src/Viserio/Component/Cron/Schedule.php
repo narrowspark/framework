@@ -151,7 +151,7 @@ class Schedule
      */
     public function dueCronJobs(string $environment, bool $isMaintenance = false): array
     {
-        return \array_filter($this->jobs, function ($job) use ($environment, $isMaintenance) {
+        return \array_filter($this->jobs, function (CronContract $job) use ($environment, $isMaintenance) {
             return $job->isDue($environment, $isMaintenance);
         });
     }

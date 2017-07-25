@@ -83,10 +83,10 @@ class CallbackCron extends Cron
      */
     public function withoutOverlapping(): CronContract
     {
-        if ($this->description !== null) {
+        if ($this->description === null) {
             throw new LogicException(
                 'A scheduled cron job description is required to prevent overlapping. ' .
-                "Use the 'description' method before 'withoutOverlapping'."
+                "Use the 'setDescription' method before 'withoutOverlapping'."
             );
         }
 

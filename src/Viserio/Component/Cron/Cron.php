@@ -149,7 +149,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function setPath(string $path): CronContract
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -181,7 +181,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function evenInMaintenanceMode(): CronContract
+    public function evenInMaintenanceMode(): self
     {
         $this->evenInMaintenanceMode = true;
 
