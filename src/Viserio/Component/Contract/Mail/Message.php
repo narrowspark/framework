@@ -134,4 +134,11 @@ interface Message
      * @return string
      */
     public function embedData(string $data, string $name, string $contentType = null): string;
+
+    /**
+     * Get the underlying Swift Message instance.
+     *
+     * @return \Swift_Mime_SimpleMessage
+     */
+    public function getSwiftMessage();
 }

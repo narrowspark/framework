@@ -44,7 +44,7 @@ class ContainerResolver
      * Resolve a class.
      *
      * @param string $class
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
