@@ -214,10 +214,6 @@ class FilesystemTest extends TestCase
 
         $dir = $this->root->getChild('copy');
 
-        $file = vfsStream::newFile('copy.txt')
-            ->withContent('copy1')
-            ->at($dir);
-
         $this->files->copy(
             $dir->url() . '/copy.txt',
             $this->root->getChild('copy2')->url() . '/copy.txt'

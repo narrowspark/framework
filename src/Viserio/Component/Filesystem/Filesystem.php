@@ -336,6 +336,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $files  = [];
         $finder = Finder::create()->files()->ignoreDotFiles(! $showHiddenFiles)->in($directory);
 
+        /** @var \SplFileObject $dir */
         foreach ($finder as $dir) {
             $files[] = self::normalizeDirectorySeparator($dir->getPathname());
         }
@@ -371,6 +372,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $directories = [];
 
+        /** @var \SplFileObject $dir */
         foreach (Finder::create()->in($directory)->directories()->depth(0) as $dir) {
             $directories[] = self::normalizeDirectorySeparator($dir->getPathname());
         }

@@ -19,10 +19,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testAwsS3ConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -55,10 +52,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testDropboxConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -91,10 +85,7 @@ class FilesystemManagerTest extends MockeryTestCase
         }
 
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -126,10 +117,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testLocalConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -158,10 +146,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testNullConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -188,10 +173,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testRackspaceConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -230,10 +212,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testSftpConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -265,10 +244,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testVfsConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -295,10 +271,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testWebDavConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -329,10 +302,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testZipConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -361,10 +331,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testgetFlysystemAdapter(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -393,10 +360,7 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testCachedAdapter(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -440,10 +404,7 @@ class FilesystemManagerTest extends MockeryTestCase
     {
         $key    = Key::createNewRandomKey();
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
@@ -467,5 +428,16 @@ class FilesystemManagerTest extends MockeryTestCase
             EncryptionWrapper::class,
             $manager->cryptedConnection($key, 'local')
         );
+    }
+
+    /**
+     * @param $config
+     */
+    private function arrangeConfigOffsetExists($config): void
+    {
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
     }
 }

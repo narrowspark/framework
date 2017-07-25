@@ -144,8 +144,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Awss3 connection.
      *
      * @param array $config
+     *
+     * @return object
+     * @return object
      */
-    protected function createAwss3Connection(array $config)
+    protected function createAwss3Connection(array $config): object
     {
         return (new Adapter\AwsS3Connector())->connect($config);
     }
@@ -154,8 +157,9 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Dropbox connection.
      *
      * @param array $config
+     * @return object
      */
-    protected function createDropboxConnection(array $config)
+    protected function createDropboxConnection(array $config): object
     {
         return (new Adapter\DropboxConnector())->connect($config);
     }
@@ -164,8 +168,9 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Ftp connection.
      *
      * @param array $config
+     * @return object
      */
-    protected function createFtpConnection(array $config)
+    protected function createFtpConnection(array $config): object
     {
         return (new Adapter\FtpConnector())->connect($config);
     }
@@ -174,8 +179,9 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Local connection.
      *
      * @param array $config
+     * @return object
      */
-    protected function createLocalConnection(array $config)
+    protected function createLocalConnection(array $config): object
     {
         return (new Adapter\LocalConnector())->connect($config);
     }
@@ -184,8 +190,9 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Null connection.
      *
      * @param array $config
+     * @return object
      */
-    protected function createNullConnection(array $config)
+    protected function createNullConnection(array $config): object
     {
         return (new Adapter\NullConnector())->connect([]);
     }
@@ -194,8 +201,9 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Rackspace connection.
      *
      * @param array $config
+     * @return object
      */
-    protected function createRackspaceConnection(array $config)
+    protected function createRackspaceConnection(array $config): object
     {
         return (new Adapter\RackspaceConnector())->connect($config);
     }
@@ -204,8 +212,9 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Sftp connection.
      *
      * @param array $config
+     * @return object
      */
-    protected function createSftpConnection(array $config)
+    protected function createSftpConnection(array $config): object
     {
         return (new Adapter\SftpConnector())->connect($config);
     }
@@ -214,8 +223,9 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Vfs connection.
      *
      * @param array $config
+     * @return object
      */
-    protected function createVfsConnection(array $config)
+    protected function createVfsConnection(array $config): object
     {
         return (new Adapter\VfsConnector())->connect($config);
     }
@@ -224,8 +234,9 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the WebDav connection.
      *
      * @param array $config
+     * @return object
      */
-    protected function createWebdavConnection(array $config)
+    protected function createWebdavConnection(array $config): object
     {
         return (new Adapter\WebDavConnector())->connect($config);
     }
@@ -234,8 +245,9 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Zip connection.
      *
      * @param array $config
+     * @return object
      */
-    protected function createZipConnection(array $config)
+    protected function createZipConnection(array $config): object
     {
         return (new Adapter\ZipConnector())->connect($config);
     }

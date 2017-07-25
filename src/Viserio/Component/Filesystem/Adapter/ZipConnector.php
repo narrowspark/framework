@@ -15,7 +15,7 @@ class ZipConnector implements ConnectorContract
      *
      * @param array $config
      *
-     * @return \League\Flysystem\ZipArchive\ZipArchiveAdapter
+     * @return object
      */
     public function connect(array $config): object
     {
