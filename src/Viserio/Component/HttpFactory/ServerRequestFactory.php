@@ -46,9 +46,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     /**
      * Build a server request from given data.
      *
-     * @param array $server
-     * @param array $headers
-     * @param string $method
+     * @param array                                 $server
+     * @param array                                 $headers
+     * @param string                                $method
      * @param \Psr\Http\Message\UriInterface|string $uri
      *
      * @throws \UnexpectedValueException
