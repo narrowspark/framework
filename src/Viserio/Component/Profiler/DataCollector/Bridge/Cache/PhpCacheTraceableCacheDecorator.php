@@ -4,7 +4,6 @@ namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
 use Cache\Adapter\Common\PhpCachePool as PhpCachePoolInterface;
 use Psr\SimpleCache\CacheInterface;
-use stdClass;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
