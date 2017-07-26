@@ -236,10 +236,10 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      * Add the content to a given message.
      *
      * @param \Viserio\Component\Contracts\Mail\Message $message
-     * @param null|string                     $view
-     * @param null|string                     $plain
-     * @param null|string                     $raw
-     * @param array                           $data
+     * @param null|string                               $view
+     * @param null|string                               $plain
+     * @param null|string                               $raw
+     * @param array                                     $data
      */
     protected function addContent(MessageContract $message, ?string $view, ?string $plain, ?string $raw, array $data): void
     {

@@ -6,7 +6,6 @@ use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
-use stdClass;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
