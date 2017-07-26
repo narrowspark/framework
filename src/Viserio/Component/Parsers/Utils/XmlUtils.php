@@ -240,7 +240,7 @@ final class XmlUtils
     /**
      * Validates DOMDocument against a file or callback.
      *
-     * @param \DOMDocument $dom
+     * @param \DOMDocument   $dom
      * @param array|callable $schemaOrCallable
      *
      * @throws \InvalidArgumentException
@@ -288,7 +288,7 @@ final class XmlUtils
      */
     private static function transformToNumber(string $value, int $position)
     {
-        $raw = $value;
+        $raw  = $value;
         $cast = (int) $value;
 
         if ($raw === (string) $cast) {
