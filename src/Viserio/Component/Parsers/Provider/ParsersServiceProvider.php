@@ -16,7 +16,7 @@ class ParsersServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             LoaderContract::class => function (ContainerInterface $container): FileLoader {

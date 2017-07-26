@@ -284,7 +284,7 @@ class XmlUtilsTest extends TestCase
             \error_reporting($errorReporting);
         }
 
-        $disableEntities = \libxml_disable_entity_loader(true);
+        $disableEntities = \libxml_disable_entity_loader();
         \libxml_disable_entity_loader($disableEntities);
 
         \libxml_disable_entity_loader($originalDisableEntities);

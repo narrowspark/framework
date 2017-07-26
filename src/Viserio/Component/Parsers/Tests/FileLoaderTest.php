@@ -92,7 +92,7 @@ class FileLoaderTest extends TestCase
     {
         $file = vfsStream::newFile('temp.json')->withContent('')->at($this->root);
 
-        $data = $this->fileloader->load($file->url(), ['foo' => 'Test']);
+        $this->fileloader->load($file->url(), ['foo' => 'Test']);
     }
 
     public function testExistsWithCache(): void
@@ -122,7 +122,7 @@ class FileLoaderTest extends TestCase
      */
     public function testExistsWithFalsePath(): void
     {
-        $exist = $this->fileloader->exists('no/file');
+        $this->fileloader->exists('no/file');
     }
 
     public function testExists(): void

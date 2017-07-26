@@ -293,7 +293,7 @@ class XliffParser implements ParserContract
      */
     private static function utf8ToCharset(string $content, string $encoding = null): string
     {
-        if ($encoding !== 'UTF-8' && ! empty($encoding)) {
+        if ($encoding !== 'UTF-8' && $encoding !== null) {
             return \mb_convert_encoding($content, $encoding, 'UTF-8');
         }
 
@@ -310,7 +310,7 @@ class XliffParser implements ParserContract
      */
     private static function fixXmlLocation(string $schemaSource, string $xmlUri): string
     {
-        $newPath = \str_replace('\\', '/', \realpath(__DIR__ . '/../Schemas/xliff-core/xml.xsd'));
+        $newPath = \str_replace('\\', '/', dirname(__DIR__) . '/Schemas/xliff-core/xml.xsd');
         $parts   = \explode('/', $newPath);
 
         if (\mb_stripos($newPath, 'phar://') === 0) {

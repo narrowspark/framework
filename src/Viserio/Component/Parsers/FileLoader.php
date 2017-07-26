@@ -148,7 +148,9 @@ class FileLoader implements LoaderContract
     {
         if (isset($options['tag'])) {
             return;
-        } elseif (isset($options['group'])) {
+        }
+
+        if (isset($options['group'])) {
             return;
         }
 

@@ -26,7 +26,7 @@ class XliffTest extends TestCase
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv1.xlf'));
 
-        $excepted = include_once __DIR__ . '/../Fixtures/xliff/output_xliffv1.php';
+        $excepted = include __DIR__ . '/../Fixtures/xliff/output_xliffv1.php';
 
         self::assertEquals($excepted, $datas);
     }
@@ -149,7 +149,7 @@ class XliffTest extends TestCase
      */
     public function testParseXliffV1NoVersion(): void
     {
-        $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version.xlf'));
+        (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version.xlf'));
     }
 
     /**
@@ -158,7 +158,7 @@ class XliffTest extends TestCase
      */
     public function testParseXliffV1NoVersionAndNamespace(): void
     {
-        $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_namespace.xlf'));
+        (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_namespace.xlf'));
     }
 
     /**
@@ -167,7 +167,7 @@ class XliffTest extends TestCase
      */
     public function testParseXliffV1NoVersionAndInvalidNamespace(): void
     {
-        $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_invalid_namespace.xlf'));
+        (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_invalid_namespace.xlf'));
     }
 
     /**
@@ -175,7 +175,7 @@ class XliffTest extends TestCase
      */
     public function testParseXliffV1NoVersionAndNoNamespace(): void
     {
-        $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_no_namespace.xlf'));
+        (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_no_namespace.xlf'));
     }
 
     /**
@@ -184,7 +184,7 @@ class XliffTest extends TestCase
      */
     public function testParseWithEmptyContent(): void
     {
-        $datas = (new XliffParser())->parse('');
+        (new XliffParser())->parse('');
     }
 
     public function testDumpXliffV1(): void
@@ -262,6 +262,6 @@ class XliffTest extends TestCase
      */
     public function testDumpWithWrongVersion(): void
     {
-        $datas = (new XliffDumper())->dump(['version' => '3.0']);
+        (new XliffDumper())->dump(['version' => '3.0']);
     }
 }

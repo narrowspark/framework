@@ -141,7 +141,9 @@ class Parser
     {
         if (isset(self::$supportedParsers[$type])) {
             return new self::$supportedParsers[$type]();
-        } elseif (isset(self::$supportedMimeTypes[$type])) {
+        }
+
+        if (isset(self::$supportedMimeTypes[$type])) {
             $class = self::$supportedParsers[self::$supportedMimeTypes[$type]];
 
             if (\is_object($class)) {

@@ -44,13 +44,13 @@ class IniDumper implements DumperContract
         if (! empty($subsections)) {
             $output .= PHP_EOL;
 
-            foreach ($subsections as $section => $data) {
+            foreach ($subsections as $subsection => $data) {
                 if (\is_array($data)) {
                     foreach ($data as $key => $value) {
-                        $output .= $section . '[' . (\is_string($key) ? $key : '') . ']=' . self::export($value);
+                        $output .= $subsection . '[' . (\is_string($key) ? $key : '') . ']=' . self::export($value);
                     }
                 } else {
-                    $output .= $section . '[]=' . $data;
+                    $output .= $subsection . '[]=' . $data;
                 }
             }
         }
@@ -69,9 +69,13 @@ class IniDumper implements DumperContract
     {
         if (null === $value) {
             return 'null';
-        } elseif (\is_bool($value)) {
+        }
+
+        if (\is_bool($value)) {
             return $value ? 'true' : 'false';
-        } elseif (\is_numeric($value)) {
+        }
+
+        if (\is_numeric($value)) {
             return '"' . $value . '"';
         }
 

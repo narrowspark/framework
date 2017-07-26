@@ -115,7 +115,9 @@ class Dumper
     {
         if (isset(self::$supportedDumper[$type])) {
             return new self::$supportedDumper[$type]();
-        } elseif (isset(self::$supportedMimeTypes[$type])) {
+        }
+
+        if (isset(self::$supportedMimeTypes[$type])) {
             $class = self::$supportedDumper[self::$supportedMimeTypes[$type]];
 
             if (\is_object($class)) {

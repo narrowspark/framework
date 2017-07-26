@@ -91,7 +91,7 @@ final class XmlUtils
         }
 
         $internalErrors  = \libxml_use_internal_errors(true);
-        $disableEntities = \libxml_disable_entity_loader(true);
+        $disableEntities = \libxml_disable_entity_loader();
 
         \libxml_clear_errors();
 
@@ -217,15 +217,9 @@ final class XmlUtils
             case 'null' === $lowercaseValue:
                 return;
             case \ctype_digit($value):
-                $raw  = $value;
-                $cast = (int) $value;
-
-                return '0' == $value[0] ? \octdec($value) : (($raw === (string) $cast) ? $cast : $raw);
+                return self::transformToNumber($value, 0);
             case isset($value[1]) && '-' === $value[0] && \ctype_digit(\mb_substr($value, 1)):
-                $raw  = $value;
-                $cast = (int) $value;
-
-                return '0' == $value[1] ? \octdec($value) : (($raw === (string) $cast) ? $cast : $raw);
+                return self::transformToNumber($value, 1);
             case 'true' === $lowercaseValue:
                 return true;
             case 'false' === $lowercaseValue:
@@ -246,8 +240,10 @@ final class XmlUtils
     /**
      * Validates DOMDocument against a file or callback.
      *
-     * @param \DOMDocument   $dom
+     * @param \DOMDocument $dom
      * @param array|callable $schemaOrCallable
+     *
+     * @throws \InvalidArgumentException
      *
      * @return void
      */
@@ -282,5 +278,23 @@ final class XmlUtils
 
             throw new InvalidArgumentException(\implode("\n", $messages), 0, $exception);
         }
+    }
+
+    /**
+     * @param string $value
+     * @param int    $position
+     *
+     * @return int|number
+     */
+    private static function transformToNumber(string $value, int $position)
+    {
+        $raw = $value;
+        $cast = (int) $value;
+
+        if ($raw === (string) $cast) {
+            return $value[$position] == '0' ? \octdec($value) : $cast;
+        }
+
+        return $value[$position] == '0' ? \octdec($value) : $raw;
     }
 }
