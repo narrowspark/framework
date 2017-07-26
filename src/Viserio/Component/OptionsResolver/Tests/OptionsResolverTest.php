@@ -400,7 +400,7 @@ class OptionsResolverTest extends MockeryTestCase
      */
     public function testOptionsThrowsMandatoryOptionNotFoundExceptionIfOptionsAreEmpty(): void
     {
-        $options = $this->getOptionsResolver(
+        $this->getOptionsResolver(
             new ConnectionMandatoryRecursiveContainerIdConfiguration(),
             ['doctrine' => ['connection' => ['orm_default' => []]]],
             'orm_default'

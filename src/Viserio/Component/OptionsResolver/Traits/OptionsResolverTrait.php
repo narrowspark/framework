@@ -107,11 +107,17 @@ trait OptionsResolverTrait
     {
         if (\is_iterable($data)) {
             return $data;
-        } elseif ($data instanceof ContainerInterface && $data->has(RepositoryContract::class)) {
+        }
+
+        if ($data instanceof ContainerInterface && $data->has(RepositoryContract::class)) {
             return $data->get(RepositoryContract::class);
-        } elseif ($data instanceof ContainerInterface && $data->has('config')) {
+        }
+
+        if ($data instanceof ContainerInterface && $data->has('config')) {
             return $data->get('config');
-        } elseif ($data instanceof ContainerInterface && $data->has('options')) {
+        }
+
+        if ($data instanceof ContainerInterface && $data->has('options')) {
             return $data->get('options');
         }
 
@@ -151,7 +157,9 @@ trait OptionsResolverTrait
 
             if (! $useRecursion && isset($config[$mandatoryOption])) {
                 continue;
-            } elseif ($useRecursion && isset($config[$key])) {
+            }
+
+            if ($useRecursion && isset($config[$key])) {
                 self::checkMandatoryOptions($configClass, $mandatoryOption, $config[$key], $interfaces);
 
                 return;
@@ -187,7 +195,9 @@ trait OptionsResolverTrait
         foreach ($dimensions as $dimension) {
             if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
                 throw new UnexpectedValueException($dimensions, $dimension);
-            } elseif (! isset($config[$dimension])) {
+            }
+
+            if (! isset($config[$dimension])) {
                 if (! isset($interfaces[RequiresMandatoryOptionsContract::class]) &&
                     isset($interfaces[ProvidesDefaultOptionsContract::class])
                 ) {
@@ -219,7 +229,9 @@ trait OptionsResolverTrait
 
             if (! $useRecursion && isset($config[$value])) {
                 continue;
-            } elseif ($useRecursion && isset($config[$key])) {
+            }
+
+            if ($useRecursion && isset($config[$key])) {
                 if (\is_callable($value)) {
                     $value($config[$key]);
 
