@@ -92,7 +92,7 @@ class TwigServiceProvider implements
         $view = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($view !== null) {
-            /** @var FactoryContract $view */
+            /* @var FactoryContract $view */
             $view->addExtension('twig', 'twig');
         }
 
@@ -112,7 +112,7 @@ class TwigServiceProvider implements
         $engines = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($engines !== null) {
-            /** @var EngineResolver $engines */
+            /* @var EngineResolver $engines */
             $engines->register('twig', function () use ($container) {
                 return $container->get(TwigEngine::class);
             });
