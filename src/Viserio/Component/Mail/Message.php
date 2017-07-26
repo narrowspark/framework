@@ -84,7 +84,9 @@ class Message implements MessageContract
             return $this;
         }
 
-        return $this->addAddresses($address, $name, 'To');
+        $this->addAddresses($address, $name, 'To');
+
+        return $this;
     }
 
     /**
@@ -98,7 +100,9 @@ class Message implements MessageContract
             return $this;
         }
 
-        return $this->addAddresses($address, $name, 'Cc');
+        $this->addAddresses($address, $name, 'Cc');
+
+        return $this;
     }
 
     /**
@@ -112,7 +116,9 @@ class Message implements MessageContract
             return $this;
         }
 
-        return $this->addAddresses($address, $name, 'Bcc');
+        $this->addAddresses($address, $name, 'Bcc');
+
+        return $this;
     }
 
     /**
@@ -120,7 +126,9 @@ class Message implements MessageContract
      */
     public function replyTo(string $address, string $name = null): MessageContract
     {
-        return $this->addAddresses($address, $name, 'ReplyTo');
+        $this->addAddresses($address, $name, 'ReplyTo');
+
+        return $this;
     }
 
     /**
@@ -196,19 +204,19 @@ class Message implements MessageContract
      * @param string       $name
      * @param string       $type
      *
-     * @return \Viserio\Component\Contracts\Mail\Message
+     * @return void
      */
-    protected function addAddresses($address, string $name, string $type): MessageContract
+    protected function addAddresses($address, string $name, string $type): void
     {
         if (\is_array($address)) {
             $set = \sprintf('set%s', $type);
             $this->swift->$set($address, $name);
-        } else {
-            $add = \sprintf('add%s', $type);
-            $this->swift->$add($address, $name);
+
+            return;
         }
 
-        return $this;
+        $add = \sprintf('add%s', $type);
+        $this->swift->$add($address, $name);
     }
 
     /**

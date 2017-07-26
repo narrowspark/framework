@@ -4,10 +4,12 @@ namespace Viserio\Component\Support;
 
 use BadMethodCallException;
 use Stringy\StaticStringy;
-use Stringy\Stringy;
 use Viserio\Component\Contracts\Support\CharacterType;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
+/**
+ * @mixin \Stringy\Stringy
+ */
 class Str
 {
     use MacroableTrait {
@@ -173,7 +175,7 @@ class Str
         if (! \ctype_lower($value)) {
             $value = self::normalizeScreamingCase($value);
             $value = \trim($value);
-            $value = (string) static::toLowerCase(\preg_replace('/(.)(?=[A-Z0-9])/u', '$1' . $delimiter, $value));
+            $value = \mb_strtolower(\preg_replace('/(.)(?=[A-Z0-9])/u', '$1' . $delimiter, $value));
             $value = \preg_replace('/[_\s-]+/', $delimiter, $value);
         }
 

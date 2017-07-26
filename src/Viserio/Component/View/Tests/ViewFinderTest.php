@@ -19,7 +19,7 @@ class ViewFinderTest extends MockeryTestCase
     private $finder;
 
     /**
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contracts\Filesystem\Filesystem|\Mockery\MockInterface
      */
     private $filesystem;
 

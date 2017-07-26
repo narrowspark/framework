@@ -74,6 +74,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
 
             if (\count($searchDirectories) !== 0 && \count($files) === 0) {
                 // Get those files from the search directory
+                /** @var \SplFileObject $file */
                 foreach ($this->getFinder($searchDirectories) as $file) {
                     $search[] = self::normalizeDirectorySeparator($file->getRealPath());
                 }
@@ -86,6 +87,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
 
         // If no files passed, use the view paths
         if (\count($search) === 0) {
+            /** @var \SplFileObject $file */
             foreach ($this->getFinder($paths) as $file) {
                 $search[] = self::normalizeDirectorySeparator($file->getRealPath());
             }
@@ -109,10 +111,12 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
 
         foreach ($files as $fileName) {
             if (\count($searchDirectories) !== 0) {
+                /** @var \SplFileObject $file */
                 foreach ($this->getFinder($searchDirectories, $fileName) as $file) {
                     $search[] = self::normalizeDirectorySeparator($file->getRealPath());
                 }
             } else {
+                /** @var \SplFileObject $file */
                 foreach ($this->getFinder($paths, $fileName) as $file) {
                     $search[] = self::normalizeDirectorySeparator($file->getRealPath());
                 }

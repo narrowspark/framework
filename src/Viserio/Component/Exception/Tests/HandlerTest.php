@@ -27,7 +27,7 @@ use Viserio\Component\HttpFactory\StreamFactory;
 class HandlerTest extends MockeryTestCase
 {
     /**
-     * @var ContainerInterface
+     * @var \Psr\Container\ContainerInterface|\Mockery\MockInterface
      */
     private $container;
 

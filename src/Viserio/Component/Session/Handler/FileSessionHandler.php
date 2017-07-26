@@ -107,6 +107,7 @@ class FileSessionHandler implements SessionHandlerInterface
 
         $boolArray = [];
 
+        /** @var \SplFileObject $file */
         foreach ($files as $file) {
             $boolArray[] = $this->files->delete([$file->getRealPath()]);
         }

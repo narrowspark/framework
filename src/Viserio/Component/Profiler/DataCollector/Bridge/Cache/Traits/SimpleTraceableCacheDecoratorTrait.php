@@ -7,6 +7,13 @@ use Traversable;
 trait SimpleTraceableCacheDecoratorTrait
 {
     /**
+     * Instance of stdClass.
+     *
+     * @var \stdClass
+     */
+    private $miss;
+
+    /**
      * {@inheritdoc}
      */
     public function get($key, $default = null)

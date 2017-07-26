@@ -38,7 +38,8 @@ class SessionServiceProvider implements ServiceProvider
      */
     public static function extendEventManager(ContainerInterface $container, ?callable $getPrevious = null): ?EventManagerContract
     {
-        $eventManager = $getPrevious();
+        /** @var EventManagerContract $eventManager */
+        $eventManager = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($eventManager !== null) {
             $eventManager->attach(TerminableContract::TERMINATE, function (EventContract $event): void {

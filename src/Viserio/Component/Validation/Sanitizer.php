@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Component\Validation;
 
-use Closure;
+
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Sanitizer

@@ -6,6 +6,7 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Foundation\Proxy\App;
 use Viserio\Provider\Twig\Command\CleanCommand;
 use Viserio\Provider\Twig\Command\LintCommand;
 
@@ -34,6 +35,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
         $console = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($console !== null) {
+            /** @var Application $console */
             $console->add(new CleanCommand());
 
             if (\class_exists(DebugCommand::class)) {

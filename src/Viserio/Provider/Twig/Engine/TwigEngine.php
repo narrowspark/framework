@@ -87,6 +87,8 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
      *
      * @param \Twig\Environment $twig
      * @param array             $config
+     *
+     * @return \Twig\Environment
      */
     protected function addExtensions(Environment $twig, array $config): Environment
     {

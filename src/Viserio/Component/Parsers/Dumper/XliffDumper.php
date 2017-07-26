@@ -84,7 +84,6 @@ class XliffDumper implements DumperContract
         $dom               = new DOMDocument('1.0', $encoding);
         $dom->formatOutput = true;
 
-        /** @var \DOMNode $xliff */
         $xliff = $dom->appendChild($dom->createElement('xliff'));
         $xliff->setAttribute('version', '1.2');
         $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:1.2');

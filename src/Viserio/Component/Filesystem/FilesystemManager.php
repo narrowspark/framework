@@ -146,7 +146,6 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * @param array $config
      *
      * @return object
-     * @return object
      */
     protected function createAwss3Connection(array $config): object
     {

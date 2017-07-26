@@ -89,7 +89,9 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function delete(string $key): RepositoryContract
     {
-        return $this->offsetUnset($key);
+        $this->offsetUnset($key);
+
+        return $this;
     }
 
     /**
@@ -146,7 +148,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      *
      * @return $this
      */
-    public function offsetSet($key, $value): RepositoryContract
+    public function offsetSet($key, $value): self
     {
         $this->data = Arr::set($this->data, $key, $value);
 

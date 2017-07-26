@@ -33,12 +33,10 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
         - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\Command\\ClosureCommandTest::comment#'
-        - '#Call to an undefined method Viserio\\Component\\Contracts\\Container\\Container::needs#'
         - '#Call to an undefined method Viserio\\Component\\Log\\Writer::getName#'
         - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
         - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::getProtectedStatic#'
-        - '#Call to an undefined method Viserio\\Component\\Mail\\Message::setBody#'
         - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::set#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::get#'
@@ -54,11 +52,12 @@ parameters:
         - '#Undefined variable: \$text#'
 
         # Used for lazy loding
-        - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\LazyOpenStream::#'
-        - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::#'
+        - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator::\$stream#'
+        - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::\$_fn_#'
 
         # No need to call the parent constructor
         - '#Viserio\\Component\\Console\\Command\\Command::__construct#'
+        - '#Viserio\\Component\\Http\\Stream\\LazyOpenStream::__construct\(\) does not call parent constructor from Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator#'
 
         # Mock dependencies
         - '#Mockery\\MockInterface#'
@@ -69,7 +68,6 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Http\\AbstractMessage::withUri#'
         - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
         - '#\$callback of class Viserio\\Component\\Cron\\CallbackCron constructor expects#'
-        - '#Access to an undefined property Viserio\\Component\\Events\\Tests\\EventTest::\$event#'
         - '#\$resource of static method League\\Flysystem\\Util::getStreamSize#'
         - '#\$view of method Viserio\\Component\\Mail\\Mailer::send#'
         - '#\$callback of method Viserio\\Component\\Mail\\Mailer::send#'
@@ -84,13 +82,11 @@ parameters:
         - '#set\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#setMultiple\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
-        - '#Method Viserio\\Component\\Cron\\Cron::withoutOverlapping#'
 
         # if check exists
         - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
         - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
-        - '#Method Viserio\\Component\\Filesystem\\FilesystemAdapter::has#'
         - '#Call to an undefined method League\\Flysystem\\AdapterInterface::getUrl#'
         - '#Call to an undefined method League\\Flysystem\\AdapterInterface::applyPathPrefix#'
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
@@ -102,14 +98,8 @@ parameters:
         - '#expects Throwable#'
         - '#Throwable given#'
 
-        # spliceIntoPosition returns cron class
-        - '#should return \$this but returns \$this->spliceIntoPosition#'
-
         # Is a protected method
         - '#Call to an undefined method Viserio\\Component\\Contracts\\Cron\\Cron::spliceIntoPosition#'
-
-        # Returns a clone class
-        - '#Method Viserio\\Component\\Cookie\\AbstractCookieCollector::forget#'
 
         # Wrapper
         - '#Viserio\\Component\\Profiler\\DataCollector\\Bridge\\PDO\\TraceablePDODecorater::__construct#'

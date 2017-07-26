@@ -284,7 +284,7 @@ final class XmlUtils
      * @param string $value
      * @param int    $position
      *
-     * @return int|number
+     * @return int
      */
     private static function transformToNumber(string $value, int $position)
     {

@@ -46,7 +46,7 @@ class Invoker implements InvokerInterface
      *
      * @return $this
      */
-    public function injectByTypeHint(bool $inject = false): InvokerInterface
+    public function injectByTypeHint(bool $inject = false): self
     {
         $this->inject['type'] = $inject;
 
@@ -60,7 +60,7 @@ class Invoker implements InvokerInterface
      *
      * @return $this
      */
-    public function injectByParameterName(bool $inject = false): InvokerInterface
+    public function injectByParameterName(bool $inject = false): self
     {
         $this->inject['parameter'] = $inject;
 
@@ -74,7 +74,7 @@ class Invoker implements InvokerInterface
      *
      * @return $this
      */
-    public function addResolver(ParameterResolver $resolver): InvokerInterface
+    public function addResolver(ParameterResolver $resolver): self
     {
         $this->resolvers[] = $resolver;
 
