@@ -12,8 +12,7 @@ class FooMiddleware implements MiddlewareInterface
     public function process(
         ServerRequestInterface $request,
         DelegateInterface $delegate
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $request = $request->withAttribute('foo-middleware', 'foo-middleware');
 
         return $delegate->process($request);
