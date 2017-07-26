@@ -35,7 +35,7 @@ class PipStreamTest extends TestCase
 
         self::assertFalse(NSA::invokeMethod($this->pipeStream, 'isPipe'));
 
-        $fhFile     = fopen(__FILE__, 'r');
+        $fhFile     = fopen(__FILE__, 'rb');
         $fileStream = new Stream($fhFile);
 
         self::assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));

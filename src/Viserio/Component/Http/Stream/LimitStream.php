@@ -44,7 +44,7 @@ class LimitStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         // Always return true if the underlying stream is EOF
         if ($this->stream->eof()) {
@@ -64,7 +64,7 @@ class LimitStream extends AbstractStreamDecorator
      *
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         if (($length = $this->stream->getSize()) === null) {
             return null;
@@ -104,7 +104,7 @@ class LimitStream extends AbstractStreamDecorator
      *
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
         return $this->stream->tell() - $this->offset;
     }
@@ -153,7 +153,7 @@ class LimitStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         if ($this->limit == -1) {
             return $this->stream->read($length);

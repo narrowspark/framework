@@ -71,11 +71,11 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
 
         $target = $this->uri->getPath();
 
-        if ($target == '') {
+        if ($target === '') {
             $target = '/';
         }
 
-        if ($this->uri->getQuery() != '') {
+        if ($this->uri->getQuery() !== '') {
             $target .= '?' . $this->uri->getQuery();
         }
 
@@ -156,7 +156,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     {
         $host = $this->uri->getHost();
 
-        if ($host == '') {
+        if ($host === '') {
             return;
         }
 
@@ -232,7 +232,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         }
 
         if ($uri === null) {
-            return Uri::createFromString('');
+            return Uri::createFromString();
         }
 
         throw new InvalidArgumentException(

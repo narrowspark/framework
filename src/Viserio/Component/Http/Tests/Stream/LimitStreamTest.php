@@ -19,14 +19,14 @@ class LimitStreamTest extends TestCase
 
     public function setUp(): void
     {
-        $this->decorated = new Stream(\fopen(__FILE__, 'r'));
+        $this->decorated = new Stream(\fopen(__FILE__, 'rb'));
         $this->body      = new LimitStream($this->decorated, 10, 3);
     }
 
     public function testReturnsSubset(): void
     {
         $body   = 'foo';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -47,7 +47,7 @@ class LimitStreamTest extends TestCase
     public function testReturnsSubsetWhenCastToString(): void
     {
         $body   = 'foo_baz_bar';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -63,13 +63,13 @@ class LimitStreamTest extends TestCase
      */
     public function testEnsuresPositionCanBeekSeekedTo(): void
     {
-        new LimitStream(new Stream(\fopen('php://temp', 'r+')), 0, 10);
+        new LimitStream(new Stream(\fopen('php://temp', 'rb+')), 0, 10);
     }
 
     public function testReturnsSubsetOfEmptyBodyWhenCastToString(): void
     {
         $body   = '01234567891234';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -82,7 +82,7 @@ class LimitStreamTest extends TestCase
     public function testReturnsSpecificSubsetOBodyWhenCastToString(): void
     {
         $body   = '0123456789abcdef';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -148,7 +148,7 @@ class LimitStreamTest extends TestCase
     public function testThrowsWhenCurrentGreaterThanOffsetSeek(): void
     {
         $body   = 'foo_bar';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -164,7 +164,7 @@ class LimitStreamTest extends TestCase
     public function testCanGetContentsWithoutSeeking(): void
     {
         $body   = 'foo_bar';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -193,7 +193,7 @@ class LimitStreamTest extends TestCase
     public function testGetContentsIsBasedOnSubset(): void
     {
         $body   = 'foobazbar';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -220,7 +220,7 @@ class LimitStreamTest extends TestCase
     public function testLengthLessOffsetWhenNoLimitSize(): void
     {
         $body   = 'foo_bar';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);

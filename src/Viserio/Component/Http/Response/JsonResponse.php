@@ -66,7 +66,7 @@ class JsonResponse extends Response
      *
      * @return string
      */
-    private function jsonEncode($data, $encodingOptions)
+    private function jsonEncode($data, $encodingOptions): string
     {
         if (\is_resource($data)) {
             throw new InvalidArgumentException('Cannot JSON encode resources');

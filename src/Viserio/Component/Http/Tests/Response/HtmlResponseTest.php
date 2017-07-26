@@ -73,7 +73,7 @@ class HtmlResponseTest extends TestCase
      */
     public function testRaisesExceptionforNonStringNonStreamBodyContent($body): void
     {
-        $response = new HtmlResponse($body);
+        new HtmlResponse($body);
     }
 
     public function testConstructorRewindsBodyStream(): void

@@ -47,7 +47,7 @@ final class HeaderSecurity
         $length = \mb_strlen($value);
         $string = '';
 
-        for ($i = 0; $i < $length; $i += 1) {
+        for ($i = 0; $i < $length; ++$i) {
             $ascii = \ord($value[$i]);
             // Detect continuation sequences
             if ($ascii === 13) {
@@ -56,7 +56,7 @@ final class HeaderSecurity
 
                 if ($lf === 10 && \in_array($ws, [9, 32], true)) {
                     $string .= $value[$i] . $value[$i + 1];
-                    $i += 1;
+                    ++$i;
                 }
 
                 continue;

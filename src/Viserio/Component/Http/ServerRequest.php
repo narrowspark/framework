@@ -39,7 +39,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @var array
      */
-    private $serverParams = [];
+    private $serverParams;
 
     /**
      * List of uploaded files.

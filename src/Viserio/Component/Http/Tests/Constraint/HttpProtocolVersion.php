@@ -38,7 +38,7 @@ class HttpProtocolVersion extends PHPUnitConstraint
         return 'is a valid HTTP protocol version number';
     }
 
-    protected function matches($other)
+    protected function matches($other): bool
     {
         if (! \is_string($other)) {
             return false;

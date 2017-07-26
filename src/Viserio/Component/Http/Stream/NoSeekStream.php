@@ -17,7 +17,7 @@ class NoSeekStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return false;
     }

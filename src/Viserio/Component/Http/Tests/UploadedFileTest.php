@@ -58,13 +58,13 @@ class UploadedFileTest extends TestCase
      */
     public function testRaisesExceptionOnInvalidError(): void
     {
-        $stream = new Stream(\fopen('php://temp', 'r'));
+        $stream = new Stream(\fopen('php://temp', 'rb'));
         new UploadedFile($stream, 0, 9999);
     }
 
     public function testGetStreamReturnsOriginalStreamObject(): void
     {
-        $stream = new Stream(\fopen('php://temp', 'r'));
+        $stream = new Stream(\fopen('php://temp', 'rb'));
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         self::assertSame($stream, $upload->getStream());
@@ -95,7 +95,7 @@ class UploadedFileTest extends TestCase
     public function testSuccessful(): void
     {
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -139,7 +139,7 @@ class UploadedFileTest extends TestCase
     public function testMoveRaisesExceptionForInvalidPath($path): void
     {
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -159,7 +159,7 @@ class UploadedFileTest extends TestCase
     public function testMoveCannotBeCalledMoreThanOnce(): void
     {
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -183,7 +183,7 @@ class UploadedFileTest extends TestCase
     public function testCannotRetrieveStreamAfterMove(): void
     {
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -251,7 +251,7 @@ class UploadedFileTest extends TestCase
     {
         $uploadedFile = new UploadedFile('not ok', 0, $status);
 
-        $stream = $uploadedFile->getStream();
+        $uploadedFile->getStream();
     }
 
     public function testMoveToCreatesStreamIfOnlyAFilenameWasProvided(): void

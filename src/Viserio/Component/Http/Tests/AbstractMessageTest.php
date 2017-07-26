@@ -36,7 +36,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
 
         foreach ($headers as $name => $values) {
             self::assertInternalType('string', $name, 'Each key MUST be a header name');
-            self::assertValidHeaderValue($values);
+            $this->assertValidHeaderValue($values);
         }
     }
 
@@ -45,7 +45,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $message = $this->classToTest;
         $values  = $message->getHeader('not exist');
 
-        self::assertValidHeaderValue($values);
+        $this->assertValidHeaderValue($values);
     }
 
     public function testValidNonExistHeaderLine(): void
@@ -84,6 +84,12 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $newMessage   = $message->withProtocolVersion($expectedVersion);
 
         self::assertEquals(
+            '1.1',
+            $messageClone->getProtocolVersion(),
+            'getProtocolVersion does not match version set in withProtocolVersion'
+        );
+
+        self::assertEquals(
             $expectedVersion,
             $newMessage->getProtocolVersion(),
             'getProtocolVersion does not match version set in withProtocolVersion'
@@ -114,7 +120,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
 
         $newMessage = $message->withHeader($headerName, $headerValue);
 
-        self::assertImmutable($messageClone, $message, $newMessage);
+        $this->assertImmutable($messageClone, $message, $newMessage);
         self::assertEquals(
             $expectedHeaderValue,
             $newMessage->getHeader($headerName),
@@ -135,7 +141,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $messageClone = clone $message;
         $newMessage   = $message->withAddedHeader($headerName, $headerValue);
 
-        self::assertImmutable($messageClone, $message, $newMessage);
+        $this->assertImmutable($messageClone, $message, $newMessage);
         self::assertEquals(
             $expectedHeaderValue,
             $newMessage->getHeader($headerName),
@@ -207,7 +213,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
 
         $newMessage = $messageWithHeader->withoutHeader($headerName);
 
-        self::assertImmutable($messageClone, $messageWithHeader, $newMessage);
+        $this->assertImmutable($messageClone, $messageWithHeader, $newMessage);
         self::assertFalse($newMessage->hasHeader($headerName));
         self::assertEquals($message, $newMessage);
     }
@@ -230,7 +236,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $expectedBody = $this->mock(StreamInterface::class);
         $newMessage   = $message->withBody($expectedBody);
 
-        self::assertImmutable($messageClone, $message, $newMessage);
+        $this->assertImmutable($messageClone, $message, $newMessage);
         self::assertEquals(
             $expectedBody,
             $newMessage->getBody(),

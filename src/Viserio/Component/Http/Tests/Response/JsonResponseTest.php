@@ -72,7 +72,7 @@ class JsonResponseTest extends TestCase
     public function testJsonErrorHandlingOfResources(): void
     {
         // Serializing something that is not serializable.
-        $resource = \fopen('php://memory', 'r');
+        $resource = \fopen('php://memory', 'rb');
         new JsonResponse($resource);
     }
 
@@ -84,7 +84,7 @@ class JsonResponseTest extends TestCase
     {
         // Serializing something that is not serializable.
         $data = [
-            'stream' => \fopen('php://memory', 'r'),
+            'stream' => \fopen('php://memory', 'rb'),
         ];
 
         new JsonResponse($data);

@@ -57,7 +57,7 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return false;
     }
@@ -65,7 +65,7 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         $content = parent::read($length);
 
@@ -83,7 +83,7 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         if ($this->reachedEof) {
             return $this->cache;

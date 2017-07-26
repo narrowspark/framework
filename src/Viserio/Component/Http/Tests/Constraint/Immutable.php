@@ -25,7 +25,7 @@ class Immutable extends PHPUnitConstraint
      * @param object $new
      * @param string $message
      */
-    public static function assertImmutable($original, $new, $message = ''): void
+    public static function assertImmutable(object $original, object $new, $message = ''): void
     {
         Assert::assertThat($new, new self($original), $message);
     }
@@ -35,7 +35,7 @@ class Immutable extends PHPUnitConstraint
         return 'is immutable';
     }
 
-    protected function matches($other)
+    protected function matches($other): bool
     {
         if (! ($other instanceof $this->new)) {
             return false;
@@ -44,7 +44,7 @@ class Immutable extends PHPUnitConstraint
         return $other !== $this->new;
     }
 
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         return \sprintf(
             '%s and %s are different instances of the same class',

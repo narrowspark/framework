@@ -33,6 +33,6 @@ class RedirectResponse extends Response
 
         $headers['location'] = [(string) $uri];
 
-        parent::__construct($status, $headers, new Stream(\fopen('php://temp', 'r+')));
+        parent::__construct($status, $headers, new Stream(\fopen('php://temp', 'rb+')));
     }
 }

@@ -23,21 +23,12 @@ class FnStream implements StreamInterface
         'isReadable', 'read', 'getContents', 'getMetadata', ];
 
     /**
-     * Hash of method name to a callable.
-     *
-     * @var array
-     */
-    private $methods;
-
-    /**
      * Create a new fn stream instance.
      *
      * @param array $methods
      */
     public function __construct(array $methods)
     {
-        $this->methods = $methods;
-
         // Create the functions on the class
         foreach ($methods as $name => $fn) {
             $this->{'_fn_' . $name} = $fn;
@@ -85,7 +76,7 @@ class FnStream implements StreamInterface
      *
      * @return FnStream
      */
-    public static function decorate(StreamInterface $stream, array $methods)
+    public static function decorate(StreamInterface $stream, array $methods): FnStream
     {
         // If any of the required methods were not provided, then simply
         // proxy to the decorated stream.

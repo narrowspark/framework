@@ -10,14 +10,14 @@ use Psr\Http\Message\ResponseInterface;
 class Response extends AbstractMessage implements ResponseInterface, StatusCodeInterface
 {
     /**
-     * @var null|string
+     * @var string
      */
     private $reasonPhrase = '';
 
     /**
-     * @var int
+     * @var null|int
      */
-    private $statusCode = self::STATUS_OK;
+    private $statusCode;
 
     /**
      * Create a new response instance.
@@ -58,7 +58,7 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
      */
     public function getReasonPhrase(): string
     {
-        if ($this->reasonPhrase == '') {
+        if ($this->reasonPhrase === '') {
             $this->reasonPhrase = HttpStatus::getReasonPhrase($this->statusCode);
         }
 

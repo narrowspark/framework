@@ -70,6 +70,6 @@ class RedirectResponseTest extends TestCase
      */
     public function testConstructorRaisesExceptionOnInvalidUri($uri): void
     {
-        $response = new RedirectResponse($uri);
+        new RedirectResponse($uri);
     }
 }

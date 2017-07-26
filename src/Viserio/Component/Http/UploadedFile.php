@@ -111,10 +111,12 @@ class UploadedFile implements UploadedFileInterface
      * Create a new uploaded file instance.
      *
      * @param resource|StreamInterface|string $streamOrFile
-     * @param int                             $size
-     * @param int                             $errorStatus
-     * @param null|string                     $clientFilename
-     * @param null|string                     $clientMediaType
+     * @param int $size
+     * @param int $errorStatus
+     * @param null|string $clientFilename
+     * @param null|string $clientMediaType
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         $streamOrFile,
@@ -246,6 +248,8 @@ class UploadedFile implements UploadedFileInterface
      *
      * @param mixed $streamOrFile
      *
+     * @throws \InvalidArgumentException
+     *
      * @return void
      */
     private function setStreamOrFile($streamOrFile): void
@@ -265,6 +269,8 @@ class UploadedFile implements UploadedFileInterface
      * Check if error is a int or a array, then set it.
      *
      * @param int $error
+     *
+     * @throws \InvalidArgumentException
      *
      * @return void
      */

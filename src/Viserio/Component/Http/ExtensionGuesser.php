@@ -96,7 +96,6 @@ final class ExtensionGuesser
      * Guesses the mime type using the PECL extension FileInfo.
      *
      * @param string      $path
-     * @param null|string $magicFile
      *
      * @return null|string
      */
@@ -146,7 +145,7 @@ final class ExtensionGuesser
         }
 
         foreach (self::$guessers as $guesser) {
-            if (null !== $extension = \call_user_func($guesser, $path)) {
+            if (($extension = $guesser($path)) !== null) {
                 return $extension;
             }
         }

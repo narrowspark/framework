@@ -81,7 +81,7 @@ class RequestTest extends AbstractMessageTest
         $requestClone = clone $request;
         $newRequest   = $request->withRequestTarget($expectedRequestTarget);
 
-        self::assertImmutable($requestClone, $request, $newRequest);
+        $this->assertImmutable($requestClone, $request, $newRequest);
         self::assertEquals(
             $expectedRequestTarget,
             $newRequest->getRequestTarget(),
@@ -108,7 +108,7 @@ class RequestTest extends AbstractMessageTest
         $requestClone = clone $request;
         $newRequest   = $request->withMethod($expectedMethod);
 
-        self::assertImmutable($requestClone, $request, $newRequest);
+        $this->assertImmutable($requestClone, $request, $newRequest);
         self::assertEquals(
             $expectedMethod,
             $newRequest->getMethod(),
@@ -140,7 +140,7 @@ class RequestTest extends AbstractMessageTest
             ->getMock();
         $newRequest = $request->withUri($uri);
 
-        self::assertImmutable($requestClone, $request, $newRequest);
+        $this->assertImmutable($requestClone, $request, $newRequest);
         self::assertEquals(
             $uri,
             $newRequest->getUri(),
@@ -152,7 +152,7 @@ class RequestTest extends AbstractMessageTest
     {
         $streamIsRead = false;
 
-        $body = FnStream::decorate(new Stream(\fopen('php://temp', 'r+')), [
+        $body = FnStream::decorate(new Stream(\fopen('php://temp', 'rb+')), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
 
@@ -172,7 +172,7 @@ class RequestTest extends AbstractMessageTest
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
-        $requestAfterUri = $this->getEmptyHostHeader()->withUri($uri, false);
+        $requestAfterUri = $this->getEmptyHostHeader()->withUri($uri);
 
         self::assertEquals('', $requestAfterUri->getHeaderLine('Host'));
     }
@@ -191,7 +191,7 @@ class RequestTest extends AbstractMessageTest
             ->once()
             ->andReturn('');
 
-        $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost(), false);
+        $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost());
 
         self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
     }
@@ -203,7 +203,7 @@ class RequestTest extends AbstractMessageTest
             ->once()
             ->andReturn('');
 
-        $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost(), false);
+        $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost());
 
         self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
     }
@@ -260,6 +260,8 @@ class RequestTest extends AbstractMessageTest
     {
         $uri = $this->mock(UriInterface::class);
         $uri->shouldReceive('getHost')
+            ->once();
+        $uri->shouldReceive('getPort')
             ->once();
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHost(), false);

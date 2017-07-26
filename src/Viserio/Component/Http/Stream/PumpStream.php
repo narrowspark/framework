@@ -101,7 +101,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
         return $this->tellPos;
     }
@@ -109,7 +109,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return ! $this->source;
     }
@@ -117,7 +117,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return false;
     }
@@ -141,7 +141,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return false;
     }
@@ -161,7 +161,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return true;
     }
@@ -188,7 +188,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         $result = '';
         while (! $this->eof()) {
@@ -215,7 +215,7 @@ class PumpStream implements StreamInterface
      *
      * @return null|void
      */
-    private function pump($length)
+    private function pump($length): void
     {
         if ($this->source) {
             do {
