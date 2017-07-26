@@ -42,7 +42,7 @@ class ConsoleCommandsServiceProvider implements ServiceProviderInterface
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-            /** @var Application $console */
+            /* @var Application $console */
             $console->add(new CleanCommand());
 
             if (\class_exists(DebugCommand::class)) {
