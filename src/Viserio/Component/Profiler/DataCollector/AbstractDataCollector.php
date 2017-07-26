@@ -64,7 +64,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     public function getName(): string
     {
-        $namespace = \mb_substr(\get_called_class(), 0, \mb_strrpos(\get_called_class(), '\\'));
+        $namespace = \mb_substr(static::class, 0, \mb_strrpos(static::class, '\\'));
 
         return Str::snake(\str_replace($namespace . '\\', '', \get_class($this)), '-');
     }
@@ -92,7 +92,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
     {
         if ($seconds < 0.001) {
             return \round($seconds * 1000000) . 'μs';
-        } elseif ($seconds < 1) {
+        }
+
+        if ($seconds < 1) {
             return \round($seconds * 1000, 2) . 'ms';
         }
 

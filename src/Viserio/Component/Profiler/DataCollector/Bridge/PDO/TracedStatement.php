@@ -77,7 +77,7 @@ class TracedStatement
      *
      * @return string
      */
-    public function getSql()
+    public function getSql(): string
     {
         return $this->sql;
     }
@@ -89,7 +89,7 @@ class TracedStatement
      *
      * @return string
      */
-    public function getSqlWithParams($quotationChar = '<>')
+    public function getSqlWithParams($quotationChar = '<>'): string
     {
         if (($l = \mb_strlen($quotationChar)) > 1) {
             $quoteLeft  = \mb_substr($quotationChar, 0, $l / 2);
@@ -116,7 +116,7 @@ class TracedStatement
      *
      * @return int
      */
-    public function getRowCount()
+    public function getRowCount(): int
     {
         return $this->rowCount;
     }
@@ -126,7 +126,7 @@ class TracedStatement
      *
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         $params = [];
         foreach ($this->parameters as $name => $param) {
@@ -141,7 +141,7 @@ class TracedStatement
      *
      * @return string
      */
-    public function getPreparedId()
+    public function getPreparedId(): string
     {
         return $this->preparedId;
     }
@@ -151,7 +151,7 @@ class TracedStatement
      *
      * @return bool
      */
-    public function isPrepared()
+    public function isPrepared(): bool
     {
         return $this->preparedId !== null;
     }
@@ -177,7 +177,7 @@ class TracedStatement
      *
      * @return int
      */
-    public function getDuration()
+    public function getDuration(): int
     {
         return $this->duration;
     }
@@ -203,7 +203,7 @@ class TracedStatement
      *
      * @return int
      */
-    public function getMemoryUsage()
+    public function getMemoryUsage(): int
     {
         return $this->memoryDelta;
     }
@@ -213,7 +213,7 @@ class TracedStatement
      *
      * @return bool
      */
-    public function isSuccess()
+    public function isSuccess(): bool
     {
         return $this->exception === null;
     }
@@ -223,7 +223,7 @@ class TracedStatement
      *
      * @return \Exception
      */
-    public function getException()
+    public function getException(): \Exception
     {
         return $this->exception;
     }
@@ -233,7 +233,7 @@ class TracedStatement
      *
      * @return string
      */
-    public function getErrorCode()
+    public function getErrorCode(): string
     {
         return $this->exception !== null ? $this->exception->getCode() : 0;
     }
@@ -243,7 +243,7 @@ class TracedStatement
      *
      * @return string
      */
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         return $this->exception !== null ? $this->exception->getMessage() : '';
     }

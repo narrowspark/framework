@@ -40,7 +40,7 @@ class ProfilerMiddlewareTest extends MockeryTestCase
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-            return (new ResponseFactory())->createResponse(200);
+            return (new ResponseFactory())->createResponse();
         }));
 
         self::assertEquals(

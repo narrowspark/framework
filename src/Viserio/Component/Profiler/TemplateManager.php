@@ -27,14 +27,14 @@ class TemplateManager implements RenderableContract
      *
      * @var array
      */
-    private $icons = [];
+    private $icons;
 
     /**
      * Request token.
      *
      * @var string
      */
-    private $token = '';
+    private $token;
 
     /**
      * Create a new template manager instance.

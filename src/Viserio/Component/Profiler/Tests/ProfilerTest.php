@@ -75,7 +75,7 @@ class ProfilerTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $profiler->enable();
-        $response = (new ResponseFactory())->createResponse(200);
+        $response = (new ResponseFactory())->createResponse();
 
         $response = $profiler->modifyResponse(
             (new ServerRequestFactory())->createServerRequestFromArray($server),
@@ -106,7 +106,7 @@ class ProfilerTest extends MockeryTestCase
         $stream = (new StreamFactory())->createStream(
             '<!DOCTYPE html><html><head><title></title></head><body></body></html>'
         );
-        $response = (new ResponseFactory())->createResponse(200);
+        $response = (new ResponseFactory())->createResponse();
         $response = $response->withBody($stream);
         $profiler->setStreamFactory(new StreamFactory());
 
@@ -144,7 +144,7 @@ class ProfilerTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $profiler->disable();
-        $orginalResponse = (new ResponseFactory())->createResponse(200);
+        $orginalResponse = (new ResponseFactory())->createResponse();
 
         $response = $profiler->modifyResponse(
             (new ServerRequestFactory())->createServerRequestFromArray($server),

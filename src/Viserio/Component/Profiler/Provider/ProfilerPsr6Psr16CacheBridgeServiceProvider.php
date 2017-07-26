@@ -18,7 +18,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             CacheItemPoolInterface::class => [self::class, 'createCacheItemPoolDecorator'],

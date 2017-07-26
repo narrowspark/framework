@@ -35,7 +35,7 @@ class AssetController extends AbstractController
     /**
      * Create a new AssetController instance.
      *
-     * @param \IPsr\Http\Message\ServerRequestInterface      $serverRequest
+     * @param \Psr\Http\Message\ServerRequestInterface       $serverRequest
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
      * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler

@@ -21,13 +21,6 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     private $pool;
 
     /**
-     * Instance of stdClass.
-     *
-     * @var \stdClass
-     */
-    private $miss;
-
-    /**
      * List of event calls.
      *
      * @var array
@@ -50,7 +43,6 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     {
         $this->pool = $pool;
         $this->name = \get_class($pool);
-        $this->miss = new stdClass();
     }
 
     /**
@@ -66,7 +58,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): ?bool
     {
         $event = $this->start(__FUNCTION__);
 
@@ -130,7 +122,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
      *
      * @return object
      */
-    private function start(string $name)
+    private function start(string $name): object
     {
         $this->calls[] = $event = new class() {
             public $name;

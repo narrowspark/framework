@@ -116,11 +116,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Set the Profiler template path.
-     *
-     * @param string $path
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setTemplate(string $path): ProfilerContract
     {
@@ -130,9 +126,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Get the Profiler template path.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTemplate(): string
     {

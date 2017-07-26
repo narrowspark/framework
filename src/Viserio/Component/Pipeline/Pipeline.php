@@ -93,7 +93,9 @@ class Pipeline implements PipelineContract
                     return $stage($traveler, $stack);
                     // Otherwise we'll resolve the stages out of the container and call it with
                 // the appropriate method and arguments, returning the results back out.
-                } elseif ($this->container && ! \is_object($stage) && \is_string($stage)) {
+                }
+
+                if ($this->container && ! \is_object($stage) && \is_string($stage)) {
                     return $this->sliceThroughContainer($traveler, $stack, $stage);
                 } elseif (\is_array($stage)) {
                     $reflectionClass = new ReflectionClass(\array_shift($stage));

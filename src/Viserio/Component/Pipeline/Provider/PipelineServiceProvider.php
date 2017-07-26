@@ -12,7 +12,7 @@ class PipelineServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             PipelineContract::class => [self::class, 'createPipeline'],

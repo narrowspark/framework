@@ -14,7 +14,7 @@ class ProfilerPDOBridgeServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             PDO::class                   => [self::class, 'createTraceablePDODecorater'],

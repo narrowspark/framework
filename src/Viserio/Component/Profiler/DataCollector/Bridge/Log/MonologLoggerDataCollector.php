@@ -230,7 +230,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     /**
      * Returns a DebugProcessor instance if one is registered with this logger.
      *
-     * @return null|Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor
+     * @return null|\Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor
      */
     private function getDebugLogger(): ?DebugProcessor
     {

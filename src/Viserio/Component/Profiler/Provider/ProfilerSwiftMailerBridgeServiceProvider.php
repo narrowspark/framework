@@ -13,7 +13,7 @@ class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             ProfilerContract::class => [self::class, 'createProfiler'],

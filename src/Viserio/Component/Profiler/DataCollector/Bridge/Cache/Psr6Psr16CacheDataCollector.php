@@ -226,8 +226,6 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
                 }
             }
 
-            $statistics[$name]['time'] = $statistics[$name]['time'];
-
             if ($statistics[$name]['reads']) {
                 $statistics[$name]['hits'] =
                     \round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
