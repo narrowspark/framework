@@ -15,9 +15,9 @@ class KernelExceptionEvent implements EventContract
     /**
      * Create a new kernel exception event.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
-     * @param \Psr\Http\Message\ServerRequestInterface       $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface            $response
+     * @param \Viserio\Component\Contracts\Foundation\HttpKernel $kernel
+     * @param \Psr\Http\Message\ServerRequestInterface           $serverRequest
+     * @param \Psr\Http\Message\ResponseInterface                $response
      */
     public function __construct(HttpKernelContract $kernel, ServerRequestInterface $serverRequest, ResponseInterface $response)
     {

@@ -182,7 +182,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         $command = new ClosureCommand($signature, $callback);
 
-        Cerebro::starting(function ($console) use ($command): void {
+        Cerebro::starting(function (Cerebro $console) use ($command): void {
             $console->add($command);
         });
 

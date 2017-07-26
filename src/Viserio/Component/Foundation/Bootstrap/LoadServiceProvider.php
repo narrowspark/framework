@@ -22,8 +22,7 @@ class LoadServiceProvider implements BootstrapContract
     /**
      * Register all of the application / kernel service providers.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
-     * @param KernelContract                                 $kernel
+     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
      *
      * @return array
      */

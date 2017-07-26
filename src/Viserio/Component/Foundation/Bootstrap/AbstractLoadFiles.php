@@ -18,6 +18,7 @@ abstract class AbstractLoadFiles
         $files      = [];
         $foundFiles = Finder::create()->files()->name('*.php')->in($path);
 
+        /** @var \SplFileObject $file */
         foreach ($foundFiles as $file) {
             $path = $file->getRealPath();
 

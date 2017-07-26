@@ -14,7 +14,3 @@
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-red .profiler-menu-label {
     background-color: var(--profiler-status-red-color);
 }
-.profiler .profiler-header .profiler-menus .profiler-menu-position-left.profiler-menu-viserio-http-data-collector .profiler-menu-content {
-    padding-left: 0;
-    padding-right: 7px;
-}

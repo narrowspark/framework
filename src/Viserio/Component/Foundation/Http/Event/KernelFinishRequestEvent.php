@@ -14,7 +14,7 @@ class KernelFinishRequestEvent implements EventContract
     /**
      * Create a new kernel request finish event.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
+     * @param \Viserio\Component\Contracts\Foundation\HttpKernel $kernel
      * @param \Psr\Http\Message\ServerRequestInterface       $serverRequest
      */
     public function __construct(HttpKernelContract $kernel, ServerRequestInterface $serverRequest)

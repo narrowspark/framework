@@ -74,7 +74,7 @@ class ConfigureLoggingServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\VViserio\Component\Log\Writer
+     * @return null|\Viserio\Component\Log\Writer
      */
     public static function createConfiguredWriter(ContainerInterface $container, ?callable $getPrevious = null): ?Writer
     {

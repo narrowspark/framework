@@ -184,7 +184,7 @@ class ServeCommand extends Command
      *
      * @return null|callable
      */
-    private function getErrorCallback(bool $quiet)
+    private function getErrorCallback(bool $quiet): ?callable
     {
         if ($quiet === true) {
             return null;
@@ -214,7 +214,7 @@ class ServeCommand extends Command
     {
         $finder = new PhpExecutableFinder();
 
-        if (($binary = $finder->find(true)) === false) {
+        if (($binary = $finder->find()) === false) {
             throw new RuntimeException('Unable to find the PHP binary.');
         }
 
