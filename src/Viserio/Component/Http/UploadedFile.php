@@ -111,10 +111,10 @@ class UploadedFile implements UploadedFileInterface
      * Create a new uploaded file instance.
      *
      * @param resource|StreamInterface|string $streamOrFile
-     * @param int $size
-     * @param int $errorStatus
-     * @param null|string $clientFilename
-     * @param null|string $clientMediaType
+     * @param int                             $size
+     * @param int                             $errorStatus
+     * @param null|string                     $clientFilename
+     * @param null|string                     $clientMediaType
      *
      * @throws \InvalidArgumentException
      */

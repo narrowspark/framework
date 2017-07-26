@@ -95,7 +95,7 @@ final class ExtensionGuesser
     /**
      * Guesses the mime type using the PECL extension FileInfo.
      *
-     * @param string      $path
+     * @param string $path
      *
      * @return null|string
      */
