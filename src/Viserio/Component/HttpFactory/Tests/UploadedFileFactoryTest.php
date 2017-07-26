@@ -8,8 +8,14 @@ use Viserio\Component\HttpFactory\UploadedFileFactory;
 
 class UploadedFileFactoryTest extends TestCase
 {
+    /**
+     * @var string
+     */
     private $fname;
 
+    /**
+     * @var \Interop\Http\Factory\UploadedFileFactoryInterface
+     */
     private $factory;
 
     public function setup(): void
@@ -42,7 +48,7 @@ class UploadedFileFactoryTest extends TestCase
 
         $file = $this->factory->createUploadedFile($filename);
 
-        self::assertUploadedFile($file, $content, $size);
+        $this->assertUploadedFile($file, $content, $size);
 
         \unlink($filename);
     }
@@ -50,7 +56,7 @@ class UploadedFileFactoryTest extends TestCase
     public function testCreateUploadedFileWithClientFilenameAndMediaType(): void
     {
         $tmpfname        = $this->fname;
-        $upload          = \fopen($tmpfname, 'w+');
+        $upload          = \fopen($tmpfname, 'wb+');
         $content         = 'this is your capitan speaking';
         $error           = \UPLOAD_ERR_OK;
         $clientFilename  = 'test.txt';
@@ -66,7 +72,7 @@ class UploadedFileFactoryTest extends TestCase
             $clientMediaType
         );
 
-        self::assertUploadedFile($file, $content, null, $error, $clientFilename, $clientMediaType);
+        $this->assertUploadedFile($file, $content, null, $error, $clientFilename, $clientMediaType);
     }
 
     public function testCreateUploadedFileWithError(): void
