@@ -169,8 +169,6 @@ class UrlGenerator implements UrlGeneratorContract
      * @param array                                      $parameters
      * @param int                                        $referenceType
      *
-     * @throws \Viserio\Component\Routing\Exception\UrlGenerationException
-     *
      * @return string
      */
     protected function toRoute(RouteContract $route, array $parameters, int $referenceType): string
@@ -192,7 +190,9 @@ class UrlGenerator implements UrlGeneratorContract
 
         if ($referenceType === self::ABSOLUTE_URL || $requiredSchemes) {
             return (string) $uri;
-        } elseif ($referenceType === self::NETWORK_PATH) {
+        }
+
+        if ($referenceType === self::NETWORK_PATH) {
             $uri = $uri->withScheme('');
 
             return (string) $uri;
@@ -391,7 +391,7 @@ class UrlGenerator implements UrlGeneratorContract
         // First we will get all of the string parameters that are remaining after we
         // have replaced the route wildcards. We'll then build a query string from
         // these string parameters then use it as a starting point for the rest.
-        if (\count($parameters) == 0 || \in_array(null, $parameters, true)) {
+        if (\count($parameters) === 0 || \in_array(null, $parameters, true)) {
             return '';
         }
 

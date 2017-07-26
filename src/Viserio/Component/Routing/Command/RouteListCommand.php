@@ -50,7 +50,7 @@ class RouteListCommand extends Command
      */
     public function handle()
     {
-        if (\count($this->routes) == 0) {
+        if (\count($this->routes) === 0) {
             $this->error("Your application doesn't have any routes.");
 
             return 1;
@@ -101,7 +101,7 @@ class RouteListCommand extends Command
         $actions = \explode('@', $route->getActionName());
 
         return $this->filterRoute([
-            'method'     => \implode('|', $route->getMethods()),
+            'method'     => $route->getMethods(),
             'uri'        => $route->getUri(),
             'name'       => \is_string($route->getName()) ? "<fg=green>{$route->getName()}</>" : '-',
             'controller' => isset($actions[0]) ? "<fg=cyan>{$actions[0]}</>" : '-',
@@ -118,11 +118,15 @@ class RouteListCommand extends Command
      */
     protected function filterRoute(array $route): ?array
     {
-        if ($this->option('name') && \mb_strpos($route['name'], $this->option('name')) === false ||
-            $this->option('path') && \mb_strpos($route['uri'], $this->option('path')) === false ||
-            $this->option('method') && \mb_strpos($route['method'], \mb_strtoupper($this->option('method'))) === false) {
+        $isNotName = ($this->option('name') && \mb_strpos($route['name'], $this->option('name')) === false);
+        $isNotPath = ($this->option('path') && \mb_strpos($route['uri'], $this->option('path')) === false);
+        $isNotMethod = ($this->option('method') && \in_array($this->option('method'), $route['method'], true) === false);
+
+        if ($isNotName || $isNotPath || $isNotMethod) {
             return null;
         }
+
+        $route['method'] = \implode('|', $route['method']);
 
         return $route;
     }

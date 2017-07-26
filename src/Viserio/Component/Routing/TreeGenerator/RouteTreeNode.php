@@ -129,7 +129,9 @@ final class RouteTreeNode
     {
         if ($contents instanceof MatchedRouteDataMap) {
             return;
-        } elseif ($contents instanceof ChildrenNodeCollection) {
+        }
+
+        if ($contents instanceof ChildrenNodeCollection) {
             return;
         }
 

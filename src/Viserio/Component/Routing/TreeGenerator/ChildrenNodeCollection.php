@@ -11,7 +11,7 @@ final class ChildrenNodeCollection
      *
      * @var \Viserio\Component\Routing\TreeGenerator\RouteTreeNode[]
      */
-    private $children = [];
+    private $children;
 
     /**
      * Create a new child node collection instance.
@@ -56,7 +56,7 @@ final class ChildrenNodeCollection
      *
      * @return null|\Viserio\Component\Routing\TreeGenerator\RouteTreeNode
      */
-    public function getChild(SegmentMatcherContract $matcher)
+    public function getChild(SegmentMatcherContract $matcher): ?RouteTreeNode
     {
         return $this->children[$matcher->getHash()] ?? null;
     }

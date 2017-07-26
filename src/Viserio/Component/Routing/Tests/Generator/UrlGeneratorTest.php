@@ -52,7 +52,7 @@ class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
 
-        $url = $this->getGenerator($routes)->generate('testing', []);
+        $url = $this->getGenerator($routes)->generate('testing');
 
         self::assertEquals('/testing', $url);
     }

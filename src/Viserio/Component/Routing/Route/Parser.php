@@ -100,7 +100,9 @@ final class Parser
                     $matchedParameter = true;
 
                     continue;
-                } elseif ($character === '{') {
+                }
+
+                if ($character === '{') {
                     throw new InvalidRoutePatternException(\sprintf(
                         'Invalid route uri; Cannot contain nested \'{\', \'%s\' given.',
                         $route
@@ -113,7 +115,9 @@ final class Parser
                     $inParameter = true;
 
                     continue;
-                } elseif ($character === '}') {
+                }
+
+                if ($character === '}') {
                     throw new InvalidRoutePatternException(\sprintf(
                         'Invalid route uri; Cannot contain \'}\' before opening \'{\', \'%s\' given.',
                         $route
@@ -129,7 +133,9 @@ final class Parser
                 'Invalid route uri: cannot contain \'{\' without closing \'}\', \'%s\' given',
                 $route
             ));
-        } elseif ($current !== '') {
+        }
+
+        if ($current !== '') {
             $matches[] = [self::STATIC_PART, $current];
         }
 

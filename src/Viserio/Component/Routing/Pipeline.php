@@ -59,7 +59,7 @@ class Pipeline extends BasePipeline
      *
      * @return object
      */
-    private function getDelegateMiddleware(callable $middleware)
+    private function getDelegateMiddleware(callable $middleware): object
     {
         return new class($middleware) implements DelegateInterface {
             /**

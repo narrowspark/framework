@@ -21,7 +21,7 @@ class RoutingServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             DispatcherContract::class   => [self::class, 'createRouteDispatcher'],

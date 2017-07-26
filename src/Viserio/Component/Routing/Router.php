@@ -513,7 +513,9 @@ class Router implements RouterContract
 
         if (! $trimmed) {
             return '/';
-        } elseif (\mb_strpos($trimmed, '/') === 0) {
+        }
+
+        if (\mb_strpos($trimmed, '/') === 0) {
             return $trimmed;
         }
 

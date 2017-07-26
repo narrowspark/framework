@@ -127,7 +127,7 @@ class MiddlewareAwareTraitTest extends TestCase
      *
      * @return object
      */
-    private function getMiddlewareAwareObject(bool $resetMiddlewares = false, bool $resetBypassedMiddlewares = false)
+    private function getMiddlewareAwareObject(bool $resetMiddlewares = false, bool $resetBypassedMiddlewares = false): object
     {
         return new class($resetMiddlewares, $resetBypassedMiddlewares) implements MiddlewareAwareContract {
             use MiddlewareAwareTrait;

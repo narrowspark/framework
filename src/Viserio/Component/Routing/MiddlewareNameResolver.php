@@ -18,7 +18,9 @@ class MiddlewareNameResolver
     {
         if (isset($disabledMiddlewares[$name]) || \in_array($name, $disabledMiddlewares, true)) {
             return [];
-        } elseif (isset($middlewareGroups[$name])) {
+        }
+
+        if (isset($middlewareGroups[$name])) {
             return self::parseMiddlewareGroup($name, $map, $middlewareGroups, $disabledMiddlewares);
         }
 

@@ -88,5 +88,7 @@ class Action
                 return $value;
             }
         }
+
+        return null;
     }
 }

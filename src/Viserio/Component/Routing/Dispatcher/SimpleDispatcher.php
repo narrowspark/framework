@@ -95,7 +95,7 @@ class SimpleDispatcher implements DispatcherContract
         $cacheFile = $this->getCachePath();
         $dir       = \pathinfo($cacheFile, PATHINFO_DIRNAME);
 
-        if (! \file_exists($cacheFile) || $this->refreshCache === true) {
+        if ($this->refreshCache === true || ! \file_exists($cacheFile)) {
             self::generateDirectory($dir);
 
             $this->generateRouterFile($routes);

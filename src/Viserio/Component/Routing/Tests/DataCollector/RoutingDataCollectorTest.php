@@ -47,8 +47,6 @@ class RoutingDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        $data = $collector->getData();
-
         self::assertSame([
             'icon'  => \file_get_contents(__DIR__ . '/../../DataCollector/Resources/icons/ic_directions_white_24px.svg'),
             'label' => 'Routes',
