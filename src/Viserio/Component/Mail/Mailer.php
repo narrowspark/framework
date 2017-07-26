@@ -191,7 +191,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      *
      * @return \Swift_Mailer
      */
-    public function getSwiftMailer()
+    public function getSwiftMailer(): Swift_Mailer
     {
         return $this->swift;
     }
@@ -216,10 +216,12 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         // array as is, since must should contain both views with numeric keys.
         if (\is_array($view) && isset($view[0])) {
             return [$view[0], $view[1], null];
-            // If the view is an array, but doesn't contain numeric keys, we will assume
-            // the the views are being explicitly specified and will extract them via
-            // named keys instead, allowing the developers to use one or the other.
-        } elseif (\is_array($view)) {
+        }
+
+        // If the view is an array, but doesn't contain numeric keys, we will assume
+        // the the views are being explicitly specified and will extract them via
+        // named keys instead, allowing the developers to use one or the other.
+        if (\is_array($view)) {
             return [
                 $view['html'] ?? null,
                 $view['text'] ?? null,
@@ -233,7 +235,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Add the content to a given message.
      *
-     * @param \Viserio\Component\Mail\Message $message
+     * @param \Viserio\Component\Contracts\Mail\Message $message
      * @param null|string                     $view
      * @param null|string                     $plain
      * @param null|string                     $raw
@@ -309,11 +311,11 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Create a new message instance.
      *
-     * @return \Viserio\Component\Mail\Message
+     * @return \Viserio\Component\Contracts\Mail\Message
      */
     protected function createMessage(): MessageContract
     {
-        $message = new Message($this->swift->createMessage('message'));
+        $message = new Message($this->swift->createMessage());
 
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
@@ -339,7 +341,9 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     {
         if ($callback instanceof Closure) {
             return $callback($message);
-        } elseif ($this->container !== null) {
+        }
+
+        if ($this->container !== null) {
             return $this->getInvoker()->call($callback)->mail($message);
         }
 

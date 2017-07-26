@@ -29,6 +29,8 @@ class MessageLoggedEvent implements EventContract
      * The log "level".
      *
      * @var string
+     *
+     * @return string
      */
     public function getLevel(): string
     {
@@ -39,6 +41,8 @@ class MessageLoggedEvent implements EventContract
      * The log message.
      *
      * @var null|bool|float|int|mixed|string
+     *
+     * @return mixed
      */
     public function getMessage()
     {
@@ -49,6 +53,8 @@ class MessageLoggedEvent implements EventContract
      * The log context.
      *
      * @var array
+     *
+     * @return array
      */
     public function getContext(): array
     {

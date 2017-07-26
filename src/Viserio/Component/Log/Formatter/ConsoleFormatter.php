@@ -202,7 +202,7 @@ class ConsoleFormatter implements FormatterInterface
 
             /**
              * @param mixed                                    $v
-             * @param array                                    $a
+             * @param array                                    $array
              * @param \Symfony\Component\VarDumper\Cloner\Stub $s
              * @param mixed                                    $isNested
              * @param array                                    $array
@@ -244,7 +244,7 @@ class ConsoleFormatter implements FormatterInterface
 
         $replacements = [];
 
-        foreach ($context as $k => $v) {
+        foreach ((array) $context as $k => $v) {
             // Remove quotes added by the dumper around string.
             $v                            = \trim($this->dumpData($v, false), '"');
             $v                            = OutputFormatter::escape($v);

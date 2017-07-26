@@ -133,7 +133,9 @@ class Writer extends LogLevel implements LogContract
         if (\is_array($message)) {
             return \var_export($message, true);
             // @codeCoverageIgnoreStart
-        } elseif ($message instanceof Jsonable) {
+        }
+
+        if ($message instanceof Jsonable) {
             // @codeCoverageIgnoreEnd
             return $message->toJson();
             // @codeCoverageIgnoreStart

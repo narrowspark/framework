@@ -246,7 +246,9 @@ class HandlerParser
     {
         if (\is_object($handler) && $handler instanceof HandlerInterface) {
             return $handler;
-        } elseif (\is_string($handler) && isset($this->handler[$handler])) {
+        }
+
+        if (\is_string($handler) && isset($this->handler[$handler])) {
             return new $this->handler[$handler]($path, self::parseLevel($level));
         }
 

@@ -24,10 +24,19 @@ class QueueMailerTest extends MockeryTestCase
     {
         $message = $this->mock(MessageContract::class);
 
-        $mockMailer = $this->mock(stdClass::class);
-        $mockMailer->shouldReceive('mail')
-            ->once()
-            ->with($message);
+        $mockMailer = new class($message) {
+            private $message;
+
+            public function __construct($message)
+            {
+                $this->message = $message;
+            }
+
+            public function mail()
+            {
+                return $this->message;
+            }
+        };
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')
@@ -100,8 +109,6 @@ class QueueMailerTest extends MockeryTestCase
             ->andReturn('rendered.view');
 
         $me = $this;
-
-        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
 
         $this->setSwiftMailer($mailer);
 

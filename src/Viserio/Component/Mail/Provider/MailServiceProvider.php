@@ -18,7 +18,7 @@ class MailServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             TransportManager::class => [self::class, 'createTransportManager'],

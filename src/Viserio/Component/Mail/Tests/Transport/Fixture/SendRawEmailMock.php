@@ -19,7 +19,7 @@ class SendRawEmailMock
      *
      * @return string
      */
-    public function get($key)
+    public function get($key): string
     {
         return $this->getResponse;
     }

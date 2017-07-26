@@ -38,12 +38,12 @@ class ConsoleFormatterTest extends TestCase
     /**
      * @param mixed $level
      * @param mixed $message
-     * @param mixed $context
-     * @param mixed $extra
+     * @param array $context
+     * @param array $extra
      *
      * @return array Record
      */
-    protected function getRecord($level = Logger::WARNING, $message = 'test', $context = [], $extra = [])
+    protected function getRecord($level = Logger::WARNING, $message = 'test', array $context = [], array $extra = []): array
     {
         return [
             'message'    => $message,
@@ -57,12 +57,12 @@ class ConsoleFormatterTest extends TestCase
     }
 
     /**
-     * @param mixed $context
-     * @param mixed $extra
+     * @param array $context
+     * @param array $extra
      *
      * @return array
      */
-    protected function getMultipleRecords($context = [], $extra = [])
+    protected function getMultipleRecords(array $context = [], array $extra = []): array
     {
         return [
             $this->getRecord(Logger::DEBUG, 'debug message 1', $context, $extra),

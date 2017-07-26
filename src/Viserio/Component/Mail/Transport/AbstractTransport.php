@@ -53,7 +53,7 @@ abstract class AbstractTransport implements Swift_Transport
      */
     public function registerPlugin(Swift_Events_EventListener $plugin): void
     {
-        \array_push($this->plugins, $plugin);
+        $this->plugins[] = $plugin;
     }
 
     /**

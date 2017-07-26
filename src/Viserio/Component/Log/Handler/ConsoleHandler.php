@@ -86,7 +86,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function isHandling(array $record)
+    public function isHandling(array $record): bool
     {
         return $this->updateLevel() && parent::isHandling($record);
     }
@@ -94,7 +94,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(array $record)
+    public function handle(array $record): bool
     {
         // we have to update the logging level each time because the verbosity of the
         // console output might have changed in the meantime (it is not immutable)
@@ -186,7 +186,7 @@ class ConsoleHandler extends AbstractProcessingHandler
      *
      * @return bool Whether the handler is enabled and verbosity is not set to quiet
      */
-    private function updateLevel()
+    private function updateLevel(): bool
     {
         if (null === $this->output) {
             return false;

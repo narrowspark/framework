@@ -17,7 +17,7 @@ class VarDumperFormatter implements FormatterInterface
     /**
      * Create a new var dump formatter instance.
      *
-     * @param Symfony\Component\VarDumper\Cloner\VarCloner $cloner
+     * @param \Symfony\Component\VarDumper\Cloner\VarCloner $cloner
      */
     public function __construct(VarCloner $cloner)
     {

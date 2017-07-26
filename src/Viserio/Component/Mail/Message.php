@@ -8,6 +8,9 @@ use Swift_Mime_Attachment;
 use Swift_Mime_SimpleMessage;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 
+/**
+ * @mixin \Swift_Mime_SimpleMessage
+ */
 class Message implements MessageContract
 {
     /**
@@ -181,7 +184,7 @@ class Message implements MessageContract
     /**
      * {@inheritdoc}
      */
-    public function getSwiftMessage()
+    public function getSwiftMessage(): Swift_Mime_SimpleMessage
     {
         return $this->swift;
     }
@@ -193,7 +196,7 @@ class Message implements MessageContract
      * @param string       $name
      * @param string       $type
      *
-     * @return $this
+     * @return \Viserio\Component\Contracts\Mail\Message
      */
     protected function addAddresses($address, string $name, string $type): MessageContract
     {
@@ -241,7 +244,7 @@ class Message implements MessageContract
      *
      * @return $this
      */
-    protected function prepAttachment(Swift_Mime_Attachment $attachment, array $options = []): MessageContract
+    protected function prepAttachment(Swift_Mime_Attachment $attachment, array $options = []): self
     {
         // First we will check for a MIME type on the message, which instructs the
         // mail client on what type of attachment the file is so that it may be
