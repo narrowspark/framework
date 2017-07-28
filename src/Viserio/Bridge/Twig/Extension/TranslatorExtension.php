@@ -131,10 +131,10 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Translates the given message.
      *
-     * @param string $id The message id
-     * @param mixed $parameters An array of parameters for the message
-     * @param string $domain The domain for the message or null to use the default
-     * @param null|string $locale The locale to change the translator language
+     * @param string      $id         The message id
+     * @param mixed       $parameters An array of parameters for the message
+     * @param string      $domain     The domain for the message or null to use the default
+     * @param null|string $locale     The locale to change the translator language
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      * @throws \RuntimeException         If no translator found

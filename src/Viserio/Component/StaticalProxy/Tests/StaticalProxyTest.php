@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Tests;
 
-use function Functional\true;
-use Mockery as Mock;
 use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
@@ -13,6 +11,7 @@ use Viserio\Component\StaticalProxy\Tests\Fixture\ExceptionSaticalProxyStub;
 use Viserio\Component\StaticalProxy\Tests\Fixture\FooStaticalProxyStub;
 use Viserio\Component\StaticalProxy\Tests\Fixture\StaticalProxyObjectStub;
 use Viserio\Component\StaticalProxy\Tests\Fixture\StaticalProxyStub;
+use function Functional\true;
 
 class StaticalProxyTest extends MockeryTestCase
 {

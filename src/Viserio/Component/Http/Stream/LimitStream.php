@@ -8,6 +8,12 @@ use RuntimeException;
 class LimitStream extends AbstractStreamDecorator
 {
     /**
+     * Stream instance.
+     *
+     * @var \Psr\Http\Message\StreamInterface
+     */
+    protected $stream;
+    /**
      * Offset to start reading from.
      *
      * @var int
@@ -20,13 +26,6 @@ class LimitStream extends AbstractStreamDecorator
      * @var int
      */
     private $limit;
-
-    /**
-     * Stream instance.
-     *
-     * @var \Psr\Http\Message\StreamInterface
-     */
-    protected $stream;
 
     /**
      * Create a new limit stream instance.

@@ -9,6 +9,12 @@ use Viserio\Component\Http\Util;
 class PhpInputStream extends AbstractStreamDecorator
 {
     /**
+     * Stream instance.
+     *
+     * @var \Psr\Http\Message\StreamInterface
+     */
+    protected $stream;
+    /**
      * Cached content-.
      *
      * @var string
@@ -21,13 +27,6 @@ class PhpInputStream extends AbstractStreamDecorator
      * @var bool
      */
     private $reachedEof = false;
-
-    /**
-     * Stream instance.
-     *
-     * @var \Psr\Http\Message\StreamInterface
-     */
-    protected $stream;
 
     /**
      * Create a new php input stream instance.
