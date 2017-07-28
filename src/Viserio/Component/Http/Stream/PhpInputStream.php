@@ -33,7 +33,7 @@ class PhpInputStream extends AbstractStreamDecorator
      *
      * @var \Psr\Http\Message\StreamInterface
      */
-    private $stream;
+    protected $stream;
 
     /**
      * Create a new php input stream instance.

@@ -32,7 +32,7 @@ class LimitStream extends AbstractStreamDecorator
      *
      * @var \Psr\Http\Message\StreamInterface
      */
-    private $stream;
+    protected $stream;
 
     /**
      * Create a new limit stream instance.
