@@ -28,13 +28,6 @@ class LimitStream extends AbstractStreamDecorator
     private $limit;
 
     /**
-     * Stream instance.
-     *
-     * @var \Psr\Http\Message\StreamInterface
-     */
-    protected $stream;
-
-    /**
      * Create a new limit stream instance.
      *
      * @param StreamInterface $stream Stream to wrap

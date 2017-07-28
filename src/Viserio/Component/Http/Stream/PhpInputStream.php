@@ -29,13 +29,6 @@ class PhpInputStream extends AbstractStreamDecorator
     private $reachedEof = false;
 
     /**
-     * Stream instance.
-     *
-     * @var \Psr\Http\Message\StreamInterface
-     */
-    protected $stream;
-
-    /**
      * Create a new php input stream instance.
      *
      * @param resource|string $stream
