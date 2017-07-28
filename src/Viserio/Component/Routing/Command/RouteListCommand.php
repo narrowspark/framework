@@ -120,7 +120,7 @@ class RouteListCommand extends Command
     {
         $isNotName   = ($this->option('name') && \mb_strpos($route['name'], $this->option('name')) === false);
         $isNotPath   = ($this->option('path') && \mb_strpos($route['uri'], $this->option('path')) === false);
-        $isNotMethod = ($this->option('method') && \in_array($this->option('method'), $route['method'], true) === false);
+        $isNotMethod = ($this->option('method') && \in_array(\mb_strtoupper($this->option('method')), $route['method'], true) === false);
 
         if ($isNotName || $isNotPath || $isNotMethod) {
             return null;

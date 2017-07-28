@@ -67,9 +67,9 @@ class TranslationNodeVisitorTest extends TestCase
      * @param null|string $domain
      * @param array|null  $arguments
      *
-     * @return \Twig\Node\Expression\FilterExpression
+     * @return FilterExpression
      */
-    private static function getTransFilter(string $message, string $domain = null, ?array $arguments = null): \Twig\Node\Expression\FilterExpression
+    private static function getTransFilter(string $message, string $domain = null, ?array $arguments = null): FilterExpression
     {
         if (! $arguments) {
             $arguments = $domain ? [

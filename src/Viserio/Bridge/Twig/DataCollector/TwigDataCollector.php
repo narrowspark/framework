@@ -125,7 +125,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      *
      * @codeCoverageIgnore
      */
-    public function getHtmlCallGraph(): \Twig\Markup
+    public function getHtmlCallGraph(): Markup
     {
         $dumper = new HtmlDumper();
         $dump   = $dumper->dump($this->getProfile());

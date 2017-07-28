@@ -16,25 +16,21 @@ class ViserioHttpDataCollectorTest extends MockeryTestCase
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('getAttributes')
             ->once()
-            ->withNoArgs()
             ->andReturn([]);
 
         $response = $this->mock(ResponseInterface::class);
         $response->shouldReceive('getStatusCode')
             ->once()
-            ->withNoArgs()
             ->andReturn(200);
 
         $route = $this->mock(RouteContract::class);
         $route->shouldReceive('getName')
             ->twice()
-            ->withNoArgs()
             ->andReturn('Home');
 
         $router = $this->mock(RouterContract::class);
         $router->shouldReceive('getCurrentRoute')
             ->once()
-            ->withNoArgs()
             ->andReturn($route);
 
         $collect = new ViserioHttpDataCollector($router, '');

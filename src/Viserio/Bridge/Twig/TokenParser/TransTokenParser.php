@@ -5,6 +5,7 @@ namespace Viserio\Bridge\Twig\TokenParser;
 use Twig\Error\SyntaxError;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ArrayExpression;
+use Twig\Node\Node;
 use Twig\Node\TextNode;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
@@ -23,11 +24,11 @@ class TransTokenParser extends AbstractTokenParser
      *
      * @param \Twig\Token $token
      *
-     * @throws SyntaxError
+     * @throws \Twig\Error\SyntaxError
      *
      * @return \Twig\Node\Node
      */
-    public function parse(Token $token): \Twig\Node\Node
+    public function parse(Token $token): Node
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();

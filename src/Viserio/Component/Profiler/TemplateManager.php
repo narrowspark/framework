@@ -67,6 +67,10 @@ class TemplateManager implements RenderableContract
     {
         $flags = ENT_QUOTES;
 
+        if (\defined('ENT_SUBSTITUTE')) {
+            $flags |= ENT_SUBSTITUTE;
+        }
+
         $raw = \str_replace(\chr(9), '    ', $raw);
 
         return \htmlspecialchars($raw, $flags);

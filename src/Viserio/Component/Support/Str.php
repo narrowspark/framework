@@ -8,7 +8,7 @@ use Viserio\Component\Contracts\Support\CharacterType;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
 /**
- * @mixin \Stringy\Stringy
+ * @mixin \Stringy\StaticStringy
  */
 class Str
 {

@@ -54,9 +54,9 @@ class StrExtension extends AbstractExtension
                 'str_*',
                 function (string $name) {
                     $arguments = \array_slice(\func_get_args(), 1);
-                    $name      = ViserioStr::camelize($name);
+                    $name      = (string) ViserioStr::camelize($name);
 
-                    return \call_user_func_array([$this->callback, (string) $name], $arguments);
+                    return \call_user_func_array([$this->callback, $name], $arguments);
                 }
             ),
         ];
@@ -72,9 +72,9 @@ class StrExtension extends AbstractExtension
                 'str_*',
                 function (string $name) {
                     $arguments = \array_slice(\func_get_args(), 1);
-                    $name      = ViserioStr::camelize($name);
+                    $name      = (string) ViserioStr::camelize($name);
 
-                    return \call_user_func_array([$this->callback, (string) $name], $arguments);
+                    return \call_user_func_array([$this->callback, $name], $arguments);
                 }
             ),
         ];

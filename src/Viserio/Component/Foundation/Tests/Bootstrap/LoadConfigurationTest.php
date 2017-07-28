@@ -9,16 +9,19 @@ use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Container\Container as ContainerContract;
 use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LoadConfigurationTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     public function testBootstrap(): void
     {
         $bootstraper = new LoadConfiguration();
         $config      = $this->mock(RepositoryContract::class);
         $config->shouldReceive('import')
             ->once()
-            ->with(dirname(__DIR__) . '/Fixtures/Config/app.php');
+            ->with(self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/Config/app.php'));
         $config->shouldReceive('get')
             ->once()
             ->with('viserio.app.timezone', 'UTC')
@@ -46,7 +49,7 @@ class LoadConfigurationTest extends MockeryTestCase
             ->andReturn('');
         $kernel->shouldReceive('getConfigPath')
             ->once()
-            ->andReturn(dirname(__DIR__) . '/Fixtures/Config');
+            ->andReturn(self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/Config'));
 
         $bootstraper->bootstrap($kernel);
     }
@@ -84,7 +87,7 @@ class LoadConfigurationTest extends MockeryTestCase
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('config.cache')
-            ->andReturn(__DIR__ . '/../Fixtures/Config/app.php');
+            ->andReturn(self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/Config/app.php'));
         $kernel->shouldReceive('getConfigPath')
             ->never();
 

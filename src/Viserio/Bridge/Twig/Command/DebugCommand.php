@@ -18,12 +18,10 @@ use Viserio\Component\Console\Command\Command;
  */
 class DebugCommand extends Command
 {
-    /** @noinspection ClassOverridesFieldOfSuperClassInspection */
     /**
      * {@inheritdoc}
      */
     protected $name = 'twig:debug';
-    /** @noinspection ClassOverridesFieldOfSuperClassInspection */
 
     /**
      * {@inheritdoc}

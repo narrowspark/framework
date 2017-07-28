@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Tests;
 
+use function Functional\true;
 use Mockery as Mock;
 use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -35,7 +36,7 @@ class StaticalProxyTest extends MockeryTestCase
 
         StaticalProxyStub::clearResolvedInstance('baz');
 
-        self::assertEmpty(StaticalProxyStub::getResolvedInstance()['baz']);
+        self::assertFalse(array_key_exists('baz', StaticalProxyStub::getResolvedInstance()));
     }
 
     public function testGetInstance(): void
@@ -92,8 +93,12 @@ class StaticalProxyTest extends MockeryTestCase
     public function testFacadeCallsUnderlyingApplication(): void
     {
         $container = $this->mock(ContainerInterface::class);
-        $mock      = Mock::mock('stdClass');
-        $mock->shouldReceive('bar')->once()->andReturn('baz');
+        $mock      = new class() {
+            public function bar()
+            {
+                return 'baz';
+            }
+        };
         $container->shouldReceive('get')->once()->andReturn($mock);
 
         FooStaticalProxyStub::setContainer($container);
@@ -136,5 +141,15 @@ class StaticalProxyTest extends MockeryTestCase
         FooStaticalProxyStub::shouldReceive('foo')->andReturn('bar');
 
         self::assertEquals('bar', FooStaticalProxyStub::foo());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function assertPreConditions()
+    {
+        parent::assertPreConditions();
+
+        $this->allowMockingNonExistentMethods(true);
     }
 }

@@ -124,7 +124,7 @@ class LintCommandTest extends MockeryTestCase
     /**
      * @return CommandTester
      */
-    private function createCommandTester(): \Symfony\Component\Console\Tester\CommandTester
+    private function createCommandTester(): CommandTester
     {
         $application = new Application();
         $application->setContainer(new ArrayContainer([
