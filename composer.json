@@ -39,7 +39,6 @@
         "cakephp/chronos"                     : "~1.1",
         "container-interop/service-provider"  : "^0.3",
         "danielstjules/stringy"               : "^3.0",
-        "defuse/php-encryption"               : "^2.0",
         "doctrine/inflector"                  : "~1.1",
         "egulias/email-validator"             : "^2.1",
         "fig/http-message-util"               : "^1.1",
