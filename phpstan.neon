@@ -83,7 +83,7 @@ parameters:
         - '#setMultiple\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
 
-        # if check exists
+        # If check exists
         - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
         - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
@@ -103,3 +103,7 @@ parameters:
 
         # Wrapper
         - '#Viserio\\Component\\Profiler\\DataCollector\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
+
+        # Not a interface function
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Mail\\Message::getSwiftMessage#'
+        - '#Call to an undefined method Viserio\\Component\\Contracts\\Mail\\Message::setBody#'

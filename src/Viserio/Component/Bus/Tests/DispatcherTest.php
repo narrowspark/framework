@@ -64,7 +64,7 @@ class DispatcherTest extends MockeryTestCase
     {
         $container = new ArrayContainer();
         $handler   = new class() {
-            public function test()
+            public function batman()
             {
                 return 'foo';
             }
@@ -73,8 +73,8 @@ class DispatcherTest extends MockeryTestCase
         $container->set('Handler', $handler);
 
         $dispatcher = new Dispatcher($container);
-        $dispatcher->via('test')->mapUsing(function () {
-            return 'Handler@test';
+        $dispatcher->via('batman')->mapUsing(function () {
+            return 'Handler@batman';
         });
 
         self::assertEquals(
@@ -117,7 +117,7 @@ class DispatcherTest extends MockeryTestCase
     public function testToThrowInvalidArgumentException(): void
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
-        $dispatcher->via('test');
+        $dispatcher->via('batman');
 
         self::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
     }
@@ -148,7 +148,7 @@ class DispatcherTest extends MockeryTestCase
                 return 'foo';
             }
 
-            public function test()
+            public function batman()
             {
                 return 'bar';
             }
@@ -159,7 +159,7 @@ class DispatcherTest extends MockeryTestCase
         $dispatcher = new Dispatcher($container);
         $dispatcher->maps([
             BusDispatcherBasicCommand::class => 'Handler@handle',
-            BusDispatcherBasicCommand::class => 'Handler@test',
+            BusDispatcherBasicCommand::class => 'Handler@batman',
         ]);
 
         self::assertEquals(

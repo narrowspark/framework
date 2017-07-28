@@ -158,7 +158,9 @@ class Message implements MessageContract
     {
         $attachment = $this->createAttachmentFromPath($file);
 
-        return $this->prepAttachment($attachment, $options);
+        $this->prepAttachment($attachment, $options);
+
+        return $this;
     }
 
     /**
@@ -168,7 +170,9 @@ class Message implements MessageContract
     {
         $attachment = $this->createAttachmentFromData($data, $name);
 
-        return $this->prepAttachment($attachment, $options);
+        $this->prepAttachment($attachment, $options);
+
+        return $this;
     }
 
     /**
@@ -190,7 +194,9 @@ class Message implements MessageContract
     }
 
     /**
-     * {@inheritdoc}
+     * Get the underlying Swift Message instance.
+     *
+     * @return \Swift_Mime_SimpleMessage
      */
     public function getSwiftMessage(): Swift_Mime_SimpleMessage
     {
@@ -269,7 +275,5 @@ class Message implements MessageContract
         }
 
         $this->swift->attach($attachment);
-
-        return $this;
     }
 }

@@ -330,14 +330,14 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Call the provided message builder.
      *
-     * @param null|\Closure|string            $callback
-     * @param \Viserio\Component\Mail\Message $message
+     * @param null|\Closure|string                      $callback
+     * @param \Viserio\Component\Contracts\Mail\Message $message
      *
      * @throws \InvalidArgumentException
      *
      * @return mixed
      */
-    protected function callMessageBuilder($callback, $message)
+    protected function callMessageBuilder($callback, MessageContract $message)
     {
         if ($callback instanceof Closure) {
             return $callback($message);

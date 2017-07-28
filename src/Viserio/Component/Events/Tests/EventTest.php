@@ -8,7 +8,7 @@ use Viserio\Component\Events\Event;
 class EventTest extends TestCase
 {
     /**
-     * @var Event
+     * @var null|\Viserio\Component\Events\Event
      */
     private $event;
 

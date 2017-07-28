@@ -9,7 +9,7 @@ use Viserio\Component\Http\Stream;
 class PipStreamTest extends TestCase
 {
     /**
-     * @var resource pipe stream file handle
+     * @var null|resource pipe stream file handle
      */
     private $pipeFh;
 
