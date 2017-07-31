@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events;
 
-use Viserio\Component\Contracts\Events\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Events\Event as EventContract;
+use Viserio\Component\Contracts\Events\Exception\InvalidArgumentException;
 use Viserio\Component\Events\Traits\EventTrait;
 use Viserio\Component\Events\Traits\ValidateNameTrait;
 
