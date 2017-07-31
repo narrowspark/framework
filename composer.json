@@ -102,6 +102,7 @@
         "psr/cache-implementation"            : "^1.0",
         "psr/container-implementation"        : "^1.0",
         "psr/event-manager-implementation"    : "^1.0",
+        "psr/http-factory-implementation"     : "^1.0",
         "psr/http-message-implementation"     : "^1.0",
         "psr/log-implementation"              : "^1.0",
         "psr/simple-cache-implementation"     : "^1.0"
