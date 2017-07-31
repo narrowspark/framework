@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
 use Cake\Chronos\Chronos;
-use Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException;
 
 final class ResponseCookies extends AbstractCookieCollector
 {

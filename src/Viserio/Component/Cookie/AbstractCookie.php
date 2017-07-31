@@ -5,8 +5,8 @@ namespace Viserio\Component\Cookie;
 use Cake\Chronos\Chronos;
 use DateTime;
 use DateTimeInterface;
-use Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Support\Stringable as StringableContract;
 
 abstract class AbstractCookie implements StringableContract, CookieContract
@@ -394,8 +394,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     }
 
     /**
-     *
-     *
      * @param array $cookieStringParts
      *
      * @return array
@@ -420,8 +418,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     }
 
     /**
-     *
-     *
      * @param array $cookieStringParts
      *
      * @return array
@@ -436,8 +432,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     }
 
     /**
-     *
-     *
      * @param array $cookieStringParts
      *
      * @return array
@@ -452,8 +446,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     }
 
     /**
-     *
-     *
      * @param array $cookieStringParts
      *
      * @return array
@@ -468,8 +460,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     }
 
     /**
-     *
-     *
      * @param array $cookieStringParts
      *
      * @return array
@@ -484,8 +474,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     }
 
     /**
-     *
-     *
      * @param array $cookieStringParts
      *
      * @return array
@@ -500,8 +488,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     }
 
     /**
-     *
-     *
      * @param array $cookieStringParts
      *
      * @return array
