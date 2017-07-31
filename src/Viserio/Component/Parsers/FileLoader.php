@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
-use Viserio\Component\Contracts\Parsers\Exception\RuntimeException;
 use Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException;
+use Viserio\Component\Contracts\Parsers\Exception\RuntimeException;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
