@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
-use Viserio\Component\Contracts\Cron\Exception\LogicException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Cron\Cron as CronContract;
+use Viserio\Component\Contracts\Cron\Exception\LogicException;
 
 class Schedule
 {
@@ -78,7 +78,7 @@ class Schedule
      * Add a new command cron job to the schedule.
      *
      * @param string $command
-     * @param array $parameters
+     * @param array  $parameters
      *
      * @throws \Viserio\Component\Contracts\Cron\Exception\LogicException
      *

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
+use Viserio\Component\Contracts\Cron\Cron as CronContract;
 use Viserio\Component\Contracts\Cron\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Cron\Exception\LogicException;
-use Viserio\Component\Contracts\Cron\Cron as CronContract;
 
 class CallbackCron extends Cron
 {
