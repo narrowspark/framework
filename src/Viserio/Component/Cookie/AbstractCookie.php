@@ -5,7 +5,7 @@ namespace Viserio\Component\Cookie;
 use Cake\Chronos\Chronos;
 use DateTime;
 use DateTimeInterface;
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Component\Contracts\Support\Stringable as StringableContract;
 
@@ -292,7 +292,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
             return false;
         }
 
-        return (bool) \preg_match('/\b' . \preg_quote($this->getDomain()) . '$/i', $domain);
+        return (bool) \preg_match('/\b' . \preg_quote($this->getDomain(), '/') . '$/i', $domain);
     }
 
     /**
@@ -315,6 +315,8 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      * Normalizes the expiration value.
      *
      * @param null|\DateTimeInterface|int|string $expiration
+     *
+     * @throws \Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException
      *
      * @return int
      */
@@ -391,7 +393,14 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         return $path;
     }
 
-    protected function appendFormattedNameAndValuePartIfSet(array $cookieStringParts)
+    /**
+     *
+     *
+     * @param array $cookieStringParts
+     *
+     * @return array
+     */
+    protected function appendFormattedNameAndValuePartIfSet(array $cookieStringParts): array
     {
         $name = \urlencode($this->name) . '=';
 
@@ -410,7 +419,14 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         return $cookieStringParts;
     }
 
-    protected function appendFormattedDomainPartIfSet(array $cookieStringParts)
+    /**
+     *
+     *
+     * @param array $cookieStringParts
+     *
+     * @return array
+     */
+    protected function appendFormattedDomainPartIfSet(array $cookieStringParts): array
     {
         if ($this->domain !== null) {
             $cookieStringParts[] = \sprintf('Domain=%s', $this->domain);
@@ -419,6 +435,13 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         return $cookieStringParts;
     }
 
+    /**
+     *
+     *
+     * @param array $cookieStringParts
+     *
+     * @return array
+     */
     protected function appendFormattedPathPartIfSet(array $cookieStringParts)
     {
         if ($this->path !== null) {
@@ -428,6 +451,13 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         return $cookieStringParts;
     }
 
+    /**
+     *
+     *
+     * @param array $cookieStringParts
+     *
+     * @return array
+     */
     protected function appendFormattedMaxAgePartIfSet(array $cookieStringParts)
     {
         if ($this->maxAge) {
@@ -437,6 +467,13 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         return $cookieStringParts;
     }
 
+    /**
+     *
+     *
+     * @param array $cookieStringParts
+     *
+     * @return array
+     */
     protected function appendFormattedSecurePartIfSet(array $cookieStringParts)
     {
         if ($this->secure) {
@@ -446,6 +483,13 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         return $cookieStringParts;
     }
 
+    /**
+     *
+     *
+     * @param array $cookieStringParts
+     *
+     * @return array
+     */
     protected function appendFormattedHttpOnlyPartIfSet(array $cookieStringParts)
     {
         if ($this->httpOnly) {
@@ -455,6 +499,13 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         return $cookieStringParts;
     }
 
+    /**
+     *
+     *
+     * @param array $cookieStringParts
+     *
+     * @return array
+     */
     protected function appendFormattedSameSitePartIfSet(array $cookieStringParts)
     {
         if ($this->sameSite) {

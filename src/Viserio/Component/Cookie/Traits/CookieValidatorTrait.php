@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Traits;
 
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException;
 
 trait CookieValidatorTrait
 {
@@ -11,7 +11,7 @@ trait CookieValidatorTrait
      *
      * @param string $name
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException
      *
      * @see http://tools.ietf.org/search/rfc2616#section-2.2
      *
@@ -37,7 +37,7 @@ trait CookieValidatorTrait
      *
      * @param null|string $value
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException
      *
      * @see http://tools.ietf.org/html/rfc6265#section-4.1.1
      *
