@@ -12,7 +12,7 @@ interface Repository extends ArrayAccess
      * @param string     $filepath
      * @param null|array $options  Supports tag or group
      *
-     * @throws \RuntimeException                                             if the php file is not found
+     * @throws \Viserio\Component\Contracts\Config\Exception\FileNotFoundException if the php file was not found
      * @throws \Viserio\Component\Contracts\Parsers\Exception\ParseException
      *
      * @return $this

@@ -5,7 +5,7 @@ namespace Viserio\Component\Config;
 use ArrayIterator;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
-use RuntimeException;
+use Viserio\Component\Contracts\Config\Exception\FileNotFoundException;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
 
@@ -41,7 +41,7 @@ class Repository implements RepositoryContract, IteratorAggregate
     {
         if ($this->loader === null && \pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
             if (! \file_exists($filepath)) {
-                throw new RuntimeException(\sprintf('File [%s] not found.', $filepath));
+                throw new FileNotFoundException(\sprintf('File [%s] not found.', $filepath));
             }
 
             $config = (array) require \str_replace('\\', '/', $filepath);

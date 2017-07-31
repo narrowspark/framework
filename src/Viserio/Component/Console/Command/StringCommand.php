@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
@@ -54,6 +54,9 @@ class StringCommand extends BaseCommand
      * Define default values for the arguments of the command.
      *
      * @param array $defaults default argument values
+     *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Console\Exception\InvalidArgumentException
      *
      * @return $this
      */

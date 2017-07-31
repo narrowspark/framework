@@ -101,6 +101,8 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
             return true;
         }
 
-        return (new ReflectionClass($this->getHandlerClass($command)))->implementsInterface(ShouldQueueContract::class);
+        $reflection = new ReflectionClass($this->getHandlerClass($command));
+
+        return $reflection->implementsInterface(ShouldQueueContract::class);
     }
 }

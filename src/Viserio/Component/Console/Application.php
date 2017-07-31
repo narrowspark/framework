@@ -419,6 +419,8 @@ class Application extends SymfonyConsole
     /**
      * Get the global environment option for the definition.
      *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     *
      * @return \Viserio\Component\Console\Input\InputOption
      */
     private function getEnvironmentOption(): InputOption

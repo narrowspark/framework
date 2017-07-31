@@ -4,7 +4,7 @@ namespace Viserio\Component\Console\Command;
 
 use Closure;
 use InvalidArgumentException;
-use Invoker\Exception\InvocationException;
+use Invoker\Exception\InvocationException as InvokerInvocationException;
 use Invoker\Reflection\CallableReflection;
 use ReflectionMethod;
 use RuntimeException;
@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Viserio\Component\Contracts\Console\Exception\InvocationException;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Str;
@@ -62,13 +63,13 @@ final class CommandResolver
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contracts\Console\Exception\InvocationException
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
     public function resolve(string $expression, $callable, array $aliases = []): StringCommand
     {
-        self::assertCallableIsValid($callable);
+        $this->assertCallableIsValid($callable);
 
         $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
             $parameters = \array_merge(
@@ -93,8 +94,8 @@ final class CommandResolver
 
             try {
                 return $this->invoker->addResolver(new HyphenatedInputResolver())->call($callable, $parameters);
-            } catch (InvocationException $exception) {
-                throw new RuntimeException(
+            } catch (InvokerInvocationException $exception) {
+                throw new InvocationException(
                     \sprintf(
                         "Impossible to call the '%s' command: %s",
                         $input->getFirstArgument(),

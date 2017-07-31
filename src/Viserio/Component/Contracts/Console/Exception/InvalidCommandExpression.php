@@ -4,6 +4,6 @@ namespace Viserio\Component\Contracts\Console\Exception;
 
 use InvalidArgumentException;
 
-class InvalidCommandExpression extends InvalidArgumentException
+class InvalidCommandExpression extends InvalidArgumentException implements Exception
 {
 }
