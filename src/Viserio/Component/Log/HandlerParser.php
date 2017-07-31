@@ -98,11 +98,11 @@ class HandlerParser
     /**
      * Parse the handler into a Monolog constant.
      *
-     * @param object|string        $handler
-     * @param string               $path
-     * @param string               $level
-     * @param null|object|string[] $processor
-     * @param null|object|string   $formatter
+     * @param object|string       $handler
+     * @param string              $path
+     * @param string              $level
+     * @param null|callable|array $processors
+     * @param null|object|string  $formatter
      *
      * @return void
      */
@@ -110,12 +110,12 @@ class HandlerParser
         $handler,
         string $path = '',
         string $level = '',
-        $processor = null,
+        $processors = null,
         $formatter = null
     ): void {
         $customHandler = $this->validateHandler($handler, $path, $level);
 
-        $customHandler = $this->parseProcessor($customHandler, $processor);
+        $customHandler = $this->parseProcessor($customHandler, $processors);
 
         if ($formatter !== null) {
             $customHandler->setFormatter($this->parseFormatter($formatter));
@@ -138,7 +138,7 @@ class HandlerParser
      * Parse Processor.
      *
      * @param \Monolog\Handler\HandlerInterface $handler
-     * @param null|array|object                 $processors
+     * @param null|array|callable               $processors
      *
      * @return \Monolog\Handler\HandlerInterface
      */

@@ -7,11 +7,8 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
 interface Log extends PsrLoggerInterface
 {
     /**
-     * The COMMAND event allows you to attach listeners before any command is
-     * executed by the console. It also allows you to modify the command, input and output
-     * before they are handled to the command.
-     *
-     * @Event("Viserio\Component\Console\Event\ConsoleCommandEvent")
+     * The MESSAGE event allows you building profilers or other tools
+     * that aggregate all of the log messages for a given "request" cycle.
      *
      * @var string
      */
@@ -20,28 +17,28 @@ interface Log extends PsrLoggerInterface
     /**
      * Register a file log handler.
      *
-     * @param string      $path
-     * @param string      $level
-     * @param null|object $processor
-     * @param null|object $formatter
+     * @param string              $path
+     * @param string              $level
+     * @param null|callable|array $processors
+     * @param null|object|string  $formatter
      *
      * @return void
      */
     public function useFiles(
         string $path,
         string $level = 'debug',
-        $processor = null,
+        $processors = null,
         $formatter = null
     ): void;
 
     /**
      * Register a daily file log handler.
      *
-     * @param string      $path
-     * @param int         $days
-     * @param string      $level
-     * @param null|object $processor
-     * @param null|object $formatter
+     * @param string              $path
+     * @param int                 $days
+     * @param string              $level
+     * @param null|callable|array $processors
+     * @param null|object|string  $formatter
      *
      * @return void
      */
@@ -49,7 +46,7 @@ interface Log extends PsrLoggerInterface
         string $path,
         int $days = 0,
         string $level = 'debug',
-        $processor = null,
+        $processors = null,
         $formatter = null
     ): void;
 }
