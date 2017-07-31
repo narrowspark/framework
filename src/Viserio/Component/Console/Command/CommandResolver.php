@@ -13,8 +13,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Viserio\Component\Contracts\Console\Exception\InvocationException;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contracts\Console\Exception\InvocationException;
 use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Str;
 

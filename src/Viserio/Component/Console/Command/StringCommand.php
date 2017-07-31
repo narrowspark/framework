@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
-use Viserio\Component\Contracts\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
+use Viserio\Component\Contracts\Console\Exception\InvalidArgumentException;
 
 /**
  * Code in this class it taken from silly.
