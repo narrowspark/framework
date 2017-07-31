@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Parsers\Exception;
 
-use RuntimeException;
+use Exception as BaseException;
 
-class NotSupportedException extends RuntimeException
+class NotSupportedException extends BaseException implements Exception
 {
 }

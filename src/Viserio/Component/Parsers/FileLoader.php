@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
-use RuntimeException;
-use Viserio\Component\Contracts\Parsers\Exception\LoadingException;
+use Viserio\Component\Contracts\Parsers\Exception\RuntimeException;
+use Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -112,7 +112,7 @@ class FileLoader implements LoaderContract
             return $this->exists[$key] = $file;
         }
 
-        throw new LoadingException(\sprintf('File [%s] not found.', $file));
+        throw new FileNotFoundException(\sprintf('File [%s] not found.', $file));
     }
 
     /**
@@ -140,7 +140,7 @@ class FileLoader implements LoaderContract
      *
      * @param null|array $options
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\RuntimeException
      *
      * @return void
      */

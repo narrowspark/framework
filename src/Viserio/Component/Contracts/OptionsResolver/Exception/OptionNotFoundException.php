@@ -8,7 +8,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as Requi
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
 
-class OptionNotFoundException extends OutOfBoundsException
+class OptionNotFoundException extends OutOfBoundsException implements Exception
 {
     /**
      * Create a new.

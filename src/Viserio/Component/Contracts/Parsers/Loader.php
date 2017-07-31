@@ -35,8 +35,8 @@ interface Loader
      * @param string     $file
      * @param null|array $options
      *
-     * @throws \RuntimeException                                               if wrong options are given
-     * @throws \Viserio\Component\Contracts\Parsers\Exception\LoadingException
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\RuntimeException      if wrong options are given
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException
      *
      * @return array
      */
@@ -46,6 +46,8 @@ interface Loader
      * Determine if the given file exists.
      *
      * @param string $file
+     *
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException
      *
      * @return bool|string
      */

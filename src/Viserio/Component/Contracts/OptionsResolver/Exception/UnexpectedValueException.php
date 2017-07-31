@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\OptionsResolver\Exception;
 
 use Throwable;
-use UnexpectedValueException as PhpUnexpectedValueException;
+use UnexpectedValueException as BaseUnexpectedValueException;
 
-class UnexpectedValueException extends PhpUnexpectedValueException
+class UnexpectedValueException extends BaseUnexpectedValueException implements Exception
 {
     /**
      * Create a new UnexpectedValue exception.

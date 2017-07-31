@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Parsers\Exception;
 
-use ErrorException;
+use Exception as BaseException;
 
-class ParseException extends ErrorException
+class ParseException extends BaseException implements Exception
 {
     public function __construct(array $error)
     {
