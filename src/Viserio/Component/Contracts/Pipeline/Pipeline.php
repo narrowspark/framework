@@ -13,7 +13,7 @@ interface Pipeline
      *
      * @return $this
      */
-    public function send($traveler): Pipeline;
+    public function send($traveler): self;
 
     /**
      * Set the array of stages.
@@ -22,12 +22,12 @@ interface Pipeline
      *
      * @return $this
      */
-    public function through($stages): Pipeline;
+    public function through($stages): self;
 
     /**
      * Run the pipeline with a final destination callback.
      *
-     * @param Closure $destination
+     * @param \Closure $destination
      *
      * @return mixed
      */
@@ -40,5 +40,5 @@ interface Pipeline
      *
      * @return $this
      */
-    public function via(string $method): Pipeline;
+    public function via(string $method): self;
 }

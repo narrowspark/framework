@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
+use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException;
-use Viserio\Component\Contracts\Parsers\Exception\RuntimeException;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -11,15 +11,9 @@ class FileLoader implements LoaderContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
-    /**
-     * Parsers list.
-     *
-     * @var array
-     */
-    protected $parsers = [
-        'group' => GroupParser::class,
-        'tag'   => TaggableParser::class,
-    ];
+    private const TAG_PARSER = TaggableParser::class;
+
+    private const GROUP_PARSER = GroupParser::class;
 
     /**
      * All directories to look for a file.
@@ -74,21 +68,10 @@ class FileLoader implements LoaderContract
     {
         $this->checkOption($options);
 
-        // Determine if the given file exists.
-        $path = $this->exists($file);
-
-        if (($tag = $options['tag'] ?? null) !== null) {
-            $parser = new $this->parsers['tag']();
-            $parser->setTag($tag);
-        } elseif (($group = $options['group'] ?? null) !== null) {
-            $parser = new $this->parsers['group']();
-            $parser->setGroup($group);
-        } else {
-            $parser = new Parser();
-        }
+        $parser = $this->getParser($options);
 
         // Set the right Parser for data and return data array
-        return $parser->parse($path);
+        return $parser->parse($this->exists($file));
     }
 
     /**
@@ -97,10 +80,6 @@ class FileLoader implements LoaderContract
     public function exists(string $file): string
     {
         $key = \str_replace('/', '', $file);
-
-        // Finally, we can simply check if this file exists. We will also cache
-        // the value in an array so we don't have to go through this process
-        // again on subsequent checks for the existing of the data file.
 
         if (isset($this->exists[$key])) {
             return $this->exists[$key];
@@ -140,7 +119,7 @@ class FileLoader implements LoaderContract
      *
      * @param null|array $options
      *
-     * @throws \Viserio\Component\Contracts\Parsers\Exception\RuntimeException
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
      *
      * @return void
      */
@@ -155,7 +134,29 @@ class FileLoader implements LoaderContract
         }
 
         if ($options !== null) {
-            throw new RuntimeException('Only the options "tag" or "group" is supported.');
+            throw new NotSupportedException('Only the options "tag" and "group" are supported.');
         }
+    }
+
+    /**
+     * Get the right parser.
+     *
+     * @param array $options
+     *
+     * @return \Viserio\Component\Parsers\Parser
+     */
+    protected function getParser(array $options): Parser
+    {
+        if (($tag = $options['tag'] ?? null) !== null) {
+            $class = self::TAG_PARSER;
+            return (new $class())->setTag($tag);
+        }
+
+        if (($group = $options['group'] ?? null) !== null) {
+            $class = self::GROUP_PARSER;
+            return (new $class())->setGroup($group);
+        }
+
+        return new Parser();
     }
 }

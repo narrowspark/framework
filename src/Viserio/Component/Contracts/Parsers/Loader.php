@@ -49,7 +49,7 @@ interface Loader
      *
      * @throws \Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException
      *
-     * @return bool|string
+     * @return string
      */
-    public function exists(string $file);
+    public function exists(string $file): string;
 }

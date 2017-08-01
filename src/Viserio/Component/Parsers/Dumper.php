@@ -89,8 +89,11 @@ class Dumper
     /**
      * Dump data in your choosing format.
      *
-     * @param array  $data
+     * @param array $data
      * @param string $format
+     *
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\DumpException
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
      *
      * @return string
      */

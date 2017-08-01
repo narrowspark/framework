@@ -7,7 +7,7 @@ use DOMDocument;
 use DOMElement;
 use DOMText;
 use InvalidArgumentException;
-use RuntimeException;
+use Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException;
 use Throwable;
 
 /**
@@ -60,15 +60,15 @@ final class XmlUtils
      * @param string               $file             An XML file path
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
-     * @throws \InvalidArgumentException When loading of XML file returns error
-     * @throws \RuntimeException         When no file was found
+     * @throws \InvalidArgumentException                                            When loading of XML file returns error
+     * @throws \Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException
      *
      * @return \DOMDocument
      */
     public static function loadFile(string $file, $schemaOrCallable = null): DOMDocument
     {
         if (! \file_exists($file)) {
-            throw new RuntimeException(\sprintf('No such file [%s] found.', $file));
+            throw new FileNotFoundException(\sprintf('No such file [%s] found.', $file));
         }
 
         return self::loadString(@\file_get_contents($file), $schemaOrCallable);
