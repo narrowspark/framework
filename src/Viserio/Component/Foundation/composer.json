@@ -31,11 +31,11 @@
     ],
     "require": {
         "php"                                         : "^7.2",
+        "ext-mbstring"                                : "*",
         "narrowspark/http-status"                     : "^3.0",
         "psr/container"                               : "^1.0",
         "psr/log"                                     : "^1.0",
         "symfony/finder"                              : "~3.3",
-        "symfony/polyfill-mbstring"                   : "^1.0",
         "viserio/contracts"                           : "self.version",
         "viserio/container"                           : "self.version",
         "viserio/events"                              : "self.version",

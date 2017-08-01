@@ -19,12 +19,12 @@
     ],
     "require": {
         "php"                                        : "^7.2",
+        "ext-mbstring"                               : "*",
         "http-interop/http-factory"                  : "^0.3",
         "narrowspark/http-status"                    : "^3.0",
         "psr/container"                              : "^1.0",
         "psr/log"                                    : "^1.0",
         "symfony/debug"                              : "~3.3",
-        "symfony/polyfill-mbstring"                  : "^1.0",
         "viserio/contracts"                          : "self.version",
         "viserio/options-resolver"                   : "self.version"
     },

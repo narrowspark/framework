@@ -19,7 +19,7 @@
     ],
     "require": {
         "php"                                     : "^7.2",
-        "symfony/polyfill-mbstring"               : "^1.0",
+        "ext-mbstring"                            : "*",
         "viserio/contracts"                       : "self.version"
     },
     "require-dev": {

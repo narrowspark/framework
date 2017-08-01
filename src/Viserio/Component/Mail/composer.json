@@ -19,9 +19,9 @@
     ],
     "require": {
         "php"                                   : "^7.2",
+        "ext-mbstring"                          : "*",
         "php-di/invoker"                        : "^2.0",
         "swiftmailer/swiftmailer"               : "^6.0",
-        "symfony/polyfill-mbstring"             : "^1.0",
         "viserio/contracts"                     : "self.version",
         "viserio/options-resolver"              : "self.version",
         "viserio/support"                       : "self.version"
