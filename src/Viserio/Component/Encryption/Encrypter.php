@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
@@ -22,7 +21,6 @@ class Encrypter implements EncrypterContract
      */
     public function __construct(string $key)
     {
-
     }
 
     /**
@@ -30,7 +28,6 @@ class Encrypter implements EncrypterContract
      */
     public function encrypt(string $plaintext): string
     {
-
     }
 
     /**
@@ -38,6 +35,5 @@ class Encrypter implements EncrypterContract
      */
     public function decrypt(string $ciphertext): string
     {
-
     }
 }

@@ -4,5 +4,4 @@ namespace Viserio\Component\Contracts\Encryption\Exception;
 
 class CannotSerializeKey extends \Exception
 {
-
 }

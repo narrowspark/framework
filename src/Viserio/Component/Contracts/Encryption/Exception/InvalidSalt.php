@@ -4,5 +4,4 @@ namespace Viserio\Component\Contracts\Encryption\Exception;
 
 class InvalidSalt extends \Exception
 {
-
 }
