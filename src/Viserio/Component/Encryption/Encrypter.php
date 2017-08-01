@@ -22,7 +22,7 @@ class Encrypter implements EncrypterContract
      */
     public function __construct(string $key)
     {
-        $this->key = Key::loadFromAsciiSafeString($key);
+
     }
 
     /**
@@ -30,7 +30,7 @@ class Encrypter implements EncrypterContract
      */
     public function encrypt(string $plaintext): string
     {
-        return Crypto::encrypt($plaintext, $this->key);
+
     }
 
     /**
@@ -38,14 +38,6 @@ class Encrypter implements EncrypterContract
      */
     public function decrypt(string $ciphertext): string
     {
-        return Crypto::decrypt($ciphertext, $this->key);
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function compare(string $encrypted1, string $encrypted2): bool
-    {
-        return $this->decrypt($encrypted1) === $this->decrypt($encrypted2);
     }
 }
