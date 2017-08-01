@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Hashing;
 
 use Defuse\Crypto\Key;
-use ParagonIE\PasswordLock\PasswordLock;
 use Viserio\Component\Contracts\Hashing\Password as PasswordContract;
 
 class Password implements PasswordContract
@@ -22,7 +21,6 @@ class Password implements PasswordContract
      */
     public function __construct(string $key)
     {
-
     }
 
     /**
@@ -30,7 +28,6 @@ class Password implements PasswordContract
      */
     public function create(string $password): string
     {
-
     }
 
     /**
@@ -38,7 +35,6 @@ class Password implements PasswordContract
      */
     public function verify(string $password, string $hashedValue): bool
     {
-
     }
 
     /**
@@ -51,6 +47,5 @@ class Password implements PasswordContract
      */
     public function shouldRecreate(string $hashedValue, string $newKey): string
     {
-
     }
 }
