@@ -22,7 +22,7 @@ class Password implements PasswordContract
      */
     public function __construct(string $key)
     {
-        $this->key = Key::loadFromAsciiSafeString($key);
+
     }
 
     /**
@@ -30,7 +30,7 @@ class Password implements PasswordContract
      */
     public function create(string $password): string
     {
-        return PasswordLock::hashAndEncrypt($password, $this->key);
+
     }
 
     /**
@@ -38,7 +38,7 @@ class Password implements PasswordContract
      */
     public function verify(string $password, string $hashedValue): bool
     {
-        return PasswordLock::decryptAndVerify($password, $hashedValue, $this->key);
+
     }
 
     /**
@@ -51,6 +51,6 @@ class Password implements PasswordContract
      */
     public function shouldRecreate(string $hashedValue, string $newKey): string
     {
-        return PasswordLock::rotateKey($hashedValue, $this->key, Key::loadFromAsciiSafeString($newKey));
+
     }
 }
