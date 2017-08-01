@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
-use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException;
+use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -149,11 +149,13 @@ class FileLoader implements LoaderContract
     {
         if (($tag = $options['tag'] ?? null) !== null) {
             $class = self::TAG_PARSER;
+
             return (new $class())->setTag($tag);
         }
 
         if (($group = $options['group'] ?? null) !== null) {
             $class = self::GROUP_PARSER;
+
             return (new $class())->setGroup($group);
         }
 

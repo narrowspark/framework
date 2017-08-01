@@ -7,8 +7,8 @@ use DOMDocument;
 use DOMElement;
 use DOMText;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException;
 use Throwable;
+use Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException;
 
 /**
  * This file has been ported from Symfony. The original
