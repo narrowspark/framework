@@ -4,6 +4,7 @@ namespace Viserio\Component\Exception;
 
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -72,6 +73,16 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         $this->console = $console;
 
         return $this;
+    }
+
+    /**
+     * Create a new handler instance.
+     *
+     * @param \Psr\Container\ContainerInterface $data
+     */
+    public function __construct($data, $serverRequestFactory, $responseFactory)
+    {
+        parent::__construct($data);
     }
 
     /**
