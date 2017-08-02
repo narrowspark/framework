@@ -14,15 +14,6 @@ class UriFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setUriFactory($this->mock(UriFactoryInterface::class));
 
-        self::assertInstanceOf(UriFactoryInterface::class, $this->getUriFactory());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\UriFactoryInterface] is not set up.
-     */
-    public function testGetUriFactoryThrowExceptionIfEventsDispatcherIsNotSet(): void
-    {
-        $this->getUriFactory();
+        self::assertInstanceOf(UriFactoryInterface::class, $this->uriFactory);
     }
 }

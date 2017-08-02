@@ -27,20 +27,4 @@ trait ResponseFactoryAwareTrait
 
         return $this;
     }
-
-    /**
-     * Get the ResponseFactory instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Interop\Http\Factory\ResponseFactoryInterface
-     */
-    public function getResponseFactory(): ResponseFactoryInterface
-    {
-        if (! $this->responseFactory) {
-            throw new RuntimeException('Instance implementing [\Interop\Http\Factory\ResponseFactoryInterface] is not set up.');
-        }
-
-        return $this->responseFactory;
-    }
 }

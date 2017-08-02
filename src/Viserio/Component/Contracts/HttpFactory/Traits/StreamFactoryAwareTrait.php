@@ -27,20 +27,4 @@ trait StreamFactoryAwareTrait
 
         return $this;
     }
-
-    /**
-     * Get the StreamFactory instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Interop\Http\Factory\StreamFactoryInterface
-     */
-    public function getStreamFactory(): StreamFactoryInterface
-    {
-        if (! $this->streamFactory) {
-            throw new RuntimeException('Instance implementing [\Interop\Http\Factory\StreamFactoryInterface] is not set up.');
-        }
-
-        return $this->streamFactory;
-    }
 }

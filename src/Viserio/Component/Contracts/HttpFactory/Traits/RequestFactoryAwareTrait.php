@@ -27,20 +27,4 @@ trait RequestFactoryAwareTrait
 
         return $this;
     }
-
-    /**
-     * Get the RequestFactory instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Interop\Http\Factory\RequestFactoryInterface
-     */
-    public function getRequestFactory(): RequestFactoryInterface
-    {
-        if (! $this->requestFactory) {
-            throw new RuntimeException('Instance implementing [\Interop\Http\Factory\RequestFactoryInterface] is not set up.');
-        }
-
-        return $this->requestFactory;
-    }
 }

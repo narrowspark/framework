@@ -14,15 +14,6 @@ class UploadedFileFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setUploadedFileFactory($this->mock(UploadedFileFactoryInterface::class));
 
-        self::assertInstanceOf(UploadedFileFactoryInterface::class, $this->getUploadedFileFactory());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\UploadedFileFactoryInterface] is not set up.
-     */
-    public function testGetUploadedFileFactoryThrowExceptionIfEventsDispatcherIsNotSet(): void
-    {
-        $this->getUploadedFileFactory();
+        self::assertInstanceOf(UploadedFileFactoryInterface::class, $this->uploadedFileFactory);
     }
 }

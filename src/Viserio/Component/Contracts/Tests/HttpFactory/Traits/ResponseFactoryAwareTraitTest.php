@@ -14,15 +14,6 @@ class ResponseFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setResponseFactory($this->mock(ResponseFactoryInterface::class));
 
-        self::assertInstanceOf(ResponseFactoryInterface::class, $this->getResponseFactory());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\ResponseFactoryInterface] is not set up.
-     */
-    public function testGetResponseFactoryThrowExceptionIfEventsDispatcherIsNotSet(): void
-    {
-        $this->getResponseFactory();
+        self::assertInstanceOf(ResponseFactoryInterface::class, $this->responseFactory);
     }
 }

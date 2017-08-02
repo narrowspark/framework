@@ -78,12 +78,14 @@ trait ConfirmableTrait
     protected function getDefaultConfirmCallback(): Closure
     {
         return function () {
-            if ($this->container->has('env')) {
-                return $this->container->get('env') === 'production';
-            }
+            if ($this->container !== null) {
+                if ($this->container->has('env')) {
+                    return $this->container->get('env') === 'production';
+                }
 
-            if ($this->container->has('viserio.app.env')) {
-                return $this->container->get('viserio.app.env') === 'production';
+                if ($this->container->has('viserio.app.env')) {
+                    return $this->container->get('viserio.app.env') === 'production';
+                }
             }
 
             return true;

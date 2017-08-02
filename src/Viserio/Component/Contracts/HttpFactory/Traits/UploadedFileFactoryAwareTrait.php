@@ -12,35 +12,19 @@ trait UploadedFileFactoryAwareTrait
      *
      * @var \Interop\Http\Factory\UploadedFileFactoryInterface
      */
-    protected $uploaded;
+    protected $uploadedFileFactory;
 
     /**
      * Set a UploadedFileFactory instance.
      *
-     * @param \Interop\Http\Factory\UploadedFileFactoryInterface $uploaded
+     * @param \Interop\Http\Factory\UploadedFileFactoryInterface $uploadedFileFactory
      *
      * @return $this
      */
-    public function setUploadedFileFactory(UploadedFileFactoryInterface $uploaded)
+    public function setUploadedFileFactory(UploadedFileFactoryInterface $uploadedFileFactory)
     {
-        $this->uploaded = $uploaded;
+        $this->uploadedFileFactory = $uploadedFileFactory;
 
         return $this;
-    }
-
-    /**
-     * Get the UploadedFileFactory instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Interop\Http\Factory\UploadedFileFactoryInterface
-     */
-    public function getUploadedFileFactory(): UploadedFileFactoryInterface
-    {
-        if (! $this->uploaded) {
-            throw new RuntimeException('Instance implementing [\Interop\Http\Factory\UploadedFileFactoryInterface] is not set up.');
-        }
-
-        return $this->uploaded;
     }
 }

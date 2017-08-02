@@ -86,7 +86,6 @@ class HtmlDisplayerTest extends MockeryTestCase
         return new HtmlDisplayer(
             new ExceptionInfo(),
             new ResponseFactory(),
-            new StreamFactory(),
             new ArrayContainer([
                 RepositoryContract::class => $config,
             ])

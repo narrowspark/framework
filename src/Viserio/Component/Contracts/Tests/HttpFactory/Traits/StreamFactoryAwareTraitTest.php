@@ -14,15 +14,6 @@ class StreamFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setStreamFactory($this->mock(StreamFactoryInterface::class));
 
-        self::assertInstanceOf(StreamFactoryInterface::class, $this->getStreamFactory());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing [\Interop\Http\Factory\StreamFactoryInterface] is not set up.
-     */
-    public function testGetStreamFactoryThrowExceptionIfEventsDispatcherIsNotSet(): void
-    {
-        $this->getStreamFactory();
+        self::assertInstanceOf(StreamFactoryInterface::class, $this->streamFactory);
     }
 }

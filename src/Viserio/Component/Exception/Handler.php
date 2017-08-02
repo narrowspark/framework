@@ -18,6 +18,8 @@ use Viserio\Component\Console\Application as ConsoleApplication;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Component\Contracts\HttpFactory\Traits\ServerRequestFactoryAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
@@ -25,6 +27,9 @@ use Viserio\Component\Exception\Filter\VerboseFilter;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
+    use ServerRequestFactoryAwareTrait;
+    use ResponseFactoryAwareTrait;
+
     /**
      * Exception filters.
      *
@@ -42,13 +47,16 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * Create a new handler instance.
      *
-     * @param \Psr\Container\ContainerInterface $data
-     * @param mixed                             $serverRequestFactory
-     * @param mixed                             $responseFactory
+     * @param \Psr\Container\ContainerInterface                   $data
+     * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequestFactory
+     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
      */
-    public function __construct($data, $serverRequestFactory, $responseFactory)
+    public function __construct($data, ServerRequestFactoryInterface $serverRequestFactory, ResponseFactoryInterface $responseFactory)
     {
         parent::__construct($data);
+
+        $this->setServerRequestFactory($serverRequestFactory);
+        $this->setResponseFactory($responseFactory);
     }
 
     /**
@@ -166,7 +174,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         }
 
         $response = $this->getPreparedResponse(
-            $this->container->get(ServerRequestFactoryInterface::class)->createServerRequest('GET', '/exception'),
+            $this->serverRequestFactory->createServerRequest('GET', '/exception'),
             $exception,
             $transformed
         );
@@ -219,7 +227,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         } catch (Throwable $exception) {
             $this->report($exception);
 
-            $response = $this->container->get(ResponseFactoryInterface::class)->createResponse();
+            $response = $this->responseFactory->createResponse();
             $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
             $response = $response->withHeader('Content-Type', 'text/plain');
         }

@@ -12,35 +12,19 @@ trait ServerRequestFactoryAwareTrait
      *
      * @var \Interop\Http\Factory\ServerRequestFactoryInterface
      */
-    protected $serverRequest;
+    protected $serverRequestFactory;
 
     /**
      * Set a ServerRequest instance.
      *
-     * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequest
+     * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequestFactory
      *
      * @return $this
      */
-    public function setServerRequestFactory(ServerRequestFactoryInterface $serverRequest)
+    public function setServerRequestFactory(ServerRequestFactoryInterface $serverRequestFactory)
     {
-        $this->serverRequest = $serverRequest;
+        $this->serverRequestFactory = $serverRequestFactory;
 
         return $this;
-    }
-
-    /**
-     * Get the ServerRequest instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Interop\Http\Factory\ServerRequestFactoryInterface
-     */
-    public function getServerRequestFactory(): ServerRequestFactoryInterface
-    {
-        if (! $this->serverRequest) {
-            throw new RuntimeException('Instance implementing [\Interop\Http\Factory\ServerRequestFactoryInterface] is not set up.');
-        }
-
-        return $this->serverRequest;
     }
 }

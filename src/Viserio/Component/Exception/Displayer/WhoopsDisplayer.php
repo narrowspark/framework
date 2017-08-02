@@ -2,27 +2,44 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayer;
 
+use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Http\Response;
+use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run as Whoops;
 
 class WhoopsDisplayer implements DisplayerContract
 {
+    use ResponseFactoryAwareTrait;
+
+    /**
+     * Create a new whoops displayer instance.
+     *
+     * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
+     */
+    public function __construct(ResponseFactoryInterface $responseFactory)
+    {
+        $this->responseFactory = $responseFactory;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
     {
-        $content = $this->getWhoops()->handleException($exception);
+        $response = $this->responseFactory->createResponse($code);
 
-        return new Response(
-            $code,
-            \array_merge($headers, ['Content-Type' => $this->contentType()]),
-            $content ?? ''
-        );
+        foreach (\array_merge($headers, ['Content-Type' => $this->contentType()]) as $header => $value) {
+            $response = $response->withAddedHeader($header, $value);
+        }
+
+        $body = $response->getBody();
+        $body->write($this->getWhoops()->handleException($exception));
+        $body->rewind();
+
+        return $response->withBody($body);
     }
 
     /**
@@ -59,7 +76,6 @@ class WhoopsDisplayer implements DisplayerContract
         $whoops = new Whoops();
         $whoops->allowQuit(false);
         $whoops->writeToOutput(false);
-
         $whoops->pushHandler(new PrettyPageHandler());
 
         return $whoops;

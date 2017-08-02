@@ -27,20 +27,4 @@ trait UriFactoryAwareTrait
 
         return $this;
     }
-
-    /**
-     * Get the UriFactory instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Interop\Http\Factory\UriFactoryInterface
-     */
-    public function getUriFactory(): UriFactoryInterface
-    {
-        if (! $this->uriFactory) {
-            throw new RuntimeException('Instance implementing [\Interop\Http\Factory\UriFactoryInterface] is not set up.');
-        }
-
-        return $this->uriFactory;
-    }
 }
