@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Console\Exception\LogicException;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
@@ -13,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Viserio\Component\Contracts\Console\Exception\LogicException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Support\Arrayable;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;

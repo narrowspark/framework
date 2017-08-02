@@ -4,7 +4,6 @@ namespace Viserio\Component\Console;
 
 use Closure;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Console\Exception\LogicException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
@@ -28,6 +27,7 @@ use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleErrorEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Input\InputOption;
+use Viserio\Component\Contracts\Console\Exception\LogicException;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
@@ -458,7 +458,7 @@ class Application extends SymfonyConsole
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      * @param $changeableException
      *
@@ -486,7 +486,7 @@ class Application extends SymfonyConsole
 
         if ($event->isErrorHandled()) {
             $changeableException = null;
-            $exitCode = 0;
+            $exitCode            = 0;
         } else {
             $exitCode = $changeableException->getCode();
         }

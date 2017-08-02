@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Traits;
 
 use Closure;
-use Psr\Container\ContainerInterface;
 
 trait ConfirmableTrait
 {
