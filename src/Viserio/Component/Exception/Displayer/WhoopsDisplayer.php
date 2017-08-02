@@ -17,7 +17,7 @@ class WhoopsDisplayer implements DisplayerContract
     /**
      * Create a new whoops displayer instance.
      *
-     * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      */
     public function __construct(ResponseFactoryInterface $responseFactory)
     {

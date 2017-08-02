@@ -8,7 +8,6 @@ use Throwable;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Http\Response\JsonResponse;
 
 class JsonDisplayer implements DisplayerContract
 {

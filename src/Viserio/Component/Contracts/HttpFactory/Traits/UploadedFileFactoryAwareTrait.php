@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Contracts\HttpFactory\Traits;
 
 use Interop\Http\Factory\UploadedFileFactoryInterface;
-use RuntimeException;
 
 trait UploadedFileFactoryAwareTrait
 {
