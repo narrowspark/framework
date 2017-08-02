@@ -15,15 +15,6 @@ class ContainerAwareTraitTest extends TestCase
     {
         $this->setContainer(new ArrayContainer());
 
-        self::assertInstanceOf(ContainerInterface::class, $this->getContainer());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Container is not set up.
-     */
-    public function testGetContainerThrowExceptionIfContainerIsNotSet(): void
-    {
-        $this->getContainer();
+        self::assertInstanceOf(ContainerInterface::class, $this->container);
     }
 }

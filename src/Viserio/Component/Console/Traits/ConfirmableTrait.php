@@ -72,15 +72,6 @@ trait ConfirmableTrait
     abstract public function confirm(string $question, bool $default = false);
 
     /**
-     * Get the container instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Psr\Container\ContainerInterface
-     */
-    abstract public function getContainer(): ContainerInterface;
-
-    /**
      * Get the default confirmation callback.
      *
      * @return \Closure
@@ -88,14 +79,12 @@ trait ConfirmableTrait
     protected function getDefaultConfirmCallback(): Closure
     {
         return function () {
-            $container = $this->getContainer();
-
-            if ($container->has('env')) {
-                return $container->get('env') == 'production';
+            if ($this->container->has('env')) {
+                return $this->container->get('env') === 'production';
             }
 
-            if ($container->has('viserio.app.env')) {
-                return $container->get('viserio.app.env') == 'production';
+            if ($this->container->has('viserio.app.env')) {
+                return $this->container->get('viserio.app.env') === 'production';
             }
 
             return true;

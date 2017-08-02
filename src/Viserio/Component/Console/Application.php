@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Console;
 
 use Closure;
+use Psr\Container\ContainerInterface;
+use Viserio\Component\Contracts\Console\Exception\LogicException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
@@ -110,7 +112,7 @@ class Application extends SymfonyConsole
     {
         if ($command instanceof ViserioCommand) {
             if ($this->container !== null) {
-                $command->setContainer($this->getContainer());
+                $command->setContainer($this->container);
             }
 
             $command->setInvoker($this->getInvoker());
@@ -256,6 +258,22 @@ class Application extends SymfonyConsole
     }
 
     /**
+     * Get the container instance.
+     *
+     * @throws \Viserio\Component\Contracts\Console\Exception\LogicException
+     *
+     * @return \Psr\Container\ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        if (! $this->container) {
+            throw new LogicException('Container is not set up.');
+        }
+
+        return $this->container;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
@@ -281,32 +299,7 @@ class Application extends SymfonyConsole
         }
 
         if ($changeableException !== null && $this->events !== null) {
-            $command = null;
-
-            if ($this->has($commandName = $this->getCommandName($input))) {
-                $command = $this->find($commandName);
-            }
-
-            $event = new ConsoleErrorEvent(
-                $command,
-                $input,
-                $output,
-                $changeableException,
-                $changeableException->getCode()
-            );
-
-            $this->events->trigger($event);
-
-            $changeableException = $event->getError();
-
-            if ($event->isErrorHandled()) {
-                $changeableException = null;
-                $exitCode            = 0;
-            } else {
-                $exitCode = $changeableException->getCode();
-            }
-
-            $this->events->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+            [$changeableException, $exitCode] = $this->changeExceptionOnEventTrigger($input, $output, $changeableException);
         }
 
         if ($changeableException !== null) {
@@ -443,7 +436,7 @@ class Application extends SymfonyConsole
                 ->injectByParameterName(true);
 
             if ($this->container !== null) {
-                $invoker->setContainer($this->getContainer());
+                $invoker->setContainer($this->container);
             }
 
             $this->invoker = $invoker;
@@ -462,5 +455,44 @@ class Application extends SymfonyConsole
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
         }
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param $changeableException
+     *
+     * @return array
+     */
+    private function changeExceptionOnEventTrigger(InputInterface $input, OutputInterface $output, $changeableException): array
+    {
+        $command = null;
+
+        if ($this->has($commandName = $this->getCommandName($input))) {
+            $command = $this->find($commandName);
+        }
+
+        $event = new ConsoleErrorEvent(
+            $command,
+            $input,
+            $output,
+            $changeableException,
+            $changeableException->getCode()
+        );
+
+        $this->events->trigger($event);
+
+        $changeableException = $event->getError();
+
+        if ($event->isErrorHandled()) {
+            $changeableException = null;
+            $exitCode = 0;
+        } else {
+            $exitCode = $changeableException->getCode();
+        }
+
+        $this->events->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+
+        return [$changeableException, $exitCode];
     }
 }

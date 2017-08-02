@@ -4,6 +4,7 @@ namespace Viserio\Component\Exception;
 
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,7 +22,6 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
@@ -38,6 +38,16 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * @var array
      */
     protected $displayers = [];
+
+    /**
+     * Create a new handler instance.
+     *
+     * @param \Psr\Container\ContainerInterface $data
+     */
+    public function __construct($data, $serverRequestFactory, $responseFactory)
+    {
+        parent::__construct($data);
+    }
 
     /**
      * {@inheritdoc}
@@ -143,18 +153,18 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         }
 
         $transformed = $this->getTransformed($exception);
-        $container   = $this->container;
 
         if (PHP_SAPI === 'cli') {
-            if ($container->has(ConsoleApplication::class)) {
-                $container->get(ConsoleApplication::class)->renderException($transformed, new ConsoleOutput());
+            if ($this->container !== null && $this->container->has(ConsoleApplication::class)) {
+                $console = $this->container->get(ConsoleApplication::class);
+                $console->renderException($transformed, new ConsoleOutput());
             } else {
                 throw $transformed;
             }
         }
 
         $response = $this->getPreparedResponse(
-            $container->get(ServerRequestFactory::class)->createServerRequest('GET', '/exception'),
+            $this->container->get(ServerRequestFactoryInterface::class)->createServerRequest('GET', '/exception'),
             $exception,
             $transformed
         );

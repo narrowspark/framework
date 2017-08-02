@@ -66,20 +66,14 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     /**
      * Create a new error handler instance.
      *
-     * @param \Psr\Container\ContainerInterface $container
+     * @param array|\ArrayAccess|\Psr\Container\ContainerInterface $data
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($data)
     {
-        $this->container           = $container;
+        $this->resolvedOptions     = self::resolveOptions($data);
         $this->exceptionIdentifier = new ExceptionIdentifier();
 
-        if ($this->container->has(LoggerInterface::class)) {
-            $this->logger = $this->container->get(LoggerInterface::class);
-        } else {
-            $this->logger = new NullLogger();
-        }
-
-        $this->resolvedOptions = self::resolveOptions($this->container);
+        $this->setLogger(new NullLogger());
     }
 
     /**
@@ -238,11 +232,9 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $transformed = $this->getTransformed($exception);
 
         if (PHP_SAPI === 'cli') {
-            $container = $this->container;
-
-            if ($container->has(ConsoleApplication::class)) {
-                $container->get(ConsoleApplication::class)
-                    ->renderException($transformed, new ConsoleOutput());
+            if ($this->container !== null && $this->container->has(ConsoleApplication::class)) {
+                $console = $this->container->get(ConsoleApplication::class);
+                $console->renderException($transformed, new ConsoleOutput());
             } else {
                 throw $transformed;
             }
@@ -339,9 +331,11 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     protected function prepareException(Throwable $exception)
     {
         if (! $exception instanceof Exception) {
-            $exception = new FatalThrowableError($exception);
-        } elseif ($exception instanceof Error) {
-            $exception = new FatalErrorException(
+            return new FatalThrowableError($exception);
+        }
+
+        if ($exception instanceof Error) {
+            return new FatalErrorException(
                 $exception->getMessage(),
                 $exception->getCode(),
                 E_ERROR,
@@ -365,7 +359,6 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        $container    = $this->container;
         $transformers = \array_merge(
             $this->transformers,
             $this->resolvedOptions['transformers']
@@ -374,8 +367,8 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         foreach ($transformers as $transformer) {
             if (\is_object($transformer)) {
                 $transformerClass = $transformer;
-            } elseif ($container->has($transformer)) {
-                $transformerClass = $container->get($transformer);
+            } elseif ($this->container !== null && $this->container->has($transformer)) {
+                $transformerClass = $this->container->get($transformer);
             } else {
                 throw new RuntimeException(\sprintf('Transformer [%s] not found.', (string) $transformer));
             }

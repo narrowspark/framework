@@ -24,6 +24,7 @@
         "opis/closure"                           : "^3.0",
         "psr/container"                          : "^1.0",
         "symfony/process"                        : "~3.3",
+        "queue-interop/queue-interop"            : "^0.5",
         "viserio/contracts"                      : "self.version",
         "viserio/console"                        : "self.version",
         "viserio/encryption"                     : "self.version",

@@ -37,7 +37,7 @@ class CommandTest extends TestCase
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
-            ->setContainer($this->application->getContainer());
+            ->setContainer($container);
     }
 
     public function testGetNormalVerbosity(): void

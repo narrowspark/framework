@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
+use Psr\Container\ContainerInterface;
+use Viserio\Component\Contracts\Console\Exception\LogicException;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
@@ -442,6 +444,22 @@ abstract class Command extends BaseCommand
     }
 
     /**
+     * Get the container instance.
+     *
+     * @throws \Viserio\Component\Contracts\Console\Exception\LogicException
+     *
+     * @return \Psr\Container\ContainerInterface
+     */
+    protected function getContainer(): ContainerInterface
+    {
+        if (! $this->container) {
+            throw new LogicException('Container is not set up.');
+        }
+
+        return $this->container;
+    }
+
+    /**
      * Execute the console command.
      *
      * @param \Symfony\Component\Console\Input\InputInterface   $input
@@ -481,14 +499,15 @@ abstract class Command extends BaseCommand
      */
     protected function configureUsingFluentDefinition(): void
     {
-        $arr = ExpressionParser::parse($this->signature);
+        [$name, $arguments, $options] = ExpressionParser::parse($this->signature);
 
-        parent::__construct($arr['name']);
+        parent::__construct($name);
 
-        foreach ($arr['arguments'] as $argument) {
+        foreach ($arguments as $argument) {
             $this->getDefinition()->addArgument($argument);
         }
-        foreach ($arr['options'] as $option) {
+
+        foreach ($options as $option) {
             $this->getDefinition()->addOption($option);
         }
     }
