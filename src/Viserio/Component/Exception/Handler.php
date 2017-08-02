@@ -79,6 +79,8 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * Create a new handler instance.
      *
      * @param \Psr\Container\ContainerInterface $data
+     * @param mixed                             $serverRequestFactory
+     * @param mixed                             $responseFactory
      */
     public function __construct($data, $serverRequestFactory, $responseFactory)
     {
