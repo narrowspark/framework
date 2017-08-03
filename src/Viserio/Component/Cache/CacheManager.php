@@ -19,10 +19,10 @@ use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use Redis;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
-use Psr\Log\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
 

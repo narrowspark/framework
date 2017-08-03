@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use RuntimeException;
-use Psr\Log\LoggerAwareTrait;
 use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;

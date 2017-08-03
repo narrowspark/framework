@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\NullLogger;
 use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
