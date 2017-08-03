@@ -56,8 +56,11 @@ class ViewDisplayer implements DisplayerContract
             $response = $response->withAddedHeader($header, $value);
         }
 
+        $view = $this->factory->create("errors.{$code}", $this->info->generate($id, $code));
+        $view->with('exception', $exception);
+
         $body = $response->getBody();
-        $body->write((string) $this->factory->create("errors.{$code}", $this->info->generate($id, $code)));
+        $body->write((string) $view);
         $body->rewind();
 
         return $response->withBody($body);

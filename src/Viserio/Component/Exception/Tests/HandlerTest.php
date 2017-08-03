@@ -5,7 +5,6 @@ namespace Viserio\Component\Exception\Tests;
 use ErrorException;
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
@@ -31,8 +30,23 @@ class HandlerTest extends MockeryTestCase
      */
     private $container;
 
+    /**
+     * @var \Interop\Http\Factory\ResponseFactoryInterface|\Mockery\MockInterface
+     */
+    private $responseFactory;
+
+    /**
+     * @var \Psr\Container\ContainerInterface|\Mockery\MockInterface
+     */
+    private $serverRequest;
+
     public function setUp()
     {
+
+        $this->responseFactory = $this->mock(ResponseFactoryInterface::class);
+        $this->serverRequestFactory = $this->mock(ServerRequestInterface::class);
+        $this->serverRequest = $this->mock(ServerRequestInterface::class);
+
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
             ->with('viserio')
@@ -58,15 +72,6 @@ class HandlerTest extends MockeryTestCase
             ->with(ExceptionIdentifier::class)
             ->andReturn(new ExceptionIdentifier());
         $this->container->shouldReceive('get')
-            ->with(ResponseFactoryInterface::class)
-            ->andReturn($this->mock(ResponseFactoryInterface::class));
-        $this->container->shouldReceive('get')
-            ->with(ServerRequestInterface::class)
-            ->andReturn($this->mock(ServerRequestInterface::class));
-        $this->container->shouldReceive('get')
-            ->with(StreamFactoryInterface::class)
-            ->andReturn($this->mock(StreamFactoryInterface::class));
-        $this->container->shouldReceive('get')
             ->with(ExceptionInfo::class)
             ->andReturn(new ExceptionInfo());
     }
@@ -76,7 +81,7 @@ class HandlerTest extends MockeryTestCase
         $this->container->shouldReceive('has')
             ->with(LoggerInterface::class)
             ->andReturn(false);
-        $handler = new Handler($this->container);
+        $handler = new Handler($this->container, '', $this->responseFactory);
 
         $info = $this->container->get(ExceptionInfo::class);
 

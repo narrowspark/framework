@@ -11,7 +11,7 @@ use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
-use RuntimeException;
+use Viserio\Component\Contracts\Exception\Exception\NotFoundException as BaseNotFoundException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
@@ -299,7 +299,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function registerExceptionHandler(): void
     {
-        if (PHP_SAPI != 'cli' || PHP_SAPI != 'phpdbg') {
+        if (PHP_SAPI !== 'cli' || PHP_SAPI !== 'phpdbg') {
             \ini_set('display_errors', '0');
         } elseif (! \ini_get('log_errors') || \ini_get('error_log')) {
             // CLI - display errors only if they're not already logged to STDERR
@@ -351,7 +351,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      *
      * @param \Throwable $exception
      *
-     * @throws \RuntimeException if transformer is not found
+     * @throws \Viserio\Component\Contracts\Exception\Exception\NotFoundException if transformer is not found
      *
      * @return \Throwable
      */
@@ -368,7 +368,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             } elseif ($this->container !== null && $this->container->has($transformer)) {
                 $transformerClass = $this->container->get($transformer);
             } else {
-                throw new RuntimeException(\sprintf('Transformer [%s] not found.', (string) $transformer));
+                throw new BaseNotFoundException(\sprintf('Transformer [%s] not found.', (string) $transformer));
             }
 
             $exception = $transformerClass->transform($exception);
