@@ -71,9 +71,11 @@ interface Cron
     /**
      * Do not allow the cron job to overlap each other.
      *
+     * @param int $expiresAt
+     *
      * @return $this
      */
-    public function withoutOverlapping(): Cron;
+    public function withoutOverlapping(int $expiresAt = 1440): Cron;
 
     /**
      * Append the output of the command to a given location.

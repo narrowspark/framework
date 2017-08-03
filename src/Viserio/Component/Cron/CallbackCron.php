@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
+use Psr\Log\NullLogger;
 use Viserio\Component\Contract\Cron\Cron as CronContract;
 use Viserio\Component\Contract\Cron\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Cron\Exception\LogicException;
@@ -42,6 +43,7 @@ class CallbackCron extends Cron
 
         $this->callback   = $callback;
         $this->parameters = $parameters;
+        $this->logger     = new NullLogger();
     }
 
     /**
@@ -75,13 +77,11 @@ class CallbackCron extends Cron
     }
 
     /**
-     * Do not allow the cron job to overlap each other.
+     * {@inheritdoc}
      *
      * @throws \Viserio\Component\Contract\Cron\Exception\LogicException
-     *
-     * @return \Viserio\Component\Contract\Cron\Cron
      */
-    public function withoutOverlapping(): CronContract
+    public function withoutOverlapping(int $expiresAt = 1440): CronContract
     {
         if ($this->description === null) {
             throw new LogicException(
@@ -90,9 +90,7 @@ class CallbackCron extends Cron
             );
         }
 
-        return $this->skip(function () {
-            return $this->cachePool->hasItem($this->getMutexName());
-        });
+        return parent::withoutOverlapping($expiresAt);
     }
 
     /**
@@ -116,6 +114,6 @@ class CallbackCron extends Cron
      */
     protected function getMutexName(): string
     {
-        return 'schedule-' . \sha1($this->expression . $this->description);
+        return 'schedule-mutex-' . \sha1($this->expression . $this->description);
     }
 }

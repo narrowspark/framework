@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
+use Psr\Log\LoggerAwareTrait;
 use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
@@ -283,13 +284,12 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
-    public function withoutOverlapping(): CronContract
+    public function withoutOverlapping(int $expiresAt = 1440): CronContract
     {
         $this->withoutOverlapping = true;
+        $this->expiresAt = $expiresAt;
 
-        $this->after(function (): void {
-            $this->cachePool->deleteItem($this->getMutexName());
-        })->skip(function () {
+        return $this->skip(function () {
             return $this->cachePool->hasItem($this->getMutexName());
         });
 
@@ -694,11 +694,19 @@ class Cron implements CronContract
      */
     public function getSummaryForDisplay(): string
     {
-        if (\is_string($this->description)) {
-            return $this->description;
+        if ($this->command !== null) {
+            return $this->expression . ' : ' . $this->command;
         }
 
-        return $this->buildCommand();
+        if ($this->description !== null) {
+            return $this->expression . ' : ' . $this->description;
+        }
+
+        if (isset($this->callback) && is_string($this->callback)) {
+            return $this->expression . ' : ' . $this->callback;
+        }
+
+        return $this->expression . ' : '. $this->getMutexName();
     }
 
     /**
@@ -736,37 +744,9 @@ class Cron implements CronContract
      *
      * @return bool
      */
-    protected function isWindows(): bool
+    private function isWindows(): bool
     {
         return \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
-    }
-
-    /**
-     * Finalize the event's command syntax with the correct user.
-     *
-     * @param string $command
-     *
-     * @return string
-     */
-    protected function ensureCorrectUser(string $command): string
-    {
-        if ($this->user && ! $this->isWindows()) {
-            return 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'';
-        }
-
-        // http://de2.php.net/manual/en/function.exec.php#56599
-        // The "start" command will start a detached process, a similar effect to &. The "/B" option prevents
-        // start from opening a new terminal window if the program you are running is a console application.
-        if ($this->user && $this->isWindows()) {
-            // https://superuser.com/questions/42537/is-there-any-sudo-command-for-windows
-            // Options for runas : [{/profile|/noprofile}] [/env] [/netonly] [/smartcard] [/showtrustlevels] [/trustlevel] /user:UserAccountName
-
-            return 'runas ' . $this->user . 'start /B ' . $command;
-        } elseif ($this->isWindows()) {
-            return 'start /B ' . $command;
-        }
-
-        return $command;
     }
 
     /**
@@ -816,10 +796,32 @@ class Cron implements CronContract
      *
      * @return int The exit status code
      */
-    protected function runCommandInForeground(): int
+    public function runCommandInForeground(): int
     {
+        register_shutdown_function(function () {
+            $this->cachePool->deleteItem($this->getMutexName());
+        });
+
         $this->callBeforeCallbacks();
 
+        try {
+            $run = $this->runForegroundProcess();
+        } finally {
+            $this->callAfterCallbacks();
+        }
+
+        return $run;
+    }
+
+    /**
+     * Build the process to run.
+     *
+     * @throws \Symfony\Component\Process\Exception\RuntimeException
+     *
+     * @return int
+     */
+    public function runForegroundProcess(): int
+    {
         $process = new Process(
             \trim($this->buildCommand(), ' &'),
             $this->path,
@@ -828,11 +830,7 @@ class Cron implements CronContract
             null
         );
 
-        $run = $process->run();
-
-        $this->callAfterCallbacks();
-
-        return $run;
+        return $process->run();
     }
 
     /**
@@ -884,7 +882,7 @@ class Cron implements CronContract
      */
     protected function getMutexName(): string
     {
-        return 'schedule-' . \sha1($this->expression . $this->command);
+        return 'schedule-mutex-' . \sha1($this->expression . $this->command);
     }
 
     /**
