@@ -94,7 +94,6 @@ class ExceptionServiceProvider implements ServiceProvider
         return new HtmlDisplayer(
             $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class),
-            $container->get(StreamFactoryInterface::class),
             $container
         );
     }
@@ -110,8 +109,7 @@ class ExceptionServiceProvider implements ServiceProvider
     {
         return new JsonDisplayer(
             $container->get(ExceptionInfoContract::class),
-            $container->get(ResponseFactoryInterface::class),
-            $container->get(StreamFactoryInterface::class)
+            $container->get(ResponseFactoryInterface::class)
         );
     }
 
@@ -127,7 +125,6 @@ class ExceptionServiceProvider implements ServiceProvider
         return new ViewDisplayer(
             $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class),
-            $container->get(StreamFactoryInterface::class),
             $container->get(FactoryContract::class)
         );
     }
@@ -135,11 +132,13 @@ class ExceptionServiceProvider implements ServiceProvider
     /**
      * Create a new WhoopsDisplayer instance.
      *
+     * @param \Psr\Container\ContainerInterface $container
+     *
      * @return \Viserio\Component\Exception\Displayer\WhoopsDisplayer
      */
-    public static function createWhoopsDisplayer(): WhoopsDisplayer
+    public static function createWhoopsDisplayer(ContainerInterface $container): WhoopsDisplayer
     {
-        return new WhoopsDisplayer();
+        return new WhoopsDisplayer($container->get(ResponseFactoryInterface::class));
     }
 
     /**

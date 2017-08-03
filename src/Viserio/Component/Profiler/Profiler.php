@@ -11,7 +11,7 @@ use Throwable;
 use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Psr\Log\LoggerAwareTrait;
 use Viserio\Component\Contracts\Profiler\AssetsRenderer as AssetsRendererContract;
 use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;

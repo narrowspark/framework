@@ -18,7 +18,7 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Psr\Log\LoggerAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;

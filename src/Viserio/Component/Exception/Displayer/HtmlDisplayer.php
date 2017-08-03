@@ -52,7 +52,6 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     ) {
         $this->info            = $info;
         $this->responseFactory = $responseFactory;
-
         $this->resolvedOptions = self::resolveOptions($data);
     }
 

@@ -30,15 +30,6 @@ trait InvokerAwareTrait
     }
 
     /**
-     * Get the container instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Psr\Container\ContainerInterface
-     */
-    abstract public function getContainer(): ContainerInterface;
-
-    /**
      * Get configured invoker.
      *
      * @return \Invoker\InvokerInterface

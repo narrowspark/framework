@@ -4,7 +4,7 @@ namespace Viserio\Component\Translation;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\NullLogger;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Psr\Log\LoggerAwareTrait;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
