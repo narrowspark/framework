@@ -42,10 +42,9 @@ class HandlerTest extends MockeryTestCase
 
     public function setUp()
     {
-
-        $this->responseFactory = $this->mock(ResponseFactoryInterface::class);
+        $this->responseFactory      = $this->mock(ResponseFactoryInterface::class);
         $this->serverRequestFactory = $this->mock(ServerRequestInterface::class);
-        $this->serverRequest = $this->mock(ServerRequestInterface::class);
+        $this->serverRequest        = $this->mock(ServerRequestInterface::class);
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
