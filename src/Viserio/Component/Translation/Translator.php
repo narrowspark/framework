@@ -267,12 +267,12 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         }
 
         if ($catalogue->has($id, $domain)) {
-            $this->getLogger()->debug(
+            $this->logger->debug(
                 'Translation use fallback catalogue.',
                 ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
             );
         } else {
-            $this->getLogger()->warning(
+            $this->logger->warning(
                 'Translation not found.',
                 ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
             );

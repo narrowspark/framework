@@ -17,6 +17,9 @@ class TranslationManagerTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
+    /**
+     * @var \Viserio\Component\Translation\TranslationManager
+     */
     private $manager;
 
     /**
@@ -178,19 +181,17 @@ declare(strict_types=1); return [
         self::assertSame('de', $this->manager->getLocale());
     }
 
-    public function testSetAndGetLogger(): void
+    public function testAddMessageCatalogue(): void
     {
-        $this->manager->setLogger($this->mock(LoggerInterface::class));
-
-        self::assertInstanceOf(LoggerInterface::class, $this->manager->getLogger());
-
         $message = $this->mock(MessageCatalogueContract::class);
         $message
             ->shouldReceive('getLocale')
             ->times(3)
-            ->andReturn('en');
+            ->andReturn('ab');
 
         $this->manager->addMessageCatalogue($message);
+
+        self::assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('ab'));
     }
 
     protected function getFileLoader()

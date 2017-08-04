@@ -91,8 +91,6 @@ class TranslatorTest extends MockeryTestCase
             ->twice();
         $this->translator->setLogger($logger);
 
-        self::assertInstanceOf(LoggerInterface::class, $this->translator->getLogger());
-
         self::assertSame('bar', $this->translator->trans('test'));
         self::assertSame('dont', $this->translator->trans('dont'));
 
