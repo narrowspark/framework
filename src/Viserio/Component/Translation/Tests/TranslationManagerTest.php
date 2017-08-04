@@ -4,7 +4,6 @@ namespace Viserio\Component\Translation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
-use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
