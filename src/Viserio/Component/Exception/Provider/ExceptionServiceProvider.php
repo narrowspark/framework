@@ -4,7 +4,6 @@ namespace Viserio\Component\Exception\Provider;
 
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;

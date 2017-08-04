@@ -45,7 +45,7 @@ class HandlerTest extends MockeryTestCase
     public function setUp()
     {
         $this->responseFactory = $this->mock(ResponseFactoryInterface::class);
-        $this->loggger = $this->mock(LoggerInterface::class);
+        $this->loggger         = $this->mock(LoggerInterface::class);
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -74,7 +74,7 @@ class HandlerTest extends MockeryTestCase
 
     public function testAddAndGetDisplayer(): void
     {
-        $info = new ExceptionInfo();
+        $info            = new ExceptionInfo();
         $repsonseFactory = new ResponseFactory();
 
         $this->handler->addDisplayer(new HtmlDisplayer($info, $repsonseFactory, $this->container));

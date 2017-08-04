@@ -31,7 +31,7 @@ class ViewDisplayerTest extends MockeryTestCase
     public function testError(): void
     {
         $exception = new Exception();
-        $view = $this->mock(View::class);
+        $view      = $this->mock(View::class);
         $view->shouldReceive('with')
             ->once()
             ->with('exception', $exception);

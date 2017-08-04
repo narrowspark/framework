@@ -4,13 +4,10 @@ namespace Viserio\Component\Exception;
 
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\ServerRequestFactoryInterface;
-use Psr\Log\LoggerInterface;
-use RuntimeException;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Console\Application as SymfonyConsole;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
@@ -21,7 +18,6 @@ use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Contracts\HttpFactory\Traits\ServerRequestFactoryAwareTrait;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
@@ -46,6 +42,11 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     private $displayers = [];
 
     /**
+     * @var null|\Viserio\Component\Console\Application
+     */
+    private $console;
+
+    /**
      * Create a new handler instance.
      *
      * @param \Psr\Container\ContainerInterface              $data
@@ -58,11 +59,6 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
 
         $this->setResponseFactory($responseFactory);
     }
-
-    /**
-     * @var null|\Viserio\Component\Console\Application
-     */
-    private $console;
 
     /**
      * Set a console application instance.
@@ -230,8 +226,8 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * Get a prepared response with the transformed exception.
      *
      * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $exception
-     * @param \Throwable                               $transformed
+     * @param \Throwable                                    $exception
+     * @param \Throwable                                    $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -261,8 +257,8 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * Create a response for the given exception.
      *
      * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param \Exception                               $exception
-     * @param \Throwable                               $transformed
+     * @param \Exception                                    $exception
+     * @param \Throwable                                    $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -288,9 +284,9 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * Get the displayer instance.
      *
      * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $original
-     * @param \Throwable                               $transformed
-     * @param int                                      $code
+     * @param \Throwable                                    $original
+     * @param \Throwable                                    $transformed
+     * @param int                                           $code
      *
      * @return \Viserio\Component\Contracts\Exception\Displayer
      */
