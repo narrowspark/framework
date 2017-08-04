@@ -5,6 +5,8 @@ namespace Viserio\Component\Exception;
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
+use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,7 +29,6 @@ use Viserio\Component\Exception\Filter\VerboseFilter;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
-    use ServerRequestFactoryAwareTrait;
     use ResponseFactoryAwareTrait;
 
     /**
@@ -35,28 +36,46 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      *
      * @var array
      */
-    protected $filters = [];
+    private $filters = [];
 
     /**
      * Exception displayers.
      *
      * @var array
      */
-    protected $displayers = [];
+    private $displayers = [];
 
     /**
      * Create a new handler instance.
      *
-     * @param \Psr\Container\ContainerInterface                   $data
-     * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequestFactory
-     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
+     * @param \Psr\Container\ContainerInterface              $data
+     * @param \Psr\Log\LoggerInterface                       $logger
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      */
-    public function __construct($data, ServerRequestFactoryInterface $serverRequestFactory, ResponseFactoryInterface $responseFactory)
+    public function __construct($data, ResponseFactoryInterface $responseFactory, LoggerInterface $logger)
     {
-        parent::__construct($data);
+        parent::__construct($data, $logger);
 
-        $this->setServerRequestFactory($serverRequestFactory);
         $this->setResponseFactory($responseFactory);
+    }
+
+    /**
+     * @var null|\Viserio\Component\Console\Application
+     */
+    private $console;
+
+    /**
+     * Set a console application instance.
+     *
+     * @param \Viserio\Component\Console\Application $console
+     *
+     * @return $this
+     */
+    public function setConsole(ConsoleApplication $console): self
+    {
+        $this->console = $console;
+
+        return $this;
     }
 
     /**
@@ -165,8 +184,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         $transformed = $this->getTransformed($exception);
 
         if (PHP_SAPI === 'cli') {
-            if ($this->container !== null && $this->container->has(ConsoleApplication::class)) {
-                $console = $this->container->get(ConsoleApplication::class);
+            if (($console = $this->getConsole()) !== null) {
                 $console->renderException($transformed, new ConsoleOutput());
             } else {
                 throw $transformed;
@@ -174,7 +192,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         }
 
         $response = $this->getPreparedResponse(
-            $this->serverRequestFactory->createServerRequest('GET', '/exception'),
+            null,
             $exception,
             $transformed
         );
@@ -201,20 +219,24 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function renderForConsole(OutputInterface $output, Throwable $exception): void
     {
-        $this->container->get(SymfonyConsole::class)->renderException($exception, $output);
+        if (($console = $this->getConsole()) !== null) {
+            $console->renderException($exception, $output);
+
+            return;
+        }
     }
 
     /**
      * Get a prepared response with the transformed exception.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param null|\Psr\Http\Message\ServerRequestInterface $request
      * @param \Throwable                               $exception
      * @param \Throwable                               $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getPreparedResponse(
-        ServerRequestInterface $request,
+        ?ServerRequestInterface $request,
         Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
@@ -238,14 +260,14 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * Create a response for the given exception.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param null|\Psr\Http\Message\ServerRequestInterface $request
      * @param \Exception                               $exception
      * @param \Throwable                               $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getResponse(
-        ServerRequestInterface $request,
+        ?ServerRequestInterface $request,
         Exception $exception,
         Throwable $transformed
     ): ResponseInterface {
@@ -265,7 +287,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * Get the displayer instance.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param null|\Psr\Http\Message\ServerRequestInterface $request
      * @param \Throwable                               $original
      * @param \Throwable                               $transformed
      * @param int                                      $code
@@ -273,7 +295,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * @return \Viserio\Component\Contracts\Exception\Displayer
      */
     protected function getDisplayer(
-        ServerRequestInterface $request,
+        ?ServerRequestInterface $request,
         Throwable $original,
         Throwable $transformed,
         int $code
@@ -283,15 +305,17 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
             $this->resolvedOptions['displayers']
         );
 
-        if ($filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
+        if ($request !== null && $filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
             return $filtered[0];
         }
 
-        if (\is_object($this->resolvedOptions['default_displayer'])) {
-            return $this->resolvedOptions['default_displayer'];
+        $defaultDisplayer = $this->resolvedOptions['default_displayer'];
+
+        if (\is_object($defaultDisplayer)) {
+            return $defaultDisplayer;
         }
 
-        return $this->container->get($this->resolvedOptions['default_displayer']);
+        return $this->container->get($defaultDisplayer);
     }
 
     /**
@@ -324,5 +348,19 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         }
 
         return \array_values($displayers);
+    }
+
+    /**
+     * Get a console instance form container or take the given instance.
+     *
+     * @return null|\Viserio\Component\Console\Application
+     */
+    private function getConsole(): ? ConsoleApplication
+    {
+        if ($this->console === null && $this->container !== null && $this->container->has(ConsoleApplication::class)) {
+            return $this->console = $this->container->get(ConsoleApplication::class);
+        }
+
+        return $this->console;
     }
 }

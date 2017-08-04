@@ -9,15 +9,15 @@ use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
+use Viserio\Component\Contracts\Exception\Exception\NotFoundException as BaseNotFoundException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Exception\Exception\NotFoundException as BaseNotFoundException;
 use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -65,13 +65,14 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      * Create a new error handler instance.
      *
      * @param array|\ArrayAccess|\Psr\Container\ContainerInterface $data
+     * @param \Psr\Log\LoggerInterface                             $logger
      */
-    public function __construct($data)
+    public function __construct($data, LoggerInterface $logger)
     {
         $this->resolvedOptions     = self::resolveOptions($data);
         $this->exceptionIdentifier = new ExceptionIdentifier();
 
-        $this->setLogger(new NullLogger());
+        $this->setLogger($logger);
     }
 
     /**
@@ -139,7 +140,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $level = $this->getLevel($exception);
         $id    = $this->exceptionIdentifier->identify($exception);
 
-        $this->getLogger()->{$level}(
+        $this->logger->{$level}(
             $exception->getMessage(),
             ['exception' => $exception, 'identification' => ['id' => $id]]
         );

@@ -36,7 +36,7 @@ class WhoopsDisplayer implements DisplayerContract
         }
 
         $body = $response->getBody();
-        $body->write($this->getWhoops()->handleException($exception));
+        $body->write(self::getWhoops()->handleException($exception));
         $body->rewind();
 
         return $response->withBody($body);
@@ -71,7 +71,7 @@ class WhoopsDisplayer implements DisplayerContract
      *
      * @return Whoops
      */
-    private function getWhoops(): Whoops
+    private static function getWhoops(): Whoops
     {
         $whoops = new Whoops();
         $whoops->allowQuit(false);

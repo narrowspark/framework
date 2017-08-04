@@ -22,6 +22,7 @@ use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransform
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
+use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\View\Provider\ViewServiceProvider;
 
 class ExceptionServiceProviderTest extends TestCase
@@ -33,6 +34,7 @@ class ExceptionServiceProviderTest extends TestCase
         $container->register(new ConfigServiceProvider());
         $container->register(new ViewServiceProvider());
         $container->register(new FilesServiceProvider());
+        $container->register(new LoggerServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->get(RepositoryContract::class)->setArray(['viserio' => [
                 'exception' => [
@@ -42,6 +44,9 @@ class ExceptionServiceProviderTest extends TestCase
                 ],
                 'view' => [
                     'paths' => [],
+                ],
+                'log' => [
+                    'env'  => 'dev',
                 ],
             ],
         ]);

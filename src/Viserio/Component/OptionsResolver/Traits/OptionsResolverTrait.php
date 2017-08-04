@@ -109,16 +109,18 @@ trait OptionsResolverTrait
             return $data;
         }
 
-        if ($data instanceof ContainerInterface && $data->has(RepositoryContract::class)) {
-            return $data->get(RepositoryContract::class);
-        }
+        if ($data instanceof ContainerInterface) {
+            if ($data->has(RepositoryContract::class)) {
+                return $data->get(RepositoryContract::class);
+            }
 
-        if ($data instanceof ContainerInterface && $data->has('config')) {
-            return $data->get('config');
-        }
+            if ($data->has('config')) {
+                return $data->get('config');
+            }
 
-        if ($data instanceof ContainerInterface && $data->has('options')) {
-            return $data->get('options');
+            if ($data->has('options')) {
+                return $data->get('options');
+            }
         }
 
         throw new RuntimeException('No configuration found.');

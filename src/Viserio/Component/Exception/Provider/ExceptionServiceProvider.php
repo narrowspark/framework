@@ -6,6 +6,7 @@ use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
@@ -79,11 +80,15 @@ class ExceptionServiceProvider implements ServiceProvider
      */
     public static function createExceptionHandler(ContainerInterface $container): HandlerContract
     {
-        return new Handler(
+        $handler = new Handler(
             $container,
-            $container->get(ServerRequestFactoryInterface::class),
-            $container->get(ResponseFactoryInterface::class)
+            $container->get(ResponseFactoryInterface::class),
+            $container->get(LoggerInterface::class)
         );
+
+        $handler->setContainer($container);
+
+        return $handler;
     }
 
     /**
