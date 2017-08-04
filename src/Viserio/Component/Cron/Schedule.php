@@ -66,7 +66,7 @@ class Schedule
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
-            $cron->setContainer($this->getContainer());
+            $cron->setContainer($this->container);
         }
 
         $this->jobs[] = $cron;
@@ -86,8 +86,8 @@ class Schedule
      */
     public function command(string $command, array $parameters = []): CronContract
     {
-        if ($this->container !== null && $this->getContainer()->has($command)) {
-            $command = $this->getContainer()->get($command)->getName();
+        if ($this->container !== null && $this->container->has($command)) {
+            $command = $this->container->get($command)->getName();
         }
 
         if (\defined('CEREBRO_BINARY')) {
@@ -125,7 +125,7 @@ class Schedule
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
-            $cron->setContainer($this->getContainer());
+            $cron->setContainer($this->container);
         }
 
         $this->jobs[] = $cron;

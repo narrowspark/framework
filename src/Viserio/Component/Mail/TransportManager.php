@@ -35,7 +35,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      */
     protected function createLogDriver(): LogTransport
     {
-        return new LogTransport($this->getContainer()->get(LoggerInterface::class));
+        return new LogTransport($this->container->get(LoggerInterface::class));
     }
 
     /**

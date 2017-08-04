@@ -105,7 +105,7 @@ LUA;
         );
 
         if ($reserved) {
-            return new RedisJob($this->getContainer(), $this, $job, $reserved, $original);
+            return new RedisJob($this->container, $this, $job, $reserved, $original);
         }
     }
 

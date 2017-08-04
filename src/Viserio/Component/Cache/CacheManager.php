@@ -66,7 +66,7 @@ class CacheManager extends AbstractManager implements
         $driver    = parent::createDriver($config);
         $namespace = $this->resolvedOptions['namespace'];
 
-        $driver->setLogger($this->getLogger());
+        $driver->setLogger($this->logger);
 
         if (\class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
             $driver = $this->getNamespacedPool($driver, $namespace);
@@ -161,7 +161,7 @@ class CacheManager extends AbstractManager implements
      */
     protected function createFilesystemDriver(array $config): FilesystemCachePool
     {
-        $adapter = $this->getContainer()->get($config['connection']);
+        $adapter = $this->container->get($config['connection']);
 
         return new FilesystemCachePool(new Flysystem($adapter));
     }

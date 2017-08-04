@@ -39,7 +39,7 @@ trait InvokerAwareTrait
             $this->invoker = new Invoker();
 
             if ($this->container !== null) {
-                $this->invoker->setContainer($this->getContainer())
+                $this->invoker->setContainer($this->container)
                     ->injectByTypeHint(true)
                     ->injectByParameterName(true);
             }

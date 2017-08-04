@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
-use Viserio\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Application as ConsoleApplication;
 use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contracts\Exception\Filter as FilterContract;
 use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
@@ -42,7 +42,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     private $displayers = [];
 
     /**
-     * @var null|\Viserio\Component\Console\Application
+     * @var null|\Symfony\Component\Console\Application
      */
     private $console;
 
@@ -63,7 +63,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * Set a console application instance.
      *
-     * @param \Viserio\Component\Console\Application $console
+     * @param \Symfony\Component\Console\Application $console
      *
      * @return $this
      */
@@ -349,7 +349,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * Get a console instance form container or take the given instance.
      *
-     * @return null|\Viserio\Component\Console\Application
+     * @return null|\Symfony\Component\Console\Application
      */
     private function getConsole(): ? ConsoleApplication
     {

@@ -103,7 +103,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
         $pipeline = new Pipeline();
 
         if ($this->container !== null) {
-            $pipeline->setContainer($this->getContainer());
+            $pipeline->setContainer($this->container);
         }
 
         return $pipeline->send($request)

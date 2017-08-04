@@ -108,7 +108,7 @@ abstract class AbstractJob implements JobContract
 
         [$class, $method] = $this->parseJob($payload['job']);
 
-        $this->instance = $this->getContainer()->get($class);
+        $this->instance = $this->container->get($class);
 
         if (\method_exists($this->instance, 'failed')) {
             $this->instance->failed($payload['data']);
@@ -157,7 +157,7 @@ abstract class AbstractJob implements JobContract
     {
         [$class, $method] = $this->parseJob($payload['job']);
 
-        $this->instance = $this->getContainer()->get($class);
+        $this->instance = $this->container->get($class);
 
         $this->instance->{$method}($this, $payload['data']);
     }

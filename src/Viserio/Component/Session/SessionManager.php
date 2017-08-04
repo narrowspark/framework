@@ -58,7 +58,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     {
         return $this->buildSession(
             new FileSessionHandler(
-                $this->getContainer()->get(FilesystemContract::class),
+                $this->container->get(FilesystemContract::class),
                 $config['path'],
                 $this->resolvedOptions['lifetime']
             )
@@ -74,7 +74,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     {
         return $this->buildSession(
             new CookieSessionHandler(
-                $this->getContainer()->get(JarContract::class),
+                $this->container->get(JarContract::class),
                 $this->resolvedOptions['lifetime']
             )
         );

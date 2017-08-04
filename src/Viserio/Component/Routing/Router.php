@@ -356,7 +356,7 @@ class Router implements RouterContract
         $dispatcher = $this->dispatcher;
 
         if ($this->container !== null && \method_exists($dispatcher, 'setContainer')) {
-            $dispatcher->setContainer($this->getContainer());
+            $dispatcher->setContainer($this->container);
         }
 
         return $dispatcher->handle($this->routes, $request);
@@ -397,7 +397,7 @@ class Router implements RouterContract
         $route = new Route($methods, $this->prefix($this->suffix($uri)), $action);
 
         if ($this->container !== null) {
-            $route->setContainer($this->getContainer());
+            $route->setContainer($this->container);
         }
 
         $route->setInvoker($this->getInvoker());
