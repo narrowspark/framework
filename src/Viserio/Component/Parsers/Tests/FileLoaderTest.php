@@ -85,8 +85,8 @@ class FileLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Only the options "tag" or "group" is supported.
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
+     * @expectedExceptionMessage Only the options "tag" and "group" are supported.
      */
     public function testLoadWithWrongOption(): void
     {
@@ -117,7 +117,7 @@ class FileLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\LoadingException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException
      * @expectedExceptionMessage File [no/file] not found.
      */
     public function testExistsWithFalsePath(): void

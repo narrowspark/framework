@@ -323,11 +323,11 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
             $class = $parameter->getClass();
 
             if ($this->parameter === $parameter->name) {
-                $contextualParameters[$key] = $implementation;
+                return $contextualParameters[$key] = $implementation;
             }
 
             if ($class && $this->parameter === $class->name) {
-                $contextualParameters[$key] = $this->contextualBindingFormat($implementation, $class);
+                return $contextualParameters[$key] = $this->contextualBindingFormat($implementation, $class);
             }
         }
 

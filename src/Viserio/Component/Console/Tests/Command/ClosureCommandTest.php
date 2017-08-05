@@ -18,7 +18,7 @@ class ClosureCommandTest extends TestCase
 
     public function setUp(): void
     {
-        $this->application = new Application('1.0.0');
+        $this->application = new Application();
     }
 
     public function testCommand(): void

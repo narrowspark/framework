@@ -35,7 +35,7 @@ class XmlUtilsTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException
      * @expectedExceptionMessage No such file [nonexistfile] found.
      */
     public function testLoadFileToThrowException(): void

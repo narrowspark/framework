@@ -20,7 +20,7 @@ interface ContextualBindingBuilder
      *
      * @throws \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
      *
-     * @return void
+     * @return mixed
      */
     public function give($implementation);
 }

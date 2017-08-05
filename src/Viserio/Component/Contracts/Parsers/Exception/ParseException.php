@@ -8,13 +8,12 @@ class ParseException extends BaseException implements Exception
 {
     public function __construct(array $error)
     {
-        $message  = (string) $error['message'];
-        $code     = $error['code'] ?? 0;
-        $severity = $error['type'] ?? 1;
-        $filename = $error['file'] ?? __FILE__;
-        $lineno   = $error['line'] ?? __LINE__;
-        $previous = $error['exception'] ?? null;
+        $message    = (string) $error['message'];
+        $code       = $error['code'] ?? 0;
+        $this->file = $error['file'] ?? __FILE__;
+        $this->line = $error['line'] ?? __LINE__;
+        $previous   = $error['exception'] ?? null;
 
-        parent::__construct($message, $code, $severity, $filename, $lineno, $previous);
+        parent::__construct($message, $code, $previous);
     }
 }

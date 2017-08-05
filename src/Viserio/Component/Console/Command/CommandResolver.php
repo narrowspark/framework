@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contracts\Console\Exception\InvocationException;
+use Viserio\Component\Contracts\Console\Exception\LogicException;
 use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Str;
 
@@ -187,7 +188,7 @@ final class CommandResolver
     {
         try {
             $this->console->getContainer();
-        } catch (RuntimeException $e) {
+        } catch (LogicException $e) {
             if ($this->isStaticCallToNonStaticMethod($callable)) {
                 [$class, $method] = $callable;
 

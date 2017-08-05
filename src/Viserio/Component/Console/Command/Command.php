@@ -499,15 +499,15 @@ abstract class Command extends BaseCommand
      */
     protected function configureUsingFluentDefinition(): void
     {
-        [$name, $arguments, $options] = ExpressionParser::parse($this->signature);
+        $data = ExpressionParser::parse($this->signature);
 
-        parent::__construct($name);
+        parent::__construct($data['name']);
 
-        foreach ($arguments as $argument) {
+        foreach ($data['arguments'] as $argument) {
             $this->getDefinition()->addArgument($argument);
         }
 
-        foreach ($options as $option) {
+        foreach ($data['options'] as $option) {
             $this->getDefinition()->addOption($option);
         }
     }
