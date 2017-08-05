@@ -7,7 +7,6 @@ use InvalidArgumentException;
 use Invoker\Exception\InvocationException as InvokerInvocationException;
 use Invoker\Reflection\CallableReflection;
 use ReflectionMethod;
-use RuntimeException;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\Output;
