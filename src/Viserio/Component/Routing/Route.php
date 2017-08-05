@@ -354,7 +354,7 @@ class Route implements RouteContract
 
         if ($this->controller === null) {
             if ($this->container !== null) {
-                $container = $this->getContainer();
+                $container = $this->container;
 
                 if ($container->has($class)) {
                     $this->controller = $container->get($class);

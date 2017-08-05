@@ -141,11 +141,11 @@ class FileLoader implements LoaderContract
     /**
      * Get the right parser.
      *
-     * @param array $options
+     * @param null|array $options
      *
      * @return \Viserio\Component\Parsers\Parser
      */
-    protected function getParser(array $options): Parser
+    protected function getParser(?array $options): Parser
     {
         if (($tag = $options['tag'] ?? null) !== null) {
             $class = self::TAG_PARSER;
