@@ -3,13 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Component\Events\Tests\DataCollector;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Events\DataCollector\WrappedListener;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Viserio\Component\Events\DataCollector\WrappedListener;
 
 class WrappedListenerTest extends TestCase
 {
     /**
      * @dataProvider getListeners
+     *
+     * @param mixed $listener
+     * @param mixed $pretty
      */
     public function testGetPretty($listener, $pretty)
     {
@@ -20,26 +23,31 @@ class WrappedListenerTest extends TestCase
 
     /**
      * @dataProvider getListeners
+     *
+     * @param mixed $listener
+     * @param mixed $pretty
      */
     public function testStub($listener, $pretty)
     {
         $wrappedListener = new WrappedListener($listener, 'name', $this->createStopwatchMock());
 
         $info = $wrappedListener->getInfo('event');
-        $this->assertSame($pretty.'()', (string) $info['stub']);
+        $this->assertSame($pretty . '()', (string) $info['stub']);
     }
 
     public function getListeners()
     {
-        return array(
-            array(array($this, 'getListeners'), __METHOD__),
-            array(function () {}, 'closure'),
-            array(/** @closure-proxy App\Foo::bar */ function () {}, 'App\Foo::bar'),
-            array('strtolower', 'strtolower'),
-            array(new Listener(), Listener::class.'::__invoke'),
-            array(new DecoratedListener(), 'listener'),
-            array(new WrappedListener(new DecoratedListener(), 'name', $this->createStopwatchMock()), 'listener'),
-        );
+        return [
+            [[$this, 'getListeners'], __METHOD__],
+            [function () {
+            }, 'closure'],
+            [/** @closure-proxy App\Foo::bar */ function () {
+            }, 'App\Foo::bar'],
+            ['strtolower', 'strtolower'],
+            [new Listener(), Listener::class . '::__invoke'],
+            [new DecoratedListener(), 'listener'],
+            [new WrappedListener(new DecoratedListener(), 'name', $this->createStopwatchMock()), 'listener'],
+        ];
     }
 
     private function createStopwatchMock()
@@ -57,12 +65,12 @@ class Listener
 
 class DecoratedListener
 {
+    public function __invoke()
+    {
+    }
+
     public function getWrappedListener()
     {
         return 'listener';
-    }
-
-    public function __invoke()
-    {
     }
 }
