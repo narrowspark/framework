@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Support\Arrayable;
 use Viserio\Component\Contracts\Support\Renderable;
 use Viserio\Component\Contracts\View\Engine;
-use Viserio\Component\View\Factory;
+use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\View;
 
 class ViewTest extends MockeryTestCase
@@ -14,7 +14,7 @@ class ViewTest extends MockeryTestCase
     public function testDataCanBeSetOnView(): void
     {
         $view = new View(
-            $this->mock(Factory::class),
+            $this->mock(ViewFactory::class),
             $this->mock(Engine::class),
             'view',
             ['path' => 'path', 'name' => 'name'],
@@ -26,7 +26,7 @@ class ViewTest extends MockeryTestCase
         self::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
 
         $view = new View(
-            $this->mock(Factory::class),
+            $this->mock(ViewFactory::class),
             $this->mock(Engine::class),
             'view',
             ['path' => 'path', 'name' => 'name'],
@@ -76,7 +76,7 @@ class ViewTest extends MockeryTestCase
         $arrayable->shouldReceive('toArray')->once()->andReturn(['foo' => 'bar', 'baz' => ['qux', 'corge']]);
 
         $view = new View(
-            $this->mock(Factory::class),
+            $this->mock(ViewFactory::class),
             $this->mock(Engine::class),
             'view',
             ['path' => 'path', 'name' => 'name'],
@@ -170,7 +170,7 @@ class ViewTest extends MockeryTestCase
     protected function getView()
     {
         return new View(
-            $this->mock(Factory::class),
+            $this->mock(ViewFactory::class),
             $this->mock(Engine::class),
             'view',
             ['path' => 'path', 'name' => 'name'],

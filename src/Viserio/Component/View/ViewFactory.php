@@ -12,7 +12,7 @@ use Viserio\Component\Contracts\View\Finder as FinderContract;
 use Viserio\Component\Contracts\View\View as ViewContract;
 use Viserio\Component\View\Traits\NormalizeNameTrait;
 
-class Factory implements FactoryContract
+class ViewFactory implements FactoryContract
 {
     use NormalizeNameTrait;
 
@@ -84,7 +84,7 @@ class Factory implements FactoryContract
         $this->engines = $engines;
         $this->finder  = $finder;
 
-        $this->share('__env', $this);
+        #$this->share('__env', $this);
     }
 
     /**
@@ -194,7 +194,7 @@ class Factory implements FactoryContract
         $extension = $this->getExtension($path);
 
         if ($extension === null) {
-            throw new InvalidArgumentException(\sprintf('Unrecognized extension in file: [%s]', $path));
+            throw new InvalidArgumentException(\sprintf('Unrecognized extension in file: [%s].', $path));
         }
 
         return $this->engines->resolve(self::$extensions[$extension]);

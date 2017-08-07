@@ -9,14 +9,14 @@ use Viserio\Component\Contracts\View\Finder;
 use Viserio\Component\Contracts\View\View as ViewContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\Engine\PhpEngine;
-use Viserio\Component\View\Factory;
+use Viserio\Component\View\ViewFactory;
 
 class ViewFactoryTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * @var \Viserio\Component\View\Factory
+     * @var \Viserio\Component\Contracts\View\Factory
      */
     private $viewFactory;
 
@@ -43,7 +43,7 @@ class ViewFactoryTest extends MockeryTestCase
         $this->engineResolverMock = $this->mock(EngineResolverContract::class);
         $this->finderMock         = $this->mock(Finder::class);
 
-        $this->viewFactory = new Factory(
+        $this->viewFactory = new ViewFactory(
             $this->engineResolverMock,
             $this->finderMock
         );
@@ -119,45 +119,24 @@ class ViewFactoryTest extends MockeryTestCase
 
     public function testRenderEachCreatesViewForEachItemInArray(): void
     {
-        $fileInfo = ['path' =>'foo.php', 'name' => 'foo', 'extension' => 'php'];
-
-        $factory = $this->mock('Viserio\Component\View\Factory[create]', $this->getFactoryArgs());
+        $factory = $this->mock(ViewFactory::class . '[create]', $this->getFactoryArgs());
         $factory->shouldReceive('create')
             ->once()
             ->with('foo', ['key' => 'bar', 'value' => 'baz'])
             ->andReturn($mockView1 = $this->mock(ViewContract::class));
-
-        $mockView1->shouldReceive('render')
-            ->once()
-            ->andReturn('dayle');
-
         $factory->shouldReceive('create')
             ->once()
             ->with('foo', ['key' => 'breeze', 'value' => 'boom'])
             ->andReturn($mockView2 = $this->mock(ViewContract::class));
+
+        $mockView1->shouldReceive('render')
+            ->once()
+            ->andReturn('dayle');
         $mockView2->shouldReceive('render')
             ->once()
             ->andReturn('rees');
 
-        $engine = $this->mock(Engine::class);
-        $engine->shouldReceive('get')
-            ->once()
-            ->with($fileInfo, ['__env' => $factory, 'key' => 'bar', 'value' => 'baz'])
-            ->andReturn('');
-        $engine->shouldReceive('get')
-            ->once()
-            ->with($fileInfo, ['__env' => $factory, 'key' => 'breeze', 'value' => 'boom'])
-            ->andReturn('');
-
-        $this->finderMock->shouldReceive('find')
-            ->once()
-            ->with('foo')
-            ->andReturn($fileInfo);
-        $this->engineResolverMock->shouldReceive('resolve')
-            ->with('php')
-            ->andReturn($engine);
-
-        $result = $this->viewFactory->renderEach('foo', ['bar' => 'baz', 'breeze' => 'boom'], 'value');
+        $result = $factory->renderEach('foo', ['bar' => 'baz', 'breeze' => 'boom'], 'value');
 
         self::assertEquals('daylerees', $result);
     }
@@ -293,16 +272,16 @@ class ViewFactoryTest extends MockeryTestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unrecognized extension in file: [view.foo]
+     * @expectedExceptionMessage nrecognized extension in file: [notfound.notfound].
      */
     public function testExceptionIsThrownForUnknownExtension(): void
     {
         $this->finderMock->shouldReceive('find')
             ->once()
-            ->with('view')
-            ->andReturn(['path' => 'view.foo', 'name' => 'view', 'extension' => 'foo']);
+            ->with('notfound')
+            ->andReturn(['path' => 'notfound.notfound', 'name' => 'view', 'extension' => 'notfound']);
 
-        $this->viewFactory->create('view');
+        $this->viewFactory->create('notfound');
     }
 
     public function testGetAnItemFromTheSharedData(): void

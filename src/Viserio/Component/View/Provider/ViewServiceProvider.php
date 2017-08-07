@@ -13,7 +13,7 @@ use Viserio\Component\View\Engine\EngineResolver;
 use Viserio\Component\View\Engine\FileEngine;
 use Viserio\Component\View\Engine\MarkdownEngine;
 use Viserio\Component\View\Engine\PhpEngine;
-use Viserio\Component\View\Factory;
+use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider
@@ -36,7 +36,7 @@ class ViewServiceProvider implements ServiceProvider
                 return $container->get(FinderContract::class);
             },
             FactoryContract::class  => [self::class, 'createViewFactory'],
-            Factory::class          => function (ContainerInterface $container) {
+            ViewFactory::class          => function (ContainerInterface $container) {
                 return $container->get(FactoryContract::class);
             },
             'view'                  => function (ContainerInterface $container) {
@@ -66,7 +66,7 @@ class ViewServiceProvider implements ServiceProvider
 
     public static function createViewFactory(ContainerInterface $container): FactoryContract
     {
-        $view = new Factory(
+        $view = new ViewFactory(
             $container->get(EngineResolver::class),
             $container->get(ViewFinder::class)
         );
