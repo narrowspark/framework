@@ -66,11 +66,12 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     {
         $this->files = $files;
         $options     = self::resolveOptions($data);
-
         $this->paths = $options['paths'];
 
         if (isset($options['extensions']) && \is_array($options['extensions'])) {
-            self::$extensions = \array_merge(self::$extensions, $options['extensions']);
+            foreach ($options['extensions'] as $extension) {
+                $this->addExtension($extension);
+            }
         }
     }
 

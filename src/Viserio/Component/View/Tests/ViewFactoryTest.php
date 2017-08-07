@@ -49,6 +49,22 @@ class ViewFactoryTest extends MockeryTestCase
         );
     }
 
+    public function testFileCreatesNewViewInstanceWithProperPathAndEngine(): void
+    {
+        $this->engineResolverMock->shouldReceive('resolve')
+            ->once()
+            ->with('php')
+            ->andReturn($engine = $this->mock(Engine::class));
+        $this->finderMock->shouldReceive('addExtension')
+            ->once()
+            ->with('php');
+        $this->viewFactory->addExtension('php', 'php');
+
+        $view = $this->viewFactory->file('path.php', ['foo' => 'bar'], ['baz' => 'boom']);
+
+        self::assertSame($engine, $view->getEngine());
+    }
+
     public function testMakeCreatesNewViewInstanceWithProperPathAndEngine(): void
     {
         $this->finderMock->shouldReceive('find')
@@ -65,22 +81,6 @@ class ViewFactoryTest extends MockeryTestCase
         $this->viewFactory->addExtension('php', 'php');
 
         $view = $this->viewFactory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
-
-        self::assertSame($engine, $view->getEngine());
-    }
-
-    public function testFileCreatesNewViewInstanceWithProperPathAndEngine(): void
-    {
-        $this->engineResolverMock->shouldReceive('resolve')
-            ->once()
-            ->with('php')
-            ->andReturn($engine = $this->mock(Engine::class));
-        $this->finderMock->shouldReceive('addExtension')
-            ->once()
-            ->with('php');
-        $this->viewFactory->addExtension('php', 'php');
-
-        $view = $this->viewFactory->file('path.php', ['foo' => 'bar'], ['baz' => 'boom']);
 
         self::assertSame($engine, $view->getEngine());
     }
@@ -143,7 +143,7 @@ class ViewFactoryTest extends MockeryTestCase
 
     public function testEmptyViewsCanBeReturnedFromRenderEach(): void
     {
-        $factory = $this->mock('Viserio\Component\View\Factory[create]', $this->getFactoryArgs());
+        $factory = $this->mock(ViewFactory::class . '[create]', $this->getFactoryArgs());
         $factory->shouldReceive('create')
             ->once()
             ->with('foo')
