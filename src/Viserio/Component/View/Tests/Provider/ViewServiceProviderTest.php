@@ -7,8 +7,8 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\View\Engine\EngineResolver;
-use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\Provider\ViewServiceProvider;
+use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
 
 class ViewServiceProviderTest extends MockeryTestCase

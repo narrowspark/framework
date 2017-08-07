@@ -35,7 +35,7 @@ class ViewServiceProvider implements ServiceProvider
             'view.finder'          => function (ContainerInterface $container) {
                 return $container->get(FinderContract::class);
             },
-            FactoryContract::class  => [self::class, 'createViewFactory'],
+            FactoryContract::class      => [self::class, 'createViewFactory'],
             ViewFactory::class          => function (ContainerInterface $container) {
                 return $container->get(FactoryContract::class);
             },

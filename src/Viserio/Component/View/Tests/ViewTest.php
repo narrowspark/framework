@@ -6,8 +6,8 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Support\Arrayable;
 use Viserio\Component\Contracts\Support\Renderable;
 use Viserio\Component\Contracts\View\Engine;
-use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\View;
+use Viserio\Component\View\ViewFactory;
 
 class ViewTest extends MockeryTestCase
 {
