@@ -228,7 +228,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
         $pos = \mb_strripos($content, '</body>');
 
         if ($pos !== false) {
-            $stream = $this->getStreamFactory()->createStream(
+            $stream = $this->streamFactory->createStream(
                 \mb_substr($content, 0, $pos) . $renderedContent . \mb_substr($content, $pos)
             );
 
