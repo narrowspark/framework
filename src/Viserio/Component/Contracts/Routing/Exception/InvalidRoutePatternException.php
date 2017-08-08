@@ -4,6 +4,6 @@ namespace Viserio\Component\Contracts\Routing\Exception;
 
 use InvalidArgumentException;
 
-class InvalidRoutePatternException extends InvalidArgumentException
+class InvalidRoutePatternException extends InvalidArgumentException implements Exception
 {
 }

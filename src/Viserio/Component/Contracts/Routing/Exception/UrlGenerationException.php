@@ -5,7 +5,7 @@ namespace Viserio\Component\Contracts\Routing\Exception;
 use InvalidArgumentException;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 
-class UrlGenerationException extends InvalidArgumentException
+class UrlGenerationException extends InvalidArgumentException implements Exception
 {
     /**
      * Create a new exception for missing route parameters.
