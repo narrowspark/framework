@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Support\Traits;
 
-use Viserio\Component\Contracts\Support\Exception\BadMethodCallException;
 use Closure;
+use Viserio\Component\Contracts\Support\Exception\BadMethodCallException;
 
 trait MacroableTrait
 {

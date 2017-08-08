@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Support;
 
-use Viserio\Component\Contracts\Support\Exception\BadMethodCallException;
 use Stringy\StaticStringy;
 use Viserio\Component\Contracts\Support\CharacterType;
+use Viserio\Component\Contracts\Support\Exception\BadMethodCallException;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
 /**

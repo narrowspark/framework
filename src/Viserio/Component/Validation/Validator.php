@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Validation;
 
-use Viserio\Component\Contracts\Validation\Exception\InvalidArgumentException;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as RespectValidator;
 use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
+use Viserio\Component\Contracts\Validation\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Validation\Validator as ValidatorContract;
 
 class Validator implements ValidatorContract
