@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy;
 
-use Viserio\Component\Contracts\StaticalProxy\Exception\BadMethodCallException;
 use Mockery;
 use Mockery\MockInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contracts\StaticalProxy\Exception\BadMethodCallException;
 use Viserio\Component\Contracts\StaticalProxy\Exception\RuntimeException;
 
 class StaticalProxy
@@ -26,7 +26,7 @@ class StaticalProxy
      * Handle dynamic, static calls to the object.
      *
      * @param string $method
-     * @param array $args
+     * @param array  $args
      *
      * @throws \Viserio\Component\Contracts\StaticalProxy\Exception\RuntimeException
      *
