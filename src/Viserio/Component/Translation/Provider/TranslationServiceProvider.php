@@ -115,7 +115,7 @@ class TranslationServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Translation\TranslationManager
+     * @return \Viserio\Component\Contracts\Translation\Translator
      */
     public static function createTranslator(ContainerInterface $container): TranslatorContract
     {

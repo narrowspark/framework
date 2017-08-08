@@ -79,7 +79,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      */
     public function setLocale(string $locale): TranslatorContract
     {
-        $this->assertValidLocale($locale);
+        self::assertValidLocale($locale);
         $this->locale = $locale;
 
         return $this;

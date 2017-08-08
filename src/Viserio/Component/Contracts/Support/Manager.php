@@ -78,7 +78,7 @@ interface Manager
      *
      * @param array $config
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Support\Exception\InvalidArgumentException
      *
      * @return mixed
      */

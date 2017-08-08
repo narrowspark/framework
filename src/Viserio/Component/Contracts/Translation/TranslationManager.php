@@ -9,7 +9,7 @@ interface TranslationManager
      *
      * @param null|string $locale
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contracts\Translation\Exception\RuntimeException
      *
      * @return \Viserio\Component\Contracts\Translation\Translator
      */

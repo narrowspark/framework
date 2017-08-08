@@ -13,7 +13,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 class HtmlDisplayerTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Exception\Displayer\JsonDisplayer
+     * @var \Viserio\Component\Exception\Displayer\HtmlDisplayer
      */
     private $displayer;
 

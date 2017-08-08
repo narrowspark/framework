@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
-use LogicException;
+use Viserio\Component\Contracts\Translation\Exception\LogicException;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 
@@ -46,7 +46,7 @@ class MessageCatalogue implements MessageCatalogueContract
      */
     public function __construct(string $locale, array $messages = [])
     {
-        $this->assertValidLocale($locale);
+        self::assertValidLocale($locale);
 
         $this->locale   = $locale;
         $this->messages = $messages;

@@ -13,9 +13,9 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 class ViewDisplayerTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contracts\View\Factory
+     * @var \Viserio\Component\Contracts\View\Factory|\Mockery\MockInterface
      */
-    private $factory;
+    private $factoryMock;
 
     /**
      * @var \Viserio\Component\Exception\Displayer\ViewDisplayer
@@ -24,8 +24,8 @@ class ViewDisplayerTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->factory   = $this->mock(Factory::class);
-        $this->displayer = new ViewDisplayer(new ExceptionInfo(), new ResponseFactory(), $this->factory);
+        $this->factoryMock = $this->mock(Factory::class);
+        $this->displayer   = new ViewDisplayer(new ExceptionInfo(), new ResponseFactory(), $this->factoryMock);
     }
 
     public function testError(): void
@@ -38,7 +38,7 @@ class ViewDisplayerTest extends MockeryTestCase
         $view->shouldReceive('__toString')
             ->once()
             ->andReturn("The server was acting as a gateway or proxy and received an invalid response from the upstream server.\n");
-        $this->factory->shouldReceive('create')
+        $this->factoryMock->shouldReceive('create')
             ->once()
             ->with(
                 'errors.502',
@@ -58,7 +58,7 @@ class ViewDisplayerTest extends MockeryTestCase
 
     public function testPropertiesTrue(): void
     {
-        $this->factory->shouldReceive('exists')
+        $this->factoryMock->shouldReceive('exists')
             ->once()
             ->with('errors.500')
             ->andReturn(true);
@@ -72,7 +72,7 @@ class ViewDisplayerTest extends MockeryTestCase
 
     public function testPropertiesFalse(): void
     {
-        $this->factory->shouldReceive('exists')
+        $this->factoryMock->shouldReceive('exists')
             ->once()
             ->with('errors.500')
             ->andReturn(false);

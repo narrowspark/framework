@@ -14,6 +14,6 @@ class ServerRequestFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setServerRequestFactory($this->mock(ServerRequestFactoryInterface::class));
 
-        self::assertInstanceOf(ServerRequestFactoryInterface::class, $this->serverRequest);
+        self::assertInstanceOf(ServerRequestFactoryInterface::class, $this->serverRequestFactory);
     }
 }

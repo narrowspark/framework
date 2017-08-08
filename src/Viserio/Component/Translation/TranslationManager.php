@@ -5,8 +5,9 @@ namespace Viserio\Component\Translation;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use RuntimeException;
 use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
+use Viserio\Component\Contracts\Translation\Exception\InvalidArgumentException;
+use Viserio\Component\Contracts\Translation\Exception\RuntimeException;
 use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
@@ -121,7 +122,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @param string $file
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contracts\Translation\Exception\InvalidArgumentException
      *
      * @return $this
      */
@@ -133,7 +134,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
         $langFile = $loader->load($file);
 
         if (! isset($langFile['lang'])) {
-            throw new RuntimeException(\sprintf('File [%s] cant be imported. Key for language is missing.', $file));
+            throw new InvalidArgumentException(\sprintf('File [%s] cant be imported. Key for language is missing.', $file));
         }
 
         $this->addMessageCatalogue(new MessageCatalogue($langFile['lang'], $langFile));
@@ -261,6 +262,6 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
             return $this->translations[$lang];
         }
 
-        throw new RuntimeException(\sprintf('Translator for [%s] dont exist.', $lang));
+        throw new RuntimeException(\sprintf('Translator for [%s] doesn\'t exist.', $lang));
     }
 }

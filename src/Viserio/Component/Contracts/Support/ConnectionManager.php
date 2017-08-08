@@ -96,7 +96,7 @@ interface ConnectionManager
      *
      * @param array $config
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Support\Exception\InvalidArgumentException
      *
      * @return mixed
      */

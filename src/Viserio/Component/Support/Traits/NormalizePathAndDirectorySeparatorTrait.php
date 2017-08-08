@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Support\Traits;
 
-use LogicException;
+use Viserio\Component\Contracts\Support\Exception\LogicException;
 
 trait NormalizePathAndDirectorySeparatorTrait
 {
@@ -31,7 +31,7 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @param string $path
      *
-     * @throws \LogicException
+     * @throws \Viserio\Component\Contracts\Support\Exception\LogicException
      *
      * @return string
      */

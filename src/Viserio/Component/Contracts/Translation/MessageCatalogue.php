@@ -121,7 +121,7 @@ interface MessageCatalogue
      *
      * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $catalogue A MessageCatalogue instance
      *
-     * @throws \LogicException
+     * @throws \Viserio\Component\Contracts\Translation\Exception\LogicException
      *
      * @return void
      */

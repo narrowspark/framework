@@ -21,8 +21,7 @@ class WhoopsDisplayerTest extends TestCase
 
     public function testServerError(): void
     {
-        $displayer = $this->whoops;
-        $response  = $displayer->display(new Exception(), 'foo', 503, []);
+        $response  = $this->whoops->display(new Exception(), 'foo', 503, []);
 
         self::assertInternalType('string', (string) $response->getBody());
         self::assertSame(503, $response->getStatusCode());
@@ -31,8 +30,7 @@ class WhoopsDisplayerTest extends TestCase
 
     public function testClientError(): void
     {
-        $displayer = $this->whoops;
-        $response  = $displayer->display(new Exception(), 'bar', 403, []);
+        $response  = $this->whoops->display(new Exception(), 'bar', 403, []);
 
         self::assertInternalType('string', (string) $response->getBody());
         self::assertSame(403, $response->getStatusCode());
