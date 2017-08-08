@@ -8,6 +8,6 @@ use UnexpectedValueException;
  * Raised when a user has performed an operation that should be considered
  * suspicious from a security perspective.
  */
-class SuspiciousOperationException extends UnexpectedValueException
+class SuspiciousOperationException extends UnexpectedValueException implements Exception
 {
 }

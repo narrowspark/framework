@@ -153,7 +153,7 @@ class SimpleDispatcher implements DispatcherContract
         $this->current = $route;
 
         if ($this->events !== null) {
-            $this->getEventManager()->trigger(new RouteMatchedEvent($this, $route, $request));
+            $this->events->trigger(new RouteMatchedEvent($this, $route, $request));
         }
 
         return $this->runRoute($route, $request);

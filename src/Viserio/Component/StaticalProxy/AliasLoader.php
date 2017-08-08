@@ -218,7 +218,7 @@ class AliasLoader implements AliasLoaderContract
     {
         if (
             isset($this->aliases[$alias]) &&
-            $this->exists($this->aliases[$alias], true)
+            $this->exists($this->aliases[$alias])
         ) {
             return $this->aliases[$alias];
         }
@@ -283,7 +283,7 @@ class AliasLoader implements AliasLoaderContract
                 $class             = $nsClass . '\\' . $alias;
                 $this->resolving[] = $class;
 
-                if ($this->exists($class, true)) {
+                if ($this->exists($class)) {
                     \array_pop($this->resolving);
 
                     return $class;
@@ -404,7 +404,6 @@ class AliasLoader implements AliasLoaderContract
     /**
      * Ensure that the given alias has an existing real-time statical proxy class.
      *
-     * @param string $class
      * @param string $alias
      *
      * @return string
