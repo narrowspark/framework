@@ -54,7 +54,7 @@ class RegexMatcher extends AbstractMatcher
     }
 
     /**
-     * Retruns the parameters key group array.
+     * Returns the parameters key group array.
      *
      * @return array
      */
@@ -64,7 +64,7 @@ class RegexMatcher extends AbstractMatcher
     }
 
     /**
-     * Retruns the used regex.
+     * Returns the used regex.
      *
      * @return string
      */

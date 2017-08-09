@@ -18,7 +18,7 @@ interface RouteCollection
      *
      * @param string $identifier
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contracts\Routing\Exception\RuntimeException
      *
      * @return \Viserio\Component\Contracts\Routing\Route
      */

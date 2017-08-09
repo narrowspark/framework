@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
 use RuntimeException;
+use TypeError;
 use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
 
 trait MiddlewareAwareTrait
@@ -29,8 +30,9 @@ trait MiddlewareAwareTrait
      * @param string        $name
      * @param object|string $middleware
      *
-     * @throws \RuntimeException if wrong type is given or alias exists
+     * @throws \RuntimeException if alias exists
      * @throws \LogicException
+     * @throws \TypeError        if wrong type is given
      *
      * @return $this
      */
@@ -52,7 +54,7 @@ trait MiddlewareAwareTrait
             return $this;
         }
 
-        throw new RuntimeException(\sprintf('Expected string or object; received [%s].', \gettype($middleware)));
+        throw new TypeError(\sprintf('Expected string or object; received [%s].', \gettype($middleware)));
     }
 
     /**
@@ -60,7 +62,7 @@ trait MiddlewareAwareTrait
      *
      * @param array|object|string $middlewares
      *
-     * @throws \RuntimeException if wrong type is given
+     * @throws \TypeError if wrong type is given
      * @throws \LogicException
      *
      * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
@@ -100,7 +102,7 @@ trait MiddlewareAwareTrait
      *
      * @param null|array|string $middlewares
      *
-     * @throws \RuntimeException
+     * @throws \TypeError if wrong type is given
      *
      * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
      */

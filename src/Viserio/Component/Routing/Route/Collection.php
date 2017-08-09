@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
 use Countable;
-use RuntimeException;
+use Viserio\Component\Contracts\Routing\Exception\RuntimeException;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 

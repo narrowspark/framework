@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
-use RuntimeException;
+use Viserio\Component\Contracts\Routing\Exception\InvalidArgumentException;
 use Viserio\Component\Support\VarExporter;
 
 class StaticMatcher extends AbstractMatcher
@@ -23,7 +23,7 @@ class StaticMatcher extends AbstractMatcher
     public function __construct(string $segment, array $parameterKeys = null)
     {
         if (\mb_strpos($segment, '/') !== false) {
-            throw new RuntimeException(
+            throw new InvalidArgumentException(
                 \sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given', __CLASS__, $segment)
             );
         }
