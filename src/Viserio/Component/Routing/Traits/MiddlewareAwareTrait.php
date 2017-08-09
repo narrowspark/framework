@@ -62,7 +62,7 @@ trait MiddlewareAwareTrait
      *
      * @param array|object|string $middlewares
      *
-     * @throws \TypeError if wrong type is given
+     * @throws \TypeError      if wrong type is given
      * @throws \LogicException
      *
      * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
