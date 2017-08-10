@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Http;
 
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 use Throwable;
+use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 use Viserio\Component\Contracts\Http\Exception\UnexpectedValueException;
 
 class Stream implements StreamInterface
