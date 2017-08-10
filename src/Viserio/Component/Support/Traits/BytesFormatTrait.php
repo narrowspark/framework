@@ -8,7 +8,7 @@ use OutOfBoundsException;
 trait BytesFormatTrait
 {
     /**
-     * Prefixes to specify unit of measure for memory amount
+     * Prefixes to specify unit of measure for memory amount.
      *
      * Warning: it is important to maintain the exact order of letters in this literal,
      * as it is used to convert string with units to bytes
@@ -27,33 +27,33 @@ trait BytesFormatTrait
      */
     protected function convertToBytes(string $number): int
     {
-        if (!preg_match('/^(.*\d)\h*(\D)$/', $number, $matches)) {
+        if (! preg_match('/^(.*\d)\h*(\D)$/', $number, $matches)) {
             throw new InvalidArgumentException("Number format '{$number}' is not recognized.");
         }
 
-        $unitSymbol = strtoupper($matches[2]);
+        $unitSymbol = mb_strtoupper($matches[2]);
 
-        if (false === strpos($this->memoryUnits, $unitSymbol)) {
+        if (false === mb_strpos($this->memoryUnits, $unitSymbol)) {
             throw new InvalidArgumentException("The number '{$number}' has an unrecognized unit: '{$unitSymbol}'.");
         }
 
-        $result = self::convertToNumber($matches[1]);
-        $pow = $unitSymbol ? strpos($this->memoryUnits, $unitSymbol) : 0;
+        $result  = self::convertToNumber($matches[1]);
+        $pow     = $unitSymbol ? mb_strpos($this->memoryUnits, $unitSymbol) : 0;
         $is32Bit = PHP_INT_SIZE == 4;
 
         if ($is32Bit && $pow >= 4) {
-            throw new OutOfBoundsException("A 32-bit system is unable to process such a number.");
+            throw new OutOfBoundsException('A 32-bit system is unable to process such a number.');
         }
 
         if ($unitSymbol) {
-            $result *= pow(1024, $pow);
+            $result *= 1024 ** $pow;
         }
 
         return (int) $result;
     }
 
     /**
-     * Remove non-numeric characters in the string to cast it to a numeric value
+     * Remove non-numeric characters in the string to cast it to a numeric value.
      *
      * Incoming number can be presented in arbitrary format that depends on locale. We don't possess locale information.
      * So the best can be done is to treat number as an integer and eliminate delimiters.
@@ -80,5 +80,4 @@ trait BytesFormatTrait
 
         return preg_replace('/\D+/', '', $number);
     }
-
 }

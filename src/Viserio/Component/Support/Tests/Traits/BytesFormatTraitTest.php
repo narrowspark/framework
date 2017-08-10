@@ -26,15 +26,15 @@ class BytesFormatTraitTest extends TestCase
     public function convertToBytesDataProvider()
     {
         return [
-            'B' => ['1B', '1'],
-            'KB' => ['3K', '3072'],
-            'MB' => ['2M', '2097152'],
-            'GB' => ['1G', '1073741824'],
-            'regular spaces' => ['1 234 K', '1263616'],
+            'B'               => ['1B', '1'],
+            'KB'              => ['3K', '3072'],
+            'MB'              => ['2M', '2097152'],
+            'GB'              => ['1G', '1073741824'],
+            'regular spaces'  => ['1 234 K', '1263616'],
             'no-break spaces' => ["1\xA0234\xA0K", '1263616'],
-            'tab' => ["1\x09234\x09K", '1263616'],
-            'coma' => ['1,234K', '1263616'],
-            'dot' => ['1.234 K', '1263616']
+            'tab'             => ["1\x09234\x09K", '1263616'],
+            'coma'            => ['1,234K', '1263616'],
+            'dot'             => ['1.234 K', '1263616'],
         ];
     }
 
@@ -57,8 +57,8 @@ class BytesFormatTraitTest extends TestCase
     {
         return [
             'more than one unit of measure' => ['1234KB'],
-            'unknown unit of measure' => ['1234Z'],
-            'non-integer value' => ['1,234.56 K']
+            'unknown unit of measure'       => ['1234Z'],
+            'non-integer value'             => ['1,234.56 K'],
         ];
     }
 
@@ -85,7 +85,7 @@ class BytesFormatTraitTest extends TestCase
         return [
             ['2T', '2199023255552'],
             ['1P', '1125899906842624'],
-            ['2E', '2305843009213693952']
+            ['2E', '2305843009213693952'],
         ];
     }
 
