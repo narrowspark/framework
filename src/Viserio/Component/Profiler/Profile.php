@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler;
 
-use Viserio\Component\Contracts\Profiler\Exception\CollectorNotFoundException;
 use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
+use Viserio\Component\Contracts\Profiler\Exception\CollectorNotFoundException;
 
 class Profile
 {

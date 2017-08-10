@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
-use Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
+use Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;

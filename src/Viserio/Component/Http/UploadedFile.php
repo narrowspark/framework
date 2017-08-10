@@ -4,8 +4,8 @@ namespace Viserio\Component\Http;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 
 class UploadedFile implements UploadedFileInterface
@@ -210,7 +210,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException if the $path specified is invalid
      * @throws \Viserio\Component\Contracts\Http\Exception\RuntimeException         if the upload was not successful or on any error during the move operation, or on
-     *                                   the second or subsequent call to the method
+     *                                                                              the second or subsequent call to the method
      */
     public function moveTo($targetPath): void
     {

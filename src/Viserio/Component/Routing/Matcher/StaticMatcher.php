@@ -17,7 +17,7 @@ class StaticMatcher extends AbstractMatcher
     /**
      * Create a new satic segment matcher instance.
      *
-     * @param string $segment
+     * @param string     $segment
      * @param null|array $parameterKeys
      *
      * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidArgumentException

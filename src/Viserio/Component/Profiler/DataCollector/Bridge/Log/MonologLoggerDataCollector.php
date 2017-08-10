@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Log;
 
 use ErrorException;
-use Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
+use Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException;
 use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Log\Writer;

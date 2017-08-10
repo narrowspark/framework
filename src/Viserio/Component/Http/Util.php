@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 
 /**

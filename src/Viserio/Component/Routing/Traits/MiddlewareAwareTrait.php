@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
-use Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException;
 use Viserio\Component\Contracts\Routing\Exception\RuntimeException;
+use Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException;
 use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
 
 trait MiddlewareAwareTrait
