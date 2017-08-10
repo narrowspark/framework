@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
@@ -31,7 +31,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
      *
      * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator $cache
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException
      *
      * @return void
      */
@@ -46,7 +46,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
             return;
         }
 
-        throw new InvalidArgumentException(\sprintf(
+        throw new UnexpectedValueException(\sprintf(
             'The object [%s] must be an instance of [%s] or [%s].',
             \get_class($cache),
             TraceableCacheItemDecorator::class,

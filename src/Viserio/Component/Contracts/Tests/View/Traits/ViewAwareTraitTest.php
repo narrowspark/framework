@@ -14,15 +14,6 @@ class ViewAwareTraitTest extends MockeryTestCase
     {
         $this->setViewFactory($this->mock(ViewFactoryContract::class));
 
-        self::assertInstanceOf(ViewFactoryContract::class, $this->getViewFactory());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage View factory is not set up.
-     */
-    public function testGetViewFactoryThrowExceptionIfViewFactoryIsNotSet(): void
-    {
-        $this->getViewFactory();
+        self::assertInstanceOf(ViewFactoryContract::class, $this->viewFactory);
     }
 }

@@ -19,6 +19,18 @@ use Viserio\Component\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
 class QueueMailerTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Contracts\View\Factory|\Mockery\MockInterface
+     */
+    private $viewFactory;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->viewFactory = $this->mock(ViewFactoryContract::class);
+    }
+
     public function testMailerCanResolveMailerClasses(): void
     {
         $message = $this->mock(MessageContract::class);
@@ -58,11 +70,12 @@ class QueueMailerTest extends MockeryTestCase
 
         $view = $this->mock(ViewContract::class);
 
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->with('foo', ['data', 'message' => $message])
             ->andReturn($view);
+
+        $mailer->setViewFactory($this->viewFactory);
 
         $view->shouldReceive('render')
             ->once()
@@ -98,10 +111,11 @@ class QueueMailerTest extends MockeryTestCase
 
         $view = $this->mock(ViewContract::class);
 
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->andReturn($view);
+
+        $mailer->setViewFactory($this->viewFactory);
 
         $view->shouldReceive('render')
             ->once()
@@ -138,10 +152,11 @@ class QueueMailerTest extends MockeryTestCase
 
         $view = $this->mock(ViewContract::class);
 
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->andReturn($view);
+
+        $mailer->setViewFactory($this->viewFactory);
 
         $view->shouldReceive('render')
             ->once()
@@ -187,7 +202,7 @@ class QueueMailerTest extends MockeryTestCase
             ])
         );
 
-        return $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
+        return $mailer;
     }
 
     protected function getMocks(): array

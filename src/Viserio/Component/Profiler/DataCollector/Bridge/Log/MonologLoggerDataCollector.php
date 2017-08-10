@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Log;
 
 use ErrorException;
+use Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,13 +29,16 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      * Create a new logs data collector instance.
      *
      * @param \Monolog\Logger|\Viserio\Component\Log\Writer $logger
+     *
+     * @throws \Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException if wrong class is given
+     * @throws \RuntimeException
      */
     public function __construct($logger)
     {
         if ($logger instanceof Logger || $logger instanceof Writer) {
             $this->logger = $logger;
         } else {
-            throw new RuntimeException(\sprintf(
+            throw new UnexpectedValueException(\sprintf(
                 'Class [%s] or [%s] is required; Instance of [%s] given.',
                 Logger::class,
                 Writer::class,
@@ -89,7 +93,6 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $html          = '';
         $tableHeaders  = [
             'Level',
             'Channel',

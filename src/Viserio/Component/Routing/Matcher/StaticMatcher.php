@@ -17,14 +17,16 @@ class StaticMatcher extends AbstractMatcher
     /**
      * Create a new satic segment matcher instance.
      *
-     * @param string     $segment
+     * @param string $segment
      * @param null|array $parameterKeys
+     *
+     * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidArgumentException
      */
     public function __construct(string $segment, array $parameterKeys = null)
     {
         if (\mb_strpos($segment, '/') !== false) {
             throw new InvalidArgumentException(
-                \sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given', __CLASS__, $segment)
+                \sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given.', __CLASS__, $segment)
             );
         }
 

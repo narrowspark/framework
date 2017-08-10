@@ -54,7 +54,8 @@ class TranslationManagerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contracts\Translation\Exception\InvalidArgumentException
+     * @expectedExceptionMessage File [invalid.php] cant be imported. Key for language is missing.
      */
     public function testImportToThrowException(): void
     {

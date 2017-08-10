@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Dispatcher;
 
-use InvalidArgumentException;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contracts\Routing\Exception\RuntimeException;
 use Viserio\Component\Contracts\Routing\Route as RouteContract;
 use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Routing\Event\RouteMatchedEvent;
@@ -87,8 +87,6 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \InvalidArgumentException if cache folder cant be created
      */
     public function handle(RouteCollectionContract $routes, ServerRequestInterface $request): ResponseInterface
     {
@@ -210,7 +208,7 @@ class SimpleDispatcher implements DispatcherContract
      *
      * @param string $dir
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Routing\Exception\RuntimeException
      *
      * @return void
      */
@@ -221,7 +219,7 @@ class SimpleDispatcher implements DispatcherContract
         }
 
         if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
-            throw new InvalidArgumentException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Route cache directory [%s] cannot be created or is write protected.',
                 $dir
             ));

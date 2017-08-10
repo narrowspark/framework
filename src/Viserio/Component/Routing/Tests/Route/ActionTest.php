@@ -9,7 +9,7 @@ use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 class ActionTest extends TestCase
 {
     /**
-     * @expectedException \LogicException
+     * @expectedException \Viserio\Component\Contracts\Routing\Exception\LogicException
      * @expectedExceptionMessage Route for [/] has no action.
      */
     public function testParserMissingAction(): void
@@ -38,7 +38,7 @@ class ActionTest extends TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException
      * @expectedExceptionMessage Invalid route action: [foo].
      */
     public function testParserNoInvokeFound(): void

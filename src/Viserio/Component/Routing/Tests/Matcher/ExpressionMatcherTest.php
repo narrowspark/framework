@@ -23,10 +23,10 @@ class ExpressionMatcherTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Cannot merge parameters: matchers must be equivalent, [Viserio\Component\Routing\Matcher\StaticMatcher:two] expected, [Viserio\Component\Routing\Matcher\ExpressionMatcher:ctype_digit({segment})] given.
+     * @expectedException \Viserio\Component\Contracts\Routing\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Cannot merge parameters: Matcher's must be equivalent, [Viserio\Component\Routing\Matcher\StaticMatcher:two] expected, [Viserio\Component\Routing\Matcher\ExpressionMatcher:ctype_digit({segment})] given.
      */
-    public function testMergeParameterKeys(): void
+    public function testMergeParameterKeysWithTwoDifferentMatcher(): void
     {
         $matcher  = new ExpressionMatcher('ctype_digit({segment})', [1]);
         $matcher2 = new StaticMatcher('two', [3]);

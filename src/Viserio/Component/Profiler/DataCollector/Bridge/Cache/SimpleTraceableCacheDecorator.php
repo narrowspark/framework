@@ -10,7 +10,7 @@ use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceable
  *
  * @see \Symfony\Component\Cache\Simple\TraceableCache
  */
-class SimpleTraceableCacheDecorator implements CacheInterface
+final class SimpleTraceableCacheDecorator implements CacheInterface
 {
     use SimpleTraceableCacheDecoratorTrait;
 

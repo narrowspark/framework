@@ -83,7 +83,7 @@ class MiddlewareAwareTraitTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contracts\Routing\Exception\RuntimeException
      * @expectedExceptionMessage Alias [foo] already exists.
      */
     public function testAliasMiddlewareThrowException(): void
@@ -95,7 +95,7 @@ class MiddlewareAwareTraitTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException
      * @expectedExceptionMessage Expected string or object; received [NULL].
      */
     public function testAliasMiddlewareThrowExceptionWithWrongType(): void
@@ -104,7 +104,7 @@ class MiddlewareAwareTraitTest extends TestCase
     }
 
     /**
-     * @expectedException \LogicException
+     * @expectedException \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException
      * @expectedExceptionMessage Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [Viserio\Component\Routing\Tests\Traits\MiddlewareAwareTraitTest].
      */
     public function testWithWrongMiddleware(): void
@@ -113,7 +113,7 @@ class MiddlewareAwareTraitTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException
      * @expectedExceptionMessage Expected string, object or array; received [NULL].
      */
     public function testWithWrongType(): void

@@ -8,6 +8,7 @@ use Swift_Mailer;
 use Swift_Mime_SimpleMessage;
 use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contracts\Mail\Exception\UnexpectedValueException;
 use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Component\Contracts\Mail\Message as MessageContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -201,7 +202,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      *
      * @param array|string $view
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Mail\Exception\UnexpectedValueException
      *
      * @return array
      */
@@ -229,7 +230,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
             ];
         }
 
-        throw new InvalidArgumentException('Invalid view.');
+        throw new UnexpectedValueException('Invalid view.');
     }
 
     /**
@@ -360,8 +361,8 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     protected function createView(string $view, array $data): string
     {
-        if ($this->views !== null) {
-            return $this->getViewFactory()->create($view, $data)->render();
+        if ($this->viewFactory !== null) {
+            return $this->viewFactory->create($view, $data)->render();
         }
 
         return \vsprintf($view, $data);

@@ -106,9 +106,9 @@ class StaticalProxy
     /**
      * Get the root object behind the facade.
      *
-     * @return object
+     * @return null|object
      */
-    public static function getStaticalProxyRoot(): object
+    public static function getStaticalProxyRoot(): ?object
     {
         return static::resolveStaticalProxyInstance(static::getInstanceIdentifier());
     }

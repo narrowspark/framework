@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use TypeError;
-use Viserio\Component\Contracts\Routing\Exception\LogicException;
+use Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException;
 
 trait MiddlewareValidatorTrait
 {
@@ -13,7 +12,7 @@ trait MiddlewareValidatorTrait
      *
      * @param array|object|string $middlewares
      *
-     * @throws \TypeError
+     * @throws \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException
      *
      * @return void
      */
@@ -23,7 +22,10 @@ trait MiddlewareValidatorTrait
             return;
         }
 
-        throw new TypeError(sprintf('Expected string, object or array; received [%s].', gettype($middlewares)));
+        throw new UnexpectedValueException(sprintf(
+            'Expected string, object or array; received [%s].',
+            gettype($middlewares)
+        ));
     }
 
     /**
@@ -31,7 +33,7 @@ trait MiddlewareValidatorTrait
      *
      * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
      *
-     * @throws \LogicException if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
+     * @throws \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
      *
      * @return void
      */
@@ -41,7 +43,7 @@ trait MiddlewareValidatorTrait
         $interfaces = \class_implements($middleware);
 
         if (! isset($interfaces[MiddlewareInterface::class])) {
-            throw new LogicException(
+            throw new UnexpectedValueException(
                 sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
             );
         }

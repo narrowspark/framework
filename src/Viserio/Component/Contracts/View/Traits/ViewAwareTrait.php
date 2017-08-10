@@ -12,35 +12,19 @@ trait ViewAwareTrait
      *
      * @var \Viserio\Component\Contracts\View\Factory
      */
-    protected $views;
+    protected $viewFactory;
 
     /**
      * Set a view factory instance.
      *
-     * @param \Viserio\Component\Contracts\View\Factory $views
+     * @param \Viserio\Component\Contracts\View\Factory $viewFactory
      *
      * @return $this
      */
-    public function setViewFactory(ViewFactoryContract $views)
+    public function setViewFactory(ViewFactoryContract $viewFactory)
     {
-        $this->views = $views;
+        $this->viewFactory = $viewFactory;
 
         return $this;
-    }
-
-    /**
-     * Get the view factory instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Viserio\Component\Contracts\View\Factory
-     */
-    public function getViewFactory(): ViewFactoryContract
-    {
-        if (! $this->views) {
-            throw new RuntimeException('View factory is not set up.');
-        }
-
-        return $this->views;
     }
 }

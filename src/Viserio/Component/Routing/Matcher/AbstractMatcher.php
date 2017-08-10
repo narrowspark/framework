@@ -32,6 +32,8 @@ abstract class AbstractMatcher implements SegmentMatcherContract
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidArgumentException
      */
     public function mergeParameterKeys(SegmentMatcherContract $matcher): void
     {

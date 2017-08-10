@@ -27,7 +27,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      *
      * @var array
      */
-    protected $views = [];
+    protected $viewFactory = [];
 
     /**
      * The namespace to file path hints.
@@ -98,15 +98,15 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function find(string $name): array
     {
-        if (isset($this->views[$name])) {
-            return $this->views[$name];
+        if (isset($this->viewFactory[$name])) {
+            return $this->viewFactory[$name];
         }
 
         if ($this->hasHintInformation($name = \trim($name))) {
-            return $this->views[$name] = $this->findNamedPathView($name);
+            return $this->viewFactory[$name] = $this->findNamedPathView($name);
         }
 
-        return $this->views[$name] = $this->findInPaths($name, $this->paths);
+        return $this->viewFactory[$name] = $this->findInPaths($name, $this->paths);
     }
 
     /**
@@ -240,7 +240,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function flush(): void
     {
-        $this->views = [];
+        $this->viewFactory = [];
     }
 
     /**
