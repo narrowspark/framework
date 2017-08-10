@@ -13,9 +13,12 @@ use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
 use Viserio\Component\Profiler\Util\HtmlDumperOutput;
 use Viserio\Component\Support\Debug\HtmlDumper;
 use Viserio\Component\Support\Str;
+use Viserio\Component\Support\Traits\BytesFormatTrait;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {
+    use BytesFormatTrait;
+
     /**
      * Array of all collected datas.
      *
@@ -99,54 +102,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
         }
 
         return \round($seconds, 2) . 's';
-    }
-
-    /**
-     * Convert a number string to bytes.
-     *
-     * @param string $memoryLimit
-     *
-     * @return int
-     *
-     * @codeCoverageIgnore
-     */
-    protected function convertToBytes(string $memoryLimit): int
-    {
-        if ($memoryLimit === '-1') {
-            return -1;
-        }
-
-        $memoryLimit = \mb_strtolower($memoryLimit);
-        $max         = \mb_strtolower(\ltrim($memoryLimit, '+'));
-
-        if (\mb_strpos($max, '0x') === 0) {
-            $max = \intval($max, 16);
-        } elseif (\mb_strpos($max, '0') === 0) {
-            $max = \intval($max, 8);
-        } else {
-            $max = (int) $max;
-        }
-
-        switch (\mb_substr($memoryLimit, -1)) {
-            case 't':
-                $max *= 1024;
-
-                break;
-            case 'g':
-                $max *= 1024;
-
-                break;
-            case 'm':
-                $max *= 1024;
-
-                break;
-            case 'k':
-                $max *= 1024;
-
-                break;
-        }
-
-        return $max;
     }
 
     /**

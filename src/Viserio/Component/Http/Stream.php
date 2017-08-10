@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
+use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 use Throwable;
+use Viserio\Component\Contracts\Http\Exception\UnexpectedValueException;
 
 class Stream implements StreamInterface
 {
@@ -105,12 +105,12 @@ class Stream implements StreamInterface
      * @param resource $stream  stream resource to wrap
      * @param array    $options associative array of options
      *
-     * @throws \InvalidArgumentException if the stream is not a stream resource
+     * @throws \Viserio\Component\Contracts\Http\Exception\UnexpectedValueException if the stream is not a stream resource
      */
     public function __construct($stream, array $options = [])
     {
         if (! \is_resource($stream) || \get_resource_type($stream) !== 'stream') {
-            throw new InvalidArgumentException(
+            throw new UnexpectedValueException(
                 'Invalid stream provided; must be a string stream identifier or stream resource'
             );
         }
