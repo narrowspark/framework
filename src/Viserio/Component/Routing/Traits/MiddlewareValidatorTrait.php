@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use Viserio\Component\Contracts\Routing\Exception\LogicException;
 use TypeError;
+use Viserio\Component\Contracts\Routing\Exception\LogicException;
 
 trait MiddlewareValidatorTrait
 {

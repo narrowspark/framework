@@ -65,9 +65,9 @@ final class Parser
      *
      * @param string $route
      * @param string $patternSegment
-     * @param array &$conditions
-     * @param array &$matches
-     * @param array &$names
+     * @param array  &$conditions
+     * @param array  &$matches
+     * @param array  &$names
      *
      * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
      *
