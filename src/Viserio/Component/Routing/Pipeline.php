@@ -33,9 +33,15 @@ class Pipeline extends BasePipeline
     }
 
     /**
-     * {@inheritdoc}
+     * Resolve from container.
+     *
+     * @param mixed  $traveler
+     * @param mixed  $stack
+     * @param string $stage
      *
      * @throws \Viserio\Component\Contracts\Routing\Exception\RuntimeException
+     *
+     * @return mixed
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
