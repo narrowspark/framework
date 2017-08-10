@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
-use RuntimeException;
+use Viserio\Component\Contracts\Routing\Exception\RuntimeException;
 use TypeError;
 use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
 
@@ -28,10 +28,9 @@ trait MiddlewareAwareTrait
      * Register a short-hand name for a middleware.
      *
      * @param string        $name
-     * @param object|string $middleware
+     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
      *
      * @throws \RuntimeException if alias exists
-     * @throws \LogicException
      * @throws \TypeError        if wrong type is given
      *
      * @return $this
@@ -60,10 +59,9 @@ trait MiddlewareAwareTrait
     /**
      * Adds a middleware or a array of middlewares to the route/controller.
      *
-     * @param array|object|string $middlewares
+     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|array|string $middlewares
      *
-     * @throws \TypeError      if wrong type is given
-     * @throws \LogicException
+     * @throws \TypeError if wrong type is given
      *
      * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
      */

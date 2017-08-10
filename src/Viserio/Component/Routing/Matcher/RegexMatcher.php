@@ -94,7 +94,7 @@ class RegexMatcher extends AbstractMatcher
     {
         $matches = [];
 
-        foreach ($this->parameterKeyGroupMap as $parameterKey => $group) {
+        foreach ((array) $this->parameterKeyGroupMap as $parameterKey => $group) {
             // Use $group + 1 as the first $matches element is the full text that matched,
             // we want the groups
             $matches[$parameterKey] = '$matches' . $uniqueKey . '[' . ($group + 1) . ']';

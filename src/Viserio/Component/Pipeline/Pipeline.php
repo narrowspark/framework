@@ -171,12 +171,6 @@ class Pipeline implements PipelineContract
             throw new RuntimeException(\sprintf('Class [%s] is not being managed by the container.', $name));
         }
 
-        return $this->getInvoker()->call(
-            [
-                $class,
-                $this->method,
-            ],
-            $parameters
-        );
+        return $this->getInvoker()->call([$class, $this->method], $parameters);
     }
 }

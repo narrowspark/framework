@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
-use LogicException;
-use UnexpectedValueException;
+use Viserio\Component\Contracts\Routing\Exception\LogicException;
+use Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException;
 
 class Action
 {
@@ -13,8 +13,8 @@ class Action
      * @param string $uri
      * @param mixed  $action
      *
-     * @throws \UnexpectedValueException if invalid route action
-     * @throws \LogicException           if no action found
+     * @throws \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException if invalid route action
+     * @throws \Viserio\Component\Contracts\Routing\Exception\LogicException           if no action found
      *
      * @return array
      */
@@ -62,7 +62,7 @@ class Action
      *
      * @param string $uri
      *
-     * @throws \LogicException if no action found
+     * @throws \Viserio\Component\Contracts\Routing\Exception\LogicException if no action found
      *
      * @return array
      */

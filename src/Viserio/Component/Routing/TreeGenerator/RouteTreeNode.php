@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use RuntimeException;
+use Viserio\Component\Contracts\Routing\Exception\RuntimeException;
 use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 
 final class RouteTreeNode
@@ -27,7 +27,7 @@ final class RouteTreeNode
      * @param \Viserio\Component\Contracts\Routing\SegmentMatcher[]                                                                        $matchers
      * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection|\Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $contents
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contracts\Routing\Exception\RuntimeException
      */
     public function __construct(array $matchers, $contents)
     {
