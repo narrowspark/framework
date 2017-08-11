@@ -77,8 +77,8 @@ class JsonResponseTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to encode
+     * @expectedException \Viserio\Component\Contracts\Http\Exception\RuntimeException
+     * @expectedExceptionMessage Unable to encode data to JSON in
      */
     public function testJsonErrorHandlingOfBadEmbeddedData(): void
     {

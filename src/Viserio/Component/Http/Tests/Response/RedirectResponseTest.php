@@ -64,7 +64,7 @@ class RedirectResponseTest extends TestCase
 
     /**
      * @dataProvider invalidUris
-     * @expectedException \InvalidArgumentException Uri
+     * @expectedException \Viserio\Component\Contracts\Http\Exception\UnexpectedValueException Uri
      *
      * @param mixed $uri
      */

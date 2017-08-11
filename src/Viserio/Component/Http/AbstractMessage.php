@@ -283,7 +283,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     private function validateProtocolVersion(string $version): void
     {
-        if ($version !== '') {
+        if ($version === '') {
             throw new InvalidArgumentException(\sprintf(
                 'HTTP protocol version can not be empty'
             ));
