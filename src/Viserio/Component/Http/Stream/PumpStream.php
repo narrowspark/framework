@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
-use RuntimeException as BaseRuntimeException;
 use Psr\Http\Message\StreamInterface;
+use RuntimeException as BaseRuntimeException;
 use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Util;
 

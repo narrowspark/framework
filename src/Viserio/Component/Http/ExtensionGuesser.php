@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Http;
 
 use finfo;
-use Viserio\Component\Contracts\Http\Exception\LogicException;
 use Viserio\Component\Contracts\Http\Exception\AccessDeniedException;
 use Viserio\Component\Contracts\Http\Exception\FileNotFoundException;
+use Viserio\Component\Contracts\Http\Exception\LogicException;
 
 final class ExtensionGuesser
 {

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
-use Viserio\Component\Contracts\Http\Exception\BadMethodCallException;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contracts\Http\Exception\BadMethodCallException;
 
 /**
  * Compose stream implementations based on a hash of functions.
@@ -37,7 +37,7 @@ class FnStream implements StreamInterface
 
     /**
      * The close method is called on the underlying stream only if possible.
-     * 
+     *
      * @return void
      */
     public function __destruct()

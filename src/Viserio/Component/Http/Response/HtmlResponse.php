@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Response;
 
-use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Response\Traits\InjectContentTypeTrait;
 use Viserio\Component\Http\Stream;
