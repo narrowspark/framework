@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
-use Exception;
+use RuntimeException as BaseRuntimeException;
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
+use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Util;
 
 class PumpStream implements StreamInterface
@@ -68,7 +68,7 @@ class PumpStream implements StreamInterface
     {
         try {
             return Util::copyToString($this);
-        } catch (Exception $e) {
+        } catch (BaseRuntimeException $e) {
             return '';
         }
     }
@@ -169,7 +169,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         $data    = $this->buffer->read($length);
         $readLen = \mb_strlen($data);

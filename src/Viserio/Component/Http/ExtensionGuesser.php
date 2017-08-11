@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Http;
 
 use finfo;
-use LogicException;
-use Viserio\Component\Http\Exception\AccessDeniedException;
-use Viserio\Component\Http\Exception\FileNotFoundException;
+use Viserio\Component\Contracts\Http\Exception\LogicException;
+use Viserio\Component\Contracts\Http\Exception\AccessDeniedException;
+use Viserio\Component\Contracts\Http\Exception\FileNotFoundException;
 
 final class ExtensionGuesser
 {
@@ -118,9 +118,9 @@ final class ExtensionGuesser
      *
      * @param string $path The path to the file
      *
-     * @throws \Viserio\Component\Http\Exception\FileNotFoundException If the file does not exist
-     * @throws \Viserio\Component\Http\Exception\AccessDeniedException If the file could not be read
-     * @throws \LogicException                                         If no guesser found
+     * @throws \Viserio\Component\Contracts\Http\Exception\FileNotFoundException If the file does not exist
+     * @throws \Viserio\Component\Contracts\Http\Exception\AccessDeniedException If the file could not be read
+     * @throws \Viserio\Component\Contracts\Http\Exception\LogicException        If no guesser found
      *
      * @return null|string The guessed extension or NULL, if none could be guessed
      */

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
-use BadMethodCallException;
+use Viserio\Component\Contracts\Http\Exception\BadMethodCallException;
 use Psr\Http\Message\StreamInterface;
 use Throwable;
-use UnexpectedValueException;
+use Viserio\Component\Contracts\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\Util;
 
 abstract class AbstractStreamDecorator implements StreamInterface
@@ -26,7 +26,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
      *
      * @param string $name Name of the property (allows "stream" only).
      *
-     * @throws \UnexpectedValueException
+     * @throws \Viserio\Component\Contracts\Http\Exception\UnexpectedValueException
      *
      * @return StreamInterface
      */
@@ -192,7 +192,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * Implement in subclasses to dynamically create streams when requested.
      *
-     * @throws \BadMethodCallException
+     * @throws \Viserio\Component\Contracts\Http\Exception\BadMethodCallException
      *
      * @return \Psr\Http\Message\StreamInterface
      */

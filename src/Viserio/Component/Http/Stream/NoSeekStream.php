@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
-use RuntimeException;
+use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 
 class NoSeekStream extends AbstractStreamDecorator
 {

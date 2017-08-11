@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
-use BadMethodCallException;
+use Viserio\Component\Contracts\Http\Exception\BadMethodCallException;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -37,6 +37,8 @@ class FnStream implements StreamInterface
 
     /**
      * The close method is called on the underlying stream only if possible.
+     * 
+     * @return void
      */
     public function __destruct()
     {
@@ -50,7 +52,9 @@ class FnStream implements StreamInterface
      *
      * @param mixed $name
      *
-     * @throws \BadMethodCallException
+     * @throws \Viserio\Component\Contracts\Http\Exception\BadMethodCallException
+     *
+     * @return void
      */
     public function __get($name): void
     {
@@ -74,9 +78,9 @@ class FnStream implements StreamInterface
      * @param StreamInterface $stream  Stream to decorate
      * @param array           $methods Hash of method name to a closure
      *
-     * @return FnStream
+     * @return $this
      */
-    public static function decorate(StreamInterface $stream, array $methods): FnStream
+    public static function decorate(StreamInterface $stream, array $methods): self
     {
         // If any of the required methods were not provided, then simply
         // proxy to the decorated stream.
@@ -106,7 +110,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         return \call_user_func($this->_fn_getSize);
     }
@@ -114,7 +118,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
         return \call_user_func($this->_fn_tell);
     }
@@ -122,7 +126,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return \call_user_func($this->_fn_eof);
     }
@@ -130,7 +134,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return \call_user_func($this->_fn_isSeekable);
     }
@@ -154,7 +158,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return \call_user_func($this->_fn_isWritable);
     }
@@ -162,7 +166,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): int
     {
         return \call_user_func($this->_fn_write, $string);
     }
@@ -170,7 +174,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return \call_user_func($this->_fn_isReadable);
     }
@@ -178,7 +182,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         return \call_user_func($this->_fn_read, $length);
     }
@@ -186,7 +190,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         return \call_user_func($this->_fn_getContents);
     }

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Http\Exception;
+namespace Viserio\Component\Contracts\Http\Exception;
 
 use RuntimeException;
 
-class FileNotFoundException extends RuntimeException
+class FileNotFoundException extends RuntimeException implements Exception
 {
     /**
      * Create a new FileNotFoundException instance.

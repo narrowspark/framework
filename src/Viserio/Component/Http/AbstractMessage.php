@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contracts\Http\Exception\UnexpectedValueException;
 
 abstract class AbstractMessage implements MessageInterface
 {
@@ -243,7 +244,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body
      *
-     * @throws \InvalidArgumentException if the $resource arg is not valid
+     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException if the $resource arg is not valid
      *
      * @return \Psr\Http\Message\StreamInterface
      */
@@ -276,13 +277,13 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param string $version
      *
-     * @throws \InvalidArgumentException on invalid HTTP protocol version
+     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException on invalid HTTP protocol version
      *
      * @return void
      */
     private function validateProtocolVersion(string $version): void
     {
-        if (empty($version)) {
+        if ($version !== '') {
             throw new InvalidArgumentException(\sprintf(
                 'HTTP protocol version can not be empty'
             ));
@@ -299,8 +300,10 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Check all header values and header name.
      *
-     * @param string       $header
+     * @param string $header
      * @param array|string $value
+     *
+     * @throws \Viserio\Component\Contracts\Http\Exception\UnexpectedValueException
      *
      * @return array
      */
@@ -311,7 +314,7 @@ abstract class AbstractMessage implements MessageInterface
         }
 
         if (! $this->arrayContainsOnlyStrings($value)) {
-            throw new InvalidArgumentException(
+            throw new UnexpectedValueException(
                 'Invalid header value; must be a string or array of strings'
             );
         }
@@ -353,7 +356,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param array $values
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Http\Exception\UnexpectedValueException
      *
      * @return void
      */

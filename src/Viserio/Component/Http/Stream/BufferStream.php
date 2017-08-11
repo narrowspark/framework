@@ -3,7 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
+use RuntimeException as BaseRuntimeException;
+use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 
 /**
  * Provides a buffer stream that can be written to to fill a buffer, and read
@@ -50,7 +51,7 @@ class BufferStream implements StreamInterface
     {
         try {
             return $this->getContents();
-        } catch (RuntimeException $exception) {
+        } catch (BaseRuntimeException $exception) {
             return '';
         }
     }

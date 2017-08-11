@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
+use Viserio\Component\Contracts\Http\Exception\RuntimeException;
 
 class LimitStream extends AbstractStreamDecorator
 {
@@ -120,7 +120,7 @@ class LimitStream extends AbstractStreamDecorator
      *
      * @param int $offset Offset to seek to and begin byte limiting from
      *
-     * @throws \RuntimeException if the stream cannot be seeked
+     * @throws \Viserio\Component\Contracts\Http\Exception\RuntimeException if the stream cannot be seeked
      *
      * @return void
      */

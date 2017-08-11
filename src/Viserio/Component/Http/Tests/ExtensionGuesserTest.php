@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Http\Exception\AccessDeniedException;
+use Viserio\Component\Contracts\Http\Exception\AccessDeniedException;
 use Viserio\Component\Http\ExtensionGuesser;
 
 class ExtensionGuesserTest extends TestCase
@@ -61,7 +61,7 @@ class ExtensionGuesserTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Http\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contracts\Http\Exception\FileNotFoundException
      */
     public function testGuessExtensionToThrowExceptionIfNoFileFound(): void
     {

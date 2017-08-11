@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Http;
 
 use Fig\Http\Message\StatusCodeInterface;
-use InvalidArgumentException;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 
@@ -27,7 +26,7 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    Stream identifier and/or actual stream resource
      * @param string                                                 $version protocol version
      *
-     * @throws InvalidArgumentException on any invalid element
+     * @throws \InvalidArgumentException on any invalid element
      */
     public function __construct(
         int $status = self::STATUS_OK,

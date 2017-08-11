@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http;
 
 use Fig\Http\Message\RequestMethodInterface;
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -181,7 +181,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      *
      * @param null|string $method
      *
-     * @throws InvalidArgumentException on invalid HTTP method
+     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException on invalid HTTP method
      *
      * @return string
      */
@@ -217,7 +217,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      *
      * @param null|string|UriInterface $uri
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException
      *
      * @return \Psr\Http\Message\UriInterface
      */
