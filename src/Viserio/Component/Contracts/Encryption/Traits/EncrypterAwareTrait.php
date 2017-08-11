@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Encryption\Traits;
 
-use RuntimeException;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 trait EncrypterAwareTrait
