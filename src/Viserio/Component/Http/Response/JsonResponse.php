@@ -64,7 +64,7 @@ class JsonResponse extends Response
      * @param int   $encodingOptions
      *
      * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contracts\Http\Exception\RuntimeException        if unable to encode the $data to JSON
+     * @throws \Viserio\Component\Contracts\Http\Exception\RuntimeException         if unable to encode the $data to JSON
      *
      * @return string
      */
