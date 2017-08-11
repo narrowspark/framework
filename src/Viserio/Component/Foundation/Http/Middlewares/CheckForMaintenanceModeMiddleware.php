@@ -30,6 +30,8 @@ class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Foundation\Http\Exception\MaintenanceModeException
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {

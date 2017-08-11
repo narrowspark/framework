@@ -518,9 +518,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
 
         switch ($visibility) {
             case FilesystemContract::VISIBILITY_PUBLIC:
-                return $this->permissions[$type][$visibility];
+                return $this->permissions[$type]['public'];
             case FilesystemContract::VISIBILITY_PRIVATE:
-                return $this->permissions[$type][$visibility];
+                return $this->permissions[$type]['private'];
         }
 
         throw new InvalidArgumentException('Unknown visibility: ' . $visibility);

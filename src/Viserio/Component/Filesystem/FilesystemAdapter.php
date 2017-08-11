@@ -11,6 +11,7 @@ use RuntimeException;
 use Viserio\Component\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Contracts\Filesystem\Exception\IOException as ViserioIOException;
+use Viserio\Component\Contracts\Filesystem\Exception\IOException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
@@ -171,6 +172,8 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\IOException If file cant be deleted
      */
     public function append(string $path, string $contents, array $config = []): bool
     {
@@ -178,7 +181,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             $contents = $this->read($path) . $contents;
 
             if (! $this->driver->delete($path)) {
-                throw new RuntimeException(\sprintf('File [%s] cannot be deleted.', $path));
+                throw new IOException(\sprintf('File [%s] cannot be deleted.', $path));
             }
         }
 
@@ -341,9 +344,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getTimestamp(string $path)
     {
-        if (! $this->has($path)) {
-            throw new FileNotFoundException($path);
-        }
+        $this->fileNotFound($path);
 
         $getTimestamp = $this->driver->getTimestamp($path);
 
@@ -461,8 +462,8 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $directories = $this->allDirectories($dirname);
 
-        foreach ($directories as $dirname) {
-            @\rmdir($this->getNormalizedOrPrefixedPath($dirname));
+        foreach ($directories as $directoryName) {
+            @\rmdir($this->getNormalizedOrPrefixedPath($directoryName));
         }
 
         return true;
@@ -552,11 +553,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     protected function getNormalizedOrPrefixedPath(string $path): string
     {
-        if (isset($this->driver)) {
-            $prefix = \method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+        $prefix = '';
 
-            $path = $prefix . $path;
+        if (\method_exists($this->driver, 'getPathPrefix')) {
+            $prefix = $this->driver->getPathPrefix();
         }
+
+        $path = $prefix . $path;
 
         return self::normalizeDirectorySeparator($path);
     }
@@ -621,5 +624,21 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         }
 
         return $return;
+    }
+
+    /**
+     * Throws a exception if file is not found.
+     *
+     * @param string $path
+     *
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     *
+     * @return void
+     */
+    private function fileNotFound(string $path): void
+    {
+        if (!$this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
     }
 }
