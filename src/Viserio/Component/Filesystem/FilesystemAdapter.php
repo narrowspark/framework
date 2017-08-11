@@ -10,8 +10,8 @@ use League\Flysystem\Config as FlyConfig;
 use RuntimeException;
 use Viserio\Component\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Component\Contracts\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Component\Contracts\Filesystem\Exception\IOException;
+use Viserio\Component\Contracts\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
@@ -637,7 +637,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     private function fileNotFound(string $path): void
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
     }
