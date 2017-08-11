@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
 use FilesystemIterator;
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
@@ -498,7 +498,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      * @param string      $path
      * @param null|string $visibility
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exceptio\InvalidArgumentException
      *
      * @return null|int
      */

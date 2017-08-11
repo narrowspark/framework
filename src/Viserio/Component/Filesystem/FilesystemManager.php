@@ -3,10 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
 use Defuse\Crypto\Key;
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
-use Narrowspark\Arr\Arr;
 use Viserio\Component\Contracts\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -82,7 +81,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     {
         $config = parent::getConnectionConfig($name);
 
-        if (\is_string($cacheName = Arr::get($config, 'cache'))) {
+        if (\is_string($cacheName = ($config['cache'] ?? false))) {
             $config['cache'] = $this->getCacheConfig($cacheName);
         }
 
@@ -102,7 +101,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param string $name
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -110,7 +109,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     {
         $cache = $this->resolvedOptions['cached'];
 
-        if (! \is_array($config = Arr::get($cache, $name)) && ! $config) {
+        if (! \is_array($config = ($cache[$name] ?? false)) && ! $config) {
             throw new InvalidArgumentException(\sprintf('Cache [%s] not configured.', $name));
         }
 

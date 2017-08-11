@@ -9,7 +9,7 @@ interface Connector
      *
      * @param array $config
      *
-     * @throws \InvalidArgumentException|\RuntimeException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException
      *
      * @return object
      */

@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Sftp\SftpAdapter;
-use Narrowspark\Arr\Arr;
-use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
 
-class SftpConnector implements ConnectorContract
+class SftpConnector extends AbstractConnector
 {
     /**
      * {@inheritdoc}
@@ -16,7 +14,7 @@ class SftpConnector implements ConnectorContract
     {
         $config = $this->getConfig($config);
 
-        return $this->getAdapter($config);
+        return new SftpAdapter($config);
     }
 
     /**
@@ -40,14 +38,30 @@ class SftpConnector implements ConnectorContract
             throw new InvalidArgumentException('The sftp connector requires password or privateKey configuration.');
         }
 
-        return Arr::only($config, ['host', 'port', 'username', 'password', 'privateKey']);
+        return self::getSelectedConfig($config, ['host', 'port', 'username', 'password', 'privateKey']);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter(array $config): SftpAdapter
+    protected function getAdapter(object $client, array $config): object
     {
-        return new SftpAdapter($config);
+        //
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAuth(array $config): array
+    {
+        //
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getClient(array $auth): object
+    {
+        //
     }
 }

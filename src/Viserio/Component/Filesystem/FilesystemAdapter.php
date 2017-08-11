@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
@@ -569,7 +569,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      *
      * @param null|string $visibility
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException
      *
      * @return null|string
      */

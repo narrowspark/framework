@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use InvalidArgumentException;
-use Narrowspark\Arr\Arr;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use Spatie\Dropbox\Client;
 use Spatie\FlysystemDropbox\DropboxAdapter;
 
@@ -18,7 +17,7 @@ class DropboxConnector extends AbstractConnector
             throw new InvalidArgumentException('The dropbox connector requires authentication token.');
         }
 
-        return Arr::only($config, ['token']);
+        return self::getSelectedConfig($config, ['token']);
     }
 
     /**
@@ -38,7 +37,7 @@ class DropboxConnector extends AbstractConnector
             $config['prefix'] = '';
         }
 
-        return Arr::only($config, ['prefix']);
+        return self::getSelectedConfig($config, ['prefix']);
     }
 
     /**

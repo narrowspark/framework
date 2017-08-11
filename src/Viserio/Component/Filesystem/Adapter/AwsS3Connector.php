@@ -3,9 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
 use Aws\S3\S3Client;
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
-use Narrowspark\Arr\Arr;
 
 class AwsS3Connector extends AbstractConnector
 {
@@ -19,7 +18,7 @@ class AwsS3Connector extends AbstractConnector
         $auth = [
             'region'      => $config['region'],
             'version'     => $config['version'],
-            'credentials' => Arr::only($config, ['key', 'secret']),
+            'credentials' => self::getSelectedConfig($config, ['key', 'secret']),
         ];
 
         if (\array_key_exists('bucket_endpoint', $config)) {
@@ -66,7 +65,7 @@ class AwsS3Connector extends AbstractConnector
             $config['options'] = [];
         }
 
-        return Arr::only($config, ['bucket', 'prefix', 'options']);
+        return self::getSelectedConfig($config, ['bucket', 'prefix', 'options']);
     }
 
     /**

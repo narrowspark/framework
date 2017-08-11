@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Adapter\Local;
-use Narrowspark\Arr\Arr;
-use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
 
-class LocalConnector implements ConnectorContract
+class LocalConnector extends AbstractConnector
 {
     /**
      * {@inheritdoc}
@@ -16,7 +14,12 @@ class LocalConnector implements ConnectorContract
     {
         $config = $this->getConfig($config);
 
-        return $this->getAdapter($config);
+        return new Local(
+            $config['path'],
+            $config['write_flags'],
+            $config['link_handling'],
+            $config['permissions']
+        );
     }
 
     /**
@@ -46,14 +49,30 @@ class LocalConnector implements ConnectorContract
             $config['permissions'] = [];
         }
 
-        return Arr::only($config, ['path', 'write_flags', 'link_handling', 'permissions']);
+        return self::getSelectedConfig($config, ['path', 'write_flags', 'link_handling', 'permissions']);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter(array $config): Local
+    protected function getAdapter(object $client, array $config): object
     {
-        return new Local($config['path'], $config['write_flags'], $config['link_handling'], $config['permissions']);
+        //
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAuth(array $config): array
+    {
+        //
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getClient(array $auth): object
+    {
+        //
     }
 }

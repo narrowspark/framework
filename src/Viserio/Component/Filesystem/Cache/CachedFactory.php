@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Cache;
 
-use InvalidArgumentException;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Cached\CacheInterface;
 use League\Flysystem\Cached\Storage\Adapter;
 use League\Flysystem\Cached\Storage\Psr6Cache;
@@ -42,7 +42,7 @@ class CachedFactory
      *
      * @param array $config
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\Cached\CacheInterface
      */
