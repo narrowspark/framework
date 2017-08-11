@@ -27,20 +27,4 @@ trait EncrypterAwareTrait
 
         return $this;
     }
-
-    /**
-     * Get the encrypter instance.
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Viserio\Component\Contracts\Encryption\Encrypter
-     */
-    public function getEncrypter(): EncrypterContract
-    {
-        if (! $this->encrypter) {
-            throw new RuntimeException('Encrypter is not set up.');
-        }
-
-        return $this->encrypter;
-    }
 }

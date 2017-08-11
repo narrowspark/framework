@@ -2,9 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Http\Exception;
 
-use RuntimeException;
-
-class AccessDeniedException extends RuntimeException implements Exception
+class AccessDeniedException extends RuntimeException
 {
     /**
      * Create a new AccessDeniedException instance.

@@ -14,15 +14,6 @@ class EncrypterAwareTraitTest extends MockeryTestCase
     {
         $this->setEncrypter($this->mock(Encrypter::class));
 
-        self::assertInstanceOf(Encrypter::class, $this->getEncrypter());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Encrypter is not set up.
-     */
-    public function testGetEncrypterThrowExceptionIfEncrypterIsNotSet(): void
-    {
-        $this->getEncrypter();
+        self::assertInstanceOf(Encrypter::class, $this->encrypter);
     }
 }
