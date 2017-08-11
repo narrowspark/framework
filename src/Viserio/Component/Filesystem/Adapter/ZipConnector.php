@@ -2,9 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
-use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use ZipArchive;
 
 class ZipConnector extends AbstractConnector
@@ -52,7 +51,6 @@ class ZipConnector extends AbstractConnector
      */
     protected function getAdapter(object $client, array $config): object
     {
-        //
     }
 
     /**
@@ -60,7 +58,6 @@ class ZipConnector extends AbstractConnector
      */
     protected function getAuth(array $config): array
     {
-        //
     }
 
     /**
@@ -68,6 +65,5 @@ class ZipConnector extends AbstractConnector
      */
     protected function getClient(array $auth): object
     {
-        //
     }
 }

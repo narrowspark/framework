@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
@@ -10,6 +9,7 @@ use League\Flysystem\Config as FlyConfig;
 use RuntimeException;
 use Viserio\Component\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Exception\IOException;
 use Viserio\Component\Contracts\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;

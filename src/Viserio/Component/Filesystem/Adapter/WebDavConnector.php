@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\WebDAV\WebDAVAdapter;
 use Sabre\DAV\Client;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 
 class WebDavConnector extends AbstractConnector
 {
@@ -23,7 +23,6 @@ class WebDavConnector extends AbstractConnector
      */
     protected function getConfig(array $config): array
     {
-        //
     }
 
     /**
@@ -47,7 +46,6 @@ class WebDavConnector extends AbstractConnector
      */
     protected function getAdapter(object $client, array $config): object
     {
-        //
     }
 
     /**
@@ -55,6 +53,5 @@ class WebDavConnector extends AbstractConnector
      */
     protected function getAuth(array $config): array
     {
-        //
     }
 }

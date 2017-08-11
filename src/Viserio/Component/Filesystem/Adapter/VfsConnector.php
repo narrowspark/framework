@@ -7,7 +7,6 @@ use VirtualFileSystem\FileSystem as Vfs;
 
 class VfsConnector extends AbstractConnector
 {
-
     /**
      * {@inheritdoc}
      */
@@ -31,7 +30,6 @@ class VfsConnector extends AbstractConnector
      */
     protected function getAuth(array $config): array
     {
-        //
     }
 
     /**
@@ -39,7 +37,6 @@ class VfsConnector extends AbstractConnector
      */
     protected function getConfig(array $config): array
     {
-        //
     }
 
     /**

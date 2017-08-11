@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use OpenCloud\Rackspace;
 use RuntimeException;
 use stdClass;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 
 class RackspaceConnector extends AbstractConnector
 {

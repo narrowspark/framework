@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
 use Defuse\Crypto\Key;
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
 use Viserio\Component\Contracts\Cache\Traits\CacheManagerAwareTrait;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;

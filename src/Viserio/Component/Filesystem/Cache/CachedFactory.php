@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Cache;
 
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Cached\CacheInterface;
 use League\Flysystem\Cached\Storage\Adapter;
 use League\Flysystem\Cached\Storage\Psr6Cache;
 use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Filesystem\FilesystemManager;
 
 class CachedFactory

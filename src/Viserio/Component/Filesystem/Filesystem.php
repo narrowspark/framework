@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
 use FilesystemIterator;
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
@@ -12,6 +11,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
 use Viserio\Component\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;

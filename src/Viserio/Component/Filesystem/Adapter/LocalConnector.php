@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use League\Flysystem\Adapter\Local;
+use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 
 class LocalConnector extends AbstractConnector
 {
@@ -57,7 +57,6 @@ class LocalConnector extends AbstractConnector
      */
     protected function getAdapter(object $client, array $config): object
     {
-        //
     }
 
     /**
@@ -65,7 +64,6 @@ class LocalConnector extends AbstractConnector
      */
     protected function getAuth(array $config): array
     {
-        //
     }
 
     /**
@@ -73,6 +71,5 @@ class LocalConnector extends AbstractConnector
      */
     protected function getClient(array $auth): object
     {
-        //
     }
 }
