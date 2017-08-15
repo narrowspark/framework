@@ -5,7 +5,6 @@ namespace Viserio\Component\Contracts\Session;
 use JsonSerializable;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 interface Store extends JsonSerializable
 {
