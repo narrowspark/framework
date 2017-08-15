@@ -78,7 +78,7 @@ class FnStream implements StreamInterface
      * @param StreamInterface $stream  Stream to decorate
      * @param array           $methods Hash of method name to a closure
      *
-     * @return $this
+     * @return \Viserio\Component\Http\Stream\FnStream
      */
     public static function decorate(StreamInterface $stream, array $methods): self
     {

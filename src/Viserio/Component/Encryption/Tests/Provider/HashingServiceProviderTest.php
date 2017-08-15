@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Hashing\Tests\Provider;
+namespace Viserio\Component\Encryption\Tests\Provider;
 
 use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Hashing\Password;
-use Viserio\Component\Hashing\Provider\HashingServiceProvider;
+use Viserio\Component\Encryption\Password;
+use Viserio\Component\Encryption\Provider\HashingServiceProvider;
 
 class HashingServiceProviderTest extends TestCase
 {

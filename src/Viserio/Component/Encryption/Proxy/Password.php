@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Hashing\Proxy;
+namespace Viserio\Component\Encryption\Proxy;
 
 use Viserio\Component\StaticalProxy\StaticalProxy;
 

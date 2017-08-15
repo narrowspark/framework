@@ -301,13 +301,6 @@ interface Store extends JsonSerializable
     public function setRequestOnHandler(ServerRequestInterface $request): void;
 
     /**
-     * Get the encrypter instance.
-     *
-     * @return EncrypterContract
-     */
-    public function getEncrypter(): EncrypterContract;
-
-    /**
      * Get used fingerprint.
      *
      * @return string

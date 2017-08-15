@@ -47,13 +47,6 @@ class Store implements StoreContract
     protected $handler;
 
     /**
-     * Encrypter instance.
-     *
-     * @var EncrypterContract
-     */
-    protected $encrypter;
-
-    /**
      * Number of requests after which id is regenerated.
      *
      * @var null|int

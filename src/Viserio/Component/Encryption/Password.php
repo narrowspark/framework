@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Hashing;
+namespace Viserio\Component\Encryption;
 
-use Defuse\Crypto\Key;
-use Viserio\Component\Contracts\Hashing\Password as PasswordContract;
+use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
 
 class Password implements PasswordContract
 {
