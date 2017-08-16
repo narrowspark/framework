@@ -7,50 +7,37 @@ final class HiddenString
     /**
      * @var string
      */
-    protected $internalStringValue = '';
+    private $internalStringValue = '';
 
     /**
      * Disallow the contents from being accessed via __toString()?
      *
      * @var bool
      */
-    protected $disallowInline = false;
+    private $disallowInline = false;
 
     /**
      * Disallow the contents from being accessed via __sleep()?
      *
      * @var bool
      */
-    protected $disallowSerialization = false;
+    private $disallowSerialization = false;
 
     /**
      * HiddenString constructor.
+     *
      * @param string $value
-     * @param bool $disallowInline
-     * @param bool $disallowSerialization
+     * @param bool   $disallowInline
+     * @param bool   $disallowSerialization
      */
     public function __construct(
         string $value,
         bool $disallowInline = false,
         bool $disallowSerialization = false
     ) {
-        $this->internalStringValue = str_cpy($value);
-        $this->disallowInline = $disallowInline;
+        $this->internalStringValue   = str_cpy($value);
+        $this->disallowInline        = $disallowInline;
         $this->disallowSerialization = $disallowSerialization;
-    }
-
-    /**
-     * Hide its internal state from var_dump()
-     *
-     * @return array
-     */
-    public function __debugInfo()
-    {
-        return [
-            'internalStringValue' => '*',
-            'attention'           => 'If you need the value of a HiddenString, ' .
-                'invoke getString() instead of dumping it.'
-        ];
     }
 
     /**
@@ -62,13 +49,17 @@ final class HiddenString
     }
 
     /**
-     * Explicit invocation -- get the raw string value
+     * Hide its internal state from var_dump().
      *
-     * @return string
+     * @return array
      */
-    public function getString(): string
+    public function __debugInfo()
     {
-        return str_cpy($this->internalStringValue);
+        return [
+            'internalStringValue' => '*',
+            'attention'           => 'If you need the value of a HiddenString, ' .
+                'invoke getString() instead of dumping it.',
+        ];
     }
 
     /**
@@ -87,20 +78,28 @@ final class HiddenString
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array
      */
     public function __sleep(): array
     {
-        if (!$this->disallowSerialization) {
+        if (! $this->disallowSerialization) {
             return [
                 'internalStringValue',
                 'disallowInline',
-                'disallowSerialization'
+                'disallowSerialization',
             ];
         }
 
         return [];
+    }
+
+    /**
+     * Explicit invocation -- get the raw string value.
+     *
+     * @return string
+     */
+    public function getString(): string
+    {
+        return str_cpy($this->internalStringValue);
     }
 }

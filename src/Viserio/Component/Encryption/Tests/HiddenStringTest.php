@@ -27,26 +27,26 @@ class HiddenStringTest extends TestCase
         var_dump($hidden);
         $dump = ob_get_clean();
 
-        self::assertFalse(\strpos($dump, $str));
+        self::assertFalse(\mb_strpos($dump, $str));
 
         $print = \print_r($hidden, true);
 
-        self::assertFalse(\strpos($print, $str));
+        self::assertFalse(\mb_strpos($print, $str));
 
         $cast = (string) $hidden;
 
         if ($disallowInline) {
-            self::assertFalse(\strpos($cast, $str));
+            self::assertFalse(\mb_strpos($cast, $str));
         } else {
-            self::assertNotFalse(\strpos($cast, $str));
+            self::assertNotFalse(\mb_strpos($cast, $str));
         }
 
         $serial = \serialize($hidden);
 
         if ($disallowSerialization) {
-            self::assertFalse(\strpos($serial, $str));
+            self::assertFalse(\mb_strpos($serial, $str));
         } else {
-            self::assertNotFalse(\strpos($serial, $str));
+            self::assertNotFalse(\mb_strpos($serial, $str));
         }
     }
 
@@ -56,7 +56,7 @@ class HiddenStringTest extends TestCase
             [true, true],
             [true, false],
             [false, true],
-            [false, false]
+            [false, false],
         ];
     }
 }
