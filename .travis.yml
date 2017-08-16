@@ -54,6 +54,7 @@ before_install:
   - ./build/travis/before_install.sh
 
 install:
+  - composer require roave/security-advisories:dev-master
   - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
   - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
   - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi

@@ -19,7 +19,6 @@
     ],
     "require": {
         "php"                                : "^7.2",
-        "roave/security-advisories"          : "dev-master",
         "twig/twig"                          : "~2.4"
     },
     "require-dev": {
