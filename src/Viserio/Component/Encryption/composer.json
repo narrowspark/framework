@@ -19,6 +19,10 @@
     ],
     "require": {
         "php"                                            : "^7.2",
+        "ext-mbstring"                                   : "*",
+        "ext-sodium"                                     : "*",
+        "ext-openssl"                                    : "*",
+        "paragonie/constant_time_encoding"               : "^2.0",
         "viserio/contracts"                              : "self.version"
     },
     "require-dev": {
@@ -30,6 +34,9 @@
         "viserio/options-resolver"                       : "self.version"
     },
     "autoload": {
+        "files": [
+            "helpers.php"
+        ],
         "psr-4": {
             "Viserio\\Component\\Encrypter\\"            : ""
         },
