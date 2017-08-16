@@ -6,5 +6,4 @@ use Exception as BaseException;
 
 class InvalidKey extends BaseException implements Exception
 {
-
 }

@@ -6,5 +6,4 @@ use Exception as BaseException;
 
 class CannotCloneKey extends BaseException implements Exception
 {
-
 }
