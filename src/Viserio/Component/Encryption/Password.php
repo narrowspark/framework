@@ -7,9 +7,18 @@ use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
 final class Password implements PasswordContract
 {
     /**
+     * @var Viserio\Component\Encryption\Key
+     */
+    private $key;
+
+    public function __construct(Key $key)
+    {
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public static function hash(string $password): string
+    public static function hash(string $password, string $level = KeyFactory::INTERACTIVE): string
     {
     }
 

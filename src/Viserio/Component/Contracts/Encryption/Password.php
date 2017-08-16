@@ -18,13 +18,14 @@ interface Password
     public function create(string $password): string;
 
     /**
-     * 1. VerifyHMAC-then-Decrypt the ciphertext to get the hash
-     * 2. Verify that the password matches the hash.
+     * Decrypt then verify a password
      *
-     * @param string $password
-     * @param string $hashedValue
+     * @param HiddenString $password    The user's password
+     * @param string $stored            The encrypted password hash
      *
-     * @return bool
+     * @throws InvalidMessage
+     *
+     * @return bool                     Is this password valid?
      */
-    public function verify(string $password, string $hashedValue): bool;
+    public function verify(HiddenString $password, string $hashedValue): bool;
 }
