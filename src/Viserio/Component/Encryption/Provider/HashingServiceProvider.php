@@ -54,7 +54,7 @@ class HashingServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Hashing\Password
+     * @return \Viserio\Component\Encryption\Password
      */
     public static function createPassword(ContainerInterface $container): Password
     {

@@ -4,28 +4,12 @@ namespace Viserio\Component\Encryption;
 
 use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
 
-class Password implements PasswordContract
+final class Password implements PasswordContract
 {
-    /**
-     * Encryption key.
-     *
-     * @var \Defuse\Crypto\Key
-     */
-    protected $key;
-
-    /**
-     * Create a new Password instance.
-     *
-     * @param string $key
-     */
-    public function __construct(string $key)
-    {
-    }
-
     /**
      * {@inheritdoc}
      */
-    public function create(string $password): string
+    public static function hash(string $password): string
     {
     }
 
@@ -37,8 +21,6 @@ class Password implements PasswordContract
     }
 
     /**
-     * Key rotation method -- decrypt with your old key then re-encrypt with your new key.
-     *
      * @param string $hashedValue
      * @param string $newKey
      *
