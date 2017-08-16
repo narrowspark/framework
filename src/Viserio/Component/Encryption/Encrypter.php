@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-use Defuse\Crypto\Key;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 
 final class Encrypter implements EncrypterContract
