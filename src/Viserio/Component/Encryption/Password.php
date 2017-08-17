@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
 use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
+use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
 
 final class Password implements PasswordContract
 {
     /**
-     * @var Viserio\Component\Encryption\Key
+     * @var \Viserio\Component\Encryption\Key
      */
     private $key;
 
@@ -18,14 +19,14 @@ final class Password implements PasswordContract
     /**
      * {@inheritdoc}
      */
-    public static function hash(string $password, string $level = KeyFactory::INTERACTIVE): string
+    public static function hash(HiddenStringContract $password, string $level = KeyFactory::INTERACTIVE): string
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function verify(string $password, string $hashedValue): bool
+    public function verify(HiddenStringContract $password, string $hashedValue): bool
     {
     }
 

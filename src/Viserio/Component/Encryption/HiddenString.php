@@ -2,26 +2,28 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-final class HiddenString
+use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
+
+final class HiddenString implements HiddenStringContract
 {
     /**
      * @var string
      */
-    private $internalStringValue = '';
+    private $internalStringValue;
 
     /**
      * Disallow the contents from being accessed via __toString()?
      *
      * @var bool
      */
-    private $disallowInline = false;
+    private $disallowInline;
 
     /**
      * Disallow the contents from being accessed via __sleep()?
      *
      * @var bool
      */
-    private $disallowSerialization = false;
+    private $disallowSerialization;
 
     /**
      * HiddenString constructor.

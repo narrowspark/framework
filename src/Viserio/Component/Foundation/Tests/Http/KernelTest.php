@@ -19,7 +19,6 @@ use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
-use Viserio\Component\Foundation\Http\Event\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
 
@@ -85,9 +84,6 @@ class KernelTest extends MockeryTestCase
         $events->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelFinishRequestEvent::class));
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(KernelResponseEvent::class));
 
         $container->shouldReceive('get')
             ->once()

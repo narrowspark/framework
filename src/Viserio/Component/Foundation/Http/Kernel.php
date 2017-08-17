@@ -19,7 +19,6 @@ use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
-use Viserio\Component\Foundation\Http\Event\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
@@ -204,10 +203,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
             $events->trigger(new KernelFinishRequestEvent($this, $serverRequest));
 
             $response = $this->sendRequestThroughRouter($serverRequest);
-
-            $events->trigger($event = new KernelResponseEvent($this, $serverRequest, $response));
-
-            $response = $event->getResponse();
         } catch (Throwable $exception) {
             $this->reportException($exception);
 

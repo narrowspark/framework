@@ -20,12 +20,12 @@ interface Password
     /**
      * Decrypt then verify a password.
      *
-     * @param HiddenString $password The user's password
+     * @param \Viserio\Component\Contracts\Encryption\HiddenString $password The user's password
      * @param string       $stored   The encrypted password hash
      *
      * @throws InvalidMessage
      *
      * @return bool Is this password valid?
      */
-    public function verify(HiddenString $password, string $hashedValue): bool;
+    public function verify(HiddenString $password, string $stored): bool;
 }
