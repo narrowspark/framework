@@ -60,6 +60,19 @@ class PhpInputStreamTest extends TestCase
         self::assertEquals(\mb_substr($contents, 128), $remainder);
     }
 
+    public function testGetContentsReturnCacheWhenReachedEof()
+    {
+        $this->stream->getContents();
+
+        $this->assertStreamContents($this->stream->getContents());
+
+        $stream = new PhpInputStream('data://,0');
+        $stream->read(1);
+        $stream->read(1);
+
+        self::assertSame('0', $stream->getContents(), 'Don\'t evaluate 0 as empty');
+    }
+
     public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads(): void
     {
         $this->stream->read(128);

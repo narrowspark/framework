@@ -75,7 +75,7 @@ class PhpInputStream extends AbstractStreamDecorator
     {
         $content = parent::read($length);
 
-        if ($content && ! $this->reachedEof) {
+        if (! $this->reachedEof) {
             $this->cache .= $content;
         }
 
