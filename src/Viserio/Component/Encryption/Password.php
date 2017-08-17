@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
 use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
+use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
 
 final class Password implements PasswordContract
 {

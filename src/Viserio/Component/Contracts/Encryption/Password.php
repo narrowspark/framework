@@ -21,7 +21,7 @@ interface Password
      * Decrypt then verify a password.
      *
      * @param \Viserio\Component\Contracts\Encryption\HiddenString $password The user's password
-     * @param string       $stored   The encrypted password hash
+     * @param string                                               $stored   The encrypted password hash
      *
      * @throws InvalidMessage
      *
