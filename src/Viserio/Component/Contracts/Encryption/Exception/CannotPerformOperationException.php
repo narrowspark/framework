@@ -4,6 +4,6 @@ namespace Viserio\Component\Contracts\Encryption\Exception;
 
 use RuntimeException as BaseRuntimeException;
 
-class CannotPerformOperation extends BaseRuntimeException implements Exception
+class CannotPerformOperationException extends BaseRuntimeException implements Exception
 {
 }

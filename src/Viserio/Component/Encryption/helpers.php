@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperation;
+use Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException;
 
 if (! \function_exists('str_cpy')) {
     /**
@@ -10,7 +10,7 @@ if (! \function_exists('str_cpy')) {
      *
      * @param string $string
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperation
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
      *
      * @return string
      */
@@ -19,7 +19,7 @@ if (! \function_exists('str_cpy')) {
         $length = \mb_strlen($string, '8bit');
 
         if ($length === false) {
-            throw new CannotPerformOperation('mb_strlen() failed unexpectedly.');
+            throw new CannotPerformOperationException('mb_strlen() failed unexpectedly.');
         }
 
         $return = '';

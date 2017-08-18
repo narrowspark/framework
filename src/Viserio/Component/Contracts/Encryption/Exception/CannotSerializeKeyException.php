@@ -4,6 +4,6 @@ namespace Viserio\Component\Contracts\Encryption\Exception;
 
 use Exception as BaseException;
 
-class CannotSerializeKey extends BaseException implements Exception
+class CannotSerializeKeyException extends BaseException implements Exception
 {
 }

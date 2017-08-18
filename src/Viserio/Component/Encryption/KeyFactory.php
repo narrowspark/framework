@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-use Viserio\Component\Contracts\Encryption\Exception\InvalidType;
+use Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException;
 use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
 
 final class KeyFactory
@@ -12,7 +12,7 @@ final class KeyFactory
      *
      * @param string $level
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidType
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException
      *
      * @return int[]
      */
@@ -35,7 +35,7 @@ final class KeyFactory
                     SODIUM_CRYPTO_PWHASH_MEMLIMIT_SENSITIVE,
                 ];
             default:
-                throw new InvalidType('Invalid security level for Argon2i.');
+                throw new InvalidTypeException('Invalid security level for Argon2i.');
         }
     }
 }

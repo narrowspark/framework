@@ -4,6 +4,6 @@ namespace Viserio\Component\Contracts\Encryption\Exception;
 
 use Exception as BaseException;
 
-class InvalidType extends BaseException implements Exception
+class CannotCloneKeyException extends BaseException implements Exception
 {
 }

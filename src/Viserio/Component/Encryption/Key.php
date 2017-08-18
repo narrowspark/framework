@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-use Viserio\Component\Contracts\Encryption\Exception\CannotCloneKey;
-use Viserio\Component\Contracts\Encryption\Exception\CannotSerializeKey;
+use Viserio\Component\Contracts\Encryption\Exception\CannotCloneKeyException;
+use Viserio\Component\Contracts\Encryption\Exception\CannotSerializeKeyException;
 
 final class Key
 {
@@ -35,11 +35,11 @@ final class Key
     /**
      * Don't let this ever succeed.
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotCloneKey
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotCloneKeyException
      */
     public function __clone()
     {
-        throw new CannotCloneKey();
+        throw new CannotCloneKeyException();
     }
 
     /**
@@ -47,7 +47,7 @@ final class Key
      */
     public function __sleep()
     {
-        throw new CannotSerializeKey();
+        throw new CannotSerializeKeyException();
     }
 
     /**
@@ -55,7 +55,7 @@ final class Key
      */
     public function __wakeup()
     {
-        throw new CannotSerializeKey();
+        throw new CannotSerializeKeyException();
     }
 
     /**
