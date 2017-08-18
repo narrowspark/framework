@@ -24,14 +24,12 @@ final class Password implements PasswordContract
     {
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function verify(HiddenStringContract $password, string $stored): bool
     {
     }
-
 
     /**
      * {@inheritdoc}

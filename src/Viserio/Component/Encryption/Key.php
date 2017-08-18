@@ -13,16 +13,6 @@ final class Key
     private $keyMaterial;
 
     /**
-     * Don't let this ever succeed
-     *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotCloneKey
-     */
-    public function __clone()
-    {
-        throw new CannotCloneKey();
-    }
-
-    /**
      * You probably should not be using this directly.
      *
      * @param HiddenString $keyMaterial - The actual key data
@@ -33,7 +23,7 @@ final class Key
     }
 
     /**
-     * Make sure you wipe the key from memory on destruction
+     * Make sure you wipe the key from memory on destruction.
      */
     public function __destruct()
     {
@@ -43,11 +33,21 @@ final class Key
     }
 
     /**
+     * Don't let this ever succeed.
+     *
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotCloneKey
+     */
+    public function __clone()
+    {
+        throw new CannotCloneKey();
+    }
+
+    /**
      * Don't allow this object to ever be serialized.
      */
     public function __sleep()
     {
-        throw new CannotSerializeKey;
+        throw new CannotSerializeKey();
     }
 
     /**
@@ -55,7 +55,7 @@ final class Key
      */
     public function __wakeup()
     {
-        throw new CannotSerializeKey;
+        throw new CannotSerializeKey();
     }
 
     /**

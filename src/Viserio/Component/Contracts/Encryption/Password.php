@@ -10,32 +10,31 @@ interface Password
      * @param \Viserio\Component\Contracts\Encryption\HiddenString $password The user's password
      * @param string                                               $level    The security level for this password
      *
-     * @return string                   An encrypted hash to store
+     * @return string An encrypted hash to store
      */
     public function hash(HiddenString $password, string $level = Security::INTERACTIVE): string;
 
     /**
-     * Decrypt then verify a password
+     * Decrypt then verify a password.
      *
      * @param \Viserio\Component\Contracts\Encryption\HiddenString $password The user's password
      * @param string                                               $stored   The encrypted password hash
      *
      * @throws InvalidMessage
      *
-     * @return bool                     Is this password valid?
+     * @return bool Is this password valid?
      */
     public function verify(HiddenString $password, string $stored): bool;
-
 
     /**
      * Is this password hash stale?
      *
-     * @param string $stored            Encrypted password hash
-     * @param string $level             The security level for this password
+     * @param string $stored Encrypted password hash
+     * @param string $level  The security level for this password
      *
      * @throws InvalidMessage
      *
-     * @return bool                     Do we need to regenerate the hash or ciphertext?
+     * @return bool Do we need to regenerate the hash or ciphertext?
      */
     public function needsRehash(string $stored, string $level = Security::INTERACTIVE): bool;
 }

@@ -22,17 +22,17 @@ final class KeyFactory
             case self::INTERACTIVE:
                 return [
                     SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE,
                 ];
             case self::MODERATE:
                 return [
                     SODIUM_CRYPTO_PWHASH_OPSLIMIT_MODERATE,
-                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_MODERATE
+                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_MODERATE,
                 ];
             case self::SENSITIVE:
                 return [
                     SODIUM_CRYPTO_PWHASH_OPSLIMIT_SENSITIVE,
-                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_SENSITIVE
+                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_SENSITIVE,
                 ];
             default:
                 throw new InvalidType('Invalid security level for Argon2i.');
