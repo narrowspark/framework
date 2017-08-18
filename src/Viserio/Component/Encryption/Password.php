@@ -4,6 +4,7 @@ namespace Viserio\Component\Encryption;
 
 use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
 use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
+use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
 
 final class Password implements PasswordContract
 {
@@ -19,24 +20,23 @@ final class Password implements PasswordContract
     /**
      * {@inheritdoc}
      */
-    public static function hash(HiddenStringContract $password, string $level = KeyFactory::INTERACTIVE): string
+    public function hash(HiddenStringContract $password, string $level = SecurityContract::INTERACTIVE): string
     {
     }
+
 
     /**
      * {@inheritdoc}
      */
-    public function verify(HiddenStringContract $password, string $hashedValue): bool
+    public function verify(HiddenStringContract $password, string $stored): bool
     {
     }
 
+
     /**
-     * @param string $hashedValue
-     * @param string $newKey
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function shouldRecreate(string $hashedValue, string $newKey): string
+    public function needsRehash(string $stored, string $level = SecurityContract::INTERACTIVE): bool
     {
     }
 }
