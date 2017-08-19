@@ -5,20 +5,27 @@ namespace Viserio\Component\Contracts\Encryption;
 interface Encrypter
 {
     /**
-     * Encrypts a plaintext string using a secret key.
+     * Encrypt a message using the Halite encryption protocol
      *
-     * @param string $plaintext
+     * (Encrypt then MAC -- xsalsa20 then keyed-Blake2b)
+     * You don't need to worry about chosen-ciphertext attacks.
+     *
+     * @param Viserio\Component\Contracts\Encryption\HiddenString $plaintext
+     * @param string|bool  $encoding
      *
      * @return string
      */
-    public function encrypt(string $plaintext): string;
+    public function encrypt(HiddenString $plaintext, $encoding = SecurityContract::ENCODE_BASE64URLSAFE): string;
 
     /**
-     * Decrypts a ciphertext string using a secret key.
+     * Decrypt a message using the Halite encryption protocol
      *
      * @param string $ciphertext
+     * @param mixed  $encoding
      *
-     * @return string
+     * @return \Viserio\Component\Contracts\Encryption\HiddenString
+     *
+     * @throws InvalidMessage
      */
-    public function decrypt(string $ciphertext): string;
+    public function decrypt(string $ciphertext, $encoding = Security::ENCODE_BASE64URLSAFE): HiddenString;
 }

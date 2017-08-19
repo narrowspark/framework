@@ -37,7 +37,7 @@ final class HiddenString implements HiddenStringContract
         bool $disallowInline = false,
         bool $disallowSerialization = false
     ) {
-        $this->internalStringValue   = str_cpy($value);
+        $this->internalStringValue   = safe_str_cpy($value);
         $this->disallowInline        = $disallowInline;
         $this->disallowSerialization = $disallowSerialization;
     }
@@ -73,7 +73,7 @@ final class HiddenString implements HiddenStringContract
     public function __toString(): string
     {
         if (! $this->disallowInline) {
-            return str_cpy($this->internalStringValue);
+            return safe_str_cpy($this->internalStringValue);
         }
 
         return '';
@@ -102,6 +102,6 @@ final class HiddenString implements HiddenStringContract
      */
     public function getString(): string
     {
-        return str_cpy($this->internalStringValue);
+        return safe_str_cpy($this->internalStringValue);
     }
 }

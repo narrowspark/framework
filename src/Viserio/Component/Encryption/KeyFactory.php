@@ -2,40 +2,201 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-use Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException;
+use ParagonIE\ConstantTime\Hex;
+use Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException;
+use Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException;
+use Viserio\Component\Contracts\Encryption\Exception\InvalidSaltException;
 use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
+use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
+use Viserio\Component\Encryption\Traits\SecurityLevelsTrait;
 
 final class KeyFactory
 {
+    use SecurityLevelsTrait;
+
     /**
-     * Returns a 2D array [OPSLIMIT, MEMLIMIT] for the appropriate security level.
+     * Generate an an encryption key (symmetric-key cryptography)
      *
-     * @param string $level
+     * @param string &$secretKey
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException
-     *
-     * @return int[]
+     * @return \Viserio\Component\Encryption\Key
      */
-    public static function getSecurityLevels(string $level = SecurityContract::INTERACTIVE): array
+    public static function generateKey(string &$secretKey = ''): Key
     {
-        switch ($level) {
-            case self::INTERACTIVE:
-                return [
-                    SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE,
-                ];
-            case self::MODERATE:
-                return [
-                    SODIUM_CRYPTO_PWHASH_OPSLIMIT_MODERATE,
-                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_MODERATE,
-                ];
-            case self::SENSITIVE:
-                return [
-                    SODIUM_CRYPTO_PWHASH_OPSLIMIT_SENSITIVE,
-                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_SENSITIVE,
-                ];
-            default:
-                throw new InvalidTypeException('Invalid security level for Argon2i.');
+        $secretKey = \random_bytes(SODIUM_CRYPTO_STREAM_KEYBYTES);
+
+        return new Key(new HiddenString($secretKey));
+    }
+
+    /**
+     * Derive an encryption key (symmetric-key cryptography) from a password
+     * and salt.
+     *
+     * @param \Viserio\Component\Contracts\Encryption\HiddenString $password
+     * @param string                                               $salt
+     * @param string                                               $level Security level for KDF
+     *
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidSaltException
+     *
+     * @return \Viserio\Component\Encryption\Key
+     */
+    public static function deriveKey(
+        HiddenStringContract $password,
+        string $salt,
+        string $level = SecurityContract::INTERACTIVE
+    ): Key {
+        $kdfLimits = self::getSecurityLevels($level);
+
+        // VERSION 2+ (argon2)
+        if (\mb_strlen($salt, '8bit') !== SODIUM_CRYPTO_PWHASH_SALTBYTES) {
+            throw new InvalidSaltException(sprintf(
+                'Expected %s bytes, got %s.',
+                SODIUM_CRYPTO_PWHASH_SALTBYTES,
+                \mb_strlen($salt, '8bit')
+            ));
         }
+
+        $secretKey = \sodium_crypto_pwhash(
+            SODIUM_CRYPTO_STREAM_KEYBYTES,
+            $password->getString(),
+            $salt,
+            $kdfLimits[0],
+            $kdfLimits[1]
+        );
+
+        return new Key(new HiddenString($secretKey));
+    }
+
+    /**
+     * Load a symmetric encryption key from a string
+     *
+     * @param \Viserio\Component\Contracts\Encryption\HiddenString $keyData
+     *
+     * @return \Viserio\Component\Encryption\Key
+     */
+    public static function importKey(HiddenStringContract $keyData): Key
+    {
+        return new Key(
+            new HiddenString(
+                self::getKeyDataFromString(
+                    Hex::decode($keyData->getString())
+                )
+            )
+        );
+    }
+
+    /**
+     * Load a symmetric encryption key from a file
+     *
+     * @param string $filePath
+     *
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
+     *
+     * @return \Viserio\Component\Encryption\Key
+     */
+    public static function loadKey(string $filePath): Key
+    {
+        if (!\is_readable($filePath)) {
+            throw new CannotPerformOperationException(sprintf(
+                'Cannot read keyfile: %s',
+                $filePath
+            ));
+        }
+
+        return new Key(self::loadKeyFile($filePath));
+    }
+
+    /**
+     * Take a stored key string, get the derived key (after verifying the
+     * checksum).
+     *
+     * @param string $data
+     *
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException
+     *
+     * @return string
+     */
+    public static function getKeyDataFromString(string $data): string
+    {
+        $keyData  = \mb_substr(
+            $data,
+            4,
+            -SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
+            '8bit'
+        );
+        $checksum = \mb_substr(
+            $data,
+            -SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
+            SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
+            '8bit'
+        );
+        $calc    = \sodium_crypto_generichash(
+            $keyData,
+            '',
+            SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
+        );
+
+        if (!\hash_equals($calc, $checksum)) {
+            throw new InvalidKeyException('Checksum validation fail.');
+        }
+
+        \sodium_memzero($data);
+        \sodium_memzero($calc);
+        \sodium_memzero($checksum);
+
+        return $keyData;
+    }
+
+    /**
+     * Read a key from a file, verify its checksum
+     *
+     * @param string $filePath
+     *
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
+     *
+     * @return HiddenString
+     */
+    protected static function loadKeyFile(string $filePath): HiddenString
+    {
+        $fileData = \file_get_contents($filePath);
+
+        if ($fileData === false) {
+            throw new CannotPerformOperationException(sprintf(
+                'Cannot load key from file: %s.',
+                $filePath
+            ));
+        }
+
+        $data = Hex::decode($fileData);
+
+        \sodium_memzero($fileData);
+
+        return new HiddenString(self::getKeyDataFromString($data));
+    }
+
+    /**
+     * Save a key to a file.
+     *
+     * @param string $filePath
+     *
+     * @param string $keyData
+     *
+     * @return bool
+     */
+    protected static function saveKeyFile(string $filePath, string $keyData): bool
+    {
+        $saved = \file_put_contents(
+            $filePath,
+            Hex::encode(
+                $keyData .
+                \sodium_crypto_generichash(
+                    $keyData,
+                    '',
+                    SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
+                )
+            )
+        );
+
+        return $saved !== false;
     }
 }

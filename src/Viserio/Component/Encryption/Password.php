@@ -5,9 +5,12 @@ namespace Viserio\Component\Encryption;
 use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
 use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
 use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
+use Viserio\Component\Encryption\Traits\SecurityLevelsTrait;
 
 final class Password implements PasswordContract
 {
+    use SecurityLevelsTrait;
+
     /**
      * @var \Viserio\Component\Encryption\Key
      */

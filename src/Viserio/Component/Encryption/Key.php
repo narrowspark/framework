@@ -4,6 +4,8 @@ namespace Viserio\Component\Encryption;
 
 use Viserio\Component\Contracts\Encryption\Exception\CannotCloneKeyException;
 use Viserio\Component\Contracts\Encryption\Exception\CannotSerializeKeyException;
+use Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException;
+use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
 
 final class Key
 {
@@ -15,11 +17,19 @@ final class Key
     /**
      * You probably should not be using this directly.
      *
-     * @param HiddenString $keyMaterial - The actual key data
+     * @param \Viserio\Component\Contracts\Encryption\HiddenString $keyMaterial - The actual key data
+     *
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException
      */
-    public function __construct(HiddenString $keyMaterial)
+    public function __construct(HiddenStringContract $keyMaterial)
     {
-        $this->keyMaterial = str_cpy($keyMaterial->getString());
+        $key = safe_str_cpy($keyMaterial->getString());
+
+        if (mb_strlen($key, '8bit') !== SODIUM_CRYPTO_STREAM_KEYBYTES) {
+            throw new InvalidKeyException('Encryption key must be SODIUM_CRYPTO_STREAM_KEYBYTES bytes long.');
+        }
+
+        $this->keyMaterial = $key;
     }
 
     /**
@@ -65,6 +75,6 @@ final class Key
      */
     public function getRawKeyMaterial(): string
     {
-        return str_cpy($this->keyMaterial);
+        return safe_str_cpy($this->keyMaterial);
     }
 }
