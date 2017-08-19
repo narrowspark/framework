@@ -34,13 +34,13 @@ if (! \function_exists('safe_str_cpy')) {
 
 if (! \function_exists('raw_keyed_hash')) {
     /**
-     * Wrapper around \sodium_crypto_generichash()
+     * Wrapper around \sodium_crypto_generichash().
      *
      * Expects a key (binary string).
      *
      * @param string $input
      * @param string $key
-     * @param int $length
+     * @param int    $length
      *
      * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
      *
@@ -72,13 +72,13 @@ if (! \function_exists('raw_keyed_hash')) {
 
 if (! \function_exists('keyed_hash')) {
     /**
-     * Wrapper around \sodium_crypto_generichash()
+     * Wrapper around \sodium_crypto_generichash().
      *
      * Expects a key (binary string).
      *
      * @param string $input
      * @param string $key
-     * @param int $length
+     * @param int    $length
      *
      * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
      *
@@ -93,7 +93,7 @@ if (! \function_exists('keyed_hash')) {
 if (! \function_exists('hash_hkdf_blake2b')) {
     /**
      * Use a derivative of HKDF to derive multiple keys from one.
-     * http://tools.ietf.org/html/rfc5869
+     * http://tools.ietf.org/html/rfc5869.
      *
      * This is a variant from hash_hkdf() and instead uses BLAKE2b provided by
      * libsodium.
@@ -101,9 +101,9 @@ if (! \function_exists('hash_hkdf_blake2b')) {
      * Important: instead of a true HKDF (from HMAC) construct, this uses the
      * sodium_crypto_generichash() key parameter. This is *probably* okay.
      *
-     * @param string $ikm Initial Keying Material
-     * @param int    $length      How many bytes?
-     * @param string $info        What sort of key are we deriving?
+     * @param string $ikm    Initial Keying Material
+     * @param int    $length How many bytes?
+     * @param string $info   What sort of key are we deriving?
      * @param string $salt
      *
      * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
@@ -135,7 +135,7 @@ if (! \function_exists('hash_hkdf_blake2b')) {
         }
 
         // T(0) = ''
-        $t = '';
+        $t          = '';
         $last_block = '';
 
         for ($block_index = 1; \mb_strlen($t, '8bit') < $length; ++$block_index) {

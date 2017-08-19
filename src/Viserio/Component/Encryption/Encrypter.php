@@ -4,8 +4,8 @@ namespace Viserio\Component\Encryption;
 
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
-use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
 use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
+use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Traits\ChooseEncoderTrait;
 
 final class Encrypter implements EncrypterContract
@@ -87,7 +87,7 @@ final class Encrypter implements EncrypterContract
         [$encKey, $authKey] = self::splitKeys($this->secretKey, $salt);
 
         // Check the MAC first
-        if (!self::verifyMAC($auth, $salt . $nonce . $encrypted, $authKey)) {
+        if (! self::verifyMAC($auth, $salt . $nonce . $encrypted, $authKey)) {
             throw new InvalidMessageException('Invalid message authentication code.');
         }
 
@@ -111,7 +111,7 @@ final class Encrypter implements EncrypterContract
     /**
      * Split a key using HKDF-BLAKE2b.
      *
-     * @param Key $master
+     * @param Key    $master
      * @param string $salt
      *
      * @return string[]
@@ -119,6 +119,7 @@ final class Encrypter implements EncrypterContract
     public static function splitKeys(Key $master, string $salt = ''): array
     {
         $binary = $master->getRawKeyMaterial();
+
         return [
             \hash_hkdf_blake2b(
                 $binary,
@@ -131,26 +132,10 @@ final class Encrypter implements EncrypterContract
                 SODIUM_CRYPTO_AUTH_KEYBYTES,
                 SecurityContract::HKDF_AUTH,
                 $salt
-            )
+            ),
         ];
     }
 
-    /**
-     * Calculate a MAC. This is used internally.
-     *
-     * @param string $message
-     * @param string $authKey
-     *
-     * @return string
-     */
-    private static function calculateMAC(string $message, string $authKey): string
-    {
-        return \sodium_crypto_generichash(
-            $message,
-            $authKey,
-            SecurityContract::MAC_SIZE
-        );
-    }
     /**
      * Unpack a message string into an array (assigned to variables via list()).
      *
@@ -227,9 +212,9 @@ final class Encrypter implements EncrypterContract
      * Verify a Message Authentication Code (MAC) of a message, with a shared
      * key.
      *
-     * @param string $mac             Message Authentication Code
-     * @param string $message         The message to verify
-     * @param string $authKey         Authentication key (symmetric)
+     * @param string $mac     Message Authentication Code
+     * @param string $message The message to verify
+     * @param string $authKey Authentication key (symmetric)
      *
      * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException
      *
@@ -256,5 +241,22 @@ final class Encrypter implements EncrypterContract
         \sodium_memzero($calc);
 
         return $res;
+    }
+
+    /**
+     * Calculate a MAC. This is used internally.
+     *
+     * @param string $message
+     * @param string $authKey
+     *
+     * @return string
+     */
+    private static function calculateMAC(string $message, string $authKey): string
+    {
+        return \sodium_crypto_generichash(
+            $message,
+            $authKey,
+            SecurityContract::MAC_SIZE
+        );
     }
 }

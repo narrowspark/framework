@@ -16,6 +16,7 @@ trait ChooseEncoderTrait
      * Select which encoding/decoding function to use.
      *
      * @internal
+     *
      * @param string|bool $chosen
      * @param bool        $decode
      *
@@ -32,7 +33,7 @@ trait ChooseEncoderTrait
                 '::',
                 [
                     Hex::class,
-                    $decode ? 'decode' : 'encode'
+                    $decode ? 'decode' : 'encode',
                 ]
             );
         } elseif ($chosen === SecurityContract::ENCODE_BASE32) {
@@ -40,7 +41,7 @@ trait ChooseEncoderTrait
                 '::',
                 [
                     Base32::class,
-                    $decode ? 'decode' : 'encode'
+                    $decode ? 'decode' : 'encode',
                 ]
             );
         } elseif ($chosen === SecurityContract::ENCODE_BASE32HEX) {
@@ -48,7 +49,7 @@ trait ChooseEncoderTrait
                 '::',
                 [
                     Base32Hex::class,
-                    $decode ? 'decode' : 'encode'
+                    $decode ? 'decode' : 'encode',
                 ]
             );
         } elseif ($chosen === SecurityContract::ENCODE_BASE64) {
@@ -56,7 +57,7 @@ trait ChooseEncoderTrait
                 '::',
                 [
                     Base64::class,
-                    $decode ? 'decode' : 'encode'
+                    $decode ? 'decode' : 'encode',
                 ]
             );
         } elseif ($chosen === SecurityContract::ENCODE_BASE64URLSAFE) {
@@ -64,7 +65,7 @@ trait ChooseEncoderTrait
                 '::',
                 [
                     Base64UrlSafe::class,
-                    $decode ? 'decode' : 'encode'
+                    $decode ? 'decode' : 'encode',
                 ]
             );
         }

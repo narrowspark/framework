@@ -26,12 +26,12 @@ class HelperTest extends TestCase
     }
 
     /**
-     * Test our HKDF-esque construct built atop BLAKE2b
+     * Test our HKDF-esque construct built atop BLAKE2b.
      */
     public function testBlake2bKDF()
     {
-        $ikm = 'YELLOW SUBMARINE';
-        $len = 32;
+        $ikm  = 'YELLOW SUBMARINE';
+        $len  = 32;
         $info = 'TESTING HKDF-BLAKE2B';
         $salt = str_repeat("\x80", 32);
 
@@ -39,23 +39,23 @@ class HelperTest extends TestCase
 
         self::assertSame(
             $test,
-            "\x7b\xaf\xb1\x11\x1c\xda\xce\x81\xd1\xb0\x73\xff\x6e\x68\x8f\xc3".
+            "\x7b\xaf\xb1\x11\x1c\xda\xce\x81\xd1\xb0\x73\xff\x6e\x68\x8f\xc3" .
             "\x6f\xb5\xa2\xc7\xbd\x53\xf6\xf1\xb4\x2f\x80\x71\x29\x4b\xb7\xf7"
         );
         // Let's change the IKM
-        $ikmB = 'YELLOW SUBMARINF';
+        $ikmB    = 'YELLOW SUBMARINF';
         $testIkm = \hash_hkdf_blake2b($ikmB, $len, $info, $salt);
 
         self::assertNotEquals($test, $testIkm);
 
         // Let's change the info
-        $infoB = 'TESTING HKDF-BLAKE2C';
+        $infoB    = 'TESTING HKDF-BLAKE2C';
         $testInfo = \hash_hkdf_blake2b($ikm, $len, $infoB, $salt);
 
         self::assertNotEquals($test, $testInfo);
 
         // Let's change the salt
-        $saltB = str_repeat("\x80", 31) . "\x81";
+        $saltB    = str_repeat("\x80", 31) . "\x81";
         $testSalt = \hash_hkdf_blake2b($ikm, $len, $info, $saltB);
 
         self::assertNotEquals($test, $testSalt);

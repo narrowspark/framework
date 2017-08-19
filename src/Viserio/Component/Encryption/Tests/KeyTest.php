@@ -33,7 +33,7 @@ class KeyTest extends TestCase
         self::assertInstanceOf(Key::class, $key);
         self::assertSame(
             $key->getRawKeyMaterial(),
-            "\x79\x12\x36\xc1\xf0\x6b\x73\xbd\xaa\x88\x89\x80\xe3\x2c\x4b\xdb".
+            "\x79\x12\x36\xc1\xf0\x6b\x73\xbd\xaa\x88\x89\x80\xe3\x2c\x4b\xdb" .
             "\x25\xd1\xf9\x39\xe5\xf7\x13\x30\x5c\xd8\x4c\x50\x22\xcc\x96\x6e"
         );
     }
@@ -54,6 +54,7 @@ class KeyTest extends TestCase
             );
         }
     }
+
     public function testKeyLevels()
     {
         $key = KeyFactory::deriveKey(

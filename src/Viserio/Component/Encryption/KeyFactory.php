@@ -6,8 +6,8 @@ use ParagonIE\ConstantTime\Hex;
 use Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException;
 use Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException;
 use Viserio\Component\Contracts\Encryption\Exception\InvalidSaltException;
-use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
 use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
+use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Traits\SecurityLevelsTrait;
 
 final class KeyFactory
@@ -15,7 +15,7 @@ final class KeyFactory
     use SecurityLevelsTrait;
 
     /**
-     * Generate an an encryption key (symmetric-key cryptography)
+     * Generate an an encryption key (symmetric-key cryptography).
      *
      * @param string &$secretKey
      *
@@ -34,7 +34,7 @@ final class KeyFactory
      *
      * @param \Viserio\Component\Contracts\Encryption\HiddenString $password
      * @param string                                               $salt
-     * @param string                                               $level Security level for KDF
+     * @param string                                               $level    Security level for KDF
      *
      * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidSaltException
      *
@@ -68,7 +68,7 @@ final class KeyFactory
     }
 
     /**
-     * Load a symmetric encryption key from a string
+     * Load a symmetric encryption key from a string.
      *
      * @param \Viserio\Component\Contracts\Encryption\HiddenString $keyData
      *
@@ -86,7 +86,7 @@ final class KeyFactory
     }
 
     /**
-     * Load a symmetric encryption key from a file
+     * Load a symmetric encryption key from a file.
      *
      * @param string $filePath
      *
@@ -96,7 +96,7 @@ final class KeyFactory
      */
     public static function loadKey(string $filePath): Key
     {
-        if (!\is_readable($filePath)) {
+        if (! \is_readable($filePath)) {
             throw new CannotPerformOperationException(sprintf(
                 'Cannot read keyfile: %s',
                 $filePath
@@ -136,7 +136,7 @@ final class KeyFactory
             SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
         );
 
-        if (!\hash_equals($calc, $checksum)) {
+        if (! \hash_equals($calc, $checksum)) {
             throw new InvalidKeyException('Checksum validation fail.');
         }
 
@@ -148,7 +148,7 @@ final class KeyFactory
     }
 
     /**
-     * Read a key from a file, verify its checksum
+     * Read a key from a file, verify its checksum.
      *
      * @param string $filePath
      *
@@ -178,7 +178,6 @@ final class KeyFactory
      * Save a key to a file.
      *
      * @param string $filePath
-     *
      * @param string $keyData
      *
      * @return bool
