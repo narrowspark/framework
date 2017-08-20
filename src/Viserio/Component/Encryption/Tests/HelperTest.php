@@ -7,11 +7,9 @@ use PHPUnit\Framework\TestCase;
 class HelperTest extends TestCase
 {
     /**
-     * Verify that safeStrcpy() doesn't fall prey to interned strings.
-     *
-     * @covers Util::safeStrcpy()
+     * Verify that safe_str_cpy() doesn't fall prey to interned strings.
      */
-    public function testSafeStrcpy()
+    public function testSafeStrCpy()
     {
         //var_dump(get_extension_funcs('sodium'));die;
         $unique = \random_bytes(128);

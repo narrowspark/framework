@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
+use RangeException;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
@@ -11,6 +12,13 @@ use Viserio\Component\Encryption\Traits\ChooseEncoderTrait;
 final class Encrypter implements EncrypterContract
 {
     use ChooseEncoderTrait;
+
+    private $secretKey;
+
+    public function __construct(Key $secretKey)
+    {
+        $this->secretKey = $secretKey;
+    }
 
     /**
      * {@inheritdoc}
@@ -72,7 +80,7 @@ final class Encrypter implements EncrypterContract
             // We were given encoded data:
             try {
                 $ciphertext = $decoder($ciphertext);
-            } catch (\RangeException $ex) {
+            } catch (RangeException $ex) {
                 throw new InvalidMessageException('Invalid character encoding.');
             }
         }
@@ -147,7 +155,7 @@ final class Encrypter implements EncrypterContract
      *
      * @return string[]
      */
-    public static function unpackMessageForDecryption(string $ciphertext): array
+    private static function unpackMessageForDecryption(string $ciphertext): array
     {
         $length = mb_strlen($ciphertext, '8bit');
         // Fail fast on invalid messages
@@ -198,6 +206,7 @@ final class Encrypter implements EncrypterContract
         $auth = \mb_substr(
             $ciphertext,
             $length - SecurityContract::MAC_SIZE,
+            null,
             '8bit'
         );
 
@@ -220,7 +229,7 @@ final class Encrypter implements EncrypterContract
      *
      * @return bool
      */
-    protected static function verifyMAC(
+    private static function verifyMAC(
         string $mac,
         string $message,
         string $authKey

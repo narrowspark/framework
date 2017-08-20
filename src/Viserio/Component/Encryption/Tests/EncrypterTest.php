@@ -2,30 +2,73 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption\Tests;
 
-use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\Encryption\HiddenString;
+use Viserio\Component\Encryption\Key;
 
 class EncrypterTest extends TestCase
 {
-    public function testCompareEncryptedValues(): void
-    {
-        $e          = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
-        $encrypted1 = $e->encrypt('foo');
-        $encrypted2 = $e->encrypt('foo');
-        $encrypted3 = $e->encrypt('bar');
+    /**
+     * @var \Viserio\Component\Encryption\Encrypter
+     */
+    private $encrypter;
 
-        self::assertTrue($e->compare($encrypted1, $encrypted2));
-        self::assertFalse($e->compare($encrypted1, $encrypted3));
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $key = new Key(new HiddenString(\str_repeat('A', 32)));
+
+        $this->encrypter = new Encrypter($key);
     }
 
-    public function testEncryptionAndDecrypt(): void
+    public function testEncrypt()
     {
-        $e = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
+        $message = $this->encrypter->encrypt(new HiddenString('test message'));
+        $plain   = $this->encrypter->decrypt($message);
 
-        $encrypted = $e->encrypt('foo');
+        self::assertSame($plain->getString(), 'test message');
+    }
 
-        self::assertNotEquals('foo', $encrypted);
-        self::assertEquals('foo', $e->decrypt($encrypted));
+    public function testEncryptEmpty()
+    {
+        $message = $this->encrypter->encrypt(new HiddenString(''));
+        $plain   = $this->encrypter->decrypt($message);
+
+        self::assertSame($plain->getString(), '');
+    }
+
+    public function testRawEncrypt()
+    {
+        $message = $this->encrypter->encrypt(new HiddenString('test message'), true);
+        $plain   = $this->encrypter->decrypt($message, true);
+
+        self::assertSame($plain->getString(), 'test message');
+    }
+
+    public function testEncryptFail()
+    {
+        $message = $this->encrypter->encrypt(
+            new HiddenString('test message'),
+            true
+        );
+        $r = \random_int(0, \mb_strlen($message, '8bit') - 1);
+        $message[$r] = \chr(
+            \ord($message[$r])
+            ^
+            1 << random_int(0, 7)
+        );
+
+        try {
+            $plain = $this->encrypter->decrypt($message, true);
+            self::assertSame($plain, $message);
+            $this->fail(
+                'This should have thrown an InvalidMessage exception!'
+            );
+        } catch (InvalidMessageException $e) {
+            self::assertTrue($e instanceof InvalidMessageException);
+        }
     }
 }

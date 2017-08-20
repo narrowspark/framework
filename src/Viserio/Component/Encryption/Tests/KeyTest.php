@@ -8,6 +8,7 @@ use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\Key;
 use Viserio\Component\Encryption\KeyFactory;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @backupGlobals disabled
@@ -15,6 +16,8 @@ use Viserio\Component\Encryption\KeyFactory;
  */
 class KeyTest extends TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     public function testGenerateKey()
     {
         $passString = 'apple';
@@ -78,5 +81,23 @@ class KeyTest extends TestCase
             \sodium_bin2hex($key->getRawKeyMaterial()),
             'c5e8ac6e81ffd5c4f9f985e5c49e2b66d760167e739f424b346b1d747e711446'
         );
+    }
+
+    public function testSaveAndLoadKey()
+    {
+        $dirPath = self::normalizeDirectorySeparator(__DIR__ . '/Stub');
+        mkdir($dirPath);
+
+        $passString = 'apple';
+        $key        = KeyFactory::generateKey($passString);
+        $keyFile    = self::normalizeDirectorySeparator($dirPath . '/testKey');
+
+        self::assertTrue(KeyFactory::saveKeyFile($keyFile, $key->getRawKeyMaterial()));
+
+        $loadedKey = KeyFactory::loadKey($keyFile);
+
+        self::assertSame($key->getRawKeyMaterial(), $loadedKey->getRawKeyMaterial());
+
+        rmdir($dirPath);
     }
 }

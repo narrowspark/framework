@@ -68,25 +68,7 @@ final class KeyFactory
     }
 
     /**
-     * Load a symmetric encryption key from a string.
-     *
-     * @param \Viserio\Component\Contracts\Encryption\HiddenString $keyData
-     *
-     * @return \Viserio\Component\Encryption\Key
-     */
-    public static function importKey(HiddenStringContract $keyData): Key
-    {
-        return new Key(
-            new HiddenString(
-                self::getKeyDataFromString(
-                    Hex::decode($keyData->getString())
-                )
-            )
-        );
-    }
-
-    /**
-     * Load a symmetric encryption key from a file.
+     * Load a symmetric key from a file.
      *
      * @param string $filePath
      *
@@ -107,6 +89,31 @@ final class KeyFactory
     }
 
     /**
+     * Save a key to a file.
+     *
+     * @param string $filePath
+     * @param string $keyData
+     *
+     * @return bool
+     */
+    public static function saveKeyFile(string $filePath, string $keyData): bool
+    {
+        $saved = \file_put_contents(
+            $filePath,
+            Hex::encode(
+                SecurityContract::SODIUM_PHP_VERSION . $keyData .
+                \sodium_crypto_generichash(
+                    SecurityContract::SODIUM_PHP_VERSION . $keyData,
+                    '',
+                    SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
+                )
+            )
+        );
+
+        return $saved !== false;
+    }
+
+    /**
      * Take a stored key string, get the derived key (after verifying the
      * checksum).
      *
@@ -116,8 +123,9 @@ final class KeyFactory
      *
      * @return string
      */
-    public static function getKeyDataFromString(string $data): string
+    private static function getKeyDataFromString(string $data): string
     {
+        $version  = \mb_substr($data, 0, 4, '8bit');
         $keyData  = \mb_substr(
             $data,
             4,
@@ -131,7 +139,7 @@ final class KeyFactory
             '8bit'
         );
         $calc    = \sodium_crypto_generichash(
-            $keyData,
+            $version. $keyData,
             '',
             SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
         );
@@ -142,6 +150,7 @@ final class KeyFactory
 
         \sodium_memzero($data);
         \sodium_memzero($calc);
+        \sodium_memzero($version);
         \sodium_memzero($checksum);
 
         return $keyData;
@@ -172,30 +181,5 @@ final class KeyFactory
         \sodium_memzero($fileData);
 
         return new HiddenString(self::getKeyDataFromString($data));
-    }
-
-    /**
-     * Save a key to a file.
-     *
-     * @param string $filePath
-     * @param string $keyData
-     *
-     * @return bool
-     */
-    protected static function saveKeyFile(string $filePath, string $keyData): bool
-    {
-        $saved = \file_put_contents(
-            $filePath,
-            Hex::encode(
-                $keyData .
-                \sodium_crypto_generichash(
-                    $keyData,
-                    '',
-                    SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
-                )
-            )
-        );
-
-        return $saved !== false;
     }
 }
