@@ -54,7 +54,7 @@ class EncrypterTest extends TestCase
             new HiddenString('test message'),
             true
         );
-        $r = \random_int(0, \mb_strlen($message, '8bit') - 1);
+        $r           = \random_int(0, \mb_strlen($message, '8bit') - 1);
         $message[$r] = \chr(
             \ord($message[$r])
             ^

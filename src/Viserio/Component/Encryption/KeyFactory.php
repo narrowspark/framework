@@ -114,6 +114,33 @@ final class KeyFactory
     }
 
     /**
+     * Read a key from a file, verify its checksum.
+     *
+     * @param string $filePath
+     *
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
+     *
+     * @return HiddenString
+     */
+    protected static function loadKeyFile(string $filePath): HiddenString
+    {
+        $fileData = \file_get_contents($filePath);
+
+        if ($fileData === false) {
+            throw new CannotPerformOperationException(sprintf(
+                'Cannot load key from file: %s.',
+                $filePath
+            ));
+        }
+
+        $data = Hex::decode($fileData);
+
+        \sodium_memzero($fileData);
+
+        return new HiddenString(self::getKeyDataFromString($data));
+    }
+
+    /**
      * Take a stored key string, get the derived key (after verifying the
      * checksum).
      *
@@ -139,7 +166,7 @@ final class KeyFactory
             '8bit'
         );
         $calc    = \sodium_crypto_generichash(
-            $version. $keyData,
+            $version . $keyData,
             '',
             SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
         );
@@ -154,32 +181,5 @@ final class KeyFactory
         \sodium_memzero($checksum);
 
         return $keyData;
-    }
-
-    /**
-     * Read a key from a file, verify its checksum.
-     *
-     * @param string $filePath
-     *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
-     *
-     * @return HiddenString
-     */
-    protected static function loadKeyFile(string $filePath): HiddenString
-    {
-        $fileData = \file_get_contents($filePath);
-
-        if ($fileData === false) {
-            throw new CannotPerformOperationException(sprintf(
-                'Cannot load key from file: %s.',
-                $filePath
-            ));
-        }
-
-        $data = Hex::decode($fileData);
-
-        \sodium_memzero($fileData);
-
-        return new HiddenString(self::getKeyDataFromString($data));
     }
 }
