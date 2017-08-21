@@ -4,7 +4,9 @@ namespace Viserio\Component\Contracts\Encryption;
 
 interface Security
 {
-    public const SODIUM_PHP_VERSION         = "\"\x00\x70\x02\x00\"";
+    public const SODIUM_PHP_VERSION         = "\x00\x70\x02\x00";
+
+    public const VERSION_TAG_LEN            = 4;
 
     // For key derivation security levels:
     public const INTERACTIVE                = 'interactive';

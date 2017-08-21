@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
+use Error;
 use ParagonIE\ConstantTime\Hex;
 use Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException;
 use Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException;
@@ -13,6 +14,14 @@ use Viserio\Component\Encryption\Traits\SecurityLevelsTrait;
 final class KeyFactory
 {
     use SecurityLevelsTrait;
+
+    /**
+     * Don't allow this to be instantiated.
+     */
+    final private function __construct()
+    {
+        throw new Error('Do not instantiate.');
+    }
 
     /**
      * Generate an an encryption key (symmetric-key cryptography).
@@ -152,10 +161,10 @@ final class KeyFactory
      */
     private static function getKeyDataFromString(string $data): string
     {
-        $version  = \mb_substr($data, 0, 4, '8bit');
-        $keyData  = \mb_substr(
+        $version = \mb_substr($data, 0, SecurityContract::VERSION_TAG_LEN, '8bit');
+        $keyData = \mb_substr(
             $data,
-            4,
+            SecurityContract::VERSION_TAG_LEN,
             -SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
             '8bit'
         );

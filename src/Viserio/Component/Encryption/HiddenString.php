@@ -12,7 +12,7 @@ final class HiddenString implements HiddenStringContract
     private $internalStringValue;
 
     /**
-     * Create a new  HiddenString.
+     * Create a new HiddenString instance.
      *
      * @param string $value
      */

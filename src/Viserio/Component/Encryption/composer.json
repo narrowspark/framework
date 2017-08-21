@@ -21,7 +21,6 @@
         "php"                                        : "^7.2",
         "ext-mbstring"                               : "*",
         "ext-sodium"                                 : "*",
-        "ext-openssl"                                : "*",
         "paragonie/constant_time_encoding"           : "^2.0",
         "viserio/contracts"                          : "self.version"
     },

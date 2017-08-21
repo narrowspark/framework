@@ -11,6 +11,8 @@ use Viserio\Component\Encryption\Key;
 
 class EncrypterTest extends TestCase
 {
+    private const PHP_VERSION_PREFIX = 'AHACA';
+
     /**
      * @var \Viserio\Component\Encryption\Encrypter
      */
@@ -29,19 +31,18 @@ class EncrypterTest extends TestCase
     {
         $message = $this->encrypter->encrypt(new HiddenString('test message'));
 
-        //self::assertSame(\strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
         $plain = $this->encrypter->decrypt($message);
 
         self::assertSame($plain->getString(), 'test message');
-        die;
     }
 
     public function testEncryptEmpty()
     {
         $message = $this->encrypter->encrypt(new HiddenString(''));
 
-        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
         $plain   = $this->encrypter->decrypt($message);
 
@@ -52,7 +53,7 @@ class EncrypterTest extends TestCase
     {
         $message = $this->encrypter->encrypt(new HiddenString('test message'), '', true);
 
-        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
         $plain   = $this->encrypter->decrypt($message, '', true);
 
@@ -67,7 +68,7 @@ class EncrypterTest extends TestCase
             true
         );
 
-        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
         $r           = \random_int(0, \mb_strlen($message, '8bit') - 1);
         $message[$r] = \chr(
@@ -94,16 +95,16 @@ class EncrypterTest extends TestCase
             'test'
         );
 
-        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
         $plain = $this->encrypter->decrypt($message, 'test');
         self::assertSame($plain->getString(), 'test message');
 
         try {
             $this->encrypter->decrypt($message, 'wrong');
-            $this->fail('AD did not change MAC');
+            $this->fail('AD did not change MAC.');
         } catch (InvalidMessageException $ex) {
-            self::assertSame('Invalid message authentication code', $ex->getMessage());
+            self::assertSame('Invalid message authentication code.', $ex->getMessage());
         }
     }
 }

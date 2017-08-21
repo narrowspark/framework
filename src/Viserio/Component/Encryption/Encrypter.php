@@ -13,13 +13,16 @@ final class Encrypter implements EncrypterContract
 {
     use ChooseEncoderTrait;
 
-    private const VERSION_TAG_LEN = 4;
-
     /**
      * @var Key
      */
     private $secretKey;
 
+    /**
+     * Create a new Encrypter instance.
+     *
+     * @param \Viserio\Component\Encryption\Key $secretKey
+     */
     public function __construct(Key $secretKey)
     {
         $this->secretKey = $secretKey;
@@ -58,6 +61,7 @@ final class Encrypter implements EncrypterContract
             SecurityContract::SODIUM_PHP_VERSION . $salt . $nonce . $additionalData . $encrypted,
             $authKey
         );
+
         \sodium_memzero($authKey);
 
         $message = SecurityContract::SODIUM_PHP_VERSION . $salt . $nonce . $encrypted . $auth;
@@ -165,8 +169,9 @@ final class Encrypter implements EncrypterContract
     private static function unpackMessageForDecryption(string $ciphertext): array
     {
         $length = \mb_strlen($ciphertext, '8bit');
+
         // Fail fast on invalid messages
-        if ($length < self::VERSION_TAG_LEN) {
+        if ($length < SecurityContract::VERSION_TAG_LEN) {
             throw new InvalidMessageException('Message is too short.');
         }
 
@@ -174,7 +179,7 @@ final class Encrypter implements EncrypterContract
         $version = \mb_substr(
             $ciphertext,
             0,
-            self::VERSION_TAG_LEN,
+            SecurityContract::VERSION_TAG_LEN,
             '8bit'
         );
 
@@ -185,7 +190,7 @@ final class Encrypter implements EncrypterContract
         // The salt is used for key splitting (via HKDF)
         $salt = \mb_substr(
             $ciphertext,
-            self::VERSION_TAG_LEN,
+            SecurityContract::VERSION_TAG_LEN,
             SecurityContract::HKDF_SALT_LEN,
             '8bit'
         );
@@ -193,7 +198,7 @@ final class Encrypter implements EncrypterContract
         // This is the nonce (we authenticated it):
         $nonce = \mb_substr(
             $ciphertext,
-            self::VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN, // 36
+            SecurityContract::VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN, // 36
             \SODIUM_CRYPTO_STREAM_NONCEBYTES, // 24
             '8bit'
         );
@@ -202,10 +207,10 @@ final class Encrypter implements EncrypterContract
         $encrypted = \mb_substr(
             $ciphertext,
             // 60:
-            self::VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN + \SODIUM_CRYPTO_STREAM_NONCEBYTES,
+            SecurityContract::VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN + \SODIUM_CRYPTO_STREAM_NONCEBYTES,
             // $length - 124
             $length - (
-                self::VERSION_TAG_LEN +
+                SecurityContract::VERSION_TAG_LEN +
                 SecurityContract::HKDF_SALT_LEN +
                 \SODIUM_CRYPTO_STREAM_NONCEBYTES +
                 SecurityContract::MAC_SIZE
