@@ -3,8 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Encryption\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
-use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\Key;
@@ -14,7 +12,7 @@ use Viserio\Component\Encryption\Password;
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class EncrypterTest extends TestCase
+class PasswordTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Encryption\Encrypter
@@ -33,7 +31,7 @@ class EncrypterTest extends TestCase
     public function testPasswordEncryption()
     {
         $password = new Password($this->encrypter);
-        $hash = $password->hash(new HiddenString('test password'));
+        $hash     = $password->hash(new HiddenString('test password'));
 
         self::assertTrue(\is_string($hash));
         self::assertTrue($password->verify(new HiddenString('test password'), $hash));

@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
+use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
 use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
 use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Encryption\Traits\SecurityLevelsTrait;
 
 final class Password implements PasswordContract
@@ -28,21 +28,6 @@ final class Password implements PasswordContract
     public function __construct(EncrypterContract $encrypter)
     {
         $this->encrypter = $encrypter;
-    }
-
-    /**
-     * @param string $stored
-     *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException
-     *
-     * @return void
-     */
-    private static function checkHashLength(string $stored): void
-    {
-        // Base64-urlsafe encoded, so 4/3 the size of raw binary
-        if (\mb_strlen($stored, '8bit') < (SecurityContract::SHORTEST_CIPHERTEXT_LENGTH * 4 / 3)) {
-            throw new InvalidMessageException('Encrypted password hash is too short.');
-        }
     }
 
     /**
@@ -96,7 +81,7 @@ final class Password implements PasswordContract
         $hashString   = $hashInstance->getString();
 
         // Upon successful decryption, verify that we're using Argon2i
-        if (!\hash_equals(
+        if (! \hash_equals(
             \mb_substr($hashString, 0, 9, '8bit'),
             \SODIUM_CRYPTO_PWHASH_STRPREFIX
         )) {
@@ -105,22 +90,37 @@ final class Password implements PasswordContract
 
         switch ($level) {
             case SecurityContract::INTERACTIVE:
-                return !\hash_equals(
+                return ! \hash_equals(
                     '$argon2i$v=19$m=32768,t=4,p=1$',
                     \mb_substr($hashString, 0, 30, '8bit')
                 );
             case SecurityContract::MODERATE:
-                return !\hash_equals(
+                return ! \hash_equals(
                     '$argon2i$v=19$m=131072,t=6,p=1$',
                     \mb_substr($hashString, 0, 31, '8bit')
                 );
             case SecurityContract::SENSITIVE:
-                return !\hash_equals(
+                return ! \hash_equals(
                     '$argon2i$v=19$m=524288,t=8,p=1$',
                     \mb_substr($hashString, 0, 31, '8bit')
                 );
             default:
                 return true;
+        }
+    }
+
+    /**
+     * @param string $stored
+     *
+     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException
+     *
+     * @return void
+     */
+    private static function checkHashLength(string $stored): void
+    {
+        // Base64-urlsafe encoded, so 4/3 the size of raw binary
+        if (\mb_strlen($stored, '8bit') < (SecurityContract::SHORTEST_CIPHERTEXT_LENGTH * 4 / 3)) {
+            throw new InvalidMessageException('Encrypted password hash is too short.');
         }
     }
 }
