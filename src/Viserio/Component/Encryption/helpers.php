@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use ParagonIE\ConstantTime\Hex;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException;
 use Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException;
 
 if (! \function_exists('safe_str_cpy')) {

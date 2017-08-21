@@ -33,14 +33,15 @@ class EncrypterTest extends TestCase
 
         $plain = $this->encrypter->decrypt($message);
 
-        self::assertSame($plain->getString(), 'test message');die;
+        self::assertSame($plain->getString(), 'test message');
+        die;
     }
 
     public function testEncryptEmpty()
     {
         $message = $this->encrypter->encrypt(new HiddenString(''));
 
-        self::assertSame(\strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
 
         $plain   = $this->encrypter->decrypt($message);
 
@@ -51,7 +52,7 @@ class EncrypterTest extends TestCase
     {
         $message = $this->encrypter->encrypt(new HiddenString('test message'), '', true);
 
-        self::assertSame(\strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
 
         $plain   = $this->encrypter->decrypt($message, '', true);
 
@@ -66,7 +67,7 @@ class EncrypterTest extends TestCase
             true
         );
 
-        self::assertSame(\strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
 
         $r           = \random_int(0, \mb_strlen($message, '8bit') - 1);
         $message[$r] = \chr(
@@ -93,7 +94,7 @@ class EncrypterTest extends TestCase
             'test'
         );
 
-        self::assertSame(\strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
 
         $plain = $this->encrypter->decrypt($message, 'test');
         self::assertSame($plain->getString(), 'test message');

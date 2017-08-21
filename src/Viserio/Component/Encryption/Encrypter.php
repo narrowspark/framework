@@ -252,7 +252,7 @@ final class Encrypter implements EncrypterContract
         }
 
         $calc = \sodium_crypto_generichash($message, $authKey, SecurityContract::MAC_SIZE);
-        $res = \hash_equals($mac, $calc);
+        $res  = \hash_equals($mac, $calc);
 
         \sodium_memzero($calc);
 

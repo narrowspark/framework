@@ -16,7 +16,8 @@ final class HiddenString implements HiddenStringContract
      *
      * @param string $value
      */
-    public function __construct(string $value) {
+    public function __construct(string $value)
+    {
         $this->internalStringValue = safe_str_cpy($value);
     }
 
