@@ -12,34 +12,12 @@ final class HiddenString implements HiddenStringContract
     private $internalStringValue;
 
     /**
-     * Disallow the contents from being accessed via __toString()?
-     *
-     * @var bool
-     */
-    private $disallowInline;
-
-    /**
-     * Disallow the contents from being accessed via __sleep()?
-     *
-     * @var bool
-     */
-    private $disallowSerialization;
-
-    /**
-     * HiddenString constructor.
+     * Create a new  HiddenString.
      *
      * @param string $value
-     * @param bool   $disallowInline
-     * @param bool   $disallowSerialization
      */
-    public function __construct(
-        string $value,
-        bool $disallowInline = false,
-        bool $disallowSerialization = false
-    ) {
-        $this->internalStringValue   = safe_str_cpy($value);
-        $this->disallowInline        = $disallowInline;
-        $this->disallowSerialization = $disallowSerialization;
+    public function __construct(string $value) {
+        $this->internalStringValue = safe_str_cpy($value);
     }
 
     /**
@@ -65,33 +43,22 @@ final class HiddenString implements HiddenStringContract
     }
 
     /**
-     * Returns a copy of the string's internal value, which should be zeroed.
-     * Optionally, it can return an empty string.
+     * Disallow the contents from being accessed via __toString().
      *
      * @return string
      */
     public function __toString(): string
     {
-        if (! $this->disallowInline) {
-            return safe_str_cpy($this->internalStringValue);
-        }
-
         return '';
     }
 
     /**
+     * Disallow the contents from being accessed via __sleep().
+     *
      * @return array
      */
     public function __sleep(): array
     {
-        if (! $this->disallowSerialization) {
-            return [
-                'internalStringValue',
-                'disallowInline',
-                'disallowSerialization',
-            ];
-        }
-
         return [];
     }
 

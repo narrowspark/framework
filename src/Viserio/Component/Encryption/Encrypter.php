@@ -13,6 +13,11 @@ final class Encrypter implements EncrypterContract
 {
     use ChooseEncoderTrait;
 
+    private const VERSION_TAG_LEN = 4;
+
+    /**
+     * @var Key
+     */
     private $secretKey;
 
     public function __construct(Key $secretKey)
@@ -25,10 +30,11 @@ final class Encrypter implements EncrypterContract
      */
     public function encrypt(
         HiddenStringContract $plaintext,
+        string $additionalData = '',
         $encoding = SecurityContract::ENCODE_BASE64URLSAFE
     ): string {
         // Generate a nonce and HKDF salt:
-        $nonce = \random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $nonce = \random_bytes(\SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $salt  = \random_bytes(SecurityContract::HKDF_SALT_LEN);
 
         // Split our key into two keys: One for encryption, the other for
@@ -36,7 +42,7 @@ final class Encrypter implements EncrypterContract
         // likely cross-protocol attacks.
         //This uses salted HKDF to split the keys, which is why we need the
         // salt in the first place.
-        list($encKey, $authKey) = self::splitKeys($this->secretKey, $salt);
+        [$encKey, $authKey] = self::splitKeys($this->secretKey, $salt);
 
         // Encrypt our message with the encryption key:
         $encrypted = \sodium_crypto_stream_xor(
@@ -49,12 +55,12 @@ final class Encrypter implements EncrypterContract
 
         // Calculate an authentication tag:
         $auth = self::calculateMAC(
-            $salt . $nonce . $encrypted,
+            SecurityContract::SODIUM_PHP_VERSION . $salt . $nonce . $additionalData . $encrypted,
             $authKey
         );
         \sodium_memzero($authKey);
 
-        $message = $salt . $nonce . $encrypted . $auth;
+        $message = SecurityContract::SODIUM_PHP_VERSION . $salt . $nonce . $encrypted . $auth;
 
         // Wipe every superfluous piece of data from memory
         \sodium_memzero($nonce);
@@ -74,6 +80,7 @@ final class Encrypter implements EncrypterContract
      */
     public function decrypt(
         string $ciphertext,
+        string $additionalData = '',
         $encoding = SecurityContract::ENCODE_BASE64URLSAFE
     ): HiddenStringContract {
         if ($decoder = $this->chooseEncoder($encoding, true)) {
@@ -85,7 +92,7 @@ final class Encrypter implements EncrypterContract
             }
         }
 
-        [$salt, $nonce, $encrypted, $auth] = self::unpackMessageForDecryption($ciphertext);
+        [$version, $salt, $nonce, $encrypted, $auth] = self::unpackMessageForDecryption($ciphertext);
 
         // Split our key into two keys: One for encryption, the other for
         // authentication. By using separate keys, we can reasonably dismiss
@@ -95,7 +102,7 @@ final class Encrypter implements EncrypterContract
         [$encKey, $authKey] = self::splitKeys($this->secretKey, $salt);
 
         // Check the MAC first
-        if (! self::verifyMAC($auth, $salt . $nonce . $encrypted, $authKey)) {
+        if (! self::verifyMAC($auth, $version . $salt . $nonce . $additionalData . $encrypted, $authKey)) {
             throw new InvalidMessageException('Invalid message authentication code.');
         }
 
@@ -131,13 +138,13 @@ final class Encrypter implements EncrypterContract
         return [
             \hash_hkdf_blake2b(
                 $binary,
-                SODIUM_CRYPTO_SECRETBOX_KEYBYTES,
+                \SODIUM_CRYPTO_SECRETBOX_KEYBYTES,
                 SecurityContract::HKDF_SBOX,
                 $salt
             ),
             \hash_hkdf_blake2b(
                 $binary,
-                SODIUM_CRYPTO_AUTH_KEYBYTES,
+                \SODIUM_CRYPTO_AUTH_KEYBYTES,
                 SecurityContract::HKDF_AUTH,
                 $salt
             ),
@@ -157,20 +164,28 @@ final class Encrypter implements EncrypterContract
      */
     private static function unpackMessageForDecryption(string $ciphertext): array
     {
-        $length = mb_strlen($ciphertext, '8bit');
+        $length = \mb_strlen($ciphertext, '8bit');
         // Fail fast on invalid messages
-        if ($length < 4) {
-            throw new InvalidMessageException('Message is too short');
+        if ($length < self::VERSION_TAG_LEN) {
+            throw new InvalidMessageException('Message is too short.');
         }
 
+        // The first 4 bytes are reserved for the version size
+        $version = \mb_substr(
+            $ciphertext,
+            0,
+            self::VERSION_TAG_LEN,
+            '8bit'
+        );
+
         if ($length < SecurityContract::SHORTEST_CIPHERTEXT_LENGTH) {
-            throw new InvalidMessageException('Message is too short');
+            throw new InvalidMessageException('Message is too short.');
         }
 
         // The salt is used for key splitting (via HKDF)
         $salt = \mb_substr(
             $ciphertext,
-            4,
+            self::VERSION_TAG_LEN,
             SecurityContract::HKDF_SALT_LEN,
             '8bit'
         );
@@ -178,10 +193,8 @@ final class Encrypter implements EncrypterContract
         // This is the nonce (we authenticated it):
         $nonce = \mb_substr(
             $ciphertext,
-            // 36:
-            4 + SecurityContract::HKDF_SALT_LEN,
-            // 24:
-            SODIUM_CRYPTO_STREAM_NONCEBYTES,
+            self::VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN, // 36
+            \SODIUM_CRYPTO_STREAM_NONCEBYTES, // 24
             '8bit'
         );
 
@@ -189,14 +202,12 @@ final class Encrypter implements EncrypterContract
         $encrypted = \mb_substr(
             $ciphertext,
             // 60:
-            4 +
-            SecurityContract::HKDF_SALT_LEN +
-            SODIUM_CRYPTO_STREAM_NONCEBYTES,
+            self::VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN + \SODIUM_CRYPTO_STREAM_NONCEBYTES,
             // $length - 124
             $length - (
-                4 +
+                self::VERSION_TAG_LEN +
                 SecurityContract::HKDF_SALT_LEN +
-                SODIUM_CRYPTO_STREAM_NONCEBYTES +
+                \SODIUM_CRYPTO_STREAM_NONCEBYTES +
                 SecurityContract::MAC_SIZE
             ),
             '8bit'
@@ -214,7 +225,7 @@ final class Encrypter implements EncrypterContract
         \sodium_memzero($ciphertext);
 
         // Now we return the pieces in a specific order:
-        return [$salt, $nonce, $encrypted, $auth];
+        return [$version, $salt, $nonce, $encrypted, $auth];
     }
 
     /**
@@ -240,13 +251,9 @@ final class Encrypter implements EncrypterContract
             );
         }
 
-        $calc = \sodium_crypto_generichash(
-            $message,
-            $authKey,
-            SecurityContract::MAC_SIZE
-        );
-
+        $calc = \sodium_crypto_generichash($message, $authKey, SecurityContract::MAC_SIZE);
         $res = \hash_equals($mac, $calc);
+
         \sodium_memzero($calc);
 
         return $res;

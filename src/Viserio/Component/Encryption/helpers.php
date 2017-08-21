@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use ParagonIE\ConstantTime\Hex;
+use Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException;
 use Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException;
 
 if (! \function_exists('safe_str_cpy')) {
@@ -86,7 +88,7 @@ if (! \function_exists('keyed_hash')) {
      */
     function keyed_hash(string $input, string $key, int $length = SODIUM_CRYPTO_GENERICHASH_BYTES): string
     {
-        return bin2hex(raw_keyed_hash($input, $key, $length));
+        return Hex::encode(raw_keyed_hash($input, $key, $length));
     }
 }
 
