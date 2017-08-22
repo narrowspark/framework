@@ -1,6 +1,6 @@
 dist: trusty
 language: php
-sudo: false
+sudo: true
 
 env:
   global:

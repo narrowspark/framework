@@ -12,3 +12,15 @@ echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/e
 
 # Install mongodb
 pecl install -f mongodb-1.1.2
+
+# Install libsodium
+sudo apt-get install make build-essential automake
+git clone git://github.com/jedisct1/libsodium.git
+cd libsodium
+git checkout 1.0.13
+./autogen.sh
+./configure && make check
+sudo make install
+cd ..
+
+pecl install -f libsodium-2.0.4
