@@ -38,6 +38,10 @@ class XliffDumper implements DumperContract
      *          ['srcLang']                        string
      *          ['trgLang']                        string
      *          ['encoding']                       string A optional option; to set the file encoding
+     *          array['notes']                            A optional array to generate notes
+     *                  ['content']                string
+     *                  ['from']                   string optional
+     *                  ['priority']               string optional
      *          array['id']                        string
      *                  ['source']                 string
      *                  ['target']                 string
@@ -128,13 +132,12 @@ class XliffDumper implements DumperContract
             if (isset($translation['notes'])) {
                 foreach ($translation['notes'] as $note) {
                     $noteElement = $dom->createElement('note');
-                    $noteElement->appendChild($dom->createTextNode($note['content']));
+                    $noteElement->appendChild($dom->createTextNode($note['content'] ?? ''));
 
-                    if (isset($note['priority'])) {
-                        $noteElement->setAttribute('priority', $note['priority']);
-                    }
-                    if (isset($note['from'])) {
-                        $noteElement->setAttribute('from', $note['from']);
+                    unset($note['content']);
+
+                    foreach ((array) $note as $name => $value) {
+                        $noteElement->setAttribute($name, $value);
                     }
 
                     $unit->appendChild($noteElement);
@@ -186,6 +189,25 @@ class XliffDumper implements DumperContract
         foreach ($data as $id => $translation) {
             $unit = $dom->createElement('unit');
             $unit->setAttribute('id', $id);
+
+            if (isset($translation['notes'])) {
+                $notesElement = $dom->createElement('notes');
+
+                foreach ((array) $translation['notes'] as $note) {
+                    $noteElement = $dom->createElement('note');
+                    $noteElement->appendChild($dom->createTextNode($note['content'] ?? ''));
+
+                    unset($note['content']);
+
+                    foreach ((array) $note as $name => $value) {
+                        $noteElement->setAttribute($name, $value);
+                    }
+
+                    $notesElement->appendChild($noteElement);
+                }
+
+                $unit->appendChild($notesElement);
+            }
 
             $segmentElement = $unit->appendChild($dom->createElement('segment'));
             $source         = $segmentElement->appendChild($dom->createElement('source'));

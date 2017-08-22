@@ -256,6 +256,40 @@ class XliffTest extends TestCase
         );
     }
 
+    public function testFormatCatalogueWithNotesMetadata()
+    {
+        $datas = [
+            'version'  => '2.0',
+            'srcLang'  => 'en-US',
+            'trgLang'  => 'de-CH',
+            'encoding' => 'UTF-8',
+            'key1'     => [
+                'source' => 'foo',
+                'target' => 'bar',
+                'notes'  => [
+                    [
+                        'category' => 'state',
+                        'content' => 'new'
+                    ],
+                    [
+                        'category' => 'approved',
+                        'content' => 'true'
+                    ],
+                    [
+                        'category' => 'section',
+                        'content' => 'user login',
+                        'priority' => '1'
+                    ],
+                ],
+            ],
+        ];
+
+        self::assertXmlStringEqualsXmlFile(
+            __DIR__ . '/../Fixtures/xliff/xliffv2-notes-meta.xlf',
+            (new XliffDumper())->dump($datas)
+        );
+    }
+
     /**
      * @expectedException \Viserio\Component\Contracts\Parsers\Exception\DumpException
      * @expectedExceptionMessage No support implemented for dumping XLIFF version [3.0].
