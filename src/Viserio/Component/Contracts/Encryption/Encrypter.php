@@ -16,7 +16,7 @@ interface Encrypter
      *
      * @return string
      */
-    public function encrypt(HiddenString $plaintext, string $additionalData = '', $encoding = SecurityContract::ENCODE_BASE64URLSAFE): string;
+    public function encrypt(HiddenString $plaintext, string $additionalData = '', $encoding = Security::ENCODE_BASE64URLSAFE): string;
 
     /**
      * Decrypt a message using the Halite encryption protocol.
