@@ -256,7 +256,7 @@ class XliffTest extends TestCase
         );
     }
 
-    public function testFormatCatalogueWithNotesMetadata()
+    public function testDumpXliffV2WithNotes()
     {
         $datas = [
             'version'  => '2.0',
@@ -288,6 +288,38 @@ class XliffTest extends TestCase
             __DIR__ . '/../Fixtures/xliff/xliffv2-notes-meta.xlf',
             (new XliffDumper())->dump($datas)
         );
+    }
+
+    public function testParserXliffV2WithNotes()
+    {
+        $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv2-notes-meta.xlf'));
+
+        $exceptedDatas = [
+            'version'  => '2.0',
+            'srcLang'  => 'en-US',
+            'trgLang'  => 'de-CH',
+            'key1'     => [
+                'source' => 'foo',
+                'target' => 'bar',
+                'notes'  => [
+                    [
+                        'category' => 'state',
+                        'content' => 'new'
+                    ],
+                    [
+                        'category' => 'approved',
+                        'content' => 'true'
+                    ],
+                    [
+                        'category' => 'section',
+                        'priority' => '1',
+                        'content' => 'user login',
+                    ],
+                ],
+            ],
+        ];
+
+        self::assertSame($exceptedDatas, $datas);
     }
 
     /**

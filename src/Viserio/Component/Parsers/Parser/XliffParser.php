@@ -188,6 +188,21 @@ class XliffParser implements ParserContract
                     $datas[$id]['target-attributes'][$key] = (string) $value;
                 }
             }
+
+            if (isset($unit->notes)) {
+                $metadata['notes'] = [];
+
+                foreach ($unit->notes->note as $noteNode) {
+                    $note = [];
+
+                    foreach ($noteNode->attributes() as $key => $value) {
+                        $note[$key] = (string) $value;
+                    }
+
+                    $note['content'] = (string) $noteNode;
+                    $datas[$id]['notes'][] = $note;
+                }
+            }
         }
 
         return $datas;
