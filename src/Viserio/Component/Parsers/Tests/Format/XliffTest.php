@@ -269,16 +269,16 @@ class XliffTest extends TestCase
                 'notes'  => [
                     [
                         'category' => 'state',
-                        'content' => 'new'
+                        'content'  => 'new',
                     ],
                     [
                         'category' => 'approved',
-                        'content' => 'true'
+                        'content'  => 'true',
                     ],
                     [
                         'category' => 'section',
-                        'content' => 'user login',
-                        'priority' => '1'
+                        'content'  => 'user login',
+                        'priority' => '1',
                     ],
                 ],
             ],
