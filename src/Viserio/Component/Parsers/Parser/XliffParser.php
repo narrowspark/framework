@@ -199,7 +199,7 @@ class XliffParser implements ParserContract
                         $note[$key] = (string) $value;
                     }
 
-                    $note['content'] = (string) $noteNode;
+                    $note['content']       = (string) $noteNode;
                     $datas[$id]['notes'][] = $note;
                 }
             }

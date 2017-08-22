@@ -304,16 +304,16 @@ class XliffTest extends TestCase
                 'notes'  => [
                     [
                         'category' => 'state',
-                        'content' => 'new'
+                        'content'  => 'new',
                     ],
                     [
                         'category' => 'approved',
-                        'content' => 'true'
+                        'content'  => 'true',
                     ],
                     [
                         'category' => 'section',
                         'priority' => '1',
-                        'content' => 'user login',
+                        'content'  => 'user login',
                     ],
                 ],
             ],
