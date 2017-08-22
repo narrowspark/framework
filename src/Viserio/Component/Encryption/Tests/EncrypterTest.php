@@ -43,7 +43,7 @@ class EncrypterTest extends TestCase
 
         self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
-        $plain   = $this->encrypter->decrypt($message);
+        $plain = $this->encrypter->decrypt($message);
 
         self::assertSame($plain->getString(), '');
     }
@@ -54,18 +54,14 @@ class EncrypterTest extends TestCase
 
         self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
-        $plain   = $this->encrypter->decrypt($message, '', true);
+        $plain = $this->encrypter->decrypt($message, '', true);
 
         self::assertSame($plain->getString(), 'test message');
     }
 
     public function testEncryptFail()
     {
-        $message = $this->encrypter->encrypt(
-            new HiddenString('test message'),
-            '',
-            true
-        );
+        $message = $this->encrypter->encrypt(new HiddenString('test message'), '', true);
 
         self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
@@ -78,30 +74,27 @@ class EncrypterTest extends TestCase
 
         try {
             $plain = $this->encrypter->decrypt($message, '', true);
+
             self::assertSame($plain, $message);
-            $this->fail(
-                'This should have thrown an InvalidMessage exception!'
-            );
+            self::fail('This should have thrown an InvalidMessage exception!');
         } catch (InvalidMessageException $e) {
-            self::assertTrue($e instanceof InvalidMessageException);
+            self::assertInstanceOf(InvalidMessageException::class, $e);
         }
     }
 
     public function testEncryptWithAd()
     {
-        $message = $this->encrypter->encrypt(
-            new HiddenString('test message'),
-            'test'
-        );
+        $message = $this->encrypter->encrypt(new HiddenString('test message'), 'test');
 
         self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
         $plain = $this->encrypter->decrypt($message, 'test');
+
         self::assertSame($plain->getString(), 'test message');
 
         try {
             $this->encrypter->decrypt($message, 'wrong');
-            $this->fail('AD did not change MAC.');
+            self::fail('AD did not change MAC.');
         } catch (InvalidMessageException $ex) {
             self::assertSame('Invalid message authentication code.', $ex->getMessage());
         }

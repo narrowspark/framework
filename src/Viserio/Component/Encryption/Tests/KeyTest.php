@@ -86,7 +86,7 @@ class KeyTest extends TestCase
     public function testSaveAndLoadKey()
     {
         $dirPath = self::normalizeDirectorySeparator(__DIR__ . '/Stub');
-        mkdir($dirPath);
+        \mkdir($dirPath);
 
         $passString = 'apple';
         $key        = KeyFactory::generateKey($passString);
@@ -98,6 +98,7 @@ class KeyTest extends TestCase
 
         self::assertSame($key->getRawKeyMaterial(), $loadedKey->getRawKeyMaterial());
 
-        rmdir($dirPath);
+        \unlink($keyFile);
+        \rmdir($dirPath);
     }
 }
