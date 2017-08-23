@@ -83,22 +83,13 @@ class KeyTest extends TestCase
         );
     }
 
-    public function testSaveAndLoadKey()
+    public function testExportAndImportKey()
     {
-        $dirPath = self::normalizeDirectorySeparator(__DIR__ . '/Stub');
-        \mkdir($dirPath);
-
-        $passString = 'apple';
-        $key        = KeyFactory::generateKey($passString);
-        $keyFile    = self::normalizeDirectorySeparator($dirPath . '/testKey');
-
-        self::assertTrue(KeyFactory::saveKeyFile($keyFile, $key->getRawKeyMaterial()));
-
-        $loadedKey = KeyFactory::loadKey($keyFile);
+        $passString   = 'apple';
+        $key          = KeyFactory::generateKey($passString);
+        $hiddenString = KeyFactory::exportToHiddenString($key);
+        $loadedKey    = KeyFactory::importFromHiddenString($hiddenString);
 
         self::assertSame($key->getRawKeyMaterial(), $loadedKey->getRawKeyMaterial());
-
-        \unlink($keyFile);
-        \rmdir($dirPath);
     }
 }

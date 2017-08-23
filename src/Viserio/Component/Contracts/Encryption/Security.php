@@ -37,7 +37,7 @@ interface Security
 
     public const MAC_SIZE                   = \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX;
 
-    public const HKDF_SBOX                  = 'Narrowspark|EncryptionKey';
+    public const HKDF_SBOX                  = 'Narrowspark|KeyForEncryption';
 
     public const HKDF_AUTH                  = 'AuthenticationKeyFor_|Narrowspark';
 }

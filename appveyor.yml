@@ -7,11 +7,11 @@ clone_folder: C:\projects\narrowspark
 environment:
   matrix:
     - dependencies: basic
-      php_ver_target: 7.1
+      php_ver_target: 7.2
     - dependencies: lowest
-      php_ver_target: 7.1
+      php_ver_target: 7.2
     - dependencies: stable
-      php_ver_target: 7.1
+      php_ver_target: 7.2
 
 matrix:
   fast_finish: true
@@ -59,6 +59,7 @@ install:
   - IF %PHP%==1 rename php-7.1.x_memcache.dll php_memcache.dll
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ..
+  - IF %PHP%==1 echo extension=sodium.dll >> php.ini
   - IF %PHP%==1 echo zend_extension=php_opcache.dll >> php.ini
   - IF %PHP%==1 echo max_execution_time=1200 >> php.ini
   - IF %PHP%==1 echo date.timezone="America/Los_Angeles" >> php.ini

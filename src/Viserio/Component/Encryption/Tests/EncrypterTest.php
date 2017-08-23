@@ -4,6 +4,7 @@ namespace Viserio\Component\Encryption\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
+use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\Key;
@@ -52,7 +53,7 @@ class EncrypterTest extends TestCase
     {
         $message = $this->encrypter->encrypt(new HiddenString('test message'), '', true);
 
-        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
+        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
 
         $plain = $this->encrypter->decrypt($message, '', true);
 
@@ -63,7 +64,7 @@ class EncrypterTest extends TestCase
     {
         $message = $this->encrypter->encrypt(new HiddenString('test message'), '', true);
 
-        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
+        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
 
         $r           = \random_int(0, \mb_strlen($message, '8bit') - 1);
         $message[$r] = \chr(

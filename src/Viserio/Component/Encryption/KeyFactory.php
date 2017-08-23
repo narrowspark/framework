@@ -77,81 +77,46 @@ final class KeyFactory
     }
 
     /**
-     * Load a symmetric key from a file.
+     * Load, specifically, an encryption public key from a string.
      *
-     * @param string $filePath
-     *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
+     * @param \Viserio\Component\Encryption\HiddenString $keyData
      *
      * @return \Viserio\Component\Encryption\Key
      */
-    public static function loadKey(string $filePath): Key
+    public static function importFromHiddenString(HiddenString $keyData): Key
     {
-        if (! \is_readable($filePath)) {
-            throw new CannotPerformOperationException(sprintf(
-                'Cannot read keyfile: %s',
-                $filePath
-            ));
-        }
-
-        return new Key(self::loadKeyFile($filePath));
-    }
-
-    /**
-     * Save a key to a file.
-     *
-     * @param string $filePath
-     * @param string $keyData
-     *
-     * @return bool
-     */
-    public static function saveKeyFile(string $filePath, string $keyData): bool
-    {
-        $saved = \file_put_contents(
-            $filePath,
-            Hex::encode(
-                SecurityContract::SODIUM_PHP_VERSION . $keyData .
-                \sodium_crypto_generichash(
-                    SecurityContract::SODIUM_PHP_VERSION . $keyData,
-                    '',
-                    SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
+        return new Key(
+            new HiddenString(
+                self::getKeyDataFromString(
+                    Hex::decode($keyData->getString())
                 )
             )
         );
-
-        return $saved !== false;
     }
 
     /**
-     * Read a key from a file, verify its checksum.
+     * Export a cryptography key to a string (with a checksum).
      *
-     * @param string $filePath
+     * @param \Viserio\Component\Encryption\Key $key
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
-     *
-     * @return HiddenString
+     * @return \Viserio\Component\Encryption\HiddenString
      */
-    protected static function loadKeyFile(string $filePath): HiddenString
+    public static function exportToHiddenString(Key $key): HiddenString
     {
-        $fileData = \file_get_contents($filePath);
-
-        if ($fileData === false) {
-            throw new CannotPerformOperationException(sprintf(
-                'Cannot load key from file: %s.',
-                $filePath
-            ));
-        }
-
-        $data = Hex::decode($fileData);
-
-        \sodium_memzero($fileData);
-
-        return new HiddenString(self::getKeyDataFromString($data));
+        return new HiddenString(
+            Hex::encode(
+                SecurityContract::SODIUM_PHP_VERSION . $key->getRawKeyMaterial() .
+                \sodium_crypto_generichash(
+                    SecurityContract::SODIUM_PHP_VERSION . $key->getRawKeyMaterial(),
+                    '',
+                    \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
+                )
+            )
+        );
     }
 
     /**
-     * Take a stored key string, get the derived key (after verifying the
-     * checksum).
+     * Take a stored key string, get the derived key (after verifying the checksum).
      *
      * @param string $data
      *

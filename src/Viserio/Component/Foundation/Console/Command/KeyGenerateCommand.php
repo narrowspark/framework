@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console\Command;
 
-use Defuse\Crypto\Key;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Encryption\HiddenString;
+use Viserio\Component\Encryption\KeyFactory;
 
 class KeyGenerateCommand extends Command
 {
@@ -33,7 +34,7 @@ class KeyGenerateCommand extends Command
         $container = $this->getContainer();
 
         if ($this->option('show') || ! $container->has(RepositoryContract::class)) {
-            $this->line('<comment>' . $key . '</comment>');
+            $this->line('<comment>' . $key->getString() . '</comment>');
 
             return 0;
         }
@@ -41,13 +42,16 @@ class KeyGenerateCommand extends Command
         // Next, we will replace the application key in the environment file so it is
         // automatically setup for this developer. This key gets generated using
         // https://github.com/defuse/php-encryption
-        if (! $this->setKeyInEnvironmentFile($key)) {
+        if (! $this->setKeyInEnvironmentFile($key->getString())) {
             return 1;
         }
 
-        $container->get(RepositoryContract::class)->set('viserio.app.key', $key);
+        $container->get(RepositoryContract::class)->set('viserio.app.key', $key->getString());
 
-        $this->info("Application key [$key] set successfully.");
+        $this->info(sprintf(
+            "Application key [%s] set successfully.",
+            $key->getString()
+        ));
 
         return 0;
     }
@@ -82,12 +86,13 @@ class KeyGenerateCommand extends Command
     /**
      * Generate a random key for the application.
      *
-     * @return string
+     * @return \Viserio\Component\Encryption\HiddenString
      */
-    protected function generateRandomKey(): string
+    protected function generateRandomKey(): HiddenString
     {
-        $key = Key::createNewRandomKey();
+        $secret = \random_bytes(32);
+        $key    = KeyFactory::generateKey($secret);
 
-        return $key->saveToAsciiSafeString();
+        return KeyFactory::exportToHiddenString($key);
     }
 }
