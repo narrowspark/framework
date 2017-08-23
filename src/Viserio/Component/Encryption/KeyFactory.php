@@ -4,7 +4,6 @@ namespace Viserio\Component\Encryption;
 
 use Error;
 use ParagonIE\ConstantTime\Hex;
-use Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException;
 use Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException;
 use Viserio\Component\Contracts\Encryption\Exception\InvalidSaltException;
 use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;

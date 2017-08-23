@@ -6,10 +6,9 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\KeyFactory;
+use Viserio\Component\Encryption\Password;
 use Viserio\Component\Encryption\Provider\EncrypterServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
-use Viserio\Component\Encryption\Password;
 
 class EncrypterServiceProviderTest extends TestCase
 {
@@ -19,7 +18,6 @@ class EncrypterServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new EncrypterServiceProvider());
-
 
         $password = \random_bytes(32);
 

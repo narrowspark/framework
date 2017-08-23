@@ -49,7 +49,7 @@ class KeyGenerateCommand extends Command
         $container->get(RepositoryContract::class)->set('viserio.app.key', $key->getString());
 
         $this->info(sprintf(
-            "Application key [%s] set successfully.",
+            'Application key [%s] set successfully.',
             $key->getString()
         ));
 

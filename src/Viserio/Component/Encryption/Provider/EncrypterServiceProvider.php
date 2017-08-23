@@ -5,13 +5,13 @@ namespace Viserio\Component\Encryption\Provider;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\KeyFactory;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
 use Viserio\Component\Encryption\Password;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class EncrypterServiceProvider implements
     ServiceProvider,
