@@ -15,7 +15,7 @@ interface Password
      */
     public function hash(
         HiddenString $password,
-        string $level = Security::INTERACTIVE,
+        string $level = Security::KEY_INTERACTIVE,
         string $additionalData = ''
     ): string;
 
@@ -49,7 +49,7 @@ interface Password
      */
     public function needsRehash(
         string $stored,
-        string $level = Security::INTERACTIVE,
+        string $level = Security::KEY_INTERACTIVE,
         string $additionalData = ''
     ): bool;
 }

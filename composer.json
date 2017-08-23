@@ -181,7 +181,6 @@
     },
     "scripts": {
         "coverage": "sh vendor/bin/phpunit --coverage-html=\"build/logs\"",
-        "cs": "sh vendor/bin/php-cs-fixer fix",
         "phpstan": "sh ./vendor/bin/phpstan analyse -c phpstan.neon -l 6 src/Viserio"
     },
     "suggest": {

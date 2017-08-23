@@ -16,20 +16,20 @@ trait SecurityLevelsTrait
      *
      * @return int[]
      */
-    public static function getSecurityLevels(string $level = SecurityContract::INTERACTIVE): array
+    public static function getSecurityLevels(string $level = SecurityContract::KEY_INTERACTIVE): array
     {
         switch ($level) {
-            case SecurityContract::INTERACTIVE:
+            case SecurityContract::KEY_INTERACTIVE:
                 return [
                     SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
                     SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE,
                 ];
-            case SecurityContract::MODERATE:
+            case SecurityContract::KEY_MODERATE:
                 return [
                     SODIUM_CRYPTO_PWHASH_OPSLIMIT_MODERATE,
                     SODIUM_CRYPTO_PWHASH_MEMLIMIT_MODERATE,
                 ];
-            case SecurityContract::SENSITIVE:
+            case SecurityContract::KEY_SENSITIVE:
                 return [
                     SODIUM_CRYPTO_PWHASH_OPSLIMIT_SENSITIVE,
                     SODIUM_CRYPTO_PWHASH_MEMLIMIT_SENSITIVE,

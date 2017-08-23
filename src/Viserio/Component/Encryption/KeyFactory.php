@@ -52,7 +52,7 @@ final class KeyFactory
     public static function deriveKey(
         HiddenStringContract $password,
         string $salt,
-        string $level = SecurityContract::INTERACTIVE
+        string $level = SecurityContract::KEY_INTERACTIVE
     ): Key {
         $kdfLimits = self::getSecurityLevels($level);
 
@@ -161,10 +161,10 @@ final class KeyFactory
      */
     private static function getKeyDataFromString(string $data): string
     {
-        $version = \mb_substr($data, 0, SecurityContract::VERSION_TAG_LEN, '8bit');
+        $version = \mb_substr($data, 0, SecurityContract::SODIUM_PHP_VERSION_TAG_LEN, '8bit');
         $keyData = \mb_substr(
             $data,
-            SecurityContract::VERSION_TAG_LEN,
+            SecurityContract::SODIUM_PHP_VERSION_TAG_LEN,
             -SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
             '8bit'
         );

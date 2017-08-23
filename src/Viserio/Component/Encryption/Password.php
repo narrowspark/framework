@@ -35,7 +35,7 @@ final class Password implements PasswordContract
      */
     public function hash(
         HiddenStringContract $password,
-        string $level = SecurityContract::INTERACTIVE,
+        string $level = SecurityContract::KEY_INTERACTIVE,
         string $additionalData = ''
     ): string {
         $kdfLimits = self::getSecurityLevels($level);
@@ -71,7 +71,7 @@ final class Password implements PasswordContract
      */
     public function needsRehash(
         string $stored,
-        string $level = SecurityContract::INTERACTIVE,
+        string $level = SecurityContract::KEY_INTERACTIVE,
         string $additionalData = ''
     ): bool {
         self::checkHashLength($stored);
@@ -89,17 +89,17 @@ final class Password implements PasswordContract
         }
 
         switch ($level) {
-            case SecurityContract::INTERACTIVE:
+            case SecurityContract::KEY_INTERACTIVE:
                 return ! \hash_equals(
                     '$argon2i$v=19$m=32768,t=4,p=1$',
                     \mb_substr($hashString, 0, 30, '8bit')
                 );
-            case SecurityContract::MODERATE:
+            case SecurityContract::KEY_MODERATE:
                 return ! \hash_equals(
                     '$argon2i$v=19$m=131072,t=6,p=1$',
                     \mb_substr($hashString, 0, 31, '8bit')
                 );
-            case SecurityContract::SENSITIVE:
+            case SecurityContract::KEY_SENSITIVE:
                 return ! \hash_equals(
                     '$argon2i$v=19$m=524288,t=8,p=1$',
                     \mb_substr($hashString, 0, 31, '8bit')

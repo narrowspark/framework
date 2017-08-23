@@ -6,15 +6,16 @@ interface Security
 {
     public const SODIUM_PHP_VERSION         = "\x00\x70\x02\x00";
 
-    public const VERSION_TAG_LEN            = 4;
+    public const SODIUM_PHP_VERSION_TAG_LEN = 4;
 
     // For key derivation security levels:
-    public const INTERACTIVE                = 'interactive';
+    public const KEY_INTERACTIVE            = 'interactive';
 
-    public const MODERATE                   = 'moderate';
+    public const KEY_MODERATE               = 'moderate';
 
-    public const SENSITIVE                  = 'sensitive';
+    public const KEY_SENSITIVE              = 'sensitive';
 
+    // All predefined encoder
     public const ENCODE_HEX                 = 'hex';
 
     public const ENCODE_BASE32              = 'base32';
@@ -25,6 +26,7 @@ interface Security
 
     public const ENCODE_BASE64URLSAFE       = 'base64urlsafe';
 
+    // Options for encryption and decryption
     public const SHORTEST_CIPHERTEXT_LENGTH = 124;
 
     public const NONCE_BYTES                = \SODIUM_CRYPTO_STREAM_NONCEBYTES;
