@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Middleware;
 
-use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
-use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -76,8 +74,8 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
 
             try {
                 $decryptedValue = $this->encrypter->decrypt($cookie->getValue());
-                $cookies = $cookies->forget($name);
-                $cookie  = $cookie->withValue($decryptedValue->getString());
+                $cookies        = $cookies->forget($name);
+                $cookie         = $cookie->withValue($decryptedValue->getString());
 
                 $cookies = $cookies->add($cookie);
             } catch (InvalidMessageException $exception) {
