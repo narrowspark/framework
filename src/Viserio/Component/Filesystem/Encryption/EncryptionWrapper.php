@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
+use Viserio\Component\Encryption\Key;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 
 class EncryptionWrapper
@@ -9,7 +10,7 @@ class EncryptionWrapper
     /**
      * Encryption key.
      *
-     * @var \Defuse\Crypto\Key
+     * @var \Viserio\Component\Encryption\Key
      */
     protected $key;
 
@@ -24,7 +25,7 @@ class EncryptionWrapper
      * Create a new encryption wrapper instance.
      *
      * @param \Viserio\Component\Contracts\Filesystem\Filesystem $adapter
-     * @param \Defuse\Crypto\Key                                 $key
+     * @param \Viserio\Component\Encryption\Key                  $key
      */
     public function __construct(FilesystemContract $adapter, Key $key)
     {

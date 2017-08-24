@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
-use Defuse\Crypto\Key;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
 use Viserio\Component\Contracts\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Encryption\Key;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Support\AbstractConnectionManager;
@@ -30,8 +30,8 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     /**
      * Get a crypted aware connection instance.
      *
-     * @param \Defuse\Crypto\Key $key
-     * @param null|string        $name
+     * @param \Viserio\Component\Encryption\Key $key
+     * @param null|string                       $name
      *
      * @return \Viserio\Component\Filesystem\Encryption\EncryptionWrapper
      */
@@ -79,9 +79,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     public function getConnectionConfig(string $name): array
     {
-        $config = parent::getConnectionConfig($name);
+        $config    = parent::getConnectionConfig($name);
+        $cacheName = ($config['cache'] ?? false);
 
-        if (\is_string($cacheName = ($config['cache'] ?? false))) {
+        if (\is_string($cacheName)) {
             $config['cache'] = $this->getCacheConfig($cacheName);
         }
 
