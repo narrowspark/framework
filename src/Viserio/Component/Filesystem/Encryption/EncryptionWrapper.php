@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
-use Defuse\Crypto\File;
-use Defuse\Crypto\Key;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 
 class EncryptionWrapper

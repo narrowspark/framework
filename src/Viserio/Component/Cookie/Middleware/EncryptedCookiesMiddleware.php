@@ -10,10 +10,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
+use Viserio\Component\Encryption\HiddenString;
 
 class EncryptedCookiesMiddleware implements MiddlewareInterface
 {
@@ -73,11 +75,12 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
             }
 
             try {
+                $decryptedValue = $this->encrypter->decrypt($cookie->getValue());
                 $cookies = $cookies->forget($name);
-                $cookie  = $cookie->withValue($this->encrypter->decrypt($cookie->getValue()));
+                $cookie  = $cookie->withValue($decryptedValue->getString());
 
                 $cookies = $cookies->add($cookie);
-            } catch (EnvironmentIsBrokenException | WrongKeyOrModifiedCiphertextException $exception) {
+            } catch (InvalidMessageException $exception) {
                 $cookies = $cookies->add(new Cookie($name, null));
             }
         }
@@ -104,12 +107,15 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
                 continue;
             }
 
-            $cookies = $cookies->forget($name);
+            $cookies        = $cookies->forget($name);
+            $encryptedValue = $this->encrypter->encrypt(
+                new HiddenString($cookie->getValue())
+            );
 
             $cookies = $cookies->add(
                 $this->duplicate(
                     $cookie,
-                    $this->encrypter->encrypt($cookie->getValue())
+                    $encryptedValue
                 )
             );
         }
