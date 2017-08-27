@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
-use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -81,6 +80,7 @@ class SessionManagerTest extends MockeryTestCase
     {
         $pw      = \random_bytes(32);
         $key     = KeyFactory::generateKey($pw);
+
         return new SessionManager(
             new ArrayContainer([
                 RepositoryContract::class   => $config,

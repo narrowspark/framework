@@ -334,7 +334,7 @@ class StoreTest extends MockeryTestCase
     public function testSessionIdShouldBeRegeneratedIfIdRequestsLimitReached(): void
     {
         $readValue = $this->encrypter->encrypt(new HiddenString(''));
-        $session = $this->session;
+        $session   = $this->session;
         $session->setIdRequestsLimit(3);
         $session->getHandler()
             ->shouldReceive('read')
