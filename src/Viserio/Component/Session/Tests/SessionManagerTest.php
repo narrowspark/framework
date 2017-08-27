@@ -13,6 +13,7 @@ use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Session\SessionManager;
 
 class SessionManagerTest extends MockeryTestCase
@@ -78,6 +79,8 @@ class SessionManagerTest extends MockeryTestCase
 
     private function getSessionManager($config)
     {
+        $pw      = \random_bytes(32);
+        $key     = KeyFactory::generateKey($pw);
         return new SessionManager(
             new ArrayContainer([
                 RepositoryContract::class   => $config,
@@ -85,7 +88,7 @@ class SessionManagerTest extends MockeryTestCase
                 CacheManagerContract::class => new CacheManager(new ArrayContainer([
                     RepositoryContract::class   => $config,
                 ])),
-                EncrypterContract::class => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+                EncrypterContract::class => new Encrypter($key),
             ])
         );
     }

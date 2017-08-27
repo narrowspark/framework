@@ -11,6 +11,7 @@ use Viserio\Component\Contracts\Session\Exception\SessionNotStartedException;
 use Viserio\Component\Contracts\Session\Exception\SuspiciousOperationException;
 use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Support\Str;
 
@@ -162,6 +163,7 @@ class Store implements StoreContract
                 } elseif ($this->generateFingerprint() !== $this->getFingerprint()) {
                     throw new SuspiciousOperationException();
                 }
+
                 $this->started = true;
                 ++$this->requestsCount;
             }
@@ -672,10 +674,15 @@ class Store implements StoreContract
      */
     private function readFromHandler(): array
     {
-        $data = $this->handler->read($this->id);
+        $data         = $this->handler->read($this->id);
+        $hiddenString = $this->encrypter->decrypt($data);
 
-        if ($data) {
-            return \json_decode($this->encrypter->decrypt($data), true);
+        if ($decryptedValue = $hiddenString->getString()) {
+            $sessionData = \json_decode($decryptedValue, true);
+
+            \sodium_memzero($decryptedValue);
+
+            return $sessionData;
         }
 
         return [];
@@ -698,9 +705,11 @@ class Store implements StoreContract
             'fingerprint'       => $this->fingerprint,
         ];
 
+        $value =  \json_encode($values, \JSON_PRESERVE_ZERO_FRACTION);
+
         $this->handler->write(
             $this->id,
-            $this->encrypter->encrypt(\json_encode($values, \JSON_PRESERVE_ZERO_FRACTION))
+            $this->encrypter->encrypt(new HiddenString($value))
         );
     }
 

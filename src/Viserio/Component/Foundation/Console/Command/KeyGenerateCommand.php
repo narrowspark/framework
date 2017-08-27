@@ -40,8 +40,7 @@ class KeyGenerateCommand extends Command
         }
 
         // Next, we will replace the application key in the environment file so it is
-        // automatically setup for this developer. This key gets generated using
-        // https://github.com/defuse/php-encryption
+        // automatically setup for this developer. This key gets generated using sodium.
         if (! $this->setKeyInEnvironmentFile($key->getString())) {
             return 1;
         }

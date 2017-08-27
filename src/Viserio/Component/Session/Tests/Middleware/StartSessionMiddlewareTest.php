@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
-use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -12,6 +11,7 @@ use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -70,11 +70,14 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                     'secure'          => false,
                 ],
             ]);
+
+        $pw      = \random_bytes(32);
+        $key     = KeyFactory::generateKey($pw);
         $manager = new SessionManager(
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-                EncrypterContract::class  => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+                EncrypterContract::class  => new Encrypter($key),
             ])
         );
 
