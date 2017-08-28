@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests\Encryption;
 
-use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Encryption\KeyFactory;
@@ -30,7 +29,7 @@ class EncryptionWrapperTest extends TestCase
         $this->root = __DIR__ . '/stubs';
 
         $connector = new LocalConnector();
-        $password = \random_bytes(32);
+        $password  = \random_bytes(32);
 
         $this->adapter = new EncryptionWrapper(
             new FilesystemAdapter(

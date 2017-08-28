@@ -404,8 +404,8 @@ class FilesystemManagerTest extends MockeryTestCase
     public function testGetCryptedConnection(): void
     {
         $password = \random_bytes(32);
-        $key    = KeyFactory::generateKey($password);
-        $config = $this->mock(RepositoryContract::class);
+        $key      = KeyFactory::generateKey($password);
+        $config   = $this->mock(RepositoryContract::class);
         $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
