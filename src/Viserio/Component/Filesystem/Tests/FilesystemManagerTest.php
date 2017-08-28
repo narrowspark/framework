@@ -10,6 +10,7 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\Cache\Manager as CacheManager;
 use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
@@ -402,7 +403,8 @@ class FilesystemManagerTest extends MockeryTestCase
 
     public function testGetCryptedConnection(): void
     {
-        $key    = Key::createNewRandomKey();
+        $password = \random_bytes(32);
+        $key    = KeyFactory::generateKey($password);
         $config = $this->mock(RepositoryContract::class);
         $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
