@@ -13,7 +13,7 @@ trait BytesFormatTrait
      * Warning: it is important to maintain the exact order of letters in this literal,
      * as it is used to convert string with units to bytes
      */
-    private $memoryUnits = 'BKMGTPE';
+    private static $memoryUnits = 'BKMGTPE';
 
     /**
      * Convert a number string to bytes.
@@ -25,7 +25,7 @@ trait BytesFormatTrait
      *
      * @return int limit in bytes or -1 if it's unlimited
      */
-    protected function convertToBytes(string $number): int
+    protected static function convertToBytes(string $number): int
     {
         if (! preg_match('/^(.*\d)\h*(\D)$/', $number, $matches)) {
             throw new InvalidArgumentException("Number format '{$number}' is not recognized.");
@@ -33,12 +33,12 @@ trait BytesFormatTrait
 
         $unitSymbol = mb_strtoupper($matches[2]);
 
-        if (false === mb_strpos($this->memoryUnits, $unitSymbol)) {
+        if (false === mb_strpos(self::$memoryUnits, $unitSymbol)) {
             throw new InvalidArgumentException("The number '{$number}' has an unrecognized unit: '{$unitSymbol}'.");
         }
 
         $result  = self::convertToNumber($matches[1]);
-        $pow     = $unitSymbol ? mb_strpos($this->memoryUnits, $unitSymbol) : 0;
+        $pow     = $unitSymbol ? mb_strpos(self::$memoryUnits, $unitSymbol) : 0;
         $is32Bit = PHP_INT_SIZE == 4;
 
         if ($is32Bit && $pow >= 4) {

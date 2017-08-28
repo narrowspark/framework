@@ -15,7 +15,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
     {
         $this->data = [
             'memory'       => 0,
-            'memory_limit' => $this->convertToBytes(\ini_get('memory_limit')),
+            'memory_limit' => self::convertToBytes(\ini_get('memory_limit')),
         ];
     }
 

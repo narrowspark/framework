@@ -48,9 +48,8 @@ trait NormalizePathAndDirectorySeparatorTrait
         }
 
         $normalized = \preg_replace('#\\\{2,}#', '\\', \trim($normalized, '\\'));
-        $normalized = \preg_replace('#/{2,}#', '/', \trim($normalized, '/'));
 
-        return $normalized;
+        return \preg_replace('#/{2,}#', '/', \trim($normalized, '/'));
     }
 
     /**
