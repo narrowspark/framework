@@ -9,13 +9,6 @@ use Viserio\Component\Support\Str;
 
 class StrExtensionTest extends MockeryTestCase
 {
-    protected function assertPreConditions()
-    {
-        parent::assertPreConditions();
-
-        $this->allowMockingNonExistentMethods(true);
-    }
-
     private static $customFilters = [
         'camel_case',
         'snake_case',
@@ -94,6 +87,13 @@ class StrExtensionTest extends MockeryTestCase
 
             \call_user_func($filter->getCallable(), 'foo_bar');
         }
+    }
+
+    protected function assertPreConditions()
+    {
+        parent::assertPreConditions();
+
+        $this->allowMockingNonExistentMethods(true);
     }
 
     protected function getString()

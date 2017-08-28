@@ -43,7 +43,7 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
             new StrExtension(),
             new ConfigExtension($this->getConfigMock()),
             new TranslatorExtension($this->getTranslatorMock()),
-            new DumpExtension()
+            new DumpExtension(),
         ];
     }
 
