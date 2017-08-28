@@ -104,14 +104,6 @@ class DumpExtension extends AbstractExtension
             $dumper->dump($this->cloner->cloneVar($value));
         }
 
-        \rewind($dump);
-
-        $content = \stream_get_contents($dump);
-
-        if (is_bool($content)) {
-            return '';
-        }
-
-        return $content;
+        return stream_get_contents($dump, -1, 0);
     }
 }
