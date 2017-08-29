@@ -39,15 +39,18 @@ class ProfilerMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-        $server    = $request->getServerParams();
-        $startTime = $server['REQUEST_TIME_FLOAT'] ?? \microtime(true);
+        if ($this->profiler !== null) {
+            $server    = $request->getServerParams();
+            $startTime = $server['REQUEST_TIME_FLOAT'] ?? \microtime(true);
+        }
 
         $response = $delegate->process($request);
-        $response = $response->withHeader('X-Response-Time', \sprintf('%2.3fms', (\microtime(true) - $startTime) * 1000));
 
         if ($this->profiler === null) {
             return $response;
         }
+
+        $response = $response->withHeader('X-Response-Time', \sprintf('%2.3fms', (\microtime(true) - $startTime) * 1000));
 
         // Modify the response to add the Profiler
         return $this->profiler->modifyResponse($request, $response);

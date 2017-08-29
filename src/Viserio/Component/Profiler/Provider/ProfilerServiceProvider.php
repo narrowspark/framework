@@ -14,6 +14,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
@@ -21,6 +22,7 @@ use Viserio\Component\Profiler\DataCollector\MemoryDataCollector;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\DataCollector\TimeDataCollector;
 use Viserio\Component\Profiler\Profiler;
+use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
 
 class ProfilerServiceProvider implements
     ServiceProvider,
@@ -42,6 +44,7 @@ class ProfilerServiceProvider implements
             Profiler::class         => function (ContainerInterface $container) {
                 return $container->get(ProfilerContract::class);
             },
+            EventManagerContract::class => [self::class, 'extendEventManager'],
         ];
     }
 
@@ -79,6 +82,31 @@ class ProfilerServiceProvider implements
             'path'           => null,
             'collectors'     => [],
         ];
+    }
+
+    /**
+     * Register profiler asset controllers.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     * @param null|callable                     $getPrevious
+     *
+     * @return \Viserio\Component\Contracts\Events\EventManager
+     */
+    public static function extendEventManager(ContainerInterface $container, ?callable $getPrevious = null): EventManagerContract
+    {
+        $eventManager = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+
+        if ($eventManager !== null) {
+            $profiler = $container->get(ProfilerContract::class);
+
+            $eventManager->attach(KernelTerminateEvent::class, function () use ($profiler) {
+                foreach ($profiler->getCollectors() as $collector) {
+                    // clear collector
+                }
+            });
+        }
+
+        return $eventManager;
     }
 
     public static function createProfiler(ContainerInterface $container): ProfilerContract
