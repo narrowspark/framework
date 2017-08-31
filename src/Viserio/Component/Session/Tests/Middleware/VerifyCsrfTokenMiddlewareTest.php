@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Cake\Chronos\Chronos;
-use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
