@@ -45,7 +45,7 @@ class ReadOnlyFile implements FileStream
     private $statistics = [];
 
     /**
-     * ReadOnlyFile constructor
+     * ReadOnlyFile constructor.
      *
      * @param string|resource                        $file
      * @param null|\Viserio\Component\Encryption\Key $key
@@ -58,7 +58,7 @@ class ReadOnlyFile implements FileStream
         if (is_string($file) && is_file($file)) {
             $fp = \fopen($file, 'rb');
 
-            if (!\is_resource($fp)) {
+            if (! \is_resource($fp)) {
                 throw new FileAccessDeniedException('Could not open file for reading.');
             }
 
@@ -73,7 +73,7 @@ class ReadOnlyFile implements FileStream
             throw new UnexpectedValueException('Invalid stream provided; must be a filename or stream resource.');
         }
 
-        $this->hashKey = !empty($key)
+        $this->hashKey = ! empty($key)
             ? $key->getRawKeyMaterial()
             : '';
 
@@ -98,7 +98,6 @@ class ReadOnlyFile implements FileStream
      */
     public function getSize(): int
     {
-
     }
 
     /**
@@ -106,7 +105,6 @@ class ReadOnlyFile implements FileStream
      */
     public function write(string $buf, int $num = null): int
     {
-
     }
 
     /**
@@ -114,7 +112,6 @@ class ReadOnlyFile implements FileStream
      */
     public function read($length): string
     {
-
     }
 
     /**
@@ -122,7 +119,6 @@ class ReadOnlyFile implements FileStream
      */
     public function tell(): int
     {
-
     }
 
     /**
@@ -130,7 +126,7 @@ class ReadOnlyFile implements FileStream
      */
     public function getRemainingBytes(): int
     {
-        return (PHP_INT_MAX & ($this->statistics['size'] - $this->position));
+        return PHP_INT_MAX & ($this->statistics['size'] - $this->position);
     }
 
     /**

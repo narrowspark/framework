@@ -35,14 +35,14 @@ interface FileStream
      * Read from a stream; prevent partial reads.
      *
      * @param int $length Read up to $length bytes from the object and return
-     *     them. Fewer than $length bytes may be returned if underlying stream
-     *     call returns fewer bytes.
+     *                    them. Fewer than $length bytes may be returned if underlying stream
+     *                    call returns fewer bytes.
      *
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException
      * @throws \Viserio\Component\Contracts\Filesystem\Exception\OutOfBoundsException
      *
      * @return string Returns the data read from the stream, or an empty string
-     *     if no bytes are available.
+     *                if no bytes are available.
      */
     public function read(int $length): string;
 

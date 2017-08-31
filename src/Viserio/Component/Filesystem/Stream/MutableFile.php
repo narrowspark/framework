@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Stream;
 
 use UnexpectedValueException;
-use Viserio\Component\Contracts\Filesystem\Exception\OutOfBoundsException;
 use Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException;
+use Viserio\Component\Contracts\Filesystem\Exception\OutOfBoundsException;
 use Viserio\Component\Contracts\Filesystem\Exception\RuntimeException;
 use Viserio\Component\Contracts\Filesystem\FileStream;
 
@@ -57,7 +57,7 @@ class MutableFile implements FileStream
         if (is_string($file) && is_file($file)) {
             $fp = \fopen($file, 'wb');
 
-            if (!\is_resource($fp)) {
+            if (! \is_resource($fp)) {
                 throw new FileAccessDeniedException('Could not open file for reading.');
             }
 
@@ -135,7 +135,7 @@ class MutableFile implements FileStream
             }
 
             $string           = \mb_substr($string, $written, null, '8bit');
-            $this->position  += $written;
+            $this->position += $written;
             $this->statistics = \fstat($this->stream);
 
             $remaining -= $written;
@@ -159,7 +159,7 @@ class MutableFile implements FileStream
             throw new OutOfBoundsException('Out-of-bounds read.');
         }
 
-        $buf = '';
+        $buf       = '';
         $remaining = $length;
 
         do {
@@ -170,7 +170,7 @@ class MutableFile implements FileStream
             /** @var string $read */
             $read = \fread($this->stream, $remaining);
 
-            if (!\is_string($read)) {
+            if (! \is_string($read)) {
                 throw new FileAccessDeniedException('Could not read from the file.');
             }
 
@@ -199,14 +199,14 @@ class MutableFile implements FileStream
     public function getRemainingBytes(): int
     {
         $stat = \fstat($this->stream);
-        $pos = \ftell($this->stream);
+        $pos  = \ftell($this->stream);
 
-        return (PHP_INT_MAX & ($stat['size'] - $pos));
+        return PHP_INT_MAX & ($stat['size'] - $pos);
     }
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function seek(int $offset): void
     {
         $this->position = $offset;

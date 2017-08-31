@@ -12,11 +12,10 @@ class File
      *
      * @throws InvalidType
      *
-     * @return int                    Number of bytes written
+     * @return int Number of bytes written
      */
     public function encrypt($input, $output)
     {
-
     }
 
     /**
@@ -27,9 +26,9 @@ class File
      *
      * @throws InvalidType
      *
-     * @return bool                   TRUE if successful
+     * @return bool TRUE if successful
      */
-    public function decrypt($input, $output): bool {
-
+    public function decrypt($input, $output): bool
+    {
     }
 }
