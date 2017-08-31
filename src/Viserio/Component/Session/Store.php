@@ -675,6 +675,11 @@ class Store implements StoreContract
     private function readFromHandler(): array
     {
         $data         = $this->handler->read($this->id);
+
+        if ($data === '') {
+            return [];
+        }
+
         $hiddenString = $this->encrypter->decrypt($data);
 
         if ($decryptedValue = $hiddenString->getString()) {

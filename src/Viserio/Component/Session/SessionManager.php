@@ -48,6 +48,18 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     }
 
     /**
+     * Get the encrypter instance.
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Viserio\Component\Contracts\Encryption\Encrypter
+     */
+    public function getEncrypter(): EncrypterContract
+    {
+        return $this->encrypter;
+    }
+
+    /**
      * Create an instance of the file session driver.
      *
      * @param array $config
@@ -225,7 +237,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
         return new Store(
             $this->resolvedOptions['cookie'],
             $handler,
-            $this->getEncrypter()
+            $this->encrypter
         );
     }
 

@@ -25,10 +25,19 @@ class StartSessionMiddlewareTest extends MockeryTestCase
      */
     private $files;
 
+    /**
+     * @var \Viserio\Component\Encryption\Key
+     */
+    private $key;
+
     public function setUp(): void
     {
         parent::setUp();
 
+        $pw  = \random_bytes(32);
+        $key = KeyFactory::generateKey($pw);
+
+        $this->key   = $key;
         $this->files = new Filesystem();
 
         $this->files->createDirectory(__DIR__ . '/stubs');
@@ -71,13 +80,11 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                 ],
             ]);
 
-        $pw      = \random_bytes(32);
-        $key     = KeyFactory::generateKey($pw);
         $manager = new SessionManager(
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-                EncrypterContract::class  => new Encrypter($key),
+                EncrypterContract::class  => new Encrypter($this->key),
             ])
         );
 
@@ -130,7 +137,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
                 JarContract::class        => $jar,
-                EncrypterContract::class  => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+                EncrypterContract::class  => new Encrypter($this->key),
             ])
         );
 

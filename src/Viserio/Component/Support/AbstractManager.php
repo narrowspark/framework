@@ -175,7 +175,9 @@ abstract class AbstractManager implements
 
         if (isset($this->extensions[$config['name']])) {
             return $this->callCustomCreator($config['name'], $config);
-        } elseif (\method_exists($this, $method)) {
+        }
+
+        if (\method_exists($this, $method)) {
             return $this->$method($config);
         }
 

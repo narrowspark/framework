@@ -37,14 +37,15 @@ class ProfilerServiceProviderTest extends MockeryTestCase
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->register(new HttpFactoryServiceProvider());
-        $container->register(new RoutingServiceProvider());
         $container->register(new EventsServiceProvider());
+        $container->register(new RoutingServiceProvider());
         $container->register(new ProfilerServiceProvider());
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
         $router  = $container->get(RouterContract::class);
         $routes  = $router->getRoutes()->getRoutes();
+
         $action1 = $routes[0]->getAction();
         $action2 = $routes[1]->getAction();
 

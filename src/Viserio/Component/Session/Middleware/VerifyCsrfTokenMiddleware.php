@@ -92,7 +92,8 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('X-CSRF-TOKEN');
 
         if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
-            $token = $this->manager->getEncrypter()->decrypt($header);
+            $hiddenString = $this->manager->getEncrypter()->decrypt($header);
+            $token        = $hiddenString->getString();
         }
 
         if (! \is_string($sessionToken) || ! \is_string($token)) {

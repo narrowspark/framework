@@ -15,7 +15,7 @@ use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as Requ
 use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contracts\Routing\Router as RouterContract;
 use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
+use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
@@ -90,17 +90,15 @@ class ProfilerServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return \Viserio\Component\Contracts\Events\EventManager
+     * @return null|\Viserio\Component\Contracts\Events\EventManager
      */
-    public static function extendEventManager(ContainerInterface $container, ?callable $getPrevious = null): EventManagerContract
+    public static function extendEventManager(ContainerInterface $container, ?callable $getPrevious = null): ?EventManagerContract
     {
         $eventManager = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($eventManager !== null) {
-            $profiler = $container->get(ProfilerContract::class);
-
-            $eventManager->attach(KernelTerminateEvent::class, function () use ($profiler) {
-                foreach ($profiler->getCollectors() as $collector) {
+            $eventManager->attach(TerminableContract::TERMINATE, function () use ($container) {
+                foreach ($container->get(ProfilerContract::class)->getCollectors() as $collector) {
                     // clear collector
                 }
             });
