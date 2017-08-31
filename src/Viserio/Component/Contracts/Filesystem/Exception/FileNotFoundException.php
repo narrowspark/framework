@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contracts\Filesystem\Exception;
 
-use Exception as BaseExceptio;
+use Exception as BaseException;
 
-class FileNotFoundException extends BaseExceptio implements Exception
+class FileNotFoundException extends BaseException implements Exception
 {
 }

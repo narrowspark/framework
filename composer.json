@@ -69,7 +69,7 @@
         "symfony/filesystem"                  : "~3.3",
         "symfony/process"                     : "~3.3",
         "swiftmailer/swiftmailer"             : "^6.0",
-        "queue-interop/queue-interop"         : "^0.5",
+        "queue-interop/queue-interop"         : "~0.6",
         "vlucas/phpdotenv"                    : "^2.3"
     },
     "replace": {
