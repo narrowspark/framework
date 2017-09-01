@@ -103,7 +103,7 @@ class ExtensionGuesserTest extends TestCase
         }
     }
 
-    protected function createMockGuesser($path, $mimeType)
+    private function createMockGuesser($path, $mimeType)
     {
         return function ($givenPath) use ($path, $mimeType) {
             self::assertSame($givenPath, $path);

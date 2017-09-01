@@ -47,11 +47,11 @@ class ReadOnlyFile implements FileStream
     /**
      * ReadOnlyFile constructor.
      *
-     * @param string|resource                        $file
+     * @param string|resource $file
      * @param null|\Viserio\Component\Encryption\Key $key
      *
-     * @throws CryptoException\InvalidType
-     * @throws CryptoException\FileAccessDenied
+     * @throws \UnexpectedValueException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException
      */
     public function __construct($file, Key $key = null)
     {
@@ -73,11 +73,8 @@ class ReadOnlyFile implements FileStream
             throw new UnexpectedValueException('Invalid stream provided; must be a filename or stream resource.');
         }
 
-        $this->hashKey = ! empty($key)
-            ? $key->getRawKeyMaterial()
-            : '';
-
-        $this->hash = $this->getHash();
+        $this->hashKey = $key !== null ? $key->getRawKeyMaterial() : '';
+        $this->hash    = $this->getHash();
     }
 
     /**
@@ -98,6 +95,7 @@ class ReadOnlyFile implements FileStream
      */
     public function getSize(): int
     {
+        return $this->statistics['size'];
     }
 
     /**

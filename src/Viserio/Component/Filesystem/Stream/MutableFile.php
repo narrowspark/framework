@@ -51,6 +51,7 @@ class MutableFile implements FileStream
      * @param string|resource $file
      *
      * @throws \UnexpectedValueException
+     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException
      */
     public function __construct($file)
     {
