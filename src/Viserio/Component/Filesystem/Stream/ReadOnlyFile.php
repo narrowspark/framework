@@ -47,7 +47,7 @@ class ReadOnlyFile implements FileStream
     /**
      * ReadOnlyFile constructor.
      *
-     * @param string|resource $file
+     * @param string|resource                        $file
      * @param null|\Viserio\Component\Encryption\Key $key
      *
      * @throws \UnexpectedValueException
