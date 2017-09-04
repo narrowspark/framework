@@ -13,6 +13,13 @@ use Viserio\Component\Encryption\Key;
 class ReadOnlyFile implements FileStream
 {
     /**
+     * PHP's fread() buffer is set to 8192 by default.
+     *
+     * @var int
+     */
+    public const CHUNK = 8192;
+
+    /**
      * The underlying stream resource.
      *
      * @var resource
