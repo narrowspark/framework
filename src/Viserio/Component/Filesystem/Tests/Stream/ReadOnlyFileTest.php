@@ -30,7 +30,6 @@ class ReadOnlyFileTest extends TestCase
         \fclose($fp);
     }
 
-
     public function testGetHashWithKey()
     {
         $filename = \tempnam('/tmp', 'x');
@@ -69,7 +68,7 @@ class ReadOnlyFileTest extends TestCase
     }
 
     /**
-     * Test for Time-of-check Time-of-use (TOCTOU) attacks (race conditions)
+     * Test for Time-of-check Time-of-use (TOCTOU) attacks (race conditions).
      *
      * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileModifiedException
      * @expectedExceptionMessage Read-only file has been modified since it was opened for reading.

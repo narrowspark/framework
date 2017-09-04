@@ -2,9 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
-use Viserio\Component\Filesystem\Stream\MutableFile;
-use Viserio\Component\Filesystem\Stream\ReadOnlyFile;
-
 class File
 {
     /**

@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Stream;
 
-use Viserio\Component\Contracts\Filesystem\Exception\RuntimeException;
 use UnexpectedValueException;
 use Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException;
 use Viserio\Component\Contracts\Filesystem\Exception\FileModifiedException;
 use Viserio\Component\Contracts\Filesystem\Exception\OutOfBoundsException;
+use Viserio\Component\Contracts\Filesystem\Exception\RuntimeException;
 use Viserio\Component\Contracts\Filesystem\FileStream;
 use Viserio\Component\Encryption\Key;
 
@@ -155,7 +155,7 @@ class ReadOnlyFile implements FileStream
             throw new OutOfBoundsException('Out-of-bounds read.');
         }
 
-        $buf = '';
+        $buf       = '';
         $remaining = $length;
 
         if (! $this->skipTest) {
@@ -170,14 +170,14 @@ class ReadOnlyFile implements FileStream
             /** @var string $read */
             $read = \fread($this->stream, $remaining);
 
-            if (!\is_string($read)) {
+            if (! \is_string($read)) {
                 throw new FileAccessDeniedException('Could not read from the file.');
             }
 
-            $buf            .= $read;
+            $buf .= $read;
             $readSize        = \mb_strlen($read, '8bit');
             $this->position += $readSize;
-            $remaining      -= $readSize;
+            $remaining -= $readSize;
         } while ($remaining > 0);
 
         return $buf;
