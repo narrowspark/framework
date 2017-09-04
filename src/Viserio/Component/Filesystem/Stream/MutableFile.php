@@ -18,13 +18,6 @@ class MutableFile implements FileStream
     private $stream;
 
     /**
-     * The size of the stream.
-     *
-     * @var int
-     */
-    private $size;
-
-    /**
      * The actual position.
      *
      * @var int
@@ -152,7 +145,9 @@ class MutableFile implements FileStream
     {
         if ($length < 0) {
             throw new OutOfBoundsException('Length parameter cannot be negative');
-        } elseif ($length === 0) {
+        }
+
+        if ($length === 0) {
             return '';
         }
 
