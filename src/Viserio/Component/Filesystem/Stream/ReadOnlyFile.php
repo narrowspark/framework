@@ -95,6 +95,16 @@ class ReadOnlyFile implements FileStream
     }
 
     /**
+     * Closes the stream when the destructed.
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->close();
+    }
+
+    /**
      * Get the calculated BLAKE2b hash of this file.
      *
      * @return string
@@ -140,7 +150,7 @@ class ReadOnlyFile implements FileStream
     /**
      * {@inheritdoc}
      */
-    public function write(string $buf, int $num = null): int
+    public function write(string $string, int $num = null): int
     {
         throw new FileAccessDeniedException('This is a read-only file handle.');
     }

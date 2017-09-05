@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests\Stream;
 
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Stream\ReadOnlyFile;
@@ -11,9 +12,22 @@ class ReadOnlyFileTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
+    /**
+     * @var \org\bovigo\vfs\vfsStream
+     */
+    private $root;
+
+    /**
+     * Setup the environment.
+     */
+    public function setUp(): void
+    {
+        $this->root = vfsStream::setup();
+    }
+
     public function testGetHashWithEmptyKey()
     {
-        $filename = \tempnam('/tmp', 'x');
+        $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 
         \file_put_contents($filename, \random_bytes(65537));
 
@@ -32,7 +46,7 @@ class ReadOnlyFileTest extends TestCase
 
     public function testGetHashWithKey()
     {
-        $filename = \tempnam('/tmp', 'x');
+        $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 
         \file_put_contents($filename, \random_bytes(65537));
 
@@ -54,7 +68,7 @@ class ReadOnlyFileTest extends TestCase
 
     public function testRead()
     {
-        $filename = \tempnam('/tmp', 'x');
+        $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 
         $buf = \random_bytes(65537);
 
@@ -62,6 +76,7 @@ class ReadOnlyFileTest extends TestCase
 
         $fStream = new ReadOnlyFile($filename);
 
+        self::assertSame(65537, $fStream->getSize());
         self::assertSame($fStream->read(65537), $buf);
 
         $fStream->seek(0);
@@ -75,7 +90,7 @@ class ReadOnlyFileTest extends TestCase
      */
     public function testReadToThrowException()
     {
-        $filename = \tempnam('/tmp', 'x');
+        $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 
         $buf = \random_bytes(65537);
 
@@ -93,5 +108,18 @@ class ReadOnlyFileTest extends TestCase
         );
 
         $fStream->read(65537);
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException
+     * @expectedExceptionMessage This is a read-only file handle.
+     */
+    public function testWrite()
+    {
+        $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
+
+        $fStream = new ReadOnlyFile($filename);
+
+        $fStream->write('');
     }
 }
