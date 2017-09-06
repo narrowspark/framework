@@ -4,7 +4,6 @@ namespace Viserio\Component\Filesystem\Tests\Stream;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Stream\MutableFile;
 
 class MutableFileTest extends TestCase
