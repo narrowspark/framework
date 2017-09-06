@@ -6,12 +6,9 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Stream\ReadOnlyFile;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ReadOnlyFileTest extends TestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \org\bovigo\vfs\vfsStream
      */
@@ -80,6 +77,23 @@ class ReadOnlyFileTest extends TestCase
         self::assertSame($fStream->read(65537), $buf);
 
         $fStream->seek(0);
+    }
+
+    public function testGetRemainingBytes()
+    {
+        $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
+
+        $buf = \random_bytes(65537);
+
+        \file_put_contents($filename, $buf);
+
+        $fStream = new ReadOnlyFile($filename);
+
+        self::assertSame(65537, $fStream->getRemainingBytes());
+
+        $fStream->read(32768);
+
+        self::assertSame(32769, $fStream->getRemainingBytes());
     }
 
     /**
