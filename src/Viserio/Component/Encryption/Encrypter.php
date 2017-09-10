@@ -171,7 +171,7 @@ final class Encrypter implements EncrypterContract
         $length = \mb_strlen($ciphertext, '8bit');
 
         // Fail fast on invalid messages
-        if ($length < SecurityContract::SODIUM_PHP_VERSION_TAG_LEN) {
+        if ($length < SecurityContract::VERSION_TAG_LEN) {
             throw new InvalidMessageException('Message is too short.');
         }
 
@@ -179,7 +179,7 @@ final class Encrypter implements EncrypterContract
         $version = \mb_substr(
             $ciphertext,
             0,
-            SecurityContract::SODIUM_PHP_VERSION_TAG_LEN,
+            SecurityContract::VERSION_TAG_LEN,
             '8bit'
         );
 
@@ -190,7 +190,7 @@ final class Encrypter implements EncrypterContract
         // The salt is used for key splitting (via HKDF)
         $salt = \mb_substr(
             $ciphertext,
-            SecurityContract::SODIUM_PHP_VERSION_TAG_LEN,
+            SecurityContract::VERSION_TAG_LEN,
             SecurityContract::HKDF_SALT_LEN,
             '8bit'
         );
@@ -198,7 +198,7 @@ final class Encrypter implements EncrypterContract
         // This is the nonce (we authenticated it):
         $nonce = \mb_substr(
             $ciphertext,
-            SecurityContract::SODIUM_PHP_VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN, // 36
+            SecurityContract::VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN, // 36
             \SODIUM_CRYPTO_STREAM_NONCEBYTES, // 24
             '8bit'
         );
@@ -207,13 +207,13 @@ final class Encrypter implements EncrypterContract
         $encrypted = \mb_substr(
             $ciphertext,
             // 60:
-            SecurityContract::SODIUM_PHP_VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN + \SODIUM_CRYPTO_STREAM_NONCEBYTES,
+            SecurityContract::VERSION_TAG_LEN + SecurityContract::HKDF_SALT_LEN + \SODIUM_CRYPTO_STREAM_NONCEBYTES,
             // $length - 124
             $length - (
-                SecurityContract::SODIUM_PHP_VERSION_TAG_LEN +
+                SecurityContract::VERSION_TAG_LEN +
                 SecurityContract::HKDF_SALT_LEN +
                 \SODIUM_CRYPTO_STREAM_NONCEBYTES +
-                SecurityContract::MAC_SIZE
+                SecurityContract::MAC_BYTE_SIZE
             ),
             '8bit'
         );
@@ -221,7 +221,7 @@ final class Encrypter implements EncrypterContract
         // $auth is the last 32 bytes
         $auth = \mb_substr(
             $ciphertext,
-            $length - SecurityContract::MAC_SIZE,
+            $length - SecurityContract::MAC_BYTE_SIZE,
             null,
             '8bit'
         );
@@ -250,13 +250,13 @@ final class Encrypter implements EncrypterContract
         string $message,
         string $authKey
     ): bool {
-        if (\mb_strlen($mac, '8bit') !== SecurityContract::MAC_SIZE) {
+        if (\mb_strlen($mac, '8bit') !== SecurityContract::MAC_BYTE_SIZE) {
             throw new InvalidMessageException(
                 'Argument 1: Message Authentication Code is not the correct length; is it encoded?'
             );
         }
 
-        $calc = \sodium_crypto_generichash($message, $authKey, SecurityContract::MAC_SIZE);
+        $calc = \sodium_crypto_generichash($message, $authKey, SecurityContract::MAC_BYTE_SIZE);
         $res  = \hash_equals($mac, $calc);
 
         \sodium_memzero($calc);
@@ -277,7 +277,7 @@ final class Encrypter implements EncrypterContract
         return \sodium_crypto_generichash(
             $message,
             $authKey,
-            SecurityContract::MAC_SIZE
+            SecurityContract::MAC_BYTE_SIZE
         );
     }
 }

@@ -106,7 +106,7 @@ final class KeyFactory
             Hex::encode(
                 SecurityContract::SODIUM_PHP_VERSION . $key->getRawKeyMaterial() .
                 \sodium_crypto_generichash(
-                    SecurityContract::SODIUM_PHP_VERSION . $key->getRawKeyMaterial(),
+                    SecurityContract::SODIUM_PHP_KEY_VERSION . $key->getRawKeyMaterial(),
                     '',
                     \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
                 )
@@ -125,10 +125,10 @@ final class KeyFactory
      */
     private static function getKeyDataFromString(string $data): string
     {
-        $version = \mb_substr($data, 0, SecurityContract::SODIUM_PHP_VERSION_TAG_LEN, '8bit');
+        $version = \mb_substr($data, 0, SecurityContract::VERSION_TAG_LEN, '8bit');
         $keyData = \mb_substr(
             $data,
-            SecurityContract::SODIUM_PHP_VERSION_TAG_LEN,
+            SecurityContract::VERSION_TAG_LEN,
             -SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
             '8bit'
         );
