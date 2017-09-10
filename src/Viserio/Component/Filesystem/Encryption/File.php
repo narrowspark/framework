@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
 use Viserio\Component\Contract\Encryption\Security as SecurityContract;
-use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
 use Viserio\Component\Contract\Filesystem\Exception\FileModifiedException;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\Key;
@@ -41,7 +40,7 @@ final class File
             (\is_resource($output) || \is_string($output))
         ) {
             $readOnly = new ReadOnlyFile($input);
-            $mutable = new MutableFile($output);
+            $mutable  = new MutableFile($output);
 
             $data = $this->encryptData(
                 $readOnly,
@@ -108,14 +107,15 @@ final class File
             $mac
         );
     }
+
     /**
      * Stream encryption.
      *
-     * @param ReadOnlyFile $input
-     * @param MutableFile $output
+     * @param ReadOnlyFile                      $input
+     * @param MutableFile                       $output
      * @param \Viserio\Component\Encryption\Key $encKey
-     * @param string $nonce
-     * @param string $mac (hash context for BLAKE2b)
+     * @param string                            $nonce
+     * @param string                            $mac    (hash context for BLAKE2b)
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      * @throws InvalidKey
@@ -156,7 +156,7 @@ final class File
         \sodium_memzero($nonce);
 
         // Check that our input file was not modified before we MAC it
-        if (!\hash_equals($input->getHash(), $initHash)) {
+        if (! \hash_equals($input->getHash(), $initHash)) {
             throw new FileModifiedException(
                 'Read-only file has been modified since it was opened for reading.'
             );
@@ -173,12 +173,12 @@ final class File
     /**
      * Split a key using HKDF-BLAKE2b.
      *
-     * @param Key $master
+     * @param Key    $master
      * @param string $salt
      *
      * @return array<int, string>
      */
-    protected static function splitKeys(Key $master, string $salt): array
+    private static function splitKeys(Key $master, string $salt): array
     {
         $binary = $master->getRawKeyMaterial();
 
@@ -194,7 +194,7 @@ final class File
                 \SODIUM_CRYPTO_AUTH_KEYBYTES,
                 SecurityContract::HKDF_AUTH,
                 $salt
-            )
+            ),
         ];
     }
 }

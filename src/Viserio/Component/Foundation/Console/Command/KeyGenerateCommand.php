@@ -76,7 +76,7 @@ class KeyGenerateCommand extends Command
         }
 
         $env        = $container->get(ConsoleKernelContract::class)->getEnvironmentFilePath();
-        $currentKey = $currentKey instanceof Key ? $this->encodeKey($currentKey) :'';
+        $currentKey = $currentKey instanceof Key ? $this->encodeKey($currentKey) : '';
 
         \file_put_contents($env, \str_replace(
             'APP_KEY=' . $currentKey,
