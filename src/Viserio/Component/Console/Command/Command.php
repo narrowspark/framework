@@ -341,9 +341,9 @@ abstract class Command extends BaseCommand
     /**
      * Format input to textual table.
      *
-     * @param array                                                $headers
+     * @param array                                               $headers
      * @param array|\Viserio\Component\Contract\Support\Arrayable $rows
-     * @param string                                               $style
+     * @param string                                              $style
      *
      * @return void
      */

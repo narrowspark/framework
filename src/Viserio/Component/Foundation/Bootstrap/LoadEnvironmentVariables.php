@@ -60,7 +60,7 @@ class LoadEnvironmentVariables implements BootstrapContract
      * Load a custom environment file.
      *
      * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
-     * @param string                                         $file
+     * @param string                                        $file
      *
      * @return void
      */

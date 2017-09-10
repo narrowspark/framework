@@ -14,9 +14,9 @@ class MessageLoggedEvent implements EventContract
      * Create a new message event.
      *
      * @param \Viserio\Component\Contract\Log\Log $log
-     * @param string                               $level
-     * @param null|bool|float|int|mixed|string     $message
-     * @param array                                $context
+     * @param string                              $level
+     * @param null|bool|float|int|mixed|string    $message
+     * @param array                               $context
      */
     public function __construct(LogContract $log, $level, $message, array $context = [])
     {

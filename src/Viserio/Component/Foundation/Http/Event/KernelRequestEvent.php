@@ -15,7 +15,7 @@ class KernelRequestEvent implements EventContract
      * Create a new kernel request event.
      *
      * @param \Viserio\Component\Contract\Foundation\HttpKernel $kernel
-     * @param \Psr\Http\Message\ServerRequestInterface           $serverRequest
+     * @param \Psr\Http\Message\ServerRequestInterface          $serverRequest
      */
     public function __construct(HttpKernelContract $kernel, ServerRequestInterface $serverRequest)
     {

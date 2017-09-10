@@ -65,7 +65,7 @@ interface Dispatcher
      * Match and dispatch a route matching the given http method and uri.
      *
      * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface             $request
+     * @param \Psr\Http\Message\ServerRequestInterface            $request
      *
      * @throws \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
      * @throws \Narrowspark\HttpStatus\Exception\NotFoundException

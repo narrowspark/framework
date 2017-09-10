@@ -77,7 +77,7 @@ class Dumper
      * Add a new dumper.
      *
      * @param \Viserio\Component\Contract\Parsers\Dumper $dumper
-     * @param string                                      $extension
+     * @param string                                     $extension
      *
      * @return void
      */

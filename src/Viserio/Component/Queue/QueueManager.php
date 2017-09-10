@@ -30,7 +30,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create a new queue manager instance.
      *
-     * @param \Psr\Container\ContainerInterface                 $container
+     * @param \Psr\Container\ContainerInterface                $container
      * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function __construct(

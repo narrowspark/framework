@@ -32,7 +32,7 @@ class ViewDisplayer implements DisplayerContract
      * Create a new html displayer instance.
      *
      * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
-     * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
+     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
      * @param \Viserio\Component\Contract\View\Factory            $factory
      */
     public function __construct(

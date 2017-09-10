@@ -113,8 +113,8 @@ class Store implements StoreContract
     /**
      * Create a new session instance.
      *
-     * @param string                                            $name
-     * @param \SessionHandlerInterface                          $handler
+     * @param string                                           $name
+     * @param \SessionHandlerInterface                         $handler
      * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)

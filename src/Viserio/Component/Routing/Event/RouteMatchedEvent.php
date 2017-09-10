@@ -17,7 +17,7 @@ class RouteMatchedEvent implements EventContract
      *
      * @param \Viserio\Component\Contract\Routing\Dispatcher $dispatcher
      * @param \Viserio\Component\Contract\Routing\Route      $route
-     * @param \Psr\Http\Message\ServerRequestInterface        $request
+     * @param \Psr\Http\Message\ServerRequestInterface       $request
      */
     public function __construct(DispatcherContract $dispatcher, RouteContract $route, ServerRequestInterface $request)
     {

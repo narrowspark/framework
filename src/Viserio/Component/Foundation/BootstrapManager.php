@@ -120,10 +120,10 @@ final class BootstrapManager
     /**
      * Calls callbacks on bootstrap name.
      *
-     * @param array                                          $bootCallbacks
+     * @param array                                         $bootCallbacks
      * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
-     * @param string                                         $type
-     * @param string                                         $bootstrap
+     * @param string                                        $type
+     * @param string                                        $bootstrap
      *
      * @return void
      */

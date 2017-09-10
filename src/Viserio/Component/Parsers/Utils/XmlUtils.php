@@ -60,7 +60,7 @@ final class XmlUtils
      * @param string               $file             An XML file path
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
-     * @throws \InvalidArgumentException                                            When loading of XML file returns error
+     * @throws \InvalidArgumentException                                           When loading of XML file returns error
      * @throws \Viserio\Component\Contract\Parsers\Exception\FileNotFoundException
      *
      * @return \DOMDocument

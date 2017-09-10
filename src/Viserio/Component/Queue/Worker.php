@@ -50,7 +50,7 @@ class Worker implements WorkerContract
     /**
      * Create a new queue worker.
      *
-     * @param \Viserio\Component\Queue\QueueManager                     $manager
+     * @param \Viserio\Component\Queue\QueueManager                    $manager
      * @param null|\Viserio\Component\Contract\Queue\FailedJobProvider $failed
      * @param null|\Viserio\Component\Contract\Events\EventManager     $events
      */
@@ -236,7 +236,7 @@ class Worker implements WorkerContract
      * Get the next job from the queue connection.
      *
      * @param \Viserio\Component\Contract\Queue\QueueConnector $connection
-     * @param null|string                                       $queue
+     * @param null|string                                      $queue
      *
      * @return null|\Viserio\Component\Contract\Queue\Job
      */
@@ -299,7 +299,7 @@ class Worker implements WorkerContract
     /**
      * Log a failed job into storage.
      *
-     * @param string                                 $connection
+     * @param string                                $connection
      * @param \Viserio\Component\Contract\Queue\Job $job
      *
      * @return null|void
@@ -332,7 +332,7 @@ class Worker implements WorkerContract
     /**
      * Raise the before queue job event.
      *
-     * @param string                                 $connection
+     * @param string                                $connection
      * @param \Viserio\Component\Contract\Queue\Job $job
      */
     protected function raiseBeforeJobEvent(string $connection, JobContract $job): void
@@ -352,7 +352,7 @@ class Worker implements WorkerContract
     /**
      * Raise the after queue job event.
      *
-     * @param string                                 $connection
+     * @param string                                $connection
      * @param \Viserio\Component\Contract\Queue\Job $job
      */
     protected function raiseAfterJobEvent(string $connection, JobContract $job): void
@@ -372,10 +372,10 @@ class Worker implements WorkerContract
     /**
      * Handle an exception that occurred while the job was running.
      *
-     * @param string                                 $connection
+     * @param string                                $connection
      * @param \Viserio\Component\Contract\Queue\Job $job
-     * @param int                                    $delay
-     * @param \Throwable                             $exception
+     * @param int                                   $delay
+     * @param \Throwable                            $exception
      *
      * @throws \Throwable
      */

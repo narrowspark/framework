@@ -82,8 +82,8 @@ class UrlGenerator implements UrlGeneratorContract
      * Create a new URL Generator instance.
      *
      * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface             $request
-     * @param \Interop\Http\Factory\UriFactoryInterface            $uriFactory
+     * @param \Psr\Http\Message\ServerRequestInterface            $request
+     * @param \Interop\Http\Factory\UriFactoryInterface           $uriFactory
      */
     public function __construct(
         RouteCollectionContract $routes,
@@ -166,8 +166,8 @@ class UrlGenerator implements UrlGeneratorContract
      * Get the URL for a given route instance.
      *
      * @param \Viserio\Component\Contract\Routing\Route $route
-     * @param array                                      $parameters
-     * @param int                                        $referenceType
+     * @param array                                     $parameters
+     * @param int                                       $referenceType
      *
      * @return string
      */
@@ -205,7 +205,7 @@ class UrlGenerator implements UrlGeneratorContract
      * Prepare route patch with all parameters and encode the path.
      *
      * @param \Viserio\Component\Contract\Routing\Route $route
-     * @param array                                      $parameters
+     * @param array                                     $parameters
      *
      * @return string
      */
@@ -280,7 +280,7 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Add the port and scheme to the uri if necessary.
      *
-     * @param \Psr\Http\Message\UriInterface             $uri
+     * @param \Psr\Http\Message\UriInterface            $uri
      * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return \Psr\Http\Message\UriInterface

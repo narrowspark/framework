@@ -86,7 +86,7 @@ class Parser
      * Add a new parser.
      *
      * @param \Viserio\Component\Contract\Parsers\Parser $parser
-     * @param string                                      $extension
+     * @param string                                     $extension
      *
      * @return void
      */
@@ -101,7 +101,7 @@ class Parser
      * @param string $payload
      *
      * @throws \Viserio\Component\Contract\Parsers\Exception\ParseException
-     * @throws \RuntimeException                                             if an error occurred during reading
+     * @throws \RuntimeException                                            if an error occurred during reading
      *
      * @return array
      */

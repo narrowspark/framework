@@ -63,7 +63,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      * Create a new viserio request and response data collector.
      *
      * @param \Viserio\Component\Contract\Routing\Router $router
-     * @param string                                      $routeDirPath
+     * @param string                                     $routeDirPath
      */
     public function __construct(RouterContract $router, string $routeDirPath)
     {

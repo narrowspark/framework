@@ -38,7 +38,7 @@ class CallQueuedHandler
      * Handle the queued job.
      *
      * @param \Viserio\Component\Contract\Queue\Job $job
-     * @param array                                  $data
+     * @param array                                 $data
      */
     public function call(JobContract $job, array $data): void
     {
@@ -80,7 +80,7 @@ class CallQueuedHandler
      * Set the job instance of the given class if necessary.
      *
      * @param \Viserio\Component\Contract\Queue\Job $job
-     * @param mixed                                  $instance
+     * @param mixed                                 $instance
      *
      * @return null|array|bool|float|int|object|resource|string
      */

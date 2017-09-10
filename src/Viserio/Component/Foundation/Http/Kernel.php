@@ -192,7 +192,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * Convert request into response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface         $serverRequest
+     * @param \Psr\Http\Message\ServerRequestInterface        $serverRequest
      * @param \Viserio\Component\Contract\Events\EventManager $events
      *
      * @return \Psr\Http\Message\ResponseInterface
@@ -269,7 +269,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * Pipes the request through given middlewares and dispatch a response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface    $request
+     * @param \Psr\Http\Message\ServerRequestInterface   $request
      * @param \Viserio\Component\Contract\Routing\Router $router
      *
      * @return \Psr\Http\Message\ResponseInterface

@@ -210,7 +210,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if the $path specified is invalid
      * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException         if the upload was not successful or on any error during the move operation, or on
-     *                                                                              the second or subsequent call to the method
+     *                                                                             the second or subsequent call to the method
      */
     public function moveTo($targetPath): void
     {

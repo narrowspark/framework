@@ -377,8 +377,8 @@ class ViewFactory implements FactoryContract
      *
      * @param \Viserio\Component\Contract\View\Factory            $factory
      * @param \Viserio\Component\Contract\View\Engine             $engine
-     * @param string                                               $view
-     * @param array                                                $fileInfo
+     * @param string                                              $view
+     * @param array                                               $fileInfo
      * @param array|\Viserio\Component\Contract\Support\Arrayable $data
      *
      * @return \Viserio\Component\View\View

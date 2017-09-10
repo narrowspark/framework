@@ -38,7 +38,7 @@ class AssetController extends AbstractController
      * @param \Psr\Http\Message\ServerRequestInterface       $serverRequest
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param \Viserio\Component\Contract\Profiler\Profiler $profiler
+     * @param \Viserio\Component\Contract\Profiler\Profiler  $profiler
      */
     public function __construct(
         ServerRequestInterface $serverRequest,

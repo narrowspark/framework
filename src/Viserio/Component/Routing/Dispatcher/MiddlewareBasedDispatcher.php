@@ -94,7 +94,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
      * Run the given route within a Stack "onion" instance.
      *
      * @param \Viserio\Component\Contract\Routing\Route $route
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

@@ -195,7 +195,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Set fallback for a language.
      *
-     * @param string                                                    $lang
+     * @param string                                                   $lang
      * @param \Viserio\Component\Contract\Translation\MessageCatalogue $fallback
      *
      * @throws \RuntimeException

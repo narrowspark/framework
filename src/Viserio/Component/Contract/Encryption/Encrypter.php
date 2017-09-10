@@ -11,8 +11,8 @@ interface Encrypter
      * You don't need to worry about chosen-ciphertext attacks.
      *
      * @param \Viserio\Component\Contract\Encryption\HiddenString $plaintext
-     * @param string                                               $additionalData
-     * @param string|bool                                          $encoding
+     * @param string                                              $additionalData
+     * @param string|bool                                         $encoding
      *
      * @return string
      */

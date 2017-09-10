@@ -107,9 +107,9 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Configure the Monolog handlers for the application.
      *
-     * @param \Psr\Container\ContainerInterface    $container
+     * @param \Psr\Container\ContainerInterface   $container
      * @param \Viserio\Component\Contract\Log\Log $log
-     * @param array                                $options
+     * @param array                               $options
      *
      * @return void
      */
@@ -126,9 +126,9 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Configure the Monolog handlers for the application.
      *
-     * @param \Psr\Container\ContainerInterface    $container
+     * @param \Psr\Container\ContainerInterface   $container
      * @param \Viserio\Component\Contract\Log\Log $log
-     * @param array                                $options
+     * @param array                               $options
      *
      * @return void
      */
@@ -146,9 +146,9 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Configure the Monolog handlers for the application.
      *
-     * @param \Psr\Container\ContainerInterface    $container
+     * @param \Psr\Container\ContainerInterface   $container
      * @param \Viserio\Component\Contract\Log\Log $log
-     * @param array                                $options
+     * @param array                               $options
      *
      * @return void
      */
@@ -166,9 +166,9 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Configure the Monolog handlers for the application.
      *
-     * @param \Psr\Container\ContainerInterface    $container
+     * @param \Psr\Container\ContainerInterface   $container
      * @param \Viserio\Component\Contract\Log\Log $log
-     * @param array                                $options
+     * @param array                               $options
      *
      * @return void
      */

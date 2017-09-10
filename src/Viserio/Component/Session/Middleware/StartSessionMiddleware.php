@@ -126,7 +126,7 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Store the current URL for the request if necessary.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
      * @param \Viserio\Component\Contract\Session\Store $session
      *
      * @return \Viserio\Component\Contract\Session\Store
@@ -164,8 +164,8 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Add the session cookie to the application response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
-     * @param \Psr\Http\Message\ResponseInterface        $response
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
+     * @param \Psr\Http\Message\ResponseInterface       $response
      * @param \Viserio\Component\Contract\Session\Store $session
      *
      * @return \Psr\Http\Message\ResponseInterface

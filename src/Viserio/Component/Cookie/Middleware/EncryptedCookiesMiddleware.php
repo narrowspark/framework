@@ -125,7 +125,7 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
      * Duplicate a cookie with a new value.
      *
      * @param \Viserio\Component\Contract\Cookie\Cookie $cookie
-     * @param string                                     $value
+     * @param string                                    $value
      *
      * @return \Viserio\Component\Contract\Cookie\Cookie
      */

@@ -127,9 +127,9 @@ class SimpleDispatcher implements DispatcherContract
      * Handle dispatching of a found route.
      *
      * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface             $request
-     * @param string                                               $identifier
-     * @param array                                                $segments
+     * @param \Psr\Http\Message\ServerRequestInterface            $request
+     * @param string                                              $identifier
+     * @param array                                               $segments
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -161,7 +161,7 @@ class SimpleDispatcher implements DispatcherContract
      * Run the given route.
      *
      * @param \Viserio\Component\Contract\Routing\Route $route
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

@@ -30,7 +30,7 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Create a new translator extension.
      *
-     * @param \Viserio\Component\Contract\Translation\TranslationManager                                         $translationManager
+     * @param \Viserio\Component\Contract\Translation\TranslationManager                                          $translationManager
      * @param null|\Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor $translationNodeVisitor
      */
     public function __construct(TranslationManagerContract $translationManager, ?NodeVisitorInterface $translationNodeVisitor = null)

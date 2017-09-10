@@ -50,7 +50,7 @@ interface Profiler
      * Adds a data collector.
      *
      * @param \Viserio\Component\Contract\Profiler\DataCollector $collector
-     * @param int                                                 $priority
+     * @param int                                                $priority
      *
      * @throws \RuntimeException
      *

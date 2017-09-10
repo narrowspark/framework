@@ -61,7 +61,7 @@ final class RouteTreeBuilder
      * Adds a route to the node tree.
      *
      * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node
-     * @param \Viserio\Component\Contract\Routing\Route             $route
+     * @param \Viserio\Component\Contract\Routing\Route              $route
      * @param array                                                  $segments
      * @param int                                                    $segmentDepth
      * @param array                                                  $parameterIndexNameMap

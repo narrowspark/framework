@@ -34,7 +34,7 @@ class CookieSessionHandler implements SessionHandlerInterface
      * Create a new cookie driven handler instance.
      *
      * @param \Viserio\Component\Contract\Cookie\QueueingFactory $cookie
-     * @param int                                                 $lifetime The session lifetime in seconds
+     * @param int                                                $lifetime The session lifetime in seconds
      */
     public function __construct(JarContract $cookie, int $lifetime)
     {

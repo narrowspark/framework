@@ -104,7 +104,7 @@ class SyncQueue extends AbstractQueue
      * Raise the exception occurred queue job event.
      *
      * @param \Viserio\Component\Contract\Queue\Job $job
-     * @param \Throwable                             $exception
+     * @param \Throwable                            $exception
      */
     protected function raiseExceptionOccurredJobEvent(JobContract $job, Throwable $exception): void
     {

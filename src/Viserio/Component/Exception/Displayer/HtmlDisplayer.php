@@ -42,8 +42,8 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      * Create a new html displayer instance.
      *
      * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
-     * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
-     * @param iterable|\Psr\Container\ContainerInterface           $data
+     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
+     * @param iterable|\Psr\Container\ContainerInterface          $data
      */
     public function __construct(
         ExceptionInfoContract $info,

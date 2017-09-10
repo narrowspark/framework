@@ -25,7 +25,7 @@ final class RouteTreeNode
     /**
      * Create a new child node collection instance.
      *
-     * @param \Viserio\Component\Contract\Routing\SegmentMatcher[]                                                                        $matchers
+     * @param \Viserio\Component\Contract\Routing\SegmentMatcher[]                                                                         $matchers
      * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection|\Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $contents
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException

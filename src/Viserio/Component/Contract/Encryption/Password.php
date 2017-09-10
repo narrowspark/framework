@@ -8,8 +8,8 @@ interface Password
      * Hash then encrypt a password.
      *
      * @param \Viserio\Component\Contract\Encryption\HiddenString $password       The user's password
-     * @param string                                               $level          The security level for this password
-     * @param string                                               $additionalData Additional authenticated data
+     * @param string                                              $level          The security level for this password
+     * @param string                                              $additionalData Additional authenticated data
      *
      * @return string An encrypted hash to store
      */
@@ -23,8 +23,8 @@ interface Password
      * Decrypt then verify a password.
      *
      * @param \Viserio\Component\Contract\Encryption\HiddenString $password       The user's password
-     * @param string                                               $stored         The encrypted password hash
-     * @param string                                               $additionalData Additional authenticated data (if used to encrypt, mandatory)
+     * @param string                                              $stored         The encrypted password hash
+     * @param string                                              $additionalData Additional authenticated data (if used to encrypt, mandatory)
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidLengthException
      *
