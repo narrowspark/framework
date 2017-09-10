@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Traits;
 
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 
 trait NormalizeNameTrait
 {

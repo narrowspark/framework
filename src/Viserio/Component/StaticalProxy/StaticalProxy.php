@@ -5,8 +5,8 @@ namespace Viserio\Component\StaticalProxy;
 use Mockery;
 use Mockery\MockInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\StaticalProxy\Exception\BadMethodCallException;
-use Viserio\Component\Contracts\StaticalProxy\Exception\RuntimeException;
+use Viserio\Component\Contract\StaticalProxy\Exception\BadMethodCallException;
+use Viserio\Component\Contract\StaticalProxy\Exception\RuntimeException;
 
 class StaticalProxy
 {
@@ -28,7 +28,7 @@ class StaticalProxy
      * @param string $method
      * @param array  $args
      *
-     * @throws \Viserio\Component\Contracts\StaticalProxy\Exception\RuntimeException
+     * @throws \Viserio\Component\Contract\StaticalProxy\Exception\RuntimeException
      *
      * @return mixed
      */
@@ -66,7 +66,7 @@ class StaticalProxy
     /**
      * Retrieves the Instance Identifier that is used to retrieve the Proxy Subject from the Container.
      *
-     * @throws \Viserio\Component\Contracts\StaticalProxy\Exception\BadMethodCallException if the method has not been implemented by a subclass
+     * @throws \Viserio\Component\Contract\StaticalProxy\Exception\BadMethodCallException if the method has not been implemented by a subclass
      *
      * @return object|string
      */

@@ -4,9 +4,9 @@ namespace Viserio\Component\Pagination;
 
 use Narrowspark\Collection\Collection;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Pagination\Adapter as AdapterContract;
-use Viserio\Component\Contracts\Pagination\Presenter as PresenterContract;
-use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
+use Viserio\Component\Contract\Pagination\Adapter as AdapterContract;
+use Viserio\Component\Contract\Pagination\Presenter as PresenterContract;
+use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
 use Viserio\Component\Pagination\Presenter\Bootstrap4;
 use Viserio\Component\Pagination\Presenter\Foundation6;
 use Viserio\Component\Pagination\Presenter\SemanticUi;
@@ -45,7 +45,7 @@ class Paginator extends AbstractPaginator
     /**
      * Create a new paginator.
      *
-     * @param \Viserio\Component\Contracts\Pagination\Adapter $adapter
+     * @param \Viserio\Component\Contract\Pagination\Adapter $adapter
      * @param \Psr\Http\Message\ServerRequestInterface        $request
      */
     public function __construct(AdapterContract $adapter, ServerRequestInterface $request)
@@ -64,7 +64,7 @@ class Paginator extends AbstractPaginator
      * Add a new presenter.
      *
      * @param string                                            $key
-     * @param \Viserio\Component\Contracts\Pagination\Presenter $presenter
+     * @param \Viserio\Component\Contract\Pagination\Presenter $presenter
      *
      * @return $this
      */

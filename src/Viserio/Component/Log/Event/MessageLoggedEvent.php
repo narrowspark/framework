@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Event;
 
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Log\Log as LogContract;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Log\Log as LogContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
 class MessageLoggedEvent implements EventContract
@@ -13,7 +13,7 @@ class MessageLoggedEvent implements EventContract
     /**
      * Create a new message event.
      *
-     * @param \Viserio\Component\Contracts\Log\Log $log
+     * @param \Viserio\Component\Contract\Log\Log $log
      * @param string                               $level
      * @param null|bool|float|int|mixed|string     $message
      * @param array                                $context

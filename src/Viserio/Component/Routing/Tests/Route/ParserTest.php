@@ -10,7 +10,7 @@ use Viserio\Component\Routing\Route\Parser;
 class ParserTest extends TestCase
 {
     /**
-     * @expectedException \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      * @expectedExceptionMessage Invalid route pattern: non-root route must be prefixed with '/', 'test' given.
      */
     public function testParseThrowException(): void

@@ -5,7 +5,7 @@ namespace Viserio\Component\View\Engine;
 use Parsedown;
 use ParsedownExtra;
 use RuntimeException;
-use Viserio\Component\Contracts\View\Engine as EngineContract;
+use Viserio\Component\Contract\View\Engine as EngineContract;
 
 class MarkdownEngine implements EngineContract
 {

@@ -6,7 +6,7 @@ use Swift_Attachment;
 use Swift_Image;
 use Swift_Mime_Attachment;
 use Swift_Mime_SimpleMessage;
-use Viserio\Component\Contracts\Mail\Message as MessageContract;
+use Viserio\Component\Contract\Mail\Message as MessageContract;
 
 /**
  * @mixin \Swift_Mime_SimpleMessage

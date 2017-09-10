@@ -5,9 +5,9 @@ namespace Viserio\Component\Translation;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 
 class Translator implements TranslatorContract, LoggerAwareInterface
@@ -18,14 +18,14 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * Formatter instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageFormatter
+     * @var \Viserio\Component\Contract\Translation\MessageFormatter
      */
     protected $formatter;
 
     /**
      * The message catalogue.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageCatalogue
+     * @var \Viserio\Component\Contract\Translation\MessageCatalogue
      */
     protected $catalogue;
 
@@ -60,8 +60,8 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * Create new Translator instance.
      *
-     * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $catalogue
-     * @param \Viserio\Component\Contracts\Translation\MessageFormatter $formatter
+     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $catalogue
+     * @param \Viserio\Component\Contract\Translation\MessageFormatter $formatter
      *
      * @throws \InvalidArgumentException If a locale contains invalid characters
      */

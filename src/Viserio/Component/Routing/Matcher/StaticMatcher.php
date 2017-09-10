@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
-use Viserio\Component\Contracts\Routing\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Routing\Exception\InvalidArgumentException;
 use Viserio\Component\Support\VarExporter;
 
 class StaticMatcher extends AbstractMatcher
@@ -20,7 +20,7 @@ class StaticMatcher extends AbstractMatcher
      * @param string     $segment
      * @param null|array $parameterKeys
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
      */
     public function __construct(string $segment, array $parameterKeys = null)
     {

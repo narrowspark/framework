@@ -4,10 +4,10 @@ namespace Viserio\Component\Encryption;
 
 use Error;
 use ParagonIE\ConstantTime\Hex;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidSaltException;
-use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
-use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
+use Viserio\Component\Contract\Encryption\Exception\InvalidKeyException;
+use Viserio\Component\Contract\Encryption\Exception\InvalidSaltException;
+use Viserio\Component\Contract\Encryption\HiddenString as HiddenStringContract;
+use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Traits\SecurityLevelsTrait;
 
 final class KeyFactory
@@ -40,11 +40,11 @@ final class KeyFactory
      * Derive an encryption key (symmetric-key cryptography) from a password
      * and salt.
      *
-     * @param \Viserio\Component\Contracts\Encryption\HiddenString $password
+     * @param \Viserio\Component\Contract\Encryption\HiddenString $password
      * @param string                                               $salt
      * @param string                                               $level    Security level for KDF
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidSaltException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidSaltException
      *
      * @return \Viserio\Component\Encryption\Key
      */
@@ -119,7 +119,7 @@ final class KeyFactory
      *
      * @param string $data
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
      *
      * @return string
      */

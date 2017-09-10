@@ -5,7 +5,7 @@ namespace Viserio\Component\Bus\Provider;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Bus\Dispatcher;
-use Viserio\Component\Contracts\Bus\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Bus\Dispatcher as DispatcherContract;
 
 class BusServiceProvider implements ServiceProvider
 {
@@ -30,7 +30,7 @@ class BusServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Bus\Dispatcher
+     * @return \Viserio\Component\Contract\Bus\Dispatcher
      */
     public static function registerBusDispatcher(ContainerInterface $container): DispatcherContract
     {

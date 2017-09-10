@@ -6,10 +6,10 @@ use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
@@ -48,7 +48,7 @@ class RoutingServiceProvider implements ServiceProvider
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return \Viserio\Component\Contracts\Routing\Dispatcher
+     * @return \Viserio\Component\Contract\Routing\Dispatcher
      */
     public static function createRouteDispatcher(ContainerInterface $container, ?callable $getPrevious = null): DispatcherContract
     {
@@ -74,7 +74,7 @@ class RoutingServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Routing\Router
+     * @return \Viserio\Component\Contract\Routing\Router
      */
     public static function createRouter(ContainerInterface $container): RouterContract
     {
@@ -90,7 +90,7 @@ class RoutingServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return null|\Viserio\Component\Contracts\Routing\UrlGenerator
+     * @return null|\Viserio\Component\Contract\Routing\UrlGenerator
      */
     public static function createUrlGenerator(ContainerInterface $container): ?UrlGeneratorContract
     {

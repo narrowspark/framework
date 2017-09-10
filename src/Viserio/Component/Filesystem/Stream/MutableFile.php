@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Stream;
 
 use UnexpectedValueException;
-use Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException;
-use Viserio\Component\Contracts\Filesystem\Exception\OutOfBoundsException;
-use Viserio\Component\Contracts\Filesystem\Exception\RuntimeException;
-use Viserio\Component\Contracts\Filesystem\FileStream;
+use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
+use Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException;
+use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
+use Viserio\Component\Contract\Filesystem\FileStream;
 
 class MutableFile implements FileStream
 {
@@ -44,7 +44,7 @@ class MutableFile implements FileStream
      * @param string|resource $file
      *
      * @throws \UnexpectedValueException
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      */
     public function __construct($file)
     {

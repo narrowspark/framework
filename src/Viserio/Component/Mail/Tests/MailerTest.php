@@ -10,10 +10,10 @@ use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
 use Swift_Transport;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Mail\Message as MessageContract;
-use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
-use Viserio\Component\Contracts\View\View as ViewContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Mail\Message as MessageContract;
+use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
+use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\Mail\Mailer;
@@ -21,7 +21,7 @@ use Viserio\Component\Mail\Mailer;
 class MailerTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contracts\View\Factory|\Mockery\MockInterface
+     * @var \Viserio\Component\Contract\View\Factory|\Mockery\MockInterface
      */
     private $viewFactory;
 
@@ -303,7 +303,7 @@ class MailerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Mail\Exception\UnexpectedValueException
+     * @expectedException \Viserio\Component\Contract\Mail\Exception\UnexpectedValueException
      * @expectedExceptionMessage Invalid view.
      */
     public function testMailerToThrowExceptionOnView(): void

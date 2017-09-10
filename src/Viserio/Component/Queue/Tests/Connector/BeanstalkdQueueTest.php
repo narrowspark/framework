@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Pheanstalk\Job;
 use Pheanstalk\Pheanstalk;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connector\BeanstalkdQueue;
 use Viserio\Component\Queue\Job\BeanstalkdJob;
 

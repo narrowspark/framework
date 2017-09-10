@@ -5,11 +5,11 @@ namespace Viserio\Component\Exception\Displayer;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
-use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
+use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
+use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContract, ProvidesDefaultOptionsContract
@@ -20,7 +20,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * The exception info instance.
      *
-     * @var \Viserio\Component\Contracts\Exception\ExceptionInfo
+     * @var \Viserio\Component\Contract\Exception\ExceptionInfo
      */
     protected $info;
 
@@ -41,7 +41,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Contracts\Exception\ExceptionInfo $info
+     * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
      * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
      * @param iterable|\Psr\Container\ContainerInterface           $data
      */

@@ -5,8 +5,8 @@ namespace Viserio\Component\Queue\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use RuntimeException;
 use stdClass;
-use Viserio\Component\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
-use Viserio\Component\Contracts\Queue\Job as JobContract;
+use Viserio\Component\Contract\Queue\FailedJobProvider as FailedJobProviderContract;
+use Viserio\Component\Contract\Queue\Job as JobContract;
 use Viserio\Component\Queue\QueueManager;
 use Viserio\Component\Queue\Worker;
 

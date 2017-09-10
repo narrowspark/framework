@@ -4,9 +4,9 @@ namespace Viserio\Component\Routing\Dispatcher;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Routing\MiddlewareNameResolver;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\SortedMiddleware;
@@ -93,7 +93,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
     /**
      * Run the given route within a Stack "onion" instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      * @param \Psr\Http\Message\ServerRequestInterface   $request
      *
      * @return \Psr\Http\Message\ResponseInterface
@@ -116,7 +116,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
     /**
      * Gather the middleware for the given route.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return array
      */

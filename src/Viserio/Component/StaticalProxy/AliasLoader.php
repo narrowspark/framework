@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy;
 
 use RuntimeException;
-use Viserio\Component\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
+use Viserio\Component\Contract\StaticalProxy\AliasLoader as AliasLoaderContract;
 use Viserio\Component\StaticalProxy\Traits\ExistTrait;
 
 class AliasLoader implements AliasLoaderContract

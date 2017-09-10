@@ -5,14 +5,14 @@ namespace Viserio\Component\Session\Handler;
 use Cake\Chronos\Chronos;
 use SessionHandlerInterface;
 use Symfony\Component\Finder\Finder;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 
 class FileSessionHandler implements SessionHandlerInterface
 {
     /**
      * The filesystem instance.
      *
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     protected $files;
 
@@ -33,7 +33,7 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * Create a new file driven handler instance.
      *
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
+     * @param \Viserio\Component\Contract\Filesystem\Filesystem $files
      * @param string                                             $path
      * @param int                                                $lifetime The session lifetime in seconds
      */

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
-use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
+use Viserio\Component\Contract\Parsers\Dumper as DumperContract;
+use Viserio\Component\Contract\Parsers\Exception\NotSupportedException;
 use Viserio\Component\Parsers\Dumper\IniDumper;
 use Viserio\Component\Parsers\Dumper\JsonDumper;
 use Viserio\Component\Parsers\Dumper\PhpDumper;
@@ -76,7 +76,7 @@ class Dumper
     /**
      * Add a new dumper.
      *
-     * @param \Viserio\Component\Contracts\Parsers\Dumper $dumper
+     * @param \Viserio\Component\Contract\Parsers\Dumper $dumper
      * @param string                                      $extension
      *
      * @return void
@@ -92,8 +92,8 @@ class Dumper
      * @param array  $data
      * @param string $format
      *
-     * @throws \Viserio\Component\Contracts\Parsers\Exception\DumpException
-     * @throws \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
+     * @throws \Viserio\Component\Contract\Parsers\Exception\DumpException
+     * @throws \Viserio\Component\Contract\Parsers\Exception\NotSupportedException
      *
      * @return string
      */
@@ -109,9 +109,9 @@ class Dumper
      *
      * @param string $type
      *
-     * @throws \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
+     * @throws \Viserio\Component\Contract\Parsers\Exception\NotSupportedException
      *
-     * @return \Viserio\Component\Contracts\Parsers\Dumper
+     * @return \Viserio\Component\Contract\Parsers\Dumper
      */
     public function getDumper(string $type): DumperContract
     {

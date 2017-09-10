@@ -4,8 +4,8 @@ namespace Viserio\Component\Http;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contracts\Http\Exception\RuntimeException;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 
 class UploadedFile implements UploadedFileInterface
@@ -116,7 +116,7 @@ class UploadedFile implements UploadedFileInterface
      * @param null|string                     $clientFilename
      * @param null|string                     $clientMediaType
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      */
     public function __construct(
         $streamOrFile,
@@ -146,7 +146,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\RuntimeException if the upload was not successful
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the upload was not successful
      */
     public function getStream(): StreamInterface
     {
@@ -208,8 +208,8 @@ class UploadedFile implements UploadedFileInterface
      *
      * @param string $targetPath path to which to move the uploaded file
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException if the $path specified is invalid
-     * @throws \Viserio\Component\Contracts\Http\Exception\RuntimeException         if the upload was not successful or on any error during the move operation, or on
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if the $path specified is invalid
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException         if the upload was not successful or on any error during the move operation, or on
      *                                                                              the second or subsequent call to the method
      */
     public function moveTo($targetPath): void
@@ -247,7 +247,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @param mixed $streamOrFile
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      *
      * @return void
      */
@@ -275,7 +275,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @param int $error
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      *
      * @return void
      */
@@ -313,7 +313,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Validate retrieve stream.
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\RuntimeException if is moved or not ok
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if is moved or not ok
      *
      * @return void
      */

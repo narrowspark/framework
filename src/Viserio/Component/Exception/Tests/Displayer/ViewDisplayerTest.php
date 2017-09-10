@@ -4,8 +4,8 @@ namespace Viserio\Component\Exception\Tests\Displayer;
 
 use Exception;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\View\Factory;
-use Viserio\Component\Contracts\View\View;
+use Viserio\Component\Contract\View\Factory;
+use Viserio\Component\Contract\View\View;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -13,7 +13,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 class ViewDisplayerTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contracts\View\Factory|\Mockery\MockInterface
+     * @var \Viserio\Component\Contract\View\Factory|\Mockery\MockInterface
      */
     private $factoryMock;
 

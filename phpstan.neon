@@ -42,7 +42,7 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::get#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::set#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::get#'
-        - '#Call to an undefined method Viserio\\Component\\Contracts\\Routing\\Router::foo#'
+        - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Router::foo#'
         - '#Cannot call method getTarget#'
         - '#Cannot call method getName#'
         - '#Swift_#'
@@ -89,9 +89,9 @@ parameters:
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
         - '#Call to an undefined method League\\Flysystem\\AdapterInterface::getUrl#'
         - '#Call to an undefined method League\\Flysystem\\AdapterInterface::applyPathPrefix#'
-        - '#Call to an undefined method Viserio\\Component\\Contracts\\Pagination\\Paginator::getElements#'
-        - '#Call to an undefined method Viserio\\Component\\Contracts\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
-        - '#Call to an undefined method Viserio\\Component\\Contracts\\Routing\\Dispatcher::setContainer#'
+        - '#Call to an undefined method Viserio\\Component\\Contract\\Pagination\\Paginator::getElements#'
+        - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
+        - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Dispatcher::setContainer#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Output\\OutputInterface::fetch\(\)#'
 
         # Throwable is the base class for all erros on php7
@@ -99,11 +99,11 @@ parameters:
         - '#Throwable given#'
 
         # Is a protected method
-        - '#Call to an undefined method Viserio\\Component\\Contracts\\Cron\\Cron::spliceIntoPosition#'
+        - '#Call to an undefined method Viserio\\Component\\Contract\\Cron\\Cron::spliceIntoPosition#'
 
         # Wrapper
         - '#Viserio\\Component\\Profiler\\DataCollector\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
 
         # Not a interface function
-        - '#Call to an undefined method Viserio\\Component\\Contracts\\Mail\\Message::getSwiftMessage#'
-        - '#Call to an undefined method Viserio\\Component\\Contracts\\Mail\\Message::setBody#'
+        - '#Call to an undefined method Viserio\\Component\\Contract\\Mail\\Message::getSwiftMessage#'
+        - '#Call to an undefined method Viserio\\Component\\Contract\\Mail\\Message::setBody#'

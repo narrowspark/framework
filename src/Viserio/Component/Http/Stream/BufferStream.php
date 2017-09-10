@@ -4,7 +4,7 @@ namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use RuntimeException as BaseRuntimeException;
-use Viserio\Component\Contracts\Http\Exception\RuntimeException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 
 /**
  * Provides a buffer stream that can be written to to fill a buffer, and read

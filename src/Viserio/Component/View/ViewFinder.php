@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\View;
 
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -52,14 +52,14 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * The filesystem instance.
      *
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     private $files;
 
     /**
      * Create a new file view loader instance.
      *
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $files
+     * @param \Viserio\Component\Contract\Filesystem\Filesystem $files
      * @param iterable|\Psr\Container\ContainerInterface         $data
      */
     public function __construct(FilesystemContract $files, $data)

@@ -5,10 +5,10 @@ namespace Viserio\Component\Exception\Displayer;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
-use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
+use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
+use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
+use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
 
 class ViewDisplayer implements DisplayerContract
 {
@@ -17,23 +17,23 @@ class ViewDisplayer implements DisplayerContract
     /**
      * The exception info instance.
      *
-     * @var \Viserio\Component\Contracts\Exception\ExceptionInfo
+     * @var \Viserio\Component\Contract\Exception\ExceptionInfo
      */
     protected $info;
 
     /**
      * The view factory instance.
      *
-     * @var \Viserio\Component\Contracts\View\Factory
+     * @var \Viserio\Component\Contract\View\Factory
      */
     protected $factory;
 
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Contracts\Exception\ExceptionInfo $info
+     * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
      * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
-     * @param \Viserio\Component\Contracts\View\Factory            $factory
+     * @param \Viserio\Component\Contract\View\Factory            $factory
      */
     public function __construct(
         ExceptionInfoContract $info,

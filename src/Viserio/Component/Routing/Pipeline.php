@@ -5,8 +5,8 @@ namespace Viserio\Component\Routing;
 use Closure;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Container\Factory as FactoryContract;
-use Viserio\Component\Contracts\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Container\Factory as FactoryContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
 use Viserio\Component\Pipeline\Pipeline as BasePipeline;
 
 class Pipeline extends BasePipeline
@@ -39,7 +39,7 @@ class Pipeline extends BasePipeline
      * @param mixed  $stack
      * @param string $stage
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\RuntimeException
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
      *
      * @return mixed
      */

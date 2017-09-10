@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Parser;
 
 use RuntimeException;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
+use Viserio\Component\Contract\Parsers\Exception\ParseException;
+use Viserio\Component\Contract\Parsers\Parser as ParserContract;
 use Yosymfony\Toml\Exception\ParseException as TomlParseException;
 use Yosymfony\Toml\Toml as YosymfonyToml;
 

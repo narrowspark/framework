@@ -6,7 +6,7 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
+use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Foundation\Http\Exception\MaintenanceModeException;
 
 class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
@@ -14,14 +14,14 @@ class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
     /**
      * The http kernel implementation.
      *
-     * @var \Viserio\Component\Contracts\Foundation\HttpKernel
+     * @var \Viserio\Component\Contract\Foundation\HttpKernel
      */
     protected $kernel;
 
     /**
      * Create a new maintenance check middleware instance.
      *
-     * @param \Viserio\Component\Contracts\Foundation\HttpKernel $kernel
+     * @param \Viserio\Component\Contract\Foundation\HttpKernel $kernel
      */
     public function __construct(HttpKernelContract $kernel)
     {

@@ -23,7 +23,7 @@ class ExpressionMatcherTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Routing\Exception\InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
      * @expectedExceptionMessage Cannot merge parameters: Matcher's must be equivalent, [Viserio\Component\Routing\Matcher\StaticMatcher:two] expected, [Viserio\Component\Routing\Matcher\ExpressionMatcher:ctype_digit({segment})] given.
      */
     public function testMergeParameterKeysWithTwoDifferentMatcher(): void

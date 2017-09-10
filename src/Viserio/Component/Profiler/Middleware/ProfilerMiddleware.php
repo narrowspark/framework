@@ -7,14 +7,14 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 
 class ProfilerMiddleware implements MiddlewareInterface
 {
     /**
      * The Profiler instance.
      *
-     * @var null|\Viserio\Component\Contracts\Profiler\Profiler
+     * @var null|\Viserio\Component\Contract\Profiler\Profiler
      */
     protected $profiler;
 

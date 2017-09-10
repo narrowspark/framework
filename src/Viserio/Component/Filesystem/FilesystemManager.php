@@ -4,10 +4,10 @@ namespace Viserio\Component\Filesystem;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
-use Viserio\Component\Contracts\Cache\Traits\CacheManagerAwareTrait;
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Encryption\Key;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
@@ -102,7 +102,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param string $name
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -125,7 +125,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * @param \League\Flysystem\AdapterInterface $adapter
      * @param array                              $config
      *
-     * @return \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @return \Viserio\Component\Contract\Filesystem\Filesystem
      */
     protected function adapt(AdapterInterface $adapter, array $config): FilesystemContract
     {

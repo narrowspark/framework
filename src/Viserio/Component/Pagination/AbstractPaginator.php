@@ -8,10 +8,10 @@ use Countable;
 use IteratorAggregate;
 use JsonSerializable;
 use Narrowspark\Collection\Collection;
-use Viserio\Component\Contracts\Pagination\Paginator as PaginatorContract;
-use Viserio\Component\Contracts\Support\Arrayable as ArrayableContract;
-use Viserio\Component\Contracts\Support\Jsonable as JsonableContract;
-use Viserio\Component\Contracts\Support\Stringable as StringableContract;
+use Viserio\Component\Contract\Pagination\Paginator as PaginatorContract;
+use Viserio\Component\Contract\Support\Arrayable as ArrayableContract;
+use Viserio\Component\Contract\Support\Jsonable as JsonableContract;
+use Viserio\Component\Contract\Support\Stringable as StringableContract;
 
 abstract class AbstractPaginator implements
     ArrayAccess,

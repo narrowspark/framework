@@ -4,9 +4,9 @@ namespace Viserio\Component\Pipeline;
 
 use Closure;
 use ReflectionClass;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Pipeline\Exception\RuntimeException;
-use Viserio\Component\Contracts\Pipeline\Pipeline as PipelineContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Pipeline\Exception\RuntimeException;
+use Viserio\Component\Contract\Pipeline\Pipeline as PipelineContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 class Pipeline implements PipelineContract
@@ -154,7 +154,7 @@ class Pipeline implements PipelineContract
      * @param mixed  $stack
      * @param string $stage
      *
-     * @throws \Viserio\Component\Contracts\Pipeline\Exception\RuntimeException
+     * @throws \Viserio\Component\Contract\Pipeline\Exception\RuntimeException
      *
      * @return mixed
      */

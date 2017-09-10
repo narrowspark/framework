@@ -4,7 +4,7 @@ namespace Viserio\Component\View\Tests\Provider;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\View\Engine\EngineResolver;
 use Viserio\Component\View\Provider\ViewServiceProvider;

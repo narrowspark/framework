@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
 
 trait MiddlewareValidatorTrait
 {
@@ -12,7 +12,7 @@ trait MiddlewareValidatorTrait
      *
      * @param array|object|string $middlewares
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
      *
      * @return void
      */
@@ -33,7 +33,7 @@ trait MiddlewareValidatorTrait
      *
      * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
      *
      * @return void
      */

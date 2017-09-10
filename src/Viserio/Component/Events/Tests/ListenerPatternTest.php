@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Events\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contracts\Events\EventManager;
+use Viserio\Component\Contract\Events\EventManager;
 use Viserio\Component\Events\ListenerPattern;
 
 class ListenerPatternTest extends TestCase

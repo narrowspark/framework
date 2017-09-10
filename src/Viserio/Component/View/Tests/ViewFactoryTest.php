@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\View\Engine;
-use Viserio\Component\Contracts\View\EngineResolver as EngineResolverContract;
-use Viserio\Component\Contracts\View\Finder;
-use Viserio\Component\Contracts\View\View as ViewContract;
+use Viserio\Component\Contract\View\Engine;
+use Viserio\Component\Contract\View\EngineResolver as EngineResolverContract;
+use Viserio\Component\Contract\View\Finder;
+use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\ViewFactory;
@@ -16,17 +16,17 @@ class ViewFactoryTest extends MockeryTestCase
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * @var \Viserio\Component\Contracts\View\Factory
+     * @var \Viserio\Component\Contract\View\Factory
      */
     private $viewFactory;
 
     /**
-     * @var \Mockery\MockInterface|\Viserio\Component\Contracts\View\EngineResolver
+     * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\EngineResolver
      */
     private $engineResolverMock;
 
     /**
-     * @var \Mockery\MockInterface|\Viserio\Component\Contracts\View\Finder
+     * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Finder
      */
     private $finderMock;
 

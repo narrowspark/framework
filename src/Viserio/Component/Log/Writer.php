@@ -6,10 +6,10 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Log\Log as LogContract;
-use Viserio\Component\Contracts\Support\Arrayable;
-use Viserio\Component\Contracts\Support\Jsonable;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Log\Log as LogContract;
+use Viserio\Component\Contract\Support\Arrayable;
+use Viserio\Component\Contract\Support\Jsonable;
 use Viserio\Component\Log\Event\MessageLoggedEvent;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 

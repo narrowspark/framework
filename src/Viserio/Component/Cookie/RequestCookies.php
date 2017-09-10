@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
 
 final class RequestCookies extends AbstractCookieCollector
 {
@@ -12,7 +12,7 @@ final class RequestCookies extends AbstractCookieCollector
      *
      * @param array $cookies
      *
-     * @throws \Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function __construct(array $cookies = [])
     {
@@ -34,7 +34,7 @@ final class RequestCookies extends AbstractCookieCollector
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @throws \Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return self
      */

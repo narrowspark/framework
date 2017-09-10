@@ -15,7 +15,7 @@ class TomlTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     private $file;
 
@@ -40,7 +40,7 @@ class TomlTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      * @expectedExceptionMessage Unable to parse the TOML string.
      */
     public function testParseToThrowException(): void

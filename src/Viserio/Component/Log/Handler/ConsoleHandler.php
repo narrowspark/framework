@@ -18,8 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Log\Formatter\ConsoleFormatter;
 
 /**
@@ -124,7 +124,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * Register needed events to event manager.
      *
-     * @param \Viserio\Component\Contracts\Events\EventManager
+     * @param \Viserio\Component\Contract\Events\EventManager
      * @param EventManagerContract $eventManager
      *
      * @return void

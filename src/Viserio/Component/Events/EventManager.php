@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events;
 
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\Traits\ValidateNameTrait;
 
 class EventManager implements EventManagerContract

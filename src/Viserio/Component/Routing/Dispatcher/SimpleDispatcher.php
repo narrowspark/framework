@@ -6,11 +6,11 @@ use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Exception\RuntimeException;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Routing\Event\RouteMatchedEvent;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
@@ -25,7 +25,7 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * The currently dispatched route instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\Route
+     * @var \Viserio\Component\Contract\Routing\Route
      */
     protected $current;
 
@@ -126,7 +126,7 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Handle dispatching of a found route.
      *
-     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
+     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
      * @param \Psr\Http\Message\ServerRequestInterface             $request
      * @param string                                               $identifier
      * @param array                                                $segments
@@ -160,7 +160,7 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Run the given route.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      * @param \Psr\Http\Message\ServerRequestInterface   $request
      *
      * @return \Psr\Http\Message\ResponseInterface
@@ -191,7 +191,7 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Generates a router file with all routes.
      *
-     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
+     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
      *
      * @return void
      */
@@ -208,7 +208,7 @@ class SimpleDispatcher implements DispatcherContract
      *
      * @param string $dir
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\RuntimeException
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
      *
      * @return void
      */

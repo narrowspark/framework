@@ -4,8 +4,8 @@ namespace Viserio\Component\View\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Filesystem\Filesystem;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Filesystem\Filesystem;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;
 
@@ -19,7 +19,7 @@ class ViewFinderTest extends MockeryTestCase
     private $finder;
 
     /**
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem|\Mockery\MockInterface
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem|\Mockery\MockInterface
      */
     private $filesystem;
 

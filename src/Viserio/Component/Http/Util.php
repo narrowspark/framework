@@ -4,8 +4,8 @@ namespace Viserio\Component\Http;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contracts\Http\Exception\RuntimeException;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 
 /**
  * Some code in this class it taken from zend-diactoros.
@@ -35,7 +35,7 @@ final class Util
      * @param string $filename File to open
      * @param string $mode     Mode used to open the file
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\\RuntimeException if the file cannot be opened
+     * @throws \Viserio\Component\Contract\Http\Exception\\RuntimeException if the file cannot be opened
      *
      * @return resource
      */
@@ -164,7 +164,7 @@ final class Util
      *
      * @param array $files A array which respect $_FILES structure
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException for unrecognized values
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException for unrecognized values
      *
      * @return array
      */

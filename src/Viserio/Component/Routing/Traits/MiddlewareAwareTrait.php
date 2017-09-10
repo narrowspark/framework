@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
-use Viserio\Component\Contracts\Routing\Exception\RuntimeException;
-use Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException;
-use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
 
 trait MiddlewareAwareTrait
 {
@@ -30,8 +30,8 @@ trait MiddlewareAwareTrait
      * @param string                                                    $name
      * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\RuntimeException         if alias exists
-     * @throws \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException if wrong type is given
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException         if alias exists
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
      * @return $this
      */
@@ -61,9 +61,9 @@ trait MiddlewareAwareTrait
      *
      * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|array|string $middlewares
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException if wrong type is given
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
-     * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
+     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
     public function withMiddleware($middlewares): MiddlewareAwareContract
     {
@@ -100,9 +100,9 @@ trait MiddlewareAwareTrait
      *
      * @param null|array|string $middlewares
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\UnexpectedValueException if wrong type is given
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
-     * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
+     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
     public function withoutMiddleware($middlewares = null): MiddlewareAwareContract
     {

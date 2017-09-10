@@ -6,7 +6,7 @@ use League\Flysystem\Rackspace\RackspaceAdapter;
 use OpenCloud\Rackspace;
 use RuntimeException;
 use stdClass;
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
 class RackspaceConnector extends AbstractConnector
 {

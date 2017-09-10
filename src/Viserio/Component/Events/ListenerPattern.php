@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Events;
 
 use Closure;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 
 class ListenerPattern
 {
@@ -121,7 +121,7 @@ class ListenerPattern
     /**
      * Adds this pattern's listener to an event.
      *
-     * @param \Viserio\Component\Contracts\Events\EventManager $dispatcher
+     * @param \Viserio\Component\Contract\Events\EventManager $dispatcher
      * @param string                                           $eventName
      *
      * @return void
@@ -140,7 +140,7 @@ class ListenerPattern
      * Removes this pattern's listener from all events to which it was
      * previously added.
      *
-     * @param \Viserio\Component\Contracts\Events\EventManager $dispatcher
+     * @param \Viserio\Component\Contract\Events\EventManager $dispatcher
      *
      * @return void
      */

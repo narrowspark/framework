@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Contracts\Routing\Router;
+use Viserio\Component\Contract\Routing\Pattern;
+use Viserio\Component\Contract\Routing\Router;
 use Viserio\Component\Routing\Matcher\RegexMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 use Viserio\Component\Routing\Route;

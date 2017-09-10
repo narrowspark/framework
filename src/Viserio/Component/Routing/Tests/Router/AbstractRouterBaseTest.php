@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Symfony\Component\Filesystem\Filesystem;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
@@ -15,7 +15,7 @@ use Viserio\Component\Routing\Router;
 abstract class AbstractRouterBaseTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contracts\Routing\Router
+     * @var \Viserio\Component\Contract\Routing\Router
      */
     protected $router;
 

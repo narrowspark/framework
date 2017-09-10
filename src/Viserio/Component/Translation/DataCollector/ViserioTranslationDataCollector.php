@@ -4,10 +4,10 @@ namespace Viserio\Component\Translation\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Translation\Traits\TranslatorAwareTrait;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class ViserioTranslationDataCollector extends AbstractDataCollector implements
@@ -19,7 +19,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     /**
      * Create new translation data collector.
      *
-     * @param \Viserio\Component\Contracts\Translation\Translator $translator
+     * @param \Viserio\Component\Contract\Translation\Translator $translator
      */
     public function __construct(TranslatorContract $translator)
     {

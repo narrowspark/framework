@@ -4,7 +4,7 @@ namespace Viserio\Component\Support\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Support\Tests\Fixture\TestManager;
 
 class AbstractManagerTest extends MockeryTestCase

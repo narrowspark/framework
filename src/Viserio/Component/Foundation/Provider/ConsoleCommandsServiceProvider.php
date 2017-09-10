@@ -6,7 +6,7 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Process\Process;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Console\Command\DownCommand;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 use Viserio\Component\Foundation\Console\Command\ServeCommand;

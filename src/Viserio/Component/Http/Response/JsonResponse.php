@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Response;
 
-use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contracts\Http\Exception\RuntimeException;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Response\Traits\InjectContentTypeTrait;
 use Viserio\Component\Http\Stream;
@@ -40,7 +40,7 @@ class JsonResponse extends Response
      * @param array $headers         array of headers to use at initialization
      * @param int   $encodingOptions jSON encoding options to use
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      */
     public function __construct(
         $data,
@@ -63,8 +63,8 @@ class JsonResponse extends Response
      * @param mixed $data
      * @param int   $encodingOptions
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contracts\Http\Exception\RuntimeException         if unable to encode the $data to JSON
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException         if unable to encode the $data to JSON
      *
      * @return string
      */

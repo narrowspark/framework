@@ -4,7 +4,7 @@ namespace Viserio\Component\Filesystem\Adapter;
 
 use Spatie\Dropbox\Client;
 use Spatie\FlysystemDropbox\DropboxAdapter;
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
 class DropboxConnector extends AbstractConnector
 {

@@ -4,8 +4,8 @@ namespace Viserio\Component\Routing\Command;
 
 use Symfony\Component\Console\Input\InputOption;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 
 class RouteListCommand extends Command
 {
@@ -36,7 +36,7 @@ class RouteListCommand extends Command
     /**
      * Create a new route command instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Router $router
+     * @param \Viserio\Component\Contract\Routing\Router $router
      */
     public function __construct(RouterContract $router)
     {
@@ -92,7 +92,7 @@ class RouteListCommand extends Command
     /**
      * Get the route information for a given route.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return null|array
      */

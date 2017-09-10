@@ -2,22 +2,22 @@
 declare(strict_types=1);
 namespace Viserio\Component\Pagination\Presenter;
 
-use Viserio\Component\Contracts\Pagination\Paginator as PaginatorContract;
-use Viserio\Component\Contracts\Pagination\Presenter as PresenterContract;
+use Viserio\Component\Contract\Pagination\Paginator as PaginatorContract;
+use Viserio\Component\Contract\Pagination\Presenter as PresenterContract;
 
 class Foundation6 implements PresenterContract
 {
     /**
      * Paginator instance.
      *
-     * @var \Viserio\Component\Contracts\Pagination\Paginator
+     * @var \Viserio\Component\Contract\Pagination\Paginator
      */
     protected $paginator;
 
     /**
      * Create a new Foundation 6 presenter.
      *
-     * @param \Viserio\Component\Contracts\Pagination\Paginator $paginator
+     * @param \Viserio\Component\Contract\Pagination\Paginator $paginator
      */
     public function __construct(PaginatorContract $paginator)
     {

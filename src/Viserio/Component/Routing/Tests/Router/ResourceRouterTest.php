@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Routing\ResourceRegistrar;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;

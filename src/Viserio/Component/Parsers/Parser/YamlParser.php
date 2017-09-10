@@ -5,8 +5,8 @@ namespace Viserio\Component\Parsers\Parser;
 use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
+use Viserio\Component\Contract\Parsers\Exception\ParseException;
+use Viserio\Component\Contract\Parsers\Parser as ParserContract;
 
 class YamlParser implements ParserContract
 {

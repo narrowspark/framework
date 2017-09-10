@@ -5,9 +5,9 @@ namespace Viserio\Component\Exception\Displayer;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
-use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
+use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
+use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 
 class JsonDisplayer implements DisplayerContract
 {
@@ -16,14 +16,14 @@ class JsonDisplayer implements DisplayerContract
     /**
      * The exception info instance.
      *
-     * @var \Viserio\Component\Contracts\Exception\ExceptionInfo
+     * @var \Viserio\Component\Contract\Exception\ExceptionInfo
      */
     protected $info;
 
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Contracts\Exception\ExceptionInfo $info
+     * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
      * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
      */
     public function __construct(

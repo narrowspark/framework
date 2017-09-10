@@ -7,7 +7,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Cache\CacheManager;
-use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 
 class CacheServiceProvider implements ServiceProvider
 {

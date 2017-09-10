@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use Viserio\Component\Contracts\Routing\Route;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\Route;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Support\Str;
 
 class ResourceRegistrar
@@ -12,7 +12,7 @@ class ResourceRegistrar
     /**
      * The router instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\Router
+     * @var \Viserio\Component\Contract\Routing\Router
      */
     protected $router;
 
@@ -65,7 +65,7 @@ class ResourceRegistrar
     /**
      * Create a new resource registrar instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Router $router
+     * @param \Viserio\Component\Contract\Routing\Router $router
      */
     public function __construct(RouterContract $router)
     {

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
-use Viserio\Component\Contracts\Support\Stringable as StringableContract;
+use Viserio\Component\Contract\Support\Stringable as StringableContract;
 use Viserio\Component\Cookie\Traits\CookieValidatorTrait;
 
 final class Cookie implements StringableContract

@@ -9,7 +9,7 @@ use Symfony\Component\VarDumper\Caster\StubCaster;
 use Symfony\Component\VarDumper\Cloner\AbstractCloner;
 use Symfony\Component\VarDumper\Cloner\Stub;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
+use Viserio\Component\Contract\Profiler\DataCollector as DataCollectorContract;
 use Viserio\Component\Profiler\Util\HtmlDumperOutput;
 use Viserio\Component\Support\Debug\HtmlDumper;
 use Viserio\Component\Support\Str;

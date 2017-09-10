@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
+use Viserio\Component\Contract\Encryption\HiddenString as HiddenStringContract;
 
 final class HiddenString implements HiddenStringContract
 {

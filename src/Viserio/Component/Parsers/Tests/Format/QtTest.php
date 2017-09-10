@@ -10,7 +10,7 @@ use Viserio\Component\Parsers\Parser\QtParser;
 class QtTest extends TestCase
 {
     /**
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     private $file;
 
@@ -69,7 +69,7 @@ class QtTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      * @expectedExceptionMessage Content does not contain valid XML, it is empty.
      */
     public function testParseWithEmptyContent(): void

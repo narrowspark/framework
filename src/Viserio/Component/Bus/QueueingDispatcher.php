@@ -6,9 +6,9 @@ use Closure;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use RuntimeException;
-use Viserio\Component\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueContract;
-use Viserio\Component\Contracts\Queue\ShouldQueue as ShouldQueueContract;
+use Viserio\Component\Contract\Bus\QueueingDispatcher as QueueingDispatcherContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueContract;
+use Viserio\Component\Contract\Queue\ShouldQueue as ShouldQueueContract;
 
 class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContract
 {
@@ -66,7 +66,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     /**
      * Push the command onto the given queue instance.
      *
-     * @param \Viserio\Component\Contracts\Queue\QueueConnector $queue
+     * @param \Viserio\Component\Contract\Queue\QueueConnector $queue
      * @param mixed                                             $command
      *
      * @return mixed

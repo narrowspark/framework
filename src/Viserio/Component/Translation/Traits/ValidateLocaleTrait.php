@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Traits;
 
-use Viserio\Component\Contracts\Translation\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 
 trait ValidateLocaleTrait
 {
@@ -11,7 +11,7 @@ trait ValidateLocaleTrait
      *
      * @param string $locale Locale to tests
      *
-     * @throws \Viserio\Component\Contracts\Translation\Exception\InvalidArgumentException If the locale contains invalid characters
+     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException If the locale contains invalid characters
      *
      * @return void
      */

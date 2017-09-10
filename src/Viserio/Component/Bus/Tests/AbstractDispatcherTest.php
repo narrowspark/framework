@@ -5,7 +5,7 @@ namespace Viserio\Component\Bus\Tests;
 abstract class AbstractDispatcherTest
 {
     /**
-     * @var \Viserio\Component\Contracts\Bus\Dispatcher|\Viserio\Component\Contracts\Bus\QueueingDispatcher
+     * @var \Viserio\Component\Contract\Bus\Dispatcher|\Viserio\Component\Contract\Bus\QueueingDispatcher
      */
     protected $dispatcher;
 }

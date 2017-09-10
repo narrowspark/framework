@@ -16,7 +16,7 @@ class PhpTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     private $file;
 
@@ -42,7 +42,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      * @expectedExceptionMessage No such file [nonexistfile] found.
      */
     public function testParseToThrowException(): void
@@ -51,7 +51,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      * @expectedExceptionMessage An exception was thrown by file
      */
     public function testParseToThrowExceptionWithInFileException(): void

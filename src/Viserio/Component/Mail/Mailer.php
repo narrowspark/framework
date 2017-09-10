@@ -6,13 +6,13 @@ use Closure;
 use InvalidArgumentException;
 use Swift_Mailer;
 use Swift_Mime_SimpleMessage;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Mail\Exception\UnexpectedValueException;
-use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
-use Viserio\Component\Contracts\Mail\Message as MessageContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\View\Traits\ViewAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Mail\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Mail\Mailer as MailerContract;
+use Viserio\Component\Contract\Mail\Message as MessageContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -202,7 +202,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      *
      * @param array|string $view
      *
-     * @throws \Viserio\Component\Contracts\Mail\Exception\UnexpectedValueException
+     * @throws \Viserio\Component\Contract\Mail\Exception\UnexpectedValueException
      *
      * @return array
      */
@@ -236,7 +236,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Add the content to a given message.
      *
-     * @param \Viserio\Component\Contracts\Mail\Message $message
+     * @param \Viserio\Component\Contract\Mail\Message $message
      * @param null|string                               $view
      * @param null|string                               $plain
      * @param null|string                               $raw
@@ -312,7 +312,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
     /**
      * Create a new message instance.
      *
-     * @return \Viserio\Component\Contracts\Mail\Message
+     * @return \Viserio\Component\Contract\Mail\Message
      */
     protected function createMessage(): MessageContract
     {
@@ -332,7 +332,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      * Call the provided message builder.
      *
      * @param null|\Closure|string                      $callback
-     * @param \Viserio\Component\Contracts\Mail\Message $message
+     * @param \Viserio\Component\Contract\Mail\Message $message
      *
      * @throws \InvalidArgumentException
      *

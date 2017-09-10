@@ -4,8 +4,8 @@ namespace Viserio\Component\Foundation\Console\Command;
 
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\KeyFactory;
 

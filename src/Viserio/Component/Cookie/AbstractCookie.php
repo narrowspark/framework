@@ -5,9 +5,9 @@ namespace Viserio\Component\Cookie;
 use Cake\Chronos\Chronos;
 use DateTime;
 use DateTimeInterface;
-use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException;
-use Viserio\Component\Contracts\Support\Stringable as StringableContract;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Support\Stringable as StringableContract;
 
 abstract class AbstractCookie implements StringableContract, CookieContract
 {
@@ -316,7 +316,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      *
      * @param null|\DateTimeInterface|int|string $expiration
      *
-     * @throws \Viserio\Component\Contracts\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return int
      */

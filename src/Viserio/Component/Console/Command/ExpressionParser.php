@@ -4,7 +4,7 @@ namespace Viserio\Component\Console\Command;
 
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression;
+use Viserio\Component\Contract\Console\Exception\InvalidCommandExpression;
 
 final class ExpressionParser
 {
@@ -13,7 +13,7 @@ final class ExpressionParser
      *
      * @param string $expression
      *
-     * @throws \Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
      *
      * @return array
      */

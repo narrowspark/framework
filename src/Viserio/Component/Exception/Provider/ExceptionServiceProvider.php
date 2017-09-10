@@ -6,10 +6,10 @@ use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
+use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
+use Viserio\Component\Contract\Exception\Handler as HandlerContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
@@ -63,7 +63,7 @@ class ExceptionServiceProvider implements ServiceProvider
     /**
      * Create a new ExceptionInfo instance.
      *
-     * @return \Viserio\Component\Contracts\Exception\ExceptionInfo
+     * @return \Viserio\Component\Contract\Exception\ExceptionInfo
      */
     public static function createExceptionInfo(): ExceptionInfoContract
     {
@@ -75,7 +75,7 @@ class ExceptionServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Exception\Handler
+     * @return \Viserio\Component\Contract\Exception\Handler
      */
     public static function createExceptionHandler(ContainerInterface $container): HandlerContract
     {

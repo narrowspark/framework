@@ -5,8 +5,8 @@ namespace Viserio\Component\Queue\Job;
 use Cake\Chronos\Chronos;
 use DateTime;
 use Narrowspark\Arr\Arr;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Queue\Job as JobContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Queue\Job as JobContract;
 use Viserio\Component\Queue\CallQueuedHandler;
 
 abstract class AbstractJob implements JobContract

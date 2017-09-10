@@ -16,7 +16,7 @@ class XmlTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     private $file;
 
@@ -44,7 +44,7 @@ class XmlTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      * @expectedExceptionMessage [ERROR 4] Start tag expected, '<' not found (in n/a - line 1, column 1)
      */
     public function testParseToThrowException(): void
@@ -77,7 +77,7 @@ class XmlTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\DumpException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\DumpException
      */
     public function testDumpToThrowException(): void
     {

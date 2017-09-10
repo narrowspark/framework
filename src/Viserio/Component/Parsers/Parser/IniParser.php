@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Parser;
 
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
+use Viserio\Component\Contract\Parsers\Exception\ParseException;
+use Viserio\Component\Contract\Parsers\Parser as ParserContract;
 
 class IniParser implements ParserContract
 {

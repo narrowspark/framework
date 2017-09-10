@@ -9,7 +9,7 @@ use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Cache\Provider\CacheServiceProvider;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 
 class CacheServiceProviderTest extends TestCase
 {

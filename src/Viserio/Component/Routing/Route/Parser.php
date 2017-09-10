@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
-use Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException;
-use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException;
+use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 
@@ -26,7 +26,7 @@ final class Parser
      * @param string   $route
      * @param string[] $conditions
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      *
      * @return array
      */
@@ -69,7 +69,7 @@ final class Parser
      * @param array  &$matches
      * @param array  &$names
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      *
      * @return bool
      */

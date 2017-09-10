@@ -7,7 +7,7 @@ class CompoundMatcher extends AbstractMatcher
     /**
      * A array of all SegmentMatcher.
      *
-     * @var \Viserio\Component\Contracts\Routing\SegmentMatcher[]
+     * @var \Viserio\Component\Contract\Routing\SegmentMatcher[]
      */
     protected $matchers;
 

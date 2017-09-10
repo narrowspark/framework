@@ -85,7 +85,7 @@ class FilesystemAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testReadToThrowException(): void
     {
@@ -93,7 +93,7 @@ class FilesystemAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testReadStreamToThrowException(): void
     {
@@ -111,7 +111,7 @@ class FilesystemAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testUpdateToThrowException(): void
     {
@@ -270,7 +270,7 @@ class FilesystemAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\IOException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\IOException
      */
     public function testCopyToThrowIOException(): void
     {
@@ -282,7 +282,7 @@ class FilesystemAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testCopyToThrowFileNotFoundException(): void
     {
@@ -323,7 +323,7 @@ class FilesystemAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testGetMimetypeToThrowFileNotFoundException(): void
     {
@@ -340,7 +340,7 @@ class FilesystemAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testGetTimestampToThrowFileNotFoundException(): void
     {

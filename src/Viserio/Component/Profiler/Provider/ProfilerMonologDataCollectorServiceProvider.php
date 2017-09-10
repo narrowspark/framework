@@ -5,9 +5,9 @@ namespace Viserio\Component\Profiler\Provider;
 use Interop\Container\ServiceProvider;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor;
 use Viserio\Component\Profiler\DataCollector\Bridge\Log\MonologLoggerDataCollector;
@@ -75,7 +75,7 @@ class ProfilerMonologDataCollectorServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
+     * @return null|\Viserio\Component\Contract\Profiler\Profiler
      */
     public static function extendProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {

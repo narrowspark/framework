@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Encryption\Key;
 
 class EncryptionWrapper
@@ -17,14 +17,14 @@ class EncryptionWrapper
     /**
      * Filesystem instance.
      *
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     protected $adapter;
 
     /**
      * Create a new encryption wrapper instance.
      *
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $adapter
+     * @param \Viserio\Component\Contract\Filesystem\Filesystem $adapter
      * @param \Viserio\Component\Encryption\Key                  $key
      */
     public function __construct(FilesystemContract $adapter, Key $key)
@@ -55,7 +55,7 @@ class EncryptionWrapper
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return bool|string the file contents or false on failure
      */
@@ -73,7 +73,7 @@ class EncryptionWrapper
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return resource
      */
@@ -141,7 +141,7 @@ class EncryptionWrapper
      * @param string $contents the file contents
      * @param array  $config   an optional configuration array
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return bool true on success, false on failure
      */

@@ -9,10 +9,10 @@ use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 
 /**
  * @group appveyor

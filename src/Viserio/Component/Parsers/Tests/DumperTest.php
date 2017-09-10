@@ -68,7 +68,7 @@ class DumperTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\NotSupportedException
      * @expectedExceptionMessage Given extension or mime type [inia] is not supported.
      */
     public function testGetParserToThrowException(): void

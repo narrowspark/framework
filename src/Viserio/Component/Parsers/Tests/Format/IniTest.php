@@ -16,7 +16,7 @@ class IniTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     private $file;
 
@@ -110,7 +110,7 @@ value=5'
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      */
     public function testParseToThrowException(): void
     {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
 use Closure;
-use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
+use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 
 class EnvironmentDetector implements EnvironmentContract
 {

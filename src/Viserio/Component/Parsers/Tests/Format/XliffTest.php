@@ -13,7 +13,7 @@ class XliffTest extends TestCase
     use ArrayPrettyPrintTrait;
 
     /**
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     private $file;
 
@@ -145,7 +145,7 @@ class XliffTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      */
     public function testParseXliffV1NoVersion(): void
     {
@@ -153,7 +153,7 @@ class XliffTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      * @expectedExceptionMessage No support implemented for loading XLIFF version "3.0".
      */
     public function testParseXliffV1NoVersionAndNamespace(): void
@@ -162,7 +162,7 @@ class XliffTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      * @expectedExceptionMessage Not a valid XLIFF namespace "urn:oasis:names:tc:xliff:"
      */
     public function testParseXliffV1NoVersionAndInvalidNamespace(): void
@@ -171,7 +171,7 @@ class XliffTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      */
     public function testParseXliffV1NoVersionAndNoNamespace(): void
     {
@@ -179,7 +179,7 @@ class XliffTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      * @expectedExceptionMessage Content does not contain valid XML, it is empty.
      */
     public function testParseWithEmptyContent(): void
@@ -323,7 +323,7 @@ class XliffTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\DumpException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\DumpException
      * @expectedExceptionMessage No support implemented for dumping XLIFF version [3.0].
      */
     public function testDumpWithWrongVersion(): void

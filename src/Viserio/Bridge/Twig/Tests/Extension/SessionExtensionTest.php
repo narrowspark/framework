@@ -4,7 +4,7 @@ namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 
 class SessionExtensionTest extends MockeryTestCase
 {

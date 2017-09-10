@@ -4,7 +4,7 @@ namespace Viserio\Component\Console\Event;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Viserio\Component\Contracts\Events\Event as EventContract;
+use Viserio\Component\Contract\Events\Event as EventContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
 abstract class ConsoleEvent implements EventContract

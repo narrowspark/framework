@@ -8,7 +8,7 @@ use DOMElement;
 use DOMText;
 use InvalidArgumentException;
 use Throwable;
-use Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Parsers\Exception\FileNotFoundException;
 
 /**
  * This file has been ported from Symfony. The original
@@ -61,7 +61,7 @@ final class XmlUtils
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
      * @throws \InvalidArgumentException                                            When loading of XML file returns error
-     * @throws \Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Parsers\Exception\FileNotFoundException
      *
      * @return \DOMDocument
      */

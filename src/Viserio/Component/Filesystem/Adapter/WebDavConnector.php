@@ -4,7 +4,7 @@ namespace Viserio\Component\Filesystem\Adapter;
 
 use League\Flysystem\WebDAV\WebDAVAdapter;
 use Sabre\DAV\Client;
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
 class WebDavConnector extends AbstractConnector
 {

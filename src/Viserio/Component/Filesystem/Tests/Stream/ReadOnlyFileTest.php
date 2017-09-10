@@ -99,7 +99,7 @@ class ReadOnlyFileTest extends TestCase
     /**
      * Test for Time-of-check Time-of-use (TOCTOU) attacks (race conditions).
      *
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileModifiedException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      * @expectedExceptionMessage Read-only file has been modified since it was opened for reading.
      */
     public function testReadToThrowException()
@@ -125,7 +125,7 @@ class ReadOnlyFileTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      * @expectedExceptionMessage This is a read-only file handle.
      */
     public function testWrite()

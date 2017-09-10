@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Dumper;
 
 use DOMDocument;
-use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exception\DumpException;
+use Viserio\Component\Contract\Parsers\Dumper as DumperContract;
+use Viserio\Component\Contract\Parsers\Exception\DumpException;
 
 /**
  * Some of this code has been ported from Symfony. The original

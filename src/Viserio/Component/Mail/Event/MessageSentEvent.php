@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Event;
 
 use Swift_Mime_SimpleMessage;
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Mail\Mailer as MailerContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
 class MessageSentEvent implements EventContract
@@ -14,7 +14,7 @@ class MessageSentEvent implements EventContract
     /**
      * Create a new message sent event.
      *
-     * @param \Viserio\Component\Contracts\Mail\Mailer $mailer
+     * @param \Viserio\Component\Contract\Mail\Mailer $mailer
      * @param \Swift_Mime_SimpleMessage                $message
      * @param int                                      $recipients
      */

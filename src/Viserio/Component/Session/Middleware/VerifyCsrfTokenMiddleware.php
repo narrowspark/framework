@@ -7,9 +7,9 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Session\Exception\SessionNotStartedException;
-use Viserio\Component\Contracts\Session\Exception\TokenMismatchException;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
+use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\SessionManager;
 

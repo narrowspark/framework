@@ -5,8 +5,8 @@ namespace Viserio\Component\Foundation\Tests\DataCollector;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\DataCollector\ViserioHttpDataCollector;
 
 class ViserioHttpDataCollectorTest extends MockeryTestCase

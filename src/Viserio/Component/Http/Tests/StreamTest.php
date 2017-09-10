@@ -13,7 +13,7 @@ class StreamTest extends TestCase
     private $tmpnam;
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Http\Exception\UnexpectedValueException
+     * @expectedException \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      */
     public function testConstructorThrowsExceptionOnInvalidArgument(): void
     {

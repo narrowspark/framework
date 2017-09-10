@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
-use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
-use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
-use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
+use Viserio\Component\Contract\Encryption\HiddenString as HiddenStringContract;
+use Viserio\Component\Contract\Encryption\Password as PasswordContract;
+use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Traits\SecurityLevelsTrait;
 
 final class Password implements PasswordContract
@@ -16,14 +16,14 @@ final class Password implements PasswordContract
     /**
      * A encrypter instance.
      *
-     * @var \Viserio\Component\Contracts\Encryption\Encrypter
+     * @var \Viserio\Component\Contract\Encryption\Encrypter
      */
     private $encrypter;
 
     /**
      * Create a new Password instance.
      *
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function __construct(EncrypterContract $encrypter)
     {
@@ -112,7 +112,7 @@ final class Password implements PasswordContract
     /**
      * @param string $stored
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
      *
      * @return void
      */

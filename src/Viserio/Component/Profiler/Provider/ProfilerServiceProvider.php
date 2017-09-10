@@ -8,14 +8,14 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
@@ -90,7 +90,7 @@ class ProfilerServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\Events\EventManager
+     * @return null|\Viserio\Component\Contract\Events\EventManager
      */
     public static function extendEventManager(ContainerInterface $container, ?callable $getPrevious = null): ?EventManagerContract
     {
@@ -158,7 +158,7 @@ class ProfilerServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return \Viserio\Component\Contracts\Routing\Router
+     * @return \Viserio\Component\Contract\Routing\Router
      */
     public static function registerProfilerAssetsControllers(ContainerInterface $container, ?callable $getPrevious = null): RouterContract
     {
@@ -190,7 +190,7 @@ class ProfilerServiceProvider implements
      * Register base collectors.
      *
      * @param \Psr\Container\ContainerInterface              $container
-     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
+     * @param \Viserio\Component\Contract\Profiler\Profiler $profiler
      *
      * @return void
      */
@@ -221,7 +221,7 @@ class ProfilerServiceProvider implements
      * Register all found collectors in config.
      *
      * @param \Psr\Container\ContainerInterface              $container
-     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
+     * @param \Viserio\Component\Contract\Profiler\Profiler $profiler
      * @param array                                          $options
      *
      * @return void

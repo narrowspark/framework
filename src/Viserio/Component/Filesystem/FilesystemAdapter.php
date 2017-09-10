@@ -7,12 +7,12 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config as FlyConfig;
 use RuntimeException;
-use Viserio\Component\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
-use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Contracts\Filesystem\Exception\IOException;
-use Viserio\Component\Contracts\Filesystem\Exception\IOException as ViserioIOException;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Filesystem\Directorysystem as DirectorysystemContract;
+use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Exception\IOException;
+use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOException;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
@@ -173,7 +173,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\IOException If file cant be deleted
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\IOException If file cant be deleted
      */
     public function append(string $path, string $contents, array $config = []): bool
     {
@@ -569,7 +569,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      *
      * @param null|string $visibility
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return null|string
      */
@@ -631,7 +631,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      *
      * @param string $path
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return void
      */

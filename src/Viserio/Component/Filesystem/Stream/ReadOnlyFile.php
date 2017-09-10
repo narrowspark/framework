@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Stream;
 
 use UnexpectedValueException;
-use Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException;
-use Viserio\Component\Contracts\Filesystem\Exception\FileModifiedException;
-use Viserio\Component\Contracts\Filesystem\Exception\OutOfBoundsException;
-use Viserio\Component\Contracts\Filesystem\Exception\RuntimeException;
-use Viserio\Component\Contracts\Filesystem\FileStream;
+use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
+use Viserio\Component\Contract\Filesystem\Exception\FileModifiedException;
+use Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException;
+use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
+use Viserio\Component\Contract\Filesystem\FileStream;
 use Viserio\Component\Encryption\Key;
 
 class ReadOnlyFile implements FileStream
@@ -68,7 +68,7 @@ class ReadOnlyFile implements FileStream
      * @param null|\Viserio\Component\Encryption\Key $key
      *
      * @throws \UnexpectedValueException
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      */
     public function __construct($file, Key $key = null)
     {
@@ -238,7 +238,7 @@ class ReadOnlyFile implements FileStream
      *
      * @link https://cwe.mitre.org/data/definitions/367.html
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      *
      * @return void
      */

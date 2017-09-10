@@ -17,7 +17,7 @@ class SerializeTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Component\Contract\Parsers\Exception\ParseException
      */
     public function testParseToThrowException(): void
     {

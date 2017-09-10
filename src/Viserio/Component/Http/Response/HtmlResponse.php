@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Response;
 
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Response\Traits\InjectContentTypeTrait;
 use Viserio\Component\Http\Stream;
@@ -22,7 +22,7 @@ class HtmlResponse extends Response
      * @param int                    $status  integer status code for the response; 200 by default
      * @param array                  $headers array of headers to use at initialization
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException if $html is neither a string or stream
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $html is neither a string or stream
      */
     public function __construct($html, int $status = 200, array $headers = [])
     {
@@ -38,7 +38,7 @@ class HtmlResponse extends Response
      *
      * @param StreamInterface|string $html
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException if $html is neither a string or stream
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $html is neither a string or stream
      *
      * @return StreamInterface
      */

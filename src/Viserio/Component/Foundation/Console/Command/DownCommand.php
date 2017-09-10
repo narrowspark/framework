@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\Console\Command;
 
 use Cake\Chronos\Chronos;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 
 class DownCommand extends Command
 {

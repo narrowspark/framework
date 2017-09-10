@@ -8,9 +8,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
-use Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
@@ -30,7 +30,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      *
      * @param \Monolog\Logger|\Viserio\Component\Log\Writer $logger
      *
-     * @throws \Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException if wrong class is given
+     * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException if wrong class is given
      * @throws \RuntimeException
      */
     public function __construct($logger)

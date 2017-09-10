@@ -4,8 +4,8 @@ namespace Viserio\Component\Http;
 
 use Psr\Http\Message\StreamInterface;
 use Throwable;
-use Viserio\Component\Contracts\Http\Exception\RuntimeException;
-use Viserio\Component\Contracts\Http\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
+use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 
 class Stream implements StreamInterface
 {
@@ -105,7 +105,7 @@ class Stream implements StreamInterface
      * @param resource $stream  stream resource to wrap
      * @param array    $options associative array of options
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\UnexpectedValueException if the stream is not a stream resource
+     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException if the stream is not a stream resource
      */
     public function __construct($stream, array $options = [])
     {

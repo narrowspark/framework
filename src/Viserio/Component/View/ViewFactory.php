@@ -4,12 +4,12 @@ namespace Viserio\Component\View;
 
 use Closure;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Support\Arrayable;
-use Viserio\Component\Contracts\View\Engine as EngineContract;
-use Viserio\Component\Contracts\View\EngineResolver as EngineResolverContract;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\Contracts\View\View as ViewContract;
+use Viserio\Component\Contract\Support\Arrayable;
+use Viserio\Component\Contract\View\Engine as EngineContract;
+use Viserio\Component\Contract\View\EngineResolver as EngineResolverContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
+use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\View\Traits\NormalizeNameTrait;
 
 class ViewFactory implements FactoryContract
@@ -60,22 +60,22 @@ class ViewFactory implements FactoryContract
     /**
      * The engines instance.
      *
-     * @var \Viserio\Component\Contracts\View\EngineResolver
+     * @var \Viserio\Component\Contract\View\EngineResolver
      */
     private $engines;
 
     /**
      * The view finder implementation.
      *
-     * @var \Viserio\Component\Contracts\View\Finder
+     * @var \Viserio\Component\Contract\View\Finder
      */
     private $finder;
 
     /**
      * Create a new factory instance.
      *
-     * @param \Viserio\Component\Contracts\View\EngineResolver $engines
-     * @param \Viserio\Component\Contracts\View\Finder         $finder
+     * @param \Viserio\Component\Contract\View\EngineResolver $engines
+     * @param \Viserio\Component\Contract\View\Finder         $finder
      */
     public function __construct(
         EngineResolverContract $engines,
@@ -375,11 +375,11 @@ class ViewFactory implements FactoryContract
     /**
      * Get the right view object.
      *
-     * @param \Viserio\Component\Contracts\View\Factory            $factory
-     * @param \Viserio\Component\Contracts\View\Engine             $engine
+     * @param \Viserio\Component\Contract\View\Factory            $factory
+     * @param \Viserio\Component\Contract\View\Engine             $engine
      * @param string                                               $view
      * @param array                                                $fileInfo
-     * @param array|\Viserio\Component\Contracts\Support\Arrayable $data
+     * @param array|\Viserio\Component\Contract\Support\Arrayable $data
      *
      * @return \Viserio\Component\View\View
      */

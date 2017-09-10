@@ -4,9 +4,9 @@ namespace Viserio\Component\Translation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
-use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Parsers\Loader as LoaderContract;
+use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
@@ -54,7 +54,7 @@ class TranslationManagerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Translation\Exception\InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
      * @expectedExceptionMessage File [invalid.php] cant be imported. Key for language is missing.
      */
     public function testImportToThrowException(): void

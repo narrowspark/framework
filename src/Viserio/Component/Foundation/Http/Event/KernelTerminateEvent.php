@@ -4,8 +4,8 @@ namespace Viserio\Component\Foundation\Http\Event;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
 class KernelTerminateEvent implements EventContract
@@ -15,7 +15,7 @@ class KernelTerminateEvent implements EventContract
     /**
      * Create a new kernel terminate event.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Terminable $kernel
+     * @param \Viserio\Component\Contract\Foundation\Terminable $kernel
      * @param \Psr\Http\Message\ServerRequestInterface           $serverRequest
      * @param \Psr\Http\Message\ResponseInterface                $response
      */

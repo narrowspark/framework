@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Tests\Fixtures;
 
-use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
+use Viserio\Component\Contract\Parsers\Parser as ParserContract;
 
 class TextParser implements ParserContract
 {

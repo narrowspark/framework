@@ -9,10 +9,10 @@ use Twig\Lexer;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\LoaderInterface;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\View\Engine\EngineResolver;
 use Viserio\Provider\Twig\Engine\TwigEngine;
@@ -85,7 +85,7 @@ class TwigServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\View\Factory
+     * @return null|\Viserio\Component\Contract\View\Factory
      */
     public static function extendViewFactory(ContainerInterface $container, ?callable $getPrevious = null): ?FactoryContract
     {
@@ -105,7 +105,7 @@ class TwigServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\View\Factory
+     * @return null|\Viserio\Component\Contract\View\Factory
      */
     public static function extendEngineResolver(ContainerInterface $container, ?callable $getPrevious = null): ?EngineResolver
     {

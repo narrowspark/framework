@@ -7,8 +7,8 @@ use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
-use Viserio\Component\Contracts\Container\Exception\BindingResolutionException;
-use Viserio\Component\Contracts\Container\Exception\CyclicDependencyException;
+use Viserio\Component\Contract\Container\Exception\BindingResolutionException;
+use Viserio\Component\Contract\Container\Exception\CyclicDependencyException;
 
 class ContainerResolver
 {
@@ -46,8 +46,8 @@ class ContainerResolver
      * @param string $class
      * @param array  $parameters
      *
-     * @throws \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
-     * @throws \Viserio\Component\Contracts\Container\Exception\CyclicDependencyException
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
      *
      * @return object
      */
@@ -153,7 +153,7 @@ class ContainerResolver
      * @param \ReflectionParameter $parameter
      * @param array                $parameters
      *
-     * @throws \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      *
      * @return mixed
      */

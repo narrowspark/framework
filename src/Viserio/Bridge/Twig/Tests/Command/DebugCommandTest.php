@@ -10,7 +10,7 @@ use Twig\Loader\ArrayLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\View\ViewFinder;
 

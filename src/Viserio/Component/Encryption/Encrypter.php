@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
 use RangeException;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
-use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
-use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
+use Viserio\Component\Contract\Encryption\HiddenString as HiddenStringContract;
+use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Traits\ChooseEncoderTrait;
 
 final class Encrypter implements EncrypterContract
@@ -162,7 +162,7 @@ final class Encrypter implements EncrypterContract
      *
      * @param string $ciphertext
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
      *
      * @return string[]
      */
@@ -241,7 +241,7 @@ final class Encrypter implements EncrypterContract
      * @param string $message The message to verify
      * @param string $authKey Authentication key (symmetric)
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
      *
      * @return bool
      */

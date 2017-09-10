@@ -5,7 +5,7 @@ namespace Viserio\Component\Queue\Tests\Connector;
 use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connector\RedisQueue;
 
 class RedisQueueTest extends MockeryTestCase

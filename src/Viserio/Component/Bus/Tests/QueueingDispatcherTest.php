@@ -13,8 +13,8 @@ use Viserio\Component\Bus\Tests\Fixture\BusDispatcherQueuedHandler;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificDelayCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificQueueAndDelayCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificQueueCommand;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
-use Viserio\Component\Contracts\Queue\ShouldQueue as ShouldQueueContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Component\Contract\Queue\ShouldQueue as ShouldQueueContract;
 
 class QueueingDispatcherTest extends MockeryTestCase
 {

@@ -4,7 +4,7 @@ namespace Viserio\Component\StaticalProxy\Tests\Provider;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\StaticalProxy\AliasLoader;
 use Viserio\Component\StaticalProxy\Provider\AliasLoaderServiceProvider;
 

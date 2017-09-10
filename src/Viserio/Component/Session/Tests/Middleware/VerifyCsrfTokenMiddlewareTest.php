@@ -7,9 +7,9 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\KeyFactory;
@@ -234,7 +234,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Session\Exception\TokenMismatchException
+     * @expectedException \Viserio\Component\Contract\Session\Exception\TokenMismatchException
      */
     public function testSessionCsrfMiddlewareToThrowException(): void
     {

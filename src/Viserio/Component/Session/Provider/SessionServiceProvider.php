@@ -4,10 +4,10 @@ namespace Viserio\Component\Session\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\SessionManager;
 
@@ -34,7 +34,7 @@ class SessionServiceProvider implements ServiceProvider
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\Events\EventManager
+     * @return null|\Viserio\Component\Contract\Events\EventManager
      */
     public static function extendEventManager(ContainerInterface $container, ?callable $getPrevious = null): ?EventManagerContract
     {
@@ -71,7 +71,7 @@ class SessionServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Session\Store
+     * @return \Viserio\Component\Contract\Session\Store
      */
     public static function createSessionStore(ContainerInterface $container): StoreContract
     {

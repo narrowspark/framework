@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 use ParagonIE\ConstantTime\Hex;
-use Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidLengthException;
+use Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException;
+use Viserio\Component\Contract\Encryption\Exception\InvalidLengthException;
 
 if (! \function_exists('safe_str_cpy')) {
     /**
@@ -12,7 +12,7 @@ if (! \function_exists('safe_str_cpy')) {
      *
      * @param string $string
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
      *
      * @return string
      */
@@ -44,7 +44,7 @@ if (! \function_exists('raw_keyed_hash')) {
      * @param string $key
      * @param int    $length
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
      *
      * @return string Returns raw binary.
      */
@@ -82,7 +82,7 @@ if (! \function_exists('keyed_hash')) {
      * @param string $key
      * @param int    $length
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
      *
      * @return string Returns hexadecimal characters.
      */
@@ -108,8 +108,8 @@ if (! \function_exists('hash_hkdf_blake2b')) {
      * @param string $info   What sort of key are we deriving?
      * @param string $salt
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotPerformOperationException
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidLengthException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidLengthException
      *
      * @return string
      */

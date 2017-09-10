@@ -5,7 +5,7 @@ namespace Viserio\Component\Routing\Provider;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Command\RouteListCommand;
 
 class ConsoleCommandsServiceProvider implements ServiceProvider

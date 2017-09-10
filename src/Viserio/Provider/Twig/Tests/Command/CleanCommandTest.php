@@ -5,7 +5,7 @@ namespace Viserio\Provider\Twig\Tests\Command;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
 
 class CleanCommandTest extends MockeryTestCase

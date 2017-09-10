@@ -4,8 +4,8 @@ namespace Viserio\Component\Routing\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class RoutingDataCollector extends AbstractDataCollector implements PanelAwareContract
@@ -13,14 +13,14 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     /**
      * Router instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\RouteCollection
+     * @var \Viserio\Component\Contract\Routing\RouteCollection
      */
     protected $routes;
 
     /**
      * Create a new viserio routes data collector.
      *
-     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
+     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
      */
     public function __construct(RouteCollectionContract $routes)
     {

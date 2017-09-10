@@ -13,8 +13,8 @@ use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\Console\Exception\InvocationException;
-use Viserio\Component\Contracts\Console\Exception\LogicException;
+use Viserio\Component\Contract\Console\Exception\InvocationException;
+use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Str;
 
@@ -63,7 +63,7 @@ final class CommandResolver
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
      *
-     * @throws \Viserio\Component\Contracts\Console\Exception\InvocationException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */

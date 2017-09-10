@@ -5,7 +5,7 @@ namespace Viserio\Component\Exception\Transformer;
 use ErrorException;
 use Exception;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
+use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 
 class CommandLineTransformer implements TransformerContract
 {

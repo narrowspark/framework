@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events\Traits;
 
-use Viserio\Component\Contracts\Events\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Events\Exception\InvalidArgumentException;
 
 trait ValidateNameTrait
 {
@@ -11,7 +11,7 @@ trait ValidateNameTrait
      *
      * @param string $eventName
      *
-     * @throws \Viserio\Component\Contracts\Events\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Events\Exception\InvalidArgumentException
      *
      * @return void
      */

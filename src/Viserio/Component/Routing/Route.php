@@ -4,9 +4,9 @@ namespace Viserio\Component\Routing;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Container\Factory as FactoryContract;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Container\Factory as FactoryContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Routing\Route\Action as RouteAction;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;

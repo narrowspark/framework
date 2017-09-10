@@ -4,10 +4,10 @@ namespace Viserio\Component\Cron;
 
 use Symfony\Component\Process\PhpExecutableFinder;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Cron\Cron as CronContract;
-use Viserio\Component\Contracts\Cron\Exception\LogicException;
+use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Cron\Cron as CronContract;
+use Viserio\Component\Contract\Cron\Exception\LogicException;
 
 class Schedule
 {
@@ -80,9 +80,9 @@ class Schedule
      * @param string $command
      * @param array  $parameters
      *
-     * @throws \Viserio\Component\Contracts\Cron\Exception\LogicException
+     * @throws \Viserio\Component\Contract\Cron\Exception\LogicException
      *
-     * @return \Viserio\Component\Contracts\Cron\Cron
+     * @return \Viserio\Component\Contract\Cron\Cron
      */
     public function command(string $command, array $parameters = []): CronContract
     {
@@ -108,7 +108,7 @@ class Schedule
      * @param string $command
      * @param array  $parameters
      *
-     * @return \Viserio\Component\Contracts\Cron\Cron
+     * @return \Viserio\Component\Contract\Cron\Cron
      */
     public function exec(string $command, array $parameters = []): CronContract
     {

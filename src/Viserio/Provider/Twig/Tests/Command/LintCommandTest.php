@@ -9,7 +9,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;

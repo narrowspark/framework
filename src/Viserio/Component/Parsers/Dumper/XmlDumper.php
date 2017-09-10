@@ -5,8 +5,8 @@ namespace Viserio\Component\Parsers\Dumper;
 use DOMException;
 use RuntimeException;
 use Spatie\ArrayToXml\ArrayToXml;
-use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exception\DumpException;
+use Viserio\Component\Contract\Parsers\Dumper as DumperContract;
+use Viserio\Component\Contract\Parsers\Exception\DumpException;
 
 class XmlDumper implements DumperContract
 {

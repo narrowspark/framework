@@ -5,9 +5,9 @@ namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
-use Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 /**
@@ -31,7 +31,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
      *
      * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator $cache
      *
-     * @throws \Viserio\Component\Contracts\Profiler\Exception\UnexpectedValueException
+     * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException
      *
      * @return void
      */

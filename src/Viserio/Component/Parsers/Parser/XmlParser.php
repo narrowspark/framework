@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Parsers\Parser;
 
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Parsers\Exception\ParseException;
-use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
+use Viserio\Component\Contract\Parsers\Exception\ParseException;
+use Viserio\Component\Contract\Parsers\Parser as ParserContract;
 use Viserio\Component\Parsers\Utils\XmlUtils;
 
 class XmlParser implements ParserContract

@@ -4,8 +4,8 @@ namespace Viserio\Component\Parsers;
 
 use finfo;
 use RuntimeException;
-use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
-use Viserio\Component\Contracts\Parsers\Parser as ParserContract;
+use Viserio\Component\Contract\Parsers\Exception\NotSupportedException;
+use Viserio\Component\Contract\Parsers\Parser as ParserContract;
 use Viserio\Component\Parsers\Parser\IniParser;
 use Viserio\Component\Parsers\Parser\JsonParser;
 use Viserio\Component\Parsers\Parser\PhpParser;
@@ -85,7 +85,7 @@ class Parser
     /**
      * Add a new parser.
      *
-     * @param \Viserio\Component\Contracts\Parsers\Parser $parser
+     * @param \Viserio\Component\Contract\Parsers\Parser $parser
      * @param string                                      $extension
      *
      * @return void
@@ -100,7 +100,7 @@ class Parser
      *
      * @param string $payload
      *
-     * @throws \Viserio\Component\Contracts\Parsers\Exception\ParseException
+     * @throws \Viserio\Component\Contract\Parsers\Exception\ParseException
      * @throws \RuntimeException                                             if an error occurred during reading
      *
      * @return array
@@ -133,9 +133,9 @@ class Parser
      *
      * @param string $type
      *
-     * @throws \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
+     * @throws \Viserio\Component\Contract\Parsers\Exception\NotSupportedException
      *
-     * @return \Viserio\Component\Contracts\Parsers\Parser
+     * @return \Viserio\Component\Contract\Parsers\Parser
      */
     public function getParser(string $type): ParserContract
     {

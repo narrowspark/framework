@@ -7,8 +7,8 @@ use ParagonIE\ConstantTime\Base32Hex;
 use ParagonIE\ConstantTime\Base64;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Hex;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException;
-use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
+use Viserio\Component\Contract\Encryption\Exception\InvalidTypeException;
+use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 
 trait ChooseEncoderTrait
 {
@@ -20,7 +20,7 @@ trait ChooseEncoderTrait
      * @param string|bool $chosen
      * @param bool        $decode
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidTypeException
      *
      * @return callable (array or string)
      */

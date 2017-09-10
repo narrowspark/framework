@@ -14,7 +14,7 @@ class ResponseCookiesTest extends MockeryTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement [Viserio\Component\Contracts\Cookie\Cookie].
+     * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement [Viserio\Component\Contract\Cookie\Cookie].
      */
     public function testRequestCookiesToThrowException(): void
     {

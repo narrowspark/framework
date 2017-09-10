@@ -12,9 +12,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Viserio\Component\Contracts\Console\Exception\LogicException;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Support\Arrayable;
+use Viserio\Component\Contract\Console\Exception\LogicException;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Support\Arrayable;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 abstract class Command extends BaseCommand
@@ -342,7 +342,7 @@ abstract class Command extends BaseCommand
      * Format input to textual table.
      *
      * @param array                                                $headers
-     * @param array|\Viserio\Component\Contracts\Support\Arrayable $rows
+     * @param array|\Viserio\Component\Contract\Support\Arrayable $rows
      * @param string                                               $style
      *
      * @return void
@@ -446,7 +446,7 @@ abstract class Command extends BaseCommand
     /**
      * Get the container instance.
      *
-     * @throws \Viserio\Component\Contracts\Console\Exception\LogicException
+     * @throws \Viserio\Component\Contract\Console\Exception\LogicException
      *
      * @return \Psr\Container\ContainerInterface
      */

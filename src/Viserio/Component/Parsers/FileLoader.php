@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers;
 
-use Viserio\Component\Contracts\Parsers\Exception\FileNotFoundException;
-use Viserio\Component\Contracts\Parsers\Exception\NotSupportedException;
-use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Component\Contract\Parsers\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Parsers\Exception\NotSupportedException;
+use Viserio\Component\Contract\Parsers\Loader as LoaderContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoader implements LoaderContract
@@ -119,7 +119,7 @@ class FileLoader implements LoaderContract
      *
      * @param null|array $options
      *
-     * @throws \Viserio\Component\Contracts\Parsers\Exception\NotSupportedException
+     * @throws \Viserio\Component\Contract\Parsers\Exception\NotSupportedException
      *
      * @return void
      */

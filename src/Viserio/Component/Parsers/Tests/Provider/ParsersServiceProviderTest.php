@@ -4,7 +4,7 @@ namespace Viserio\Component\Parsers\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Component\Contract\Parsers\Loader as LoaderContract;
 use Viserio\Component\Parsers\Dumper;
 use Viserio\Component\Parsers\FileLoader;
 use Viserio\Component\Parsers\GroupParser;

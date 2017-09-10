@@ -6,7 +6,7 @@ use ErrorException;
 use ParseError;
 use Throwable;
 use TypeError;
-use Viserio\Component\Contracts\View\Engine as EngineContract;
+use Viserio\Component\Contract\View\Engine as EngineContract;
 
 class PhpEngine implements EngineContract
 {

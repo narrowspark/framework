@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator\Optimizer;
 
-use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Contract\Routing\Pattern;
+use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Routing\Matcher\AnyMatcher;
 use Viserio\Component\Routing\Matcher\CompoundMatcher;
 use Viserio\Component\Routing\Matcher\ExpressionMatcher;
@@ -63,9 +63,9 @@ final class MatcherOptimizer
     /**
      * Change matcher for a faster one, if available.
      *
-     * @param \Viserio\Component\Contracts\Routing\SegmentMatcher $matcher
+     * @param \Viserio\Component\Contract\Routing\SegmentMatcher $matcher
      *
-     * @return \Viserio\Component\Contracts\Routing\SegmentMatcher
+     * @return \Viserio\Component\Contract\Routing\SegmentMatcher
      */
     private static function optimizeMatcher(SegmentMatcherContract $matcher): SegmentMatcherContract
     {

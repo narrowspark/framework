@@ -14,13 +14,13 @@ use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
-use Viserio\Component\Contracts\Container\Exception\ContainerException;
-use Viserio\Component\Contracts\Container\Exception\NotFoundException;
-use Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException;
-use Viserio\Component\Contracts\Container\Factory as FactoryContract;
-use Viserio\Component\Contracts\Container\Types as TypesContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use Viserio\Component\Contract\Container\Exception\ContainerException;
+use Viserio\Component\Contract\Container\Exception\NotFoundException;
+use Viserio\Component\Contract\Container\Exception\UnresolvableDependencyException;
+use Viserio\Component\Contract\Container\Factory as FactoryContract;
+use Viserio\Component\Contract\Container\Types as TypesContract;
 
 class Container extends ContainerResolver implements ContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {

@@ -5,13 +5,13 @@ namespace Viserio\Component\Translation;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
-use Viserio\Component\Contracts\Translation\Exception\InvalidArgumentException;
-use Viserio\Component\Contracts\Translation\Exception\RuntimeException;
-use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
-use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Parsers\Traits\ParserAwareTrait;
+use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Translation\Exception\RuntimeException;
+use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 
@@ -25,7 +25,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * MessageFormatter instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageFormatter
+     * @var \Viserio\Component\Contract\Translation\MessageFormatter
      */
     protected $formatter;
 
@@ -39,7 +39,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Default fallback for all languages.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageCatalogue
+     * @var \Viserio\Component\Contract\Translation\MessageCatalogue
      */
     protected $defaultFallback;
 
@@ -67,7 +67,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Create a new Translation instance.
      *
-     * @param \Viserio\Component\Contracts\Translation\MessageFormatter $formatter
+     * @param \Viserio\Component\Contract\Translation\MessageFormatter $formatter
      */
     public function __construct(MessageFormatterContract $formatter)
     {
@@ -122,7 +122,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @param string $file
      *
-     * @throws \Viserio\Component\Contracts\Translation\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
      *
      * @return $this
      */
@@ -145,7 +145,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Add message catalogue.
      *
-     * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $messageCatalogue
+     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $messageCatalogue
      *
      * @return $this
      */
@@ -171,7 +171,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Set default fallback for all languages.
      *
-     * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $fallback
+     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $fallback
      *
      * @return $this
      */
@@ -185,7 +185,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Get default fallback.
      *
-     * @return \Viserio\Component\Contracts\Translation\MessageCatalogue
+     * @return \Viserio\Component\Contract\Translation\MessageCatalogue
      */
     public function getDefaultFallback(): MessageCatalogueContract
     {
@@ -196,7 +196,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      * Set fallback for a language.
      *
      * @param string                                                    $lang
-     * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $fallback
+     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $fallback
      *
      * @throws \RuntimeException
      *
@@ -214,7 +214,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @param string $lang
      *
-     * @return null|\Viserio\Component\Contracts\Translation\MessageCatalogue
+     * @return null|\Viserio\Component\Contract\Translation\MessageCatalogue
      */
     public function getLanguageFallback(string $lang): ?MessageCatalogueContract
     {

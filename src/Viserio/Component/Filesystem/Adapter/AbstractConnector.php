@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
+use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
 
 abstract class AbstractConnector implements ConnectorContract
 {

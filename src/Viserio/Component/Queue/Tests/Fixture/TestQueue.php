@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Fixture;
 
 use Exception;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 
 class TestQueue
 {
@@ -13,7 +13,7 @@ class TestQueue
     /**
      * The encrypter implementation.
      *
-     * @var \Viserio\Component\Contracts\Encryption\Encrypter
+     * @var \Viserio\Component\Contract\Encryption\Encrypter
      */
     protected $encrypter;
 
@@ -22,7 +22,7 @@ class TestQueue
      *
      * @throws \Exception
      *
-     * @return \Viserio\Component\Contracts\Encryption\Encrypter
+     * @return \Viserio\Component\Contract\Encryption\Encrypter
      */
     public function getEncrypter(): EncrypterContract
     {
@@ -36,7 +36,7 @@ class TestQueue
     /**
      * Set the encrypter implementation.
      *
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function setEncrypter(EncrypterContract $encrypter): void
     {

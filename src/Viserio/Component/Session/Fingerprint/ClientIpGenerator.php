@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Fingerprint;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
+use Viserio\Component\Contract\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Support\Http\ClientIp;
 
 class ClientIpGenerator implements FingerprintContract

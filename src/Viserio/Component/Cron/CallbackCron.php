@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
-use Viserio\Component\Contracts\Cron\Cron as CronContract;
-use Viserio\Component\Contracts\Cron\Exception\InvalidArgumentException;
-use Viserio\Component\Contracts\Cron\Exception\LogicException;
+use Viserio\Component\Contract\Cron\Cron as CronContract;
+use Viserio\Component\Contract\Cron\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Cron\Exception\LogicException;
 
 class CallbackCron extends Cron
 {
@@ -28,7 +28,7 @@ class CallbackCron extends Cron
      * @param callable|string $callback
      * @param array           $parameters
      *
-     * @throws \Viserio\Component\Contracts\Cron\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cron\Exception\InvalidArgumentException
      */
     public function __construct($callback, array $parameters = [])
     {
@@ -77,9 +77,9 @@ class CallbackCron extends Cron
     /**
      * Do not allow the cron job to overlap each other.
      *
-     * @throws \Viserio\Component\Contracts\Cron\Exception\LogicException
+     * @throws \Viserio\Component\Contract\Cron\Exception\LogicException
      *
-     * @return \Viserio\Component\Contracts\Cron\Cron
+     * @return \Viserio\Component\Contract\Cron\Cron
      */
     public function withoutOverlapping(): CronContract
     {

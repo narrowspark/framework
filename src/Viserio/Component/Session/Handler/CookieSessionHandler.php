@@ -5,14 +5,14 @@ namespace Viserio\Component\Session\Handler;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface;
-use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 
 class CookieSessionHandler implements SessionHandlerInterface
 {
     /**
      * The cookie jar instance.
      *
-     * @var \Viserio\Component\Contracts\Cookie\QueueingFactory
+     * @var \Viserio\Component\Contract\Cookie\QueueingFactory
      */
     protected $cookie;
 
@@ -33,7 +33,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * Create a new cookie driven handler instance.
      *
-     * @param \Viserio\Component\Contracts\Cookie\QueueingFactory $cookie
+     * @param \Viserio\Component\Contract\Cookie\QueueingFactory $cookie
      * @param int                                                 $lifetime The session lifetime in seconds
      */
     public function __construct(JarContract $cookie, int $lifetime)

@@ -6,7 +6,7 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 
 class ConsoleServiceProvider implements ServiceProvider
 {

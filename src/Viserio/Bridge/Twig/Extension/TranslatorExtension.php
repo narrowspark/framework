@@ -8,15 +8,15 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 use Viserio\Bridge\Twig\TokenParser\TransTokenParser;
-use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 
 class TranslatorExtension extends AbstractExtension
 {
     /**
      * Translation instance.
      *
-     * @var null|\Viserio\Component\Contracts\Translation\TranslationManager
+     * @var null|\Viserio\Component\Contract\Translation\TranslationManager
      */
     protected $translationManager;
 
@@ -30,7 +30,7 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Create a new translator extension.
      *
-     * @param \Viserio\Component\Contracts\Translation\TranslationManager                                         $translationManager
+     * @param \Viserio\Component\Contract\Translation\TranslationManager                                         $translationManager
      * @param null|\Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor $translationNodeVisitor
      */
     public function __construct(TranslationManagerContract $translationManager, ?NodeVisitorInterface $translationNodeVisitor = null)
@@ -121,7 +121,7 @@ class TranslatorExtension extends AbstractExtension
      *
      * @throws \RuntimeException
      *
-     * @return \Viserio\Component\Contracts\Translation\Translator
+     * @return \Viserio\Component\Contract\Translation\Translator
      */
     public function getTranslator(?string $locale = null): TranslatorContract
     {

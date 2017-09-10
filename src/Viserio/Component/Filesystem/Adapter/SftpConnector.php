@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
 use League\Flysystem\Sftp\SftpAdapter;
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
 class SftpConnector extends AbstractConnector
 {

@@ -4,7 +4,7 @@ namespace Viserio\Component\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 
 class ServerRequest extends Request implements ServerRequestInterface
 {
@@ -208,7 +208,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @param array $uploadedFiles
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException if any leaf is not an UploadedFileInterface instance
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if any leaf is not an UploadedFileInterface instance
      */
     private function validateUploadedFiles(array $uploadedFiles): void
     {

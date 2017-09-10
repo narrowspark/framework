@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption\Traits;
 
-use Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException;
-use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
+use Viserio\Component\Contract\Encryption\Exception\InvalidTypeException;
+use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 
 trait SecurityLevelsTrait
 {
@@ -12,7 +12,7 @@ trait SecurityLevelsTrait
      *
      * @param string $level
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidTypeException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidTypeException
      *
      * @return int[]
      */

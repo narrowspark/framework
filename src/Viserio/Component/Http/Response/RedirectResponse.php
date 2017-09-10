@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Response;
 
 use Psr\Http\Message\UriInterface;
-use Viserio\Component\Contracts\Http\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Stream;
 
@@ -21,7 +21,7 @@ class RedirectResponse extends Response
      * @param int                 $status  integer status code for the redirect; 302 by default
      * @param array               $headers array of headers to use at initialization
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\UnexpectedValueException
+     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      */
     public function __construct($uri, int $status = 302, array $headers = [])
     {

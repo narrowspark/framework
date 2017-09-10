@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
 use Countable;
-use Viserio\Component\Contracts\Routing\Exception\RuntimeException;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 
 class Collection implements Countable, RouteCollectionContract
 {
@@ -101,7 +101,7 @@ class Collection implements Countable, RouteCollectionContract
     /**
      * Add the route to any look-up tables if necessary.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return void
      */

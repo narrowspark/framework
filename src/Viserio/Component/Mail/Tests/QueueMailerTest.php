@@ -10,17 +10,17 @@ use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
 use Swift_Transport;
-use Viserio\Component\Contracts\Mail\Message as MessageContract;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueContract;
-use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
-use Viserio\Component\Contracts\View\View as ViewContract;
+use Viserio\Component\Contract\Mail\Message as MessageContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueContract;
+use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
+use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\Mail\QueueMailer;
 use Viserio\Component\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
 class QueueMailerTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contracts\View\Factory|\Mockery\MockInterface
+     * @var \Viserio\Component\Contract\View\Factory|\Mockery\MockInterface
      */
     private $viewFactory;
 

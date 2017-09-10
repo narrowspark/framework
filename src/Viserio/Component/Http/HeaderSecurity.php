@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use Viserio\Component\Contracts\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 
 /**
  * Provide security tools around HTTP headers to prevent common injection vectors.
@@ -122,7 +122,7 @@ final class HeaderSecurity
      *
      * @param string $value
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException for invalid values
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException for invalid values
      *
      * @return void
      */
@@ -143,7 +143,7 @@ final class HeaderSecurity
      *
      * @param mixed $name
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      *
      * @return void
      */

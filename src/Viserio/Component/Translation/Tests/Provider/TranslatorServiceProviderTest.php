@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Parsers\Provider\ParsersServiceProvider;
 use Viserio\Component\Translation\Provider\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;

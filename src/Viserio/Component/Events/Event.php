@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events;
 
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Events\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Events\Exception\InvalidArgumentException;
 use Viserio\Component\Events\Traits\EventTrait;
 use Viserio\Component\Events\Traits\ValidateNameTrait;
 
@@ -19,7 +19,7 @@ class Event implements EventContract
      * @param null|object|string $target     event context, object or classname
      * @param array              $parameters event parameters
      *
-     * @throws \Viserio\Component\Contracts\Events\Exception\InvalidArgumentException if event name is invalid
+     * @throws \Viserio\Component\Contract\Events\Exception\InvalidArgumentException if event name is invalid
      */
     public function __construct(
         string $eventName,

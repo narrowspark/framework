@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Traits;
 
 use Closure;
-use Viserio\Component\Contracts\Support\Exception\BadMethodCallException;
+use Viserio\Component\Contract\Support\Exception\BadMethodCallException;
 
 trait MacroableTrait
 {
@@ -20,7 +20,7 @@ trait MacroableTrait
      * @param string $method
      * @param array  $parameters
      *
-     * @throws \Viserio\Component\Contracts\Support\Exception\BadMethodCallException
+     * @throws \Viserio\Component\Contract\Support\Exception\BadMethodCallException
      *
      * @return mixed
      */

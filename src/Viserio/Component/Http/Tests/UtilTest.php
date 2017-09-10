@@ -422,7 +422,7 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Http\Exception\InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      * @expectedExceptionMessage Invalid value in files specification
      */
     public function testNormalizeFilesRaisesException(): void

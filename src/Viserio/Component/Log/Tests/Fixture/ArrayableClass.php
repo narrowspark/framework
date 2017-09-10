@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Tests\Fixture;
 
-use Viserio\Component\Contracts\Support\Arrayable;
+use Viserio\Component\Contract\Support\Arrayable;
 
 class ArrayableClass implements Arrayable
 {

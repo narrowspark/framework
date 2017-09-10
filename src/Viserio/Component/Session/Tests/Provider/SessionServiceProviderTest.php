@@ -5,7 +5,7 @@ namespace Viserio\Component\Session\Tests\Provider;
 use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Encryption\Provider\EncrypterServiceProvider;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;

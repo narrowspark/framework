@@ -6,9 +6,9 @@ use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
 use Symfony\Component\Process\Process;
-use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Cron\Cron as CronContract;
+use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Cron\Cron as CronContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
 
@@ -716,7 +716,7 @@ class Cron implements CronContract
      * @param int        $position
      * @param int|string $value
      *
-     * @return \Viserio\Component\Contracts\Cron\Cron
+     * @return \Viserio\Component\Contract\Cron\Cron
      */
     protected function spliceIntoPosition(int $position, $value): CronContract
     {

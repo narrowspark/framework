@@ -5,9 +5,9 @@ namespace Viserio\Component\Config;
 use ArrayIterator;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
-use Viserio\Component\Contracts\Config\Exception\FileNotFoundException;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
+use Viserio\Component\Contract\Config\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Parsers\Traits\ParserAwareTrait;
 
 class Repository implements RepositoryContract, IteratorAggregate
 {
@@ -172,7 +172,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      *
      * @param string $key
      *
-     * @return \Viserio\Component\Contracts\Config\Repository
+     * @return \Viserio\Component\Contract\Config\Repository
      */
     public function offsetUnset($key): RepositoryContract
     {

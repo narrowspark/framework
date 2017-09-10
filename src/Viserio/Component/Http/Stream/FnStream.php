@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Contracts\Http\Exception\BadMethodCallException;
+use Viserio\Component\Contract\Http\Exception\BadMethodCallException;
 
 /**
  * Compose stream implementations based on a hash of functions.
@@ -52,7 +52,7 @@ class FnStream implements StreamInterface
      *
      * @param mixed $name
      *
-     * @throws \Viserio\Component\Contracts\Http\Exception\BadMethodCallException
+     * @throws \Viserio\Component\Contract\Http\Exception\BadMethodCallException
      *
      * @return void
      */

@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Encryption\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
-use Viserio\Component\Contracts\Encryption\Security as SecurityContract;
+use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
+use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\Key;

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Dumper;
 
-use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
+use Viserio\Component\Contract\Parsers\Dumper as DumperContract;
 use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
 
 class PhpDumper implements DumperContract

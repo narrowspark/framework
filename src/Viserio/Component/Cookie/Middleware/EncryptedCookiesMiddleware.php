@@ -6,9 +6,9 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidMessageException;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
@@ -20,7 +20,7 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     /**
      * The encrypter instance.
      *
-     * @var \Viserio\Component\Contracts\Encryption\Encrypter
+     * @var \Viserio\Component\Contract\Encryption\Encrypter
      */
     protected $encrypter;
 
@@ -34,7 +34,7 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     /**
      * Create a new encrypt Cookies instance.
      *
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function __construct(EncrypterContract $encrypter)
     {
@@ -124,10 +124,10 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     /**
      * Duplicate a cookie with a new value.
      *
-     * @param \Viserio\Component\Contracts\Cookie\Cookie $cookie
+     * @param \Viserio\Component\Contract\Cookie\Cookie $cookie
      * @param string                                     $value
      *
-     * @return \Viserio\Component\Contracts\Cookie\Cookie
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
     protected function duplicate(CookieContract $cookie, string $value): CookieContract
     {

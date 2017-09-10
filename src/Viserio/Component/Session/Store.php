@@ -5,12 +5,12 @@ namespace Viserio\Component\Session;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
-use Viserio\Component\Contracts\Session\Exception\SessionNotStartedException;
-use Viserio\Component\Contracts\Session\Exception\SuspiciousOperationException;
-use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
+use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
+use Viserio\Component\Contract\Session\Exception\SuspiciousOperationException;
+use Viserio\Component\Contract\Session\Fingerprint as FingerprintContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Support\Str;
@@ -115,7 +115,7 @@ class Store implements StoreContract
      *
      * @param string                                            $name
      * @param \SessionHandlerInterface                          $handler
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
     {
@@ -584,7 +584,7 @@ class Store implements StoreContract
     /**
      * Check if session has already started.
      *
-     * @throws \Viserio\Component\Contracts\Session\Exception\SessionNotStartedException
+     * @throws \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
      *
      * @return void
      */

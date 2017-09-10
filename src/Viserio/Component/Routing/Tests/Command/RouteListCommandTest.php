@@ -4,8 +4,8 @@ namespace Viserio\Component\Routing\Tests\Command;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Command\RouteListCommand;
 use Viserio\Component\Routing\Route;
 

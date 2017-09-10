@@ -14,11 +14,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contracts\Exception\Filter as FilterContract;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
+use Viserio\Component\Contract\Exception\Filter as FilterContract;
+use Viserio\Component\Contract\Exception\Handler as HandlerContract;
+use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
@@ -288,7 +288,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * @param \Throwable                                    $transformed
      * @param int                                           $code
      *
-     * @return \Viserio\Component\Contracts\Exception\Displayer
+     * @return \Viserio\Component\Contract\Exception\Displayer
      */
     protected function getDisplayer(
         ?ServerRequestInterface $request,
@@ -317,13 +317,13 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * Get the filtered list of displayers.
      *
-     * @param \Viserio\Component\Contracts\Exception\Displayer[] $displayers
+     * @param \Viserio\Component\Contract\Exception\Displayer[] $displayers
      * @param \Psr\Http\Message\ServerRequestInterface           $request
      * @param \Throwable                                         $original
      * @param \Throwable                                         $transformed
      * @param int                                                $code
      *
-     * @return \Viserio\Component\Contracts\Exception\Displayer[]
+     * @return \Viserio\Component\Contract\Exception\Displayer[]
      */
     protected function getFiltered(
         array $displayers,

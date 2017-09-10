@@ -4,10 +4,10 @@ namespace Viserio\Component\Encryption\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Encryption\Password as PasswordContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Password as PasswordContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Encryption\Password;
@@ -64,7 +64,7 @@ class EncrypterServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Encryption\Encrypter
+     * @return \Viserio\Component\Contract\Encryption\Encrypter
      */
     public static function createEncrypter(ContainerInterface $container): EncrypterContract
     {
@@ -78,7 +78,7 @@ class EncrypterServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Encryption\Password
+     * @return \Viserio\Component\Contract\Encryption\Password
      */
     public static function createPassword(ContainerInterface $container): PasswordContract
     {

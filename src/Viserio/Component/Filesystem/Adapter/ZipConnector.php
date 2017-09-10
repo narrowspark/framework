@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
-use Viserio\Component\Contracts\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 use ZipArchive;
 
 class ZipConnector extends AbstractConnector

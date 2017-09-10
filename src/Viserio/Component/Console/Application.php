@@ -27,9 +27,9 @@ use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleErrorEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contracts\Console\Exception\LogicException;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Console\Exception\LogicException;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Support\Invoker;
 
 class Application extends SymfonyConsole
@@ -260,7 +260,7 @@ class Application extends SymfonyConsole
     /**
      * Get the container instance.
      *
-     * @throws \Viserio\Component\Contracts\Console\Exception\LogicException
+     * @throws \Viserio\Component\Contract\Console\Exception\LogicException
      *
      * @return \Psr\Container\ContainerInterface
      */

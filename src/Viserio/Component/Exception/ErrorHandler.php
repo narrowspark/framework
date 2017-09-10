@@ -16,11 +16,11 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Exception\Exception\NotFoundException as BaseNotFoundException;
-use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Exception\Exception\NotFoundException as BaseNotFoundException;
+use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\CommandLineTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
@@ -149,7 +149,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     /**
      * Add the transformed instance.
      *
-     * @param \Viserio\Component\Contracts\Exception\Transformer $transformer
+     * @param \Viserio\Component\Contract\Exception\Transformer $transformer
      *
      * @return $this
      */
@@ -352,7 +352,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      *
      * @param \Throwable $exception
      *
-     * @throws \Viserio\Component\Contracts\Exception\Exception\NotFoundException if transformer is not found
+     * @throws \Viserio\Component\Contract\Exception\Exception\NotFoundException if transformer is not found
      *
      * @return \Throwable
      */

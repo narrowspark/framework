@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Tests\Fixture;
 
-use Viserio\Component\Contracts\Support\Jsonable;
+use Viserio\Component\Contract\Support\Jsonable;
 
 class JsonableClass implements Jsonable
 {

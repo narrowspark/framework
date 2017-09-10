@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
-use Viserio\Component\Contracts\Encryption\Exception\CannotCloneKeyException;
-use Viserio\Component\Contracts\Encryption\Exception\CannotSerializeKeyException;
-use Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException;
-use Viserio\Component\Contracts\Encryption\HiddenString as HiddenStringContract;
+use Viserio\Component\Contract\Encryption\Exception\CannotCloneKeyException;
+use Viserio\Component\Contract\Encryption\Exception\CannotSerializeKeyException;
+use Viserio\Component\Contract\Encryption\Exception\InvalidKeyException;
+use Viserio\Component\Contract\Encryption\HiddenString as HiddenStringContract;
 
 final class Key
 {
@@ -17,9 +17,9 @@ final class Key
     /**
      * You probably should not be using this directly.
      *
-     * @param \Viserio\Component\Contracts\Encryption\HiddenString $keyMaterial - The actual key data
+     * @param \Viserio\Component\Contract\Encryption\HiddenString $keyMaterial - The actual key data
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\InvalidKeyException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
      */
     public function __construct(HiddenStringContract $keyMaterial)
     {
@@ -45,7 +45,7 @@ final class Key
     /**
      * Don't let this ever succeed.
      *
-     * @throws \Viserio\Component\Contracts\Encryption\Exception\CannotCloneKeyException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotCloneKeyException
      */
     public function __clone()
     {

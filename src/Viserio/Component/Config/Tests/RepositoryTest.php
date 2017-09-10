@@ -102,7 +102,7 @@ return [
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Config\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Config\Exception\FileNotFoundException
      * @expectedExceptionMessage File [test.php] not found.
      */
     public function testImportWithAPhpFileThrowsException(): void
