@@ -6,7 +6,7 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\Parsers\Loader as LoaderContract;
+use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 
 class ConfigServiceProvider implements ServiceProvider
 {

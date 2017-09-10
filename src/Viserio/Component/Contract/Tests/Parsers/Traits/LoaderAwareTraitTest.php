@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Contract\Parsers\Tests\Traits;
+namespace Viserio\Component\Contract\Parser\Tests\Traits;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Parsers\Loader as LoaderContract;
-use Viserio\Component\Contract\Parsers\Traits\ParserAwareTrait;
+use Viserio\Component\Contract\Parser\Loader as LoaderContract;
+use Viserio\Component\Contract\Parser\Traits\ParserAwareTrait;
 
 class LoaderAwareTraitTest extends MockeryTestCase
 {

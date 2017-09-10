@@ -41,8 +41,8 @@
         <testsuite name="Narrowspark Container Component Test Suite">
             <directory>./src/Viserio/Component/Container/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Contracts Component Test Suite">
-            <directory>./src/Viserio/Component/Contracts/Tests</directory>
+        <testsuite name="Narrowspark Contract Component Test Suite">
+            <directory>./src/Viserio/Component/Contract/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Cookie Component Test Suite">
             <directory>./src/Viserio/Component/Cookie/Tests</directory>
@@ -86,8 +86,8 @@
         <testsuite name="Narrowspark Pagination Component Test Suite">
             <directory>./src/Viserio/Component/Pagination/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Parsers Component Test Suite">
-            <directory>./src/Viserio/Component/Parsers/Tests</directory>
+        <testsuite name="Narrowspark Parser Component Test Suite">
+            <directory>./src/Viserio/Component/Parser/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Pipeline Component Test Suite">
             <directory>./src/Viserio/Component/Pipeline/Tests</directory>
@@ -136,4 +136,5 @@
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
+
 </phpunit>

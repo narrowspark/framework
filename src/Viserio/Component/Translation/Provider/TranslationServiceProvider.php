@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contract\Parsers\Loader as LoaderContract;
+use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contract\Translation\Translator as TranslatorContract;

@@ -5,7 +5,7 @@ namespace Viserio\Component\Translation;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Viserio\Component\Contract\Parsers\Traits\ParserAwareTrait;
+use Viserio\Component\Contract\Parser\Traits\ParserAwareTrait;
 use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Translation\Exception\RuntimeException;
 use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;

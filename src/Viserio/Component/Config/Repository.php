@@ -7,7 +7,7 @@ use IteratorAggregate;
 use Narrowspark\Arr\Arr;
 use Viserio\Component\Contract\Config\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\Parsers\Traits\ParserAwareTrait;
+use Viserio\Component\Contract\Parser\Traits\ParserAwareTrait;
 
 class Repository implements RepositoryContract, IteratorAggregate
 {
