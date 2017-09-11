@@ -73,8 +73,8 @@ final class File
         ) {
             try {
                 $readOnly = new ReadOnlyFile($input);
-                $mutable = new MutableFile($output);
-                $data = $this->decryptData($readOnly, $mutable);
+                $mutable  = new MutableFile($output);
+                $data     = $this->decryptData($readOnly, $mutable);
 
                 return $data;
             } finally {
@@ -201,7 +201,7 @@ final class File
         // Make sure it's large enough to even read a version tag
         if ($input->getSize() < SecurityContract::HEADER_VERSION_SIZE) {
             throw new InvalidMessageException(
-                "Input file is too small to have been encrypted."
+                'Input file is too small to have been encrypted.'
             );
         }
         // Parse the header, ensuring we get 4 bytes
@@ -210,12 +210,12 @@ final class File
         // Is this shorter than an encrypted empty string?
         if ($input->getSize() < SecurityContract::SHORTEST_CIPHERTEXT_LENGTH) {
             throw new InvalidMessageException(
-                "Input file is too small to have been encrypted."
+                'Input file is too small to have been encrypted.'
             );
         }
         // Let's grab the first nonce and salt
         $firstNonce = $input->read(SecurityContract::NONCE_BYTES);
-        $hkdfSalt = $input->read(SecurityContract::HKDF_SALT_LEN);
+        $hkdfSalt   = $input->read(SecurityContract::HKDF_SALT_LEN);
         // Split our keys, begin the HMAC instance
         [$encKey, $authKey] = $this->splitKeys($this->key, $hkdfSalt);
 
@@ -237,11 +237,7 @@ final class File
         );
 
         \sodium_memzero($encKey);
-        unset($encKey);
-        unset($authKey);
-        unset($firstNonce);
-        unset($mac);
-        unset($config);
+        unset($encKey, $authKey, $firstNonce, $mac, $config);
 
         return $ret;
     }
@@ -277,16 +273,15 @@ final class File
     /**
      * Recalculate and verify the HMAC of the input file.
      *
-     * @param ReadOnlyFile $input  The file we are verifying
-     * @param resource|string $mac (hash context)
-     *
-     * @return array               Hashes of various chunks
+     * @param ReadOnlyFile    $input The file we are verifying
+     * @param resource|string $mac   (hash context)
      *
      * @throws CannotPerformOperation
      * @throws InvalidMessage
+     *
+     * @return array Hashes of various chunks
      */
     final private static function streamVerify(ReadOnlyFile $input, $mac): array
     {
-
     }
 }
