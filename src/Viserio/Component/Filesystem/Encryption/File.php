@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
+use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Contract\Filesystem\Exception\FileModifiedException;
 use Viserio\Component\Encryption\HiddenString;
@@ -66,6 +67,21 @@ final class File
      */
     public function decrypt($input, $output): bool
     {
+        if ((\is_resource($input) || \is_string($input))
+            &&
+            (\is_resource($output) || \is_string($output))
+        ) {
+            try {
+                $readOnly = new ReadOnlyFile($input);
+                $mutable = new MutableFile($output);
+                $data = $this->decryptData($readOnly, $mutable);
+
+                return $data;
+            } finally {
+                $readOnly->close();
+                $mutable->close();
+            }
+        }
     }
 
     /**
@@ -86,7 +102,7 @@ final class File
         // Write the header
         $output->write(
             SecurityContract::SODIUM_PHP_VERSION,
-            SecurityContract::VERSION_TAG_LEN
+            SecurityContract::HEADER_VERSION_SIZE
         );
         $output->write($firstNonce, \SODIUM_CRYPTO_STREAM_NONCEBYTES);
         $output->write($hkdfSalt, SecurityContract::HKDF_SALT_LEN);
@@ -118,7 +134,6 @@ final class File
      * @param string                            $mac    (hash context for BLAKE2b)
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
-     * @throws InvalidKey
      *
      * @return int (number of bytes)
      */
@@ -171,16 +186,77 @@ final class File
     }
 
     /**
+     * Decrypt the contents of a file.
+     *
+     * @param $input
+     * @param $output
+     *
+     * @throws InvalidMessageException
+     *
+     * @return bool
+     */
+    private function decryptData(ReadOnlyFile $input, MutableFile $output): bool
+    {
+        $input->seek(0);
+        // Make sure it's large enough to even read a version tag
+        if ($input->getSize() < SecurityContract::HEADER_VERSION_SIZE) {
+            throw new InvalidMessageException(
+                "Input file is too small to have been encrypted."
+            );
+        }
+        // Parse the header, ensuring we get 4 bytes
+        $header = $input->read(SecurityContract::HEADER_VERSION_SIZE);
+
+        // Is this shorter than an encrypted empty string?
+        if ($input->getSize() < SecurityContract::SHORTEST_CIPHERTEXT_LENGTH) {
+            throw new InvalidMessageException(
+                "Input file is too small to have been encrypted."
+            );
+        }
+        // Let's grab the first nonce and salt
+        $firstNonce = $input->read(SecurityContract::NONCE_BYTES);
+        $hkdfSalt = $input->read(SecurityContract::HKDF_SALT_LEN);
+        // Split our keys, begin the HMAC instance
+        [$encKey, $authKey] = $this->splitKeys($this->key, $hkdfSalt);
+
+        // BMAC
+        $mac = \sodium_crypto_generichash_init($authKey);
+        \sodium_crypto_generichash_update($mac, $header);
+        \sodium_crypto_generichash_update($mac, $firstNonce);
+        \sodium_crypto_generichash_update($mac, $hkdfSalt);
+        \sodium_memzero($authKey);
+        \sodium_memzero($hkdfSalt);
+
+        $ret = $this->streamDecrypt(
+            $input,
+            $output,
+            new Key(new HiddenString($encKey)),
+            $firstNonce,
+            $mac,
+            $this->streamVerify($input, safe_str_cpy($mac))
+        );
+
+        \sodium_memzero($encKey);
+        unset($encKey);
+        unset($authKey);
+        unset($firstNonce);
+        unset($mac);
+        unset($config);
+
+        return $ret;
+    }
+
+    /**
      * Split a key using HKDF-BLAKE2b.
      *
-     * @param Key    $master
+     * @param Key    $masterKey
      * @param string $salt
      *
      * @return array<int, string>
      */
-    private static function splitKeys(Key $master, string $salt): array
+    private static function splitKeys(Key $masterKey, string $salt): array
     {
-        $binary = $master->getRawKeyMaterial();
+        $binary = $masterKey->getRawKeyMaterial();
 
         return [
             \hash_hkdf_blake2b(
@@ -196,5 +272,21 @@ final class File
                 $salt
             ),
         ];
+    }
+
+    /**
+     * Recalculate and verify the HMAC of the input file.
+     *
+     * @param ReadOnlyFile $input  The file we are verifying
+     * @param resource|string $mac (hash context)
+     *
+     * @return array               Hashes of various chunks
+     *
+     * @throws CannotPerformOperation
+     * @throws InvalidMessage
+     */
+    final private static function streamVerify(ReadOnlyFile $input, $mac): array
+    {
+
     }
 }

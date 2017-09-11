@@ -125,10 +125,10 @@ final class KeyFactory
      */
     private static function getKeyDataFromString(string $data): string
     {
-        $version = \mb_substr($data, 0, SecurityContract::VERSION_TAG_LEN, '8bit');
+        $version = \mb_substr($data, 0, SecurityContract::HEADER_VERSION_SIZE, '8bit');
         $keyData = \mb_substr(
             $data,
-            SecurityContract::VERSION_TAG_LEN,
+            SecurityContract::HEADER_VERSION_SIZE,
             -SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
             '8bit'
         );

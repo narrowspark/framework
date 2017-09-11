@@ -4,13 +4,13 @@ namespace Viserio\Component\Contract\Encryption;
 
 interface Security
 {
+    public const HEADER_VERSION_SIZE        = 4;
+
     public const SODIUM_PHP_VERSION         = "\x00\x70\x02\x00";
     public const SODIUM_PHP_KEY_VERSION     = "\x01\x70\x02\x00";
     public const SODIUM_PHP_FILE_VERSION    = "\x02\x70\x02\x00";
 
-    public const VERSION_TAG_LEN            = 4;
-
-    public const FILE_BUFFER                = 0;
+    public const FILE_BUFFER                = 1048576;
 
     // For key derivation security levels:
     public const KEY_INTERACTIVE            = 'interactive';
@@ -43,5 +43,5 @@ interface Security
 
     public const HKDF_SBOX                  = 'Narrowspark|KeyForEncryption';
 
-    public const HKDF_AUTH                  = 'AuthenticationKeyFor_|Narrowspark';
+    public const HKDF_AUTH                  = 'Narrowspark|KeyForAuthentication';
 }
