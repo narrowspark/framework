@@ -52,7 +52,7 @@
         "monolog/monolog"                     : "^1.17",
         "narrowspark/arr"                     : "^2.1",
         "narrowspark/collection"              : "^0.1",
-        "narrowspark/http-emitter"            : "^0.2",
+        "narrowspark/http-emitter"            : "^0.3",
         "narrowspark/http-status"             : "^4.0",
         "mtdowling/cron-expression"           : "^1.1",
         "opis/closure"                        : "^3.0",
