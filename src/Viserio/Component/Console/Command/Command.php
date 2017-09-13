@@ -344,10 +344,11 @@ abstract class Command extends BaseCommand
      * @param array                                               $headers
      * @param array|\Viserio\Component\Contract\Support\Arrayable $rows
      * @param string                                              $style
+     * @param  array                                              $columnStyles
      *
      * @return void
      */
-    public function table(array $headers, $rows, string $style = 'default'): void
+    public function table(array $headers, $rows, string $style = 'default', array $columnStyles = []): void
     {
         $table = new Table($this->output);
 
@@ -356,6 +357,12 @@ abstract class Command extends BaseCommand
         }
 
         $table->setHeaders($headers)->setRows($rows)->setStyle($style)->render();
+
+        foreach ($columnStyles as $columnIndex => $columnStyle) {
+            $table->setColumnStyle($columnIndex, $columnStyle);
+        }
+
+        $table->render();
     }
 
     /**
