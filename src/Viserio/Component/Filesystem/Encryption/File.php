@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
+use UnexpectedValueException;
 use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Contract\Filesystem\Exception\FileModifiedException;
@@ -31,8 +32,8 @@ final class File
      * @param string|resource $input  File name or file handle
      * @param string|resource $output File name or file handle
      *
-     * @throws InvalidType
-     *
+     * @throws \UnexpectedValueException
+     * 
      * @return int Number of bytes written
      */
     public function encrypt($input, $output)
@@ -53,6 +54,8 @@ final class File
 
             return $data;
         }
+
+        throw new UnexpectedValueException('Invalid stream provided; must be a filename or stream resource.');
     }
 
     /**
@@ -61,7 +64,7 @@ final class File
      * @param string|resource $input  File name or file handle
      * @param string|resource $output File name or file handle
      *
-     * @throws InvalidType
+     * @throws \UnexpectedValueException
      *
      * @return bool TRUE if successful
      */
@@ -82,6 +85,8 @@ final class File
                 $mutable->close();
             }
         }
+
+        throw new UnexpectedValueException('Invalid stream provided; must be a filename or stream resource.');
     }
 
     /**
@@ -127,11 +132,11 @@ final class File
     /**
      * Stream encryption.
      *
-     * @param ReadOnlyFile                      $input
-     * @param MutableFile                       $output
-     * @param \Viserio\Component\Encryption\Key $encKey
-     * @param string                            $nonce
-     * @param string                            $mac    (hash context for BLAKE2b)
+     * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
+     * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
+     * @param \Viserio\Component\Encryption\Key                 $encKey
+     * @param string                                            $nonce
+     * @param string                                            $mac    (hash context for BLAKE2b)
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      *
@@ -177,8 +182,8 @@ final class File
             );
         }
 
-        $mac = \sodium_crypto_generichash_final($mac, SecurityContract::MAC_BYTE_SIZE);
-        $written += $output->write($mac, SecurityContract::MAC_BYTE_SIZE);
+        $mac = \sodium_crypto_generichash_final($mac, SecurityContract::FILE_MAC_BYTE_SIZE);
+        $written += $output->write($mac, SecurityContract::FILE_MAC_BYTE_SIZE);
 
         \sodium_memzero($mac);
 
@@ -188,10 +193,10 @@ final class File
     /**
      * Decrypt the contents of a file.
      *
-     * @param $input
-     * @param $output
+     * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
+     * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
      *
-     * @throws InvalidMessageException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
      *
      * @return bool
      */
@@ -208,7 +213,7 @@ final class File
         $header = $input->read(SecurityContract::HEADER_VERSION_SIZE);
 
         // Is this shorter than an encrypted empty string?
-        if ($input->getSize() < SecurityContract::SHORTEST_CIPHERTEXT_LENGTH) {
+        if ($input->getSize() < SecurityContract::FILE_SHORTEST_CIPHERTEXT_LENGTH) {
             throw new InvalidMessageException(
                 'Input file is too small to have been encrypted.'
             );
@@ -237,6 +242,7 @@ final class File
         );
 
         \sodium_memzero($encKey);
+
         unset($encKey, $authKey, $firstNonce, $mac, $config);
 
         return $ret;
@@ -245,8 +251,8 @@ final class File
     /**
      * Split a key using HKDF-BLAKE2b.
      *
-     * @param Key    $masterKey
-     * @param string $salt
+     * @param \Viserio\Component\Encryption\Key $masterKey
+     * @param string                            $salt
      *
      * @return array<int, string>
      */
@@ -271,17 +277,132 @@ final class File
     }
 
     /**
+     * Stream decryption - Do not call directly
+     *
+     * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
+     * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
+     * @param \Viserio\Component\Encryption\Key                 $encKey
+     * @param string                                            $nonce
+     * @param string                                            $mac (hash context for BLAKE2b)
+     * @param array                                             &$chunkMacs
+     *
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
+     *
+     * @return bool
+     */
+    private function streamDecrypt(
+        ReadOnlyFile $input,
+        MutableFile $output,
+        Key $encKey,
+        string $nonce,
+        string $mac,
+        array &$chunkMacs
+    ): bool {
+        $start     = $input->tell();
+        $cipherEnd = $input->getSize() - SecurityContract::FILE_MAC_BYTE_SIZE;
+
+        $input->seek($start);
+
+        while ($input->getRemainingBytes() > SecurityContract::FILE_MAC_BYTE_SIZE) {
+            if (($input->tell() + SecurityContract::FILE_BUFFER) > $cipherEnd) {
+                $read = $input->read($cipherEnd - $input->tell());
+            } else {
+                $read = $input->read(SecurityContract::FILE_BUFFER);
+            }
+
+            \sodium_crypto_generichash_update($mac, $read);
+
+            $calc = \sodium_crypto_generichash_final(
+                safe_str_cpy($mac),
+                SecurityContract::FILE_MAC_BYTE_SIZE
+            );
+
+            if (empty($chunkMacs)) {
+                // Someone attempted to add a chunk at the end.
+                throw new InvalidMessageException(
+                    'Invalid message authentication code.'
+                );
+            } else {
+                $chunkMAC = \array_shift($chunkMacs);
+
+                if (!\hash_equals($chunkMAC, $calc)) {
+                    // This chunk was altered after the original MAC was verified
+                    throw new InvalidMessageException(
+                        'Invalid message authentication code.'
+                    );
+                }
+            }
+
+            $decrypted = \sodium_crypto_stream_xor(
+                $read,
+                $nonce,
+                $encKey->getRawKeyMaterial()
+            );
+
+            $output->write($decrypted);
+
+            \sodium_increment($nonce);
+        }
+
+        \sodium_memzero($nonce);
+
+        return true;
+    }
+
+    /**
      * Recalculate and verify the HMAC of the input file.
      *
      * @param ReadOnlyFile    $input The file we are verifying
      * @param resource|string $mac   (hash context)
      *
-     * @throws CannotPerformOperation
-     * @throws InvalidMessage
+     * @throws InvalidMessageException
      *
      * @return array Hashes of various chunks
      */
-    final private static function streamVerify(ReadOnlyFile $input, $mac): array
+    private function streamVerify(ReadOnlyFile $input, $mac): array
     {
+        $start     = $input->tell();
+        $cipherEnd = $input->getSize() - SecurityContract::FILE_MAC_BYTE_SIZE;
+
+        $input->seek($cipherEnd);
+
+        $storedMac = $input->read(SecurityContract::FILE_MAC_BYTE_SIZE);
+
+        $input->seek($start);
+
+        $chunkMACs = [];
+        $break     = false;
+
+        while (!$break && $input->tell() < $cipherEnd) {
+            // Would a full BUFFER read put it past the end of the ciphertext?
+            // If so, only return a portion of the file.
+            if (($input->tell() + SecurityContract::FILE_BUFFER) >= $cipherEnd) {
+                $break = true;
+                $read = $input->read($cipherEnd - $input->tell());
+            } else {
+                $read = $input->read(SecurityContract::FILE_BUFFER);
+            }
+
+            \sodium_crypto_generichash_update($mac, $read);
+
+            $chunkMAC    = safe_str_cpy($mac);
+            $chunkMACs[] = \sodium_crypto_generichash_final(
+                $chunkMAC,
+                SecurityContract::FILE_MAC_BYTE_SIZE
+            );
+        }
+
+        $finalHMAC = \sodium_crypto_generichash_final(
+            $mac,
+            SecurityContract::FILE_MAC_BYTE_SIZE
+        );
+
+        if (! \hash_equals($finalHMAC, $storedMac)) {
+            throw new InvalidMessageException('Invalid message authentication code.');
+        }
+
+        $input->seek($start);
+
+        return $chunkMACs;
     }
 }
