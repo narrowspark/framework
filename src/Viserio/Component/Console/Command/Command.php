@@ -344,7 +344,7 @@ abstract class Command extends BaseCommand
      * @param array                                               $headers
      * @param array|\Viserio\Component\Contract\Support\Arrayable $rows
      * @param string                                              $style
-     * @param  array                                              $columnStyles
+     * @param array                                               $columnStyles
      *
      * @return void
      */
