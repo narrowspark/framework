@@ -33,7 +33,7 @@ final class File
      * @param string|resource $output File name or file handle
      *
      * @throws \UnexpectedValueException
-     * 
+     *
      * @return int Number of bytes written
      */
     public function encrypt($input, $output)
@@ -277,13 +277,13 @@ final class File
     }
 
     /**
-     * Stream decryption - Do not call directly
+     * Stream decryption - Do not call directly.
      *
      * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
      * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
      * @param \Viserio\Component\Encryption\Key                 $encKey
      * @param string                                            $nonce
-     * @param string                                            $mac (hash context for BLAKE2b)
+     * @param string                                            $mac        (hash context for BLAKE2b)
      * @param array                                             &$chunkMacs
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
@@ -322,15 +322,14 @@ final class File
                 throw new InvalidMessageException(
                     'Invalid message authentication code.'
                 );
-            } else {
-                $chunkMAC = \array_shift($chunkMacs);
+            }
+            $chunkMAC = \array_shift($chunkMacs);
 
-                if (!\hash_equals($chunkMAC, $calc)) {
-                    // This chunk was altered after the original MAC was verified
-                    throw new InvalidMessageException(
+            if (! \hash_equals($chunkMAC, $calc)) {
+                // This chunk was altered after the original MAC was verified
+                throw new InvalidMessageException(
                         'Invalid message authentication code.'
                     );
-                }
             }
 
             $decrypted = \sodium_crypto_stream_xor(
@@ -373,12 +372,12 @@ final class File
         $chunkMACs = [];
         $break     = false;
 
-        while (!$break && $input->tell() < $cipherEnd) {
+        while (! $break && $input->tell() < $cipherEnd) {
             // Would a full BUFFER read put it past the end of the ciphertext?
             // If so, only return a portion of the file.
             if (($input->tell() + SecurityContract::FILE_BUFFER) >= $cipherEnd) {
                 $break = true;
-                $read = $input->read($cipherEnd - $input->tell());
+                $read  = $input->read($cipherEnd - $input->tell());
             } else {
                 $read = $input->read(SecurityContract::FILE_BUFFER);
             }
