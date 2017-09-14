@@ -29,14 +29,14 @@ class FileTest extends TestCase
         $this->root = vfsStream::setup();
 
         $password = \random_bytes(32);
-        $key = KeyFactory::generateKey($password);
+        $key      = KeyFactory::generateKey($password);
 
         $this->file = new File($key);
     }
 
     public function testEncrypt()
     {
-        $file = vfsStream::newFile('file.txt')->at($this->root);
+        $file          = vfsStream::newFile('file.txt')->at($this->root);
         $encryptedFile = vfsStream::newFile('encrypted.txt')->at($this->root);
         $decryptedFile = vfsStream::newFile('decrypted.txt')->at($this->root);
 
