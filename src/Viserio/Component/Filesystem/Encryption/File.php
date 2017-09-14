@@ -232,13 +232,15 @@ final class File
         \sodium_memzero($authKey);
         \sodium_memzero($hkdfSalt);
 
+        $chunkMacs = $this->streamVerify($input, safe_str_cpy($mac));
+
         $ret = $this->streamDecrypt(
             $input,
             $output,
             new Key(new HiddenString($encKey)),
             $firstNonce,
             $mac,
-            $this->streamVerify($input, safe_str_cpy($mac))
+            $chunkMacs
         );
 
         \sodium_memzero($encKey);

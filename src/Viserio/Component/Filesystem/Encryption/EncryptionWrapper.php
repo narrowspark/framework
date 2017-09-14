@@ -10,9 +10,9 @@ class EncryptionWrapper
     /**
      * Encryption key.
      *
-     * @var \Viserio\Component\Encryption\Key
+     * @var \Viserio\Component\Filesystem\Encryption\File
      */
-    protected $key;
+    protected $file;
 
     /**
      * Filesystem instance.
@@ -30,7 +30,7 @@ class EncryptionWrapper
     public function __construct(FilesystemContract $adapter, Key $key)
     {
         $this->adapter = $adapter;
-        $this->key     = $key;
+        $this->file    = new File($key);
     }
 
     /**
@@ -166,91 +166,5 @@ class EncryptionWrapper
         $resource = $this->encryptStream($resource);
 
         return $this->adapter->updateStream($path, $resource, $config);
-    }
-
-    /**
-     * Returns a stream representation of a string.
-     *
-     * @param string $contents The string
-     *
-     * @return resource
-     */
-    private function getStreamFromString(string $contents)
-    {
-        $resource = \fopen('php://memory', 'r+b');
-
-        File::writeBytes($resource, $contents);
-
-        \rewind($resource);
-
-        return $resource;
-    }
-
-    /**
-     * Decrypts a stream.
-     *
-     * @param resource $resource the stream to decrypt
-     *
-     * @return resource
-     */
-    private function decryptStream($resource)
-    {
-        $out = \fopen('php://memory', 'r+b');
-
-        if ($resource != false) {
-            File::decryptResource($resource, $out, $this->key);
-        } else {
-            $out = '';
-        }
-
-        \rewind($out);
-
-        return $out;
-    }
-
-    /**
-     * Encrypts a stream.
-     *
-     * @param resource $resource the stream to encrypt
-     *
-     * @return resource
-     */
-    private function encryptStream($resource)
-    {
-        $out = \fopen('php://temp', 'r+b');
-
-        File::encryptResource($resource, $out, $this->key);
-
-        \rewind($out);
-
-        return $out;
-    }
-
-    /**
-     * Decrypts a string.
-     *
-     * @param string $contents the string to decrypt
-     *
-     * @return string
-     */
-    private function decryptString(string $contents): string
-    {
-        $resource = $this->getStreamFromString($contents);
-
-        return (string) \stream_get_contents($this->decryptStream($resource));
-    }
-
-    /**
-     * Encrypts a string.
-     *
-     * @param string $contents the string to encrypt
-     *
-     * @return string
-     */
-    private function encryptString(string $contents): string
-    {
-        $resource = $this->getStreamFromString($contents);
-
-        return (string) \stream_get_contents($this->encryptStream($resource));
     }
 }
