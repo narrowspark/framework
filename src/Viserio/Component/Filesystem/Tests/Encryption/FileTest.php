@@ -68,7 +68,7 @@ class FileTest extends TestCase
      */
     private function arrangeStreamFiles(): array
     {
-        $file = vfsStream::newFile('file.txt')->withContent('test')->at($this->root);
+        $file          = vfsStream::newFile('file.txt')->withContent('test')->at($this->root);
         $encryptedFile = vfsStream::newFile('encrypted.txt')->at($this->root);
         $decryptedFile = vfsStream::newFile('decrypted.txt')->at($this->root);
 
