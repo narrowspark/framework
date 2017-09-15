@@ -313,9 +313,9 @@ final class File
             }
 
             \sodium_crypto_generichash_update($mac, $read);
-
-            $calc = \sodium_crypto_generichash_final(
-                safe_str_cpy($mac),
+            $calcMAC = safe_str_cpy($mac);
+            $calc    = \sodium_crypto_generichash_final(
+                $calcMAC,
                 SecurityContract::FILE_MAC_BYTE_SIZE
             );
 
