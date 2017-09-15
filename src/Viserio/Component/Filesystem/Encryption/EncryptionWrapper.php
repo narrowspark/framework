@@ -187,7 +187,7 @@ class EncryptionWrapper
             /** @var int $written */
             $written = \fwrite($stream, $contents, $remaining);
 
-            if (!\is_int($written)) {
+            if (! \is_int($written)) {
                 throw new FileAccessDeniedException('Could not write to the file.');
             }
 
@@ -245,6 +245,7 @@ class EncryptionWrapper
 
         return $out;
     }
+
     /**
      * Decrypts a string.
      *
@@ -258,6 +259,7 @@ class EncryptionWrapper
 
         return (string) \stream_get_contents($this->decryptStream($resource));
     }
+
     /**
      * Encrypts a string.
      *

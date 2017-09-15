@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
-use Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Contract\Filesystem\Exception\FileModifiedException;
+use Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\Key;
 use Viserio\Component\Filesystem\Stream\MutableFile;
@@ -29,7 +29,7 @@ final class File
     /**
      * Encrypt a file using key encryption.
      *
-     * @param string|resource $input File name or file handle
+     * @param string|resource $input  File name or file handle
      * @param string|resource $output File name or file handle
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException
@@ -65,7 +65,7 @@ final class File
     /**
      * Decrypt a file using key encryption.
      *
-     * @param string|resource $input File name or file handle
+     * @param string|resource $input  File name or file handle
      * @param string|resource $output File name or file handle
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException
@@ -102,7 +102,7 @@ final class File
      * Encrypt the contents of a file.
      *
      * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
-     * @param \Viserio\Component\Filesystem\Stream\MutableFile $output
+     * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException
@@ -147,10 +147,10 @@ final class File
      * Stream encryption.
      *
      * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
-     * @param \Viserio\Component\Filesystem\Stream\MutableFile $output
-     * @param \Viserio\Component\Encryption\Key $encKey
-     * @param string $nonce
-     * @param string $mac (hash context for BLAKE2b)
+     * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
+     * @param \Viserio\Component\Encryption\Key                 $encKey
+     * @param string                                            $nonce
+     * @param string                                            $mac    (hash context for BLAKE2b)
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException
@@ -210,7 +210,7 @@ final class File
      * Decrypt the contents of a file.
      *
      * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
-     * @param \Viserio\Component\Filesystem\Stream\MutableFile $output
+     * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException
@@ -302,11 +302,11 @@ final class File
      * Stream decryption - Do not call directly.
      *
      * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
-     * @param \Viserio\Component\Filesystem\Stream\MutableFile $output
-     * @param \Viserio\Component\Encryption\Key $encKey
-     * @param string $nonce
-     * @param string $mac (hash context for BLAKE2b)
-     * @param array &$chunkMacs
+     * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
+     * @param \Viserio\Component\Encryption\Key                 $encKey
+     * @param string                                            $nonce
+     * @param string                                            $mac        (hash context for BLAKE2b)
+     * @param array                                             &$chunkMacs
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException
@@ -376,8 +376,8 @@ final class File
     /**
      * Recalculate and verify the HMAC of the input file.
      *
-     * @param ReadOnlyFile $input The file we are verifying
-     * @param resource|string $mac (hash context)
+     * @param ReadOnlyFile    $input The file we are verifying
+     * @param resource|string $mac   (hash context)
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Stream;
 
-use Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
 use Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException;
 use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
+use Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Filesystem\FileStream;
 
 class MutableFile implements FileStream
