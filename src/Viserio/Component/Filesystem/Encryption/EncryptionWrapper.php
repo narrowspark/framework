@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
+use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Encryption\Key;
 
@@ -166,5 +167,108 @@ class EncryptionWrapper
         $resource = $this->encryptStream($resource);
 
         return $this->adapter->updateStream($path, $resource, $config);
+    }
+
+    /**
+     * Returns a stream representation of a string.
+     *
+     * @param string $contents The string
+     *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     *
+     * @return resource
+     */
+    private function getStreamFromString(string $contents)
+    {
+        $stream    = \fopen('php://memory', 'r+b');
+        $remaining = \mb_strlen($contents, '8bit');
+
+        while ($remaining > 0) {
+            /** @var int $written */
+            $written = \fwrite($stream, $contents, $remaining);
+
+            if (!\is_int($written)) {
+                throw new FileAccessDeniedException('Could not write to the file.');
+            }
+
+            $contents = (string) \mb_substr($contents, $written, null, '8bit');
+            $remaining -= $written;
+        }
+
+        \sodium_memzero($contents);
+
+        \rewind($stream);
+
+        return $stream;
+    }
+
+    /**
+     * Decrypts a stream.
+     *
+     * @param resource $resource the stream to decrypt
+     *
+     * @return resource
+     */
+    private function decryptStream($resource)
+    {
+        $out = \fopen('php://memory', 'r+b');
+
+        if ($resource !== false) {
+            $this->file->decrypt($resource, $out);
+
+            \rewind($out);
+        } else {
+            $out = '';
+        }
+
+        return $out;
+    }
+
+    /**
+     * Encrypts a stream.
+     *
+     * @param resource $resource the stream to encrypt
+     *
+     * @return resource
+     */
+    private function encryptStream($resource)
+    {
+        $out = \fopen('php://temp', 'r+b');
+
+        if ($resource !== false) {
+            $this->file->encrypt($resource, $out);
+
+            \rewind($out);
+        } else {
+            $out = '';
+        }
+
+        return $out;
+    }
+    /**
+     * Decrypts a string.
+     *
+     * @param string $contents the string to decrypt
+     *
+     * @return string
+     */
+    private function decryptString(string $contents): string
+    {
+        $resource = $this->getStreamFromString($contents);
+
+        return (string) \stream_get_contents($this->decryptStream($resource));
+    }
+    /**
+     * Encrypts a string.
+     *
+     * @param string $contents the string to encrypt
+     *
+     * @return string
+     */
+    private function encryptString(string $contents): string
+    {
+        $resource = $this->getStreamFromString($contents);
+
+        return (string) \stream_get_contents($this->encryptStream($resource));
     }
 }

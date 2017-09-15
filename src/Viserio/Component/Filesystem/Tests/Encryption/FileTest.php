@@ -63,6 +63,21 @@ class FileTest extends TestCase
         );
     }
 
+    public function testEmptyFileToFileEncryptionAndDecryption()
+    {
+        $file          = vfsStream::newFile('file.txt')->withContent('')->at($this->root);
+        $encryptedFile = vfsStream::newFile('encrypted.txt')->at($this->root);
+        $decryptedFile = vfsStream::newFile('decrypted.txt')->at($this->root);
+
+        $this->file->encrypt($file->url(), $encryptedFile->url());
+        $this->file->decrypt($encryptedFile->url(), $decryptedFile->url());
+
+        self::assertSame(
+            \hash_file('sha256', $file->url()),
+            \hash_file('sha256', $decryptedFile->url())
+        );
+    }
+
     /**
      * @return array
      */

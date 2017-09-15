@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Stream;
 
-use UnexpectedValueException;
+use Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
 use Viserio\Component\Contract\Filesystem\Exception\FileModifiedException;
 use Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException;
@@ -67,7 +67,7 @@ class ReadOnlyFile implements FileStream
      * @param string|resource                        $file
      * @param null|\Viserio\Component\Encryption\Key $key
      *
-     * @throws \UnexpectedValueException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      */
     public function __construct($file, Key $key = null)

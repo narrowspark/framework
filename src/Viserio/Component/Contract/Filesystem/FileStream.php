@@ -49,8 +49,6 @@ interface FileStream
     /**
      * Returns the current position of the file read/write pointer.
      *
-     * @throws \RuntimeException on error.
-     *
      * @return int Position of the file pointer
      */
     public function tell(): int;

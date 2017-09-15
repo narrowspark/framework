@@ -498,7 +498,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      * @param string      $path
      * @param null|string $visibility
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exceptio\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return null|int
      */
@@ -516,11 +516,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             return null;
         }
 
-        switch ($visibility) {
-            case FilesystemContract::VISIBILITY_PUBLIC:
-                return $this->permissions[$type]['public'];
-            case FilesystemContract::VISIBILITY_PRIVATE:
-                return $this->permissions[$type]['private'];
+        if ($visibility == FilesystemContract::VISIBILITY_PUBLIC) {
+            return $this->permissions[$type]['public'];
+        } elseif ($visibility == FilesystemContract::VISIBILITY_PRIVATE) {
+            return $this->permissions[$type]['private'];
         }
 
         throw new InvalidArgumentException('Unknown visibility: ' . $visibility);
