@@ -43,7 +43,7 @@ class MaintenanceModeException extends ServiceUnavailableException
         ?string $message = null,
         ?Throwable $previous = null
     ) {
-        parent::__construct($message, 503, $previous);
+        parent::__construct($message, $previous, [], 503);
 
         $this->wentDownAt = Chronos::createFromTimestamp($time);
 
