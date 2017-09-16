@@ -11,7 +11,7 @@ use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as Provide
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Parsers\Dumper;
+use Viserio\Component\Parser\Dumper;
 use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
 
 class OptionDumpCommand extends Command

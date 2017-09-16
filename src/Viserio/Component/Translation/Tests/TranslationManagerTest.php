@@ -7,7 +7,7 @@ use org\bovigo\vfs\vfsStream;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
-use Viserio\Component\Parsers\FileLoader;
+use Viserio\Component\Parser\FileLoader;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
