@@ -45,8 +45,8 @@ final class KeyFactory
      * and salt.
      *
      * @param \Viserio\Component\Contract\Encryption\HiddenString $password
-     * @param string $salt
-     * @param string $level Security level for KDF
+     * @param string                                              $salt
+     * @param string                                              $level    Security level for KDF
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidSaltException
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidTypeException
