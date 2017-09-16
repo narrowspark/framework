@@ -22,50 +22,62 @@ trait ChooseEncoderTrait
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidTypeException
      *
-     * @return callable (array or string)
+     * @return null|callable (array or string)
      */
-    protected static function chooseEncoder($chosen, bool $decode = false)
+    protected static function chooseEncoder($chosen, bool $decode = false): ?callable
     {
         if ($chosen === true) {
             return null;
-        } elseif ($chosen === false || $chosen === SecurityContract::ENCODE_HEX) {
+        }
+
+        $functionName = $decode === true ? 'decode' : 'encode';
+
+        if ($chosen === false || $chosen === SecurityContract::ENCODE_HEX) {
             return \implode(
                 '::',
                 [
                     Hex::class,
-                    $decode ? 'decode' : 'encode',
+                    $functionName,
                 ]
             );
-        } elseif ($chosen === SecurityContract::ENCODE_BASE32) {
+        }
+
+        if ($chosen === SecurityContract::ENCODE_BASE32) {
             return \implode(
                 '::',
                 [
                     Base32::class,
-                    $decode ? 'decode' : 'encode',
+                    $functionName,
                 ]
             );
-        } elseif ($chosen === SecurityContract::ENCODE_BASE32HEX) {
+        }
+
+        if ($chosen === SecurityContract::ENCODE_BASE32HEX) {
             return \implode(
                 '::',
                 [
                     Base32Hex::class,
-                    $decode ? 'decode' : 'encode',
+                    $functionName,
                 ]
             );
-        } elseif ($chosen === SecurityContract::ENCODE_BASE64) {
+        }
+
+        if ($chosen === SecurityContract::ENCODE_BASE64) {
             return \implode(
                 '::',
                 [
                     Base64::class,
-                    $decode ? 'decode' : 'encode',
+                    $functionName,
                 ]
             );
-        } elseif ($chosen === SecurityContract::ENCODE_BASE64URLSAFE) {
+        }
+
+        if ($chosen === SecurityContract::ENCODE_BASE64URLSAFE) {
             return \implode(
                 '::',
                 [
                     Base64UrlSafe::class,
-                    $decode ? 'decode' : 'encode',
+                    $functionName,
                 ]
             );
         }

@@ -16,8 +16,10 @@ final class KeyFactory
 
     /**
      * Don't allow this to be instantiated.
+     *
+     * @throws \Error
      */
-    final private function __construct()
+    private function __construct()
     {
         throw new Error('Do not instantiate.');
     }
@@ -27,11 +29,13 @@ final class KeyFactory
      *
      * @param string &$secretKey
      *
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
+     *
      * @return \Viserio\Component\Encryption\Key
      */
     public static function generateKey(string &$secretKey = ''): Key
     {
-        $secretKey = \random_bytes(SODIUM_CRYPTO_STREAM_KEYBYTES);
+        $secretKey = \random_bytes(\SODIUM_CRYPTO_STREAM_KEYBYTES);
 
         return new Key(new HiddenString($secretKey));
     }
@@ -41,10 +45,12 @@ final class KeyFactory
      * and salt.
      *
      * @param \Viserio\Component\Contract\Encryption\HiddenString $password
-     * @param string                                              $salt
-     * @param string                                              $level    Security level for KDF
+     * @param string $salt
+     * @param string $level Security level for KDF
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidSaltException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidTypeException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
      *
      * @return \Viserio\Component\Encryption\Key
      */
@@ -56,16 +62,16 @@ final class KeyFactory
         $kdfLimits = self::getSecurityLevels($level);
 
         // VERSION 2+ (argon2)
-        if (\mb_strlen($salt, '8bit') !== SODIUM_CRYPTO_PWHASH_SALTBYTES) {
+        if (\mb_strlen($salt, '8bit') !== \SODIUM_CRYPTO_PWHASH_SALTBYTES) {
             throw new InvalidSaltException(sprintf(
                 'Expected %s bytes, got %s.',
-                SODIUM_CRYPTO_PWHASH_SALTBYTES,
+                \SODIUM_CRYPTO_PWHASH_SALTBYTES,
                 \mb_strlen($salt, '8bit')
             ));
         }
 
         $secretKey = \sodium_crypto_pwhash(
-            SODIUM_CRYPTO_STREAM_KEYBYTES,
+            \SODIUM_CRYPTO_STREAM_KEYBYTES,
             $password->getString(),
             $salt,
             $kdfLimits[0],
@@ -76,9 +82,11 @@ final class KeyFactory
     }
 
     /**
-     * Load, specifically, an encryption public key from a string.
+     * Load a symmetric encryption key from a string.
      *
      * @param \Viserio\Component\Encryption\HiddenString $keyData
+     *
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
      *
      * @return \Viserio\Component\Encryption\Key
      */
@@ -104,7 +112,7 @@ final class KeyFactory
     {
         return new HiddenString(
             Hex::encode(
-                SecurityContract::SODIUM_PHP_VERSION . $key->getRawKeyMaterial() .
+                SecurityContract::SODIUM_PHP_KEY_VERSION . $key->getRawKeyMaterial() .
                 \sodium_crypto_generichash(
                     SecurityContract::SODIUM_PHP_KEY_VERSION . $key->getRawKeyMaterial(),
                     '',
@@ -129,19 +137,19 @@ final class KeyFactory
         $keyData = \mb_substr(
             $data,
             SecurityContract::HEADER_VERSION_SIZE,
-            -SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
+            -\SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
             '8bit'
         );
         $checksum = \mb_substr(
             $data,
-            -SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
-            SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
+            -\SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
+            \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
             '8bit'
         );
         $calc    = \sodium_crypto_generichash(
             $version . $keyData,
             '',
-            SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
+            \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
         );
 
         if (! \hash_equals($calc, $checksum)) {

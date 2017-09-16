@@ -21,18 +21,18 @@ trait SecurityLevelsTrait
         switch ($level) {
             case SecurityContract::KEY_INTERACTIVE:
                 return [
-                    SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE,
+                    \SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+                    \SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE,
                 ];
             case SecurityContract::KEY_MODERATE:
                 return [
-                    SODIUM_CRYPTO_PWHASH_OPSLIMIT_MODERATE,
-                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_MODERATE,
+                    \SODIUM_CRYPTO_PWHASH_OPSLIMIT_MODERATE,
+                    \SODIUM_CRYPTO_PWHASH_MEMLIMIT_MODERATE,
                 ];
             case SecurityContract::KEY_SENSITIVE:
                 return [
-                    SODIUM_CRYPTO_PWHASH_OPSLIMIT_SENSITIVE,
-                    SODIUM_CRYPTO_PWHASH_MEMLIMIT_SENSITIVE,
+                    \SODIUM_CRYPTO_PWHASH_OPSLIMIT_SENSITIVE,
+                    \SODIUM_CRYPTO_PWHASH_MEMLIMIT_SENSITIVE,
                 ];
             default:
                 throw new InvalidTypeException('Invalid security level for Argon2i.');
