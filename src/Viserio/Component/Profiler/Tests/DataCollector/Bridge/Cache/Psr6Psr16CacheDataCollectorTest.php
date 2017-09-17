@@ -51,12 +51,4 @@ class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
 
         return $collector;
     }
-
-    private function removeSymfonyVarDumper(string $html): string
-    {
-        $html = \preg_replace('/<script\b[^>]*>(.*?)<\/script>/', '', $html);
-        $html = \preg_replace('/<style\b[^>]*>(.*?)<\/style>/', '', $html);
-
-        return $this->removeTabId(\preg_replace('/id=sf-dump-(?:\d+) /', '', $html));
-    }
 }

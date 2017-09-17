@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
-use InvalidArgumentException;
+use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
 
 abstract class AbstractCookieCollector
 {
@@ -30,7 +30,7 @@ abstract class AbstractCookieCollector
      *
      * @param string $name
      *
-     * @return null|\Viserio\Component\Contracts\Cookie\Cookie|\Viserio\Component\Cookie\Cookie
+     * @return null|\Viserio\Component\Contract\Cookie\Cookie|\Viserio\Component\Cookie\Cookie
      */
     public function get(string $name)
     {
@@ -54,9 +54,9 @@ abstract class AbstractCookieCollector
     /**
      * Add a request cookie to the stack.
      *
-     * @param \Viserio\Component\Contracts\Cookie\Cookie|\Viserio\Component\Cookie\Cookie $cookie
+     * @param \Viserio\Component\Contract\Cookie\Cookie|\Viserio\Component\Cookie\Cookie $cookie
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return $this
      */

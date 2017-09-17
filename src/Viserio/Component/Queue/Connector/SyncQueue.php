@@ -6,7 +6,7 @@ use ErrorException;
 use ParseError;
 use Throwable;
 use TypeError;
-use Viserio\Component\Contracts\Queue\Job as JobContract;
+use Viserio\Component\Contract\Queue\Job as JobContract;
 use Viserio\Component\Queue\Job\SyncJob;
 
 class SyncQueue extends AbstractQueue
@@ -65,7 +65,7 @@ class SyncQueue extends AbstractQueue
     /**
      * Raise the before queue job event.
      *
-     * @param \Viserio\Component\Contracts\Queue\Job $job
+     * @param \Viserio\Component\Contract\Queue\Job $job
      */
     protected function raiseBeforeJobEvent(JobContract $job): void
     {
@@ -84,7 +84,7 @@ class SyncQueue extends AbstractQueue
     /**
      * Raise the after queue job event.
      *
-     * @param \Viserio\Component\Contracts\Queue\Job $job
+     * @param \Viserio\Component\Contract\Queue\Job $job
      */
     protected function raiseAfterJobEvent(JobContract $job): void
     {
@@ -103,8 +103,8 @@ class SyncQueue extends AbstractQueue
     /**
      * Raise the exception occurred queue job event.
      *
-     * @param \Viserio\Component\Contracts\Queue\Job $job
-     * @param \Throwable                             $exception
+     * @param \Viserio\Component\Contract\Queue\Job $job
+     * @param \Throwable                            $exception
      */
     protected function raiseExceptionOccurredJobEvent(JobContract $job, Throwable $exception): void
     {
@@ -124,7 +124,7 @@ class SyncQueue extends AbstractQueue
     /**
      * Handle the failed job.
      *
-     * @param \Viserio\Component\Contracts\Queue\Job $job
+     * @param \Viserio\Component\Contract\Queue\Job $job
      */
     protected function handleFailedJob(JobContract $job): void
     {

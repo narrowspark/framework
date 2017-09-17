@@ -19,6 +19,10 @@ class DumpExtensionTest extends TestCase
      * @param mixed $debug
      * @param mixed $expectedOutput
      * @param mixed $expectedDumped
+     *
+     * @throws \Throwable
+     *
+     * @return void
      */
     public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped): void
     {

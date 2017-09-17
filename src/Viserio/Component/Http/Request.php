@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Http;
 
 use Fig\Http\Message\RequestMethodInterface;
-use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 
 class Request extends AbstractMessage implements RequestInterface, RequestMethodInterface
 {
@@ -71,11 +71,11 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
 
         $target = $this->uri->getPath();
 
-        if ($target == '') {
+        if ($target === '') {
             $target = '/';
         }
 
-        if ($this->uri->getQuery() != '') {
+        if ($this->uri->getQuery() !== '') {
             $target .= '?' . $this->uri->getQuery();
         }
 
@@ -156,7 +156,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     {
         $host = $this->uri->getHost();
 
-        if ($host == '') {
+        if ($host === '') {
             return;
         }
 
@@ -181,7 +181,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      *
      * @param null|string $method
      *
-     * @throws InvalidArgumentException on invalid HTTP method
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException on invalid HTTP method
      *
      * @return string
      */
@@ -217,7 +217,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      *
      * @param null|string|UriInterface $uri
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      *
      * @return \Psr\Http\Message\UriInterface
      */
@@ -232,7 +232,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         }
 
         if ($uri === null) {
-            return Uri::createFromString('');
+            return Uri::createFromString();
         }
 
         throw new InvalidArgumentException(

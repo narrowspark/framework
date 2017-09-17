@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
-use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
 use Viserio\Component\Cookie\Traits\CookieValidatorTrait;
 
 final class SetCookie extends AbstractCookie

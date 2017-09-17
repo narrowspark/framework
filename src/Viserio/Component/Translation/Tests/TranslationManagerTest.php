@@ -4,11 +4,10 @@ namespace Viserio\Component\Translation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
-use Psr\Log\LoggerInterface;
-use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Parsers\FileLoader;
+use Viserio\Component\Contract\Parser\Loader as LoaderContract;
+use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
+use Viserio\Component\Parser\FileLoader;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
@@ -17,6 +16,9 @@ class TranslationManagerTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
+    /**
+     * @var \Viserio\Component\Translation\TranslationManager
+     */
     private $manager;
 
     /**
@@ -52,7 +54,8 @@ class TranslationManagerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
+     * @expectedExceptionMessage File [invalid.php] cant be imported. Key for language is missing.
      */
     public function testImportToThrowException(): void
     {
@@ -178,19 +181,17 @@ declare(strict_types=1); return [
         self::assertSame('de', $this->manager->getLocale());
     }
 
-    public function testSetAndGetLogger(): void
+    public function testAddMessageCatalogue(): void
     {
-        $this->manager->setLogger($this->mock(LoggerInterface::class));
-
-        self::assertInstanceOf(LoggerInterface::class, $this->manager->getLogger());
-
         $message = $this->mock(MessageCatalogueContract::class);
         $message
             ->shouldReceive('getLocale')
             ->times(3)
-            ->andReturn('en');
+            ->andReturn('ab');
 
         $this->manager->addMessageCatalogue($message);
+
+        self::assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('ab'));
     }
 
     protected function getFileLoader()

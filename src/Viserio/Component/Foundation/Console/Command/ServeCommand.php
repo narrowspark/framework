@@ -11,7 +11,7 @@ use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use Throwable;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ServeCommand extends Command
@@ -184,7 +184,7 @@ class ServeCommand extends Command
      *
      * @return null|callable
      */
-    private function getErrorCallback(bool $quiet)
+    private function getErrorCallback(bool $quiet): ?callable
     {
         if ($quiet === true) {
             return null;
@@ -214,7 +214,7 @@ class ServeCommand extends Command
     {
         $finder = new PhpExecutableFinder();
 
-        if (($binary = $finder->find(true)) === false) {
+        if (($binary = $finder->find()) === false) {
             throw new RuntimeException('Unable to find the PHP binary.');
         }
 

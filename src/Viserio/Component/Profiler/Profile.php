@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler;
 
-use InvalidArgumentException;
-use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
+use Viserio\Component\Contract\Profiler\DataCollector as DataCollectorContract;
+use Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException;
 
 class Profile
 {
@@ -257,14 +257,14 @@ class Profile
      *
      * @param string $name A collector name
      *
-     * @throws \InvalidArgumentException if the collector does not exist
+     * @throws \Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException if the collector does not exist
      *
-     * @return \Viserio\Component\Contracts\Profiler\DataCollector
+     * @return \Viserio\Component\Contract\Profiler\DataCollector
      */
     public function getCollector(string $name): DataCollectorContract
     {
         if (! isset($this->collectors[$name])) {
-            throw new InvalidArgumentException(\sprintf('Collector [%s] does not exist.', $name));
+            throw new CollectorNotFoundException(\sprintf('Collector [%s] not found.', $name));
         }
 
         return $this->collectors[$name];
@@ -273,7 +273,7 @@ class Profile
     /**
      * Gets the Collectors associated with this profile.
      *
-     * @return \Viserio\Component\Contracts\Profiler\DataCollector[]
+     * @return \Viserio\Component\Contract\Profiler\DataCollector[]
      */
     public function getCollectors(): array
     {
@@ -298,7 +298,7 @@ class Profile
     /**
      * Adds a Collector.
      *
-     * @param \Viserio\Component\Contracts\Profiler\DataCollector $collector
+     * @param \Viserio\Component\Contract\Profiler\DataCollector $collector
      *
      * @return void
      */

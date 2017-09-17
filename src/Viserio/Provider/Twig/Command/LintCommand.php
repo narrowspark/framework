@@ -4,9 +4,9 @@ namespace Viserio\Provider\Twig\Command;
 
 use Symfony\Component\Finder\Finder;
 use Viserio\Bridge\Twig\Command\LintCommand as BaseLintCommand;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class LintCommand extends BaseLintCommand implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
@@ -64,18 +64,19 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         if (\count($directories) !== 0) {
             foreach ($directories as $directory) {
                 foreach ($paths as $path) {
-                    if (\is_dir($this->normalizeDirectorySeparator($path . '/' . $directory))) {
-                        $searchDirectories[] = $this->normalizeDirectorySeparator($path . '/' . $directory);
+                    if (\is_dir(self::normalizeDirectorySeparator($path . '/' . $directory))) {
+                        $searchDirectories[] = self::normalizeDirectorySeparator($path . '/' . $directory);
                     } else {
-                        $this->warn('Path "' . $this->normalizeDirectorySeparator($path . '/' . $directory) . '" is not a directory.');
+                        $this->warn('Path "' . self::normalizeDirectorySeparator($path . '/' . $directory) . '" is not a directory.');
                     }
                 }
             }
 
             if (\count($searchDirectories) !== 0 && \count($files) === 0) {
                 // Get those files from the search directory
+                /** @var \SplFileObject $file */
                 foreach ($this->getFinder($searchDirectories) as $file) {
-                    $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
+                    $search[] = self::normalizeDirectorySeparator($file->getRealPath());
                 }
             }
         }
@@ -86,8 +87,9 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
 
         // If no files passed, use the view paths
         if (\count($search) === 0) {
+            /** @var \SplFileObject $file */
             foreach ($this->getFinder($paths) as $file) {
-                $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
+                $search[] = self::normalizeDirectorySeparator($file->getRealPath());
             }
         }
 
@@ -109,12 +111,14 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
 
         foreach ($files as $fileName) {
             if (\count($searchDirectories) !== 0) {
+                /** @var \SplFileObject $file */
                 foreach ($this->getFinder($searchDirectories, $fileName) as $file) {
-                    $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
+                    $search[] = self::normalizeDirectorySeparator($file->getRealPath());
                 }
             } else {
+                /** @var \SplFileObject $file */
                 foreach ($this->getFinder($paths, $fileName) as $file) {
-                    $search[] = $this->normalizeDirectorySeparator($file->getRealPath());
+                    $search[] = self::normalizeDirectorySeparator($file->getRealPath());
                 }
             }
         }

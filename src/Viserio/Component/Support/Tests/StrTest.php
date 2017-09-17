@@ -54,7 +54,7 @@ class StrTest extends TestCase
     public function testRandom(): void
     {
         self::assertEquals(64, \mb_strlen(Str::random()));
-        $randomInteger = \mt_rand(1, 100);
+        $randomInteger = \random_int(1, 100);
         self::assertEquals($randomInteger, \mb_strlen(Str::random($randomInteger)));
         self::assertInternalType('string', Str::random());
 

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
-use Viserio\Component\Contracts\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
+use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Component\Contract\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
 use Viserio\Component\Routing\Traits\MiddlewareValidatorTrait;
 
 class PendingResourceRegistration implements PendingResourceRegistrationContract

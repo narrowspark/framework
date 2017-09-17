@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
 
 class MatchedRouteDataMap
 {
@@ -50,8 +50,8 @@ class MatchedRouteDataMap
     /**
      * Adds the supplied route to the matched route data map.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
-     * @param array                                      $parameterIndexNameMap
+     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param array                                     $parameterIndexNameMap
      */
     public function addRoute(RouteContract $route, array $parameterIndexNameMap): void
     {

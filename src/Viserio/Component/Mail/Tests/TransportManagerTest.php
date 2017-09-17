@@ -7,7 +7,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Mail\Transport\LogTransport;
 use Viserio\Component\Mail\Transport\MailgunTransport;

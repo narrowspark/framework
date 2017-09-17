@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerSwiftMailerBridgeServiceProvider;

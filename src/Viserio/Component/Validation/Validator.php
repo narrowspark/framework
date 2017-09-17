@@ -4,9 +4,9 @@ namespace Viserio\Component\Validation;
 
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as RespectValidator;
-use RuntimeException;
-use Viserio\Component\Contracts\Translation\Traits\TranslatorAwareTrait;
-use Viserio\Component\Contracts\Validation\Validator as ValidatorContract;
+use Viserio\Component\Contract\Translation\Traits\TranslatorAwareTrait;
+use Viserio\Component\Contract\Validation\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Validation\Validator as ValidatorContract;
 
 class Validator implements ValidatorContract
 {
@@ -186,7 +186,7 @@ class Validator implements ValidatorContract
     protected function createValidator(array &$rules, array $notRules, array $optionalRules): RespectValidator
     {
         if (\count($notRules) !== 0 && \count($optionalRules) !== 0) {
-            throw new RuntimeException('Not (!) and optional (?) cant be used at the same time.');
+            throw new InvalidArgumentException('Not (!) and optional (?) cant be used at the same time.');
         } elseif (\count($notRules) !== 0) {
             return $this->createNegativeOrOptionalValidator('!', $notRules);
         } elseif (\count($optionalRules) !== 0) {

@@ -10,6 +10,9 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class ServerRequestFactoryTest extends TestCase
 {
+    /**
+     * @var \Interop\Http\Factory\ServerRequestFactoryInterface
+     */
     private $factory;
 
     public function setUp(): void
@@ -224,7 +227,7 @@ class ServerRequestFactoryTest extends TestCase
         $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
         $request = $this->factory->createServerRequestFromArray($server);
 
-        self::assertServerRequest($request, $method, $uri);
+        $this->assertServerRequest($request, $method, $uri);
     }
 
     /**
@@ -238,7 +241,7 @@ class ServerRequestFactoryTest extends TestCase
         $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
         $request = $this->factory->createServerRequest($method, Uri::createFromString($uri));
 
-        self::assertServerRequest($request, $method, $uri);
+        $this->assertServerRequest($request, $method, $uri);
     }
 
     /**

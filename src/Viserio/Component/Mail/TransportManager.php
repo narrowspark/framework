@@ -7,7 +7,7 @@ use GuzzleHttp\Client as HttpClient;
 use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Mail\Transport\LogTransport;
 use Viserio\Component\Mail\Transport\MailgunTransport;
@@ -35,7 +35,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      */
     protected function createLogDriver(): LogTransport
     {
-        return new LogTransport($this->getContainer()->get(LoggerInterface::class));
+        return new LogTransport($this->container->get(LoggerInterface::class));
     }
 
     /**

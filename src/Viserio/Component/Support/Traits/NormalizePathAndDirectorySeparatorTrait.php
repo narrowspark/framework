@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Support\Traits;
 
-use LogicException;
+use Viserio\Component\Contract\Support\Exception\LogicException;
 
 trait NormalizePathAndDirectorySeparatorTrait
 {
@@ -31,7 +31,7 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @param string $path
      *
-     * @throws \LogicException
+     * @throws \Viserio\Component\Contract\Support\Exception\LogicException
      *
      * @return string
      */
@@ -48,9 +48,8 @@ trait NormalizePathAndDirectorySeparatorTrait
         }
 
         $normalized = \preg_replace('#\\\{2,}#', '\\', \trim($normalized, '\\'));
-        $normalized = \preg_replace('#/{2,}#', '/', \trim($normalized, '/'));
 
-        return $normalized;
+        return \preg_replace('#/{2,}#', '/', \trim($normalized, '/'));
     }
 
     /**

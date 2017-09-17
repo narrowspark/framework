@@ -204,9 +204,9 @@ class ContainerTest extends MockeryTestCase
         $container->alias('foo', 'baz');
         $container->alias('baz', 'bat');
 
-        self::assertEquals('bar', $container->resolve('foo'));
-        self::assertEquals('bar', $container->resolve('baz'));
-        self::assertEquals('bar', $container->resolve('bat'));
+        self::assertSame('bar', $container->resolve('foo'));
+        self::assertSame('bar', $container->resolve('baz'));
+        self::assertSame('bar', $container->resolve('bat'));
     }
 
     public function testBindingsCanBeOverridden(): void
@@ -214,9 +214,12 @@ class ContainerTest extends MockeryTestCase
         $container        = $this->container;
         $container['foo'] = 'bar';
         $foo              = $container['foo'];
+
+        self::assertSame('bar', $foo);
+
         $container['foo'] = 'baz';
 
-        self::assertEquals('baz', $container['foo']);
+        self::assertSame('baz', $container['foo']);
     }
 
     public function testExtendedBindings(): void
@@ -227,7 +230,7 @@ class ContainerTest extends MockeryTestCase
             return $old . 'bar';
         });
 
-        self::assertEquals('foobar', $container->resolve('foo'));
+        self::assertSame('foobar', $container->resolve('foo'));
 
         $container        = $this->container;
         $container['foo'] = function () {
@@ -242,8 +245,8 @@ class ContainerTest extends MockeryTestCase
 
         $result = $container->resolve('foo');
 
-        self::assertEquals('narrowspark', $result->name);
-        self::assertEquals('viserio', $result->oldName);
+        self::assertSame('narrowspark', $result->name);
+        self::assertSame('viserio', $result->oldName);
     }
 
     public function testMultipleExtends(): void
@@ -337,7 +340,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\ContainerException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\ContainerException
      * @expectedExceptionMessage The name parameter must be of type string, [stdClass] given.
      */
     public function testHasToThrowExceptionOnNoStringType(): void
@@ -348,7 +351,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\ContainerException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\ContainerException
      * @expectedExceptionMessage The id parameter must be of type string, [stdClass] given.
      */
     public function testGetToThrowExceptionOnNoStringType(): void
@@ -359,7 +362,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\NotFoundException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\NotFoundException
      * @expectedExceptionMessage Abstract [test] is not being managed by the container.
      */
     public function testGetToThrowExceptionOnNotFoundId(): void
@@ -380,7 +383,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\CyclicDependencyException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
      * @expectedExceptionMessage Circular reference found while resolving [Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubD].
      */
     public function testCircularReferenceCheck(): void
@@ -392,7 +395,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\CyclicDependencyException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
      * @expectedExceptionMessage Circular reference found while resolving [Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubB].
      */
     public function testCircularReferenceCheckDetectCycleStartLocation(): void
@@ -438,7 +441,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage Parameter [something] cannot be injected in [Viserio\Component\Container\Tests\Fixture\ContainerInjectVariableFixture].
      */
     public function testContainerWhenNeedsGiveToThrowException(): void
@@ -455,7 +458,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\ContainerTestNotResolvable] is not resolvable.
      */
     public function testContainerCantInjectObjectIsNotResolvable(): void
@@ -471,7 +474,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\Fixture\ContainerTestNoConstructor] must have a constructor.
      */
     public function testContainerCantInjectObjectWithoutConstructor(): void
@@ -525,7 +528,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage Unresolvable dependency resolving [Parameter #0 [ <required> $first ]] in [Viserio\Component\Container\Tests\Fixture\ContainerMixedPrimitiveFixture]
      */
     public function testInternalClassWithDefaultParameters(): void
@@ -535,7 +538,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage Unable to reflect on the class [string], does the class exist and is it properly autoloaded?
      */
     public function testUnableToReflectClass(): void
@@ -545,7 +548,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\Fixture\ContainerContractFixtureInterface] is not resolvable. Build stack : []
      */
     public function testBindingResolutionExceptionMessage(): void
@@ -555,7 +558,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\BindingResolutionException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @expectedExceptionMessage [Viserio\Component\Container\Tests\Fixture\ContainerContractFixtureInterface] is not resolvable. Build stack : [Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixture]
      */
     public function testBindingResolutionExceptionMessageIncludesBuildStack(): void
@@ -757,7 +760,7 @@ class ContainerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException
+     * @expectedException \Viserio\Component\Contract\Container\Exception\UnresolvableDependencyException
      * @expectedExceptionMessage Parameter [stub] cannot be injected in [Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixture].
      */
     public function testContextualBindingNotWorksOnBoundAlias(): void

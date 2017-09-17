@@ -10,16 +10,28 @@ use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
 use Swift_Transport;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Mail\Message as MessageContract;
-use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
-use Viserio\Component\Contracts\View\View as ViewContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Mail\Message as MessageContract;
+use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
+use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\Mail\Mailer;
 
 class MailerTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Contract\View\Factory|\Mockery\MockInterface
+     */
+    private $viewFactory;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->viewFactory = $this->mock(ViewFactoryContract::class);
+    }
+
     public function testMailerSendSendsMessageWithProperViewContent(): void
     {
         unset($_SERVER['__mailer.test']);
@@ -28,7 +40,7 @@ class MailerTest extends MockeryTestCase
             ->setMethods(['createMessage'])
             ->setConstructorArgs($this->getMocks())
             ->getMock();
-        $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
+        $mailer->setViewFactory($this->viewFactory);
 
         $message = $this->mock(MessageContract::class);
 
@@ -38,8 +50,7 @@ class MailerTest extends MockeryTestCase
 
         $view = $this->mock(ViewContract::class);
 
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->with('foo', ['data', 'message' => $message])
             ->andReturn($view);
@@ -89,7 +100,7 @@ class MailerTest extends MockeryTestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
-        $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
+        $mailer->setViewFactory($this->viewFactory);
 
         $message = $this->mock(MessageContract::class);
 
@@ -99,13 +110,11 @@ class MailerTest extends MockeryTestCase
 
         $view = $this->mock(ViewContract::class);
 
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->with('foo', ['data', 'message' => $message])
             ->andReturn($view);
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->with('bar', ['data', 'message' => $message])
             ->andReturn($view);
@@ -150,7 +159,7 @@ class MailerTest extends MockeryTestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
-        $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
+        $mailer->setViewFactory($this->viewFactory);
 
         $message = $this->mock(MessageContract::class);
 
@@ -160,13 +169,11 @@ class MailerTest extends MockeryTestCase
 
         $view = $this->mock(ViewContract::class);
 
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->with('foo', ['data', 'message' => $message])
             ->andReturn($view);
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->with('bar', ['data', 'message' => $message])
             ->andReturn($view);
@@ -296,7 +303,7 @@ class MailerTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Mail\Exception\UnexpectedValueException
      * @expectedExceptionMessage Invalid view.
      */
     public function testMailerToThrowExceptionOnView(): void

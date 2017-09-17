@@ -18,10 +18,10 @@
         }
     ],
     "require": {
-        "php"                                   : "^7.1",
+        "php"                                   : "^7.2",
+        "ext-mbstring"                          : "*",
         "php-di/invoker"                        : "^2.0",
         "swiftmailer/swiftmailer"               : "^6.0",
-        "symfony/polyfill-mbstring"             : "^1.0",
         "viserio/contracts"                     : "self.version",
         "viserio/options-resolver"              : "self.version",
         "viserio/support"                       : "self.version"
@@ -31,7 +31,7 @@
         "container-interop/service-provider"    : "^0.3",
         "guzzlehttp/guzzle"                     : "^6.0",
         "mockery/mockery"                       : "^0.9",
-        "narrowspark/testing-helper"            : "^3.0",
+        "narrowspark/testing-helper"            : "^4.0",
         "opis/closure"                          : "^3.0",
         "phpunit/phpunit"                       : "^6.0",
         "viserio/config"                        : "self.version",

@@ -4,17 +4,17 @@ namespace Viserio\Component\Console\Command;
 
 use Closure;
 use InvalidArgumentException;
-use Invoker\Exception\InvocationException;
+use Invoker\Exception\InvocationException as InvokerInvocationException;
 use Invoker\Reflection\CallableReflection;
 use ReflectionMethod;
-use RuntimeException;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\Console\Exception\InvocationException;
+use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Str;
 
@@ -63,11 +63,13 @@ final class CommandResolver
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
      *
+     * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
+     *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
     public function resolve(string $expression, $callable, array $aliases = []): StringCommand
     {
-        self::assertCallableIsValid($callable);
+        $this->assertCallableIsValid($callable);
 
         $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
             $parameters = \array_merge(
@@ -92,8 +94,8 @@ final class CommandResolver
 
             try {
                 return $this->invoker->addResolver(new HyphenatedInputResolver())->call($callable, $parameters);
-            } catch (InvocationException $exception) {
-                throw new RuntimeException(
+            } catch (InvokerInvocationException $exception) {
+                throw new InvocationException(
                     \sprintf(
                         "Impossible to call the '%s' command: %s",
                         $input->getFirstArgument(),
@@ -105,7 +107,7 @@ final class CommandResolver
             }
         };
 
-        $command = $this->createCommand($expression, $commandFunction);
+        $command = self::createCommand($expression, $commandFunction);
         $command->setAliases($aliases);
         $command->defaults($this->defaultsViaReflection($command, $callable));
 
@@ -120,7 +122,7 @@ final class CommandResolver
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
-    private static function createCommand(string $expression, callable $callable): SymfonyCommand
+    private static function createCommand(string $expression, callable $callable): StringCommand
     {
         $result = ExpressionParser::parse($expression);
 
@@ -135,8 +137,8 @@ final class CommandResolver
     /**
      * Reflect default values from callable.
      *
-     * @param Viserio\Component\Console\Command\StringCommand $command
-     * @param callable|string                                 $callable
+     * @param \Viserio\Component\Console\Command\StringCommand $command
+     * @param callable|string                                  $callable
      *
      * @return array
      */
@@ -177,13 +179,15 @@ final class CommandResolver
      *
      * @param mixed $callable
      *
+     * @throws \InvalidArgumentException
+     *
      * @return void
      */
     private function assertCallableIsValid($callable): void
     {
         try {
-            $container = $this->console->getContainer();
-        } catch (RuntimeException $e) {
+            $this->console->getContainer();
+        } catch (LogicException $e) {
             if ($this->isStaticCallToNonStaticMethod($callable)) {
                 [$class, $method] = $callable;
 

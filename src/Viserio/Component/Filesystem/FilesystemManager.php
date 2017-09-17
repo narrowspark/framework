@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
-use Defuse\Crypto\Key;
-use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
-use Narrowspark\Arr\Arr;
-use Viserio\Component\Contracts\Cache\Traits\CacheManagerAwareTrait;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Encryption\Key;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Support\AbstractConnectionManager;
@@ -31,8 +30,8 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     /**
      * Get a crypted aware connection instance.
      *
-     * @param \Defuse\Crypto\Key $key
-     * @param null|string        $name
+     * @param \Viserio\Component\Encryption\Key $key
+     * @param null|string                       $name
      *
      * @return \Viserio\Component\Filesystem\Encryption\EncryptionWrapper
      */
@@ -80,9 +79,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     public function getConnectionConfig(string $name): array
     {
-        $config = parent::getConnectionConfig($name);
+        $config    = parent::getConnectionConfig($name);
+        $cacheName = ($config['cache'] ?? false);
 
-        if (\is_string($cacheName = Arr::get($config, 'cache'))) {
+        if (\is_string($cacheName)) {
             $config['cache'] = $this->getCacheConfig($cacheName);
         }
 
@@ -102,7 +102,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param string $name
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -110,7 +110,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     {
         $cache = $this->resolvedOptions['cached'];
 
-        if (! \is_array($config = Arr::get($cache, $name)) && ! $config) {
+        if (! \is_array($config = ($cache[$name] ?? false)) && ! $config) {
             throw new InvalidArgumentException(\sprintf('Cache [%s] not configured.', $name));
         }
 
@@ -125,7 +125,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * @param \League\Flysystem\AdapterInterface $adapter
      * @param array                              $config
      *
-     * @return \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @return \Viserio\Component\Contract\Filesystem\Filesystem
      */
     protected function adapt(AdapterInterface $adapter, array $config): FilesystemContract
     {
@@ -144,8 +144,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Awss3 connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createAwss3Connection(array $config)
+    protected function createAwss3Connection(array $config): object
     {
         return (new Adapter\AwsS3Connector())->connect($config);
     }
@@ -154,8 +156,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Dropbox connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createDropboxConnection(array $config)
+    protected function createDropboxConnection(array $config): object
     {
         return (new Adapter\DropboxConnector())->connect($config);
     }
@@ -164,8 +168,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Ftp connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createFtpConnection(array $config)
+    protected function createFtpConnection(array $config): object
     {
         return (new Adapter\FtpConnector())->connect($config);
     }
@@ -174,8 +180,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Local connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createLocalConnection(array $config)
+    protected function createLocalConnection(array $config): object
     {
         return (new Adapter\LocalConnector())->connect($config);
     }
@@ -184,8 +192,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Null connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createNullConnection(array $config)
+    protected function createNullConnection(array $config): object
     {
         return (new Adapter\NullConnector())->connect([]);
     }
@@ -194,8 +204,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Rackspace connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createRackspaceConnection(array $config)
+    protected function createRackspaceConnection(array $config): object
     {
         return (new Adapter\RackspaceConnector())->connect($config);
     }
@@ -204,8 +216,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Sftp connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createSftpConnection(array $config)
+    protected function createSftpConnection(array $config): object
     {
         return (new Adapter\SftpConnector())->connect($config);
     }
@@ -214,8 +228,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Vfs connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createVfsConnection(array $config)
+    protected function createVfsConnection(array $config): object
     {
         return (new Adapter\VfsConnector())->connect($config);
     }
@@ -224,8 +240,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the WebDav connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createWebdavConnection(array $config)
+    protected function createWebdavConnection(array $config): object
     {
         return (new Adapter\WebDavConnector())->connect($config);
     }
@@ -234,8 +252,10 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Create an instance of the Zip connection.
      *
      * @param array $config
+     *
+     * @return object
      */
-    protected function createZipConnection(array $config)
+    protected function createZipConnection(array $config): object
     {
         return (new Adapter\ZipConnector())->connect($config);
     }

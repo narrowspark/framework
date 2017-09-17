@@ -7,22 +7,22 @@ use Twig\Error\LoaderError;
 use Twig\Loader\ExistsLoaderInterface;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
-use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 
 class Loader implements LoaderInterface, ExistsLoaderInterface
 {
     /**
      * The filesystem instance.
      *
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     protected $files;
 
     /**
      * The finder instance.
      *
-     * @var \Viserio\Component\Contracts\View\Finder
+     * @var \Viserio\Component\Contract\View\Finder
      */
     protected $finder;
 
@@ -43,7 +43,7 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
     /**
      * Create a new twig loader instance.
      *
-     * @param \Viserio\Component\Contracts\View\Finder $finder
+     * @param \Viserio\Component\Contract\View\Finder $finder
      */
     public function __construct(FinderContract $finder)
     {

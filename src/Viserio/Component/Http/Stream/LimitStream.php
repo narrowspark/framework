@@ -3,10 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 
 class LimitStream extends AbstractStreamDecorator
 {
+    /**
+     * Stream instance.
+     *
+     * @var \Psr\Http\Message\StreamInterface
+     */
+    protected $stream;
     /**
      * Offset to start reading from.
      *
@@ -44,7 +50,7 @@ class LimitStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         // Always return true if the underlying stream is EOF
         if ($this->stream->eof()) {
@@ -64,7 +70,7 @@ class LimitStream extends AbstractStreamDecorator
      *
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         if (($length = $this->stream->getSize()) === null) {
             return null;
@@ -91,11 +97,11 @@ class LimitStream extends AbstractStreamDecorator
         }
 
         $offset += $this->offset;
-        if ($this->limit !== -1) {
-            if ($offset > $this->offset + $this->limit) {
-                $offset = $this->offset + $this->limit;
-            }
+
+        if ($this->limit !== -1 && $offset > $this->offset + $this->limit) {
+            $offset = $this->offset + $this->limit;
         }
+
         $this->stream->seek($offset);
     }
 
@@ -104,7 +110,7 @@ class LimitStream extends AbstractStreamDecorator
      *
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
         return $this->stream->tell() - $this->offset;
     }
@@ -114,7 +120,7 @@ class LimitStream extends AbstractStreamDecorator
      *
      * @param int $offset Offset to seek to and begin byte limiting from
      *
-     * @throws \RuntimeException if the stream cannot be seeked
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the stream cannot be seeked
      *
      * @return void
      */
@@ -153,7 +159,7 @@ class LimitStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         if ($this->limit == -1) {
             return $this->stream->read($length);

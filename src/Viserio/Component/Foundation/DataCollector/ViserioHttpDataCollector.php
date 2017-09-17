@@ -7,12 +7,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use ReflectionMethod;
-use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Profiler\AssetAware as AssetAwareContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
@@ -46,7 +48,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     /**
      * Current route.
      *
-     * @var \Viserio\Component\Contracts\Routing\Route
+     * @var \Viserio\Component\Contract\Routing\Route
      */
     protected $route;
 
@@ -60,8 +62,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     /**
      * Create a new viserio request and response data collector.
      *
-     * @param \Viserio\Component\Contracts\Routing\Router $router
-     * @param string                                      $routeDirPath
+     * @param \Viserio\Component\Contract\Routing\Router $router
+     * @param string                                     $routeDirPath
      */
     public function __construct(RouterContract $router, string $routeDirPath)
     {
@@ -120,7 +122,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                     'value' => $this->route->getName(),
                 ]
             );
-        } elseif ($this->route !== null) {
+        }
+
+        if ($this->route !== null) {
             return \array_merge(
                 $tabInfos,
                 [
@@ -264,10 +268,12 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         $requestCookies = $responseCookies = [];
 
+        /** @var Cookie $cookie */
         foreach (RequestCookies::fromRequest($serverRequest)->getAll() as $cookie) {
             $requestCookies[$cookie->getName()] = $cookie->getValue();
         }
 
+        /** @var CookieContract $cookie */
         foreach (ResponseCookies::fromResponse($response)->getAll() as $cookie) {
             $responseCookies[$cookie->getName()] = $cookie->getValue();
         }
@@ -293,7 +299,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     /**
      * Get the route information for a given route.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return array
      */
@@ -301,10 +307,11 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     {
         $routesPath = \realpath($this->routeDirPath);
         $action     = $route->getAction();
+        $reflector  = null;
 
         $result = [
            'uri'     => $route->getUri() ?: '-',
-           'methods' => \count($route->getMethods()) > 1 ?
+           'methods' => \count((array) $route->getMethods()) > 1 ?
                 \implode(' | ', $route->getMethods()) :
                 $route->getMethods(),
         ];
@@ -324,7 +331,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             $result['uses'] = $this->cloneVar($result['uses']);
         }
 
-        if (isset($reflector)) {
+        if ($reflector !== null) {
             $filename       = \ltrim(\str_replace($routesPath, '', $reflector->getFileName()), '/');
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
@@ -378,7 +385,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $preparedHeaders = [];
 
         foreach ($headers as $key => $value) {
-            if (\count($value) === 1) {
+            if (\count((array) $value) === 1) {
                 $preparedHeaders[$key] = $value[0];
             } else {
                 $preparedHeaders[$key] = $value;
@@ -401,7 +408,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $preparedParams = [];
 
         foreach ($params as $key => $value) {
-            if (\preg_match('/(_KEY|_PASSWORD|_PW|_SECRET)/s', $key)) {
+            if (\preg_match('/(_KEY|_PASSWORD|_PW|_SECRET)/', $key)) {
                 $preparedParams[$key] = '******';
             } else {
                 $preparedParams[$key] = $value;

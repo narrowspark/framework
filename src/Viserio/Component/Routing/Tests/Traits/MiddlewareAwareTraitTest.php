@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Traits;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
@@ -83,7 +83,7 @@ class MiddlewareAwareTraitTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\RuntimeException
      * @expectedExceptionMessage Alias [foo] already exists.
      */
     public function testAliasMiddlewareThrowException(): void
@@ -95,7 +95,7 @@ class MiddlewareAwareTraitTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
      * @expectedExceptionMessage Expected string or object; received [NULL].
      */
     public function testAliasMiddlewareThrowExceptionWithWrongType(): void
@@ -104,7 +104,7 @@ class MiddlewareAwareTraitTest extends TestCase
     }
 
     /**
-     * @expectedException \LogicException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
      * @expectedExceptionMessage Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [Viserio\Component\Routing\Tests\Traits\MiddlewareAwareTraitTest].
      */
     public function testWithWrongMiddleware(): void
@@ -113,7 +113,7 @@ class MiddlewareAwareTraitTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
      * @expectedExceptionMessage Expected string, object or array; received [NULL].
      */
     public function testWithWrongType(): void
@@ -127,7 +127,7 @@ class MiddlewareAwareTraitTest extends TestCase
      *
      * @return object
      */
-    private function getMiddlewareAwareObject(bool $resetMiddlewares = false, bool $resetBypassedMiddlewares = false)
+    private function getMiddlewareAwareObject(bool $resetMiddlewares = false, bool $resetBypassedMiddlewares = false): object
     {
         return new class($resetMiddlewares, $resetBypassedMiddlewares) implements MiddlewareAwareContract {
             use MiddlewareAwareTrait;

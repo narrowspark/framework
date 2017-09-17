@@ -5,9 +5,9 @@ namespace Viserio\Component\Config;
 use ArrayIterator;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
-use RuntimeException;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Parsers\Traits\ParserAwareTrait;
+use Viserio\Component\Contract\Config\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Parser\Traits\ParserAwareTrait;
 
 class Repository implements RepositoryContract, IteratorAggregate
 {
@@ -41,10 +41,10 @@ class Repository implements RepositoryContract, IteratorAggregate
     {
         if ($this->loader === null && \pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
             if (! \file_exists($filepath)) {
-                throw new RuntimeException(\sprintf('File [%s] not found.', $filepath));
+                throw new FileNotFoundException(\sprintf('File [%s] not found.', $filepath));
             }
 
-            $config = (array) require $filepath;
+            $config = (array) require \str_replace('\\', '/', $filepath);
         } else {
             $config = $this->getLoader()->load($filepath, $options);
         }
@@ -89,7 +89,9 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function delete(string $key): RepositoryContract
     {
-        return $this->offsetUnset($key);
+        $this->offsetUnset($key);
+
+        return $this;
     }
 
     /**
@@ -146,7 +148,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      *
      * @return $this
      */
-    public function offsetSet($key, $value): RepositoryContract
+    public function offsetSet($key, $value): self
     {
         $this->data = Arr::set($this->data, $key, $value);
 
@@ -170,7 +172,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      *
      * @param string $key
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Config\Repository
      */
     public function offsetUnset($key): RepositoryContract
     {

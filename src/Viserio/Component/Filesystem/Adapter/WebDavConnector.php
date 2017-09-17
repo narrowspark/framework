@@ -2,32 +2,33 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use InvalidArgumentException;
 use League\Flysystem\WebDAV\WebDAVAdapter;
-use Narrowspark\Arr\Arr;
 use Sabre\DAV\Client;
-use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
-class WebDavConnector implements ConnectorContract
+class WebDavConnector extends AbstractConnector
 {
     /**
-     * Establish an adapter connection.
-     *
-     * @param string[] $config
-     *
-     * @return \League\Flysystem\WebDAV\WebDAVAdapter
+     * {@inheritdoc}
      */
-    public function connect(array $config)
+    public function connect(array $config): object
     {
         $client = $this->getClient($config);
 
-        return $this->getAdapter($client);
+        return new WebDAVAdapter($client);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $config)
+    protected function getConfig(array $config): array
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getClient(array $config): object
     {
         if (! \array_key_exists('baseUri', $config)) {
             throw new InvalidArgumentException('The WebDav connector requires baseUri configuration.');
@@ -37,14 +38,20 @@ class WebDavConnector implements ConnectorContract
             $config['prefix'] = null;
         }
 
-        return new Client(Arr::only($config, ['prefix', 'baseUri']));
+        return new Client(self::getSelectedConfig($config, ['prefix', 'baseUri']));
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client): WebDAVAdapter
+    protected function getAdapter(object $client, array $config): object
     {
-        return new WebDAVAdapter($client);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAuth(array $config): array
+    {
     }
 }

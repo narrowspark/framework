@@ -2,15 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use RuntimeException;
-use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 final class RouteTreeNode
 {
     /**
      * All segment matcher.
      *
-     * @var \Viserio\Component\Contracts\Routing\SegmentMatcher[]
+     * @var \Viserio\Component\Contract\Routing\SegmentMatcher[]
      */
     private $matchers;
 
@@ -24,10 +25,10 @@ final class RouteTreeNode
     /**
      * Create a new child node collection instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\SegmentMatcher[]                                                                        $matchers
+     * @param \Viserio\Component\Contract\Routing\SegmentMatcher[]                                                                         $matchers
      * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection|\Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $contents
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
      */
     public function __construct(array $matchers, $contents)
     {
@@ -44,7 +45,7 @@ final class RouteTreeNode
     /**
      * Get all matchers from array.
      *
-     * @return \Viserio\Component\Contracts\Routing\SegmentMatcher[]
+     * @return \Viserio\Component\Contract\Routing\SegmentMatcher[]
      */
     public function getMatchers(): array
     {
@@ -54,7 +55,7 @@ final class RouteTreeNode
     /**
      * Get the first matcher from array.
      *
-     * @return \Viserio\Component\Contracts\Routing\SegmentMatcher
+     * @return \Viserio\Component\Contract\Routing\SegmentMatcher
      */
     public function getFirstMatcher(): SegmentMatcherContract
     {
@@ -121,7 +122,7 @@ final class RouteTreeNode
      *
      * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection|\Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $contents
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
      *
      * @return void
      */
@@ -129,11 +130,13 @@ final class RouteTreeNode
     {
         if ($contents instanceof MatchedRouteDataMap) {
             return;
-        } elseif ($contents instanceof ChildrenNodeCollection) {
+        }
+
+        if ($contents instanceof ChildrenNodeCollection) {
             return;
         }
 
-        throw new RuntimeException(\sprintf(
+        throw new UnexpectedValueException(\sprintf(
             'RouteTreeNode needs "Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection" or "Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap" but %s given.',
             $contents
         ));

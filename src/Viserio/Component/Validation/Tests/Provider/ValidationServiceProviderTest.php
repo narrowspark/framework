@@ -4,7 +4,7 @@ namespace Viserio\Component\Validation\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Validation\Validator as ValidatorContract;
+use Viserio\Component\Contract\Validation\Validator as ValidatorContract;
 use Viserio\Component\Validation\Provider\ValidationServiceProvider;
 use Viserio\Component\Validation\Validator;
 

@@ -18,16 +18,15 @@
         }
     ],
     "require": {
-        "php"                                : "^7.1",
+        "php"                                : "^7.2",
         "twig/twig"                          : "~2.4"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
         "danielstjules/stringy"              : "^3.0",
         "mockery/mockery"                    : "^0.9",
-        "narrowspark/testing-helper"         : "^3.0",
+        "narrowspark/testing-helper"         : "^4.0",
         "phpunit/phpunit"                    : "^6.0",
-        "symfony/var-dumper"                 : "~3.3",
         "viserio/config"                     : "self.version",
         "viserio/console"                    : "self.version",
         "viserio/container"                  : "self.version",

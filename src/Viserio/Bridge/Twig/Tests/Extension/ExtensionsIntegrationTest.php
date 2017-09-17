@@ -9,16 +9,25 @@ use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 
 /**
  * @group appveyor
  */
 class ExtensionsIntegrationTest extends IntegrationTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win') {
+            $this->markTestSkipped('Test is skipped on windows.');
+        }
+    }
+
     public function tearDown(): void
     {
         parent::tearDown();
@@ -27,25 +36,25 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
         Mock::close();
     }
 
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return [
             new SessionExtension($this->getSessionMock()),
             new StrExtension(),
             new ConfigExtension($this->getConfigMock()),
-            new DumpExtension(),
             new TranslatorExtension($this->getTranslatorMock()),
+            new DumpExtension(),
         ];
     }
 
-    public function getFixturesDir()
+    public function getFixturesDir(): string
     {
         return __DIR__ . '/../Fixtures/';
     }
 
     public function getLegacyTests()
     {
-        return $this->getTests('testLegacyIntegration', false);
+        return $this->getTests('testLegacyIntegration');
     }
 
     private function getSessionMock()

@@ -7,8 +7,8 @@ use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
-use Viserio\Component\Contracts\Container\Exception\BindingResolutionException;
-use Viserio\Component\Contracts\Container\Exception\CyclicDependencyException;
+use Viserio\Component\Contract\Container\Exception\BindingResolutionException;
+use Viserio\Component\Contract\Container\Exception\CyclicDependencyException;
 
 class ContainerResolver
 {
@@ -23,7 +23,9 @@ class ContainerResolver
     {
         if ($this->isClass($subject)) {
             return $this->resolveClass($subject, $parameters);
-        } elseif ($this->isMethod($subject)) {
+        }
+
+        if ($this->isMethod($subject)) {
             return $this->resolveMethod($subject, $parameters);
         } elseif ($this->isFunction($subject)) {
             return $this->resolveFunction($subject, $parameters);
@@ -44,9 +46,12 @@ class ContainerResolver
      * @param string $class
      * @param array  $parameters
      *
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     *
      * @return object
      */
-    public function resolveClass(string $class, array $parameters = [])
+    public function resolveClass(string $class, array $parameters = []): object
     {
         $reflectionClass = new ReflectionClass($class);
 
@@ -65,9 +70,8 @@ class ContainerResolver
             throw new CyclicDependencyException($class, $this->buildStack);
         }
 
-        $reflectionMethod = $reflectionClass->getConstructor();
-
-        \array_push($this->buildStack, $reflectionClass->name);
+        $reflectionMethod   = $reflectionClass->getConstructor();
+        $this->buildStack[] = $reflectionClass->name;
 
         if ($reflectionMethod) {
             $reflectionParameters = $reflectionMethod->getParameters();
@@ -91,10 +95,8 @@ class ContainerResolver
     {
         $reflectionMethod     = $this->getMethodReflector($method);
         $reflectionParameters = $reflectionMethod->getParameters();
-
-        \array_push($this->buildStack, $reflectionMethod->name);
-
-        $resolvedParameters = $this->resolveParameters($reflectionParameters, $parameters);
+        $this->buildStack[]   = $reflectionMethod->name;
+        $resolvedParameters   = $this->resolveParameters($reflectionParameters, $parameters);
 
         \array_pop($this->buildStack);
 
@@ -113,10 +115,8 @@ class ContainerResolver
     {
         $reflectionFunction   = new ReflectionFunction($function);
         $reflectionParameters = $reflectionFunction->getParameters();
-
-        \array_push($this->buildStack, $reflectionFunction->name);
-
-        $resolvedParameters = $this->resolveParameters($reflectionParameters, $parameters);
+        $this->buildStack[]   = $reflectionFunction->name;
+        $resolvedParameters   = $this->resolveParameters($reflectionParameters, $parameters);
 
         \array_pop($this->buildStack);
 
@@ -136,11 +136,15 @@ class ContainerResolver
     {
         if ($this->isClass($subject)) {
             return new ReflectionClass($subject);
-        } elseif ($this->isMethod($subject)) {
+        }
+
+        if ($this->isMethod($subject)) {
             return $this->getMethodReflector($subject);
         } elseif ($this->isFunction($subject)) {
             return new ReflectionFunction($subject);
         }
+
+        return null;
     }
 
     /**
@@ -148,6 +152,8 @@ class ContainerResolver
      *
      * @param \ReflectionParameter $parameter
      * @param array                $parameters
+     *
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      *
      * @return mixed
      */
@@ -164,7 +170,7 @@ class ContainerResolver
             return $parameters[$index];
         }
 
-        if (($class = $parameter->getClass())) {
+        if ($class = $parameter->getClass()) {
             return $this->resolve($class->name);
         }
 
@@ -261,7 +267,7 @@ class ContainerResolver
     private function mergeParameters(array $rootParameters, array $parameters = []): array
     {
         foreach ($parameters as $key => $value) {
-            if (! isset($rootParameters[$key]) && \is_int($key)) {
+            if (\is_int($key) && ! isset($rootParameters[$key])) {
                 $rootParameters[$key] = $value;
             }
         }

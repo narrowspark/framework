@@ -4,11 +4,10 @@ namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
 use Cache\Adapter\Common\PhpCachePool as PhpCachePoolInterface;
 use Psr\SimpleCache\CacheInterface;
-use stdClass;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
-class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInterface
+final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInterface
 {
     use SimpleTraceableCacheDecoratorTrait;
     use TraceableCacheItemDecoratorTrait;
@@ -19,13 +18,6 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
      * @var \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface
      */
     private $pool;
-
-    /**
-     * Instance of stdClass.
-     *
-     * @var \stdClass
-     */
-    private $miss;
 
     /**
      * List of event calls.
@@ -50,7 +42,6 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     {
         $this->pool = $pool;
         $this->name = \get_class($pool);
-        $this->miss = new stdClass();
     }
 
     /**
@@ -66,7 +57,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): ?bool
     {
         $event = $this->start(__FUNCTION__);
 
@@ -130,7 +121,7 @@ class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInt
      *
      * @return object
      */
-    private function start(string $name)
+    private function start(string $name): object
     {
         $this->calls[] = $event = new class() {
             public $name;

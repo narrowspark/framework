@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Event;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Events\Traits\EventTrait;
 
 class RouteMatchedEvent implements EventContract
@@ -15,9 +15,9 @@ class RouteMatchedEvent implements EventContract
     /**
      * Create a new route matched event.
      *
-     * @param \Viserio\Component\Contracts\Routing\Dispatcher $dispatcher
-     * @param \Viserio\Component\Contracts\Routing\Route      $route
-     * @param \Psr\Http\Message\ServerRequestInterface        $request
+     * @param \Viserio\Component\Contract\Routing\Dispatcher $dispatcher
+     * @param \Viserio\Component\Contract\Routing\Route      $route
+     * @param \Psr\Http\Message\ServerRequestInterface       $request
      */
     public function __construct(DispatcherContract $dispatcher, RouteContract $route, ServerRequestInterface $request)
     {
@@ -29,7 +29,7 @@ class RouteMatchedEvent implements EventContract
     /**
      * Get matched route instance.
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return \Viserio\Component\Contract\Routing\Route
      */
     public function getRoute(): RouteContract
     {

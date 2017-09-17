@@ -51,6 +51,8 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @param string                                $method
      * @param \Psr\Http\Message\UriInterface|string $uri
      *
+     * @throws \UnexpectedValueException
+     *
      * @return \Psr\Http\Message\ServerRequestInterface
      */
     protected function buildServerRequest(array $server, array $headers, string $method, $uri = null): ServerRequestInterface
@@ -118,7 +120,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         ];
 
         foreach ($server as $key => $value) {
-            if (\mb_substr($key, 0, 5) == 'HTTP_') {
+            if (\mb_strpos($key, 'HTTP_') === 0) {
                 $headers[$key] = $value;
                 // CONTENT_* are not prefixed with HTTP_
             } elseif (isset($contentHeaders[$key])) {
@@ -143,7 +145,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
                     // Decode AUTHORIZATION header into PHP_AUTH_USER and PHP_AUTH_PW when authorization header is basic
                     $exploded = \explode(':', \base64_decode(\mb_substr($authorizationHeader, 6), true), 2);
 
-                    if (\count($exploded) == 2) {
+                    if (\count($exploded) === 2) {
                         [$headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']] = $exploded;
                     }
                 } elseif (empty($server['PHP_AUTH_DIGEST']) && (0 === \mb_stripos($authorizationHeader, 'digest '))) {
@@ -228,7 +230,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     private function normalizeKey(string $key): string
     {
-        $key = \strtr(\mb_strtolower($key), '_', '-');
+        $key = \str_replace('_', '-', \mb_strtolower($key));
 
         if (\mb_strpos($key, 'http-') === 0) {
             $key = \mb_substr($key, 5);

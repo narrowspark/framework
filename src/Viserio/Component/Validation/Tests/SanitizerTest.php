@@ -12,7 +12,6 @@ class SanitizerTest extends TestCase
 {
     public function testThatSanitizerCanSanitizeWithLambdaAndClosure(): void
     {
-        $name      = 'viserio';
         $sanitizer = new Sanitizer();
         $sanitizer->register('reverse', function ($field) {
             return \strrev($field);

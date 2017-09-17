@@ -8,8 +8,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Log\Writer;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
@@ -28,13 +29,16 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      * Create a new logs data collector instance.
      *
      * @param \Monolog\Logger|\Viserio\Component\Log\Writer $logger
+     *
+     * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException if wrong class is given
+     * @throws \RuntimeException
      */
     public function __construct($logger)
     {
         if ($logger instanceof Logger || $logger instanceof Writer) {
             $this->logger = $logger;
         } else {
-            throw new RuntimeException(\sprintf(
+            throw new UnexpectedValueException(\sprintf(
                 'Class [%s] or [%s] is required; Instance of [%s] given.',
                 Logger::class,
                 Writer::class,
@@ -89,7 +93,6 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $html          = '';
         $tableHeaders  = [
             'Level',
             'Channel',
@@ -230,7 +233,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     /**
      * Returns a DebugProcessor instance if one is registered with this logger.
      *
-     * @return null|Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor
+     * @return null|\Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor
      */
     private function getDebugLogger(): ?DebugProcessor
     {
@@ -375,7 +378,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
         };
 
         foreach ($this->data['logs'] as $log) {
-            if (isset($log['priority']) && (\in_array($log['priority'], [Logger::ERROR, Logger::INFO], true))) {
+            if (isset($log['priority']) && \in_array($log['priority'], [Logger::ERROR, Logger::INFO], true)) {
                 $infoAndErrorLogs[] = $formatLog($log);
             } elseif (isset($log['priority']) && $log['priority'] === Logger::DEBUG) {
                 $debugLogs[] = $formatLog($log);

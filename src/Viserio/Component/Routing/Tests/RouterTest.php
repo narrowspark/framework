@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
 use Symfony\Component\Filesystem\Filesystem;
-use Viserio\Component\Contracts\Routing\Dispatcher;
+use Viserio\Component\Contract\Routing\Dispatcher;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -19,7 +19,7 @@ use Viserio\Component\Routing\Router;
 class RouterTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contracts\Routing\Router
+     * @var \Viserio\Component\Contract\Routing\Router
      */
     protected $router;
 

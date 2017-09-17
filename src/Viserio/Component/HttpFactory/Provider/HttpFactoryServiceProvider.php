@@ -22,7 +22,7 @@ class HttpFactoryServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             RequestFactoryInterface::class => [self::class, 'createRequestFactory'],

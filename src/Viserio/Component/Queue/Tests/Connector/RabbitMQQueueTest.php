@@ -7,7 +7,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connector\RabbitMQQueue;
 use Viserio\Component\Queue\Job\RabbitMQJob;
 

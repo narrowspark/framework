@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 /**
@@ -31,7 +31,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
      *
      * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator $cache
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException
      *
      * @return void
      */
@@ -46,7 +46,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
             return;
         }
 
-        throw new InvalidArgumentException(\sprintf(
+        throw new UnexpectedValueException(\sprintf(
             'The object [%s] must be an instance of [%s] or [%s].',
             \get_class($cache),
             TraceableCacheItemDecorator::class,
@@ -225,8 +225,6 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
                     $statistics[$name]['deletes'] += 1;
                 }
             }
-
-            $statistics[$name]['time'] = $statistics[$name]['time'];
 
             if ($statistics[$name]['reads']) {
                 $statistics[$name]['hits'] =

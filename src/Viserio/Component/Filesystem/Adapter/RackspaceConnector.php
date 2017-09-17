@@ -2,12 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use InvalidArgumentException;
 use League\Flysystem\Rackspace\RackspaceAdapter;
-use Narrowspark\Arr\Arr;
 use OpenCloud\Rackspace;
 use RuntimeException;
 use stdClass;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
 class RackspaceConnector extends AbstractConnector
 {
@@ -32,7 +31,7 @@ class RackspaceConnector extends AbstractConnector
             throw new InvalidArgumentException('The rackspace connector requires container configuration.');
         }
 
-        return Arr::only($config, ['username', 'apiKey', 'endpoint', 'region', 'container', 'internal']);
+        return self::getSelectedConfig($config, ['username', 'apiKey', 'endpoint', 'region', 'container', 'internal']);
     }
 
     /**
@@ -45,15 +44,17 @@ class RackspaceConnector extends AbstractConnector
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException
      */
-    protected function getClient(array $auth)
+    protected function getClient(array $auth): object
     {
         $client = new Rackspace($auth['endpoint'], [
             'username' => $auth['username'],
             'apiKey'   => $auth['apiKey'],
         ]);
 
-        $urlType = Arr::get($auth, 'internal', false) ? 'internalURL' : 'publicURL';
+        $urlType = ($auth['internal'] ?? false) ? 'internalURL' : 'publicURL';
 
         if ($auth['container'] instanceof stdClass || $auth['container'] === null) {
             return $client->objectStoreService('cloudFiles', $auth['region'], $urlType)
@@ -66,7 +67,7 @@ class RackspaceConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): RackspaceAdapter
+    protected function getAdapter(object $client, array $config): object
     {
         return new RackspaceAdapter($client);
     }

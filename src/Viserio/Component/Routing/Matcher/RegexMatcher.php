@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
-use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Support\VarExporter;
 
 class RegexMatcher extends AbstractMatcher
@@ -54,7 +54,7 @@ class RegexMatcher extends AbstractMatcher
     }
 
     /**
-     * Retruns the parameters key group array.
+     * Returns the parameters key group array.
      *
      * @return array
      */
@@ -64,7 +64,7 @@ class RegexMatcher extends AbstractMatcher
     }
 
     /**
-     * Retruns the used regex.
+     * Returns the used regex.
      *
      * @return string
      */
@@ -94,7 +94,7 @@ class RegexMatcher extends AbstractMatcher
     {
         $matches = [];
 
-        foreach ($this->parameterKeyGroupMap as $parameterKey => $group) {
+        foreach ((array) $this->parameterKeyGroupMap as $parameterKey => $group) {
             // Use $group + 1 as the first $matches element is the full text that matched,
             // we want the groups
             $matches[$parameterKey] = '$matches' . $uniqueKey . '[' . ($group + 1) . ']';

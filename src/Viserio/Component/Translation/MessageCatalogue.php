@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
-use LogicException;
-use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Component\Contract\Translation\Exception\LogicException;
+use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 
 class MessageCatalogue implements MessageCatalogueContract
@@ -20,7 +20,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * Message catalogue instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageCatalogue
+     * @var \Viserio\Component\Contract\Translation\MessageCatalogue
      */
     protected $fallbackCatalogue;
 
@@ -34,7 +34,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * A parent instance of MessageCatalogue.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageCatalogue
+     * @var \Viserio\Component\Contract\Translation\MessageCatalogue
      */
     protected $parent;
 
@@ -46,7 +46,7 @@ class MessageCatalogue implements MessageCatalogueContract
      */
     public function __construct(string $locale, array $messages = [])
     {
-        $this->assertValidLocale($locale);
+        self::assertValidLocale($locale);
 
         $this->locale   = $locale;
         $this->messages = $messages;
@@ -77,7 +77,7 @@ class MessageCatalogue implements MessageCatalogueContract
             return $this->messages;
         }
 
-        return isset($this->messages[$domain]) ? $this->messages[$domain] : [];
+        return $this->messages[$domain] ?? [];
     }
 
     /**

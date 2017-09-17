@@ -7,9 +7,9 @@ use Closure;
 use DateTimeInterface;
 use Exception;
 use Opis\Closure\SerializableClosure;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
 use Viserio\Component\Queue\CallQueuedHandler;
 use Viserio\Component\Queue\QueueClosure;
 
@@ -20,7 +20,7 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * The encrypter implementation.
      *
-     * @var \Viserio\Component\Contracts\Encryption\Encrypter
+     * @var \Viserio\Component\Contract\Encryption\Encrypter
      */
     protected $encrypter;
 
@@ -74,7 +74,7 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * Set the encrypter implementation.
      *
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function setEncrypter(EncrypterContract $encrypter): void
     {
@@ -174,7 +174,7 @@ abstract class AbstractQueue implements QueueConnectorContract
      *
      * @throws \Exception
      *
-     * @return \Viserio\Component\Contracts\Encryption\Encrypter
+     * @return \Viserio\Component\Contract\Encryption\Encrypter
      */
     protected function getEncrypter(): EncrypterContract
     {

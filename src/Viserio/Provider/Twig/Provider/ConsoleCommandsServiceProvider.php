@@ -34,6 +34,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
         $console = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($console !== null) {
+            /* @var Application $console */
             $console->add(new CleanCommand());
 
             if (\class_exists(DebugCommand::class)) {

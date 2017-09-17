@@ -6,7 +6,7 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use League\Flysystem\Adapter\Local as FlyLocal;
 use League\Flysystem\Cached\CacheInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemManager;
 

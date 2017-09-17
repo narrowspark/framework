@@ -9,13 +9,16 @@ use Symfony\Component\VarDumper\Caster\StubCaster;
 use Symfony\Component\VarDumper\Cloner\AbstractCloner;
 use Symfony\Component\VarDumper\Cloner\Stub;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
+use Viserio\Component\Contract\Profiler\DataCollector as DataCollectorContract;
 use Viserio\Component\Profiler\Util\HtmlDumperOutput;
 use Viserio\Component\Support\Debug\HtmlDumper;
 use Viserio\Component\Support\Str;
+use Viserio\Component\Support\Traits\BytesFormatTrait;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {
+    use BytesFormatTrait;
+
     /**
      * Array of all collected datas.
      *
@@ -64,7 +67,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     public function getName(): string
     {
-        $namespace = \mb_substr(\get_called_class(), 0, \mb_strrpos(\get_called_class(), '\\'));
+        $namespace = \mb_substr(static::class, 0, \mb_strrpos(static::class, '\\'));
 
         return Str::snake(\str_replace($namespace . '\\', '', \get_class($this)), '-');
     }
@@ -92,59 +95,13 @@ abstract class AbstractDataCollector implements DataCollectorContract
     {
         if ($seconds < 0.001) {
             return \round($seconds * 1000000) . 'μs';
-        } elseif ($seconds < 1) {
+        }
+
+        if ($seconds < 1) {
             return \round($seconds * 1000, 2) . 'ms';
         }
 
         return \round($seconds, 2) . 's';
-    }
-
-    /**
-     * Convert a number string to bytes.
-     *
-     * @param string $memoryLimit
-     *
-     * @return int
-     *
-     * @codeCoverageIgnore
-     */
-    protected function convertToBytes(string $memoryLimit): int
-    {
-        if ($memoryLimit === '-1') {
-            return -1;
-        }
-
-        $memoryLimit = \mb_strtolower($memoryLimit);
-        $max         = \mb_strtolower(\ltrim($memoryLimit, '+'));
-
-        if (\mb_strpos($max, '0x') === 0) {
-            $max = \intval($max, 16);
-        } elseif (\mb_strpos($max, '0') === 0) {
-            $max = \intval($max, 8);
-        } else {
-            $max = (int) $max;
-        }
-
-        switch (\mb_substr($memoryLimit, -1)) {
-            case 't':
-                $max *= 1024;
-
-                break;
-            case 'g':
-                $max *= 1024;
-
-                break;
-            case 'm':
-                $max *= 1024;
-
-                break;
-            case 'k':
-                $max *= 1024;
-
-                break;
-        }
-
-        return $max;
     }
 
     /**
@@ -205,7 +162,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $html = '<div class="profiler-tabs row">';
 
         foreach ($data as $key => $value) {
-            $id = \uniqid($key . '-');
+            $id = \uniqid($key . '-', true);
 
             $html .= '<div class="profiler-tabs-tab col">';
             $html .= '<input type="radio" name="tabgroup" id="tab-' . $id . '">';
@@ -258,7 +215,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
                     $html .= '<tr>';
 
                     if (\is_array($values)) {
-                        foreach ($values as $key => $value) {
+                        foreach ($values as $k => $value) {
                             $html .= \sprintf('<td>%s</td>', ($options['vardumper'] ? $this->cloneVar($value) : $value));
                         }
                     } else {
@@ -290,7 +247,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $selected = false;
 
         foreach ($data as $key => $value) {
-            $id = 'content-' . $key . '-' . \uniqid('');
+            $id = 'content-' . $key . '-' . \uniqid('', true);
 
             $selected = $selected === false ? $selected = 'selected' : '';
 

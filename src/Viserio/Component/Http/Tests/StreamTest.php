@@ -13,7 +13,7 @@ class StreamTest extends TestCase
     private $tmpnam;
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      */
     public function testConstructorThrowsExceptionOnInvalidArgument(): void
     {
@@ -22,7 +22,7 @@ class StreamTest extends TestCase
 
     public function testConstructorInitializesProperties(): void
     {
-        $handle = \fopen('php://temp', 'r+');
+        $handle = \fopen('php://temp', 'rb+');
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -38,7 +38,7 @@ class StreamTest extends TestCase
 
     public function testStreamClosesHandleOnDestruct(): void
     {
-        $handle = \fopen('php://temp', 'r');
+        $handle = \fopen('php://temp', 'rb');
         $stream = new Stream($handle);
         unset($stream);
         self::assertFalse(\is_resource($handle));
@@ -46,7 +46,7 @@ class StreamTest extends TestCase
 
     public function testConvertsToString(): void
     {
-        $handle = \fopen('php://temp', 'w+');
+        $handle = \fopen('php://temp', 'wb+');
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -57,7 +57,7 @@ class StreamTest extends TestCase
 
     public function testGetsContents(): void
     {
-        $handle = \fopen('php://temp', 'w+');
+        $handle = \fopen('php://temp', 'wb+');
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -74,7 +74,7 @@ class StreamTest extends TestCase
 
     public function testChecksEof(): void
     {
-        $handle = \fopen('php://temp', 'w+');
+        $handle = \fopen('php://temp', 'wb+');
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -90,7 +90,7 @@ class StreamTest extends TestCase
     public function testGetSize(): void
     {
         $size   = \filesize(__FILE__);
-        $handle = \fopen(__FILE__, 'r');
+        $handle = \fopen(__FILE__, 'rb');
 
         $stream = new Stream($handle);
         self::assertEquals($size, $stream->getSize());
@@ -101,7 +101,7 @@ class StreamTest extends TestCase
 
     public function testEnsuresSizeIsConsistent(): void
     {
-        $h = \fopen('php://temp', 'w+');
+        $h = \fopen('php://temp', 'wb+');
         self::assertEquals(3, \fwrite($h, 'foo'));
 
         $stream = new Stream($h);
@@ -114,7 +114,7 @@ class StreamTest extends TestCase
 
     public function testProvidesStreamPosition(): void
     {
-        $handle = \fopen('php://temp', 'w+');
+        $handle = \fopen('php://temp', 'wb+');
         $stream = new Stream($handle);
 
         self::assertEquals(0, $stream->tell());
@@ -131,7 +131,7 @@ class StreamTest extends TestCase
 
     public function testDetachStreamAndClearProperties(): void
     {
-        $handle = \fopen('php://temp', 'r');
+        $handle = \fopen('php://temp', 'rb');
         $stream = new Stream($handle);
 
         self::assertSame($handle, $stream->detach());
@@ -144,7 +144,7 @@ class StreamTest extends TestCase
 
     public function testCloseResourceAndClearProperties(): void
     {
-        $handle = \fopen('php://temp', 'r');
+        $handle = \fopen('php://temp', 'rb');
         $stream = new Stream($handle);
         $stream->close();
 
@@ -155,7 +155,7 @@ class StreamTest extends TestCase
     public function testDoesNotThrowInToString(): void
     {
         $body   = 'foo';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -168,7 +168,7 @@ class StreamTest extends TestCase
 
     public function testStreamReadingWithZeroLength(): void
     {
-        $r      = \fopen('php://temp', 'r');
+        $r      = \fopen('php://temp', 'rb');
         $stream = new Stream($r);
 
         self::assertSame('', $stream->read(0));
@@ -182,7 +182,7 @@ class StreamTest extends TestCase
      */
     public function testStreamReadingWithNegativeLength(): void
     {
-        $r      = \fopen('php://temp', 'r');
+        $r      = \fopen('php://temp', 'rb');
         $stream = new Stream($r);
 
         try {
@@ -204,7 +204,7 @@ class StreamTest extends TestCase
     {
         self::$isFreadError = true;
 
-        $r      = \fopen('php://temp', 'r');
+        $r      = \fopen('php://temp', 'rb');
         $stream = new Stream($r);
 
         try {
@@ -227,7 +227,7 @@ class StreamTest extends TestCase
 
         \file_put_contents($this->tmpnam, 'FOO BAR');
 
-        $resource = \fopen($this->tmpnam, 'r');
+        $resource = \fopen($this->tmpnam, 'rb');
         $stream   = $this->getMockBuilder(Stream::class)
             ->setConstructorArgs([$resource])
             ->setMethods(['isSeekable'])

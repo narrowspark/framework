@@ -2,17 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
-use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Cache\CacheManager;
-use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Session\SessionManager;
 
 class SessionManagerTest extends MockeryTestCase
@@ -78,6 +78,9 @@ class SessionManagerTest extends MockeryTestCase
 
     private function getSessionManager($config)
     {
+        $pw      = \random_bytes(32);
+        $key     = KeyFactory::generateKey($pw);
+
         return new SessionManager(
             new ArrayContainer([
                 RepositoryContract::class   => $config,
@@ -85,7 +88,7 @@ class SessionManagerTest extends MockeryTestCase
                 CacheManagerContract::class => new CacheManager(new ArrayContainer([
                     RepositoryContract::class   => $config,
                 ])),
-                EncrypterContract::class => new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString()),
+                EncrypterContract::class => new Encrypter($key),
             ])
         );
     }

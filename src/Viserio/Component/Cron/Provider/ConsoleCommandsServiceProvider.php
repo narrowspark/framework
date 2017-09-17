@@ -33,6 +33,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
         $console = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($console !== null) {
+            /* @var Application $console */
             $console->addCommands([
                 new CronListCommand(),
                 new ScheduleRunCommand(),

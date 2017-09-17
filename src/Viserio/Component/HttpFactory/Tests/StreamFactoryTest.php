@@ -8,6 +8,9 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class StreamFactoryTest extends TestCase
 {
+    /**
+     * @var \Interop\Http\Factory\StreamFactoryInterface
+     */
     private $factory;
 
     public function setUp(): void
@@ -19,7 +22,7 @@ class StreamFactoryTest extends TestCase
     {
         $string = 'would you like some crumpets?';
         $stream = $this->factory->createStream($string);
-        self::assertStream($stream, $string);
+        $this->assertStream($stream, $string);
     }
 
     public function testCreateStreamFromFile(): void
@@ -28,7 +31,7 @@ class StreamFactoryTest extends TestCase
         $filename = $this->createTemporaryFile();
         \file_put_contents($filename, $string);
         $stream = $this->factory->createStreamFromFile($filename);
-        self::assertStream($stream, $string);
+        $this->assertStream($stream, $string);
     }
 
     public function testCreateStreamFromResource(): void
@@ -36,7 +39,7 @@ class StreamFactoryTest extends TestCase
         $string   = 'would you like some crumpets?';
         $resource = $this->createTemporaryResource($string);
         $stream   = $this->factory->createStreamFromResource($resource);
-        self::assertStream($stream, $string);
+        $this->assertStream($stream, $string);
     }
 
     protected function assertStream($stream, $content): void
@@ -47,13 +50,13 @@ class StreamFactoryTest extends TestCase
 
     protected function createTemporaryFile()
     {
-        return \tempnam(\sys_get_temp_dir(), \uniqid());
+        return \tempnam(\sys_get_temp_dir(), \uniqid('', true));
     }
 
     protected function createTemporaryResource($content = null)
     {
         $file     = $this->createTemporaryFile();
-        $resource = \fopen($file, 'r+');
+        $resource = \fopen($file, 'rb+');
         if ($content) {
             \fwrite($resource, $content);
             \rewind($resource);

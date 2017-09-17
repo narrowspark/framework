@@ -34,20 +34,20 @@
         }
     ],
     "require": {
-        "php"                                : "^7.1",
+        "php"                                : "^7.2",
+        "ext-curl"                           : "*",
+        "ext-fileinfo"                       : "*",
+        "ext-mbstring"                       : "*",
         "psr/container"                      : "^1.0",
-        "league/flysystem"                   : "^1.0.27",
-        "narrowspark/arr"                    : "^1.0",
+        "league/flysystem"                   : "~1.0",
         "symfony/filesystem"                 : "~3.3",
         "symfony/finder"                     : "~3.3",
-        "symfony/polyfill-mbstring"          : "^1.0",
         "viserio/contracts"                  : "self.version",
         "viserio/options-resolver"           : "self.version",
         "viserio/support"                    : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.3",
-        "defuse/php-encryption"              : "^2.0",
         "league/flysystem-aws-s3-v3"         : "^1.0",
         "league/flysystem-cached-adapter"    : "^1.0.3",
         "league/flysystem-dropbox"           : "^1.0",
@@ -58,11 +58,12 @@
         "league/flysystem-ziparchive"        : "^1.0",
         "mikey179/vfsStream"                 : "^1.6",
         "mockery/mockery"                    : "^0.9",
-        "narrowspark/testing-helper"         : "^3.0",
+        "narrowspark/testing-helper"         : "^4.0",
         "phpunit/phpunit"                    : "^6.0",
         "viserio/cache"                      : "self.version",
         "viserio/config"                     : "self.version",
-        "viserio/container"                  : "self.version"
+        "viserio/container"                  : "self.version",
+        "viserio/encryption"                 : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -87,6 +88,7 @@
         "league/flysystem-webdav"            : "Required to use the Flysystem WebDav adapter (^1.0).",
         "league/flysystem-vfs"               : "Required to use the Flysystem VFS adapter (^1.0).",
         "league/flysystem-ziparchive"        : "Required to use the Flysystem ZipArchive adapter (^1.0).",
+        "viserio/encryption"                 : "Required to use the encryption for files (self.version).",
         "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."
     },
     "extra": {

@@ -18,13 +18,13 @@
         }
     ],
     "require": {
-        "php"                                          : "^7.1",
+        "php"                                          : "^7.2",
         "http-interop/http-factory"                    : "^0.3",
         "viserio/http"                                 : "self.version"
     },
     "require-dev": {
         "mockery/mockery"                              : "^0.9",
-        "narrowspark/testing-helper"                   : "^3.0",
+        "narrowspark/testing-helper"                   : "^4.0",
         "phpunit/phpunit"                              : "^6.0"
     },
     "autoload": {
@@ -39,6 +39,7 @@
         }
     },
     "provide": {
+        "psr/http-factory-implementation"              : "^1.0",
         "psr/http-message-implementation"              : "^1.0"
     },
     "extra": {

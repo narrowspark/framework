@@ -7,8 +7,8 @@ trait ArrayPrettyPrintTrait
     /**
      * Make php array pretty for save or output.
      *
-     * @param iterable $config
-     * @param in       $indentLevel
+     * @param array $config
+     * @param int   $indentLevel
      *
      * @return string
      */

@@ -6,10 +6,10 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Log\Log as LogContract;
-use Viserio\Component\Contracts\Support\Arrayable;
-use Viserio\Component\Contracts\Support\Jsonable;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Log\Log as LogContract;
+use Viserio\Component\Contract\Support\Arrayable;
+use Viserio\Component\Contract\Support\Jsonable;
 use Viserio\Component\Log\Event\MessageLoggedEvent;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 
@@ -55,14 +55,14 @@ class Writer extends LogLevel implements LogContract
     public function useFiles(
         string $path,
         string $level = 'debug',
-        $processor = null,
+        $processors = null,
         $formatter = null
     ): void {
         $this->handlerParser->parseHandler(
             'stream',
             $path,
             $level,
-            $processor,
+            $processors,
             $formatter
         );
     }
@@ -74,14 +74,14 @@ class Writer extends LogLevel implements LogContract
         string $path,
         int $days = 0,
         string $level = 'debug',
-        $processor = null,
+        $processors = null,
         $formatter = null
     ): void {
         $this->handlerParser->parseHandler(
             new RotatingFileHandler($path, $days, self::parseLevel($level)),
             '',
             '',
-            $processor,
+            $processors,
             $formatter
         );
     }
@@ -132,15 +132,17 @@ class Writer extends LogLevel implements LogContract
     {
         if (\is_array($message)) {
             return \var_export($message, true);
-            // @codeCoverageIgnoreStart
-        } elseif ($message instanceof Jsonable) {
-            // @codeCoverageIgnoreEnd
+        }
+
+        // @codeCoverageIgnoreStart
+        if ($message instanceof Jsonable) {
             return $message->toJson();
-            // @codeCoverageIgnoreStart
-        } elseif ($message instanceof Arrayable) {
-            // @codeCoverageIgnoreEnd
+        }
+
+        if ($message instanceof Arrayable) {
             return \var_export($message->toArray(), true);
         }
+        // @codeCoverageIgnoreEnd
 
         return $message;
     }

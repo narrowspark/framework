@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareContract

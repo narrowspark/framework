@@ -100,8 +100,8 @@ class ProfileTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Collector [dont] does not exist.
+     * @expectedException \Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException
+     * @expectedExceptionMessage Collector [dont] not found.
      */
     public function testGetCollectorTothrowException(): void
     {

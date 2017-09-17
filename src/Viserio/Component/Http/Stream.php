@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
 use Throwable;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
+use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 
 class Stream implements StreamInterface
 {
@@ -105,12 +105,12 @@ class Stream implements StreamInterface
      * @param resource $stream  stream resource to wrap
      * @param array    $options associative array of options
      *
-     * @throws \InvalidArgumentException if the stream is not a stream resource
+     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException if the stream is not a stream resource
      */
     public function __construct($stream, array $options = [])
     {
         if (! \is_resource($stream) || \get_resource_type($stream) !== 'stream') {
-            throw new InvalidArgumentException(
+            throw new UnexpectedValueException(
                 'Invalid stream provided; must be a string stream identifier or stream resource'
             );
         }
@@ -163,13 +163,13 @@ class Stream implements StreamInterface
     public function getContents(): string
     {
         if (! isset($this->stream)) {
-            throw new RuntimeException('Stream is detached');
+            throw new RuntimeException('Stream is detached.');
         }
 
         $contents = \stream_get_contents($this->stream);
 
         if ($contents === false) {
-            throw new RuntimeException('Unable to read stream contents');
+            throw new RuntimeException('Unable to read stream contents.');
         }
 
         return $contents;
@@ -266,11 +266,13 @@ class Stream implements StreamInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException If Stream is detached
      */
     public function eof(): bool
     {
         if (! isset($this->stream)) {
-            throw new RuntimeException('Stream is detached');
+            throw new RuntimeException('Stream is detached.');
         }
 
         return \feof($this->stream);
@@ -278,17 +280,20 @@ class Stream implements StreamInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException If Stream is detached
+     * @throws \RuntimeException If Unable to determine stream position
      */
     public function tell(): int
     {
         if (! isset($this->stream)) {
-            throw new RuntimeException('Stream is detached');
+            throw new RuntimeException('Stream is detached.');
         }
 
         $result = \ftell($this->stream);
 
         if ($result === false || $this->isPipe()) {
-            throw new RuntimeException('Unable to determine stream position');
+            throw new RuntimeException('Unable to determine stream position.');
         }
 
         return $result;
@@ -308,17 +313,17 @@ class Stream implements StreamInterface
     public function seek($offset, $whence = SEEK_SET): void
     {
         if (! isset($this->stream)) {
-            throw new RuntimeException('Stream is detached');
+            throw new RuntimeException('Stream is detached.');
         }
 
         if (! $this->seekable) {
-            throw new RuntimeException('Stream is not seekable');
+            throw new RuntimeException('Stream is not seekable.');
         }
 
         if (\fseek($this->stream, $offset, $whence) === -1) {
             throw new RuntimeException(
                 'Unable to seek to stream position '
-                . $offset . ' with whence ' . \var_export($whence, true)
+                . $offset . ' with whence ' . \var_export($whence, true) . '.'
             );
         }
     }
@@ -329,11 +334,11 @@ class Stream implements StreamInterface
     public function read($length): string
     {
         if (! isset($this->stream)) {
-            throw new RuntimeException('Stream is detached');
+            throw new RuntimeException('Stream is detached.');
         }
 
         if (! $this->readable) {
-            throw new RuntimeException('Cannot read from non-readable stream');
+            throw new RuntimeException('Cannot read from non-readable stream.');
         }
 
         if ($length < 0) {
@@ -347,7 +352,7 @@ class Stream implements StreamInterface
         $string = fread($this->stream, $length);
 
         if ($string === false) {
-            throw new RuntimeException('Unable to read from stream');
+            throw new RuntimeException('Unable to read from stream.');
         }
 
         return $string;
@@ -359,11 +364,11 @@ class Stream implements StreamInterface
     public function write($string): int
     {
         if (! isset($this->stream)) {
-            throw new RuntimeException('Stream is detached');
+            throw new RuntimeException('Stream is detached.');
         }
 
         if (! $this->writable) {
-            throw new RuntimeException('Cannot write to a non-writable stream');
+            throw new RuntimeException('Cannot write to a non-writable stream.');
         }
 
         // We can't know the size after writing anything
@@ -371,7 +376,7 @@ class Stream implements StreamInterface
         $result     = \fwrite($this->stream, $string);
 
         if ($result === false) {
-            throw new RuntimeException('Unable to write to stream');
+            throw new RuntimeException('Unable to write to stream.');
         }
 
         return $result;
@@ -384,9 +389,13 @@ class Stream implements StreamInterface
     {
         if (! isset($this->stream)) {
             return $key ? null : [];
-        } elseif (! $key) {
+        }
+
+        if (! $key) {
             return $this->meta + \stream_get_meta_data($this->stream);
-        } elseif (isset($this->meta[$key])) {
+        }
+
+        if (isset($this->meta[$key])) {
             return $this->meta[$key];
         }
 
@@ -400,7 +409,7 @@ class Stream implements StreamInterface
      *
      * @return bool
      */
-    private function isPipe()
+    private function isPipe(): bool
     {
         if ($this->isPipe === null) {
             $this->isPipe = false;

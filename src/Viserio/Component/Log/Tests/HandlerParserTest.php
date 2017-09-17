@@ -26,7 +26,7 @@ class HandlerParserTest extends MockeryTestCase
     {
         $handler = new HandlerParser($this->getMonologger());
 
-        $handler->parseHandler('chromePHP', '');
+        $handler->parseHandler('chromePHP');
     }
 
     /**

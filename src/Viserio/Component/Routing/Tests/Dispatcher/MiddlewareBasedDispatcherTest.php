@@ -4,7 +4,7 @@ namespace Viserio\Component\Routing\Tests\Dispatchers;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Tests\Fixture\Controller;

@@ -3,15 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Cake\Chronos\Chronos;
-use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\Encryption\HiddenString;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -35,10 +36,13 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     {
         parent::setUp();
 
+        $pw  = \random_bytes(32);
+        $key = KeyFactory::generateKey($pw);
+
         $this->files = new Filesystem();
         $this->files->createDirectory(__DIR__ . '/stubs');
 
-        $this->encrypter = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
+        $this->encrypter = new Encrypter($key);
     }
 
     public function tearDown(): void
@@ -212,7 +216,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                 new CallableMiddleware(function ($request, $delegate) {
                     $request = $request->withAddedHeader(
                         'X-XSRF-TOKEN',
-                        $this->encrypter->encrypt($request->getAttribute('session')->getToken())
+                        $this->encrypter->encrypt(new HiddenString($request->getAttribute('session')->getToken()))
                     );
 
                     return $delegate->process($request);
@@ -230,7 +234,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Session\Exception\TokenMismatchException
+     * @expectedException \Viserio\Component\Contract\Session\Exception\TokenMismatchException
      */
     public function testSessionCsrfMiddlewareToThrowException(): void
     {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Generator;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Component\Routing\Generator\UrlGenerator;
@@ -52,7 +52,7 @@ class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
 
-        $url = $this->getGenerator($routes)->generate('testing', []);
+        $url = $this->getGenerator($routes)->generate('testing');
 
         self::assertEquals('/testing', $url);
     }
@@ -76,7 +76,7 @@ class UrlGeneratorTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Routing\Exception\RouteNotFoundException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\RouteNotFoundException
      * @expectedExceptionMessage Unable to generate a URL for the named/action route [test] as such route does not exist.
      */
     public function testThrowExceptionOnNotFoundRoute(): void
@@ -87,12 +87,12 @@ class UrlGeneratorTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Routing\Exception\UrlGenerationException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\UrlGenerationException
      * @expectedExceptionMessage Missing required parameters for [Route: testing] [URI: /testing/{foo}/bar].
      */
     public function testRelativeUrlWithNotOptionalParameter(): void
     {
-        $routes = $this->getRoutes((new Route('GET', '/testing/{foo}/bar', ['as' => 'testing'])));
+        $routes = $this->getRoutes(new Route('GET', '/testing/{foo}/bar', ['as' => 'testing']));
 
         // This must raise an exception because the default requirement for "foo" is "[^/]+" which is not met with these params.
         // Generating path "/testing//bar" would be wrong as matching this route would fail.
@@ -127,7 +127,7 @@ class UrlGeneratorTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Routing\Exception\RouteNotFoundException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\RouteNotFoundException
      * @expectedExceptionMessage Unable to generate a URL for the named/action route [test] as such route does not exist.
      */
     public function testGenerateWithoutRoutes(): void

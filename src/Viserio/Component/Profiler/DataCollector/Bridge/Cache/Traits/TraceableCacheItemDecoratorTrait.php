@@ -87,7 +87,7 @@ trait TraceableCacheItemDecoratorTrait
     /**
      * {@inheritdoc}
      */
-    public function getItems(array $keys = [])
+    public function getItems(array $keys = []): \Generator
     {
         $event = $this->start(__FUNCTION__);
 

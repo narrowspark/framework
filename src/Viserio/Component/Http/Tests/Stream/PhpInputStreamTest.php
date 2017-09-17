@@ -48,29 +48,42 @@ class PhpInputStreamTest extends TestCase
             $body .= $this->stream->read(128);
         }
 
-        self::assertStreamContents($body);
+        $this->assertStreamContents($body);
     }
 
     public function testGetContentsReturnsRemainingContentsOfStream(): void
     {
-        $start     = $this->stream->read(128);
+        $this->stream->read(128);
         $remainder = $this->stream->getContents();
         $contents  = $this->getFileContents();
 
         self::assertEquals(\mb_substr($contents, 128), $remainder);
     }
 
+    public function testGetContentsReturnCacheWhenReachedEof()
+    {
+        $this->stream->getContents();
+
+        $this->assertStreamContents($this->stream->getContents());
+
+        $stream = new PhpInputStream('data://,0');
+        $stream->read(1);
+        $stream->read(1);
+
+        self::assertSame('0', $stream->getContents(), 'Don\'t evaluate 0 as empty');
+    }
+
     public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads(): void
     {
-        $start = $this->stream->read(128);
+        $this->stream->read(128);
 
-        self::assertStreamContents($this->stream->__toString());
+        $this->assertStreamContents($this->stream->__toString());
     }
 
     public function testMultipleCastsToStringReturnSameContentsEvenIfReadsOccur(): void
     {
         $first  = (string) $this->stream;
-        $read   = $this->stream->read(128);
+        $this->stream->read(128);
         $second = (string) $this->stream;
 
         self::assertSame($first, $second);

@@ -2,36 +2,36 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Encryption;
 
-use Defuse\Crypto\File;
-use Defuse\Crypto\Key;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Encryption\Key;
 
 class EncryptionWrapper
 {
     /**
      * Encryption key.
      *
-     * @var \Defuse\Crypto\Key
+     * @var \Viserio\Component\Filesystem\Encryption\File
      */
-    protected $key;
+    protected $file;
 
     /**
      * Filesystem instance.
      *
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     protected $adapter;
 
     /**
      * Create a new encryption wrapper instance.
      *
-     * @param \Viserio\Component\Contracts\Filesystem\Filesystem $adapter
-     * @param \Defuse\Crypto\Key                                 $key
+     * @param \Viserio\Component\Contract\Filesystem\Filesystem $adapter
+     * @param \Viserio\Component\Encryption\Key                 $key
      */
     public function __construct(FilesystemContract $adapter, Key $key)
     {
         $this->adapter = $adapter;
-        $this->key     = $key;
+        $this->file    = new File($key);
     }
 
     /**
@@ -56,7 +56,7 @@ class EncryptionWrapper
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return bool|string the file contents or false on failure
      */
@@ -74,7 +74,7 @@ class EncryptionWrapper
      *
      * @param string $path the path to the file
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return resource
      */
@@ -142,7 +142,7 @@ class EncryptionWrapper
      * @param string $contents the file contents
      * @param array  $config   an optional configuration array
      *
-     * @throws \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return bool true on success, false on failure
      */
@@ -174,17 +174,32 @@ class EncryptionWrapper
      *
      * @param string $contents The string
      *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     *
      * @return resource
      */
     private function getStreamFromString(string $contents)
     {
-        $resource = \fopen('php://memory', 'r+b');
+        $stream    = \fopen('php://memory', 'r+b');
+        $remaining = \mb_strlen($contents, '8bit');
 
-        File::writeBytes($resource, $contents);
+        while ($remaining > 0) {
+            /** @var int $written */
+            $written = \fwrite($stream, $contents, $remaining);
 
-        \rewind($resource);
+            if (! \is_int($written)) {
+                throw new FileAccessDeniedException('Could not write to the file.');
+            }
 
-        return $resource;
+            $contents = (string) \mb_substr($contents, $written, null, '8bit');
+            $remaining -= $written;
+        }
+
+        \sodium_memzero($contents);
+
+        \rewind($stream);
+
+        return $stream;
     }
 
     /**
@@ -198,13 +213,13 @@ class EncryptionWrapper
     {
         $out = \fopen('php://memory', 'r+b');
 
-        if ($resource != false) {
-            File::decryptResource($resource, $out, $this->key);
+        if ($resource !== false) {
+            $this->file->decrypt($resource, $out);
+
+            \rewind($out);
         } else {
             $out = '';
         }
-
-        \rewind($out);
 
         return $out;
     }
@@ -220,9 +235,13 @@ class EncryptionWrapper
     {
         $out = \fopen('php://temp', 'r+b');
 
-        File::encryptResource($resource, $out, $this->key);
+        if ($resource !== false) {
+            $this->file->encrypt($resource, $out);
 
-        \rewind($out);
+            \rewind($out);
+        } else {
+            $out = '';
+        }
 
         return $out;
     }

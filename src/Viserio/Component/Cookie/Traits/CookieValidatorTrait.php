@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Traits;
 
-use InvalidArgumentException;
+use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
 
 trait CookieValidatorTrait
 {
@@ -11,7 +11,7 @@ trait CookieValidatorTrait
      *
      * @param string $name
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @see http://tools.ietf.org/search/rfc2616#section-2.2
      *
@@ -19,7 +19,7 @@ trait CookieValidatorTrait
      */
     protected function validateName(string $name): void
     {
-        if (\mb_strlen($name) < 1) {
+        if ($name === '') {
             throw new InvalidArgumentException('The name cannot be empty');
         }
 
@@ -37,7 +37,7 @@ trait CookieValidatorTrait
      *
      * @param null|string $value
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @see http://tools.ietf.org/html/rfc6265#section-4.1.1
      *
@@ -45,15 +45,13 @@ trait CookieValidatorTrait
      */
     protected function validateValue(?string $value = null): void
     {
-        if (isset($value)) {
-            if (\preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {
-                throw new InvalidArgumentException(
-                    \sprintf(
-                        'The cookie value [%s] contains invalid characters.',
-                        $value
-                    )
-                );
-            }
+        if ($value !== null && \preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {
+            throw new InvalidArgumentException(
+                \sprintf(
+                    'The cookie value [%s] contains invalid characters.',
+                    $value
+                )
+            );
         }
     }
 }

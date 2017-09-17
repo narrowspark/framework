@@ -3,15 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
 use Psr\SimpleCache\CacheInterface;
-use stdClass;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 
 /**
  * Ported from.
  *
- * @see Symfony\Component\Cache\Simple\TraceableCache
+ * @see \Symfony\Component\Cache\Simple\TraceableCache
  */
-class SimpleTraceableCacheDecorator implements CacheInterface
+final class SimpleTraceableCacheDecorator implements CacheInterface
 {
     use SimpleTraceableCacheDecoratorTrait;
 
@@ -21,13 +20,6 @@ class SimpleTraceableCacheDecorator implements CacheInterface
      * @var \Psr\SimpleCache\CacheInterface
      */
     private $pool;
-
-    /**
-     * Instance of stdClass.
-     *
-     * @var \stdClass
-     */
-    private $miss;
 
     /**
      * List of event calls.
@@ -52,7 +44,6 @@ class SimpleTraceableCacheDecorator implements CacheInterface
     {
         $this->pool = $pool;
         $this->name = \get_class($pool);
-        $this->miss = new stdClass();
     }
 
     /**
@@ -68,7 +59,7 @@ class SimpleTraceableCacheDecorator implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): ?bool
     {
         $event = $this->start(__FUNCTION__);
 
@@ -100,7 +91,7 @@ class SimpleTraceableCacheDecorator implements CacheInterface
      *
      * @return object
      */
-    private function start(string $name)
+    private function start(string $name): object
     {
         $this->calls[] = $event = new class() {
             public $name;

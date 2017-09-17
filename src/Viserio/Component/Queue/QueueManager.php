@@ -8,12 +8,12 @@ use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Psr\Container\ContainerInterface as ContainerInteropInterface;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Queue\Factory as FactoryContract;
-use Viserio\Component\Contracts\Queue\Monitor as MonitorContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Queue\Factory as FactoryContract;
+use Viserio\Component\Contract\Queue\Monitor as MonitorContract;
 use Viserio\Component\Queue\Connector\BeanstalkdQueue;
 use Viserio\Component\Queue\Connector\NullQueue;
 use Viserio\Component\Queue\Connector\RabbitMQQueue;
@@ -30,8 +30,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create a new queue manager instance.
      *
-     * @param \Psr\Container\ContainerInterface                 $container
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Psr\Container\ContainerInterface                $container
+     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function __construct(
         ContainerInteropInterface $container,
@@ -190,7 +190,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     protected function createRedisConnection(array $config): RedisQueue
     {
         $queue = new RedisQueue(
-            $this->getContainer()->get('redis'),
+            $this->container->get('redis'),
             $config['queue'],
             Arr::get($config, 'expire', 90)
         );

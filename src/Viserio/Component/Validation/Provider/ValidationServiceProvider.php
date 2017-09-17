@@ -4,8 +4,8 @@ namespace Viserio\Component\Validation\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Contracts\Validation\Validator as ValidatorContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Validation\Validator as ValidatorContract;
 use Viserio\Component\Validation\Validator;
 
 class ValidationServiceProvider implements ServiceProvider

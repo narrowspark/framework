@@ -7,23 +7,20 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Router as  RouterContract;
-use Viserio\Component\Events\Provider\EventsServiceProvider;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Router as  RouterContract;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
-use Viserio\Component\Foundation\Http\Event\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
-use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 
 class KernelTest extends MockeryTestCase
 {
@@ -69,8 +66,6 @@ class KernelTest extends MockeryTestCase
 
     public function testHandle(): void
     {
-        $response = $this->mock(ResponseInterface::class);
-
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('withAddedHeader')
             ->once()
@@ -89,9 +84,6 @@ class KernelTest extends MockeryTestCase
         $events->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelFinishRequestEvent::class));
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(KernelResponseEvent::class));
 
         $container->shouldReceive('get')
             ->once()
@@ -152,9 +144,7 @@ class KernelTest extends MockeryTestCase
     public function testHandleWithException(): void
     {
         $container = $this->mock(ContainerContract::class);
-
         $exception = new Exception();
-        $response  = $this->mock(ResponseInterface::class);
 
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('withAddedHeader')
@@ -293,16 +283,6 @@ class KernelTest extends MockeryTestCase
         $kernel->bootstrap();
 
         $kernel->terminate($serverRequest, $response);
-    }
-
-    private function registerBaseProvider($container): void
-    {
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(EventsServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mock::type(RoutingServiceProvider::class));
     }
 
     private function getKernel($container)

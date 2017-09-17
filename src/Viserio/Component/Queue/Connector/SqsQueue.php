@@ -105,7 +105,7 @@ class SqsQueue extends AbstractQueue
             return $queue;
         }
 
-        return \rtrim($this->prefix, '/') . '/' . ($queue);
+        return \rtrim($this->prefix, '/') . '/' . $queue;
     }
 
     /**

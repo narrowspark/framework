@@ -5,7 +5,8 @@ namespace Viserio\Component\Profiler\Tests\Provider;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerMonologDataCollectorServiceProvider;
@@ -17,6 +18,7 @@ class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
     {
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
+        $container->register(new EventsServiceProvider());
         $container->register(new LoggerServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ProfilerServiceProvider());

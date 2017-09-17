@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler;
 
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Contracts\Support\Renderable as RenderableContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Support\Renderable as RenderableContract;
 
 class TemplateManager implements RenderableContract
 {
@@ -27,14 +27,14 @@ class TemplateManager implements RenderableContract
      *
      * @var array
      */
-    private $icons = [];
+    private $icons;
 
     /**
      * Request token.
      *
      * @var string
      */
-    private $token = '';
+    private $token;
 
     /**
      * Create a new template manager instance.
@@ -67,15 +67,13 @@ class TemplateManager implements RenderableContract
     {
         $flags = ENT_QUOTES;
 
-        // HHVM has all constants defined, but only ENT_IGNORE
-        // works at the moment
-        if (\defined('ENT_SUBSTITUTE') && ! \defined('HHVM_VERSION')) {
+        if (\defined('ENT_SUBSTITUTE')) {
             $flags |= ENT_SUBSTITUTE;
         }
 
         $raw = \str_replace(\chr(9), '    ', $raw);
 
-        return \htmlspecialchars($raw, $flags, 'UTF-8');
+        return \htmlspecialchars($raw, $flags);
     }
 
     /**

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Traits;
 
-use InvalidArgumentException;
+use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 
 trait ValidateLocaleTrait
 {
@@ -11,9 +11,11 @@ trait ValidateLocaleTrait
      *
      * @param string $locale Locale to tests
      *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
+     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException If the locale contains invalid characters
+     *
+     * @return void
      */
-    protected function assertValidLocale(string $locale): void
+    protected static function assertValidLocale(string $locale): void
     {
         if (\preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale) !== 1) {
             throw new InvalidArgumentException(\sprintf('Invalid [%s] locale.', $locale));

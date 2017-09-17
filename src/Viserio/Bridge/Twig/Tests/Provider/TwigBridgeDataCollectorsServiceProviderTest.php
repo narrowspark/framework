@@ -9,7 +9,7 @@ use Twig\Loader\ArrayLoader;
 use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\Provider\TwigBridgeDataCollectorsServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;

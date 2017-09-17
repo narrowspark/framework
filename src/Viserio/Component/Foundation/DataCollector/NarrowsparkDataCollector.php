@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Support\Env;

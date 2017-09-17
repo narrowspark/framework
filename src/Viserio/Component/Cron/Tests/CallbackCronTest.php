@@ -12,7 +12,7 @@ class CallbackCronTest extends MockeryTestCase
     /**
      * Mocked CacheItemPoolInterface.
      *
-     * @var \Psr\Cache\CacheItemPoolInterface
+     * @var \Psr\Cache\CacheItemPoolInterface|\Mockery\MockInterface
      */
     protected $cache;
 
@@ -34,7 +34,7 @@ class CallbackCronTest extends MockeryTestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage A scheduled cron job description is required to prevent overlapping. Use the 'description' method before 'withoutOverlapping'.
+     * @expectedExceptionMessage A scheduled cron job description is required to prevent overlapping. Use the 'setDescription' method before 'withoutOverlapping'.
      */
     public function testWithoutOverlappingToThrowException(): void
     {
@@ -90,7 +90,7 @@ class CallbackCronTest extends MockeryTestCase
         unset($_SERVER['test']);
     }
 
-    public function testCronRunWithoutOverlappinga(): void
+    public function testCronRunWithoutOverlapping(): void
     {
         $name = 'schedule-' . \sha1('* * * * * *' . 'test');
         $item = $this->mock(CacheItemInterface::class);

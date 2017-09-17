@@ -5,8 +5,8 @@ namespace Viserio\Provider\Twig\Engine;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Twig\Environment;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\View\Engine\AbstractBaseEngine;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsContract
@@ -87,6 +87,8 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
      *
      * @param \Twig\Environment $twig
      * @param array             $config
+     *
+     * @return \Twig\Environment
      */
     protected function addExtensions(Environment $twig, array $config): Environment
     {

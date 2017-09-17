@@ -3,7 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
+use RuntimeException as BaseRuntimeException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 
 /**
  * Provides a buffer stream that can be written to to fill a buffer, and read
@@ -48,13 +49,17 @@ class BufferStream implements StreamInterface
      */
     public function __toString()
     {
-        return $this->getContents();
+        try {
+            return $this->getContents();
+        } catch (BaseRuntimeException $exception) {
+            return '';
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         $buffer       = $this->buffer;
         $this->buffer = '';
@@ -89,7 +94,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return true;
     }
@@ -97,7 +102,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return true;
     }
@@ -105,7 +110,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return false;
     }
@@ -129,9 +134,9 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
-        return \mb_strlen($this->buffer) === 0;
+        return $this->buffer === '';
     }
 
     /**
@@ -143,11 +148,9 @@ class BufferStream implements StreamInterface
     }
 
     /**
-     * Reads data from the buffer.
-     *
-     * @param mixed $length
+     * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         $currentLength = \mb_strlen($this->buffer);
 
@@ -165,9 +168,7 @@ class BufferStream implements StreamInterface
     }
 
     /**
-     * Writes data to the buffer.
-     *
-     * @param mixed $string
+     * {@inheritdoc}
      */
     public function write($string)
     {
@@ -185,7 +186,7 @@ class BufferStream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        if ($key == 'hwm') {
+        if ($key === 'hwm') {
             return $this->hwm;
         }
 

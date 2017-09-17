@@ -5,8 +5,8 @@ namespace Viserio\Component\Bus\Provider;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Bus\QueueingDispatcher;
-use Viserio\Component\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
-use Viserio\Component\Contracts\Queue\Factory as FactoryContract;
+use Viserio\Component\Contract\Bus\QueueingDispatcher as QueueingDispatcherContract;
+use Viserio\Component\Contract\Queue\Factory as FactoryContract;
 
 class QueueingBusServiceProvider implements ServiceProvider
 {
@@ -31,7 +31,7 @@ class QueueingBusServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Bus\Dispatcher
+     * @return \Viserio\Component\Contract\Bus\QueueingDispatcher
      */
     public static function registerBusDispatcher(ContainerInterface $container): QueueingDispatcherContract
     {

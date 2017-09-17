@@ -72,19 +72,19 @@ class JsonResponseTest extends TestCase
     public function testJsonErrorHandlingOfResources(): void
     {
         // Serializing something that is not serializable.
-        $resource = \fopen('php://memory', 'r');
+        $resource = \fopen('php://memory', 'rb');
         new JsonResponse($resource);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to encode
+     * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
+     * @expectedExceptionMessage Unable to encode data to JSON in
      */
     public function testJsonErrorHandlingOfBadEmbeddedData(): void
     {
         // Serializing something that is not serializable.
         $data = [
-            'stream' => \fopen('php://memory', 'r'),
+            'stream' => \fopen('php://memory', 'rb'),
         ];
 
         new JsonResponse($data);

@@ -5,12 +5,12 @@ namespace Viserio\Component\Routing;
 use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
@@ -34,7 +34,7 @@ class Router implements RouterContract
     /**
      * The dispatcher instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\Dispatcher
+     * @var \Viserio\Component\Contract\Routing\Dispatcher
      */
     protected $dispatcher;
 
@@ -62,7 +62,7 @@ class Router implements RouterContract
     /**
      * Create a new Router instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Dispatcher $dispatcher
+     * @param \Viserio\Component\Contract\Routing\Dispatcher $dispatcher
      */
     public function __construct(DispatcherContract $dispatcher)
     {
@@ -356,7 +356,7 @@ class Router implements RouterContract
         $dispatcher = $this->dispatcher;
 
         if ($this->container !== null && \method_exists($dispatcher, 'setContainer')) {
-            $dispatcher->setContainer($this->getContainer());
+            $dispatcher->setContainer($this->container);
         }
 
         return $dispatcher->handle($this->routes, $request);
@@ -369,7 +369,7 @@ class Router implements RouterContract
      * @param string                     $uri
      * @param null|array|\Closure|string $action
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return \Viserio\Component\Contract\Routing\Route
      */
     protected function addRoute($methods, string $uri, $action): RouteContract
     {
@@ -383,7 +383,7 @@ class Router implements RouterContract
      * @param string       $uri
      * @param mixed        $action
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return \Viserio\Component\Contract\Routing\Route
      */
     protected function createRoute($methods, string $uri, $action): RouteContract
     {
@@ -397,7 +397,7 @@ class Router implements RouterContract
         $route = new Route($methods, $this->prefix($this->suffix($uri)), $action);
 
         if ($this->container !== null) {
-            $route->setContainer($this->getContainer());
+            $route->setContainer($this->container);
         }
 
         $route->setInvoker($this->getInvoker());
@@ -418,7 +418,7 @@ class Router implements RouterContract
     /**
      * Add the necessary where clauses to the route based on its initial registration.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return void
      */
@@ -435,7 +435,7 @@ class Router implements RouterContract
     /**
      * Merge the group stack with the controller action.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return void
      */
@@ -513,7 +513,9 @@ class Router implements RouterContract
 
         if (! $trimmed) {
             return '/';
-        } elseif (\mb_strpos($trimmed, '/') === 0) {
+        }
+
+        if (\mb_strpos($trimmed, '/') === 0) {
             return $trimmed;
         }
 

@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Cake\Chronos\Chronos;
-use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
 use SessionHandlerInterface as SessionHandlerContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\Encryption\HiddenString;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Component\Session\Store;
 
@@ -17,8 +17,13 @@ class StoreTest extends MockeryTestCase
 {
     public const SESSION_ID = 'cfdddff0a844531c4a985eae2806a8c761b754df';
 
+    /**
+     * @var \Viserio\Component\Encryption\Encrypter
+     */
     private $encrypter;
+
     private $encryptString;
+
     private $session;
 
     public function setUp(): void
@@ -26,7 +31,8 @@ class StoreTest extends MockeryTestCase
         parent::setUp();
 
         $reflection      = new ReflectionClass(Store::class);
-        $this->encrypter = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
+        $password        = \random_bytes(32);
+        $this->encrypter = new Encrypter(KeyFactory::generateKey($password));
 
         $this->session = $reflection->newInstanceArgs(
             [
@@ -36,7 +42,7 @@ class StoreTest extends MockeryTestCase
             ]
         );
 
-        $this->encryptString = $this->encrypter->encrypt(
+        $this->encryptString = $this->encrypter->encrypt(new HiddenString(
             \json_encode(
                 [
                     'foo'          => 'bar',
@@ -51,13 +57,13 @@ class StoreTest extends MockeryTestCase
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
             )
-        );
+        ));
     }
 
     public function testSessionIsLoadedFromHandler(): void
     {
         $session       = $this->session;
-        $encryptString = $this->encrypter->encrypt(
+        $encryptString = $this->encrypter->encrypt(new HiddenString(
             \json_encode(
                 [
                     'foo'          => 'bar',
@@ -72,7 +78,7 @@ class StoreTest extends MockeryTestCase
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
             )
-        );
+        ));
         $session->getHandler()
             ->shouldReceive('read')
             ->once()
@@ -83,7 +89,6 @@ class StoreTest extends MockeryTestCase
 
         self::assertEquals('bar', $session->get('foo'));
         self::assertTrue($session->isStarted());
-        self::assertInstanceOf(EncrypterContract::class, $session->getEncrypter());
 
         $session->getHandler()
             ->shouldReceive('write')
@@ -109,12 +114,11 @@ class StoreTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Session\Exception\SuspiciousOperationException
+     * @expectedException \Viserio\Component\Contract\Session\Exception\SuspiciousOperationException
      */
     public function testSessionHasSuspiciousFingerPrint(): void
     {
-        $session       = $this->session;
-        $encryptString = $this->encrypter->encrypt(
+        $encryptString = $this->encrypter->encrypt(new HiddenString(
             \json_encode(
                 [
                     'foo'          => 'bar',
@@ -129,7 +133,8 @@ class StoreTest extends MockeryTestCase
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
             )
-        );
+        ));
+        $session       = $this->session;
         $session->getHandler()
             ->shouldReceive('read')
             ->once()
@@ -144,7 +149,7 @@ class StoreTest extends MockeryTestCase
         $session->getHandler()
             ->shouldReceive('read')
             ->once()
-            ->andReturn([]);
+            ->andReturn($this->encrypter->encrypt(new HiddenString('')));
         $session->setId(self::SESSION_ID);
 
         self::assertFalse($session->open());
@@ -219,7 +224,7 @@ class StoreTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Session\Exception\SessionNotStartedException
+     * @expectedException \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
      * @expectedExceptionMessage The session is not started.
      */
     public function testSetMethodToThrowException(): void
@@ -328,11 +333,13 @@ class StoreTest extends MockeryTestCase
 
     public function testSessionIdShouldBeRegeneratedIfIdRequestsLimitReached(): void
     {
-        $session = $this->session;
+        $readValue = $this->encrypter->encrypt(new HiddenString(''));
+        $session   = $this->session;
         $session->setIdRequestsLimit(3);
         $session->getHandler()
             ->shouldReceive('read')
-            ->times(3);
+            ->times(3)
+            ->andReturn($readValue);
         $session->getHandler()
             ->shouldReceive('write')
             ->times(3);

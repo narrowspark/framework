@@ -3,18 +3,18 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Support\Arrayable;
-use Viserio\Component\Contracts\Support\Renderable;
-use Viserio\Component\Contracts\View\Engine;
-use Viserio\Component\View\Factory;
+use Viserio\Component\Contract\Support\Arrayable;
+use Viserio\Component\Contract\Support\Renderable;
+use Viserio\Component\Contract\View\Engine;
 use Viserio\Component\View\View;
+use Viserio\Component\View\ViewFactory;
 
 class ViewTest extends MockeryTestCase
 {
     public function testDataCanBeSetOnView(): void
     {
         $view = new View(
-            $this->mock(Factory::class),
+            $this->mock(ViewFactory::class),
             $this->mock(Engine::class),
             'view',
             ['path' => 'path', 'name' => 'name'],
@@ -26,7 +26,7 @@ class ViewTest extends MockeryTestCase
         self::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
 
         $view = new View(
-            $this->mock(Factory::class),
+            $this->mock(ViewFactory::class),
             $this->mock(Engine::class),
             'view',
             ['path' => 'path', 'name' => 'name'],
@@ -67,7 +67,7 @@ class ViewTest extends MockeryTestCase
 
         $result = $view->nest('key', 'foo', ['data']);
 
-        self::assertInstanceOf('Viserio\Component\View\View', $result);
+        self::assertInstanceOf(View::class, $result);
     }
 
     public function testViewAcceptsArrayableImplementations(): void
@@ -76,7 +76,7 @@ class ViewTest extends MockeryTestCase
         $arrayable->shouldReceive('toArray')->once()->andReturn(['foo' => 'bar', 'baz' => ['qux', 'corge']]);
 
         $view = new View(
-            $this->mock(Factory::class),
+            $this->mock(ViewFactory::class),
             $this->mock(Engine::class),
             'view',
             ['path' => 'path', 'name' => 'name'],
@@ -170,7 +170,7 @@ class ViewTest extends MockeryTestCase
     protected function getView()
     {
         return new View(
-            $this->mock(Factory::class),
+            $this->mock(ViewFactory::class),
             $this->mock(Engine::class),
             'view',
             ['path' => 'path', 'name' => 'name'],

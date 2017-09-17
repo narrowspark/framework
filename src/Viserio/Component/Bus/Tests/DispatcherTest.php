@@ -4,7 +4,6 @@ namespace Viserio\Component\Bus\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use stdClass;
 use Viserio\Component\Bus\Dispatcher;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherBasicCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSetCommand;
@@ -14,10 +13,12 @@ class DispatcherTest extends MockeryTestCase
     public function testBasicDispatchingOfCommandsToHandlers(): void
     {
         $container = new ArrayContainer();
-        $handler   = $this->mock(stdClass::class);
-        $handler->shouldReceive('handle')
-            ->once()
-            ->andReturn('foo');
+        $handler   = new class() {
+            public function handle()
+            {
+                return 'foo';
+            }
+        };
 
         $container->set('Handler', $handler);
 
@@ -35,9 +36,17 @@ class DispatcherTest extends MockeryTestCase
     public function testDispatchShouldCallAfterResolvingIfCommand(): void
     {
         $container = new ArrayContainer();
-        $handler   = $this->mock(stdClass::class)->shouldIgnoreMissing();
-        $handler->shouldReceive('after')
-            ->once();
+        $handler   = new class() {
+            public function handle()
+            {
+                return 'foo';
+            }
+
+            public function after()
+            {
+                return true;
+            }
+        };
 
         $container->set('Handler', $handler);
 
@@ -47,21 +56,25 @@ class DispatcherTest extends MockeryTestCase
         });
 
         $dispatcher->dispatch(new BusDispatcherBasicCommand(), function ($handler): void {
-            $handler->after();
+            self::assertTrue($handler->after());
         });
     }
 
     public function testDispatcherShouldNotCallHanlde(): void
     {
         $container = new ArrayContainer();
-        $handler   = $this->mock(stdClass::class);
-        $handler->shouldReceive('test')->once()->andReturn('foo');
+        $handler   = new class() {
+            public function batman()
+            {
+                return 'foo';
+            }
+        };
 
         $container->set('Handler', $handler);
 
         $dispatcher = new Dispatcher($container);
-        $dispatcher->via('test')->mapUsing(function () {
-            return 'Handler@test';
+        $dispatcher->via('batman')->mapUsing(function () {
+            return 'Handler@batman';
         });
 
         self::assertEquals(
@@ -104,7 +117,7 @@ class DispatcherTest extends MockeryTestCase
     public function testToThrowInvalidArgumentException(): void
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
-        $dispatcher->via('test');
+        $dispatcher->via('batman');
 
         self::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
     }
@@ -129,16 +142,24 @@ class DispatcherTest extends MockeryTestCase
     public function testMaps(): void
     {
         $container = new ArrayContainer();
-        $handler   = $this->mock(stdClass::class);
-        $handler->shouldReceive('handle')->andReturn('foo');
-        $handler->shouldReceive('test')->andReturn('bar');
+        $handler   = new class() {
+            public function handle()
+            {
+                return 'foo';
+            }
+
+            public function batman()
+            {
+                return 'bar';
+            }
+        };
 
         $container->set('Handler', $handler);
 
         $dispatcher = new Dispatcher($container);
         $dispatcher->maps([
             BusDispatcherBasicCommand::class => 'Handler@handle',
-            BusDispatcherBasicCommand::class => 'Handler@test',
+            BusDispatcherBasicCommand::class => 'Handler@batman',
         ]);
 
         self::assertEquals(

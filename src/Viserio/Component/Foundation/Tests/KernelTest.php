@@ -4,8 +4,8 @@ namespace Viserio\Component\Foundation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\EnvironmentDetector;
 

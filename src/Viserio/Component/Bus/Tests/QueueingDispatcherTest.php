@@ -13,19 +13,20 @@ use Viserio\Component\Bus\Tests\Fixture\BusDispatcherQueuedHandler;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificDelayCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificQueueAndDelayCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificQueueCommand;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
-use Viserio\Component\Contracts\Queue\ShouldQueue as ShouldQueueContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Component\Contract\Queue\ShouldQueue as ShouldQueueContract;
 
 class QueueingDispatcherTest extends MockeryTestCase
 {
     public function testDispatchNowShouldNeverQueue(): void
     {
         $container = new ArrayContainer();
-
-        $handler = $this->mock(stdClass::class);
-        $handler->shouldReceive('handle')
-            ->once()
-            ->andReturn('foo');
+        $handler   = new class() {
+            public function handle()
+            {
+                return 'foo';
+            }
+        };
 
         $container->set('Handler', $handler);
 
@@ -124,9 +125,17 @@ class QueueingDispatcherTest extends MockeryTestCase
     public function testDispatchShouldCallAfterResolvingIfCommandNotQueued(): void
     {
         $container = new ArrayContainer();
+        $handler   = new class() {
+            public function handle()
+            {
+                return 'foo';
+            }
 
-        $handler = $this->mock(stdClass::class)->shouldIgnoreMissing();
-        $handler->shouldReceive('after')->once();
+            public function after()
+            {
+                return true;
+            }
+        };
 
         $container->set('Handler', $handler);
 
@@ -136,7 +145,7 @@ class QueueingDispatcherTest extends MockeryTestCase
         });
 
         $dispatcher->dispatch(new BusDispatcherBasicCommand(), function ($handler): void {
-            $handler->after();
+            self::assertTrue($handler->after());
         });
     }
 

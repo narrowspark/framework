@@ -18,8 +18,8 @@
         }
     ],
     "require": {
-        "php"                                      : "^7.1",
-        "symfony/polyfill-mbstring"                : "^1.0",
+        "php"                                      : "^7.2",
+        "ext-mbstring"                             : "*",
         "viserio/contracts"                        : "self.version"
     },
     "require-dev": {
@@ -27,7 +27,7 @@
         "doctrine/inflector"                       : "~1.1",
         "mikey179/vfsStream"                       : "^1.6",
         "mockery/mockery"                          : "^0.9",
-        "narrowspark/testing-helper"               : "^3.0",
+        "narrowspark/testing-helper"               : "^4.0",
         "php-di/invoker"                           : "^2.0",
         "phpunit/phpunit"                          : "^6.0",
         "symfony/var-dumper"                       : "~3.3",

@@ -18,19 +18,19 @@
         }
     ],
     "require": {
-        "php"                                : "^7.1",
+        "php"                                : "^7.2",
+        "ext-mbstring"                       : "*",
         "http-interop/http-factory"          : "^0.3",
         "psr/cache"                          : "^1.0",
         "psr/http-message"                   : "^1.0",
         "symfony/var-dumper"                 : "~3.3",
-        "symfony/polyfill-mbstring"          : "^1.0",
         "viserio/contracts"                  : "self.version",
         "viserio/support"                    : "self.version"
     },
     "require-dev": {
         "cache/array-adapter"                : "^0.4",
         "mockery/mockery"                    : "^0.9",
-        "narrowspark/testing-helper"         : "^3.0",
+        "narrowspark/testing-helper"         : "^4.0",
         "phpunit/phpunit"                    : "^6.0",
         "http-interop/http-middleware"       : "^0.4",
         "viserio/cache"                      : "self.version",

@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Cache;
 
-use InvalidArgumentException;
 use League\Flysystem\Cached\CacheInterface;
 use League\Flysystem\Cached\Storage\Adapter;
 use League\Flysystem\Cached\Storage\Psr6Cache;
-use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Filesystem\FilesystemManager;
 
 class CachedFactory
@@ -21,7 +21,7 @@ class CachedFactory
     /**
      * Instance of CacheManager.
      *
-     * @var null|\Viserio\Component\Contracts\Cache\Manager
+     * @var null|\Viserio\Component\Contract\Cache\Manager
      */
     protected $cacheManager;
 
@@ -29,7 +29,7 @@ class CachedFactory
      * Create a new cached factory instance.
      *
      * @param \Viserio\Component\Filesystem\FilesystemManager $manager
-     * @param null|\Viserio\Component\Contracts\Cache\Manager $cacheManager
+     * @param null|\Viserio\Component\Contract\Cache\Manager  $cacheManager
      */
     public function __construct(FilesystemManager $manager, CacheManagerContract $cacheManager = null)
     {
@@ -42,7 +42,7 @@ class CachedFactory
      *
      * @param array $config
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\Cached\CacheInterface
      */

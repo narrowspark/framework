@@ -46,7 +46,7 @@ class ResponseTest extends AbstractMessageTest
         $statusCode   = 100;
         $newMessage   = $message->withStatus($statusCode);
 
-        self::assertImmutable($messageClone, $message, $newMessage);
+        $this->assertImmutable($messageClone, $message, $newMessage);
         self::assertEquals(
             $statusCode,
             $newMessage->getStatusCode(),
@@ -62,7 +62,7 @@ class ResponseTest extends AbstractMessageTest
         $reasonPhrase = 'example';
         $newMessage   = $message->withStatus($statusCode, $reasonPhrase);
 
-        self::assertImmutable($messageClone, $message, $newMessage);
+        $this->assertImmutable($messageClone, $message, $newMessage);
         self::assertEquals(
             $statusCode,
             $newMessage->getStatusCode(),
@@ -98,7 +98,7 @@ class ResponseTest extends AbstractMessageTest
     public function testConstructorDoesNotReadStreamBody(): void
     {
         $streamIsRead = false;
-        $body         = FnStream::decorate(new Stream(\fopen('php://temp', 'r+')), [
+        $body         = FnStream::decorate(new Stream(\fopen('php://temp', 'rb+')), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
 
@@ -183,7 +183,7 @@ class ResponseTest extends AbstractMessageTest
      */
     public function testWithProtocolVersion(): void
     {
-        $response = (new Response())->withProtocolVersion('1000');
+        (new Response())->withProtocolVersion('1000');
     }
 
     public function testSameInstanceWhenSameProtocol(): void
@@ -196,7 +196,7 @@ class ResponseTest extends AbstractMessageTest
     public function testWithBody(): void
     {
         $body   = '0';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);

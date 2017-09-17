@@ -2,8 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
-use RuntimeException;
-use Viserio\Component\Contracts\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
 
 trait MiddlewareAwareTrait
 {
@@ -26,11 +27,11 @@ trait MiddlewareAwareTrait
     /**
      * Register a short-hand name for a middleware.
      *
-     * @param string        $name
-     * @param object|string $middleware
+     * @param string                                                    $name
+     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
      *
-     * @throws \RuntimeException if wrong type is given or alias exists
-     * @throws \LogicException
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException         if alias exists
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
      * @return $this
      */
@@ -52,18 +53,17 @@ trait MiddlewareAwareTrait
             return $this;
         }
 
-        throw new RuntimeException(\sprintf('Expected string or object; received [%s].', \gettype($middleware)));
+        throw new UnexpectedValueException(\sprintf('Expected string or object; received [%s].', \gettype($middleware)));
     }
 
     /**
      * Adds a middleware or a array of middlewares to the route/controller.
      *
-     * @param array|object|string $middlewares
+     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|array|string $middlewares
      *
-     * @throws \RuntimeException if wrong type is given
-     * @throws \LogicException
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
-     * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
+     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
     public function withMiddleware($middlewares): MiddlewareAwareContract
     {
@@ -100,9 +100,9 @@ trait MiddlewareAwareTrait
      *
      * @param null|array|string $middlewares
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
-     * @return \Viserio\Component\Contracts\Routing\MiddlewareAware
+     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
     public function withoutMiddleware($middlewares = null): MiddlewareAwareContract
     {

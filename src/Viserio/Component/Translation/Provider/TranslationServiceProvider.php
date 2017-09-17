@@ -5,12 +5,12 @@ namespace Viserio\Component\Translation\Provider;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
-use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Parser\Loader as LoaderContract;
+use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
@@ -77,7 +77,7 @@ class TranslationServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Translation\TranslationManager
+     * @return \Viserio\Component\Contract\Translation\TranslationManager
      */
     public static function createTranslationManager(ContainerInterface $container): TranslationManagerContract
     {
@@ -115,7 +115,7 @@ class TranslationServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Translation\TranslationManager
+     * @return \Viserio\Component\Contract\Translation\Translator
      */
     public static function createTranslator(ContainerInterface $container): TranslatorContract
     {

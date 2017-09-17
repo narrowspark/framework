@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
@@ -11,8 +12,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Support\Arrayable;
+use Viserio\Component\Contract\Console\Exception\LogicException;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Support\Arrayable;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 abstract class Command extends BaseCommand
@@ -79,7 +81,7 @@ abstract class Command extends BaseCommand
     /**
      * The name and signature of the console command.
      *
-     * @var string
+     * @var null|string
      */
     protected $signature;
 
@@ -91,7 +93,7 @@ abstract class Command extends BaseCommand
         // We will go ahead and set the name, description, and parameters on console
         // commands just to make things a little easier on the developer. This is
         // so they don't have to all be manually specified in the constructors.
-        if (isset($this->signature)) {
+        if ($this->signature !== null) {
             $this->configureUsingFluentDefinition();
         } else {
             parent::__construct($this->name);
@@ -101,7 +103,7 @@ abstract class Command extends BaseCommand
 
         $this->setHidden($this->hidden);
 
-        if (! isset($this->signature)) {
+        if ($this->signature === null) {
             $this->specifyParameters();
         }
     }
@@ -252,15 +254,14 @@ abstract class Command extends BaseCommand
     /**
      * Prompt the user for input.
      *
-     * @param string        $question
-     * @param null|string   $default
-     * @param null|callable $validator
+     * @param string      $question
+     * @param null|string $default
      *
      * @return null|string
      */
-    public function ask(string $question, ?string $default = null, ?callable $validator = null): ?string
+    public function ask(string $question, ?string $default = null): ?string
     {
-        return $this->output->ask($question, $default, $validator);
+        return $this->output->ask($question, $default);
     }
 
     /**
@@ -340,13 +341,14 @@ abstract class Command extends BaseCommand
     /**
      * Format input to textual table.
      *
-     * @param array                                                $headers
-     * @param array|\Viserio\Component\Contracts\Support\Arrayable $rows
-     * @param string                                               $style
+     * @param array                                               $headers
+     * @param array|\Viserio\Component\Contract\Support\Arrayable $rows
+     * @param string                                              $style
+     * @param array                                               $columnStyles
      *
      * @return void
      */
-    public function table(array $headers, $rows, string $style = 'default'): void
+    public function table(array $headers, $rows, string $style = 'default', array $columnStyles = []): void
     {
         $table = new Table($this->output);
 
@@ -354,7 +356,13 @@ abstract class Command extends BaseCommand
             $rows = $rows->toArray();
         }
 
-        $table->setHeaders($headers)->setRows($rows)->setStyle($style)->render();
+        $table->setHeaders($headers)->setRows($rows)->setStyle($style);
+
+        foreach ($columnStyles as $columnIndex => $columnStyle) {
+            $table->setColumnStyle($columnIndex, $columnStyle);
+        }
+
+        $table->render();
     }
 
     /**
@@ -443,6 +451,22 @@ abstract class Command extends BaseCommand
     }
 
     /**
+     * Get the container instance.
+     *
+     * @throws \Viserio\Component\Contract\Console\Exception\LogicException
+     *
+     * @return \Psr\Container\ContainerInterface
+     */
+    protected function getContainer(): ContainerInterface
+    {
+        if (! $this->container) {
+            throw new LogicException('Container is not set up.');
+        }
+
+        return $this->container;
+    }
+
+    /**
      * Execute the console command.
      *
      * @param \Symfony\Component\Console\Input\InputInterface   $input
@@ -482,14 +506,15 @@ abstract class Command extends BaseCommand
      */
     protected function configureUsingFluentDefinition(): void
     {
-        $arr = (new ExpressionParser())->parse($this->signature);
+        $data = ExpressionParser::parse($this->signature);
 
-        parent::__construct($arr['name']);
+        parent::__construct($data['name']);
 
-        foreach ($arr['arguments'] as $argument) {
+        foreach ($data['arguments'] as $argument) {
             $this->getDefinition()->addArgument($argument);
         }
-        foreach ($arr['options'] as $option) {
+
+        foreach ($data['options'] as $option) {
             $this->getDefinition()->addOption($option);
         }
     }

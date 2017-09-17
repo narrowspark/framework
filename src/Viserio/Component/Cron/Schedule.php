@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
-use LogicException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Cron\Cron as CronContract;
+use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Cron\Cron as CronContract;
+use Viserio\Component\Contract\Cron\Exception\LogicException;
 
 class Schedule
 {
@@ -66,7 +66,7 @@ class Schedule
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
-            $cron->setContainer($this->getContainer());
+            $cron->setContainer($this->container);
         }
 
         $this->jobs[] = $cron;
@@ -80,12 +80,14 @@ class Schedule
      * @param string $command
      * @param array  $parameters
      *
-     * @return \Viserio\Component\Contracts\Cron\Cron
+     * @throws \Viserio\Component\Contract\Cron\Exception\LogicException
+     *
+     * @return \Viserio\Component\Contract\Cron\Cron
      */
     public function command(string $command, array $parameters = []): CronContract
     {
-        if ($this->container !== null && $this->getContainer()->has($command)) {
-            $command = $this->getContainer()->get($command)->getName();
+        if ($this->container !== null && $this->container->has($command)) {
+            $command = $this->container->get($command)->getName();
         }
 
         if (\defined('CEREBRO_BINARY')) {
@@ -106,7 +108,7 @@ class Schedule
      * @param string $command
      * @param array  $parameters
      *
-     * @return \Viserio\Component\Contracts\Cron\Cron
+     * @return \Viserio\Component\Contract\Cron\Cron
      */
     public function exec(string $command, array $parameters = []): CronContract
     {
@@ -123,7 +125,7 @@ class Schedule
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
-            $cron->setContainer($this->getContainer());
+            $cron->setContainer($this->container);
         }
 
         $this->jobs[] = $cron;
@@ -151,7 +153,7 @@ class Schedule
      */
     public function dueCronJobs(string $environment, bool $isMaintenance = false): array
     {
-        return \array_filter($this->jobs, function ($job) use ($environment, $isMaintenance) {
+        return \array_filter($this->jobs, function (CronContract $job) use ($environment, $isMaintenance) {
             return $job->isDue($environment, $isMaintenance);
         });
     }
@@ -174,7 +176,7 @@ class Schedule
                 }, $value);
 
                 $value = \implode(' ', $value);
-            } elseif (! \is_numeric($value) && ! \preg_match('/^(-.$|--.*)/i', $value)) {
+            } elseif (! \is_numeric($value) && ! \preg_match('/^(-.$|--.*)/', $value)) {
                 $value = \escapeshellarg($value);
             }
 

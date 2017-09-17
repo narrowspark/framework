@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
-use Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException;
-use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException;
+use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 
@@ -26,7 +26,7 @@ final class Parser
      * @param string   $route
      * @param string[] $conditions
      *
-     * @throws \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      *
      * @return array
      */
@@ -61,13 +61,15 @@ final class Parser
     }
 
     /**
-     * Validate and match uri paramters.
+     * Validate and match uri parameters.
      *
      * @param string $route
      * @param string $patternSegment
      * @param array  &$conditions
      * @param array  &$matches
      * @param array  &$names
+     *
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      *
      * @return bool
      */
@@ -100,7 +102,9 @@ final class Parser
                     $matchedParameter = true;
 
                     continue;
-                } elseif ($character === '{') {
+                }
+
+                if ($character === '{') {
                     throw new InvalidRoutePatternException(\sprintf(
                         'Invalid route uri; Cannot contain nested \'{\', \'%s\' given.',
                         $route
@@ -113,7 +117,9 @@ final class Parser
                     $inParameter = true;
 
                     continue;
-                } elseif ($character === '}') {
+                }
+
+                if ($character === '}') {
                     throw new InvalidRoutePatternException(\sprintf(
                         'Invalid route uri; Cannot contain \'}\' before opening \'{\', \'%s\' given.',
                         $route
@@ -129,7 +135,9 @@ final class Parser
                 'Invalid route uri: cannot contain \'{\' without closing \'}\', \'%s\' given',
                 $route
             ));
-        } elseif ($current !== '') {
+        }
+
+        if ($current !== '') {
             $matches[] = [self::STATIC_PART, $current];
         }
 

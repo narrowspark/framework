@@ -9,7 +9,7 @@ use Viserio\Component\Http\Stream;
 class PipStreamTest extends TestCase
 {
     /**
-     * @var resource pipe stream file handle
+     * @var null|resource pipe stream file handle
      */
     private $pipeFh;
 
@@ -35,7 +35,7 @@ class PipStreamTest extends TestCase
 
         self::assertFalse(NSA::invokeMethod($this->pipeStream, 'isPipe'));
 
-        $fhFile     = fopen(__FILE__, 'r');
+        $fhFile     = fopen(__FILE__, 'rb');
         $fileStream = new Stream($fhFile);
 
         self::assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));

@@ -35,7 +35,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return $this->pdo->beginTransaction();
     }
@@ -43,7 +43,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function commit()
+    public function commit(): bool
     {
         return $this->pdo->commit();
     }
@@ -59,7 +59,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function errorInfo()
+    public function errorInfo(): array
     {
         return $this->pdo->errorInfo();
     }
@@ -85,7 +85,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function inTransaction()
+    public function inTransaction(): bool
     {
         return $this->pdo->inTransaction();
     }
@@ -93,7 +93,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function lastInsertId($name = null)
+    public function lastInsertId($name = null): string
     {
         return $this->pdo->lastInsertId($name);
     }
@@ -101,7 +101,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function prepare($statement, $driver_options = [])
+    public function prepare($statement, $driver_options = []): \PDOStatement
     {
         return $this->pdo->prepare($statement, $driver_options);
     }
@@ -117,7 +117,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function quote($string, $parameter_type = PDO::PARAM_STR)
+    public function quote($string, $parameter_type = PDO::PARAM_STR): string
     {
         return $this->pdo->quote($string, $parameter_type);
     }
@@ -125,7 +125,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         return $this->pdo->rollBack();
     }
@@ -133,7 +133,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function setAttribute($attribute, $value)
+    public function setAttribute($attribute, $value): bool
     {
         return $this->pdo->setAttribute($attribute, $value);
     }

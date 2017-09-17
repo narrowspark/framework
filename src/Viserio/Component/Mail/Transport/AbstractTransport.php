@@ -53,7 +53,7 @@ abstract class AbstractTransport implements Swift_Transport
      */
     public function registerPlugin(Swift_Events_EventListener $plugin): void
     {
-        \array_push($this->plugins, $plugin);
+        $this->plugins[] = $plugin;
     }
 
     /**
@@ -83,9 +83,9 @@ abstract class AbstractTransport implements Swift_Transport
      */
     protected function numberOfRecipients(Swift_Mime_SimpleMessage $message): int
     {
-        $to  = null === $message->getTo() ? [] : $message->getTo();
-        $cc  = null === $message->getCc() ? [] : $message->getCc();
-        $bcc = null === $message->getBcc() ? [] : $message->getBcc();
+        $to  = $message->getTo() ?? [];
+        $cc  = $message->getCc() ?? [];
+        $bcc = $message->getBcc() ?? [];
 
         return \count(\array_merge($to, $cc, $bcc));
     }

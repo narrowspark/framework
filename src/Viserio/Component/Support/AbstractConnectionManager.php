@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use InvalidArgumentException;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\Support\ConnectionManager as ConnectionManagerContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Support\ConnectionManager as ConnectionManagerContract;
+use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractConnectionManager implements
@@ -105,7 +105,7 @@ abstract class AbstractConnectionManager implements
     /**
      * {@inheritdoc}
      */
-    public function reconnect(string $name = null)
+    public function reconnect(string $name = null): object
     {
         $name = $name ?? $this->getDefaultConnection();
 

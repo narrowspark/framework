@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Support\VarExporter;
 
@@ -142,7 +142,7 @@ PHP;
      * @param array                  $parameters
      */
     protected function compileSegmentNodes(
-        $code,
+        object $code,
         ChildrenNodeCollection $nodes,
         array $segmentVariables,
         array $parameters = []
@@ -198,7 +198,7 @@ PHP;
      * @param MatchedRouteDataMap $routeDataMap
      * @param array               $parameters
      */
-    protected function compiledRouteHttpMethodMatch($code, MatchedRouteDataMap $routeDataMap, array $parameters): void
+    protected function compiledRouteHttpMethodMatch(object $code, MatchedRouteDataMap $routeDataMap, array $parameters): void
     {
         $code->appendLine('switch ($method) {');
 
@@ -239,7 +239,7 @@ PHP;
      *
      * @param object $code
      */
-    protected function compileNotFound($code): void
+    protected function compileNotFound(object $code): void
     {
         $code->appendLine('return [' . VarExporter::export(DispatcherContract::NOT_FOUND) . '];');
     }
@@ -249,7 +249,7 @@ PHP;
      *
      * @param object $code
      */
-    protected function compileDisallowedHttpMethodOrNotFound($code): void
+    protected function compileDisallowedHttpMethodOrNotFound(object $code): void
     {
         $code->appendLine(
             'return ' .
@@ -272,7 +272,7 @@ PHP;
      * @param array  $foundRoute
      * @param array  $parameterExpressions
      */
-    protected function compileFoundRoute($code, array $foundRoute, array $parameterExpressions): void
+    protected function compileFoundRoute(object $code, array $foundRoute, array $parameterExpressions): void
     {
         $parameters = '[';
 
@@ -302,7 +302,7 @@ PHP;
      *
      * @return object
      */
-    private function phpBuilder()
+    private function phpBuilder(): object
     {
         return new class() {
             /**

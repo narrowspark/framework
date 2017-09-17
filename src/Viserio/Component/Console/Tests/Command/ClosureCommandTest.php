@@ -18,7 +18,7 @@ class ClosureCommandTest extends TestCase
 
     public function setUp(): void
     {
-        $this->application = new Application('1.0.0');
+        $this->application = new Application();
     }
 
     public function testCommand(): void
@@ -30,7 +30,7 @@ class ClosureCommandTest extends TestCase
         $this->application->add($command);
 
         self::assertSame($command, $this->application->get('demo'));
-        self::assertOutputIs('demo', 'hello' . "\n");
+        $this->assertOutputIs('demo', 'hello' . "\n");
     }
 
     public function testCommandWithParam(): void
@@ -45,7 +45,7 @@ class ClosureCommandTest extends TestCase
         $this->application->add($command);
 
         self::assertSame($command, $this->application->get('demo'));
-        self::assertOutputIs('demo', 'hello daniel' . "\n");
+        $this->assertOutputIs('demo', 'hello daniel' . "\n");
     }
 
     /**

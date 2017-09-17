@@ -18,18 +18,18 @@
         }
     ],
     "require": {
-        "php"                                        : "^7.1",
+        "php"                                        : "^7.2",
+        "ext-mbstring"                               : "*",
         "container-interop/service-provider"         : "^0.3",
         "php-di/invoker"                             : "^2.0",
         "psr/container"                              : "^1.0",
-        "symfony/polyfill-mbstring"                  : "^1.0",
         "viserio/contracts"                          : "self.version"
     },
     "require-dev": {
         "mockery/mockery"                            : "^0.9",
         "mouf/picotainer"                            : "^1.0",
         "phpunit/phpunit"                            : "^6.0",
-        "narrowspark/testing-helper"                 : "^3.0"
+        "narrowspark/testing-helper"                 : "^4.0"
     },
     "provide": {
         "psr/container-implementation"               : "^1.0"

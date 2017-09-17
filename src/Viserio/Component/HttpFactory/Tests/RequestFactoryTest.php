@@ -9,6 +9,9 @@ use Viserio\Component\HttpFactory\UriFactory;
 
 class RequestFactoryTest extends TestCase
 {
+    /**
+     * @var \Interop\Http\Factory\RequestFactoryInterface
+     */
     private $factory;
 
     public function setUp(): void
@@ -38,7 +41,7 @@ class RequestFactoryTest extends TestCase
         $uri     = 'http://example.com/';
         $request = $this->factory->createRequest($method, $uri);
 
-        self::assertRequest($request, $method, $uri);
+        $this->assertRequest($request, $method, $uri);
     }
 
     public function testCreateRequestWithUri(): void
@@ -48,7 +51,7 @@ class RequestFactoryTest extends TestCase
         $uri        = 'http://example.com/';
         $request    = $this->factory->createRequest($method, $uriFactory->createUri($uri));
 
-        self::assertRequest($request, $method, $uri);
+        $this->assertRequest($request, $method, $uri);
     }
 
     private function assertRequest($request, $method, $uri): void

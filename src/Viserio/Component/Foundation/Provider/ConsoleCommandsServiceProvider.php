@@ -6,7 +6,7 @@ use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Process\Process;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Console\Command\DownCommand;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 use Viserio\Component\Foundation\Console\Command\ServeCommand;
@@ -17,7 +17,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             Application::class => [self::class, 'createConsoleCommands'],
@@ -34,6 +34,7 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
      */
     public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
     {
+        /** @var Application $console */
         $console = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($console !== null) {

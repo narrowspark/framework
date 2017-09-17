@@ -9,7 +9,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Viserio\Bridge\Twig\Extension\ConfigExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Provider\Twig\Engine\TwigEngine;
 
 class TwigEngineTest extends MockeryTestCase

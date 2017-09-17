@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -75,7 +75,7 @@ class ProfilerTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $profiler->enable();
-        $response = (new ResponseFactory())->createResponse(200);
+        $response = (new ResponseFactory())->createResponse();
 
         $response = $profiler->modifyResponse(
             (new ServerRequestFactory())->createServerRequestFromArray($server),
@@ -106,7 +106,7 @@ class ProfilerTest extends MockeryTestCase
         $stream = (new StreamFactory())->createStream(
             '<!DOCTYPE html><html><head><title></title></head><body></body></html>'
         );
-        $response = (new ResponseFactory())->createResponse(200);
+        $response = (new ResponseFactory())->createResponse();
         $response = $response->withBody($stream);
         $profiler->setStreamFactory(new StreamFactory());
 
@@ -144,7 +144,7 @@ class ProfilerTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $profiler->disable();
-        $orginalResponse = (new ResponseFactory())->createResponse(200);
+        $orginalResponse = (new ResponseFactory())->createResponse();
 
         $response = $profiler->modifyResponse(
             (new ServerRequestFactory())->createServerRequestFromArray($server),

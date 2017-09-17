@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Routing\Pattern;
-use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Contract\Routing\Pattern;
+use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Routing\Matcher\AnyMatcher;
 use Viserio\Component\Routing\Matcher\CompoundMatcher;
 use Viserio\Component\Routing\Matcher\ExpressionMatcher;

@@ -4,7 +4,7 @@ namespace Viserio\Component\Console\Command;
 
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression;
+use Viserio\Component\Contract\Console\Exception\InvalidCommandExpression;
 
 final class ExpressionParser
 {
@@ -13,13 +13,13 @@ final class ExpressionParser
      *
      * @param string $expression
      *
-     * @throws \Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
      *
      * @return array
      */
     public static function parse(string $expression): array
     {
-        \preg_match_all('/^[^\s]*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
+        \preg_match_all('/^\S*|(\[\s*(.*?)\]|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\=\*|[[:alnum:]_-]+\?|[[:alnum:]_-]+|-+[[:alnum:]_\-=*]+)/', $expression, $matches);
 
         if (\trim($expression) === '') {
             throw new InvalidCommandExpression('The expression was empty.');
@@ -154,7 +154,7 @@ final class ExpressionParser
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        return $needle !== '' && \mb_substr($haystack, 0, \mb_strlen($needle)) === $needle;
+        return $needle !== '' && \mb_strrpos($haystack, $needle) === 0;
     }
 
     /**

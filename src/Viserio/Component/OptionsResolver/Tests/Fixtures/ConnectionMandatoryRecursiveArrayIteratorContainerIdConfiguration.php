@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
 use ArrayIterator;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
 class ConnectionMandatoryRecursiveArrayIteratorContainerIdConfiguration implements RequiresComponentConfigIdContract, RequiresMandatoryOptionsContract
 {

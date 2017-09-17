@@ -4,7 +4,7 @@ namespace Viserio\Component\Pagination\Adapter;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Pagination\Adapter as AdapterContract;
+use Viserio\Component\Contract\Pagination\Adapter as AdapterContract;
 
 class DoctrineDbalAdapter implements AdapterContract
 {

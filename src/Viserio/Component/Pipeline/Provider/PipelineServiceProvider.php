@@ -4,7 +4,7 @@ namespace Viserio\Component\Pipeline\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Pipeline\Pipeline as PipelineContract;
+use Viserio\Component\Contract\Pipeline\Pipeline as PipelineContract;
 use Viserio\Component\Pipeline\Pipeline;
 
 class PipelineServiceProvider implements ServiceProvider
@@ -12,7 +12,7 @@ class PipelineServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             PipelineContract::class => [self::class, 'createPipeline'],

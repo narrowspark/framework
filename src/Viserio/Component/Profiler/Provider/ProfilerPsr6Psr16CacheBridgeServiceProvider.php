@@ -7,7 +7,7 @@ use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Psr6Psr16CacheDataCollector;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator;
@@ -18,7 +18,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             CacheItemPoolInterface::class => [self::class, 'createCacheItemPoolDecorator'],
@@ -79,7 +79,7 @@ class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProvider
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
+     * @return null|\Viserio\Component\Contract\Profiler\Profiler
      */
     public static function extendsProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {

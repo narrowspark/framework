@@ -58,13 +58,13 @@ class UploadedFileTest extends TestCase
      */
     public function testRaisesExceptionOnInvalidError(): void
     {
-        $stream = new Stream(\fopen('php://temp', 'r'));
+        $stream = new Stream(\fopen('php://temp', 'rb'));
         new UploadedFile($stream, 0, 9999);
     }
 
     public function testGetStreamReturnsOriginalStreamObject(): void
     {
-        $stream = new Stream(\fopen('php://temp', 'r'));
+        $stream = new Stream(\fopen('php://temp', 'rb'));
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         self::assertSame($stream, $upload->getStream());
@@ -95,7 +95,7 @@ class UploadedFileTest extends TestCase
     public function testSuccessful(): void
     {
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -111,7 +111,7 @@ class UploadedFileTest extends TestCase
         $upload->moveTo($to);
 
         self::assertFileExists($to);
-        self::assertEquals($stream->__toString(), \file_get_contents($to));
+        self::assertStringEqualsFile($to, $stream->__toString());
     }
 
     public function invalidMovePaths()
@@ -139,7 +139,7 @@ class UploadedFileTest extends TestCase
     public function testMoveRaisesExceptionForInvalidPath($path): void
     {
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -159,7 +159,7 @@ class UploadedFileTest extends TestCase
     public function testMoveCannotBeCalledMoreThanOnce(): void
     {
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -171,7 +171,7 @@ class UploadedFileTest extends TestCase
 
         $upload->moveTo($to);
 
-        self::assertTrue(\file_exists($to));
+        self::assertFileExists($to);
 
         $upload->moveTo($to);
     }
@@ -183,7 +183,7 @@ class UploadedFileTest extends TestCase
     public function testCannotRetrieveStreamAfterMove(): void
     {
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -236,7 +236,7 @@ class UploadedFileTest extends TestCase
     {
         $uploadedFile = new UploadedFile('not ok', 0, $status);
 
-        $uploadedFile->moveTo(__DIR__ . '/' . \uniqid());
+        $uploadedFile->moveTo(__DIR__ . '/' . \uniqid('', true));
     }
 
     /**
@@ -251,7 +251,7 @@ class UploadedFileTest extends TestCase
     {
         $uploadedFile = new UploadedFile('not ok', 0, $status);
 
-        $stream = $uploadedFile->getStream();
+        $uploadedFile->getStream();
     }
 
     public function testMoveToCreatesStreamIfOnlyAFilenameWasProvided(): void

@@ -4,17 +4,12 @@ namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use Throwable;
+use Viserio\Component\Contract\Http\Exception\BadMethodCallException;
+use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\Util;
 
 abstract class AbstractStreamDecorator implements StreamInterface
 {
-    /**
-     * Stream instance.
-     *
-     * @var \Psr\Http\Message\StreamInterface
-     */
-    protected $stream;
-
     /**
      * Create a new stream instance.
      *
@@ -23,6 +18,27 @@ abstract class AbstractStreamDecorator implements StreamInterface
     public function __construct(StreamInterface $stream)
     {
         $this->stream = $stream;
+    }
+
+    /**
+     * Magic method used to create a new stream if streams are not added in
+     * the constructor of a decorator (e.g., LazyOpenStream).
+     *
+     * @param string $name Name of the property (allows "stream" only).
+     *
+     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
+     *
+     * @return StreamInterface
+     */
+    public function __get($name)
+    {
+        if ($name === 'stream') {
+            $this->stream = $this->createStream();
+
+            return $this->stream;
+        }
+
+        throw new UnexpectedValueException(\sprintf('%s not found on class.', $name));
     }
 
     /**
@@ -64,7 +80,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         return Util::copyToString($this);
     }
@@ -96,7 +112,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         return $this->stream->getSize();
     }
@@ -104,7 +120,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return $this->stream->eof();
     }
@@ -112,7 +128,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
         return $this->stream->tell();
     }
@@ -120,7 +136,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return $this->stream->isReadable();
     }
@@ -128,7 +144,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return $this->stream->isWritable();
     }
@@ -136,7 +152,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return $this->stream->isSeekable();
     }
@@ -160,7 +176,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         return $this->stream->read($length);
     }
@@ -168,8 +184,20 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): int
     {
         return $this->stream->write($string);
+    }
+
+    /**
+     * Implement in subclasses to dynamically create streams when requested.
+     *
+     * @throws \Viserio\Component\Contract\Http\Exception\BadMethodCallException
+     *
+     * @return \Psr\Http\Message\StreamInterface
+     */
+    protected function createStream(): StreamInterface
+    {
+        throw new BadMethodCallException('Not implemented.');
     }
 }

@@ -5,14 +5,14 @@ namespace Viserio\Component\Session\Handler;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface;
-use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 
 class CookieSessionHandler implements SessionHandlerInterface
 {
     /**
      * The cookie jar instance.
      *
-     * @var \Viserio\Component\Contracts\Cookie\QueueingFactory
+     * @var \Viserio\Component\Contract\Cookie\QueueingFactory
      */
     protected $cookie;
 
@@ -33,8 +33,8 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * Create a new cookie driven handler instance.
      *
-     * @param \Viserio\Component\Contracts\Cookie\QueueingFactory $cookie
-     * @param int                                                 $lifetime The session lifetime in seconds
+     * @param \Viserio\Component\Contract\Cookie\QueueingFactory $cookie
+     * @param int                                                $lifetime The session lifetime in seconds
      */
     public function __construct(JarContract $cookie, int $lifetime)
     {
@@ -66,12 +66,11 @@ class CookieSessionHandler implements SessionHandlerInterface
         $cookies = $this->request->getCookieParams();
 
         if (isset($cookies[$sessionId]) &&
-            null !== ($decoded = \json_decode($cookies[$sessionId], true)) &&
-            \is_array($decoded)
+            ($decoded = \json_decode($cookies[$sessionId], true)) !== null &&
+            \is_array($decoded) &&
+            (isset($decoded['expires']) && Chronos::now()->getTimestamp() <= $decoded['expires'])
         ) {
-            if (isset($decoded['expires']) && Chronos::now()->getTimestamp() <= $decoded['expires']) {
-                return $decoded['data'];
-            }
+            return $decoded['data'];
         }
 
         return '';

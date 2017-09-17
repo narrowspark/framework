@@ -86,8 +86,8 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
         }
 
         if ($node instanceof FilterExpression &&
-            $node->getNode('filter')->getAttribute('value') === 'trans' &&
-            $node->getNode('node') instanceof ConstantExpression
+            $node->getNode('node') instanceof ConstantExpression &&
+            $node->getNode('filter')->getAttribute('value') === 'trans'
         ) {
             // extract constant nodes with a trans filter
             $this->messages[] = [

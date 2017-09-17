@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixtures;
 
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class OptionsResolver

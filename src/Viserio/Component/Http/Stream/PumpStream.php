@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
-use Exception;
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
+use RuntimeException as BaseRuntimeException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Util;
 
 class PumpStream implements StreamInterface
@@ -68,7 +68,7 @@ class PumpStream implements StreamInterface
     {
         try {
             return Util::copyToString($this);
-        } catch (Exception $e) {
+        } catch (BaseRuntimeException $e) {
             return '';
         }
     }
@@ -101,7 +101,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
         return $this->tellPos;
     }
@@ -109,7 +109,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return ! $this->source;
     }
@@ -117,7 +117,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return false;
     }
@@ -141,7 +141,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return false;
     }
@@ -161,7 +161,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return true;
     }
@@ -169,7 +169,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         $data    = $this->buffer->read($length);
         $readLen = \mb_strlen($data);
@@ -188,7 +188,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         $result = '';
         while (! $this->eof()) {
@@ -207,7 +207,7 @@ class PumpStream implements StreamInterface
             return $this->metadata;
         }
 
-        return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
+        return $this->metadata[$key] ?? null;
     }
 
     /**
@@ -215,7 +215,7 @@ class PumpStream implements StreamInterface
      *
      * @return null|void
      */
-    private function pump($length)
+    private function pump($length): void
     {
         if ($this->source) {
             do {

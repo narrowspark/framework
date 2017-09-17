@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
 class LoadEnvironmentVariablesTest extends MockeryTestCase

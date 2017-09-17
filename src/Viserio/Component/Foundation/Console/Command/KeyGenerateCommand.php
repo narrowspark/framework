@@ -2,11 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console\Command;
 
-use Defuse\Crypto\Key;
+use ParagonIE\ConstantTime\Hex;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Encryption\Security as SecurityContract;
+use Viserio\Component\Encryption\Key;
+use Viserio\Component\Encryption\KeyFactory;
 
 class KeyGenerateCommand extends Command
 {
@@ -29,25 +32,29 @@ class KeyGenerateCommand extends Command
      */
     public function handle()
     {
-        $key       = $this->generateRandomKey();
-        $container = $this->getContainer();
+        $key        = $this->generateRandomKey();
+        $encodedKey = $this->encodeKey($key);
+        $container  = $this->getContainer();
 
         if ($this->option('show') || ! $container->has(RepositoryContract::class)) {
-            $this->line('<comment>' . $key . '</comment>');
+            $this->line('<comment>' . $encodedKey . '</comment>');
 
             return 0;
         }
 
         // Next, we will replace the application key in the environment file so it is
-        // automatically setup for this developer. This key gets generated using
-        // https://github.com/defuse/php-encryption
-        if (! $this->setKeyInEnvironmentFile($key)) {
+        // automatically setup for this developer. This key gets generated using sodium.
+        if (! $this->setKeyInEnvironmentFile($encodedKey)) {
+            \sodium_memzero($encodedKey);
+
             return 1;
         }
 
         $container->get(RepositoryContract::class)->set('viserio.app.key', $key);
 
-        $this->info("Application key [$key] set successfully.");
+        $this->info(sprintf('Application key [%s] set successfully.', $encodedKey));
+
+        \sodium_memzero($encodedKey);
 
         return 0;
     }
@@ -55,24 +62,25 @@ class KeyGenerateCommand extends Command
     /**
      * Set the application key in the environment file.
      *
-     * @param string $key
+     * @param string $encodedKey
      *
      * @return bool
      */
-    protected function setKeyInEnvironmentFile(string $key): bool
+    protected function setKeyInEnvironmentFile(string $encodedKey): bool
     {
         $container  = $this->getContainer();
-        $currentKey = $container->get(RepositoryContract::class)->get('viserio.app.key', '');
+        $currentKey = $container->get(RepositoryContract::class)->get('viserio.app.key');
 
-        if (\mb_strlen($currentKey) !== 0 && (! $this->confirmToProceed())) {
+        if ($currentKey !== null && (! $this->confirmToProceed())) {
             return false;
         }
 
-        $env = $container->get(ConsoleKernelContract::class)->getEnvironmentFilePath();
+        $env        = $container->get(ConsoleKernelContract::class)->getEnvironmentFilePath();
+        $currentKey = $currentKey instanceof Key ? $this->encodeKey($currentKey) : '';
 
         \file_put_contents($env, \str_replace(
             'APP_KEY=' . $currentKey,
-            'APP_KEY=' . $key,
+            'APP_KEY=' . $encodedKey,
             \file_get_contents($env)
         ));
 
@@ -82,12 +90,29 @@ class KeyGenerateCommand extends Command
     /**
      * Generate a random key for the application.
      *
+     * @return \Viserio\Component\Encryption\Key
+     */
+    protected function generateRandomKey(): Key
+    {
+        $secret = \random_bytes(32);
+
+        return KeyFactory::generateKey($secret);
+    }
+
+    /**
+     * @param \Viserio\Component\Encryption\Key $key
+     *
      * @return string
      */
-    protected function generateRandomKey(): string
+    private function encodeKey(Key $key): string
     {
-        $key = Key::createNewRandomKey();
-
-        return $key->saveToAsciiSafeString();
+        return Hex::encode(
+            SecurityContract::SODIUM_PHP_VERSION . $key->getRawKeyMaterial() .
+            \sodium_crypto_generichash(
+                SecurityContract::SODIUM_PHP_KEY_VERSION . $key->getRawKeyMaterial(),
+                '',
+                \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
+            )
+        );
     }
 }

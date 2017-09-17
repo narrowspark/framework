@@ -7,7 +7,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
-use Viserio\Component\Parsers\Dumper;
+use Viserio\Component\Parser\Dumper;
 
 class OptionDumpCommandTest extends TestCase
 {

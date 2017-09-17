@@ -39,7 +39,7 @@ class FilesystemTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testReadStreamToThrowException(): void
     {
@@ -47,7 +47,7 @@ class FilesystemTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testReadToThrowException(): void
     {
@@ -74,7 +74,7 @@ class FilesystemTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testUpdateToThrowException(): void
     {
@@ -214,9 +214,7 @@ class FilesystemTest extends TestCase
 
         $dir = $this->root->getChild('copy');
 
-        $file = vfsStream::newFile('copy.txt')
-            ->withContent('copy1')
-            ->at($dir);
+        file_put_contents($dir->url() . '/copy.txt', 'copy1');
 
         $this->files->copy(
             $dir->url() . '/copy.txt',
@@ -232,7 +230,7 @@ class FilesystemTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\IOException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\IOException
      */
     public function testCopyToThrowIOException(): void
     {
@@ -249,7 +247,7 @@ class FilesystemTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testCopyToThrowFileNotFoundException(): void
     {
@@ -388,7 +386,7 @@ class FilesystemTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testGetMimetypeToThrowFileNotFoundException(): void
     {
@@ -409,7 +407,7 @@ class FilesystemTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testGetTimestampToThrowFileNotFoundException(): void
     {

@@ -44,7 +44,7 @@ class SortedMiddleware
      */
     protected function doSortMiddleware(array $priorityMap, array $middlewares): array
     {
-        $lastIndex = 0;
+        $lastIndex = $lastPriorityIndex = 0;
 
         foreach ($middlewares as $index => $middleware) {
             if (\in_array($middleware, $priorityMap, true)) {

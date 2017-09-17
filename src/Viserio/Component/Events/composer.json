@@ -18,13 +18,13 @@
         }
     ],
     "require": {
-        "php"                                     : "^7.1",
-        "symfony/polyfill-mbstring"               : "^1.0",
+        "php"                                     : "^7.2",
+        "ext-mbstring"                            : "*",
         "viserio/contracts"                       : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"      : "^0.3",
-        "narrowspark/testing-helper"              : "^3.0",
+        "narrowspark/testing-helper"              : "^4.0",
         "phpunit/phpunit"                         : "^6.0",
         "viserio/container"                       : "self.version",
         "viserio/http-factory"                    : "self.version",

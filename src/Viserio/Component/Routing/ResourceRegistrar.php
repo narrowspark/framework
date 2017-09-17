@@ -2,8 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\Route;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Support\Str;
 
 class ResourceRegistrar
@@ -11,7 +12,7 @@ class ResourceRegistrar
     /**
      * The router instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\Router
+     * @var \Viserio\Component\Contract\Routing\Router
      */
     protected $router;
 
@@ -20,7 +21,7 @@ class ResourceRegistrar
      *
      * @var array
      */
-    protected $resourceDefaults = [
+    protected static $resourceDefaults = [
         'index',
         'create',
         'store',
@@ -64,7 +65,7 @@ class ResourceRegistrar
     /**
      * Create a new resource registrar instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Router $router
+     * @param \Viserio\Component\Contract\Routing\Router $router
      */
     public function __construct(RouterContract $router)
     {
@@ -82,7 +83,7 @@ class ResourceRegistrar
      */
     public function register(string $name, string $controller, array $options = []): void
     {
-        if (isset($options['parameters']) && count($this->parameters) === 0) {
+        if (isset($options['parameters']) && \count((array) $this->parameters) === 0) {
             $this->parameters = $options['parameters'];
         }
 
@@ -111,7 +112,7 @@ class ResourceRegistrar
         // the base resources.
         $base = $this->getResourceWildcard($resource);
 
-        $defaults = $this->resourceDefaults;
+        $defaults = self::$resourceDefaults;
 
         foreach ($this->getResourceMethods($defaults, $options) as $m) {
             $this->{'addResource' . ucfirst($m)}($name, $base, $controller, $options);
@@ -278,7 +279,9 @@ class ResourceRegistrar
     {
         if (isset($options['only'])) {
             return array_intersect($defaults, (array) $options['only']);
-        } elseif (isset($options['except'])) {
+        }
+
+        if (isset($options['except'])) {
             return array_diff($defaults, (array) $options['except']);
         }
 
@@ -293,9 +296,9 @@ class ResourceRegistrar
      * @param string $controller
      * @param array  $options
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return Route
      */
-    protected function addResourceIndex(string $name, string $base, string $controller, array $options)
+    protected function addResourceIndex(string $name, string $base, string $controller, array $options): Route
     {
         $uri = $this->getResourceUri($name, $options);
 
@@ -312,9 +315,9 @@ class ResourceRegistrar
      * @param string $controller
      * @param array  $options
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return Route
      */
-    protected function addResourceCreate(string $name, string $base, string $controller, array $options)
+    protected function addResourceCreate(string $name, string $base, string $controller, array $options): Route
     {
         $uri = $this->getResourceUri($name, $options) . '/' . static::$verbs['create'];
 
@@ -331,7 +334,7 @@ class ResourceRegistrar
      * @param string $controller
      * @param array  $options
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return Route
      */
     protected function addResourceStore(string $name, string $base, string $controller, array $options): RouteContract
     {
@@ -350,7 +353,7 @@ class ResourceRegistrar
      * @param string $controller
      * @param array  $options
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return Route
      */
     protected function addResourceShow(string $name, string $base, string $controller, array $options): RouteContract
     {
@@ -369,7 +372,7 @@ class ResourceRegistrar
      * @param string $controller
      * @param array  $options
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return Route
      */
     protected function addResourceEdit(string $name, string $base, string $controller, array $options): RouteContract
     {
@@ -388,7 +391,7 @@ class ResourceRegistrar
      * @param string $controller
      * @param array  $options
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return Route
      */
     protected function addResourceUpdate(string $name, string $base, string $controller, array $options): RouteContract
     {
@@ -407,7 +410,7 @@ class ResourceRegistrar
      * @param string $controller
      * @param array  $options
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return Route
      */
     protected function addResourceDestroy(string $name, string $base, string $controller, array $options): RouteContract
     {

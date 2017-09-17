@@ -14,7 +14,7 @@ class ResponseCookiesTest extends MockeryTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement [Viserio\Component\Contracts\Cookie\Cookie].
+     * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement [Viserio\Component\Contract\Cookie\Cookie].
      */
     public function testRequestCookiesToThrowException(): void
     {
@@ -54,6 +54,7 @@ class ResponseCookiesTest extends MockeryTestCase
 
         $setCookies = ResponseCookies::fromResponse($response);
 
+        /** @var SetCookie $cookie */
         foreach ($setCookies->getAll() as $name => $cookie) {
             self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
             self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
@@ -251,7 +252,7 @@ class ResponseCookiesTest extends MockeryTestCase
         $setCookies = $setCookies->forget('hello');
 
         self::assertFalse($setCookies->has('hello'));
-        self::assertTrue(null === $setCookies->get('hello'));
+        self::assertSame(null, $setCookies->get('hello'));
 
         $response = $setCookies->renderIntoSetCookieHeader($response);
 

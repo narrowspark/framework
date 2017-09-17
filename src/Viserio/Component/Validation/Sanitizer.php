@@ -1,8 +1,7 @@
 <?php
 namespace Viserio\Component\Validation;
 
-use Closure;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 
 class Sanitizer
 {
@@ -107,11 +106,11 @@ class Sanitizer
 
             array_unshift($parametersSet, $value);
 
+            $sanitizers = $rule;
+
             // Retrieve a sanitizer by key.
             if (isset($this->sanitizers[$rule])) {
                 $sanitizers = $this->sanitizers[$rule];
-            } else {
-                $sanitizers = $rule;
             }
 
             // Execute the sanitizer to mutate the value.
@@ -158,7 +157,7 @@ class Sanitizer
     protected function resolveCallback(string $callback): array
     {
         $segments = explode('@', $callback);
-        $method = count($segments) == 2 ? $segments[1] : 'sanitize';
+        $method = \count($segments) == 2 ? $segments[1] : 'sanitize';
 
         // Return the constructed callback.
         return [$this->container->get($segments[0]), $method];

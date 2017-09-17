@@ -64,12 +64,12 @@ class RedirectResponseTest extends TestCase
 
     /**
      * @dataProvider invalidUris
-     * @expectedException \InvalidArgumentException Uri
+     * @expectedException \Viserio\Component\Contract\Http\Exception\UnexpectedValueException Uri
      *
      * @param mixed $uri
      */
     public function testConstructorRaisesExceptionOnInvalidUri($uri): void
     {
-        $response = new RedirectResponse($uri);
+        new RedirectResponse($uri);
     }
 }

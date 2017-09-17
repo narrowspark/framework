@@ -5,12 +5,13 @@ namespace Viserio\Component\Session;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
-use Viserio\Component\Contracts\Session\Exception\SessionNotStartedException;
-use Viserio\Component\Contracts\Session\Exception\SuspiciousOperationException;
-use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
+use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
+use Viserio\Component\Contract\Session\Exception\SuspiciousOperationException;
+use Viserio\Component\Contract\Session\Fingerprint as FingerprintContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Support\Str;
 
@@ -45,13 +46,6 @@ class Store implements StoreContract
      * @var SessionHandlerContract
      */
     protected $handler;
-
-    /**
-     * Encrypter instance.
-     *
-     * @var EncrypterContract
-     */
-    protected $encrypter;
 
     /**
      * Number of requests after which id is regenerated.
@@ -119,9 +113,9 @@ class Store implements StoreContract
     /**
      * Create a new session instance.
      *
-     * @param string                                            $name
-     * @param \SessionHandlerInterface                          $handler
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param string                                           $name
+     * @param \SessionHandlerInterface                         $handler
+     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
     {
@@ -169,8 +163,9 @@ class Store implements StoreContract
                 } elseif ($this->generateFingerprint() !== $this->getFingerprint()) {
                     throw new SuspiciousOperationException();
                 }
+
                 $this->started = true;
-                $this->requestsCount += 1;
+                ++$this->requestsCount;
             }
         }
 
@@ -589,7 +584,7 @@ class Store implements StoreContract
     /**
      * Check if session has already started.
      *
-     * @throws \Viserio\Component\Contracts\Session\Exception\SessionNotStartedException
+     * @throws \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
      *
      * @return void
      */
@@ -679,10 +674,20 @@ class Store implements StoreContract
      */
     private function readFromHandler(): array
     {
-        $data = $this->handler->read($this->id);
+        $data         = $this->handler->read($this->id);
 
-        if ($data) {
-            return \json_decode($this->encrypter->decrypt($data), true);
+        if ($data === '') {
+            return [];
+        }
+
+        $hiddenString = $this->encrypter->decrypt($data);
+
+        if ($decryptedValue = $hiddenString->getString()) {
+            $sessionData = \json_decode($decryptedValue, true);
+
+            \sodium_memzero($decryptedValue);
+
+            return $sessionData;
         }
 
         return [];
@@ -705,9 +710,11 @@ class Store implements StoreContract
             'fingerprint'       => $this->fingerprint,
         ];
 
+        $value =  \json_encode($values, \JSON_PRESERVE_ZERO_FRACTION);
+
         $this->handler->write(
             $this->id,
-            $this->encrypter->encrypt(\json_encode($values, \JSON_PRESERVE_ZERO_FRACTION))
+            $this->encrypter->encrypt(new HiddenString($value))
         );
     }
 

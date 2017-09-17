@@ -38,7 +38,7 @@ class DebugCommand extends Command
         if (! $container->has(Environment::class)) {
             $this->error('The Twig environment needs to be set.');
 
-            return;
+            return 1;
         }
 
         $twig = $container->get(Environment::class);
@@ -122,28 +122,30 @@ class DebugCommand extends Command
      * @param string $type
      * @param object $entity
      *
+     * @throws \UnexpectedValueException
+     *
      * @return mixed
      */
-    private function getMetadata(string $type, $entity)
+    private function getMetadata(string $type, object $entity)
     {
         if ($type === 'globals') {
             return $entity;
         }
 
         if ($type === 'tests') {
-            return;
+            return null;
         }
 
         if ($type === 'functions' || $type === 'filters') {
             $cb = $entity->getCallable();
 
             if ($cb === null) {
-                return;
+                return null;
             }
 
             if (\is_array($cb)) {
                 if (! \method_exists($cb[0], $cb[1])) {
-                    return;
+                    return null;
                 }
 
                 $refl = new ReflectionMethod($cb[0], $cb[1]);
@@ -182,6 +184,8 @@ class DebugCommand extends Command
 
             return $args;
         }
+
+        return null;
     }
 
     /**
@@ -192,7 +196,7 @@ class DebugCommand extends Command
      *
      * @return string
      */
-    private function getPrettyMetadata(string $type, $entity): string
+    private function getPrettyMetadata(string $type, object $entity): string
     {
         if ($type === 'tests') {
             return '';
@@ -223,5 +227,7 @@ class DebugCommand extends Command
         if ($type === 'filters') {
             return $meta ? '(' . \implode(', ', $meta) . ')' : '';
         }
+
+        return '';
     }
 }

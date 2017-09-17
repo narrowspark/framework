@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Dispatcher;
 
-use InvalidArgumentException;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Routing\Event\RouteMatchedEvent;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
@@ -25,7 +25,7 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * The currently dispatched route instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\Route
+     * @var \Viserio\Component\Contract\Routing\Route
      */
     protected $current;
 
@@ -87,15 +87,13 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \InvalidArgumentException if cache folder cant be created
      */
     public function handle(RouteCollectionContract $routes, ServerRequestInterface $request): ResponseInterface
     {
         $cacheFile = $this->getCachePath();
         $dir       = \pathinfo($cacheFile, PATHINFO_DIRNAME);
 
-        if (! \file_exists($cacheFile) || $this->refreshCache === true) {
+        if ($this->refreshCache === true || ! \file_exists($cacheFile)) {
             self::generateDirectory($dir);
 
             $this->generateRouterFile($routes);
@@ -128,10 +126,10 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Handle dispatching of a found route.
      *
-     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface             $request
-     * @param string                                               $identifier
-     * @param array                                                $segments
+     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
+     * @param \Psr\Http\Message\ServerRequestInterface            $request
+     * @param string                                              $identifier
+     * @param array                                               $segments
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -153,7 +151,7 @@ class SimpleDispatcher implements DispatcherContract
         $this->current = $route;
 
         if ($this->events !== null) {
-            $this->getEventManager()->trigger(new RouteMatchedEvent($this, $route, $request));
+            $this->events->trigger(new RouteMatchedEvent($this, $route, $request));
         }
 
         return $this->runRoute($route, $request);
@@ -162,8 +160,8 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Run the given route.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
-     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -193,7 +191,7 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Generates a router file with all routes.
      *
-     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
+     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
      *
      * @return void
      */
@@ -210,7 +208,7 @@ class SimpleDispatcher implements DispatcherContract
      *
      * @param string $dir
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
      *
      * @return void
      */
@@ -221,7 +219,7 @@ class SimpleDispatcher implements DispatcherContract
         }
 
         if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
-            throw new InvalidArgumentException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Route cache directory [%s] cannot be created or is write protected.',
                 $dir
             ));

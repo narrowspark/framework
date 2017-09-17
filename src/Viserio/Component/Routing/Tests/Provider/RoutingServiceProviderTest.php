@@ -6,7 +6,7 @@ use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Provider\RoutingServiceProvider;

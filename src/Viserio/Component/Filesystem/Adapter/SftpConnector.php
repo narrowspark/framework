@@ -2,25 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use InvalidArgumentException;
 use League\Flysystem\Sftp\SftpAdapter;
-use Narrowspark\Arr\Arr;
-use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
-class SftpConnector implements ConnectorContract
+class SftpConnector extends AbstractConnector
 {
     /**
-     * Establish an adapter connection.
-     *
-     * @param string[] $config
-     *
-     * @return SftpAdapter
+     * {@inheritdoc}
      */
-    public function connect(array $config)
+    public function connect(array $config): object
     {
         $config = $this->getConfig($config);
 
-        return $this->getAdapter($config);
+        return new SftpAdapter($config);
     }
 
     /**
@@ -40,20 +34,31 @@ class SftpConnector implements ConnectorContract
             throw new InvalidArgumentException('The sftp connector requires username configuration.');
         }
 
-        if ($pw = ! \array_key_exists('password', $config)) {
-            if (! \array_key_exists('privateKey', $config) && $pw) {
-                throw new InvalidArgumentException('The sftp connector requires password or privateKey configuration.');
-            }
+        if (! \array_key_exists('password', $config) && ! \array_key_exists('privateKey', $config)) {
+            throw new InvalidArgumentException('The sftp connector requires password or privateKey configuration.');
         }
 
-        return Arr::only($config, ['host', 'port', 'username', 'password', 'privateKey']);
+        return self::getSelectedConfig($config, ['host', 'port', 'username', 'password', 'privateKey']);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter(array $config): SftpAdapter
+    protected function getAdapter(object $client, array $config): object
     {
-        return new SftpAdapter($config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAuth(array $config): array
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getClient(array $auth): object
+    {
     }
 }

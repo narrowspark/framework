@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator\Optimizer;
 
-use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 

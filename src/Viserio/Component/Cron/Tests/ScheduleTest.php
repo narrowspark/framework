@@ -63,9 +63,7 @@ class ScheduleTest extends MockeryTestCase
         $schedule = new Schedule(__DIR__, 'cerebro');
         $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
 
-        $schedule->command('clear:view');
-        $schedule->command('clear:view --tries=3');
-        $schedule->command('clear:view', ['--tries' => 3]);
+        $this->arrangeScheduleClearViewCommand($schedule);
 
         $cronJobs = $schedule->getCronJobs();
 
@@ -100,9 +98,7 @@ class ScheduleTest extends MockeryTestCase
 
         $schedule = new Schedule(__DIR__);
 
-        $schedule->command('clear:view');
-        $schedule->command('clear:view --tries=3');
-        $schedule->command('clear:view', ['--tries' => 3]);
+        $this->arrangeScheduleClearViewCommand($schedule);
 
         $cronJobs = $schedule->getCronJobs();
 
@@ -171,5 +167,15 @@ class ScheduleTest extends MockeryTestCase
         $cronJobs = $schedule->getCronJobs();
 
         self::assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
+    }
+
+    /**
+     * @param $schedule
+     */
+    private function arrangeScheduleClearViewCommand($schedule): void
+    {
+        $schedule->command('clear:view');
+        $schedule->command('clear:view --tries=3');
+        $schedule->command('clear:view', ['--tries' => 3]);
     }
 }

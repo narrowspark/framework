@@ -5,7 +5,7 @@ namespace Viserio\Component\Config\Tests;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Config\Repository;
-use Viserio\Component\Parsers\FileLoader;
+use Viserio\Component\Parser\FileLoader;
 
 class RepositoryTest extends TestCase
 {
@@ -15,7 +15,7 @@ class RepositoryTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Parsers\FileLoader
+     * @var \Viserio\Component\Parser\FileLoader
      */
     private $fileloader;
 
@@ -102,7 +102,7 @@ return [
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contract\Config\Exception\FileNotFoundException
      * @expectedExceptionMessage File [test.php] not found.
      */
     public function testImportWithAPhpFileThrowsException(): void

@@ -28,7 +28,7 @@ use Viserio\Component\Console\Event\ConsoleErrorEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
 
 /**
@@ -164,7 +164,7 @@ class ApplicationTest extends MockeryTestCase
     public function testItShouldRunACommandWithAnOption(): void
     {
         $this->application->command('greet [-i|--iterations=]', function ($iterations, OutputInterface $output): void {
-            $output->write($iterations === null ? 'null' : $iterations);
+            $output->write($iterations ?? 'null');
         });
 
         self::assertOutputIs('greet', 'null');
@@ -609,7 +609,9 @@ class ApplicationTest extends MockeryTestCase
     {
         $exception = new Exception('', 4);
 
-        $application = $this->getMockBuilder(Application::class)->setConstructorArgs(['1'])->setMethods(['doRun'])->getMock();
+        $application = $this->getMockBuilder(Application::class)
+            ->setMethods(['doRun'])
+            ->getMock();
         $application->setCatchExceptions(true);
         $application->expects($this->once())
             ->method('doRun')

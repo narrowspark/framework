@@ -6,14 +6,14 @@ use ErrorException;
 use ParseError;
 use Throwable;
 use TypeError;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Exception\Handler as ExceptionHandlerContract;
-use Viserio\Component\Contracts\Queue\Exception\TimeoutException;
-use Viserio\Component\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
-use Viserio\Component\Contracts\Queue\Job as JobContract;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
-use Viserio\Component\Contracts\Queue\Worker as WorkerContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Exception\Handler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Queue\Exception\TimeoutException;
+use Viserio\Component\Contract\Queue\FailedJobProvider as FailedJobProviderContract;
+use Viserio\Component\Contract\Queue\Job as JobContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Component\Contract\Queue\Worker as WorkerContract;
 
 class Worker implements WorkerContract
 {
@@ -29,30 +29,30 @@ class Worker implements WorkerContract
     /**
      * The failed job provider implementation.
      *
-     * @var \Viserio\Component\Contracts\Queue\FailedJobProvider
+     * @var \Viserio\Component\Contract\Queue\FailedJobProvider
      */
     protected $failed;
 
     /**
      * The event dispatcher instance.
      *
-     * @var \Viserio\Component\Contracts\Events\EventManager
+     * @var \Viserio\Component\Contract\Events\EventManager
      */
     protected $events;
 
     /**
      * The exception handler instance.
      *
-     * @var \Viserio\Component\Contracts\Exception\Handler
+     * @var \Viserio\Component\Contract\Exception\Handler
      */
     protected $exceptions;
 
     /**
      * Create a new queue worker.
      *
-     * @param \Viserio\Component\Queue\QueueManager                     $manager
-     * @param null|\Viserio\Component\Contracts\Queue\FailedJobProvider $failed
-     * @param null|\Viserio\Component\Contracts\Events\EventManager     $events
+     * @param \Viserio\Component\Queue\QueueManager                    $manager
+     * @param null|\Viserio\Component\Contract\Queue\FailedJobProvider $failed
+     * @param null|\Viserio\Component\Contract\Events\EventManager     $events
      */
     public function __construct(
         QueueManager $manager,
@@ -235,10 +235,10 @@ class Worker implements WorkerContract
     /**
      * Get the next job from the queue connection.
      *
-     * @param \Viserio\Component\Contracts\Queue\QueueConnector $connection
-     * @param null|string                                       $queue
+     * @param \Viserio\Component\Contract\Queue\QueueConnector $connection
+     * @param null|string                                      $queue
      *
-     * @return null|\Viserio\Component\Contracts\Queue\Job
+     * @return null|\Viserio\Component\Contract\Queue\Job
      */
     protected function getNextJob(QueueConnectorContract $connection, string $queue)
     {
@@ -299,8 +299,8 @@ class Worker implements WorkerContract
     /**
      * Log a failed job into storage.
      *
-     * @param string                                 $connection
-     * @param \Viserio\Component\Contracts\Queue\Job $job
+     * @param string                                $connection
+     * @param \Viserio\Component\Contract\Queue\Job $job
      *
      * @return null|void
      */
@@ -332,8 +332,8 @@ class Worker implements WorkerContract
     /**
      * Raise the before queue job event.
      *
-     * @param string                                 $connection
-     * @param \Viserio\Component\Contracts\Queue\Job $job
+     * @param string                                $connection
+     * @param \Viserio\Component\Contract\Queue\Job $job
      */
     protected function raiseBeforeJobEvent(string $connection, JobContract $job): void
     {
@@ -352,8 +352,8 @@ class Worker implements WorkerContract
     /**
      * Raise the after queue job event.
      *
-     * @param string                                 $connection
-     * @param \Viserio\Component\Contracts\Queue\Job $job
+     * @param string                                $connection
+     * @param \Viserio\Component\Contract\Queue\Job $job
      */
     protected function raiseAfterJobEvent(string $connection, JobContract $job): void
     {
@@ -372,10 +372,10 @@ class Worker implements WorkerContract
     /**
      * Handle an exception that occurred while the job was running.
      *
-     * @param string                                 $connection
-     * @param \Viserio\Component\Contracts\Queue\Job $job
-     * @param int                                    $delay
-     * @param \Throwable                             $exception
+     * @param string                                $connection
+     * @param \Viserio\Component\Contract\Queue\Job $job
+     * @param int                                   $delay
+     * @param \Throwable                            $exception
      *
      * @throws \Throwable
      */

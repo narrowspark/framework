@@ -3,17 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
 use FilesystemIterator;
-use InvalidArgumentException;
 use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
-use Viserio\Component\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
-use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Component\Contracts\Filesystem\Exception\IOException as ViserioIOException;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Filesystem\Directorysystem as DirectorysystemContract;
+use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOException;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
 use Viserio\Component\Support\Traits\MacroableTrait;
@@ -191,7 +191,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         \clearstatcache(false, $path);
         $permissions = \octdec(\mb_substr(\sprintf('%o', \fileperms($path)), -4));
 
-        return $permissions & 0044 ?
+        return ($permissions & 0044) ?
             FilesystemContract::VISIBILITY_PUBLIC :
             FilesystemContract::VISIBILITY_PRIVATE;
     }
@@ -318,13 +318,13 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $directory = self::normalizeDirectorySeparator($directory);
 
-        $files = \array_diff(\scandir($directory), ['..', '.']);
+        $files = \array_diff(\scandir($directory, SCANDIR_SORT_ASCENDING), ['..', '.']);
 
         // To get the appropriate files, we'll simply scan the directory and filter
         // out any "files" that are not truly files so we do not end up with any
         // directories in our list, but only true files within the directory.
         return \array_filter($files, function ($file) use ($directory) {
-            return \filetype(self::normalizeDirectorySeparator($directory . '/' . $file)) == 'file';
+            return \filetype(self::normalizeDirectorySeparator($directory . '/' . $file)) === 'file';
         });
     }
 
@@ -336,6 +336,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $files  = [];
         $finder = Finder::create()->files()->ignoreDotFiles(! $showHiddenFiles)->in($directory);
 
+        /** @var \SplFileObject $dir */
         foreach ($finder as $dir) {
             $files[] = self::normalizeDirectorySeparator($dir->getPathname());
         }
@@ -371,6 +372,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $directories = [];
 
+        /** @var \SplFileObject $dir */
         foreach (Finder::create()->in($directory)->directories()->depth(0) as $dir) {
             $directories[] = self::normalizeDirectorySeparator($dir->getPathname());
         }
@@ -471,17 +473,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $destination = self::normalizeDirectorySeparator($destination);
         $overwrite   = $options['overwrite'] ?? false;
 
-        if ($overwrite && $this->isDirectory($destination)) {
-            if (! $this->deleteDirectory($destination)) {
-                return false;
-            }
-        }
-
-        if (@\rename($directory, $destination) !== true) {
+        if ($overwrite && $this->isDirectory($destination) && ! $this->deleteDirectory($destination)) {
             return false;
         }
 
-        return true;
+        return @\rename($directory, $destination);
     }
 
     /**
@@ -502,7 +498,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      * @param string      $path
      * @param null|string $visibility
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return null|int
      */
@@ -520,11 +516,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             return null;
         }
 
-        switch ($visibility) {
-            case FilesystemContract::VISIBILITY_PUBLIC:
-                return $this->permissions[$type][$visibility];
-            case FilesystemContract::VISIBILITY_PRIVATE:
-                return $this->permissions[$type][$visibility];
+        if ($visibility == FilesystemContract::VISIBILITY_PUBLIC) {
+            return $this->permissions[$type]['public'];
+        } elseif ($visibility == FilesystemContract::VISIBILITY_PRIVATE) {
+            return $this->permissions[$type]['private'];
         }
 
         throw new InvalidArgumentException('Unknown visibility: ' . $visibility);

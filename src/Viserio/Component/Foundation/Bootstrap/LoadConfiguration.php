@@ -3,12 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -24,7 +27,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.
         if (\file_exists($cached = $kernel->getStoragePath('config.cache'))) {
-            $items = require $cached;
+            $items = require self::normalizeDirectorySeparator($cached);
 
             $config->setArray($items);
 
@@ -49,8 +52,8 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     /**
      * Load the configuration items from all of the files.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
-     * @param \Viserio\Component\Contracts\Config\Repository $config
+     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
+     * @param \Viserio\Component\Contract\Config\Repository $config
      */
     protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config): void
     {
@@ -59,7 +62,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
                 continue;
             }
 
-            $config->import($path);
+            $config->import(self::normalizeDirectorySeparator($path));
         }
     }
 }

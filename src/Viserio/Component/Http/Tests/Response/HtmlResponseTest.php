@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Response;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Response\HtmlResponse;
 
 class HtmlResponseTest extends TestCase
@@ -43,7 +44,7 @@ class HtmlResponseTest extends TestCase
 
     public function testAllowsStreamsForResponseBody(): void
     {
-        $stream   = $this->getMockBuilder('Psr\Http\Message\StreamInterface')->getMock();
+        $stream   = $this->getMockBuilder(StreamInterface::class)->getMock();
         $response = new HtmlResponse($stream);
 
         self::assertSame($stream, $response->getBody());
@@ -72,7 +73,7 @@ class HtmlResponseTest extends TestCase
      */
     public function testRaisesExceptionforNonStringNonStreamBodyContent($body): void
     {
-        $response = new HtmlResponse($body);
+        new HtmlResponse($body);
     }
 
     public function testConstructorRewindsBodyStream(): void

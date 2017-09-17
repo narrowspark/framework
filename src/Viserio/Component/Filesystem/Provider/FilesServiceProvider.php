@@ -4,7 +4,7 @@ namespace Viserio\Component\Filesystem\Provider;
 
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Filesystem;
 
 class FilesServiceProvider implements ServiceProvider

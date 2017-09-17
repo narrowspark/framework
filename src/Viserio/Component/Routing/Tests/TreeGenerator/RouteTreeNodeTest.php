@@ -76,7 +76,7 @@ class RouteTreeNodeTest extends MockeryTestCase
     public function testMatchedRouteDataMapOperations(): void
     {
         $node = new RouteTreeNode([$this->mock(AbstractMatcher::class)], new MatchedRouteDataMap());
-        $node->getContents()->addRoute((new Route(['GET', 'POST'], '', null)), []);
+        $node->getContents()->addRoute(new Route(['GET', 'POST'], '', null), []);
 
         self::assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->allowedHttpMethods());
         self::assertEquals(
@@ -86,7 +86,7 @@ class RouteTreeNodeTest extends MockeryTestCase
             $node->getContents()->getHttpMethodRouteDataMap()
         );
 
-        $node->getContents()->addRoute((new Route('PATCH', '', null)), [0 => 'param']);
+        $node->getContents()->addRoute(new Route('PATCH', '', null), [0 => 'param']);
 
         self::assertSame(['GET', 'POST', 'HEAD', 'PATCH'], $node->getContents()->allowedHttpMethods());
         self::assertEquals(

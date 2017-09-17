@@ -2,25 +2,25 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Middleware;
 
-use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
-use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
+use Viserio\Component\Encryption\HiddenString;
 
 class EncryptedCookiesMiddleware implements MiddlewareInterface
 {
     /**
      * The encrypter instance.
      *
-     * @var \Viserio\Component\Contracts\Encryption\Encrypter
+     * @var \Viserio\Component\Contract\Encryption\Encrypter
      */
     protected $encrypter;
 
@@ -34,7 +34,7 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     /**
      * Create a new encrypt Cookies instance.
      *
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function __construct(EncrypterContract $encrypter)
     {
@@ -64,6 +64,7 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     {
         $cookies = RequestCookies::fromRequest($request);
 
+        /** @var Cookie $cookie */
         foreach ($cookies->getAll() as $cookie) {
             $name = $cookie->getName();
 
@@ -72,11 +73,12 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
             }
 
             try {
-                $cookies = $cookies->forget($name);
-                $cookie  = $cookie->withValue($this->encrypter->decrypt($cookie->getValue()));
+                $decryptedValue = $this->encrypter->decrypt($cookie->getValue());
+                $cookies        = $cookies->forget($name);
+                $cookie         = $cookie->withValue($decryptedValue->getString());
 
                 $cookies = $cookies->add($cookie);
-            } catch (EnvironmentIsBrokenException | WrongKeyOrModifiedCiphertextException $exception) {
+            } catch (InvalidMessageException $exception) {
                 $cookies = $cookies->add(new Cookie($name, null));
             }
         }
@@ -95,6 +97,7 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     {
         $cookies = ResponseCookies::fromResponse($response);
 
+        /** @var SetCookie $cookie */
         foreach ($cookies->getAll() as $cookie) {
             $name = $cookie->getName();
 
@@ -102,12 +105,15 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
                 continue;
             }
 
-            $cookies = $cookies->forget($name);
+            $cookies        = $cookies->forget($name);
+            $encryptedValue = $this->encrypter->encrypt(
+                new HiddenString($cookie->getValue())
+            );
 
             $cookies = $cookies->add(
                 $this->duplicate(
                     $cookie,
-                    $this->encrypter->encrypt($cookie->getValue())
+                    $encryptedValue
                 )
             );
         }
@@ -118,10 +124,10 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     /**
      * Duplicate a cookie with a new value.
      *
-     * @param \Viserio\Component\Contracts\Cookie\Cookie $cookie
-     * @param string                                     $value
+     * @param \Viserio\Component\Contract\Cookie\Cookie $cookie
+     * @param string                                    $value
      *
-     * @return \Viserio\Component\Contracts\Cookie\Cookie
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
     protected function duplicate(CookieContract $cookie, string $value): CookieContract
     {

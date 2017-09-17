@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
-use RuntimeException;
-use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Contract\Routing\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 abstract class AbstractMatcher implements SegmentMatcherContract
 {
@@ -32,13 +32,15 @@ abstract class AbstractMatcher implements SegmentMatcherContract
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
      */
     public function mergeParameterKeys(SegmentMatcherContract $matcher): void
     {
         if ($matcher->getHash() !== $this->getHash()) {
-            throw new RuntimeException(
+            throw new InvalidArgumentException(
                 \sprintf(
-                    'Cannot merge parameters: matchers must be equivalent, [%s] expected, [%s] given.',
+                    'Cannot merge parameters: Matcher\'s must be equivalent, [%s] expected, [%s] given.',
                     $matcher->getHash(),
                     $this->getHash()
                 )

@@ -6,28 +6,48 @@ use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
-use stdClass;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
 use Swift_Transport;
-use Viserio\Component\Contracts\Mail\Message as MessageContract;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueContract;
-use Viserio\Component\Contracts\View\Factory as ViewFactoryContract;
-use Viserio\Component\Contracts\View\View as ViewContract;
+use Viserio\Component\Contract\Mail\Message as MessageContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueContract;
+use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
+use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\Mail\QueueMailer;
 use Viserio\Component\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
 class QueueMailerTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Contract\View\Factory|\Mockery\MockInterface
+     */
+    private $viewFactory;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->viewFactory = $this->mock(ViewFactoryContract::class);
+    }
+
     public function testMailerCanResolveMailerClasses(): void
     {
         $message = $this->mock(MessageContract::class);
 
-        $mockMailer = $this->mock(stdClass::class);
-        $mockMailer->shouldReceive('mail')
-            ->once()
-            ->with($message);
+        $mockMailer = new class($message) {
+            private $message;
+
+            public function __construct($message)
+            {
+                $this->message = $message;
+            }
+
+            public function mail()
+            {
+                return $this->message;
+            }
+        };
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')
@@ -50,11 +70,12 @@ class QueueMailerTest extends MockeryTestCase
 
         $view = $this->mock(ViewContract::class);
 
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->with('foo', ['data', 'message' => $message])
             ->andReturn($view);
+
+        $mailer->setViewFactory($this->viewFactory);
 
         $view->shouldReceive('render')
             ->once()
@@ -90,18 +111,17 @@ class QueueMailerTest extends MockeryTestCase
 
         $view = $this->mock(ViewContract::class);
 
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->andReturn($view);
+
+        $mailer->setViewFactory($this->viewFactory);
 
         $view->shouldReceive('render')
             ->once()
             ->andReturn('rendered.view');
 
         $me = $this;
-
-        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
 
         $this->setSwiftMailer($mailer);
 
@@ -132,10 +152,11 @@ class QueueMailerTest extends MockeryTestCase
 
         $view = $this->mock(ViewContract::class);
 
-        $mailer->getViewFactory()
-            ->shouldReceive('create')
+        $this->viewFactory->shouldReceive('create')
             ->once()
             ->andReturn($view);
+
+        $mailer->setViewFactory($this->viewFactory);
 
         $view->shouldReceive('render')
             ->once()
@@ -181,7 +202,7 @@ class QueueMailerTest extends MockeryTestCase
             ])
         );
 
-        return $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
+        return $mailer;
     }
 
     protected function getMocks(): array

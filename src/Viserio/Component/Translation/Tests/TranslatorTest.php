@@ -4,7 +4,7 @@ namespace Viserio\Component\Translation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
-use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\Translator;
@@ -90,8 +90,6 @@ class TranslatorTest extends MockeryTestCase
             ->shouldReceive('warning')
             ->twice();
         $this->translator->setLogger($logger);
-
-        self::assertInstanceOf(LoggerInterface::class, $this->translator->getLogger());
 
         self::assertSame('bar', $this->translator->trans('test'));
         self::assertSame('dont', $this->translator->trans('dont'));

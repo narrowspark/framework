@@ -5,12 +5,12 @@ namespace Viserio\Component\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Foundation\HttpKernel as HttpKernelContract;
-use Viserio\Component\Contracts\Foundation\Terminable as TerminableContract;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
+use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
@@ -19,7 +19,6 @@ use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
-use Viserio\Component\Foundation\Http\Event\KernelResponseEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
@@ -98,7 +97,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function prependMiddleware(string $middleware): self
     {
-        if (\array_search($middleware, $this->middlewares, true) === false) {
+        if (\in_array($middleware, $this->middlewares, true) === false) {
             \array_unshift($this->middlewares, $middleware);
         }
 
@@ -114,7 +113,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function pushMiddleware(string $middleware): self
     {
-        if (\array_search($middleware, $this->middlewares, true) === false) {
+        if (\in_array($middleware, $this->middlewares, true) === false) {
             $this->middlewares[] = $middleware;
         }
 
@@ -193,8 +192,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * Convert request into response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface         $serverRequest
-     * @param \Viserio\Component\Contracts\Events\EventManager $events
+     * @param \Psr\Http\Message\ServerRequestInterface        $serverRequest
+     * @param \Viserio\Component\Contract\Events\EventManager $events
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -204,10 +203,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
             $events->trigger(new KernelFinishRequestEvent($this, $serverRequest));
 
             $response = $this->sendRequestThroughRouter($serverRequest);
-
-            $events->trigger($event = new KernelResponseEvent($this, $serverRequest, $response));
-
-            $response = $event->getResponse();
         } catch (Throwable $exception) {
             $this->reportException($exception);
 
@@ -274,8 +269,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * Pipes the request through given middlewares and dispatch a response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface    $request
-     * @param \Viserio\Component\Contracts\Routing\Router $router
+     * @param \Psr\Http\Message\ServerRequestInterface   $request
+     * @param \Viserio\Component\Contract\Routing\Router $router
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

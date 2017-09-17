@@ -5,8 +5,8 @@ namespace Viserio\Component\Queue\Job;
 use Cake\Chronos\Chronos;
 use DateTime;
 use Narrowspark\Arr\Arr;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Queue\Job as JobContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Queue\Job as JobContract;
 use Viserio\Component\Queue\CallQueuedHandler;
 
 abstract class AbstractJob implements JobContract
@@ -108,7 +108,7 @@ abstract class AbstractJob implements JobContract
 
         [$class, $method] = $this->parseJob($payload['job']);
 
-        $this->instance = $this->getContainer()->get($class);
+        $this->instance = $this->container->get($class);
 
         if (\method_exists($this->instance, 'failed')) {
             $this->instance->failed($payload['data']);
@@ -157,7 +157,7 @@ abstract class AbstractJob implements JobContract
     {
         [$class, $method] = $this->parseJob($payload['job']);
 
-        $this->instance = $this->getContainer()->get($class);
+        $this->instance = $this->container->get($class);
 
         $this->instance->{$method}($this, $payload['data']);
     }

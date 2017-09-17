@@ -8,10 +8,10 @@ use Countable;
 use IteratorAggregate;
 use JsonSerializable;
 use Narrowspark\Collection\Collection;
-use Viserio\Component\Contracts\Pagination\Paginator as PaginatorContract;
-use Viserio\Component\Contracts\Support\Arrayable as ArrayableContract;
-use Viserio\Component\Contracts\Support\Jsonable as JsonableContract;
-use Viserio\Component\Contracts\Support\Stringable as StringableContract;
+use Viserio\Component\Contract\Pagination\Paginator as PaginatorContract;
+use Viserio\Component\Contract\Support\Arrayable as ArrayableContract;
+use Viserio\Component\Contract\Support\Jsonable as JsonableContract;
+use Viserio\Component\Contract\Support\Stringable as StringableContract;
 
 abstract class AbstractPaginator implements
     ArrayAccess,
@@ -232,7 +232,7 @@ abstract class AbstractPaginator implements
      */
     public function setPath(string $path): PaginatorContract
     {
-        $this->path = $path != '/' ? \rtrim($path, '/') : $path;
+        $this->path = $path !== '/' ? \rtrim($path, '/') : $path;
 
         return $this;
     }
@@ -252,7 +252,7 @@ abstract class AbstractPaginator implements
      *
      * @codeCoverageIgnore
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new ArrayIterator($this->items->all());
     }
@@ -272,7 +272,7 @@ abstract class AbstractPaginator implements
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->items->count();
     }
@@ -382,7 +382,7 @@ abstract class AbstractPaginator implements
      *
      * @codeCoverageIgnore
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return $this->items->has($key);
     }
@@ -477,7 +477,7 @@ abstract class AbstractPaginator implements
             $query = $this->secureInput($query);
             $page  = $query[$this->pageName];
 
-            if (\filter_var($page, FILTER_VALIDATE_INT) !== false && (int) $page >= 1) {
+            if ((int) $page >= 1 && \filter_var($page, FILTER_VALIDATE_INT) !== false) {
                 return (int) $page;
             }
         }

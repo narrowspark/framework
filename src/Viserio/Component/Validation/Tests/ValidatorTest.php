@@ -134,7 +134,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contract\Validation\Exception\InvalidArgumentException
      * @expectedExceptionMessage Not (!) and optional (?) cant be used at the same time.
      */
     public function testThrowExceptionOnUseNotAndOptionalOnSameRuleValidate(): void

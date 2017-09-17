@@ -37,7 +37,7 @@ class CommandTest extends TestCase
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
-            ->setContainer($this->application->getContainer());
+            ->setContainer($container);
     }
 
     public function testGetNormalVerbosity(): void
@@ -101,7 +101,7 @@ class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        self::assertSame(null, $command->argument('name'));
+        self::assertNull($command->argument('name'));
         self::assertInternalType('array', $command->argument());
     }
 }

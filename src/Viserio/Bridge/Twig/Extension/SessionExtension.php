@@ -4,21 +4,21 @@ namespace Viserio\Bridge\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 
 class SessionExtension extends AbstractExtension
 {
     /**
      * Viserio session instance.
      *
-     * @var \Viserio\Component\Contracts\Session\Store
+     * @var \Viserio\Component\Contract\Session\Store
      */
     protected $session;
 
     /**
      * Create a new session extension.
      *
-     * @param \Viserio\Component\Contracts\Session\Store $session
+     * @param \Viserio\Component\Contract\Session\Store $session
      */
     public function __construct(StoreContract $session)
     {

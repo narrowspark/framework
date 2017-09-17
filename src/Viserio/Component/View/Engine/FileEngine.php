@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Engine;
 
-use Viserio\Component\Contracts\View\Engine as EngineContract;
+use Viserio\Component\Contract\View\Engine as EngineContract;
 
 class FileEngine implements EngineContract
 {

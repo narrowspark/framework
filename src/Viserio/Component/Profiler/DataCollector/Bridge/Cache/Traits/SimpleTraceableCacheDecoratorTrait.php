@@ -7,6 +7,13 @@ use Traversable;
 trait SimpleTraceableCacheDecoratorTrait
 {
     /**
+     * Instance of stdClass.
+     *
+     * @var \stdClass
+     */
+    private $miss;
+
+    /**
      * {@inheritdoc}
      */
     public function get($key, $default = null)
@@ -103,7 +110,7 @@ trait SimpleTraceableCacheDecoratorTrait
     /**
      * {@inheritdoc}
      */
-    public function getMultiple($keys, $default = null)
+    public function getMultiple($keys, $default = null): \Generator
     {
         $miss  = null !== $default && \is_object($default) ? $default : $this->miss;
         $event = $this->start(__FUNCTION__);

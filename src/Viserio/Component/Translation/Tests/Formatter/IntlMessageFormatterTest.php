@@ -20,7 +20,7 @@ class IntlMessageFormatterTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Translation\Exception\CannotInstantiateFormatterException
+     * @expectedException \Viserio\Component\Contract\Translation\Exception\CannotInstantiateFormatterException
      * @expectedExceptionMessage Constructor failed
      */
     public function testFormatToThrowException(): void
@@ -31,7 +31,7 @@ female {She avoids bugs} }', 'en', [1]));
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Translation\Exception\CannotFormatException
+     * @expectedException \Viserio\Component\Contract\Translation\Exception\CannotFormatException
      * @expectedExceptionMessage The argument for key 'catchDate' cannot be used as a date or time: U_ILLEGAL_ARGUMENT_ERROR
      */
     public function testFormatToThrowExceptionOnFormat(): void

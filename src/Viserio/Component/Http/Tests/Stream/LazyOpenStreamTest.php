@@ -34,7 +34,7 @@ class LazyOpenStreamTest extends TestCase
 
         self::assertInternalType('array', $lazy->getMetadata());
         self::assertFileExists($this->fname);
-        self::assertEquals('foo', \file_get_contents($this->fname));
+        self::assertStringEqualsFile($this->fname, 'foo');
         self::assertEquals('foo', (string) $lazy);
     }
 

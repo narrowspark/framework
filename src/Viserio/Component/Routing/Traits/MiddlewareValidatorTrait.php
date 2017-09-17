@@ -3,8 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use LogicException;
-use RuntimeException;
+use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
 
 trait MiddlewareValidatorTrait
 {
@@ -13,7 +12,7 @@ trait MiddlewareValidatorTrait
      *
      * @param array|object|string $middlewares
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
      *
      * @return void
      */
@@ -23,15 +22,18 @@ trait MiddlewareValidatorTrait
             return;
         }
 
-        throw new RuntimeException(sprintf('Expected string, object or array; received [%s].', gettype($middlewares)));
+        throw new UnexpectedValueException(sprintf(
+            'Expected string, object or array; received [%s].',
+            gettype($middlewares)
+        ));
     }
 
     /**
      * Validates if given object or string has a middleware interface.
      *
-     * @param object|string $middleware
+     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
      *
-     * @throws \LogicException if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
      *
      * @return void
      */
@@ -41,7 +43,7 @@ trait MiddlewareValidatorTrait
         $interfaces = \class_implements($middleware);
 
         if (! isset($interfaces[MiddlewareInterface::class])) {
-            throw new LogicException(
+            throw new UnexpectedValueException(
                 sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
             );
         }
@@ -50,7 +52,7 @@ trait MiddlewareValidatorTrait
     /**
      * If input is a object returns full class name else the given string input.
      *
-     * @param object|string $middleware
+     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
      *
      * @return string
      */

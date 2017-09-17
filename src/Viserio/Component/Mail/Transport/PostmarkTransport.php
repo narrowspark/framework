@@ -11,7 +11,7 @@ use Swift_Mime_Headers_ParameterizedHeader;
 use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
 use Swift_Mime_SimpleMessage;
-use Swift_MimePart;
+use Swift_Mime_SimpleMimeEntity;
 
 class PostmarkTransport extends AbstractTransport
 {
@@ -90,7 +90,7 @@ class PostmarkTransport extends AbstractTransport
      *
      * @param string $serverToken
      *
-     * @return \Viserio\Component\Mail\Transport\Postmark
+     * @return $this
      */
     public function setServerToken(string $serverToken): self
     {
@@ -128,13 +128,13 @@ class PostmarkTransport extends AbstractTransport
      * @param \Swift_Mime_SimpleMessage $message
      * @param string                    $mimeType
      *
-     * @return null|\Swift_MimePart
+     * @return null|\Swift_Mime_SimpleMimeEntity
      */
-    protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType): ?Swift_MimePart
+    protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType): ?Swift_Mime_SimpleMimeEntity
     {
         foreach ($message->getChildren() as $part) {
-            if (\mb_strpos($part->getContentType(), $mimeType) === 0 &&
-                ! ($part instanceof Swift_Mime_Attachment)
+            if (! ($part instanceof Swift_Mime_Attachment) &&
+                \mb_strpos($part->getContentType(), $mimeType) === 0
             ) {
                 return $part;
             }
@@ -272,25 +272,25 @@ class PostmarkTransport extends AbstractTransport
                 if ($value instanceof Swift_Mime_Headers_UnstructuredHeader ||
                     $value instanceof Swift_Mime_Headers_OpenDKIMHeader
                 ) {
-                    \array_push($headers, [
+                    $headers[] = [
                         'Name'  => $fieldName,
                         'Value' => $value->getValue(),
-                    ]);
+                    ];
                 } elseif ($value instanceof Swift_Mime_Headers_DateHeader ||
                     $value instanceof Swift_Mime_Headers_IdentificationHeader ||
                     $value instanceof Swift_Mime_Headers_ParameterizedHeader ||
                     $value instanceof Swift_Mime_Headers_PathHeader
                 ) {
-                    \array_push($headers, [
+                    $headers[] = [
                         'Name'  => $fieldName,
                         'Value' => $value->getFieldBody(),
-                    ]);
+                    ];
 
                     if ($value->getFieldName() === 'Message-ID') {
-                        \array_push($headers, [
+                        $headers[] = [
                             'Name'  => 'X-PM-KeepID',
                             'Value' => 'true',
-                        ]);
+                        ];
                     }
                 }
             }

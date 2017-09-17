@@ -8,7 +8,8 @@ use Viserio\Component\Routing\Matcher\StaticMatcher;
 class StaticMatcherTest extends TestCase
 {
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Cannot create Viserio\Component\Routing\Matcher\StaticMatcher: segment cannot contain '/', 'abc/foo' given.
      */
     public function testCannotContainSlash(): void
     {

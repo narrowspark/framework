@@ -6,8 +6,11 @@ use Swift_Attachment;
 use Swift_Image;
 use Swift_Mime_Attachment;
 use Swift_Mime_SimpleMessage;
-use Viserio\Component\Contracts\Mail\Message as MessageContract;
+use Viserio\Component\Contract\Mail\Message as MessageContract;
 
+/**
+ * @mixin \Swift_Mime_SimpleMessage
+ */
 class Message implements MessageContract
 {
     /**
@@ -81,7 +84,9 @@ class Message implements MessageContract
             return $this;
         }
 
-        return $this->addAddresses($address, $name, 'To');
+        $this->addAddresses($address, $name, 'To');
+
+        return $this;
     }
 
     /**
@@ -95,7 +100,9 @@ class Message implements MessageContract
             return $this;
         }
 
-        return $this->addAddresses($address, $name, 'Cc');
+        $this->addAddresses($address, $name, 'Cc');
+
+        return $this;
     }
 
     /**
@@ -109,7 +116,9 @@ class Message implements MessageContract
             return $this;
         }
 
-        return $this->addAddresses($address, $name, 'Bcc');
+        $this->addAddresses($address, $name, 'Bcc');
+
+        return $this;
     }
 
     /**
@@ -117,7 +126,9 @@ class Message implements MessageContract
      */
     public function replyTo(string $address, string $name = null): MessageContract
     {
-        return $this->addAddresses($address, $name, 'ReplyTo');
+        $this->addAddresses($address, $name, 'ReplyTo');
+
+        return $this;
     }
 
     /**
@@ -147,7 +158,9 @@ class Message implements MessageContract
     {
         $attachment = $this->createAttachmentFromPath($file);
 
-        return $this->prepAttachment($attachment, $options);
+        $this->prepAttachment($attachment, $options);
+
+        return $this;
     }
 
     /**
@@ -157,7 +170,9 @@ class Message implements MessageContract
     {
         $attachment = $this->createAttachmentFromData($data, $name);
 
-        return $this->prepAttachment($attachment, $options);
+        $this->prepAttachment($attachment, $options);
+
+        return $this;
     }
 
     /**
@@ -179,9 +194,11 @@ class Message implements MessageContract
     }
 
     /**
-     * {@inheritdoc}
+     * Get the underlying Swift Message instance.
+     *
+     * @return \Swift_Mime_SimpleMessage
      */
-    public function getSwiftMessage()
+    public function getSwiftMessage(): Swift_Mime_SimpleMessage
     {
         return $this->swift;
     }
@@ -193,19 +210,19 @@ class Message implements MessageContract
      * @param string       $name
      * @param string       $type
      *
-     * @return $this
+     * @return void
      */
-    protected function addAddresses($address, string $name, string $type): MessageContract
+    protected function addAddresses($address, string $name, string $type): void
     {
         if (\is_array($address)) {
             $set = \sprintf('set%s', $type);
             $this->swift->$set($address, $name);
-        } else {
-            $add = \sprintf('add%s', $type);
-            $this->swift->$add($address, $name);
+
+            return;
         }
 
-        return $this;
+        $add = \sprintf('add%s', $type);
+        $this->swift->$add($address, $name);
     }
 
     /**
@@ -239,9 +256,9 @@ class Message implements MessageContract
      * @param \Swift_Mime_Attachment $attachment
      * @param array                  $options
      *
-     * @return $this
+     * @return void
      */
-    protected function prepAttachment(Swift_Mime_Attachment $attachment, array $options = []): MessageContract
+    protected function prepAttachment(Swift_Mime_Attachment $attachment, array $options = []): void
     {
         // First we will check for a MIME type on the message, which instructs the
         // mail client on what type of attachment the file is so that it may be
@@ -258,7 +275,5 @@ class Message implements MessageContract
         }
 
         $this->swift->attach($attachment);
-
-        return $this;
     }
 }

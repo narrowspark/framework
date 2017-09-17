@@ -18,14 +18,14 @@
         }
     ],
     "require": {
-        "php"                                              : "^7.1",
+        "php"                                              : "^7.2",
         "psr/container"                                    : "^1.0",
         "viserio/contracts"                                : "self.version"
     },
     "require-dev": {
         "mikey179/vfsStream"                               : "^1.6",
         "mockery/mockery"                                  : "^0.9",
-        "narrowspark/testing-helper"                       : "^3.0",
+        "narrowspark/testing-helper"                       : "^4.0",
         "phpunit/phpunit"                                  : "^6.0",
         "viserio/config"                                   : "self.version",
         "viserio/console"                                  : "self.version",

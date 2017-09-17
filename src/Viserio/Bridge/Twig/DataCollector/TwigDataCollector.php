@@ -8,9 +8,9 @@ use Twig\Environment;
 use Twig\Markup;
 use Twig\Profiler\Dumper\HtmlDumper;
 use Twig\Profiler\Profile;
-use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\AssetAware as AssetAwareContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class TwigDataCollector extends AbstractDataCollector implements
@@ -125,7 +125,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      *
      * @codeCoverageIgnore
      */
-    public function getHtmlCallGraph()
+    public function getHtmlCallGraph(): Markup
     {
         $dumper = new HtmlDumper();
         $dump   = $dumper->dump($this->getProfile());

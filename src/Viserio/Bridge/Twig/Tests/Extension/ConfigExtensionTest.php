@@ -4,7 +4,7 @@ namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Extension\ConfigExtension;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 
 class ConfigExtensionTest extends MockeryTestCase
 {

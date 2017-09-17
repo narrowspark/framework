@@ -5,8 +5,8 @@ namespace Viserio\Component\Foundation\Bootstrap;
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
 use Symfony\Component\Console\Input\ArgvInput;
-use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Support\Env;
 
 class LoadEnvironmentVariables implements BootstrapContract
@@ -31,7 +31,7 @@ class LoadEnvironmentVariables implements BootstrapContract
     /**
      * Detect if a custom environment file matching the APP_ENV exists.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
+     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
      *
      * @return void
      */
@@ -59,8 +59,8 @@ class LoadEnvironmentVariables implements BootstrapContract
     /**
      * Load a custom environment file.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
-     * @param string                                         $file
+     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
+     * @param string                                        $file
      *
      * @return void
      */

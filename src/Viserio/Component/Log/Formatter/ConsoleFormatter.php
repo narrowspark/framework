@@ -106,10 +106,10 @@ class ConsoleFormatter implements FormatterInterface
 
             $this->outputBuffer = \fopen('php://memory', 'r+b');
 
+            $output = [$this, 'echoLine'];
+
             if ($this->options['multiline']) {
                 $output = $this->outputBuffer;
-            } else {
-                $output = [$this, 'echoLine'];
             }
 
             // Exits from VarDumper version >=3.3
@@ -185,7 +185,7 @@ class ConsoleFormatter implements FormatterInterface
      *
      * @codeCoverageIgnore
      */
-    private function castObjectClass()
+    private function castObjectClass(): object
     {
         return new class($this->options) {
             /**
@@ -202,7 +202,7 @@ class ConsoleFormatter implements FormatterInterface
 
             /**
              * @param mixed                                    $v
-             * @param array                                    $a
+             * @param array                                    $array
              * @param \Symfony\Component\VarDumper\Cloner\Stub $s
              * @param mixed                                    $isNested
              * @param array                                    $array
@@ -244,7 +244,7 @@ class ConsoleFormatter implements FormatterInterface
 
         $replacements = [];
 
-        foreach ($context as $k => $v) {
+        foreach ((array) $context as $k => $v) {
             // Remove quotes added by the dumper around string.
             $v                            = \trim($this->dumpData($v, false), '"');
             $v                            = OutputFormatter::escape($v);

@@ -2,31 +2,31 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue;
 
-use Viserio\Component\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Queue\Job as JobContract;
+use Viserio\Component\Contract\Bus\QueueingDispatcher as QueueingDispatcherContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Queue\Job as JobContract;
 
 class CallQueuedHandler
 {
     /**
      * The bus dispatcher implementation.
      *
-     * @var \Viserio\Component\Contracts\Bus\QueueingDispatcher
+     * @var \Viserio\Component\Contract\Bus\QueueingDispatcher
      */
     protected $dispatcher;
 
     /**
      * The encrypter implementation.
      *
-     * @var \Viserio\Component\Contracts\Encryption\Encrypter
+     * @var \Viserio\Component\Contract\Encryption\Encrypter
      */
     protected $encrypter;
 
     /**
      * Create a new handler instance.
      *
-     * @param \Viserio\Component\Contracts\Bus\QueueingDispatcher $dispatcher
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter   $encrypter
+     * @param \Viserio\Component\Contract\Bus\QueueingDispatcher $dispatcher
+     * @param \Viserio\Component\Contract\Encryption\Encrypter   $encrypter
      */
     public function __construct(QueueingDispatcherContract $dispatcher, EncrypterContract $encrypter)
     {
@@ -37,8 +37,8 @@ class CallQueuedHandler
     /**
      * Handle the queued job.
      *
-     * @param \Viserio\Component\Contracts\Queue\Job $job
-     * @param array                                  $data
+     * @param \Viserio\Component\Contract\Queue\Job $job
+     * @param array                                 $data
      */
     public function call(JobContract $job, array $data): void
     {
@@ -79,8 +79,8 @@ class CallQueuedHandler
     /**
      * Set the job instance of the given class if necessary.
      *
-     * @param \Viserio\Component\Contracts\Queue\Job $job
-     * @param mixed                                  $instance
+     * @param \Viserio\Component\Contract\Queue\Job $job
+     * @param mixed                                 $instance
      *
      * @return null|array|bool|float|int|object|resource|string
      */

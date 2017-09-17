@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
 use Cake\Chronos\Chronos;
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
 
 final class ResponseCookies extends AbstractCookieCollector
 {
@@ -14,7 +14,7 @@ final class ResponseCookies extends AbstractCookieCollector
      *
      * @param array $cookies
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function __construct(array $cookies = [])
     {
@@ -35,6 +35,8 @@ final class ResponseCookies extends AbstractCookieCollector
      * Creates a Cookie instance from a Set-Cookie header value.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
+     *
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return self
      */
@@ -68,7 +70,7 @@ final class ResponseCookies extends AbstractCookieCollector
      *
      * @param string $string
      *
-     * @return \Viserio\Component\Contracts\Cookie\Cookie
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
     protected static function fromStringCookie(string $string): CookieContract
     {
@@ -103,7 +105,7 @@ final class ResponseCookies extends AbstractCookieCollector
 
                     break;
                 case 'path':
-                    $cookie = $cookie->withPath($attributeValue);
+                    $cookie = $cookie->withPath($attributeValue ?? '/');
 
                     break;
                 case 'secure':

@@ -284,38 +284,38 @@ class EventManagerTest extends TestCase
         $ee->attach('*.exception', [$this->listener, 'onException']);
         $ee->attach(self::COREREQUEST, [$this->listener, 'onCoreRequest']);
 
-        self::assertNumberListenersAdded(3, self::COREREQUEST);
-        self::assertNumberListenersAdded(3, self::COREEXCEPTION);
-        self::assertNumberListenersAdded(1, self::APIREQUEST);
-        self::assertNumberListenersAdded(2, self::APIEXCEPTION);
+        $this->assertNumberListenersAdded(3, self::COREREQUEST);
+        $this->assertNumberListenersAdded(3, self::COREEXCEPTION);
+        $this->assertNumberListenersAdded(1, self::APIREQUEST);
+        $this->assertNumberListenersAdded(2, self::APIEXCEPTION);
 
         $ee->detach('#', [$this->listener, 'onAny']);
 
-        self::assertNumberListenersAdded(2, self::COREREQUEST);
-        self::assertNumberListenersAdded(2, self::COREEXCEPTION);
-        self::assertNumberListenersAdded(0, self::APIREQUEST);
-        self::assertNumberListenersAdded(1, self::APIEXCEPTION);
+        $this->assertNumberListenersAdded(2, self::COREREQUEST);
+        $this->assertNumberListenersAdded(2, self::COREEXCEPTION);
+        $this->assertNumberListenersAdded(0, self::APIREQUEST);
+        $this->assertNumberListenersAdded(1, self::APIEXCEPTION);
 
         $ee->detach('core.*', [$this->listener, 'onCore']);
 
-        self::assertNumberListenersAdded(1, self::COREREQUEST);
-        self::assertNumberListenersAdded(1, self::COREEXCEPTION);
-        self::assertNumberListenersAdded(0, self::APIREQUEST);
-        self::assertNumberListenersAdded(1, self::APIEXCEPTION);
+        $this->assertNumberListenersAdded(1, self::COREREQUEST);
+        $this->assertNumberListenersAdded(1, self::COREEXCEPTION);
+        $this->assertNumberListenersAdded(0, self::APIREQUEST);
+        $this->assertNumberListenersAdded(1, self::APIEXCEPTION);
 
         $ee->detach('*.exception', [$this->listener, 'onException']);
 
-        self::assertNumberListenersAdded(1, self::COREREQUEST);
-        self::assertNumberListenersAdded(0, self::COREEXCEPTION);
-        self::assertNumberListenersAdded(0, self::APIREQUEST);
-        self::assertNumberListenersAdded(0, self::APIEXCEPTION);
+        $this->assertNumberListenersAdded(1, self::COREREQUEST);
+        $this->assertNumberListenersAdded(0, self::COREEXCEPTION);
+        $this->assertNumberListenersAdded(0, self::APIREQUEST);
+        $this->assertNumberListenersAdded(0, self::APIEXCEPTION);
 
         $ee->detach(self::COREREQUEST, [$this->listener, 'onCoreRequest']);
 
-        self::assertNumberListenersAdded(0, self::COREREQUEST);
-        self::assertNumberListenersAdded(0, self::COREEXCEPTION);
-        self::assertNumberListenersAdded(0, self::APIREQUEST);
-        self::assertNumberListenersAdded(0, self::APIEXCEPTION);
+        $this->assertNumberListenersAdded(0, self::COREREQUEST);
+        $this->assertNumberListenersAdded(0, self::COREEXCEPTION);
+        $this->assertNumberListenersAdded(0, self::APIREQUEST);
+        $this->assertNumberListenersAdded(0, self::APIEXCEPTION);
 
         $ee->detach('empty.*', '');
     }
@@ -327,16 +327,16 @@ class EventManagerTest extends TestCase
         $ee->attach('#', [$this->listener, 'onAny']);
 
         self::assertTrue($ee->hasListeners(self::COREREQUEST));
-        self::assertNumberListenersAdded(1, self::COREREQUEST);
+        $this->assertNumberListenersAdded(1, self::COREREQUEST);
 
         self::assertTrue($ee->hasListeners(self::COREEXCEPTION));
-        self::assertNumberListenersAdded(1, self::COREEXCEPTION);
+        $this->assertNumberListenersAdded(1, self::COREEXCEPTION);
 
         self::assertTrue($ee->hasListeners(self::APIREQUEST));
-        self::assertNumberListenersAdded(1, self::APIREQUEST);
+        $this->assertNumberListenersAdded(1, self::APIREQUEST);
 
         self::assertTrue($ee->hasListeners(self::APIEXCEPTION));
-        self::assertNumberListenersAdded(1, self::APIEXCEPTION);
+        $this->assertNumberListenersAdded(1, self::APIEXCEPTION);
     }
 
     public function testAttachToUnsetSyncedEventsIfMatchRegex(): void
@@ -345,11 +345,11 @@ class EventManagerTest extends TestCase
 
         $ee->attach('core.*', [$this->listener, 'onCore']);
 
-        self::assertNumberListenersAdded(1, self::COREREQUEST);
+        $this->assertNumberListenersAdded(1, self::COREREQUEST);
 
         $ee->attach('core.*', [$this->listener, 'onCore']);
 
-        self::assertNumberListenersAdded(2, self::COREREQUEST);
+        $this->assertNumberListenersAdded(2, self::COREREQUEST);
     }
 
     public function testTrigger(): void
@@ -410,11 +410,11 @@ class EventManagerTest extends TestCase
      *
      * @param int    $expected
      * @param string $eventName
+     *
+     * @return void
      */
-    private function assertNumberListenersAdded(int $expected, string $eventName)
+    private function assertNumberListenersAdded(int $expected, string $eventName): void
     {
-        $ee = $this->dispatcher;
-
-        return self::assertEquals($expected, \count($ee->getListeners($eventName)));
+        self::assertCount($expected, $this->dispatcher->getListeners($eventName));
     }
 }

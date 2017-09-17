@@ -5,8 +5,8 @@ namespace Viserio\Component\Bus;
 use Closure;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Bus\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Bus\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
@@ -139,11 +139,11 @@ class Dispatcher implements DispatcherContract
 
             $handler = $this->resolveHandler($command);
 
-            if ($afterResolving) {
-                \call_user_func($afterResolving, $handler);
+            if ($afterResolving !== null) {
+                $afterResolving($handler);
             }
 
-            return \call_user_func([$handler, $this->getHandlerMethod($command)], $command);
+            return $handler->{$this->getHandlerMethod($command)}($command);
         });
     }
 

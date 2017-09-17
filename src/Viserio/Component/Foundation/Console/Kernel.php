@@ -11,9 +11,9 @@ use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
-use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
-use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Console\Terminable as TerminableContract;
+use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
@@ -182,7 +182,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         $command = new ClosureCommand($signature, $callback);
 
-        Cerebro::starting(function ($console) use ($command): void {
+        Cerebro::starting(function (Cerebro $console) use ($command): void {
             $console->add($command);
         });
 

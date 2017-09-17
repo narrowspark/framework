@@ -8,15 +8,22 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\StreamFactory;
 
 class JsonDisplayerTest extends TestCase
 {
+    /**
+     * @var \Viserio\Component\Exception\Displayer\JsonDisplayer
+     */
+    private $displayer;
+
+    public function setUp()
+    {
+        $this->displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory());
+    }
+
     public function testServerError(): void
     {
-        $displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
-
-        $response = $displayer->display(new Exception(), 'foo', 500, []);
+        $response = $this->displayer->display(new Exception(), 'foo', 500, []);
         $expected = '{"errors":[{"id":"foo","status":500,"title":"Internal Server Error","detail":"An error has occurred and this resource cannot be displayed."}]}';
 
         self::assertSame(\trim($expected), (string) $response->getBody());
@@ -26,9 +33,7 @@ class JsonDisplayerTest extends TestCase
 
     public function testClientError(): void
     {
-        $displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
-
-        $response = $displayer->display(new Exception(), 'bar', 401, []);
+        $response = $this->displayer->display(new Exception(), 'bar', 401, []);
         $expected = '{"errors":[{"id":"bar","status":401,"title":"Unauthorized","detail":"Authentication is required and has failed or has not yet been provided."}]}';
 
         self::assertSame(\trim($expected), (string) $response->getBody());
@@ -38,10 +43,8 @@ class JsonDisplayerTest extends TestCase
 
     public function testProperties(): void
     {
-        $displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
-
-        self::assertFalse($displayer->isVerbose());
-        self::assertTrue($displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
-        self::assertSame('application/json', $displayer->contentType());
+        self::assertFalse($this->displayer->isVerbose());
+        self::assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
+        self::assertSame('application/json', $this->displayer->contentType());
     }
 }

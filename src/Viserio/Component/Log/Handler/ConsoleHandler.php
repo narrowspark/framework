@@ -18,8 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
 use Viserio\Component\Log\Formatter\ConsoleFormatter;
 
 /**
@@ -86,7 +86,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function isHandling(array $record)
+    public function isHandling(array $record): bool
     {
         return $this->updateLevel() && parent::isHandling($record);
     }
@@ -94,7 +94,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(array $record)
+    public function handle(array $record): bool
     {
         // we have to update the logging level each time because the verbosity of the
         // console output might have changed in the meantime (it is not immutable)
@@ -124,7 +124,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * Register needed events to event manager.
      *
-     * @param \Viserio\Component\Contracts\Events\EventManager
+     * @param \Viserio\Component\Contract\Events\EventManager
      * @param EventManagerContract $eventManager
      *
      * @return void
@@ -186,7 +186,7 @@ class ConsoleHandler extends AbstractProcessingHandler
      *
      * @return bool Whether the handler is enabled and verbosity is not set to quiet
      */
-    private function updateLevel()
+    private function updateLevel(): bool
     {
         if (null === $this->output) {
             return false;

@@ -38,7 +38,7 @@
         }
     ],
     "require": {
-        "php"                                    : "^7.1",
+        "php"                                    : "^7.2",
         "cache/array-adapter"                    : "^1.0",
         "cache/void-adapter"                     : "^1.0",
         "psr/container"                          : "^1.0",
@@ -51,7 +51,7 @@
         "cache/namespaced-cache"                 : "^1.0",
         "container-interop/service-provider"     : "^0.3",
         "mockery/mockery"                        : "^0.9",
-        "narrowspark/testing-helper"             : "^3.0",
+        "narrowspark/testing-helper"             : "^4.0",
         "phpunit/phpunit"                        : "^6.0",
         "viserio/config"                         : "self.version",
         "viserio/container"                      : "self.version"

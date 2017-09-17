@@ -3,9 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
 use Cake\Chronos\Chronos;
-use Narrowspark\Arr\Arr;
-use Viserio\Component\Contracts\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 
 class CookieJar implements JarContract
 {
@@ -96,7 +95,7 @@ class CookieJar implements JarContract
      */
     public function queued(string $key, $default = null): ?CookieContract
     {
-        return Arr::get($this->queued, $key, $default);
+        return $this->queued[$key] ?? $default;
     }
 
     /**
@@ -130,7 +129,7 @@ class CookieJar implements JarContract
      *
      * @return $this
      */
-    public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): JarContract
+    public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): self
     {
         [$this->path, $this->domain, $this->secure] = [$path, $domain, $secure];
 
@@ -152,7 +151,7 @@ class CookieJar implements JarContract
      * @param null|string $domain
      * @param bool        $secure
      *
-     * @return string[]
+     * @return array
      */
     protected function getPathAndDomain(?string $path, ?string $domain, bool $secure = false): array
     {

@@ -30,7 +30,7 @@ class NoSeekStreamTest extends TestCase
     public function testToStringDoesNotSeek(): void
     {
         $body   = 'foo';
-        $stream = \fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);

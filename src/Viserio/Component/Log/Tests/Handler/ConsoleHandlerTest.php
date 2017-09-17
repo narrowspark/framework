@@ -71,10 +71,10 @@ class ConsoleHandlerTest extends TestCase
             ->getMock();
         $realOutput->setVerbosity($verbosity);
 
+        $log = "16:21:54 $levelName [app] My info message [] []\n";
+
         if ($realOutput->isDebug()) {
             $log = "16:21:54 $levelName [app] My info message\n[]\n[]\n";
-        } else {
-            $log = "16:21:54 $levelName [app] My info message [] []\n";
         }
 
         $realOutput

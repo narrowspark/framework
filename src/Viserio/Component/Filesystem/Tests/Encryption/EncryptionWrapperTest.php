@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests\Encryption;
 
-use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Adapter\LocalConnector;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
@@ -29,13 +29,14 @@ class EncryptionWrapperTest extends TestCase
         $this->root = __DIR__ . '/stubs';
 
         $connector = new LocalConnector();
+        $password  = \random_bytes(32);
 
         $this->adapter = new EncryptionWrapper(
             new FilesystemAdapter(
                 $connector->connect(['path' => $this->root]),
                 []
             ),
-            Key::createNewRandomKey()
+            KeyFactory::generateKey($password)
         );
     }
 
@@ -104,7 +105,7 @@ class EncryptionWrapperTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testRead(): void
     {
@@ -112,7 +113,7 @@ class EncryptionWrapperTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testReadStream(): void
     {

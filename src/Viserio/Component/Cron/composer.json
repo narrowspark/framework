@@ -18,21 +18,21 @@
         }
     ],
     "require": {
-        "php"                                   : "^7.1",
+        "php"                                   : "^7.2",
+        "ext-mbstring"                          : "*",
         "cakephp/chronos"                       : "^1.0",
         "mtdowling/cron-expression"             : "^1.1",
         "php-di/invoker"                        : "^2.0",
         "psr/cache"                             : "^1.0",
         "psr/container"                         : "^1.0",
         "symfony/process"                       : "~3.3",
-        "symfony/polyfill-mbstring"             : "^1.0",
         "viserio/contracts"                     : "self.version",
         "viserio/support"                       : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"    : "^0.3",
         "mockery/mockery"                       : "^0.9",
-        "narrowspark/testing-helper"            : "^3.0",
+        "narrowspark/testing-helper"            : "^4.0",
         "phpunit/phpunit"                       : "^6.0",
         "viserio/cache"                         : "self.version",
         "viserio/console"                       : "self.version",

@@ -6,14 +6,14 @@ use Interop\Container\ServiceProvider;
 use Parsedown;
 use ParsedownExtra;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\View\Engine\EngineResolver;
 use Viserio\Component\View\Engine\FileEngine;
 use Viserio\Component\View\Engine\MarkdownEngine;
 use Viserio\Component\View\Engine\PhpEngine;
-use Viserio\Component\View\Factory;
+use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider
@@ -35,8 +35,8 @@ class ViewServiceProvider implements ServiceProvider
             'view.finder'          => function (ContainerInterface $container) {
                 return $container->get(FinderContract::class);
             },
-            FactoryContract::class  => [self::class, 'createViewFactory'],
-            Factory::class          => function (ContainerInterface $container) {
+            FactoryContract::class      => [self::class, 'createViewFactory'],
+            ViewFactory::class          => function (ContainerInterface $container) {
                 return $container->get(FactoryContract::class);
             },
             'view'                  => function (ContainerInterface $container) {
@@ -66,7 +66,7 @@ class ViewServiceProvider implements ServiceProvider
 
     public static function createViewFactory(ContainerInterface $container): FactoryContract
     {
-        $view = new Factory(
+        $view = new ViewFactory(
             $container->get(EngineResolver::class),
             $container->get(ViewFinder::class)
         );

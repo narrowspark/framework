@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Traits;
 
-use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
 
 trait FilesystemHelperTrait
 {
@@ -11,7 +11,7 @@ trait FilesystemHelperTrait
      *
      * @param string $path
      *
-     * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
      */
@@ -31,7 +31,7 @@ trait FilesystemHelperTrait
      *
      * @param string $path
      *
-     * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
      *
@@ -91,9 +91,12 @@ trait FilesystemHelperTrait
             return \symlink($target, $link);
         }
 
-        $mode = $this->isDirectory($target) ? 'J' : 'H';
+        $mode   = $this->isDirectory($target) ? 'J' : 'H';
+        $output = $return = false;
 
-        \exec("mklink /{$mode} \"{$link}\" \"{$target}\"");
+        \exec("mklink /{$mode} \"{$link}\" \"{$target}\"", $output, $return);
+
+        return $return;
     }
 
     /**

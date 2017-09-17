@@ -5,7 +5,7 @@ namespace Viserio\Component\Cookie\Middleware;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Cookie\QueueingFactory as CookieJar;
+use Viserio\Component\Contract\Cookie\QueueingFactory as CookieJar;
 use Viserio\Component\Cookie\ResponseCookies;
 
 class AddQueuedCookiesToResponseMiddleware implements MiddlewareInterface
@@ -13,14 +13,14 @@ class AddQueuedCookiesToResponseMiddleware implements MiddlewareInterface
     /**
      * The cookie jar instance.
      *
-     * @var \Viserio\Component\Contracts\Cookie\QueueingFactory
+     * @var \Viserio\Component\Contract\Cookie\QueueingFactory
      */
     protected $cookies;
 
     /**
      * Create a new CookieQueue instance.
      *
-     * @param \Viserio\Component\Contracts\Cookie\QueueingFactory $cookies
+     * @param \Viserio\Component\Contract\Cookie\QueueingFactory $cookies
      */
     public function __construct(CookieJar $cookies)
     {

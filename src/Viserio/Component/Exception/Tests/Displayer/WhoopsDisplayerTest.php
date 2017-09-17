@@ -5,13 +5,23 @@ namespace Viserio\Component\Exception\Tests\Displayer;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\HttpFactory\ResponseFactory;
 
 class WhoopsDisplayerTest extends TestCase
 {
+    /**
+     * @var \Viserio\Component\Exception\Displayer\WhoopsDisplayer
+     */
+    private $whoops;
+
+    public function setUp()
+    {
+        $this->whoops = new WhoopsDisplayer(new ResponseFactory());
+    }
+
     public function testServerError(): void
     {
-        $displayer = new WhoopsDisplayer();
-        $response  = $displayer->display(new Exception(), 'foo', 503, []);
+        $response  = $this->whoops->display(new Exception(), 'foo', 503, []);
 
         self::assertInternalType('string', (string) $response->getBody());
         self::assertSame(503, $response->getStatusCode());
@@ -20,8 +30,7 @@ class WhoopsDisplayerTest extends TestCase
 
     public function testClientError(): void
     {
-        $displayer = new WhoopsDisplayer();
-        $response  = $displayer->display(new Exception(), 'bar', 403, []);
+        $response  = $this->whoops->display(new Exception(), 'bar', 403, []);
 
         self::assertInternalType('string', (string) $response->getBody());
         self::assertSame(403, $response->getStatusCode());
@@ -31,7 +40,7 @@ class WhoopsDisplayerTest extends TestCase
     public function testProperties(): void
     {
         $exception = new Exception();
-        $displayer = new WhoopsDisplayer();
+        $displayer = $this->whoops;
 
         self::assertTrue($displayer->isVerbose());
         self::assertTrue($displayer->canDisplay($exception, $exception, 500));

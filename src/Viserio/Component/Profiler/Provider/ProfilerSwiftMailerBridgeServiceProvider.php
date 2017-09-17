@@ -5,7 +5,7 @@ namespace Viserio\Component\Profiler\Provider;
 use Interop\Container\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Swift_Mailer;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Profiler\DataCollector\Bridge\SwiftMailDataCollector;
 
 class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
@@ -13,7 +13,7 @@ class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getServices(): array
     {
         return [
             ProfilerContract::class => [self::class, 'createProfiler'],
@@ -26,7 +26,7 @@ class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
+     * @return null|\Viserio\Component\Contract\Profiler\Profiler
      */
     public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
     {

@@ -29,7 +29,7 @@ class FilesystemHelperTraitTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      */
     public function testGetRequireThrowsExceptionOnexisitingFile(): void
     {

@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 
 abstract class AbstractMessage implements MessageInterface
 {
@@ -14,17 +15,6 @@ abstract class AbstractMessage implements MessageInterface
      * @var string
      */
     protected $protocol = '1.1';
-
-    /**
-     * A map of valid protocol versions.
-     *
-     * @var array
-     */
-    protected static $validProtocolVersions = [
-        '1.0' => true,
-        '1.1' => true,
-        '2.0' => true,
-    ];
 
     /**
      * Map of all registered headers, as original name => array of values.
@@ -46,6 +36,17 @@ abstract class AbstractMessage implements MessageInterface
      * @var \Psr\Http\Message\StreamInterface
      */
     protected $stream;
+
+    /**
+     * A map of valid protocol versions.
+     *
+     * @var array
+     */
+    private static $validProtocolVersions = [
+        '1.0' => true,
+        '1.1' => true,
+        '2.0' => true,
+    ];
 
     /**
      * {@inheritdoc}
@@ -188,7 +189,7 @@ abstract class AbstractMessage implements MessageInterface
     public function getBody(): StreamInterface
     {
         if (! $this->stream) {
-            $this->stream = new Stream(\fopen('php://temp', 'r+'));
+            $this->stream = new Stream(\fopen('php://temp', 'rb+'));
         }
 
         return $this->stream;
@@ -225,11 +226,7 @@ abstract class AbstractMessage implements MessageInterface
         $this->headerNames = $this->headers = [];
 
         foreach ($headers as $header => $value) {
-            if (! \is_array($value)) {
-                $value = [$value];
-            }
-
-            $value      = $this->trimHeaderValues($this->filterHeaderValue($value));
+            $value      = $this->trimHeaderValues($this->filterHeaderValue((array) $value));
             $normalized = \mb_strtolower($header);
 
             if (isset($this->headerNames[$normalized])) {
@@ -247,7 +244,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body
      *
-     * @throws \InvalidArgumentException if the $resource arg is not valid
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if the $resource arg is not valid
      *
      * @return \Psr\Http\Message\StreamInterface
      */
@@ -258,7 +255,7 @@ abstract class AbstractMessage implements MessageInterface
         if ($body instanceof StreamInterface) {
             return $body;
         } elseif (\is_string($body)) {
-            $stream = \fopen('php://temp', 'r+');
+            $stream = \fopen('php://temp', 'rb+');
 
             if ($body !== '') {
                 \fwrite($stream, $body);
@@ -267,7 +264,7 @@ abstract class AbstractMessage implements MessageInterface
 
             return new Stream($stream);
         } elseif ($type === 'NULL') {
-            return new Stream(\fopen('php://temp', 'r+'));
+            return new Stream(\fopen('php://temp', 'rb+'));
         } elseif ($type === 'resource') {
             return new Stream($body);
         }
@@ -280,13 +277,13 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param string $version
      *
-     * @throws \InvalidArgumentException on invalid HTTP protocol version
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException on invalid HTTP protocol version
      *
      * @return void
      */
     private function validateProtocolVersion(string $version): void
     {
-        if (empty($version)) {
+        if ($version === '') {
             throw new InvalidArgumentException(\sprintf(
                 'HTTP protocol version can not be empty'
             ));
@@ -306,6 +303,8 @@ abstract class AbstractMessage implements MessageInterface
      * @param string       $header
      * @param array|string $value
      *
+     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
+     *
      * @return array
      */
     private function checkHeaderData(string $header, $value): array
@@ -315,7 +314,7 @@ abstract class AbstractMessage implements MessageInterface
         }
 
         if (! $this->arrayContainsOnlyStrings($value)) {
-            throw new InvalidArgumentException(
+            throw new UnexpectedValueException(
                 'Invalid header value; must be a string or array of strings'
             );
         }
@@ -357,7 +356,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param array $values
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      *
      * @return void
      */

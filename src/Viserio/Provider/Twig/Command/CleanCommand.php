@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Provider\Twig\Command;
 
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class CleanCommand extends Command implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract

@@ -6,8 +6,8 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Component\Parsers\Provider\ParsersServiceProvider;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
+use Viserio\Component\Parser\Provider\ParserServiceProvider;
 use Viserio\Component\Translation\Provider\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;
 
@@ -51,7 +51,7 @@ return [
         $container = new Container();
         $container->instance(PsrLoggerInterface::class, $this->mock(PsrLoggerInterface::class));
         $container->register(new TranslationServiceProvider());
-        $container->register(new ParsersServiceProvider());
+        $container->register(new ParserServiceProvider());
 
         $container->instance('config', [
             'viserio' => [

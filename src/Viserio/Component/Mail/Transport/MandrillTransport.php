@@ -81,7 +81,7 @@ class MandrillTransport extends AbstractTransport
      *
      * @param string $key
      *
-     * @return \Viserio\Component\Mail\Transport\Mandrill
+     * @return $this
      */
     public function setKey(string $key): self
     {

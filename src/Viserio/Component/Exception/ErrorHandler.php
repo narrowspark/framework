@@ -8,21 +8,19 @@ use Exception;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
-use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
-use RuntimeException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Exception\Transformer as TransformerContract;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Exception\Exception\NotFoundException as BaseNotFoundException;
+use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\CommandLineTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
@@ -66,20 +64,15 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     /**
      * Create a new error handler instance.
      *
-     * @param \Psr\Container\ContainerInterface $container
+     * @param array|\ArrayAccess|\Psr\Container\ContainerInterface $data
+     * @param \Psr\Log\LoggerInterface                             $logger
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($data, LoggerInterface $logger)
     {
-        $this->container           = $container;
+        $this->resolvedOptions     = self::resolveOptions($data);
         $this->exceptionIdentifier = new ExceptionIdentifier();
 
-        if ($this->container->has(LoggerInterface::class)) {
-            $this->logger = $this->container->get(LoggerInterface::class);
-        } else {
-            $this->logger = new NullLogger();
-        }
-
-        $this->resolvedOptions = self::resolveOptions($this->container);
+        $this->setLogger($logger);
     }
 
     /**
@@ -147,7 +140,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $level = $this->getLevel($exception);
         $id    = $this->exceptionIdentifier->identify($exception);
 
-        $this->getLogger()->{$level}(
+        $this->logger->{$level}(
             $exception->getMessage(),
             ['exception' => $exception, 'identification' => ['id' => $id]]
         );
@@ -156,7 +149,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     /**
      * Add the transformed instance.
      *
-     * @param \Viserio\Component\Contracts\Exception\Transformer $transformer
+     * @param \Viserio\Component\Contract\Exception\Transformer $transformer
      *
      * @return $this
      */
@@ -238,11 +231,9 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         $transformed = $this->getTransformed($exception);
 
         if (PHP_SAPI === 'cli') {
-            $container = $this->container;
-
-            if ($container->has(ConsoleApplication::class)) {
-                $container->get(ConsoleApplication::class)
-                    ->renderException($transformed, new ConsoleOutput());
+            if ($this->container !== null && $this->container->has(ConsoleApplication::class)) {
+                $console = $this->container->get(ConsoleApplication::class);
+                $console->renderException($transformed, new ConsoleOutput());
             } else {
                 throw $transformed;
             }
@@ -309,7 +300,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function registerExceptionHandler(): void
     {
-        if (PHP_SAPI != 'cli' || PHP_SAPI != 'phpdbg') {
+        if (PHP_SAPI !== 'cli' || PHP_SAPI !== 'phpdbg') {
             \ini_set('display_errors', '0');
         } elseif (! \ini_get('log_errors') || \ini_get('error_log')) {
             // CLI - display errors only if they're not already logged to STDERR
@@ -339,9 +330,11 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     protected function prepareException(Throwable $exception)
     {
         if (! $exception instanceof Exception) {
-            $exception = new FatalThrowableError($exception);
-        } elseif ($exception instanceof Error) {
-            $exception = new FatalErrorException(
+            return new FatalThrowableError($exception);
+        }
+
+        if ($exception instanceof Error) {
+            return new FatalErrorException(
                 $exception->getMessage(),
                 $exception->getCode(),
                 E_ERROR,
@@ -359,13 +352,12 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      *
      * @param \Throwable $exception
      *
-     * @throws \RuntimeException if transformer is not found
+     * @throws \Viserio\Component\Contract\Exception\Exception\NotFoundException if transformer is not found
      *
      * @return \Throwable
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        $container    = $this->container;
         $transformers = \array_merge(
             $this->transformers,
             $this->resolvedOptions['transformers']
@@ -374,10 +366,10 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         foreach ($transformers as $transformer) {
             if (\is_object($transformer)) {
                 $transformerClass = $transformer;
-            } elseif ($container->has($transformer)) {
-                $transformerClass = $container->get($transformer);
+            } elseif ($this->container !== null && $this->container->has($transformer)) {
+                $transformerClass = $this->container->get($transformer);
             } else {
-                throw new RuntimeException(\sprintf('Transformer [%s] not found.', (string) $transformer));
+                throw new BaseNotFoundException(\sprintf('Transformer [%s] not found.', (string) $transformer));
             }
 
             $exception = $transformerClass->transform($exception);

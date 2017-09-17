@@ -12,7 +12,6 @@ use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
-use Defuse\Crypto\Key;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
@@ -20,11 +19,11 @@ use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use Redis;
-use Viserio\Component\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
 
 class CacheManager extends AbstractManager implements
@@ -67,7 +66,7 @@ class CacheManager extends AbstractManager implements
         $driver    = parent::createDriver($config);
         $namespace = $this->resolvedOptions['namespace'];
 
-        $driver->setLogger($this->getLogger());
+        $driver->setLogger($this->logger);
 
         if (\class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
             $driver = $this->getNamespacedPool($driver, $namespace);
@@ -162,7 +161,7 @@ class CacheManager extends AbstractManager implements
      */
     protected function createFilesystemDriver(array $config): FilesystemCachePool
     {
-        $adapter = $this->getContainer()->get($config['connection']);
+        $adapter = $this->container->get($config['connection']);
 
         return new FilesystemCachePool(new Flysystem($adapter));
     }

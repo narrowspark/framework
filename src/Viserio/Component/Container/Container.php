@@ -13,15 +13,14 @@ use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
-use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionClass;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
-use Viserio\Component\Contracts\Container\Exception\ContainerException;
-use Viserio\Component\Contracts\Container\Exception\NotFoundException;
-use Viserio\Component\Contracts\Container\Exception\UnresolvableDependencyException;
-use Viserio\Component\Contracts\Container\Factory as FactoryContract;
-use Viserio\Component\Contracts\Container\Types as TypesContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use Viserio\Component\Contract\Container\Exception\ContainerException;
+use Viserio\Component\Contract\Container\Exception\NotFoundException;
+use Viserio\Component\Contract\Container\Exception\UnresolvableDependencyException;
+use Viserio\Component\Contract\Container\Factory as FactoryContract;
+use Viserio\Component\Contract\Container\Types as TypesContract;
 
 class Container extends ContainerResolver implements ContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
@@ -97,7 +96,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
         $this->instance(Container::class, $this);
         $this->instance(ContainerContract::class, $this);
         $this->instance(ContainerInterface::class, $this);
-        $this->instance(PsrContainerInterface::class, $this);
         $this->instance(FactoryContract::class, $this);
     }
 
@@ -106,7 +104,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function bind($abstract, $concrete = null): void
     {
-        $concrete = ($concrete) ? $concrete : $abstract;
+        $concrete = $concrete ?? $abstract;
 
         if (\is_array($abstract)) {
             $this->bindService(\key($abstract), $concrete);
@@ -141,7 +139,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function singleton(string $abstract, $concrete = null): void
     {
-        $concrete = ($concrete) ? $concrete : $abstract;
+        $concrete = $concrete ?? $abstract;
 
         $this->bindSingleton($abstract, $concrete);
     }
@@ -364,7 +362,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
         if (isset($this->bindings[$id])) {
             return $this->resolve($id);
-        } elseif ($resolved = $this->getFromDelegate($id)) {
+        }
+
+        if ($resolved = $this->getFromDelegate($id)) {
             return $resolved;
         }
 
@@ -493,7 +493,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->has($offset);
     }

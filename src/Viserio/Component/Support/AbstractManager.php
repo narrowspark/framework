@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use InvalidArgumentException;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\Support\Manager as ManagerContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Support\Manager as ManagerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractManager implements
@@ -175,7 +175,9 @@ abstract class AbstractManager implements
 
         if (isset($this->extensions[$config['name']])) {
             return $this->callCustomCreator($config['name'], $config);
-        } elseif (\method_exists($this, $method)) {
+        }
+
+        if (\method_exists($this, $method)) {
             return $this->$method($config);
         }
 

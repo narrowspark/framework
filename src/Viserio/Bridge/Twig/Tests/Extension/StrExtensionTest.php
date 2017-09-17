@@ -9,7 +9,7 @@ use Viserio\Component\Support\Str;
 
 class StrExtensionTest extends MockeryTestCase
 {
-    protected $customFilters = [
+    private static $customFilters = [
         'camel_case',
         'snake_case',
         'studly_case',
@@ -61,7 +61,7 @@ class StrExtensionTest extends MockeryTestCase
         self::assertInternalType('array', $filters);
 
         foreach ($filters as $filter) {
-            if (! \in_array($filter->getName(), $this->customFilters, true)) {
+            if (! \in_array($filter->getName(), self::$customFilters, true)) {
                 continue;
             }
 
@@ -72,7 +72,8 @@ class StrExtensionTest extends MockeryTestCase
     public function testWildcardFilters(): void
     {
         $mock = $this->mock(Str::class);
-        $mock->shouldReceive('fooBar')->once();
+        $mock->shouldReceive('fooBar')
+            ->once();
 
         $string  = $this->getString();
         $string->setCallback($mock);
@@ -80,12 +81,19 @@ class StrExtensionTest extends MockeryTestCase
         $filters = $string->getFilters();
 
         foreach ($filters as $filter) {
-            if (\in_array($filter->getName(), $this->customFilters, true)) {
+            if (\in_array($filter->getName(), self::$customFilters, true)) {
                 continue;
             }
 
             \call_user_func($filter->getCallable(), 'foo_bar');
         }
+    }
+
+    protected function assertPreConditions()
+    {
+        parent::assertPreConditions();
+
+        $this->allowMockingNonExistentMethods(true);
     }
 
     protected function getString()

@@ -5,8 +5,8 @@ namespace Viserio\Component\Profiler\Tests\Provider;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\AssetsRenderer;
@@ -37,14 +37,15 @@ class ProfilerServiceProviderTest extends MockeryTestCase
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->register(new HttpFactoryServiceProvider());
-        $container->register(new RoutingServiceProvider());
         $container->register(new EventsServiceProvider());
+        $container->register(new RoutingServiceProvider());
         $container->register(new ProfilerServiceProvider());
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
         $router  = $container->get(RouterContract::class);
         $routes  = $router->getRoutes()->getRoutes();
+
         $action1 = $routes[0]->getAction();
         $action2 = $routes[1]->getAction();
 

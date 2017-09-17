@@ -5,25 +5,23 @@ namespace Viserio\Component\Foundation\Tests\Console\Command;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 
 class KeyGenerateCommandTest extends MockeryTestCase
 {
-    public function testCommand(): void
+    public function testApplicationKeyIsSetToEnvFile(): void
     {
         $file = __DIR__ . '/../../Fixtures/.env.key';
 
-        if (! \file_exists($file)) {
-            \file_put_contents($file, 'APP_KEY=');
-        }
+        \file_put_contents($file, 'APP_KEY=');
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
-            ->with('viserio.app.key', '')
-            ->andReturn('');
+            ->with('viserio.app.key')
+            ->andReturn(null);
         $config->shouldReceive('set')
             ->once();
 
@@ -55,7 +53,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->never()
-            ->with('viserio.app.key', '');
+            ->with('viserio.app.key');
         $config->shouldReceive('set')
             ->never();
 
@@ -80,12 +78,12 @@ class KeyGenerateCommandTest extends MockeryTestCase
         self::assertTrue(\is_string($output));
     }
 
-    public function testCommandNotInProduction(): void
+    public function testCommandToAskIfKeyShouldBeOverwrittenInProduction(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
-            ->with('viserio.app.key', '')
+            ->with('viserio.app.key')
             ->andReturn('test');
         $config->shouldReceive('set')
             ->never();
