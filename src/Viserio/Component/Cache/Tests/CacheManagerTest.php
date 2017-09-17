@@ -10,7 +10,6 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Cache\CacheManager;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 
 class CacheManagerTest extends MockeryTestCase
 {
@@ -22,7 +21,7 @@ class CacheManagerTest extends MockeryTestCase
                     'drivers'   => [],
                     'namespace' => false,
                 ],
-            ]
+            ],
         ]);
 
         self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
@@ -37,7 +36,7 @@ class CacheManagerTest extends MockeryTestCase
                     'drivers'   => [],
                     'namespace' => false,
                 ],
-            ]
+            ],
         ]);
 
         $manager->setLogger($this->mock(PsrLoggerInterface::class));
@@ -54,7 +53,7 @@ class CacheManagerTest extends MockeryTestCase
                     'drivers'   => [],
                     'namespace' => 'viserio',
                 ],
-            ]
+            ],
         ]);
 
         self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('array'));
@@ -69,7 +68,7 @@ class CacheManagerTest extends MockeryTestCase
                     'drivers'   => [],
                     'namespace' => 'viserio',
                 ],
-            ]
+            ],
         ]);
 
         self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
@@ -88,7 +87,7 @@ class CacheManagerTest extends MockeryTestCase
                     ],
                     'namespace' => false,
                 ],
-            ]
+            ],
         ]);
         $manager->setContainer(new ArrayContainer([
             'local' => new Local(__DIR__ . '/'),
