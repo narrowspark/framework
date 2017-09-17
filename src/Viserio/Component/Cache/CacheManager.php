@@ -17,7 +17,6 @@ use Memcache;
 use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -36,14 +35,13 @@ class CacheManager extends AbstractManager implements
     /**
      * Create a new cache manager instance.
      *
-     * @param \Psr\Container\ContainerInterface $container
+     * @param iterable|\Psr\Container\ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
         parent::__construct($container);
 
-        $this->container = $container;
-        $this->logger    = new NullLogger();
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -68,7 +66,10 @@ class CacheManager extends AbstractManager implements
 
         $driver->setLogger($this->logger);
 
-        if (\class_exists(NamespacedCachePool::class) && $namespace && $driver instanceof HierarchicalPoolInterface) {
+        if ($namespace !== false &&
+            $driver instanceof HierarchicalPoolInterface &&
+            \class_exists(NamespacedCachePool::class)
+        ) {
             $driver = $this->getNamespacedPool($driver, $namespace);
         }
 
@@ -91,6 +92,9 @@ class CacheManager extends AbstractManager implements
      * Create an instance of the MongoDB cache driver.
      *
      * @param array $config
+     *
+     * @throws \MongoDB\Driver\Exception\RuntimeException
+     * @throws \MongoDB\Driver\Exception\InvalidArgumentException
      *
      * @return \Cache\Adapter\MongoDB\MongoDBCachePool
      *

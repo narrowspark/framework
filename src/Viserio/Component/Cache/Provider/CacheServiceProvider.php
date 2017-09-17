@@ -17,9 +17,7 @@ class CacheServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            CacheManagerContract::class   => function (ContainerInterface $container): CacheManagerContract {
-                return new CacheManager($container);
-            },
+            CacheManagerContract::class   => [self::class, 'createCacheManager'],
             CacheManager::class           => function (ContainerInterface $container): CacheManagerContract {
                 return $container->get(CacheManagerContract::class);
             },
@@ -44,5 +42,20 @@ class CacheServiceProvider implements ServiceProvider
     public static function registerDefaultCache(ContainerInterface $container)
     {
         return $container->get(CacheManager::class)->getDriver();
+    }
+
+    /**
+     * Create a cache manger instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contract\Cache\Manager
+     */
+    public static function createCacheManager(ContainerInterface $container): CacheManagerContract
+    {
+        $cache = new CacheManager($container);
+        $cache->setContainer($container);
+
+        return $cache;
     }
 }
