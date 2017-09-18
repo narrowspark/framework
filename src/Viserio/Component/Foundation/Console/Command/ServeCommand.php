@@ -4,7 +4,6 @@ namespace Viserio\Component\Foundation\Console\Command;
 
 use InvalidArgumentException;
 use RuntimeException;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -123,7 +122,6 @@ class ServeCommand extends Command
                 $process->setTty(true);
                 $callback = null;
             } catch (RuntimeException $e) {
-                //
             }
         }
 
