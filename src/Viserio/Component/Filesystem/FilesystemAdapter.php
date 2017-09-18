@@ -5,8 +5,8 @@ namespace Viserio\Component\Filesystem;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use League\Flysystem\Rackspace\RackspaceAdapter;
 use League\Flysystem\Config as FlyConfig;
+use League\Flysystem\Rackspace\RackspaceAdapter;
 use RuntimeException;
 use Viserio\Component\Contract\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
@@ -577,7 +577,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      * Get the URL for the file at the given path.
      *
      * @param \League\Flysystem\Rackspace\RackspaceAdapter $adapter
-     * @param string $path
+     * @param string                                       $path
      *
      * @return string
      */
