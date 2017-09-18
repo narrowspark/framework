@@ -5,6 +5,7 @@ namespace Viserio\Component\Filesystem;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\Rackspace\RackspaceAdapter;
 use League\Flysystem\Config as FlyConfig;
 use RuntimeException;
 use Viserio\Component\Contract\Filesystem\Directorysystem as DirectorysystemContract;
@@ -368,7 +369,9 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             $path = $adapter->getPathPrefix() . $path;
 
             return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
-        } elseif ($adapter instanceof LocalAdapter) {
+        }
+
+        if ($adapter instanceof LocalAdapter) {
             if (isset($this->config['url'])) {
                 return self::normalizeDirectorySeparator(
                     $this->config['url'] . '/' . $path
@@ -376,7 +379,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             }
 
             return $adapter->getPathPrefix() . $path;
-        } elseif (\method_exists($adapter, 'getUrl')) {
+        }
+
+        if ($adapter instanceof RackspaceAdapter) {
+            return $this->getRackspaceUrl($adapter, $path);
+        }
+
+        if (\method_exists($adapter, 'getUrl')) {
             return $adapter->getUrl($path);
         }
 
@@ -562,6 +571,19 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $path = $prefix . $path;
 
         return self::normalizeDirectorySeparator($path);
+    }
+
+    /**
+     * Get the URL for the file at the given path.
+     *
+     * @param \League\Flysystem\Rackspace\RackspaceAdapter $adapter
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function getRackspaceUrl(RackspaceAdapter $adapter, string $path): string
+    {
+        return (string) $adapter->getContainer()->getObject($path)->getPublicUrl();
     }
 
     /**
