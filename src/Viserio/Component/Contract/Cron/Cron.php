@@ -176,6 +176,13 @@ interface Cron
     public function everyTenMinutes(): Cron;
 
     /**
+     * Schedule the event to run every fifteen minutes.
+     *
+     * @return $this
+     */
+    public function everyFifteenMinutes(): Cron;
+
+    /**
      * Schedule the cron job to run every thirty minutes.
      *
      * @return $this

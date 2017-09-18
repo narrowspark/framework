@@ -421,6 +421,14 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
+    public function everyFifteenMinutes(): CronContract
+    {
+        return $this->spliceIntoPosition(1, '*/15');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function everyThirtyMinutes(): CronContract
     {
         return $this->spliceIntoPosition(1, '0,30');
