@@ -12,7 +12,13 @@ class RouteListCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $name = 'route:table';
+    protected $signature = 'route:table
+        [--method= : Filter the routes by method.]
+        [--name= : Filter the routes by name.]
+        [--path= : Filter the routes by path.]
+        [-r|--reverse : Reverse the ordering of the routes.]
+        [--sort=uri : The column (host, method, uri, name, action) to sort by.]
+    ';
 
     /**
      * {@inheritdoc}
@@ -154,19 +160,5 @@ class RouteListCommand extends Command
         }
 
         return $results;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOptions(): array
-    {
-        return [
-            ['method', null, InputOption::VALUE_OPTIONAL, 'Filter the routes by method.'],
-            ['name', null, InputOption::VALUE_OPTIONAL, 'Filter the routes by name.'],
-            ['path', null, InputOption::VALUE_OPTIONAL, 'Filter the routes by path.'],
-            ['reverse', 'r', InputOption::VALUE_NONE, 'Reverse the ordering of the routes.'],
-            ['sort', null, InputOption::VALUE_OPTIONAL, 'The column (host, method, uri, name, action) to sort by.', 'uri'],
-        ];
     }
 }

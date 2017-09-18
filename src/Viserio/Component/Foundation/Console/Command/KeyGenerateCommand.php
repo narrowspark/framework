@@ -20,7 +20,10 @@ class KeyGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'key:generate [--show= : Display the key instead of modifying files] [--force= : Force the operation to run when in production]';
+    protected $signature = 'key:generate
+        [--show= : Display the key instead of modifying files]
+        [--force= : Force the operation to run when in production]
+    ';
 
     /**
      * {@inheritdoc}

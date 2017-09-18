@@ -21,7 +21,10 @@ class DebugCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $name = 'twig:debug';
+    protected $signature = 'twig:debug
+        [filter : Show details for all entries matching this filter.]
+        [--format=text : The output format (text or json)]
+    ';
 
     /**
      * {@inheritdoc}
@@ -84,36 +87,6 @@ class DebugCommand extends Command
         }
 
         return 0;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getArguments(): array
-    {
-        return [
-            [
-                'filter',
-                InputArgument::OPTIONAL,
-                'Show details for all entries matching this filter.',
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOptions(): array
-    {
-        return [
-            [
-                'format',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The output format (text or json)',
-                'text',
-            ],
-        ];
     }
 
     /**

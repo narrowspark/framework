@@ -23,7 +23,12 @@ class LintCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $name = 'twig:lint';
+    protected $signature = 'twig:lint
+        [dir=* : Path to the template dir.]
+        [--files=* : Lint multiple files. Relative to the view path.]
+        [--directories=* : Lint multiple directories. Relative to the view path.]
+        [--format=text : Format to ouput the result in. Supports `text` or `json`.]
+    ';
 
     /**
      * {@inheritdoc}
@@ -80,48 +85,6 @@ class LintCommand extends Command
         }
 
         return $foundFiles;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getArguments(): array
-    {
-        return [
-            [
-                'dir',
-                InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                'Path to the template dir.',
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOptions(): array
-    {
-        return [
-            [
-                'files',
-                null,
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Lint multiple files. Relative to the view path.',
-            ],
-            [
-                'directories',
-                null,
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Lint multiple directories. Relative to the view path.',
-            ],
-            [
-                'format',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Format to ouput the result in. Supports `text` or `json`.',
-                'text',
-            ],
-        ];
     }
 
     /**

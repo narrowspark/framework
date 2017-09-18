@@ -21,7 +21,11 @@ class ServeCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $name = 'serve';
+    protected $signature = 'serve
+        [--H|--host=127.0.0.1 : The hostname to listen to.]
+        [--p|--port=8000 : The port to listen to.]
+        [--controller=index.php : File name of controller.]
+    ';
 
     /**
      * {@inheritdoc}
@@ -68,8 +72,7 @@ class ServeCommand extends Command
 
         $this->configureCommand();
 
-        $callback = null;
-        $output   = $this->getOutput();
+        $output = $this->getOutput();
 
         try {
             if (\file_exists($pidFilePath = $this->getDefaultPidFile())) {
@@ -92,18 +95,6 @@ class ServeCommand extends Command
         }
 
         return 0;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOptions(): array
-    {
-        return [
-            ['host', 'H', InputOption::VALUE_REQUIRED, 'The hostname to listen to.', '127.0.0.1'],
-            ['port', 'p', InputOption::VALUE_REQUIRED, 'The port to listen to.', 8000],
-            ['controller', null, InputOption::VALUE_REQUIRED, 'File name of controller.', 'index.php'],
-        ];
     }
 
     /**
@@ -132,6 +123,7 @@ class ServeCommand extends Command
                 $process->setTty(true);
                 $callback = null;
             } catch (RuntimeException $e) {
+                //
             }
         }
 

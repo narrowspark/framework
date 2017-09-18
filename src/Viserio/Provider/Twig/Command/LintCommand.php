@@ -16,6 +16,15 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     /**
      * {@inheritdoc}
      */
+    protected $signature = 'twig:lint
+        [--files=* : Lint multiple files. Relative to the view path.]
+        [--directories=* : Lint multiple directories. Relative to the view path.]
+        [--format=text : Format to ouput the result in. Supports `text` or `json`.]
+    ';
+
+    /**
+     * {@inheritdoc}
+     */
     public static function getDimensions(): iterable
     {
         return ['viserio', 'view'];
@@ -33,14 +42,6 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
                 ],
             ],
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getArguments(): array
-    {
-        return [];
     }
 
     /**

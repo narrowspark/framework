@@ -21,7 +21,13 @@ class OptionDumpCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $name = 'option:dump';
+    protected $signature = 'option:dump 
+        [dir : Path to the config dir.]
+        [--format=php : The output format (php, json, xml, json).]
+        [--overwrite : Overwrite existent class config.]
+        [--merge : Merge existent class config with a new class config.]
+        [--show : You will see the config and be asked before the config is written to a file.]
+    ';
 
     /**
      * {@inheritdoc}
@@ -95,54 +101,6 @@ return ' . $this->getPrettyPrintArray($config) . ';';
         }
 
         return 0;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getArguments(): array
-    {
-        return [
-            [
-                'dir',
-                InputArgument::REQUIRED,
-                'Path to the config dir.',
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOptions(): array
-    {
-        return [
-            [
-                'format',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The output format (php, json, xml, json)',
-                'php',
-            ],
-            [
-                'overwrite',
-                null,
-                InputOption::VALUE_NONE,
-                'Overwrite existent class config',
-            ],
-            [
-                'merge',
-                null,
-                InputOption::VALUE_NONE,
-                'Merge existent class config with a new class config',
-            ],
-            [
-                'show',
-                null,
-                InputOption::VALUE_NONE,
-                'You will see the config and be asked before the config is written to a file',
-            ],
-        ];
     }
 
     /**
@@ -257,7 +215,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
         if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
             throw new InvalidArgumentException(sprintf(
-                'Route cache directory [%s] cannot be created or is write protected.',
+                'Cache directory [%s] cannot be created or is write protected.',
                 $dir
             ));
         }
