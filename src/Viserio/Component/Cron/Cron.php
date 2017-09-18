@@ -5,12 +5,12 @@ namespace Viserio\Component\Cron;
 use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
+use Spatie\Macroable\Macroable;
 use Symfony\Component\Process\Process;
 use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Cron\Cron as CronContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
-use Spatie\Macroable\Macroable;
 
 class Cron implements CronContract
 {

@@ -4,6 +4,7 @@ namespace Viserio\Component\Mail;
 
 use Closure;
 use InvalidArgumentException;
+use Spatie\Macroable\Macroable;
 use Swift_Mailer;
 use Swift_Mime_SimpleMessage;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
@@ -17,7 +18,6 @@ use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
-use Spatie\Macroable\Macroable;
 
 class Mailer implements MailerContract, RequiresComponentConfigContract
 {

@@ -5,6 +5,7 @@ namespace Viserio\Component\Routing;
 use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Spatie\Macroable\Macroable;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
@@ -14,7 +15,6 @@ use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
-use Spatie\Macroable\Macroable;
 
 class Router implements RouterContract
 {

@@ -5,12 +5,12 @@ namespace Viserio\Component\Routing\Generator;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use Spatie\Macroable\Macroable;
 use Viserio\Component\Contract\Routing\Exception\RouteNotFoundException;
 use Viserio\Component\Contract\Routing\Exception\UrlGenerationException;
 use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
-use Spatie\Macroable\Macroable;
 
 class UrlGenerator implements UrlGeneratorContract
 {

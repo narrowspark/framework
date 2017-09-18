@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use BadMethodCallException;
+use Spatie\Macroable\Macroable;
 use Stringy\StaticStringy;
 use Viserio\Component\Contract\Support\CharacterType;
-use Spatie\Macroable\Macroable;
 
 /**
  * @mixin \Stringy\StaticStringy

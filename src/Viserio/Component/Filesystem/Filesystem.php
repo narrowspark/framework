@@ -5,6 +5,7 @@ namespace Viserio\Component\Filesystem;
 use FilesystemIterator;
 use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
+use Spatie\Macroable\Macroable;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -16,7 +17,6 @@ use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOExce
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
-use Spatie\Macroable\Macroable;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract

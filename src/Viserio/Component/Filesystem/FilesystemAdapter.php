@@ -8,6 +8,7 @@ use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use RuntimeException;
+use Spatie\Macroable\Macroable;
 use Viserio\Component\Contract\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
@@ -16,7 +17,6 @@ use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOExce
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
-use Spatie\Macroable\Macroable;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
