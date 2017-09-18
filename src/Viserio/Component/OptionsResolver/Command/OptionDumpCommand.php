@@ -4,8 +4,6 @@ namespace Viserio\Component\OptionsResolver\Command;
 
 use InvalidArgumentException;
 use ReflectionClass;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;

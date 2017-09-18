@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Command;
 
-use Symfony\Component\Console\Input\InputOption;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;

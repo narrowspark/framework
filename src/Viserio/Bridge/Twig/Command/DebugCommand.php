@@ -4,8 +4,6 @@ namespace Viserio\Bridge\Twig\Command;
 
 use ReflectionFunction;
 use ReflectionMethod;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Twig\Environment;
 use UnexpectedValueException;
 use Viserio\Component\Console\Command\Command;
