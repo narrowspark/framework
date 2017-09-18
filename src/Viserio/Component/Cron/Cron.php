@@ -10,14 +10,14 @@ use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Cron\Cron as CronContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
-use Viserio\Component\Support\Traits\MacroableTrait;
+use Spatie\Macroable\Macroable;
 
 class Cron implements CronContract
 {
     use ContainerAwareTrait;
     use CacheItemPoolAwareTrait;
     use InvokerAwareTrait;
-    use MacroableTrait;
+    use Macroable;
 
     /**
      * The cron expression representing the cron job's frequency.

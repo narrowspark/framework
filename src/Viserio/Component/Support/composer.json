@@ -20,6 +20,7 @@
     "require": {
         "php"                                      : "^7.2",
         "ext-mbstring"                             : "*",
+        "spatie/macroable"                         : "^1.0",
         "viserio/contracts"                        : "self.version"
     },
     "require-dev": {

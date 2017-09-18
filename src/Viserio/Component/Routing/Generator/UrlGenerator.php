@@ -10,11 +10,11 @@ use Viserio\Component\Contract\Routing\Exception\UrlGenerationException;
 use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Component\Support\Traits\MacroableTrait;
+use Spatie\Macroable\Macroable;
 
 class UrlGenerator implements UrlGeneratorContract
 {
-    use MacroableTrait;
+    use Macroable;
 
     /**
      * The named parameter defaults.

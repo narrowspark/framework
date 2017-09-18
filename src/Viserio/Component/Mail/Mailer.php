@@ -17,15 +17,15 @@ use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
-use Viserio\Component\Support\Traits\MacroableTrait;
+use Spatie\Macroable\Macroable;
 
 class Mailer implements MailerContract, RequiresComponentConfigContract
 {
     use ContainerAwareTrait;
-    use OptionsResolverTrait;
     use EventsAwareTrait;
     use InvokerAwareTrait;
-    use MacroableTrait;
+    use Macroable;
+    use OptionsResolverTrait;
     use ViewAwareTrait;
 
     /**

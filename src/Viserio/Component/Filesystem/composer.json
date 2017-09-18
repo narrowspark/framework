@@ -40,6 +40,7 @@
         "ext-mbstring"                       : "*",
         "psr/container"                      : "^1.0",
         "league/flysystem"                   : "~1.0",
+        "spatie/macroable"                   : "^1.0",
         "symfony/filesystem"                 : "~3.3",
         "symfony/finder"                     : "~3.3",
         "viserio/contracts"                  : "self.version",

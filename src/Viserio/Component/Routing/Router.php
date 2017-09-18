@@ -14,13 +14,13 @@ use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
-use Viserio\Component\Support\Traits\MacroableTrait;
+use Spatie\Macroable\Macroable;
 
 class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
-    use MacroableTrait {
+    use Macroable {
         __call as macroCall;
     }
 

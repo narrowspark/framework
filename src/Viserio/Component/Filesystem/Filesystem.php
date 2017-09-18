@@ -16,7 +16,7 @@ use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOExce
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
-use Viserio\Component\Support\Traits\MacroableTrait;
+use Spatie\Macroable\Macroable;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract
@@ -24,7 +24,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemHelperTrait;
     use FilesystemExtensionTrait;
-    use MacroableTrait;
+    use Macroable;
 
     /**
      * @var array
