@@ -56,6 +56,8 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
      *
      * @param string $extension
      *
+     * @return \Twig\Loader\LoaderInterface
+     *
      * @codeCoverageIgnore
      */
     public function setExtension(string $extension): LoaderInterface

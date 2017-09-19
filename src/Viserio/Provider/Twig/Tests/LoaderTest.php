@@ -11,62 +11,77 @@ use Viserio\Provider\Twig\Loader;
 
 class LoaderTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
+     */
+    private $file;
+
+    /**
+     * @var \Viserio\Component\View\ViewFinder
+     */
+    private $finder;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->file = $this->mock(FilesystemContract::class);
+        $this->finder = $this->mock(FinderContract::class);
+    }
+
     public function testExists(): void
     {
-        $file = $this->mock(FilesystemContract::class);
-        $file->shouldReceive('has')
+        $this->file->shouldReceive('has')
             ->once()
             ->with('test.twig')
             ->andReturn(true);
-        $finder = $this->mock(FinderContract::class);
-        $finder->shouldReceive('getFilesystem')
-            ->once()
-            ->andReturn($file);
 
-        $loader = new Loader($finder);
+        $this->finder->shouldReceive('getFilesystem')
+            ->once()
+            ->andReturn($this->file);
+
+        $loader = new Loader($this->finder);
 
         self::assertTrue($loader->exists('test.twig'));
 
-        $file = $this->mock(FilesystemContract::class);
-        $file->shouldReceive('has')
+        $this->file->shouldReceive('has')
             ->once()
             ->with('test.twig')
             ->andReturn(false);
-        $file->shouldReceive('getExtension')
+        $this->file->shouldReceive('getExtension')
             ->once()
             ->with('test.twig')
             ->andReturn('twig');
-        $finder = $this->mock(FinderContract::class);
-        $finder->shouldReceive('find')
+
+        $this->finder->shouldReceive('find')
             ->once()
             ->with('test')
             ->andThrow(new InvalidArgumentException());
-        $finder->shouldReceive('getFilesystem')
+        $this->finder->shouldReceive('getFilesystem')
             ->once()
-            ->andReturn($file);
+            ->andReturn($this->file);
 
-        $loader = new Loader($finder);
+        $loader = new Loader($this->finder);
 
         self::assertFalse($loader->exists('test.twig'));
     }
 
     public function testGetSourceContext(): void
     {
-        $file = $this->mock(FilesystemContract::class);
-        $file->shouldReceive('has')
+        $this->file->shouldReceive('has')
             ->once()
             ->with('test.twig')
             ->andReturn(true);
-        $file->shouldReceive('read')
+        $this->file->shouldReceive('read')
             ->once()
             ->with('test.twig')
             ->andReturn('test');
-        $finder = $this->mock(FinderContract::class);
-        $finder->shouldReceive('getFilesystem')
-            ->once()
-            ->andReturn($file);
 
-        $loader = new Loader($finder);
+        $this->finder->shouldReceive('getFilesystem')
+            ->once()
+            ->andReturn($this->file);
+
+        $loader = new Loader($this->finder);
         $source = $loader->getSourceContext('test.twig');
 
         self::assertSame('test.twig', $source->getName());
@@ -80,28 +95,27 @@ class LoaderTest extends MockeryTestCase
      */
     public function testGetSourceContextFileNotFound(): void
     {
-        $file = $this->mock(FilesystemContract::class);
-        $file->shouldReceive('has')
+        $this->file->shouldReceive('has')
             ->once()
             ->with('test.twig')
             ->andReturn(false);
-        $file->shouldReceive('read')
+        $this->file->shouldReceive('read')
             ->once()
             ->with('test.twig')
             ->andThrow(new FileNotFoundException('test.twig'));
-        $file->shouldReceive('getExtension')
+        $this->file->shouldReceive('getExtension')
             ->once()
             ->with('test.twig')
             ->andReturn('twig');
-        $finder = $this->mock(FinderContract::class);
-        $finder->shouldReceive('getFilesystem')
+
+        $this->finder->shouldReceive('getFilesystem')
             ->once()
-            ->andReturn($file);
-        $finder->shouldReceive('find')
+            ->andReturn($this->file);
+        $this->finder->shouldReceive('find')
             ->once()
             ->andReturn(['path' => 'test.twig']);
 
-        $loader = new Loader($finder);
+        $loader = new Loader($this->finder);
 
         $loader->getSourceContext('test.twig');
     }
@@ -110,46 +124,45 @@ class LoaderTest extends MockeryTestCase
     {
         $path = __DIR__ . '/Fixtures/twightml.twig.html';
         $date = \date('F d Y H:i:s', \filemtime($path));
-        $file = $this->mock(FilesystemContract::class);
-        $file->shouldReceive('has')
+
+        $this->file->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn($path);
-        $file->shouldReceive('getTimestamp')
+        $this->file->shouldReceive('getTimestamp')
             ->once()
             ->with($path)
             ->andReturn($date);
-        $finder = $this->mock(FinderContract::class);
-        $finder->shouldReceive('getFilesystem')
-            ->once()
-            ->andReturn($file);
 
-        $loader = new Loader($finder);
+        $this->finder->shouldReceive('getFilesystem')
+            ->once()
+            ->andReturn($this->file);
+
+        $loader = new Loader($this->finder);
 
         self::assertTrue($loader->isFresh($path, $date));
     }
 
     public function testFindTemplate(): void
     {
-        $file = $this->mock(FilesystemContract::class);
-        $file->shouldReceive('has')
+        $this->file->shouldReceive('has')
             ->twice()
             ->with('test.twig')
             ->andReturn(false);
-        $file->shouldReceive('getExtension')
+        $this->file->shouldReceive('getExtension')
             ->twice()
             ->with('test.twig')
             ->andReturn('twig');
-        $finder = $this->mock(FinderContract::class);
-        $finder->shouldReceive('find')
+
+        $this->finder->shouldReceive('find')
             ->once()
             ->with('test')
             ->andReturn(['path' => 'test.twig']);
-        $finder->shouldReceive('getFilesystem')
+        $this->finder->shouldReceive('getFilesystem')
             ->once()
-            ->andReturn($file);
+            ->andReturn($this->file);
 
-        $loader = new Loader($finder);
+        $loader = new Loader($this->finder);
 
         self::assertSame('test.twig', $loader->findTemplate('test.twig'));
 

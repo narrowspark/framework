@@ -44,7 +44,7 @@ class MemoryDataCollectorTest extends MockeryTestCase
         $collect->updateMemoryUsage();
         $data = $collect->getData();
 
-        $memory = self::convertToBytes(\ini_get('memory_limit')) / 1024 / 1024;
+        $memory = \ini_get('memory_limit') == '-1' ? 'Unlimited' : self::convertToBytes(\ini_get('memory_limit')) / 1024 / 1024;
 
         self::assertSame(
             '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Peak memory usage</b><span>' . $data['memory'] / 1024 / 1024 . ' MB</span></div><div class="profiler-menu-tooltip-group-piece"><b>PHP memory limit</b><span>' . $memory . ' MB</span></div></div>',

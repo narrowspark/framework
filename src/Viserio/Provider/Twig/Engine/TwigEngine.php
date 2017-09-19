@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Provider\Twig\Engine;
 
 use Psr\Container\ContainerInterface;
-use RuntimeException;
 use Twig\Environment;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\View\Exception\RuntimeException;
 use Viserio\Component\View\Engine\AbstractBaseEngine;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsContract
@@ -74,6 +74,11 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @throws \Viserio\Component\Contract\View\Exception\RuntimeException
      */
     public function get(array $fileInfo, array $data = []): string
     {
@@ -88,6 +93,8 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
      * @param \Twig\Environment $twig
      * @param array             $config
      *
+     * @throws \Viserio\Component\Contract\View\Exception\RuntimeException
+     *
      * @return \Twig\Environment
      */
     protected function addExtensions(Environment $twig, array $config): Environment
@@ -101,7 +108,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
                 } else {
                     throw new RuntimeException(\sprintf(
                         'Twig extension [%s] is not a object.',
-                        (string) $extension
+                        $extension
                     ));
                 }
             }

@@ -87,8 +87,10 @@ class TwigServiceProvider implements
      *
      * @return null|\Viserio\Component\Contract\View\Factory
      */
-    public static function extendViewFactory(ContainerInterface $container, ?callable $getPrevious = null): ?FactoryContract
-    {
+    public static function extendViewFactory(
+        ContainerInterface $container,
+        ?callable $getPrevious = null
+    ): ?FactoryContract {
         $view = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
 
         if ($view !== null) {
@@ -105,7 +107,7 @@ class TwigServiceProvider implements
      * @param \Psr\Container\ContainerInterface $container
      * @param null|callable                     $getPrevious
      *
-     * @return null|\Viserio\Component\Contract\View\Factory
+     * @return null|\Viserio\Component\View\Engine\EngineResolver
      */
     public static function extendEngineResolver(ContainerInterface $container, ?callable $getPrevious = null): ?EngineResolver
     {
@@ -158,9 +160,7 @@ class TwigServiceProvider implements
 
         $loaders     = [];
         $twigOptions = $options['engines']['twig'];
-        $loader      = new TwigLoader(
-            $container->get(FinderContract::class)
-        );
+        $loader      = new TwigLoader($container->get(FinderContract::class));
 
         if (isset($twigOptions['file_extension'])) {
             $loader->setExtension($twigOptions['file_extension']);

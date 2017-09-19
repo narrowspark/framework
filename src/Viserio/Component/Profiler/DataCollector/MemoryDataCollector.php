@@ -17,7 +17,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
 
         $this->data = [
             'memory'       => 0,
-            'memory_limit' => $memoryLimit === '-1' ? -1 : self::convertToBytes($memoryLimit),
+            'memory_limit' => $memoryLimit == '-1' ? -1 : self::convertToBytes($memoryLimit),
         ];
     }
 
@@ -53,7 +53,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
             return $number / 1024 / 1024;
         };
 
-        $limit = $this->data['memory_limit'] == -1 ? 'Unlimited' : $coverToMb($this->data['memory_limit']);
+        $limit = $this->data['memory_limit'] == '-1' ? 'Unlimited' : $coverToMb($this->data['memory_limit']);
 
         return $this->createTooltipGroup([
             'Peak memory usage' => $coverToMb($this->data['memory']) . ' MB',
