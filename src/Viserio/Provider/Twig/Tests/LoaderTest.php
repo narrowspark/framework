@@ -25,7 +25,7 @@ class LoaderTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->file = $this->mock(FilesystemContract::class);
+        $this->file   = $this->mock(FilesystemContract::class);
         $this->finder = $this->mock(FinderContract::class);
     }
 
