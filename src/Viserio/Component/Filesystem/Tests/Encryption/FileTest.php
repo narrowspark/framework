@@ -18,7 +18,7 @@ class FileTest extends TestCase
     private $file;
 
     /**
-     * @var \org\bovigo\vfs\vfsStream
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 

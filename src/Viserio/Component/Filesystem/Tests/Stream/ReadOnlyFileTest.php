@@ -10,7 +10,7 @@ use Viserio\Component\Filesystem\Stream\ReadOnlyFile;
 class ReadOnlyFileTest extends TestCase
 {
     /**
-     * @var \org\bovigo\vfs\vfsStream
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 

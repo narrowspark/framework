@@ -9,7 +9,7 @@ use Viserio\Component\Filesystem\Stream\MutableFile;
 class MutableFileTest extends TestCase
 {
     /**
-     * @var \org\bovigo\vfs\vfsStream
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 

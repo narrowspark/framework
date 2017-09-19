@@ -184,6 +184,7 @@ trait OptionsResolverTrait
      * @param array       $interfaces
      *
      * @throws \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException
      *
      * @return iterable|object
      */
@@ -222,6 +223,8 @@ trait OptionsResolverTrait
      * @param iterable $config
      * @param string   $configClass
      *
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidValidatorException
+     *
      * @return void
      */
     private static function validateOptions(array $validators, iterable $config, string $configClass): void
@@ -243,7 +246,9 @@ trait OptionsResolverTrait
                 self::validateOptions($value, $config[$key], $configClass);
 
                 return;
-            } elseif (! \is_callable($value)) {
+            }
+
+            if (! \is_callable($value)) {
                 throw new InvalidValidatorException(\sprintf(
                     'The validator must be of type callable, [%s] given, in %s.',
                     \is_object($value) ? \get_class($value) : \gettype($value),

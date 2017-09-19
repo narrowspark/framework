@@ -10,7 +10,7 @@ use Viserio\Component\Session\Handler\FileSessionHandler;
 class FileSessionHandlerTest extends TestCase
 {
     /**
-     * @var \org\bovigo\vfs\vfsStream
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 
