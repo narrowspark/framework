@@ -637,15 +637,15 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     private function filterContentsByType(array $contents, string $type): array
     {
-        $return = [];
+        $results = [];
 
         foreach ($contents as $key => $value) {
             if (isset($value['type']) && $value['type'] === $type) {
-                $return[$key] = $value['path'];
+                $results[$key] = $value['path'];
             }
         }
 
-        return $return;
+        return $results;
     }
 
     /**
