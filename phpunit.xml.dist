@@ -92,9 +92,9 @@
         <testsuite name="Narrowspark Pipeline Component Test Suite">
             <directory>./src/Viserio/Component/Pipeline/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Queue Component Test Suite">
-            <directory>./src/Viserio/Component/Queue/Tests</directory>
-        </testsuite>
+        <!--<testsuite name="Narrowspark Queue Component Test Suite">-->
+            <!--<directory>./src/Viserio/Component/Queue/Tests</directory>-->
+        <!--</testsuite>-->
         <testsuite name="Narrowspark Routing Component Test Suite">
             <directory>./src/Viserio/Component/Routing/Tests</directory>
         </testsuite>
