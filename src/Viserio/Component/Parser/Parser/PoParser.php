@@ -11,14 +11,14 @@ class PoParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        $lines = explode("\n", $string);
+        $lines = \explode("\n", $payload);
         $i     = 0;
 
         $translation  = [];
         $translations = [];
 
-        for ($n = count($lines); $i < $n; ++$i) {
-            $line = trim($lines[$i]);
+        for ($n = \count($lines); $i < $n; ++$i) {
+            $line = \trim($lines[$i]);
             $line = $this->fixMultiLines($line, $lines, $i);
 
             if ($line === '') {
@@ -31,9 +31,9 @@ class PoParser implements ParserContract
                 continue;
             }
 
-            $splitLine = preg_split('/\s+/', $line, 2);
+            $splitLine = \preg_split('/\s+/', $line, 2);
             $key       = $splitLine[0];
-            $data      = isset($splitLine[1]) ? $splitLine[1] : '';
+            $data      = $splitLine[1] ?? '';
 
             switch ($key) {
                 case '#':
@@ -47,15 +47,15 @@ class PoParser implements ParserContract
                     break;
 
                 case '#,':
-                    foreach (array_map('trim', explode(',', trim($data))) as $value) {
+                    foreach (array_map('trim', \explode(',', \trim($data))) as $value) {
                         $translation->addFlag($value);
                     }
                     $append = null;
                     break;
 
                 case '#:':
-                    foreach (preg_split('/\s+/', trim($data)) as $value) {
-                        if (preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
+                    foreach (\preg_split('/\s+/', \trim($data)) as $value) {
+                        if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
                             $translation->addReference($matches[1], isset($matches[3]) ? $matches[3] : null);
                         }
                     }
@@ -128,7 +128,7 @@ class PoParser implements ParserContract
             }
         }
 
-        if ($translation->hasOriginal() && ! in_array($translation, iterator_to_array($translations))) {
+        if ($translation->hasOriginal() && ! \in_array($translation, \iterator_to_array($translations))) {
             $translations[] = $translation;
         }
 
@@ -146,12 +146,12 @@ class PoParser implements ParserContract
      */
     private function fixMultiLines(string $line, array $lines, int &$i): string
     {
-        for ($j = $i, $t = count($lines); $j < $t; ++$j) {
-            if (mb_substr($line, -1, 1) == '"'
-                && isset($lines[$j + 1])
-                && mb_substr(trim($lines[$j + 1]), 0, 1) == '"'
+        for ($j = $i, $t = \count($lines); $j < $t; ++$j) {
+            if (isset($lines[$j + 1]) &&
+                \mb_substr($line, -1, 1) === '"' &&
+                \mb_substr(trim($lines[$j + 1]), 0, 1) === '"'
             ) {
-                $line = mb_substr($line, 0, -1) . mb_substr(trim($lines[$j + 1]), 1);
+                $line = \mb_substr($line, 0, -1) . \mb_substr(trim($lines[$j + 1]), 1);
             } else {
                 $i = $j;
                 break;
@@ -175,10 +175,10 @@ class PoParser implements ParserContract
         }
 
         if ($value[0] === '"') {
-            $value = mb_substr($value, 1, -1);
+            $value = \mb_substr($value, 1, -1);
         }
 
-        return strtr(
+        return \strtr(
             $value,
             [
                 '\\\\' => '\\',

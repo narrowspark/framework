@@ -6,9 +6,9 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parser\Dumper\PhpDumper;
-use Viserio\Component\Parser\Parser\PhpParser;
+use Viserio\Component\Parser\Parser\PhpArrayParser;
 
-class PhpTest extends TestCase
+class PhpArrayTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -35,7 +35,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
             '
         )->at($this->root);
 
-        $parsed = (new PhpParser())->parse($file->url());
+        $parsed = (new PhpArrayParser())->parse($file->url());
 
         self::assertTrue(\is_array($parsed));
         self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
@@ -47,7 +47,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
      */
     public function testParseToThrowException(): void
     {
-        (new PhpParser())->parse('nonexistfile');
+        (new PhpArrayParser())->parse('nonexistfile');
     }
 
     /**
@@ -62,7 +62,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
             '
         )->at($this->root);
 
-        (new PhpParser())->parse($file->url());
+        (new PhpArrayParser())->parse($file->url());
     }
 
     public function testDumpFile(): void

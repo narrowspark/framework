@@ -41,7 +41,6 @@
         "mikey179/vfsStream"                       : "^1.6",
         "narrowspark/testing-helper"               : "^4.0",
         "phpunit/phpunit"                          : "^6.0",
-        "sepia/po-parser"                          : "^4.2",
         "symfony/polyfill-xml"                     : "^1.3",
         "symfony/yaml"                             : "~3.4 || ~4.0",
         "yosymfony/toml"                           : "^0.3",
@@ -62,7 +61,6 @@
     "suggest": {
         "container-interop/service-provider"       : "Required to use service-provider (^0.4).",
         "symfony/yaml"                             : "Required to use the YAML parser (~3.4).",
-        "sepia/po-parser"                          : "Required to use the PO parser (^4.2).",
         "spatie/array-to-xml"                      : "Required to use the XML dump (^2.1.1).",
         "yosymfony/toml"                           : "Required to use the TOML parser (^0.3).",
         "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version)."
