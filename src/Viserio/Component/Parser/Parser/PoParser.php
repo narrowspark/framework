@@ -2,10 +2,23 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parser\Parser;
 
+use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Contract\Parser\Parser as ParserContract;
 
 class PoParser implements ParserContract
 {
+    private $entries = [];
+
+    private $headers = [];
+
+    private $options = [
+        'multiline-glue' => '<##EOL##>',  // Token used to separate lines in msgid
+        'context-glue' => '<##EOC##>',  // Token used to separate ctxt from msgid
+        'line-ending' => 'unix',
+    ];
+
+    private $lineEndings = ['unix' => "\n", 'win' => "\r\n"];
+
     /**
      * {@inheritdoc}
      */
@@ -14,8 +27,13 @@ class PoParser implements ParserContract
         $lines = \explode("\n", $payload);
         $i     = 0;
 
-        $translation  = [];
-        $translations = [];
+        $headers = [];
+        $hash = [];
+        $entry = [];
+        $justNewEntry = false; // A new entry has been just inserted.
+        $firstLine = true;
+        $lastPreviousKey = null; // Used to remember last key in a multiline previous entry.
+        $state = null;
 
         for ($n = \count($lines); $i < $n; ++$i) {
             $line = \trim($lines[$i]);
@@ -24,8 +42,6 @@ class PoParser implements ParserContract
             if ($line === '') {
                 if (isset($translations['']) && $translations[''] === '') {
                     $translations = self::extractHeaders($translations[''], $translations);
-                } elseif (! isset($translations[''])) {
-                    $translations[] = $translation;
                 }
 
                 continue;
@@ -37,102 +53,113 @@ class PoParser implements ParserContract
 
             switch ($key) {
                 case '#':
-                    $translation->addComment($data);
-                    $append = null;
+                    $entry = $this->addComment($data, $entry);
                     break;
 
                 case '#.':
-                    $translation->addExtractedComment($data);
-                    $append = null;
+                    $entry = $this->addExtractedComment($data, $entry);
                     break;
 
                 case '#,':
-                    foreach (array_map('trim', \explode(',', \trim($data))) as $value) {
-                        $translation->addFlag($value);
-                    }
-                    $append = null;
+                    $entry = $this->addFlags($data, $entry);
                     break;
 
                 case '#:':
-                    foreach (\preg_split('/\s+/', \trim($data)) as $value) {
-                        if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
-                            $translation->addReference($matches[1], isset($matches[3]) ? $matches[3] : null);
-                        }
-                    }
-                    $append = null;
+                    $entry = $this->addReference($data, $entry);
                     break;
+
+                case '#|':  // Previous untranslated string
+                case '#~':  // Old entry
+                case '#~|': // Previous-Old untranslated string.
+                    $type = $key;
+
+                    if ($key === '#|') {
+                        $type = 'previous';
+                    } elseif ($key === '#~') {
+                        $type = 'obsolete';
+                    } elseif ($key === '#~|') {
+                        $type = 'previous-obsolete';
+                    }
+
+                $tmpParts = explode(' ', $data);
+                $tmpKey = $tmpParts[0];
+
+                if (!in_array($tmpKey, ['msgid', 'msgid_plural', 'msgstr', 'msgctxt'], true)) {
+                    $tmpKey = $lastPreviousKey; // If there is a multiline previous string we must remember what key was first line.
+                    $str = $data;
+                } else {
+                    $str = implode(' ', array_slice($tmpParts, 1));
+                }
+
+                $entry[$type] = $entry[$type] ?? ['msgid' => [], 'msgstr' => []];
+
+                if ($type === 'obsolete' || $type === 'previous-obsolete') {
+                    [$entry, $lastPreviousKey] = $this->addObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entry);
+                }
+
+                if ($type === 'previous') {
+                    [$entry, $lastPreviousKey] = $this->addPreviousEntry($lastPreviousKey, $tmpKey, $str, $entry, $type);
+                }
+
+                break;
 
                 case 'msgctxt':
-                    $translation = $translation->getClone(self::convertString($data));
-                    $append      = 'Context';
-                    break;
-
-                case 'msgid':
-                    $translation = $translation->getClone(null, self::convertString($data));
-                    $append      = 'Original';
-                    break;
-
-                case 'msgid_plural':
-                    $translation->setPlural(self::convertString($data));
-                    $append = 'Plural';
+                case 'msgid':        // untranslated-string
+                case 'msgid_plural': // untranslated-string-plural
+                    $state = $key;
+                    $entry[$state][] = self::convertString($data);
                     break;
 
                 case 'msgstr':
-                case 'msgstr[0]':
-                    $translation->setTranslation(self::convertString($data));
-                    $append = 'Translation';
-                    break;
-
-                case 'msgstr[1]':
-                    $translation->setPluralTranslations([self::convertString($data)]);
-                    $append = 'PluralTranslation';
+                    $state = 'msgstr';
+                    $entry[$state][] = self::convertString($data);
                     break;
 
                 default:
-                    if (mb_strpos($key, 'msgstr[') === 0) {
-                        $p   = $translation->getPluralTranslations();
-                        $p[] = self::convertString($data);
+                    if (strpos($key, 'msgstr[') !== false) {
+                        // translated-string-case-n
+                        $state = $key;
+                        $entry[$state][] = self::convertString($data);
+                    } else {
+                        // "multiline" lines
+                        switch ($state) {
+                            case 'msgctxt':
+                            case 'msgid':
+                            case 'msgid_plural':
+                            case (strpos($state, 'msgstr[') !== false):
+                                if (is_string($entry[$state])) {
+                                    // Convert it to array
+                                    $entry[$state] = [$entry[$state]];
+                                }
 
-                        $translation->setPluralTranslations($p);
-                        $append = 'PluralTranslation';
-                        break;
+                                $entry[$state][] = self::convertString($line);
+                                break;
+                            case 'msgstr':
+                                // Special fix where msgid is ""
+                                if ($entry['msgid'] === "\"\"") {
+                                    $entry['msgstr'][] = trim($line, '"');
+                                } else {
+                                    $entry['msgstr'][] = $line;
+                                }
+
+                                break;
+                            default:
+                                throw new ParseException([
+                                    'message' => sprintf(
+                                        'Parse error! Unknown key [%s] on line %s',
+                                        $key,
+                                        ($lineNumber + 1)
+                                    ),
+                                    'line' => $lineNumber
+                                ]);
+                        }
                     }
 
-                    if (isset($append)) {
-                        if ($append === 'Context') {
-                            $translation = $translation->getClone($translation->getContext()
-                                . "\n"
-                                . self::convertString($data));
-                            break;
-                        }
-
-                        if ($append === 'Original') {
-                            $translation = $translation->getClone(null, $translation->getOriginal()
-                                . "\n"
-                                . self::convertString($data));
-                            break;
-                        }
-
-                        if ($append === 'PluralTranslation') {
-                            $p   = $translation->getPluralTranslations();
-                            $p[] = array_pop($p) . "\n" . self::convertString($data);
-                            $translation->setPluralTranslations($p);
-                            break;
-                        }
-
-                        $getMethod = 'get' . $append;
-                        $setMethod = 'set' . $append;
-                        $translation->$setMethod($translation->$getMethod() . "\n" . self::convertString($data));
-                    }
                     break;
             }
         }
 
-        if ($translation->hasOriginal() && ! \in_array($translation, \iterator_to_array($translations))) {
-            $translations[] = $translation;
-        }
-
-        return $translations;
+        return $entry;
     }
 
     /**
@@ -149,7 +176,7 @@ class PoParser implements ParserContract
         for ($j = $i, $t = \count($lines); $j < $t; ++$j) {
             if (isset($lines[$j + 1]) &&
                 \mb_substr($line, -1, 1) === '"' &&
-                \mb_substr(trim($lines[$j + 1]), 0, 1) === '"'
+                \mb_strpos(trim($lines[$j + 1]), '"') === 0
             ) {
                 $line = \mb_substr($line, 0, -1) . \mb_substr(trim($lines[$j + 1]), 1);
             } else {
@@ -238,5 +265,139 @@ class PoParser implements ParserContract
     private static function isHeaderDefinition(string $line): bool
     {
         return (bool) preg_match('/^[\w-]+:/', $line);
+    }
+
+    /**
+     * Translator comments.
+     *
+     * @param $data
+     * @param array $entry
+     *
+     * @return array
+     */
+    private function addComment($data, $entry): array
+    {
+        if (!in_array($data, $entry['comment'], true)) {
+            $entry['comment'][] = self::convertString($data);
+        }
+
+        return $entry;
+    }
+
+    /**
+     * Comments extracted from source code.
+     *
+     * @param $data
+     * @param array $entry
+     *
+     * @return array
+     */
+    private function addExtractedComment($data, array $entry): array
+    {
+        if (!in_array($data, $entry['extractedComment'], true)) {
+            $entry['extractedComment'][] = self::convertString($data);
+        }
+
+        return $entry;
+    }
+
+    /**
+     * Flagged translation.
+     *
+     * @param $data
+     * @param array $entry
+     *
+     * @return array
+     */
+    private function addFlags($data, array $entry): array
+    {
+        foreach (array_map('trim', \explode(',', \trim($data))) as $value) {
+            if (!in_array($value, $entry['flags'], true)) {
+                $entry['flags'][] = self::convertString($value);
+            }
+        }
+
+        return $entry;
+    }
+
+    /**
+     * Reference
+     *
+     * @param $data
+     * @param array $entry
+     *
+     * @return array
+     */
+    private function addReference($data, $entry): array
+    {
+        foreach (\preg_split('/\s+/', \trim($data)) as $value) {
+            if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
+                $filename = $matches[1];
+                $line = $matches[3] ?? null;
+                $key = sprintf('{%s}:{%s}', $filename, $line);
+
+                $entry['reference'][$key] = [$filename, $line];
+            }
+        }
+
+        return $entry;
+    }
+
+    /**
+     * @param $lastPreviousKey
+     * @param $tmpKey
+     * @param $str
+     * @param $entry
+     * @return array
+     */
+    private function addObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entry): array
+    {
+        $entry['obsolete'] = true;
+
+        switch ($tmpKey) {
+            case 'msgid':
+                $entry['msgid'][] = self::convertString($str);
+                $lastPreviousKey = $tmpKey;
+                break;
+            case 'msgstr':
+                if ($str === "\"\"") {
+                    $entry['msgstr'][] = self::convertString(trim($str, '"'));
+                } else {
+                    $entry['msgstr'][] = self::convertString($str);
+                }
+
+                $lastPreviousKey = $tmpKey;
+                break;
+            default:
+                break;
+        }
+
+        return [$entry, $lastPreviousKey];
+    }
+
+    /**
+     * @param $lastPreviousKey
+     * @param $tmpKey
+     * @param $str
+     * @param $entry
+     * @param $type
+     *
+     * @return array
+     */
+    private function addPreviousEntry($lastPreviousKey, $tmpKey, $str, $entry, $type): array
+    {
+        switch ($tmpKey) {
+            case 'msgid':
+            case 'msgid_plural':
+            case 'msgstr':
+                $entry[$type][$tmpKey][] = self::convertString($str);
+                $lastPreviousKey = $tmpKey;
+                break;
+            default:
+                $entry[$type][$tmpKey] = self::convertString(($str);
+                break;
+        }
+
+        return [$entry, $lastPreviousKey];
     }
 }
