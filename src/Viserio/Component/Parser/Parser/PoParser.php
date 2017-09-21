@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parser\Parser;
 
-use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Contract\Parser\Parser as ParserContract;
 
 class PoParser implements ParserContract
