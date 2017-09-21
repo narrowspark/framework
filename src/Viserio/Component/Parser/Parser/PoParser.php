@@ -23,7 +23,7 @@ class PoParser implements ParserContract
 
             if ($line === '') {
                 if (isset($translations['']) && $translations[''] === '') {
-                    $this->extractHeaders($translations[''], $translations);
+                    $translations = self::extractHeaders($translations[''], $translations);
                 } elseif (! isset($translations[''])) {
                     $translations[] = $translation;
                 }
@@ -63,35 +63,35 @@ class PoParser implements ParserContract
                     break;
 
                 case 'msgctxt':
-                    $translation = $translation->getClone($this->convertString($data));
+                    $translation = $translation->getClone(self::convertString($data));
                     $append      = 'Context';
                     break;
 
                 case 'msgid':
-                    $translation = $translation->getClone(null, $this->convertString($data));
+                    $translation = $translation->getClone(null, self::convertString($data));
                     $append      = 'Original';
                     break;
 
                 case 'msgid_plural':
-                    $translation->setPlural($this->convertString($data));
+                    $translation->setPlural(self::convertString($data));
                     $append = 'Plural';
                     break;
 
                 case 'msgstr':
                 case 'msgstr[0]':
-                    $translation->setTranslation($this->convertString($data));
+                    $translation->setTranslation(self::convertString($data));
                     $append = 'Translation';
                     break;
 
                 case 'msgstr[1]':
-                    $translation->setPluralTranslations([$this->convertString($data)]);
+                    $translation->setPluralTranslations([self::convertString($data)]);
                     $append = 'PluralTranslation';
                     break;
 
                 default:
                     if (mb_strpos($key, 'msgstr[') === 0) {
                         $p   = $translation->getPluralTranslations();
-                        $p[] = $this->convertString($data);
+                        $p[] = self::convertString($data);
 
                         $translation->setPluralTranslations($p);
                         $append = 'PluralTranslation';
@@ -102,27 +102,27 @@ class PoParser implements ParserContract
                         if ($append === 'Context') {
                             $translation = $translation->getClone($translation->getContext()
                                 . "\n"
-                                . $this->convertString($data));
+                                . self::convertString($data));
                             break;
                         }
 
                         if ($append === 'Original') {
                             $translation = $translation->getClone(null, $translation->getOriginal()
                                 . "\n"
-                                . $this->convertString($data));
+                                . self::convertString($data));
                             break;
                         }
 
                         if ($append === 'PluralTranslation') {
                             $p   = $translation->getPluralTranslations();
-                            $p[] = array_pop($p) . "\n" . $this->convertString($data);
+                            $p[] = array_pop($p) . "\n" . self::convertString($data);
                             $translation->setPluralTranslations($p);
                             break;
                         }
 
                         $getMethod = 'get' . $append;
                         $setMethod = 'set' . $append;
-                        $translation->$setMethod($translation->$getMethod() . "\n" . $this->convertString($data));
+                        $translation->$setMethod($translation->$getMethod() . "\n" . self::convertString($data));
                     }
                     break;
             }
@@ -168,7 +168,7 @@ class PoParser implements ParserContract
      *
      * @return string
      */
-    private function convertString(string $value): string
+    private static function convertString(string $value): string
     {
         if (! $value) {
             return '';
@@ -202,19 +202,19 @@ class PoParser implements ParserContract
      *
      * @return array
      */
-    private function extractHeaders($headers, array $translations)
+    private static function extractHeaders($headers, array $translations): array
     {
-        $headers       = explode("\n", $headers);
+        $headers       = \explode("\n", $headers);
         $currentHeader = null;
 
         foreach ($headers as $line) {
-            $line = $this->convertString($line);
+            $line = self::convertString($line);
 
             if ($line === '') {
                 continue;
             }
 
-            if ($this->isHeaderDefinition($line)) {
+            if (self::isHeaderDefinition($line)) {
                 $header                                 = array_map('trim', explode(':', $line, 2));
                 $currentHeader                          = $header[0];
                 $translations['header'][$currentHeader] = $header[1];
@@ -223,6 +223,8 @@ class PoParser implements ParserContract
                 $translations['header'][$currentHeader] = $entry . $line;
             }
         }
+
+        return $translations;
     }
 
     /**
@@ -233,7 +235,7 @@ class PoParser implements ParserContract
      *
      * @return bool
      */
-    private function isHeaderDefinition(string $line): bool
+    private static function isHeaderDefinition(string $line): bool
     {
         return (bool) preg_match('/^[\w-]+:/', $line);
     }
