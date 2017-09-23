@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\HttpFactory\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Interop\Http\Factory\RequestFactoryInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
@@ -17,12 +17,12 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\HttpFactory\UploadedFileFactory;
 use Viserio\Component\HttpFactory\UriFactory;
 
-class HttpFactoryServiceProvider implements ServiceProvider
+class HttpFactoryServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices(): array
+    public function getFactories(): array
     {
         return [
             RequestFactoryInterface::class => [self::class, 'createRequestFactory'],
@@ -50,6 +50,14 @@ class HttpFactoryServiceProvider implements ServiceProvider
                 return $container->get(UriFactoryInterface::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     public static function createRequestFactory(): RequestFactory

@@ -31,7 +31,7 @@
     "require-dev": {
         "cache/array-adapter"                      : "^0.4",
         "cache/session-handler"                    : "^0.2",
-        "container-interop/service-provider"       : "^0.3",
+        "container-interop/service-provider"       : "^0.4",
         "mockery/mockery"                          : "^0.9",
         "narrowspark/testing-helper"               : "^4.0",
         "mikey179/vfsStream"                       : "^1.6",
@@ -60,7 +60,7 @@
         "psr/http-message-implementation"          : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"       : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"       : "Required to use service-provider (^0.4).",
         "cache/session-handler"                    : "Required to use the CacheBasedSessionHandler (^0.2).",
         "http-interop/http-middleware"             : "Required to use middleware (^0.4).",
         "viserio/cache"                            : "Required to use the CookieSessionHandler (self.version).",

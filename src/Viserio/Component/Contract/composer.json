@@ -64,7 +64,7 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider"         : "Required to use Container contract (^0.3).",
+        "container-interop/service-provider"         : "Required to use Container contract (^0.4).",
         "psr/log"                                    : "Required to use log contracts (^1.0).",
         "psr/http-message"                           : "Required to use Http, Routing contracts (^1.0).",
         "http-interop/http-middleware"               : "Required to use middleware (^0.4).",

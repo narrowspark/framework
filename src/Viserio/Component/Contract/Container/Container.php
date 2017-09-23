@@ -4,7 +4,7 @@ namespace Viserio\Component\Contract\Container;
 
 use ArrayAccess;
 use Closure;
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 
 interface Container extends ContainerInterface, Factory, ArrayAccess
@@ -129,12 +129,12 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
     /**
      * Registers a service provider.
      *
-     * @param \Interop\Container\ServiceProvider $provider   the service provider to register
+     * @param \Interop\Container\ServiceProviderInterface $provider   the service provider to register
      * @param array                              $parameters An array of values that customizes the provider
      *
      * @return $this
      */
-    public function register(ServiceProvider $provider, array $parameters = []): Container;
+    public function register(ServiceProviderInterface $provider, array $parameters = []): Container;
 
     /**
      * Check if a binding is computed.

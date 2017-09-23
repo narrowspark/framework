@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Swift_Mailer;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
@@ -13,12 +13,12 @@ use Viserio\Component\Mail\Mailer;
 use Viserio\Component\Mail\QueueMailer;
 use Viserio\Component\Mail\TransportManager;
 
-class MailServiceProvider implements ServiceProvider
+class MailServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices(): array
+    public function getFactories(): array
     {
         return [
             TransportManager::class => [self::class, 'createTransportManager'],
@@ -37,6 +37,14 @@ class MailServiceProvider implements ServiceProvider
                 return $container->get(MailerContract::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     public static function createTransportManager(ContainerInterface $container): TransportManager

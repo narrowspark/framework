@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Process\Process;
 use Viserio\Component\Console\Application;
@@ -12,31 +12,38 @@ use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 use Viserio\Component\Foundation\Console\Command\ServeCommand;
 use Viserio\Component\Foundation\Console\Command\UpCommand;
 
-class ConsoleCommandsServiceProvider implements ServiceProvider
+class ConsoleCommandsServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices(): array
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
-            Application::class => [self::class, 'createConsoleCommands'],
+            Application::class => [self::class, 'extendConsole'],
         ];
     }
 
     /**
      * Extend viserio console with commands.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface           $container
+     * @param null|\Viserio\Component\Console\Application $console
      *
      * @return null|\Viserio\Component\Console\Application
      */
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
-    {
-        /** @var Application $console */
-        $console = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
+    public static function extendConsole(
+    	ContainerInterface $container,
+    	?Application $console = null
+    ): ?Application {
         if ($console !== null) {
             $console->addCommands([
                 new DownCommand(),

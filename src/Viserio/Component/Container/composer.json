@@ -20,7 +20,7 @@
     "require": {
         "php"                                        : "^7.2",
         "ext-mbstring"                               : "*",
-        "container-interop/service-provider"         : "^0.3",
+        "container-interop/service-provider"         : "^0.4",
         "php-di/invoker"                             : "^2.0",
         "psr/container"                              : "^1.0",
         "viserio/contracts"                          : "self.version"

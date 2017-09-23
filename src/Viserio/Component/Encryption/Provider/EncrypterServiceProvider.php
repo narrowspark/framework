@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\Encryption\Password as PasswordContract;
@@ -14,7 +14,7 @@ use Viserio\Component\Encryption\Password;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class EncrypterServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
@@ -23,7 +23,7 @@ class EncrypterServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             Encrypter::class         => [self::class, 'createEncrypter'],
@@ -40,6 +40,16 @@ class EncrypterServiceProvider implements
             'password' => function (ContainerInterface $container) {
                 return $container->get(PasswordContract::class);
             },
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [
+            Application::class => [self::class, 'extendConsole'],
         ];
     }
 

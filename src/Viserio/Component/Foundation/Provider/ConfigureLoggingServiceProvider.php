@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\SyslogHandler;
@@ -18,7 +18,7 @@ use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ConfigureLoggingServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract,
     RequiresMandatoryOptionsContract
@@ -29,10 +29,18 @@ class ConfigureLoggingServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
-            Writer::class => [self::class, 'createConfiguredWriter'],
+            Writer::class => [self::class, 'extendLogWriter'],
         ];
     }
 
@@ -71,15 +79,13 @@ class ConfigureLoggingServiceProvider implements
     /**
      * Extend viserio log writer.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface        $container
+     * @param null|\Viserio\Component\Contract\Log\Log $log
      *
-     * @return null|\Viserio\Component\Log\Writer
+     * @return null|\Viserio\Component\Contract\Log\Log
      */
-    public static function createConfiguredWriter(ContainerInterface $container, ?callable $getPrevious = null): ?Writer
+    public static function extendLogWriter(ContainerInterface $container, ?LogContract $log = null): ?LogContract
     {
-        $log = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
         if ($log !== null) {
             // Configure the Monolog handlers for the application.
             $options = self::resolveOptions($container);

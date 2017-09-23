@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -12,7 +12,7 @@ use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Translation\DataCollector\ViserioTranslationDataCollector;
 
 class TranslationDataCollectorServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
@@ -21,12 +21,21 @@ class TranslationDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
-            ProfilerContract::class => [self::class, 'createProfiler'],
+            ProfilerContract::class => [self::class, 'extendProfiler'],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -51,15 +60,15 @@ class TranslationDataCollectorServiceProvider implements
     /**
      * Extend viserio profiler with data collector.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface                  $container
+     * @param null|\Viserio\Component\Contract\Profiler\Profiler $profiler
      *
      * @return null|\Viserio\Component\Contract\Profiler\Profiler
      */
-    public static function createProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
-    {
-        $profiler = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
+    public static function extendProfiler(
+        ContainerInterface $container,
+        ?ProfilerContract $profiler = null
+    ): ?ProfilerContract {
         if ($profiler !== null) {
             $options = self::resolveOptions($container);
 

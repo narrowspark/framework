@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Parsedown;
 use ParsedownExtra;
 use Psr\Container\ContainerInterface;
@@ -16,12 +16,12 @@ use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
 
-class ViewServiceProvider implements ServiceProvider
+class ViewServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             EngineResolver::class  => [self::class, 'createEngineResolver'],
@@ -43,6 +43,14 @@ class ViewServiceProvider implements ServiceProvider
                 return $container->get(FactoryContract::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     public static function createEngineResolver(ContainerInterface $container): EngineResolver

@@ -2,18 +2,24 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\Fixture;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 
-class SimpleFixtureServiceProvider implements ServiceProvider
+class SimpleFixtureServiceProvider implements ServiceProviderInterface
 {
-    public function getServices(): array
+    public function getFactories(): array
     {
         return [
             'param'   => [SimpleFixtureServiceProvider::class, 'getParam'],
             'service' => function () {
                 return new ServiceFixture();
-            },
+            }
+        ];
+    }
+
+    public function getExtensions()
+    {
+        return [
             'previous' => [SimpleFixtureServiceProvider::class, 'getPrevious'],
         ];
     }
@@ -23,8 +29,8 @@ class SimpleFixtureServiceProvider implements ServiceProvider
         return 'value';
     }
 
-    public static function getPrevious(ContainerInterface $container, callable $getPrevious = null)
+    public static function getPrevious(ContainerInterface $container, $previous = null)
     {
-        return \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        return $previous.$previous;
     }
 }

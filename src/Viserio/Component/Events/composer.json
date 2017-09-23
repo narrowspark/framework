@@ -23,7 +23,7 @@
         "viserio/contracts"                       : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"      : "^0.3",
+        "container-interop/service-provider"      : "^0.4",
         "narrowspark/testing-helper"              : "^4.0",
         "phpunit/phpunit"                         : "^6.0",
         "viserio/container"                       : "self.version",
@@ -45,7 +45,7 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider"      : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"      : "Required to use service-provider (^0.4).",
         "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version)."
     },
     "extra": {

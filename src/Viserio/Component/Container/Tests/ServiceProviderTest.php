@@ -36,7 +36,7 @@ class ServiceProviderTest extends TestCase
         $container->instance('previous', 'foo');
         $container->register(new SimpleFixtureServiceProvider());
 
-        self::assertEquals('foo', $container->get('previous'));
+        self::assertEquals('foofoo', $container->get('previous'));
     }
 
     public function testExtendingNothing(): void
@@ -44,6 +44,6 @@ class ServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());
 
-        self::assertNull($container->get('previous'));
+        self::assertSame('', $container->get('previous'));
     }
 }

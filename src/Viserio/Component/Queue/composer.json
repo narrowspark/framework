@@ -39,7 +39,7 @@
         "enqueue/pheanstalk"                     : "^0.7",
         "enqueue/redis"                          : "^0.7",
         "enqueue/test"                           : "^0.7",
-        "container-interop/service-provider"     : "^0.3",
+        "container-interop/service-provider"     : "^0.4",
         "mockery/mockery"                        : "^0.9",
         "narrowspark/testing-helper"             : "^4.0",
         "phpunit/phpunit"                        : "^6.0",
@@ -61,7 +61,7 @@
         "psr/container-implementation"           : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"     : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"     : "Required to use service-provider (^0.4).",
         "enqueue/amqp-ext"                       : "Required to use the Enqueue AMQP transport (based on php extension) (^0.7).",
         "enqueue/dbal"                           : "Required to use the Enqueue Doctrine DBAL transport (^0.7).",
         "enqueue/fs"                             : "Required to use the Enqueue Filesystem transport (^0.7).",

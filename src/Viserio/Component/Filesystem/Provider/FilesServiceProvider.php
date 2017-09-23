@@ -2,17 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Filesystem;
 
-class FilesServiceProvider implements ServiceProvider
+class FilesServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             FilesystemContract::class => function (): Filesystem {
@@ -25,5 +25,13 @@ class FilesServiceProvider implements ServiceProvider
                 return $container->get(FilesystemContract::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 }

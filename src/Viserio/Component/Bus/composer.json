@@ -32,7 +32,7 @@
         "viserio/support"                      : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"   : "^0.3",
+        "container-interop/service-provider"   : "^0.4",
         "mockery/mockery"                      : "^0.9",
         "narrowspark/testing-helper"           : "^4.0",
         "phpunit/phpunit"                      : "^6.0",
@@ -54,7 +54,7 @@
         "psr/container-implementation"         : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"   : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"   : "Required to use service-provider (^0.4).",
         "viserio/statical-proxy"               : "Required to use the proxy instances (self.version).",
         "viserio/queue"                        : "Required to use queueing dispatcher (self.version)."
     },

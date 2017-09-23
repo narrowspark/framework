@@ -31,7 +31,7 @@
         "viserio/support"                       : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"    : "^0.3",
+        "container-interop/service-provider"    : "^0.4",
         "mockery/mockery"                       : "^0.9",
         "narrowspark/testing-helper"            : "^4.0",
         "phpunit/phpunit"                       : "^6.0",
@@ -51,7 +51,7 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider"    : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"    : "Required to use service-provider (^0.4).",
         "psr/cache"                             : "WithoutOverlapping requires a cache component.",
         "viserio/statical-proxy"                : "Required to use the proxy instances (self.version).",
         "viserio/console"                       : "Required to use commands (self.version).",

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,12 +16,12 @@ use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Router;
 
-class RoutingServiceProvider implements ServiceProvider
+class RoutingServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices(): array
+    public function getFactories(): array
     {
         return [
             DispatcherContract::class   => [self::class, 'createRouteDispatcher'],
@@ -40,6 +40,14 @@ class RoutingServiceProvider implements ServiceProvider
                 return $container->get(UrlGeneratorContract::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     /**

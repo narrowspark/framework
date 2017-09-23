@@ -27,7 +27,7 @@
         "viserio/support"                     : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"  : "^0.3",
+        "container-interop/service-provider"  : "^0.4",
         "erusev/parsedown-extra"              : "^0.7",
         "mockery/mockery"                     : "^0.9",
         "narrowspark/testing-helper"          : "^4.0",
@@ -51,7 +51,7 @@
         "psr/container-implementation"        : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"  : "Required to use service-provider (^0.4).",
         "http-interop/http-middleware"        : "Required to use middleware (^0.4).",
         "viserio/http-factory"                : "Required to use the Proxy View::createResponseView (^0.3)."
     },

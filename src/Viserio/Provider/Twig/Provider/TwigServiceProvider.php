@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Provider\Twig\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Twig\Environment as TwigEnvironment;
 use Twig\Lexer;
@@ -19,7 +19,7 @@ use Viserio\Provider\Twig\Engine\TwigEngine;
 use Viserio\Provider\Twig\Loader as TwigLoader;
 
 class TwigServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
@@ -28,7 +28,7 @@ class TwigServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             LoaderInterface::class => [self::class, 'createTwigLoader'],
@@ -36,9 +36,18 @@ class TwigServiceProvider implements
                 return $container->get(LoaderInterface::class);
             },
             TwigEnvironment::class => [self::class, 'createTwigEnvironment'],
+            TwigEngine::class      => [self::class, 'createTwigEngine'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [
             FactoryContract::class => [self::class, 'extendViewFactory'],
             EngineResolver::class  => [self::class, 'extendEngineResolver'],
-            TwigEngine::class      => [self::class, 'createTwigEngine'],
         ];
     }
 
@@ -82,17 +91,15 @@ class TwigServiceProvider implements
     /**
      * Extend ViewFactory.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface             $container
+     * @param null|\Viserio\Component\Contract\View\Factory $view
      *
      * @return null|\Viserio\Component\Contract\View\Factory
      */
     public static function extendViewFactory(
         ContainerInterface $container,
-        ?callable $getPrevious = null
+        ?FactoryContract $view = null
     ): ?FactoryContract {
-        $view = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
         if ($view !== null) {
             /* @var FactoryContract $view */
             $view->addExtension('twig', 'twig');
@@ -104,15 +111,15 @@ class TwigServiceProvider implements
     /**
      * Extend EngineResolver with twig extension.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface                  $container
+     * @param null|\Viserio\Component\View\Engine\EngineResolver $engines
      *
      * @return null|\Viserio\Component\View\Engine\EngineResolver
      */
-    public static function extendEngineResolver(ContainerInterface $container, ?callable $getPrevious = null): ?EngineResolver
-    {
-        $engines = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
+    public static function extendEngineResolver(
+        ContainerInterface $container,
+        ?EngineResolver $engines = null
+    ): ?EngineResolver {
         if ($engines !== null) {
             /* @var EngineResolver $engines */
             $engines->register('twig', function () use ($container) {

@@ -24,6 +24,8 @@ use Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixtu
 use Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
 use Viserio\Component\Container\Tests\Fixture\ContainerTestNoConstructor;
 use Viserio\Component\Container\Tests\Fixture\FactoryClass;
+use Viserio\Component\Container\Tests\Fixture\ServiceFixture;
+use Viserio\Component\Container\Tests\Fixture\SimpleFixtureServiceProvider;
 
 class ContainerTest extends MockeryTestCase
 {
@@ -773,5 +775,43 @@ class ContainerTest extends MockeryTestCase
         $container->when(ContainerTestContextInjectOneFixture::class)->needs('stub')->give(ContainerImplementationTwoFixture::class);
 
         $container->get(ContainerTestContextInjectOneFixture::class);
+    }
+
+    public function testProvider()
+    {
+        $container = new Container();
+        $container->register(new SimpleFixtureServiceProvider());
+
+        self::assertEquals('value', $container['param']);
+        self::assertInstanceOf(ServiceFixture::class, $container['service']);
+    }
+
+    public function testProviderWithRegisterMethod()
+    {
+        $container = new Container();
+        $container->register(new SimpleFixtureServiceProvider(), [
+            'anotherParameter' => 'anotherValue',
+        ]);
+
+        self::assertEquals('value', $container->get('param'));
+        self::assertEquals('anotherValue', $container->get('anotherParameter'));
+        self::assertInstanceOf(ServiceFixture::class, $container->get('service'));
+    }
+
+    public function testExtendingValue()
+    {
+        $container = new Container();
+        $container->instance('previous', 'foo');
+        $container->register(new SimpleFixtureServiceProvider());
+
+        self::assertEquals('foofoo', $container->get('previous'));
+    }
+
+    public function testExtendingNothing()
+    {
+        $container = new Container();
+        $container->register(new SimpleFixtureServiceProvider());
+
+        self::assertSame('', $container->get('previous'));
     }
 }

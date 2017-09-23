@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container;
 
 use Closure;
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -407,15 +407,19 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function register(ServiceProvider $provider, array $parameters = []): ContainerContract
+    public function register(ServiceProviderInterface $provider, array $parameters = []): ContainerContract
     {
-        foreach ($provider->getServices() as $key => $callable) {
+        foreach ($provider->getFactories() as $key => $callable) {
+            $this->singleton($key, function ($container) use ($callable) {
+                return $callable($container, null);
+            });
+        }
+
+        foreach ($provider->getExtensions() as $key => $callable) {
             if ($this->has($key)) {
                 $this->extend($key, function ($previous, $container) use ($callable) {
                     // Extend a previous entry
-                    return $callable($container, function () use ($previous) {
-                        return $previous;
-                    });
+                    return $callable($container, $previous);
                 });
             } else {
                 $this->singleton($key, function ($container) use ($callable) {

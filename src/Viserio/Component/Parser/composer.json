@@ -37,7 +37,7 @@
         "viserio/support"                          : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"       : "^0.3",
+        "container-interop/service-provider"       : "^0.4",
         "mikey179/vfsStream"                       : "^1.6",
         "narrowspark/testing-helper"               : "^4.0",
         "phpunit/phpunit"                          : "^6.0",
@@ -60,7 +60,7 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider"       : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"       : "Required to use service-provider (^0.4).",
         "symfony/yaml"                             : "Required to use the YAML parser (~3.3).",
         "sepia/po-parser"                          : "Required to use the PO parser (^4.2).",
         "spatie/array-to-xml"                      : "Required to use the XML dump (^2.1.1).",

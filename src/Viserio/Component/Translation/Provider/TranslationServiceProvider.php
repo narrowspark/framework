@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -16,7 +16,7 @@ use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
 
 class TranslationServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
@@ -25,7 +25,7 @@ class TranslationServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             MessageFormatterContract::class   => [self::class, 'createMessageFormatter'],
@@ -39,6 +39,15 @@ class TranslationServiceProvider implements
             },
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
+    }
+
 
     /**
      * {@inheritdoc}

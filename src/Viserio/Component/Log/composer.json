@@ -23,7 +23,7 @@
         "viserio/contracts"                    : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"   : "^0.3",
+        "container-interop/service-provider"   : "^0.4",
         "mockery/mockery"                      : "^0.9",
         "narrowspark/testing-helper"           : "^4.0",
         "phpunit/phpunit"                      : "^6.0",
@@ -49,7 +49,7 @@
         "psr/log-implementation"               : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"   : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"   : "Required to use service-provider (^0.4).",
         "symfony/var-dumper"                   : "Required to use VarDumperFormatter and optional for ConsoleFormatter (~3.3).",
         "viserio/console"                      : "Required to use ConsoleFormatter (^self.version).",
         "viserio/events"                       : "Required to use ConsoleFormatter (^self.version).",

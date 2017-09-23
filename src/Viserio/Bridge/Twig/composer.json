@@ -22,7 +22,7 @@
         "twig/twig"                          : "~2.4"
     },
     "require-dev": {
-        "container-interop/service-provider" : "^0.3",
+        "container-interop/service-provider" : "^0.4",
         "danielstjules/stringy"              : "^3.0",
         "mockery/mockery"                    : "^0.9",
         "narrowspark/testing-helper"         : "^4.0",
@@ -47,7 +47,7 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider" : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider" : "Required to use service-provider (^0.4).",
         "viserio/config"                     : "Required to use config extension (self.version).",
         "viserio/console"                    : "Required to use lint and debug command (self.version).",
         "viserio/session"                    : "Required to use session extension (self.version).",

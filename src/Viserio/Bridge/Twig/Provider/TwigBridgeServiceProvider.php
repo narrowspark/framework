@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Twig\Environment as TwigEnvironment;
@@ -17,12 +17,20 @@ use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Support\Str;
 
-class TwigBridgeServiceProvider implements ServiceProvider
+class TwigBridgeServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices(): array
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
             TwigEnvironment::class => [self::class, 'extendTwigEnvironment'],
@@ -33,14 +41,12 @@ class TwigBridgeServiceProvider implements ServiceProvider
      * Extend the twig environment.
      *
      * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param null|\Twig\Environment            $twig
      *
-     * @return \Twig\Environment
+     * @return null|\Twig\Environment
      */
-    public static function extendTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
+    public static function extendTwigEnvironment(ContainerInterface $container, ?TwigEnvironment $twig = null): ?TwigEnvironment
     {
-        $twig = \is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
         if ($twig !== null) {
             if ($container->has(Lexer::class)) {
                 $twig->setLexer($container->get(Lexer::class));

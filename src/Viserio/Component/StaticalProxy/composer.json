@@ -24,7 +24,7 @@
         "viserio/contracts"                              : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"             : "^0.3",
+        "container-interop/service-provider"             : "^0.4",
         "mockery/mockery"                                : "^0.9",
         "narrowspark/testing-helper"                     : "^4.0",
         "phpunit/phpunit"                                : "^6.0",
@@ -46,7 +46,7 @@
         "psr/container-implementation"                   : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"             : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"             : "Required to use service-provider (^0.4).",
         "viserio/options-resolver"                       : "Required to use service-provider (self.version)."
     },
     "extra": {

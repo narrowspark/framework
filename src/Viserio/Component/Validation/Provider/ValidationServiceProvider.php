@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Component\Validation\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Contract\Validation\Validator as ValidatorContract;
 use Viserio\Component\Validation\Validator;
 
-class ValidationServiceProvider implements ServiceProvider
+class ValidationServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             ValidatorContract::class => [self::class, 'createValidator'],
@@ -26,7 +26,22 @@ class ValidationServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createValidator(ContainerInterface $container): Validator
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
+    }
+
+    /**
+     * Create a validator instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contract\Validation\Validator
+     */
+    public static function createValidator(ContainerInterface $container): ValidatorContract
     {
         $validator = new Validator();
 

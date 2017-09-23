@@ -2,19 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cache\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 
-class CacheServiceProvider implements ServiceProvider
+class CacheServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             CacheManagerContract::class   => [self::class, 'createCacheManager'],
@@ -30,6 +30,14 @@ class CacheServiceProvider implements ServiceProvider
                 return $container->get(CacheItemPoolInterface::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     /**

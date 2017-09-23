@@ -29,7 +29,7 @@
         "viserio/options-resolver"                   : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"         : "^0.3",
+        "container-interop/service-provider"         : "^0.4",
         "filp/whoops"                                : "^2.0",
         "mockery/mockery"                            : "^0.9",
         "narrowspark/testing-helper"                 : "^4.0",
@@ -56,7 +56,7 @@
         "psr/http-message-implementation"            : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"         : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"         : "Required to use service-provider (^0.4).",
         "filp/whoops"                                : "Enables use of the whoops displayer (^2.0).",
         "symfony/console"                            : "Required to use renderForConsole function (~3.3).",
         "viserio/http"                               : "Enables use of the json displayer (self.version).",

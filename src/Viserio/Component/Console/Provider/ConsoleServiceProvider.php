@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 
-class ConsoleServiceProvider implements ServiceProvider
+class ConsoleServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices(): array
+    public function getFactories(): array
     {
         return [
             Application::class         => [self::class, 'createCerebro'],
@@ -27,6 +27,14 @@ class ConsoleServiceProvider implements ServiceProvider
                 return $container->get(Application::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     /**

@@ -25,7 +25,7 @@
         "viserio/contracts"                       : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"      : "^0.3",
+        "container-interop/service-provider"      : "^0.4",
         "mockery/mockery"                         : "^0.9",
         "narrowspark/testing-helper"              : "^4.0",
         "phpunit/phpunit"                         : "^6.0",
@@ -51,7 +51,7 @@
         "psr/http-message-implementation"         : "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"      : "Required to use service-provider (^0.3).",
+        "container-interop/service-provider"      : "Required to use service-provider (^0.4).",
         "http-interop/http-middleware"            : "Required to use middleware (^0.4).",
         "viserio/encryption"                      : "Required to use the EncryptCookies Middleware (self.version).",
         "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version).",

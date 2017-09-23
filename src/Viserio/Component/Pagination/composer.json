@@ -25,7 +25,7 @@
         "viserio/contracts"                           : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"          : "^0.3",
+        "container-interop/service-provider"          : "^0.4",
         "doctrine/dbal"                               : "^2.5",
         "mockery/mockery"                             : "^0.9",
         "narrowspark/testing-helper"                  : "^4.0",
