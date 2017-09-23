@@ -31,7 +31,9 @@ final class VarExporter
         if (\is_array($value)) {
             if (empty($value)) {
                 return '[]';
-            } elseif (\count($value) === 1) {
+            }
+
+            if (\count($value) === 1) {
                 \reset($value);
 
                 return '[' . self::export(\key($value)) . ' => ' . self::export(\current($value)) . ']';
@@ -46,10 +48,10 @@ final class VarExporter
                 $code .= ',';
             }
 
-            $code .= ']';
+            return $code . ']';
+        }
 
-            return $code;
-        } elseif (\is_object($value) && $value instanceof stdClass) {
+        if (\is_object($value) && $value instanceof stdClass) {
             return '(object)' . self::export((array) $value);
         }
 

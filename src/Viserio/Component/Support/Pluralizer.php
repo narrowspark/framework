@@ -45,6 +45,7 @@ class Pluralizer
         'rice',
         'series',
         'sheep',
+        'software',
         'species',
         'swine',
         'traffic',
