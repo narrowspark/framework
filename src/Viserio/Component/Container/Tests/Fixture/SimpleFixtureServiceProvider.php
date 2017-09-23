@@ -13,7 +13,7 @@ class SimpleFixtureServiceProvider implements ServiceProviderInterface
             'param'   => [SimpleFixtureServiceProvider::class, 'getParam'],
             'service' => function () {
                 return new ServiceFixture();
-            }
+            },
         ];
     }
 
@@ -31,6 +31,6 @@ class SimpleFixtureServiceProvider implements ServiceProviderInterface
 
     public static function getPrevious(ContainerInterface $container, $previous = null)
     {
-        return $previous.$previous;
+        return $previous . $previous;
     }
 }

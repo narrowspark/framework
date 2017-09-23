@@ -48,7 +48,6 @@ class TranslationServiceProvider implements
         return [];
     }
 
-
     /**
      * {@inheritdoc}
      */

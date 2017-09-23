@@ -42,7 +42,6 @@ class AliasLoaderServiceProvider implements
         return [];
     }
 
-
     /**
      * {@inheritdoc}
      */
