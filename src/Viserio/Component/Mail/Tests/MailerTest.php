@@ -35,16 +35,6 @@ class MailerTest extends MockeryTestCase
         $this->viewFactory = $this->mock(ViewFactoryContract::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function assertPreConditions()
-    {
-        parent::assertPreConditions();
-
-        $this->allowMockingNonExistentMethods(true);
-    }
-
     public function testMailerSendSendsMessageWithProperViewContent(): void
     {
         unset($_SERVER['__mailer.test']);
@@ -426,6 +416,16 @@ class MailerTest extends MockeryTestCase
         );
 
         $this->assertEquals('bar', $mailer->foo());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function assertPreConditions()
+    {
+        parent::assertPreConditions();
+
+        $this->allowMockingNonExistentMethods(true);
     }
 
     protected function setSwiftMailer($mailer)
