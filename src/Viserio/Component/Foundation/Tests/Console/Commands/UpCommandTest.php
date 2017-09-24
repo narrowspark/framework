@@ -19,7 +19,7 @@ class UpCommandTest extends MockeryTestCase
         \file_put_contents($down, 'test');
 
         $kernel = $this->mock(ConsoleKernelContract::class);
-        $kernel->shouldReceive('storagePath')
+        $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('framework/down')
             ->andReturn($down);

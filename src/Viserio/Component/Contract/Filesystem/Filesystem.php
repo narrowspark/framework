@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\Filesystem;
 
-interface Filesystem
+interface Filesystem extends Directorysystem
 {
     /**
      * The public visibility setting.

@@ -10,7 +10,6 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileN
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
-use Viserio\Component\Contract\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOException;
@@ -19,7 +18,7 @@ use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract
+class Filesystem extends SymfonyFilesystem implements FilesystemContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemHelperTrait;

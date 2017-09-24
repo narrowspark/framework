@@ -29,7 +29,7 @@ class DownCommand extends Command
         $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
         \file_put_contents(
-            $kernel->storagePath('framework/down'),
+            $kernel->getStoragePath('framework/down'),
             \json_encode($this->getDownPayload(), JSON_PRETTY_PRINT)
         );
 

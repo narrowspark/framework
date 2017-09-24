@@ -59,7 +59,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
 
         $files->deleteDirectory($cacheDir);
 
-        if ($files->exists($cacheDir)) {
+        if ($files->has($cacheDir)) {
             $this->error('Twig cache failed to be cleaned.');
         } else {
             $this->info('Twig cache cleaned.');

@@ -12,13 +12,14 @@ class CleanCommandTest extends MockeryTestCase
 {
     public function testFailed(): void
     {
+        $path  = __DIR__;
         $files = $this->mock(FilesystemContract::class);
         $files->shouldReceive('deleteDirectory')
             ->once()
-            ->with(__DIR__);
-        $files->shouldReceive('exists')
+            ->with($path);
+        $files->shouldReceive('has')
             ->once()
-            ->with(__DIR__)
+            ->with($path)
             ->andReturn(true);
         $container = new ArrayContainer([
             FilesystemContract::class => $files,
@@ -28,7 +29,7 @@ class CleanCommandTest extends MockeryTestCase
                         'engines' => [
                             'twig' => [
                                 'options' => [
-                                    'cache' => __DIR__,
+                                    'cache' => $path,
                                 ],
                             ],
                         ],
@@ -50,11 +51,12 @@ class CleanCommandTest extends MockeryTestCase
 
     public function testSuccess(): void
     {
+        $path  = __DIR__;
         $files = $this->mock(FilesystemContract::class);
         $files->shouldReceive('deleteDirectory')
             ->once()
-            ->with(__DIR__);
-        $files->shouldReceive('exists')
+            ->with($path);
+        $files->shouldReceive('has')
             ->once()
             ->andReturn(false);
         $container = new ArrayContainer([
@@ -65,7 +67,7 @@ class CleanCommandTest extends MockeryTestCase
                         'engines' => [
                             'twig' => [
                                 'options' => [
-                                    'cache' => __DIR__,
+                                    'cache' => $path,
                                 ],
                             ],
                         ],

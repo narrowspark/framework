@@ -20,7 +20,7 @@ class DownCommandTest extends MockeryTestCase
         }
 
         $kernel = $this->mock(ConsoleKernelContract::class);
-        $kernel->shouldReceive('storagePath')
+        $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('framework/down')
             ->andReturn($down);

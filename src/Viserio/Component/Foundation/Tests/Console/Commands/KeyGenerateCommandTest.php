@@ -58,9 +58,8 @@ class KeyGenerateCommandTest extends MockeryTestCase
             ->never();
 
         $kernel = $this->mock(ConsoleKernelContract::class);
-        $kernel->shouldReceive('get')
-            ->never()
-            ->with('getEnvironmentFilePath');
+        $kernel->shouldReceive('getEnvironmentFilePath')
+            ->never();
 
         $container = new ArrayContainer([
             RepositoryContract::class    => $config,

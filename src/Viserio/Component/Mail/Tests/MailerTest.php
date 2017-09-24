@@ -25,11 +25,24 @@ class MailerTest extends MockeryTestCase
      */
     private $viewFactory;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         parent::setUp();
 
         $this->viewFactory = $this->mock(ViewFactoryContract::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function assertPreConditions()
+    {
+        parent::assertPreConditions();
+
+        $this->allowMockingNonExistentMethods(true);
     }
 
     public function testMailerSendSendsMessageWithProperViewContent(): void

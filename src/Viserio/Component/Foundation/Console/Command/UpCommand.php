@@ -24,7 +24,7 @@ class UpCommand extends Command
     {
         $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
-        @\unlink($kernel->storagePath('framework/down'));
+        @\unlink($kernel->getStoragePath('framework/down'));
 
         $this->info('Application is now live.');
     }

@@ -9,7 +9,6 @@ use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use RuntimeException;
 use Spatie\Macroable\Macroable;
-use Viserio\Component\Contract\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Filesystem\Exception\IOException;
@@ -19,7 +18,7 @@ use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
+class FilesystemAdapter implements FilesystemContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
