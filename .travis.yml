@@ -37,8 +37,8 @@ matrix:
       env: PHPUNIT=true SETUP=lowest
   allow_failures:
     - php: nightly
-    - env: SETUP=lowest PHPUNIT=true
-      php: 7.2
+    - php: 7.2
+      env: PHPUNIT=true SETUP=lowest
   fast_finish: true
 
 cache:
