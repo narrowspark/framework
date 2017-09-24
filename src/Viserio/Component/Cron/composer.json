@@ -32,7 +32,7 @@
     },
     "require-dev": {
         "container-interop/service-provider"    : "^0.4",
-        "mockery/mockery"                       : "^0.9",
+        "mockery/mockery"                       : "^1.0",
         "narrowspark/testing-helper"            : "^4.0",
         "phpunit/phpunit"                       : "^6.0",
         "viserio/cache"                         : "self.version",
