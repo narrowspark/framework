@@ -34,16 +34,6 @@ class QueueMailerTest extends MockeryTestCase
         $this->viewFactory = $this->mock(ViewFactoryContract::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function assertPreConditions()
-    {
-        parent::assertPreConditions();
-
-        $this->allowMockingNonExistentMethods(true);
-    }
-
     public function testMailerCanResolveMailerClasses(): void
     {
         $message = $this->mock(MessageContract::class);
@@ -182,6 +172,16 @@ class QueueMailerTest extends MockeryTestCase
         });
 
         self::assertEquals(['info@narrowspark.de'], $mailer->failures());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function assertPreConditions()
+    {
+        parent::assertPreConditions();
+
+        $this->allowMockingNonExistentMethods(true);
     }
 
     protected function setSwiftMailer($mailer)
