@@ -5,6 +5,7 @@ sudo: true
 env:
   global:
     - TEST="./vendor/bin/phpunit"
+    - COMPOSER_UP="composer update --no-interaction --prefer-dist --no-progress --profile --no-suggest"
 
 services:
   - memcached
@@ -21,23 +22,19 @@ addons:
 matrix:
   include:
     - php: 7.2
-      env: SETUP=basic SEND_COVERAGE=true PHPUNIT=true
+      env: PHPUNIT=true SEND_COVERAGE=true
     - php: 7.2
-      env: SETUP=basic PHPUNIT=true
+      env: PHPUNIT=true SETUP=high
     - php: 7.2
-      env: SETUP=stable PHPUNIT=true
-    - php: 7.2
-      env: SETUP=lowest PHPUNIT=true
+      env: PHPUNIT=true SETUP=lowest
       # phpstan
     - php: 7.2
-      env: SETUP=basic PHPSTAN=true
+      env: PHPSTAN=true
       # Nightly
     - php: nightly
-      env: SETUP=basic PHPUNIT=true
+      env: PHPUNIT=true SETUP=high
     - php: nightly
-      env: SETUP=stable PHPUNIT=true
-    - php: nightly
-      env: SETUP=lowest PHPUNIT=true
+      env: PHPUNIT=true SETUP=lowest
   allow_failures:
     - php: nightly
     - env: SETUP=lowest PHPUNIT=true
@@ -55,9 +52,14 @@ before_install:
 
 install:
   - composer require roave/security-advisories:dev-master
-  - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
-  - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
-  - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
+  - |
+    if [[ "$SETUP" = "high" ]]; then
+      $COMPOSER_UP;
+    elif [[ "$SETUP" = "lowest" ]]; then
+      $COMPOSER_UP --prefer-lowest --prefer-stable;
+    else
+      $COMPOSER_UP
+    fi
 
 before_script:
   - if [[ "$PHPSTAN" = "false" ]]; then sleep 15; fi
