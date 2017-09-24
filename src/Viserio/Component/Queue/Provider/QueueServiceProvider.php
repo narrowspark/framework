@@ -24,6 +24,14 @@ class QueueServiceProvider implements ServiceProviderInterface
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
+    }
+
     public static function createQueueManager(ContainerInterface $container): QueueManager
     {
         return new QueueManager(
