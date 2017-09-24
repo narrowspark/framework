@@ -37,6 +37,18 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected $config = [];
 
     /**
+     * Create a new session middleware.
+     *
+     * @param \Viserio\Component\Session\SessionManager $manager
+     */
+    public function __construct(SessionManager $manager)
+    {
+        $this->manager      = $manager;
+        $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
+        $this->config       = $manager->getConfig();
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @throws \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
@@ -58,18 +70,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         }
 
         throw new TokenMismatchException();
-    }
-
-    /**
-     * Create a new session middleware.
-     *
-     * @param \Viserio\Component\Session\SessionManager $manager
-     */
-    public function __construct(SessionManager $manager)
-    {
-        $this->manager      = $manager;
-        $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
-        $this->config       = $manager->getConfig();
     }
 
     /**
@@ -110,7 +110,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      * Add the CSRF token to the response cookies.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param \Psr\Http\Message\ResponseInterface      $response
      *
      * @throws \InvalidArgumentException
      *
