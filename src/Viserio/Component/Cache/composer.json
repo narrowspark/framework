@@ -82,7 +82,7 @@
         "cache/filesystem-adapter"               : "Required to use the Filesystem cache (^1.0).",
         "cache/memcache-adapter"                 : "Required to use the Memcache cache (^1.0).",
         "cache/memcached-adapter"                : "Required to use the Memcached cache (^1.0).",
-        "cache/namespaced-adapter"               : "Required to use the Namespaced cache (^1.0).",
+        "cache/namespaced-cache"                 : "Required to use the Namespaced cache (^1.0).",
         "cache/mongodb-adapter"                  : "Required to use the Mongodb cache (^1.0).",
         "cache/predis-adapter"                   : "Required to use the Predis cache (^1.0).",
         "container-interop/service-provider"     : "Required to use service-provider (^0.4).",
