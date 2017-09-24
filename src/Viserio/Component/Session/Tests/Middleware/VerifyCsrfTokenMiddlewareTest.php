@@ -48,7 +48,6 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     public function tearDown(): void
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
-        $this->files = $this->encrypter = null;
 
         parent::tearDown();
     }

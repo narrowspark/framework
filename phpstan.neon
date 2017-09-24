@@ -24,19 +24,13 @@ parameters:
         # Magic functions, call and static call
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
-        - '#Access to an undefined property Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::\$protectedVariable#'
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FooStaticalProxyStub#'
         - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
-        - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\MacroTest::#'
-        - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Fixture\\MacroTest::#'
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionSaticalProxyStub::arg#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
         - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\Command\\ClosureCommandTest::comment#'
         - '#Call to an undefined method Viserio\\Component\\Log\\Writer::getName#'
-        - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
-        - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
-        - '#Call to an undefined static method Viserio\\Component\\Support\\Tests\\Traits\\MacroableTraitTest::getProtectedStatic#'
         - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::set#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::get#'
@@ -67,7 +61,6 @@ parameters:
         # Tests
         - '#Call to an undefined method Viserio\\Component\\Http\\AbstractMessage::withUri#'
         - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
-        - '#\$callback of class Viserio\\Component\\Cron\\CallbackCron constructor expects#'
         - '#\$resource of static method League\\Flysystem\\Util::getStreamSize#'
         - '#\$view of method Viserio\\Component\\Mail\\Mailer::send#'
         - '#\$callback of method Viserio\\Component\\Mail\\Mailer::send#'
@@ -75,6 +68,7 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\ApplicationTest::call#'
 
         # Is wrong
+        - '#Function sodium_memzero invoked with 1 parameter, 2 required#'
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'
         - "#Casting to mixed[] something that's already mixed[]#"
         - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
@@ -89,6 +83,7 @@ parameters:
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
         - '#Call to an undefined method League\\Flysystem\\AdapterInterface::getUrl#'
         - '#Call to an undefined method League\\Flysystem\\AdapterInterface::applyPathPrefix#'
+        - '#Call to an undefined method League\\Flysystem\\AdapterInterface::getPathPrefix#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Pagination\\Paginator::getElements#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Dispatcher::setContainer#'
@@ -98,12 +93,12 @@ parameters:
         - '#expects Throwable#'
         - '#Throwable given#'
 
-        # Is a protected method
-        - '#Call to an undefined method Viserio\\Component\\Contract\\Cron\\Cron::spliceIntoPosition#'
-
         # Wrapper
         - '#Viserio\\Component\\Profiler\\DataCollector\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
 
         # Not a interface function
         - '#Call to an undefined method Viserio\\Component\\Contract\\Mail\\Message::getSwiftMessage#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Mail\\Message::setBody#'
+        - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
+        - '#Call to an undefined method Viserio\\Component\\Contract\\Cron\\Cron::spliceIntoPosition#'
+        - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'

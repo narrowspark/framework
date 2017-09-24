@@ -39,10 +39,8 @@ class ProfilerMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-        if ($this->profiler !== null) {
-            $server    = $request->getServerParams();
-            $startTime = $server['REQUEST_TIME_FLOAT'] ?? \microtime(true);
-        }
+        $server    = $request->getServerParams();
+        $startTime = $server['REQUEST_TIME_FLOAT'] ?? \microtime(true);
 
         $response = $delegate->process($request);
 

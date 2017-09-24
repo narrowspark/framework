@@ -37,19 +37,10 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected $config = [];
 
     /**
-     * Create a new session middleware.
-     *
-     * @param \Viserio\Component\Session\SessionManager $manager
-     */
-    public function __construct(SessionManager $manager)
-    {
-        $this->manager      = $manager;
-        $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
-        $this->config       = $manager->getConfig();
-    }
-
-    /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
+     * @throws \Viserio\Component\Contract\Session\Exception\TokenMismatchException
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
@@ -70,13 +61,25 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     }
 
     /**
+     * Create a new session middleware.
+     *
+     * @param \Viserio\Component\Session\SessionManager $manager
+     */
+    public function __construct(SessionManager $manager)
+    {
+        $this->manager      = $manager;
+        $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
+        $this->config       = $manager->getConfig();
+    }
+
+    /**
      * Determine if the application is running unit tests.
      *
      * @return bool
      */
     protected function runningUnitTests(): bool
     {
-        return PHP_SAPI == 'cli' && ($this->config['env'] ?? 'production') === 'testing';
+        return PHP_SAPI === 'cli' && ($this->config['env'] ?? 'production') === 'testing';
     }
 
     /**
@@ -107,7 +110,9 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      * Add the CSRF token to the response cookies.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Psr\Http\Message\ResponseInterface $response
+     *
+     * @throws \InvalidArgumentException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

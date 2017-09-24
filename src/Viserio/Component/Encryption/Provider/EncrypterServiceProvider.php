@@ -48,9 +48,7 @@ class EncrypterServiceProvider implements
      */
     public function getExtensions(): array
     {
-        return [
-            Application::class => [self::class, 'extendConsole'],
-        ];
+        return [];
     }
 
     /**

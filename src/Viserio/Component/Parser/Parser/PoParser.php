@@ -38,7 +38,9 @@ class PoParser implements ParserContract
         }
 
         try {
-            return SepiaPoParser::parseFile($payload);
+            $parser = SepiaPoParser::parseFile($payload);
+
+            return $parser->getEntries();
         } catch (Throwable $exception) {
             throw new ParseException([
                 'message' => 'Unable to parse the Po string',

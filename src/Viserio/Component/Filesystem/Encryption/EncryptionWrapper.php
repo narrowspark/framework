@@ -207,13 +207,20 @@ class EncryptionWrapper
      *
      * @param resource $resource the stream to decrypt
      *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
+     *
      * @return resource
      */
     private function decryptStream($resource)
     {
         $out = \fopen('php://memory', 'r+b');
 
-        if ($resource !== false) {
+        if ($resource != false) {
             $this->file->decrypt($resource, $out);
 
             \rewind($out);
@@ -229,13 +236,19 @@ class EncryptionWrapper
      *
      * @param resource $resource the stream to encrypt
      *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
+     *
      * @return resource
      */
     private function encryptStream($resource)
     {
         $out = \fopen('php://temp', 'r+b');
 
-        if ($resource !== false) {
+        if ($resource != false) {
             $this->file->encrypt($resource, $out);
 
             \rewind($out);
