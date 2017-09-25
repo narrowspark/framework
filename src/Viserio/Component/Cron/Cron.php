@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
-use Psr\Log\LoggerAwareTrait;
 use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
@@ -287,7 +286,7 @@ class Cron implements CronContract
     public function withoutOverlapping(int $expiresAt = 1440): CronContract
     {
         $this->withoutOverlapping = true;
-        $this->expiresAt = $expiresAt;
+        $this->expiresAt          = $expiresAt;
 
         return $this->skip(function () {
             return $this->cachePool->hasItem($this->getMutexName());
@@ -706,7 +705,7 @@ class Cron implements CronContract
             return $this->expression . ' : ' . $this->callback;
         }
 
-        return $this->expression . ' : '. $this->getMutexName();
+        return $this->expression . ' : ' . $this->getMutexName();
     }
 
     /**
@@ -737,58 +736,6 @@ class Cron implements CronContract
         }
 
         return true;
-    }
-
-    /**
-     * Check if os is windows.
-     *
-     * @return bool
-     */
-    private function isWindows(): bool
-    {
-        return \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
-    }
-
-    /**
-     * Splice the given value into the given position of the expression.
-     *
-     * @param int        $position
-     * @param int|string $value
-     *
-     * @return \Viserio\Component\Contract\Cron\Cron
-     */
-    protected function spliceIntoPosition(int $position, $value): CronContract
-    {
-        $segments                = \explode(' ', $this->expression);
-        $segments[$position - 1] = $value;
-
-        return $this->cron(\implode(' ', $segments));
-    }
-
-    /**
-     * Get the default output depending on the OS.
-     *
-     * @return string
-     */
-    protected function getDefaultOutput(): string
-    {
-        return $this->isWindows() ? 'NUL' : '/dev/null';
-    }
-
-    /**
-     * Determine if the Cron expression passes.
-     *
-     * @return bool
-     */
-    protected function expressionPasses(): bool
-    {
-        $date = Chronos::now();
-
-        if ($this->timezone !== null) {
-            $date->setTimezone($this->timezone);
-        }
-
-        return CronExpression::factory($this->expression)->isDue($date->toDateTimeString());
     }
 
     /**
@@ -831,6 +778,48 @@ class Cron implements CronContract
         );
 
         return $process->run();
+    }
+
+    /**
+     * Splice the given value into the given position of the expression.
+     *
+     * @param int        $position
+     * @param int|string $value
+     *
+     * @return \Viserio\Component\Contract\Cron\Cron
+     */
+    protected function spliceIntoPosition(int $position, $value): CronContract
+    {
+        $segments                = \explode(' ', $this->expression);
+        $segments[$position - 1] = $value;
+
+        return $this->cron(\implode(' ', $segments));
+    }
+
+    /**
+     * Get the default output depending on the OS.
+     *
+     * @return string
+     */
+    protected function getDefaultOutput(): string
+    {
+        return $this->isWindows() ? 'NUL' : '/dev/null';
+    }
+
+    /**
+     * Determine if the Cron expression passes.
+     *
+     * @return bool
+     */
+    protected function expressionPasses(): bool
+    {
+        $date = Chronos::now();
+
+        if ($this->timezone !== null) {
+            $date->setTimezone($this->timezone);
+        }
+
+        return CronExpression::factory($this->expression)->isDue($date->toDateTimeString());
     }
 
     /**
@@ -901,5 +890,15 @@ class Cron implements CronContract
                 Chronos::parse($endTime, $this->timezone)
             );
         };
+    }
+
+    /**
+     * Check if os is windows.
+     *
+     * @return bool
+     */
+    private function isWindows(): bool
+    {
+        return \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
     }
 }

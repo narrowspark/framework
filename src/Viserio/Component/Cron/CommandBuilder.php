@@ -31,7 +31,6 @@ final class CommandBuilder
      */
     public function buildBackgroundCommand(CronContract $cron): string
     {
-
     }
 
     /**

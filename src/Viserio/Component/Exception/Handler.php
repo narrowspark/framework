@@ -4,7 +4,6 @@ namespace Viserio\Component\Exception;
 
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -62,6 +61,18 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     }
 
     /**
+     * Create a new handler instance.
+     *
+     * @param \Psr\Container\ContainerInterface $data
+     * @param mixed                             $serverRequestFactory
+     * @param mixed                             $responseFactory
+     */
+    public function __construct($data, $serverRequestFactory, $responseFactory)
+    {
+        parent::__construct($data);
+    }
+
+    /**
      * Set a console application instance.
      *
      * @param \Symfony\Component\Console\Application $console
@@ -73,18 +84,6 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         $this->console = $console;
 
         return $this;
-    }
-
-    /**
-     * Create a new handler instance.
-     *
-     * @param \Psr\Container\ContainerInterface $data
-     * @param mixed                             $serverRequestFactory
-     * @param mixed                             $responseFactory
-     */
-    public function __construct($data, $serverRequestFactory, $responseFactory)
-    {
-        parent::__construct($data);
     }
 
     /**

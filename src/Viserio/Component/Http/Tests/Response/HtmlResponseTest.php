@@ -4,8 +4,8 @@ namespace Viserio\Component\Http\Tests\Response;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Http\Response\HtmlResponse;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Http\Response\HtmlResponse;
 
 class HtmlResponseTest extends TestCase
 {
