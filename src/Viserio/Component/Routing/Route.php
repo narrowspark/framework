@@ -375,7 +375,10 @@ class Route implements RouteContract
     public function run(ServerRequestInterface $serverRequest): ResponseInterface
     {
         if ($this->isControllerAction()) {
-            return $this->getController()->{$this->getControllerMethod()}();
+            return $this->getInvoker()->call(
+                [$this->getController(), $this->getControllerMethod()],
+                [$serverRequest]
+            );
         }
 
         return $this->getInvoker()->call(
