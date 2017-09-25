@@ -12,7 +12,7 @@
         "log",
         "exception",
         "events",
-        "parsers",
+        "parser",
         "routing"
     ],
     "license"    : "MIT",

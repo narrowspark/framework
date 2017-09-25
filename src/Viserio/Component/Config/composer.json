@@ -28,7 +28,7 @@
         "mikey179/vfsStream"                      : "^1.6",
         "narrowspark/testing-helper"              : "^4.0",
         "viserio/container"                       : "self.version",
-        "viserio/parsers"                         : "self.version"
+        "viserio/parser"                          : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -43,7 +43,7 @@
     },
     "suggest": {
         "container-interop/service-provider"      : "Required to use service-provider (^0.4).",
-        "viserio/parsers"                         : "Required to import yaml, ini, json, po, toml and xml config files (self.version).",
+        "viserio/parser"                          : "Required to import yaml, ini, json, po, toml and xml config files (self.version).",
         "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version)."
     },
     "extra": {

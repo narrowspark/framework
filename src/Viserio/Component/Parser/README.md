@@ -17,7 +17,7 @@ Installation
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/parsers
+composer require viserio/parser
 ```
 
 Official Documentation

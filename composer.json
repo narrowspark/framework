@@ -96,7 +96,7 @@
         "viserio/log"                         : "self.version",
         "viserio/mail"                        : "self.version",
         "viserio/options-resolver"            : "self.version",
-        "viserio/parsers"                     : "self.version",
+        "viserio/parser"                      : "self.version",
         "viserio/pipeline"                    : "self.version",
         "viserio/routing"                     : "self.version",
         "viserio/session"                     : "self.version",

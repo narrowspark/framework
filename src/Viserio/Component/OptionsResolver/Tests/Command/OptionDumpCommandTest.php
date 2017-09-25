@@ -54,7 +54,7 @@ return [
 
         $output = $tester->getDisplay(true);
 
-        self::assertSame("Only the php format is supported; use composer req viserio/parsers to get json, xml, yml output.\n", $output);
+        self::assertSame("Only the php format is supported; use composer req viserio/parser to get json, xml, yml output.\n", $output);
     }
 
     public function testCommandWithDumper(): void

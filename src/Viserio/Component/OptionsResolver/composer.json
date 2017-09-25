@@ -30,7 +30,7 @@
         "viserio/config"                                   : "self.version",
         "viserio/console"                                  : "self.version",
         "viserio/container"                                : "self.version",
-        "viserio/parsers"                                  : "self.version"
+        "viserio/parser"                                   : "self.version"
     },
     "autoload": {
         "psr-4": {

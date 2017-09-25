@@ -1,5 +1,5 @@
 {
-    "name"       : "viserio/parsers",
+    "name"       : "viserio/parser",
     "type"       : "library",
     "description": "The Viserio Parsers package.",
     "keywords"   : [
@@ -13,7 +13,7 @@
         "xliff",
         "xlf",
         "parser",
-        "parsers"
+        "parser"
     ],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
