@@ -21,7 +21,7 @@
         "php"                                      : "^7.2",
         "ext-mbstring"                             : "*",
         "spatie/macroable"                         : "^1.0",
-        "viserio/contracts"                        : "self.version"
+        "viserio/contract"                         : "self.version"
     },
     "require-dev": {
         "danielstjules/stringy"                    : "^3.0",

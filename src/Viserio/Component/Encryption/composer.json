@@ -22,7 +22,7 @@
         "ext-mbstring"                               : "*",
         "ext-sodium"                                 : "*",
         "paragonie/constant_time_encoding"           : "^2.0",
-        "viserio/contracts"                          : "self.version"
+        "viserio/contract"                           : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"         : "^0.4",

@@ -33,7 +33,7 @@
         "php"                                      : "^7.2",
         "ext-fileinfo"                             : "*",
         "ext-mbstring"                             : "*",
-        "viserio/contracts"                        : "self.version",
+        "viserio/contract"                         : "self.version",
         "viserio/support"                          : "self.version"
     },
     "require-dev": {

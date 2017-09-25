@@ -20,7 +20,7 @@
     "require": {
         "php"                                     : "^7.2",
         "narrowspark/arr"                         : "^2.1",
-        "viserio/contracts"                       : "self.version"
+        "viserio/contract"                        : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"      : "^0.4",

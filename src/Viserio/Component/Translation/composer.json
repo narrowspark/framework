@@ -22,7 +22,7 @@
         "ext-intl"                                     : "*",
         "ext-mbstring"                                 : "*",
         "psr/log"                                      : "^1.0",
-        "viserio/contracts"                            : "self.version",
+        "viserio/contract"                             : "self.version",
         "viserio/parser"                               : "self.version"
     },
     "require-dev": {

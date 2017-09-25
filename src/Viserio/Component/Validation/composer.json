@@ -22,7 +22,7 @@
         "ext-mbstring"                                : "*",
         "egulias/email-validator"                     : "^2.1",
         "respect/validation"                          : "^1.1",
-        "viserio/contracts"                           : "self.version"
+        "viserio/contract"                            : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"          : "^0.4",

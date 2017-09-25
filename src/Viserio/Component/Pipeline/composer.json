@@ -21,7 +21,7 @@
         "php"                                       : "^7.2",
         "psr/container"                             : "^1.0",
         "php-di/invoker"                            : "^2.0",
-        "viserio/contracts"                         : "self.version",
+        "viserio/contract"                          : "self.version",
         "viserio/support"                           : "self.version"
     },
     "require-dev": {

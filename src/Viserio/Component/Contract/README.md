@@ -17,7 +17,7 @@ Installation
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/contracts
+composer require viserio/contract
 ```
 
 Official Documentation

@@ -27,7 +27,7 @@
         "php"                                  : "^7.2",
         "php-di/invoker"                       : "^2.0",
         "psr/container"                        : "^1.0",
-        "viserio/contracts"                    : "self.version",
+        "viserio/contract"                     : "self.version",
         "viserio/pipeline"                     : "self.version",
         "viserio/support"                      : "self.version"
     },

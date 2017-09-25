@@ -23,7 +23,7 @@
         "cakephp/chronos"                          : "^1.0",
         "psr/container"                            : "^1.0",
         "psr/http-message"                         : "^1.0",
-        "viserio/contracts"                        : "self.version",
+        "viserio/contract"                         : "self.version",
         "viserio/encryption"                       : "self.version",
         "viserio/options-resolver"                 : "self.version",
         "viserio/support"                          : "self.version"

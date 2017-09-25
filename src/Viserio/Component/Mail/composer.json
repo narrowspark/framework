@@ -23,7 +23,7 @@
         "php-di/invoker"                        : "^2.0",
         "spatie/macroable"                      : "^1.0",
         "swiftmailer/swiftmailer"               : "^6.0",
-        "viserio/contracts"                     : "self.version",
+        "viserio/contract"                      : "self.version",
         "viserio/options-resolver"              : "self.version",
         "viserio/support"                       : "self.version"
     },

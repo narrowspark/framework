@@ -19,7 +19,7 @@
     ],
     "require": {
         "php"                                  : "^7.2",
-        "viserio/contracts"                    : "self.version",
+        "viserio/contract"                     : "self.version",
         "viserio/view"                         : "self.version"
     },
     "require-dev": {

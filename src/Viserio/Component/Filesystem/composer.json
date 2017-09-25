@@ -43,7 +43,7 @@
         "spatie/macroable"                   : "^1.0",
         "symfony/filesystem"                 : "~3.3",
         "symfony/finder"                     : "~3.3",
-        "viserio/contracts"                  : "self.version",
+        "viserio/contract"                   : "self.version",
         "viserio/options-resolver"           : "self.version",
         "viserio/support"                    : "self.version"
     },
