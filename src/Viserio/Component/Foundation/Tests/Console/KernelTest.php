@@ -22,7 +22,7 @@ use Viserio\Component\Foundation\Console\Kernel;
 
 class KernelTest extends MockeryTestCase
 {
-    public function testIfClassHasConsoleAndTerminableContracts(): void
+    public function testIfClassHasConsoleAndTerminableContract(): void
     {
         $interfaces = \class_implements(new Kernel());
 

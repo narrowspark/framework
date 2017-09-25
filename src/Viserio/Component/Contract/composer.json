@@ -1,7 +1,7 @@
 {
     "name"       : "viserio/contracts",
     "type"       : "library",
-    "description": "The Viserio Contracts package.",
+    "description": "The Viserio Contract package.",
     "keywords"   : [
         "framework",
         "narrowspark",
