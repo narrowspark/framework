@@ -37,7 +37,7 @@ final class CommandBuilder
      * Finalize the event's command syntax with the correct user.
      *
      * @param \Viserio\Component\Contract\Cron\Cron $cron
-     * @param string                                 $command
+     * @param string                                $command
      *
      * @return string
      */
