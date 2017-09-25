@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
-use Viserio\Component\Contracts\Cron\Cron as CronContract;
+use Viserio\Component\Contract\Cron\Cron as CronContract;
 
 final class CommandBuilder
 {
     /**
      * Build the command for running the event in the foreground.
      *
-     * @param \Viserio\Component\Contracts\Cron\Cron $cron
+     * @param \Viserio\Component\Contract\Cron\Cron $cron
      *
      * @return string
      */
@@ -25,7 +25,7 @@ final class CommandBuilder
     /**
      * Build the command for running the event in the background.
      *
-     * @param \Viserio\Component\Contracts\Cron\Cron $cron
+     * @param \Viserio\Component\Contract\Cron\Cron $cron
      *
      * @return string
      */
@@ -36,7 +36,7 @@ final class CommandBuilder
     /**
      * Finalize the event's command syntax with the correct user.
      *
-     * @param \Viserio\Component\Contracts\Cron\Cron $cron
+     * @param \Viserio\Component\Contract\Cron\Cron $cron
      * @param string                                 $command
      *
      * @return string
