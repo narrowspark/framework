@@ -12,6 +12,7 @@ use Viserio\Component\Contract\Exception\Handler as HandlerContract;
 use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
+use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
@@ -41,6 +42,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             },
             HtmlDisplayer::class                          => [self::class, 'createHtmlDisplayer'],
             JsonDisplayer::class                          => [self::class, 'createJsonDisplayer'],
+            SymfonyDisplayer::class                       => [self::class, 'createSymfonyDisplayer'],
             ViewDisplayer::class                          => [self::class, 'createViewDisplayer'],
             WhoopsDisplayer::class                        => [self::class, 'createWhoopsDisplayer'],
             VerboseFilter::class                          => [self::class, 'createVerboseFilter'],
@@ -115,6 +117,18 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     }
 
     /**
+     * Create a new SymfonyDisplayer instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Exception\Displayer\SymfonyDisplayer
+     */
+    public static function createSymfonyDisplayer(ContainerInterface $container): SymfonyDisplayer
+    {
+        return new SymfonyDisplayer($container->get(ResponseFactoryInterface::class));
+    }
+
+    /**
      * Create a new JsonDisplayer instance.
      *
      * @param \Psr\Container\ContainerInterface $container
@@ -154,7 +168,10 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     public static function createWhoopsDisplayer(ContainerInterface $container): WhoopsDisplayer
     {
-        return new WhoopsDisplayer($container->get(ResponseFactoryInterface::class));
+        return new WhoopsDisplayer(
+            $container->get(ResponseFactoryInterface::class),
+            $container
+        );
     }
 
     /**
