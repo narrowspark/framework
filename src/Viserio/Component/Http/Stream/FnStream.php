@@ -4,6 +4,7 @@ namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Contract\Http\Exception\BadMethodCallException;
+use Viserio\Component\Contract\Http\Exception\LogicException;
 
 /**
  * Compose stream implementations based on a hash of functions.
@@ -201,5 +202,15 @@ class FnStream implements StreamInterface
     public function getMetadata($key = null)
     {
         return \call_user_func($this->_fn_getMetadata, $key);
+    }
+
+    /**
+     * An unserialize would allow the __destruct to run when the unserialized value goes out of scope.
+     *
+     * @throws \Viserio\Component\Contract\Http\Exception\LogicException
+     */
+    public function __wakeup()
+    {
+        throw new LogicException('FnStream should never be unserialized');
     }
 }

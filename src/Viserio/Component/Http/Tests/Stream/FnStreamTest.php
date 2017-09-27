@@ -5,9 +5,20 @@ namespace Viserio\Component\Http\Tests\Stream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
+use Viserio\Component\Contract\Http\Exception\LogicException;
 
 class FnStreamTest extends TestCase
 {
+    public function testDoNotAllowUnserialization()
+    {
+        $this->expectException(LogicException::class);
+
+        $a = new FnStream([]);
+        $b = \serialize($a);
+
+        \unserialize($b);
+    }
+
     /**
      * @expectedException \BadMethodCallException
      * @expectedExceptionMessage seek() is not implemented in the FnStream
