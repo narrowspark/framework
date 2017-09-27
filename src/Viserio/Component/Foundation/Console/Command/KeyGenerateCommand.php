@@ -2,12 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console\Command;
 
-use ParagonIE\ConstantTime\Hex;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Key;
 use Viserio\Component\Encryption\KeyFactory;
 
@@ -21,7 +20,6 @@ class KeyGenerateCommand extends Command
      * @var string
      */
     protected $signature = 'key:generate
-        [--show= : Display the key instead of modifying files]
         [--force= : Force the operation to run when in production]
     ';
 
@@ -32,62 +30,39 @@ class KeyGenerateCommand extends Command
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
-    public function handle()
+    public function handle(RepositoryContract $config, ConsoleKernelContract $consoleKernel)
     {
-        $key        = $this->generateRandomKey();
-        $encodedKey = $this->encodeKey($key);
-        $container  = $this->getContainer();
+        $keyFolderPath        = $consoleKernel->getStoragePath('keysring');
+        $currentEncryptionKey = $config->get('viserio.encryption.key_path', '');
+        $currentPasswordKey   = $config->get('viserio.encryption.password_key_path', '');
 
-        if ($this->option('show') || ! $container->has(RepositoryContract::class)) {
-            $this->line('<comment>' . $encodedKey . '</comment>');
-
+        if ($currentEncryptionKey !== '' &&
+            $currentPasswordKey !== '' &&
+            (! $this->confirmToProceed('Your sure to overwrite your encryption and password key?'))
+        ) {
             return 0;
         }
 
-        // Next, we will replace the application key in the environment file so it is
-        // automatically setup for this developer. This key gets generated using sodium.
-        if (! $this->setKeyInEnvironmentFile($encodedKey)) {
-            \sodium_memzero($encodedKey);
+        $this->removeKeysAndFolder($currentEncryptionKey, $currentPasswordKey, $keyFolderPath);
 
-            return 1;
+        if (! mkdir($keyFolderPath) && ! is_dir($keyFolderPath)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created.', $keyFolderPath));
         }
 
-        $container->get(RepositoryContract::class)->set('viserio.app.key', $key);
+        $this->saveKeyToFileAndPathToEnv(
+            $this->generateRandomKey(),
+            $this->generateRandomKey(),
+            $keyFolderPath,
+            $currentEncryptionKey,
+            $currentPasswordKey
+        );
 
-        $this->info(sprintf('Application key [%s] set successfully.', $encodedKey));
-
-        \sodium_memzero($encodedKey);
+        $this->info('Application & Password key set successfully.');
 
         return 0;
-    }
-
-    /**
-     * Set the application key in the environment file.
-     *
-     * @param string $encodedKey
-     *
-     * @return bool
-     */
-    protected function setKeyInEnvironmentFile(string $encodedKey): bool
-    {
-        $container  = $this->getContainer();
-        $currentKey = $container->get(RepositoryContract::class)->get('viserio.app.key');
-
-        if ($currentKey !== null && (! $this->confirmToProceed())) {
-            return false;
-        }
-
-        $env        = $container->get(ConsoleKernelContract::class)->getEnvironmentFilePath();
-        $currentKey = $currentKey instanceof Key ? $this->encodeKey($currentKey) : '';
-
-        \file_put_contents($env, \str_replace(
-            'APP_KEY=' . $currentKey,
-            'APP_KEY=' . $encodedKey,
-            \file_get_contents($env)
-        ));
-
-        return true;
     }
 
     /**
@@ -103,19 +78,82 @@ class KeyGenerateCommand extends Command
     }
 
     /**
-     * @param \Viserio\Component\Encryption\Key $key
+     * Replace a env key with given value.
      *
-     * @return string
+     * @param string $key
+     * @param string $currentKeyString
+     * @param string $encodedKey
+     *
+     * @return void
      */
-    private function encodeKey(Key $key): string
+    private function replaceEnvVariableValue(
+        string $key,
+        string $currentKeyString,
+        string $encodedKey
+    ): void {
+        $envPath = $this->getContainer()->get(ConsoleKernelContract::class)
+            ->getEnvironmentFilePath();
+
+        \file_put_contents($envPath, \str_replace(
+            $key . '=' . $currentKeyString,
+            $key . '=' . $encodedKey,
+            \file_get_contents($envPath)
+        ));
+    }
+
+    /**
+     * Removes old keys if they exits.
+     *
+     * @param string $currentEncryptionKey
+     * @param string $currentPasswordKey
+     * @param string $keyFolderPath
+     *
+     * @return void
+     */
+    private function removeKeysAndFolder($currentEncryptionKey, $currentPasswordKey, $keyFolderPath): void
     {
-        return Hex::encode(
-            SecurityContract::SODIUM_PHP_VERSION . $key->getRawKeyMaterial() .
-            \sodium_crypto_generichash(
-                SecurityContract::SODIUM_PHP_KEY_VERSION . $key->getRawKeyMaterial(),
-                '',
-                \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
-            )
-        );
+        if ($currentEncryptionKey !== '' && $currentPasswordKey !== '') {
+            \unlink($currentEncryptionKey);
+            \unlink($currentPasswordKey);
+        }
+
+        if (\is_dir($keyFolderPath)) {
+            \rmdir($keyFolderPath);
+        }
+    }
+
+    /**
+     * Saves the key to a file and the file path to env vars.
+     *
+     * @param \Viserio\Component\Encryption\Key $encryptionKey
+     * @param \Viserio\Component\Encryption\Key $passwordKey
+     * @param string                            $keyFolderPath
+     * @param string                            $currentEncryptionKey
+     * @param string                            $currentPasswordKey
+     *
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
+     *
+     * @return void
+     */
+    protected function saveKeyToFileAndPathToEnv(
+        Key $encryptionKey,
+        Key $passwordKey,
+        string $keyFolderPath,
+        string $currentEncryptionKey,
+        string $currentPasswordKey
+    ): void {
+        $encryptionKeyPath = $keyFolderPath . '/encryption_key';
+        $passwordKeyPath = $keyFolderPath . '/password_key';
+
+        if (! KeyFactory::saveKeyToFile($encryptionKeyPath, $encryptionKey)) {
+            throw new RuntimeException('Encryption Key can\'t be created.');
+        }
+
+        if (! KeyFactory::saveKeyToFile($passwordKeyPath, $passwordKey)) {
+            throw new RuntimeException('Password Key can\'t be created.');
+        }
+
+        $this->replaceEnvVariableValue('ENCRYPTION_KEY_PATH', $currentEncryptionKey, $encryptionKeyPath);
+        $this->replaceEnvVariableValue('ENCRYPTION_PASSWORD_KEY_PATH', $currentPasswordKey, $passwordKeyPath);
     }
 }

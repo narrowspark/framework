@@ -4,6 +4,7 @@ namespace Viserio\Component\Encryption;
 
 use Error;
 use ParagonIE\ConstantTime\Hex;
+use Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException;
 use Viserio\Component\Contract\Encryption\Exception\InvalidKeyException;
 use Viserio\Component\Contract\Encryption\Exception\InvalidSaltException;
 use Viserio\Component\Contract\Encryption\HiddenString as HiddenStringContract;
@@ -110,14 +111,93 @@ final class KeyFactory
      */
     public static function exportToHiddenString(Key $key): HiddenString
     {
-        return new HiddenString(
-            Hex::encode(
-                SecurityContract::SODIUM_PHP_KEY_VERSION . $key->getRawKeyMaterial() .
-                \sodium_crypto_generichash(
-                    SecurityContract::SODIUM_PHP_KEY_VERSION . $key->getRawKeyMaterial(),
-                    '',
-                    \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
-                )
+        return new HiddenString(self::convertToHexadecimalString($key));
+    }
+
+    /**
+     * Save a key to a file
+     *
+     * @param string                            $filePath
+     * @param \Viserio\Component\Encryption\Key $key
+     *
+     * @return bool
+     */
+    public static function saveKeyToFile(string $filePath, Key $key): bool
+    {
+        $saved = \file_put_contents(
+            $filePath,
+            self::convertToHexadecimalString($key)
+        );
+
+        return $saved !== false;
+    }
+
+    /**
+     * Load a symmetric encryption key from a file
+     *
+     * @param string $filePath
+     *
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
+     *
+     * @return \Viserio\Component\Encryption\Key
+     */
+    public static function loadKey(string $filePath): Key
+    {
+        if (!\is_readable($filePath)) {
+            throw new CannotPerformOperationException(sprintf(
+                'Cannot read keyfile: %s',
+                $filePath
+            ));
+        }
+
+        return new Key(self::loadKeyFile($filePath));
+    }
+
+    /**
+     * Read a key from a file, verify its checksum.
+     *
+     * @param string $filePath
+     *
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
+     *
+     * @return \Viserio\Component\Contract\Encryption\HiddenString
+     */
+    private static function loadKeyFile(string $filePath): HiddenStringContract
+    {
+        $fileData = \file_get_contents($filePath);
+
+        if ($fileData === false) {
+            throw new CannotPerformOperationException(sprintf(
+                'Cannot load key from file: %s',
+                $filePath
+            ));
+        }
+
+        $data = Hex::decode($fileData);
+
+        \sodium_memzero($fileData);
+
+        return new HiddenString(self::getKeyDataFromString($data));
+    }
+
+    /**
+     * Convert a binary string into a hexadecimal string without cache-timing
+     * leaks.
+     *
+     * @param \Viserio\Component\Encryption\Key $key
+     *
+     * @return string
+     */
+    private static function convertToHexadecimalString(Key $key): string
+    {
+        return Hex::encode(
+            SecurityContract::SODIUM_PHP_KEY_VERSION . $key->getRawKeyMaterial() .
+            \sodium_crypto_generichash(
+                SecurityContract::SODIUM_PHP_KEY_VERSION . $key->getRawKeyMaterial(),
+                '',
+                \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX
             )
         );
     }

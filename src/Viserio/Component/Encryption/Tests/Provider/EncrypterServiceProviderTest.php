@@ -20,11 +20,15 @@ class EncrypterServiceProviderTest extends TestCase
         $container->register(new EncrypterServiceProvider());
 
         $password = \random_bytes(32);
+        $path     = __DIR__ . '/test_key';
+
+        KeyFactory::saveKeyToFile($path, KeyFactory::generateKey($password));
 
         $container->instance('config', [
             'viserio' => [
                 'encryption' => [
-                    'key' => KeyFactory::exportToHiddenString(KeyFactory::generateKey($password)),
+                    'key_path' => $path,
+                    'password_key_path' => $path,
                 ],
             ],
         ]);
@@ -33,5 +37,7 @@ class EncrypterServiceProviderTest extends TestCase
         self::assertInstanceOf(Encrypter::class, $container->get('encrypter'));
         self::assertInstanceOf(Password::class, $container->get(Password::class));
         self::assertInstanceOf(Password::class, $container->get('password'));
+
+        unlink($path);
     }
 }

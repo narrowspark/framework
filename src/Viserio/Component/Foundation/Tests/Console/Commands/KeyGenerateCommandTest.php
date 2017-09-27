@@ -14,21 +14,28 @@ class KeyGenerateCommandTest extends MockeryTestCase
     public function testApplicationKeyIsSetToEnvFile(): void
     {
         $file = __DIR__ . '/../../Fixtures/.env.key';
+        $dirPath = __DIR__ . '/keysring';
 
-        \file_put_contents($file, 'APP_KEY=');
+        \file_put_contents($file, "ENCRYPTION_KEY_PATH=\r\nENCRYPTION_PASSWORD_KEY_PATH=");
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
-            ->with('viserio.app.key')
-            ->andReturn(null);
-        $config->shouldReceive('set')
-            ->once();
+            ->with('viserio.encryption.key_path', '')
+            ->andReturn('');
+        $config->shouldReceive('get')
+            ->once()
+            ->with('viserio.encryption.password_key_path', '')
+            ->andReturn('');
 
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getEnvironmentFilePath')
-            ->once()
+            ->twice()
             ->andReturn($file);
+        $kernel->shouldReceive('getStoragePath')
+            ->once()
+            ->with('keysring')
+            ->andReturn($dirPath);
 
         $container = new ArrayContainer([
             RepositoryContract::class    => $config,
@@ -43,53 +50,35 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertRegExp("/Application key \[(.*)\] set successfully/", $output);
+        self::assertEquals("Application & Password key set successfully.\n", $output);
 
         @\unlink($file);
-    }
-
-    public function testCommandWithShowOption(): void
-    {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->never()
-            ->with('viserio.app.key');
-        $config->shouldReceive('set')
-            ->never();
-
-        $kernel = $this->mock(ConsoleKernelContract::class);
-        $kernel->shouldReceive('getEnvironmentFilePath')
-            ->never();
-
-        $container = new ArrayContainer([
-            RepositoryContract::class    => $config,
-            ConsoleKernelContract::class => $kernel,
-        ]);
-
-        $command = new KeyGenerateCommand();
-        $command->setContainer($container);
-
-        $tester = new CommandTester($command);
-        $tester->execute(['--show' => 'true']);
-
-        $output = $tester->getDisplay(true);
-
-        self::assertTrue(\is_string($output));
+        @\unlink($dirPath . '\encryption_key');
+        @\unlink($dirPath . '\password_key');
+        @\rmdir($dirPath);
     }
 
     public function testCommandToAskIfKeyShouldBeOverwrittenInProduction(): void
     {
+        $dirPath = __DIR__ . '/keysring';
+
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
-            ->with('viserio.app.key')
+            ->with('viserio.encryption.key_path', '')
             ->andReturn('test');
-        $config->shouldReceive('set')
-            ->never();
+        $config->shouldReceive('get')
+            ->once()
+            ->with('viserio.encryption.password_key_path', '')
+            ->andReturn('test');
 
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getEnvironmentFilePath')
             ->never();
+        $kernel->shouldReceive('getStoragePath')
+            ->once()
+            ->with('keysring')
+            ->andReturn($dirPath);
 
         $container = new ArrayContainer([
             RepositoryContract::class    => $config,
@@ -119,5 +108,9 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $output = $tester->getDisplay(true);
 
         self::assertSame('', $output);
+
+        @\unlink($dirPath . '\encryption_key');
+        @\unlink($dirPath . '\password_key');
+        @\rmdir($dirPath);
     }
 }
