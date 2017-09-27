@@ -27,7 +27,7 @@ class EncrypterServiceProviderTest extends TestCase
         $container->instance('config', [
             'viserio' => [
                 'encryption' => [
-                    'key_path' => $path,
+                    'key_path'          => $path,
                     'password_key_path' => $path,
                 ],
             ],

@@ -115,7 +115,7 @@ final class KeyFactory
     }
 
     /**
-     * Save a key to a file
+     * Save a key to a file.
      *
      * @param string                            $filePath
      * @param \Viserio\Component\Encryption\Key $key
@@ -133,7 +133,7 @@ final class KeyFactory
     }
 
     /**
-     * Load a symmetric encryption key from a file
+     * Load a symmetric encryption key from a file.
      *
      * @param string $filePath
      *
@@ -144,7 +144,7 @@ final class KeyFactory
      */
     public static function loadKey(string $filePath): Key
     {
-        if (!\is_readable($filePath)) {
+        if (! \is_readable($filePath)) {
             throw new CannotPerformOperationException(sprintf(
                 'Cannot read keyfile: %s',
                 $filePath

@@ -78,6 +78,41 @@ class KeyGenerateCommand extends Command
     }
 
     /**
+     * Saves the key to a file and the file path to env vars.
+     *
+     * @param \Viserio\Component\Encryption\Key $encryptionKey
+     * @param \Viserio\Component\Encryption\Key $passwordKey
+     * @param string                            $keyFolderPath
+     * @param string                            $currentEncryptionKey
+     * @param string                            $currentPasswordKey
+     *
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
+     *
+     * @return void
+     */
+    protected function saveKeyToFileAndPathToEnv(
+        Key $encryptionKey,
+        Key $passwordKey,
+        string $keyFolderPath,
+        string $currentEncryptionKey,
+        string $currentPasswordKey
+    ): void {
+        $encryptionKeyPath = $keyFolderPath . '/encryption_key';
+        $passwordKeyPath   = $keyFolderPath . '/password_key';
+
+        if (! KeyFactory::saveKeyToFile($encryptionKeyPath, $encryptionKey)) {
+            throw new RuntimeException('Encryption Key can\'t be created.');
+        }
+
+        if (! KeyFactory::saveKeyToFile($passwordKeyPath, $passwordKey)) {
+            throw new RuntimeException('Password Key can\'t be created.');
+        }
+
+        $this->replaceEnvVariableValue('ENCRYPTION_KEY_PATH', $currentEncryptionKey, $encryptionKeyPath);
+        $this->replaceEnvVariableValue('ENCRYPTION_PASSWORD_KEY_PATH', $currentPasswordKey, $passwordKeyPath);
+    }
+
+    /**
      * Replace a env key with given value.
      *
      * @param string $key
@@ -120,40 +155,5 @@ class KeyGenerateCommand extends Command
         if (\is_dir($keyFolderPath)) {
             \rmdir($keyFolderPath);
         }
-    }
-
-    /**
-     * Saves the key to a file and the file path to env vars.
-     *
-     * @param \Viserio\Component\Encryption\Key $encryptionKey
-     * @param \Viserio\Component\Encryption\Key $passwordKey
-     * @param string                            $keyFolderPath
-     * @param string                            $currentEncryptionKey
-     * @param string                            $currentPasswordKey
-     *
-     * @throws \Symfony\Component\Console\Exception\RuntimeException
-     *
-     * @return void
-     */
-    protected function saveKeyToFileAndPathToEnv(
-        Key $encryptionKey,
-        Key $passwordKey,
-        string $keyFolderPath,
-        string $currentEncryptionKey,
-        string $currentPasswordKey
-    ): void {
-        $encryptionKeyPath = $keyFolderPath . '/encryption_key';
-        $passwordKeyPath = $keyFolderPath . '/password_key';
-
-        if (! KeyFactory::saveKeyToFile($encryptionKeyPath, $encryptionKey)) {
-            throw new RuntimeException('Encryption Key can\'t be created.');
-        }
-
-        if (! KeyFactory::saveKeyToFile($passwordKeyPath, $passwordKey)) {
-            throw new RuntimeException('Password Key can\'t be created.');
-        }
-
-        $this->replaceEnvVariableValue('ENCRYPTION_KEY_PATH', $currentEncryptionKey, $encryptionKeyPath);
-        $this->replaceEnvVariableValue('ENCRYPTION_PASSWORD_KEY_PATH', $currentPasswordKey, $passwordKeyPath);
     }
 }
