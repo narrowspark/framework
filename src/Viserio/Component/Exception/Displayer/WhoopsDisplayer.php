@@ -55,7 +55,7 @@ class WhoopsDisplayer implements
     public static function getDefaultOptions(): iterable
     {
         return [
-            'debug_blacklist' => [],
+            'debug_blacklist'   => [],
             'application_paths' => [],
         ];
     }

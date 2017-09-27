@@ -68,7 +68,7 @@ class SymfonyDisplayer implements DisplayerContract
     /**
      * Render an exception to a string using Symfony.
      *
-     * @param \Throwable  $exception
+     * @param \Throwable $exception
      *
      * @return string
      */
