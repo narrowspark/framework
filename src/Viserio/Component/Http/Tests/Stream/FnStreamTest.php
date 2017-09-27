@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Http\Exception\LogicException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
-use Viserio\Component\Contract\Http\Exception\LogicException;
 
 class FnStreamTest extends TestCase
 {
