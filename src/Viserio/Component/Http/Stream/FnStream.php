@@ -73,6 +73,16 @@ class FnStream implements StreamInterface
     }
 
     /**
+     * An unserialize would allow the __destruct to run when the unserialized value goes out of scope.
+     *
+     * @throws \Viserio\Component\Contract\Http\Exception\LogicException
+     */
+    public function __wakeup()
+    {
+        throw new LogicException('FnStream should never be unserialized');
+    }
+
+    /**
      * Adds custom functionality to an underlying stream by intercepting
      * specific method calls.
      *
@@ -202,15 +212,5 @@ class FnStream implements StreamInterface
     public function getMetadata($key = null)
     {
         return \call_user_func($this->_fn_getMetadata, $key);
-    }
-
-    /**
-     * An unserialize would allow the __destruct to run when the unserialized value goes out of scope.
-     *
-     * @throws \Viserio\Component\Contract\Http\Exception\LogicException
-     */
-    public function __wakeup()
-    {
-        throw new LogicException('FnStream should never be unserialized');
     }
 }
