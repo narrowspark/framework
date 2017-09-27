@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Provider;
 
-use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Session\Store as StoreContract;
@@ -39,7 +38,7 @@ class SessionServiceProviderTest extends TestCase
                     'cookie'   => 'test',
                 ],
                 'encryption' => [
-                    'key_path' => $path,
+                    'key_path'          => $path,
                     'password_key_path' => $path,
                 ],
             ],
