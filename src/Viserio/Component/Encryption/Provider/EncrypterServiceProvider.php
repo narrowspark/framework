@@ -64,7 +64,7 @@ class EncrypterServiceProvider implements
      */
     public static function getMandatoryOptions(): iterable
     {
-        return ['key'];
+        return ['key_path', 'password_key_path'];
     }
 
     /**
@@ -77,8 +77,9 @@ class EncrypterServiceProvider implements
     public static function createEncrypter(ContainerInterface $container): EncrypterContract
     {
         $options = self::resolveOptions($container);
+        $key     = KeyFactory::loadKey($options['key_path']);
 
-        return new Encrypter(KeyFactory::importFromHiddenString($options['key']));
+        return new Encrypter($key);
     }
 
     /**
@@ -90,6 +91,9 @@ class EncrypterServiceProvider implements
      */
     public static function createPassword(ContainerInterface $container): PasswordContract
     {
-        return new Password($container->get(EncrypterContract::class));
+        $options   = self::resolveOptions($container);
+        $key       = KeyFactory::loadKey($options['password_key_path']);
+
+        return new Password(new Encrypter($key));
     }
 }

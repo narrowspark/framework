@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Provider;
 
-use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Session\Store as StoreContract;
@@ -22,6 +21,9 @@ class SessionServiceProviderTest extends TestCase
         $container->register(new FilesServiceProvider());
 
         $password = \random_bytes(32);
+        $path     = __DIR__ . '/test_key';
+
+        KeyFactory::saveKeyToFile($path, KeyFactory::generateKey($password));
 
         $container->instance('config', [
             'viserio' => [
@@ -36,7 +38,8 @@ class SessionServiceProviderTest extends TestCase
                     'cookie'   => 'test',
                 ],
                 'encryption' => [
-                    'key' => KeyFactory::exportToHiddenString(KeyFactory::generateKey($password)),
+                    'key_path'          => $path,
+                    'password_key_path' => $path,
                 ],
             ],
         ]);
@@ -44,5 +47,7 @@ class SessionServiceProviderTest extends TestCase
         self::assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));
         self::assertInstanceOf(SessionManager::class, $container->get('session'));
         self::assertInstanceOf(StoreContract::class, $container->get('session.store'));
+
+        unlink($path);
     }
 }
