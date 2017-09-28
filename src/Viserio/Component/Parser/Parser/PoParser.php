@@ -7,17 +7,16 @@ use Viserio\Component\Contract\Parser\Parser as ParserContract;
 
 class PoParser implements ParserContract
 {
-    private $entries = [];
-
-    private $headers = [];
-
     private $options = [
         'multiline-glue' => '<##EOL##>',  // Token used to separate lines in msgid
         'context-glue' => '<##EOC##>',  // Token used to separate ctxt from msgid
         'line-ending' => 'unix',
     ];
 
-    private $lineEndings = ['unix' => "\n", 'win' => "\r\n"];
+    private $lineEndings = [
+        'unix' => "\n",
+        'win' => "\r\n"
+    ];
 
     /**
      * {@inheritdoc}
@@ -50,7 +49,9 @@ class PoParser implements ParserContract
 
                 if ($firstLine) {
                     $firstLine = false;
-                    $headers = self::extractHeaders($entry['msgstr'], $headers);
+                    array_shift($entry['msgstr']);
+                    var_dump($entry['msgstr']);die;
+                    $headers = self::extractHeaders($entry['msgstr'][0], $headers);
                 } else {
                     // A new entry is found!
                     $hash[] = $entry;
@@ -92,27 +93,27 @@ class PoParser implements ParserContract
                         $type = 'previous-obsolete';
                     }
 
-                $tmpParts = explode(' ', $data);
-                $tmpKey = $tmpParts[0];
+                    $tmpParts = explode(' ', $data);
+                    $tmpKey = $tmpParts[0];
 
-                if (!in_array($tmpKey, ['msgid', 'msgid_plural', 'msgstr', 'msgctxt'], true)) {
-                    $tmpKey = $lastPreviousKey; // If there is a multiline previous string we must remember what key was first line.
-                    $str = $data;
-                } else {
-                    $str = implode(' ', array_slice($tmpParts, 1));
-                }
+                    if (! in_array($tmpKey, ['msgid', 'msgid_plural', 'msgstr', 'msgctxt'], true)) {
+                        $tmpKey = $lastPreviousKey; // If there is a multiline previous string we must remember what key was first line.
+                        $str = $data;
+                    } else {
+                        $str = implode(' ', array_slice($tmpParts, 1));
+                    }
 
-                $entry[$type] = $entry[$type] ?? ['msgid' => [], 'msgstr' => []];
+                    $entry[$type] = $entry[$type] ?? ['msgid' => [], 'msgstr' => []];
 
-                if ($type === 'obsolete' || $type === 'previous-obsolete') {
-                    [$entry, $lastPreviousKey] = $this->addObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entry);
-                }
+                    if ($type === 'obsolete' || $type === 'previous-obsolete') {
+                        [$entry, $lastPreviousKey] = $this->addObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entry);
+                    }
 
-                if ($type === 'previous') {
-                    [$entry, $lastPreviousKey] = $this->addPreviousEntry($lastPreviousKey, $tmpKey, $str, $entry, $type);
-                }
+                    if ($type === 'previous') {
+                        [$entry, $lastPreviousKey] = $this->addPreviousEntry($lastPreviousKey, $tmpKey, $str, $entry, $type);
+                    }
 
-                break;
+                    break;
 
                 case 'msgctxt':
                 case 'msgid':        // untranslated-string
@@ -121,7 +122,7 @@ class PoParser implements ParserContract
                     $entry[$state][] = self::convertString($data);
                     break;
 
-                case 'msgstr':
+                case 'msgstr': // translated-string
                     $state = 'msgstr';
                     $entry[$state][] = self::convertString($data);
                     break;
@@ -133,37 +134,7 @@ class PoParser implements ParserContract
                         $entry[$state][] = self::convertString($data);
                     } else {
                         // "multiline" lines
-                        switch ($state) {
-                            case 'msgctxt':
-                            case 'msgid':
-                            case 'msgid_plural':
-                            case (strpos($state, 'msgstr[') !== false):
-                                if (is_string($entry[$state])) {
-                                    // Convert it to array
-                                    $entry[$state] = [$entry[$state]];
-                                }
-
-                                $entry[$state][] = self::convertString($line);
-                                break;
-                            case 'msgstr':
-                                // Special fix where msgid is ""
-                                if ($entry['msgid'] === "\"\"") {
-                                    $entry['msgstr'][] = trim($line, '"');
-                                } else {
-                                    $entry['msgstr'][] = $line;
-                                }
-
-                                break;
-                            default:
-                                throw new ParseException([
-                                    'message' => sprintf(
-                                        'Parse error! Unknown key [%s] on line %s',
-                                        $key,
-                                        ($lineNumber + 1)
-                                    ),
-                                    'line' => $lineNumber
-                                ]);
-                        }
+                        $entry = $this->extractMultiLines($state, $entry, $line, $key, $i);
                     }
 
                     break;
@@ -242,10 +213,10 @@ class PoParser implements ParserContract
      */
     private static function extractHeaders($headers, array $data): array
     {
-        $headers       = \explode("\n", $headers);
+        $headerArray   = \explode("\n", $headers);
         $currentHeader = null;
 
-        foreach ($headers as $line) {
+        foreach ($headerArray as $line) {
             $line = self::convertString($line);
 
             if ($line === '') {
@@ -255,10 +226,10 @@ class PoParser implements ParserContract
             if (self::isHeaderDefinition($line)) {
                 $header                         = array_map('trim', explode(':', $line, 2));
                 $currentHeader                  = $header[0];
-                $data[$currentHeader] = $header[1];
+                $data[$currentHeader]           = $header[1];
             } else {
                 $entry                          = $data[$currentHeader] ?? '';
-                $data[$currentHeader] = $entry . $line;
+                $data[$currentHeader]           = $entry . $line;
             }
         }
 
@@ -355,14 +326,19 @@ class PoParser implements ParserContract
     }
 
     /**
-     * @param $lastPreviousKey
-     * @param $tmpKey
-     * @param $str
-     * @param $entry
+     * @param null|string $lastPreviousKey
+     * @param null|string $tmpKey
+     * @param string      $str
+     * @param array       $entry
+     *
      * @return array
      */
-    private function addObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entry): array
-    {
+    private function addObsoleteEntry(
+        ?string $lastPreviousKey,
+        ?string $tmpKey,
+        string $str,
+        array $entry
+    ): array {
         $entry['obsolete'] = true;
 
         switch ($tmpKey) {
@@ -387,16 +363,21 @@ class PoParser implements ParserContract
     }
 
     /**
-     * @param $lastPreviousKey
-     * @param $tmpKey
-     * @param $str
-     * @param $entry
-     * @param $type
+     * @param null|string $lastPreviousKey
+     * @param null|string $tmpKey
+     * @param string      $str
+     * @param array       $entry
+     * @param string      $type
      *
      * @return array
      */
-    private function addPreviousEntry($lastPreviousKey, $tmpKey, $str, $entry, $type): array
-    {
+    private function addPreviousEntry(
+        ?string $lastPreviousKey,
+        ?string $tmpKey,
+        string $str,
+        array $entry,
+        string $type
+    ): array {
         switch ($tmpKey) {
             case 'msgid':
             case 'msgid_plural':
@@ -405,10 +386,58 @@ class PoParser implements ParserContract
                 $lastPreviousKey = $tmpKey;
                 break;
             default:
-                $entry[$type][$tmpKey] = self::convertString(($str);
+                $entry[$type][$tmpKey] = self::convertString($str);
                 break;
         }
 
         return [$entry, $lastPreviousKey];
+    }
+
+    /**
+     * @param null|string $state
+     * @param array       $entry
+     * @param $line
+     * @param $key
+     * @param int         $i
+     *
+     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     *
+     * @return array
+     */
+    private function extractMultiLines(?string $state, array $entry, $line, $key, int $i): array
+    {
+        switch ($state) {
+            case 'msgctxt':
+            case 'msgid':
+            case 'msgid_plural':
+            case (strpos($state, 'msgstr[') !== false):
+                if (is_string($entry[$state])) {
+                    // Convert it to array
+                    $entry[$state] = [$entry[$state]];
+                }
+
+                $entry[$state][] = self::convertString($line);
+                break;
+            case 'msgstr':
+                // Special fix where msgid is ""
+                if ($entry['msgid'] === "\"\"") {
+                    $entry['msgstr'][] = trim($line, '"');
+                } else {
+                    $entry['msgstr'][] = $line;
+                }
+
+                break;
+            default:
+                throw new ParseException([
+                    'message' => sprintf(
+                        'Parse error! Unknown key [%s] on line %s',
+                        $key,
+                        $i
+                    ),
+                    'line' => $i
+                ]);
+        }
+
+        return $entry;
     }
 }
