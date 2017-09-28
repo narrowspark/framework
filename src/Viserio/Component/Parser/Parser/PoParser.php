@@ -39,17 +39,28 @@ class PoParser implements ParserContract
             $line = \trim($lines[$i]);
             $line = $this->fixMultiLines($line, $lines, $i);
 
-            if ($line === '') {
-                if (isset($translations['']) && $translations[''] === '') {
-                    $translations = self::extractHeaders($translations[''], $translations);
+            $splitLine = \preg_split('/\s+/', $line, 2);
+            $key       = $splitLine[0];
+
+            if ($line === '' || ($key === 'msgid' && isset($entry['msgid']))) {
+                // Two consecutive blank lines
+                if ($justNewEntry) {
+                    continue;
+                }
+
+                if ($firstLine) {
+                    $firstLine = false;
+                    $headers = self::extractHeaders($entry['msgstr'], $headers);
+                } else {
+                    // A new entry is found!
+                    $hash[] = $entry;
                 }
 
                 continue;
             }
 
-            $splitLine = \preg_split('/\s+/', $line, 2);
-            $key       = $splitLine[0];
-            $data      = $splitLine[1] ?? '';
+            $justNewEntry = false;
+            $data         = $splitLine[1] ?? '';
 
             switch ($key) {
                 case '#':
@@ -225,11 +236,11 @@ class PoParser implements ParserContract
      * Add the headers found to the translations instance.
      *
      * @param string $headers
-     * @param array  $translations
+     * @param array  $data
      *
      * @return array
      */
-    private static function extractHeaders($headers, array $translations): array
+    private static function extractHeaders($headers, array $data): array
     {
         $headers       = \explode("\n", $headers);
         $currentHeader = null;
@@ -242,16 +253,16 @@ class PoParser implements ParserContract
             }
 
             if (self::isHeaderDefinition($line)) {
-                $header                                 = array_map('trim', explode(':', $line, 2));
-                $currentHeader                          = $header[0];
-                $translations['header'][$currentHeader] = $header[1];
+                $header                         = array_map('trim', explode(':', $line, 2));
+                $currentHeader                  = $header[0];
+                $data[$currentHeader] = $header[1];
             } else {
-                $entry                                  = $translations['header'][$currentHeader] ?? '';
-                $translations['header'][$currentHeader] = $entry . $line;
+                $entry                          = $data[$currentHeader] ?? '';
+                $data[$currentHeader] = $entry . $line;
             }
         }
 
-        return $translations;
+        return $data;
     }
 
     /**
