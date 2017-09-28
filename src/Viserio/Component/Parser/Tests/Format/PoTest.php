@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Tests\Format;
 
-use Throwable;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 use Viserio\Component\Parser\Parser\PoParser;
 
 class PoTest extends TestCase
@@ -22,7 +22,7 @@ class PoTest extends TestCase
     {
         parent::setUp();
 
-        $this->parser = new PoParser();
+        $this->parser      = new PoParser();
         $this->fixturePath = __DIR__ . '/../Fixtures/po';
     }
 
