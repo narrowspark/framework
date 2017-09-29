@@ -6,7 +6,6 @@ use ErrorException;
 use ParseError;
 use Throwable;
 use TypeError;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Exception\Handler as ExceptionHandlerContract;
 use Viserio\Component\Contract\Queue\Exception\TimeoutException;
