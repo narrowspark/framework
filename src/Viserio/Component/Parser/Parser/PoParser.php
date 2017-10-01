@@ -8,14 +8,14 @@ use Viserio\Component\Contract\Parser\Parser as ParserContract;
 class PoParser implements ParserContract
 {
     private const DEFAULT_ENTRY = [
-        'msgctxt' => '',
-        'header' => false,
-        'obsolete' => false,
-        'fuzzy' => false,
-        'flags' => [],
+        'msgctxt'    => '',
+        'header'     => false,
+        'obsolete'   => false,
+        'fuzzy'      => false,
+        'flags'      => [],
         'references' => [],
-        'ccomment' => '',
-        'tcomment' => '',
+        'ccomment'   => '',
+        'tcomment'   => '',
     ];
 
     /**
@@ -30,7 +30,7 @@ class PoParser implements ParserContract
      *     'obsolete'   => <bool> Is the message obsolete?
      *     'fuzzy'      => <bool> Is the message "fuzzy"?
      *     'flags'      => <array> Flags of the entry. Internal usage.
-     * ]
+     * ].
      */
     public function parse(string $payload): array
     {
@@ -66,8 +66,8 @@ class PoParser implements ParserContract
                     $entries = [];
                 }
 
-                $state = null;
-                $justNewEntry = true;
+                $state           = null;
+                $justNewEntry    = true;
                 $lastPreviousKey = null;
 
                 if ($line === '') {

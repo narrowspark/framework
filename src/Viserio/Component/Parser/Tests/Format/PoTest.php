@@ -53,7 +53,7 @@ class PoTest extends TestCase
     public function testHeaders()
     {
         try {
-            $result = $this->parser->parse(self::readFile($this->fixturePath . '/healthy.po'));
+            $result  = $this->parser->parse(self::readFile($this->fixturePath . '/healthy.po'));
             $headers = $result['headers'];
 
             self::assertCount(18, $headers);
@@ -84,7 +84,7 @@ class PoTest extends TestCase
     {
         try {
             $result = $this->parser->parse(self::readFile($this->fixturePath . '/multilines.po'));
-var_dump($result);
+            var_dump($result);
             $this->assertCount(18, $result['headers']);
             $this->assertCount(9, $result['msgid']);
             $this->assertCount(9, $result['msgstr']);
