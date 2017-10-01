@@ -7,19 +7,30 @@ use Viserio\Component\Contract\Parser\Parser as ParserContract;
 
 class PoParser implements ParserContract
 {
-    private $options = [
-        'multiline-glue' => '<##EOL##>',  // Token used to separate lines in msgid
-        'context-glue'   => '<##EOC##>',  // Token used to separate ctxt from msgid
-        'line-ending'    => 'unix',
-    ];
-
-    private $lineEndings = [
-        'unix' => "\n",
-        'win'  => "\r\n",
+    private const DEFAULT_ENTRY = [
+        'msgctxt' => '',
+        'header' => false,
+        'obsolete' => false,
+        'fuzzy' => false,
+        'flags' => [],
+        'references' => [],
+        'ccomment' => '',
+        'tcomment' => '',
     ];
 
     /**
      * {@inheritdoc}
+     * [
+     *     'msgid'      => <string> ID of the message.
+     *     'msgctxt'    => <string> Message context.
+     *     'msgstr'     => <string> Message translation.
+     *     'tcomment'   => <string> Comment from translator.
+     *     'ccomment'   => <string> Extracted comments from code.
+     *     'references' => <array> Location of string in code.
+     *     'obsolete'   => <bool> Is the message obsolete?
+     *     'fuzzy'      => <bool> Is the message "fuzzy"?
+     *     'flags'      => <array> Flags of the entry. Internal usage.
+     * ]
      */
     public function parse(string $payload): array
     {
@@ -27,11 +38,11 @@ class PoParser implements ParserContract
         $i     = 0;
 
         $headers         = [];
-        $hash            = [];
-        $entry           = [];
-        $justNewEntry    = false; // A new entry has been just inserted.
+        $entries         = [];
+        $entry           = self::DEFAULT_ENTRY;
+        $justNewEntry    = false; // A new entries has been just inserted.
         $firstLine       = true;
-        $lastPreviousKey = null; // Used to remember last key in a multiline previous entry.
+        $lastPreviousKey = null; // Used to remember last key in a multiline previous entries.
         $state           = null;
 
         for ($n = \count($lines); $i < $n; ++$i) {
@@ -41,7 +52,7 @@ class PoParser implements ParserContract
             $splitLine = \preg_split('/\s+/', $line, 2);
             $key       = $splitLine[0];
 
-            if ($line === '' || ($key === 'msgid' && isset($entry['msgid']))) {
+            if ($line === '' || ($key === 'msgid' && isset($entries['msgid']))) {
                 // Two consecutive blank lines
                 if ($justNewEntry) {
                     continue;
@@ -49,40 +60,45 @@ class PoParser implements ParserContract
 
                 if ($firstLine) {
                     $firstLine = false;
-                    array_shift($entry['msgstr']);
-                    var_dump($entry['msgstr']);
-                    die;
-                    $headers = self::extractHeaders($entry['msgstr'][0], $headers);
-                } else {
-                    // A new entry is found!
-                    $hash[] = $entry;
+
+                    $headers = self::extractHeaders($entries['msgstr'][0], $headers);
+                    // rest entries
+                    $entries = [];
                 }
 
-                continue;
+                $state = null;
+                $justNewEntry = true;
+                $lastPreviousKey = null;
+
+                if ($line === '') {
+                    continue;
+                }
+            } else {
+                $justNewEntry = false;
             }
 
-            $justNewEntry = false;
-            $data         = $splitLine[1] ?? '';
+            $data = $splitLine[1] ?? '';
 
             switch ($key) {
                 case '#':
-                    $entry = $this->addComment($data, $entry);
+                    $entry['tcomment'] = self::convertString($data);
                     break;
 
                 case '#.':
-                    $entry = $this->addExtractedComment($data, $entry);
+                    $entry['ccomment'] = self::convertString($data);
                     break;
 
                 case '#,':
-                    $entry = $this->addFlags($data, $entry);
+                    $entry['flags'] = preg_split('/,\s*/', $data);
+                    $entry['fuzzy'] = in_array('fuzzy', $entry['flags'], true);
                     break;
 
                 case '#:':
-                    $entry = $this->addReference($data, $entry);
+                    $entry['references'] = $this->addReferences($data);
                     break;
 
                 case '#|':  // Previous untranslated string
-                case '#~':  // Old entry
+                case '#~':  // Old entries
                 case '#~|': // Previous-Old untranslated string.
                     $type = $key;
 
@@ -104,14 +120,14 @@ class PoParser implements ParserContract
                         $str = implode(' ', array_slice($tmpParts, 1));
                     }
 
-                    $entry[$type] = $entry[$type] ?? ['msgid' => [], 'msgstr' => []];
+                    $entries[$type] = $entries[$type] ?? ['msgid' => [], 'msgstr' => []];
 
                     if ($type === 'obsolete' || $type === 'previous-obsolete') {
-                        [$entry, $lastPreviousKey] = $this->addObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entry);
+                        [$entries, $lastPreviousKey] = $this->addObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entries);
                     }
 
                     if ($type === 'previous') {
-                        [$entry, $lastPreviousKey] = $this->addPreviousEntry($lastPreviousKey, $tmpKey, $str, $entry, $type);
+                        [$entries, $lastPreviousKey] = $this->addPreviousEntry($lastPreviousKey, $tmpKey, $str, $entries, $type);
                     }
 
                     break;
@@ -119,8 +135,8 @@ class PoParser implements ParserContract
                 case 'msgctxt':
                 case 'msgid':        // untranslated-string
                 case 'msgid_plural': // untranslated-string-plural
-                    $state           = $key;
-                    $entry[$state][] = self::convertString($data);
+                    $state         = $key;
+                    $entry[$state] = self::convertString($data);
                     break;
 
                 case 'msgstr': // translated-string
@@ -142,7 +158,10 @@ class PoParser implements ParserContract
             }
         }
 
-        return $entry;
+        // add headers
+        $entries['headers'] = $headers;
+
+        return $entries;
     }
 
     /**
@@ -251,79 +270,27 @@ class PoParser implements ParserContract
     }
 
     /**
-     * Translator comments.
+     * Export reference infos.
      *
-     * @param $data
-     * @param array $entry
-     *
-     * @return array
-     */
-    private function addComment($data, $entry): array
-    {
-        if (! in_array($data, $entry['comment'], true)) {
-            $entry['comment'][] = self::convertString($data);
-        }
-
-        return $entry;
-    }
-
-    /**
-     * Comments extracted from source code.
-     *
-     * @param $data
-     * @param array $entry
+     * @param string $data
      *
      * @return array
      */
-    private function addExtractedComment($data, array $entry): array
+    private function addReferences($data): array
     {
-        if (! in_array($data, $entry['extractedComment'], true)) {
-            $entry['extractedComment'][] = self::convertString($data);
-        }
+        $entries = [];
 
-        return $entry;
-    }
-
-    /**
-     * Flagged translation.
-     *
-     * @param $data
-     * @param array $entry
-     *
-     * @return array
-     */
-    private function addFlags($data, array $entry): array
-    {
-        foreach (array_map('trim', \explode(',', \trim($data))) as $value) {
-            if (! in_array($value, $entry['flags'], true)) {
-                $entry['flags'][] = self::convertString($value);
-            }
-        }
-
-        return $entry;
-    }
-
-    /**
-     * Reference.
-     *
-     * @param $data
-     * @param array $entry
-     *
-     * @return array
-     */
-    private function addReference($data, $entry): array
-    {
         foreach (\preg_split('/\s+/', \trim($data)) as $value) {
             if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
                 $filename = $matches[1];
                 $line     = $matches[3] ?? null;
                 $key      = sprintf('{%s}:{%s}', $filename, $line);
 
-                $entry['reference'][$key] = [$filename, $line];
+                $entries[$key] = [$filename, $line];
             }
         }
 
-        return $entry;
+        return $entries;
     }
 
     /**
@@ -346,6 +313,7 @@ class PoParser implements ParserContract
             case 'msgid':
                 $entry['msgid'][] = self::convertString($str);
                 $lastPreviousKey  = $tmpKey;
+
                 break;
             case 'msgstr':
                 if ($str === '""') {
