@@ -37,6 +37,13 @@ class TraceableEventManager implements EventManagerContract
     private $wrappedListeners = [];
 
     /**
+     * List of orphaned listeners.
+     *
+     * @var array
+     */
+    private $orphanedEvents = [];
+
+    /**
      * @var null|\Symfony\Component\Stopwatch\Stopwatch
      */
     private $stopwatch;
@@ -200,6 +207,16 @@ class TraceableEventManager implements EventManagerContract
     }
 
     /**
+     * Gets the orphaned events.
+     *
+     * @return array An array of orphaned events
+     */
+    public function getOrphanedEvents(): array
+    {
+        return $this->orphanedEvents;
+    }
+
+    /**
      * @param string $eventName
      * @param $listener
      *
@@ -227,6 +244,10 @@ class TraceableEventManager implements EventManagerContract
      */
     private function preProcess(string $eventName): void
     {
+        if (count($this->eventManager->getListeners($eventName)) === 0) {
+            $this->orphanedEvents[] = $eventName;
+        }
+
         foreach ($this->eventManager->getListeners($eventName) as $listener) {
             $priority        = $this->getListenerPriority($eventName, $listener);
             $wrappedListener = new WrappedListener($listener, null, $this->stopwatch, $this);

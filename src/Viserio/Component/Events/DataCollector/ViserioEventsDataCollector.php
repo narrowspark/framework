@@ -55,8 +55,8 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
         $calledContent = $notCalledContent = '';
         $called        = $notCalled        = [];
 
-        $tableConfig = function (string $name): array {
-            return ['name' => $name, 'headers' => ['Priority', 'Listener'], 'vardumper' => false];
+        $tableConfig = function (string $name, string $emptyText): array {
+            return ['name' => $name, 'headers' => ['Priority', 'Listener'], 'vardumper' => false, 'empty_text' => $emptyText];
         };
 
         foreach ($this->eventManager->getCalledListeners() as $eventName => $calledListener) {
@@ -64,7 +64,7 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
                 $called[] = [$listner['priority'], $listner['pretty']];
             }
 
-            $calledContent .= $this->createTable($called, $tableConfig($eventName));
+            $calledContent .= $this->createTable($called, $tableConfig($eventName, 'No events have been recorded. Check that debugging is enabled in the kernel.'));
         }
 
         foreach ($this->eventManager->getNotCalledListeners() as $eventName => $calledListener) {
@@ -72,8 +72,28 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
                 $notCalled[] = [$listner['priority'], $listner['pretty']];
             }
 
-            $notCalledContent .= $this->createTable($notCalled, $tableConfig($eventName));
+            $notCalledContent .= $this->createTable(
+                $notCalled,
+                $tableConfig(
+                    $eventName,
+                    '<p><strong>There are no uncalled listeners.</strong></p>'.
+                    '<p>All listeners were called for this request or an error occurred when trying to collect uncalled listeners'.
+                    '(in which case check the logs to get more information).</p>'
+                )
+            );
         }
+
+        $orphanedEvents = $this->eventManager->getOrphanedEvents();
+        $orphanedEventsContent = $this->createTable(
+            $orphanedEvents,
+            [
+                'headers' => ['events'],
+                'vardumper' => false,
+                'empty_text' => '<p><strong>There are no orphaned events.</strong></p>' .
+                    '<p>All dispatched events were handled or an error occurred when trying to collect orphaned events' .
+                    '(in which case check the logs to get more information).</p>'
+            ]
+        );
 
         return $this->createTabs([
             [
@@ -83,6 +103,10 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
             [
                 'name'    => 'Not Called Listeners <span class="counter">' . count($notCalled) . '</span>',
                 'content' => $notCalledContent,
+            ],
+            [
+                'name'    => 'Orphaned events <span class="counter">' . count($orphanedEvents) . '</span>',
+                'content' => $orphanedEventsContent,
             ],
         ]);
     }
