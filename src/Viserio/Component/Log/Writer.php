@@ -103,7 +103,7 @@ class Writer extends LogLevel implements LogContract
             // If the event dispatcher is set, we will pass along the parameters to the
             // log listeners. These are useful for building profilers or other tools
             // that aggregate all of the log messages for a given "request" cycle.
-            $this->getEventManager()->trigger(
+            $this->eventManager->trigger(
                 new MessageLoggedEvent($this, $level, $message, $context)
             );
         }

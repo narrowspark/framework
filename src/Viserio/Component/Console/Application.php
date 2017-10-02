@@ -375,7 +375,7 @@ class Application extends SymfonyConsole
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
 
-        $this->getEventManager()->trigger($event = new ConsoleCommandEvent($command, $input, $output));
+        $this->eventManager->trigger($event = new ConsoleCommandEvent($command, $input, $output));
 
         if ($event->commandShouldRun()) {
             $x = null;
@@ -389,7 +389,7 @@ class Application extends SymfonyConsole
             $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
         }
 
-        $this->getEventManager()->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        $this->eventManager->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
 
         return $event->getExitCode();
     }

@@ -294,7 +294,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
             return true;
         }
 
-        return $this->getEventManager()->trigger(new MessageSendingEvent($this, $message)) !== false;
+        return $this->eventManager->trigger(new MessageSendingEvent($this, $message)) !== false;
     }
 
     /**
