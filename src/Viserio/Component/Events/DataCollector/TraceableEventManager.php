@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events\DataCollector;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use SplObjectStorage;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -9,8 +11,6 @@ use Throwable;
 use Viserio\Component\Contract\Events\Event as EventContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerAwareInterface;
 use Viserio\Component\Events\Event;
 use Viserio\Component\Events\EventManager;
 

@@ -33,9 +33,9 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $this->data = [
-            'called_listeners' => $this->eventManager->getCalledListeners(),
+            'called_listeners'     => $this->eventManager->getCalledListeners(),
             'not_called_listeners' => $this->eventManager->getNotCalledListeners(),
-            'orphaned_events' => $this->eventManager->getOrphanedEvents(),
+            'orphaned_events'      => $this->eventManager->getOrphanedEvents(),
         ];
     }
 

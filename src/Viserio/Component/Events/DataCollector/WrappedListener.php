@@ -52,9 +52,9 @@ class WrappedListener
     /**
      * WrappedListener constructor.
      *
-     * @param array|\Closure|string                                 $listener
-     * @param null|string                                           $name
-     * @param \Symfony\Component\Stopwatch\Stopwatch                $stopwatch
+     * @param array|\Closure|string                                $listener
+     * @param null|string                                          $name
+     * @param \Symfony\Component\Stopwatch\Stopwatch               $stopwatch
      * @param null|\Viserio\Component\Contract\Events\EventManager $eventManager
      */
     public function __construct($listener, ?string $name, Stopwatch $stopwatch, EventManagerContract $eventManager = null)
