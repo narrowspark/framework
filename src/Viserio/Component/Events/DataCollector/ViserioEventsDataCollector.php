@@ -76,22 +76,22 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
                 $notCalled,
                 $tableConfig(
                     $eventName,
-                    '<p><strong>There are no uncalled listeners.</strong></p>'.
-                    '<p>All listeners were called for this request or an error occurred when trying to collect uncalled listeners'.
+                    '<p><strong>There are no uncalled listeners.</strong></p>' .
+                    '<p>All listeners were called for this request or an error occurred when trying to collect uncalled listeners' .
                     '(in which case check the logs to get more information).</p>'
                 )
             );
         }
 
-        $orphanedEvents = $this->eventManager->getOrphanedEvents();
+        $orphanedEvents        = $this->eventManager->getOrphanedEvents();
         $orphanedEventsContent = $this->createTable(
             $orphanedEvents,
             [
-                'headers' => ['events'],
-                'vardumper' => false,
+                'headers'    => ['events'],
+                'vardumper'  => false,
                 'empty_text' => '<p><strong>There are no orphaned events.</strong></p>' .
                     '<p>All dispatched events were handled or an error occurred when trying to collect orphaned events' .
-                    '(in which case check the logs to get more information).</p>'
+                    '(in which case check the logs to get more information).</p>',
             ]
         );
 
