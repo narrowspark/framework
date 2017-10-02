@@ -48,12 +48,13 @@ class TraceableEventManagerTest extends MockeryTestCase
         };
 
         $this->wrapperDispatcher = new TraceableEventManager($this->dispatcher, new Stopwatch());
-        $this->listener = new EventListener();
+        $this->listener          = new EventListener();
     }
 
     public function testGetListenerPriority()
     {
-        $this->wrapperDispatcher->attach('foo', function () {}, 123);
+        $this->wrapperDispatcher->attach('foo', function () {
+        }, 123);
 
         $listeners = $this->dispatcher->getListeners('foo');
 
@@ -88,7 +89,8 @@ class TraceableEventManagerTest extends MockeryTestCase
      */
     public function testGetListeners()
     {
-        $this->wrapperDispatcher->attach('foo', $listener = function () {});
+        $this->wrapperDispatcher->attach('foo', $listener = function () {
+        });
 
         self::assertSame($this->dispatcher->getListeners('foo'), $this->wrapperDispatcher->getListeners('foo'));
     }
@@ -107,12 +109,13 @@ class TraceableEventManagerTest extends MockeryTestCase
         $events = $this->wrapperDispatcher->getOrphanedEvents();
 
         self::assertCount(1, $events);
-        self::assertEquals(array('foo'), $events);
+        self::assertEquals(['foo'], $events);
     }
 
     public function testItDoesNotReturnHandledEvents()
     {
-        $this->wrapperDispatcher->attach('foo', function () {});
+        $this->wrapperDispatcher->attach('foo', function () {
+        });
         $this->wrapperDispatcher->trigger('foo');
 
         $events = $this->wrapperDispatcher->getOrphanedEvents();
@@ -125,8 +128,10 @@ class TraceableEventManagerTest extends MockeryTestCase
         $logger = $this->mock(LoggerInterface::class);
 
         $this->wrapperDispatcher->setLogger($logger);
-        $this->wrapperDispatcher->attach('foo', $listener1 = function () {});
-        $this->wrapperDispatcher->attach('foo', $listener2 = function () {});
+        $this->wrapperDispatcher->attach('foo', $listener1 = function () {
+        });
+        $this->wrapperDispatcher->attach('foo', $listener2 = function () {
+        });
 
         $logger->shouldReceive('debug')
             ->with('Notified event "{event}" to listener "{listener}".', ['event' => 'foo', 'listener' => 'closure'])
@@ -140,24 +145,28 @@ class TraceableEventManagerTest extends MockeryTestCase
         $logger = $this->mock(LoggerInterface::class);
 
         $this->wrapperDispatcher->setLogger($logger);
-        $this->wrapperDispatcher->attach('foo', $listener1 = function (Event $event) { $event->stopPropagation(); });
-        $this->wrapperDispatcher->attach('foo', $listener2 = function () {});
+        $this->wrapperDispatcher->attach('foo', $listener1 = function (Event $event) {
+            $event->stopPropagation();
+        });
+        $this->wrapperDispatcher->attach('foo', $listener2 = function () {
+        });
 
         $logger->shouldReceive('debug')
-            ->with('Notified event "{event}" to listener "{listener}".', array('event' => 'foo', 'listener' => 'closure'));
+            ->with('Notified event "{event}" to listener "{listener}".', ['event' => 'foo', 'listener' => 'closure']);
 
         $logger->shouldReceive('debug')
-            ->with('Listener "{listener}" stopped propagation of the event "{event}".', array('event' => 'foo', 'listener' => 'closure'));
+            ->with('Listener "{listener}" stopped propagation of the event "{event}".', ['event' => 'foo', 'listener' => 'closure']);
 
         $logger->shouldReceive('debug')
-            ->with('Listener "{listener}" was not called for event "{event}".', array('event' => 'foo', 'listener' => 'closure'));
+            ->with('Listener "{listener}" was not called for event "{event}".', ['event' => 'foo', 'listener' => 'closure']);
 
         $this->wrapperDispatcher->trigger('foo');
     }
 
     public function testAttachAndDetach()
     {
-        $this->wrapperDispatcher->attach('foo', $listener = function () {});
+        $this->wrapperDispatcher->attach('foo', $listener = function () {
+        });
 
         $listeners = $this->dispatcher->getListeners('foo');
 
@@ -173,8 +182,12 @@ class TraceableEventManagerTest extends MockeryTestCase
     {
         $called = [];
 
-        $this->wrapperDispatcher->attach('foo', function () use (&$called) { $called[] = 'foo1'; }, 10);
-        $this->wrapperDispatcher->attach('foo', function () use (&$called) { $called[] = 'foo2'; }, 20);
+        $this->wrapperDispatcher->attach('foo', function () use (&$called) {
+            $called[] = 'foo1';
+        }, 10);
+        $this->wrapperDispatcher->attach('foo', function () use (&$called) {
+            $called[] = 'foo2';
+        }, 20);
         $this->wrapperDispatcher->trigger('foo');
 
         self::assertSame(['foo2', 'foo1'], $called);
@@ -182,8 +195,8 @@ class TraceableEventManagerTest extends MockeryTestCase
 
     public function testDispatchNested()
     {
-        $dispatcher = $this->wrapperDispatcher;
-        $loop = 1;
+        $dispatcher       = $this->wrapperDispatcher;
+        $loop             = 1;
         $dispatchedEvents = 0;
 
         $dispatcher->attach('foo', $listener1 = function () use ($dispatcher, &$loop) {
@@ -228,7 +241,8 @@ class TraceableEventManagerTest extends MockeryTestCase
         };
 
         $eventDispatcher->attach('foo', $listener1);
-        $eventDispatcher->attach('foo', function () {});
+        $eventDispatcher->attach('foo', function () {
+        });
         $eventDispatcher->trigger('foo');
 
         self::assertCount(1, $eventDispatcher->getListeners('foo'), 'expected listener1 to be removed');

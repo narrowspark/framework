@@ -42,7 +42,8 @@ class WrappedListenerTest extends TestCase
     {
         return [
             [[$this, 'getListeners'], __METHOD__],
-            [function () {}, 'closure'],
+            [function () {
+            }, 'closure'],
             ['strtolower', 'strtolower'],
             [new Listener(), Listener::class . '::__invoke'],
             [new DecoratedListener(), DecoratedListener::class . '::__invoke'],

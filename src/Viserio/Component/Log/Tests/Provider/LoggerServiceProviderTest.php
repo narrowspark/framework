@@ -6,7 +6,6 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Log\Log;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Log\HandlerParser;

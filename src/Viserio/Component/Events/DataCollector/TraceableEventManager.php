@@ -10,8 +10,8 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 use Viserio\Component\Contract\Events\Event as EventContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Events\Exception\RuntimeException;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Events\Event;
 
 /**
@@ -53,7 +53,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      * Constructor.
      *
      * @param \Viserio\Component\Contract\Events\EventManager $eventManager
-     * @param \Symfony\Component\Stopwatch\Stopwatch $stopwatch
+     * @param \Symfony\Component\Stopwatch\Stopwatch          $stopwatch
      *
      * @throws \Viserio\Component\Contract\Events\Exception\RuntimeException
      */
