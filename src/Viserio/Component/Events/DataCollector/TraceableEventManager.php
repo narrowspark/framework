@@ -6,10 +6,11 @@ use Psr\Log\NullLogger;
 use SplObjectStorage;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
 use Viserio\Component\Events\Event;
 use Viserio\Component\Events\EventManager;
 
@@ -17,7 +18,7 @@ use Viserio\Component\Events\EventManager;
  * Some of this code has been ported from Symfony. The original
  * code is (c) Fabien Potencier <fabien@symfony.com>.
  */
-class TraceableEventManager implements EventManagerContract
+class TraceableEventManager implements EventManagerContract, LoggerAwareInterface
 {
     use LoggerAwareTrait;
     use EventManagerAwareTrait;

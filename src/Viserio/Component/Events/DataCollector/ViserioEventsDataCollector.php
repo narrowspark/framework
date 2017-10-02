@@ -4,7 +4,7 @@ namespace Viserio\Component\Events\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class ViserioEventsDataCollector extends AbstractDataCollector implements PanelAwareContract
@@ -32,7 +32,11 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        $this->data['events'] = count($this->data['measures']);
+        $this->data = [
+            'called_listeners' => $this->eventManager->getCalledListeners(),
+            'not_called_listeners' => $this->eventManager->getNotCalledListeners(),
+            'orphaned_events' => $this->eventManager->getOrphanedEvents(),
+        ];
     }
 
     /**
@@ -59,7 +63,7 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
             return ['name' => $name, 'headers' => ['Priority', 'Listener'], 'vardumper' => false, 'empty_text' => $emptyText];
         };
 
-        foreach ($this->eventManager->getCalledListeners() as $eventName => $calledListener) {
+        foreach ($this->data['called_listeners'] as $eventName => $calledListener) {
             foreach ($calledListener as $listner) {
                 $called[] = [$listner['priority'], $listner['pretty']];
             }
@@ -67,7 +71,7 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
             $calledContent .= $this->createTable($called, $tableConfig($eventName, 'No events have been recorded. Check that debugging is enabled in the kernel.'));
         }
 
-        foreach ($this->eventManager->getNotCalledListeners() as $eventName => $calledListener) {
+        foreach ($this->data['not_called_listeners'] as $eventName => $calledListener) {
             foreach ($calledListener as $listner) {
                 $notCalled[] = [$listner['priority'], $listner['pretty']];
             }
@@ -83,9 +87,8 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
             );
         }
 
-        $orphanedEvents        = $this->eventManager->getOrphanedEvents();
         $orphanedEventsContent = $this->createTable(
-            $orphanedEvents,
+            $this->data['orphaned_events'],
             [
                 'headers'    => ['events'],
                 'vardumper'  => false,
@@ -105,7 +108,7 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
                 'content' => $notCalledContent,
             ],
             [
-                'name'    => 'Orphaned events <span class="counter">' . count($orphanedEvents) . '</span>',
+                'name'    => 'Orphaned events <span class="counter">' . count($this->data['orphaned_events']) . '</span>',
                 'content' => $orphanedEventsContent,
             ],
         ]);

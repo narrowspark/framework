@@ -163,7 +163,7 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
         $recipients = $this->sendSwiftMessage($message->getSwiftMessage());
 
         if ($this->eventManager !== null) {
-            $this->events->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $recipients));
+            $this->eventManager->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $recipients));
         }
 
         return $recipients;

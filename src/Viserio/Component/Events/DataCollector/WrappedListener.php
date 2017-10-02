@@ -5,9 +5,9 @@ namespace Viserio\Component\Events\DataCollector;
 use Closure;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\VarDumper\Caster\ClassStub;
-use Viserio\Component\Contracts\Events\Event as EventContract;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\Events\Event as EventContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Events\Traits\EventTrait;
 
 /**
@@ -55,7 +55,7 @@ class WrappedListener
      * @param array|\Closure|string                                 $listener
      * @param null|string                                           $name
      * @param \Symfony\Component\Stopwatch\Stopwatch                $stopwatch
-     * @param null|\Viserio\Component\Contracts\Events\EventManager $eventManager
+     * @param null|\Viserio\Component\Contract\Events\EventManager $eventManager
      */
     public function __construct($listener, ?string $name, Stopwatch $stopwatch, EventManagerContract $eventManager = null)
     {
@@ -75,7 +75,7 @@ class WrappedListener
     }
 
     /**
-     * @param \Viserio\Component\Contracts\Events\Event $event
+     * @param \Viserio\Component\Contract\Events\Event $event
      *
      * @return void
      */

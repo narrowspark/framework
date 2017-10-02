@@ -298,7 +298,7 @@ class Application extends SymfonyConsole
             $exception = new FatalThrowableError($changeableException);
         }
 
-        if ($changeableException !== null && $this->events !== null) {
+        if ($changeableException !== null && $this->eventManager !== null) {
             [$changeableException, $exitCode] = $this->changeExceptionOnEventTrigger($input, $output, $changeableException);
         }
 
@@ -480,7 +480,7 @@ class Application extends SymfonyConsole
             $changeableException->getCode()
         );
 
-        $this->events->trigger($event);
+        $this->eventManager->trigger($event);
 
         $changeableException = $event->getError();
 
@@ -491,7 +491,7 @@ class Application extends SymfonyConsole
             $exitCode = $changeableException->getCode();
         }
 
-        $this->events->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        $this->eventManager->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
 
         return [$changeableException, $exitCode];
     }

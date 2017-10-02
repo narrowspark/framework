@@ -2,20 +2,20 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Events\DataCollector\TraceableEventManager;
 use Viserio\Component\Events\DataCollector\ViserioEventsDataCollector;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class EventsDataCollectorServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
@@ -24,7 +24,15 @@ class EventsDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions()
     {
         return [
             EventManagerContract::class => [self::class, 'extendEventManager'],
@@ -55,15 +63,15 @@ class EventsDataCollectorServiceProvider implements
     /**
      * Extend viserio events manager with a new event.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface                    $container
+     * @param null|\Viserio\Component\Contract\Events\EventManager $eventManager
      *
      * @return null|\Viserio\Component\Events\DataCollector\TraceableEventManager
      */
-    public static function extendEventManager(ContainerInterface $container, ?callable $getPrevious = null): ?TraceableEventManager
-    {
-        $eventManager = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
+    public static function extendEventManager(
+        ContainerInterface $container,
+        ?EventManagerContract $eventManager = null
+    ): ?TraceableEventManager {
         if ($eventManager !== null) {
             $options = self::resolveOptions($container);
 
@@ -82,20 +90,19 @@ class EventsDataCollectorServiceProvider implements
     /**
      * Extend viserio profiler with data collector.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface                  $container
+     * @param null|\Viserio\Component\Contract\Profiler\Profiler $profiler
      *
-     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
+     * @return null|\Viserio\Component\Contract\Profiler\Profiler
      */
-    public static function extendProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
-    {
-        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
+    public static function extendProfiler(
+        ContainerInterface $container,
+        ?ProfilerContract $profiler = null
+    ): ?ProfilerContract {
         if ($profiler !== null) {
             $options = self::resolveOptions($container);
 
             if ($options['collector']['events']) {
-                // @var ProfilerContract $profiler
                 $profiler->addCollector(new ViserioEventsDataCollector(
                     $container->get(EventManagerContract::class)
                 ));
