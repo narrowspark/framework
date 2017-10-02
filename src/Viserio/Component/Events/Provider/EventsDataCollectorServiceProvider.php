@@ -12,6 +12,7 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Events\DataCollector\TraceableEventManager;
 use Viserio\Component\Events\DataCollector\ViserioEventsDataCollector;
+use Viserio\Component\Events\EventManager;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class EventsDataCollectorServiceProvider implements
@@ -66,7 +67,7 @@ class EventsDataCollectorServiceProvider implements
      * @param \Psr\Container\ContainerInterface                    $container
      * @param null|\Viserio\Component\Contract\Events\EventManager $eventManager
      *
-     * @return null|\Viserio\Component\Events\DataCollector\TraceableEventManager
+     * @return null|\Viserio\Component\Contract\Events\EventManager|\Viserio\Component\Events\DataCollector\TraceableEventManager
      */
     public static function extendEventManager(
         ContainerInterface $container,
@@ -104,7 +105,7 @@ class EventsDataCollectorServiceProvider implements
 
             if ($options['collector']['events']) {
                 $profiler->addCollector(new ViserioEventsDataCollector(
-                    $container->get(EventManagerContract::class)
+                    $container->get(EventManager::class)
                 ));
             }
         }

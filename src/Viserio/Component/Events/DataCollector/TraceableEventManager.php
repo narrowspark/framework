@@ -11,8 +11,8 @@ use Throwable;
 use Viserio\Component\Contract\Events\Event as EventContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\Events\Exception\RuntimeException;
 use Viserio\Component\Events\Event;
-use Viserio\Component\Events\EventManager;
 
 /**
  * Some of this code has been ported from Symfony. The original
@@ -52,11 +52,18 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
     /**
      * Constructor.
      *
-     * @param \Viserio\Component\Events\EventManager $eventManager
+     * @param \Viserio\Component\Contract\Events\EventManager $eventManager
      * @param \Symfony\Component\Stopwatch\Stopwatch $stopwatch
+     *
+     * @throws \Viserio\Component\Contract\Events\Exception\RuntimeException
      */
-    public function __construct(EventManager $eventManager, Stopwatch $stopwatch)
+    public function __construct(EventManagerContract $eventManager, Stopwatch $stopwatch)
     {
+        if (! method_exists($eventManager, 'getListenerPriority') &&
+        ! method_exists($eventManager, 'getListeners')) {
+            throw new RuntimeException('Pleas add gerListenerPriority and getListeners function to your EventManager class.');
+        }
+
         $this->eventManager = $eventManager;
         $this->stopwatch    = $stopwatch;
         $this->logger       = new NullLogger();

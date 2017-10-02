@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests;
 
-use Defuse\Crypto\Key;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;

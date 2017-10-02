@@ -20,21 +20,29 @@ class WrappedListener
     use EventManagerAwareTrait;
 
     /**
+     * Given event listener.
+     *
      * @var array|\Closure|string
      */
     private $listener;
 
     /**
+     * Is event listener called?
+     *
      * @var bool
      */
     private $called = false;
 
     /**
+     * A Stopwatch instance.
+     *
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     private $stopwatch;
 
     /**
+     * A pretty sting info about the listener.
+     *
      * @var string
      */
     private $pretty;
@@ -45,12 +53,14 @@ class WrappedListener
     private $stub;
 
     /**
+     * Returns true if ClassStub exists or false if not.
+     *
      * @var bool
      */
     private static $hasClassStub;
 
     /**
-     * WrappedListener constructor.
+     * Create a new WrappedListener instance.
      *
      * @param array|\Closure|string                                $listener
      * @param null|string                                          $name
@@ -97,6 +107,8 @@ class WrappedListener
     }
 
     /**
+     * Get the original listener.
+     *
      * @return array|Closure|string
      */
     public function getWrappedListener()
@@ -105,6 +117,8 @@ class WrappedListener
     }
 
     /**
+     * Was the event called?
+     *
      * @return bool
      */
     public function wasCalled()
@@ -113,6 +127,8 @@ class WrappedListener
     }
 
     /**
+     * Get a pretty info string about the called event.
+     *
      * @return string
      */
     public function getPretty(): string
@@ -121,6 +137,8 @@ class WrappedListener
     }
 
     /**
+     * Get information's about given event.
+     *
      * @param string $eventName
      *
      * @return array

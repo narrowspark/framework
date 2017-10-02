@@ -18,7 +18,7 @@ class WrappedListenerTest extends TestCase
     {
         $wrappedListener = new WrappedListener($listener, 'name', $this->createStopwatchMock());
 
-        $this->assertSame($pretty, $wrappedListener->getPretty());
+        self::assertSame($pretty, $wrappedListener->getPretty());
     }
 
     /**
@@ -32,21 +32,21 @@ class WrappedListenerTest extends TestCase
         $wrappedListener = new WrappedListener($listener, 'name', $this->createStopwatchMock());
 
         $info = $wrappedListener->getInfo('event');
-        $this->assertSame($pretty . '()', (string) $info['stub']);
+
+        self::assertSame($pretty . '()', (string) $info['stub']);
+        self::assertNull($info['priority']);
+        self::assertSame($wrappedListener->getPretty(), $info['pretty']);
     }
 
     public function getListeners()
     {
         return [
             [[$this, 'getListeners'], __METHOD__],
-            [function () {
-            }, 'closure'],
-            [/** @closure-proxy App\Foo::bar */ function () {
-            }, 'App\Foo::bar'],
+            [function () {}, 'closure'],
             ['strtolower', 'strtolower'],
             [new Listener(), Listener::class . '::__invoke'],
-            [new DecoratedListener(), 'listener'],
-            [new WrappedListener(new DecoratedListener(), 'name', $this->createStopwatchMock()), 'listener'],
+            [new DecoratedListener(), DecoratedListener::class . '::__invoke'],
+            [[new DecoratedListener(), 'getWrappedListener'], DecoratedListener::class . '::getWrappedListener'],
         ];
     }
 

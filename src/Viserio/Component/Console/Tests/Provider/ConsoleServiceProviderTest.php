@@ -22,6 +22,5 @@ class ConsoleServiceProviderTest extends TestCase
         self::assertInstanceOf(Application::class, $console);
         self::assertSame('UNKNOWN', $console->getVersion());
         self::assertSame('UNKNOWN', $console->getName());
-        self::assertInstanceOf(EventManagerContract::class, $console->getEventManager());
     }
 }

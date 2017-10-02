@@ -128,12 +128,12 @@ class ListenerPattern
      */
     public function bind(EventManagerContract $dispatcher, string $eventName): void
     {
-        if (isset($this->eventManager[$eventName])) {
+        if (isset($this->events[$eventName])) {
             return;
         }
 
         $dispatcher->attach($eventName, $this->getListener(), $this->priority);
-        $this->eventManager[$eventName] = true;
+        $this->events[$eventName] = true;
     }
 
     /**
@@ -146,11 +146,11 @@ class ListenerPattern
      */
     public function unbind(EventManagerContract $dispatcher): void
     {
-        foreach ($this->eventManager as $eventName => $value) {
+        foreach ($this->events as $eventName => $value) {
             $dispatcher->detach($eventName, $this->getListener());
         }
 
-        $this->eventManager = [];
+        $this->events = [];
     }
 
     /**

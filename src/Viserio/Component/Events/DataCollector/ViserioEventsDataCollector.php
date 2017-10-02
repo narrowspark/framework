@@ -4,11 +4,14 @@ namespace Viserio\Component\Events\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class ViserioEventsDataCollector extends AbstractDataCollector implements PanelAwareContract
 {
+    use EventManagerAwareTrait;
+
     /**
      * Create new events collector instance.
      *

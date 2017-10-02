@@ -34,7 +34,6 @@ class LoggerServiceProviderTest extends TestCase
         self::assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
         self::assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
         self::assertInstanceOf(MonologWriter::class, $container->get(Log::class));
-        self::assertInstanceOf(EventManagerContract::class, $container->get(MonologWriter::class)->getEventManager());
         self::assertInstanceOf(MonologWriter::class, $container->get('logger'));
     }
 }
