@@ -8,19 +8,18 @@ environment:
   matrix:
     - dependencies: basic
       php_ver_target: 7.2
-    - dependencies: lowest
+    - dependencies: high
       php_ver_target: 7.2
-    - dependencies: stable
+    - dependencies: lowest
       php_ver_target: 7.2
 
 matrix:
   fast_finish: true
   allow_failures:
     - dependencies: lowest
-      php_ver_target: 7.1
+      php_ver_target: 7.2
 
 services:
-  - mongodb
   - memcached
 
 cache: # cache is cleared when linked file is modified
@@ -35,45 +34,40 @@ cache: # cache is cleared when linked file is modified
 
 init:
   - SET PATH=C:\Program Files\OpenSSL;C:\tools\php;%PATH%
-  - SET PHP=1
   - SET ANSICON=121x90 (121x90)
   - SET COMPOSER_NO_INTERACTION=1
+  - SET COMPOSER_UP=composer update --no-interaction --prefer-dist --no-progress --profile --no-suggest --ansi
   - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
   # Install PHP
-  - IF EXIST C:\tools\php (SET PHP=0) ELSE (mkdir C:\tools\php)
-  - IF %PHP%==1 ps: Invoke-WebRequest "https://raw.githubusercontent.com/prisis/ps-install-php/master/Install-PHP.ps1" -OutFile "Install-PHP.ps1"
-  - IF %PHP%==1 ps: .\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:php_ver_target -Highest -Arch x64 -Extensions mbstring,intl,openssl,mongodb,memcache,fileinfo,pdo_sqlite,curl
+  - mkdir C:\tools\php
+  - appveyor DownloadFile "https://raw.githubusercontent.com/prisis/ps-install-php/master/Install-PHP.ps1"
+  - ps: IF ($env:PHP -match 1) { .\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:php_ver_target -Highest -Arch x64 -Extensions mbstring,intl,openssl,memcache,fileinfo,pdo_sqlite,curl,sodium }
   # Install redis and start
-  - IF %PHP%==1 nuget install redis-64 -excludeversion -Verbosity quiet
-  - IF %PHP%==1 redis-64\tools\redis-server.exe --service-install
-  - IF %PHP%==1 redis-64\tools\redis-server.exe --service-start
+  - nuget install redis-64 -excludeversion -Verbosity quiet
+  - redis-64\tools\redis-server.exe --service-install
+  - redis-64\tools\redis-server.exe --service-start
   # PHP settings and extensions
-  - IF %PHP%==1 cd C:\tools\php
-  - IF %PHP%==1 appveyor DownloadFile https://raw.githubusercontent.com/symfony/binary-utils/master/cacert.pem
-  - IF %PHP%==1 cd ext
-  - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/mongodb/1.2.2/php_mongodb-1.2.2-7.1-nts-vc14-x64.zip
-  - IF %PHP%==1 7z x php_mongodb-1.2.2-7.1-nts-vc14-x64.zip -y >nul
-  - IF %PHP%==1 appveyor DownloadFile https://github.com/nono303/PHP7-memcache-dll/blob/master/vc14/x64/nts/php-7.1.x_memcache.dll?raw=true
-  - IF %PHP%==1 rename php-7.1.x_memcache.dll php_memcache.dll
-  - IF %PHP%==1 del /Q *.zip
-  - IF %PHP%==1 cd ..
-  - IF %PHP%==1 echo extension=sodium.dll >> php.ini
-  - IF %PHP%==1 echo zend_extension=php_opcache.dll >> php.ini
-  - IF %PHP%==1 echo max_execution_time=1200 >> php.ini
-  - IF %PHP%==1 echo date.timezone="America/Los_Angeles" >> php.ini
-  - IF %PHP%==1 echo opcache.enable_cli=1 >> php.ini
-  - IF %PHP%==1 echo apc.enable_cli=1 >> php.ini
-  - IF %PHP%==1 echo curl.cainfo=C:\tools\php\cacert.pem >> php.ini
-  - IF %PHP%==1 php -r "readfile('https://getcomposer.org/installer');" | php
-  - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
-  - IF %APPVEYOR_REPO_BRANCH%==master IF %PHP%==1 php (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
+  - cd C:\tools\php
+  - cd ext
+  - appveyor DownloadFile https://github.com/nono303/PHP7-memcache-dll/blob/master/vc15/x64/nts/php-7.2.x_memcache.dll?raw=true
+  - rename php-7.2.x_memcache.dll php_memcache.dll
+  - del /Q *.zip
+  - cd ..
+  - echo zend_extension=php_opcache.dll >> php.ini
+  - echo max_execution_time=1200 >> php.ini
+  - echo date.timezone="America/Los_Angeles" >> php.ini
+  - echo opcache.enable_cli=1 >> php.ini
+  - echo apc.enable_cli=1 >> php.ini
+  - php -r "readfile('https://getcomposer.org/installer');" | php
+  - echo @php %%~dp0composer.phar %%* > composer.bat
+  - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd C:\projects\narrowspark
   # Matrix
-  - IF %dependencies%==basic appveyor-retry composer install --prefer-dist --no-interaction --profile --no-suggest --no-progress --ansi
-  - IF %dependencies%==lowest appveyor-retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --profile --no-suggest --no-progress --ansi
-  - IF %dependencies%==stable appveyor-retry composer update --prefer-dist --no-interaction --prefer-stable --profile --no-progress --ansi
+  - IF %dependencies%==basic appveyor-retry %COMPOSER_UP%
+  - IF %dependencies%==lowest appveyor-retry %COMPOSER_UP% --prefer-lowest --prefer-stable
+  - IF %dependencies%==high appveyor-retry %COMPOSER_UP%
 
 test_script:
   - cd C:\projects\narrowspark
