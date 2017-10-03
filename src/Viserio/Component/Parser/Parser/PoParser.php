@@ -118,7 +118,7 @@ class PoParser implements ParserContract
 
                     $entry[$key] = $entry[$key] ?? ['msgid' => [], 'msgstr' => []];
 
-                    if (strpos($key, 'obsolete') !== false) {
+                    if (mb_strpos($key, 'obsolete') !== false) {
                         [$entry, $lastPreviousKey] = self::processObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entry);
                     }
 
@@ -172,7 +172,6 @@ class PoParser implements ParserContract
 
                     break;
             }
-
         }
 
         if ($state === 'msgstr') {
@@ -375,7 +374,7 @@ class PoParser implements ParserContract
             case 'msgid':
             case 'msgid_plural':
             case 'msgstr':
-                $entry[$key][$tmpKey][] = self::convertString($str);
+                $entry[$key][$tmpKey][]  = self::convertString($str);
                 $lastPreviousKey         = $tmpKey;
                 break;
             default:
