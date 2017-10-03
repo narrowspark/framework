@@ -102,3 +102,8 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Cron\\Cron::spliceIntoPosition#'
         - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
+
+        # @internal
+        - '#Call to an undefined method Viserio\\Component\\Contract\\Events\\EventManager::getListenerPriority#'
+        - '#Call to an undefined method Viserio\\Component\\Events\\DataCollector\\TraceableEventManager::getListeners#'
+        - '#Call to an undefined method Viserio\\Component\\Events\\EventManager::hasListeners#'

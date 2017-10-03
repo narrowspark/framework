@@ -29,7 +29,7 @@ interface EventManager
     public function detach(string $eventName, $listener): bool;
 
     /**
-     * RClear all listeners for a given event.
+     * Clear all listeners for a given event.
      *
      * If the eventName argument is specified, all listeners for that event are
      * removed.

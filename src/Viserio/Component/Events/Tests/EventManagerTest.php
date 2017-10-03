@@ -14,13 +14,35 @@ class EventManagerTest extends TestCase
     private const APIREQUEST    = 'api.request';
     private const APIEXCEPTION  = 'api.exception';
 
+    /**
+     * @var \Viserio\Component\Events\EventManager
+     */
     private $dispatcher;
+
+    /**
+     * @var \Viserio\Component\Events\Tests\Fixture\EventListener
+     */
     private $listener;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setup(): void
     {
-        $this->dispatcher = new EventManager();
-        $this->listener   = new EventListener();
+        $this->dispatcher = new class() extends EventManager {
+            /**
+             * Determine if a given event has listeners.
+             *
+             * @param string $eventName
+             *
+             * @return bool
+             */
+            public function hasListeners(string $eventName): bool
+            {
+                return \count($this->getListeners($eventName)) !== 0;
+            }
+        };
+        $this->listener = new EventListener();
     }
 
     /**

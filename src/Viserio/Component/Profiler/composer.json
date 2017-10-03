@@ -24,6 +24,7 @@
         "psr/cache"                          : "^1.0",
         "psr/http-message"                   : "^1.0",
         "symfony/var-dumper"                 : "~3.3",
+        "symfony/stopwatch"                  : "~3.3",
         "viserio/contract"                   : "self.version",
         "viserio/support"                    : "self.version"
     },

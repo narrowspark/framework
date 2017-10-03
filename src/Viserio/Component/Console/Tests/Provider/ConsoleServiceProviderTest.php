@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 
 class ConsoleServiceProviderTest extends TestCase
@@ -22,6 +21,5 @@ class ConsoleServiceProviderTest extends TestCase
         self::assertInstanceOf(Application::class, $console);
         self::assertSame('UNKNOWN', $console->getVersion());
         self::assertSame('UNKNOWN', $console->getName());
-        self::assertInstanceOf(EventManagerContract::class, $console->getEventManager());
     }
 }

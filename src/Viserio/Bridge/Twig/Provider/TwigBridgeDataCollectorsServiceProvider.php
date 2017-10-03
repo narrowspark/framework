@@ -71,8 +71,10 @@ class TwigBridgeDataCollectorsServiceProvider implements
      *
      * @return null|\Viserio\Component\Contract\Profiler\Profiler
      */
-    public static function extendProfiler(ContainerInterface $container, ?ProfilerContract $profiler = null): ?ProfilerContract
-    {
+    public static function extendProfiler(
+        ContainerInterface $container,
+        ?ProfilerContract $profiler = null
+    ): ?ProfilerContract {
         if ($profiler !== null) {
             $options = self::resolveOptions($container);
 

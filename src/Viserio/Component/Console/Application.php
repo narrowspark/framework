@@ -29,13 +29,13 @@ use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Support\Invoker;
 
 class Application extends SymfonyConsole
 {
     use ContainerAwareTrait;
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
 
     /**
      * The console application bootstrappers.
@@ -298,7 +298,7 @@ class Application extends SymfonyConsole
             $exception = new FatalThrowableError($changeableException);
         }
 
-        if ($changeableException !== null && $this->events !== null) {
+        if ($changeableException !== null && $this->eventManager !== null) {
             [$changeableException, $exitCode] = $this->changeExceptionOnEventTrigger($input, $output, $changeableException);
         }
 
@@ -359,7 +359,7 @@ class Application extends SymfonyConsole
             }
         }
 
-        if ($this->events === null) {
+        if ($this->eventManager === null) {
             try {
                 return $command->run($input, $output);
             } catch (Throwable $e) {
@@ -375,7 +375,7 @@ class Application extends SymfonyConsole
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
 
-        $this->getEventManager()->trigger($event = new ConsoleCommandEvent($command, $input, $output));
+        $this->eventManager->trigger($event = new ConsoleCommandEvent($command, $input, $output));
 
         if ($event->commandShouldRun()) {
             $x = null;
@@ -389,7 +389,7 @@ class Application extends SymfonyConsole
             $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
         }
 
-        $this->events->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        $this->eventManager->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
 
         return $event->getExitCode();
     }
@@ -480,7 +480,7 @@ class Application extends SymfonyConsole
             $changeableException->getCode()
         );
 
-        $this->events->trigger($event);
+        $this->eventManager->trigger($event);
 
         $changeableException = $event->getError();
 
@@ -491,7 +491,7 @@ class Application extends SymfonyConsole
             $exitCode = $changeableException->getCode();
         }
 
-        $this->events->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        $this->eventManager->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
 
         return [$changeableException, $exitCode];
     }

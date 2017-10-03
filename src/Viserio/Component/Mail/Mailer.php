@@ -8,7 +8,7 @@ use Spatie\Macroable\Macroable;
 use Swift_Mailer;
 use Swift_Mime_SimpleMessage;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Events\Traits\EventsAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Mail\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
 use Viserio\Component\Contract\Mail\Message as MessageContract;
@@ -22,7 +22,7 @@ use Viserio\Component\Support\Traits\InvokerAwareTrait;
 class Mailer implements MailerContract, RequiresComponentConfigContract
 {
     use ContainerAwareTrait;
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
     use InvokerAwareTrait;
     use Macroable;
     use OptionsResolverTrait;
@@ -162,8 +162,8 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
 
         $recipients = $this->sendSwiftMessage($message->getSwiftMessage());
 
-        if ($this->events !== null) {
-            $this->events->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $recipients));
+        if ($this->eventManager !== null) {
+            $this->eventManager->trigger(new MessageSentEvent($this, $message->getSwiftMessage(), $recipients));
         }
 
         return $recipients;
@@ -290,11 +290,11 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      */
     protected function shouldSendMessage(Swift_Mime_SimpleMessage $message): bool
     {
-        if (! $this->events) {
+        if (! $this->eventManager) {
             return true;
         }
 
-        return $this->events->trigger(new MessageSendingEvent($this, $message)) !== false;
+        return $this->eventManager->trigger(new MessageSendingEvent($this, $message)) !== false;
     }
 
     /**
