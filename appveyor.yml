@@ -36,7 +36,7 @@ init:
   - SET PATH=C:\Program Files\OpenSSL;C:\tools\php;%PATH%
   - SET ANSICON=121x90 (121x90)
   - SET COMPOSER_NO_INTERACTION=1
-  - SET COMPOSER_UP=composer.phar update --no-interaction --prefer-dist --no-progress --profile --no-suggest --ansi
+  - SET COMPOSER_UP=composer update --no-interaction --prefer-dist --no-progress --profile --no-suggest --ansi
   - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
@@ -53,7 +53,6 @@ install:
   - cd ext
   - appveyor DownloadFile https://github.com/nono303/PHP7-memcache-dll/blob/master/vc15/x64/nts/php-7.2.x_memcache.dll?raw=true
   - rename php-7.2.x_memcache.dll php_memcache.dll
-  - del /Q *.zip
   - cd ..
   - echo zend_extension=php_opcache.dll >> php.ini
   - echo max_execution_time=1200 >> php.ini
@@ -61,6 +60,7 @@ install:
   - echo opcache.enable_cli=1 >> php.ini
   - echo apc.enable_cli=1 >> php.ini
   - php -r "readfile('https://getcomposer.org/installer');" | php
+  - echo @php %%~dp0composer.phar %%* > composer.bat
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd C:\projects\narrowspark
   # Matrix
