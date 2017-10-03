@@ -59,9 +59,9 @@ install:
   - echo date.timezone="America/Los_Angeles" >> php.ini
   - echo opcache.enable_cli=1 >> php.ini
   - echo apc.enable_cli=1 >> php.ini
-  - php -r "readfile('https://getcomposer.org/installer');" | php
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd C:\projects\narrowspark
+  - php -r "readfile('https://getcomposer.org/installer');" | php
   # Matrix
   - IF %dependencies%==basic appveyor-retry %COMPOSER_UP%
   - IF %dependencies%==lowest appveyor-retry %COMPOSER_UP% --prefer-lowest --prefer-stable
