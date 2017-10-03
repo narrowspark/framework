@@ -36,7 +36,8 @@ class PoTest extends TestCase
             $this->fail($e->getMessage());
         }
 
-        self::assertCount(4, $result);
+        self::assertCount(3, $result);
+        self::assertTrue(array_key_exists('headers', $result));
 
         // Read file without headers.
         // It should not skip first entry
@@ -47,7 +48,8 @@ class PoTest extends TestCase
             $this->fail($e->getMessage());
         }
 
-        self::assertCount(4, $result, 'Did not read properly po file without headers.');
+        self::assertCount(2, $result, 'Did not read properly po file without headers.');
+        self::assertFalse(array_key_exists('headers', $result));
     }
 
     public function testHeaders()
@@ -85,9 +87,9 @@ class PoTest extends TestCase
         try {
             $result = $this->parser->parse(self::readFile($this->fixturePath . '/multilines.po'));
             var_dump($result);
-            $this->assertCount(18, $result['headers']);
-            $this->assertCount(9, $result['msgid']);
-            $this->assertCount(9, $result['msgstr']);
+            self::assertCount(18, $result['headers']);
+            self::assertCount(9, $result['msgid']);
+            self::assertCount(9, $result['msgstr']);
         } catch (Throwable $e) {
             $this->fail($e->getMessage());
         }
