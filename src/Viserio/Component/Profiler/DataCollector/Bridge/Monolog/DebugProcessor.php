@@ -73,7 +73,7 @@ class DebugProcessor
      */
     public function flush(): void
     {
-        $this->records = [];
+        $this->records    = [];
         $this->errorCount = 0;
     }
 }

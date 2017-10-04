@@ -250,7 +250,8 @@ class TraceableEventManagerTest extends MockeryTestCase
 
     public function testClearCalledListeners()
     {
-        $this->wrapperDispatcher->attach('foo', function () {}, 5);
+        $this->wrapperDispatcher->attach('foo', function () {
+        }, 5);
 
         $this->wrapperDispatcher->trigger('foo');
         $this->wrapperDispatcher->flush();

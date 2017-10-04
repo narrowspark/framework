@@ -7,7 +7,7 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor;
 
-class LoggerTest extends TestCase
+class DebugProcessorTest extends TestCase
 {
     /**
      * @var \Monolog\Logger
@@ -18,7 +18,7 @@ class LoggerTest extends TestCase
     {
         parent::setUp();
 
-        $handler = new TestHandler();
+        $handler   = new TestHandler();
         $processor = new DebugProcessor();
 
         $this->logger = new Logger(__METHOD__, [$handler], [$processor]);
