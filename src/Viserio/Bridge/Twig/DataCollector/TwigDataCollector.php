@@ -219,6 +219,17 @@ class TwigDataCollector extends AbstractDataCollector implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->profile->reset();
+
+        $this->computed = null;
+        $this->data     = [];
+    }
+
+    /**
      * Get computed data.
      *
      * @param string $index

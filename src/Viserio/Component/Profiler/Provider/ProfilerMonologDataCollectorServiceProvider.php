@@ -9,8 +9,8 @@ use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as Provide
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor;
-use Viserio\Component\Profiler\DataCollector\Bridge\Log\MonologLoggerDataCollector;
+use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor;
+use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\MonologLoggerDataCollector;
 
 class ProfilerMonologDataCollectorServiceProvider implements
     ServiceProviderInterface,

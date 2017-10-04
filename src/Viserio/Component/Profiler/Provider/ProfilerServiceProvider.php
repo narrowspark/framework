@@ -111,9 +111,7 @@ class ProfilerServiceProvider implements
     ): ?EventManagerContract {
         if ($eventManager !== null) {
             $eventManager->attach(TerminableContract::TERMINATE, function () use ($container) {
-                foreach ($container->get(ProfilerContract::class)->getCollectors() as $collector) {
-                    // @todo clear collector
-                }
+                $container->get(ProfilerContract::class)->flush();
             });
         }
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Contract\Profiler\DataCollector;
 use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -14,32 +15,39 @@ use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester as Profiler;
 
 class ProfilerTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Profiler\Tests\Fixture\ProfilerTester
+     */
+    private $profiler;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->profiler = new Profiler(new AssetsRenderer());
+    }
+
     public function testSetAndGetUrlGenerator(): void
     {
-        $profiler = $this->getProfiler();
+        $this->profiler->setUrlGenerator($this->mock(UrlGeneratorContract::class));
 
-        $profiler->setUrlGenerator($this->mock(UrlGeneratorContract::class));
-
-        self::assertInstanceOf(UrlGeneratorContract::class, $profiler->getUrlGenerator());
+        self::assertInstanceOf(UrlGeneratorContract::class, $this->profiler->getUrlGenerator());
     }
 
     public function testSetAndGetTemplate(): void
     {
-        $profiler = $this->getProfiler();
+        $this->profiler->setTemplate(__DIR__);
 
-        $profiler->setTemplate(__DIR__);
-
-        self::assertSame(__DIR__, $profiler->getTemplate());
+        self::assertSame(__DIR__, $this->profiler->getTemplate());
     }
 
     public function testAddHasAndGetCollectors(): void
     {
-        $profiler  = $this->getProfiler();
         $collector = new PhpInfoDataCollector();
 
-        $profiler->addCollector($collector);
+        $this->profiler->addCollector($collector);
 
-        self::assertTrue($profiler->hasCollector('php-info-data-collector'));
+        self::assertTrue($this->profiler->hasCollector('php-info-data-collector'));
 
         self::assertSame(
             [
@@ -48,7 +56,7 @@ class ProfilerTest extends MockeryTestCase
                     'priority'  => 100,
                 ],
             ],
-            $profiler->getCollectors()
+            $this->profiler->getCollectors()
         );
     }
 
@@ -58,11 +66,10 @@ class ProfilerTest extends MockeryTestCase
      */
     public function testAddCollectorThrowsException(): void
     {
-        $profiler  = $this->getProfiler();
         $collector = new PhpInfoDataCollector();
 
-        $profiler->addCollector($collector);
-        $profiler->addCollector($collector);
+        $this->profiler->addCollector($collector);
+        $this->profiler->addCollector($collector);
     }
 
     public function testModifyResponse(): void
@@ -136,17 +143,14 @@ class ProfilerTest extends MockeryTestCase
 
     public function testDontModifyResponse(): void
     {
-        $assets   = new AssetsRenderer();
-        $profiler = new Profiler($assets);
-
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $profiler->disable();
+        $this->profiler->disable();
         $orginalResponse = (new ResponseFactory())->createResponse();
 
-        $response = $profiler->modifyResponse(
+        $response = $this->profiler->modifyResponse(
             (new ServerRequestFactory())->createServerRequestFromArray($server),
             $orginalResponse
         );
@@ -154,13 +158,21 @@ class ProfilerTest extends MockeryTestCase
         self::assertEquals($response, $orginalResponse);
     }
 
+    public function testFlush()
+    {
+        $collector = $this->mock(DataCollector::class);
+        $collector->shouldReceive('getName')
+            ->twice()
+            ->andReturn('mock');
+        $collector->shouldReceive('flush')
+            ->once();
+
+        $this->profiler->addCollector($collector);
+        $this->profiler->flush();
+    }
+
     private function removeId(string $html): string
     {
         return \trim(\preg_replace('/="profiler-(.*?)"/', '', $html));
-    }
-
-    private function getProfiler()
-    {
-        return new Profiler(new AssetsRenderer());
     }
 }

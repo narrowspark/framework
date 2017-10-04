@@ -179,6 +179,19 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        parent::flush();
+
+        foreach ($this->pools as $instance) {
+            // Calling getCalls() will clear the calls.
+            $instance->getCalls();
+        }
+    }
+
+    /**
      * @return array
      */
     private function calculateStatistics(): array

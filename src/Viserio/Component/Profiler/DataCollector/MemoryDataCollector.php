@@ -13,12 +13,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
      */
     public function __construct()
     {
-        $memoryLimit = \ini_get('memory_limit');
-
-        $this->data = [
-            'memory'       => 0,
-            'memory_limit' => $memoryLimit == '-1' ? -1 : self::convertToBytes($memoryLimit),
-        ];
+        $this->flush();
     }
 
     /**
@@ -67,5 +62,18 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
     public function updateMemoryUsage(): void
     {
         $this->data['memory'] = \memory_get_peak_usage(true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        $memoryLimit = \ini_get('memory_limit');
+
+        $this->data = [
+            'memory'       => 0,
+            'memory_limit' => $memoryLimit == '-1' ? -1 : self::convertToBytes($memoryLimit),
+        ];
     }
 }

@@ -215,8 +215,8 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     public function flush(): void
     {
-        foreach ($this->collectors as $collector) {
-            $collector->flush();
+        foreach ($this->collectors as $data) {
+            $data['collector']->flush();
         }
     }
 
