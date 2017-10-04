@@ -104,7 +104,6 @@ interface Profiler
     public function getUrlGenerator(): ?UrlGeneratorContract;
 
     /**
-     *
      * @return void
      */
     public function flush(): void;

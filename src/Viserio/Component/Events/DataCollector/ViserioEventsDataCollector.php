@@ -122,7 +122,7 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
      */
     public function flush(): void
     {
-        $this->data = array();
+        $this->data = [];
 
         $this->eventManager->flush();
     }

@@ -230,9 +230,9 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      * @return void
      */
     public function flush(): void
-     {
-         $this->called = [];
-     }
+    {
+        $this->called = [];
+    }
 
     /**
      * @param string $eventName
