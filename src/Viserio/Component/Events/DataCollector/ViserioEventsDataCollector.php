@@ -116,4 +116,14 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
             ],
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        $this->data = array();
+
+        $this->eventManager->flush();
+    }
 }
