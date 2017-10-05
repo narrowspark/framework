@@ -37,7 +37,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      *
      * @var array
      */
-    private $computed;
+    private $computed = [];
 
     /**
      * Create new twig collector instance.
@@ -225,7 +225,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     {
         $this->profile->reset();
 
-        $this->computed = null;
+        $this->computed = [];
         $this->data     = [];
     }
 
@@ -238,7 +238,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     private function getComputedData(string $index)
     {
-        if ($this->computed === null) {
+        if (count($this->computed) === 0) {
             $this->computed = $this->generateComputeData($this->getProfile());
         }
 
