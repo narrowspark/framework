@@ -42,7 +42,7 @@ install:
   # Install PHP
   - IF EXIST C:\tools\php (SET PHP=0) ELSE (mkdir C:\tools\php)
   - IF %PHP%==1 appveyor DownloadFile "https://raw.githubusercontent.com/prisis/ps-install-php/master/Install-PHP.ps1"
-  - IF %PHP%==1 (ps: .\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:php_ver_target -Highest -Arch x64 -Extensions mbstring,intl,openssl,memcache,fileinfo,pdo_sqlite,curl,sodium)
+  - ps: if ($env.PHP === 1) {.\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:php_ver_target -Highest -Arch x64 -Extensions mbstring,intl,openssl,memcache,fileinfo,pdo_sqlite,curl,sodium}
   # Install redis and start
   - IF %PHP%==1 nuget install redis-64 -excludeversion -Verbosity quiet
   - IF %PHP%==1 redis-64\tools\redis-server.exe --service-install
