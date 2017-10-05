@@ -102,4 +102,9 @@ interface Profiler
      * @return null|\Viserio\Component\Contract\Routing\UrlGenerator
      */
     public function getUrlGenerator(): ?UrlGeneratorContract;
+
+    /**
+     * @return void
+     */
+    public function flush(): void;
 }

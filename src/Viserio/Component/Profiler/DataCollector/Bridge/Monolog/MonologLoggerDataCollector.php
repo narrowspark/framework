@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Profiler\DataCollector\Bridge\Log;
+namespace Viserio\Component\Profiler\DataCollector\Bridge\Monolog;
 
 use ErrorException;
 use Monolog\Logger;
@@ -93,13 +93,9 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $tableHeaders  = [
-            'Level',
-            'Channel',
-            'Message',
-        ];
-        $logs          = $this->groupLogLevels();
+        $tableHeaders  = ['Level', 'Channel', 'Message'];
 
+        $logs = $this->groupLogLevels();
         $html = $this->createTabs([
             [
                 'name'    => 'Info. & Errors <span class="counter">' . \count($logs['info_error']) . '</span>',
@@ -231,9 +227,19 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        if (($logger = $this->getDebugLogger()) && method_exists($logger, 'flush')) {
+            $logger->flush();
+        }
+    }
+
+    /**
      * Returns a DebugProcessor instance if one is registered with this logger.
      *
-     * @return null|\Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor
+     * @return null|\Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor
      */
     private function getDebugLogger(): ?DebugProcessor
     {

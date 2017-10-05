@@ -247,4 +247,19 @@ class TraceableEventManagerTest extends MockeryTestCase
 
         self::assertCount(1, $eventDispatcher->getListeners('foo'), 'expected listener1 to be removed');
     }
+
+    public function testClearCalledListeners()
+    {
+        $this->wrapperDispatcher->attach('foo', function () {
+        }, 5);
+
+        $this->wrapperDispatcher->trigger('foo');
+        $this->wrapperDispatcher->flush();
+
+        $listeners = $this->wrapperDispatcher->getNotCalledListeners();
+
+        self::assertArrayHasKey('stub', $listeners['foo'][0]);
+
+        self::assertEquals([], $this->wrapperDispatcher->getCalledListeners());
+    }
 }

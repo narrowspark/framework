@@ -83,6 +83,14 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
+     * +     * {@inheritdoc}
+     * +     */
+    public function flush(): void
+    {
+        $this->data = [];
+    }
+
+    /**
      * Add measurement to float time.
      *
      * @param float $seconds

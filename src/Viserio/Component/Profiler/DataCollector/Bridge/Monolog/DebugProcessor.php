@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Profiler\DataCollector\Bridge\Log;
+namespace Viserio\Component\Profiler\DataCollector\Bridge\Monolog;
 
 use Monolog\Logger;
 
@@ -64,5 +64,16 @@ class DebugProcessor
     public function countErrors(): int
     {
         return $this->errorCount;
+    }
+
+    /**
+     * Removes all log records.
+     *
+     * @return void
+     */
+    public function flush(): void
+    {
+        $this->records    = [];
+        $this->errorCount = 0;
     }
 }

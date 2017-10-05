@@ -42,4 +42,11 @@ interface DataCollector
      * @return string
      */
     public function getMenuPosition(): string;
+
+    /**
+     * Resets this data collector to its initial state.
+     *
+     * @return void
+     */
+    public function flush(): void;
 }

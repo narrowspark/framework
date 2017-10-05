@@ -311,7 +311,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         $result = [
            'uri'     => $route->getUri() ?: '-',
-           'methods' => \count((array) $route->getMethods()) > 1 ?
+           'methods' => \count($route->getMethods()) > 1 ?
                 \implode(' | ', $route->getMethods()) :
                 $route->getMethods(),
         ];

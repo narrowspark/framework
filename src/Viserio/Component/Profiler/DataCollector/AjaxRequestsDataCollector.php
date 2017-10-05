@@ -64,4 +64,12 @@ class AjaxRequestsDataCollector extends AbstractDataCollector implements
             'js'  => __DIR__ . '/../Resources/js/ajaxHandler.js',
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        // all collecting is done client side
+    }
 }

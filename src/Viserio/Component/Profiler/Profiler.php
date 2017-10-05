@@ -211,6 +211,16 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        foreach ($this->collectors as $data) {
+            $data['collector']->flush();
+        }
+    }
+
+    /**
      * Injects the web debug toolbar into the given Response.
      *
      * @param \Psr\Http\Message\ResponseInterface $response

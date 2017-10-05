@@ -19,7 +19,7 @@
     ],
     "require": {
         "php"                                : "^7.2",
-        "twig/twig"                          : "~2.4"
+        "twig/twig"                          : "^2.4.4"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.4",
