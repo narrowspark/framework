@@ -22,10 +22,6 @@
 * Powerful [encryption][7] and [hashing][8] components.
 * All components are based on [psr][9] standards, easy to switch or used in other [psr][9] compatible projects.
 
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/acKmSTrBUtXoZTrszJvCgLgw/narrowspark/framework'>
-  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/acKmSTrBUtXoZTrszJvCgLgw/narrowspark/framework.svg' />
-</a>
-
 Documentation
 -------------
 
