@@ -61,9 +61,8 @@ class PoParser implements ParserContract
                     $firstLine = false;
 
                     continue;
-                } else {
-                    $entries[] = $entry;
                 }
+                $entries[] = $entry;
 
                 $state           = null;
                 $justNewEntry    = true;
