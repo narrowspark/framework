@@ -8,9 +8,9 @@ use Viserio\Component\Contract\Parser\Parser as ParserContract;
 class PoParser implements ParserContract
 {
     private const DEFAULT_ENTRY = [
-        'msgid'      => '',
-        'msgstr'     => '',
-        'msgctxt'    => '',
+        'msgid'      => [],
+        'msgstr'     => [],
+        'msgctxt'    => [],
         'ccomment'   => [],
         'tcomment'   => [],
         'obsolete'   => false,
@@ -39,7 +39,6 @@ class PoParser implements ParserContract
         $i     = 0;
 
         $entries         = [];
-        $headers         = [];
         $entry           = self::DEFAULT_ENTRY;
         $justNewEntry    = false; // A new entries has been just inserted.
         $lastPreviousKey = null; // Used to remember last key in a multiline previous entries.
@@ -47,10 +46,12 @@ class PoParser implements ParserContract
         $firstLine       = true;
 
         for ($n = \count($lines); $i < $n; ++$i) {
-            $line = \trim($lines[$i]);
-//            $line = $this->fixMultiLines($line, $lines, $i);
+            $line      = \trim($lines[$i]);
+            $line      = $this->fixMultiLines($line, $lines, $i);
+            $splitLine = \preg_split('/\s+/', $line, 2);
+            $key       = $splitLine[0];
 
-            if ($line === '') {
+            if ($line === '' || ($key === 'msgid' && isset($entry['msgid']))) {
                 // Two consecutive blank lines
                 if ($justNewEntry) {
                     continue;
@@ -59,22 +60,22 @@ class PoParser implements ParserContract
                 if ($firstLine) {
                     $firstLine = false;
 
-                    $headers = self::extractHeaders($entry['msgstr'][0], $headers);
                     continue;
+                } else {
+                    $entries[] = $entry;
                 }
 
                 $state           = null;
                 $justNewEntry    = true;
                 $lastPreviousKey = null;
-                $entries[]       = $entry;
                 $entry           = self::DEFAULT_ENTRY;
 
-                continue;
+                if ($line === '') {
+                    continue;
+                }
             }
 
             $justNewEntry = false;
-            $splitLine    = \preg_split('/\s+/', $line, 2);
-            $key          = $splitLine[0];
             $data         = $splitLine[1] ?? '';
 
             switch ($key) {
@@ -122,7 +123,7 @@ class PoParser implements ParserContract
                         [$entry, $lastPreviousKey] = self::processObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entry);
                     }
 
-                    if ($key === 'previous') {
+                    if ($key !== 'obsolete') {
                         [$entry, $lastPreviousKey] = self::processPreviousEntry($lastPreviousKey, $tmpKey, $str, $entry, $key);
                     }
 
@@ -150,7 +151,6 @@ class PoParser implements ParserContract
                 case 'msgid_plural': // untranslated-string-plural
                 case 'msgstr':       // translated-string
                     $state           = $key;
-                    $entry[$state]   = ! isset($entry[$state]) ? $entry[$state] : [];
 
                     if ($state === 'msgstr') {
                         $entry[$state][] = self::convertString(trim($data, '"'));
@@ -178,7 +178,17 @@ class PoParser implements ParserContract
             $entries[] = $entry;
         }
 
-        // add headers
+        // - Cleanup header data
+        $headers = [];
+
+        foreach ($entries as $key => $entry) {
+            if (count($entry['msgid']) === 0) {
+                $headers = self::extractHeaders($entry['msgstr'][0], $headers);
+
+                unset($entries[$key]);
+            }
+        }
+
         $entries['headers'] = $headers;
 
         return $entries;
@@ -331,14 +341,11 @@ class PoParser implements ParserContract
 
         switch ($tmpKey) {
             case 'msgid':
-                $entry['msgid']   = ! isset($entry['msgid']) ? $entry['msgid'] : [];
                 $entry['msgid'][] = self::convertString($str);
                 $lastPreviousKey  = $tmpKey;
 
                 break;
             case 'msgstr':
-                $entry['msgstr'] = ! isset($entry['msgstr']) ? $entry['msgstr'] : [];
-
                 if ($str === '""') {
                     $entry['msgstr'][] = self::convertString(trim($str, '"'));
                 } else {
@@ -374,8 +381,8 @@ class PoParser implements ParserContract
             case 'msgid':
             case 'msgid_plural':
             case 'msgstr':
-                $entry[$key][$tmpKey][]  = self::convertString($str);
-                $lastPreviousKey         = $tmpKey;
+                $entry[$key][$tmpKey][] = self::convertString($str);
+                $lastPreviousKey        = $tmpKey;
                 break;
             default:
                 $entry[$key][$tmpKey] = self::convertString($str);
@@ -411,7 +418,6 @@ class PoParser implements ParserContract
                 $entry[$state][] = self::convertString($line);
                 break;
             case 'msgstr':
-                $entry['msgstr'] = ! isset($entry['msgstr']) ? $entry['msgstr'] : [];
                 // Special fix where msgid is ""
                 if ($entry['msgid'] === '""') {
                     $entry['msgstr'][] = self::convertString(trim($line, '"'));
