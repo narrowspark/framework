@@ -29,6 +29,9 @@ cache:
   - C:\ProgramData\chocolatey\lib -> .appveyor.yml
   # Cache php install
   - C:\tools\php -> .appveyor.yml
+  # Cache composer
+  - C:\projects\narrowspark\vendor -> composer.lock
+  - '%LOCALAPPDATA%\Composer\files -> composer.lock'
 
 init:
   - SET PHP=1
@@ -39,8 +42,17 @@ init:
   - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
+  # If there is a newer build queued for the same PR, cancel this one.
+  # The AppVeyor 'rollout builds' option is supposed to serve the same
+  # purpose but it is problematic because it tends to cancel builds pushed
+  # directly to master instead of just PR builds (or the converse).
+  # credits: JuliaLang developers.
+  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
+        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+          throw "There are newer queued builds for this pull request, failing early." }
   # Install PHP
-  - IF EXIST C:\tools\php (SET PHP=0) ELSE (mkdir C:\tools\php)
+  - IF EXIST C:\tools\php (SET PHP=0)
   - IF %PHP%==1 appveyor DownloadFile "https://raw.githubusercontent.com/prisis/ps-install-php/master/Install-PHP.ps1"
   - ps: if ($env.PHP) {.\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:php_ver_target -Highest -Arch x64 -Extensions mbstring,intl,openssl,memcache,fileinfo,pdo_sqlite,curl,sodium}
   # Install redis and start
