@@ -200,8 +200,8 @@ class PoParser implements ParserContract
                 }
 
                 if (self::isHeaderDefinition($line)) {
-                    $header                         = array_map('trim', explode(':', $line, 2));
-                    $currentHeader                  = $header[0];
+                    $header                                       = array_map('trim', explode(':', $line, 2));
+                    $currentHeader                                = $header[0];
                     $entries['headers'][$currentHeader]           = $header[1];
                 } else {
                     $entry                              = $entries['headers'][$currentHeader] ?? '';
@@ -316,8 +316,8 @@ class PoParser implements ParserContract
     {
         $headerKeys = [
             'Project-Id-Version' => false,
-            'PO-Revision-Date' => false,
-            'MIME-Version' => false,
+            'PO-Revision-Date'   => false,
+            'MIME-Version'       => false,
         ];
 
         $keys        = array_keys($headerKeys);

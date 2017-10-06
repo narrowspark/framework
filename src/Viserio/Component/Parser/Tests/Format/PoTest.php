@@ -50,7 +50,7 @@ class PoTest extends TestCase
                 'flags'      => [],
                 'references' => ['{../../classes/dddddd.php}:{33}' => [
                     '../../classes/dddddd.php',
-                    '33'
+                    '33',
                 ]],
             ],
             reset($result)
@@ -138,7 +138,7 @@ class PoTest extends TestCase
                 'flags'      => [],
                 'references' => ['{../../classes/dddddd.php}:{33}' => [
                     '../../classes/dddddd.php',
-                    '33'
+                    '33',
                 ]],
             ],
             reset($result)
@@ -151,12 +151,12 @@ class PoTest extends TestCase
                 'msgid'      => [
                     '',
                     'El archivo {file} es demasiado pequeño, el tamaño mínimo de archivo es ',
-                    '{minSizeLimit}.'
+                    '{minSizeLimit}.',
                 ],
                 'msgstr'     => [
                     '',
                     'El fitxer {file} es massa petit, el tamany mínim de fitxer es ',
-                    '{minSizeLimit}.'
+                    '{minSizeLimit}.',
                 ],
                 'msgctxt'    => [],
                 'ccomment'   => [],
