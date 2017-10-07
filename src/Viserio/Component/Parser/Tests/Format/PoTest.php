@@ -223,7 +223,7 @@ class PoTest extends TestCase
                 'fuzzy'      => false,
                 'flags'      => [],
                 'references' => [],
-            ]
+            ],
         ];
 
         self::assertEquals($result, $expected);
@@ -237,8 +237,8 @@ class PoTest extends TestCase
 
         $expected = [
             [
-                'msgid' => ['this is a string'],
-                'msgstr'=> ['this is a translation'],
+                'msgid'      => ['this is a string'],
+                'msgstr'     => ['this is a translation'],
                 'msgctxt'    => [],
                 'ccomment'   => [],
                 'tcomment'   => [],
@@ -246,11 +246,11 @@ class PoTest extends TestCase
                 'fuzzy'      => false,
                 'flags'      => [],
                 'references' => [],
-                'previous' => [
+                'previous'   => [
                     'msgid' => ['this is a previous string'],
-                    'msgstr'=> ['this is a previous translation string']
-                ]
-            ]
+                    'msgstr'=> ['this is a previous translation string'],
+                ],
+            ],
         ];
 
         self::assertEquals($result, $expected);
