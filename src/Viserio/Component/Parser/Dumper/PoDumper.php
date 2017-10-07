@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parsers\Dumper;
 
-use Viserio\Component\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Component\Contracts\Parsers\Exception\DumpException;
+use Viserio\Component\Contract\Parser\Dumper as DumperContract;
+use Viserio\Component\Contract\Parser\Exception\DumpException;
 
 class PoDumper implements DumperContract
 {

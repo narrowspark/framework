@@ -21,17 +21,17 @@ class PoParser implements ParserContract
 
     /**
      * {@inheritdoc}
-     * [
-     *     'msgid'      => <string> ID of the message.
-     *     'msgctxt'    => <string> Message context.
-     *     'msgstr'     => <string> Message translation.
-     *     'tcomment'   => <string> Comment from translator.
-     *     'ccomment'   => <string> Extracted comments from code.
-     *     'references' => <array> Location of string in code.
-     *     'obsolete'   => <bool> Is the message obsolete?
-     *     'fuzzy'      => <bool> Is the message "fuzzy"?
-     *     'flags'      => <array> Flags of the entry. Internal usage.
-     * ].
+     *
+     * array[]
+     *     ['msgid']      array ID of the message.
+     *     ['msgctxt']    array Message context.
+     *     ['msgstr']     array Message translation.
+     *     ['tcomment']   array Comment from translator.
+     *     ['ccomment']   array Extracted comments from code.
+     *     ['references'] array Location of string in code.
+     *     ['obsolete']   bool  Is the message obsolete?
+     *     ['fuzzy']      bool  Is the message "fuzzy"?
+     *     ['flags']      array Flags of the entry. Internal usage.
      */
     public function parse(string $payload): array
     {
@@ -125,11 +125,11 @@ class PoParser implements ParserContract
 
                     $entry[$key] = $entry[$key] ?? ['msgid' => [], 'msgstr' => []];
 
-                    if (mb_strpos($key, 'obsolete') !== false) {
+                    if ($key === 'obsolete' || $key === 'previous-obsolete') {
                         [$entry, $lastPreviousKey] = self::processObsoleteEntry($lastPreviousKey, $tmpKey, $str, $entry);
                     }
 
-                    if ($key !== 'obsolete') {
+                    if ($key === 'previous') {
                         [$entry, $lastPreviousKey] = self::processPreviousEntry($lastPreviousKey, $tmpKey, $str, $entry, $key);
                     }
 

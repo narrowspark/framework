@@ -170,6 +170,92 @@ class PoTest extends TestCase
         );
     }
 
+    public function testPlurals()
+    {
+        $result = $this->parser->parse(self::readFile($this->fixturePath . '/plurals.po'));
+
+        self::assertCount(7, $result['headers']);
+
+        unset($result['headers']);
+
+        self::assertCount(15, $result);
+    }
+
+    public function testPluralsMultiline()
+    {
+        $result = $this->parser->parse(self::readFile($this->fixturePath . '/pluralsMultiline.po'));
+
+        unset($result['headers']);
+
+        self::assertCount(2, $result);
+
+        foreach ($result as $id => $entry) {
+            self::assertTrue(isset($entry['msgstr[0]']));
+            self::assertTrue(isset($entry['msgstr[1]']));
+        }
+    }
+
+    public function testNoBlankLines()
+    {
+        $result = $this->parser->parse(self::readFile($this->fixturePath . '/noblankline.po'));
+
+        unset($result['headers']);
+
+        $expected = [
+            [
+                'msgid'      => [0 => 'one'],
+                'msgstr'     => [0 => 'uno'],
+                'msgctxt'    => [],
+                'ccomment'   => [],
+                'tcomment'   => [],
+                'obsolete'   => false,
+                'fuzzy'      => false,
+                'flags'      => [],
+                'references' => [],
+            ],
+            [
+                'msgid'      => [0 => 'two'],
+                'msgstr'     => [0 => 'dos'],
+                'msgctxt'    => [],
+                'ccomment'   => [],
+                'tcomment'   => [],
+                'obsolete'   => false,
+                'fuzzy'      => false,
+                'flags'      => [],
+                'references' => [],
+            ]
+        ];
+
+        self::assertEquals($result, $expected);
+    }
+
+    public function testPreviousUnstranslated()
+    {
+        $result = $this->parser->parse(self::readFile($this->fixturePath . '/previous_unstranslated.po'));
+
+        unset($result['headers']);
+
+        $expected = [
+            [
+                'msgid' => ['this is a string'],
+                'msgstr'=> ['this is a translation'],
+                'msgctxt'    => [],
+                'ccomment'   => [],
+                'tcomment'   => [],
+                'obsolete'   => false,
+                'fuzzy'      => false,
+                'flags'      => [],
+                'references' => [],
+                'previous' => [
+                    'msgid' => ['this is a previous string'],
+                    'msgstr'=> ['this is a previous translation string']
+                ]
+            ]
+        ];
+
+        self::assertEquals($result, $expected);
+    }
+
     private static function readFile(string $filePath): string
     {
         return file_get_contents($filePath);
