@@ -457,7 +457,7 @@ class PoParser implements ParserContract
     private static function extractHeaders(array $headers, array $entries): array
     {
         foreach ($headers as $header) {
-            $headerArray = \explode("\n", $header);
+            $headerArray   = \explode("\n", $header);
             $currentHeader = null;
 
             foreach ($headerArray as $line) {
@@ -468,8 +468,8 @@ class PoParser implements ParserContract
                 }
 
                 if (self::isHeaderDefinition($line)) {
-                    $header                            = array_map('trim', explode(':', $line, 2));
-                    $currentHeader                     = $header[0];
+                    $header                             = array_map('trim', explode(':', $line, 2));
+                    $currentHeader                      = $header[0];
                     $entries['headers'][$currentHeader] = $header[1];
                 } else {
                     $entries['headers'][$currentHeader] = ($entries['headers'][$currentHeader] ?? '') . $line;
