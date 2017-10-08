@@ -23,15 +23,17 @@ class PoParser implements ParserContract
      * {@inheritdoc}
      *
      * array[]
-     *     ['msgid']      array ID of the message.
-     *     ['msgctxt']    array Message context.
-     *     ['msgstr']     array Message translation.
-     *     ['tcomment']   array Comment from translator.
-     *     ['ccomment']   array Extracted comments from code.
-     *     ['references'] array Location of string in code.
-     *     ['obsolete']   bool  Is the message obsolete?
-     *     ['fuzzy']      bool  Is the message "fuzzy"?
-     *     ['flags']      array Flags of the entry. Internal usage.
+     *     ['headers']        array
+     *     array[]
+     *         ['msgid']      array ID of the message.
+     *         ['msgstr']     array Message translation.
+     *         ['msgctxt']    array Message context.
+     *         ['tcomment']   array Comment from translator.
+     *         ['ccomment']   array Extracted comments from code.
+     *         ['references'] array Location of string in code.
+     *         ['obsolete']   bool  Is the message obsolete?
+     *         ['fuzzy']      bool  Is the message "fuzzy"?
+     *         ['flags']      array Flags of the entry.
      */
     public function parse(string $payload): array
     {
@@ -188,27 +190,7 @@ class PoParser implements ParserContract
 
         $entries['headers'] = [];
 
-        foreach ($headers as $header) {
-            $headerArray   = \explode("\n", $header);
-            $currentHeader = null;
-
-            foreach ($headerArray as $line) {
-                $line = self::convertString($line);
-
-                if ($line === '') {
-                    continue;
-                }
-
-                if (self::isHeaderDefinition($line)) {
-                    $header                                       = array_map('trim', explode(':', $line, 2));
-                    $currentHeader                                = $header[0];
-                    $entries['headers'][$currentHeader]           = $header[1];
-                } else {
-                    $entry                              = $entries['headers'][$currentHeader] ?? '';
-                    $entries['headers'][$currentHeader] = $entry . $line;
-                }
-            }
-        }
+        $entries = self::extractHeaders($headers, $entries);
 
         return $entries;
     }
@@ -270,39 +252,6 @@ class PoParser implements ParserContract
                 '\\"'  => '"',
             ]
         );
-    }
-
-    /**
-     * Add the headers found to the translations instance.
-     *
-     * @param string $headers
-     * @param array  $data
-     *
-     * @return array
-     */
-    private static function extractHeaders($headers, array $data): array
-    {
-        $headerArray   = \explode("\n", $headers);
-        $currentHeader = null;
-
-        foreach ($headerArray as $line) {
-            $line = self::convertString($line);
-
-            if ($line === '') {
-                continue;
-            }
-
-            if (self::isHeaderDefinition($line)) {
-                $header                         = array_map('trim', explode(':', $line, 2));
-                $currentHeader                  = $header[0];
-                $data[$currentHeader]           = $header[1];
-            } else {
-                $entry                          = $data[$currentHeader] ?? '';
-                $data[$currentHeader]           = $entry . $line;
-            }
-        }
-
-        return $data;
     }
 
     /**
@@ -495,5 +444,39 @@ class PoParser implements ParserContract
         }
 
         return $entry;
+    }
+
+    /**
+     * Add the headers found to the translations instance.
+     *
+     * @param array $headers
+     * @param array $entries
+     *
+     * @return array
+     */
+    private static function extractHeaders(array $headers, array $entries): array
+    {
+        foreach ($headers as $header) {
+            $headerArray = \explode("\n", $header);
+            $currentHeader = null;
+
+            foreach ($headerArray as $line) {
+                $line = self::convertString($line);
+
+                if ($line === '') {
+                    continue;
+                }
+
+                if (self::isHeaderDefinition($line)) {
+                    $header                            = array_map('trim', explode(':', $line, 2));
+                    $currentHeader                     = $header[0];
+                    $entries['headers'][$currentHeader] = $header[1];
+                } else {
+                    $entries['headers'][$currentHeader] = ($entries['headers'][$currentHeader] ?? '') . $line;
+                }
+            }
+        }
+
+        return $entries;
     }
 }
