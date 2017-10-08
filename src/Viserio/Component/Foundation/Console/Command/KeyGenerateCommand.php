@@ -15,9 +15,12 @@ class KeyGenerateCommand extends Command
     use ConfirmableTrait;
 
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
+     * {@inheritdoc}
+     */
+    protected static $defaultName = 'key:generate';
+
+    /**
+     * {@inheritdoc}
      */
     protected $signature = 'key:generate
         [--force= : Force the operation to run when in production]

@@ -20,6 +20,11 @@ class ServeCommand extends Command
     /**
      * {@inheritdoc}
      */
+    protected static $defaultName = 'serve';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $signature = 'serve
         [--H|--host=127.0.0.1 : The hostname to listen to.]
         [--p|--port=8000 : The port to listen to.]

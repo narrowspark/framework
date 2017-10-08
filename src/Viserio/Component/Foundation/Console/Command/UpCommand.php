@@ -10,7 +10,7 @@ class UpCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $name = 'up';
+    protected static $defaultName = 'app:up';
 
     /**
      * {@inheritdoc}

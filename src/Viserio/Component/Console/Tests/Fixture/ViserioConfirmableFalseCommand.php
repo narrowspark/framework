@@ -10,18 +10,8 @@ class ViserioConfirmableFalseCommand extends Command
 {
     use ConfirmableTrait;
 
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'confirmable';
+    protected static $defaultName = 'confirmable';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'confirmable command';
 
     public function confirm(string $question, bool $default = false)

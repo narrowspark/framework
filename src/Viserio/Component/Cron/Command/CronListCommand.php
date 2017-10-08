@@ -11,7 +11,7 @@ class CronListCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $name = 'cron:list';
+    protected static $defaultName = 'cron:list';
 
     /**
      * {@inheritdoc}

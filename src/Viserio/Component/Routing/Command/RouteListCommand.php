@@ -11,6 +11,11 @@ class RouteListCommand extends Command
     /**
      * {@inheritdoc}
      */
+    protected static $defaultName = 'route:table';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $signature = 'route:table
         [--method= : Filter the routes by method.]
         [--name= : Filter the routes by name.]

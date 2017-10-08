@@ -56,6 +56,21 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
+        $this->data['template_paths'] = [];
+
+        $templateFinder = function (Profile $profile) use (&$templateFinder) {
+            if ($profile->isTemplate() &&
+                $template = $this->twigEnvironment->load($profile->getName())->getSourceContext()->getPath()
+            ) {
+                $this->data['template_paths'][$profile->getName()] = $template;
+            }
+
+            foreach ($profile as $p) {
+                $templateFinder($p);
+            }
+        };
+
+        $templateFinder($this->profile);
     }
 
     /**
@@ -67,7 +82,6 @@ class TwigDataCollector extends AbstractDataCollector implements
     {
         return $this->profile;
     }
-
     /**
      * Get duration time.
      *
@@ -116,6 +130,16 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getMacroCount(): int
     {
         return (int) $this->getComputedData('macro_count');
+    }
+
+    /**
+     * List of twig file paths.
+     *
+     * @return array
+     */
+    public function getTemplatePaths()
+    {
+        return $this->data['template_paths'];
     }
 
     /**
@@ -172,8 +196,14 @@ class TwigDataCollector extends AbstractDataCollector implements
             'Twig Metrics'
         );
 
+        $templates = [];
+
+        foreach ($this->getTemplates() as $template => $count) {
+            $templates[$template] = $count;
+        }
+
         $twigHtml .= $this->createTable(
-            $this->getTemplates(),
+            $templates,
             [
                 'name'      => 'Rendered Templates',
                 'headers'   => ['Template Name', 'Render Count'],

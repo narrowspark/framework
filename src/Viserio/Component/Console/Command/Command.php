@@ -23,13 +23,6 @@ abstract class Command extends BaseCommand
     use InvokerAwareTrait;
 
     /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
      * The console command input.
      *
      * @var \Symfony\Component\Console\Input\InputInterface
@@ -87,16 +80,17 @@ abstract class Command extends BaseCommand
 
     /**
      * Create a new console command instance.
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException When the command name is empty
      */
     public function __construct()
     {
         // We will go ahead and set the name, description, and parameters on console
-        // commands just to make things a little easier on the developer. This is
-        // so they don't have to all be manually specified in the constructors.
+        // commands just to make things a little easier.
         if ($this->signature !== null) {
             $this->configureUsingFluentDefinition();
         } else {
-            parent::__construct($this->name);
+            parent::__construct();
         }
 
         $this->setDescription($this->description);
@@ -502,9 +496,12 @@ abstract class Command extends BaseCommand
     /**
      * Configure the console command using a fluent definition.
      *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
+     *
      * @return void
      */
-    protected function configureUsingFluentDefinition(): void
+    private function configureUsingFluentDefinition(): void
     {
         $data = ExpressionParser::parse($this->signature);
 
@@ -524,7 +521,7 @@ abstract class Command extends BaseCommand
      *
      * @return void
      */
-    protected function specifyParameters(): void
+    private function specifyParameters(): void
     {
         // We will loop through all of the arguments and options for the command and
         // set them all on the base command instance. This specifies what can get

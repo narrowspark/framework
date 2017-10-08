@@ -19,6 +19,11 @@ class DebugCommand extends Command
     /**
      * {@inheritdoc}
      */
+    protected static $defaultName = 'twig:debug';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $signature = 'twig:debug
         [filter : Show details for all entries matching this filter.]
         [--format=text : The output format (text or json)]

@@ -18,7 +18,7 @@ class ScheduleRunCommand extends Command implements
     /**
      * {@inheritdoc}
      */
-    protected $name = 'cron:run';
+    protected static $defaultName = 'cron:run';
 
     /**
      * {@inheritdoc}
