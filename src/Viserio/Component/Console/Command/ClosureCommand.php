@@ -21,6 +21,8 @@ class ClosureCommand extends Command
      *
      * @param string   $signature
      * @param \Closure $callback
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException
      */
     public function __construct(string $signature, Closure $callback)
     {
@@ -35,6 +37,11 @@ class ClosureCommand extends Command
      *
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @throws \ReflectionException
+     * @throws \Invoker\Exception\InvocationException
+     * @throws \Invoker\Exception\NotEnoughParametersException
+     * @throws \Invoker\Exception\NotCallableException
      *
      * @return mixed
      */

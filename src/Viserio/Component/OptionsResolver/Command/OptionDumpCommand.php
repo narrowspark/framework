@@ -19,6 +19,11 @@ class OptionDumpCommand extends Command
     /**
      * {@inheritdoc}
      */
+    protected static $defaultName = 'option:dump';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $signature = 'option:dump 
         [dir : Path to the config dir.]
         [--format=php : The output format (php, json, xml, json).]

@@ -22,7 +22,7 @@
         "ext-mbstring"                             : "*",
         "php-di/invoker"                           : "^2.0",
         "psr/container"                            : "^1.0",
-        "symfony/console"                          : "~3.3",
+        "symfony/console"                          : "~3.4 || ~4.0",
         "viserio/contract"                         : "self.version",
         "viserio/support"                          : "self.version"
     },
@@ -50,7 +50,7 @@
     },
     "suggest": {
         "container-interop/service-provider"       : "Required to use service-provider (^0.4).",
-        "symfony/process"                          : "Required to use scheduling component (~3.3).",
+        "symfony/process"                          : "Required to use scheduling component (~3.4).",
         "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version)."
     },
     "extra": {

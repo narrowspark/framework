@@ -31,8 +31,8 @@ class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(UpCommand::class, $commands['up']);
-        self::assertInstanceOf(DownCommand::class, $commands['down']);
+        self::assertInstanceOf(UpCommand::class, $commands['app:up']);
+        self::assertInstanceOf(DownCommand::class, $commands['app:down']);
         self::assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
         self::assertInstanceOf(ServeCommand::class, $commands['serve']);
     }

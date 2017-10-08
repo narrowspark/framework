@@ -8,18 +8,8 @@ use Viserio\Component\Console\Command\Command;
 
 class ViserioSecCommand extends Command
 {
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'demo:greet';
+    protected static $defaultName = 'demo:greet';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Greet someone';
 
     public function handle(): void

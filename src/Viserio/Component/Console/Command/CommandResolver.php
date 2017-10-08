@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
 use Closure;
-use InvalidArgumentException;
 use Invoker\Exception\InvocationException as InvokerInvocationException;
 use Invoker\Reflection\CallableReflection;
 use ReflectionMethod;
@@ -13,6 +12,7 @@ use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\Console\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Console\Exception\InvocationException;
 use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Support\Invoker;
@@ -43,7 +43,7 @@ final class CommandResolver
     private $console;
 
     /**
-     * Create a new Cerebro console application.
+     * Create a new command resolver instance.
      *
      * @param \Viserio\Component\Support\Invoker     $invoker
      * @param \Viserio\Component\Console\Application $console
@@ -64,6 +64,7 @@ final class CommandResolver
      * @param array                 $aliases    an array of aliases for the command
      *
      * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidArgumentException
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
@@ -120,6 +121,10 @@ final class CommandResolver
      * @param string   $expression
      * @param callable $callable
      *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
+     *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
     private static function createCommand(string $expression, callable $callable): StringCommand
@@ -139,6 +144,8 @@ final class CommandResolver
      *
      * @param \Viserio\Component\Console\Command\StringCommand $command
      * @param callable|string                                  $callable
+     *
+     * @throws \Invoker\Exception\NotCallableException
      *
      * @return array
      */
@@ -179,7 +186,8 @@ final class CommandResolver
      *
      * @param mixed $callable
      *
-     * @throws \InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidArgumentException
      *
      * @return void
      */
@@ -203,6 +211,8 @@ final class CommandResolver
      * Check if the callable represents a static call to a non-static method.
      *
      * @param mixed $callable
+     *
+     * @throws \ReflectionException
      *
      * @return bool
      */

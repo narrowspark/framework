@@ -31,7 +31,7 @@
         "narrowspark/testing-helper"               : "^4.0",
         "php-di/invoker"                           : "^2.0",
         "phpunit/phpunit"                          : "^6.0",
-        "symfony/var-dumper"                       : "~3.3",
+        "symfony/var-dumper"                       : "~3.4 || ~4.0",
         "viserio/config"                           : "self.version"
     },
     "autoload": {
@@ -56,7 +56,7 @@
         "doctrine/inflector"                       : "Required to use the Pluralizer, Str::plural and Str::singular (^1.2).",
         "php-di/invoker"                           : "Required to use the Invoker Class (^1.3).",
         "viserio/options-resolver"                 : "Required to use the AbstractConnectionManager and AbstractManager Class (self.version).",
-        "symfony/var-dumper"                       : "Improves the Dumper::dump function (~3.3)."
+        "symfony/var-dumper"                       : "Improves the Dumper::dump function (~3.4)."
     },
     "extra": {
         "branch-alias": {

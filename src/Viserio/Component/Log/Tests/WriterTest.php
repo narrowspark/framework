@@ -262,7 +262,7 @@ class WriterTest extends MockeryTestCase
             ->once();
         $monolog->shouldReceive('warning')
             ->once()
-            ->with('{"message": true}', []);
+            ->with(\json_encode(['message' => true], JSON_PRETTY_PRINT), []);
         $monolog->shouldReceive('debug')
             ->once()
             ->with(\var_export((new ArrayableClass())->toArray(), true), []);
