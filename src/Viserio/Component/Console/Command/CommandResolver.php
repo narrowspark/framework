@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
 use Closure;
-use Viserio\Component\Contract\Console\Exception\InvalidArgumentException;
 use Invoker\Exception\InvocationException as InvokerInvocationException;
 use Invoker\Reflection\CallableReflection;
 use ReflectionMethod;
@@ -13,6 +12,7 @@ use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\Console\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Console\Exception\InvocationException;
 use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Support\Invoker;
@@ -57,11 +57,11 @@ final class CommandResolver
     /**
      * Resolve a command from expression.
      *
-     * @param string $expression Defines the arguments and options of the command
-     * @param array|callable|string $callable Called when the command is called.
+     * @param string                $expression Defines the arguments and options of the command
+     * @param array|callable|string $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
-     * @param array $aliases an array of aliases for the command
+     * @param array                 $aliases    an array of aliases for the command
      *
      * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
      * @throws \Viserio\Component\Contract\Console\Exception\InvalidArgumentException
@@ -118,7 +118,7 @@ final class CommandResolver
     /**
      * Create a new command.
      *
-     * @param string $expression
+     * @param string   $expression
      * @param callable $callable
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
@@ -143,7 +143,7 @@ final class CommandResolver
      * Reflect default values from callable.
      *
      * @param \Viserio\Component\Console\Command\StringCommand $command
-     * @param callable|string $callable
+     * @param callable|string                                  $callable
      *
      * @throws \Invoker\Exception\NotCallableException
      *

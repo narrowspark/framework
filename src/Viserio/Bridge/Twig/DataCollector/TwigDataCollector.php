@@ -82,6 +82,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     {
         return $this->profile;
     }
+
     /**
      * Get duration time.
      *
