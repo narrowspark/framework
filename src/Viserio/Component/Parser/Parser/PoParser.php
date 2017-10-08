@@ -96,8 +96,8 @@ class PoParser implements ParserContract
                     break;
 
                 case '#,': // Flagged translation
-                    $entry['flags'] = preg_split('/,\s*/', $data);
-                    $entry['fuzzy'] = in_array('fuzzy', $entry['flags'], true);
+                    $entry['flags'] = \preg_split('/,\s*/', $data);
+                    $entry['fuzzy'] = \in_array('fuzzy', $entry['flags'], true);
                     break;
 
                 case '#:':
@@ -115,14 +115,14 @@ class PoParser implements ParserContract
                         $key = 'previous-obsolete';
                     }
 
-                    $tmpParts = explode(' ', $data);
+                    $tmpParts = \explode(' ', $data);
                     $tmpKey   = $tmpParts[0];
 
-                    if (! in_array($tmpKey, ['msgid', 'msgid_plural', 'msgstr', 'msgctxt'], true)) {
+                    if (! \in_array($tmpKey, ['msgid', 'msgid_plural', 'msgstr', 'msgctxt'], true)) {
                         $tmpKey = $lastPreviousKey; // If there is a multiline previous string we must remember what key was first line.
                         $str    = $data;
                     } else {
-                        $str = implode(' ', array_slice($tmpParts, 1));
+                        $str = \implode(' ', \array_slice($tmpParts, 1));
                     }
 
                     $entry[$key] = $entry[$key] ?? ['msgid' => [], 'msgstr' => []];
@@ -185,7 +185,7 @@ class PoParser implements ParserContract
         }
 
         foreach ($entries as $key => $entry) {
-            $entries[$key] = array_merge(self::DEFAULT_ENTRY, $entry);
+            $entries[$key] = \array_merge(self::DEFAULT_ENTRY, $entry);
         }
 
         $entries['headers'] = [];
@@ -269,18 +269,18 @@ class PoParser implements ParserContract
             'MIME-Version'       => false,
         ];
 
-        $keys        = array_keys($headerKeys);
+        $keys        = \array_keys($headerKeys);
         $headerItems = 0;
 
-        preg_match_all('/(.*): /', $entry['msgstr'][0], $matches, PREG_SET_ORDER);
+        \preg_match_all('/(.*): /', $entry['msgstr'][0], $matches, PREG_SET_ORDER);
 
         foreach ($matches as $token) {
-            if (in_array($token[1], $keys, true)) {
+            if (\in_array($token[1], $keys, true)) {
                 $headerItems++;
 
                 unset($headerKeys[$token[1]]);
 
-                $keys = array_keys($headerKeys);
+                $keys = \array_keys($headerKeys);
             }
         }
 
@@ -297,7 +297,7 @@ class PoParser implements ParserContract
      */
     private static function isHeaderDefinition(string $line): bool
     {
-        return (bool) preg_match('/^[\w-]+:/', $line);
+        return (bool) \preg_match('/^[\w-]+:/', $line);
     }
 
     /**
@@ -315,7 +315,7 @@ class PoParser implements ParserContract
             if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
                 $filename = $matches[1];
                 $line     = $matches[3] ?? null;
-                $key      = sprintf('{%s}:{%s}', $filename, $line);
+                $key      = \sprintf('{%s}:{%s}', $filename, $line);
 
                 $references[$key] = [$filename, $line];
             }
@@ -415,8 +415,8 @@ class PoParser implements ParserContract
             case 'msgctxt':
             case 'msgid':
             case 'msgid_plural':
-            case mb_strpos($state, 'msgstr[') !== false:
-                if (is_string($entry[$state])) {
+            case \mb_strpos($state, 'msgstr[') !== false:
+                if (\is_string($entry[$state])) {
                     // Convert it to array
                     $entry[$state] = [$entry[$state]];
                 }
@@ -434,7 +434,7 @@ class PoParser implements ParserContract
                 break;
             default:
                 throw new ParseException([
-                    'message' => sprintf(
+                    'message' => \sprintf(
                         'Parse error! Unknown key [%s] on line %s',
                         $key,
                         $i
@@ -468,7 +468,7 @@ class PoParser implements ParserContract
                 }
 
                 if (self::isHeaderDefinition($line)) {
-                    $header                             = array_map('trim', explode(':', $line, 2));
+                    $header                             = \array_map('trim', \explode(':', $line, 2));
                     $currentHeader                      = $header[0];
                     $entries['headers'][$currentHeader] = $header[1];
                 } else {

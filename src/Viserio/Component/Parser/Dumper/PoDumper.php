@@ -10,7 +10,7 @@ class PoDumper implements DumperContract
     /**
      * @var array
      */
-    public const LINE_ENDINGS    = ['unix' => "\n", 'win' => "\r\n"];
+    private const LINE_ENDINGS = ['unix' => "\n", 'win' => "\r\n"];
 
     /**
      * Returns configured line ending (option 'line-ending' ['win', 'unix']).
@@ -32,7 +32,7 @@ class PoDumper implements DumperContract
             'line-ending'    => 'unix',
         ];
 
-        $options = array_merge($default, $options);
+        $options = \array_merge($default, $options);
 
         $this->eol = self::LINE_ENDINGS[$options['line-ending']];
     }
@@ -59,7 +59,7 @@ class PoDumper implements DumperContract
     {
         $output = '';
 
-        if (isset($data['headers']) && count($data['headers']) > 0) {
+        if (isset($data['headers']) && \count($data['headers']) > 0) {
             $output .= 'msgid ""' . $this->eol;
             $output .= 'msgstr ""' . $this->eol;
 
@@ -74,15 +74,15 @@ class PoDumper implements DumperContract
             $output = $this->createHeader($data, $output);
         }
 
-        $entriesCount = count($data);
+        $entriesCount = \count($data);
         $counter      = 0;
 
         foreach ($data as $entry) {
             if (isset($entry['previous'])) {
                 foreach ((array) $entry['previous'] as $key => $value) {
-                    if (is_string($value)) {
+                    if (\is_string($value)) {
                         $output .= '#| ' . $key . ' ' . $this->cleanExport($value) . $this->eol;
-                    } elseif (is_array($value) && count($value) > 0) {
+                    } elseif (\is_array($value) && \count($value) > 0) {
                         foreach ($value as $line) {
                             $output .= '#| ' . $key . ' ' . $this->cleanExport($line) . $this->eol;
                         }
@@ -109,7 +109,7 @@ class PoDumper implements DumperContract
             }
 
             if (isset($entry['flags']) && ! empty($entry['flags'])) {
-                $output .= '#, ' . implode(', ', $entry['flags']) . $this->eol;
+                $output .= '#, ' . \implode(', ', $entry['flags']) . $this->eol;
             }
 
             if (isset($entry['@'])) {
@@ -129,9 +129,9 @@ class PoDumper implements DumperContract
 
             if (isset($entry['msgid'])) {
                 // Special clean for msgid
-                if (is_string($entry['msgid'])) {
-                    $msgid = explode($this->eol, $entry['msgid']);
-                } elseif (is_array($entry['msgid'])) {
+                if (\is_string($entry['msgid'])) {
+                    $msgid = \explode($this->eol, $entry['msgid']);
+                } elseif (\is_array($entry['msgid'])) {
                     $msgid = $entry['msgid'];
                 } else {
                     throw new \Exception('msgid not string or array');
@@ -149,24 +149,27 @@ class PoDumper implements DumperContract
 
             if (isset($entry['msgid_plural'])) {
                 // Special clean for msgid_plural
-                if (is_string($entry['msgid_plural'])) {
-                    $msgidPlural = explode($this->eol, $entry['msgid_plural']);
-                } elseif (is_array($entry['msgid_plural'])) {
+                if (\is_string($entry['msgid_plural'])) {
+                    $msgidPlural = \explode($this->eol, $entry['msgid_plural']);
+                } elseif (\is_array($entry['msgid_plural'])) {
                     $msgidPlural = $entry['msgid_plural'];
                 } else {
                     throw new \Exception('msgid_plural not string or array');
                 }
+
                 $output .= 'msgid_plural ';
+
                 foreach ($msgidPlural as $plural) {
                     $output .= $this->cleanExport($plural) . $this->eol;
                 }
             }
 
-            if (count(preg_grep('/^msgstr/', array_keys($entry)))) { // checks if there is a key starting with msgstr
+            // checks if there is a key starting with msgstr
+            if (\count(\preg_grep('/^msgstr/', \array_keys($entry)))) {
                 if ($isPlural) {
                     $noTranslation = true;
                     foreach ($entry as $key => $value) {
-                        if (mb_strpos($key, 'msgstr[') === false) {
+                        if (\mb_strpos($key, 'msgstr[') === false) {
                             continue;
                         }
                         $output .= $key . ' ';
@@ -195,7 +198,9 @@ class PoDumper implements DumperContract
                     }
                 }
             }
+
             $counter++;
+
             // Avoid inserting an extra newline at end of file
             if ($counter < $entriesCount) {
                 $output .= $this->eol;
