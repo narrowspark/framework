@@ -84,7 +84,7 @@ class PoParser implements ParserContract
                 $justNewEntry = false;
             }
 
-            $data         = $splitLine[1] ?? '';
+            $data = $splitLine[1] ?? '';
 
             switch ($key) {
                 case '#': // # Translator comments
@@ -101,7 +101,7 @@ class PoParser implements ParserContract
                     break;
 
                 case '#:':
-                    $entry['references'] = self::addReferences($data);
+                    $entry = self::addReferences($data, $entry);
                     break;
 
                 case '#|':  // Previous untranslated string
@@ -304,24 +304,23 @@ class PoParser implements ParserContract
      * Export reference infos.
      *
      * @param string $data
+     * @param array  $entry
      *
      * @return array
      */
-    private static function addReferences($data): array
+    private static function addReferences(string $data, array $entry): array
     {
-        $references = [];
-
         foreach (\preg_split('/\s+/', \trim($data)) as $value) {
             if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
                 $filename = $matches[1];
                 $line     = $matches[3] ?? null;
                 $key      = \sprintf('{%s}:{%s}', $filename, $line);
 
-                $references[$key] = [$filename, $line];
+                $entry['references'][$key] = [$filename, $line];
             }
         }
 
-        return $references;
+        return $entry;
     }
 
     /**

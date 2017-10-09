@@ -377,38 +377,8 @@ class PoDumper implements DumperContract
             unset($data['headers']);
 
             $output .= $this->eol;
-        } else {
-            $output = $this->createHeader($data, $output);
         }
 
         return [$data, $output];
-    }
-
-    /**
-     * Creates a header with needed infos about the file.
-     *
-     * @param array  $data
-     * @param string $output
-     *
-     * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
-     *
-     * @return string
-     */
-    private function createHeader(array $data, string $output): string
-    {
-        if (! isset($data['locale']) && $data['locale'] !== '') {
-            throw new DumpException('No language key found; Please add [locale] to your data array.');
-        }
-
-        $charset = $data['charset'] ?? 'UTF-8';
-
-        $output .= '"Content-Type: text/plain; charset=' . $charset . $this->eol;
-        $output .= '"Content-Transfer-Encoding: 8bit\n"' . $this->eol;
-        $output .= '"Language: ' . $data['locale'] . $this->eol;
-        $output .= $this->eol;
-
-        unset($data['locale'], $data['charset']);
-
-        return $output;
     }
 }

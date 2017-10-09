@@ -4,6 +4,7 @@ namespace Viserio\Component\Parsers\Tests\Format;
 
 use PHPUnit\Framework\TestCase;
 use Throwable;
+use Viserio\Component\Contract\Parser\Exception\DumpException;
 use Viserio\Component\Parser\Dumper\PoDumper;
 use Viserio\Component\Parser\Parser\PoParser;
 
@@ -296,6 +297,24 @@ class PoTest extends TestCase
     public function testDumpSimplePoFile()
     {
         $fileContent = self::readFile($this->fixturePath . '/healthy.po');
+        $result      = $this->parser->parse($fileContent);
+        $output      = $this->dumper->dump($result);
+
+        self::assertEquals($fileContent, $output);
+    }
+
+    public function testDumpPoFileWithNoHeader()
+    {
+        $fileContent = self::readFile($this->fixturePath . '/noheader.po');
+        $result      = $this->parser->parse($fileContent);
+        $output      = $this->dumper->dump($result);
+
+        self::assertEquals($fileContent . "\n", $output);
+    }
+
+    public function testDumpPoFileWithMultilines()
+    {
+        $fileContent = self::readFile($this->fixturePath . '/multilines.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
