@@ -310,13 +310,34 @@ class PoParser implements ParserContract
      */
     private static function addReferences(string $data, array $entry): array
     {
-        foreach (\preg_split('/\s+/', \trim($data)) as $value) {
-            if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
-                $filename = $matches[1];
-                $line     = $matches[3] ?? null;
-                $key      = \sprintf('{%s}:{%s}', $filename, $line);
+        foreach (\preg_split('/#:\s+/', \trim($data)) as $value) {
+            if (count(\preg_split('/\s+/', $value)) >= 2) {
+                if (\preg_match('/^(.+)(:(\d*))\s(.+)(:(\d*))?$/U', $value, $matches)) {
+                    $filenameStart = $matches[1];
+                    $lineStart     = $matches[3] ?? null;
+                    $filenameEnd   = $matches[4];
+                    $lineEnd       = $matches[6] ?? null;
+                    $key           = \sprintf(
+                        '{%s}:{%s} {%s}:{%s}',
+                        $filenameStart,
+                        $lineStart,
+                        $filenameEnd,
+                        $lineEnd
+                    );
 
-                $entry['references'][$key] = [$filename, $line];
+                    $entry['references'][$key] = [
+                        [$filenameStart, $lineStart],
+                        [$filenameEnd, $lineEnd]
+                    ];
+                }
+            } else {
+                if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
+                    $filename = $matches[1];
+                    $line     = $matches[3] ?? null;
+                    $key      = \sprintf('{%s}:{%s}', $filename, $line);
+
+                    $entry['references'][$key] = [$filename, $line];
+                }
             }
         }
 

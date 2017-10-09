@@ -76,13 +76,15 @@ class PoTest extends TestCase
                 'fuzzy'      => false,
                 'flags'      => [],
                 'references' => [
-                    '{../../classes/xxxxx.php}:{96}' => [
-                        '../../classes/xxxxx.php',
-                        '96',
-                    ],
-                    '{../../classes/controller/iiiiiii.php}:{107}' => [
-                        '../../classes/controller/iiiiiii.php',
-                        '107',
+                    '{../../classes/xxxxx.php}:{96} {../../classes/controller/iiiiiii.php}:{107}' => [
+                        [
+                            '../../classes/xxxxx.php',
+                            '96',
+                        ],
+                        [
+                            '../../classes/controller/iiiiiii.php',
+                            '107',
+                        ],
                     ],
                     '{../../classes/controller/yyyyyyy/zzzzzz.php}:{288}' => [
                         '../../classes/controller/yyyyyyy/zzzzzz.php',

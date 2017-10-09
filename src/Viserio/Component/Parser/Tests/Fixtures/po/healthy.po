@@ -23,7 +23,7 @@ msgstr ""
 msgid "Lo sentimos, ha ocurrido un error..."
 msgstr "Ho sentim, s'ha produït un error"
 
-#: ../../classes/xxxxx.php:96 ../../classes/controller/iiiiiii.php:107
+#: ../../classes/xxxxx.php:96 ../../classes/controller/iiiiiii.php:107 skycomponents/equator.php:31
 #: ../../classes/controller/yyyyyyy/zzzzzz.php:288
 msgid "Debes indicar un nombre."
 msgstr "Has d'indicar un nom."
