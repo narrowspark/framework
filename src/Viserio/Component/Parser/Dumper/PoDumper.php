@@ -39,19 +39,24 @@ class PoDumper implements DumperContract
      * {@inheritdoc}
      *
      * array[]
-     *     ['headers']        array                               (optional)
-     *     ['locale']         string Only is needed if the
-     *                               Key "headers" is empty.      (optional)
+     *     ['headers']        array  If a multi-line header is provided
+     *                               than the value is a array else a string (optional)
      *     array[]
-     *         ['msgid']      array ID of the message.
-     *         ['msgstr']     array Message translation.
-     *         ['msgctxt']    array Message context.              (optional)
-     *         ['tcomment']   array Comment from translator.      (optional)
-     *         ['ccomment']   array Extracted comments from code. (optional)
-     *         ['references'] array Location of string in code.   (optional)
-     *         ['obsolete']   bool  Is the message obsolete?      (optional)
-     *         ['fuzzy']      bool  Is the message "fuzzy"?       (optional)
-     *         ['flags']      array Flags of the entry.           (optional)
+     *         ['msgid']        array  ID of the message.
+     *         ['msgstr']       array  Message translation.
+     *         ['msgctxt']      array  Message context.                      (optional)
+     *         ['tcomment']     array  Comment from translator.              (optional)
+     *         ['ccomment']     array  Extracted comments from code.         (optional)
+     *         ['references']   array  Location of string in code.           (optional)
+     *         ['obsolete']     bool   Is the message obsolete?              (optional)
+     *         ['fuzzy']        bool   Is the message "fuzzy"?               (optional)
+     *         ['flags']        array  Flags of the entry.                   (optional)
+     *         ['previous']     array                                        (optional)
+     *             ['msgid']    string This is a previous string
+     *             ['msgstr']   string This is a previous translation string
+     *         ['msgid_plural'] array  The plural string                     (optional)
+     *         ['msgstr[0]']    array  The string when the number is equal
+     *         ['msgstr[1]']    array  The string when the number is equal
      */
     public function dump(array $data): string
     {
