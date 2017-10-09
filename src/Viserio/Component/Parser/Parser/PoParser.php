@@ -327,7 +327,7 @@ class PoParser implements ParserContract
 
                     $entry['references'][$key] = [
                         [$filenameStart, $lineStart],
-                        [$filenameEnd, $lineEnd]
+                        [$filenameEnd, $lineEnd],
                     ];
                 }
             } else {
