@@ -31,8 +31,10 @@ class PoTest extends TestCase
     {
         parent::setUp();
 
+        $isWindows = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
+
         $this->parser      = new PoParser();
-        $this->dumper      = new PoDumper();
+        $this->dumper      = new PoDumper(($isWindows ? 'win' : 'unix'));
         $this->fixturePath = __DIR__ . '/../Fixtures/po';
     }
 
@@ -154,7 +156,13 @@ class PoTest extends TestCase
         self::assertSame('text/plain; charset=UTF-8', $headers['Content-Type']);
         self::assertSame('8bit', $headers['Content-Transfer-Encoding']);
         // a multi-line header value
-        self::assertSame('nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);', $headers['Plural-Forms']);
+        self::assertSame(
+            [
+            'nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n',
+            '%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);'
+            ],
+            $headers['Plural-Forms']
+        );
         self::assertSame('UTF-8', $headers['X-Poedit-SourceCharset']);
         self::assertSame('__;_e;_n;_t', $headers['X-Poedit-KeywordsList']);
         self::assertSame('yes', $headers['X-Textdomain-Support']);
@@ -210,6 +218,32 @@ class PoTest extends TestCase
                 'references' => [],
             ],
             end($result)
+        );
+        self::assertSame(
+            [
+                'msgid'      => [
+                    'El archivo supera el tamaño máximo permitido: %size%MB',
+                ],
+                'msgstr'     => [
+                    '',
+                    'El fitxer {file} es massa gran, el tamany máxim de fitxer es {sizeLimit}.',
+                ],
+                'msgctxt'    => [],
+                'ccomment'   => [],
+                'tcomment'   => ['@ default'],
+                'obsolete'   => false,
+                'fuzzy'      => true,
+                'flags'      => [
+                    'fuzzy'
+                ],
+                'references' => [
+                    '{../../classes/uuuuuuu.php}:{175}' => [
+                        '../../classes/uuuuuuu.php',
+                        '175'
+                    ]
+                ],
+            ],
+            $result[4]
         );
     }
 

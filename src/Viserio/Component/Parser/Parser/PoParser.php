@@ -23,7 +23,8 @@ class PoParser implements ParserContract
      * {@inheritdoc}
      *
      * array[]
-     *     ['headers']        array
+     *     ['headers']        array If a multi-line header is provided
+     *                              than the value is a array else a string
      *     array[]
      *         ['msgid']      array ID of the message.
      *         ['msgstr']     array Message translation.
@@ -50,7 +51,6 @@ class PoParser implements ParserContract
 
         for ($n = \count($lines); $i < $n; ++$i) {
             $line      = \trim($lines[$i]);
-            $line      = $this->fixMultiLines($line, $lines, $i);
             $splitLine = \preg_split('/\s+/', $line, 2);
             $key       = $splitLine[0];
 
@@ -196,32 +196,6 @@ class PoParser implements ParserContract
     }
 
     /**
-     * Gets one string from multiline strings.
-     *
-     * @param string $line
-     * @param array  $lines
-     * @param int    &$i
-     *
-     * @return string
-     */
-    private function fixMultiLines(string $line, array $lines, int &$i): string
-    {
-        for ($j = $i, $t = \count($lines); $j < $t; ++$j) {
-            if (isset($lines[$j + 1]) &&
-                \mb_substr($line, -1, 1) === '"' &&
-                \mb_strpos(trim($lines[$j + 1]), '"') === 0
-            ) {
-                $line = \mb_substr($line, 0, -1) . \mb_substr(trim($lines[$j + 1]), 1);
-            } else {
-                $i = $j;
-                break;
-            }
-        }
-
-        return $line;
-    }
-
-    /**
      * Convert a string from its PO representation.
      *
      * @param string $value
@@ -271,14 +245,15 @@ class PoParser implements ParserContract
 
         $keys        = \array_keys($headerKeys);
         $headerItems = 0;
+        $headers = array_map('trim', $entry['msgstr']);
 
-        \preg_match_all('/(.*): /', $entry['msgstr'][0], $matches, PREG_SET_ORDER);
+        foreach ($headers as $header) {
+            \preg_match_all('/(.*):\s/', $header, $matches, PREG_SET_ORDER);
 
-        foreach ($matches as $token) {
-            if (\in_array($token[1], $keys, true)) {
+            if (isset($matches[0]) && \in_array($matches[0][1], $keys, true)) {
                 $headerItems++;
 
-                unset($headerKeys[$token[1]]);
+                unset($headerKeys[$matches[0][1]]);
 
                 $keys = \array_keys($headerKeys);
             }
@@ -472,24 +447,22 @@ class PoParser implements ParserContract
      */
     private static function extractHeaders(array $headers, array $entries): array
     {
+        $currentHeader = null;
+
         foreach ($headers as $header) {
-            $headerArray   = \explode("\n", $header);
-            $currentHeader = null;
+            $header = trim($header);
+            $header = self::convertString($header);
 
-            foreach ($headerArray as $line) {
-                $line = self::convertString($line);
+            if ($header === '') {
+                continue;
+            }
 
-                if ($line === '') {
-                    continue;
-                }
-
-                if (self::isHeaderDefinition($line)) {
-                    $header                             = \array_map('trim', \explode(':', $line, 2));
-                    $currentHeader                      = $header[0];
-                    $entries['headers'][$currentHeader] = $header[1];
-                } else {
-                    $entries['headers'][$currentHeader] = ($entries['headers'][$currentHeader] ?? '') . $line;
-                }
+            if (self::isHeaderDefinition($header)) {
+                $header                             = \explode(':', $header, 2);
+                $currentHeader                      = trim($header[0]);
+                $entries['headers'][$currentHeader] = trim($header[1]);
+            } else {
+                $entries['headers'][$currentHeader] = [$entries['headers'][$currentHeader] ?? '', trim($header)];
             }
         }
 

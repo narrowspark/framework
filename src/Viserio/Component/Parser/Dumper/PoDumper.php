@@ -259,6 +259,7 @@ class PoDumper implements DumperContract
                 if ($i > 0 && $isObsolete) {
                     $output .= '#~ ';
                 }
+
                 $output .= $this->cleanExport($id) . $this->eol;
             }
         }
@@ -334,19 +335,15 @@ class PoDumper implements DumperContract
                 }
             } else {
                 foreach ((array) $entry['msgstr'] as $i => $t) {
-                    if ($i == 0) {
-                        if ($isObsolete) {
-                            $output .= '#~ ';
-                        }
-
-                        $output .= 'msgstr ' . $this->cleanExport($t) . $this->eol;
-                    } else {
-                        if ($isObsolete) {
-                            $output .= '#~ ';
-                        }
-
-                        $output .= $this->cleanExport($t) . $this->eol;
+                    if ($isObsolete) {
+                        $output .= '#~ ';
                     }
+
+                    if ($i === 0) {
+                        $output .= 'msgstr ';
+                    }
+
+                    $output .= $this->cleanExport($t) . $this->eol;
                 }
             }
         }
@@ -371,7 +368,20 @@ class PoDumper implements DumperContract
             $output .= 'msgstr ""' . $this->eol;
 
             foreach ($data['headers'] as $key => $value) {
-                $output .= sprintf('"%s: %s\n"', $key, $value) . $this->eol;
+                if (\is_array($value)) {
+                    $first = true;
+
+                    foreach ($value as $h) {
+                        if ($first) {
+                            $first = false;
+                            $output .= sprintf('"%s: %s"', $key, $h) . $this->eol;
+                        } else {
+                            $output .= sprintf('"%s\n"', $h) . $this->eol;
+                        }
+                    }
+                } else {
+                    $output .= sprintf('"%s: %s\n"', $key, $value) . $this->eol;
+                }
             }
 
             unset($data['headers']);
