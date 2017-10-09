@@ -159,7 +159,7 @@ class PoTest extends TestCase
         self::assertSame(
             [
             'nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n',
-            '%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);'
+            '%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);',
             ],
             $headers['Plural-Forms']
         );
@@ -234,13 +234,13 @@ class PoTest extends TestCase
                 'obsolete'   => false,
                 'fuzzy'      => true,
                 'flags'      => [
-                    'fuzzy'
+                    'fuzzy',
                 ],
                 'references' => [
                     '{../../classes/uuuuuuu.php}:{175}' => [
                         '../../classes/uuuuuuu.php',
-                        '175'
-                    ]
+                        '175',
+                    ],
                 ],
             ],
             $result[4]

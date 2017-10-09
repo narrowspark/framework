@@ -245,7 +245,7 @@ class PoParser implements ParserContract
 
         $keys        = \array_keys($headerKeys);
         $headerItems = 0;
-        $headers = array_map('trim', $entry['msgstr']);
+        $headers     = array_map('trim', $entry['msgstr']);
 
         foreach ($headers as $header) {
             \preg_match_all('/(.*):\s/', $header, $matches, PREG_SET_ORDER);
