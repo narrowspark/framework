@@ -269,19 +269,19 @@ class PoTest extends TestCase
                 'references' => [
                     '{wp-admin/edit.php}:{238}' => [
                         'wp-admin/edit.php',
-                        '238'
-                    ]
+                        '238',
+                    ],
                 ],
                 'msgid_plural' => [
-                    '%s posts not updated, somebody is editing them.'
+                    '%s posts not updated, somebody is editing them.',
                 ],
                 'msgstr[0]' => [
                     '%s entrada no actualizada',
-                    ', alguien la está editando.'
+                    ', alguien la está editando.',
                 ],
                 'msgstr[1]' => [
-                    '%s entradas no actualizadas, alguien las está editando.'
-                ]
+                    '%s entradas no actualizadas, alguien las está editando.',
+                ],
             ],
             $result[0]
         );
