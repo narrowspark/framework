@@ -4,8 +4,8 @@ namespace Viserio\Component\Parsers\Tests\Format;
 
 use PHPUnit\Framework\TestCase;
 use Throwable;
-use Viserio\Component\Parser\Parser\PoParser;
 use Viserio\Component\Parser\Dumper\PoDumper;
+use Viserio\Component\Parser\Parser\PoParser;
 
 class PoTest extends TestCase
 {
@@ -87,7 +87,7 @@ class PoTest extends TestCase
                     '{../../classes/controller/yyyyyyy/zzzzzz.php}:{288}' => [
                         '../../classes/controller/yyyyyyy/zzzzzz.php',
                         '288',
-                    ]
+                    ],
                 ],
             ],
             $result[1]
@@ -293,7 +293,8 @@ class PoTest extends TestCase
         self::assertEquals($result, $expected);
     }
 
-    public function testDumpSimplePoFile() {
+    public function testDumpSimplePoFile()
+    {
         $fileContent = self::readFile($this->fixturePath . '/healthy.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
