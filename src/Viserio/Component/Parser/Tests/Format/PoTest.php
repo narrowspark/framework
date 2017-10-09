@@ -34,7 +34,7 @@ class PoTest extends TestCase
         $isWindows = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
 
         $this->parser      = new PoParser();
-        $this->dumper      = new PoDumper(($isWindows ? 'win' : 'unix'));
+        $this->dumper      = new PoDumper();
         $this->fixturePath = __DIR__ . '/../Fixtures/po';
     }
 
@@ -339,7 +339,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals($fileContent, $output);
+        self::assertEquals(str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithNoHeader()
@@ -348,7 +348,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals($fileContent . "\n", $output);
+        self::assertEquals(str_replace("\r", '', $fileContent . "\n"), $output);
     }
 
     public function testDumpPoFileWithMultilines()
@@ -357,7 +357,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals($fileContent, $output);
+        self::assertEquals(str_replace("\r", '', $fileContent), $output);
     }
 
     private static function readFile(string $filePath): string
