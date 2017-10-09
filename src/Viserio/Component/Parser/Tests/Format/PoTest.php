@@ -5,6 +5,7 @@ namespace Viserio\Component\Parsers\Tests\Format;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 use Viserio\Component\Parser\Parser\PoParser;
+use Viserio\Component\Parser\Dumper\PoDumper;
 
 class PoTest extends TestCase
 {
@@ -14,15 +15,24 @@ class PoTest extends TestCase
     private $parser;
 
     /**
+     * @var \Viserio\Component\Parser\Dumper\PoDumper
+     */
+    private $dumper;
+
+    /**
      * @var string
      */
     private $fixturePath;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         parent::setUp();
 
         $this->parser      = new PoParser();
+        $this->dumper      = new PoDumper();
         $this->fixturePath = __DIR__ . '/../Fixtures/po';
     }
 
@@ -53,7 +63,34 @@ class PoTest extends TestCase
                     '33',
                 ]],
             ],
-            reset($result)
+            $result[0]
+        );
+        self::assertSame(
+            [
+                'msgid'      => ['Debes indicar un nombre.'],
+                'msgstr'     => ['Has d\'indicar un nom.'],
+                'msgctxt'    => [],
+                'ccomment'   => [],
+                'tcomment'   => [],
+                'obsolete'   => false,
+                'fuzzy'      => false,
+                'flags'      => [],
+                'references' => [
+                    '{../../classes/xxxxx.php}:{96}' => [
+                        '../../classes/xxxxx.php',
+                        '96',
+                    ],
+                    '{../../classes/controller/iiiiiii.php}:{107}' => [
+                        '../../classes/controller/iiiiiii.php',
+                        '107',
+                    ],
+                    '{../../classes/controller/yyyyyyy/zzzzzz.php}:{288}' => [
+                        '../../classes/controller/yyyyyyy/zzzzzz.php',
+                        '288',
+                    ]
+                ],
+            ],
+            $result[1]
         );
 
         // Read file without headers.
@@ -254,6 +291,14 @@ class PoTest extends TestCase
         ];
 
         self::assertEquals($result, $expected);
+    }
+
+    public function testDumpSimplePoFile() {
+        $fileContent = self::readFile($this->fixturePath . '/healthy.po');
+        $result      = $this->parser->parse($fileContent);
+        $output      = $this->dumper->dump($result);
+
+        self::assertEquals($fileContent, $output);
     }
 
     private static function readFile(string $filePath): string
