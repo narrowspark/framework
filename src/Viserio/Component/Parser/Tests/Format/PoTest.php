@@ -256,6 +256,35 @@ class PoTest extends TestCase
         unset($result['headers']);
 
         self::assertCount(15, $result);
+        self::assertSame(
+            [
+                'msgid'      => ['%s post not updated, somebody is editing it.'],
+                'msgstr'     => [],
+                'msgctxt'    => [],
+                'ccomment'   => [],
+                'tcomment'   => [],
+                'obsolete'   => false,
+                'fuzzy'      => false,
+                'flags'      => [],
+                'references' => [
+                    '{wp-admin/edit.php}:{238}' => [
+                        'wp-admin/edit.php',
+                        '238'
+                    ]
+                ],
+                'msgid_plural' => [
+                    '%s posts not updated, somebody is editing them.'
+                ],
+                'msgstr[0]' => [
+                    '%s entrada no actualizada',
+                    ', alguien la está editando.'
+                ],
+                'msgstr[1]' => [
+                    '%s entradas no actualizadas, alguien las está editando.'
+                ]
+            ],
+            $result[0]
+        );
     }
 
     public function testPluralsMultiline()
@@ -280,8 +309,8 @@ class PoTest extends TestCase
 
         $expected = [
             [
-                'msgid'      => [0 => 'one'],
-                'msgstr'     => [0 => 'uno'],
+                'msgid'      => ['one'],
+                'msgstr'     => ['uno'],
                 'msgctxt'    => [],
                 'ccomment'   => [],
                 'tcomment'   => [],
@@ -291,8 +320,8 @@ class PoTest extends TestCase
                 'references' => [],
             ],
             [
-                'msgid'      => [0 => 'two'],
-                'msgstr'     => [0 => 'dos'],
+                'msgid'      => ['two'],
+                'msgstr'     => ['dos'],
                 'msgctxt'    => [],
                 'ccomment'   => [],
                 'tcomment'   => [],
@@ -354,6 +383,33 @@ class PoTest extends TestCase
     public function testDumpPoFileWithMultilines()
     {
         $fileContent = self::readFile($this->fixturePath . '/multilines.po');
+        $result      = $this->parser->parse($fileContent);
+        $output      = $this->dumper->dump($result);
+
+        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+    }
+
+    public function testDumpPoFileWithContext()
+    {
+        $fileContent = self::readFile($this->fixturePath . '/context.po');
+        $result      = $this->parser->parse($fileContent);
+        $output      = $this->dumper->dump($result);
+
+        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+    }
+
+    public function testDumpPoFileWithPreviousUnstranslated()
+    {
+        $fileContent = self::readFile($this->fixturePath . '/previous_unstranslated.po');
+        $result      = $this->parser->parse($fileContent);
+        $output      = $this->dumper->dump($result);
+
+        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+    }
+
+    public function testDumpPoFileWithMultiflags()
+    {
+        $fileContent = self::readFile($this->fixturePath . '/multiflags.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 

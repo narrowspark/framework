@@ -23,18 +23,24 @@ class PoParser implements ParserContract
      * {@inheritdoc}
      *
      * array[]
-     *     ['headers']        array If a multi-line header is provided
-     *                              than the value is a array else a string
+     *     ['headers']        array  If a multi-line header is provided
+     *                               than the value is a array else a string
      *     array[]
-     *         ['msgid']      array ID of the message.
-     *         ['msgstr']     array Message translation.
-     *         ['msgctxt']    array Message context.
-     *         ['tcomment']   array Comment from translator.
-     *         ['ccomment']   array Extracted comments from code.
-     *         ['references'] array Location of string in code.
-     *         ['obsolete']   bool  Is the message obsolete?
-     *         ['fuzzy']      bool  Is the message "fuzzy"?
-     *         ['flags']      array Flags of the entry.
+     *         ['msgid']        array  ID of the message.
+     *         ['msgstr']       array  Message translation.
+     *         ['msgctxt']      array  Message context.
+     *         ['tcomment']     array  Comment from translator.
+     *         ['ccomment']     array  Extracted comments from code.
+     *         ['references']   array  Location of string in code.
+     *         ['obsolete']     bool   Is the message obsolete?
+     *         ['fuzzy']        bool   Is the message "fuzzy"?
+     *         ['flags']        array  Flags of the entry.
+     *         ['previous']     array
+     *             ['msgid']    string This is a previous string
+     *             ['msgstr']   string This is a previous translation string
+     *         ['msgid_plural'] array  The plural string
+     *         ['msgstr[0]']    array  The string when the number is equal
+     *         ['msgstr[1]']    array  The string when the number is equal
      */
     public function parse(string $payload): array
     {
@@ -163,7 +169,7 @@ class PoParser implements ParserContract
                     break;
                 case 'msgstr':       // translated-string
                     $state           = 'msgstr';
-                    $entry[$state][] = self::convertString(trim($data, '"'));
+                    $entry[$state][] = self::convertString($data);
                     break;
 
                 default:
@@ -204,7 +210,7 @@ class PoParser implements ParserContract
      */
     private static function convertString(string $value): string
     {
-        if (! $value) {
+        if ($value === '') {
             return '';
         }
 
@@ -338,11 +344,7 @@ class PoParser implements ParserContract
 
                 break;
             case 'msgstr':
-                if ($str === '""') {
-                    $entry['msgstr'][] = self::convertString(trim($str, '"'));
-                } else {
-                    $entry['msgstr'][] = self::convertString($str);
-                }
+                $entry['msgstr'][] = self::convertString($str);
 
                 $lastPreviousKey = $tmpKey;
                 break;
@@ -415,12 +417,7 @@ class PoParser implements ParserContract
                 $entry[$state][] = self::convertString($line);
                 break;
             case 'msgstr':
-                // Special fix where msgid is ""
-                if ($entry['msgid'] === '""') {
-                    $entry['msgstr'][] = self::convertString(trim($line, '"'));
-                } else {
-                    $entry['msgstr'][] = self::convertString($line);
-                }
+                $entry['msgstr'][] = self::convertString($line);
 
                 break;
             default:
