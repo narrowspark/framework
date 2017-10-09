@@ -147,7 +147,7 @@ class PoDumper implements DumperContract
             }
         }
 
-        return array($entry, $output);
+        return [$entry, $output];
     }
 
     /**
@@ -165,7 +165,8 @@ class PoDumper implements DumperContract
                 $output .= '#. ' . $comment . $this->eol;
             }
         }
-        return array($entry, $output);
+
+        return [$entry, $output];
     }
 
     /**
@@ -184,7 +185,7 @@ class PoDumper implements DumperContract
             }
         }
 
-        return array($entry, $output);
+        return [$entry, $output];
     }
 
     /**
@@ -197,11 +198,11 @@ class PoDumper implements DumperContract
      */
     private function addFlagsToOutput(array $entry, string $output): array
     {
-        if (isset($entry['flags']) && !empty($entry['flags'])) {
+        if (isset($entry['flags']) && ! empty($entry['flags'])) {
             $output .= '#, ' . \implode(', ', $entry['flags']) . $this->eol;
         }
 
-        return array($entry, $output);
+        return [$entry, $output];
     }
 
     /**
@@ -215,7 +216,7 @@ class PoDumper implements DumperContract
     private function addPreviousToOutput(array $entry, string $output): array
     {
         if (isset($entry['previous'])) {
-            foreach ((array)$entry['previous'] as $key => $value) {
+            foreach ((array) $entry['previous'] as $key => $value) {
                 if (\is_string($value)) {
                     $output .= '#| ' . $key . ' ' . $this->cleanExport($value) . $this->eol;
                 } elseif (\is_array($value) && \count($value) > 0) {
@@ -226,7 +227,7 @@ class PoDumper implements DumperContract
             }
         }
 
-        return array($entry, $output);
+        return [$entry, $output];
     }
 
     /**
@@ -262,7 +263,7 @@ class PoDumper implements DumperContract
             }
         }
 
-        return array($entry, $output);
+        return [$entry, $output];
     }
 
     /**
@@ -294,7 +295,7 @@ class PoDumper implements DumperContract
             }
         }
 
-        return array($entry, $output);
+        return [$entry, $output];
     }
 
     /**
@@ -332,7 +333,7 @@ class PoDumper implements DumperContract
                     $output .= 'msgstr[1] ' . $this->cleanExport('') . $this->eol;
                 }
             } else {
-                foreach ((array)$entry['msgstr'] as $i => $t) {
+                foreach ((array) $entry['msgstr'] as $i => $t) {
                     if ($i == 0) {
                         if ($isObsolete) {
                             $output .= '#~ ';
@@ -356,7 +357,7 @@ class PoDumper implements DumperContract
     /**
      * Adds a header to the output.
      *
-     * @param array $data
+     * @param array  $data
      * @param string $output
      *
      * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
@@ -380,7 +381,7 @@ class PoDumper implements DumperContract
             $output = $this->createHeader($data, $output);
         }
 
-        return array($data, $output);
+        return [$data, $output];
     }
 
     /**
