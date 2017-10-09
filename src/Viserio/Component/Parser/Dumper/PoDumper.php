@@ -20,21 +20,19 @@ class PoDumper implements DumperContract
     private $eol;
 
     /**
-     * PoDumper constructor.
+     * Create a new po dumper.
      *
-     * @param array $options
+     * @param string $eol
+     *
+     * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
      */
-    public function __construct(array $options)
+    public function __construct(string $eol = 'unix')
     {
-        $default = [
-            'multiline-glue' => '<##EOL##>', // Token used to separate lines in msgid
-            'context-glue'   => '<##EOC##>', // Token used to separate ctxt from msgid
-            'line-ending'    => 'unix',
-        ];
+        if (! array_key_exists($eol, self::LINE_ENDINGS)) {
+            throw new DumpException('Only [unix] and [win] eol are supported.');
+        }
 
-        $options = \array_merge($default, $options);
-
-        $this->eol = self::LINE_ENDINGS[$options['line-ending']];
+        $this->eol = self::LINE_ENDINGS[$eol];
     }
 
     /**
@@ -59,58 +57,21 @@ class PoDumper implements DumperContract
     {
         $output = '';
 
-        if (isset($data['headers']) && \count($data['headers']) > 0) {
-            $output .= 'msgid ""' . $this->eol;
-            $output .= 'msgstr ""' . $this->eol;
-
-            foreach ($data['headers'] as $header) {
-                $output .= $header . $this->eol;
-            }
-
-            unset($data['headers']);
-
-            $output .= $this->eol;
-        } else {
-            $output = $this->createHeader($data, $output);
-        }
+        [$data, $output] = $this->addHeaderToOutput($data, $output);
 
         $entriesCount = \count($data);
         $counter      = 0;
 
         foreach ($data as $entry) {
-            if (isset($entry['previous'])) {
-                foreach ((array) $entry['previous'] as $key => $value) {
-                    if (\is_string($value)) {
-                        $output .= '#| ' . $key . ' ' . $this->cleanExport($value) . $this->eol;
-                    } elseif (\is_array($value) && \count($value) > 0) {
-                        foreach ($value as $line) {
-                            $output .= '#| ' . $key . ' ' . $this->cleanExport($line) . $this->eol;
-                        }
-                    }
-                }
-            }
+            [$entry, $output] = $this->addPreviousToOutput($entry, $output);
 
-            if (isset($entry['tcomment'])) {
-                foreach ($entry['tcomment'] as $comment) {
-                    $output .= '# ' . $comment . $this->eol;
-                }
-            }
+            [$entry, $output] = $this->addTCommentToOutput($entry, $output);
 
-            if (isset($entry['ccomment'])) {
-                foreach ($entry['ccomment'] as $comment) {
-                    $output .= '#. ' . $comment . $this->eol;
-                }
-            }
+            [$entry, $output] = $this->addCcommentToOutput($entry, $output);
 
-            if (isset($entry['reference'])) {
-                foreach ($entry['reference'] as $ref) {
-                    $output .= '#: ' . $ref . $this->eol;
-                }
-            }
+            [$entry, $output] = $this->addReferenceToOutput($entry, $output);
 
-            if (isset($entry['flags']) && ! empty($entry['flags'])) {
-                $output .= '#, ' . \implode(', ', $entry['flags']) . $this->eol;
-            }
+            [$entry, $output] = $this->addFlagsToOutput($entry, $output);
 
             if (isset($entry['@'])) {
                 $output .= '#@ ' . $entry['@'] . $this->eol;
@@ -127,77 +88,11 @@ class PoDumper implements DumperContract
                 $output .= '#~ ';
             }
 
-            if (isset($entry['msgid'])) {
-                // Special clean for msgid
-                if (\is_string($entry['msgid'])) {
-                    $msgid = \explode($this->eol, $entry['msgid']);
-                } elseif (\is_array($entry['msgid'])) {
-                    $msgid = $entry['msgid'];
-                } else {
-                    throw new \Exception('msgid not string or array');
-                }
+            [$entry, $output] = $this->addMsgidToOutput($entry, $output, $isObsolete);
 
-                $output .= 'msgid ';
+            [$entry, $output] = $this->addMsgidPluralToOutput($entry, $output);
 
-                foreach ($msgid as $i => $id) {
-                    if ($i > 0 && $isObsolete) {
-                        $output .= '#~ ';
-                    }
-                    $output .= $this->cleanExport($id) . $this->eol;
-                }
-            }
-
-            if (isset($entry['msgid_plural'])) {
-                // Special clean for msgid_plural
-                if (\is_string($entry['msgid_plural'])) {
-                    $msgidPlural = \explode($this->eol, $entry['msgid_plural']);
-                } elseif (\is_array($entry['msgid_plural'])) {
-                    $msgidPlural = $entry['msgid_plural'];
-                } else {
-                    throw new \Exception('msgid_plural not string or array');
-                }
-
-                $output .= 'msgid_plural ';
-
-                foreach ($msgidPlural as $plural) {
-                    $output .= $this->cleanExport($plural) . $this->eol;
-                }
-            }
-
-            // checks if there is a key starting with msgstr
-            if (\count(\preg_grep('/^msgstr/', \array_keys($entry)))) {
-                if ($isPlural) {
-                    $noTranslation = true;
-                    foreach ($entry as $key => $value) {
-                        if (\mb_strpos($key, 'msgstr[') === false) {
-                            continue;
-                        }
-                        $output .= $key . ' ';
-                        $noTranslation = false;
-                        foreach ($value as $i => $t) {
-                            $output .= $this->cleanExport($t) . $this->eol;
-                        }
-                    }
-                    if ($noTranslation) {
-                        $output .= 'msgstr[0] ' . $this->cleanExport('') . $this->eol;
-                        $output .= 'msgstr[1] ' . $this->cleanExport('') . $this->eol;
-                    }
-                } else {
-                    foreach ((array) $entry['msgstr'] as $i => $t) {
-                        if ($i == 0) {
-                            if ($isObsolete) {
-                                $output .= '#~ ';
-                            }
-                            $output .= 'msgstr ' . $this->cleanExport($t) . $this->eol;
-                        } else {
-                            if ($isObsolete) {
-                                $output .= '#~ ';
-                            }
-                            $output .= $this->cleanExport($t) . $this->eol;
-                        }
-                    }
-                }
-            }
+            $output = $this->addMsgstrToOutput($entry, $isPlural, $output, $isObsolete);
 
             $counter++;
 
@@ -237,6 +132,260 @@ class PoDumper implements DumperContract
     }
 
     /**
+     * Adds tcomment to the output.
+     *
+     * @param array  $entry
+     * @param string $output
+     *
+     * @return array
+     */
+    private function addTCommentToOutput(array $entry, string $output): array
+    {
+        if (isset($entry['tcomment'])) {
+            foreach ($entry['tcomment'] as $comment) {
+                $output .= '# ' . $comment . $this->eol;
+            }
+        }
+
+        return array($entry, $output);
+    }
+
+    /**
+     * Adds ccomment to the output.
+     *
+     * @param array  $entry
+     * @param string $output
+     *
+     * @return array
+     */
+    private function addCcommentToOutput($entry, string $output): array
+    {
+        if (isset($entry['ccomment'])) {
+            foreach ($entry['ccomment'] as $comment) {
+                $output .= '#. ' . $comment . $this->eol;
+            }
+        }
+        return array($entry, $output);
+    }
+
+    /**
+     * Adds reference to the output.
+     *
+     * @param array  $entry
+     * @param string $output
+     *
+     * @return array
+     */
+    private function addReferenceToOutput(array $entry, string $output): array
+    {
+        if (isset($entry['reference'])) {
+            foreach ($entry['reference'] as $ref) {
+                $output .= '#: ' . $ref . $this->eol;
+            }
+        }
+
+        return array($entry, $output);
+    }
+
+    /**
+     * Adds flags infos to the output.
+     *
+     * @param array  $entry
+     * @param string $output
+     *
+     * @return array
+     */
+    private function addFlagsToOutput(array $entry, string $output): array
+    {
+        if (isset($entry['flags']) && !empty($entry['flags'])) {
+            $output .= '#, ' . \implode(', ', $entry['flags']) . $this->eol;
+        }
+
+        return array($entry, $output);
+    }
+
+    /**
+     * Adds previous info to the output.
+     *
+     * @param array  $entry
+     * @param string $output
+     *
+     * @return array
+     */
+    private function addPreviousToOutput(array $entry, string $output): array
+    {
+        if (isset($entry['previous'])) {
+            foreach ((array)$entry['previous'] as $key => $value) {
+                if (\is_string($value)) {
+                    $output .= '#| ' . $key . ' ' . $this->cleanExport($value) . $this->eol;
+                } elseif (\is_array($value) && \count($value) > 0) {
+                    foreach ($value as $line) {
+                        $output .= '#| ' . $key . ' ' . $this->cleanExport($line) . $this->eol;
+                    }
+                }
+            }
+        }
+
+        return array($entry, $output);
+    }
+
+    /**
+     * Adds msgid to the output.
+     *
+     * @param array  $entry
+     * @param string $output
+     * @param bool   $isObsolete
+     *
+     * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
+     *
+     * @return array
+     */
+    private function addMsgidToOutput(array $entry, string $output, bool $isObsolete): array
+    {
+        if (isset($entry['msgid'])) {
+            // Special clean for msgid
+            if (\is_string($entry['msgid'])) {
+                $msgid = \explode($this->eol, $entry['msgid']);
+            } elseif (\is_array($entry['msgid'])) {
+                $msgid = $entry['msgid'];
+            } else {
+                throw new DumpException('msgid not string or array');
+            }
+
+            $output .= 'msgid ';
+
+            foreach ($msgid as $i => $id) {
+                if ($i > 0 && $isObsolete) {
+                    $output .= '#~ ';
+                }
+                $output .= $this->cleanExport($id) . $this->eol;
+            }
+        }
+
+        return array($entry, $output);
+    }
+
+    /**
+     * Add msgid_plural to the output.
+     *
+     * @param array  $entry
+     * @param string $output
+     *
+     * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
+     *
+     * @return array
+     */
+    private function addMsgidPluralToOutput(array $entry, string $output): array
+    {
+        if (isset($entry['msgid_plural'])) {
+            // Special clean for msgid_plural
+            if (\is_string($entry['msgid_plural'])) {
+                $msgidPlural = \explode($this->eol, $entry['msgid_plural']);
+            } elseif (\is_array($entry['msgid_plural'])) {
+                $msgidPlural = $entry['msgid_plural'];
+            } else {
+                throw new DumpException('msgid_plural not string or array');
+            }
+
+            $output .= 'msgid_plural ';
+
+            foreach ($msgidPlural as $plural) {
+                $output .= $this->cleanExport($plural) . $this->eol;
+            }
+        }
+
+        return array($entry, $output);
+    }
+
+    /**
+     * Adds key with msgstr to the output.
+     *
+     * @param array  $entry
+     * @param bool   $isPlural
+     * @param string $output
+     * @param bool   $isObsolete
+     *
+     * @return string
+     */
+    private function addMsgstrToOutput(array $entry, bool $isPlural, string $output, bool $isObsolete): string
+    {
+        // checks if there is a key starting with msgstr
+        if (\count(\preg_grep('/^msgstr/', \array_keys($entry)))) {
+            if ($isPlural) {
+                $noTranslation = true;
+
+                foreach ($entry as $key => $value) {
+                    if (\mb_strpos($key, 'msgstr[') === false) {
+                        continue;
+                    }
+
+                    $output .= $key . ' ';
+                    $noTranslation = false;
+
+                    foreach ($value as $i => $t) {
+                        $output .= $this->cleanExport($t) . $this->eol;
+                    }
+                }
+
+                if ($noTranslation) {
+                    $output .= 'msgstr[0] ' . $this->cleanExport('') . $this->eol;
+                    $output .= 'msgstr[1] ' . $this->cleanExport('') . $this->eol;
+                }
+            } else {
+                foreach ((array)$entry['msgstr'] as $i => $t) {
+                    if ($i == 0) {
+                        if ($isObsolete) {
+                            $output .= '#~ ';
+                        }
+
+                        $output .= 'msgstr ' . $this->cleanExport($t) . $this->eol;
+                    } else {
+                        if ($isObsolete) {
+                            $output .= '#~ ';
+                        }
+
+                        $output .= $this->cleanExport($t) . $this->eol;
+                    }
+                }
+            }
+        }
+
+        return $output;
+    }
+
+    /**
+     * Adds a header to the output.
+     *
+     * @param array $data
+     * @param string $output
+     *
+     * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
+     *
+     * @return array
+     */
+    private function addHeaderToOutput(array $data, string $output): array
+    {
+        if (isset($data['headers']) && \count($data['headers']) > 0) {
+            $output .= 'msgid ""' . $this->eol;
+            $output .= 'msgstr ""' . $this->eol;
+
+            foreach ($data['headers'] as $header) {
+                $output .= $header . $this->eol;
+            }
+
+            unset($data['headers']);
+
+            $output .= $this->eol;
+        } else {
+            $output = $this->createHeader($data, $output);
+        }
+
+        return array($data, $output);
+    }
+
+    /**
+     * Creates a header with needed infos about the file.
+     *
      * @param array  $data
      * @param string $output
      *
@@ -244,7 +393,7 @@ class PoDumper implements DumperContract
      *
      * @return string
      */
-    private function createHeader(array $data, $output): string
+    private function createHeader(array $data, string $output): string
     {
         if (! isset($data['locale']) && $data['locale'] !== '') {
             throw new DumpException('No language key found; Please add [locale] to your data array.');
