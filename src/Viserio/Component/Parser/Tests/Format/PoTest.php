@@ -4,7 +4,6 @@ namespace Viserio\Component\Parsers\Tests\Format;
 
 use PHPUnit\Framework\TestCase;
 use Throwable;
-use Viserio\Component\Contract\Parser\Exception\DumpException;
 use Viserio\Component\Parser\Dumper\PoDumper;
 use Viserio\Component\Parser\Parser\PoParser;
 
