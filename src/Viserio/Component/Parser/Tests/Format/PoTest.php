@@ -4,6 +4,7 @@ namespace Viserio\Component\Parsers\Tests\Format;
 
 use PHPUnit\Framework\TestCase;
 use Throwable;
+use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Parser\Dumper\PoDumper;
 use Viserio\Component\Parser\Parser\PoParser;
 
@@ -362,6 +363,22 @@ class PoTest extends TestCase
         self::assertEquals($result, $expected);
     }
 
+    public function testNoSpaceBetweenCommentAndMessage()
+    {
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Parse error! Comments must have a space after them on line: [12].');
+
+        $this->parser->parse(self::readFile($this->fixturePath . '/no_space_between_comment_and_space.po'));
+    }
+
+    public function testBrokenPoFile()
+    {
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Parse error! Unknown key [msgida] on line: [0].');
+
+        $this->parser->parse(self::readFile($this->fixturePath . '/broken.po'));
+    }
+
     public function testDumpSimplePoFile()
     {
         $fileContent = self::readFile($this->fixturePath . '/healthy.po');
@@ -410,6 +427,24 @@ class PoTest extends TestCase
     public function testDumpPoFileWithMultiflags()
     {
         $fileContent = self::readFile($this->fixturePath . '/multiflags.po');
+        $result      = $this->parser->parse($fileContent);
+        $output      = $this->dumper->dump($result);
+
+        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+    }
+
+    public function testDumpPoFileWithFlagsPhpformat()
+    {
+        $fileContent = self::readFile($this->fixturePath . '/flags-phpformat.po');
+        $result      = $this->parser->parse($fileContent);
+        $output      = $this->dumper->dump($result);
+
+        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+    }
+
+    public function testDumpPoFileWithFlagsPhpformatAndFuzzy()
+    {
+        $fileContent = self::readFile($this->fixturePath . '/flags-phpformat-fuzzy.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 

@@ -125,7 +125,7 @@ class PoParser implements ParserContract
                     $tmpKey   = $tmpParts[0];
 
                     if (! \in_array($tmpKey, ['msgid', 'msgid_plural', 'msgstr', 'msgctxt'], true)) {
-                        $tmpKey = $lastPreviousKey; // If there is a multiline previous string we must remember what key was first line.
+                        $tmpKey = $lastPreviousKey;
                         $str    = $data;
                     } else {
                         $str = \implode(' ', \array_slice($tmpParts, 1));
@@ -147,19 +147,7 @@ class PoParser implements ParserContract
                     $entry['@'] = self::convertString($data);
                     break;
 
-                // context
                 // Allows disambiguations of different messages that have same msgid.
-                // Example:
-                //
-                // #: tools/observinglist.cpp:700
-                // msgctxt "First letter in 'Scope'"
-                // msgid "S"
-                // msgstr ""
-                //
-                // #: skycomponents/horizoncomponent.cpp:429
-                // msgctxt "South"
-                // msgid "S"
-                // msgstr ""
                 case 'msgctxt':
                 case 'msgid':        // untranslated-string
                 case 'msgid_plural': // untranslated-string-plural
@@ -322,6 +310,8 @@ class PoParser implements ParserContract
     }
 
     /**
+     * Export obsolete entries.
+     *
      * @param null|string $lastPreviousKey
      * @param null|string $tmpKey
      * @param string      $str
@@ -356,6 +346,8 @@ class PoParser implements ParserContract
     }
 
     /**
+     * Export previous entries.
+     *
      * @param null|string $lastPreviousKey
      * @param null|string $tmpKey
      * @param string      $str
@@ -387,6 +379,9 @@ class PoParser implements ParserContract
     }
 
     /**
+     * Export multi-lines from given line.
+     * Throws a exception if state is not found or broken comment is given.
+     *
      * @param null|string $state
      * @param array       $entry
      * @param string      $line
@@ -404,31 +399,53 @@ class PoParser implements ParserContract
         string $key,
         int $i
     ): array {
+        $addEntry = function (array $entry, ?string $state, string $line): array {
+            if (!isset($entry[$state])) {
+                throw new ParseException([
+                    'message' => sprintf('Parse error! Missing state: [%s].', $state)
+                ]);
+            }
+
+            // Convert it to array
+            if (\is_string($entry[$state])) {
+                $entry[$state] = [$entry[$state]];
+            }
+
+            $entry[$state][] = self::convertString($line);
+
+            return $entry;
+        };
+
         switch ($state) {
             case 'msgctxt':
             case 'msgid':
             case 'msgid_plural':
-            case \mb_strpos($state, 'msgstr[') !== false:
-                if (\is_string($entry[$state])) {
-                    // Convert it to array
-                    $entry[$state] = [$entry[$state]];
-                }
-
-                $entry[$state][] = self::convertString($line);
+                $entry = $addEntry($entry, $state, $line);
                 break;
             case 'msgstr':
                 $entry['msgstr'][] = self::convertString($line);
 
                 break;
             default:
-                throw new ParseException([
-                    'message' => \sprintf(
-                        'Parse error! Unknown key [%s] on line %s',
-                        $key,
-                        $i
-                    ),
-                    'line' => $i,
-                ]);
+                if ($state !== null && (strpos($state, 'msgstr[') !== false)) {
+                    $entry = $addEntry($entry, $state, $line);
+                } elseif ($key[0] === '#' && $key[1] !== ' ') {
+                    throw new ParseException([
+                        'message' => \sprintf(
+                            'Parse error! Comments must have a space after them on line: [%s].',
+                            $i
+                        )
+                    ]);
+                } else {
+                    throw new ParseException([
+                        'message' => \sprintf(
+                            'Parse error! Unknown key [%s] on line: [%s].',
+                            $key,
+                            $i
+                        ),
+                        'line' => $i,
+                    ]);
+                }
         }
 
         return $entry;
