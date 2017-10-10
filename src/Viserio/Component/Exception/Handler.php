@@ -216,7 +216,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     public function renderForConsole(OutputInterface $output, Throwable $exception): void
     {
         if (($console = $this->getConsole()) !== null) {
-            $console->renderException($exception, $output);
+            $console->renderException($this->getTransformed($exception), $output);
 
             return;
         }

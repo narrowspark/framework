@@ -71,6 +71,8 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     {
         $this->resolvedOptions     = self::resolveOptions($data);
         $this->exceptionIdentifier = new ExceptionIdentifier();
+        $this->transformers        = $this->resolvedOptions['transformers'];
+        $this->dontReport          = $this->resolvedOptions['dont_report'];
 
         $this->setLogger($logger);
     }
@@ -358,12 +360,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        $transformers = \array_merge(
-            $this->transformers,
-            $this->resolvedOptions['transformers']
-        );
-
-        foreach ($transformers as $transformer) {
+        foreach ($this->transformers as $transformer) {
             if (\is_object($transformer)) {
                 $transformerClass = $transformer;
             } elseif ($this->container !== null && $this->container->has($transformer)) {
@@ -405,12 +402,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      */
     protected function shouldntReport(Throwable $exception): bool
     {
-        $dontReport = \array_merge(
-            $this->dontReport,
-            $this->resolvedOptions['dont_report']
-        );
-
-        foreach ($dontReport as $type) {
+        foreach ($this->dontReport as $type) {
             if ($exception instanceof $type) {
                 return true;
             }
