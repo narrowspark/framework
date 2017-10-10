@@ -81,7 +81,7 @@ abstract class AbstractKernel implements
     /**
      * Container instance.
      *
-     * @var null|\Viserio\Component\Contract\Container\Container
+     * @var \Viserio\Component\Contract\Container\Container
      */
     protected $container;
 
@@ -161,7 +161,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getContainer(): ?ContainerContract
+    public function getContainer(): ContainerContract
     {
         return $this->container;
     }

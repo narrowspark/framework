@@ -4,6 +4,8 @@ namespace Viserio\Component\Foundation\Console;
 
 use Closure;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -240,6 +242,10 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
             $console->setVersion($this->resolvedOptions['version']);
             $console->setName($this->resolvedOptions['console_name']);
+
+            if ($container->has(ContainerCommandLoader::class)) {
+                $console->setCommandLoader($container->get(ContainerCommandLoader::class));
+            }
 
             foreach ($this->commands as $command) {
                 $console->add($container->resolve($command));

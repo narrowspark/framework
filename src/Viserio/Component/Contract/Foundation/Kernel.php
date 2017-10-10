@@ -10,11 +10,9 @@ interface Kernel
     /**
      * Get the container instance.
      *
-     * @throws \RuntimeException
-     *
-     * @return null|\Viserio\Component\Contract\Container\Container
+     * @return \Viserio\Component\Contract\Container\Container
      */
-    public function getContainer(): ?ContainerContract;
+    public function getContainer(): ContainerContract;
 
     /**
      * Set the kernel configuration.

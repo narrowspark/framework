@@ -5,6 +5,7 @@ namespace Viserio\Component\Console\Provider;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
+use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 
@@ -16,16 +17,17 @@ class ConsoleServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            Application::class         => [self::class, 'createCerebro'],
-            SymfonyConsole::class      => function (ContainerInterface $container) {
+            Application::class            => [self::class, 'createCerebro'],
+            SymfonyConsole::class         => function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
-            'console' => function (ContainerInterface $container) {
+            'console'                     => function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
-            'cerebro' => function (ContainerInterface $container) {
+            'cerebro'                     => function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
+            ContainerCommandLoader::class => [self::class, 'createContainerCommandLoader'],
         ];
     }
 
@@ -54,5 +56,17 @@ class ConsoleServiceProvider implements ServiceProviderInterface
         }
 
         return $console;
+    }
+
+    /**
+     * Create a new console application instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Symfony\Component\Console\CommandLoader\ContainerCommandLoader
+     */
+    public static function createContainerCommandLoader(ContainerInterface $container): ContainerCommandLoader
+    {
+        return new ContainerCommandLoader($container, []);
     }
 }
