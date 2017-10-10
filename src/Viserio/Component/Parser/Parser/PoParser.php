@@ -400,9 +400,9 @@ class PoParser implements ParserContract
         int $i
     ): array {
         $addEntry = function (array $entry, ?string $state, string $line): array {
-            if (!isset($entry[$state])) {
+            if (! isset($entry[$state])) {
                 throw new ParseException([
-                    'message' => sprintf('Parse error! Missing state: [%s].', $state)
+                    'message' => sprintf('Parse error! Missing state: [%s].', $state),
                 ]);
             }
 
@@ -427,14 +427,14 @@ class PoParser implements ParserContract
 
                 break;
             default:
-                if ($state !== null && (strpos($state, 'msgstr[') !== false)) {
+                if ($state !== null && (mb_strpos($state, 'msgstr[') !== false)) {
                     $entry = $addEntry($entry, $state, $line);
                 } elseif ($key[0] === '#' && $key[1] !== ' ') {
                     throw new ParseException([
                         'message' => \sprintf(
                             'Parse error! Comments must have a space after them on line: [%s].',
                             $i
-                        )
+                        ),
                     ]);
                 } else {
                     throw new ParseException([
