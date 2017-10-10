@@ -4,7 +4,6 @@ namespace Viserio\Component\Foundation\Console;
 
 use Closure;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
-use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
