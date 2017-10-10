@@ -70,6 +70,7 @@
         "symfony/finder"                      : "~3.4 || ~4.0",
         "symfony/filesystem"                  : "~3.4 || ~4.0",
         "symfony/process"                     : "~3.4 || ~4.0",
+        "symfony/stopwatch"                   : "~3.4 || ~4.0",
         "swiftmailer/swiftmailer"             : "^6.0",
         "queue-interop/queue-interop"         : "~0.6",
         "vlucas/phpdotenv"                    : "^2.3"
@@ -153,7 +154,6 @@
         "spatie/flysystem-dropbox"            : "^1.0",
         "symfony/phpunit-bridge"              : "~3.4 || ~4.0",
         "symfony/polyfill-xml"                : "^1.4",
-        "symfony/stopwatch"                   : "~3.4 || ~4.0",
         "symfony/var-dumper"                  : "~3.4 || ~4.0",
         "symfony/yaml"                        : "~3.4 || ~4.0",
         "yosymfony/toml"                      : "^0.3"
