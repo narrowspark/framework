@@ -32,10 +32,10 @@ class WhoopsDisplayer implements
     /**
      * Create a new whoops displayer instance.
      *
-     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
-     * @param array                                          $data
+     * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
+     * @param array|\ArrayAccess|\Psr\Container\ContainerInterface $data
      */
-    public function __construct(ResponseFactoryInterface $responseFactory, array $data = [])
+    public function __construct(ResponseFactoryInterface $responseFactory, $data = [])
     {
         $this->responseFactory = $responseFactory;
         $this->resolvedOptions = self::resolveOptions($data);
