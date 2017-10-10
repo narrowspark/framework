@@ -1,0 +1,2 @@
+msgida "one"
+msgstra "uno"

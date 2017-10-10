@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Parser;
 use Viserio\Component\Parser\Parser\IniParser;
 use Viserio\Component\Parser\Parser\JsonParser;
-use Viserio\Component\Parser\Parser\PhpParser;
+use Viserio\Component\Parser\Parser\PhpArrayParser;
 use Viserio\Component\Parser\Parser\QueryStrParser;
 use Viserio\Component\Parser\Parser\SerializeParser;
 use Viserio\Component\Parser\Parser\TomlParser;
@@ -53,7 +53,7 @@ class ParserTest extends TestCase
         self::assertInstanceOf(JsonParser::class, $this->parser->getParser('text/javascript'));
         self::assertInstanceOf(JsonParser::class, $this->parser->getParser('text/x-javascript'));
         self::assertInstanceOf(JsonParser::class, $this->parser->getParser('text/x-json'));
-        self::assertInstanceOf(PhpParser::class, $this->parser->getParser('php'));
+        self::assertInstanceOf(PhpArrayParser::class, $this->parser->getParser('php'));
         self::assertInstanceOf(SerializeParser::class, $this->parser->getParser('application/vnd.php.serialized'));
         self::assertInstanceOf(QueryStrParser::class, $this->parser->getParser('application/x-www-form-urlencoded'));
         self::assertInstanceOf(TomlParser::class, $this->parser->getParser('toml'));

@@ -8,7 +8,7 @@ use Viserio\Component\Contract\Parser\Exception\NotSupportedException;
 use Viserio\Component\Contract\Parser\Parser as ParserContract;
 use Viserio\Component\Parser\Parser\IniParser;
 use Viserio\Component\Parser\Parser\JsonParser;
-use Viserio\Component\Parser\Parser\PhpParser;
+use Viserio\Component\Parser\Parser\PhpArrayParser;
 use Viserio\Component\Parser\Parser\PoParser;
 use Viserio\Component\Parser\Parser\QtParser;
 use Viserio\Component\Parser\Parser\QueryStrParser;
@@ -58,7 +58,7 @@ class Parser
     private static $supportedParsers = [
         'ini'       => IniParser::class,
         'json'      => JsonParser::class,
-        'php'       => PhpParser::class,
+        'php'       => PhpArrayParser::class,
         'po'        => PoParser::class,
         'querystr'  => QueryStrParser::class,
         'serialize' => SerializeParser::class,

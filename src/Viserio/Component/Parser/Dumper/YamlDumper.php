@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 use Viserio\Component\Contract\Parser\Dumper as DumperContract;
-use Viserio\Component\Contract\Parser\Exception\ParseException;
+use Viserio\Component\Contract\Parser\Exception\DumpException;
 
 class YamlDumper implements DumperContract
 {
@@ -34,10 +34,7 @@ class YamlDumper implements DumperContract
         try {
             return SymfonyYaml::dump($data);
         } catch (InvalidArgumentException $exception) {
-            throw new ParseException([
-                'message'   => $exception->getMessage(),
-                'exception' => $exception,
-            ]);
+            throw new DumpException($exception->getMessage());
         }
     }
 }

@@ -150,7 +150,6 @@
         "pda/pheanstalk"                      : "^3.1",
         "spatie/array-to-xml"                 : "^2.1",
         "twig/twig"                           : "^2.4.4",
-        "sepia/po-parser"                     : "^4.2",
         "spatie/flysystem-dropbox"            : "^1.0",
         "symfony/phpunit-bridge"              : "~3.4 || ~4.0",
         "symfony/polyfill-xml"                : "^1.4",

@@ -6,7 +6,7 @@ use Throwable;
 use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Contract\Parser\Parser as ParserContract;
 
-class PhpParser implements ParserContract
+class PhpArrayParser implements ParserContract
 {
     /**
      * {@inheritdoc}
