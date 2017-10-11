@@ -9,7 +9,10 @@ use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Viserio\Component\Console\Application;
+use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
@@ -144,5 +147,23 @@ class HandlerTest extends MockeryTestCase
         } catch (ErrorException $e) {
             self::assertInstanceOf(ErrorException::class, $e);
         }
+    }
+
+    public function testRenderForConsole()
+    {
+        $application = new Application();
+        $output = new SpyOutput();
+
+        $application->command('greet', function ($output): void {
+            throw new Exception('test');
+        });
+
+        try {
+            $application->run(new StringInput('greet'), $output);
+        } catch (\Exception $e) {
+            $this->handler->renderForConsole($output, $e);
+        }
+
+        self::assertSame('', $output->output);
     }
 }

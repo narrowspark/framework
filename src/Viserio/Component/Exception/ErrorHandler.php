@@ -8,9 +8,11 @@ use Exception;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
@@ -22,12 +24,14 @@ use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
-use Viserio\Component\Exception\Transformer\CommandLineTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
+class ErrorHandler implements
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract,
+    LoggerAwareInterface
 {
     use ContainerAwareTrait;
     use OptionsResolverTrait;
@@ -65,16 +69,15 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
      * Create a new error handler instance.
      *
      * @param array|\ArrayAccess|\Psr\Container\ContainerInterface $data
-     * @param \Psr\Log\LoggerInterface                             $logger
+     * @param null|\Psr\Log\LoggerInterface                        $logger
      */
-    public function __construct($data, LoggerInterface $logger)
+    public function __construct($data, ?LoggerInterface $logger = null)
     {
         $this->resolvedOptions     = self::resolveOptions($data);
         $this->exceptionIdentifier = new ExceptionIdentifier();
         $this->transformers        = $this->getFormattedTransformers();
         $this->dontReport          = $this->resolvedOptions['dont_report'];
-
-        $this->setLogger($logger);
+        $this->logger              = $logger ?? new NullLogger();
     }
 
     /**
@@ -105,7 +108,6 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
             // Exception transformers.
             'transformers' => [
                 ClassNotFoundFatalErrorTransformer::class,
-                CommandLineTransformer::class,
                 UndefinedFunctionFatalErrorTransformer::class,
                 UndefinedMethodFatalErrorTransformer::class,
             ],

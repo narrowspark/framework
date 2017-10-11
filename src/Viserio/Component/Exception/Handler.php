@@ -8,7 +8,6 @@ use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
@@ -42,18 +41,13 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     private $displayers = [];
 
     /**
-     * @var null|\Symfony\Component\Console\Application
-     */
-    private $console;
-
-    /**
      * Create a new handler instance.
      *
      * @param \Psr\Container\ContainerInterface              $data
-     * @param \Psr\Log\LoggerInterface                       $logger
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param null|\Psr\Log\LoggerInterface                  $logger
      */
-    public function __construct($data, ResponseFactoryInterface $responseFactory, LoggerInterface $logger)
+    public function __construct($data, ResponseFactoryInterface $responseFactory, ?LoggerInterface $logger = null)
     {
         parent::__construct($data, $logger);
 
@@ -61,20 +55,6 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         $this->displayers = $this->getFormattedDisplayers();
 
         $this->setResponseFactory($responseFactory);
-    }
-
-    /**
-     * Set a console application instance.
-     *
-     * @param \Symfony\Component\Console\Application $console
-     *
-     * @return $this
-     */
-    public function setConsole(ConsoleApplication $console): self
-    {
-        $this->console = $console;
-
-        return $this;
     }
 
     /**
@@ -218,11 +198,20 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function renderForConsole(OutputInterface $output, Throwable $exception): void
     {
-        if (($console = $this->getConsole()) !== null) {
-            $console->renderException($this->getTransformed($exception), $output);
+        $exceptionMessage = $exception->getMessage();
+        $exceptionName    = get_class($exception);
 
-            return;
-        }
+        $output->writeln(sprintf(
+        '<bg=red;options=bold>%s</> : <comment>%s</>',
+            $exceptionName,
+            $exceptionMessage
+        ));
+        $output->writeln('');
+        $output->writeln(sprintf(
+            ' at <fg=green>%s</>'.': <fg=green>%s</>',
+            $exception->getFile(),
+            $exception->getLine()
+        ));
     }
 
     /**
@@ -337,20 +326,6 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         }
 
         return \array_values($displayers);
-    }
-
-    /**
-     * Get a console instance form container or take the given instance.
-     *
-     * @return null|\Symfony\Component\Console\Application
-     */
-    private function getConsole(): ? ConsoleApplication
-    {
-        if ($this->console === null && $this->container !== null && $this->container->has(ConsoleApplication::class)) {
-            return $this->console = $this->container->get(ConsoleApplication::class);
-        }
-
-        return $this->console;
     }
 
     /**
