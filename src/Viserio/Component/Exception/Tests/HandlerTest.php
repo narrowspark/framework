@@ -152,7 +152,7 @@ class HandlerTest extends MockeryTestCase
     public function testRenderForConsole()
     {
         $application = new Application();
-        $output = new SpyOutput();
+        $output      = new SpyOutput();
 
         $application->command('greet', function ($output): void {
             throw new Exception('test');

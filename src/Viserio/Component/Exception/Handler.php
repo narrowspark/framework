@@ -208,7 +208,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         ));
         $output->writeln('');
         $output->writeln(sprintf(
-            ' at <fg=green>%s</>'.': <fg=green>%s</>',
+            ' at <fg=green>%s</>' . ': <fg=green>%s</>',
             $exception->getFile(),
             $exception->getLine()
         ));
