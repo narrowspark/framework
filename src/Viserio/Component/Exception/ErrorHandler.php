@@ -71,7 +71,7 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
     {
         $this->resolvedOptions     = self::resolveOptions($data);
         $this->exceptionIdentifier = new ExceptionIdentifier();
-        $this->transformers        = $this->resolvedOptions['transformers'];
+        $this->transformers        = $this->getFormattedTransformers();
         $this->dontReport          = $this->resolvedOptions['dont_report'];
 
         $this->setLogger($logger);
@@ -409,5 +409,25 @@ class ErrorHandler implements RequiresComponentConfigContract, ProvidesDefaultOp
         }
 
         return false;
+    }
+
+    /**
+     * Formant's the filters array to a key (class name) value (object/class name).
+     *
+     * @return array
+     */
+    private function getFormattedTransformers(): array
+    {
+        $transformers = [];
+
+        foreach ($this->resolvedOptions['transformers'] as $key => $transformer) {
+            if (is_numeric($key)) {
+                $key = is_string($transformer) ? $transformer : \get_class($transformer);
+            }
+
+            $transformers[$key] = $transformer;
+        }
+
+        return $transformers;
     }
 }
