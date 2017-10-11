@@ -92,7 +92,9 @@ final class Handler
      * Returns the full contents of the file for this frame,
      * if it's known.
      *
-     * @var string $filePath
+     * @var string
+     *
+     * @param mixed $filePath
      *
      * @return string|null
      */
@@ -102,12 +104,12 @@ final class Handler
             // Leave the stage early when 'Unknown' is passed
             // this would otherwise raise an exception when
             // open_basedir is enabled.
-            if ($filePath === "Unknown") {
+            if ($filePath === 'Unknown') {
                 return null;
             }
 
             // Return null if the file doesn't actually exist.
-            if (!is_file($filePath)) {
+            if (! is_file($filePath)) {
                 return null;
             }
 
@@ -185,7 +187,7 @@ final class Handler
             $output->writeln('');
 
             $output->writeln(sprintf(
-                "    <fg=green>%s</> : <fg=green>%s</>",
+                '    <fg=green>%s</> : <fg=green>%s</>',
                 $frame['file'],
                 $frame['line']
             ));
@@ -196,7 +198,7 @@ final class Handler
      * Format the given function args to a string.
      *
      * @param array $arguments
-     * @param bool $recursive
+     * @param bool  $recursive
      *
      * @return string
      */
@@ -207,18 +209,18 @@ final class Handler
         foreach ($arguments as $argument) {
             switch (true) {
                 case is_string($argument):
-                    $result[] = '"'.$argument.'"';
+                    $result[] = '"' . $argument . '"';
                     break;
                 case is_array($argument):
                     $associative = array_keys($argument) !== range(0, count($argument) - 1);
 
                     if ($recursive && $associative && count($argument) <= 5) {
-                        $result[] = '['.$this->formatsArgs($argument, false).']';
+                        $result[] = '[' . $this->formatsArgs($argument, false) . ']';
                     }
 
                     break;
                 case is_object($argument):
-                    $class = get_class($argument);
+                    $class    = get_class($argument);
                     $result[] = "Object($class)";
                     break;
             }
