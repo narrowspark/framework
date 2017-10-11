@@ -7,7 +7,6 @@ use Throwable;
 
 class Handler
 {
-
     /**
      * Render an exception to the console.
      *
@@ -33,33 +32,13 @@ class Handler
     }
 
     /**
-     * Renders the editor containing the code that was the
-     * origin of the exception.
-     *
-     * @param OutputInterface $output
-     * @param \Throwable $exception
-     *
-     * @return void
-     */
-    private function renderEditor(OutputInterface $output, Throwable $exception): void
-    {
-        $output->writeln(sprintf(
-            ' at <fg=green>%s</>' . ': <fg=green>%s</>',
-            $exception->getFile(),
-            $exception->getLine()
-        ));
-
-        $output->writeln('');
-    }
-
-    /**
      * Returns the contents of the file for this frame as an
      * array of lines, and optionally as a clamped range of lines.
      *
      * NOTE: lines are 0-indexed
      *
-     * @param  int                      $start
-     * @param  int                      $length
+     * @param int $start
+     * @param int $length
      *
      * @throws InvalidArgumentException if $length is less than or equal to 0
      *
@@ -88,5 +67,25 @@ class Handler
 
             return $lines;
         }
+    }
+
+    /**
+     * Renders the editor containing the code that was the
+     * origin of the exception.
+     *
+     * @param OutputInterface $output
+     * @param \Throwable      $exception
+     *
+     * @return void
+     */
+    private function renderEditor(OutputInterface $output, Throwable $exception): void
+    {
+        $output->writeln(sprintf(
+            ' at <fg=green>%s</>' . ': <fg=green>%s</>',
+            $exception->getFile(),
+            $exception->getLine()
+        ));
+
+        $output->writeln('');
     }
 }

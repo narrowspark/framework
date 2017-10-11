@@ -198,7 +198,6 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function renderForConsole(OutputInterface $output, Throwable $exception): void
     {
-
     }
 
     /**
