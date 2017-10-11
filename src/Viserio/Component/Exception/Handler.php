@@ -369,6 +369,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
 
             $displayers[$key] = $displayer;
         }
+
         return $displayers;
     }
 
