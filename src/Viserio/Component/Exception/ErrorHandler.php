@@ -7,7 +7,6 @@ use ErrorException;
 use Exception;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
-use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
@@ -101,7 +100,6 @@ class ErrorHandler implements
                 FatalErrorException::class          => LogLevel::ERROR,
                 Throwable::class                    => LogLevel::ERROR,
                 Exception::class                    => LogLevel::ERROR,
-                NotFoundException::class            => LogLevel::NOTICE,
                 AbstractClientErrorException::class => LogLevel::NOTICE,
                 AbstractServerErrorException::class => LogLevel::ERROR,
             ],

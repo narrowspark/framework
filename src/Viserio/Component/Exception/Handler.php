@@ -198,20 +198,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function renderForConsole(OutputInterface $output, Throwable $exception): void
     {
-        $exceptionMessage = $exception->getMessage();
-        $exceptionName    = get_class($exception);
 
-        $output->writeln(sprintf(
-        '<bg=red;options=bold>%s</> : <comment>%s</>',
-            $exceptionName,
-            $exceptionMessage
-        ));
-        $output->writeln('');
-        $output->writeln(sprintf(
-            ' at <fg=green>%s</>' . ': <fg=green>%s</>',
-            $exception->getFile(),
-            $exception->getLine()
-        ));
     }
 
     /**
