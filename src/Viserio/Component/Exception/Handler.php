@@ -8,6 +8,7 @@ use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
@@ -198,6 +199,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function renderForConsole(OutputInterface $output, Throwable $exception): void
     {
+        (new ConsoleHandler())->render($output, $exception);
     }
 
     /**
