@@ -100,19 +100,26 @@ final class Handler
                 break;
             }
 
-            $output->writeln(\sprintf(
-                '<comment><fg=cyan>%s</>%s%s(%s)</comment>',
-                \str_pad((string) ((int) $i + 1), 4, ' '),
-                ($frame['class'] ?? '') . '::',
-                $frame['function'] ?? '',
-                isset($frame['args']) ? self::formatsArgs($frame['args']) : ''
-            ));
+            $class = isset($frame['class']) ? $frame['class'] . '::' : '';
+            $function = $frame['function'] ?? '';
 
-            $output->writeln(\sprintf(
-                '    <fg=green>%s</> : <fg=green>%s</>',
-                $frame['file'] ?? '',
-                $frame['line'] ?? ''
-            ));
+            if ($class !== '' && $function !== '') {
+                $output->writeln(\sprintf(
+                    '<comment><fg=cyan>%s</>%s%s(%s)</comment>',
+                    \str_pad((string) ((int) $i + 1), 4, ' '),
+                    $class,
+                    $function,
+                    isset($frame['args']) ? self::formatsArgs($frame['args']) : ''
+                ));
+            }
+
+            if (isset($frame['file'], $frame['line'])) {
+                $output->writeln(\sprintf(
+                    '    <fg=green>%s</> : <fg=green>%s</>',
+                    $frame['file'],
+                    $frame['line']
+                ));
+            }
 
             if ($count !== 4) {
                 $output->writeln('');
