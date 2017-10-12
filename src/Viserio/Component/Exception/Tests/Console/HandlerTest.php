@@ -46,11 +46,15 @@ class HandlerTest extends TestCase
             $this->handler->render($output, $exception);
         }
 
-        $dir = __DIR__;
+        $file = __DIR__ . '\HandlerTest.php';
+
+        if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) !== 'win') {
+            $file = self::normalizeDirectorySeparator($file);
+        }
 
         self::assertSame("Symfony\Component\Debug\Exception\FatalThrowableError : test
 
-at $dir\HandlerTest.php: 40
+at $file : 40
 36:         \$application = new Application();
 37:         \$output      = new SpyOutput();
 38: 
@@ -65,7 +69,7 @@ at $dir\HandlerTest.php: 40
 Exception trace:
 
 1   Symfony\Component\Debug\Exception\FatalThrowableError::__construct(\"test\")
-    $dir\HandlerTest.php : 40
+    $file : 40
 
 ", $output->output);
     }
@@ -83,18 +87,22 @@ Exception trace:
             $this->handler->render($output, $exception);
         }
 
-        $dir = dirname(__DIR__);
+        $file = dirname(__DIR__) . '\Fixtures\ErrorFixtureCommand.php';
+
+        if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) !== 'win') {
+            $file = self::normalizeDirectorySeparator($file);
+        }
 
         self::assertSame("Symfony\Component\Debug\Exception\FatalThrowableError : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
 
-at $dir\Fixtures\ErrorFixtureCommand.php: 16
+at $file : 16
 12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle()\n15:     {\n16:         Console::test('error');\n17:     }\n18: }
 19: 
 
 Exception trace:
 
 1   Symfony\Component\Debug\Exception\FatalThrowableError::__construct(\"Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found\")
-    $dir\Fixtures\ErrorFixtureCommand.php : 16
+    $file : 16
 
 ", $output->output);
     }
@@ -110,11 +118,19 @@ Exception trace:
             $this->handler->render($output, $exception);
         }
 
-        $dir = dirname(__DIR__, 6);
+        $viserioFile = dirname(__DIR__, 6) . '\src\Viserio\Component\Console\Application.php';
+        $vendorFile = dirname(__DIR__, 6) . '\vendor\symfony\console\Application.php';
+        $handlerFile = dirname(__DIR__, 6) . '\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php';
+
+        if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) !== 'win') {
+            $viserioFile = self::normalizeDirectorySeparator($viserioFile);
+            $vendorFile = self::normalizeDirectorySeparator($vendorFile);
+            $handlerFile = self::normalizeDirectorySeparator($handlerFile);
+        }
 
         self::assertSame("Symfony\Component\Console\Exception\CommandNotFoundException : Command \"error\" is not defined.
 
-at $dir\\vendor\symfony\console\Application.php: 615
+at $vendorFile : 615
 611:                 }
 612:                 \$message .= implode(\"\\n    \", \$alternatives);
 613:             }
@@ -129,16 +145,16 @@ at $dir\\vendor\symfony\console\Application.php: 615
 Exception trace:
 
 1   Symfony\Component\Console\Exception\CommandNotFoundException::__construct(\"Command \"error\" is not defined.\")
-    $dir\\vendor\symfony\console\Application.php : 615
+    $vendorFile : 615
 
 2   Symfony\Component\Console\Application::find(\"error\")
-    $dir\\vendor\symfony\console\Application.php : 212
+    $vendorFile : 212
 
 3   Symfony\Component\Console\Application::doRun(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Tests\Fixture\SpyOutput))
-    $dir\\src\Viserio\Component\Console\Application.php : 296
+    $viserioFile : 296
 
 4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Tests\Fixture\SpyOutput))
-    $dir\\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php : 108
+    $handlerFile : 116
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
     [internal] : 0

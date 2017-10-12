@@ -54,7 +54,7 @@ final class Handler
     private function renderEditor(OutputInterface $output, Throwable $exception): void
     {
         $output->writeln(\sprintf(
-            'at <fg=green>%s</>' . ': <fg=green>%s</>',
+            'at <fg=green>%s</>' . ' : <fg=green>%s</>',
             $exception->getFile(),
             $exception->getLine()
         ));
