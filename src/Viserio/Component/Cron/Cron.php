@@ -24,7 +24,7 @@ class Cron implements CronContract
      *
      * @var string
      */
-    protected $expression = '* * * * * *';
+    protected $expression = '* * * * *';
 
     /**
      * The command string.

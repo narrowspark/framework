@@ -92,7 +92,7 @@ class CallbackCronTest extends MockeryTestCase
 
     public function testCronRunWithoutOverlapping(): void
     {
-        $name = 'schedule-' . \sha1('* * * * * *' . 'test');
+        $name = 'schedule-' . \sha1('* * * * *' . 'test');
         $item = $this->mock(CacheItemInterface::class);
         $item->shouldReceive('set')
             ->once()
