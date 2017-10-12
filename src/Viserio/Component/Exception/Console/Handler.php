@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Console;
 
-use InvalidArgumentException;
+use ErrorException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
@@ -16,17 +16,10 @@ final class Handler
     private const VERBOSITY_NORMAL_FRAMES = 1;
 
     /**
-     * @var string
-     */
-    private $fileContentsCache;
-
-    /**
      * Render an exception to the console.
      *
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Throwable                                        $exception
-     *
-     * @throws \InvalidArgumentException
      *
      * @return void
      */
@@ -35,88 +28,15 @@ final class Handler
         $exceptionMessage = $exception->getMessage();
         $exceptionName    = get_class($exception);
 
-        try {
-            $output->writeln(sprintf(
-                '<bg=red;options=bold>%s</> : <comment>%s</>',
-                $exceptionName,
-                $exceptionMessage
-            ));
-            $output->writeln('');
+        $output->writeln(sprintf(
+            '<bg=red;options=bold>%s</> : <comment>%s</>',
+            $exceptionName,
+            $exceptionMessage
+        ));
+        $output->writeln('');
 
-            $this->renderEditor($output, $exception);
-            $this->renderTrace($output, $exception);
-        } catch (\Throwable $exception) {
-            $output->writeln($exception->getMessage());
-        }
-    }
-
-    /**
-     * Returns the contents of the file for this frame as an
-     * array of lines, and optionally as a clamped range of lines.
-     *
-     * NOTE: lines are 0-indexed
-     *
-     * @param string $filePath
-     * @param int    $start
-     * @param int    $length
-     *
-     * @throws \InvalidArgumentException if $length is less than or equal to 0
-     *
-     * @return string[]|null
-     */
-    private function getFileLines(string $filePath, int $start = 0, int $length = null): ?array
-    {
-        if (($contents = $this->getFileContents($filePath)) !== null) {
-            $lines = explode("\n", $contents);
-            // Get a subset of lines from $start to $end
-            if ($length !== null) {
-                if ($start < 0) {
-                    $start = 0;
-                }
-
-                if ($length <= 0) {
-                    throw new InvalidArgumentException(sprintf(
-                        '$length(%s) cannot be lower or equal to 0',
-                        $length
-                    ));
-                }
-
-                $lines = array_slice($lines, $start, $length, true);
-            }
-
-            return $lines;
-        }
-    }
-
-    /**
-     * Returns the full contents of the file for this frame,
-     * if it's known.
-     *
-     * @var string
-     *
-     * @param mixed $filePath
-     *
-     * @return string|null
-     */
-    private function getFileContents($filePath): ?string
-    {
-        if ($this->fileContentsCache === null) {
-            // Leave the stage early when 'Unknown' is passed
-            // this would otherwise raise an exception when
-            // open_basedir is enabled.
-            if ($filePath === 'Unknown') {
-                return null;
-            }
-
-            // Return null if the file doesn't actually exist.
-            if (! is_file($filePath)) {
-                return null;
-            }
-
-            $this->fileContentsCache = file_get_contents($filePath);
-        }
-
-        return $this->fileContentsCache;
+        $this->renderEditor($output, $exception);
+        $this->renderTrace($output, $exception);
     }
 
     /**
@@ -126,19 +46,17 @@ final class Handler
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Throwable                                        $exception
      *
-     * @throws \InvalidArgumentException
-     *
      * @return void
      */
     private function renderEditor(OutputInterface $output, Throwable $exception): void
     {
-        $output->writeln(sprintf(
-            ' at <fg=green>%s</>' . ': <fg=green>%s</>',
+        $output->writeln(\sprintf(
+            'at <fg=green>%s</>' . ': <fg=green>%s</>',
             $exception->getFile(),
             $exception->getLine()
         ));
 
-        $range = $this->getFileLines(
+        $range = self::getFileLines(
             $exception->getFile(),
             $exception->getLine() - 5,
             10
@@ -146,8 +64,8 @@ final class Handler
 
         foreach ($range as $k => $code) {
             $line = $k + 1;
-            $code = $exception->getLine() === $line ? sprintf('<bg=red>%s</>', $code) : $code;
-            $output->writeln(sprintf('%s: %s', $line, $code));
+            $code = $exception->getLine() === $line ? \sprintf('<bg=red>%s</>', $code) : $code;
+            $output->writeln(\sprintf('%s: %s', $line, $code));
         }
 
         $output->writeln('');
@@ -164,8 +82,9 @@ final class Handler
     private function renderTrace(OutputInterface $output, Throwable $exception): void
     {
         $output->writeln('<comment>Exception trace:</comment>');
+        $output->writeln('');
 
-        foreach ($exception->getTrace() as $i => $frame) {
+        foreach ($this->getFrames($exception) as $i => $frame) {
             if ($i > static::VERBOSITY_NORMAL_FRAMES &&
                 $output->getVerbosity() < OutputInterface::VERBOSITY_VERBOSE
             ) {
@@ -176,22 +95,154 @@ final class Handler
                 break;
             }
 
-            $output->writeln(sprintf(
+            $output->writeln(\sprintf(
                 '<comment><fg=cyan>%s</>%s%s(%s)</comment>',
-                str_pad((string) ($i + 1), 4, ' '),
+                \str_pad((string) ($i + 1), 4, ' '),
                 ($frame['class'] ?? '') . '::',
                 $frame['function'],
-                $this->formatsArgs($frame['args'])
+                self::formatsArgs($frame['args'])
             ));
 
             $output->writeln('');
 
-            $output->writeln(sprintf(
+            $output->writeln(\sprintf(
                 '    <fg=green>%s</> : <fg=green>%s</>',
-                $frame['file'],
+                $frame['file'] ?? '',
                 $frame['line']
             ));
         }
+    }
+
+    /**
+     * Gets the backtrace from an exception.
+     *
+     * If xdebug is installed
+     *
+     * @param \Throwable $exception
+     *
+     * @return array
+     */
+    private function getTrace(Throwable $exception): array
+    {
+        $traces = $exception->getTrace();
+
+        // Get trace from xdebug if enabled, failure exceptions only trace to the shutdown handler by default
+        if (! $exception instanceof ErrorException) {
+            return $traces;
+        }
+
+        if (! self::isLevelFatal($exception->getSeverity())) {
+            return $traces;
+        }
+
+        if (! \extension_loaded('xdebug') || ! \xdebug_is_enabled()) {
+            return [];
+        }
+
+        // Use xdebug to get the full stack trace and remove the shutdown handler stack trace
+        $stack = \array_reverse(\xdebug_get_function_stack());
+        $trace = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
+        $traces = \array_diff_key($stack, $trace);
+
+        return $traces;
+    }
+
+    /**
+     * Returns an iterator for the inspected exception's
+     * frames.
+     *
+     * @param \Throwable $exception
+     *
+     * @return array
+     */
+    private function getFrames(Throwable $exception)
+    {
+        $frames = $this->getTrace($exception);
+
+        // Fill empty line/file info for call_user_func_array usages (PHP Bug #44428)
+        foreach ($frames as $k => $frame) {
+            if (empty($frame['file'])) {
+                // Default values when file and line are missing
+                $file = '[internal]';
+                $line = 0;
+                $nextFrame = ! empty($frames[$k + 1]) ? $frames[$k + 1] : [];
+
+                if ($this->isValidNextFrame($nextFrame)) {
+                    $file = $nextFrame['file'];
+                    $line = $nextFrame['line'];
+                }
+
+                $frames[$k]['file'] = $file;
+                $frames[$k]['line'] = $line;
+            }
+
+            $frames['function'] = $frame['function'] ?? '';
+        }
+
+        // Find latest non-error handling frame index ($i) used to remove error handling frames
+        $i = 0;
+
+        foreach ($frames as $k => $frame) {
+            if ($frame['file'] === $exception->getFile() && $frame['line'] === $exception->getLine()) {
+                $i = $k;
+            }
+        }
+
+        // Remove error handling frames
+        if ($i > 0) {
+            \array_splice($frames, 0, $i);
+        }
+
+        $firstFrame = $this->getFrameFromException($exception);
+        \array_unshift($frames, $firstFrame);
+
+        return $frames;
+    }
+
+    /**
+     * Given an exception, generates an array in the format
+     * generated by Exception::getTrace()
+     *
+     * @param  \Throwable $exception
+     *
+     * @return array
+     */
+    private function getFrameFromException(Throwable $exception): array
+    {
+        return [
+            'file'     => $exception->getFile(),
+            'line'     => $exception->getLine(),
+            'class'    => \get_class($exception),
+            'function' => '__construct',
+            'args'     => [
+                $exception->getMessage(),
+            ],
+        ];
+    }
+
+    /**
+     * Determine if the frame can be used to fill in previous frame's missing info
+     * happens for call_user_func and call_user_func_array usages (PHP Bug #44428)
+     *
+     * @param array $frame
+     *
+     * @return bool
+     */
+    private function isValidNextFrame(array $frame): bool
+    {
+        if (empty($frame['file'])) {
+            return false;
+        }
+
+        if (empty($frame['line'])) {
+            return false;
+        }
+
+        if (empty($frame['function']) || \stripos($frame['function'], 'call_user_func') === false) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -202,30 +253,99 @@ final class Handler
      *
      * @return string
      */
-    private function formatsArgs(array $arguments, bool $recursive = true): string
+    private static function formatsArgs(array $arguments, bool $recursive = true): string
     {
         $result = [];
 
         foreach ($arguments as $argument) {
             switch (true) {
-                case is_string($argument):
+                case \is_string($argument):
                     $result[] = '"' . $argument . '"';
                     break;
-                case is_array($argument):
-                    $associative = array_keys($argument) !== range(0, count($argument) - 1);
+                case \is_array($argument):
+                    $associative = \array_keys($argument) !== \range(0, \count($argument) - 1);
 
-                    if ($recursive && $associative && count($argument) <= 5) {
-                        $result[] = '[' . $this->formatsArgs($argument, false) . ']';
+                    if ($recursive && $associative && \count($argument) <= 5) {
+                        $result[] = '[' . self::formatsArgs($argument, false) . ']';
                     }
 
                     break;
-                case is_object($argument):
-                    $class    = get_class($argument);
+                case \is_object($argument):
+                    $class    = \get_class($argument);
                     $result[] = "Object($class)";
                     break;
             }
         }
 
         return implode(', ', $result);
+    }
+
+    /**
+     * Returns the contents of the file for this frame as an
+     * array of lines, and optionally as a clamped range of lines.
+     *
+     * @param string $filePath
+     * @param int    $start
+     * @param int    $length
+     *
+     * @return string[]|null
+     */
+    private static function getFileLines(string $filePath, int $start, int $length): ?array
+    {
+        if (($contents = self::getFileContents($filePath)) !== null) {
+            $lines = \explode("\n", $contents);
+
+            if ($start < 0) {
+                $start = 0;
+            }
+
+            $lines = \array_slice($lines, $start, $length, true);
+
+            return $lines;
+        }
+    }
+
+    /**
+     * Returns the full contents of the file for this frame,
+     * if it's known.
+     *
+     * @param string $filePath
+     *
+     * @return string|null
+     */
+    private static function getFileContents(string $filePath): ?string
+    {
+        // Leave the stage early when 'Unknown' is passed
+        // this would otherwise raise an exception when
+        // open_basedir is enabled.
+        if ($filePath === 'Unknown') {
+            return null;
+        }
+
+        // Return null if the file doesn't actually exist.
+        if (! \is_file($filePath)) {
+            return null;
+        }
+
+        return \file_get_contents($filePath);
+    }
+
+    /**
+     * Determine if an error level is fatal (halts execution).
+     *
+     * @param int $level
+     *
+     * @return bool
+     */
+    private static function isLevelFatal(int $level): bool
+    {
+        $errors = E_ERROR;
+        $errors |= E_PARSE;
+        $errors |= E_CORE_ERROR;
+        $errors |= E_CORE_WARNING;
+        $errors |= E_COMPILE_ERROR;
+        $errors |= E_COMPILE_WARNING;
+
+        return ($level & $errors) > 0;
     }
 }

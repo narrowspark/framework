@@ -9,10 +9,7 @@ use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Viserio\Component\Console\Application;
-use Viserio\Component\Console\Tests\Fixture\SpyOutput;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
@@ -20,7 +17,7 @@ use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Handler;
-use Viserio\Component\Exception\Transformer\CommandLineTransformer;
+use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
 class HandlerTest extends MockeryTestCase
@@ -45,8 +42,13 @@ class HandlerTest extends MockeryTestCase
      */
     private $handler;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
+        parent::setUp();
+
         $this->responseFactory = $this->mock(ResponseFactoryInterface::class);
         $this->loggger         = $this->mock(LoggerInterface::class);
 
@@ -90,10 +92,10 @@ class HandlerTest extends MockeryTestCase
 
     public function testAddAndGetTransformer(): void
     {
-        $this->handler->addTransformer(new CommandLineTransformer());
-        $this->handler->addTransformer(new CommandLineTransformer());
+        $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
+        $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
 
-        self::assertCount(4, $this->handler->getTransformers());
+        self::assertCount(3, $this->handler->getTransformers());
     }
 
     public function testAddAndGetFilter(): void
@@ -147,23 +149,5 @@ class HandlerTest extends MockeryTestCase
         } catch (ErrorException $e) {
             self::assertInstanceOf(ErrorException::class, $e);
         }
-    }
-
-    public function testRenderForConsole()
-    {
-        $application = new Application();
-        $output      = new SpyOutput();
-
-        $application->command('greet', function ($output): void {
-            throw new Exception('test');
-        });
-
-        try {
-            $application->run(new StringInput('greet'), $output);
-        } catch (\Exception $e) {
-            $this->handler->renderForConsole($output, $e);
-        }
-
-        self::assertSame('', $output->output);
     }
 }
