@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Console;
 
-use RuntimeException;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\Console\Input\StringInput;
 use Throwable;
 use Viserio\Component\Console\Application;
