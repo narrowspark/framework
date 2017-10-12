@@ -183,7 +183,10 @@ final class Handler
         $i = 0;
 
         foreach ($frames as $k => $frame) {
-            if ($frame['file'] === $exception->getFile() && $frame['line'] === $exception->getLine()) {
+            if (isset($frame['file'], $frame['line']) &&
+                $frame['file'] === $exception->getFile() &&
+                $frame['line'] === $exception->getLine()
+            ) {
                 $i = $k;
             }
         }

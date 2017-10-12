@@ -17,7 +17,6 @@ use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Handler;
 use Viserio\Component\Exception\Provider\ExceptionServiceProvider;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
-use Viserio\Component\Exception\Transformer\CommandLineTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
@@ -52,7 +51,6 @@ class ExceptionServiceProviderTest extends TestCase
         ]);
 
         self::assertInstanceOf(ClassNotFoundFatalErrorTransformer::class, $container->get(ClassNotFoundFatalErrorTransformer::class));
-        self::assertInstanceOf(CommandLineTransformer::class, $container->get(CommandLineTransformer::class));
         self::assertInstanceOf(UndefinedFunctionFatalErrorTransformer::class, $container->get(UndefinedFunctionFatalErrorTransformer::class));
         self::assertInstanceOf(UndefinedMethodFatalErrorTransformer::class, $container->get(UndefinedMethodFatalErrorTransformer::class));
         self::assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfoContract::class));

@@ -20,7 +20,6 @@ use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Handler;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
-use Viserio\Component\Exception\Transformer\CommandLineTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 
@@ -49,9 +48,6 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             CanDisplayFilter::class                       => [self::class, 'createCanDisplayFilter'],
             ClassNotFoundFatalErrorTransformer::class     => function () {
                 return new ClassNotFoundFatalErrorTransformer();
-            },
-            CommandLineTransformer::class                 => function () {
-                return new CommandLineTransformer();
             },
             UndefinedFunctionFatalErrorTransformer::class => function () {
                 return new UndefinedFunctionFatalErrorTransformer();
