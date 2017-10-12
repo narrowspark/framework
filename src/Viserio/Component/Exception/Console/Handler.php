@@ -87,6 +87,8 @@ final class Handler
         $output->writeln('<comment>Exception trace:</comment>');
         $output->writeln('');
 
+        $count = 0;
+
         foreach ($this->getFrames($exception) as $i => $frame) {
             if ($i > static::VERBOSITY_NORMAL_FRAMES &&
                 $output->getVerbosity() < OutputInterface::VERBOSITY_VERBOSE
@@ -106,13 +108,17 @@ final class Handler
                 isset($frame['args']) ? self::formatsArgs($frame['args']) : ''
             ));
 
-            $output->writeln('');
-
             $output->writeln(\sprintf(
                 '    <fg=green>%s</> : <fg=green>%s</>',
                 $frame['file'] ?? '',
-                $frame['line']
+                $frame['line'] ?? ''
             ));
+
+            if ($count !== 4) {
+                $output->writeln('');
+            }
+
+            $count++;
         }
     }
 
@@ -202,7 +208,8 @@ final class Handler
         $firstFrame = $this->getFrameFromException($exception);
         \array_unshift($frames, $firstFrame);
 
-        return $frames;
+        // show the last 5 frames
+        return array_slice($frames, 0, 5);
     }
 
     /**
