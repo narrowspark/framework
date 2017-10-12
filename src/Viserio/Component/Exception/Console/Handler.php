@@ -102,7 +102,7 @@ final class Handler
                 '<comment><fg=cyan>%s</>%s%s(%s)</comment>',
                 \str_pad((string) ((int) $i + 1), 4, ' '),
                 ($frame['class'] ?? '') . '::',
-                $frame['function'],
+                $frame['function'] ?? '',
                 isset($frame['args']) ? self::formatsArgs($frame['args']) : ''
             ));
 
