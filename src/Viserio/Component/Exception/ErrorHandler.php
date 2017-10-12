@@ -12,7 +12,7 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
-use Symfony\Component\Console\Application as ConsoleApplication;
+use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -22,6 +22,7 @@ use Viserio\Component\Contract\Exception\Exception\NotFoundException as BaseNotF
 use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
@@ -35,6 +36,7 @@ class ErrorHandler implements
     use ContainerAwareTrait;
     use OptionsResolverTrait;
     use LoggerAwareTrait;
+    use DetermineErrorLevelTrait;
 
     /**
      * ExceptionIdentifier instance.
@@ -228,17 +230,18 @@ class ErrorHandler implements
     {
         $exception = $this->prepareException($exception);
 
-        $this->report($exception);
+        try {
+            $this->report($exception);
+        } catch (Throwable $exception) {
+            // If handler can't report exception just throw it
+        }
 
         $transformed = $this->getTransformed($exception);
 
-        if (PHP_SAPI === 'cli') {
-            if ($this->container !== null && $this->container->has(ConsoleApplication::class)) {
-                $console = $this->container->get(ConsoleApplication::class);
-                $console->renderException($transformed, new ConsoleOutput());
-            } else {
-                throw $transformed;
-            }
+        if ((PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg') &&
+            \class_exists(ConsoleOutput::class)
+        ) {
+            (new ConsoleHandler)->render(new ConsoleOutput(), $transformed);
         }
 
         throw $transformed;
@@ -246,6 +249,10 @@ class ErrorHandler implements
 
     /**
      * Shutdown registered function for handling PHP fatal errors.
+     *
+     * @throws \Throwable
+     *
+     * @return void
      *
      * @internal
      */
@@ -256,7 +263,7 @@ class ErrorHandler implements
         // code so it can be displayed back out to the developer for information.
         $error = \error_get_last();
 
-        if ($error !== null && $this->isFatal($error['type'])) {
+        if ($error !== null && self::isLevelFatal($error['type'])) {
             $this->handleException(
                 // Create a new fatal exception instance from an error array.
                 new FatalErrorException(
@@ -269,20 +276,6 @@ class ErrorHandler implements
                 )
             );
         }
-    }
-
-    /**
-     * Determine if the error type is fatal.
-     *
-     * @param int $type
-     *
-     * @return bool
-     *
-     * @codeCoverageIgnore
-     */
-    protected function isFatal(int $type): bool
-    {
-        return \in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE], true);
     }
 
     /**
@@ -382,7 +375,7 @@ class ErrorHandler implements
      *
      * @return string
      */
-    protected function getLevel(Throwable $exception): string
+    private function getLevel(Throwable $exception): string
     {
         foreach ($this->resolvedOptions['levels'] as $class => $level) {
             if ($exception instanceof $class) {
@@ -400,7 +393,7 @@ class ErrorHandler implements
      *
      * @return bool
      */
-    protected function shouldntReport(Throwable $exception): bool
+    private function shouldntReport(Throwable $exception): bool
     {
         foreach ($this->dontReport as $type) {
             if ($exception instanceof $type) {

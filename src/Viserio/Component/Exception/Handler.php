@@ -8,7 +8,6 @@ use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -153,31 +152,17 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function handleException(Throwable $exception): void
     {
-        $exception = $this->prepareException($exception);
-
         try {
-            $this->report($exception);
-        } catch (Throwable $exception) {
-            // If handler can't report exception just render it
+            parent::handleException($exception);
+        } catch (Throwable $transformedException) {
+            $response = $this->getPreparedResponse(
+                null,
+                $exception,
+                $transformedException
+            );
+
+            echo (string)$response->getBody();
         }
-
-        $transformed = $this->getTransformed($exception);
-
-        if (PHP_SAPI === 'cli') {
-            if (($console = $this->getConsole()) !== null) {
-                $console->renderException($transformed, new ConsoleOutput());
-            } else {
-                throw $transformed;
-            }
-        }
-
-        $response = $this->getPreparedResponse(
-            null,
-            $exception,
-            $transformed
-        );
-
-        echo (string) $response->getBody();
     }
 
     /**

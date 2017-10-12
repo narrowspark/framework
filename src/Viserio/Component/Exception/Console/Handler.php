@@ -5,9 +5,12 @@ namespace Viserio\Component\Exception\Console;
 use ErrorException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 
 final class Handler
 {
+    use DetermineErrorLevelTrait;
+
     /**
      * The number of frames if no verbosity is specified.
      *
@@ -331,24 +334,5 @@ final class Handler
         }
 
         return \file_get_contents($filePath);
-    }
-
-    /**
-     * Determine if an error level is fatal (halts execution).
-     *
-     * @param int $level
-     *
-     * @return bool
-     */
-    private static function isLevelFatal(int $level): bool
-    {
-        $errors = E_ERROR;
-        $errors |= E_PARSE;
-        $errors |= E_CORE_ERROR;
-        $errors |= E_CORE_WARNING;
-        $errors |= E_COMPILE_ERROR;
-        $errors |= E_COMPILE_WARNING;
-
-        return ($level & $errors) > 0;
     }
 }
