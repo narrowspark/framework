@@ -50,23 +50,23 @@ class HandlerTest extends TestCase
 
         self::assertSame("Symfony\Component\Debug\Exception\FatalThrowableError : test
 
-at $dir\HandlerTest.php: 36
-32:         \$application = new Application();
-33:         \$output      = new SpyOutput();
-34: 
-35:         \$application->command('greet', function (\$output): void {
-36:             throw new RuntimeException('test');
-37:         });
+at $dir\HandlerTest.php: 40
+36:         \$application = new Application();
+37:         \$output      = new SpyOutput();
 38: 
-39:         try {
-40:             \$application->run(new StringInput('greet -v'), \$output);
-41:         } catch (Throwable \$exception) {
+39:         \$application->command('greet', function (\$output): void {
+40:             throw new RuntimeException('test');
+41:         });
+42: 
+43:         try {
+44:             \$application->run(new StringInput('greet -v'), \$output);
+45:         } catch (Throwable \$exception) {
 
 Exception trace:
 
 1   Symfony\Component\Debug\Exception\FatalThrowableError::__construct(\"test\")
+    $dir\HandlerTest.php : 40
 
-    $dir\HandlerTest.php : 36
 ", $output->output);
     }
 
@@ -85,16 +85,17 @@ Exception trace:
 
         $dir = dirname(__DIR__);
 
-        self::assertEquals("Symfony\Component\Debug\Exception\FatalThrowableError : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
+        self::assertSame("Symfony\Component\Debug\Exception\FatalThrowableError : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
 
 at $dir\Fixtures\ErrorFixtureCommand.php: 16
-12:     protected static \$defaultName = 'error';\r\n13: \r\n14:     public function handle()\r\n15:     {\r\n16:         Console::test('error');\r\n17:     }\r\n18: }
+12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle()\n15:     {\n16:         Console::test('error');\n17:     }\n18: }
+19: 
 
 Exception trace:
 
 1   Symfony\Component\Debug\Exception\FatalThrowableError::__construct(\"Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found\")
-
     $dir\Fixtures\ErrorFixtureCommand.php : 16
+
 ", $output->output);
     }
 
@@ -137,7 +138,7 @@ Exception trace:
     $dir\\src\Viserio\Component\Console\Application.php : 296
 
 4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Tests\Fixture\SpyOutput))
-    $dir\\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php : 107
+    $dir\\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php : 108
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
     [internal] : 0
