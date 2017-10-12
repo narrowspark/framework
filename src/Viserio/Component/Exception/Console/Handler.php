@@ -103,7 +103,7 @@ final class Handler
                 \str_pad((string) ($i + 1), 4, ' '),
                 ($frame['class'] ?? '') . '::',
                 $frame['function'],
-                self::formatsArgs($frame['args'])
+                isset($frame['args']) ? self::formatsArgs($frame['args']) : ''
             ));
 
             $output->writeln('');
