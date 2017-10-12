@@ -53,7 +53,7 @@ class CronTest extends MockeryTestCase
     {
         $cron = new Cron('php foo');
 
-        self::assertEquals('* * * * * *', $cron->getExpression());
+        self::assertEquals('* * * * *', $cron->getExpression());
         self::assertTrue($cron->isDue('test'));
         self::assertTrue($cron->skip(function () {
             return true;
@@ -64,12 +64,12 @@ class CronTest extends MockeryTestCase
 
         $cron = new Cron('php foo');
 
-        self::assertEquals('* * * * * *', $cron->getExpression());
+        self::assertEquals('* * * * *', $cron->getExpression());
         self::assertFalse($cron->setEnvironments('local')->isDue('test'));
 
         $cron = new Cron('php foo');
 
-        self::assertEquals('* * * * * *', $cron->getExpression());
+        self::assertEquals('* * * * *', $cron->getExpression());
         self::assertFalse($cron->when(function () {
             return false;
         })->filtersPass());
@@ -98,7 +98,7 @@ class CronTest extends MockeryTestCase
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * * *', $cron->getExpression());
+        self::assertSame('* * * * *', $cron->getExpression());
     }
 
     public function testCron(): void
@@ -113,168 +113,168 @@ class CronTest extends MockeryTestCase
     {
         $cron = new Cron('');
 
-        self::assertSame('0 * * * * *', $cron->hourly()->getExpression());
+        self::assertSame('0 * * * *', $cron->hourly()->getExpression());
     }
 
     public function testDaily(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('0 0 * * * *', $cron->daily()->getExpression());
+        self::assertSame('0 0 * * *', $cron->daily()->getExpression());
     }
 
     public function testMonthly(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('0 0 1 * * *', $cron->monthly()->getExpression());
+        self::assertSame('0 0 1 * *', $cron->monthly()->getExpression());
     }
 
     public function testYearly(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('0 0 1 1 * *', $cron->yearly()->getExpression());
+        self::assertSame('0 0 1 1 *', $cron->yearly()->getExpression());
     }
 
     public function testQuarterly(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('0 0 1 */3 * *', $cron->quarterly()->getExpression());
+        self::assertSame('0 0 1 */3 *', $cron->quarterly()->getExpression());
     }
 
     public function testEveryMinute(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * * *', $cron->everyMinute()->getExpression());
+        self::assertSame('* * * * *', $cron->everyMinute()->getExpression());
     }
 
     public function testEveryFiveMinutes(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('*/5 * * * * *', $cron->everyFiveMinutes()->getExpression());
+        self::assertSame('*/5 * * * *', $cron->everyFiveMinutes()->getExpression());
     }
 
     public function testEveryTenMinutes(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('*/10 * * * * *', $cron->everyTenMinutes()->getExpression());
+        self::assertSame('*/10 * * * *', $cron->everyTenMinutes()->getExpression());
     }
 
     public function testEveryThirtyMinutes(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('0,30 * * * * *', $cron->everyThirtyMinutes()->getExpression());
+        self::assertSame('0,30 * * * *', $cron->everyThirtyMinutes()->getExpression());
     }
 
     public function testDays(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * 1 *', $cron->days(1)->getExpression());
+        self::assertSame('* * * * 1', $cron->days(1)->getExpression());
     }
 
     public function testMonthlyOn(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('0 15 4 * * *', $cron->monthlyOn(4, '15:00')->getExpression());
+        self::assertSame('0 15 4 * *', $cron->monthlyOn(4, '15:00')->getExpression());
     }
 
     public function testDailyAt(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('30 10 * * * *', $cron->dailyAt('10:30')->getExpression());
+        self::assertSame('30 10 * * *', $cron->dailyAt('10:30')->getExpression());
     }
 
     public function testTwiceDaily(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('0 1,13 * * * *', $cron->twiceDaily()->getExpression());
+        self::assertSame('0 1,13 * * *', $cron->twiceDaily()->getExpression());
     }
 
     public function testTwiceMonthly(): void
     {
         $cron = new Cron('');
 
-        $this->assertEquals('0 0 1,16 * * *', $cron->twiceMonthly(1, 16)->getExpression());
+        $this->assertEquals('0 0 1,16 * *', $cron->twiceMonthly(1, 16)->getExpression());
     }
 
     public function testWeekdays(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * 1-5 *', $cron->weekdays()->getExpression());
+        self::assertSame('* * * * 1-5', $cron->weekdays()->getExpression());
     }
 
     public function testMondays(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * 1 *', $cron->mondays()->getExpression());
+        self::assertSame('* * * * 1', $cron->mondays()->getExpression());
     }
 
     public function testTuesdays(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * 2 *', $cron->tuesdays()->getExpression());
+        self::assertSame('* * * * 2', $cron->tuesdays()->getExpression());
     }
 
     public function testWednesdays(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * 3 *', $cron->wednesdays()->getExpression());
+        self::assertSame('* * * * 3', $cron->wednesdays()->getExpression());
     }
 
     public function testThursdays(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * 4 *', $cron->thursdays()->getExpression());
+        self::assertSame('* * * * 4', $cron->thursdays()->getExpression());
     }
 
     public function testFridays(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * 5 *', $cron->fridays()->getExpression());
+        self::assertSame('* * * * 5', $cron->fridays()->getExpression());
     }
 
     public function testSaturdays(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * 6 *', $cron->saturdays()->getExpression());
+        self::assertSame('* * * * 6', $cron->saturdays()->getExpression());
     }
 
     public function testSundays(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('* * * * 0 *', $cron->sundays()->getExpression());
+        self::assertSame('* * * * 0', $cron->sundays()->getExpression());
     }
 
     public function testWeekly(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('0 0 * * 0 *', $cron->weekly()->getExpression());
+        self::assertSame('0 0 * * 0', $cron->weekly()->getExpression());
     }
 
     public function testWeeklyOn(): void
     {
         $cron = new Cron('');
 
-        self::assertSame('0 0 * * 1 *', $cron->weeklyOn(1)->getExpression());
+        self::assertSame('0 0 * * 1', $cron->weeklyOn(1)->getExpression());
     }
 
     /**
@@ -379,7 +379,7 @@ class CronTest extends MockeryTestCase
         $cron = new Cron('php foo');
         $cron->setTimezone('Europe/Berlin');
 
-        self::assertEquals('* * * * 4 *', $cron->thursdays()->getExpression());
+        self::assertEquals('* * * * 4', $cron->thursdays()->getExpression());
         self::assertTrue($cron->isDue('test'));
 
         self::assertFalse($cron->isDue('test', true));
@@ -421,7 +421,7 @@ class CronTest extends MockeryTestCase
 
     public function testCronRunWithoutOverlapping(): void
     {
-        $name = 'schedule-' . \sha1('* * * * * *' . 'ls -lsa');
+        $name = 'schedule-' . \sha1('* * * * *' . 'ls -lsa');
         $item = $this->mock(CacheItemInterface::class);
         $item->shouldReceive('set')
             ->once()
@@ -457,6 +457,6 @@ class CronTest extends MockeryTestCase
             return $this->spliceIntoPosition(1, "*/{$x}");
         });
 
-        self::assertEquals('*/6 * * * * *', $cron->everyXMinutes(6)->getExpression());
+        self::assertEquals('*/6 * * * *', $cron->everyXMinutes(6)->getExpression());
     }
 }
