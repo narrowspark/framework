@@ -119,12 +119,12 @@ Exception trace:
         }
 
         $viserioFile = dirname(__DIR__, 6) . '\src\Viserio\Component\Console\Application.php';
-        $vendorFile = dirname(__DIR__, 6) . '\vendor\symfony\console\Application.php';
+        $vendorFile  = dirname(__DIR__, 6) . '\vendor\symfony\console\Application.php';
         $handlerFile = dirname(__DIR__, 6) . '\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php';
 
         if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) !== 'win') {
             $viserioFile = self::normalizeDirectorySeparator($viserioFile);
-            $vendorFile = self::normalizeDirectorySeparator($vendorFile);
+            $vendorFile  = self::normalizeDirectorySeparator($vendorFile);
             $handlerFile = self::normalizeDirectorySeparator($handlerFile);
         }
 
