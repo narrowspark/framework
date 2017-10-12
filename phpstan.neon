@@ -66,6 +66,7 @@ parameters:
         - '#\$callback of method Viserio\\Component\\Mail\\Mailer::send#'
         - '#Viserio\\Component\\Routing\\Tests\\Fixture\\Controller::put#'
         - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\ApplicationTest::call#'
+        - '#Call to static method test\(\) on an unknown class Viserio\\Component\\Exception\\Tests\\Fixtures\\Console#'
 
         # Is wrong
         - '#Function sodium_memzero invoked with 1 parameter, 2 required#'
@@ -76,6 +77,7 @@ parameters:
         - '#set\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#setMultiple\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
+        - '#Function xdebug_get_function_stack not found#'
 
         # If check exists
         - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
@@ -88,6 +90,7 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Dispatcher::setContainer#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Output\\OutputInterface::fetch\(\)#'
+        - '#Function xdebug_is_enabled not found#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'
