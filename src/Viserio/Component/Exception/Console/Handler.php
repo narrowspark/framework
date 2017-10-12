@@ -100,7 +100,7 @@ final class Handler
                 break;
             }
 
-            $class = isset($frame['class']) ? $frame['class'] . '::' : '';
+            $class    = isset($frame['class']) ? $frame['class'] . '::' : '';
             $function = $frame['function'] ?? '';
 
             if ($class !== '' && $function !== '') {
