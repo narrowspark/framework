@@ -100,7 +100,7 @@ final class Handler
 
             $output->writeln(\sprintf(
                 '<comment><fg=cyan>%s</>%s%s(%s)</comment>',
-                \str_pad((string) ($i + 1), 4, ' '),
+                \str_pad((string) ((int) $i + 1), 4, ' '),
                 ($frame['class'] ?? '') . '::',
                 $frame['function'],
                 isset($frame['args']) ? self::formatsArgs($frame['args']) : ''
@@ -158,7 +158,7 @@ final class Handler
      *
      * @return array
      */
-    private function getFrames(Throwable $exception)
+    private function getFrames(Throwable $exception): array
     {
         $frames = $this->getTrace($exception);
 
