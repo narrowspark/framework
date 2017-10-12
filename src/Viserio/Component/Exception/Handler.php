@@ -161,7 +161,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
                 $transformedException
             );
 
-            echo (string)$response->getBody();
+            echo (string) $response->getBody();
         }
     }
 

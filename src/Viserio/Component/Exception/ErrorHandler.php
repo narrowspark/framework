@@ -12,7 +12,6 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
-use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -22,6 +21,7 @@ use Viserio\Component\Contract\Exception\Exception\NotFoundException as BaseNotF
 use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
@@ -241,7 +241,7 @@ class ErrorHandler implements
         if ((PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg') &&
             \class_exists(ConsoleOutput::class)
         ) {
-            (new ConsoleHandler)->render(new ConsoleOutput(), $transformed);
+            (new ConsoleHandler())->render(new ConsoleOutput(), $transformed);
         }
 
         throw $transformed;
