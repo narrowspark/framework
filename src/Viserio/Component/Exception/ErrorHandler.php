@@ -190,7 +190,7 @@ class ErrorHandler implements
      *
      * @throws \ErrorException
      *
-     * @return void
+     * @return bool Returns false when no handling happens so that the PHP engine can handle the error itself
      *
      * @internal
      */
@@ -201,7 +201,11 @@ class ErrorHandler implements
         int $line = 0,
         $context = null,
         array $backtrace = null
-    ): void {
+    ): bool {
+        if (error_reporting() === 0) {
+            return false;
+        }
+
         // Level is the current error reporting level to manage silent error.
         // Strong errors are not authorized to be silenced.
         $level = \error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
@@ -209,6 +213,8 @@ class ErrorHandler implements
         if ($level) {
             throw new ErrorException($message, 0, $level, $file, $line);
         }
+
+        return true;
     }
 
     /**
@@ -225,6 +231,8 @@ class ErrorHandler implements
      * @return void
      *
      * @internal
+     *
+     * @see https://secure.php.net/manual/en/function.set-exception-handler.php
      */
     public function handleException(Throwable $exception): void
     {
@@ -232,7 +240,7 @@ class ErrorHandler implements
 
         try {
             $this->report($exception);
-        } catch (Throwable $exception) {
+        } catch (Throwable $e) {
             // If handler can't report exception just throw it
         }
 

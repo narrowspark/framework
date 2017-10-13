@@ -9,6 +9,7 @@ use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
+use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
@@ -56,6 +57,7 @@ class ExceptionServiceProviderTest extends TestCase
         self::assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfoContract::class));
         self::assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
         self::assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));
+        self::assertInstanceOf(SymfonyDisplayer::class, $container->get(SymfonyDisplayer::class));
         self::assertInstanceOf(ViewDisplayer::class, $container->get(ViewDisplayer::class));
         self::assertInstanceOf(WhoopsDisplayer::class, $container->get(WhoopsDisplayer::class));
         self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
