@@ -95,7 +95,7 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
 
-        self::assertCount(3, $this->handler->getTransformers());
+        self::assertCount(6, $this->handler->getTransformers());
     }
 
     public function testAddAndGetFilter(): void
@@ -103,7 +103,7 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addFilter(new VerboseFilter($this->container));
         $this->handler->addFilter(new VerboseFilter($this->container));
 
-        self::assertCount(2, $this->handler->getFilters());
+        self::assertCount(3, $this->handler->getFilters());
     }
 
     public function testReportError(): void
