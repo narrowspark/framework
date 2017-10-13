@@ -19,6 +19,11 @@ use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
+use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
+use Viserio\Component\Exception\Displayer\JsonDisplayer;
+use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
+use Viserio\Component\Exception\Displayer\ViewDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
@@ -74,7 +79,14 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         return \array_merge(
             parent::getDefaultOptions(),
             [
-                'displayers'        => [],
+                'displayers'        => [
+                    WhoopsDisplayer::class,
+                    SymfonyDisplayer::class,
+                    ViewDisplayer::class,
+                    HtmlDisplayer::class,
+                    JsonDisplayer::class,
+                    JsonApiDisplayer::class,
+                ],
                 'default_displayer' => HtmlDisplayer::class,
                 'filters'           => [
                     VerboseFilter::class,
