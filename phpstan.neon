@@ -77,7 +77,6 @@ parameters:
         - '#set\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#setMultiple\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
-        - '#Function xdebug_get_function_stack not found#'
 
         # If check exists
         - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
@@ -90,7 +89,6 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Dispatcher::setContainer#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Output\\OutputInterface::fetch\(\)#'
-        - '#Function xdebug_is_enabled not found#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'

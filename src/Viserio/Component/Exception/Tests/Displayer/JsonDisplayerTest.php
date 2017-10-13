@@ -16,6 +16,9 @@ class JsonDisplayerTest extends TestCase
      */
     private $displayer;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         $this->displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory());

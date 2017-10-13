@@ -17,6 +17,9 @@ class HtmlDisplayerTest extends MockeryTestCase
      */
     private $displayer;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         $config = $this->mock(RepositoryContract::class);

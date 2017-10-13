@@ -22,6 +22,9 @@ class ViewDisplayerTest extends MockeryTestCase
      */
     private $displayer;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         $this->factoryMock = $this->mock(Factory::class);

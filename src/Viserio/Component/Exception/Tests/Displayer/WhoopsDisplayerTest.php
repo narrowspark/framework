@@ -14,6 +14,9 @@ class WhoopsDisplayerTest extends TestCase
      */
     private $whoops;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         $this->whoops = new WhoopsDisplayer(new ResponseFactory());
