@@ -9,7 +9,8 @@ class DetermineErrorLevelTraitTest extends TestCase
 {
     use DetermineErrorLevelTrait;
 
-    public function testIsLevelFatal() {
+    public function testIsLevelFatal()
+    {
         self::assertFalse(self::isLevelFatal(\E_DEPRECATED));
         self::assertTrue(self::isLevelFatal(\E_ERROR));
         self::assertTrue(self::isLevelFatal(\E_PARSE));
