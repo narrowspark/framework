@@ -48,6 +48,6 @@ class JsonDisplayerTest extends TestCase
     {
         self::assertFalse($this->displayer->isVerbose());
         self::assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
-        self::assertSame('application/json', $this->displayer->contentType());
+        self::assertSame('application/json', $this->displayer->getContentType());
     }
 }

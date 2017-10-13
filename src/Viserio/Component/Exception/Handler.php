@@ -20,6 +20,7 @@ use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as Requi
 use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
+use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
@@ -78,6 +79,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
                 'filters'           => [
                     VerboseFilter::class,
                     CanDisplayFilter::class,
+                    ContentTypeFilter::class,
                 ],
             ]
         );

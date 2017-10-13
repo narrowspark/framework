@@ -11,6 +11,7 @@ use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Contract\Exception\Handler as HandlerContract;
 use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
+use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
@@ -41,6 +42,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             },
             HtmlDisplayer::class                          => [self::class, 'createHtmlDisplayer'],
             JsonDisplayer::class                          => [self::class, 'createJsonDisplayer'],
+            JsonApiDisplayer::class                       => [self::class, 'createJsonApiDisplayer'],
             SymfonyDisplayer::class                       => [self::class, 'createSymfonyDisplayer'],
             ViewDisplayer::class                          => [self::class, 'createViewDisplayer'],
             WhoopsDisplayer::class                        => [self::class, 'createWhoopsDisplayer'],
@@ -134,6 +136,21 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer
     {
         return new JsonDisplayer(
+            $container->get(ExceptionInfoContract::class),
+            $container->get(ResponseFactoryInterface::class)
+        );
+    }
+
+    /**
+     * Create a new JsonApiDisplayer instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Exception\Displayer\JsonApiDisplayer
+     */
+    public static function createJsonApiDisplayer(ContainerInterface $container): JsonApiDisplayer
+    {
+        return new JsonApiDisplayer(
             $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class)
         );

@@ -43,6 +43,6 @@ class SymfonyDisplayerTest extends TestCase
     {
         self::assertTrue($this->displayer->isVerbose());
         self::assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
-        self::assertSame('text/html', $this->displayer->contentType());
+        self::assertSame('text/html', $this->displayer->getContentType());
     }
 }

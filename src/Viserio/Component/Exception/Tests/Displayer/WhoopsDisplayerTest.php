@@ -47,6 +47,6 @@ class WhoopsDisplayerTest extends TestCase
 
         self::assertTrue($displayer->isVerbose());
         self::assertTrue($displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $displayer->contentType());
+        self::assertSame('text/html', $displayer->getContentType());
     }
 }

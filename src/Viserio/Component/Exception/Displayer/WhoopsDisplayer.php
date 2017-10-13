@@ -67,7 +67,7 @@ class WhoopsDisplayer implements
     {
         $response = $this->responseFactory->createResponse($code);
 
-        foreach (\array_merge($headers, ['Content-Type' => $this->contentType()]) as $header => $value) {
+        foreach (\array_merge($headers, ['Content-Type' => $this->getContentType()]) as $header => $value) {
             $response = $response->withAddedHeader($header, $value);
         }
 
@@ -81,7 +81,7 @@ class WhoopsDisplayer implements
     /**
      * {@inheritdoc}
      */
-    public function contentType(): string
+    public function getContentType(): string
     {
         return 'text/html';
     }

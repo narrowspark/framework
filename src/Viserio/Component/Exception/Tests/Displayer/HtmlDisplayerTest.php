@@ -93,6 +93,6 @@ class HtmlDisplayerTest extends MockeryTestCase
 
         self::assertFalse($this->displayer->isVerbose());
         self::assertTrue($this->displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $this->displayer->contentType());
+        self::assertSame('text/html', $this->displayer->getContentType());
     }
 }
