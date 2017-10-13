@@ -87,7 +87,7 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addDisplayer(new JsonDisplayer($info, $repsonseFactory));
         $this->handler->addDisplayer(new WhoopsDisplayer($repsonseFactory));
 
-        self::assertCount(3, $this->handler->getDisplayers());
+        self::assertCount(6, $this->handler->getDisplayers());
     }
 
     public function testAddAndGetTransformer(): void
@@ -95,7 +95,7 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
 
-        self::assertCount(6, $this->handler->getTransformers());
+        self::assertCount(3, $this->handler->getTransformers());
     }
 
     public function testAddAndGetFilter(): void
