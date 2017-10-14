@@ -19,7 +19,7 @@ class ContentTypeFilter implements FilterContract
         int $code
     ): array {
         foreach ($displayers as $index => $displayer) {
-            if (strpos($request->getHeaderLine('Accept'), $displayer->getContentType()) === false) {
+            if (mb_strpos($request->getHeaderLine('Accept'), $displayer->getContentType()) === false) {
                 unset($displayers[$index]);
             }
         }

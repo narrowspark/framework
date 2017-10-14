@@ -67,11 +67,8 @@ class ErrorHandler implements
      */
     protected $resolvedOptions = [];
 
-
     /**
-     *
-     *
-     * @var null|int $reservedMemory
+     * @var null|int
      */
     private $reservedMemory;
 
@@ -81,21 +78,21 @@ class ErrorHandler implements
      * @var array
      */
     private static $levels = [
-        E_DEPRECATED => 'Deprecated',
-        E_USER_DEPRECATED => 'User Deprecated',
-        E_NOTICE => 'Notice',
-        E_USER_NOTICE => 'User Notice',
-        E_STRICT => 'Runtime Notice',
-        E_WARNING => 'Warning',
-        E_USER_WARNING => 'User Warning',
-        E_COMPILE_WARNING => 'Compile Warning',
-        E_CORE_WARNING => 'Core Warning',
-        E_USER_ERROR => 'User Error',
+        E_DEPRECATED        => 'Deprecated',
+        E_USER_DEPRECATED   => 'User Deprecated',
+        E_NOTICE            => 'Notice',
+        E_USER_NOTICE       => 'User Notice',
+        E_STRICT            => 'Runtime Notice',
+        E_WARNING           => 'Warning',
+        E_USER_WARNING      => 'User Warning',
+        E_COMPILE_WARNING   => 'Compile Warning',
+        E_CORE_WARNING      => 'Core Warning',
+        E_USER_ERROR        => 'User Error',
         E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
-        E_COMPILE_ERROR => 'Compile Error',
-        E_PARSE => 'Parse Error',
-        E_ERROR => 'Error',
-        E_CORE_ERROR => 'Core Error',
+        E_COMPILE_ERROR     => 'Compile Error',
+        E_PARSE             => 'Parse Error',
+        E_ERROR             => 'Error',
+        E_CORE_ERROR        => 'Core Error',
     ];
 
     /**
@@ -104,21 +101,21 @@ class ErrorHandler implements
      * @var array
      */
     private static $loggers = [
-        E_DEPRECATED => LogLevel::INFO,
-        E_USER_DEPRECATED => LogLevel::INFO,
-        E_NOTICE => LogLevel::WARNING,
-        E_USER_NOTICE => LogLevel::WARNING,
-        E_STRICT => LogLevel::WARNING,
-        E_WARNING => LogLevel::WARNING,
-        E_USER_WARNING => LogLevel::WARNING,
-        E_COMPILE_WARNING => LogLevel::WARNING,
-        E_CORE_WARNING => LogLevel::WARNING,
-        E_USER_ERROR => LogLevel::CRITICAL,
+        E_DEPRECATED        => LogLevel::INFO,
+        E_USER_DEPRECATED   => LogLevel::INFO,
+        E_NOTICE            => LogLevel::WARNING,
+        E_USER_NOTICE       => LogLevel::WARNING,
+        E_STRICT            => LogLevel::WARNING,
+        E_WARNING           => LogLevel::WARNING,
+        E_USER_WARNING      => LogLevel::WARNING,
+        E_COMPILE_WARNING   => LogLevel::WARNING,
+        E_CORE_WARNING      => LogLevel::WARNING,
+        E_USER_ERROR        => LogLevel::CRITICAL,
         E_RECOVERABLE_ERROR => LogLevel::CRITICAL,
-        E_COMPILE_ERROR => LogLevel::CRITICAL,
-        E_PARSE => LogLevel::CRITICAL,
-        E_ERROR => LogLevel::CRITICAL,
-        E_CORE_ERROR => LogLevel::CRITICAL,
+        E_COMPILE_ERROR     => LogLevel::CRITICAL,
+        E_PARSE             => LogLevel::CRITICAL,
+        E_ERROR             => LogLevel::CRITICAL,
+        E_CORE_ERROR        => LogLevel::CRITICAL,
     ];
 
     /**
@@ -162,9 +159,9 @@ class ErrorHandler implements
             ],
             // Exception transformers.
             'transformers' => [
-                ClassNotFoundFatalErrorTransformer::class => new ClassNotFoundFatalErrorTransformer(),
+                ClassNotFoundFatalErrorTransformer::class     => new ClassNotFoundFatalErrorTransformer(),
                 UndefinedFunctionFatalErrorTransformer::class => new UndefinedFunctionFatalErrorTransformer(),
-                UndefinedMethodFatalErrorTransformer::class => new UndefinedMethodFatalErrorTransformer(),
+                UndefinedMethodFatalErrorTransformer::class   => new UndefinedMethodFatalErrorTransformer(),
             ],
         ];
     }
@@ -203,12 +200,12 @@ class ErrorHandler implements
             if ($exception instanceof FatalThrowableError) {
                 $message = $exception->getMessage();
             } else {
-                $message = 'Fatal '.$exception->getMessage();
+                $message = 'Fatal ' . $exception->getMessage();
             }
         } elseif ($exception instanceof ErrorException) {
-            $message = 'Uncaught '.$exception->getMessage();
+            $message = 'Uncaught ' . $exception->getMessage();
         } else {
-            $message = 'Uncaught Exception: '.$exception->getMessage();
+            $message = 'Uncaught Exception: ' . $exception->getMessage();
         }
 
         $this->logger->{$level}(
@@ -248,10 +245,10 @@ class ErrorHandler implements
      * these ErrorException objects are then thrown and caught by Viserio's
      * built-in or custom error handlers.
      *
-     * @param int        $type      The numeric type of the Error
-     * @param string     $message   The error message
-     * @param string     $file      The absolute path to the affected file
-     * @param int        $line      The line number of the error in the affected file
+     * @param int    $type    The numeric type of the Error
+     * @param string $message The error message
+     * @param string $file    The absolute path to the affected file
+     * @param int    $line    The line number of the error in the affected file
      *
      * @throws \ErrorException
      *
@@ -344,11 +341,11 @@ class ErrorHandler implements
         if ($error !== null && self::isLevelFatal($error['type'])) {
             $trace = $error['backtrace'] ?? null;
 
-            if (0 === strpos($error['message'], 'Allowed memory') || 0 === strpos($error['message'], 'Out of memory')) {
+            if (0 === mb_strpos($error['message'], 'Allowed memory') || 0 === mb_strpos($error['message'], 'Out of memory')) {
                 $exception = new OutOfMemoryException(self::$levels[$error['type']] . ': ' . $error['message'], 0, $error['type'], $error['file'], $error['line'], 2, false, $trace);
             } else {
                 // Create a new fatal exception instance from an error array.
-                $exception = new FatalErrorException(self::$levels[$error['type']].': '.$error['message'], 0, $error['type'], $error['file'], $error['line'], 2, true, $trace);
+                $exception = new FatalErrorException(self::$levels[$error['type']] . ': ' . $error['message'], 0, $error['type'], $error['file'], $error['line'], 2, true, $trace);
             }
         }
 
