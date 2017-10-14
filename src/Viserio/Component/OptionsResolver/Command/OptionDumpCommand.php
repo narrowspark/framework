@@ -25,7 +25,7 @@ class OptionDumpCommand extends Command
      * {@inheritdoc}
      */
     protected $signature = 'option:dump 
-        [dir : Path to the config dir.]
+        [dir= : Path to the config dir.]
         [--format=php : The output format (php, json, xml, json).]
         [--overwrite : Overwrite existent class config.]
         [--merge : Merge existent class config with a new class config.]

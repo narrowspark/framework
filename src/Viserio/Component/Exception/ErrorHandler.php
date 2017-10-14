@@ -7,6 +7,7 @@ use ErrorException;
 use Exception;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
@@ -15,9 +16,9 @@ use Psr\Log\NullLogger;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Throwable;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Exception\Exception\NotFoundException as BaseNotFoundException;
 use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -66,6 +67,60 @@ class ErrorHandler implements
      */
     protected $resolvedOptions = [];
 
+
+    /**
+     *
+     *
+     * @var null|int $reservedMemory
+     */
+    private $reservedMemory;
+
+    /**
+     * List of int errors to string.
+     *
+     * @var array
+     */
+    private static $levels = [
+        E_DEPRECATED => 'Deprecated',
+        E_USER_DEPRECATED => 'User Deprecated',
+        E_NOTICE => 'Notice',
+        E_USER_NOTICE => 'User Notice',
+        E_STRICT => 'Runtime Notice',
+        E_WARNING => 'Warning',
+        E_USER_WARNING => 'User Warning',
+        E_COMPILE_WARNING => 'Compile Warning',
+        E_CORE_WARNING => 'Core Warning',
+        E_USER_ERROR => 'User Error',
+        E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
+        E_COMPILE_ERROR => 'Compile Error',
+        E_PARSE => 'Parse Error',
+        E_ERROR => 'Error',
+        E_CORE_ERROR => 'Core Error',
+    ];
+
+    /**
+     * Transform's php errors to logger level errors.
+     *
+     * @var array
+     */
+    private static $loggers = [
+        E_DEPRECATED => LogLevel::INFO,
+        E_USER_DEPRECATED => LogLevel::INFO,
+        E_NOTICE => LogLevel::WARNING,
+        E_USER_NOTICE => LogLevel::WARNING,
+        E_STRICT => LogLevel::WARNING,
+        E_WARNING => LogLevel::WARNING,
+        E_USER_WARNING => LogLevel::WARNING,
+        E_COMPILE_WARNING => LogLevel::WARNING,
+        E_CORE_WARNING => LogLevel::WARNING,
+        E_USER_ERROR => LogLevel::CRITICAL,
+        E_RECOVERABLE_ERROR => LogLevel::CRITICAL,
+        E_COMPILE_ERROR => LogLevel::CRITICAL,
+        E_PARSE => LogLevel::CRITICAL,
+        E_ERROR => LogLevel::CRITICAL,
+        E_CORE_ERROR => LogLevel::CRITICAL,
+    ];
+
     /**
      * Create a new error handler instance.
      *
@@ -76,7 +131,7 @@ class ErrorHandler implements
     {
         $this->resolvedOptions     = self::resolveOptions($data);
         $this->exceptionIdentifier = new ExceptionIdentifier();
-        $this->transformers        = $this->getFormattedTransformers();
+        $this->transformers        = $this->transformArray($this->resolvedOptions['transformers']);
         $this->dontReport          = $this->resolvedOptions['dont_report'];
         $this->logger              = $logger ?? new NullLogger();
     }
@@ -107,9 +162,9 @@ class ErrorHandler implements
             ],
             // Exception transformers.
             'transformers' => [
-                ClassNotFoundFatalErrorTransformer::class,
-                UndefinedFunctionFatalErrorTransformer::class,
-                UndefinedMethodFatalErrorTransformer::class,
+                ClassNotFoundFatalErrorTransformer::class => new ClassNotFoundFatalErrorTransformer(),
+                UndefinedFunctionFatalErrorTransformer::class => new UndefinedFunctionFatalErrorTransformer(),
+                UndefinedMethodFatalErrorTransformer::class => new UndefinedMethodFatalErrorTransformer(),
             ],
         ];
     }
@@ -144,8 +199,20 @@ class ErrorHandler implements
         $level = $this->getLevel($exception);
         $id    = $this->exceptionIdentifier->identify($exception);
 
+        if ($exception instanceof FatalErrorException) {
+            if ($exception instanceof FatalThrowableError) {
+                $message = $exception->getMessage();
+            } else {
+                $message = 'Fatal '.$exception->getMessage();
+            }
+        } elseif ($exception instanceof ErrorException) {
+            $message = 'Uncaught '.$exception->getMessage();
+        } else {
+            $message = 'Uncaught Exception: '.$exception->getMessage();
+        }
+
         $this->logger->{$level}(
-            $exception->getMessage(),
+            $message,
             ['exception' => $exception, 'identification' => ['id' => $id]]
         );
     }
@@ -185,8 +252,6 @@ class ErrorHandler implements
      * @param string     $message   The error message
      * @param string     $file      The absolute path to the affected file
      * @param int        $line      The line number of the error in the affected file
-     * @param null       $context
-     * @param null|array $backtrace
      *
      * @throws \ErrorException
      *
@@ -198,9 +263,7 @@ class ErrorHandler implements
         int $type,
         string $message,
         string $file = '',
-        int $line = 0,
-        $context = null,
-        array $backtrace = null
+        int $line = 0
     ): bool {
         if (error_reporting() === 0) {
             return false;
@@ -266,23 +329,31 @@ class ErrorHandler implements
      */
     public function handleShutdown(): void
     {
+        if ($this->reservedMemory === null) {
+            return;
+        }
+
+        $this->reservedMemory = null;
+
         // If an error has occurred that has not been displayed, we will create a fatal
         // error exception instance and pass it into the regular exception handling
         // code so it can be displayed back out to the developer for information.
-        $error = \error_get_last();
+        $error     = \error_get_last();
+        $exception = null;
 
         if ($error !== null && self::isLevelFatal($error['type'])) {
-            $this->handleException(
+            $trace = $error['backtrace'] ?? null;
+
+            if (0 === strpos($error['message'], 'Allowed memory') || 0 === strpos($error['message'], 'Out of memory')) {
+                $exception = new OutOfMemoryException(self::$levels[$error['type']] . ': ' . $error['message'], 0, $error['type'], $error['file'], $error['line'], 2, false, $trace);
+            } else {
                 // Create a new fatal exception instance from an error array.
-                new FatalErrorException(
-                    $error['message'],
-                    $error['type'],
-                    0,
-                    $error['file'],
-                    $error['line'],
-                    0
-                )
-            );
+                $exception = new FatalErrorException(self::$levels[$error['type']].': '.$error['message'], 0, $error['type'], $error['file'], $error['line'], 2, true, $trace);
+            }
+        }
+
+        if ($exception !== null) {
+            $this->handleException($exception);
         }
     }
 
@@ -320,7 +391,10 @@ class ErrorHandler implements
      */
     protected function registerShutdownHandler(): void
     {
-        \register_shutdown_function([$this, 'handleShutdown']);
+        if ($this->reservedMemory === null) {
+            $this->reservedMemory = \str_repeat('x', 10240);
+            \register_shutdown_function([$this, 'handleShutdown']);
+        }
     }
 
     /**
@@ -355,25 +429,78 @@ class ErrorHandler implements
      *
      * @param \Throwable $exception
      *
-     * @throws \Viserio\Component\Contract\Exception\Exception\NotFoundException if transformer is not found
-     *
      * @return \Throwable
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        foreach ($this->transformers as $transformer) {
-            if (\is_object($transformer)) {
-                $transformerClass = $transformer;
-            } elseif ($this->container !== null && $this->container->has($transformer)) {
-                $transformerClass = $this->container->get($transformer);
-            } else {
-                throw new BaseNotFoundException(\sprintf('Transformer [%s] not found.', (string) $transformer));
-            }
+        $transformers = $this->make($this->transformers);
 
-            $exception = $transformerClass->transform($exception);
+        if (! $exception instanceof OutOfMemoryException ||
+            count($transformers) === 0
+        ) {
+            return $exception;
+        }
+
+        foreach ($transformers as $transformer) {
+            $exception = $transformer->transform($exception);
         }
 
         return $exception;
+    }
+
+    /**
+     * Transform's the given array to a key (class name) value (object/class name) array.
+     *
+     * @return array
+     */
+    protected function transformArray(array $data): array
+    {
+        $array = [];
+
+        foreach ($data as $key => $value) {
+            if (is_numeric($key)) {
+                $key = is_string($value) ? $value : \get_class($value);
+            }
+
+            $array[$key] = $value;
+        }
+
+        return $array;
+    }
+
+    /**
+     * Make multiple objects using the container
+     * if the value is not a object.
+     *
+     * @param array $classes
+     *
+     * @return object[]
+     */
+    protected function make(array $classes)
+    {
+        foreach ($classes as $index => $class) {
+            if (is_object($class)) {
+                $classes[$index] = $class;
+
+                continue;
+            }
+
+            if ($this->container === null) {
+                continue;
+            }
+
+            try {
+                $classes[$index] = $this->container->get($class);
+            } catch (NotFoundExceptionInterface $exception) {
+                unset($classes[$index]);
+
+                $this->report(
+                    $exception instanceof Exception ? $exception : new FatalThrowableError($exception)
+                );
+            }
+        }
+
+        return array_values($classes);
     }
 
     /**
@@ -389,6 +516,10 @@ class ErrorHandler implements
             if ($exception instanceof $class) {
                 return $level;
             }
+        }
+
+        if ($exception instanceof FatalErrorException) {
+            return self::$loggers[$exception->getSeverity()];
         }
 
         return LogLevel::ERROR;
@@ -410,25 +541,5 @@ class ErrorHandler implements
         }
 
         return false;
-    }
-
-    /**
-     * Formant's the filters array to a key (class name) value (object/class name).
-     *
-     * @return array
-     */
-    private function getFormattedTransformers(): array
-    {
-        $transformers = [];
-
-        foreach ($this->resolvedOptions['transformers'] as $key => $transformer) {
-            if (is_numeric($key)) {
-                $key = is_string($transformer) ? $transformer : \get_class($transformer);
-            }
-
-            $transformers[$key] = $transformer;
-        }
-
-        return $transformers;
     }
 }

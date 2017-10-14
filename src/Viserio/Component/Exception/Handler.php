@@ -57,8 +57,8 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     {
         parent::__construct($data, $logger);
 
-        $this->filters    = $this->getFormattedFilters();
-        $this->displayers = $this->getFormattedDisplayers();
+        $this->filters    = $this->transformArray($this->resolvedOptions['filters']);
+        $this->displayers = $this->transformArray($this->resolvedOptions['displayers']);
 
         $this->setResponseFactory($responseFactory);
     }
@@ -275,7 +275,9 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         Throwable $transformed,
         int $code
     ): DisplayerContract {
-        if ($request !== null && $filtered = $this->getFiltered($this->displayers, $request, $original, $transformed, $code)) {
+        if ($request !== null &&
+            $filtered = $this->getFiltered($this->make($this->displayers), $request, $original, $transformed, $code)
+        ) {
             return $filtered[0];
         }
 
@@ -306,52 +308,11 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         Throwable $transformed,
         int $code
     ): array {
-        foreach ($this->filters as $filter) {
-            $filterClass = \is_object($filter) ? $filter : $this->container->get($filter);
-
-            $displayers  = $filterClass->filter($displayers, $request, $original, $transformed, $code);
+        /* @var FilterContract $filter */
+        foreach ($this->make($this->filters) as $filter) {
+            $displayers = $filter->filter($displayers, $request, $original, $transformed, $code);
         }
 
         return \array_values($displayers);
-    }
-
-    /**
-     * Formant's the displayers array to a key (class name) value (object/class name).
-     *
-     * @return array
-     */
-    private function getFormattedDisplayers(): array
-    {
-        $displayers = [];
-
-        foreach ($this->resolvedOptions['displayers'] as $key => $displayer) {
-            if (is_numeric($key)) {
-                $key = is_string($displayer) ? $displayer : \get_class($displayer);
-            }
-
-            $displayers[$key] = $displayer;
-        }
-
-        return $displayers;
-    }
-
-    /**
-     * Formant's the filters array to a key (class name) value (object/class name).
-     *
-     * @return array
-     */
-    private function getFormattedFilters(): array
-    {
-        $filters = [];
-
-        foreach ($this->resolvedOptions['filters'] as $key => $filter) {
-            if (is_numeric($key)) {
-                $key = is_string($filter) ? $filter : \get_class($filter);
-            }
-
-            $filters[$key] = $filter;
-        }
-
-        return $filters;
     }
 }

@@ -19,6 +19,7 @@ use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
+use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Handler;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
@@ -47,6 +48,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             ViewDisplayer::class                          => [self::class, 'createViewDisplayer'],
             WhoopsDisplayer::class                        => [self::class, 'createWhoopsDisplayer'],
             VerboseFilter::class                          => [self::class, 'createVerboseFilter'],
+            ContentTypeFilter::class                      => [self::class, 'createContentTypeFilter'],
             CanDisplayFilter::class                       => [self::class, 'createCanDisplayFilter'],
             ClassNotFoundFatalErrorTransformer::class     => function () {
                 return new ClassNotFoundFatalErrorTransformer();
@@ -197,6 +199,18 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     public static function createVerboseFilter(ContainerInterface $container): VerboseFilter
     {
         return new VerboseFilter($container);
+    }
+
+    /**
+     * Create a new ContentTypeFilter instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Exception\Filter\ContentTypeFilter
+     */
+    public static function createContentTypeFilter(ContainerInterface $container): ContentTypeFilter
+    {
+        return new ContentTypeFilter();
     }
 
     /**
