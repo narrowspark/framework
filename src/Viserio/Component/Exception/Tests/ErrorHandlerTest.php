@@ -17,7 +17,7 @@ class ErrorHandlerTest extends MockeryTestCase
     private $loggger;
 
     /**
-     * @var \Viserio\Component\Exception\Handler
+     * @var \Viserio\Component\Exception\ErrorHandler
      */
     private $handler;
 
