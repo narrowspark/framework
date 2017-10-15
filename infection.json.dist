@@ -1,0 +1,9 @@
+{
+    "source": {
+        "directories": [
+            "src/Viserio"
+        ],
+        "exclude": []
+    },
+    "timeout": 300,
+}
