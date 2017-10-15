@@ -106,42 +106,6 @@ class HandlerTest extends MockeryTestCase
         self::assertCount(3, $this->handler->getFilters());
     }
 
-    public function testReportError(): void
-    {
-        $exception = new Exception('Exception message');
-
-        $this->loggger->shouldReceive('error')
-            ->once()
-            ->withArgs(['Uncaught Exception: Exception message', Mockery::hasKey('exception')]);
-        $this->loggger->shouldReceive('critical')
-            ->never();
-
-        $this->handler->report($exception);
-    }
-
-    public function testReportCritical(): void
-    {
-        $exception = new FatalThrowableError(new Exception());
-
-        $this->loggger->shouldReceive('error')
-            ->never();
-        $this->loggger->shouldReceive('critical')
-            ->once();
-
-        $this->handler->report($exception);
-    }
-
-    public function testShouldntReport(): void
-    {
-        $exception = new FatalThrowableError(new Exception());
-
-        $this->loggger->shouldReceive('critical')
-            ->never();
-
-        $this->handler->addShouldntReport($exception);
-        $this->handler->report($exception);
-    }
-
     public function testHandleError(): void
     {
         try {
