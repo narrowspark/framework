@@ -4,9 +4,9 @@ namespace Viserio\Component\Exception\Tests\Displayer;
 
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
-use PHPUnit\Framework\TestCase;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
 class JsonApiDisplayerTest extends TestCase
