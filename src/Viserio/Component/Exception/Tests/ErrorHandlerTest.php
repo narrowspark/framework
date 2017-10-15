@@ -37,7 +37,7 @@ class ErrorHandlerTest extends MockeryTestCase
     {
         $exception = new Exception('Exception message');
 
-               $this->loggger->shouldReceive('error')
+        $this->loggger->shouldReceive('error')
             ->once()
             ->withArgs(['Uncaught Exception: Exception message', Mockery::hasKey('exception')]);
         $this->loggger->shouldReceive('critical')
@@ -68,7 +68,7 @@ class ErrorHandlerTest extends MockeryTestCase
         $this->handler->addShouldntReport($exception);
         $this->handler->report($exception);
     }
-    
+
     /**
      * {@inheritdoc}
      */
