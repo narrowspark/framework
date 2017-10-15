@@ -25,7 +25,7 @@ class OptionDumpCommand extends Command
      * {@inheritdoc}
      */
     protected $signature = 'option:dump 
-        [dir= : Path to the config dir.]
+        [dir : Path to the config dir.]
         [--format=php : The output format (php, json, xml, json).]
         [--overwrite : Overwrite existent class config.]
         [--merge : Merge existent class config with a new class config.]
@@ -51,6 +51,11 @@ class OptionDumpCommand extends Command
 
         if ($this->container !== null && $this->getContainer()->has(Dumper::class)) {
             $dumper = $this->getContainer()->get(Dumper::class);
+        }
+
+        if ($dirPath === null) {
+            $this->error('');
+            return 1;
         }
 
         if ($dumper === null && $format !== 'php') {

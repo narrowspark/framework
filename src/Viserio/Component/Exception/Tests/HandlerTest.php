@@ -112,7 +112,7 @@ class HandlerTest extends MockeryTestCase
 
         $this->loggger->shouldReceive('error')
             ->once()
-            ->withArgs(['Exception message', Mockery::hasKey('exception')]);
+            ->withArgs(['Uncaught Exception: Exception message', Mockery::hasKey('exception')]);
         $this->loggger->shouldReceive('critical')
             ->never();
 
@@ -145,7 +145,7 @@ class HandlerTest extends MockeryTestCase
     public function testHandleError(): void
     {
         try {
-            $this->handler->handleError(E_PARSE, 'test', '', 0, null);
+            $this->handler->handleError(E_PARSE, 'test', '', 0);
         } catch (ErrorException $e) {
             self::assertInstanceOf(ErrorException::class, $e);
         }
