@@ -117,6 +117,7 @@ class VerboseFilterTest extends MockeryTestCase
             $this->exception,
             500
         );
+
         return $displayers;
     }
 }

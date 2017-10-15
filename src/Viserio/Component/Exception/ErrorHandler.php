@@ -70,7 +70,7 @@ class ErrorHandler implements
     /**
      * Some reserved memory.
      *
-     * @var null|string $reservedMemory
+     * @var null|string
      */
     private $reservedMemory;
 

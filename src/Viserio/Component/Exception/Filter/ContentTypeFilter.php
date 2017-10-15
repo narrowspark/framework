@@ -54,7 +54,7 @@ class ContentTypeFilter implements FilterContract
             }
 
             foreach ((array) $contentTypes as $type) {
-                if ($this->matchesType($accept, $type) || $accept === strtok($type, '/').'/*') {
+                if ($this->matchesType($accept, $type) || $accept === strtok($type, '/') . '/*') {
                     return true;
                 }
             }
@@ -79,7 +79,7 @@ class ContentTypeFilter implements FilterContract
 
         $split = explode('/', $actual);
 
-        return isset($split[1]) && preg_match('#'.preg_quote($split[0], '#').'/.+\+'.preg_quote($split[1], '#').'#', $type);
+        return isset($split[1]) && preg_match('#' . preg_quote($split[0], '#') . '/.+\+' . preg_quote($split[1], '#') . '#', $type);
     }
 
     /**
@@ -100,10 +100,10 @@ class ContentTypeFilter implements FilterContract
                 $bits = preg_split('/\s*(?:;*("[^"]+");*|;*(\'[^\']+\');*|;+)\s*/', $itemValue, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
                 $value = array_shift($bits);
 
-                if (($start = substr($value, 0, 1)) === ($end = substr($value, -1)) &&
+                if (($start = mb_substr($value, 0, 1)) === ($end = mb_substr($value, -1)) &&
                     ('"' === $start || '\'' === $start)
                 ) {
-                    return substr($value, 1, -1);
+                    return mb_substr($value, 1, -1);
                 }
 
                 return $value;

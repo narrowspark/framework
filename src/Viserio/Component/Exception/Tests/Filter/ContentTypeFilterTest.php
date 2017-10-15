@@ -47,23 +47,13 @@ class ContentTypeFilterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $response              = new ResponseFactory();
-        $eInfo                 = new ExceptionInfo();
-        $this->serverRequest   = $this->mock(ServerRequestInterface::class);
-        $this->whoopsDisplayer = new WhoopsDisplayer($response);
-        $this->jsonDisplayer   = new JsonDisplayer($eInfo, $response);
+        $response               = new ResponseFactory();
+        $eInfo                  = new ExceptionInfo();
+        $this->serverRequest    = $this->mock(ServerRequestInterface::class);
+        $this->whoopsDisplayer  = new WhoopsDisplayer($response);
+        $this->jsonDisplayer    = new JsonDisplayer($eInfo, $response);
         $this->jsonApiDisplayer = new JsonApiDisplayer($eInfo, $response);
-        $this->htmlDisplayer   = new HtmlDisplayer($eInfo, $response);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function assertPreConditions(): void
-    {
-        parent::assertPreConditions();
-
-        $this->allowMockingNonExistentMethods(true);
+        $this->htmlDisplayer    = new HtmlDisplayer($eInfo, $response);
     }
 
     public function testAcceptAll(): void
@@ -235,7 +225,17 @@ class ContentTypeFilterTest extends MockeryTestCase
     }
 
     /**
-     * @param array $displayers
+     * {@inheritdoc}
+     */
+    protected function assertPreConditions(): void
+    {
+        parent::assertPreConditions();
+
+        $this->allowMockingNonExistentMethods(true);
+    }
+
+    /**
+     * @param array                                    $displayers
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return array
