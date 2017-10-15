@@ -55,6 +55,7 @@ class OptionDumpCommand extends Command
 
         if ($dirPath === null) {
             $this->error('');
+
             return 1;
         }
 
