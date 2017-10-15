@@ -33,32 +33,23 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            ExceptionInfoContract::class                  => [self::class, 'createExceptionInfo'],
-            HandlerContract::class                        => [self::class, 'createExceptionHandler'],
-            Handler::class                                => function (ContainerInterface $container) {
+            ExceptionInfoContract::class    => [self::class, 'createExceptionInfo'],
+            HandlerContract::class          => [self::class, 'createExceptionHandler'],
+            Handler::class                  => function (ContainerInterface $container) {
                 return $container->get(HandlerContract::class);
             },
-            ExceptionHandlerContract::class               => function (ContainerInterface $container) {
+            ExceptionHandlerContract::class => function (ContainerInterface $container) {
                 return $container->get(HandlerContract::class);
             },
-            HtmlDisplayer::class                          => [self::class, 'createHtmlDisplayer'],
-            JsonDisplayer::class                          => [self::class, 'createJsonDisplayer'],
-            JsonApiDisplayer::class                       => [self::class, 'createJsonApiDisplayer'],
-            SymfonyDisplayer::class                       => [self::class, 'createSymfonyDisplayer'],
-            ViewDisplayer::class                          => [self::class, 'createViewDisplayer'],
-            WhoopsDisplayer::class                        => [self::class, 'createWhoopsDisplayer'],
-            VerboseFilter::class                          => [self::class, 'createVerboseFilter'],
-            ContentTypeFilter::class                      => [self::class, 'createContentTypeFilter'],
-            CanDisplayFilter::class                       => [self::class, 'createCanDisplayFilter'],
-            ClassNotFoundFatalErrorTransformer::class     => function () {
-                return new ClassNotFoundFatalErrorTransformer();
-            },
-            UndefinedFunctionFatalErrorTransformer::class => function () {
-                return new UndefinedFunctionFatalErrorTransformer();
-            },
-            UndefinedMethodFatalErrorTransformer::class   => function () {
-                return new UndefinedMethodFatalErrorTransformer();
-            },
+            HtmlDisplayer::class            => [self::class, 'createHtmlDisplayer'],
+            JsonDisplayer::class            => [self::class, 'createJsonDisplayer'],
+            JsonApiDisplayer::class         => [self::class, 'createJsonApiDisplayer'],
+            SymfonyDisplayer::class         => [self::class, 'createSymfonyDisplayer'],
+            ViewDisplayer::class            => [self::class, 'createViewDisplayer'],
+            WhoopsDisplayer::class          => [self::class, 'createWhoopsDisplayer'],
+            VerboseFilter::class            => [self::class, 'createVerboseFilter'],
+            ContentTypeFilter::class        => [self::class, 'createContentTypeFilter'],
+            CanDisplayFilter::class         => [self::class, 'createCanDisplayFilter'],
         ];
     }
 
