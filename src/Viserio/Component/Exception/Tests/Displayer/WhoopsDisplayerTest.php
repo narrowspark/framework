@@ -14,6 +14,9 @@ class WhoopsDisplayerTest extends TestCase
      */
     private $whoops;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         $this->whoops = new WhoopsDisplayer(new ResponseFactory());
@@ -44,6 +47,6 @@ class WhoopsDisplayerTest extends TestCase
 
         self::assertTrue($displayer->isVerbose());
         self::assertTrue($displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $displayer->contentType());
+        self::assertSame('text/html', $displayer->getContentType());
     }
 }

@@ -5,14 +5,14 @@ namespace Viserio\Component\Exception\Tests\Displayer;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Exception\Displayer\JsonDisplayer;
+use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class JsonDisplayerTest extends TestCase
+class JsonApiDisplayerTest extends TestCase
 {
     /**
-     * @var \Viserio\Component\Exception\Displayer\JsonDisplayer
+     * @var \Viserio\Component\Exception\Displayer\JsonApiDisplayer
      */
     private $displayer;
 
@@ -21,7 +21,7 @@ class JsonDisplayerTest extends TestCase
      */
     public function setUp()
     {
-        $this->displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory());
+        $this->displayer = new JsonApiDisplayer(new ExceptionInfo(), new ResponseFactory());
     }
 
     public function testServerError(): void
@@ -31,7 +31,7 @@ class JsonDisplayerTest extends TestCase
 
         self::assertSame(\trim($expected), (string) $response->getBody());
         self::assertSame(500, $response->getStatusCode());
-        self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
+        self::assertSame('application/vnd.api+json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
@@ -41,13 +41,13 @@ class JsonDisplayerTest extends TestCase
 
         self::assertSame(\trim($expected), (string) $response->getBody());
         self::assertSame(401, $response->getStatusCode());
-        self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
+        self::assertSame('application/vnd.api+json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
     {
         self::assertFalse($this->displayer->isVerbose());
         self::assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
-        self::assertSame('application/json', $this->displayer->getContentType());
+        self::assertSame('application/vnd.api+json', $this->displayer->getContentType());
     }
 }

@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception;
 
-use InvalidArgumentException;
+use Narrowspark\HttpStatus\Exception\InvalidArgumentException;
+use Narrowspark\HttpStatus\Exception\OutOfBoundsException;
 use Narrowspark\HttpStatus\HttpStatus;
 use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 
@@ -20,7 +21,7 @@ class ExceptionInfo implements ExceptionInfoContract
                 'name'   => HttpStatus::getReasonPhrase($code),
                 'detail' => HttpStatus::getReasonMessage($code),
             ];
-        } catch (InvalidArgumentException $error) {
+        } catch (InvalidArgumentException | OutOfBoundsException $error) {
             $info = [
                 'id'     => $id,
                 'code'   => 500,

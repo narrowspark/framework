@@ -7,17 +7,17 @@ trait ArrayPrettyPrintTrait
     /**
      * Make php array pretty for save or output.
      *
-     * @param array $config
+     * @param array $data
      * @param int   $indentLevel
      *
      * @return string
      */
-    protected function getPrettyPrintArray(array $config, int $indentLevel = 1): string
+    protected function getPrettyPrintArray(array $data, int $indentLevel = 1): string
     {
         $indent  = \str_repeat(' ', $indentLevel * 4);
         $entries = [];
 
-        foreach ($config as $key => $value) {
+        foreach ($data as $key => $value) {
             if (! \is_int($key)) {
                 if (\is_string($key) && (\class_exists($key) || \interface_exists($key)) && \ctype_upper($key[0])) {
                     $key = \sprintf('\\%s::class', \ltrim($key, '\\'));
