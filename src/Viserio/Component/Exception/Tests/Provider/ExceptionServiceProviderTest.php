@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
@@ -23,7 +24,6 @@ use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\View\Provider\ViewServiceProvider;
-use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
 
 class ExceptionServiceProviderTest extends TestCase
 {

@@ -21,9 +21,6 @@ use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Handler;
-use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
-use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
-use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 
 class ExceptionServiceProvider implements ServiceProviderInterface
 {
