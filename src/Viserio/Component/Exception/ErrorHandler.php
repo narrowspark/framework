@@ -68,7 +68,9 @@ class ErrorHandler implements
     protected $resolvedOptions = [];
 
     /**
-     * @var null|int
+     * Some reserved memory.
+     *
+     * @var null|string $reservedMemory
      */
     private $reservedMemory;
 

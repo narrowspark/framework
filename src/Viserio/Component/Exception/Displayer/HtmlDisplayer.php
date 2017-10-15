@@ -48,7 +48,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     public function __construct(
         ExceptionInfoContract $info,
         ResponseFactoryInterface $responseFactory,
-        $data
+        $data = []
     ) {
         $this->info            = $info;
         $this->responseFactory = $responseFactory;

@@ -32,8 +32,8 @@ class WhoopsDisplayer implements
     /**
      * Create a new whoops displayer instance.
      *
-     * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
-     * @param array|\ArrayAccess|\Psr\Container\ContainerInterface $data
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param iterable|\Psr\Container\ContainerInterface     $data
      */
     public function __construct(ResponseFactoryInterface $responseFactory, $data = [])
     {
@@ -46,7 +46,7 @@ class WhoopsDisplayer implements
      */
     public static function getDimensions(): iterable
     {
-        return ['viserio', 'exception'];
+        return ['viserio', 'exception', 'whoops'];
     }
 
     /**
