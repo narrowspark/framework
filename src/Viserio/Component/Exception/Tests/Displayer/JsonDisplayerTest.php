@@ -14,7 +14,7 @@ class JsonDisplayerTest extends TestCase
     /**
      * @var \Viserio\Component\Exception\Displayer\JsonDisplayer
      */
-    protected $displayer;
+    private $displayer;
 
     /**
      * {@inheritdoc}
