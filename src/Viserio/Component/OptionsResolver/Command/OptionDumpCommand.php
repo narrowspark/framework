@@ -53,12 +53,6 @@ class OptionDumpCommand extends Command
             $dumper = $this->getContainer()->get(Dumper::class);
         }
 
-        if ($dirPath === null) {
-            $this->error('');
-
-            return 1;
-        }
-
         if ($dumper === null && $format !== 'php') {
             $this->error('Only the php format is supported; use composer req viserio/parser to get json, xml, yml output.');
 
