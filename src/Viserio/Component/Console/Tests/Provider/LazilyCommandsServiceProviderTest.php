@@ -5,12 +5,12 @@ namespace Viserio\Component\Console\Tests\Provider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Console\Provider\LazilyCommandsServiceProvider;
 use Viserio\Component\Console\Tests\Fixture\GoodbyeCommand;
 use Viserio\Component\Console\Tests\Fixture\HelloCommand;
 use Viserio\Component\Console\Tests\Fixture\LazyWhiner;
-use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Container\Container;
 
 class LazilyCommandsServiceProviderTest extends TestCase

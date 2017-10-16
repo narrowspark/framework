@@ -5,7 +5,6 @@ namespace Viserio\Component\Console\Provider;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
-use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 
@@ -26,7 +25,7 @@ class ConsoleServiceProvider implements ServiceProviderInterface
             },
             'cerebro'                     => function (ContainerInterface $container) {
                 return $container->get(Application::class);
-            }
+            },
         ];
     }
 
