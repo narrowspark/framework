@@ -1,13 +1,21 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Console\Tests\Fixture;
+namespace Viserio\Component\Console\Output;
 
 use Symfony\Component\Console\Output\Output;
 
 class SpyOutput extends Output
 {
-    public $output;
+    /**
+     * Get the outputted string.
+     *
+     * @var string
+     */
+    public $output = '';
 
+    /**
+     * {@inheritdoc}
+     */
     protected function doWrite($message, $newline): void
     {
         $this->output .= $message . ($newline ? "\n" : '');

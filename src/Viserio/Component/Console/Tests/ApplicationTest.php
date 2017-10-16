@@ -26,7 +26,7 @@ use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleErrorEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
-use Viserio\Component\Console\Tests\Fixture\SpyOutput;
+use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;

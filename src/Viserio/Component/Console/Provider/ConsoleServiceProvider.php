@@ -8,17 +8,9 @@ use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class ConsoleServiceProvider implements
-    ServiceProviderInterface,
-    RequiresComponentConfigContract,
-    ProvidesDefaultOptionsContract
+class ConsoleServiceProvider implements ServiceProviderInterface
 {
-    use OptionsResolverTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -34,8 +26,7 @@ class ConsoleServiceProvider implements
             },
             'cerebro'                     => function (ContainerInterface $container) {
                 return $container->get(Application::class);
-            },
-            ContainerCommandLoader::class => [self::class, 'createContainerCommandLoader'],
+            }
         ];
     }
 
@@ -45,24 +36,6 @@ class ConsoleServiceProvider implements
     public function getExtensions(): array
     {
         return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): iterable
-    {
-        return ['viserio', 'console'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): iterable
-    {
-        return [
-            'lazily_commands' => [],
-        ];
     }
 
     /**
@@ -81,24 +54,6 @@ class ConsoleServiceProvider implements
             $console->setEventManager($container->get(EventManagerContract::class));
         }
 
-        if ($container->has(ContainerCommandLoader::class)) {
-            $console->setCommandLoader($container->get(ContainerCommandLoader::class));
-        }
-
         return $console;
-    }
-
-    /**
-     * Create a new console application instance.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return \Symfony\Component\Console\CommandLoader\ContainerCommandLoader
-     */
-    public static function createContainerCommandLoader(ContainerInterface $container): ContainerCommandLoader
-    {
-        $options = self::resolveOptions($container);
-
-        return new ContainerCommandLoader($container, $options['lazily_commands']);
     }
 }
