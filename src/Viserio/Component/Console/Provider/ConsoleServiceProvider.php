@@ -16,14 +16,14 @@ class ConsoleServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            Application::class         => [self::class, 'createCerebro'],
-            SymfonyConsole::class      => function (ContainerInterface $container) {
+            Application::class            => [self::class, 'createCerebro'],
+            SymfonyConsole::class         => function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
-            'console' => function (ContainerInterface $container) {
+            'console'                     => function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
-            'cerebro' => function (ContainerInterface $container) {
+            'cerebro'                     => function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
         ];

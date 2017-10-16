@@ -32,4 +32,21 @@ class ConsoleCommandsServiceProviderTest extends TestCase
 
         self::assertInstanceOf(RouteListCommand::class, $commands['route:table']);
     }
+
+    public function testGetDimensions()
+    {
+        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+    }
+
+    public function testGetDefaultOptions()
+    {
+        self::assertSame(
+            [
+                'lazily_commands' => [
+                    'route:table' => RouteListCommand::class,
+                ],
+            ],
+            ConsoleCommandsServiceProvider::getDefaultOptions()
+        );
+    }
 }

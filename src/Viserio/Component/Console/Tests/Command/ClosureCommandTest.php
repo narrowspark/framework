@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Command\ClosureCommand;
-use Viserio\Component\Console\Tests\Fixture\SpyOutput;
+use Viserio\Component\Console\Output\SpyOutput;
 
 class ClosureCommandTest extends TestCase
 {

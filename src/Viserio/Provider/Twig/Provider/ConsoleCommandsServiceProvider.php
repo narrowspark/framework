@@ -6,10 +6,15 @@ use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
 use Viserio\Provider\Twig\Command\LintCommand;
 
-class ConsoleCommandsServiceProvider implements ServiceProviderInterface
+class ConsoleCommandsServiceProvider implements
+    ServiceProviderInterface,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract
 {
     /**
      * {@inheritdoc}
@@ -26,6 +31,28 @@ class ConsoleCommandsServiceProvider implements ServiceProviderInterface
     {
         return [
             Application::class => [self::class, 'extendConsole'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['viserio', 'console'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultOptions(): iterable
+    {
+        return [
+            'lazily_commands' => [
+                'twig:debug' => DebugCommand::class,
+                'twig:lint'  => LintCommand::class,
+                'twig:clean' => CleanCommand::class,
+            ],
         ];
     }
 

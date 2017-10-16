@@ -36,4 +36,22 @@ class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
         self::assertInstanceOf(ServeCommand::class, $commands['serve']);
     }
+
+    public function testGetDimensions()
+    {
+        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+    }
+
+    public function testGetDefaultOptions()
+    {
+        self::assertSame(
+            [
+                'lazily_commands' => [
+                    'app:down' => DownCommand::class,
+                    'app:up'   => UpCommand::class,
+                ],
+            ],
+            ConsoleCommandsServiceProvider::getDefaultOptions()
+        );
+    }
 }

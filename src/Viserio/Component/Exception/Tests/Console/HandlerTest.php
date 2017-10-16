@@ -7,7 +7,7 @@ use RuntimeException;
 use Symfony\Component\Console\Input\StringInput;
 use Throwable;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Console\Tests\Fixture\SpyOutput;
+use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Exception\Console\Handler;
 use Viserio\Component\Exception\Tests\Fixtures\ErrorFixtureCommand;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -154,10 +154,10 @@ Exception trace:
 2   Symfony\Component\Console\Application::find(\"error\")
     $vendorFile : 212
 
-3   Symfony\Component\Console\Application::doRun(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Tests\Fixture\SpyOutput))
+3   Symfony\Component\Console\Application::doRun(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
     $viserioFile : 296
 
-4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Tests\Fixture\SpyOutput))
+4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
     $handlerFile : 120
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()

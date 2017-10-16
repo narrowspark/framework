@@ -44,4 +44,22 @@ class ConsoleCommandsServiceProviderTest extends TestCase
 
         self::assertNull($container->get(Application::class));
     }
+
+    public function testGetDimensions()
+    {
+        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+    }
+
+    public function testGetDefaultOptions()
+    {
+        self::assertSame(
+            [
+                'lazily_commands' => [
+                    'cron:list' => CronListCommand::class,
+                    'cron:run'  => ScheduleRunCommand::class,
+                ],
+            ],
+            ConsoleCommandsServiceProvider::getDefaultOptions()
+        );
+    }
 }

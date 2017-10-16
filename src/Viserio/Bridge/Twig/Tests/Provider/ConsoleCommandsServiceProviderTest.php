@@ -24,4 +24,22 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertInstanceOf(DebugCommand::class, $commands['twig:debug']);
         self::assertInstanceOf(LintCommand::class, $commands['twig:lint']);
     }
+
+    public function testGetDimensions()
+    {
+        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+    }
+
+    public function testGetDefaultOptions()
+    {
+        self::assertSame(
+            [
+                'lazily_commands' => [
+                    'twig:debug' => DebugCommand::class,
+                    'twig:lint'  => LintCommand::class,
+                ],
+            ],
+            ConsoleCommandsServiceProvider::getDefaultOptions()
+        );
+    }
 }

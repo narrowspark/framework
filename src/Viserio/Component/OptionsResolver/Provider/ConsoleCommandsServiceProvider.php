@@ -5,9 +5,14 @@ namespace Viserio\Component\OptionsResolver\Provider;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 
-class ConsoleCommandsServiceProvider implements ServiceProviderInterface
+class ConsoleCommandsServiceProvider implements
+    ServiceProviderInterface,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract
 {
     /**
      * {@inheritdoc}
@@ -24,6 +29,26 @@ class ConsoleCommandsServiceProvider implements ServiceProviderInterface
     {
         return [
             Application::class => [self::class, 'extendConsole'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['viserio', 'console'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultOptions(): iterable
+    {
+        return [
+            'lazily_commands' => [
+                'option:dump' => OptionDumpCommand::class,
+            ],
         ];
     }
 

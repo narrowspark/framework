@@ -22,4 +22,21 @@ class ConsoleCommandsServiceProviderTest extends TestCase
 
         self::assertInstanceOf(OptionDumpCommand::class, $commands['option:dump']);
     }
+
+    public function testGetDimensions()
+    {
+        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+    }
+
+    public function testGetDefaultOptions()
+    {
+        self::assertSame(
+            [
+                'lazily_commands' => [
+                    'option:dump' => OptionDumpCommand::class,
+                ],
+            ],
+            ConsoleCommandsServiceProvider::getDefaultOptions()
+        );
+    }
 }

@@ -1,24 +1,22 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Provider;
+namespace Viserio\Component\Console\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Foundation\Console\Command\DownCommand;
-use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
-use Viserio\Component\Foundation\Console\Command\ServeCommand;
-use Viserio\Component\Foundation\Console\Command\UpCommand;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class ConsoleCommandsServiceProvider implements
+class LazilyCommandsServiceProvider implements
     ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
+    use OptionsResolverTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -51,10 +49,7 @@ class ConsoleCommandsServiceProvider implements
     public static function getDefaultOptions(): iterable
     {
         return [
-            'lazily_commands' => [
-                'app:down' => DownCommand::class,
-                'app:up'   => UpCommand::class,
-            ],
+            'lazily_commands' => [],
         ];
     }
 
@@ -71,18 +66,9 @@ class ConsoleCommandsServiceProvider implements
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-            $console->addCommands([
-                new DownCommand(),
-                new UpCommand(),
-            ]);
+            $options = self::resolveOptions($container);
 
-            if ($container->has(KernelContract::class) && $container->get(KernelContract::class)->isLocal()) {
-                $console->add(new KeyGenerateCommand());
-
-                if (\class_exists(Process::class)) {
-                    $console->add(new ServeCommand());
-                }
-            }
+            $console->setCommandLoader(new ContainerCommandLoader($container, $options['lazily_commands']));
         }
 
         return $console;

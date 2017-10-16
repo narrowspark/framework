@@ -147,7 +147,7 @@ class PoParser implements ParserContract
                     $entry['@'] = self::convertString($data);
                     break;
 
-                // Allows disambiguations of different messages that have same msgid.
+                // Allows disambiguation of different messages that have same msgid.
                 case 'msgctxt':
                 case 'msgid':        // untranslated-string
                 case 'msgid_plural': // untranslated-string-plural
@@ -239,7 +239,7 @@ class PoParser implements ParserContract
 
         $keys        = \array_keys($headerKeys);
         $headerItems = 0;
-        $headers     = array_map('trim', $entry['msgstr']);
+        $headers     = \array_map('trim', $entry['msgstr']);
 
         foreach ($headers as $header) {
             \preg_match_all('/(.*):\s/', $header, $matches, PREG_SET_ORDER);
@@ -402,7 +402,7 @@ class PoParser implements ParserContract
         $addEntry = function (array $entry, ?string $state, string $line): array {
             if (! isset($entry[$state])) {
                 throw new ParseException([
-                    'message' => sprintf('Parse error! Missing state: [%s].', $state),
+                    'message' => \sprintf('Parse error! Missing state: [%s].', $state),
                 ]);
             }
 
@@ -427,7 +427,7 @@ class PoParser implements ParserContract
 
                 break;
             default:
-                if ($state !== null && (mb_strpos($state, 'msgstr[') !== false)) {
+                if ($state !== null && (\mb_strpos($state, 'msgstr[') !== false)) {
                     $entry = $addEntry($entry, $state, $line);
                 } elseif ($key[0] === '#' && $key[1] !== ' ') {
                     throw new ParseException([
@@ -464,7 +464,7 @@ class PoParser implements ParserContract
         $currentHeader = null;
 
         foreach ($headers as $header) {
-            $header = trim($header);
+            $header = \trim($header);
             $header = self::convertString($header);
 
             if ($header === '') {
@@ -473,10 +473,10 @@ class PoParser implements ParserContract
 
             if (self::isHeaderDefinition($header)) {
                 $header                             = \explode(':', $header, 2);
-                $currentHeader                      = trim($header[0]);
-                $entries['headers'][$currentHeader] = trim($header[1]);
+                $currentHeader                      = \trim($header[0]);
+                $entries['headers'][$currentHeader] = \trim($header[1]);
             } else {
-                $entries['headers'][$currentHeader] = [$entries['headers'][$currentHeader] ?? '', trim($header)];
+                $entries['headers'][$currentHeader] = [$entries['headers'][$currentHeader] ?? '', \trim($header)];
             }
         }
 
