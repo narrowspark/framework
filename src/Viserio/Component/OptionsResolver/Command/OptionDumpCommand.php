@@ -2,15 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
-use function Functional\false;
 use InvalidArgumentException;
-use Error;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
 use RegexIterator;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Throwable;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -18,6 +15,7 @@ use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigC
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Parser\Dumper;
 use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
+use function Functional\false;
 
 class OptionDumpCommand extends Command
 {
@@ -256,7 +254,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
             $namespace = '';
 
             for ($index = 0; isset($tokens[$index]); $index++) {
-                if (!isset($tokens[$index][0])) {
+                if (! isset($tokens[$index][0])) {
                     continue;
                 }
 
@@ -271,7 +269,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
                 if (isset($tokens[$index][0]) && $tokens[$index][0] === T_CLASS && $tokens[$index - 1][0] !== T_DOUBLE_COLON) {
                     $index += 2; // Skip class keyword and whitespace
 
-                    if (!is_array($tokens[$index])) {
+                    if (! is_array($tokens[$index])) {
                         continue;
                     }
 
@@ -302,12 +300,12 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     {
         $phpFilePaths = array_merge(
 //            \array_values((array) require $composerFolder . '/autoload_files.php'),
-            \array_values((array)require $composerFolder . '/autoload_psr4.php'),
-            \array_values((array)require $composerFolder . '/autoload_namespaces.php')
+            \array_values((array) require $composerFolder . '/autoload_psr4.php'),
+            \array_values((array) require $composerFolder . '/autoload_namespaces.php')
         );
 
         $splObjects = [];
-        $iterator = function ($path) {
+        $iterator   = function ($path) {
             return \iterator_to_array(new RegexIterator(
                 new RecursiveIteratorIterator(
                     new RecursiveDirectoryIterator($path)
