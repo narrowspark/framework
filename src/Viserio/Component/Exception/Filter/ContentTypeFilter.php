@@ -44,7 +44,7 @@ class ContentTypeFilter implements FilterContract
     {
         $accepts = $this->getAcceptableContentTypes($request->getHeaderLine('Accept'));
 
-        if (count($accepts) === 0) {
+        if (\count($accepts) === 0) {
             return true;
         }
 
@@ -54,7 +54,7 @@ class ContentTypeFilter implements FilterContract
             }
 
             foreach ((array) $contentTypes as $type) {
-                if ($this->matchesType($accept, $type) || $accept === strtok($type, '/') . '/*') {
+                if ($this->matchesType($accept, $type) || $accept === \strtok($type, '/') . '/*') {
                     return true;
                 }
             }
@@ -77,9 +77,9 @@ class ContentTypeFilter implements FilterContract
             return true;
         }
 
-        $split = explode('/', $actual);
+        $split = \explode('/', $actual);
 
-        return isset($split[1]) && preg_match('#' . preg_quote($split[0], '#') . '/.+\+' . preg_quote($split[1], '#') . '#', $type);
+        return isset($split[1]) && \preg_match('#' . \preg_quote($split[0], '#') . '/.+\+' . \preg_quote($split[1], '#') . '#', $type);
     }
 
     /**
@@ -95,20 +95,20 @@ class ContentTypeFilter implements FilterContract
             return $this->acceptableContentTypes;
         }
 
-        return $this->acceptableContentTypes = array_map(
+        return $this->acceptableContentTypes = \array_map(
             function ($itemValue) {
-                $bits = preg_split('/\s*(?:;*("[^"]+");*|;*(\'[^\']+\');*|;+)\s*/', $itemValue, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-                $value = array_shift($bits);
+                $bits = \preg_split('/\s*(?:;*("[^"]+");*|;*(\'[^\']+\');*|;+)\s*/', $itemValue, 0, \PREG_SPLIT_NO_EMPTY | \PREG_SPLIT_DELIM_CAPTURE);
+                $value = \array_shift($bits);
 
-                if (($start = mb_substr($value, 0, 1)) === ($end = mb_substr($value, -1)) &&
+                if (($start = \mb_substr($value, 0, 1)) === \mb_substr($value, -1) &&
                     ('"' === $start || '\'' === $start)
                 ) {
-                    return mb_substr($value, 1, -1);
+                    return \mb_substr($value, 1, -1);
                 }
 
                 return $value;
             },
-            preg_split(
+            \preg_split(
                 '/\s*(?:,*("[^"]+"),*|,*(\'[^\']+\'),*|,+)\s*/',
                 $headerValue,
                 0,

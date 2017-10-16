@@ -264,7 +264,7 @@ class ErrorHandler implements
         string $file = '',
         int $line = 0
     ): bool {
-        if (error_reporting() === 0) {
+        if (\error_reporting() === 0) {
             return false;
         }
 
@@ -343,7 +343,7 @@ class ErrorHandler implements
         if ($error !== null && self::isLevelFatal($error['type'])) {
             $trace = $error['backtrace'] ?? null;
 
-            if (0 === mb_strpos($error['message'], 'Allowed memory') || 0 === mb_strpos($error['message'], 'Out of memory')) {
+            if (\mb_strpos($error['message'], 'Allowed memory') === 0 || \mb_strpos($error['message'], 'Out of memory') === 0) {
                 $exception = new OutOfMemoryException(self::$levels[$error['type']] . ': ' . $error['message'], 0, $error['type'], $error['file'], $error['line'], 2, false, $trace);
             } else {
                 // Create a new fatal exception instance from an error array.
@@ -450,6 +450,8 @@ class ErrorHandler implements
     /**
      * Transform's the given array to a key (class name) value (object/class name) array.
      *
+     * @param array $data
+     *
      * @return array
      */
     protected function transformArray(array $data): array
@@ -475,7 +477,7 @@ class ErrorHandler implements
      *
      * @return object[]
      */
-    protected function make(array $classes)
+    protected function make(array $classes): array
     {
         foreach ($classes as $index => $class) {
             if (is_object($class)) {

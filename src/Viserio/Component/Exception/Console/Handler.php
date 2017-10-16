@@ -29,9 +29,9 @@ final class Handler
     public function render(OutputInterface $output, Throwable $exception): void
     {
         $exceptionMessage = $exception->getMessage();
-        $exceptionName    = get_class($exception);
+        $exceptionName    = \get_class($exception);
 
-        $output->writeln(sprintf(
+        $output->writeln(\sprintf(
             '<bg=red;options=bold>%s</> : <comment>%s</>',
             $exceptionName,
             $exceptionMessage

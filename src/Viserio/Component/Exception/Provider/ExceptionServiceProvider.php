@@ -192,11 +192,9 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Create a new ContentTypeFilter instance.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     *
      * @return \Viserio\Component\Exception\Filter\ContentTypeFilter
      */
-    public static function createContentTypeFilter(ContainerInterface $container): ContentTypeFilter
+    public static function createContentTypeFilter(): ContentTypeFilter
     {
         return new ContentTypeFilter();
     }

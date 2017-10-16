@@ -236,14 +236,14 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * Create a response for the given exception.
      *
      * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param \Exception                                    $exception
+     * @param \Throwable                                    $exception
      * @param \Throwable                                    $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getResponse(
         ?ServerRequestInterface $request,
-        Exception $exception,
+        Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
         $id          = $this->exceptionIdentifier->identify($exception);
