@@ -2,8 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
+use function Functional\false;
 use InvalidArgumentException;
+use Error;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ReflectionClass;
+use RegexIterator;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Throwable;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -117,7 +124,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     {
         $configs = [];
 
-        foreach (get_declared_classes() as $className) {
+        foreach ($this->getClassMap() as $className) {
             $reflectionClass = new ReflectionClass($className);
             $interfaces      = \array_flip($reflectionClass->getInterfaceNames());
 
@@ -222,5 +229,103 @@ return ' . $this->getPrettyPrintArray($config) . ';';
                 $dir
             ));
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getClassMap(): array
+    {
+        $composerFolder = \getcwd() . '/vendor/composer/';
+
+        $classMap   = \array_keys((array) require $composerFolder . '/autoload_classmap.php');
+        $splObjects = $this->getSplObjects($composerFolder);
+
+        $output = $this->getOutput();
+        $output->writeln(\sprintf(
+            'Searching for php files with implemented \%s interface.',
+            RequiresConfigContract::class)
+        );
+
+        $progress = new ProgressBar($output, count($splObjects));
+        $progress->start();
+
+        foreach ($splObjects as $splObject) {
+            $content   = \file_get_contents($splObject->getPathname());
+            $tokens    = \token_get_all($content);
+            $namespace = '';
+
+            for ($index = 0; isset($tokens[$index]); $index++) {
+                if (!isset($tokens[$index][0])) {
+                    continue;
+                }
+
+                if (isset($tokens[$index][0]) && $tokens[$index][0] === T_NAMESPACE) {
+                    $index += 2; // Skip namespace keyword and whitespace
+
+                    while (isset($tokens[$index]) && is_array($tokens[$index])) {
+                        $namespace .= $tokens[$index++][1];
+                    }
+                }
+
+                if (isset($tokens[$index][0]) && $tokens[$index][0] === T_CLASS && $tokens[$index - 1][0] !== T_DOUBLE_COLON) {
+                    $index += 2; // Skip class keyword and whitespace
+
+                    if (!is_array($tokens[$index])) {
+                        continue;
+                    }
+
+                    $class = ltrim($namespace . '\\' . $tokens[$index][1], '\\');
+
+                    if (! class_exists($class, false)) {
+                        continue;
+                    }
+
+                    $classMap[] = $class;
+                }
+            }
+
+            $progress->advance();
+        }
+
+        $progress->finish();
+
+        return $classMap;
+    }
+
+    /**
+     * @param $composerFolder
+     *
+     * @return array
+     */
+    private function getSplObjects($composerFolder): array
+    {
+        $phpFilePaths = array_merge(
+//            \array_values((array) require $composerFolder . '/autoload_files.php'),
+            \array_values((array)require $composerFolder . '/autoload_psr4.php'),
+            \array_values((array)require $composerFolder . '/autoload_namespaces.php')
+        );
+
+        $splObjects = [];
+        $iterator = function ($path) {
+            return \iterator_to_array(new RegexIterator(
+                new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($path)
+                ),
+                '/\.php$/'
+            ));
+        };
+
+        foreach ($phpFilePaths as $path) {
+            if (is_array($path)) {
+                foreach ($path as $subpath) {
+                    $splObjects = \array_merge($splObjects, $iterator($subpath));
+                }
+            } else {
+                $splObjects = \array_merge($splObjects, $iterator($path));
+            }
+        }
+
+        return $splObjects;
     }
 }
