@@ -11,7 +11,7 @@ class CronListCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $name = 'cron:list';
+    protected static $defaultName = 'cron:list';
 
     /**
      * {@inheritdoc}
@@ -20,11 +20,12 @@ class CronListCommand extends Command
 
     /**
      * {@inheritdoc}
+     *
+     * @param \Viserio\Component\Cron\Schedule $schedule
      */
-    public function handle()
+    public function handle(Schedule $schedule): void
     {
-        $container = $this->getContainer();
-        $cronJobs  = $container->get(Schedule::class)->getCronJobs();
+        $cronJobs = $schedule->getCronJobs();
 
         $table = new Table($this->getOutput());
         $table->setHeaders(['Jobname', 'Expression', 'Summary']);

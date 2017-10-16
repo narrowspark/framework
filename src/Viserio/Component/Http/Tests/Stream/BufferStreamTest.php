@@ -7,7 +7,7 @@ use Viserio\Component\Http\Stream\BufferStream;
 
 class BufferStreamTest extends TestCase
 {
-    public function testHasMetadata()
+    public function testHasMetadata(): void
     {
         $buffer = new BufferStream(10);
 
@@ -19,7 +19,7 @@ class BufferStreamTest extends TestCase
         self::assertEquals([], $buffer->getMetadata());
     }
 
-    public function testRemovesReadDataFromBuffer()
+    public function testRemovesReadDataFromBuffer(): void
     {
         $buffer = new BufferStream();
 
@@ -35,7 +35,7 @@ class BufferStreamTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Cannot determine the position of a BufferStream
      */
-    public function testCanCastToStringOrGetContents()
+    public function testCanCastToStringOrGetContents(): void
     {
         $buffer = new BufferStream();
         $buffer->write('foo');
@@ -49,7 +49,7 @@ class BufferStreamTest extends TestCase
         $buffer->tell();
     }
 
-    public function testDetachClearsBuffer()
+    public function testDetachClearsBuffer(): void
     {
         $buffer = new BufferStream();
         $buffer->write('foo');
@@ -60,7 +60,7 @@ class BufferStreamTest extends TestCase
         self::assertEquals('abc', $buffer->read(10));
     }
 
-    public function testExceedingHighwaterMarkReturnsFalseButStillBuffers()
+    public function testExceedingHighwaterMarkReturnsFalseButStillBuffers(): void
     {
         $buffer = new BufferStream(5);
 

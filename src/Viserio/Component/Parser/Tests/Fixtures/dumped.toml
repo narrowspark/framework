@@ -1,0 +1,39 @@
+[data.string]
+name = "Toml"
+newline = "This string has a \n new line character."
+winPath = "C:\\Users\\nodejs\\templates"
+unicode = "unicode character: δ"
+
+[data.bool]
+t = true
+f = false
+
+[data.integer]
+positive = 25
+negative = -25
+
+[data.float]
+positive = 25.25
+negative = -25.25
+
+[data.datetime]
+datetime = 2017-11-21T13:47:25Z
+
+[data.array]
+simple = [1, 2, 3]
+multiple = [[1, 2], ["abc", "def"], [1.1, 1.2], [true, false], [2017-11-21T13:47:25Z]]
+
+[[fruit]]
+name = "apple"
+
+[[fruit.variety]]
+name = "red delicious"
+
+[[fruit.variety]]
+name = "granny smith"
+
+[[fruit]]
+name = "banana"
+
+[[fruit.variety]]
+name = "platain"

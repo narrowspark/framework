@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 
 final class BootstrapManager
 {
@@ -31,14 +31,14 @@ final class BootstrapManager
     /**
      * A container instance.
      *
-     * @var \Viserio\Component\Contracts\Container\Container
+     * @var \Viserio\Component\Contract\Container\Container
      */
     private $container;
 
     /**
      * Create a new bootstrap manger instance.
      *
-     * @param \Viserio\Component\Contracts\Container\Container $container
+     * @param \Viserio\Component\Contract\Container\Container $container
      */
     public function __construct(ContainerContract $container)
     {
@@ -55,7 +55,7 @@ final class BootstrapManager
      */
     public function addBeforeBootstrapping(string $bootstrapper, callable $callback): void
     {
-        $key = 'bootstrapping: ' . str_replace('\\', '', $bootstrapper);
+        $key = 'bootstrapping: ' . \str_replace('\\', '', $bootstrapper);
 
         $this->bootstrappingCallbacks[$key][] = $callback;
     }
@@ -70,7 +70,7 @@ final class BootstrapManager
      */
     public function addAfterBootstrapping(string $bootstrapper, callable $callback): void
     {
-        $key = 'bootstrapped: ' . str_replace('\\', '', $bootstrapper);
+        $key = 'bootstrapped: ' . \str_replace('\\', '', $bootstrapper);
 
         $this->bootstrappedCallbacks[$key][] = $callback;
     }
@@ -120,10 +120,10 @@ final class BootstrapManager
     /**
      * Calls callbacks on bootstrap name.
      *
-     * @param array                                          $bootCallbacks
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
-     * @param string                                         $type
-     * @param string                                         $bootstrap
+     * @param array                                         $bootCallbacks
+     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
+     * @param string                                        $type
+     * @param string                                        $bootstrap
      *
      * @return void
      */
@@ -133,8 +133,9 @@ final class BootstrapManager
         string $type,
         string $bootstrap
     ): void {
-        foreach ($this->bootstrappedCallbacks as $name => $callbacks) {
-            if ($type . str_replace('\\', '', $bootstrap) === $name) {
+        foreach ($bootCallbacks as $name => $callbacks) {
+            if ($type . \str_replace('\\', '', $bootstrap) === $name) {
+                /** @var callback $callback */
                 foreach ($callbacks as $callback) {
                     $callback($kernel);
                 }

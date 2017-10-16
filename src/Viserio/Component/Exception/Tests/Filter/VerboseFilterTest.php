@@ -3,61 +3,79 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Filter;
 
 use Exception;
-use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
-use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\StreamFactory;
 
 class VerboseFilterTest extends MockeryTestCase
 {
-    public function testDebugStaysOnTop()
+    /**
+     * @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer
+     */
+    private $whoopsDisplayer;
+
+    /**
+     * @var \Viserio\Component\Exception\Displayer\JsonDisplayer
+     */
+    private $jsonDisplayer;
+
+    /**
+     * @var \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
+     */
+    private $requestMock;
+
+    /**
+     * @var \Exception
+     */
+    private $exception;
+
+    public function setUp(): void
     {
-        $request    = $this->mock(ServerRequestInterface::class);
-        $exception  = new Exception();
-        $verbose    = new WhoopsDisplayer();
-        $standard   = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
-        $displayers = (new VerboseFilter($this->getContainer(true)))->filter([$verbose, $standard], $request, $exception, $exception, 500);
+        $response              = new ResponseFactory();
+        $this->whoopsDisplayer = new WhoopsPrettyDisplayer($response);
+        $this->jsonDisplayer   = new JsonDisplayer(new ExceptionInfo(), $response);
+        $this->requestMock     = $this->mock(ServerRequestInterface::class);
+        $this->exception       = new Exception();
+    }
+
+    public function testDebugStaysOnTop(): void
+    {
+        $verbose    = $this->whoopsDisplayer;
+        $standard   = $this->jsonDisplayer;
+        $displayers = $this->arrangeVerboseFilter([$verbose, $standard], true);
 
         self::assertSame([$verbose, $standard], $displayers);
     }
 
-    public function testDebugIsRemoved()
+    public function testDebugIsRemoved(): void
     {
-        $request    = $this->mock(ServerRequestInterface::class);
-        $exception  = new Exception();
-        $verbose    = new WhoopsDisplayer();
-        $standard   = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
-        $displayers = (new VerboseFilter($this->getContainer()))->filter([$verbose, $standard], $request, $exception, $exception, 500);
+        $verbose    = $this->whoopsDisplayer;
+        $standard   = $this->jsonDisplayer;
+        $displayers = $this->arrangeVerboseFilter([$verbose, $standard]);
 
         self::assertSame([$standard], $displayers);
     }
 
-    public function testNoChangeInDebugMode()
+    public function testNoChangeInDebugMode(): void
     {
-        $request    = $this->mock(ServerRequestInterface::class);
-        $exception  = new Exception();
-        $json       = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
-        $html       = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $this->getContainer());
-        $displayers = (new VerboseFilter($this->getContainer(true)))->filter([$json, $html], $request, $exception, $exception, 500);
+        $json       = $this->jsonDisplayer;
+        $html       = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), $this->getContainer());
+        $displayers = $this->arrangeVerboseFilter([$json, $html], true);
 
         self::assertSame([$json, $html], $displayers);
     }
 
-    public function testNoChangeNotInDebugMode()
+    public function testNoChangeNotInDebugMode(): void
     {
-        $request    = $this->mock(ServerRequestInterface::class);
-        $exception  = new Exception();
-        $json       = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory());
-        $displayers = (new VerboseFilter($this->getContainer()))->filter([$json], $request, $exception, $exception, 500);
+        $json       = $this->jsonDisplayer;
+        $displayers = $this->arrangeVerboseFilter([$json], true);
 
         self::assertSame([$json], $displayers);
     }
@@ -80,10 +98,26 @@ class VerboseFilterTest extends MockeryTestCase
             ]);
 
         return new ArrayContainer([
-            RepositoryContract::class       => $config,
-            ExceptionInfo::class            => new ExceptionInfo(),
-            ResponseFactoryInterface::class => new ResponseFactory(),
-            StreamFactoryInterface::class   => new StreamFactory(),
+            RepositoryContract::class => $config,
         ]);
+    }
+
+    /**
+     * @param array $displayers
+     * @param bool  $debug
+     *
+     * @return array
+     */
+    private function arrangeVerboseFilter(array $displayers, bool $debug = false): array
+    {
+        $displayers = (new VerboseFilter($this->getContainer($debug)))->filter(
+            $displayers,
+            $this->requestMock,
+            $this->exception,
+            $this->exception,
+            500
+        );
+
+        return $displayers;
     }
 }

@@ -26,8 +26,7 @@ final class ConsoleEvents
     public const TERMINATE = 'console.terminate';
 
     /**
-     * The ERROR event occurs when an uncaught exception appears or
-     * a throwable error.
+     * The ERROR event occurs when an uncaught exception or error appears.
      *
      * This event allows you to deal with the exception/error or
      * to modify the thrown exception.

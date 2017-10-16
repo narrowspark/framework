@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 /**
  * Ported from.
  *
- * @link https://github.com/php-cache/cache-bundle/blob/master/src/DataCollector/CacheDataCollector.php
+ * @see https://github.com/php-cache/cache-bundle/blob/master/src/DataCollector/CacheDataCollector.php
  */
 class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     TooltipAwareContract,
@@ -29,9 +29,9 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     /**
      * Create a new cache data collector.
      *
-     * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator $cache
+     * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator $cache
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException
      *
      * @return void
      */
@@ -46,9 +46,9 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
             return;
         }
 
-        throw new InvalidArgumentException(sprintf(
+        throw new UnexpectedValueException(\sprintf(
             'The object [%s] must be an instance of [%s] or [%s].',
-            get_class($cache),
+            \get_class($cache),
             TraceableCacheItemDecorator::class,
             SimpleTraceableCacheDecorator::class
         ));
@@ -179,6 +179,19 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        parent::flush();
+
+        foreach ($this->pools as $instance) {
+            // Calling getCalls() will clear the calls.
+            $instance->getCalls();
+        }
+    }
+
+    /**
      * @return array
      */
     private function calculateStatistics(): array
@@ -226,11 +239,8 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
                 }
             }
 
-            $statistics[$name]['time'] = $statistics[$name]['time'];
-
             if ($statistics[$name]['reads']) {
-                $statistics[$name]['hits'] =
-                    round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
+                $statistics[$name]['hits'] = \round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
             } else {
                 $statistics[$name]['hits'] = 0;
             }
@@ -261,7 +271,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
         }
 
         if ($totals['reads']) {
-            $totals['hits'] = round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
+            $totals['hits'] = \round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
         } else {
             $totals['hits'] = 0;
         }

@@ -11,9 +11,9 @@ use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
-use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Contracts\Console\Terminable as TerminableContract;
-use Viserio\Component\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Console\Terminable as TerminableContract;
+use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
@@ -61,8 +61,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function __construct()
     {
-        if (! defined('CEREBRO_BINARY')) {
-            define('CEREBRO_BINARY', 'cerebro');
+        if (! \defined('CEREBRO_BINARY')) {
+            \define('CEREBRO_BINARY', 'cerebro');
         }
 
         parent::__construct();
@@ -79,7 +79,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             'console_name' => 'Cerebro',
         ];
 
-        return array_merge(parent::getDefaultOptions(), $options);
+        return \array_merge(parent::getDefaultOptions(), $options);
     }
 
     /**
@@ -117,7 +117,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             return;
         }
 
-        restore_error_handler();
+        \restore_error_handler();
     }
 
     /**
@@ -182,7 +182,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         $command = new ClosureCommand($signature, $callback);
 
-        Cerebro::starting(function ($console) use ($command) {
+        Cerebro::starting(function (Cerebro $console) use ($command): void {
             $console->add($command);
         });
 
@@ -218,7 +218,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function defineConsoleSchedule(): void
     {
-        if (class_exists(CronServiceProvider::class)) {
+        if (\class_exists(CronServiceProvider::class)) {
             $container = $this->getContainer();
 
             $container->register(new CronServiceProvider());
@@ -266,7 +266,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     /**
      * Report the exception to the exception handler.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface|null $output
+     * @param null|\Symfony\Component\Console\Output\OutputInterface $output
      * @param \Throwable                                             $exception
      *
      * @return void

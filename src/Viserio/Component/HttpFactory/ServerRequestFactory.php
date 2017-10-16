@@ -23,7 +23,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     public function createServerRequest($method, $uri): ServerRequestInterface
     {
-        return $this->buildServerRequest([], [], $method, $uri);
+        return self::buildServerRequest([], [], $method, $uri);
     }
 
     /**
@@ -32,15 +32,15 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     public function createServerRequestFromArray(array $server): ServerRequestInterface
     {
         $server         = static::normalizeServer($server);
-        $marshalHeaders = $this->getHeaders($server);
+        $marshalHeaders = static::getHeaders($server);
         $headers        = [];
         $method         = $server['REQUEST_METHOD'] ?? 'GET';
 
-        array_walk($marshalHeaders, function ($value, $key) use (&$headers) {
-            $headers[$this->normalizeKey($key)] = $value;
+        \array_walk($marshalHeaders, function ($value, $key) use (&$headers): void {
+            $headers[self::normalizeKey($key)] = $value;
         });
 
-        return $this->buildServerRequest($server, $headers, $method, Uri::createFromServer($server));
+        return self::buildServerRequest($server, $headers, $method, Uri::createFromServer($server));
     }
 
     /**
@@ -51,16 +51,18 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @param string                                $method
      * @param \Psr\Http\Message\UriInterface|string $uri
      *
+     * @throws \UnexpectedValueException
+     *
      * @return \Psr\Http\Message\ServerRequestInterface
      */
-    protected function buildServerRequest(array $server, array $headers, string $method, $uri = null): ServerRequestInterface
+    private static function buildServerRequest(array $server, array $headers, string $method, $uri = null): ServerRequestInterface
     {
         return new ServerRequest(
             $uri,
             $method,
             $headers,
             new LazyOpenStream('php://input', 'r+'),
-            $this->marshalProtocolVersion($server),
+            self::marshalProtocolVersion($server),
             $server
         );
     }
@@ -79,14 +81,14 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (http://www.zend.com)
      * @license   http://framework.zend.com/license/new-bsd New BSD License
      */
-    protected function marshalProtocolVersion(array $server): string
+    private static function marshalProtocolVersion(array $server): string
     {
         if (! isset($server['SERVER_PROTOCOL'])) {
             return '1.1';
         }
 
-        if (! preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
-            throw new UnexpectedValueException(sprintf(
+        if (! \preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
+            throw new UnexpectedValueException(\sprintf(
                 'Unrecognized protocol version (%s)',
                 $server['SERVER_PROTOCOL']
             ));
@@ -102,13 +104,13 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * Ported from symfony, see original:
      *
-     * @link https://github.com/symfony/symfony/blob/master/src/Symfony/Component/HttpFoundation/ServerBag.php#L28
+     * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/HttpFoundation/ServerBag.php#L28
      *
      * (c) Fabien Potencier <fabien@symfony.com>
      *
      * @return array
      */
-    protected function getHeaders(array $server): array
+    private static function getHeaders(array $server): array
     {
         $headers        = [];
         $contentHeaders = [
@@ -118,9 +120,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         ];
 
         foreach ($server as $key => $value) {
-            if (mb_substr($key, 0, 5) == 'HTTP_') {
+            if (\mb_strpos($key, 'HTTP_') === 0) {
                 $headers[$key] = $value;
-            // CONTENT_* are not prefixed with HTTP_
+                // CONTENT_* are not prefixed with HTTP_
             } elseif (isset($contentHeaders[$key])) {
                 $headers[$key] = $value;
             }
@@ -139,18 +141,18 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             }
 
             if ($authorizationHeader !== null) {
-                if (mb_stripos($authorizationHeader, 'basic ') === 0) {
+                if (\mb_stripos($authorizationHeader, 'basic ') === 0) {
                     // Decode AUTHORIZATION header into PHP_AUTH_USER and PHP_AUTH_PW when authorization header is basic
-                    $exploded = explode(':', base64_decode(mb_substr($authorizationHeader, 6)), 2);
+                    $exploded = \explode(':', \base64_decode(\mb_substr($authorizationHeader, 6), true), 2);
 
-                    if (count($exploded) == 2) {
-                        list($headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']) = $exploded;
+                    if (\count($exploded) === 2) {
+                        [$headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']] = $exploded;
                     }
-                } elseif (empty($server['PHP_AUTH_DIGEST']) && (0 === mb_stripos($authorizationHeader, 'digest '))) {
+                } elseif (empty($server['PHP_AUTH_DIGEST']) && (0 === \mb_stripos($authorizationHeader, 'digest '))) {
                     // In some circumstances PHP_AUTH_DIGEST needs to be set
                     $headers['PHP_AUTH_DIGEST'] = $authorizationHeader;
                     $server['PHP_AUTH_DIGEST']  = $authorizationHeader;
-                } elseif (mb_stripos($authorizationHeader, 'bearer ') === 0) {
+                } elseif (\mb_stripos($authorizationHeader, 'bearer ') === 0) {
                     /*
                      * XXX: Since there is no PHP_AUTH_BEARER in PHP predefined variables,
                      *      I'll just set $headers['AUTHORIZATION'] here.
@@ -167,7 +169,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         // PHP_AUTH_USER/PHP_AUTH_PW
         if (isset($headers['PHP_AUTH_USER'])) {
-            $headers['HTTP_AUTHORIZATION'] = 'Basic ' . base64_encode($headers['PHP_AUTH_USER'] . ':' . $headers['PHP_AUTH_PW']);
+            $headers['HTTP_AUTHORIZATION'] = 'Basic ' . \base64_encode($headers['PHP_AUTH_USER'] . ':' . $headers['PHP_AUTH_PW']);
         } elseif (isset($headers['PHP_AUTH_DIGEST'])) {
             $headers['HTTP_AUTHORIZATION'] = $headers['PHP_AUTH_DIGEST'];
         }
@@ -194,7 +196,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         // This seems to be the only way to get the Authorization header on Apache
         $apacheRequestHeaders = self::$apacheRequestHeaders;
 
-        if (isset($server['HTTP_AUTHORIZATION']) || ! is_callable($apacheRequestHeaders)) {
+        if (isset($server['HTTP_AUTHORIZATION']) || ! \is_callable($apacheRequestHeaders)) {
             return $server;
         }
 
@@ -226,12 +228,12 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return string Normalized header name
      */
-    private function normalizeKey(string $key): string
+    private static function normalizeKey(string $key): string
     {
-        $key = strtr(mb_strtolower($key), '_', '-');
+        $key = \str_replace('_', '-', \mb_strtolower($key));
 
-        if (mb_strpos($key, 'http-') === 0) {
-            $key = mb_substr($key, 5);
+        if (\mb_strpos($key, 'http-') === 0) {
+            $key = \mb_substr($key, 5);
         }
 
         return $key;

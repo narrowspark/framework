@@ -13,7 +13,7 @@
 .profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre .status-warning {
     background-color: var(--profiler-status-yellow-color);
     color: #FFF;
-    padding: 0px 5px;
+    padding: 0 5px;
 }
 .profiler-panel.profiler-panel-twig-data-collector.active .twig-graph pre .status-error {
     color: var(--profiler-status-red-color);

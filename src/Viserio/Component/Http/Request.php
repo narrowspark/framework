@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Http;
 
 use Fig\Http\Message\RequestMethodInterface;
-use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 
 class Request extends AbstractMessage implements RequestInterface, RequestMethodInterface
 {
@@ -26,7 +26,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     /**
      * The request URI object.
      *
-     * @var \Psr\Http\Message\UriInterface|null
+     * @var null|\Psr\Http\Message\UriInterface
      */
     protected $uri;
 
@@ -34,9 +34,9 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      * Create a new request instance.
      *
      * @param null|string|UriInterface                               $uri     uri for the request
-     * @param string|null                                            $method  http method for the request
+     * @param null|string                                            $method  http method for the request
      * @param array                                                  $headers headers for the message
-     * @param string|null|resource|\Psr\Http\Message\StreamInterface $body    message body
+     * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    message body
      * @param string                                                 $version http protocol version
      */
     public function __construct(
@@ -51,13 +51,48 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         $this->setHeaders($headers);
         $this->protocol = $version;
 
-        if (! $this->hasHeader('Host')) {
+        if (! $this->hasHeader('host')) {
             $this->updateHostFromUri();
         }
 
         if ($body !== '' && $body !== null) {
             $this->stream = $this->createStream($body);
         }
+    }
+
+    /**
+     * String representation of Request-object as HTTP message.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        $request = $this;
+
+        $msg = trim($request->getMethod() . ' ' .
+            $request->getRequestTarget()) . ' HTTP/' .
+            $request->getProtocolVersion();
+
+        if (! $request->hasHeader('host')) {
+            $msg .= "\r\nHost: " . $request->getUri()->getHost();
+        }
+
+        if (! $request->hasHeader('Content-Length')) {
+            try {
+                $request = $request->withAddedHeader(
+                    'Content-Length',
+                    (string) $request->getBody()->getSize()
+                );
+            } catch (\Throwable $e) {
+                return $e->getMessage();
+            }
+        }
+
+        foreach ($request->getHeaders() as $name => $values) {
+            $msg .= "\r\n{$name}: " . implode(', ', $values);
+        }
+
+        return "{$msg}\r\n\r\n" . $request->getBody();
     }
 
     /**
@@ -71,11 +106,11 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
 
         $target = $this->uri->getPath();
 
-        if ($target == '') {
+        if ($target === '') {
             $target = '/';
         }
 
-        if ($this->uri->getQuery() != '') {
+        if ($this->uri->getQuery() !== '') {
             $target .= '?' . $this->uri->getQuery();
         }
 
@@ -87,7 +122,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      */
     public function withRequestTarget($requestTarget): RequestInterface
     {
-        if (preg_match('#\s#', $requestTarget)) {
+        if (\preg_match('#\s#', $requestTarget)) {
             throw new InvalidArgumentException(
                 'Invalid request target provided; cannot contain whitespace'
             );
@@ -156,7 +191,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     {
         $host = $this->uri->getHost();
 
-        if ($host == '') {
+        if ($host === '') {
             return;
         }
 
@@ -181,7 +216,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      *
      * @param null|string $method
      *
-     * @throws InvalidArgumentException on invalid HTTP method
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException on invalid HTTP method
      *
      * @return string
      */
@@ -191,10 +226,10 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
             return self::METHOD_GET;
         }
 
-        $method = mb_strtoupper($method);
+        $method = \mb_strtoupper($method);
 
-        if (! preg_match("/^[!#$%&'*+.^_`|~0-9a-z-]+$/i", $method)) {
-            throw new InvalidArgumentException(sprintf(
+        if (! \preg_match("/^[!#$%&'*+.^_`|~0-9a-z-]+$/i", $method)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Unsupported HTTP method [%s].',
                 $method
             ));
@@ -217,7 +252,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      *
      * @param null|string|UriInterface $uri
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      *
      * @return \Psr\Http\Message\UriInterface
      */
@@ -227,12 +262,12 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
             return $uri;
         }
 
-        if (is_string($uri)) {
+        if (\is_string($uri)) {
             return Uri::createFromString($uri);
         }
 
         if ($uri === null) {
-            return Uri::createFromString('');
+            return Uri::createFromString();
         }
 
         throw new InvalidArgumentException(

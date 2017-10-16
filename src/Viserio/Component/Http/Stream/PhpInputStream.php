@@ -2,11 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
+use RuntimeException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Util;
 
 class PhpInputStream extends AbstractStreamDecorator
 {
+    /**
+     * Stream instance.
+     *
+     * @var \Psr\Http\Message\StreamInterface
+     */
+    protected $stream;
     /**
      * Cached content-.
      *
@@ -24,11 +31,11 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * Create a new php input stream instance.
      *
-     * @param string|resource $stream
+     * @param resource|string $stream
      */
     public function __construct($stream = 'php://input')
     {
-        if (is_string($stream)) {
+        if (\is_string($stream)) {
             $stream = Util::tryFopen($stream, 'r');
         }
 
@@ -44,7 +51,11 @@ class PhpInputStream extends AbstractStreamDecorator
             return $this->cache;
         }
 
-        $this->getContents();
+        try {
+            $this->getContents();
+        } catch (RuntimeException $exception) {
+            return '';
+        }
 
         return $this->cache;
     }
@@ -52,7 +63,7 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return false;
     }
@@ -60,11 +71,11 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         $content = parent::read($length);
 
-        if ($content && ! $this->reachedEof) {
+        if (! $this->reachedEof) {
             $this->cache .= $content;
         }
 
@@ -78,7 +89,7 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         if ($this->reachedEof) {
             return $this->cache;

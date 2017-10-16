@@ -18,41 +18,47 @@
         }
     ],
     "require": {
-        "php"                                            : "^7.1",
-        "defuse/php-encryption"                          : "^2.0",
-        "ext-openssl"                                    : "*",
-        "viserio/contracts"                              : "self.version"
+        "php"                                        : "^7.2",
+        "ext-mbstring"                               : "*",
+        "ext-sodium"                                 : "*",
+        "paragonie/constant_time_encoding"           : "^2.0",
+        "viserio/contract"                           : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"             : "^0.3",
-        "phpunit/phpunit"                                : "^6.0",
-        "narrowspark/testing-helper"                     : "^3.0",
-        "viserio/config"                                 : "self.version",
-        "viserio/container"                              : "self.version",
-        "viserio/options-resolver"                       : "self.version"
+        "container-interop/service-provider"         : "^0.4",
+        "phpunit/phpunit"                            : "^6.0",
+        "narrowspark/testing-helper"                 : "^4.0",
+        "nyholm/nsa"                                 : "^1.1",
+        "viserio/config"                             : "self.version",
+        "viserio/container"                          : "self.version",
+        "viserio/options-resolver"                   : "self.version",
+        "viserio/support"                            : "self.version"
     },
     "autoload": {
+        "files": [
+            "helpers.php"
+        ],
         "psr-4": {
-            "Viserio\\Component\\Encrypter\\"            : ""
+            "Viserio\\Component\\Encrypter\\"        : ""
         },
-        "exclude-from-classmap"                          : ["/Tests/"]
+        "exclude-from-classmap"                      : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Component\\Encrypter\\Tests\\"     : "Tests/"
+            "Viserio\\Component\\Encrypter\\Tests\\" : "Tests/"
         }
     },
     "suggest": {
-        "container-interop/service-provider"              : "Required to use service-provider (^0.3).",
-        "viserio/config"                                  : "Optional to use service-provider (self.version).",
-        "viserio/statical-proxy"                          : "Required to use the proxy instances (self.version).",
-        "viserio/options-resolver"                        : "Required to use service-provider (self.version)."
+        "container-interop/service-provider"         : "Required to use service-provider (^0.4).",
+        "viserio/config"                             : "Optional to use service-provider (self.version).",
+        "viserio/statical-proxy"                     : "Required to use the proxy instances (self.version).",
+        "viserio/options-resolver"                   : "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                                  : "1.0-dev"
+            "dev-master"                             : "1.0-dev"
         }
     },
-    "minimum-stability"                                   : "dev",
-    "prefer-stable"                                       : true
+    "minimum-stability"                              : "dev",
+    "prefer-stable"                                  : true
 }

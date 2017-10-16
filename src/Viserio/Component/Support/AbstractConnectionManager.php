@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
-use InvalidArgumentException;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\Support\ConnectionManager as ConnectionManagerContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Support\ConnectionManager as ConnectionManagerContract;
+use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractConnectionManager implements
@@ -42,7 +42,7 @@ abstract class AbstractConnectionManager implements
     /**
      * Create a new connection manager instance.
      *
-     * @param \Psr\Container\ContainerInterface|iterable $data
+     * @param iterable|\Psr\Container\ContainerInterface $data
      */
     public function __construct($data)
     {
@@ -59,7 +59,7 @@ abstract class AbstractConnectionManager implements
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array([$this->getConnection(), $method], $parameters);
+        return \call_user_func_array([$this->getConnection(), $method], $parameters);
     }
 
     /**
@@ -105,7 +105,7 @@ abstract class AbstractConnectionManager implements
     /**
      * {@inheritdoc}
      */
-    public function reconnect(string $name = null)
+    public function reconnect(string $name = null): object
     {
         $name = $name ?? $this->getDefaultConnection();
 
@@ -163,7 +163,7 @@ abstract class AbstractConnectionManager implements
     {
         $method = 'create' . Str::studly($connect) . 'Connection';
 
-        return method_exists($this, $method) || isset($this->extensions[$connect]);
+        return \method_exists($this, $method) || isset($this->extensions[$connect]);
     }
 
     /**
@@ -175,7 +175,7 @@ abstract class AbstractConnectionManager implements
 
         $connections = $this->resolvedOptions['connections'];
 
-        if (isset($connections[$name]) && is_array($connections[$name])) {
+        if (isset($connections[$name]) && \is_array($connections[$name])) {
             $config         = $connections[$name];
             $config['name'] = $name;
 
@@ -194,11 +194,11 @@ abstract class AbstractConnectionManager implements
 
         if (isset($this->extensions[$config['name']])) {
             return $this->callCustomCreator($config['name'], $config);
-        } elseif (method_exists($this, $method)) {
+        } elseif (\method_exists($this, $method)) {
             return $this->$method($config);
         }
 
-        throw new InvalidArgumentException(sprintf('Connection [%s] not supported.', $config['name']));
+        throw new InvalidArgumentException(\sprintf('Connection [%s] not supported.', $config['name']));
     }
 
     /**

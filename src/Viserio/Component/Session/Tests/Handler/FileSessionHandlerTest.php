@@ -4,13 +4,15 @@ namespace Viserio\Component\Session\Tests\Handler;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Session\Handler\FileSessionHandler;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileSessionHandlerTest extends TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
-     * @var \org\bovigo\vfs\vfsStream
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 
@@ -19,101 +21,101 @@ class FileSessionHandlerTest extends TestCase
      */
     private $handler;
 
-    /**
-     * @var \Viserio\Component\Filesystem\Filesystem
-     */
-    private $files;
-
-    public function setUp()
+    public function setUp(): void
     {
         $this->root    = vfsStream::setup();
-        $this->files   = new Filesystem();
         $this->handler = new FileSessionHandler(
-            $this->files,
             $this->root->url(),
             60
         );
-
-        $this->files->createDirectory(__DIR__ . '/stubs');
     }
 
-    public function tearDown()
+    public function testOpenReturnsTrue(): void
     {
-        $this->files->deleteDirectory(__DIR__ . '/stubs');
-
-        parent::tearDown();
+        self::assertTrue($this->handler->open($this->root->url(), 'temp'));
     }
 
-    public function testOpenReturnsTrue()
+    public function testCloseReturnsTrue(): void
     {
-        $handler = $this->handler;
-
-        self::assertTrue($handler->open($this->root->url(), 'temp'));
+        self::assertTrue($this->handler->close());
     }
 
-    public function testCloseReturnsTrue()
+    public function testReadExistingSessionReturnsTheData(): void
     {
-        $handler = $this->handler;
+        vfsStream::newFile('temp.' . FileSessionHandler::FILE_EXTENSION)
+            ->withContent('Foo Bar')
+            ->at($this->root);
 
-        self::assertTrue($handler->close());
+        self::assertSame('Foo Bar', $this->handler->read('temp'));
     }
 
-    public function testReadExistingSessionReturnsTheData()
+    public function testReadMissingSessionReturnsAnEmptyString(): void
     {
-        vfsStream::newFile('temp')->withContent('Foo Bar')->at($this->root);
+        vfsStream::newFile('temp')
+            ->withContent('Foo Bar')
+            ->at($this->root);
 
-        $handler = $this->handler;
-
-        self::assertSame('Foo Bar', $handler->read('temp'));
+        self::assertSame('', $this->handler->read('12'));
     }
 
-    public function testReadMissingSessionReturnsAnEmptyString()
+    public function testWriteSuccessfullyReturnsTrue(): void
     {
-        vfsStream::newFile('temp')->withContent('Foo Bar')->at($this->root);
+        $dir = self::normalizeDirectorySeparator(__DIR__ . '/' . __FUNCTION__);
 
-        $handler = $this->handler;
+        \mkdir($dir);
 
-        self::assertSame('', $handler->read('12'));
+        $handler = new FileSessionHandler($dir, 120);
+
+        self::assertTrue($handler->write('write', \json_encode(['user_id' => 1])));
+
+        \unlink(self::normalizeDirectorySeparator($dir . '\write.' . FileSessionHandler::FILE_EXTENSION));
+        \rmdir($dir);
     }
 
-    public function testWriteSuccessfullyReturnsTrue()
+    public function testGcSuccessfullyReturnsTrue(): void
     {
-        $handler = new FileSessionHandler(
-            $this->files,
-            __DIR__ . '/stubs',
-            120
-        );
+        $dir = self::normalizeDirectorySeparator(__DIR__ . '/' . __FUNCTION__);
 
-        self::assertTrue($handler->write('write.sess', json_encode(['user_id' => 1])));
+        \mkdir($dir);
+
+        $handler = new FileSessionHandler($dir, 5);
+        $handler->write('temp', \json_encode(['user_id' => 1]));
+
+        self::assertSame('{"user_id":1}', $handler->read('temp'));
+
+        \sleep(10);
+
+        self::assertTrue($handler->gc(5));
+        self::assertSame('', $handler->read('temp'));
+
+        \rmdir($dir);
     }
 
-    public function testGcSuccessfullyReturnsTrue()
+    public function testDestroySuccessfullReturnsTrue(): void
     {
-        if (getenv('TRAVIS')) {
-            $this->markTestSkipped('FileSessionHandler::gc() dont work on travis. ');
-        }
+        vfsStream::newFile('destroy.' . FileSessionHandler::FILE_EXTENSION)
+            ->withContent('Foo Bar')
+            ->at($this->root);
 
-        $handler = new FileSessionHandler(
-            $this->files,
-            __DIR__ . '/stubs',
-            120
-        );
-        $handler->write('temp.sess', json_encode(['user_id' => 1]));
-
-        self::assertSame('{"user_id":1}', $handler->read('temp.sess'));
-
-        sleep(2);
-
-        self::assertTrue($handler->gc(2));
-        self::assertSame('', $handler->read('temp.sess'));
+        self::assertTrue($this->handler->destroy('destroy'));
     }
 
-    public function testDestroySuccessfullReturnsTrue()
+    public function testUpdateTimestamp(): void
     {
-        vfsStream::newFile('destroy.sess')->withContent('Foo Bar')->at($this->root);
+        $dir = self::normalizeDirectorySeparator(__DIR__ . '/' . __FUNCTION__);
 
-        $handler = $this->handler;
+        \mkdir($dir);
 
-        self::assertTrue($handler->destroy('destroy.sess'));
+        $lifetime = 120;
+        $handler  = new FileSessionHandler($dir, $lifetime);
+
+        $filePath = self::normalizeDirectorySeparator($dir . '\update.' . FileSessionHandler::FILE_EXTENSION);
+
+        $handler->write('update', \json_encode(['user_id' => 1]));
+
+        self::assertTrue($handler->updateTimestamp('update', 'no'));
+
+        \unlink($filePath);
+        \rmdir($dir);
     }
 }

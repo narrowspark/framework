@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Twig\Environment as TwigEnvironment;
@@ -12,17 +12,25 @@ use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Contracts\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Support\Str;
 
-class TwigBridgeServiceProvider implements ServiceProvider
+class TwigBridgeServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
             TwigEnvironment::class => [self::class, 'extendTwigEnvironment'],
@@ -33,20 +41,18 @@ class TwigBridgeServiceProvider implements ServiceProvider
      * Extend the twig environment.
      *
      * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param null|\Twig\Environment            $twig
      *
-     * @return \Twig\Environment
+     * @return null|\Twig\Environment
      */
-    public static function extendTwigEnvironment(ContainerInterface $container, ?callable $getPrevious = null): ?TwigEnvironment
+    public static function extendTwigEnvironment(ContainerInterface $container, ?TwigEnvironment $twig = null): ?TwigEnvironment
     {
-        $twig = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
         if ($twig !== null) {
             if ($container->has(Lexer::class)) {
                 $twig->setLexer($container->get(Lexer::class));
             }
 
-            if ($twig->isDebug() && class_exists(VarCloner::class)) {
+            if ($twig->isDebug() && \class_exists(VarCloner::class)) {
                 $twig->addExtension(new DumpExtension());
             }
 
@@ -70,7 +76,7 @@ class TwigBridgeServiceProvider implements ServiceProvider
             $twig->addExtension(new TranslatorExtension($container->get(TranslationManagerContract::class)));
         }
 
-        if (class_exists(Str::class)) {
+        if (\class_exists(Str::class)) {
             $twig->addExtension(new StrExtension());
         }
 

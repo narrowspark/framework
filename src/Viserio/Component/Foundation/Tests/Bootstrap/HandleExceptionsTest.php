@@ -3,15 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Exception\Handler as HandlerContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Exception\Provider\ExceptionServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
 
 class HandleExceptionsTest extends MockeryTestCase
 {
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         $bootstraper = new HandleExceptions();
         $handler     = $this->mock(HandlerContract::class);

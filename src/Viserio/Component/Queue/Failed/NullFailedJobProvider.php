@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Failed;
 
-use Viserio\Component\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
+use Viserio\Component\Contract\Queue\FailedJobProvider as FailedJobProviderContract;
 
 class NullFailedJobProvider implements FailedJobProviderContract
 {
     /**
      * {@inheritdoc}
      */
-    public function log(string $connection, string $queue, string $payload)
+    public function log(string $connection, string $queue, string $payload): void
     {
     }
 
@@ -39,7 +39,7 @@ class NullFailedJobProvider implements FailedJobProviderContract
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): void
     {
     }
 }

@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron;
 
-use LogicException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Cron\Cron as CronContract;
+use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Cron\Cron as CronContract;
+use Viserio\Component\Contract\Cron\Exception\LogicException;
 
 class Schedule
 {
@@ -24,7 +24,7 @@ class Schedule
     /**
      * Console path or console name that should be called.
      *
-     * @var string|null
+     * @var null|string
      */
     private $console;
 
@@ -50,7 +50,7 @@ class Schedule
     /**
      * Add a new callback cron job to the schedule.
      *
-     * @param string|callable $callback
+     * @param callable|string $callback
      * @param array           $parameters
      *
      * @return \Viserio\Component\Cron\CallbackCron
@@ -66,7 +66,7 @@ class Schedule
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
-            $cron->setContainer($this->getContainer());
+            $cron->setContainer($this->container);
         }
 
         $this->jobs[] = $cron;
@@ -80,21 +80,23 @@ class Schedule
      * @param string $command
      * @param array  $parameters
      *
-     * @return \Viserio\Component\Contracts\Cron\Cron
+     * @throws \Viserio\Component\Contract\Cron\Exception\LogicException
+     *
+     * @return \Viserio\Component\Contract\Cron\Cron
      */
     public function command(string $command, array $parameters = []): CronContract
     {
-        if ($this->container !== null && $this->getContainer()->has($command)) {
-            $command = $this->getContainer()->get($command)->getName();
+        if ($this->container !== null && $this->container->has($command)) {
+            $command = $this->container->get($command)->getName();
         }
 
-        if (defined('CEREBRO_BINARY')) {
+        if (\defined('CEREBRO_BINARY')) {
             return $this->exec(Application::formatCommandString($command), $parameters);
         } elseif ($this->console !== null) {
-            $binary  = escapeshellarg((string) (new PhpExecutableFinder())->find(false));
-            $console = escapeshellarg($this->console);
+            $binary  = \escapeshellarg((string) (new PhpExecutableFinder())->find(false));
+            $console = \escapeshellarg($this->console);
 
-            return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);
+            return $this->exec(\sprintf('%s %s %s', $binary, $console, $command), $parameters);
         }
 
         throw new LogicException('You need to set a console name or a path to a console, before you call command.');
@@ -106,11 +108,11 @@ class Schedule
      * @param string $command
      * @param array  $parameters
      *
-     * @return \Viserio\Component\Contracts\Cron\Cron
+     * @return \Viserio\Component\Contract\Cron\Cron
      */
     public function exec(string $command, array $parameters = []): CronContract
     {
-        if (count($parameters)) {
+        if (\count($parameters)) {
             $command .= ' ' . $this->compileParameters($parameters);
         }
 
@@ -123,7 +125,7 @@ class Schedule
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
-            $cron->setContainer($this->getContainer());
+            $cron->setContainer($this->container);
         }
 
         $this->jobs[] = $cron;
@@ -151,7 +153,7 @@ class Schedule
      */
     public function dueCronJobs(string $environment, bool $isMaintenance = false): array
     {
-        return array_filter($this->jobs, function ($job) use ($environment, $isMaintenance) {
+        return \array_filter($this->jobs, function (CronContract $job) use ($environment, $isMaintenance) {
             return $job->isDue($environment, $isMaintenance);
         });
     }
@@ -165,22 +167,22 @@ class Schedule
      */
     protected function compileParameters(array $parameters): string
     {
-        $keys = array_keys($parameters);
+        $keys = \array_keys($parameters);
 
-        $items = array_map(function ($value, $key) {
-            if (is_array($value)) {
-                $value = array_map(function ($value) {
-                    return escapeshellarg($value);
+        $items = \array_map(function ($value, $key) {
+            if (\is_array($value)) {
+                $value = \array_map(function ($value) {
+                    return \escapeshellarg($value);
                 }, $value);
 
-                $value = implode(' ', $value);
-            } elseif (! is_numeric($value) && ! preg_match('/^(-.$|--.*)/i', $value)) {
-                $value = escapeshellarg($value);
+                $value = \implode(' ', $value);
+            } elseif (! \is_numeric($value) && ! \preg_match('/^(-.$|--.*)/', $value)) {
+                $value = \escapeshellarg($value);
             }
 
-            return is_numeric($key) ? $value : sprintf('%s=%s', $key, $value);
+            return \is_numeric($key) ? $value : \sprintf('%s=%s', $key, $value);
         }, $parameters, $keys);
 
-        return implode(' ', array_combine($keys, $items));
+        return \implode(' ', \array_combine($keys, $items));
     }
 }

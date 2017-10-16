@@ -9,7 +9,7 @@ use Twig\Loader\ArrayLoader;
 use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\Provider\TwigBridgeDataCollectorsServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
@@ -17,7 +17,7 @@ use Viserio\Component\View\Provider\ViewServiceProvider;
 
 class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 {
-    public function testGetServices()
+    public function testGetServices(): void
     {
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
@@ -34,11 +34,11 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
                 'profiler' => [
                     'enable'    => true,
                     'collector' => [
-                        'twig'  => true,
+                        'twig' => true,
                     ],
                 ],
                 'view' => [
-                    'paths'      => [
+                    'paths' => [
                         __DIR__ . '/../Fixture/',
                         __DIR__,
                     ],
@@ -61,9 +61,9 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 
         self::assertInstanceOf(ProfilerContract::class, $profiler);
 
-        self::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
-        self::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));
-        self::assertTrue(array_key_exists('twig-data-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('time-data-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('memory-data-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('twig-data-collector', $profiler->getCollectors()));
 
         self::assertInstanceOf(Profile::class, $container->get(Profile::class));
         self::assertInstanceOf(Environment::class, $container->get(Environment::class));
@@ -73,10 +73,10 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME_FLOAT')
+            ->with('request_time_float')
             ->andReturn(false);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME')
+            ->with('request_time')
             ->andReturn(false);
 
         return $request;

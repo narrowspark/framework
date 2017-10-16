@@ -12,7 +12,7 @@ use Viserio\Component\Container\Container;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testGetServices()
+    public function testGetServices(): void
     {
         $container = new Container();
         $container->register(new ConsoleServiceProvider());
@@ -23,5 +23,23 @@ class ConsoleCommandsServiceProviderTest extends TestCase
 
         self::assertInstanceOf(DebugCommand::class, $commands['twig:debug']);
         self::assertInstanceOf(LintCommand::class, $commands['twig:lint']);
+    }
+
+    public function testGetDimensions(): void
+    {
+        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+    }
+
+    public function testGetDefaultOptions(): void
+    {
+        self::assertSame(
+            [
+                'lazily_commands' => [
+                    'twig:debug' => DebugCommand::class,
+                    'twig:lint'  => LintCommand::class,
+                ],
+            ],
+            ConsoleCommandsServiceProvider::getDefaultOptions()
+        );
     }
 }

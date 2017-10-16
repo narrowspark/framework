@@ -9,7 +9,7 @@ use Viserio\Component\Profiler\DataCollector\MessagesDataCollector;
 
 class MessagesDataCollectorTest extends MockeryTestCase
 {
-    public function testAddMessageAndLog()
+    public function testAddMessageAndLog(): void
     {
         $collector = new MessagesDataCollector();
         $collector->addMessage('foobar');
@@ -29,7 +29,7 @@ class MessagesDataCollectorTest extends MockeryTestCase
         self::assertCount(0, $msgs);
     }
 
-    public function testCollect()
+    public function testCollect(): void
     {
         $collector = new MessagesDataCollector();
         $collector->addMessage('foo');
@@ -45,7 +45,7 @@ class MessagesDataCollectorTest extends MockeryTestCase
         self::assertEquals($collector->getMessages(), $data['messages']);
     }
 
-    public function testGetMenu()
+    public function testGetMenu(): void
     {
         $collector = new MessagesDataCollector();
 

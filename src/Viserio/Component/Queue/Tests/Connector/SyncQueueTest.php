@@ -7,7 +7,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Opis\Closure\SerializableClosure;
 use Psr\Container\ContainerInterface;
 use stdClass;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connector\SyncQueue;
 use Viserio\Component\Queue\Job\SyncJob;
 use Viserio\Component\Queue\QueueClosure;
@@ -16,15 +16,17 @@ use Viserio\Component\Queue\Tests\Fixture\SyncQueueHandler;
 
 class SyncQueueTest extends MockeryTestCase
 {
-    public function testPushShouldRunJobInstantly()
+    public function testPushShouldRunJobInstantly(): void
     {
         unset($_SERVER['__sync.test']);
 
         $sync    = new SyncQueue();
-        $closure = function ($job) {
+        $closure = function ($job): bool {
             $_SERVER['__sync.test'] = true;
 
             $job->delete();
+
+            return true;
         };
 
         $events = $this->mock(stdClass::class);
@@ -35,7 +37,7 @@ class SyncQueueTest extends MockeryTestCase
             ->once();
         $encrypter->shouldReceive('decrypt')
             ->once()
-            ->andReturn(serialize(new SerializableClosure($closure)));
+            ->andReturn(\serialize(new SerializableClosure($closure)));
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('has')
@@ -67,7 +69,7 @@ class SyncQueueTest extends MockeryTestCase
         self::assertEquals(['foo' => 'bar'], $_SERVER['__sync.test'][1]);
     }
 
-    public function testFailedJobGetsHandledWhenAnExceptionIsThrown()
+    public function testFailedJobGetsHandledWhenAnExceptionIsThrown(): void
     {
         unset($_SERVER['__sync.failed']);
 

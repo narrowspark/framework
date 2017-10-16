@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Validation\Proxy;
 
-use Viserio\Component\Contracts\Validation\Validator as ValidatorContract;
+use Viserio\Component\Contract\Validation\Validator as ValidatorContract;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Validator extends StaticalProxy

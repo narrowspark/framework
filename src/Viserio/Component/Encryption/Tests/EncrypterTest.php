@@ -2,30 +2,102 @@
 declare(strict_types=1);
 namespace Viserio\Component\Encryption\Tests;
 
-use Defuse\Crypto\Key;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
+use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\Encryption\HiddenString;
+use Viserio\Component\Encryption\Key;
 
 class EncrypterTest extends TestCase
 {
-    public function testCompareEncryptedValues()
-    {
-        $e          = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
-        $encrypted1 = $e->encrypt('foo');
-        $encrypted2 = $e->encrypt('foo');
-        $encrypted3 = $e->encrypt('bar');
+    private const PHP_VERSION_PREFIX = 'AHACA';
 
-        self::assertTrue($e->compare($encrypted1, $encrypted2));
-        self::assertFalse($e->compare($encrypted1, $encrypted3));
+    /**
+     * @var \Viserio\Component\Encryption\Encrypter
+     */
+    private $encrypter;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $key = new Key(new HiddenString(\str_repeat('A', 32)));
+
+        $this->encrypter = new Encrypter($key);
     }
 
-    public function testEncryptionAndDecrypt()
+    public function testEncrypt(): void
     {
-        $e = new Encrypter(Key::createNewRandomKey()->saveToAsciiSafeString());
+        $message = $this->encrypter->encrypt(new HiddenString('test message'));
 
-        $encrypted = $e->encrypt('foo');
+        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
 
-        self::assertNotEquals('foo', $encrypted);
-        self::assertEquals('foo', $e->decrypt($encrypted));
+        $plain = $this->encrypter->decrypt($message);
+
+        self::assertSame($plain->getString(), 'test message');
+    }
+
+    public function testEncryptEmpty(): void
+    {
+        $message = $this->encrypter->encrypt(new HiddenString(''));
+
+        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
+
+        $plain = $this->encrypter->decrypt($message);
+
+        self::assertSame($plain->getString(), '');
+    }
+
+    public function testRawEncrypt(): void
+    {
+        $message = $this->encrypter->encrypt(new HiddenString('test message'), '', true);
+
+        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+
+        $plain = $this->encrypter->decrypt($message, '', true);
+
+        self::assertSame($plain->getString(), 'test message');
+    }
+
+    public function testEncryptFail(): void
+    {
+        $message = $this->encrypter->encrypt(new HiddenString('test message'), '', true);
+
+        self::assertSame(\mb_strpos($message, SecurityContract::SODIUM_PHP_VERSION), 0);
+
+        $r           = \random_int(0, \mb_strlen($message, '8bit') - 1);
+        $message[$r] = \chr(
+            \ord($message[$r])
+            ^
+            1 << random_int(0, 7)
+        );
+
+        try {
+            $plain = $this->encrypter->decrypt($message, '', true);
+
+            self::assertSame($plain, $message);
+            self::fail('This should have thrown an InvalidMessage exception!');
+        } catch (InvalidMessageException $e) {
+            self::assertInstanceOf(InvalidMessageException::class, $e);
+        }
+    }
+
+    public function testEncryptWithAd(): void
+    {
+        $message = $this->encrypter->encrypt(new HiddenString('test message'), 'test');
+
+        self::assertSame(\mb_strpos($message, self::PHP_VERSION_PREFIX), 0);
+
+        $plain = $this->encrypter->decrypt($message, 'test');
+
+        self::assertSame($plain->getString(), 'test message');
+
+        try {
+            $this->encrypter->decrypt($message, 'wrong');
+            self::fail('AD did not change MAC.');
+        } catch (InvalidMessageException $ex) {
+            self::assertSame('Invalid message authentication code.', $ex->getMessage());
+        }
     }
 }

@@ -2,33 +2,30 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests;
 
-use Defuse\Crypto\Key;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Cache\Manager as CacheManager;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Cache\Manager as CacheManager;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
 
 class FilesystemManagerTest extends MockeryTestCase
 {
-    public function testAwsS3ConnectorDriver()
+    public function testAwsS3ConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'awss3' => [
                             'key'     => 'your-key',
                             'secret'  => 'your-secret',
@@ -52,19 +49,16 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testDropboxConnectorDriver()
+    public function testDropboxConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'dropbox' => [
                             'token' => 'your-token',
                         ],
@@ -84,23 +78,20 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testFtpConnectorDriver()
+    public function testFtpConnectorDriver(): void
     {
-        if (! defined('FTP_BINARY')) {
+        if (! \defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'ftp' => [
                             'host'     => 'ftp.example.com',
                             'port'     => 21,
@@ -123,19 +114,16 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testLocalConnectorDriver()
+    public function testLocalConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'local' => [
                             'path' => __DIR__,
                         ],
@@ -155,19 +143,16 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testNullConnectorDriver()
+    public function testNullConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'null' => [],
                     ],
                 ],
@@ -185,19 +170,16 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testRackspaceConnectorDriver()
+    public function testRackspaceConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'rackspace' => [
                             'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
                             'region'    => 'LON',
@@ -227,19 +209,16 @@ class FilesystemManagerTest extends MockeryTestCase
         }
     }
 
-    public function testSftpConnectorDriver()
+    public function testSftpConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'sftp' => [
                             'host'     => 'sftp.example.com',
                             'port'     => 22,
@@ -262,19 +241,16 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testVfsConnectorDriver()
+    public function testVfsConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'vfs' => [],
                     ],
                 ],
@@ -292,19 +268,16 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testWebDavConnectorDriver()
+    public function testWebDavConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'webdav' => [
                             'baseUri'  => 'http://example.org/dav/',
                             'userName' => 'your-username',
@@ -326,19 +299,16 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testZipConnectorDriver()
+    public function testZipConnectorDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'zip' => [
                             'path' => __DIR__ . '\Adapter\stubs\test.zip',
                         ],
@@ -358,19 +328,16 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testgetFlysystemAdapter()
+    public function testgetFlysystemAdapter(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'zip' => [
                             'path' => __DIR__ . '\Adapter\stubs\test.zip',
                         ],
@@ -390,19 +357,16 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testCachedAdapter()
+    public function testCachedAdapter(): void
     {
         $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'local' => [
                             'path'  => __DIR__,
                             'cache' => 'local',
@@ -436,20 +400,18 @@ class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testGetCryptedConnection()
+    public function testGetCryptedConnection(): void
     {
-        $key    = Key::createNewRandomKey();
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
+        $password = \random_bytes(32);
+        $key      = KeyFactory::generateKey($password);
+        $config   = $this->mock(RepositoryContract::class);
+        $this->arrangeConfigOffsetExists($config);
         $config->shouldReceive('offsetGet')
             ->once()
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'local' => [
                             'path' => __DIR__,
                         ],
@@ -467,5 +429,16 @@ class FilesystemManagerTest extends MockeryTestCase
             EncryptionWrapper::class,
             $manager->cryptedConnection($key, 'local')
         );
+    }
+
+    /**
+     * @param $config
+     */
+    private function arrangeConfigOffsetExists($config): void
+    {
+        $config->shouldReceive('offsetExists')
+            ->once()
+            ->with('viserio')
+            ->andReturn(true);
     }
 }

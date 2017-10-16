@@ -10,20 +10,20 @@ use Twig\Loader\ArrayLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\View\ViewFinder;
 
 class DebugCommandTest extends MockeryTestCase
 {
-    public function testThrowErrorIfTwigIsNotSet()
+    public function testThrowErrorIfTwigIsNotSet(): void
     {
         $config = [
             'config' => [
                 'viserio' => [
                     'view' => [
                         'paths' => [
-                            $path ?? __DIR__ . '/../Fixtures/',
+                            __DIR__ . '/../Fixtures/',
                         ],
                     ],
                 ],
@@ -31,15 +31,14 @@ class DebugCommandTest extends MockeryTestCase
         ];
         $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
         $loader = new ArrayLoader([]);
-        $twig   = new Environment($loader);
 
         $application = new Application('1');
         $application->setContainer(new ArrayContainer(
-            array_merge(
+            \array_merge(
                 $config,
                 [
-                    FinderContract::class       => $finder,
-                    LoaderInterface::class      => $loader,
+                    FinderContract::class  => $finder,
+                    LoaderInterface::class => $loader,
                 ]
             )
         ));
@@ -49,29 +48,29 @@ class DebugCommandTest extends MockeryTestCase
 
         $tester->execute([], ['decorated' => false]);
 
-        self::assertSame('The Twig environment needs to be set.', trim($tester->getDisplay(true)));
+        self::assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
     }
 
-    public function testDebug()
+    public function testDebug(): void
     {
-        $tester   = $this->createCommandTester();
-        $ret      = $tester->execute([], ['decorated' => false]);
+        $tester = $this->createCommandTester();
+        $tester->execute([], ['decorated' => false]);
 
-        self::assertTrue(is_string($tester->getDisplay(true)));
+        self::assertTrue(\is_string($tester->getDisplay(true)));
     }
 
-    public function testDebugJsonFormat()
+    public function testDebugJsonFormat(): void
     {
-        $tester   = $this->createCommandTester();
-        $ret      = $tester->execute(['--format' => 'json'], ['decorated' => false]);
+        $tester = $this->createCommandTester();
+        $tester->execute(['--format' => 'json'], ['decorated' => false]);
 
-        self::assertTrue(is_string($tester->getDisplay(true)));
+        self::assertTrue(\is_string($tester->getDisplay(true)));
     }
 
     /**
-     * @return CommandTester
+     * @return \Symfony\Component\Console\Tester\CommandTester
      */
-    private function createCommandTester()
+    private function createCommandTester(): CommandTester
     {
         $config = [
             'config' => [
@@ -90,12 +89,12 @@ class DebugCommandTest extends MockeryTestCase
 
         $application = new Application('1');
         $application->setContainer(new ArrayContainer(
-            array_merge(
+            \array_merge(
                 $config,
                 [
-                    Environment::class          => $twig,
-                    FinderContract::class       => $finder,
-                    LoaderInterface::class      => $loader,
+                    Environment::class     => $twig,
+                    FinderContract::class  => $finder,
+                    LoaderInterface::class => $loader,
                 ]
             )
         ));

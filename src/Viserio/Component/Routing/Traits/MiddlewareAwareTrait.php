@@ -2,14 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use LogicException;
-use RuntimeException;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
 
 trait MiddlewareAwareTrait
 {
+    use MiddlewareValidatorTrait;
+
     /**
-     * All middlewares.
+     * List of registered middlewares.
      *
      * @var array
      */
@@ -25,58 +27,68 @@ trait MiddlewareAwareTrait
     /**
      * Register a short-hand name for a middleware.
      *
-     * @param string        $name
-     * @param string|object $middleware
+     * @param string                                                    $name
+     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
      *
-     * @throws \RuntimeException if wrong type is given or alias exists
-     * @throws \LogicException
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException         if alias exists
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
      * @return $this
      */
     public function aliasMiddleware(string $name, $middleware)
     {
         if (isset($this->middlewares[$name])) {
-            throw new RuntimeException(sprintf('Alias [%s] already exists.', $name));
+            throw new RuntimeException(\sprintf('Alias [%s] already exists.', $name));
         }
 
-        if (is_string($middleware) || is_object($middleware)) {
-            $this->validateMiddlewareClass($middleware);
+        if (\is_string($middleware) || \is_object($middleware)) {
+            $className = $this->getMiddlewareClassName($middleware);
+
+            if (\class_exists($className)) {
+                $this->validateMiddleware($className);
+            }
 
             $this->middlewares[$name] = $middleware;
 
             return $this;
         }
 
-        throw new RuntimeException(sprintf('Expected string or object; received [%s].', gettype($middleware)));
+        throw new UnexpectedValueException(\sprintf('Expected string or object; received [%s].', \gettype($middleware)));
     }
 
     /**
-     * Set the middlewares to the route.
+     * Adds a middleware or a array of middlewares to the route/controller.
      *
-     * @param string|array|object $middlewares
+     * @param array|\Interop\Http\ServerMiddleware\MiddlewareInterface|string $middlewares
      *
-     * @throws \RuntimeException if wrong type is given
-     * @throws \LogicException
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
-    public function withMiddleware($middlewares)
+    public function withMiddleware($middlewares): MiddlewareAwareContract
     {
-        $this->validateMiddlewareInput($middlewares);
-        $this->validateMiddlewareClass($middlewares);
+        $this->validateInput($middlewares);
 
-        if (is_string($middlewares) || is_object($middlewares)) {
-            $name = is_object($middlewares) ? get_class($middlewares) : $middlewares;
+        if (\is_string($middlewares) || \is_object($middlewares)) {
+            $className = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
 
-            $this->middlewares[$name] = $middlewares;
+            if (class_exists($className)) {
+                $this->validateMiddleware($className);
+            }
+
+            $this->middlewares[$className] = $middlewares;
 
             return $this;
         }
 
         foreach ($middlewares as $middleware) {
-            $name = is_object($middleware) ? get_class($middleware) : $middleware;
+            $className = $this->getMiddlewareClassName($middleware);
 
-            $this->middlewares[$name] = $middleware;
+            if (class_exists($className)) {
+                $this->validateMiddleware($className);
+            }
+
+            $this->middlewares[$className] = $middleware;
         }
 
         return $this;
@@ -86,14 +98,13 @@ trait MiddlewareAwareTrait
      * Remove the given middlewares from the route/controller.
      * If no middleware is passed, all middlewares will be removed.
      *
-     * @param string|array|null $middlewares
+     * @param null|array|string $middlewares
      *
-     * @throws \RuntimeException
-     * @throws \LogicException
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
-    public function withoutMiddleware($middlewares = null)
+    public function withoutMiddleware($middlewares = null): MiddlewareAwareContract
     {
         if ($middlewares === null) {
             $this->middlewares = [];
@@ -101,70 +112,23 @@ trait MiddlewareAwareTrait
             return $this;
         }
 
-        $this->validateMiddlewareInput($middlewares);
-        $this->validateMiddlewareClass($middlewares);
+        $this->validateInput($middlewares);
 
-        if (is_string($middlewares)) {
-            $this->bypassedMiddlewares[$middlewares] = $middlewares;
+        if (\is_object($middlewares) || \is_string($middlewares)) {
+            $name = is_object($middlewares) ? get_class($middlewares) : $middlewares;
+
+            $this->bypassedMiddlewares[$name] = true;
 
             return $this;
         }
 
-        foreach ($middlewares as $middleware) {
-            $this->bypassedMiddlewares[$middleware] = $middleware;
+        foreach ($middlewares as $name => $middleware) {
+            $middleware = $this->getMiddlewareClassName($middleware);
+            $name       = \is_numeric($name) ? $middleware : $name;
+
+            $this->bypassedMiddlewares[$name] = true;
         }
 
         return $this;
-    }
-
-    /**
-     * Check if given input is a string, object or array.
-     *
-     * @param string|object|array $middlewares
-     *
-     * @throws \RuntimeException
-     *
-     * @return void
-     */
-    private function validateMiddlewareInput($middlewares): void
-    {
-        if (is_array($middlewares) || is_string($middlewares) || is_object($middlewares)) {
-            return;
-        }
-
-        throw new RuntimeException(sprintf('Expected string, object or array; received [%s].', gettype($middlewares)));
-    }
-
-    /**
-     * Check if given middleware class has \Interop\Http\ServerMiddleware\MiddlewareInterface implemented.
-     *
-     * @param string|object|array $middlewares
-     *
-     * @throws \LogicException
-     *
-     * @return void
-     */
-    private function validateMiddlewareClass($middlewares): void
-    {
-        $middlewareCheck = function ($middleware) {
-            if (! in_array(MiddlewareInterface::class, class_implements($middleware))) {
-                throw new LogicException(
-                    sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
-                );
-            }
-        };
-
-        if (
-            (is_string($middlewares) && ! isset($this->middlewares[$middlewares])) ||
-            is_object($middlewares)
-        ) {
-            $middlewareCheck($middlewares);
-        } elseif (is_array($middlewares)) {
-            foreach ($middlewares as $name => $middleware) {
-                if (! isset($this->middlewares[$middleware])) {
-                    $middlewareCheck($middleware);
-                }
-            }
-        }
     }
 }

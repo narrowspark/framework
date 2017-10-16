@@ -9,7 +9,7 @@ use Viserio\Component\Console\Input\InputOption;
 
 class ExpressionParserTest extends TestCase
 {
-    public function testParsesCommandNames()
+    public function testParsesCommandNames(): void
     {
         self::assertParsesTo('greet', [
             'name'      => 'greet',
@@ -18,7 +18,7 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testParsesCommandNamesContainingNamespaces()
+    public function testParsesCommandNamesContainingNamespaces(): void
     {
         self::assertParsesTo('demo:greet', [
             'name'      => 'demo:greet',
@@ -27,7 +27,7 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testParsesMandatoryArguments()
+    public function testParsesMandatoryArguments(): void
     {
         self::assertParsesTo('greet firstname lastname', [
             'name'      => 'greet',
@@ -39,7 +39,7 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testParsesOptionalArguments()
+    public function testParsesOptionalArguments(): void
     {
         self::assertParsesTo('greet [firstname] [lastname]', [
             'name'      => 'greet',
@@ -51,7 +51,7 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testParsesArrayArguments()
+    public function testParsesArrayArguments(): void
     {
         self::assertParsesTo('greet [names=*]', [
             'name'      => 'greet',
@@ -62,7 +62,7 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testParsesArrayArgumentsWithAtLeastOneValue()
+    public function testParsesArrayArgumentsWithAtLeastOneValue(): void
     {
         self::assertParsesTo('greet names=*', [
             'name'      => 'greet',
@@ -73,7 +73,7 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testParsesOptions()
+    public function testParsesOptions(): void
     {
         self::assertParsesTo('greet [--yell]', [
             'name'      => 'greet',
@@ -84,7 +84,7 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testParsesOptionsWithMandatoryValues()
+    public function testParsesOptionsWithMandatoryValues(): void
     {
         self::assertParsesTo('greet [--iterations=]', [
             'name'      => 'greet',
@@ -95,7 +95,7 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testParsesOptionsWithMultipleValues()
+    public function testParsesOptionsWithMultipleValues(): void
     {
         self::assertParsesTo('greet [--name=*]', [
             'name'      => 'greet',
@@ -106,7 +106,7 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testParsesOptionsWithShortcuts()
+    public function testParsesOptionsWithShortcuts(): void
     {
         self::assertParsesTo('greet [-y|--yell] [-it|--iterations=] [-n|--name=*]', [
             'name'      => 'greet',
@@ -119,46 +119,46 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testDefaultValueParsing()
+    public function testDefaultValueParsing(): void
     {
         self::assertParsesTo('command:name [argument=defaultArgumentValue] [--option=defaultOptionValue]', [
             'name'      => 'command:name',
             'arguments' => [
                 new InputArgument('argument', InputArgument::OPTIONAL, '', 'defaultArgumentValue'),
             ],
-            'options'   => [
+            'options' => [
                 new InputOption('option', null, InputOption::VALUE_OPTIONAL, '', 'defaultOptionValue'),
             ],
         ]);
     }
 
-    public function testDefaultValueParsingWithDiscription()
+    public function testDefaultValueParsingWithDiscription(): void
     {
         self::assertParsesTo('command:name [argument=defaultArgumentValue : The option description.] [--option=defaultOptionValue : The option description.]', [
             'name'      => 'command:name',
             'arguments' => [
                 new InputArgument('argument', InputArgument::OPTIONAL, 'The option description.', 'defaultArgumentValue'),
             ],
-            'options'   => [
+            'options' => [
                 new InputOption('option', null, InputOption::VALUE_OPTIONAL, 'The option description.', 'defaultOptionValue'),
             ],
         ]);
     }
 
-    public function testArrayValueParsing()
+    public function testArrayValueParsing(): void
     {
         self::assertParsesTo('command:name [argument=*test,test2] [--option=*doptionValue, test]', [
             'name'      => 'command:name',
             'arguments' => [
                 new InputArgument('argument', InputArgument::IS_ARRAY, '', ['test', 'test2']),
             ],
-            'options'   => [
+            'options' => [
                 new InputOption('option', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, '', ['doptionValue', 'test']),
             ],
         ]);
     }
 
-    public function testParserRegex()
+    public function testParserRegex(): void
     {
         self::assertParsesTo('greet test optional? foo-bar baz-foo=* [-y|--yell=hello] [argument=test]* names=* test= [argument_desc=test : description]', [
             'name'      => 'greet',
@@ -172,26 +172,26 @@ class ExpressionParserTest extends TestCase
                 new InputArgument('test', InputArgument::REQUIRED),
                 new InputArgument('argument_desc', InputArgument::OPTIONAL, 'description', 'test'),
             ],
-            'options'   => [
+            'options' => [
                 new InputOption('yell', 'y', InputOption::VALUE_OPTIONAL, '', 'hello'),
             ],
         ]);
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression
+     * @expectedException \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
      * @expectedExceptionMessage An option must be enclosed by brackets: [--option]
      */
-    public function testProvidesAnErrorMessageOnOptionsMissingBrackets()
+    public function testProvidesAnErrorMessageOnOptionsMissingBrackets(): void
     {
         ExpressionParser::parse('greet --yell');
     }
 
     /**
-     * @expectedException \Viserio\Component\Contracts\Console\Exception\InvalidCommandExpression
+     * @expectedException \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
      * @expectedExceptionMessage The expression was empty.
      */
-    public function testProvidesAnErrorMessageOnEmpty()
+    public function testProvidesAnErrorMessageOnEmpty(): void
     {
         ExpressionParser::parse('');
     }
@@ -200,7 +200,7 @@ class ExpressionParserTest extends TestCase
      * @param string $expression
      * @param array  $expected
      */
-    protected static function assertParsesTo(string $expression, array $expected = [])
+    protected static function assertParsesTo(string $expression, array $expected = []): void
     {
         self::assertEquals($expected, ExpressionParser::parse($expression));
     }

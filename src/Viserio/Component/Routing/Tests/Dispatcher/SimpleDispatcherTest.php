@@ -15,18 +15,18 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $dispatcher  = new SimpleDispatcher();
-        $dispatcher->setCachePath(__DIR__ . '/../Cache/SimpleDispatcherTest.cache');
+        $dispatcher = new SimpleDispatcher();
+        $dispatcher->setCachePath($this->patch . '/SimpleDispatcherTest.cache');
         $dispatcher->refreshCache(true);
 
         $this->dispatcher = $dispatcher;
     }
 
-    public function testHandleFound()
+    public function testHandleFound(): void
     {
-        $path = __DIR__ . '/../Cache/SimpleDispatcherTest.cache';
+        $path = $this->patch . '/SimpleDispatcherTest.cache';
 
         self::assertSame(self::normalizeDirectorySeparator($path), $this->dispatcher->getCachePath());
 

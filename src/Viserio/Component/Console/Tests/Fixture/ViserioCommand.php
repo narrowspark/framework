@@ -8,21 +8,11 @@ use Viserio\Component\Console\Command\Command;
 
 class ViserioCommand extends Command
 {
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'demo:greet';
+    protected static $defaultName = 'demo:greet';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Greet someone';
 
-    public function handle()
+    public function handle(): void
     {
         $this->addArgument(
             'name',

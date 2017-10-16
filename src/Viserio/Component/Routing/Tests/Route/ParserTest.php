@@ -10,15 +10,15 @@ use Viserio\Component\Routing\Route\Parser;
 class ParserTest extends TestCase
 {
     /**
-     * @expectedException \Viserio\Component\Contracts\Routing\Exception\InvalidRoutePatternException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      * @expectedExceptionMessage Invalid route pattern: non-root route must be prefixed with '/', 'test' given.
      */
-    public function testParseThrowException()
+    public function testParseThrowException(): void
     {
         Parser::parse('test', []);
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $out = Parser::parse('/user/{id}/create', ['id' => '[0-9]+']);
 
@@ -27,7 +27,7 @@ class ParserTest extends TestCase
         self::assertEquals(new StaticMatcher('create'), $out[2]);
     }
 
-    public function testParseWithDoublePoints()
+    public function testParseWithDoublePoints(): void
     {
         $out = Parser::parse('/user/{post_slug:[a-z0-9\-]+}/', []);
 

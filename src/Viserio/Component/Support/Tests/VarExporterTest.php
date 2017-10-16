@@ -29,7 +29,7 @@ class VarExporterTest extends TestCase
            [['foo' => 1, [2, 3]], '[\'foo\' => 1,0 => [0 => 2,1 => 3,],]'],
            [new stdClass(), '(object)[]'],
            [(object) ['foo' => 'bar'], '(object)[\'foo\' => \'bar\']'],
-           [new Controller(), 'unserialize(' . var_export(serialize(new Controller()), true) . ')'],
+           [new Controller(), 'unserialize(' . \var_export(\serialize(new Controller()), true) . ')'],
        ];
     }
 
@@ -39,7 +39,7 @@ class VarExporterTest extends TestCase
      * @param mixed $value
      * @param mixed $code
      */
-    public function testConvertsValueToValidPhp($value, $code)
+    public function testConvertsValueToValidPhp($value, $code): void
     {
         $exported  = VarExporter::export($value);
         $evaluated = eval('return ' . $exported . ';');

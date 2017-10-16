@@ -3,42 +3,35 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayer;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Viserio\Component\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contracts\Exception\ExceptionInfo as ExceptionInfoContract;
-use Viserio\Component\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
-use Viserio\Component\Http\Response\JsonResponse;
+use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
+use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
+use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 
 class JsonDisplayer implements DisplayerContract
 {
     use ResponseFactoryAwareTrait;
-    use StreamFactoryAwareTrait;
 
     /**
      * The exception info instance.
      *
-     * @var \Viserio\Component\Contracts\Exception\ExceptionInfo
+     * @var \Viserio\Component\Contract\Exception\ExceptionInfo
      */
     protected $info;
 
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Contracts\Exception\ExceptionInfo $info
-     * @param \Interop\Http\Factory\ResponseFactoryInterface       $responseFactory
-     * @param \Interop\Http\Factory\StreamFactoryInterface         $streamFactory
+     * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
+     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
      */
     public function __construct(
         ExceptionInfoContract $info,
-        ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface $streamFactory
+        ResponseFactoryInterface $responseFactory
     ) {
         $this->info            = $info;
         $this->responseFactory = $responseFactory;
-        $this->streamFactory   = $streamFactory;
     }
 
     /**
@@ -49,17 +42,23 @@ class JsonDisplayer implements DisplayerContract
         $info  = $this->info->generate($id, $code);
         $error = ['id' => $id, 'status' => $info['code'], 'title' => $info['name'], 'detail' => $info['detail']];
 
-        return new JsonResponse(
-            ['errors' => [$error]],
-            $code,
-            array_merge($headers, ['Content-Type' => $this->contentType()])
-        );
+        $response = $this->responseFactory->createResponse($code);
+
+        foreach (\array_merge($headers, ['Content-Type' => $this->getContentType()]) as $header => $value) {
+            $response = $response->withAddedHeader($header, $value);
+        }
+
+        $body = $response->getBody();
+        $body->write(\json_encode(['errors' => [$error]], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES));
+        $body->rewind();
+
+        return $response->withBody($body);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function contentType(): string
+    public function getContentType(): string
     {
         return 'application/json';
     }

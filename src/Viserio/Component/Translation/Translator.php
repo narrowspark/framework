@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation;
 
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Viserio\Component\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 
 class Translator implements TranslatorContract, LoggerAwareInterface
@@ -18,14 +18,14 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * Formatter instance.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageFormatter
+     * @var \Viserio\Component\Contract\Translation\MessageFormatter
      */
     protected $formatter;
 
     /**
      * The message catalogue.
      *
-     * @var \Viserio\Component\Contracts\Translation\MessageCatalogue
+     * @var \Viserio\Component\Contract\Translation\MessageCatalogue
      */
     protected $catalogue;
 
@@ -60,8 +60,8 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * Create new Translator instance.
      *
-     * @param \Viserio\Component\Contracts\Translation\MessageCatalogue $catalogue
-     * @param \Viserio\Component\Contracts\Translation\MessageFormatter $formatter
+     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $catalogue
+     * @param \Viserio\Component\Contract\Translation\MessageFormatter $formatter
      *
      * @throws \InvalidArgumentException If a locale contains invalid characters
      */
@@ -79,7 +79,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      */
     public function setLocale(string $locale): TranslatorContract
     {
-        $this->assertValidLocale($locale);
+        self::assertValidLocale($locale);
         $this->locale = $locale;
 
         return $this;
@@ -117,7 +117,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         array $parameters = [],
         string $domain = 'messages'
     ): string {
-        if (preg_match("/^(.*?)(\[.*?\])$/", $id, $match)) {
+        if (\preg_match("/^(.*?)(\[.*?\])$/", $id, $match)) {
             $id = $match[1];
         }
 
@@ -181,7 +181,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     {
         $helpers = $this->filterHelpersFromString($translation);
 
-        if (count($this->helpers) === 0 || count($helpers) === 0) {
+        if (\count($this->helpers) === 0 || \count($helpers) === 0) {
             return $translation;
         }
 
@@ -190,9 +190,9 @@ class Translator implements TranslatorContract, LoggerAwareInterface
                 return $translation;
             }
 
-            array_unshift($helper['arguments'], $translation);
+            \array_unshift($helper['arguments'], $translation);
 
-            $translation = call_user_func_array($this->helpers[$helper['name']], $helper['arguments']);
+            $translation = \call_user_func_array($this->helpers[$helper['name']], $helper['arguments']);
         }
 
         return $translation;
@@ -209,16 +209,15 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     {
         $helpers = [];
 
-        if (preg_match("/^(.*?)\[(.*?)\]$/", $translation, $match)) {
-            $translation = $match[1];
-            $helpers     = explode('|', $match[2]);
-            $helpers     = array_map(function ($helper) {
+        if (\preg_match("/^(.*?)\[(.*?)\]$/", $translation, $match)) {
+            $helpers = \explode('|', $match[2]);
+            $helpers = \array_map(function ($helper) {
                 $name = $helper;
                 $arguments = [];
 
-                if (preg_match('/^(.*?)\:(.*)$/', $helper, $match)) {
+                if (\preg_match('/^(.*?)\:(.*)$/', $helper, $match)) {
                     $name = $match[1];
-                    $arguments = explode(':', $match[2]);
+                    $arguments = \explode(':', $match[2]);
                 }
 
                 return [
@@ -268,12 +267,12 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         }
 
         if ($catalogue->has($id, $domain)) {
-            $this->getLogger()->debug(
+            $this->logger->debug(
                 'Translation use fallback catalogue.',
                 ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
             );
         } else {
-            $this->getLogger()->warning(
+            $this->logger->warning(
                 'Translation not found.',
                 ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
             );
@@ -283,7 +282,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * Collect messages about all translations.
      *
-     * @param string|null $locale
+     * @param null|string $locale
      * @param string      $domain
      * @param string      $id
      * @param string      $translation
@@ -309,6 +308,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
             while ($fallbackCatalogue) {
                 if ($fallbackCatalogue->defines($id, $domain)) {
                     $locale = $fallbackCatalogue->getLocale();
+
                     break;
                 }
 
@@ -319,12 +319,12 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         }
 
         $this->messages[] = [
-            'locale'            => $locale,
-            'domain'            => $domain,
-            'id'                => $id,
-            'translation'       => $translation,
-            'parameters'        => $parameters,
-            'state'             => $state,
+            'locale'      => $locale,
+            'domain'      => $domain,
+            'id'          => $id,
+            'translation' => $translation,
+            'parameters'  => $parameters,
+            'state'       => $state,
         ];
     }
 }

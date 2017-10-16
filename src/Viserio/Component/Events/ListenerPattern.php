@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Events;
 
 use Closure;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 
 class ListenerPattern
 {
@@ -54,7 +54,7 @@ class ListenerPattern
      *
      * @var array
      */
-    private $wildcardsSeparators = [
+    private static $wildcardsSeparators = [
         // Trailing single-wildcard with separator prefix
         '/\\\\\.\\\\\*$/' => '(?:\.\w+)?',
         // Single-wildcard with separator prefix
@@ -76,10 +76,10 @@ class ListenerPattern
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
-        if (is_callable($listener) ||
+        if (\is_callable($listener) ||
             $listener instanceof Closure ||
-            is_array($listener) ||
-            is_string($listener)
+            \is_array($listener) ||
+            \is_string($listener)
         ) {
             $this->provider = $listener;
         } else {
@@ -110,7 +110,7 @@ class ListenerPattern
      */
     public function getListener()
     {
-        if (! isset($this->listener) && isset($this->provider)) {
+        if ($this->listener === null && $this->provider !== null) {
             $this->listener = $this->provider;
             $this->provider = null;
         }
@@ -121,8 +121,8 @@ class ListenerPattern
     /**
      * Adds this pattern's listener to an event.
      *
-     * @param \Viserio\Component\Contracts\Events\EventManager $dispatcher
-     * @param string                                           $eventName
+     * @param \Viserio\Component\Contract\Events\EventManager $dispatcher
+     * @param string                                          $eventName
      *
      * @return void
      */
@@ -140,7 +140,7 @@ class ListenerPattern
      * Removes this pattern's listener from all events to which it was
      * previously added.
      *
-     * @param \Viserio\Component\Contracts\Events\EventManager $dispatcher
+     * @param \Viserio\Component\Contract\Events\EventManager $dispatcher
      *
      * @return void
      */
@@ -162,7 +162,7 @@ class ListenerPattern
      */
     final public function test(string $eventName): bool
     {
-        return (bool) preg_match($this->regex, $eventName);
+        return (bool) \preg_match($this->regex, $eventName);
     }
 
     /**
@@ -174,10 +174,10 @@ class ListenerPattern
      */
     private function createRegex(string $eventPattern): string
     {
-        return sprintf('/^%s$/', preg_replace(
-            array_keys($this->wildcardsSeparators),
-            array_values($this->wildcardsSeparators),
-            preg_quote($eventPattern, '/')
+        return \sprintf('/^%s$/', \preg_replace(
+            \array_keys(self::$wildcardsSeparators),
+            \array_values(self::$wildcardsSeparators),
+            \preg_quote($eventPattern, '/')
         ));
     }
 }

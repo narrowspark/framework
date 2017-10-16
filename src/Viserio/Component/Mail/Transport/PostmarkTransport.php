@@ -11,7 +11,7 @@ use Swift_Mime_Headers_ParameterizedHeader;
 use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
 use Swift_Mime_SimpleMessage;
-use Swift_MimePart;
+use Swift_Mime_SimpleMimeEntity;
 
 class PostmarkTransport extends AbstractTransport
 {
@@ -48,7 +48,7 @@ class PostmarkTransport extends AbstractTransport
     {
         $this->beforeSendPerformed($message);
 
-        $version = phpversion() ?? 'Unknown PHP version';
+        $version = PHP_VERSION ?? 'Unknown PHP version';
         $os      = PHP_OS ?? 'Unknown OS';
 
         $this->client->post('https://api.postmarkapp.com/email', [
@@ -90,7 +90,7 @@ class PostmarkTransport extends AbstractTransport
      *
      * @param string $serverToken
      *
-     * @return \Viserio\Component\Mail\Transport\Postmark
+     * @return $this
      */
     public function setServerToken(string $serverToken): self
     {
@@ -113,7 +113,7 @@ class PostmarkTransport extends AbstractTransport
 
         foreach ($emails as $email => $name) {
             $convertedEmails[] = $name ?
-            '"' . str_replace('"', '\\"', $name) . "\" <{$email}>" :
+            '"' . \str_replace('"', '\\"', $name) . "\" <{$email}>" :
             $email;
         }
 
@@ -128,13 +128,13 @@ class PostmarkTransport extends AbstractTransport
      * @param \Swift_Mime_SimpleMessage $message
      * @param string                    $mimeType
      *
-     * @return \Swift_MimePart|null
+     * @return null|\Swift_Mime_SimpleMimeEntity
      */
-    protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType): ?Swift_MimePart
+    protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType): ?Swift_Mime_SimpleMimeEntity
     {
         foreach ($message->getChildren() as $part) {
-            if (mb_strpos($part->getContentType(), $mimeType) === 0 &&
-                ! ($part instanceof Swift_Mime_Attachment)
+            if (! ($part instanceof Swift_Mime_Attachment) &&
+                \mb_strpos($part->getContentType(), $mimeType) === 0
             ) {
                 return $part;
             }
@@ -174,20 +174,20 @@ class PostmarkTransport extends AbstractTransport
      */
     protected function processRecipients(array $payload, Swift_Mime_SimpleMessage $message): array
     {
-        $payload['From']    = implode(',', $this->convertEmailsArray($message->getFrom()));
-        $payload['To']      = implode(',', $this->convertEmailsArray($message->getTo()));
+        $payload['From']    = \implode(',', $this->convertEmailsArray($message->getFrom()));
+        $payload['To']      = \implode(',', $this->convertEmailsArray($message->getTo()));
         $payload['Subject'] = $message->getSubject();
 
         if ($cc = $message->getCc()) {
-            $payload['Cc'] = implode(',', $this->convertEmailsArray($cc));
+            $payload['Cc'] = \implode(',', $this->convertEmailsArray($cc));
         }
 
         if ($replyTo = $message->getReplyTo()) {
-            $payload['ReplyTo'] = implode(',', $this->convertEmailsArray($replyTo));
+            $payload['ReplyTo'] = \implode(',', $this->convertEmailsArray($replyTo));
         }
 
         if ($bcc = $message->getBcc()) {
-            $payload['Bcc'] = implode(',', $this->convertEmailsArray($bcc));
+            $payload['Bcc'] = \implode(',', $this->convertEmailsArray($bcc));
         }
 
         return $payload;
@@ -210,9 +210,11 @@ class PostmarkTransport extends AbstractTransport
             case 'multipart/alternative':
             case 'multipart/mixed':
                 $payload['HtmlBody'] = $message->getBody();
+
                 break;
             default:
                 $payload['TextBody'] = $message->getBody();
+
                 break;
         }
 
@@ -229,10 +231,10 @@ class PostmarkTransport extends AbstractTransport
             $payload['Attachments'] = [];
 
             foreach ($message->getChildren() as $attachment) {
-                if (is_object($attachment) && $attachment instanceof Swift_Mime_Attachment) {
+                if (\is_object($attachment) && $attachment instanceof Swift_Mime_Attachment) {
                     $attachments = [
                         'Name'        => $attachment->getFilename(),
-                        'Content'     => base64_encode($attachment->getBody()),
+                        'Content'     => \base64_encode($attachment->getBody()),
                         'ContentType' => $attachment->getContentType(),
                     ];
 
@@ -266,29 +268,29 @@ class PostmarkTransport extends AbstractTransport
             $fieldName       = $value->getFieldName();
             $excludedHeaders = ['Subject', 'Content-Type', 'MIME-Version', 'Date'];
 
-            if (! in_array($fieldName, $excludedHeaders)) {
+            if (! \in_array($fieldName, $excludedHeaders, true)) {
                 if ($value instanceof Swift_Mime_Headers_UnstructuredHeader ||
                     $value instanceof Swift_Mime_Headers_OpenDKIMHeader
                 ) {
-                    array_push($headers, [
+                    $headers[] = [
                         'Name'  => $fieldName,
                         'Value' => $value->getValue(),
-                    ]);
+                    ];
                 } elseif ($value instanceof Swift_Mime_Headers_DateHeader ||
                     $value instanceof Swift_Mime_Headers_IdentificationHeader ||
                     $value instanceof Swift_Mime_Headers_ParameterizedHeader ||
                     $value instanceof Swift_Mime_Headers_PathHeader
                 ) {
-                    array_push($headers, [
+                    $headers[] = [
                         'Name'  => $fieldName,
                         'Value' => $value->getFieldBody(),
-                    ]);
+                    ];
 
                     if ($value->getFieldName() === 'Message-ID') {
-                        array_push($headers, [
+                        $headers[] = [
                             'Name'  => 'X-PM-KeepID',
                             'Value' => 'true',
-                        ]);
+                        ];
                     }
                 }
             }

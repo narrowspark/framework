@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Traits;
 
 use Closure;
-use Psr\Container\ContainerInterface;
 
 trait ConfirmableTrait
 {
@@ -11,24 +10,24 @@ trait ConfirmableTrait
      * Confirm before proceeding with the action.
      *
      * @param string             $warning
-     * @param \Closure|bool|null $callback
+     * @param null|bool|\Closure $callback
      *
      * @return bool
      */
     public function confirmToProceed(string $warning = 'Application is in Production mode!', $callback = null): bool
     {
-        $callback      = is_null($callback) ? $this->getDefaultConfirmCallback() : $callback;
-        $shouldConfirm = $callback instanceof Closure ? call_user_func($callback) : $callback;
+        $callback      = $callback ?? $this->getDefaultConfirmCallback();
+        $shouldConfirm = $callback instanceof Closure ? $callback() : $callback;
 
         if ($shouldConfirm) {
             if ($this->option('force')) {
                 return true;
             }
 
-            $this->comment(str_repeat('*', mb_strlen($warning) + 12));
+            $this->comment(\str_repeat('*', \mb_strlen($warning) + 12));
             $this->comment('*     ' . $warning . '     *');
-            $this->comment(str_repeat('*', mb_strlen($warning) + 12));
-            $this->output->writeln('');
+            $this->comment(\str_repeat('*', \mb_strlen($warning) + 12));
+            $this->line('');
 
             $confirmed = $this->confirm('Do you really wish to run this command?');
 
@@ -45,9 +44,9 @@ trait ConfirmableTrait
     /**
      * Get the value of a command option.
      *
-     * @param string|null $key
+     * @param null|string $key
      *
-     * @return string|array
+     * @return array|string
      */
     abstract public function option($key = null);
 
@@ -67,18 +66,20 @@ trait ConfirmableTrait
      * @param string $question
      * @param bool   $default
      *
-     * @return string|bool
+     * @return bool|string
      */
     abstract public function confirm(string $question, bool $default = false);
 
     /**
-     * Get the container instance.
+     * Write a string as standard output.
      *
-     * @throws \RuntimeException
+     * @param string          $string
+     * @param null|string     $style          The output style of the string
+     * @param null|int|string $verbosityLevel
      *
-     * @return \Psr\Container\ContainerInterface
+     * @return void
      */
-    abstract public function getContainer(): ContainerInterface;
+    abstract public function line(string $string, ?string $style = null, $verbosityLevel = null): void;
 
     /**
      * Get the default confirmation callback.
@@ -88,12 +89,14 @@ trait ConfirmableTrait
     protected function getDefaultConfirmCallback(): Closure
     {
         return function () {
-            $container = $this->getContainer();
+            if ($this->container !== null) {
+                if ($this->container->has('env')) {
+                    return $this->container->get('env') === 'production';
+                }
 
-            if ($container->has('env')) {
-                return $container->get('env') == 'production';
-            } elseif ($container->has('viserio.app.env')) {
-                return $container->get('viserio.app.env') == 'production';
+                if ($this->container->has('viserio.app.env')) {
+                    return $this->container->get('viserio.app.env') === 'production';
+                }
             }
 
             return true;

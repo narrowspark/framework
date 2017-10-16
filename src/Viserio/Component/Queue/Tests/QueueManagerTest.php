@@ -5,8 +5,8 @@ namespace Viserio\Component\Queue\Tests;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface as ContainerInteropInterface;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\QueueManager;
 use Viserio\Component\Queue\Tests\Fixture\TestQueue;
 

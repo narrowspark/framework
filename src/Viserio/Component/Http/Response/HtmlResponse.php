@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Response;
 
-use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Response\Traits\InjectContentTypeTrait;
 use Viserio\Component\Http\Stream;
@@ -18,11 +18,11 @@ class HtmlResponse extends Response
      * Produces an HTML response with a Content-Type of text/html and a default
      * status of 200.
      *
-     * @param string|StreamInterface $html    hTML or stream for the message body
+     * @param StreamInterface|string $html    hTML or stream for the message body
      * @param int                    $status  integer status code for the response; 200 by default
      * @param array                  $headers array of headers to use at initialization
      *
-     * @throws InvalidArgumentException if $html is neither a string or stream
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $html is neither a string or stream
      */
     public function __construct($html, int $status = 200, array $headers = [])
     {
@@ -36,9 +36,9 @@ class HtmlResponse extends Response
     /**
      * Create the message body.
      *
-     * @param string|StreamInterface $html
+     * @param StreamInterface|string $html
      *
-     * @throws InvalidArgumentException if $html is neither a string or stream
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $html is neither a string or stream
      *
      * @return StreamInterface
      */
@@ -48,15 +48,15 @@ class HtmlResponse extends Response
             return $html;
         }
 
-        if (! is_string($html)) {
-            throw new InvalidArgumentException(sprintf(
+        if (! \is_string($html)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Invalid content (%s) provided to %s',
-                (is_object($html) ? get_class($html) : gettype($html)),
+                (\is_object($html) ? \get_class($html) : \gettype($html)),
                 __CLASS__
             ));
         }
 
-        $body = new Stream(fopen('php://temp', 'wb+'));
+        $body = new Stream(\fopen('php://temp', 'wb+'));
         $body->write($html);
         $body->rewind();
 

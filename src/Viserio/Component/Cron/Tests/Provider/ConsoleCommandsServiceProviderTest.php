@@ -13,7 +13,7 @@ use Viserio\Component\Cron\Provider\ConsoleCommandsServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testConsoleCommands()
+    public function testConsoleCommands(): void
     {
         $container = new Container();
         $container->register(new CacheServiceProvider());
@@ -37,11 +37,29 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertInstanceOf(ScheduleRunCommand::class, $commands['cron:run']);
     }
 
-    public function testConsoleCommandsWithNoConsole()
+    public function testConsoleCommandsWithNoConsole(): void
     {
         $container = new Container();
         $container->register(new ConsoleCommandsServiceProvider());
 
         self::assertNull($container->get(Application::class));
+    }
+
+    public function testGetDimensions(): void
+    {
+        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+    }
+
+    public function testGetDefaultOptions(): void
+    {
+        self::assertSame(
+            [
+                'lazily_commands' => [
+                    'cron:list' => CronListCommand::class,
+                    'cron:run'  => ScheduleRunCommand::class,
+                ],
+            ],
+            ConsoleCommandsServiceProvider::getDefaultOptions()
+        );
     }
 }

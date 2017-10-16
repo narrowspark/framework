@@ -9,7 +9,7 @@ use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\View\Provider\ViewServiceProvider;
 use Viserio\Provider\Twig\Engine\TwigEngine;
@@ -18,7 +18,10 @@ use Viserio\Provider\Twig\Provider\TwigServiceProvider;
 
 class TwigServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    /**
+     * @runInSeparateProcess
+     */
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new FilesServiceProvider());
@@ -29,7 +32,7 @@ class TwigServiceProviderTest extends MockeryTestCase
         $container->instance('config', [
             'viserio' => [
                 'view' => [
-                    'paths'      => [
+                    'paths' => [
                         __DIR__ . '/../Fixture/',
                         __DIR__,
                     ],

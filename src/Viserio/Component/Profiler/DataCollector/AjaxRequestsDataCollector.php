@@ -4,8 +4,8 @@ namespace Viserio\Component\Profiler\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Profiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\AssetAware as AssetAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 
 class AjaxRequestsDataCollector extends AbstractDataCollector implements
     AssetAwareContract,
@@ -63,5 +63,13 @@ class AjaxRequestsDataCollector extends AbstractDataCollector implements
             'css' => __DIR__ . '/../Resources/css/ajax-requests.css',
             'js'  => __DIR__ . '/../Resources/js/ajaxHandler.js',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        // all collecting is done client side
     }
 }

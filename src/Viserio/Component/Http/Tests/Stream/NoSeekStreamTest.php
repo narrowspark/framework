@@ -13,7 +13,7 @@ class NoSeekStreamTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Cannot seek a NoSeekStream
      */
-    public function testCannotSeek()
+    public function testCannotSeek(): void
     {
         $s = $this->getMockBuilder(StreamInterface::class)
             ->setMethods(['isSeekable', 'seek'])
@@ -27,15 +27,15 @@ class NoSeekStreamTest extends TestCase
         $wrapped->seek(2);
     }
 
-    public function testToStringDoesNotSeek()
+    public function testToStringDoesNotSeek(): void
     {
         $body   = 'foo';
-        $stream = fopen('php://temp', 'r+');
+        $stream = \fopen('php://temp', 'rb+');
 
-        fwrite($stream, $body);
-        fseek($stream, 0);
+        \fwrite($stream, $body);
+        \fseek($stream, 0);
 
-        $s       = new Stream($stream);
+        $s = new Stream($stream);
         $s->seek(1);
 
         $wrapped = new NoSeekStream($s);

@@ -35,7 +35,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return $this->pdo->beginTransaction();
     }
@@ -43,7 +43,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function commit()
+    public function commit(): bool
     {
         return $this->pdo->commit();
     }
@@ -59,7 +59,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function errorInfo()
+    public function errorInfo(): array
     {
         return $this->pdo->errorInfo();
     }
@@ -71,7 +71,7 @@ class TraceablePDODecorater extends PDO
      */
     public function exec($statement)
     {
-        return $this->profileCall('exec', $statement, func_get_args());
+        return $this->profileCall('exec', $statement, \func_get_args());
     }
 
     /**
@@ -85,7 +85,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function inTransaction()
+    public function inTransaction(): bool
     {
         return $this->pdo->inTransaction();
     }
@@ -93,7 +93,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function lastInsertId($name = null)
+    public function lastInsertId($name = null): string
     {
         return $this->pdo->lastInsertId($name);
     }
@@ -101,7 +101,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function prepare($statement, $driver_options = [])
+    public function prepare($statement, $driver_options = []): \PDOStatement
     {
         return $this->pdo->prepare($statement, $driver_options);
     }
@@ -111,13 +111,13 @@ class TraceablePDODecorater extends PDO
      */
     public function query($statement)
     {
-        return $this->profileCall('query', $statement, func_get_args());
+        return $this->profileCall('query', $statement, \func_get_args());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function quote($string, $parameter_type = PDO::PARAM_STR)
+    public function quote($string, $parameter_type = PDO::PARAM_STR): string
     {
         return $this->pdo->quote($string, $parameter_type);
     }
@@ -125,7 +125,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         return $this->pdo->rollBack();
     }
@@ -133,7 +133,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function setAttribute($attribute, $value)
+    public function setAttribute($attribute, $value): bool
     {
         return $this->pdo->setAttribute($attribute, $value);
     }
@@ -143,7 +143,7 @@ class TraceablePDODecorater extends PDO
      *
      * @param \Viserio\Component\Profiler\DataCollector\Bridge\PDO\TracedStatement $stmt
      */
-    public function addExecutedStatement(TracedStatement $stmt)
+    public function addExecutedStatement(TracedStatement $stmt): void
     {
         $this->executedStatements[] = $stmt;
     }
@@ -155,7 +155,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getAccumulatedStatementsDuration(): int
     {
-        return array_reduce($this->executedStatements, function ($v, $s) {
+        return \array_reduce($this->executedStatements, function ($v, $s) {
             return $v + $s->getDuration();
         });
     }
@@ -167,7 +167,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getMemoryUsage(): int
     {
-        return array_reduce($this->executedStatements, function ($v, $s) {
+        return \array_reduce($this->executedStatements, function ($v, $s) {
             return $v + $s->getMemoryUsage();
         });
     }
@@ -179,7 +179,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getPeakMemoryUsage(): int
     {
-        return array_reduce($this->executedStatements, function ($v, $s) {
+        return \array_reduce($this->executedStatements, function ($v, $s) {
             $m = $s->getEndMemory();
 
             return $m > $v ? $m : $v;
@@ -203,7 +203,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getFailedExecutedStatements(): array
     {
-        return array_filter($this->executedStatements, function ($s) {
+        return \array_filter($this->executedStatements, function ($s) {
             return ! $s->isSuccess();
         });
     }
@@ -226,7 +226,7 @@ class TraceablePDODecorater extends PDO
         $result = null;
 
         try {
-            $result = call_user_func_array([$this->pdo, $method], $args);
+            $result = \call_user_func_array([$this->pdo, $method], $args);
         } catch (PDOException $e) {
             $ex = $e;
         }

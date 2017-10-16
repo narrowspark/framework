@@ -11,7 +11,7 @@ use Viserio\Component\OptionsResolver\Provider\ConsoleCommandsServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testGetServices()
+    public function testGetServices(): void
     {
         $container = new Container();
         $container->register(new ConsoleServiceProvider());
@@ -21,5 +21,22 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $commands = $console->all();
 
         self::assertInstanceOf(OptionDumpCommand::class, $commands['option:dump']);
+    }
+
+    public function testGetDimensions(): void
+    {
+        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+    }
+
+    public function testGetDefaultOptions(): void
+    {
+        self::assertSame(
+            [
+                'lazily_commands' => [
+                    'option:dump' => OptionDumpCommand::class,
+                ],
+            ],
+            ConsoleCommandsServiceProvider::getDefaultOptions()
+        );
     }
 }

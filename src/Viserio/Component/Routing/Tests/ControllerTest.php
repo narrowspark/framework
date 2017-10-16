@@ -8,7 +8,7 @@ use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 
 class ControllerTest extends TestCase
 {
-    public function testGatherMiddleware()
+    public function testGatherMiddleware(): void
     {
         $controller = new Controller();
 
@@ -19,7 +19,7 @@ class ControllerTest extends TestCase
         self::assertSame([FooMiddleware::class => FooMiddleware::class], $controller->gatherMiddleware());
     }
 
-    public function testGatherDisabledMiddlewares()
+    public function testGatherDisabledMiddlewares(): void
     {
         $controller = new Controller();
 
@@ -27,14 +27,14 @@ class ControllerTest extends TestCase
 
         $controller->withoutMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class], $controller->gatherDisabledMiddlewares());
+        self::assertSame([FooMiddleware::class => true], $controller->gatherDisabledMiddlewares());
     }
 
     /**
      * @expectedException \BadMethodCallException
      * @expectedExceptionMessage Method [put] does not exist.
      */
-    public function testThrowsExceptionOnMissingMethods()
+    public function testThrowsExceptionOnMissingMethods(): void
     {
         $controller = new Controller();
         $controller->put();

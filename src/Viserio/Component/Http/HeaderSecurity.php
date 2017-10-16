@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
-use InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 
 /**
  * Provide security tools around HTTP headers to prevent common injection vectors.
@@ -36,7 +36,7 @@ final class HeaderSecurity
      * This method filters any values not allowed from the string, and is
      * lossy.
      *
-     * @link http://en.wikipedia.org/wiki/HTTP_response_splitting
+     * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      *
      * @param string $value
      *
@@ -44,19 +44,19 @@ final class HeaderSecurity
      */
     public static function filter(string $value): string
     {
-        $length = mb_strlen($value);
+        $length = \mb_strlen($value);
         $string = '';
 
-        for ($i = 0; $i < $length; $i += 1) {
-            $ascii = ord($value[$i]);
+        for ($i = 0; $i < $length; $i++) {
+            $ascii = \ord($value[$i]);
             // Detect continuation sequences
             if ($ascii === 13) {
-                $lf = ord($value[$i + 1]);
-                $ws = ord($value[$i + 2]);
+                $lf = \ord($value[$i + 1]);
+                $ws = \ord($value[$i + 2]);
 
-                if ($lf === 10 && in_array($ws, [9, 32], true)) {
+                if ($lf === 10 && \in_array($ws, [9, 32], true)) {
                     $string .= $value[$i] . $value[$i + 1];
-                    $i += 1;
+                    $i++;
                 }
 
                 continue;
@@ -87,7 +87,7 @@ final class HeaderSecurity
      * tabs are allowed in values; header continuations MUST consist of
      * a single CRLF sequence followed by a space or horizontal tab.
      *
-     * @link http://en.wikipedia.org/wiki/HTTP_response_splitting
+     * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      *
      * @param string $value
      *
@@ -99,7 +99,7 @@ final class HeaderSecurity
         // \n not preceded by \r, OR
         // \r not followed by \n, OR
         // \r\n not followed by space or horizontal tab; these are all CRLF attacks
-        if (preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value)) {
+        if (\preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value)) {
             return false;
         }
 
@@ -110,7 +110,7 @@ final class HeaderSecurity
         // 32-126, 128-254 === visible
         // 127 === DEL (disallowed)
         // 255 === null byte (disallowed)
-        if (preg_match('/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/', $value)) {
+        if (\preg_match('/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/', $value)) {
             return false;
         }
 
@@ -122,14 +122,14 @@ final class HeaderSecurity
      *
      * @param string $value
      *
-     * @throws \InvalidArgumentException for invalid values
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException for invalid values
      *
      * @return void
      */
     public static function assertValid(string $value): void
     {
         if (! self::isValid($value)) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 '[%s] is not valid header value',
                 $value
             ));
@@ -139,18 +139,18 @@ final class HeaderSecurity
     /**
      * Assert whether or not a header name is valid.
      *
-     * @link http://tools.ietf.org/html/rfc7230#section-3.2
+     * @see http://tools.ietf.org/html/rfc7230#section-3.2
      *
      * @param mixed $name
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      *
      * @return void
      */
     public static function assertValidName($name): void
     {
-        if (! preg_match('/^[a-zA-Z0-9\'`#$%&*+.^_|~!-]+$/', $name)) {
-            throw new InvalidArgumentException(sprintf(
+        if (! \preg_match('/^[a-zA-Z0-9\'`#$%&*+.^_|~!-]+$/', $name)) {
+            throw new InvalidArgumentException(\sprintf(
                 '[%s] is not valid header name',
                 $name
             ));

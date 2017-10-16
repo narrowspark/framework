@@ -9,9 +9,12 @@ use Viserio\Component\HttpFactory\UriFactory;
 
 class RequestFactoryTest extends TestCase
 {
+    /**
+     * @var \Interop\Http\Factory\RequestFactoryInterface
+     */
     private $factory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->factory = new RequestFactory();
     }
@@ -33,25 +36,25 @@ class RequestFactoryTest extends TestCase
      *
      * @param mixed $method
      */
-    public function testCreateRequest($method)
+    public function testCreateRequest($method): void
     {
         $uri     = 'http://example.com/';
         $request = $this->factory->createRequest($method, $uri);
 
-        self::assertRequest($request, $method, $uri);
+        $this->assertRequest($request, $method, $uri);
     }
 
-    public function testCreateRequestWithUri()
+    public function testCreateRequestWithUri(): void
     {
         $uriFactory = new UriFactory();
         $method     = 'GET';
         $uri        = 'http://example.com/';
         $request    = $this->factory->createRequest($method, $uriFactory->createUri($uri));
 
-        self::assertRequest($request, $method, $uri);
+        $this->assertRequest($request, $method, $uri);
     }
 
-    private function assertRequest($request, $method, $uri)
+    private function assertRequest($request, $method, $uri): void
     {
         self::assertInstanceOf(RequestInterface::class, $request);
         self::assertSame($method, $request->getMethod());

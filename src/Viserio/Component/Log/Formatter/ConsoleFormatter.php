@@ -89,7 +89,7 @@ class ConsoleFormatter implements FormatterInterface
      */
     public function __construct(array $options = [])
     {
-        $this->options = array_replace([
+        $this->options = \array_replace([
             'format'      => self::SIMPLE_FORMAT,
             'date_format' => self::SIMPLE_DATE,
             'colors'      => true,
@@ -98,22 +98,22 @@ class ConsoleFormatter implements FormatterInterface
 
         $casterClass = $this->castObjectClass();
 
-        if (class_exists(VarCloner::class)) {
+        if (\class_exists(VarCloner::class)) {
             $this->cloner = new VarCloner();
             $this->cloner->addCasters([
                 '*' => [$casterClass, 'castObject'],
             ]);
 
-            $this->outputBuffer = fopen('php://memory', 'r+b');
+            $this->outputBuffer = \fopen('php://memory', 'r+b');
+
+            $output = [$this, 'echoLine'];
 
             if ($this->options['multiline']) {
                 $output = $this->outputBuffer;
-            } else {
-                $output = [$this, 'echoLine'];
             }
 
             // Exits from VarDumper version >=3.3
-            $commaSeparator = defined(CliDumper::class . '::DUMP_COMMA_SEPARATOR') ? CliDumper::DUMP_COMMA_SEPARATOR : 4;
+            $commaSeparator = \defined(CliDumper::class . '::DUMP_COMMA_SEPARATOR') ? CliDumper::DUMP_COMMA_SEPARATOR : 4;
 
             $this->dumper = new CliDumper($output, null, CliDumper::DUMP_LIGHT_ARRAY | $commaSeparator);
         }
@@ -148,10 +148,10 @@ class ConsoleFormatter implements FormatterInterface
         $context .= $this->dumpData($record['context']);
         $extra .= $this->dumpData($record['extra']);
 
-        $formatted = strtr($this->options['format'], [
+        $formatted = \strtr($this->options['format'], [
             '%datetime%'   => $record['datetime']->format($this->options['date_format']),
-            '%start_tag%'  => sprintf('<%s>', $levelColor),
-            '%level_name%' => sprintf('%-9s', $record['level_name']),
+            '%start_tag%'  => \sprintf('<%s>', $levelColor),
+            '%level_name%' => \sprintf('%-9s', $record['level_name']),
             '%end_tag%'    => '</>',
             '%channel%'    => $record['channel'],
             '%message%'    => $this->replacePlaceHolder($record)['message'],
@@ -174,7 +174,7 @@ class ConsoleFormatter implements FormatterInterface
     public function echoLine($line, $depth, $indentPad): void
     {
         if (-1 !== $depth) {
-            fwrite($this->outputBuffer, $line);
+            \fwrite($this->outputBuffer, $line);
         }
     }
 
@@ -185,7 +185,7 @@ class ConsoleFormatter implements FormatterInterface
      *
      * @codeCoverageIgnore
      */
-    private function castObjectClass()
+    private function castObjectClass(): object
     {
         return new class($this->options) {
             /**
@@ -202,7 +202,7 @@ class ConsoleFormatter implements FormatterInterface
 
             /**
              * @param mixed                                    $v
-             * @param array                                    $a
+             * @param array                                    $array
              * @param \Symfony\Component\VarDumper\Cloner\Stub $s
              * @param mixed                                    $isNested
              * @param array                                    $array
@@ -236,7 +236,7 @@ class ConsoleFormatter implements FormatterInterface
     {
         $message = $record['message'];
 
-        if (mb_strpos($message, '{') === false) {
+        if (\mb_strpos($message, '{') === false) {
             return $record;
         }
 
@@ -244,14 +244,14 @@ class ConsoleFormatter implements FormatterInterface
 
         $replacements = [];
 
-        foreach ($context as $k => $v) {
+        foreach ((array) $context as $k => $v) {
             // Remove quotes added by the dumper around string.
-            $v                            = trim($this->dumpData($v, false), '"');
+            $v                            = \trim($this->dumpData($v, false), '"');
             $v                            = OutputFormatter::escape($v);
-            $replacements['{' . $k . '}'] = sprintf('<comment>%s</>', $v);
+            $replacements['{' . $k . '}'] = \sprintf('<comment>%s</>', $v);
         }
 
-        $record['message'] = strtr($message, $replacements);
+        $record['message'] = \strtr($message, $replacements);
 
         return $record;
     }
@@ -260,7 +260,7 @@ class ConsoleFormatter implements FormatterInterface
      * Dump console data.
      *
      * @param mixed     $data
-     * @param bool|null $colors
+     * @param null|bool $colors
      *
      * @return string
      */
@@ -283,11 +283,11 @@ class ConsoleFormatter implements FormatterInterface
         $data = $data->withRefHandles(false);
         $this->dumper->dump($data);
 
-        $dump = stream_get_contents($this->outputBuffer, -1, 0);
+        $dump = \stream_get_contents($this->outputBuffer, -1, 0);
 
-        rewind($this->outputBuffer);
-        ftruncate($this->outputBuffer, 0);
+        \rewind($this->outputBuffer);
+        \ftruncate($this->outputBuffer, 0);
 
-        return rtrim($dump);
+        return \rtrim($dump);
     }
 }

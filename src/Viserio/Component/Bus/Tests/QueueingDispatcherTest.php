@@ -13,19 +13,20 @@ use Viserio\Component\Bus\Tests\Fixture\BusDispatcherQueuedHandler;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificDelayCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificQueueAndDelayCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificQueueCommand;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
-use Viserio\Component\Contracts\Queue\ShouldQueue as ShouldQueueContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Component\Contract\Queue\ShouldQueue as ShouldQueueContract;
 
 class QueueingDispatcherTest extends MockeryTestCase
 {
-    public function testDispatchNowShouldNeverQueue()
+    public function testDispatchNowShouldNeverQueue(): void
     {
         $container = new ArrayContainer();
-
-        $handler = $this->mock(stdClass::class);
-        $handler->shouldReceive('handle')
-            ->once()
-            ->andReturn('foo');
+        $handler   = new class() {
+            public function handle()
+            {
+                return 'foo';
+            }
+        };
 
         $container->set('Handler', $handler);
 
@@ -40,7 +41,7 @@ class QueueingDispatcherTest extends MockeryTestCase
         );
     }
 
-    public function testHandlersThatShouldQueueIsQueued()
+    public function testHandlersThatShouldQueueIsQueued(): void
     {
         $container = new ArrayContainer();
 
@@ -59,7 +60,7 @@ class QueueingDispatcherTest extends MockeryTestCase
         $dispatcher->dispatch(new BusDispatcherBasicCommand());
     }
 
-    public function testCommandsThatShouldQueueIsQueuedUsingCustomQueueAndDelay()
+    public function testCommandsThatShouldQueueIsQueuedUsingCustomQueueAndDelay(): void
     {
         $container = new ArrayContainer();
 
@@ -75,7 +76,7 @@ class QueueingDispatcherTest extends MockeryTestCase
         $dispatcher->dispatch(new BusDispatcherSpecificQueueAndDelayCommand());
     }
 
-    public function testCommandsThatShouldQueueIsQueuedUsingCustomQueue()
+    public function testCommandsThatShouldQueueIsQueuedUsingCustomQueue(): void
     {
         $container = new ArrayContainer();
 
@@ -91,7 +92,7 @@ class QueueingDispatcherTest extends MockeryTestCase
         $dispatcher->dispatch(new BusDispatcherSpecificQueueCommand());
     }
 
-    public function testCommandsThatShouldQueueIsQueuedUsingCustomDelay()
+    public function testCommandsThatShouldQueueIsQueuedUsingCustomDelay(): void
     {
         $container = new ArrayContainer();
 
@@ -107,7 +108,7 @@ class QueueingDispatcherTest extends MockeryTestCase
         $dispatcher->dispatch(new BusDispatcherSpecificDelayCommand());
     }
 
-    public function testCommandsThatShouldQueueIsQueued()
+    public function testCommandsThatShouldQueueIsQueued(): void
     {
         $container = new ArrayContainer();
 
@@ -121,12 +122,20 @@ class QueueingDispatcherTest extends MockeryTestCase
         $dispatcher->dispatch($this->mock(ShouldQueueContract::class));
     }
 
-    public function testDispatchShouldCallAfterResolvingIfCommandNotQueued()
+    public function testDispatchShouldCallAfterResolvingIfCommandNotQueued(): void
     {
         $container = new ArrayContainer();
+        $handler   = new class() {
+            public function handle()
+            {
+                return 'foo';
+            }
 
-        $handler = $this->mock(stdClass::class)->shouldIgnoreMissing();
-        $handler->shouldReceive('after')->once();
+            public function after()
+            {
+                return true;
+            }
+        };
 
         $container->set('Handler', $handler);
 
@@ -135,12 +144,12 @@ class QueueingDispatcherTest extends MockeryTestCase
             return 'Handler@handle';
         });
 
-        $dispatcher->dispatch(new BusDispatcherBasicCommand(), function ($handler) {
-            $handler->after();
+        $dispatcher->dispatch(new BusDispatcherBasicCommand(), function ($handler): void {
+            self::assertTrue($handler->after());
         });
     }
 
-    public function testCommandsThatShouldQueueIsQueuedUsingCustomHandler()
+    public function testCommandsThatShouldQueueIsQueuedUsingCustomHandler(): void
     {
         $container = new ArrayContainer();
 
@@ -158,7 +167,7 @@ class QueueingDispatcherTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Queue resolver did not return a Queue implementation.
      */
-    public function testCommandsThatShouldThrowException()
+    public function testCommandsThatShouldThrowException(): void
     {
         $container = new ArrayContainer();
 

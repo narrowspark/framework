@@ -3,13 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\StaticalProxy\AliasLoader;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\StaticalProxy\Tests\Fixture\Foo;
 
 class AliasLoaderTest extends TestCase
 {
-    public function testLiteral()
+    public function testLiteral(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->alias('TestFoo', Foo::class);
@@ -18,7 +19,7 @@ class AliasLoaderTest extends TestCase
         self::assertFalse($aliasloader->load('Unknown'));
     }
 
-    public function testMatchedLiteral()
+    public function testMatchedLiteral(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->aliasPattern([
@@ -29,7 +30,7 @@ class AliasLoaderTest extends TestCase
         self::assertFalse($aliasloader->load('Unknown\ThisClass'));
     }
 
-    public function testMatchedReplacement()
+    public function testMatchedReplacement(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->aliasPattern([
@@ -40,7 +41,7 @@ class AliasLoaderTest extends TestCase
         self::assertFalse($aliasloader->load('Test\Unknown'));
     }
 
-    public function testNonExistingResolving()
+    public function testNonExistingResolving(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->alias('ThisClass', 'ToSomethingThatDoesntExist');
@@ -48,7 +49,7 @@ class AliasLoaderTest extends TestCase
         self::assertFalse($aliasloader->load('ThisClass'));
     }
 
-    public function testAliasContainingTarget()
+    public function testAliasContainingTarget(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->alias('FakeFoo::class', Foo::class);
@@ -56,7 +57,7 @@ class AliasLoaderTest extends TestCase
         self::assertTrue($aliasloader->load('FakeFoo::class'));
     }
 
-    public function testRemoveloader()
+    public function testRemoveloader(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->setAliases([
@@ -65,7 +66,7 @@ class AliasLoaderTest extends TestCase
             'ResolvableThree' => Foo::class,
             'ResolvableFour'  => Foo::class,
         ]);
-        self::assertTrue(is_array($aliasloader->getAliases()));
+        self::assertTrue(\is_array($aliasloader->getAliases()));
         self::assertTrue($aliasloader->load('Resolvable'));
 
         $aliasloader->removeAlias('ResolvableTwo');
@@ -78,7 +79,7 @@ class AliasLoaderTest extends TestCase
         self::assertFalse($aliasloader->load('ResolvableFour'));
     }
 
-    public function testRemovePatternloadr()
+    public function testRemovePatternloadr(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->aliasPattern([
@@ -99,7 +100,7 @@ class AliasLoaderTest extends TestCase
         self::assertFalse($aliasloader->load('PatternResolvableFour'));
     }
 
-    public function testloadAutoloader()
+    public function testloadAutoloader(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->alias([
@@ -107,19 +108,19 @@ class AliasLoaderTest extends TestCase
             'Second\Autoloaded\Foo' => Foo::class,
             'Third\Autoloaded\Foo'  => Foo::class,
         ]);
-        self::assertFalse(class_exists('Autoloaded\Foo', true));
+        self::assertFalse(\class_exists('Autoloaded\Foo', true));
         self::assertTrue($aliasloader->load('Autoloaded\Foo'));
 
         $aliasloader->register();
-        self::assertTrue(class_exists('Second\Autoloaded\Foo', true));
+        self::assertTrue(\class_exists('Second\Autoloaded\Foo', true));
         self::assertTrue($aliasloader->isRegistered());
 
         $aliasloader->unregister();
-        self::assertFalse(class_exists('Third\Autoloaded\Foo', true));
+        self::assertFalse(\class_exists('Third\Autoloaded\Foo', true));
         self::assertFalse($aliasloader->isRegistered());
     }
 
-    public function testStopRecursion()
+    public function testStopRecursion(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->aliasPattern([
@@ -132,7 +133,7 @@ class AliasLoaderTest extends TestCase
         self::assertFalse($aliasloader->load('Unresolvable'));
     }
 
-    public function testNamespaceAliasing()
+    public function testNamespaceAliasing(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->aliasNamespace('Viserio\\Component\\StaticalProxy\\Tests\\Fixture', '');
@@ -145,7 +146,7 @@ class AliasLoaderTest extends TestCase
         self::assertFalse($aliasloader->load('OtherFoo'));
     }
 
-    public function testSetAndGetCachePath()
+    public function testSetAndGetCachePath(): void
     {
         $path = __DIR__ . '/cache';
 
@@ -159,7 +160,7 @@ class AliasLoaderTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Please provide a valid cache path.
      */
-    public function testGetCachePathThrowExceptionIfRealTimeProxyIsActive()
+    public function testGetCachePathThrowExceptionIfRealTimeProxyIsActive(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->enableRealTimeStaticalProxy();
@@ -167,11 +168,11 @@ class AliasLoaderTest extends TestCase
         $aliasloader->getCachePath();
     }
 
-    public function testRealTimeStaticalProxy()
+    public function testRealTimeStaticalProxy(): void
     {
         $path = __DIR__ . '/cache';
 
-        mkdir($path);
+        \mkdir($path);
 
         StaticalProxy::clearResolvedInstances();
 
@@ -183,7 +184,7 @@ class AliasLoaderTest extends TestCase
 
         $aliasloader->load($class);
 
-        self::assertSame(StaticalProxy::class, get_parent_class($class));
+        self::assertSame(StaticalProxy::class, \get_parent_class($class));
 
         $aliasloader->setStaticalProxyNamespace('StaticalProxyTwo\\');
 
@@ -191,19 +192,8 @@ class AliasLoaderTest extends TestCase
 
         $aliasloader->load($class);
 
-        self::assertSame(StaticalProxy::class, get_parent_class($class));
+        self::assertSame(StaticalProxy::class, \get_parent_class($class));
 
-        $this->delTree($path);
-    }
-
-    private function delTree($dir)
-    {
-        $files = array_diff(scandir($dir), ['.', '..']);
-
-        foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
-        }
-
-        return rmdir($dir);
+        (new Filesystem())->remove($path);
     }
 }

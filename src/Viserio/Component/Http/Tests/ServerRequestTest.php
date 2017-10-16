@@ -8,7 +8,7 @@ use Viserio\Component\Http\UploadedFile;
 
 class ServerRequestTest extends TestCase
 {
-    public function testUploadedFiles()
+    public function testUploadedFiles(): void
     {
         $request1 = new ServerRequest('', 'GET');
         $files    = [
@@ -24,7 +24,7 @@ class ServerRequestTest extends TestCase
         self::assertSame($files, $request2->getUploadedFiles());
     }
 
-    public function testServerParams()
+    public function testServerParams(): void
     {
         $params  = ['name' => 'value'];
         $request = new ServerRequest('/', 'GET', [], null, '1.1', $params);
@@ -32,7 +32,7 @@ class ServerRequestTest extends TestCase
         self::assertSame($params, $request->getServerParams());
     }
 
-    public function testCookieParams()
+    public function testCookieParams(): void
     {
         $request1 = new ServerRequest('/', 'GET');
         $params   = ['name' => 'value'];
@@ -43,7 +43,7 @@ class ServerRequestTest extends TestCase
         self::assertSame($params, $request2->getCookieParams());
     }
 
-    public function testQueryParams()
+    public function testQueryParams(): void
     {
         $request1 = new ServerRequest('/', 'GET');
         $params   = ['name' => 'value'];
@@ -54,7 +54,7 @@ class ServerRequestTest extends TestCase
         self::assertSame($params, $request2->getQueryParams());
     }
 
-    public function testParsedBody()
+    public function testParsedBody(): void
     {
         $request1 = new ServerRequest('/', 'GET');
         $params   = ['name' => 'value'];
@@ -65,7 +65,7 @@ class ServerRequestTest extends TestCase
         self::assertSame($params, $request2->getParsedBody());
     }
 
-    public function testAttributes()
+    public function testAttributes(): void
     {
         $request1 = new ServerRequest('/', 'GET');
         $request2 = $request1->withAttribute('name', 'value');
@@ -90,7 +90,7 @@ class ServerRequestTest extends TestCase
         self::assertEquals(['name' => 'value'], $request4->getAttributes());
     }
 
-    public function testNullAttribute()
+    public function testNullAttribute(): void
     {
         $request = (new ServerRequest('/', 'GET'))->withAttribute('name', null);
 

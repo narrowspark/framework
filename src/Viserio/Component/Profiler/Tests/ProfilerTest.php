@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Psr\Http\Message\ResponseInterface;
+use Viserio\Component\Contract\Profiler\DataCollector;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -14,32 +16,39 @@ use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester as Profiler;
 
 class ProfilerTest extends MockeryTestCase
 {
-    public function testSetAndGetUrlGenerator()
+    /**
+     * @var \Viserio\Component\Profiler\Tests\Fixture\ProfilerTester
+     */
+    private $profiler;
+
+    public function setUp(): void
     {
-        $profiler = $this->getProfiler();
+        parent::setUp();
 
-        $profiler->setUrlGenerator($this->mock(UrlGeneratorContract::class));
-
-        self::assertInstanceOf(UrlGeneratorContract::class, $profiler->getUrlGenerator());
+        $this->profiler = new Profiler(new AssetsRenderer());
     }
 
-    public function testSetAndGetTemplate()
+    public function testSetAndGetUrlGenerator(): void
     {
-        $profiler = $this->getProfiler();
+        $this->profiler->setUrlGenerator($this->mock(UrlGeneratorContract::class));
 
-        $profiler->setTemplate(__DIR__);
-
-        self::assertSame(__DIR__, $profiler->getTemplate());
+        self::assertInstanceOf(UrlGeneratorContract::class, $this->profiler->getUrlGenerator());
     }
 
-    public function testAddHasAndGetCollectors()
+    public function testSetAndGetTemplate(): void
     {
-        $profiler  = $this->getProfiler();
+        $this->profiler->setTemplate(__DIR__);
+
+        self::assertSame(__DIR__, $this->profiler->getTemplate());
+    }
+
+    public function testAddHasAndGetCollectors(): void
+    {
         $collector = new PhpInfoDataCollector();
 
-        $profiler->addCollector($collector);
+        $this->profiler->addCollector($collector);
 
-        self::assertTrue($profiler->hasCollector('php-info-data-collector'));
+        self::assertTrue($this->profiler->hasCollector('php-info-data-collector'));
 
         self::assertSame(
             [
@@ -48,7 +57,7 @@ class ProfilerTest extends MockeryTestCase
                     'priority'  => 100,
                 ],
             ],
-            $profiler->getCollectors()
+            $this->profiler->getCollectors()
         );
     }
 
@@ -56,16 +65,15 @@ class ProfilerTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage [php-info-data-collector] is already a registered collector.
      */
-    public function testAddCollectorThrowsException()
+    public function testAddCollectorThrowsException(): void
     {
-        $profiler  = $this->getProfiler();
         $collector = new PhpInfoDataCollector();
 
-        $profiler->addCollector($collector);
-        $profiler->addCollector($collector);
+        $this->profiler->addCollector($collector);
+        $this->profiler->addCollector($collector);
     }
 
-    public function testModifyResponse()
+    public function testModifyResponse(): void
     {
         $assets   = new AssetsRenderer();
         $profiler = new Profiler($assets);
@@ -75,14 +83,13 @@ class ProfilerTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $profiler->enable();
-        $response = (new ResponseFactory())->createResponse(200);
 
         $response = $profiler->modifyResponse(
             (new ServerRequestFactory())->createServerRequestFromArray($server),
-            $response
+            $this->getHtmlResponse()
         );
 
-        $template   = new TemplateManager(
+        $template = new TemplateManager(
             [],
             $profiler->getTemplate(),
             '12213435415',
@@ -97,7 +104,7 @@ class ProfilerTest extends MockeryTestCase
         );
     }
 
-    public function testModifyResponseWithOldContent()
+    public function testModifyResponseWithOldContent(): void
     {
         $assets   = new AssetsRenderer();
         $profiler = new Profiler($assets);
@@ -106,7 +113,7 @@ class ProfilerTest extends MockeryTestCase
         $stream = (new StreamFactory())->createStream(
             '<!DOCTYPE html><html><head><title></title></head><body></body></html>'
         );
-        $response = (new ResponseFactory())->createResponse(200);
+        $response = $this->getHtmlResponse();
         $response = $response->withBody($stream);
         $profiler->setStreamFactory(new StreamFactory());
 
@@ -119,7 +126,7 @@ class ProfilerTest extends MockeryTestCase
             $response
         );
 
-        $template   = new TemplateManager(
+        $template = new TemplateManager(
             [],
             $profiler->getTemplate(),
             '12213435415',
@@ -134,19 +141,16 @@ class ProfilerTest extends MockeryTestCase
         );
     }
 
-    public function testDontModifyResponse()
+    public function testDontModifyResponse(): void
     {
-        $assets   = new AssetsRenderer();
-        $profiler = new Profiler($assets);
-
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $profiler->disable();
-        $orginalResponse = (new ResponseFactory())->createResponse(200);
+        $this->profiler->disable();
+        $orginalResponse = $this->getHtmlResponse();
 
-        $response = $profiler->modifyResponse(
+        $response = $this->profiler->modifyResponse(
             (new ServerRequestFactory())->createServerRequestFromArray($server),
             $orginalResponse
         );
@@ -154,13 +158,31 @@ class ProfilerTest extends MockeryTestCase
         self::assertEquals($response, $orginalResponse);
     }
 
-    private function removeId(string $html): string
+    public function testFlush(): void
     {
-        return trim(preg_replace('/="profiler-(.*?)"/', '', $html));
+        $collector = $this->mock(DataCollector::class);
+        $collector->shouldReceive('getName')
+            ->twice()
+            ->andReturn('mock');
+        $collector->shouldReceive('flush')
+            ->once();
+
+        $this->profiler->addCollector($collector);
+        $this->profiler->flush();
     }
 
-    private function getProfiler()
+    private function removeId(string $html): string
     {
-        return new Profiler(new AssetsRenderer());
+        return \trim(\preg_replace('/="profiler-(.*?)"/', '', $html));
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    private function getHtmlResponse(): ResponseInterface
+    {
+        $response = (new ResponseFactory())->createResponse();
+
+        return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
 }

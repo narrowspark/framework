@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
@@ -11,21 +12,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Support\Arrayable;
+use Viserio\Component\Contract\Console\Exception\LogicException;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Support\Arrayable;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 abstract class Command extends BaseCommand
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
-
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name;
 
     /**
      * The console command input.
@@ -79,29 +74,30 @@ abstract class Command extends BaseCommand
     /**
      * The name and signature of the console command.
      *
-     * @var string
+     * @var null|string
      */
     protected $signature;
 
     /**
      * Create a new console command instance.
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException When the command name is empty
      */
     public function __construct()
     {
         // We will go ahead and set the name, description, and parameters on console
-        // commands just to make things a little easier on the developer. This is
-        // so they don't have to all be manually specified in the constructors.
-        if (isset($this->signature)) {
+        // commands just to make things a little easier.
+        if ($this->signature !== null) {
             $this->configureUsingFluentDefinition();
         } else {
-            parent::__construct($this->name);
+            parent::__construct();
         }
 
         $this->setDescription($this->description);
 
         $this->setHidden($this->hidden);
 
-        if (! isset($this->signature)) {
+        if ($this->signature === null) {
             $this->specifyParameters();
         }
     }
@@ -137,7 +133,7 @@ abstract class Command extends BaseCommand
     /**
      * Set the verbosity level.
      *
-     * @param string|int $level
+     * @param int|string $level
      *
      * @return void
      */
@@ -149,7 +145,7 @@ abstract class Command extends BaseCommand
     /**
      * Get the verbosity level in terms of Symfony's OutputInterface level.
      *
-     * @param null|string|int $level
+     * @param null|int|string $level
      *
      * @return int
      */
@@ -195,9 +191,9 @@ abstract class Command extends BaseCommand
     /**
      * Get the value of a command argument.
      *
-     * @param string|null $key
+     * @param null|string $key
      *
-     * @return string|array
+     * @return array|string
      */
     public function argument(?string $key = null)
     {
@@ -211,9 +207,9 @@ abstract class Command extends BaseCommand
     /**
      * Get the value of a command option.
      *
-     * @param string|null $key
+     * @param null|string $key
      *
-     * @return string|array
+     * @return array|string
      */
     public function option($key = null)
     {
@@ -242,7 +238,7 @@ abstract class Command extends BaseCommand
      * @param string $question
      * @param bool   $default
      *
-     * @return string|bool
+     * @return bool|string
      */
     public function confirm(string $question, bool $default = false)
     {
@@ -252,15 +248,14 @@ abstract class Command extends BaseCommand
     /**
      * Prompt the user for input.
      *
-     * @param string        $question
-     * @param string|null   $default
-     * @param callable|null $validator
+     * @param string      $question
+     * @param null|string $default
      *
-     * @return string|null
+     * @return null|string
      */
-    public function ask(string $question, ?string $default = null, ?callable $validator = null): ?string
+    public function ask(string $question, ?string $default = null): ?string
     {
-        return $this->output->ask($question, $default, $validator);
+        return $this->output->ask($question, $default);
     }
 
     /**
@@ -270,7 +265,7 @@ abstract class Command extends BaseCommand
      * @param array  $choices
      * @param string $default
      *
-     * @return string|null
+     * @return null|string
      */
     public function anticipate(string $question, array $choices, string $default = null): ?string
     {
@@ -282,9 +277,9 @@ abstract class Command extends BaseCommand
      *
      * @param string      $question
      * @param array       $choices
-     * @param string|null $default
+     * @param null|string $default
      *
-     * @return string|null
+     * @return null|string
      */
     public function askWithCompletion(string $question, array $choices, ?string $default = null): ?string
     {
@@ -317,11 +312,11 @@ abstract class Command extends BaseCommand
      *
      * @param string      $question
      * @param array       $choices
-     * @param string|null $default
+     * @param null|string $default
      * @param mixed       $attempts
      * @param bool        $multiple
      *
-     * @return string|null
+     * @return null|string
      */
     public function choice(
         string $question,
@@ -340,13 +335,14 @@ abstract class Command extends BaseCommand
     /**
      * Format input to textual table.
      *
-     * @param array                                                $headers
-     * @param array|\Viserio\Component\Contracts\Support\Arrayable $rows
-     * @param string                                               $style
+     * @param array                                               $headers
+     * @param array|\Viserio\Component\Contract\Support\Arrayable $rows
+     * @param string                                              $style
+     * @param array                                               $columnStyles
      *
      * @return void
      */
-    public function table(array $headers, $rows, string $style = 'default'): void
+    public function table(array $headers, $rows, string $style = 'default', array $columnStyles = []): void
     {
         $table = new Table($this->output);
 
@@ -354,14 +350,20 @@ abstract class Command extends BaseCommand
             $rows = $rows->toArray();
         }
 
-        $table->setHeaders($headers)->setRows($rows)->setStyle($style)->render();
+        $table->setHeaders($headers)->setRows($rows)->setStyle($style);
+
+        foreach ($columnStyles as $columnIndex => $columnStyle) {
+            $table->setColumnStyle($columnIndex, $columnStyle);
+        }
+
+        $table->render();
     }
 
     /**
      * Write a string as standard output.
      *
      * @param string          $string
-     * @param string|null     $style          The output style of the string
+     * @param null|string     $style          The output style of the string
      * @param null|int|string $verbosityLevel
      *
      * @return void
@@ -443,6 +445,22 @@ abstract class Command extends BaseCommand
     }
 
     /**
+     * Get the container instance.
+     *
+     * @throws \Viserio\Component\Contract\Console\Exception\LogicException
+     *
+     * @return \Psr\Container\ContainerInterface
+     */
+    protected function getContainer(): ContainerInterface
+    {
+        if (! $this->container) {
+            throw new LogicException('Container is not set up.');
+        }
+
+        return $this->container;
+    }
+
+    /**
      * Execute the console command.
      *
      * @param \Symfony\Component\Console\Input\InputInterface   $input
@@ -478,18 +496,22 @@ abstract class Command extends BaseCommand
     /**
      * Configure the console command using a fluent definition.
      *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
+     *
      * @return void
      */
-    protected function configureUsingFluentDefinition(): void
+    private function configureUsingFluentDefinition(): void
     {
-        $arr = (new ExpressionParser())->parse($this->signature);
+        $data = ExpressionParser::parse($this->signature);
 
-        parent::__construct($arr['name']);
+        parent::__construct($data['name']);
 
-        foreach ($arr['arguments'] as $argument) {
+        foreach ($data['arguments'] as $argument) {
             $this->getDefinition()->addArgument($argument);
         }
-        foreach ($arr['options'] as $option) {
+
+        foreach ($data['options'] as $option) {
             $this->getDefinition()->addOption($option);
         }
     }
@@ -499,17 +521,17 @@ abstract class Command extends BaseCommand
      *
      * @return void
      */
-    protected function specifyParameters(): void
+    private function specifyParameters(): void
     {
         // We will loop through all of the arguments and options for the command and
         // set them all on the base command instance. This specifies what can get
         // passed into these commands as "parameters" to control the execution.
         foreach ($this->getArguments() as $arguments) {
-            call_user_func_array([$this, 'addArgument'], $arguments);
+            \call_user_func_array([$this, 'addArgument'], $arguments);
         }
 
         foreach ($this->getOptions() as $options) {
-            call_user_func_array([$this, 'addOption'], $options);
+            \call_user_func_array([$this, 'addOption'], $options);
         }
     }
 }

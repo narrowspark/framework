@@ -5,36 +5,32 @@ namespace Viserio\Component\Foundation\Tests\DataCollector;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\DataCollector\ViserioHttpDataCollector;
 
 class ViserioHttpDataCollectorTest extends MockeryTestCase
 {
-    public function testGetMenuAndPosition()
+    public function testGetMenuAndPosition(): void
     {
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('getAttributes')
             ->once()
-            ->withNoArgs()
             ->andReturn([]);
 
         $response = $this->mock(ResponseInterface::class);
         $response->shouldReceive('getStatusCode')
             ->once()
-            ->withNoArgs()
             ->andReturn(200);
 
         $route = $this->mock(RouteContract::class);
         $route->shouldReceive('getName')
             ->twice()
-            ->withNoArgs()
             ->andReturn('Home');
 
         $router = $this->mock(RouterContract::class);
         $router->shouldReceive('getCurrentRoute')
             ->once()
-            ->withNoArgs()
             ->andReturn($route);
 
         $collect = new ViserioHttpDataCollector($router, '');

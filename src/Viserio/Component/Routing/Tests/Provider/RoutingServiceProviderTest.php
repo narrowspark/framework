@@ -6,7 +6,7 @@ use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Provider\RoutingServiceProvider;
@@ -14,7 +14,7 @@ use Viserio\Component\Routing\Router;
 
 class RoutingServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new RoutingServiceProvider());
@@ -34,5 +34,24 @@ class RoutingServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGeneratorContract::class));
         self::assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGenerator::class));
         self::assertInstanceOf(Router::class, $container->get('router'));
+    }
+
+    public function testGetUrlGeneratorProvider(): void
+    {
+        $container = new Container();
+        $container->register(new RoutingServiceProvider());
+        $container->register(new EventsServiceProvider());
+        $container->instance(ServerRequestInterface::class, $this->mock(ServerRequestInterface::class));
+
+        $container->instance('config', [
+            'viserio' => [
+                'routing' => [
+                    'path' => '',
+                ],
+            ],
+        ]);
+
+        self::assertNull($container->get(UrlGeneratorContract::class));
+        self::assertNull($container->get(UrlGenerator::class));
     }
 }

@@ -10,7 +10,7 @@ use Viserio\Component\Pagination\Paginator;
 
 class Foundation6Test extends MockeryTestCase
 {
-    public function testPaginatorRenderFoundation6()
+    public function testPaginatorRenderFoundation6(): void
     {
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
 

@@ -8,38 +8,41 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class StreamFactoryTest extends TestCase
 {
+    /**
+     * @var \Interop\Http\Factory\StreamFactoryInterface
+     */
     private $factory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->factory = new StreamFactory();
     }
 
-    public function testCreateStream()
+    public function testCreateStream(): void
     {
         $string = 'would you like some crumpets?';
         $stream = $this->factory->createStream($string);
-        self::assertStream($stream, $string);
+        $this->assertStream($stream, $string);
     }
 
-    public function testCreateStreamFromFile()
+    public function testCreateStreamFromFile(): void
     {
         $string   = 'would you like some crumpets?';
         $filename = $this->createTemporaryFile();
-        file_put_contents($filename, $string);
+        \file_put_contents($filename, $string);
         $stream = $this->factory->createStreamFromFile($filename);
-        self::assertStream($stream, $string);
+        $this->assertStream($stream, $string);
     }
 
-    public function testCreateStreamFromResource()
+    public function testCreateStreamFromResource(): void
     {
         $string   = 'would you like some crumpets?';
         $resource = $this->createTemporaryResource($string);
         $stream   = $this->factory->createStreamFromResource($resource);
-        self::assertStream($stream, $string);
+        $this->assertStream($stream, $string);
     }
 
-    protected function assertStream($stream, $content)
+    protected function assertStream($stream, $content): void
     {
         self::assertInstanceOf(StreamInterface::class, $stream);
         self::assertSame($content, (string) $stream);
@@ -47,16 +50,16 @@ class StreamFactoryTest extends TestCase
 
     protected function createTemporaryFile()
     {
-        return tempnam(sys_get_temp_dir(), uniqid());
+        return \tempnam(\sys_get_temp_dir(), \uniqid('', true));
     }
 
     protected function createTemporaryResource($content = null)
     {
         $file     = $this->createTemporaryFile();
-        $resource = fopen($file, 'r+');
+        $resource = \fopen($file, 'rb+');
         if ($content) {
-            fwrite($resource, $content);
-            rewind($resource);
+            \fwrite($resource, $content);
+            \rewind($resource);
         }
 
         return $resource;

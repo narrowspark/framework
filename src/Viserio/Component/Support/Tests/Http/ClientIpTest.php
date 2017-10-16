@@ -2,13 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Support\Tests\Http;
 
+use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Support\Http\ClientIp;
 
 class ClientIpTest extends MockeryTestCase
 {
-    public function testGetIpAddressByRemoteAddr()
+    public function testGetIpAddressByRemoteAddr(): void
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
@@ -35,7 +36,7 @@ class ClientIpTest extends MockeryTestCase
         static::assertSame('192.168.1.1', $clientIp->getIpAddress());
     }
 
-    public function testGetIpIsNullIfMissing()
+    public function testGetIpIsNullIfMissing(): void
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
@@ -62,27 +63,9 @@ class ClientIpTest extends MockeryTestCase
         static::assertNull($clientIp->getIpAddress());
     }
 
-    public function testGetIpByXForwardedFor()
+    public function testGetIpByXForwardedFor(): void
     {
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('getServerParams')
-            ->once()
-            ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
-        $request->shouldReceive('hasHeader')
-            ->with('Forwarded')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Forwarded-For')
-            ->andReturn(true);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Forwarded')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Cluster-Client-Ip')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('Client-Ip')
-            ->andReturn(false);
+        $request = $this->arrangeRequestWithXForwardedForHeader();
         $request->shouldReceive('getHeaderLine')
             ->with('X-Forwarded-For')
             ->andReturn('192.168.1.3, 192.168.1.2, 192.168.1.1');
@@ -92,7 +75,7 @@ class ClientIpTest extends MockeryTestCase
         static::assertSame('192.168.1.3', $clientIp->getIpAddress());
     }
 
-    public function testGetIpByHttpClientIp()
+    public function testGetIpByHttpClientIp(): void
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
@@ -122,27 +105,9 @@ class ClientIpTest extends MockeryTestCase
         static::assertSame('192.168.1.3', $clientIp->getIpAddress());
     }
 
-    public function testGetIpByXForwardedForIpV6()
+    public function testGetIpByXForwardedForIpV6(): void
     {
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('getServerParams')
-            ->once()
-            ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
-        $request->shouldReceive('hasHeader')
-            ->with('Forwarded')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Forwarded-For')
-            ->andReturn(true);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Forwarded')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Cluster-Client-Ip')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('Client-Ip')
-            ->andReturn(false);
+        $request = $this->arrangeRequestWithXForwardedForHeader();
         $request->shouldReceive('getHeaderLine')
             ->with('X-Forwarded-For')
             ->andReturn('001:DB8::21f:5bff:febf:ce22:8a2e');
@@ -152,27 +117,9 @@ class ClientIpTest extends MockeryTestCase
         static::assertSame('001:DB8::21f:5bff:febf:ce22:8a2e', $clientIp->getIpAddress());
     }
 
-    public function testGetIpByForwardedWithMultipleFor()
+    public function testGetIpByForwardedWithMultipleFor(): void
     {
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('getServerParams')
-            ->once()
-            ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
-        $request->shouldReceive('hasHeader')
-            ->with('Forwarded')
-            ->andReturn(true);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Forwarded-For')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Forwarded')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Cluster-Client-Ip')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('Client-Ip')
-            ->andReturn(false);
+        $request = $this->arrangeRequestWithForwardedHeader();
         $request->shouldReceive('getHeaderLine')
             ->with('Forwarded')
             ->andReturn('for=192.0.2.43, for=198.51.100.17;by=203.0.113.60;proto=http;host=example.com');
@@ -182,27 +129,9 @@ class ClientIpTest extends MockeryTestCase
         static::assertSame('192.0.2.43', $clientIp->getIpAddress());
     }
 
-    public function testGetIpByForwardedhWithIpV6()
+    public function testGetIpByForwardedhWithIpV6(): void
     {
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('getServerParams')
-            ->once()
-            ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
-        $request->shouldReceive('hasHeader')
-            ->with('Forwarded')
-            ->andReturn(true);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Forwarded-For')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Forwarded')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('X-Cluster-Client-Ip')
-            ->andReturn(false);
-        $request->shouldReceive('hasHeader')
-            ->with('Client-Ip')
-            ->andReturn(false);
+        $request = $this->arrangeRequestWithForwardedHeader();
         $request->shouldReceive('getHeaderLine')
             ->with('Forwarded')
             ->andReturn('For="[2001:db8:cafe::17]:4711", for=_internalProxy');
@@ -212,7 +141,22 @@ class ClientIpTest extends MockeryTestCase
         static::assertSame('2001:db8:cafe::17', $clientIp->getIpAddress());
     }
 
-    public function testGetIpByXForwardedForWithInvalidIp()
+    public function testGetIpByXForwardedForWithInvalidIp(): void
+    {
+        $request = $this->arrangeRequestWithXForwardedForHeader();
+        $request->shouldReceive('getHeaderLine')
+            ->with('X-Forwarded-For')
+            ->andReturn('For');
+
+        $clientIp = new ClientIp($request);
+
+        static::assertSame('192.168.1.1', $clientIp->getIpAddress());
+    }
+
+    /**
+     * @return MockInterface
+     */
+    private function arrangeRequestWithXForwardedForHeader(): MockInterface
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
@@ -233,12 +177,35 @@ class ClientIpTest extends MockeryTestCase
         $request->shouldReceive('hasHeader')
             ->with('Client-Ip')
             ->andReturn(false);
-        $request->shouldReceive('getHeaderLine')
+
+        return $request;
+    }
+
+    /**
+     * @return MockInterface
+     */
+    private function arrangeRequestWithForwardedHeader(): MockInterface
+    {
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getServerParams')
+            ->once()
+            ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
+        $request->shouldReceive('hasHeader')
+            ->with('Forwarded')
+            ->andReturn(true);
+        $request->shouldReceive('hasHeader')
             ->with('X-Forwarded-For')
-            ->andReturn('For');
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('X-Forwarded')
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('X-Cluster-Client-Ip')
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('Client-Ip')
+            ->andReturn(false);
 
-        $clientIp = new ClientIp($request);
-
-        static::assertSame('192.168.1.1', $clientIp->getIpAddress());
+        return $request;
     }
 }

@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy;
 
-use BadMethodCallException;
 use Mockery;
 use Mockery\MockInterface;
 use Psr\Container\ContainerInterface;
-use RuntimeException;
+use Viserio\Component\Contract\StaticalProxy\Exception\BadMethodCallException;
+use Viserio\Component\Contract\StaticalProxy\Exception\RuntimeException;
 
 class StaticalProxy
 {
     /**
-     * @var ContainerInterface the Container that provides the Proxy Subjects
+     * @var \Psr\Container\ContainerInterface the Container that provides the Proxy Subjects
      */
     protected static $container;
 
@@ -27,6 +27,8 @@ class StaticalProxy
      *
      * @param string $method
      * @param array  $args
+     *
+     * @throws \Viserio\Component\Contract\StaticalProxy\Exception\RuntimeException
      *
      * @return mixed
      */
@@ -44,9 +46,9 @@ class StaticalProxy
     /**
      * Sets the Container that will be used to retrieve the Proxy Subject.
      *
-     * @param ContainerInterface $container The Container that provides the real Proxy Subject
+     * @param \Psr\Container\ContainerInterface $container The Container that provides the real Proxy Subject
      */
-    public static function setContainer(ContainerInterface $container)
+    public static function setContainer(ContainerInterface $container): void
     {
         static::$container = $container;
     }
@@ -64,21 +66,21 @@ class StaticalProxy
     /**
      * Retrieves the Instance Identifier that is used to retrieve the Proxy Subject from the Container.
      *
-     * @throws \BadMethodCallException if the method has not been implemented by a subclass
+     * @throws \Viserio\Component\Contract\StaticalProxy\Exception\BadMethodCallException if the method has not been implemented by a subclass
      *
-     * @return string|object
+     * @return object|string
      */
     public static function getInstanceIdentifier()
     {
-        throw new BadMethodCallException(sprintf('The [%s] method must be implemented by a subclass.', __METHOD__));
+        throw new BadMethodCallException(\sprintf('The [%s] method must be implemented by a subclass.', __METHOD__));
     }
 
     /**
-     * Hotswap the underlying instance behind the facade.
+     * Hot swap the underlying instance behind the facade.
      *
      * @param mixed $instance
      */
-    public static function swap($instance)
+    public static function swap($instance): void
     {
         static::$resolvedInstance[static::getInstanceIdentifier()] = $instance;
     }
@@ -88,7 +90,7 @@ class StaticalProxy
      *
      * @return object
      */
-    public static function shouldReceive()
+    public static function shouldReceive(): object
     {
         $name = static::getInstanceIdentifier();
 
@@ -98,13 +100,13 @@ class StaticalProxy
             $mock = static::createFreshMockInstance($name);
         }
 
-        return call_user_func_array([$mock, 'shouldReceive'], func_get_args());
+        return \call_user_func_array([$mock, 'shouldReceive'], \func_get_args());
     }
 
     /**
      * Get the root object behind the facade.
      *
-     * @return object
+     * @return null|object
      */
     public static function getStaticalProxyRoot()
     {
@@ -116,7 +118,7 @@ class StaticalProxy
      *
      * @param string $name
      */
-    public static function clearResolvedInstance(string $name)
+    public static function clearResolvedInstance(string $name): void
     {
         unset(static::$resolvedInstance[$name]);
     }
@@ -124,7 +126,7 @@ class StaticalProxy
     /**
      * Clear all of the resolved instances.
      */
-    public static function clearResolvedInstances()
+    public static function clearResolvedInstances(): void
     {
         static::$resolvedInstance = [];
     }
@@ -136,9 +138,9 @@ class StaticalProxy
      *
      * @return object
      */
-    protected static function resolveStaticalProxyInstance($name)
+    protected static function resolveStaticalProxyInstance($name): object
     {
-        if (is_object($name)) {
+        if (\is_object($name)) {
             return $name;
         }
 
@@ -156,7 +158,7 @@ class StaticalProxy
      *
      * @return \Mockery\MockInterface
      */
-    protected static function createFreshMockInstance(string $name)
+    protected static function createFreshMockInstance(string $name): MockInterface
     {
         static::$resolvedInstance[$name] = $mock = static::createMock();
 
@@ -173,7 +175,7 @@ class StaticalProxy
     protected static function createMock(): MockInterface
     {
         if ($root = static::getStaticalProxyRoot()) {
-            return Mockery::mock(get_class($root));
+            return Mockery::mock(\get_class($root));
         }
         // @codeCoverageIgnoreStart
         return Mockery::mock();

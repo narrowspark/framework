@@ -4,6 +4,7 @@ namespace Viserio\Component\Container;
 
 use InvalidArgumentException;
 use Mockery;
+use Mockery\MockInterface;
 
 class MockContainer extends Container
 {
@@ -18,21 +19,25 @@ class MockContainer extends Container
      *
      * @param array $args
      *
-     * @return \Mockery
+     * @throws \InvalidArgumentException
+     *
+     * @return \Mockery\MockInterface
      */
-    public function mock(...$args)
+    public function mock(...$args): MockInterface
     {
-        $id = array_shift($args);
+        $id = \array_shift($args);
 
         if (! $this->has($id)) {
-            throw new InvalidArgumentException(sprintf('Cannot mock a non-existent service: [%s]', $id));
+            throw new InvalidArgumentException(\sprintf('Cannot mock a non-existent service: [%s]', $id));
         }
 
-        if (! isset($this->mockedServices['mock::' . $id])) {
-            $this->mockedServices['mock::' . $id] = call_user_func_array([Mockery::class, 'mock'], $args);
+        $mock = 'mock::' . $id;
+
+        if (! isset($this->mockedServices[$mock])) {
+            $this->mockedServices[$mock] = \call_user_func_array([Mockery::class, 'mock'], $args);
         }
 
-        return $this->mockedServices['mock::' . $id];
+        return $this->mockedServices[$mock];
     }
 
     /**
@@ -40,7 +45,7 @@ class MockContainer extends Container
      *
      * @param string $id
      */
-    public function unmock(string $id)
+    public function unmock(string $id): void
     {
         unset($this->mockedServices['mock::' . $id]);
     }
@@ -48,7 +53,7 @@ class MockContainer extends Container
     /**
      * @return array
      */
-    public function getMockedServices()
+    public function getMockedServices(): array
     {
         return $this->mockedServices;
     }
@@ -78,7 +83,7 @@ class MockContainer extends Container
      *
      * @param string $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->bindings[$offset], $this->mockedServices['mock::' . $offset]);
     }

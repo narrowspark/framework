@@ -2,26 +2,25 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler;
 
-use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use RuntimeException;
 use Throwable;
-use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
-use Viserio\Component\Contracts\Log\Traits\LoggerAwareTrait;
-use Viserio\Component\Contracts\Profiler\AssetsRenderer as AssetsRendererContract;
-use Viserio\Component\Contracts\Profiler\DataCollector as DataCollectorContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\HttpFactory\Traits\StreamFactoryAwareTrait;
+use Viserio\Component\Contract\Profiler\AssetsRenderer as AssetsRendererContract;
+use Viserio\Component\Contract\Profiler\DataCollector as DataCollectorContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Support\Http\ClientIp;
 
 class Profiler implements ProfilerContract, LoggerAwareInterface
 {
     use CacheItemPoolAwareTrait;
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
     use LoggerAwareTrait;
     use StreamFactoryAwareTrait;
 
@@ -42,14 +41,14 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     /**
      * Url generator instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\UrlGenerator
+     * @var \Viserio\Component\Contract\Routing\UrlGenerator
      */
     protected $urlGenerator;
 
     /**
      * Assets renderer instance.
      *
-     * @var \Viserio\Component\Contracts\Profiler\AssetsRenderer
+     * @var \Viserio\Component\Contract\Profiler\AssetsRenderer
      */
     protected $assetsRenderer;
 
@@ -70,7 +69,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     /**
      * Create new Profiler instance.
      *
-     * @param \Viserio\Component\Contracts\Profiler\AssetsRenderer $assetsRenderer
+     * @param \Viserio\Component\Contract\Profiler\AssetsRenderer $assetsRenderer
      */
     public function __construct(AssetsRendererContract $assetsRenderer)
     {
@@ -116,11 +115,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Set the Profiler template path.
-     *
-     * @param string $path
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setTemplate(string $path): ProfilerContract
     {
@@ -130,9 +125,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     }
 
     /**
-     * Get the Profiler template path.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTemplate(): string
     {
@@ -145,7 +138,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     public function addCollector(DataCollectorContract $collector, int $priority = 100): ProfilerContract
     {
         if (isset($this->collectors[$collector->getName()])) {
-            throw new RuntimeException(sprintf('[%s] is already a registered collector.', $collector->getName()));
+            throw new RuntimeException(\sprintf('[%s] is already a registered collector.', $collector->getName()));
         }
 
         $this->collectors[$collector->getName()] = [
@@ -183,18 +176,11 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
             return $response;
         }
 
-        $token = mb_substr(hash('sha256', uniqid((string) mt_rand(), true)), 0, 6);
-        $response->withHeader('X-Debug-Token', $token);
-        //@TODO Send json data or redirect.
+        $token = \mb_substr(\hash('sha256', \uniqid((string) \mt_rand(), true)), 0, 6);
+        $response->withHeader('x-debug-token', $token);
+
         try {
-            if ($this->isRedirect($response)) {
-                // $this->stackData();
-            } elseif ($this->isJsonRequest($serverRequest)) {
-                // $this->sendDataInHeaders(true);
-            } elseif ($this->isHtmlResponse($response) || $this->isHtmlAccepted($serverRequest)) {
-                // Just collect + store data, don't inject it.
-                $this->collectData($token, $serverRequest, $response);
-            }
+            $this->collectData($token, $serverRequest, $response);
         } catch (Throwable $exception) {
             if ($this->logger !== null) {
                 $this->logger->error('Profiler exception: ' . $exception->getMessage());
@@ -203,17 +189,32 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
             }
         }
 
-        return $this->injectProfiler($response, $token);
+        if ($this->isHtmlResponse($response)) {
+            $response = $this->injectProfiler($response, $token);
+        }
+
+        return $response;
     }
 
     /**
      * Returns a AssetsRenderer for this instance.
      *
-     * @return \Viserio\Component\Contracts\Profiler\AssetsRenderer
+     * @return \Viserio\Component\Contract\Profiler\AssetsRenderer
      */
     public function getAssetsRenderer(): AssetsRendererContract
     {
         return $this->assetsRenderer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        /** @var \Viserio\Component\Contract\Profiler\DataCollector $data */
+        foreach ($this->collectors as $data) {
+            $data['collector']->flush();
+        }
     }
 
     /**
@@ -224,22 +225,22 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      *
      * @return \Psr\Http\Message\ResponseInterface
      *
-     * @link https://github.com/symfony/ProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
+     * @see https://github.com/symfony/ProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
      */
     protected function injectProfiler(ResponseInterface $response, string $token): ResponseInterface
     {
         $content         = (string) $response->getBody();
         $renderedContent = $this->createTemplate($token);
 
-        $pos = mb_strripos($content, '</body>');
+        $pos = \mb_strripos($content, '</body>');
 
         if ($pos !== false) {
-            $stream = $this->getStreamFactory()->createStream(
-                mb_substr($content, 0, $pos) . $renderedContent . mb_substr($content, $pos)
+            $stream = $this->streamFactory->createStream(
+                \mb_substr($content, 0, $pos) . $renderedContent . \mb_substr($content, $pos)
             );
 
             // Update the new content and reset the content length
-            $response = $response->withoutHeader('Content-Length');
+            $response = $response->withoutHeader('content-length');
 
             return $response->withBody($stream);
         }
@@ -258,7 +259,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     protected function runningInConsole(): bool
     {
-        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
+        return PHP_SAPI == 'cli' || PHP_SAPI == 'phpdbg';
     }
 
     /**
@@ -276,7 +277,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
         ResponseInterface $response
     ): void {
         // sort on priority
-        usort($this->collectors, function ($a, $b) {
+        \usort($this->collectors, function ($a, $b) {
             return $a['priority'] <=> $b['priority'];
         });
 
@@ -286,15 +287,17 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
             $this->collectors[$name]['collector'] = $collector['collector'];
         }
 
+        $ip = (new ClientIp($serverRequest))->getIpAddress();
+
         if ($this->cachePool !== null) {
             $this->createProfile(
                 $token,
-                (new ClientIp($serverRequest))->getIpAddress(),
+                $ip ?? 'Unknown',
                 $serverRequest->getMethod(),
                 (string) $serverRequest->getUri(),
                 $response->getStatusCode(),
-                microtime(true),
-                date('Y-m-d H:i:s'),
+                \microtime(true),
+                \date('Y-m-d H:i:s'),
                 $this->collectors
             );
         }
@@ -329,62 +332,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     private function isHtmlResponse(ResponseInterface $response): bool
     {
-        return $this->hasHeaderContains($response, 'Content-Type', 'html');
-    }
-
-    /**
-     * Check if request is a json request.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return bool
-     */
-    private function isJsonRequest(ServerRequestInterface $request): bool
-    {
-        return $this->hasHeaderContains($request, 'Accept', 'application/json');
-    }
-
-    /**
-     * Check if request accept html.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return bool
-     */
-    private function isHtmlAccepted(ServerRequestInterface $request): bool
-    {
-        return $this->hasHeaderContains($request, 'Accept', 'html');
-    }
-
-    /**
-     * Checks if headers contains searched header.
-     *
-     * @param \Psr\Http\Message\MessageInterface $message
-     * @param string                             $headerName
-     * @param string                             $value
-     *
-     * @return bool
-     */
-    private function hasHeaderContains(MessageInterface $message, string $headerName, string $value): bool
-    {
-        return mb_strpos($message->getHeaderLine($headerName), $value) !== false;
-    }
-
-    /**
-     * Returns a boolean TRUE for if the response has redirect status code.
-     *
-     * Five common HTTP status codes indicates a redirection beginning from 301.
-     * 304 not modified and 305 use proxy are not redirects.
-     *
-     * @link https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return bool
-     */
-    private function isRedirect(ResponseInterface $response): bool
-    {
-        return in_array($response->getStatusCode(), [301, 302, 303, 307, 308]);
+        return \mb_strpos($response->getHeaderLine('Content-Type'), 'html', 0, 'UTF-8') !== false;
     }
 
     /**

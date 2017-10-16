@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Fingerprint;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Session\Fingerprint as FingerprintContract;
+use Viserio\Component\Contract\Session\Fingerprint as FingerprintContract;
 
 class UserAgentGenerator implements FingerprintContract
 {
@@ -36,6 +36,6 @@ class UserAgentGenerator implements FingerprintContract
      */
     public function generate(): string
     {
-        return hash('ripemd160', $this->userAgent);
+        return \hash('ripemd160', $this->userAgent);
     }
 }

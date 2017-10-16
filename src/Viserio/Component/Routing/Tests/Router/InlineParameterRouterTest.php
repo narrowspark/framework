@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -28,8 +29,10 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter404($httpMethod, $uri)
+    public function testRouter404($httpMethod, $uri): void
     {
+        $this->definitions($this->router);
+
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
@@ -46,6 +49,22 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
         ];
     }
 
+    /**
+     * @dataProvider routerMatching405Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
+     *
+     * @param mixed $httpMethod
+     * @param mixed $uri
+     */
+    public function testRouter405($httpMethod, $uri): void
+    {
+        $this->definitions($this->router);
+
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
+        );
+    }
+
     public function routerMatching405Provider()
     {
         return [
@@ -56,22 +75,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @dataProvider routerMatching405Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter405($httpMethod, $uri)
-    {
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
-            (new ResponseFactory())->createResponse()
-        );
-    }
-
-    protected function definitions($router)
+    protected function definitions(RouterContract $router): void
     {
         $router->get('/', function ($request, $args) {
             return (new ResponseFactory())
@@ -80,7 +84,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'])
                 );
-        })->setParameter('name', 'home');
+        })->addParameter('name', 'home');
 
         $router->get('/blog', function ($request, $args) {
             return (new ResponseFactory())
@@ -89,7 +93,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'])
                 );
-        })->setParameter('name', 'blog.index');
+        })->addParameter('name', 'blog.index');
         $router->get('/blog/post/{post_slug:[a-z0-9\-]+}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -97,7 +101,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
                 );
-        })->setParameter('name', 'blog.post.show');
+        })->addParameter('name', 'blog.post.show');
         $router->post('/blog/post/{post_slug:[a-z0-9\-]+}/comment', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -105,7 +109,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
                 );
-        })->setParameter('name', 'blog.post.comment');
+        })->addParameter('name', 'blog.post.comment');
         $router->get('/blog/post/{post_slug:[a-z0-9\-]+}/comment/{comment_id:[0-9]+}', function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -113,6 +117,6 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                     (new StreamFactory())
                     ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'] . ' | comment_id = ' . $args['comment_id'])
                 );
-        })->setParameter('name', 'blog.post.comment.show');
+        })->addParameter('name', 'blog.post.comment.show');
     }
 }

@@ -15,7 +15,7 @@ class NormalizeNameTraitTest extends TestCase
      * @param mixed $name
      * @param mixed $validated
      */
-    public function testNormalizeName($name, $validated)
+    public function testNormalizeName($name, $validated): void
     {
         $validatedName = $this->normalizeName($name);
 

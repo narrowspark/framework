@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use Viserio\Component\Contracts\Filesystem\Connector as ConnectorContract;
+use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
 
 abstract class AbstractConnector implements ConnectorContract
 {
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config)
+    public function connect(array $config): object
     {
         $auth   = $this->getAuth($config);
         $client = $this->getClient($auth);
@@ -36,7 +36,7 @@ abstract class AbstractConnector implements ConnectorContract
      *
      * @return object
      */
-    abstract protected function getClient(array $auth);
+    abstract protected function getClient(array $auth): object;
 
     /**
      * Get the configuration.
@@ -57,5 +57,18 @@ abstract class AbstractConnector implements ConnectorContract
      *
      * @return object
      */
-    abstract protected function getAdapter($client, array $config);
+    abstract protected function getAdapter(object $client, array $config): object;
+
+    /**
+     * Get a subset of the items from the given array.
+     *
+     * @param array    $config
+     * @param string[] $keys
+     *
+     * @return string[]
+     */
+    protected static function getSelectedConfig(array $config, array $keys): array
+    {
+        return array_intersect_key($config, array_flip($keys));
+    }
 }

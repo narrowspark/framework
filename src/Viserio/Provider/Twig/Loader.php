@@ -7,22 +7,22 @@ use Twig\Error\LoaderError;
 use Twig\Loader\ExistsLoaderInterface;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
-use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
+use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 
 class Loader implements LoaderInterface, ExistsLoaderInterface
 {
     /**
      * The filesystem instance.
      *
-     * @var \Viserio\Component\Contracts\Filesystem\Filesystem
+     * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     protected $files;
 
     /**
      * The finder instance.
      *
-     * @var \Viserio\Component\Contracts\View\Finder
+     * @var \Viserio\Component\Contract\View\Finder
      */
     protected $finder;
 
@@ -43,7 +43,7 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
     /**
      * Create a new twig loader instance.
      *
-     * @param \Viserio\Component\Contracts\View\Finder $finder
+     * @param \Viserio\Component\Contract\View\Finder $finder
      */
     public function __construct(FinderContract $finder)
     {
@@ -55,6 +55,8 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
      * Set file extension for the twig loader.
      *
      * @param string $extension
+     *
+     * @return \Twig\Loader\LoaderInterface
      *
      * @codeCoverageIgnore
      */
@@ -89,11 +91,11 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
         try {
             $source = $this->files->read($template);
         } catch (FileNotFoundException $exception) {
-            throw new LoaderError(sprintf('Twig file [%s] was not found.', $exception->getMessage()));
+            throw new LoaderError(\sprintf('Twig file [%s] was not found.', $exception->getMessage()));
         }
 
         if ($source === false) {
-            throw new LoaderError(sprintf('A error occurred during template [%s] reading', $name));
+            throw new LoaderError(\sprintf('A error occurred during template [%s] reading', $name));
         }
 
         return new Source($source, $name, $template);
@@ -158,7 +160,7 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
     protected function normalizeName(string $name): string
     {
         if ($this->files->getExtension($name) === $this->extension) {
-            $name = mb_substr($name, 0, -(mb_strlen($this->extension) + 1));
+            $name = \mb_substr($name, 0, -(\mb_strlen($this->extension) + 1));
         }
 
         return $name;

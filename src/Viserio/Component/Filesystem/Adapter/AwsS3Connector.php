@@ -3,10 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
 use Aws\S3\S3Client;
-use InvalidArgumentException;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
-use Narrowspark\Arr\Arr;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
 class AwsS3Connector extends AbstractConnector
 {
@@ -20,22 +18,22 @@ class AwsS3Connector extends AbstractConnector
         $auth = [
             'region'      => $config['region'],
             'version'     => $config['version'],
-            'credentials' => Arr::only($config, ['key', 'secret']),
+            'credentials' => self::getSelectedConfig($config, ['key', 'secret']),
         ];
 
-        if (array_key_exists('bucket_endpoint', $config)) {
+        if (\array_key_exists('bucket_endpoint', $config)) {
             $auth['bucket_endpoint'] = $config['bucket_endpoint'];
         }
 
-        if (array_key_exists('calculate_md5', $config)) {
+        if (\array_key_exists('calculate_md5', $config)) {
             $auth['calculate_md5'] = $config['calculate_md5'];
         }
 
-        if (array_key_exists('scheme', $config)) {
+        if (\array_key_exists('scheme', $config)) {
             $auth['scheme'] = $config['scheme'];
         }
 
-        if (array_key_exists('endpoint', $config)) {
+        if (\array_key_exists('endpoint', $config)) {
             $auth['endpoint'] = $config['endpoint'];
         }
 
@@ -45,7 +43,7 @@ class AwsS3Connector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $auth)
+    protected function getClient(array $auth): object
     {
         return new S3Client($auth);
     }
@@ -55,25 +53,25 @@ class AwsS3Connector extends AbstractConnector
      */
     protected function getConfig(array $config): array
     {
-        if (! array_key_exists('prefix', $config)) {
+        if (! \array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 
-        if (! array_key_exists('bucket', $config)) {
+        if (! \array_key_exists('bucket', $config)) {
             throw new InvalidArgumentException('The awss3 connector requires a bucket configuration.');
         }
 
-        if (! array_key_exists('options', $config)) {
+        if (! \array_key_exists('options', $config)) {
             $config['options'] = [];
         }
 
-        return Arr::only($config, ['bucket', 'prefix', 'options']);
+        return self::getSelectedConfig($config, ['bucket', 'prefix', 'options']);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): AdapterInterface
+    protected function getAdapter(object $client, array $config): object
     {
         return new AwsS3v3($client, $config['bucket'], $config['prefix'], (array) $config['options']);
     }
@@ -85,17 +83,17 @@ class AwsS3Connector extends AbstractConnector
      *
      * @throws \InvalidArgumentException
      */
-    private function checkForKeyInConfigArray(array $config)
+    private function checkForKeyInConfigArray(array $config): void
     {
-        if (! array_key_exists('key', $config) || ! array_key_exists('secret', $config)) {
+        if (! \array_key_exists('key', $config) || ! \array_key_exists('secret', $config)) {
             throw new InvalidArgumentException('The awss3 connector requires authentication.');
         }
 
-        if (! array_key_exists('version', $config)) {
+        if (! \array_key_exists('version', $config)) {
             throw new InvalidArgumentException('The awss3 connector requires version configuration.');
         }
 
-        if (! array_key_exists('region', $config)) {
+        if (! \array_key_exists('region', $config)) {
             throw new InvalidArgumentException('The awss3 connector requires region configuration.');
         }
     }

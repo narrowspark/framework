@@ -7,7 +7,7 @@ class CompoundMatcher extends AbstractMatcher
     /**
      * A array of all SegmentMatcher.
      *
-     * @var \Viserio\Component\Contracts\Routing\SegmentMatcher[]
+     * @var \Viserio\Component\Contract\Routing\SegmentMatcher[]
      */
     protected $matchers;
 
@@ -21,7 +21,7 @@ class CompoundMatcher extends AbstractMatcher
         $parameterKeys = [];
 
         foreach ($matchers as $matcher) {
-            $parameterKeys = array_merge($parameterKeys, $matcher->getParameterKeys());
+            $parameterKeys = \array_merge($parameterKeys, $matcher->getParameterKeys());
         }
 
         $this->parameterKeys = $parameterKeys;
@@ -39,7 +39,7 @@ class CompoundMatcher extends AbstractMatcher
             $conditions[] = $matcher->getConditionExpression($segmentVariable, $uniqueKey + $key);
         }
 
-        return implode(' && ', $conditions);
+        return \implode(' && ', $conditions);
     }
 
     /**
@@ -74,6 +74,6 @@ class CompoundMatcher extends AbstractMatcher
             $hashes[] = $matcher->getHash();
         }
 
-        return implode('::', $hashes);
+        return \implode('::', $hashes);
     }
 }

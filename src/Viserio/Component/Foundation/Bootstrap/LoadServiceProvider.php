@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
-use Viserio\Component\Contracts\Foundation\Bootstrap as BootstrapContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 
 class LoadServiceProvider implements BootstrapContract
 {
@@ -22,8 +22,7 @@ class LoadServiceProvider implements BootstrapContract
     /**
      * Register all of the application / kernel service providers.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $app
-     * @param KernelContract                                 $kernel
+     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
      *
      * @return array
      */
@@ -31,7 +30,7 @@ class LoadServiceProvider implements BootstrapContract
     {
         $providers = $kernel->getConfigPath('/serviceproviders.php');
 
-        if (file_exists($providers)) {
+        if (\file_exists($providers)) {
             return require_once $providers;
         }
 

@@ -2,28 +2,36 @@
 declare(strict_types=1);
 namespace Viserio\Component\Bus\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Bus\QueueingDispatcher;
-use Viserio\Component\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
-use Viserio\Component\Contracts\Queue\Factory as FactoryContract;
+use Viserio\Component\Contract\Bus\QueueingDispatcher as QueueingDispatcherContract;
+use Viserio\Component\Contract\Queue\Factory as FactoryContract;
 
-class QueueingBusServiceProvider implements ServiceProvider
+class QueueingBusServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
-            QueueingDispatcherContract::class => [self::class, 'registerBusDispatcher'],
+            QueueingDispatcherContract::class => [self::class, 'registerBusQueueingDispatcher'],
             QueueingDispatcher::class         => function (ContainerInterface $container) {
                 return $container->get(QueueingDispatcherContract::class);
             },
-            'bus'                             => function (ContainerInterface $container) {
+            'bus' => function (ContainerInterface $container) {
                 return $container->get(QueueingDispatcherContract::class);
             },
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     /**
@@ -31,9 +39,9 @@ class QueueingBusServiceProvider implements ServiceProvider
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contracts\Bus\Dispatcher
+     * @return \Viserio\Component\Contract\Bus\QueueingDispatcher
      */
-    public static function registerBusDispatcher(ContainerInterface $container): QueueingDispatcherContract
+    public static function registerBusQueueingDispatcher(ContainerInterface $container): QueueingDispatcherContract
     {
         return new QueueingDispatcher($container, function ($connection = null) use ($container) {
             return $container->get(FactoryContract::class)->connection($connection);

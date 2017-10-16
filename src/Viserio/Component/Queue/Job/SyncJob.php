@@ -35,9 +35,9 @@ class SyncJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(): void
     {
-        $this->resolveAndRun(json_decode($this->payload, true));
+        $this->resolveAndRun(\json_decode($this->payload, true));
     }
 
     /**

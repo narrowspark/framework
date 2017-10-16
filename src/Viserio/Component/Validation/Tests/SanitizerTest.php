@@ -10,12 +10,11 @@ use Viserio\Component\Validation\Tests\Fixture\SuffixFixture;
 
 class SanitizerTest extends TestCase
 {
-    public function testThatSanitizerCanSanitizeWithLambdaAndClosure()
+    public function testThatSanitizerCanSanitizeWithLambdaAndClosure(): void
     {
-        $name      = 'viserio';
         $sanitizer = new Sanitizer();
         $sanitizer->register('reverse', function ($field) {
-            return strrev($field);
+            return \strrev($field);
         });
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], ['name' => 'narrowspark']);
@@ -27,7 +26,7 @@ class SanitizerTest extends TestCase
         self::assertEquals('narrowspark', $data['name']);
     }
 
-    public function testThatSanitizerCanSanitizeWithClass()
+    public function testThatSanitizerCanSanitizeWithClass(): void
     {
         $sanitizer = new Sanitizer();
         $sanitizer->setContainer(new ArrayContainer([
@@ -42,11 +41,11 @@ class SanitizerTest extends TestCase
         self::assertEquals('krapsworran', $data['name']);
     }
 
-    public function testThatSanitizerCanSanitizeWithClosureAndParameters()
+    public function testThatSanitizerCanSanitizeWithClosureAndParameters(): void
     {
         $sanitizer = new Sanitizer();
         $sanitizer->register('substring', function ($string, $start, $length) {
-            return mb_substr($string, (int) $start, (int) $length);
+            return \mb_substr($string, (int) $start, (int) $length);
         });
 
         $data = ['name' => 'narrowspark'];
@@ -56,7 +55,7 @@ class SanitizerTest extends TestCase
         self::assertEquals('rro', $data['name']);
     }
 
-    public function testThatSanitizerCanSanitizeWithClassAndParameters()
+    public function testThatSanitizerCanSanitizeWithClassAndParameters(): void
     {
         $sanitizer = new Sanitizer();
         $sanitizer->setContainer(new ArrayContainer([
@@ -71,7 +70,7 @@ class SanitizerTest extends TestCase
         self::assertEquals('Dayle Rees', $data['name']);
     }
 
-    public function testThatSanitizerCanSanitizeWithACallback()
+    public function testThatSanitizerCanSanitizeWithACallback(): void
     {
         $sanitizer = new Sanitizer();
         $sanitizer->register('reverse', [new SanitizerFixture(), 'foo']);
@@ -83,7 +82,7 @@ class SanitizerTest extends TestCase
         self::assertEquals('krapsworraN', $data['name']);
     }
 
-    public function testThatSanitizerCanSanitizeWithACallbackAndParameters()
+    public function testThatSanitizerCanSanitizeWithACallbackAndParameters(): void
     {
         $sanitizer = new Sanitizer();
         $sanitizer->register('suffix', [new SuffixFixture(), 'sanitize']);
@@ -95,7 +94,7 @@ class SanitizerTest extends TestCase
         self::assertEquals('Narrow Spark', $data['name']);
     }
 
-    public function testThatACallableRuleCanBeUsed()
+    public function testThatACallableRuleCanBeUsed(): void
     {
         $sanitizer = new Sanitizer();
         $data      = ['name' => 'Narrowspark'];
@@ -105,7 +104,7 @@ class SanitizerTest extends TestCase
         self::assertEquals('krapsworraN', $data['name']);
     }
 
-    public function testThatACallableRuleCanBeUsedWithParameters()
+    public function testThatACallableRuleCanBeUsedWithParameters(): void
     {
         $sanitizer = new Sanitizer();
         $data      = ['number' => '2435'];
@@ -115,13 +114,13 @@ class SanitizerTest extends TestCase
         self::assertEquals('0000002435', $data['number']);
     }
 
-    public function testThatSanitizerFunctionsWithMultipleRules()
+    public function testThatSanitizerFunctionsWithMultipleRules(): void
     {
         $sanitizer = new Sanitizer();
         $data      = ['name' => '  Narrowspark_ !'];
 
         $sanitizer->register('alphabetize', function ($field) {
-            return preg_replace('/[^a-zA-Z]/', null, $field);
+            return \preg_replace('/[^a-zA-Z]/', null, $field);
         });
 
         $data = $sanitizer->sanitize(['name' => 'strrev|alphabetize|trim'], $data);
@@ -129,7 +128,7 @@ class SanitizerTest extends TestCase
         self::assertEquals('krapsworraN', $data['name']);
     }
 
-    public function testThatSanitizerFunctionsWithMultipleRulesWithParameters()
+    public function testThatSanitizerFunctionsWithMultipleRulesWithParameters(): void
     {
         $sanitizer = new Sanitizer();
         $data      = ['name' => '  Dayle_ !'];
@@ -137,7 +136,7 @@ class SanitizerTest extends TestCase
         $sanitizer->register('suffix', [new SuffixFixture(), 'sanitize']);
 
         $sanitizer->register('alphabetize', function ($field) {
-            return preg_replace('/[^a-zA-Z]/', null, $field);
+            return \preg_replace('/[^a-zA-Z]/', null, $field);
         });
 
         $data = $sanitizer->sanitize(['name' => 'suffix: Rees |strrev|alphabetize|trim'], $data);
@@ -145,7 +144,7 @@ class SanitizerTest extends TestCase
         self::assertEquals('seeRelyaD', $data['name']);
     }
 
-    public function testThatGlobalRulesCanBeSet()
+    public function testThatGlobalRulesCanBeSet(): void
     {
         $sanitizer = new Sanitizer();
         $data      = [
@@ -164,7 +163,7 @@ class SanitizerTest extends TestCase
         ], $data);
     }
 
-    public function testThatGlobalRulesCanBeSetWithParameters()
+    public function testThatGlobalRulesCanBeSetWithParameters(): void
     {
         $sanitizer = new Sanitizer();
         $data      = [

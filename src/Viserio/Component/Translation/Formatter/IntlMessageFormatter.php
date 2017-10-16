@@ -4,9 +4,9 @@ namespace Viserio\Component\Translation\Formatter;
 
 use IntlException;
 use MessageFormatter;
-use Viserio\Component\Contracts\Translation\Exception\CannotFormatException;
-use Viserio\Component\Contracts\Translation\Exception\CannotInstantiateFormatterException;
-use Viserio\Component\Contracts\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Component\Contract\Translation\Exception\CannotFormatException;
+use Viserio\Component\Contract\Translation\Exception\CannotInstantiateFormatterException;
+use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
 
 class IntlMessageFormatter implements MessageFormatterContract
 {
@@ -32,8 +32,8 @@ class IntlMessageFormatter implements MessageFormatterContract
 
         if (! $formatter) {
             throw new CannotInstantiateFormatterException(
-                intl_get_error_message(),
-                intl_get_error_code()
+                \intl_get_error_message(),
+                \intl_get_error_code()
             );
         }
 

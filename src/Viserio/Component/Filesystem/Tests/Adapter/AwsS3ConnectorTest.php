@@ -8,7 +8,7 @@ use Viserio\Component\Filesystem\Adapter\AwsS3Connector;
 
 class AwsS3ConnectorTest extends TestCase
 {
-    public function testConnectStandard()
+    public function testConnectStandard(): void
     {
         $connector = new AwsS3Connector();
 
@@ -23,7 +23,7 @@ class AwsS3ConnectorTest extends TestCase
         self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
-    public function testConnectWithPrefix()
+    public function testConnectWithPrefix(): void
     {
         $connector = new AwsS3Connector();
 
@@ -38,7 +38,7 @@ class AwsS3ConnectorTest extends TestCase
         self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
-    public function testConnectWithBucketEndPoint()
+    public function testConnectWithBucketEndPoint(): void
     {
         $connector = new AwsS3Connector();
 
@@ -54,7 +54,7 @@ class AwsS3ConnectorTest extends TestCase
         self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
-    public function testConnectWithCalculateMD5()
+    public function testConnectWithCalculateMD5(): void
     {
         $connector = new AwsS3Connector();
 
@@ -70,7 +70,7 @@ class AwsS3ConnectorTest extends TestCase
         self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
-    public function testConnectWithScheme()
+    public function testConnectWithScheme(): void
     {
         $connector = new AwsS3Connector();
 
@@ -86,7 +86,7 @@ class AwsS3ConnectorTest extends TestCase
         self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
-    public function testConnectWithEndPoint()
+    public function testConnectWithEndPoint(): void
     {
         $connector = new AwsS3Connector();
 
@@ -101,7 +101,7 @@ class AwsS3ConnectorTest extends TestCase
         self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
-    public function testConnectWithEverything()
+    public function testConnectWithEverything(): void
     {
         $connector = new AwsS3Connector();
 
@@ -124,7 +124,7 @@ class AwsS3ConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The awss3 connector requires a bucket configuration.
      */
-    public function testConnectWithoutBucket()
+    public function testConnectWithoutBucket(): void
     {
         $connector = new AwsS3Connector();
 
@@ -140,7 +140,7 @@ class AwsS3ConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The awss3 connector requires authentication.
      */
-    public function testConnectWithoutKey()
+    public function testConnectWithoutKey(): void
     {
         $connector = new AwsS3Connector();
 
@@ -156,7 +156,7 @@ class AwsS3ConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The awss3 connector requires authentication.
      */
-    public function testConnectWithoutSecret()
+    public function testConnectWithoutSecret(): void
     {
         $connector = new AwsS3Connector();
 
@@ -172,7 +172,7 @@ class AwsS3ConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The awss3 connector requires version configuration.
      */
-    public function testConnectWithoutVersion()
+    public function testConnectWithoutVersion(): void
     {
         $connector = new AwsS3Connector();
 
@@ -188,7 +188,7 @@ class AwsS3ConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The awss3 connector requires region configuration.
      */
-    public function testConnectWithoutRegion()
+    public function testConnectWithoutRegion(): void
     {
         $connector = new AwsS3Connector();
 

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler;
 
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Contracts\Support\Renderable as RenderableContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Support\Renderable as RenderableContract;
 
 class TemplateManager implements RenderableContract
 {
@@ -27,14 +27,14 @@ class TemplateManager implements RenderableContract
      *
      * @var array
      */
-    private $icons = [];
+    private $icons;
 
     /**
      * Request token.
      *
      * @var string
      */
-    private $token = '';
+    private $token;
 
     /**
      * Create a new template manager instance.
@@ -67,15 +67,13 @@ class TemplateManager implements RenderableContract
     {
         $flags = ENT_QUOTES;
 
-        // HHVM has all constants defined, but only ENT_IGNORE
-        // works at the moment
-        if (defined('ENT_SUBSTITUTE') && ! defined('HHVM_VERSION')) {
+        if (\defined('ENT_SUBSTITUTE')) {
             $flags |= ENT_SUBSTITUTE;
         }
 
-        $raw = str_replace(chr(9), '    ', $raw);
+        $raw = \str_replace(\chr(9), '    ', $raw);
 
-        return htmlspecialchars($raw, $flags, 'UTF-8');
+        return \htmlspecialchars($raw, $flags);
     }
 
     /**
@@ -83,18 +81,18 @@ class TemplateManager implements RenderableContract
      */
     public function render(): string
     {
-        $obLevel = ob_get_level();
+        $obLevel = \ob_get_level();
 
-        ob_start();
+        \ob_start();
 
-        $data = array_merge(
+        $data = \array_merge(
             $this->getSortedData(),
             [
                 'token' => $this->token,
             ]
         );
 
-        extract(
+        \extract(
             $data,
             EXTR_PREFIX_SAME,
             'viserio'
@@ -104,7 +102,7 @@ class TemplateManager implements RenderableContract
 
         // @codeCoverageIgnoreStart
         // Return temporary output buffer content, destroy output buffer
-        return ltrim(ob_get_clean());
+        return \ltrim(\ob_get_clean());
         // @codeCoverageIgnoreEnd
     }
 
@@ -142,13 +140,13 @@ class TemplateManager implements RenderableContract
                 $panel = $collector->getPanel();
 
                 // @codeCoverageIgnoreStart
-                if (mb_strpos($panel, '<div class="profiler-tabs') !== false) {
+                if (\mb_strpos($panel, '<div class="profiler-tabs') !== false) {
                     $class = ' profiler-body-has-tabs';
-                } elseif (mb_strpos($panel, '<select class="content-selector"') !== false) {
+                } elseif (\mb_strpos($panel, '<select class="content-selector"') !== false) {
                     $class = ' profiler-body-has-selector';
-                } elseif (mb_strpos($panel, '<ul class="metrics"') !== false) {
+                } elseif (\mb_strpos($panel, '<ul class="metrics"') !== false) {
                     $class = ' profiler-body-has-metrics';
-                } elseif (mb_strpos($panel, '<table>') !== false) {
+                } elseif (\mb_strpos($panel, '<table>') !== false) {
                     $class = ' profiler-body-has-table';
                 }
                 // @codeCoverageIgnoreEnd

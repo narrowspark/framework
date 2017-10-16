@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Command;
 
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
@@ -17,7 +18,7 @@ class ScheduleRunCommand extends Command implements
     /**
      * {@inheritdoc}
      */
-    protected $name = 'cron:run';
+    protected static $defaultName = 'cron:run';
 
     /**
      * {@inheritdoc}
@@ -45,18 +46,21 @@ class ScheduleRunCommand extends Command implements
 
     /**
      * {@inheritdoc}
+     *
+     * @param \Viserio\Component\Cron\Schedule $schedule
      */
-    public function handle()
+    public function handle(Schedule $schedule): void
     {
         $container = $this->getContainer();
         $options   = self::resolveOptions($container);
-        $cronJobs  = $container->get(Schedule::class)->dueCronJobs(
+        $cronJobs  = $schedule->dueCronJobs(
             $options['env'],
             $options['maintenance']
         );
 
         $cronJobsRan = 0;
 
+        /** @var Cron $cronJob */
         foreach ($cronJobs as $cronJob) {
             if (! $cronJob->filtersPass()) {
                 continue;
@@ -66,10 +70,10 @@ class ScheduleRunCommand extends Command implements
 
             $cronJob->run();
 
-            ++$cronJobsRan;
+            $cronJobsRan++;
         }
 
-        if (count($cronJobs) === 0 || $cronJobsRan === 0) {
+        if (\count($cronJobs) === 0 || $cronJobsRan === 0) {
             $this->info('No scheduled commands are ready to run.');
         }
     }

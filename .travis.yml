@@ -1,10 +1,11 @@
+dist: trusty
 language: php
-
-sudo: false
+sudo: true
 
 env:
   global:
     - TEST="./vendor/bin/phpunit"
+    - COMPOSER_UP="composer update --no-interaction --prefer-dist --no-progress --profile --no-suggest"
 
 services:
   - memcached
@@ -20,28 +21,18 @@ addons:
 
 matrix:
   include:
-    - php: 7.1
-      env: SETUP=basic SEND_COVERAGE=true PHPUNIT=true
-    - php: 7.1
-      env: SETUP=basic PHPUNIT=true
-    - php: 7.1
-      env: SETUP=stable PHPUNIT=true
-    - php: 7.1
-      env: SETUP=lowest PHPUNIT=true
+    - php: 7.2.0RC5
+      env: PHPUNIT=true SEND_COVERAGE=true
+    - php: 7.2.0RC5
+      env: PHPUNIT=true SETUP=high
+    - php: 7.2.0RC5
+      env: PHPUNIT=true SETUP=lowest
       # phpstan
-    - php: 7.1
-      env: SETUP=basic PHPSTAN=true
-      # Nightly
-    - php: nightly
-      env: SETUP=basic PHPUNIT=true
-    - php: nightly
-      env: SETUP=stable PHPUNIT=true
-    - php: nightly
-      env: SETUP=lowest PHPUNIT=true
+    - php: 7.2.0RC5
+      env: PHPSTAN=true
   allow_failures:
-    - php: nightly
-    - env: SETUP=lowest PHPUNIT=true
-      php: 7.1
+    - php: 7.2.0RC5
+      env: PHPUNIT=true SETUP=lowest
   fast_finish: true
 
 cache:
@@ -54,12 +45,18 @@ before_install:
   - ./build/travis/before_install.sh
 
 install:
-  - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
-  - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
-  - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
+  - composer require roave/security-advisories:dev-master
+  - |
+    if [[ "$SETUP" = "high" ]]; then
+      $COMPOSER_UP;
+    elif [[ "$SETUP" = "lowest" ]]; then
+      $COMPOSER_UP --prefer-lowest --prefer-stable;
+    else
+      $COMPOSER_UP
+    fi
 
 before_script:
-  - sleep 15
+  - if [[ "$PHPSTAN" = "false" ]]; then sleep 15; fi
 
 script:
   - ./build/travis/script.sh

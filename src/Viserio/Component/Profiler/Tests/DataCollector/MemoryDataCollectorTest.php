@@ -6,10 +6,13 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Profiler\DataCollector\MemoryDataCollector;
+use Viserio\Component\Support\Traits\BytesFormatTrait;
 
 class MemoryDataCollectorTest extends MockeryTestCase
 {
-    public function testGetMenu()
+    use BytesFormatTrait;
+
+    public function testGetMenu(): void
     {
         $collect = new MemoryDataCollector();
         $collect->collect(
@@ -30,7 +33,7 @@ class MemoryDataCollectorTest extends MockeryTestCase
         );
     }
 
-    public function testGetTooltip()
+    public function testGetTooltip(): void
     {
         $collect = new MemoryDataCollector();
         $collect->collect(
@@ -41,8 +44,10 @@ class MemoryDataCollectorTest extends MockeryTestCase
         $collect->updateMemoryUsage();
         $data = $collect->getData();
 
+        $memory = \ini_get('memory_limit') == '-1' ? 'Unlimited' : self::convertToBytes(\ini_get('memory_limit')) / 1024 / 1024;
+
         self::assertSame(
-            '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Peak memory usage</b><span>' . $data['memory'] / 1024 / 1024 . ' MB</span></div><div class="profiler-menu-tooltip-group-piece"><b>PHP memory limit</b><span>Unlimited MB</span></div></div>',
+            '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Peak memory usage</b><span>' . $data['memory'] / 1024 / 1024 . ' MB</span></div><div class="profiler-menu-tooltip-group-piece"><b>PHP memory limit</b><span>' . $memory . ' MB</span></div></div>',
             $collect->getTooltip()
         );
     }

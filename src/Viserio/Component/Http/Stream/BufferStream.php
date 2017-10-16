@@ -3,7 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
+use RuntimeException as BaseRuntimeException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 
 /**
  * Provides a buffer stream that can be written to to fill a buffer, and read
@@ -48,13 +49,17 @@ class BufferStream implements StreamInterface
      */
     public function __toString()
     {
-        return $this->getContents();
+        try {
+            return $this->getContents();
+        } catch (BaseRuntimeException $exception) {
+            return '';
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         $buffer       = $this->buffer;
         $this->buffer = '';
@@ -65,7 +70,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
         $this->buffer = '';
     }
@@ -73,7 +78,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function detach()
+    public function detach(): void
     {
         $this->close();
     }
@@ -83,13 +88,13 @@ class BufferStream implements StreamInterface
      */
     public function getSize()
     {
-        return mb_strlen($this->buffer);
+        return \mb_strlen($this->buffer);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return true;
     }
@@ -97,7 +102,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return true;
     }
@@ -105,7 +110,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return false;
     }
@@ -113,7 +118,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek(0);
     }
@@ -121,7 +126,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         throw new RuntimeException('Cannot seek a BufferStream');
     }
@@ -129,27 +134,25 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
-        return mb_strlen($this->buffer) === 0;
+        return $this->buffer === '';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): void
     {
         throw new RuntimeException('Cannot determine the position of a BufferStream');
     }
 
     /**
-     * Reads data from the buffer.
-     *
-     * @param mixed $length
+     * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
-        $currentLength = mb_strlen($this->buffer);
+        $currentLength = \mb_strlen($this->buffer);
 
         if ($length >= $currentLength) {
             // No need to slice the buffer because we don't have enough data.
@@ -157,27 +160,25 @@ class BufferStream implements StreamInterface
             $this->buffer = '';
         } else {
             // Slice up the result to provide a subset of the buffer.
-            $result       = mb_substr($this->buffer, 0, $length);
-            $this->buffer = mb_substr($this->buffer, $length);
+            $result       = \mb_substr($this->buffer, 0, $length);
+            $this->buffer = \mb_substr($this->buffer, $length);
         }
 
         return $result;
     }
 
     /**
-     * Writes data to the buffer.
-     *
-     * @param mixed $string
+     * {@inheritdoc}
      */
     public function write($string)
     {
         $this->buffer .= $string;
 
-        if (mb_strlen($this->buffer) >= $this->hwm) {
+        if (\mb_strlen($this->buffer) >= $this->hwm) {
             return 0;
         }
 
-        return mb_strlen($string);
+        return \mb_strlen($string);
     }
 
     /**
@@ -185,7 +186,7 @@ class BufferStream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        if ($key == 'hwm') {
+        if ($key === 'hwm') {
             return $this->hwm;
         }
 

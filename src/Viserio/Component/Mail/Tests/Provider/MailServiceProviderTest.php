@@ -6,9 +6,9 @@ use PHPUnit\Framework\TestCase;
 use Swift_Mailer;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Mail\Mailer as MailerContract;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Mail\Mailer as MailerContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\Mail\Mailer;
@@ -19,7 +19,7 @@ use Viserio\Component\View\Provider\ViewServiceProvider;
 
 class MailServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new ConfigServiceProvider());
@@ -58,7 +58,7 @@ class MailServiceProviderTest extends TestCase
         self::assertInstanceOf(Swift_Mailer::class, $container->get(Swift_Mailer::class));
     }
 
-    public function testProviderWithQueue()
+    public function testProviderWithQueue(): void
     {
         $container = new Container();
         $container->register(new ConfigServiceProvider());

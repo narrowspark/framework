@@ -8,12 +8,12 @@ use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Psr\Container\ContainerInterface as ContainerInteropInterface;
-use Viserio\Component\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contracts\Encryption\Traits\EncrypterAwareTrait;
-use Viserio\Component\Contracts\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Component\Contracts\Queue\Factory as FactoryContract;
-use Viserio\Component\Contracts\Queue\Monitor as MonitorContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\Queue\Factory as FactoryContract;
+use Viserio\Component\Contract\Queue\Monitor as MonitorContract;
 use Viserio\Component\Queue\Connector\BeanstalkdQueue;
 use Viserio\Component\Queue\Connector\NullQueue;
 use Viserio\Component\Queue\Connector\RabbitMQQueue;
@@ -24,14 +24,14 @@ use Viserio\Component\Support\AbstractConnectionManager;
 
 class QueueManager extends AbstractConnectionManager implements MonitorContract, FactoryContract
 {
-    use EventsAwareTrait;
+    use EventManagerAwareTrait;
     use EncrypterAwareTrait;
 
     /**
      * Create a new queue manager instance.
      *
-     * @param \Psr\Container\ContainerInterface                 $container
-     * @param \Viserio\Component\Contracts\Encryption\Encrypter $encrypter
+     * @param \Psr\Container\ContainerInterface                $container
+     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
      */
     public function __construct(
         ContainerInteropInterface $container,
@@ -46,7 +46,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * {@inheritdoc}
      */
-    public function failing($callback)
+    public function failing($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.job.failed', $callback);
     }
@@ -54,7 +54,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * {@inheritdoc}
      */
-    public function stopping($callback)
+    public function stopping($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.worker.stopping', $callback);
     }
@@ -62,7 +62,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * {@inheritdoc}
      */
-    public function exceptionOccurred($callback)
+    public function exceptionOccurred($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.job.exception.occurred', $callback);
     }
@@ -72,7 +72,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param mixed $callback
      */
-    public function before($callback)
+    public function before($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.job.processing', $callback);
     }
@@ -82,7 +82,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      *
      * @param mixed $callback
      */
-    public function after($callback)
+    public function after($callback): void
     {
         $this->container->get(EventManagerContract::class)->attach('viserio.job.processed', $callback);
     }
@@ -161,7 +161,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     protected function createSqsConnection(array $config): SqsQueue
     {
-        $config = array_merge([
+        $config = \array_merge([
             'version' => 'latest',
             'http'    => [
                 'timeout'         => 60,
@@ -190,7 +190,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     protected function createRedisConnection(array $config): RedisQueue
     {
         $queue = new RedisQueue(
-            $this->getContainer()->get('redis'),
+            $this->container->get('redis'),
             $config['queue'],
             Arr::get($config, 'expire', 90)
         );

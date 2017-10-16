@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console\Command;
 
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contracts\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 
 class UpCommand extends Command
 {
     /**
      * {@inheritdoc}
      */
-    protected $name = 'up';
+    protected static $defaultName = 'app:up';
 
     /**
      * {@inheritdoc}
@@ -20,11 +20,11 @@ class UpCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
-        @unlink($kernel->storagePath('framework/down'));
+        @\unlink($kernel->getStoragePath('framework/down'));
 
         $this->info('Application is now live.');
     }

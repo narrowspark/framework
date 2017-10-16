@@ -9,7 +9,7 @@ use Viserio\Component\Log\Formatter\VarDumperFormatter;
 
 class VarDumperFormatterTest extends TestCase
 {
-    public function testFormat()
+    public function testFormat(): void
     {
         $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
@@ -20,7 +20,7 @@ class VarDumperFormatterTest extends TestCase
         );
     }
 
-    public function testFormatBatch()
+    public function testFormatBatch(): void
     {
         $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
@@ -39,7 +39,7 @@ class VarDumperFormatterTest extends TestCase
      *
      * @return array Record
      */
-    protected function getRecord($level = Logger::WARNING, $message = 'test', $context = [], $extra = [])
+    protected function getRecord($level = Logger::WARNING, $message = 'test', $context = [], $extra = []): array
     {
         return [
             'message'    => $message,
@@ -58,7 +58,7 @@ class VarDumperFormatterTest extends TestCase
      *
      * @return array
      */
-    protected function getMultipleRecords($context = [], $extra = [])
+    protected function getMultipleRecords($context = [], $extra = []): array
     {
         return [
             $this->getRecord(Logger::DEBUG, 'debug message 1', $context, $extra),

@@ -10,14 +10,26 @@ class VfsConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $config)
+    public function connect(array $config): object
+    {
+        $client = $this->getClient($config);
+
+        return $this->getAdapter($client, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getClient(array $config): object
     {
         return new Vfs();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getAuth(array $config): array
     {
-        return $config;
     }
 
     /**
@@ -25,13 +37,12 @@ class VfsConnector extends AbstractConnector
      */
     protected function getConfig(array $config): array
     {
-        return $config;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): VfsAdapter
+    protected function getAdapter(object $client, array $config): object
     {
         return new VfsAdapter($client);
     }

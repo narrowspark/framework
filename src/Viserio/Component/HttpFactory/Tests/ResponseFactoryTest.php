@@ -8,9 +8,12 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 
 class ResponseFactoryTest extends TestCase
 {
+    /**
+     * @var \Interop\Http\Factory\ResponseFactoryInterface
+     */
     private $factory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->factory = new ResponseFactory();
     }
@@ -30,14 +33,14 @@ class ResponseFactoryTest extends TestCase
      *
      * @param mixed $code
      */
-    public function testCreateResponse($code)
+    public function testCreateResponse($code): void
     {
         $response = $this->factory->createResponse($code);
 
-        self::assertResponse($response, $code);
+        $this->assertResponse($response, $code);
     }
 
-    private function assertResponse($response, $code)
+    private function assertResponse($response, $code): void
     {
         self::assertInstanceOf(ResponseInterface::class, $response);
 

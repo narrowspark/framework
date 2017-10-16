@@ -2,18 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
-use Viserio\Component\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Symfony\Component\Stopwatch\Stopwatch;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
@@ -23,7 +26,7 @@ use Viserio\Component\Profiler\DataCollector\TimeDataCollector;
 use Viserio\Component\Profiler\Profiler;
 
 class ProfilerServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract,
     RequiresMandatoryOptionsContract
@@ -33,15 +36,28 @@ class ProfilerServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
-            RouterContract::class   => [self::class, 'registerProfilerAssetsControllers'],
             AssetsRenderer::class   => [self::class, 'createAssetsRenderer'],
             ProfilerContract::class => [self::class, 'createProfiler'],
             Profiler::class         => function (ContainerInterface $container) {
                 return $container->get(ProfilerContract::class);
             },
+            Stopwatch::class => function () {
+                return new Stopwatch();
+            },
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [
+            RouterContract::class       => [self::class, 'extendRouter'],
+            EventManagerContract::class => [self::class, 'extendEventManager'],
         ];
     }
 
@@ -81,6 +97,27 @@ class ProfilerServiceProvider implements
         ];
     }
 
+    /**
+     * Register profiler asset controllers.
+     *
+     * @param \Psr\Container\ContainerInterface                    $container
+     * @param null|\Viserio\Component\Contract\Events\EventManager $eventManager
+     *
+     * @return null|\Viserio\Component\Contract\Events\EventManager
+     */
+    public static function extendEventManager(
+        ContainerInterface $container,
+        ?EventManagerContract $eventManager = null
+    ): ?EventManagerContract {
+        if ($eventManager !== null) {
+            $eventManager->attach(TerminableContract::TERMINATE, function () use ($container): void {
+                $container->get(ProfilerContract::class)->flush();
+            });
+        }
+
+        return $eventManager;
+    }
+
     public static function createProfiler(ContainerInterface $container): ProfilerContract
     {
         $options  = self::resolveOptions($container);
@@ -107,7 +144,7 @@ class ProfilerServiceProvider implements
         }
 
         self::registerCollectorsFromConfig($container, $profiler, $options);
-        self::registerBaseCollectors($container, $profiler);
+        self::registerBaseCollectors($container, $profiler, $options);
 
         return $profiler;
     }
@@ -129,22 +166,22 @@ class ProfilerServiceProvider implements
     /**
      * Register profiler asset controllers.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface               $container
+     * @param null|\Viserio\Component\Contract\Routing\Router $router
      *
-     * @return \Viserio\Component\Contracts\Routing\Router
+     * @return null|\Viserio\Component\Contract\Routing\Router
      */
-    public static function registerProfilerAssetsControllers(ContainerInterface $container, ?callable $getPrevious = null): RouterContract
-    {
-        $router = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
+    public static function extendRouter(
+        ContainerInterface $container,
+        ?RouterContract $router = null
+    ): RouterContract {
         if ($router !== null) {
             $router->group(
                 [
                     'namespace' => 'Viserio\Component\Profiler\Controller',
                     'prefix'    => 'profiler',
                 ],
-                function ($router) {
+                function ($router): void {
                     $router->get('assets/stylesheets', [
                         'uses' => 'AssetController@css',
                         'as'   => 'profiler.assets.css',
@@ -163,15 +200,17 @@ class ProfilerServiceProvider implements
     /**
      * Register base collectors.
      *
-     * @param \Psr\Container\ContainerInterface              $container
-     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
+     * @param \Psr\Container\ContainerInterface             $container
+     * @param \Viserio\Component\Contract\Profiler\Profiler $profiler
+     * @param array                                         $options
      *
      * @return void
      */
-    protected static function registerBaseCollectors(ContainerInterface $container, ProfilerContract $profiler): void
-    {
-        $options = self::resolveOptions($container);
-
+    protected static function registerBaseCollectors(
+        ContainerInterface $container,
+        ProfilerContract $profiler,
+        array $options
+    ): void {
         if ($options['collector']['time']) {
             $profiler->addCollector(new TimeDataCollector(
                 $container->get(ServerRequestInterface::class)
@@ -194,14 +233,17 @@ class ProfilerServiceProvider implements
     /**
      * Register all found collectors in config.
      *
-     * @param \Psr\Container\ContainerInterface              $container
-     * @param \Viserio\Component\Contracts\Profiler\Profiler $profiler
-     * @param array                                          $options
+     * @param \Psr\Container\ContainerInterface             $container
+     * @param \Viserio\Component\Contract\Profiler\Profiler $profiler
+     * @param array                                         $options
      *
      * @return void
      */
-    private static function registerCollectorsFromConfig(ContainerInterface $container, ProfilerContract $profiler, $options): void
-    {
+    private static function registerCollectorsFromConfig(
+        ContainerInterface $container,
+        ProfilerContract $profiler,
+        array $options
+    ): void {
         if ($collectors = $options['collectors']) {
             foreach ($collectors as $collector) {
                 $profiler->addCollector($container->get($collector));

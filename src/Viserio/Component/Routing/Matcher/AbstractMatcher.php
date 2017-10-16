@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
-use RuntimeException;
-use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Contract\Routing\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 abstract class AbstractMatcher implements SegmentMatcherContract
 {
@@ -27,26 +27,28 @@ abstract class AbstractMatcher implements SegmentMatcherContract
      */
     public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
     {
-        return array_fill_keys($this->parameterKeys, $segmentVariable);
+        return \array_fill_keys($this->parameterKeys, $segmentVariable);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
      */
-    public function mergeParameterKeys(SegmentMatcherContract $matcher)
+    public function mergeParameterKeys(SegmentMatcherContract $matcher): void
     {
         if ($matcher->getHash() !== $this->getHash()) {
-            throw new RuntimeException(
-                sprintf(
-                    'Cannot merge parameters: matchers must be equivalent, [%s] expected, [%s] given.',
+            throw new InvalidArgumentException(
+                \sprintf(
+                    'Cannot merge parameters: Matcher\'s must be equivalent, [%s] expected, [%s] given.',
                     $matcher->getHash(),
                     $this->getHash()
                 )
             );
         }
 
-        $this->parameterKeys = array_unique(
-            array_merge($this->parameterKeys, $matcher->getParameterKeys()),
+        $this->parameterKeys = \array_unique(
+            \array_merge($this->parameterKeys, $matcher->getParameterKeys()),
             SORT_NUMERIC
         );
     }
@@ -56,7 +58,7 @@ abstract class AbstractMatcher implements SegmentMatcherContract
      */
     public function getHash(): string
     {
-        return get_class($this) . ':' . $this->getMatchHash();
+        return \get_class($this) . ':' . $this->getMatchHash();
     }
 
     /**

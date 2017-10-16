@@ -13,8 +13,6 @@ final class ResponseFactory implements ResponseFactoryInterface
      */
     public function createResponse($code = 200): ResponseInterface
     {
-        return new Response(
-            $code
-        );
+        return new Response($code);
     }
 }

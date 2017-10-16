@@ -3,24 +3,26 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
-use Fig\Http\Message\RequestMethodInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Spatie\Macroable\Macroable;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
-use Viserio\Component\Support\Traits\MacroableTrait;
 
-class Router implements RouterContract, RequestMethodInterface
+class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
-    use MacroableTrait;
+    use Macroable {
+        __call as macroCall;
+    }
 
     /**
      * The route collection instance.
@@ -32,7 +34,7 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * The dispatcher instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\Dispatcher
+     * @var \Viserio\Component\Contract\Routing\Dispatcher
      */
     protected $dispatcher;
 
@@ -60,12 +62,27 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * Create a new Router instance.
      *
-     * @param \Viserio\Component\Contracts\Routing\Dispatcher $dispatcher
+     * @param \Viserio\Component\Contract\Routing\Dispatcher $dispatcher
      */
     public function __construct(DispatcherContract $dispatcher)
     {
         $this->dispatcher = $dispatcher;
         $this->routes     = new RouteCollection();
+    }
+
+    /**
+     * Dynamically handle calls into the router instance.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->macroCall($method, $parameters);
     }
 
     /**
@@ -142,8 +159,8 @@ class Router implements RouterContract, RequestMethodInterface
                 self::METHOD_TRACE,
                 self::METHOD_CONNECT,
                 self::METHOD_TRACE,
-                'LINK',
-                'UNLINK',
+                self::METHOD_LINK,
+                self::METHOD_UNLINK,
             ],
             $uri,
             $action
@@ -155,7 +172,7 @@ class Router implements RouterContract, RequestMethodInterface
      */
     public function match($methods, string $uri, $action = null): RouteContract
     {
-        return $this->addRoute(array_map('strtoupper', (array) $methods), $uri, $action);
+        return $this->addRoute(\array_map('strtoupper', (array) $methods), $uri, $action);
     }
 
     /**
@@ -191,7 +208,7 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * {@inheritdoc}
      */
-    public function setParameter(string $parameterName, string $expression): RouterContract
+    public function addParameter(string $parameterName, string $expression): RouterContract
     {
         $this->globalParameterConditions[$parameterName] = $expression;
 
@@ -201,7 +218,7 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * {@inheritdoc}
      */
-    public function removeParameter(string $name)
+    public function removeParameter(string $name): void
     {
         unset($this->globalParameterConditions[$name]);
     }
@@ -217,7 +234,30 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * {@inheritdoc}
      */
-    public function group(array $attributes, $routes)
+    public function resources(array $resources): void
+    {
+        foreach ($resources as $name => $controller) {
+            $this->resource($name, $controller);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resource(string $name, string $controller, array $options = []): PendingResourceRegistrationContract
+    {
+        return new PendingResourceRegistration(
+            new ResourceRegistrar($this),
+            $name,
+            $controller,
+            $options
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function group(array $attributes, $routes): void
     {
         $this->updateGroupStack($attributes);
 
@@ -229,7 +269,7 @@ class Router implements RouterContract, RequestMethodInterface
             require $routes;
         }
 
-        array_pop($this->groupStack);
+        \array_pop($this->groupStack);
     }
 
     /**
@@ -237,7 +277,7 @@ class Router implements RouterContract, RequestMethodInterface
      */
     public function mergeWithLastGroup(array $new): array
     {
-        return RouteGroup::merge($new, end($this->groupStack));
+        return RouteGroup::merge($new, \end($this->groupStack));
     }
 
     /**
@@ -246,7 +286,7 @@ class Router implements RouterContract, RequestMethodInterface
     public function getLastGroupSuffix(): string
     {
         if (! empty($this->groupStack)) {
-            $last = end($this->groupStack);
+            $last = \end($this->groupStack);
 
             return $last['suffix'] ?? '';
         }
@@ -260,7 +300,7 @@ class Router implements RouterContract, RequestMethodInterface
     public function getLastGroupPrefix(): string
     {
         if (! empty($this->groupStack)) {
-            $last = end($this->groupStack);
+            $last = \end($this->groupStack);
 
             return $last['prefix'] ?? '';
         }
@@ -287,7 +327,7 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * {@inheritdoc}
      */
-    public function getCurrentRoute()
+    public function getCurrentRoute(): ?RouteContract
     {
         return $this->dispatcher->getCurrentRoute();
     }
@@ -303,12 +343,20 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * {@inheritdoc}
      */
+    public function getDispatcher(): DispatcherContract
+    {
+        return $this->dispatcher;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
         $dispatcher = $this->dispatcher;
 
-        if ($this->container !== null && method_exists($dispatcher, 'setContainer')) {
-            $dispatcher->setContainer($this->getContainer());
+        if ($this->container !== null && \method_exists($dispatcher, 'setContainer')) {
+            $dispatcher->setContainer($this->container);
         }
 
         return $dispatcher->handle($this->routes, $request);
@@ -319,9 +367,9 @@ class Router implements RouterContract, RequestMethodInterface
      *
      * @param array|string               $methods
      * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param null|array|\Closure|string $action
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return \Viserio\Component\Contract\Routing\Route
      */
     protected function addRoute($methods, string $uri, $action): RouteContract
     {
@@ -335,7 +383,7 @@ class Router implements RouterContract, RequestMethodInterface
      * @param string       $uri
      * @param mixed        $action
      *
-     * @return \Viserio\Component\Contracts\Routing\Route
+     * @return \Viserio\Component\Contract\Routing\Route
      */
     protected function createRoute($methods, string $uri, $action): RouteContract
     {
@@ -349,7 +397,7 @@ class Router implements RouterContract, RequestMethodInterface
         $route = new Route($methods, $this->prefix($this->suffix($uri)), $action);
 
         if ($this->container !== null) {
-            $route->setContainer($this->getContainer());
+            $route->setContainer($this->container);
         }
 
         $route->setInvoker($this->getInvoker());
@@ -361,7 +409,7 @@ class Router implements RouterContract, RequestMethodInterface
         $this->addWhereClausesToRoute($route);
 
         foreach ($this->globalParameterConditions as $key => $value) {
-            $route->setParameter($key, $value);
+            $route->addParameter($key, $value);
         }
 
         return $route;
@@ -370,14 +418,14 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * Add the necessary where clauses to the route based on its initial registration.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return void
      */
     protected function addWhereClausesToRoute(RouteContract $route): void
     {
         $where   = $route->getAction()['where'] ?? [];
-        $pattern = array_merge($this->patterns, $where);
+        $pattern = \array_merge($this->patterns, $where);
 
         foreach ($pattern as $name => $value) {
             $route->where($name, $value);
@@ -387,7 +435,7 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * Merge the group stack with the controller action.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return void
      */
@@ -401,7 +449,7 @@ class Router implements RouterContract, RequestMethodInterface
     /**
      * Determine if the action is routing to a controller.
      *
-     * @param string|array|\Closure $action
+     * @param array|\Closure|string $action
      *
      * @return bool
      */
@@ -411,7 +459,7 @@ class Router implements RouterContract, RequestMethodInterface
             return false;
         }
 
-        return is_string($action) || (isset($action['uses']) && is_string($action['uses']));
+        return \is_string($action) || (isset($action['uses']) && \is_string($action['uses']));
     }
 
     /**
@@ -423,7 +471,7 @@ class Router implements RouterContract, RequestMethodInterface
      */
     protected function convertToControllerAction($action): array
     {
-        if (is_string($action)) {
+        if (\is_string($action)) {
             $action = ['uses' => $action];
         }
 
@@ -445,9 +493,9 @@ class Router implements RouterContract, RequestMethodInterface
      */
     protected function prependGroupNamespace(string $uses): string
     {
-        $group = end($this->groupStack);
+        $group = \end($this->groupStack);
 
-        return isset($group['namespace']) && mb_strpos($uses, '\\') !== 0 ?
+        return isset($group['namespace']) && \mb_strpos($uses, '\\') !== 0 ?
             $group['namespace'] . '\\' . $uses :
             $uses;
     }
@@ -461,11 +509,13 @@ class Router implements RouterContract, RequestMethodInterface
      */
     protected function prefix(string $uri): string
     {
-        $trimmed = trim($this->getLastGroupPrefix(), '/') . '/' . trim($uri, '/');
+        $trimmed = \trim($this->getLastGroupPrefix(), '/') . '/' . \trim($uri, '/');
 
         if (! $trimmed) {
             return '/';
-        } elseif (mb_substr($trimmed, 0, 1) === '/') {
+        }
+
+        if (\mb_strpos($trimmed, '/') === 0) {
             return $trimmed;
         }
 
@@ -481,7 +531,7 @@ class Router implements RouterContract, RequestMethodInterface
      */
     protected function suffix(string $uri): string
     {
-        return trim($uri) . trim($this->getLastGroupSuffix());
+        return \trim($uri) . \trim($this->getLastGroupSuffix());
     }
 
     /**
@@ -494,7 +544,7 @@ class Router implements RouterContract, RequestMethodInterface
     protected function updateGroupStack(array $attributes): void
     {
         if (! empty($this->groupStack)) {
-            $attributes = RouteGroup::merge($attributes, end($this->groupStack));
+            $attributes = RouteGroup::merge($attributes, \end($this->groupStack));
         }
 
         $this->groupStack[] = $attributes;

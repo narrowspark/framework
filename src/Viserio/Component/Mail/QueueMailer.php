@@ -5,25 +5,25 @@ namespace Viserio\Component\Mail;
 use Closure;
 use Opis\Closure\SerializableClosure;
 use Swift_Mailer;
-use Viserio\Component\Contracts\Mail\QueueMailer as QueueMailerContract;
-use Viserio\Component\Contracts\Queue\Job as JobContract;
-use Viserio\Component\Contracts\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Component\Contract\Mail\QueueMailer as QueueMailerContract;
+use Viserio\Component\Contract\Queue\Job as JobContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
 
 class QueueMailer extends Mailer implements QueueMailerContract
 {
     /**
      * Queue instance.
      *
-     * @var \Viserio\Component\Contracts\Queue\QueueConnector
+     * @var \Viserio\Component\Contract\Queue\QueueConnector
      */
     protected $queue;
 
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                                     $swiftMailer
-     * @param \Viserio\Component\Contracts\Queue\QueueConnector $queue
-     * @param \Psr\Container\ContainerInterface|iterable        $data
+     * @param \Swift_Mailer                                    $swiftMailer
+     * @param \Viserio\Component\Contract\Queue\QueueConnector $queue
+     * @param iterable|\Psr\Container\ContainerInterface       $data
      */
     public function __construct(Swift_Mailer $swiftMailer, QueueConnectorContract $queue, $data)
     {
@@ -59,7 +59,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
 
         return $this->queue->push(
             'mailer@handleQueuedMessage',
-            compact('view', 'data', 'callback'),
+            \compact('view', 'data', 'callback'),
             $queue
         );
     }
@@ -89,7 +89,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
         return $this->queue->later(
             $delay,
             'mailer@handleQueuedMessage',
-            compact('view', 'data', 'callback'),
+            \compact('view', 'data', 'callback'),
             $queue
         );
     }
@@ -110,7 +110,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
     /**
      * {@inheritdoc}
      */
-    public function handleQueuedMessage(JobContract $job, array $data)
+    public function handleQueuedMessage(JobContract $job, array $data): void
     {
         $this->send($data['view'], $data['data'], $this->getQueuedCallable($data));
 
@@ -142,8 +142,8 @@ class QueueMailer extends Mailer implements QueueMailerContract
      */
     protected function getQueuedCallable(array $data)
     {
-        if (mb_strpos($data['callback'], 'SerializableClosure') !== false) {
-            return unserialize($data['callback']);
+        if (\mb_strpos($data['callback'], 'SerializableClosure') !== false) {
+            return \unserialize($data['callback']);
         }
 
         return $data['callback'];

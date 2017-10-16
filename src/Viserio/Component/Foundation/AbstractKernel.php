@@ -5,13 +5,13 @@ namespace Viserio\Component\Foundation;
 use Closure;
 use ReflectionObject;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\Container\Container as ContainerContract;
-use Viserio\Component\Contracts\Foundation\Environment as EnvironmentContract;
-use Viserio\Component\Contracts\Foundation\Kernel as KernelContract;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Routing\Provider\RoutingServiceProvider;
@@ -38,7 +38,7 @@ abstract class AbstractKernel implements
      *
      * @var int
      */
-    public const VERSION_ID  = 10000;
+    public const VERSION_ID = 10000;
 
     /**
      * The current Framework "major" version.
@@ -81,7 +81,7 @@ abstract class AbstractKernel implements
     /**
      * Container instance.
      *
-     * @var \Viserio\Component\Contracts\Container\Container|null
+     * @var \Viserio\Component\Contract\Container\Container
      */
     protected $container;
 
@@ -161,7 +161,7 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getContainer(): ?ContainerContract
+    public function getContainer(): ContainerContract
     {
         return $this->container;
     }
@@ -203,7 +203,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningInConsole(): bool
     {
-        return php_sapi_name() == 'cli' || php_sapi_name() == 'phpdbg';
+        return PHP_SAPI == 'cli' || PHP_SAPI == 'phpdbg';
     }
 
     /**
@@ -211,7 +211,7 @@ abstract class AbstractKernel implements
      */
     public function isDownForMaintenance(): bool
     {
-        return file_exists($this->getStoragePath('framework/down'));
+        return \file_exists($this->getStoragePath('framework/down'));
     }
 
     /**
@@ -221,14 +221,14 @@ abstract class AbstractKernel implements
     {
         if ($this->projectDir === null) {
             $reflection = new ReflectionObject($this);
-            $dir        = $rootDir        = dirname($reflection->getFileName());
+            $dir        = $rootDir        = \dirname($reflection->getFileName());
 
-            while (! file_exists($dir . '/composer.json')) {
-                if (dirname($dir) === $dir) {
+            while (! \file_exists($dir . '/composer.json')) {
+                if (\dirname($dir) === $dir) {
                     return $this->projectDir = $rootDir;
                 }
 
-                $dir = dirname($dir);
+                $dir = \dirname($dir);
             }
 
             $this->projectDir = $dir;
@@ -242,7 +242,7 @@ abstract class AbstractKernel implements
      */
     public function getAppPath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/app' . ($path ? '/' . $path : $path)
         );
     }
@@ -252,7 +252,7 @@ abstract class AbstractKernel implements
      */
     public function getConfigPath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/config' . ($path ? '/' . $path : $path)
         );
     }
@@ -262,7 +262,7 @@ abstract class AbstractKernel implements
      */
     public function getDatabasePath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/database' . ($path ? '/' . $path : $path)
         );
     }
@@ -272,7 +272,7 @@ abstract class AbstractKernel implements
      */
     public function getPublicPath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/public' . ($path ? '/' . $path : $path)
         );
     }
@@ -282,7 +282,7 @@ abstract class AbstractKernel implements
      */
     public function getStoragePath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/storage' . ($path ? '/' . $path : $path)
         );
     }
@@ -292,7 +292,7 @@ abstract class AbstractKernel implements
      */
     public function getResourcePath(string $path = ''): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/resources' . ($path ? '/' . $path : $path)
         );
     }
@@ -310,7 +310,7 @@ abstract class AbstractKernel implements
      */
     public function getRoutesPath(): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->projectDir . '/routes'
         );
     }
@@ -340,7 +340,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentPath(): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->environmentPath ?: $this->projectDir
         );
     }
@@ -358,7 +358,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentFilePath(): string
     {
-        return $this->normalizeDirectorySeparator(
+        return self::normalizeDirectorySeparator(
             $this->getEnvironmentPath() . '/' . $this->getEnvironmentFile()
         );
     }
@@ -384,15 +384,15 @@ abstract class AbstractKernel implements
     /**
      * Register all of the application / kernel service providers.
      *
-     * @param \Viserio\Component\Contracts\Foundation\Kernel $kernel
+     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
      *
      * @return array
      */
-    protected function registerServiceProviders(KernelContract $kernel): array
+    public function registerServiceProviders(KernelContract $kernel): array
     {
         $providers = $kernel->getConfigPath('/serviceproviders.php');
 
-        if (file_exists($providers)) {
+        if (\file_exists($providers)) {
             return require_once $providers;
         }
 

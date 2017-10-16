@@ -5,16 +5,16 @@ namespace Viserio\Component\Routing\Tests\Provider;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
-use Viserio\Component\Contracts\Routing\Router as RouterContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 use Viserio\Component\Routing\Provider\RoutingDataCollectorServiceProvider;
 
 class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
 {
-    public function testGetServices()
+    public function testGetServices(): void
     {
         $routes = $this->mock(RouteCollectionContract::class);
         $router = $this->mock(RouterContract::class);
@@ -31,13 +31,14 @@ class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
         $container->register(new ProfilerServiceProvider());
         $container->register(new RoutingDataCollectorServiceProvider());
 
-        $container->instance('config',
+        $container->instance(
+            'config',
             [
                 'viserio' => [
                     'profiler' => [
                         'enable'    => true,
                         'collector' => [
-                            'routes'  => true,
+                            'routes' => true,
                         ],
                     ],
                 ],
@@ -48,19 +49,19 @@ class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
 
         self::assertInstanceOf(ProfilerContract::class, $profiler);
 
-        self::assertTrue(array_key_exists('time-data-collector', $profiler->getCollectors()));
-        self::assertTrue(array_key_exists('memory-data-collector', $profiler->getCollectors()));
-        self::assertTrue(array_key_exists('routing-data-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('time-data-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('memory-data-collector', $profiler->getCollectors()));
+        self::assertTrue(\array_key_exists('routing-data-collector', $profiler->getCollectors()));
     }
 
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME_FLOAT')
+            ->with('request_time_float')
             ->andReturn(false);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME')
+            ->with('request_time')
             ->andReturn(false);
 
         return $request;

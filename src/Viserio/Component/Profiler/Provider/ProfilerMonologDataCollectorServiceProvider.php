@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Profiler\DataCollector\Bridge\Log\DebugProcessor;
-use Viserio\Component\Profiler\DataCollector\Bridge\Log\MonologLoggerDataCollector;
+use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor;
+use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\MonologLoggerDataCollector;
 
 class ProfilerMonologDataCollectorServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
@@ -22,11 +22,19 @@ class ProfilerMonologDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
-            ProfilerContract::class => [self::class, 'extendProfiler'],
             Logger::class           => [self::class, 'extendLogger'],
+            ProfilerContract::class => [self::class, 'extendProfiler'],
         ];
     }
 
@@ -53,16 +61,16 @@ class ProfilerMonologDataCollectorServiceProvider implements
     /**
      * Extend monolog with a processor.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface                  $container
+     * @param null|\Monolog\Logger|\Viserio\Component\Log\Writer $log
      *
      * @return null|\Monolog\Logger|\Viserio\Component\Log\Writer
      */
-    public static function extendLogger(ContainerInterface $container, ?callable $getPrevious = null)
+    public static function extendLogger(ContainerInterface $container, $log = null)
     {
-        $log = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
+        $options = self::resolveOptions($container);
 
-        if ($log !== null) {
+        if ($log !== null && $options['collector']['logs'] === true) {
             $log->pushProcessor(new DebugProcessor());
         }
 
@@ -72,15 +80,15 @@ class ProfilerMonologDataCollectorServiceProvider implements
     /**
      * Extend viserio profiler with a data collector.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface                  $container
+     * @param null|\Viserio\Component\Contract\Profiler\Profiler $profiler
      *
-     * @return null|\Viserio\Component\Contracts\Profiler\Profiler
+     * @return null|\Viserio\Component\Contract\Profiler\Profiler
      */
-    public static function extendProfiler(ContainerInterface $container, ?callable $getPrevious = null): ?ProfilerContract
-    {
-        $profiler = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
+    public static function extendProfiler(
+        ContainerInterface $container,
+        ?ProfilerContract $profiler = null
+    ): ?ProfilerContract {
         if ($profiler !== null) {
             $options = self::resolveOptions($container);
 

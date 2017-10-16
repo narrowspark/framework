@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Viserio\Component\Contracts\Routing\Pattern;
+use Viserio\Component\Contract\Routing\Pattern;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -34,8 +35,10 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
      * @param mixed $httpMethod
      * @param mixed $uri
      */
-    public function testRouter404($httpMethod, $uri)
+    public function testRouter404($httpMethod, $uri): void
     {
+        $this->definitions($this->router);
+
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
@@ -58,6 +61,22 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
         ];
     }
 
+    /**
+     * @dataProvider routerMatching405Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
+     *
+     * @param mixed $httpMethod
+     * @param mixed $uri
+     */
+    public function testRouter405($httpMethod, $uri): void
+    {
+        $this->definitions($this->router);
+
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
+        );
+    }
+
     public function routerMatching405Provider()
     {
         return [
@@ -72,24 +91,10 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @dataProvider routerMatching405Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter405($httpMethod, $uri)
-    {
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
-    }
-
-    protected function definitions($router)
+    protected function definitions(RouterContract $router): void
     {
         $router->pattern('id', Pattern::DIGITS);
-        $router->setParameter('digits', Pattern::DIGITS);
+        $router->addParameter('digits', Pattern::DIGITS);
 
         $router->get('/user', function ($request, $args) {
             return (new ResponseFactory())
@@ -98,7 +103,7 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
-        })->setParameter('name', 'user.index');
+        })->addParameter('name', 'user.index');
         $router->get('/user/create', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -106,7 +111,7 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
-        })->setParameter('name', 'user.create');
+        })->addParameter('name', 'user.create');
         $router->post('/user', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -114,7 +119,7 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
-        })->setParameter('name', 'user.save');
+        })->addParameter('name', 'user.save');
         $router->get('/user/{id}', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -122,7 +127,7 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
-        })->setParameter('name', 'user.show');
+        })->addParameter('name', 'user.show');
         $router->get('/user/{id}/edit', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -130,7 +135,7 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
-        })->setParameter('name', 'user.edit');
+        })->addParameter('name', 'user.edit');
         $router->put('/user/{id}', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -138,7 +143,7 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
-        })->setParameter('name', 'user.update');
+        })->addParameter('name', 'user.update');
         $router->delete('/user/{id}', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -146,7 +151,7 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
-        })->setParameter('name', 'user.delete');
+        })->addParameter('name', 'user.delete');
         $router->patch('/admin/{id}', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -154,7 +159,7 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
-        })->setParameter('name', 'admin.patch');
+        })->addParameter('name', 'admin.patch');
         $router->options('/options', function ($request, $args) {
             return (new ResponseFactory())
             ->createResponse()
@@ -162,6 +167,6 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
                 (new StreamFactory())
                 ->createStream($args['name'] . ' | ' . $args['digits'])
             );
-        })->setParameter('name', 'options');
+        })->addParameter('name', 'options');
     }
 }

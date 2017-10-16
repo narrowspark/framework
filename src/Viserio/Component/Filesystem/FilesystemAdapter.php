@@ -2,28 +2,28 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem;
 
-use InvalidArgumentException;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config as FlyConfig;
-use Narrowspark\Arr\Arr;
+use League\Flysystem\Rackspace\RackspaceAdapter;
 use RuntimeException;
-use Viserio\Component\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
-use Viserio\Component\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Component\Contracts\Filesystem\Exception\IOException as ViserioIOException;
-use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Spatie\Macroable\Macroable;
+use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Exception\IOException;
+use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOException;
+use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
-use Viserio\Component\Support\Traits\MacroableTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
+class FilesystemAdapter implements FilesystemContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
     use FilesystemHelperTrait;
-    use MacroableTrait;
+    use Macroable;
 
     /**
      * The Flysystem filesystem implementation.
@@ -63,7 +63,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function __call(string $method, array $arguments)
     {
-        return call_user_func_array([$this->driver, $method], $arguments);
+        return \call_user_func_array([$this->driver, $method], $arguments);
     }
 
     /**
@@ -79,7 +79,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         if ($has === null) {
             return false;
-        } elseif (is_array($has)) {
+        } elseif (\is_array($has)) {
             return $has['path'] !== '';
         }
 
@@ -155,7 +155,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $flyConfig = new FlyConfig($config);
 
-        if (is_resource($contents)) {
+        if (\is_resource($contents)) {
             if ($this->has($path)) {
                 return $this->driver->updateStream($path, $contents, $flyConfig) !== false;
             }
@@ -172,6 +172,8 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\IOException If file cant be deleted
      */
     public function append(string $path, string $contents, array $config = []): bool
     {
@@ -179,7 +181,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             $contents = $this->read($path) . $contents;
 
             if (! $this->driver->delete($path)) {
-                throw new RuntimeException(sprintf('File [%s] cannot be deleted.', $path));
+                throw new IOException(\sprintf('File [%s] cannot be deleted.', $path));
             }
         }
 
@@ -252,13 +254,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
-    public function copy($originFile, $targetFile, $override = false)
+    public function copy($originFile, $targetFile, $override = false): bool
     {
         if (! $this->has($originFile)) {
             throw new FileNotFoundException($originFile);
         }
 
-        if (method_exists($this->driver, 'applyPathPrefix')) {
+        if (\method_exists($this->driver, 'applyPathPrefix')) {
             $orginal = $this->driver->applyPathPrefix($originFile);
             $target  = $this->driver->applyPathPrefix($targetFile);
         } else {
@@ -267,8 +269,8 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         }
 
         // https://bugs.php.net/bug.php?id=64634
-        if (@fopen($orginal, 'r') === false) {
-            throw new ViserioIOException(sprintf(
+        if (@\fopen($orginal, 'r') === false) {
+            throw new ViserioIOException(\sprintf(
                 'Failed to copy [%s] to [%s] because source file could not be opened for reading.',
                 $orginal,
                 $target
@@ -276,8 +278,8 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         }
 
         // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
-        if (@fopen($target, 'w', false, stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
-            throw new ViserioIOException(sprintf(
+        if (@\fopen($target, 'w', false, \stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
+            throw new ViserioIOException(\sprintf(
                 'Failed to copy [%s] to [%s] because target file could not be opened for writing.',
                 $orginal,
                 $target
@@ -286,8 +288,8 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $this->driver->copy($originFile, $targetFile);
 
-        if (! is_file($target)) {
-            throw new ViserioIOException(sprintf(
+        if (! \is_file($target)) {
+            throw new ViserioIOException(\sprintf(
                 'Failed to copy [%s] to [%s].',
                 $originFile,
                 $target
@@ -342,9 +344,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getTimestamp(string $path)
     {
-        if (! $this->has($path)) {
-            throw new FileNotFoundException($path);
-        }
+        $this->fileNotFound($path);
 
         $getTimestamp = $this->driver->getTimestamp($path);
 
@@ -368,7 +368,9 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             $path = $adapter->getPathPrefix() . $path;
 
             return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
-        } elseif ($adapter instanceof LocalAdapter) {
+        }
+
+        if ($adapter instanceof LocalAdapter) {
             if (isset($this->config['url'])) {
                 return self::normalizeDirectorySeparator(
                     $this->config['url'] . '/' . $path
@@ -376,7 +378,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             }
 
             return $adapter->getPathPrefix() . $path;
-        } elseif (method_exists($adapter, 'getUrl')) {
+        }
+
+        if ($adapter instanceof RackspaceAdapter) {
+            return $this->getRackspaceUrl($adapter, $path);
+        }
+
+        if (\method_exists($adapter, 'getUrl')) {
             return $adapter->getUrl($path);
         }
 
@@ -462,8 +470,8 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $directories = $this->allDirectories($dirname);
 
-        foreach ($directories as $dirname) {
-            @rmdir($this->getNormalizedOrPrefixedPath($dirname));
+        foreach ($directories as $directoryName) {
+            @\rmdir($this->getNormalizedOrPrefixedPath($directoryName));
         }
 
         return true;
@@ -474,7 +482,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function isDirectory(string $dirname): bool
     {
-        return is_dir($this->getNormalizedOrPrefixedPath($dirname));
+        return \is_dir($this->getNormalizedOrPrefixedPath($dirname));
     }
 
     /**
@@ -486,7 +494,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             return false;
         }
 
-        if (! is_dir($destination)) {
+        if (! \is_dir($destination)) {
             $this->createDirectory($destination, ['visibility' => 'public']);
         }
 
@@ -497,7 +505,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         foreach ($contents as $item) {
             if ($item['type'] == 'dir') {
                 $this->createDirectory(
-                    $destination . str_replace($directory, '', $item['path']),
+                    $destination . \str_replace($directory, '', $item['path']),
                     ['visibility' => $this->getVisibility($item['path'])]
                 );
             }
@@ -505,7 +513,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             if ($item['type'] == 'file') {
                 $this->copy(
                     $item['path'],
-                    $destination . str_replace($directory, '', $item['path'])
+                    $destination . \str_replace($directory, '', $item['path'])
                 );
             }
         }
@@ -520,10 +528,8 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $overwrite = $options['overwrite'] ?? false;
 
-        if ($overwrite && $this->isDirectory($destination)) {
-            if (! $this->deleteDirectory($destination)) {
-                return false;
-            }
+        if ($overwrite && $this->isDirectory($destination) && ! $this->deleteDirectory($destination)) {
+            return false;
         }
 
         $copy = $this->copyDirectory(
@@ -555,44 +561,36 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     protected function getNormalizedOrPrefixedPath(string $path): string
     {
-        if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+        $prefix = '';
 
-            $path = $prefix . $path;
+        if (\method_exists($this->driver, 'getPathPrefix')) {
+            $prefix = $this->driver->getPathPrefix();
         }
+
+        $path = $prefix . $path;
 
         return self::normalizeDirectorySeparator($path);
     }
 
     /**
-     * Filter directory contents by type.
+     * Get the URL for the file at the given path.
      *
-     * @param array  $contents
-     * @param string $type
+     * @param \League\Flysystem\Rackspace\RackspaceAdapter $adapter
+     * @param string                                       $path
      *
-     * @return array
+     * @return string
      */
-    private function filterContentsByType(array $contents, string $type): array
+    protected function getRackspaceUrl(RackspaceAdapter $adapter, string $path): string
     {
-        $return = [];
-
-        foreach ($contents as $key => $value) {
-            if (Arr::get($contents, $key) === $value) {
-                if (isset($value['path'])) {
-                    $return[$key] = $value['path'];
-                }
-            }
-        }
-
-        return array_values($return);
+        return (string) $adapter->getContainer()->getObject($path)->getPublicUrl();
     }
 
     /**
      * Parse the given visibility value.
      *
-     * @param string|null $visibility
+     * @param null|string $visibility
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return null|string
      */
@@ -626,5 +624,42 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $contents = $this->driver->listContents($directory, $recursive);
 
         return $this->filterContentsByType($contents, $typ);
+    }
+
+    /**
+     * Filter directory contents by type.
+     *
+     * @param array  $contents
+     * @param string $type
+     *
+     * @return array
+     */
+    private function filterContentsByType(array $contents, string $type): array
+    {
+        $results = [];
+
+        foreach ($contents as $key => $value) {
+            if (isset($value['type']) && $value['type'] === $type) {
+                $results[$key] = $value['path'];
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Throws a exception if file is not found.
+     *
+     * @param string $path
+     *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
+     *
+     * @return void
+     */
+    private function fileNotFound(string $path): void
+    {
+        if (! $this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
     }
 }

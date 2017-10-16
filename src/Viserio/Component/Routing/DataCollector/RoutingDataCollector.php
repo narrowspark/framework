@@ -4,8 +4,8 @@ namespace Viserio\Component\Routing\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class RoutingDataCollector extends AbstractDataCollector implements PanelAwareContract
@@ -13,14 +13,14 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     /**
      * Router instance.
      *
-     * @var \Viserio\Component\Contracts\Routing\RouteCollection
+     * @var \Viserio\Component\Contract\Routing\RouteCollection
      */
     protected $routes;
 
     /**
      * Create a new viserio routes data collector.
      *
-     * @param \Viserio\Component\Contracts\Routing\RouteCollection $routes
+     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
      */
     public function __construct(RouteCollectionContract $routes)
     {
@@ -34,7 +34,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     {
         $this->data = [
             'routes'  => $this->routes->getRoutes(),
-            'counted' => count($this->routes->getRoutes()),
+            'counted' => \count($this->routes->getRoutes()),
         ];
     }
 
@@ -44,7 +44,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     public function getMenu(): array
     {
         return [
-            'icon'  => file_get_contents(__DIR__ . '/Resources/icons/ic_directions_white_24px.svg'),
+            'icon'  => \file_get_contents(__DIR__ . '/Resources/icons/ic_directions_white_24px.svg'),
             'label' => 'Routes',
             'value' => $this->data['counted'],
         ];
@@ -60,12 +60,12 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
 
         foreach ($this->data['routes'] as $route) {
             $routeData = [
-                0 => implode(' | ', $route->getMethods()),
+                0 => \implode(' | ', $route->getMethods()),
                 2 => $route->getUri(),
                 3 => $route->getName() ?? '-',
                 4 => $route->getActionName(),
-                5 => implode(', ', $route->gatherMiddleware()),
-                6 => implode(', ', $route->gatherDisabledMiddlewares()),
+                5 => \implode(', ', $route->gatherMiddleware()),
+                6 => \implode(', ', $route->gatherDisabledMiddlewares()),
             ];
 
             if ($route->getDomain() !== null) {
@@ -79,8 +79,8 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
             $headers[1] = 'Domain';
         }
 
-        sort($data, SORT_NUMERIC);
-        sort($headers, SORT_NUMERIC);
+        \sort($data, SORT_NUMERIC);
+        \sort($headers, SORT_NUMERIC);
 
         return $this->createTable(
             $data,

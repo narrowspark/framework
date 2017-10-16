@@ -3,21 +3,21 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Traits;
 
 use ArrayAccess;
-use InvalidArgumentException;
 use Iterator;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Component\Contracts\OptionsResolver\Exception\InvalidValidatorException;
-use Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException;
-use Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException;
-use Viserio\Component\Contracts\OptionsResolver\Exception\UnexpectedValueException;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\OptionsResolver\Exception\InvalidValidatorException;
+use Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
+use Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException;
+use Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
 /**
  * Some code in this trait is taken from interop-config.
@@ -33,35 +33,35 @@ trait OptionsResolverTrait
      * ProvidesDefaultOptions interface is implemented, these options must be overridden by the provided config.
      * If you want to allow configurations for more then one instance use RequiresConfigId interface.
      *
-     * The \Viserio\Component\Contracts\OptionsResolver\RequiresConfigId interface is supported.
+     * The \Viserio\Component\Contract\OptionsResolver\RequiresConfigId interface is supported.
      *
      * @param mixed       $config
      * @param null|string $configId Config name, must be provided if factory uses RequiresConfigId interface
      *
-     * @throws \InvalidArgumentException                                                               If the $configId parameter is provided but factory does not support it
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\UnexpectedValueException         If the $config parameter has the wrong type
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException          If no options are available
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException If a mandatory option is missing
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException         If the $configId parameter is provided but factory does not support it
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException         If the $config parameter has the wrong type
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException          If no options are available
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException If a mandatory option is missing
      *
      * @return array
      */
     public static function resolveOptions($config, string $configId = null): array
     {
         $configClass = self::getConfigClass();
-        $interfaces  = class_implements($configClass);
+        $interfaces  = \class_implements($configClass);
         $config      = self::resolveConfiguration($config);
         $dimensions  = [];
 
         if (isset($interfaces[RequiresComponentConfigContract::class])) {
-            $dimensions  = $configClass::getDimensions();
-            $dimensions  = $dimensions instanceof Iterator ? iterator_to_array($dimensions) : $dimensions;
+            $dimensions = $configClass::getDimensions();
+            $dimensions = $dimensions instanceof Iterator ? \iterator_to_array($dimensions) : $dimensions;
         }
 
         if (isset($interfaces[RequiresConfigIdContract::class]) || isset($interfaces[RequiresComponentConfigIdContract::class])) {
             $dimensions[] = $configId;
         } elseif ($configId !== null) {
             throw new InvalidArgumentException(
-                sprintf('The factory [%s] does not support multiple instances.', $configClass)
+                \sprintf('The factory [%s] does not support multiple instances.', $configClass)
             );
         }
 
@@ -85,8 +85,8 @@ trait OptionsResolverTrait
 
         if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
             $options = $configClass::getDefaultOptions();
-            $config  = array_replace_recursive(
-                $options instanceof Iterator ? iterator_to_array($options) : (array) $options,
+            $config  = \array_replace_recursive(
+                $options instanceof Iterator ? \iterator_to_array($options) : (array) $options,
                 (array) $config
             );
         }
@@ -97,7 +97,7 @@ trait OptionsResolverTrait
     /**
      * Resolve the configuration from given data.
      *
-     * @param \Psr\Container\ContainerInterface|\ArrayAccess|array $data
+     * @param array|\ArrayAccess|\Psr\Container\ContainerInterface $data
      *
      * @throws \RuntimeException is thrown if config cant be resolved
      *
@@ -105,14 +105,22 @@ trait OptionsResolverTrait
      */
     protected static function resolveConfiguration($data)
     {
-        if (is_iterable($data)) {
+        if (\is_iterable($data)) {
             return $data;
-        } elseif ($data instanceof ContainerInterface && $data->has(RepositoryContract::class)) {
-            return $data->get(RepositoryContract::class);
-        } elseif ($data instanceof ContainerInterface && $data->has('config')) {
-            return $data->get('config');
-        } elseif ($data instanceof ContainerInterface && $data->has('options')) {
-            return $data->get('options');
+        }
+
+        if ($data instanceof ContainerInterface) {
+            if ($data->has(RepositoryContract::class)) {
+                return $data->get(RepositoryContract::class);
+            }
+
+            if ($data->has('config')) {
+                return $data->get('config');
+            }
+
+            if ($data->has('options')) {
+                return $data->get('options');
+            }
         }
 
         throw new RuntimeException('No configuration found.');
@@ -136,7 +144,7 @@ trait OptionsResolverTrait
      * @param iterable $config
      * @param array    $interfaces
      *
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\MandatoryOptionNotFoundException
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException
      *
      * @return void
      */
@@ -147,11 +155,13 @@ trait OptionsResolverTrait
         array $interfaces
     ): void {
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
-            $useRecursion = ! is_scalar($mandatoryOption);
+            $useRecursion = ! \is_scalar($mandatoryOption);
 
             if (! $useRecursion && isset($config[$mandatoryOption])) {
                 continue;
-            } elseif ($useRecursion && isset($config[$key])) {
+            }
+
+            if ($useRecursion && isset($config[$key])) {
                 self::checkMandatoryOptions($configClass, $mandatoryOption, $config[$key], $interfaces);
 
                 return;
@@ -171,8 +181,10 @@ trait OptionsResolverTrait
      * @param iterable    $config
      * @param string      $configClass
      * @param null|string $configId
+     * @param array       $interfaces
      *
-     * @throws \Viserio\Component\Contracts\OptionsResolver\Exception\OptionNotFoundException
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException
      *
      * @return iterable|object
      */
@@ -186,7 +198,9 @@ trait OptionsResolverTrait
         foreach ($dimensions as $dimension) {
             if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
                 throw new UnexpectedValueException($dimensions, $dimension);
-            } elseif (! isset($config[$dimension])) {
+            }
+
+            if (! isset($config[$dimension])) {
                 if (! isset($interfaces[RequiresMandatoryOptionsContract::class]) &&
                     isset($interfaces[ProvidesDefaultOptionsContract::class])
                 ) {
@@ -209,17 +223,21 @@ trait OptionsResolverTrait
      * @param iterable $config
      * @param string   $configClass
      *
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidValidatorException
+     *
      * @return void
      */
     private static function validateOptions(array $validators, iterable $config, string $configClass): void
     {
         foreach ($validators as $key => $value) {
-            $useRecursion = ! is_scalar($value);
+            $useRecursion = ! \is_scalar($value);
 
             if (! $useRecursion && isset($config[$value])) {
                 continue;
-            } elseif ($useRecursion && isset($config[$key])) {
-                if (is_callable($value)) {
+            }
+
+            if ($useRecursion && isset($config[$key])) {
+                if (\is_callable($value)) {
                     $value($config[$key]);
 
                     return;
@@ -228,10 +246,12 @@ trait OptionsResolverTrait
                 self::validateOptions($value, $config[$key], $configClass);
 
                 return;
-            } elseif (! is_callable($value)) {
-                throw new InvalidValidatorException(sprintf(
+            }
+
+            if (! \is_callable($value)) {
+                throw new InvalidValidatorException(\sprintf(
                     'The validator must be of type callable, [%s] given, in %s.',
-                    is_object($value) ? get_class($value) : gettype($value),
+                    \is_object($value) ? \get_class($value) : \gettype($value),
                     $configClass
                 ));
             }

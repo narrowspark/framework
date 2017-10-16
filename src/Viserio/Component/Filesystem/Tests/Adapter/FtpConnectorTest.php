@@ -8,9 +8,9 @@ use Viserio\Component\Filesystem\Adapter\FtpConnector;
 
 class FtpConnectorTest extends TestCase
 {
-    public function testConnect()
+    public function testConnect(): void
     {
-        if (! defined('FTP_BINARY')) {
+        if (! \defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
@@ -30,7 +30,7 @@ class FtpConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The sftp connector requires host configuration.
      */
-    public function testConnectWithoutHost()
+    public function testConnectWithoutHost(): void
     {
         $connector = new FtpConnector();
 
@@ -41,7 +41,7 @@ class FtpConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The sftp connector requires port configuration.
      */
-    public function testConnectWithoutPort()
+    public function testConnectWithoutPort(): void
     {
         $connector = new FtpConnector();
 
@@ -54,7 +54,7 @@ class FtpConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The sftp connector requires username configuration.
      */
-    public function testConnectWithoutUsername()
+    public function testConnectWithoutUsername(): void
     {
         $connector = new FtpConnector();
 
@@ -68,7 +68,7 @@ class FtpConnectorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The sftp connector requires password configuration.
      */
-    public function testConnectWithoutPassword()
+    public function testConnectWithoutPassword(): void
     {
         $connector = new FtpConnector();
 

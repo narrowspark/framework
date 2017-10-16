@@ -3,18 +3,18 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
 use Closure;
-use InvalidArgumentException;
-use Invoker\Exception\InvocationException;
+use Invoker\Exception\InvocationException as InvokerInvocationException;
 use Invoker\Reflection\CallableReflection;
 use ReflectionMethod;
-use RuntimeException;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\Console\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Console\Exception\InvocationException;
+use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Str;
 
@@ -43,7 +43,7 @@ final class CommandResolver
     private $console;
 
     /**
-     * Create a new Cerebro console application.
+     * Create a new command resolver instance.
      *
      * @param \Viserio\Component\Support\Invoker     $invoker
      * @param \Viserio\Component\Console\Application $console
@@ -58,19 +58,22 @@ final class CommandResolver
      * Resolve a command from expression.
      *
      * @param string                $expression Defines the arguments and options of the command
-     * @param callable|string|array $callable   Called when the command is called.
+     * @param array|callable|string $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
+     *
+     * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidArgumentException
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
     public function resolve(string $expression, $callable, array $aliases = []): StringCommand
     {
-        self::assertCallableIsValid($callable);
+        $this->assertCallableIsValid($callable);
 
         $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
-            $parameters = array_merge(
+            $parameters = \array_merge(
                 [
                     // Injection by parameter name
                     'input'  => $input,
@@ -92,9 +95,9 @@ final class CommandResolver
 
             try {
                 return $this->invoker->addResolver(new HyphenatedInputResolver())->call($callable, $parameters);
-            } catch (InvocationException $exception) {
-                throw new RuntimeException(
-                    sprintf(
+            } catch (InvokerInvocationException $exception) {
+                throw new InvocationException(
+                    \sprintf(
                         "Impossible to call the '%s' command: %s",
                         $input->getFirstArgument(),
                         $exception->getMessage()
@@ -105,7 +108,7 @@ final class CommandResolver
             }
         };
 
-        $command = $this->createCommand($expression, $commandFunction);
+        $command = self::createCommand($expression, $commandFunction);
         $command->setAliases($aliases);
         $command->defaults($this->defaultsViaReflection($command, $callable));
 
@@ -118,9 +121,13 @@ final class CommandResolver
      * @param string   $expression
      * @param callable $callable
      *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
+     *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
-    private static function createCommand(string $expression, callable $callable): SymfonyCommand
+    private static function createCommand(string $expression, callable $callable): StringCommand
     {
         $result = ExpressionParser::parse($expression);
 
@@ -135,14 +142,16 @@ final class CommandResolver
     /**
      * Reflect default values from callable.
      *
-     * @param Viserio\Component\Console\Command\StringCommand $command
-     * @param callable|string                                 $callable
+     * @param \Viserio\Component\Console\Command\StringCommand $command
+     * @param callable|string                                  $callable
+     *
+     * @throws \Invoker\Exception\NotCallableException
      *
      * @return array
      */
     private function defaultsViaReflection(StringCommand $command, $callable): array
     {
-        if (! is_callable($callable)) {
+        if (! \is_callable($callable)) {
             return [];
         }
 
@@ -177,17 +186,20 @@ final class CommandResolver
      *
      * @param mixed $callable
      *
+     * @throws \ReflectionException
+     * @throws \Viserio\Component\Contract\Console\Exception\InvalidArgumentException
+     *
      * @return void
      */
     private function assertCallableIsValid($callable): void
     {
         try {
-            $container = $this->console->getContainer();
-        } catch (RuntimeException $e) {
+            $this->console->getContainer();
+        } catch (LogicException $e) {
             if ($this->isStaticCallToNonStaticMethod($callable)) {
-                list($class, $method) = $callable;
+                [$class, $method] = $callable;
 
-                $message  = "['{$class}', '{$method}'] is not a callable because '{$method}' is a static method.";
+                $message = "['{$class}', '{$method}'] is not a callable because '{$method}' is a static method.";
                 $message .= " Either use [new {$class}(), '{$method}'] or configure a dependency injection container that supports autowiring.";
 
                 throw new InvalidArgumentException($message);
@@ -200,12 +212,14 @@ final class CommandResolver
      *
      * @param mixed $callable
      *
+     * @throws \ReflectionException
+     *
      * @return bool
      */
     private function isStaticCallToNonStaticMethod($callable): bool
     {
-        if (is_array($callable) && is_string($callable[0])) {
-            list($class, $method) = $callable;
+        if (\is_array($callable) && \is_string($callable[0])) {
+            [$class, $method] = $callable;
 
             $reflection = new ReflectionMethod($class, $method);
 

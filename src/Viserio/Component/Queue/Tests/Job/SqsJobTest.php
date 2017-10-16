@@ -13,7 +13,7 @@ class SqsJobTest extends MockeryTestCase
     private $queueUrl;
     private $mockedReceiptHandle;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,14 +23,14 @@ class SqsJobTest extends MockeryTestCase
         $this->mockedReceiptHandle = '0NNAq8PwvXuWv5gMtS9DJ8qEdyiUwbAjpp45w2m6M4SJ1Y+PxCh7R930NRB8ylSacEmoSnW18bgd4nK\/O6ctE+VFVul4eD23mA07vVoSnPI4F\/voI1eNCp6Iax0ktGmhlNVzBwaZHEr91BRtqTRM3QKd2ASF8u+IQaSwyl\/DGK+P1+dqUOodvOVtExJwdyDLy1glZVgm85Yw9Jf5yZEEErqRwzYz\/qSigdvW4sm2l7e4phRol\/+IjMtovOyH\/ukueYdlVbQ4OshQLENhUKe7RNN5i6bE\/e5x9bnPhfj2gbM';
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
         $this->allowMockingNonExistentMethods(true);
     }
 
-    public function testFireProperlyCallsTheJobHandler()
+    public function testFireProperlyCallsTheJobHandler(): void
     {
         $job = $this->getJob();
         $job->getContainer()->shouldReceive('get')
@@ -44,7 +44,7 @@ class SqsJobTest extends MockeryTestCase
         $job->run();
     }
 
-    public function testDeleteRemovesTheJobFromSqs()
+    public function testDeleteRemovesTheJobFromSqs(): void
     {
         $job = $this->getJob();
         $job->getSqs()->shouldReceive('deleteMessage')
@@ -54,7 +54,7 @@ class SqsJobTest extends MockeryTestCase
         $job->delete();
     }
 
-    public function testReleaseProperlyReleasesTheJobOntoSqs()
+    public function testReleaseProperlyReleasesTheJobOntoSqs(): void
     {
         $job = $this->getJob();
         $job->getSqs()->shouldReceive('changeMessageVisibility')
@@ -67,11 +67,11 @@ class SqsJobTest extends MockeryTestCase
 
     protected function getJob()
     {
-        $mockedPayload = json_encode(['job' => 'foo', 'data' => ['data'], 'attempts' => 1]);
+        $mockedPayload = \json_encode(['job' => 'foo', 'data' => ['data'], 'attempts' => 1]);
 
         $mockedJobData = [
             'Body'          => $mockedPayload,
-            'MD5OfBody'     => md5($mockedPayload),
+            'MD5OfBody'     => \md5($mockedPayload),
             'ReceiptHandle' => $this->mockedReceiptHandle,
             'MessageId'     => 'e3cd03ee-59a3-4ad8-b0aa-ee2e3808ac81',
             'Attributes'    => ['ApproximateReceiveCount' => 1],

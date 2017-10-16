@@ -4,12 +4,12 @@ namespace Viserio\Component\Support\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Support\Tests\Fixture\TestManager;
 
 class AbstractManagerTest extends MockeryTestCase
 {
-    public function testDriver()
+    public function testDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -48,7 +48,7 @@ class AbstractManagerTest extends MockeryTestCase
         self::assertInstanceOf('stdClass', $manager->getDriver('testmanager'));
     }
 
-    public function testCustomeDriver()
+    public function testCustomeDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -79,7 +79,7 @@ class AbstractManagerTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Driver [dont] not supported.
      */
-    public function testDriverToThrowException()
+    public function testDriverToThrowException(): void
     {
         $manager = new TestManager(new ArrayContainer([
             'config' => [
@@ -94,7 +94,7 @@ class AbstractManagerTest extends MockeryTestCase
         $manager->getDriver('dont');
     }
 
-    public function testCall()
+    public function testCall(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -107,9 +107,7 @@ class AbstractManagerTest extends MockeryTestCase
             ->andReturn([
                 'test' => [
                     'default' => 'test',
-                    'drivers' => [
-                        'call' => [''],
-                    ],
+                    'drivers' => [],
                 ],
             ]);
 
@@ -122,9 +120,13 @@ class AbstractManagerTest extends MockeryTestCase
         $driver = $manager->getDriver('call');
 
         self::assertInstanceOf(ArrayContainer::class, $driver);
+
+        $manager->set('test', 'test');
+
+        self::assertSame('test', $manager->get('test'));
     }
 
-    public function testCustomDriverClosureBoundObjectIsCacheManager()
+    public function testCustomDriverClosureBoundObjectIsCacheManager(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -154,7 +156,7 @@ class AbstractManagerTest extends MockeryTestCase
         self::assertTrue($manager->hasDriver(__CLASS__));
     }
 
-    public function testGetDriverConfig()
+    public function testGetDriverConfig(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -177,10 +179,10 @@ class AbstractManagerTest extends MockeryTestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        self::assertTrue(is_array($manager->getDriverConfig('pdo')));
+        self::assertTrue(\is_array($manager->getDriverConfig('pdo')));
     }
 
-    public function testDefaultDriver()
+    public function testDefaultDriver(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')

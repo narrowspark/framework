@@ -14,7 +14,7 @@ trait EventTrait
     /**
      * Event target/context an object OR static class name (string).
      *
-     * @var object|string|null
+     * @var null|object|string
      */
     protected $target;
 
@@ -45,7 +45,7 @@ trait EventTrait
     /**
      * Get target/context from which event was triggered.
      *
-     * @return null|string|object
+     * @return null|object|string
      */
     public function getTarget()
     {
@@ -69,7 +69,7 @@ trait EventTrait
      * further event listener will be triggered once any trigger calls
      * stopPropagation().
      */
-    public function stopPropagation()
+    public function stopPropagation(): void
     {
         $this->propagationStopped = true;
     }

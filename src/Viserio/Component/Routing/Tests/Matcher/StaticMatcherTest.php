@@ -8,21 +8,22 @@ use Viserio\Component\Routing\Matcher\StaticMatcher;
 class StaticMatcherTest extends TestCase
 {
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Cannot create Viserio\Component\Routing\Matcher\StaticMatcher: segment cannot contain '/', 'abc/foo' given.
      */
-    public function testCannotContainSlash()
+    public function testCannotContainSlash(): void
     {
         new StaticMatcher('abc/foo');
     }
 
-    public function testGetConditionExpression()
+    public function testGetConditionExpression(): void
     {
         $matcher = new StaticMatcher('one');
 
         self::assertSame('one === \'one\'', $matcher->getConditionExpression('one'));
     }
 
-    public function testGetMatchedParameterExpressions()
+    public function testGetMatchedParameterExpressions(): void
     {
         $matcher = new StaticMatcher('two', [1]);
 
@@ -33,7 +34,7 @@ class StaticMatcherTest extends TestCase
         self::assertSame([], $matcher->getMatchedParameterExpressions('three'));
     }
 
-    public function testMergeParameterKeys()
+    public function testMergeParameterKeys(): void
     {
         $matcher  = new StaticMatcher('two', [2]);
         $matcher2 = new StaticMatcher('two', [3]);

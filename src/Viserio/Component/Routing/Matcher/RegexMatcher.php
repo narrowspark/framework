@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
-use RuntimeException;
-use Viserio\Component\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Support\VarExporter;
 
 class RegexMatcher extends AbstractMatcher
@@ -30,18 +29,18 @@ class RegexMatcher extends AbstractMatcher
      */
     public function __construct(string $regex, $parameterKeyGroupMap)
     {
-        if ((mb_strpos($regex, '/^(') !== false && mb_strpos($regex, ')$/') !== false) ||
-            (mb_strpos($regex, '/^') !== false && mb_strpos($regex, '$/') !== false)
+        if ((\mb_strpos($regex, '/^(') !== false && \mb_strpos($regex, ')$/') !== false) ||
+            (\mb_strpos($regex, '/^') !== false && \mb_strpos($regex, '$/') !== false)
         ) {
             $this->regex = $regex;
         } else {
             $this->regex = '/^(' . $regex . ')$/';
         }
 
-        $map = is_array($parameterKeyGroupMap) ? $parameterKeyGroupMap : [$parameterKeyGroupMap => 0];
+        $map = \is_array($parameterKeyGroupMap) ? $parameterKeyGroupMap : [$parameterKeyGroupMap => 0];
 
         $this->parameterKeyGroupMap = $map;
-        $this->parameterKeys        = array_keys($map);
+        $this->parameterKeys        = \array_keys($map);
     }
 
     /**
@@ -51,11 +50,11 @@ class RegexMatcher extends AbstractMatcher
      */
     public function getGroupCount(): int
     {
-        return count(array_unique($this->parameterKeyGroupMap, SORT_NUMERIC));
+        return \count(\array_unique($this->parameterKeyGroupMap, SORT_NUMERIC));
     }
 
     /**
-     * Retruns the parameters key group array.
+     * Returns the parameters key group array.
      *
      * @return array
      */
@@ -65,7 +64,7 @@ class RegexMatcher extends AbstractMatcher
     }
 
     /**
-     * Retruns the used regex.
+     * Returns the used regex.
      *
      * @return string
      */
@@ -95,7 +94,7 @@ class RegexMatcher extends AbstractMatcher
     {
         $matches = [];
 
-        foreach ($this->parameterKeyGroupMap as $parameterKey => $group) {
+        foreach ((array) $this->parameterKeyGroupMap as $parameterKey => $group) {
             // Use $group + 1 as the first $matches element is the full text that matched,
             // we want the groups
             $matches[$parameterKey] = '$matches' . $uniqueKey . '[' . ($group + 1) . ']';
@@ -107,13 +106,9 @@ class RegexMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function mergeParameterKeys(SegmentMatcherContract $matcher)
+    public function mergeParameterKeys(SegmentMatcherContract $matcher): void
     {
         parent::mergeParameterKeys($matcher);
-
-        if (! method_exists($matcher, 'getParameterKeyGroupMap')) {
-            throw new RuntimeException(sprintf('%s::getParameterKeyGroupMap is needed for this function.', get_class($this)));
-        }
 
         $this->parameterKeyGroupMap += $matcher->getParameterKeyGroupMap();
     }

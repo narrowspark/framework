@@ -4,8 +4,8 @@ namespace Viserio\Component\View\Engine;
 
 use Closure;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\View\Engine as EngineContract;
-use Viserio\Component\Contracts\View\EngineResolver as EngineResolverContract;
+use Viserio\Component\Contract\View\Engine as EngineContract;
+use Viserio\Component\Contract\View\EngineResolver as EngineResolverContract;
 
 class EngineResolver implements EngineResolverContract
 {
@@ -45,9 +45,9 @@ class EngineResolver implements EngineResolverContract
         }
 
         if (isset($this->resolvers[$engine])) {
-            return $this->resolved[$engine] = call_user_func($this->resolvers[$engine]);
+            return $this->resolved[$engine] = \call_user_func($this->resolvers[$engine]);
         }
 
-        throw new InvalidArgumentException(sprintf('Engine [%s] not found.', $engine));
+        throw new InvalidArgumentException(\sprintf('Engine [%s] not found.', $engine));
     }
 }

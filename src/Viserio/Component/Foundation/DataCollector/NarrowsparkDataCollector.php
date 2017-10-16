@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Support\Env;
@@ -62,10 +62,10 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
     public function getTooltip(): string
     {
         $debug   = Env::get('APP_DEBUG', false);
-        $opcache = extension_loaded('Zend OPcache') && ini_get('opcache.enable');
+        $opcache = \extension_loaded('Zend OPcache') && \ini_get('opcache.enable');
 
         $tooltip = $this->createTooltipGroup([
-            'Profiler token'   => $this->serverRequest->getHeaderLine('X-Debug-Token'),
+            'Profiler token'   => $this->serverRequest->getHeaderLine('x-debug-token'),
             'Application name' => '',
             'Environment'      => Env::get('APP_ENV', 'develop'),
             'Debug'            => [
@@ -77,12 +77,12 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         ]);
 
         $tooltip .= $this->createTooltipGroup([
-            'PHP version'    => phpversion(),
+            'PHP version'    => PHP_VERSION,
             'Architecture'   => PHP_INT_SIZE * 8,
-            'Timezone'       => date_default_timezone_get(),
+            'Timezone'       => \date_default_timezone_get(),
             'PHP Extensions' => [
                 [
-                    'class' => extension_loaded('xdebug') ? 'status-green' : 'status-red',
+                    'class' => \extension_loaded('xdebug') ? 'status-green' : 'status-red',
                     'value' => 'Xdebug',
                 ],
                 [
@@ -90,7 +90,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
                     'value' => 'OPcache',
                 ],
             ],
-            'PHP SAPI' => php_sapi_name(),
+            'PHP SAPI' => PHP_SAPI,
         ]);
 
         $version = AbstractKernel::VERSION;

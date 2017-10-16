@@ -21,10 +21,10 @@ class TransNode extends Node
      *
      * @param \Twig\Node\Node                               $body
      * @param \Twig\Node\Node                               $domain
-     * @param \Twig\Node\Expression\AbstractExpression|null $vars
-     * @param \Twig\Node\Expression\AbstractExpression|null $locale
+     * @param null|\Twig\Node\Expression\AbstractExpression $vars
+     * @param null|\Twig\Node\Expression\AbstractExpression $locale
      * @param int                                           $lineno
-     * @param string|null                                   $tag
+     * @param null|string                                   $tag
      */
     public function __construct(
         Node $body,
@@ -63,7 +63,7 @@ class TransNode extends Node
             $vars     = null;
         }
 
-        list($msg, $defaults) = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
+        [$msg, $defaults] = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
 
         $locale = null;
 
@@ -124,7 +124,7 @@ class TransNode extends Node
             return [$body, $vars];
         }
 
-        preg_match_all('/(?<!{){([^,}|^,]+)/', $msg, $matches);
+        \preg_match_all('/(?<!{){([^,}|^,]+)/', $msg, $matches);
 
         foreach ($matches[1] as $var) {
             $key = new ConstantExpression($var, $body->getTemplateLine());
@@ -137,6 +137,6 @@ class TransNode extends Node
             }
         }
 
-        return [new ConstantExpression(trim($msg), $body->getTemplateLine()), $vars];
+        return [new ConstantExpression(\trim($msg), $body->getTemplateLine()), $vars];
     }
 }

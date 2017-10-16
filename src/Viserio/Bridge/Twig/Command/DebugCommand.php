@@ -4,8 +4,6 @@ namespace Viserio\Bridge\Twig\Command;
 
 use ReflectionFunction;
 use ReflectionMethod;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Twig\Environment;
 use UnexpectedValueException;
 use Viserio\Component\Console\Command\Command;
@@ -21,7 +19,15 @@ class DebugCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $name = 'twig:debug';
+    protected static $defaultName = 'twig:debug';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $signature = 'twig:debug
+        [filter : Show details for all entries matching this filter.]
+        [--format=text : The output format (text or json)]
+    ';
 
     /**
      * {@inheritdoc}
@@ -38,7 +44,7 @@ class DebugCommand extends Command
         if (! $container->has(Environment::class)) {
             $this->error('The Twig environment needs to be set.');
 
-            return;
+            return 1;
         }
 
         $twig = $container->get(Environment::class);
@@ -49,14 +55,14 @@ class DebugCommand extends Command
             $data = [];
 
             foreach ($types as $type) {
-                foreach ($twig->{'get' . ucfirst($type)}() as $name => $entity) {
+                foreach ($twig->{'get' . \ucfirst($type)}() as $name => $entity) {
                     $data[$type][$name] = $this->getMetadata($type, $entity);
                 }
             }
 
-            $data['tests'] = array_keys($data['tests']);
+            $data['tests'] = \array_keys($data['tests']);
 
-            $this->line(json_encode($data));
+            $this->line(\json_encode($data));
 
             return 0;
         }
@@ -66,8 +72,8 @@ class DebugCommand extends Command
         foreach ($types as $index => $type) {
             $items = [];
 
-            foreach ($twig->{'get' . ucfirst($type)}() as $name => $entity) {
-                if (! $filter || false !== mb_strpos($name, $filter)) {
+            foreach ($twig->{'get' . \ucfirst($type)}() as $name => $entity) {
+                if (! $filter || false !== \mb_strpos($name, $filter)) {
                     $items[$name] = $name . $this->getPrettyMetadata($type, $entity);
                 }
             }
@@ -76,9 +82,9 @@ class DebugCommand extends Command
                 continue;
             }
 
-            $this->output->section(ucfirst($type));
+            $this->output->section(\ucfirst($type));
 
-            ksort($items);
+            \ksort($items);
 
             $this->output->listing($items);
         }
@@ -87,78 +93,50 @@ class DebugCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getArguments(): array
-    {
-        return [
-            [
-                'filter',
-                InputArgument::OPTIONAL,
-                'Show details for all entries matching this filter.',
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOptions(): array
-    {
-        return [
-            [
-                'format',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The output format (text or json)',
-                'text',
-            ],
-        ];
-    }
-
-    /**
      * Get twig metadata.
      *
      * @param string $type
      * @param object $entity
      *
+     * @throws \UnexpectedValueException
+     *
      * @return mixed
      */
-    private function getMetadata(string $type, $entity)
+    private function getMetadata(string $type, object $entity)
     {
         if ($type === 'globals') {
             return $entity;
         }
 
         if ($type === 'tests') {
-            return;
+            return null;
         }
 
         if ($type === 'functions' || $type === 'filters') {
             $cb = $entity->getCallable();
 
             if ($cb === null) {
-                return;
+                return null;
             }
 
-            if (is_array($cb)) {
-                if (! method_exists($cb[0], $cb[1])) {
-                    return;
+            if (\is_array($cb)) {
+                if (! \method_exists($cb[0], $cb[1])) {
+                    return null;
                 }
 
                 $refl = new ReflectionMethod($cb[0], $cb[1]);
-            } elseif (is_object($cb) && method_exists($cb, '__invoke')) {
+            } elseif (\is_object($cb) && \method_exists($cb, '__invoke')) {
                 $refl = new ReflectionMethod($cb, '__invoke');
-            } elseif (function_exists($cb)) {
+            } elseif (\function_exists($cb)) {
                 $refl = new ReflectionFunction($cb);
-            } elseif (is_string($cb) && preg_match('{^(.+)::(.+)$}', $cb, $m) && method_exists($m[1], $m[2])) {
+            } elseif (\is_string($cb) && \preg_match('{^(.+)::(.+)$}', $cb, $m) && \method_exists($m[1], $m[2])) {
                 $refl = new ReflectionMethod($m[1], $m[2]);
             } else {
                 throw new UnexpectedValueException('Unsupported callback type');
             }
 
             // filter out context/environment args
-            $args = array_filter($refl->getParameters(), function ($param) use ($entity) {
+            $args = \array_filter($refl->getParameters(), function ($param) use ($entity) {
                 if ($entity->needsContext() && $param->getName() === 'context') {
                     return false;
                 }
@@ -167,9 +145,9 @@ class DebugCommand extends Command
             });
 
             // format args
-            $args = array_map(function ($param) {
+            $args = \array_map(function ($param) {
                 if ($param->isDefaultValueAvailable()) {
-                    return $param->getName() . ' = ' . json_encode($param->getDefaultValue());
+                    return $param->getName() . ' = ' . \json_encode($param->getDefaultValue());
                 }
 
                 return $param->getName();
@@ -177,11 +155,13 @@ class DebugCommand extends Command
 
             if ($type === 'filters') {
                 // remove the value the filter is applied on
-                array_shift($args);
+                \array_shift($args);
             }
 
             return $args;
         }
+
+        return null;
     }
 
     /**
@@ -192,7 +172,7 @@ class DebugCommand extends Command
      *
      * @return string
      */
-    private function getPrettyMetadata(string $type, $entity): string
+    private function getPrettyMetadata(string $type, object $entity): string
     {
         if ($type === 'tests') {
             return '';
@@ -209,19 +189,21 @@ class DebugCommand extends Command
         }
 
         if ($type === 'globals') {
-            if (is_object($meta)) {
-                return ' = object(' . get_class($meta) . ')';
+            if (\is_object($meta)) {
+                return ' = object(' . \get_class($meta) . ')';
             }
 
-            return ' = ' . mb_substr(@json_encode($meta), 0, 50);
+            return ' = ' . \mb_substr(@\json_encode($meta), 0, 50);
         }
 
         if ($type === 'functions') {
-            return '(' . implode(', ', $meta) . ')';
+            return '(' . \implode(', ', $meta) . ')';
         }
 
         if ($type === 'filters') {
-            return $meta ? '(' . implode(', ', $meta) . ')' : '';
+            return $meta ? '(' . \implode(', ', $meta) . ')' : '';
         }
+
+        return '';
     }
 }

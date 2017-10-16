@@ -9,7 +9,7 @@ use Viserio\Component\Validation\Sanitizer;
 
 class SanitizerServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new SanitizerServiceProvider());

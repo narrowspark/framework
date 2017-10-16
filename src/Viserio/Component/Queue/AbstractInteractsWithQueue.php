@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue;
 
-use Viserio\Component\Contracts\Queue\InteractsWithQueue as InteractsWithQueueContract;
-use Viserio\Component\Contracts\Queue\Job as JobContract;
+use Viserio\Component\Contract\Queue\InteractsWithQueue as InteractsWithQueueContract;
+use Viserio\Component\Contract\Queue\Job as JobContract;
 
 abstract class AbstractInteractsWithQueue implements InteractsWithQueueContract
 {
     /**
      * The underlying queue job instance.
      *
-     * @var \Viserio\Component\Contracts\Queue\Job
+     * @var \Viserio\Component\Contract\Queue\Job
      */
     protected $job;
 

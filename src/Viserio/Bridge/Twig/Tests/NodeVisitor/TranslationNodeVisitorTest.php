@@ -22,7 +22,7 @@ class TranslationNodeVisitorTest extends TestCase
      * @param Node  $node
      * @param array $expectedMessages
      */
-    public function testMessagesExtraction(Node $node, array $expectedMessages)
+    public function testMessagesExtraction(Node $node, array $expectedMessages): void
     {
         $env     = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock(), ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
         $visitor = new TranslationNodeVisitor();
@@ -33,7 +33,7 @@ class TranslationNodeVisitorTest extends TestCase
         self::assertEquals($expectedMessages, $visitor->getMessages());
     }
 
-    public function testMessageExtractionWithInvalidDomainNode()
+    public function testMessageExtractionWithInvalidDomainNode(): void
     {
         $message = 'new key';
         $node    = new FilterExpression(
@@ -62,7 +62,14 @@ class TranslationNodeVisitorTest extends TestCase
         ];
     }
 
-    private static function getTransFilter($message, $domain = null, $arguments = null)
+    /**
+     * @param string      $message
+     * @param null|string $domain
+     * @param null|array  $arguments
+     *
+     * @return FilterExpression
+     */
+    private static function getTransFilter(string $message, string $domain = null, ?array $arguments = null): FilterExpression
     {
         if (! $arguments) {
             $arguments = $domain ? [
@@ -79,7 +86,13 @@ class TranslationNodeVisitorTest extends TestCase
         );
     }
 
-    private static function getTransTag($message, $domain = null)
+    /**
+     * @param string      $message
+     * @param null|string $domain
+     *
+     * @return \Viserio\Bridge\Twig\Node\TransNode
+     */
+    private static function getTransTag(string $message, ?string $domain = null): TransNode
     {
         return new TransNode(
             new BodyNode([], ['data' => $message]),

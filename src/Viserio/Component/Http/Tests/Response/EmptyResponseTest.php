@@ -8,7 +8,7 @@ use Viserio\Component\Http\Response\EmptyResponse;
 
 class EmptyResponseTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $response = new EmptyResponse([], 201);
 
@@ -17,7 +17,7 @@ class EmptyResponseTest extends TestCase
         self::assertEquals(201, $response->getStatusCode());
     }
 
-    public function testHeaderConstructor()
+    public function testHeaderConstructor(): void
     {
         $response = new EmptyResponse(['x-empty' => ['true']]);
 

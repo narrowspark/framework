@@ -17,30 +17,30 @@ class PhpInputStreamTest extends TestCase
      */
     protected $stream;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->file   = dirname(__DIR__) . '/Fixture/php-input-stream.txt';
+        $this->file   = \dirname(__DIR__) . '/Fixture/php-input-stream.txt';
         $this->stream = new PhpInputStream($this->file);
     }
 
     public function getFileContents()
     {
-        return file_get_contents($this->file);
+        return \file_get_contents($this->file);
     }
 
-    public function assertStreamContents($test, $message = null)
+    public function assertStreamContents($test, $message = null): void
     {
         $content = $this->getFileContents();
 
         self::assertEquals($content, $test, $message);
     }
 
-    public function testStreamIsNeverWritable()
+    public function testStreamIsNeverWritable(): void
     {
         self::assertFalse($this->stream->isWritable());
     }
 
-    public function testCanReadStreamIteratively()
+    public function testCanReadStreamIteratively(): void
     {
         $body = '';
 
@@ -48,29 +48,42 @@ class PhpInputStreamTest extends TestCase
             $body .= $this->stream->read(128);
         }
 
-        self::assertStreamContents($body);
+        $this->assertStreamContents($body);
     }
 
-    public function testGetContentsReturnsRemainingContentsOfStream()
+    public function testGetContentsReturnsRemainingContentsOfStream(): void
     {
-        $start     = $this->stream->read(128);
+        $this->stream->read(128);
         $remainder = $this->stream->getContents();
         $contents  = $this->getFileContents();
 
-        self::assertEquals(mb_substr($contents, 128), $remainder);
+        self::assertEquals(\mb_substr($contents, 128), $remainder);
     }
 
-    public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads()
+    public function testGetContentsReturnCacheWhenReachedEof(): void
     {
-        $start = $this->stream->read(128);
+        $this->stream->getContents();
 
-        self::assertStreamContents($this->stream->__toString());
+        $this->assertStreamContents($this->stream->getContents());
+
+        $stream = new PhpInputStream('data://,0');
+        $stream->read(1);
+        $stream->read(1);
+
+        self::assertSame('0', $stream->getContents(), 'Don\'t evaluate 0 as empty');
     }
 
-    public function testMultipleCastsToStringReturnSameContentsEvenIfReadsOccur()
+    public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads(): void
     {
-        $first  = (string) $this->stream;
-        $read   = $this->stream->read(128);
+        $this->stream->read(128);
+
+        $this->assertStreamContents($this->stream->__toString());
+    }
+
+    public function testMultipleCastsToStringReturnSameContentsEvenIfReadsOccur(): void
+    {
+        $first = (string) $this->stream;
+        $this->stream->read(128);
         $second = (string) $this->stream;
 
         self::assertSame($first, $second);

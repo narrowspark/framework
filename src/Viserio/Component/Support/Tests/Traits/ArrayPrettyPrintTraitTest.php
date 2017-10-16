@@ -17,12 +17,12 @@ class ArrayPrettyPrintTraitTest extends TestCase
      */
     private $root;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->root = vfsStream::setup();
     }
 
-    public function testWithSimpleArray()
+    public function testWithSimpleArray(): void
     {
         $array = $this->getPrettyPrintArray([1 => 'foo', '188.29614911019327165' => 'bar', 'foo' => '889614911019327165', 'fooa' => 18896141256]);
         $file  = vfsStream::newFile('simpleArray.php')
@@ -33,14 +33,14 @@ class ArrayPrettyPrintTraitTest extends TestCase
     \'fooa\' => 18896141256,
 ]')
             ->at($this->root);
-        $outFile  = vfsStream::newFile('simpleArrayOutput.php')
+        $outFile = vfsStream::newFile('simpleArrayOutput.php')
             ->withContent($array)
             ->at($this->root);
 
-        self::assertSame(file_get_contents($file->url()), file_get_contents($outFile->url()));
+        self::assertSame(\file_get_contents($file->url()), \file_get_contents($outFile->url()));
     }
 
-    public function testArrayWithClassAndInterface()
+    public function testArrayWithClassAndInterface(): void
     {
         $array = $this->getPrettyPrintArray([1 => Exception::class, Throwable::class => 'error', 'foo' => 'bar', 'fooa' => 1.2]);
         $file  = vfsStream::newFile('classAndInterfaceArray.php')
@@ -51,14 +51,14 @@ class ArrayPrettyPrintTraitTest extends TestCase
     \'fooa\' => 1.2,
 ]')
             ->at($this->root);
-        $outFile  = vfsStream::newFile('classAndInterfaceArrayOutput.php')
+        $outFile = vfsStream::newFile('classAndInterfaceArrayOutput.php')
             ->withContent($array)
             ->at($this->root);
 
-        self::assertSame(file_get_contents($file->url()), file_get_contents($outFile->url()));
+        self::assertSame(\file_get_contents($file->url()), \file_get_contents($outFile->url()));
     }
 
-    public function testWithDimensionalArray()
+    public function testWithDimensionalArray(): void
     {
         $array = $this->getPrettyPrintArray([1 => ['foo'], 'bar' => 2]);
         $file  = vfsStream::newFile('dimensionalArray.php')
@@ -69,10 +69,10 @@ class ArrayPrettyPrintTraitTest extends TestCase
     \'bar\' => 2,
 ]')
             ->at($this->root);
-        $outFile  = vfsStream::newFile('dimensionalArrayOutput.php')
+        $outFile = vfsStream::newFile('dimensionalArrayOutput.php')
             ->withContent($array)
             ->at($this->root);
 
-        self::assertSame(file_get_contents($file->url()), file_get_contents($outFile->url()));
+        self::assertSame(\file_get_contents($file->url()), \file_get_contents($outFile->url()));
     }
 }

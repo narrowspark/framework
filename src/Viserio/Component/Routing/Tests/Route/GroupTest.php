@@ -7,7 +7,7 @@ use Viserio\Component\Routing\Route\Group;
 
 class GroupTest extends TestCase
 {
-    public function testGroupMerging()
+    public function testGroupMerging(): void
     {
         $old = ['prefix' => 'foo/bar/'];
         self::assertEquals(

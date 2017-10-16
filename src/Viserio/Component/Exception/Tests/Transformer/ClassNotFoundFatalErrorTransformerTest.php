@@ -9,7 +9,7 @@ use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 
 class ClassNotFoundFatalErrorTransformerTest extends TestCase
 {
-    public function testExceptionIsWrapped()
+    public function testExceptionIsWrapped(): void
     {
         $transformer = new ClassNotFoundFatalErrorTransformer();
         $exception   = $transformer->transform(
@@ -24,7 +24,7 @@ class ClassNotFoundFatalErrorTransformerTest extends TestCase
 Did you forget a "use" statement?', $exception->getMessage());
     }
 
-    public function testExceptionIsNotWrapped()
+    public function testExceptionIsNotWrapped(): void
     {
         $transformer = new ClassNotFoundFatalErrorTransformer();
         $exception   = $transformer->transform(

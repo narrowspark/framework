@@ -5,7 +5,8 @@ namespace Viserio\Component\Profiler\Tests\Provider;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerMonologDataCollectorServiceProvider;
@@ -13,10 +14,11 @@ use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
 class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
+        $container->register(new EventsServiceProvider());
         $container->register(new LoggerServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ProfilerServiceProvider());
@@ -43,10 +45,10 @@ class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME_FLOAT')
+            ->with('request_time_float')
             ->andReturn(false);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME')
+            ->with('request_time')
             ->andReturn(false);
 
         return $request;

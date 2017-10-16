@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
-use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
 
 final class RequestCookies extends AbstractCookieCollector
 {
@@ -12,15 +12,15 @@ final class RequestCookies extends AbstractCookieCollector
      *
      * @param array $cookies
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function __construct(array $cookies = [])
     {
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof Cookie)) {
-                throw new InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(\sprintf(
                     'The object [%s] must be an instance of [%s].',
-                    get_class($cookie),
+                    \get_class($cookie),
                     Cookie::class
                 ));
             }
@@ -34,11 +34,13 @@ final class RequestCookies extends AbstractCookieCollector
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     *
      * @return self
      */
     public static function fromRequest(ServerRequestInterface $request): self
     {
-        return new static(self::listFromCookieString($request->getHeaderLine('Cookie')));
+        return new static(self::listFromCookieString($request->getHeaderLine('cookie')));
     }
 
     /**
@@ -50,8 +52,8 @@ final class RequestCookies extends AbstractCookieCollector
      */
     public function renderIntoCookieHeader(ServerRequestInterface $request): ServerRequestInterface
     {
-        $cookieString = implode('; ', $this->cookies);
-        $request      = $request->withHeader('Cookie', $cookieString);
+        $cookieString = \implode('; ', $this->cookies);
+        $request      = $request->withHeader('cookie', $cookieString);
 
         return $request;
     }
@@ -67,7 +69,7 @@ final class RequestCookies extends AbstractCookieCollector
     {
         $cookies = self::splitOnAttributeDelimiter($string);
 
-        return array_map(function ($cookiePair) {
+        return \array_map(function ($cookiePair) {
             return self::oneFromCookiePair($cookiePair);
         }, $cookies);
     }
@@ -81,7 +83,7 @@ final class RequestCookies extends AbstractCookieCollector
      */
     protected static function oneFromCookiePair(string $string): Cookie
     {
-        list($name, $value) = self::splitCookiePair($string);
+        [$name, $value] = self::splitCookiePair($string);
 
         $cookie = new Cookie($name);
 

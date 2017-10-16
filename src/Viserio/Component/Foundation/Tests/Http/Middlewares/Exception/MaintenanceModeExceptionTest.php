@@ -8,7 +8,7 @@ use Viserio\Component\Foundation\Http\Exception\MaintenanceModeException;
 
 class MaintenanceModeExceptionTest extends TestCase
 {
-    public function testExceptionFunctions()
+    public function testExceptionFunctions(): void
     {
         $time       = 1491737578;
         $retryAfter = 5;

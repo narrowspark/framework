@@ -16,13 +16,13 @@ trait TraceableCacheItemDecoratorTrait
         try {
             $item = $this->pool->getItem($key);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
 
         if ($event->result[$key] = $item->isHit()) {
-            ++$event->hits;
+            $event->hits++;
         } else {
-            ++$event->misses;
+            $event->misses++;
         }
 
         return $item;
@@ -38,7 +38,7 @@ trait TraceableCacheItemDecoratorTrait
         try {
             return $event->result[$key] = $this->pool->hasItem($key);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -52,7 +52,7 @@ trait TraceableCacheItemDecoratorTrait
         try {
             return $event->result[$key] = $this->pool->deleteItem($key);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -66,7 +66,7 @@ trait TraceableCacheItemDecoratorTrait
         try {
             return $event->result[$item->getKey()] = $this->pool->save($item);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -80,21 +80,21 @@ trait TraceableCacheItemDecoratorTrait
         try {
             return $event->result[$item->getKey()] = $this->pool->saveDeferred($item);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getItems(array $keys = [])
+    public function getItems(array $keys = []): \Generator
     {
         $event = $this->start(__FUNCTION__);
 
         try {
             $result = $this->pool->getItems($keys);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
 
         $f = function () use ($result, $event) {
@@ -102,9 +102,9 @@ trait TraceableCacheItemDecoratorTrait
 
             foreach ($result as $key => $item) {
                 if ($event->result[$key] = $item->isHit()) {
-                    ++$event->hits;
+                    $event->hits++;
                 } else {
-                    ++$event->misses;
+                    $event->misses++;
                 }
 
                 yield $key => $item;
@@ -124,7 +124,7 @@ trait TraceableCacheItemDecoratorTrait
         try {
             return $event->result = $this->pool->deleteItems($keys);
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 
@@ -138,7 +138,7 @@ trait TraceableCacheItemDecoratorTrait
         try {
             return $event->result = $this->pool->commit();
         } finally {
-            $event->end = microtime(true);
+            $event->end = \microtime(true);
         }
     }
 }

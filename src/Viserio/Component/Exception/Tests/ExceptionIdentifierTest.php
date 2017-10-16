@@ -8,7 +8,7 @@ use Viserio\Component\Exception\ExceptionIdentifier;
 
 class ExceptionIdentifierTest extends TestCase
 {
-    public function testIdentifyOne()
+    public function testIdentifyOne(): void
     {
         $i = new ExceptionIdentifier();
         $e = new Exception();
@@ -16,7 +16,7 @@ class ExceptionIdentifierTest extends TestCase
         self::assertSame($i->identify($e), $i->identify($e));
     }
 
-    public function testIdentifyTwo()
+    public function testIdentifyTwo(): void
     {
         $i      = new ExceptionIdentifier();
         $first  = new Exception();
@@ -27,12 +27,12 @@ class ExceptionIdentifierTest extends TestCase
         self::assertNotSame($i->identify($first), $i->identify($second));
     }
 
-    public function testIdentifyMany()
+    public function testIdentifyMany(): void
     {
         $i   = new ExceptionIdentifier();
         $arr = [];
 
-        for ($j = 0; $j < 20; ++$j) {
+        for ($j = 0; $j < 20; $j++) {
             $arr[] = new Exception();
         }
 

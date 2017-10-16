@@ -5,7 +5,7 @@ namespace Viserio\Component\Profiler\Test\Middleware;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Profiler\AssetsRenderer;
@@ -15,7 +15,7 @@ use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester;
 
 class ProfilerMiddlewareTest extends MockeryTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $assets   = new AssetsRenderer();
         $profiler = new ProfilerTester($assets);
@@ -39,24 +39,27 @@ class ProfilerMiddlewareTest extends MockeryTestCase
 
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
-        $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-            return (new ResponseFactory())->createResponse(200);
+        $response = $middleware->process($request, new DelegateMiddleware(function () {
+            $response = (new ResponseFactory())->createResponse();
+            $response = $response->withHeader('content-type', 'text/html; charset=utf-8');
+
+            return $response;
         }));
 
         self::assertEquals(
             $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
-        self::assertRegExp('/^\d+.\d+ms$/', $response->getHeaderLine('X-Response-Time'));
+        self::assertRegExp('/^\d+.\d+ms$/', $response->getHeaderLine('x-response-time'));
     }
 
     private function removeId(string $html): string
     {
-        return trim(
-            str_replace(
+        return \trim(
+            \str_replace(
                 "\r\n",
                 '',
-                preg_replace('/="profiler-(.*?)"/', '', $html)
+                \preg_replace('/="profiler-(.*?)"/', '', $html)
             )
         );
     }

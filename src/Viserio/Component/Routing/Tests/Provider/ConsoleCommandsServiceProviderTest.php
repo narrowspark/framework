@@ -12,7 +12,7 @@ use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testGetServices()
+    public function testGetServices(): void
     {
         $container = new Container();
         $container->register(new RoutingServiceProvider());
@@ -31,5 +31,22 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $commands = $console->all();
 
         self::assertInstanceOf(RouteListCommand::class, $commands['route:table']);
+    }
+
+    public function testGetDimensions(): void
+    {
+        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+    }
+
+    public function testGetDefaultOptions(): void
+    {
+        self::assertSame(
+            [
+                'lazily_commands' => [
+                    'route:table' => RouteListCommand::class,
+                ],
+            ],
+            ConsoleCommandsServiceProvider::getDefaultOptions()
+        );
     }
 }

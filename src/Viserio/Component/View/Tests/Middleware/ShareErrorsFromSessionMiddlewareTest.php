@@ -5,15 +5,15 @@ namespace Viserio\Component\View\Tests\Middleware;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Component\Contracts\Session\Store as StoreContract;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
 
 class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $session = $this->mock(StoreContract::class);
         $session->shouldReceive('get')

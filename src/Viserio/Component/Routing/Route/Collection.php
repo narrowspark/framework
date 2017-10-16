@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
 use Countable;
-use RuntimeException;
-use Viserio\Component\Contracts\Routing\Route as RouteContract;
-use Viserio\Component\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Component\Contract\Routing\Exception\RuntimeException;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 
 class Collection implements Countable, RouteCollectionContract
 {
@@ -37,7 +37,7 @@ class Collection implements Countable, RouteCollectionContract
     {
         $domainAndUri = $route->getDomain() . $route->getUri();
 
-        $this->allRoutes[implode($route->getMethods(), '|') . $domainAndUri] = $route;
+        $this->allRoutes[\implode($route->getMethods(), '|') . $domainAndUri] = $route;
 
         $this->addLookups($route);
 
@@ -61,7 +61,7 @@ class Collection implements Countable, RouteCollectionContract
      */
     public function hasNamedRoute(string $name): bool
     {
-        return ! is_null($this->getByName($name));
+        return null !== $this->getByName($name);
     }
 
     /**
@@ -85,7 +85,7 @@ class Collection implements Countable, RouteCollectionContract
      */
     public function getRoutes(): array
     {
-        return array_values($this->allRoutes);
+        return \array_values($this->allRoutes);
     }
 
     /**
@@ -95,13 +95,13 @@ class Collection implements Countable, RouteCollectionContract
      */
     public function count(): int
     {
-        return count($this->allRoutes);
+        return \count($this->allRoutes);
     }
 
     /**
      * Add the route to any look-up tables if necessary.
      *
-     * @param \Viserio\Component\Contracts\Routing\Route $route
+     * @param \Viserio\Component\Contract\Routing\Route $route
      *
      * @return void
      */
@@ -120,7 +120,7 @@ class Collection implements Countable, RouteCollectionContract
         // is used by the route. This will let us reverse route to controllers while
         // processing a request and easily generate URLs to the given controllers.
         if (isset($action['controller'])) {
-            $this->actionList[trim($action['controller'], '\\')] = $route;
+            $this->actionList[\trim($action['controller'], '\\')] = $route;
         }
     }
 }

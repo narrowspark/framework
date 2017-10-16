@@ -2,37 +2,72 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron\Provider;
 
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Cron\Command\CronListCommand;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
 
-class ConsoleCommandsServiceProvider implements ServiceProvider
+class ConsoleCommandsServiceProvider implements
+    ServiceProviderInterface,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
-            Application::class => [self::class, 'createConsoleCommands'],
+            Application::class => [self::class, 'extendConsole'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['viserio', 'console'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultOptions(): iterable
+    {
+        return [
+            'lazily_commands' => [
+                'cron:list' => CronListCommand::class,
+                'cron:run'  => ScheduleRunCommand::class,
+            ],
         ];
     }
 
     /**
      * Extend viserio console with commands.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface           $container
+     * @param null|\Viserio\Component\Console\Application $console
      *
      * @return null|\Viserio\Component\Console\Application
      */
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
-    {
-        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
+    public static function extendConsole(
+        ContainerInterface $container,
+        ?Application $console = null
+    ): ?Application {
         if ($console !== null) {
+            // @var Application $console
             $console->addCommands([
                 new CronListCommand(),
                 new ScheduleRunCommand(),

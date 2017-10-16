@@ -3,14 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use BadMethodCallException;
+use Spatie\Macroable\Macroable;
 use Stringy\StaticStringy;
-use Stringy\Stringy;
-use Viserio\Component\Contracts\Support\CharacterType;
-use Viserio\Component\Support\Traits\MacroableTrait;
+use Viserio\Component\Contract\Support\CharacterType;
 
+/**
+ * @mixin \Stringy\StaticStringy
+ */
 class Str
 {
-    use MacroableTrait {
+    use Macroable {
         __callStatic as macroableCallStatic;
     }
 
@@ -40,21 +42,15 @@ class Str
      * @param string  $name
      * @param mixed[] $arguments
      *
-     * @throws \BadMethodCallException
-     *
      * @return mixed
      */
     public static function __callStatic($name, $arguments)
     {
-        if (class_exists(StaticStringy::class)) {
-            try {
-                return self::macroableCallStatic($name, $arguments);
-            } catch (BadMethodCallException $exception) {
-                return forward_static_call_array([StaticStringy::class, $name], $arguments);
-            }
+        try {
+            return self::macroableCallStatic($name, $arguments);
+        } catch (BadMethodCallException $exception) {
+            return \forward_static_call_array([StaticStringy::class, $name], $arguments);
         }
-
-        return self::macroableCallStatic($name, $arguments);
     }
 
     /**
@@ -67,9 +63,9 @@ class Str
      */
     public static function finish(string $value, string $cap): string
     {
-        $quoted = preg_quote($cap, '/');
+        $quoted = \preg_quote($cap, '/');
 
-        return preg_replace('/(?:' . $quoted . ')+$/', '', $value) . $cap;
+        return \preg_replace('/(?:' . $quoted . ')+$/', '', $value) . $cap;
     }
 
     /**
@@ -83,11 +79,11 @@ class Str
      */
     public static function limit(string $value, int $limit = 100, string $end = '...'): string
     {
-        if (mb_strwidth($value, 'UTF-8') <= $limit) {
+        if (\mb_strwidth($value, 'UTF-8') <= $limit) {
             return $value;
         }
 
-        return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')) . $end;
+        return \rtrim(\mb_strimwidth($value, 0, $limit, '', 'UTF-8')) . $end;
     }
 
     /**
@@ -101,13 +97,13 @@ class Str
      */
     public static function words(string $value, int $words = 100, string $end = '...'): string
     {
-        preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
+        \preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
-        if (! isset($matches[0]) || mb_strlen($value) === mb_strlen($matches[0])) {
+        if (! isset($matches[0]) || \mb_strlen($value) === \mb_strlen($matches[0])) {
             return $value;
         }
 
-        return rtrim($matches[0]) . $end;
+        return \rtrim($matches[0]) . $end;
     }
 
     /**
@@ -120,7 +116,7 @@ class Str
      */
     public static function parseCallback(string $callback, string $default): array
     {
-        return static::contains($callback, '@') ? explode('@', $callback, 2) : [$callback, $default];
+        return static::contains($callback, '@') ? \explode('@', $callback, 2) : [$callback, $default];
     }
 
     /**
@@ -138,8 +134,8 @@ class Str
         $str = '';
         $l   = self::length($characters) - 1;
 
-        for ($i = 0; $i < $length; ++$i) {
-            $r = random_int(0, $l);
+        for ($i = 0; $i < $length; $i++) {
+            $r = \random_int(0, $l);
             $str .= $characters[$r];
         }
 
@@ -147,9 +143,21 @@ class Str
     }
 
     /**
+     * Convert a string to kebab case.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public static function kebab(string $value): string
+    {
+        return static::snake($value, '-');
+    }
+
+    /**
      * Convert a string to snake case.
      *
-     * @link https://en.wikipedia.org/wiki/Snake_case
+     * @see https://en.wikipedia.org/wiki/Snake_case
      *
      * @param string $value
      * @param string $delimiter
@@ -164,11 +172,11 @@ class Str
             return static::$snakeCache[$key][$delimiter];
         }
 
-        if (! ctype_lower($value)) {
+        if (! \ctype_lower($value)) {
             $value = self::normalizeScreamingCase($value);
-            $value = trim($value);
-            $value = (string) static::toLowerCase(preg_replace('/(.)(?=[A-Z0-9])/u', '$1' . $delimiter, $value));
-            $value = preg_replace('/[_\s-]+/', $delimiter, $value);
+            $value = \trim($value);
+            $value = \mb_strtolower(\preg_replace('/(.)(?=[A-Z0-9])/u', '$1' . $delimiter, $value));
+            $value = \preg_replace('/[_\s-]+/', $delimiter, $value);
         }
 
         return static::$snakeCache[$key][$delimiter] = $value;
@@ -190,9 +198,89 @@ class Str
         }
 
         $value = self::normalizeScreamingCase($value);
-        $value = ucwords(str_replace(['-', '_'], ' ', $value));
+        $value = \ucwords(\str_replace(['-', '_'], ' ', $value));
 
-        return static::$studlyCache[$key] = str_replace(' ', '', $value);
+        return static::$studlyCache[$key] = \str_replace(' ', '', $value);
+    }
+
+    /**
+     * Get the plural form of an English word.
+     *
+     * @param string $value
+     * @param int    $count
+     *
+     * @return string
+     */
+    public static function plural(string $value, int $count = 2): string
+    {
+        return Pluralizer::plural($value, $count);
+    }
+
+    /**
+     * Get the singular form of an English word.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public static function singular(string $value): string
+    {
+        return Pluralizer::singular($value);
+    }
+
+    /**
+     * Replace the first occurrence of a given value in the string.
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     *
+     * @return string
+     */
+    public static function replaceFirst(string $search, string $replace, string $subject): string
+    {
+        if ($search === '') {
+            return $subject;
+        }
+
+        $position = \mb_strpos($subject, $search);
+
+        return self::replaceByPosition($subject, $replace, $position, $search);
+    }
+
+    /**
+     * Replace the last occurrence of a given value in the string.
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     *
+     * @return string
+     */
+    public static function replaceLast(string $search, string $replace, string $subject): string
+    {
+        $position = \mb_strrpos($subject, $search);
+
+        return self::replaceByPosition($subject, $replace, $position, $search);
+    }
+
+    /**
+     * Helper function for replaceLast and replaceFirst.
+     *
+     * @param string   $subject
+     * @param string   $replace
+     * @param bool|int $position
+     * @param string   $search
+     *
+     * @return string
+     */
+    private static function replaceByPosition(string $subject, string $replace, $position, string $search): string
+    {
+        if ($position !== false) {
+            return \substr_replace($subject, $replace, $position, \mb_strlen($search));
+        }
+
+        return $subject;
     }
 
     /**
@@ -204,8 +292,8 @@ class Str
      */
     private static function normalizeScreamingCase(string $value): string
     {
-        if (ctype_upper(str_replace(['_', '-'], '', $value))) {
-            return mb_strtolower($value);
+        if (\ctype_upper(\str_replace(['_', '-'], '', $value))) {
+            return \mb_strtolower($value);
         }
 
         return $value;

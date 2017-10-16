@@ -5,26 +5,26 @@ namespace Viserio\Component\Cron;
 use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
+use Spatie\Macroable\Macroable;
 use Symfony\Component\Process\Process;
-use Viserio\Component\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\Cron\Cron as CronContract;
+use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Cron\Cron as CronContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
-use Viserio\Component\Support\Traits\MacroableTrait;
 
 class Cron implements CronContract
 {
     use ContainerAwareTrait;
     use CacheItemPoolAwareTrait;
     use InvokerAwareTrait;
-    use MacroableTrait;
+    use Macroable;
 
     /**
      * The cron expression representing the cron job's frequency.
      *
      * @var string
      */
-    protected $expression = '* * * * * *';
+    protected $expression = '* * * * *';
 
     /**
      * The command string.
@@ -78,7 +78,7 @@ class Cron implements CronContract
     /**
      * The human readable description of the cron.
      *
-     * @var string
+     * @var null|string
      */
     protected $description;
 
@@ -149,7 +149,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function setPath(string $path): CronContract
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -181,7 +181,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function evenInMaintenanceMode(): CronContract
+    public function evenInMaintenanceMode(): self
     {
         $this->evenInMaintenanceMode = true;
 
@@ -219,7 +219,7 @@ class Cron implements CronContract
      */
     public function setEnvironments($environments): CronContract
     {
-        $this->environments = is_array($environments) ? $environments : func_get_args();
+        $this->environments = \is_array($environments) ? $environments : \func_get_args();
 
         return $this;
     }
@@ -229,7 +229,7 @@ class Cron implements CronContract
      */
     public function runsInEnvironment(string $environment): bool
     {
-        return empty($this->environments) || in_array($environment, $this->environments);
+        return empty($this->environments) || \in_array($environment, $this->environments, true);
     }
 
     /**
@@ -273,9 +273,9 @@ class Cron implements CronContract
      */
     public function buildCommand(): string
     {
-        $output    = escapeshellarg($this->output);
-        $redirect  = $this->shouldAppendOutput ? ' >> ' : ' > ';
-        $command   = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
+        $output   = \escapeshellarg($this->output);
+        $redirect = $this->shouldAppendOutput ? ' >> ' : ' > ';
+        $command  = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
 
         return $this->ensureCorrectUser($command);
     }
@@ -287,11 +287,13 @@ class Cron implements CronContract
     {
         $this->withoutOverlapping = true;
 
-        return $this->after(function () {
+        $this->after(function (): void {
             $this->cachePool->deleteItem($this->getMutexName());
         })->skip(function () {
             return $this->cachePool->hasItem($this->getMutexName());
         });
+
+        return $this;
     }
 
     /**
@@ -350,7 +352,9 @@ class Cron implements CronContract
      */
     public function hourly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0);
+        $this->spliceIntoPosition(1, 0);
+
+        return $this;
     }
 
     /**
@@ -358,8 +362,10 @@ class Cron implements CronContract
      */
     public function daily(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
+        $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, 0);
+
+        return $this;
     }
 
     /**
@@ -367,9 +373,11 @@ class Cron implements CronContract
      */
     public function monthly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
+        $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, 0)
             ->spliceIntoPosition(3, 1);
+
+        return $this;
     }
 
     /**
@@ -377,10 +385,12 @@ class Cron implements CronContract
      */
     public function yearly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
+        $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, 0)
             ->spliceIntoPosition(3, 1)
             ->spliceIntoPosition(4, 1);
+
+        return $this;
     }
 
     /**
@@ -388,10 +398,12 @@ class Cron implements CronContract
      */
     public function quarterly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
+        $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, 0)
             ->spliceIntoPosition(3, 1)
             ->spliceIntoPosition(4, '*/3');
+
+        return $this;
     }
 
     /**
@@ -399,7 +411,9 @@ class Cron implements CronContract
      */
     public function everyMinute(): CronContract
     {
-        return $this->spliceIntoPosition(1, '*');
+        $this->spliceIntoPosition(1, '*');
+
+        return $this;
     }
 
     /**
@@ -407,7 +421,9 @@ class Cron implements CronContract
      */
     public function everyFiveMinutes(): CronContract
     {
-        return $this->spliceIntoPosition(1, '*/5');
+        $this->spliceIntoPosition(1, '*/5');
+
+        return $this;
     }
 
     /**
@@ -415,7 +431,19 @@ class Cron implements CronContract
      */
     public function everyTenMinutes(): CronContract
     {
-        return $this->spliceIntoPosition(1, '*/10');
+        $this->spliceIntoPosition(1, '*/10');
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function everyFifteenMinutes(): CronContract
+    {
+        $this->spliceIntoPosition(1, '*/15');
+
+        return $this;
     }
 
     /**
@@ -423,7 +451,9 @@ class Cron implements CronContract
      */
     public function everyThirtyMinutes(): CronContract
     {
-        return $this->spliceIntoPosition(1, '0,30');
+        $this->spliceIntoPosition(1, '0,30');
+
+        return $this;
     }
 
     /**
@@ -431,9 +461,11 @@ class Cron implements CronContract
      */
     public function days($days): CronContract
     {
-        $days = is_array($days) ? $days : func_get_args();
+        $days = \is_array($days) ? $days : \func_get_args();
 
-        return $this->spliceIntoPosition(5, implode(',', $days));
+        $this->spliceIntoPosition(5, \implode(',', $days));
+
+        return $this;
     }
 
     /**
@@ -443,7 +475,9 @@ class Cron implements CronContract
     {
         $this->dailyAt($time);
 
-        return $this->spliceIntoPosition(3, $day);
+        $this->spliceIntoPosition(3, $day);
+
+        return $this;
     }
 
     /**
@@ -451,10 +485,12 @@ class Cron implements CronContract
      */
     public function dailyAt(string $time): CronContract
     {
-        $segments = explode(':', $time);
+        $segments = \explode(':', $time);
 
-        return $this->spliceIntoPosition(2, (int) $segments[0])
-            ->spliceIntoPosition(1, count($segments) == 2 ? (int) $segments[1] : 0);
+        $this->spliceIntoPosition(2, (int) $segments[0])
+            ->spliceIntoPosition(1, \count($segments) == 2 ? (int) $segments[1] : 0);
+
+        return $this;
     }
 
     /**
@@ -464,8 +500,10 @@ class Cron implements CronContract
     {
         $hours = $first . ',' . $second;
 
-        return $this->spliceIntoPosition(1, 0)
+        $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, $hours);
+
+        return $this;
     }
 
     /**
@@ -475,9 +513,11 @@ class Cron implements CronContract
     {
         $days = $first . ',' . $second;
 
-        return $this->spliceIntoPosition(1, 0)
+        $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, 0)
             ->spliceIntoPosition(3, $days);
+
+        return $this;
     }
 
     /**
@@ -485,7 +525,9 @@ class Cron implements CronContract
      */
     public function weekdays(): CronContract
     {
-        return $this->spliceIntoPosition(5, '1-5');
+        $this->spliceIntoPosition(5, '1-5');
+
+        return $this;
     }
 
     /**
@@ -493,7 +535,9 @@ class Cron implements CronContract
      */
     public function mondays(): CronContract
     {
-        return $this->days(1);
+        $this->days(1);
+
+        return $this;
     }
 
     /**
@@ -501,7 +545,9 @@ class Cron implements CronContract
      */
     public function tuesdays(): CronContract
     {
-        return $this->days(2);
+        $this->days(2);
+
+        return $this;
     }
 
     /**
@@ -509,7 +555,9 @@ class Cron implements CronContract
      */
     public function wednesdays(): CronContract
     {
-        return $this->days(3);
+        $this->days(3);
+
+        return $this;
     }
 
     /**
@@ -517,7 +565,9 @@ class Cron implements CronContract
      */
     public function thursdays(): CronContract
     {
-        return $this->days(4);
+        $this->days(4);
+
+        return $this;
     }
 
     /**
@@ -525,7 +575,9 @@ class Cron implements CronContract
      */
     public function fridays(): CronContract
     {
-        return $this->days(5);
+        $this->days(5);
+
+        return $this;
     }
 
     /**
@@ -533,7 +585,9 @@ class Cron implements CronContract
      */
     public function saturdays(): CronContract
     {
-        return $this->days(6);
+        $this->days(6);
+
+        return $this;
     }
 
     /**
@@ -541,7 +595,9 @@ class Cron implements CronContract
      */
     public function sundays(): CronContract
     {
-        return $this->days(0);
+        $this->days(0);
+
+        return $this;
     }
 
     /**
@@ -549,9 +605,11 @@ class Cron implements CronContract
      */
     public function weekly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
+        $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, 0)
             ->spliceIntoPosition(5, 0);
+
+        return $this;
     }
 
     /**
@@ -559,9 +617,10 @@ class Cron implements CronContract
      */
     public function weeklyOn(int $day, string $time = '0:0'): CronContract
     {
-        $this->dailyAt($time);
+        $this->dailyAt($time)
+            ->spliceIntoPosition(5, $day);
 
-        return $this->spliceIntoPosition(5, $day);
+        return $this;
     }
 
     /**
@@ -635,7 +694,7 @@ class Cron implements CronContract
      */
     public function getSummaryForDisplay(): string
     {
-        if (is_string($this->description)) {
+        if (\is_string($this->description)) {
             return $this->description;
         }
 
@@ -679,7 +738,7 @@ class Cron implements CronContract
      */
     protected function isWindows(): bool
     {
-        return mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
+        return \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
     }
 
     /**
@@ -716,14 +775,14 @@ class Cron implements CronContract
      * @param int        $position
      * @param int|string $value
      *
-     * @return \Viserio\Component\Contracts\Cron\Cron
+     * @return \Viserio\Component\Contract\Cron\Cron
      */
     protected function spliceIntoPosition(int $position, $value): CronContract
     {
-        $segments                = explode(' ', $this->expression);
+        $segments                = \explode(' ', $this->expression);
         $segments[$position - 1] = $value;
 
-        return $this->cron(implode(' ', $segments));
+        return $this->cron(\implode(' ', $segments));
     }
 
     /**
@@ -762,7 +821,7 @@ class Cron implements CronContract
         $this->callBeforeCallbacks();
 
         $process = new Process(
-            trim($this->buildCommand(), ' &'),
+            \trim($this->buildCommand(), ' &'),
             $this->path,
             null,
             null,
@@ -825,7 +884,7 @@ class Cron implements CronContract
      */
     protected function getMutexName(): string
     {
-        return 'schedule-' . sha1($this->expression . $this->command);
+        return 'schedule-' . \sha1($this->expression . $this->command);
     }
 
     /**
@@ -839,9 +898,10 @@ class Cron implements CronContract
     protected function inTimeInterval(string $startTime, string $endTime): Closure
     {
         return function () use ($startTime, $endTime) {
-            $now = Chronos::now()->getTimestamp();
-
-            return $now >= strtotime($startTime) && $now <= strtotime($endTime);
+            return Chronos::now($this->timezone)->between(
+                Chronos::parse($startTime, $this->timezone),
+                Chronos::parse($endTime, $this->timezone)
+            );
         };
     }
 }

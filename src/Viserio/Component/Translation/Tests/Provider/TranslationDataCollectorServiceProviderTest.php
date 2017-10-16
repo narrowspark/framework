@@ -5,8 +5,8 @@ namespace Viserio\Component\Translation\Tests\Provider;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contracts\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
@@ -16,7 +16,7 @@ use Viserio\Component\Translation\Translator;
 
 class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $catalogue = new MessageCatalogue('en', [
             'messages' => [
@@ -54,7 +54,7 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
-    public function testProviderProfilerIsNull()
+    public function testProviderProfilerIsNull(): void
     {
         $container = new Container();
         $container->register(new TranslationDataCollectorServiceProvider());
@@ -77,10 +77,10 @@ class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME_FLOAT')
+            ->with('request_time_float')
             ->andReturn(false);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME')
+            ->with('request_time')
             ->andReturn(false);
 
         return $request;
