@@ -5,9 +5,9 @@ namespace Viserio\Component\OptionsResolver\Provider;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Console\Application;
-use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProviderInterface,

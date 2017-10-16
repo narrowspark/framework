@@ -6,10 +6,10 @@ use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Component\Console\Application;
-use Viserio\Provider\Twig\Command\CleanCommand;
-use Viserio\Provider\Twig\Command\LintCommand;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Provider\Twig\Command\CleanCommand;
+use Viserio\Provider\Twig\Command\LintCommand;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProviderInterface,
@@ -54,7 +54,6 @@ class ConsoleCommandsServiceProvider implements
             ],
         ];
     }
-
 
     /**
      * Extend viserio console with commands.

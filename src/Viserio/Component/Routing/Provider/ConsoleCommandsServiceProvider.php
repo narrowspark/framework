@@ -5,10 +5,10 @@ namespace Viserio\Component\Routing\Provider;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\Routing\Command\RouteListCommand;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
+use Viserio\Component\Routing\Command\RouteListCommand;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProviderInterface,
@@ -52,7 +52,6 @@ class ConsoleCommandsServiceProvider implements
             ],
         ];
     }
-
 
     /**
      * Extend viserio console with commands.
