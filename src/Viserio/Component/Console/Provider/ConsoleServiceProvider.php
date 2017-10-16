@@ -61,7 +61,7 @@ class ConsoleServiceProvider implements
     public static function getDefaultOptions(): iterable
     {
         return [
-            'lazily_commands' => []
+            'lazily_commands' => [],
         ];
     }
 

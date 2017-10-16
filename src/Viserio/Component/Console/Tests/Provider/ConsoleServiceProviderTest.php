@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Component\Console\Application;
-use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Console\Tests\Fixture\GoodbyeCommand;
 use Viserio\Component\Console\Tests\Fixture\HelloCommand;
@@ -46,9 +46,9 @@ class ConsoleServiceProviderTest extends TestCase
             'viserio' => [
                 'console' => [
                     'lazily_commands' => [
-                        'hello' => HelloCommand::class,
+                        'hello'   => HelloCommand::class,
                         'goodbye' => GoodbyeCommand::class,
-                    ]
+                    ],
                 ],
             ],
         ]);
@@ -59,7 +59,7 @@ class ConsoleServiceProviderTest extends TestCase
         $container->register(new ConsoleServiceProvider());
 
         LazyWhiner::setOutput(new SpyOutput());
-        $output  = new SpyOutput();
+        $output      = new SpyOutput();
         $application = $container->get(Application::class);
 
         $application->run(new StringInput('hello'), $output);
@@ -85,6 +85,5 @@ LazyWhiner says:
 Viserio\Component\Console\Tests\Fixture\HelloCommand made me do work! :-(
 
 ', LazyWhiner::getOutput());
-
     }
 }
