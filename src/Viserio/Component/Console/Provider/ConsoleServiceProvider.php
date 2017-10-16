@@ -8,9 +8,17 @@ use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class ConsoleServiceProvider implements ServiceProviderInterface
+class ConsoleServiceProvider implements
+    ServiceProviderInterface,
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract
 {
+    use OptionsResolverTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -40,6 +48,24 @@ class ConsoleServiceProvider implements ServiceProviderInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['viserio', 'console'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultOptions(): iterable
+    {
+        return [
+            'lazily_commands' => []
+        ];
+    }
+
+    /**
      * Create a new console application instance.
      *
      * @param \Psr\Container\ContainerInterface $container
@@ -55,6 +81,10 @@ class ConsoleServiceProvider implements ServiceProviderInterface
             $console->setEventManager($container->get(EventManagerContract::class));
         }
 
+        if ($container->has(ContainerCommandLoader::class)) {
+            $console->setCommandLoader($container->get(ContainerCommandLoader::class));
+        }
+
         return $console;
     }
 
@@ -67,6 +97,8 @@ class ConsoleServiceProvider implements ServiceProviderInterface
      */
     public static function createContainerCommandLoader(ContainerInterface $container): ContainerCommandLoader
     {
-        return new ContainerCommandLoader($container, []);
+        $options = self::resolveOptions($container);
+
+        return new ContainerCommandLoader($container, $options['lazily_commands']);
     }
 }
