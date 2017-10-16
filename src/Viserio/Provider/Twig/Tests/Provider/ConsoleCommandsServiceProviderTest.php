@@ -4,11 +4,11 @@ namespace Viserio\Provider\Twig\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Twig\Command\DebugCommand;
-use Viserio\Provider\Twig\Command\LintCommand;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Provider\Twig\Command\CleanCommand;
+use Viserio\Provider\Twig\Command\LintCommand;
 use Viserio\Provider\Twig\Provider\ConsoleCommandsServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
