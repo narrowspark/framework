@@ -24,7 +24,7 @@ interface Displayer
      *
      * @return string
      */
-    public function contentType(): string;
+    public function getContentType(): string;
 
     /**
      * Can we display the exception?

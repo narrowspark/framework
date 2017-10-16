@@ -48,7 +48,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     public function __construct(
         ExceptionInfoContract $info,
         ResponseFactoryInterface $responseFactory,
-        $data
+        $data = []
     ) {
         $this->info            = $info;
         $this->responseFactory = $responseFactory;
@@ -80,7 +80,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     {
         $response = $this->responseFactory->createResponse($code);
 
-        foreach (\array_merge($headers, ['Content-Type' => $this->contentType()]) as $header => $value) {
+        foreach (\array_merge($headers, ['Content-Type' => $this->getContentType()]) as $header => $value) {
             $response = $response->withAddedHeader($header, $value);
         }
 
@@ -94,7 +94,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * {@inheritdoc}
      */
-    public function contentType(): string
+    public function getContentType(): string
     {
         return 'text/html';
     }

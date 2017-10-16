@@ -55,7 +55,7 @@
         "narrowspark/collection"              : "^0.1",
         "narrowspark/http-emitter"            : "^0.4",
         "narrowspark/http-status"             : "^4.0",
-        "mtdowling/cron-expression"           : "^1.1",
+        "dragonmantank/cron-expression"       : "^2.0",
         "opis/closure"                        : "^3.0",
         "paragonie/constant_time_encoding"    : "^2.0",
         "php-di/invoker"                      : "^2.0",
@@ -70,6 +70,7 @@
         "symfony/finder"                      : "~3.4 || ~4.0",
         "symfony/filesystem"                  : "~3.4 || ~4.0",
         "symfony/process"                     : "~3.4 || ~4.0",
+        "symfony/stopwatch"                   : "~3.4 || ~4.0",
         "swiftmailer/swiftmailer"             : "^6.0",
         "queue-interop/queue-interop"         : "~0.6",
         "vlucas/phpdotenv"                    : "^2.3"
@@ -153,7 +154,6 @@
         "spatie/flysystem-dropbox"            : "^1.0",
         "symfony/phpunit-bridge"              : "~3.4 || ~4.0",
         "symfony/polyfill-xml"                : "^1.4",
-        "symfony/stopwatch"                   : "~3.4 || ~4.0",
         "symfony/var-dumper"                  : "~3.4 || ~4.0",
         "symfony/yaml"                        : "~3.4 || ~4.0",
         "yosymfony/toml"                      : "^0.3"

@@ -8,8 +8,6 @@ use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Application as ConsoleApplication;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -19,8 +17,15 @@ use Viserio\Component\Contract\Exception\Filter as FilterContract;
 use Viserio\Component\Contract\Exception\Handler as HandlerContract;
 use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
+use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
+use Viserio\Component\Exception\Displayer\JsonDisplayer;
+use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
+use Viserio\Component\Exception\Displayer\ViewDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
+use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
@@ -42,36 +47,20 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     private $displayers = [];
 
     /**
-     * @var null|\Symfony\Component\Console\Application
-     */
-    private $console;
-
-    /**
      * Create a new handler instance.
      *
      * @param \Psr\Container\ContainerInterface              $data
-     * @param \Psr\Log\LoggerInterface                       $logger
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param null|\Psr\Log\LoggerInterface                  $logger
      */
-    public function __construct($data, ResponseFactoryInterface $responseFactory, LoggerInterface $logger)
+    public function __construct($data, ResponseFactoryInterface $responseFactory, ?LoggerInterface $logger = null)
     {
         parent::__construct($data, $logger);
 
+        $this->filters    = $this->transformArray($this->resolvedOptions['filters']);
+        $this->displayers = $this->transformArray($this->resolvedOptions['displayers']);
+
         $this->setResponseFactory($responseFactory);
-    }
-
-    /**
-     * Set a console application instance.
-     *
-     * @param \Symfony\Component\Console\Application $console
-     *
-     * @return $this
-     */
-    public function setConsole(ConsoleApplication $console): self
-    {
-        $this->console = $console;
-
-        return $this;
     }
 
     /**
@@ -90,11 +79,19 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         return \array_merge(
             parent::getDefaultOptions(),
             [
-                'displayers'        => [],
+                'displayers'        => [
+                    WhoopsDisplayer::class,
+                    SymfonyDisplayer::class,
+                    ViewDisplayer::class,
+                    HtmlDisplayer::class,
+                    JsonDisplayer::class,
+                    JsonApiDisplayer::class,
+                ],
                 'default_displayer' => HtmlDisplayer::class,
                 'filters'           => [
                     VerboseFilter::class,
                     CanDisplayFilter::class,
+                    ContentTypeFilter::class,
                 ],
             ]
         );
@@ -169,31 +166,17 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function handleException(Throwable $exception): void
     {
-        $exception = $this->prepareException($exception);
-
         try {
-            $this->report($exception);
-        } catch (Throwable $exception) {
-            // If handler can't report exception just render it
+            parent::handleException($exception);
+        } catch (Throwable $transformedException) {
+            $response = $this->getPreparedResponse(
+                null,
+                $exception,
+                $transformedException
+            );
+
+            echo (string) $response->getBody();
         }
-
-        $transformed = $this->getTransformed($exception);
-
-        if (PHP_SAPI === 'cli') {
-            if (($console = $this->getConsole()) !== null) {
-                $console->renderException($transformed, new ConsoleOutput());
-            } else {
-                throw $transformed;
-            }
-        }
-
-        $response = $this->getPreparedResponse(
-            null,
-            $exception,
-            $transformed
-        );
-
-        echo (string) $response->getBody();
     }
 
     /**
@@ -215,11 +198,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      */
     public function renderForConsole(OutputInterface $output, Throwable $exception): void
     {
-        if (($console = $this->getConsole()) !== null) {
-            $console->renderException($exception, $output);
-
-            return;
-        }
+        (new ConsoleHandler())->render($output, $exception);
     }
 
     /**
@@ -257,14 +236,14 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
      * Create a response for the given exception.
      *
      * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param \Exception                                    $exception
+     * @param \Throwable                                    $exception
      * @param \Throwable                                    $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getResponse(
         ?ServerRequestInterface $request,
-        Exception $exception,
+        Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
         $id          = $this->exceptionIdentifier->identify($exception);
@@ -296,12 +275,9 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         Throwable $transformed,
         int $code
     ): DisplayerContract {
-        $displayers = \array_merge(
-            $this->displayers,
-            $this->resolvedOptions['displayers']
-        );
-
-        if ($request !== null && $filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
+        if ($request !== null &&
+            $filtered = $this->getFiltered($this->make($this->displayers), $request, $original, $transformed, $code)
+        ) {
             return $filtered[0];
         }
 
@@ -332,31 +308,11 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         Throwable $transformed,
         int $code
     ): array {
-        $filters = \array_merge(
-            $this->filters,
-            $this->resolvedOptions['filters']
-        );
-
-        foreach ($filters as $filter) {
-            $filterClass = \is_object($filter) ? $filter : $this->container->get($filter);
-
-            $displayers  = $filterClass->filter($displayers, $request, $original, $transformed, $code);
+        /* @var FilterContract $filter */
+        foreach ($this->make($this->filters) as $filter) {
+            $displayers = $filter->filter($displayers, $request, $original, $transformed, $code);
         }
 
         return \array_values($displayers);
-    }
-
-    /**
-     * Get a console instance form container or take the given instance.
-     *
-     * @return null|\Symfony\Component\Console\Application
-     */
-    private function getConsole(): ? ConsoleApplication
-    {
-        if ($this->console === null && $this->container !== null && $this->container->has(ConsoleApplication::class)) {
-            return $this->console = $this->container->get(ConsoleApplication::class);
-        }
-
-        return $this->console;
     }
 }

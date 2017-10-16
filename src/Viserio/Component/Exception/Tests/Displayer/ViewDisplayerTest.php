@@ -22,6 +22,9 @@ class ViewDisplayerTest extends MockeryTestCase
      */
     private $displayer;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         $this->factoryMock = $this->mock(Factory::class);
@@ -67,7 +70,7 @@ class ViewDisplayerTest extends MockeryTestCase
 
         self::assertFalse($this->displayer->isVerbose());
         self::assertTrue($this->displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $this->displayer->contentType());
+        self::assertSame('text/html', $this->displayer->getContentType());
     }
 
     public function testPropertiesFalse(): void
@@ -81,6 +84,6 @@ class ViewDisplayerTest extends MockeryTestCase
 
         self::assertFalse($this->displayer->isVerbose());
         self::assertFalse($this->displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $this->displayer->contentType());
+        self::assertSame('text/html', $this->displayer->getContentType());
     }
 }

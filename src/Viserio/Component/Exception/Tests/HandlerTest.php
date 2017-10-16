@@ -5,11 +5,9 @@ namespace Viserio\Component\Exception\Tests;
 use ErrorException;
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
@@ -17,7 +15,7 @@ use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Handler;
-use Viserio\Component\Exception\Transformer\CommandLineTransformer;
+use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
 class HandlerTest extends MockeryTestCase
@@ -42,8 +40,13 @@ class HandlerTest extends MockeryTestCase
      */
     private $handler;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
+        parent::setUp();
+
         $this->responseFactory = $this->mock(ResponseFactoryInterface::class);
         $this->loggger         = $this->mock(LoggerInterface::class);
 
@@ -82,15 +85,15 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addDisplayer(new JsonDisplayer($info, $repsonseFactory));
         $this->handler->addDisplayer(new WhoopsDisplayer($repsonseFactory));
 
-        self::assertCount(3, $this->handler->getDisplayers());
+        self::assertCount(6, $this->handler->getDisplayers());
     }
 
     public function testAddAndGetTransformer(): void
     {
-        $this->handler->addTransformer(new CommandLineTransformer());
-        $this->handler->addTransformer(new CommandLineTransformer());
+        $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
+        $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
 
-        self::assertCount(1, $this->handler->getTransformers());
+        self::assertCount(3, $this->handler->getTransformers());
     }
 
     public function testAddAndGetFilter(): void
@@ -98,49 +101,13 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addFilter(new VerboseFilter($this->container));
         $this->handler->addFilter(new VerboseFilter($this->container));
 
-        self::assertCount(1, $this->handler->getFilters());
-    }
-
-    public function testReportError(): void
-    {
-        $exception = new Exception('Exception message');
-
-        $this->loggger->shouldReceive('error')
-            ->once()
-            ->withArgs(['Exception message', Mockery::hasKey('exception')]);
-        $this->loggger->shouldReceive('critical')
-            ->never();
-
-        $this->handler->report($exception);
-    }
-
-    public function testReportCritical(): void
-    {
-        $exception = new FatalThrowableError(new Exception());
-
-        $this->loggger->shouldReceive('error')
-            ->never();
-        $this->loggger->shouldReceive('critical')
-            ->once();
-
-        $this->handler->report($exception);
-    }
-
-    public function testShouldntReport(): void
-    {
-        $exception = new FatalThrowableError(new Exception());
-
-        $this->loggger->shouldReceive('critical')
-            ->never();
-
-        $this->handler->addShouldntReport($exception);
-        $this->handler->report($exception);
+        self::assertCount(3, $this->handler->getFilters());
     }
 
     public function testHandleError(): void
     {
         try {
-            $this->handler->handleError(E_PARSE, 'test', '', 0, null);
+            $this->handler->handleError(E_PARSE, 'test', '', 0);
         } catch (ErrorException $e) {
             self::assertInstanceOf(ErrorException::class, $e);
         }

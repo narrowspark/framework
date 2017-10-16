@@ -22,6 +22,7 @@ class View extends StaticalProxy
     public static function createResponseView(string $template, array $args = [])
     {
         $response = self::$container->get(ResponseFactoryInterface::class)->createResponse();
+        $response = $response->withAddedHeader('Content-Type', 'text/html');
 
         $stream = self::$container->get(StreamFactoryInterface::class)->createStream();
         $stream->write((string) self::$container->get(ViewFactory::class)->create($template, $args));

@@ -4,33 +4,22 @@ namespace Viserio\Component\Exception\Displayer;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 use Throwable;
 use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 
-class JsonDisplayer implements DisplayerContract
+class SymfonyDisplayer implements DisplayerContract
 {
     use ResponseFactoryAwareTrait;
 
     /**
-     * The exception info instance.
+     * Create a new symfony displayer instance.
      *
-     * @var \Viserio\Component\Contract\Exception\ExceptionInfo
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      */
-    protected $info;
-
-    /**
-     * Create a new html displayer instance.
-     *
-     * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
-     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
-     */
-    public function __construct(
-        ExceptionInfoContract $info,
-        ResponseFactoryInterface $responseFactory
-    ) {
-        $this->info            = $info;
+    public function __construct(ResponseFactoryInterface $responseFactory)
+    {
         $this->responseFactory = $responseFactory;
     }
 
@@ -39,9 +28,6 @@ class JsonDisplayer implements DisplayerContract
      */
     public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
     {
-        $info  = $this->info->generate($id, $code);
-        $error = ['id' => $id, 'status' => $info['code'], 'title' => $info['name'], 'detail' => $info['detail']];
-
         $response = $this->responseFactory->createResponse($code);
 
         foreach (\array_merge($headers, ['Content-Type' => $this->getContentType()]) as $header => $value) {
@@ -49,7 +35,7 @@ class JsonDisplayer implements DisplayerContract
         }
 
         $body = $response->getBody();
-        $body->write(\json_encode(['errors' => [$error]], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES));
+        $body->write($this->renderExceptionWithSymfony($exception));
         $body->rewind();
 
         return $response->withBody($body);
@@ -60,7 +46,7 @@ class JsonDisplayer implements DisplayerContract
      */
     public function getContentType(): string
     {
-        return 'application/json';
+        return 'text/html';
     }
 
     /**
@@ -76,6 +62,18 @@ class JsonDisplayer implements DisplayerContract
      */
     public function isVerbose(): bool
     {
-        return false;
+        return true;
+    }
+
+    /**
+     * Render an exception to a string using Symfony.
+     *
+     * @param \Throwable $exception
+     *
+     * @return string
+     */
+    private function renderExceptionWithSymfony(Throwable $exception)
+    {
+        return (new SymfonyExceptionHandler())->getHtml($exception);
     }
 }
