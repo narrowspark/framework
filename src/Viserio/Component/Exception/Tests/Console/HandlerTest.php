@@ -56,7 +56,8 @@ class HandlerTest extends TestCase
             $file = self::normalizeDirectorySeparator($file);
         }
 
-        self::assertSame("Symfony\Component\Debug\Exception\FatalThrowableError : test
+        self::assertSame("
+Symfony\Component\Debug\Exception\FatalThrowableError : test
 
 at $file : 44
 40:         \$application = new Application();
@@ -97,7 +98,8 @@ Exception trace:
             $file = self::normalizeDirectorySeparator($file);
         }
 
-        self::assertSame("Symfony\Component\Debug\Exception\FatalThrowableError : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
+        self::assertSame("
+Symfony\Component\Debug\Exception\FatalThrowableError : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
 
 at $file : 16
 12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle()\n15:     {\n16:         Console::test('error');\n17:     }\n18: }
@@ -132,7 +134,8 @@ Exception trace:
             $handlerFile = self::normalizeDirectorySeparator($handlerFile);
         }
 
-        self::assertSame("Symfony\Component\Console\Exception\CommandNotFoundException : Command \"error\" is not defined.
+        self::assertSame("
+Symfony\Component\Console\Exception\CommandNotFoundException : Command \"error\" is not defined.
 
 at $vendorFile : 615
 611:                 }
@@ -158,7 +161,7 @@ Exception trace:
     $viserioFile : 296
 
 4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
-    $handlerFile : 120
+    $handlerFile : 122
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
     [internal] : 0

@@ -31,6 +31,7 @@ final class Handler
         $exceptionMessage = $exception->getMessage();
         $exceptionName    = \get_class($exception);
 
+        $output->writeln('');
         $output->writeln(\sprintf(
             '<bg=red;options=bold>%s</> : <comment>%s</>',
             $exceptionName,
