@@ -312,6 +312,8 @@ class ErrorHandler implements
             \class_exists(ConsoleOutput::class)
         ) {
             (new ConsoleHandler())->render(new ConsoleOutput(), $transformed);
+
+            return;
         }
 
         throw $transformed;
