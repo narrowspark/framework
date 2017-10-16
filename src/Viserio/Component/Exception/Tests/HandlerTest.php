@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests;
 
 use ErrorException;
-use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
