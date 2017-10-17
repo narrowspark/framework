@@ -38,7 +38,68 @@ class OptionDumpCommandTest extends TestCase
         };
     }
 
-    public function testCommand(): void
+    public function testCommandWithNoDirArgument(): void
+    {
+        $tester = new CommandTester($this->command);
+        $tester->execute([], ['interactive' => false]);
+
+        self::assertEquals(
+            'Argument [dir] can\'t be empty.',
+            trim($tester->getDisplay())
+        );
+    }
+
+    public function testCommandWithMerge(): void
+    {
+        $tester = new CommandTester($this->command);
+
+        vfsStream::newFile('package.php')
+            ->withContent("<?php
+declare(strict_types=1);
+
+return [
+    'vendor' => [
+        'package' => [
+            'minLength' => 2,
+        ],
+    ],
+];")
+            ->at($this->root);
+
+        $tester->execute(['dir' => $this->root->url(), '--merge' => true], ['interactive' => false]);
+
+        self::assertEquals(
+            "Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.\r\n  0/26 [>---------------------------]   0%\r\n  2/26 [==>-------------------------]   7%\r\n  4/26 [====>-----------------------]  15%\r\n  6/26 [======>---------------------]  23%\r\n  8/26 [========>-------------------]  30%\r\n 10/26 [==========>-----------------]  38%\r\n 12/26 [============>---------------]  46%\r\n 14/26 [===============>------------]  53%\r\n 16/26 [=================>----------]  61%\r\n 18/26 [===================>--------]  69%\r\n 20/26 [=====================>------]  76%\r\n 22/26 [=======================>----]  84%\r\n 24/26 [=========================>--]  92%\r\n 26/26 [============================] 100%",
+            trim($tester->getDisplay())
+        );
+        self::assertEquals(
+            "<?php
+declare(strict_types=1);
+
+return [
+    'vendor' => [
+        'package' => [
+            'minLength' => 2,
+            'maxLength' => NULL,
+        ],
+    ],
+];",
+            $this->root->getChild('package.php')->getContent()
+        );
+    }
+
+    public function testCommandWithShow(): void
+    {
+        $tester = new CommandTester($this->command);
+        $tester->execute(['dir' => $this->root->url(), '--show' => true], ['interactive' => false]);
+
+        self::assertEquals(
+            "Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.\r\n  0/26 [>---------------------------]   0%\r\n  2/26 [==>-------------------------]   7%\r\n  4/26 [====>-----------------------]  15%\r\n  6/26 [======>---------------------]  23%\r\n  8/26 [========>-------------------]  30%\r\n 10/26 [==========>-----------------]  38%\r\n 12/26 [============>---------------]  46%\r\n 14/26 [===============>------------]  53%\r\n 16/26 [=================>----------]  61%\r\n 18/26 [===================>--------]  69%\r\n 20/26 [=====================>------]  76%\r\n 22/26 [=======================>----]  84%\r\n 24/26 [=========================>--]  92%\r\n 26/26 [============================] 100%\r\nOutput array:\n\n<?php\ndeclare(strict_types=1);\n\nreturn [\n    'vendor' => [\n        'package' => [\n            'minLength' => 2,\n            'maxLength' => NULL,\n        ],\n    ],\n];",
+            trim($tester->getDisplay())
+        );
+    }
+
+    public function testCommandWithDirArgument(): void
     {
         $tester = new CommandTester($this->command);
         $tester->execute(['dir' => $this->root->url()], ['interactive' => false]);
@@ -67,7 +128,7 @@ return [
 
         $output = $tester->getDisplay(true);
 
-        self::assertSame("Only the php format is supported; use composer req viserio/parser to get json, xml, yml output.\n", $output);
+        self::assertSame("Only the php format is supported; use composer req viserio/parser to get [json], [xml], [yml] output.\n", $output);
     }
 
     public function testCommandWithDumper(): void

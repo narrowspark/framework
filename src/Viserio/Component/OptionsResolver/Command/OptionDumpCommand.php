@@ -74,7 +74,7 @@ class OptionDumpCommand extends Command
         }
 
         if ($dumper === null && $format !== 'php') {
-            $this->error('Only the php format is supported; use composer req viserio/parser to get json, xml, yml output.');
+            $this->error('Only the php format is supported; use composer req viserio/parser to get [json], [xml], [yml] output.');
 
             return 1;
         }
@@ -85,7 +85,7 @@ class OptionDumpCommand extends Command
             $file = $dirPath . '\\' . $key . '.' . $format;
 
             if ($this->hasOption('merge') && \file_exists($file)) {
-                $existingConfig = (array) include $file;
+                $existingConfig = includeFile($file);
                 $config         = \array_replace_recursive($existingConfig, $config);
             }
 
@@ -99,28 +99,14 @@ return ' . $this->getPrettyPrintArray($config) . ';';
             }
 
             if ($this->hasOption('show')) {
-                $this->info("Merged array:\n\n" . $content);
+                $this->info("Output array:\n\n" . $content);
 
                 if ($this->confirm(\sprintf('Write content to "%s"?', $file)) === false) {
                     continue;
                 }
             }
 
-            if ($this->hasOption('overwrite') || ! \file_exists($file)) {
-                \file_put_contents($file, $content);
-            } else {
-                if ($this->hasOption('merge')) {
-                    $confirmed = true;
-                } else {
-                    $confirmed = $this->confirm(\sprintf('Do you really wish to overwrite %s', $key));
-                }
-
-                if ($confirmed) {
-                    \file_put_contents($file, $content);
-                } else {
-                    continue;
-                }
-            }
+            $this->putContentToFile($file, $content, $key);
         }
 
         return 0;
@@ -328,6 +314,8 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
         $progress->finish();
 
+        $output->writeln('');
+
         return $classMap;
     }
 
@@ -382,4 +370,45 @@ return ' . $this->getPrettyPrintArray($config) . ';';
             '/\.php$/'
         ));
     }
+
+    /**
+     * Put the created content to file.
+     *
+     * @param string $file
+     * @param string $content
+     * @param string $key
+     *
+     * @return void
+     */
+    private function putContentToFile(string $file, string $content, string $key): void
+    {
+        if ($this->hasOption('overwrite') || !\file_exists($file)) {
+            \file_put_contents($file, $content);
+        } else {
+            if ($this->hasOption('merge')) {
+                $confirmed = true;
+            } else {
+                $confirmed = $this->confirm(\sprintf('Do you really wish to overwrite %s', $key));
+            }
+
+            if ($confirmed) {
+                \file_put_contents($file, $content);
+            }
+        }
+    }
+}
+
+
+/**
+ * Scope isolated include.
+ *
+ * Prevents access to $this/self from included files.
+ *
+ * @param string $file
+ *
+ * @return array
+ */
+function includeFile(string $file): array
+{
+    return (array) include $file;
 }
