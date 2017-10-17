@@ -175,11 +175,6 @@
             "benchmarks/"
         ]
     },
-    "autoload-dev": {
-        "files": [
-            "src/Viserio/Component/OptionsResolver/Tests/Command/OverwritePhpFunctions.php"
-        ]
-    },
     "extra": {
         "branch-alias": {
             "dev-master"                     : "1.0-dev"

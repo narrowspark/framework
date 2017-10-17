@@ -8,24 +8,40 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 use Viserio\Component\Parser\Dumper;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class OptionDumpCommandTest extends TestCase
 {
+
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 
+    /**
+     * @var \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
+     */
+    private $command;
+
     public function setUp(): void
     {
         $this->root = vfsStream::setup();
+        $this->command = new class extends OptionDumpCommand {
+            use NormalizePathAndDirectorySeparatorTrait;
+
+            /**
+             * {@inheritdoc}
+             */
+            protected function getComposerVendorPath(): string
+            {
+                return self::normalizeDirectorySeparator(dirname(__DIR__) . '/Fixtures/composer');
+            }
+        };
     }
 
     public function testCommand(): void
     {
-        $command = new OptionDumpCommand();
-
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute(['dir' => $this->root->url()], ['interactive' => false]);
         $tester->getDisplay();
 
@@ -47,9 +63,7 @@ return [
 
     public function testCommandShowError(): void
     {
-        $command = new OptionDumpCommand();
-
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute(['dir' => $this->root->url(), '--format' => 'json'], ['interactive' => false]);
 
         $output = $tester->getDisplay(true);
@@ -60,7 +74,7 @@ return [
     public function testCommandWithDumper(): void
     {
         $container = new ArrayContainer([Dumper::class => new Dumper()]);
-        $command   = new OptionDumpCommand();
+        $command   = $this->command;
         $command->setContainer($container);
 
         $tester = new CommandTester($command);

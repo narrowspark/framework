@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
+use Exception;
 use InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionObject;
 use RegexIterator;
 use SplFileObject;
@@ -17,7 +19,6 @@ use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigC
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Parser\Dumper;
 use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
-use function Functional\false;
 
 class OptionDumpCommand extends Command
 {
@@ -58,10 +59,16 @@ class OptionDumpCommand extends Command
      */
     public function handle()
     {
-        $configs = $this->getOptionsFromDeclaredClasses();
-        $format  = $this->option('format');
         $dirPath = $this->argument('dir');
-        $dumper  = null;
+
+        if ($dirPath === null) {
+            $this->error('Argument [dir] can\'t be empty.');
+
+            return 1;
+        }
+
+        $format = $this->option('format');
+        $dumper = null;
 
         if ($this->container !== null && $this->getContainer()->has(Dumper::class)) {
             $dumper = $this->getContainer()->get(Dumper::class);
@@ -75,7 +82,7 @@ class OptionDumpCommand extends Command
 
         self::generateDirectory($dirPath);
 
-        foreach ($configs as $key => $config) {
+        foreach ($this->getOptionsFromDeclaredClasses() as $key => $config) {
             $file = $dirPath . '\\' . $key . '.' . $format;
 
             if ($this->hasOption('merge') && \file_exists($file)) {
@@ -131,20 +138,18 @@ return ' . $this->getPrettyPrintArray($config) . ';';
             $reflection = new ReflectionObject($this);
             $dir        = \dirname($reflection->getFileName());
 
-            while (! \file_exists($dir . '/composer.json')) {
+            while (! \is_dir($dir . '/vendor/composer')) {
                 $dir = \dirname($dir);
             }
 
             $this->rootDir = $dir;
         }
 
-        return \rtrim($this->rootDir, '/') . '/vendor/composer/';
+        return $this->rootDir . '/vendor/composer/';
     }
 
     /**
      * Return a array full of declared class options.
-     *
-     * @throws \ReflectionException
      *
      * @return array
      */
@@ -153,8 +158,13 @@ return ' . $this->getPrettyPrintArray($config) . ';';
         $configs = [];
 
         foreach ($this->getClassMap() as $className) {
-            $reflectionClass = new ReflectionClass($className);
-            $interfaces      = \array_flip($reflectionClass->getInterfaceNames());
+            try {
+                $reflectionClass = new ReflectionClass($className);
+            } catch (ReflectionException $e) {
+                continue;
+            }
+
+            $interfaces = \array_flip($reflectionClass->getInterfaceNames());
 
             if (isset($interfaces[RequiresConfigContract::class]) && ! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract()) {
                 $dimensions       = [];
@@ -172,7 +182,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
                 }
 
                 if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
-                    $mandatoryOptions = $this->readMandatoryOption($className::getMandatoryOptions());
+                    $mandatoryOptions = $this->readMandatoryOption($className, $className::getMandatoryOptions());
                 }
 
                 $options = \array_merge_recursive($defaultOptions, $mandatoryOptions);
@@ -192,22 +202,25 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     /**
      * Read the mandatory options and ask for the value.
      *
+     * @param string   $className
      * @param iterable $mandatoryOptions
      *
      * @return array
      */
-    private function readMandatoryOption(iterable $mandatoryOptions): array
+    private function readMandatoryOption($className, iterable $mandatoryOptions): array
     {
         $options = [];
 
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
             if (! \is_scalar($mandatoryOption)) {
-                $options[$key] = $this->readMandatoryOption($mandatoryOptions[$key]);
+                $options[$key] = $this->readMandatoryOption($className, $mandatoryOptions[$key]);
 
                 continue;
             }
 
-            $options[$mandatoryOption] = $this->ask(\sprintf('Pleas enter the mandatory value for %s', $mandatoryOption));
+            $options[$mandatoryOption] = $this->ask(
+                \sprintf('%s: Please enter the following mandatory value for [%s]', $className, $mandatoryOption)
+            );
         }
 
         return $options;
@@ -252,7 +265,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
         if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
             throw new InvalidArgumentException(sprintf(
-                'Cache directory [%s] cannot be created or is write protected.',
+                'Config directory [%s] cannot be created or is write protected.',
                 $dir
             ));
         }
@@ -267,7 +280,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
         $output = $this->getOutput();
         $output->writeln(\sprintf(
-            'Searching for php files with implemented \%s interface.',
+            'Searching for php classes with implemented \%s interface.',
             RequiresConfigContract::class)
         );
 
