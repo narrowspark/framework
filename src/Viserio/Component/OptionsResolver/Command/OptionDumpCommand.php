@@ -157,23 +157,22 @@ return ' . $this->getPrettyPrintArray($config) . ';';
             $interfaces      = \array_flip($reflectionClass->getInterfaceNames());
 
             if (isset($interfaces[RequiresConfigContract::class]) && ! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract()) {
-                $factory          = $reflectionClass->newInstanceWithoutConstructor();
                 $dimensions       = [];
                 $mandatoryOptions = [];
                 $defaultOptions   = [];
                 $key              = null;
 
                 if (isset($interfaces[RequiresComponentConfigContract::class])) {
-                    $dimensions = (array) $factory->getDimensions();
+                    $dimensions = (array) $className::getDimensions();
                     $key        = \end($dimensions);
                 }
 
                 if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
-                    $defaultOptions = (array) $factory->getDefaultOptions();
+                    $defaultOptions = (array) $className::getDefaultOptions();
                 }
 
                 if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
-                    $mandatoryOptions = $this->readMandatoryOption($factory->getMandatoryOptions());
+                    $mandatoryOptions = $this->readMandatoryOption($className::getMandatoryOptions());
                 }
 
                 $options = \array_merge_recursive($defaultOptions, $mandatoryOptions);
