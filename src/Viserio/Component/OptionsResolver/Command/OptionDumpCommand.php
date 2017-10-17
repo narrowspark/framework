@@ -6,7 +6,9 @@ use InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
+use ReflectionObject;
 use RegexIterator;
+use SplFileObject;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -41,6 +43,13 @@ class OptionDumpCommand extends Command
      * {@inheritdoc}
      */
     protected $description = 'Dumps config files for found classes with RequiresConfig interface.';
+
+    /**
+     * Root dir path.
+     *
+     * @var string
+     */
+    private $rootDir;
 
     /**
      * {@inheritdoc}
@@ -109,6 +118,27 @@ return ' . $this->getPrettyPrintArray($config) . ';';
         }
 
         return 0;
+    }
+
+    /**
+     * Returns the composer vendor path.
+     *
+     * @return string
+     */
+    protected function getComposerVendorPath(): string
+    {
+        if ($this->rootDir === null) {
+            $reflection = new ReflectionObject($this);
+            $dir = \dirname($reflection->getFileName());
+
+            while (!\file_exists($dir . '/composer.json')) {
+                $dir = \dirname($dir);
+            }
+
+            $this->rootDir = $dir;
+        }
+
+        return \rtrim($this->rootDir, '/') . '/vendor/composer/';
     }
 
     /**
@@ -234,16 +264,15 @@ return ' . $this->getPrettyPrintArray($config) . ';';
      */
     private function getClassMap(): array
     {
-        $composerFolder = \getcwd() . '/vendor/composer/';
-
-        $classMap   = \array_keys((array) require $composerFolder . '/autoload_classmap.php');
-        $splObjects = $this->getSplObjects($composerFolder);
+        $classMap = \array_keys((array) require $this->getComposerVendorPath() . '/autoload_classmap.php');
 
         $output = $this->getOutput();
         $output->writeln(\sprintf(
             'Searching for php files with implemented \%s interface.',
             RequiresConfigContract::class)
         );
+
+        $splObjects = $this->getSplFileObjects();
 
         $progress = new ProgressBar($output, count($splObjects));
         $progress->start();
@@ -261,7 +290,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
                 if (isset($tokens[$index][0]) && $tokens[$index][0] === T_NAMESPACE) {
                     $index += 2; // Skip namespace keyword and whitespace
 
-                    while (isset($tokens[$index]) && is_array($tokens[$index])) {
+                    while (isset($tokens[$index]) && \is_array($tokens[$index])) {
                         $namespace .= $tokens[$index++][1];
                     }
                 }
@@ -269,11 +298,11 @@ return ' . $this->getPrettyPrintArray($config) . ';';
                 if (isset($tokens[$index][0]) && $tokens[$index][0] === T_CLASS && $tokens[$index - 1][0] !== T_DOUBLE_COLON) {
                     $index += 2; // Skip class keyword and whitespace
 
-                    if (! is_array($tokens[$index])) {
+                    if (! \is_array($tokens[$index])) {
                         continue;
                     }
 
-                    $class = ltrim($namespace . '\\' . $tokens[$index][1], '\\');
+                    $class = \ltrim($namespace . '\\' . $tokens[$index][1], '\\');
 
                     if (! class_exists($class, false)) {
                         continue;
@@ -292,38 +321,54 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     }
 
     /**
-     * @param $composerFolder
+     * Get all found classes as spl file objects.
+     *
      *
      * @return array
      */
-    private function getSplObjects($composerFolder): array
+    private function getSplFileObjects(): array
     {
-        $phpFilePaths = array_merge(
-//            \array_values((array) require $composerFolder . '/autoload_files.php'),
+        $composerFolder = $this->getComposerVendorPath();
+        $phpFilePaths   = array_merge(
             \array_values((array) require $composerFolder . '/autoload_psr4.php'),
             \array_values((array) require $composerFolder . '/autoload_namespaces.php')
         );
 
+        $filesPaths = \array_values((array) require $composerFolder . '/autoload_files.php');
+
         $splObjects = [];
-        $iterator   = function ($path) {
-            return \iterator_to_array(new RegexIterator(
-                new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($path)
-                ),
-                '/\.php$/'
-            ));
-        };
+
+        foreach ($filesPaths as $path) {
+            $splObjects[] = new SplFileObject($path);
+        }
 
         foreach ($phpFilePaths as $path) {
-            if (is_array($path)) {
+            if (\is_array($path)) {
                 foreach ($path as $subpath) {
-                    $splObjects = \array_merge($splObjects, $iterator($subpath));
+                    $splObjects = \array_merge($splObjects, $this->getRegexIterator($subpath));
                 }
             } else {
-                $splObjects = \array_merge($splObjects, $iterator($path));
+                $splObjects = \array_merge($splObjects, $this->getRegexIterator($path));
             }
         }
 
         return $splObjects;
+    }
+
+    /**
+     * Returns a configured RegexIterator.
+     *
+     * @param string $path
+     *
+     * @return array
+     */
+    private function getRegexIterator(string $path): array
+    {
+        return \iterator_to_array(new RegexIterator(
+            new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($path)
+            ),
+            '/\.php$/'
+        ));
     }
 }
