@@ -382,7 +382,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
      */
     private function putContentToFile(string $file, string $content, string $key): void
     {
-        if ($this->hasOption('overwrite') || !\file_exists($file)) {
+        if ($this->hasOption('overwrite') || ! \file_exists($file)) {
             \file_put_contents($file, $content);
         } else {
             if ($this->hasOption('merge')) {
@@ -397,7 +397,6 @@ return ' . $this->getPrettyPrintArray($config) . ';';
         }
     }
 }
-
 
 /**
  * Scope isolated include.

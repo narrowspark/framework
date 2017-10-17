@@ -507,6 +507,20 @@ class ErrorHandler implements
     }
 
     /**
+     * The default error transformers.
+     *
+     * @return array
+     */
+    protected function getErrorTransformer(): array
+    {
+        return [
+            ClassNotFoundFatalErrorTransformer::class     => new ClassNotFoundFatalErrorTransformer(),
+            UndefinedFunctionFatalErrorTransformer::class => new UndefinedFunctionFatalErrorTransformer(),
+            UndefinedMethodFatalErrorTransformer::class   => new UndefinedMethodFatalErrorTransformer(),
+        ];
+    }
+
+    /**
      * Get the exception level.
      *
      * @param \Throwable $exception
@@ -544,19 +558,5 @@ class ErrorHandler implements
         }
 
         return false;
-    }
-
-    /**
-     * The default error transformers.
-     *
-     * @return array
-     */
-    protected function getErrorTransformer(): array
-    {
-        return [
-            ClassNotFoundFatalErrorTransformer::class => new ClassNotFoundFatalErrorTransformer(),
-            UndefinedFunctionFatalErrorTransformer::class => new UndefinedFunctionFatalErrorTransformer(),
-            UndefinedMethodFatalErrorTransformer::class => new UndefinedMethodFatalErrorTransformer(),
-        ];
     }
 }
