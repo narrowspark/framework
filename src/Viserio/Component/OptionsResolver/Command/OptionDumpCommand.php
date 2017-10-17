@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
-use Exception;
 use InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

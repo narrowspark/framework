@@ -12,7 +12,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class OptionDumpCommandTest extends TestCase
 {
-
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
@@ -25,8 +24,8 @@ class OptionDumpCommandTest extends TestCase
 
     public function setUp(): void
     {
-        $this->root = vfsStream::setup();
-        $this->command = new class extends OptionDumpCommand {
+        $this->root    = vfsStream::setup();
+        $this->command = new class() extends OptionDumpCommand {
             use NormalizePathAndDirectorySeparatorTrait;
 
             /**
