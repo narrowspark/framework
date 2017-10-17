@@ -129,9 +129,9 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     {
         if ($this->rootDir === null) {
             $reflection = new ReflectionObject($this);
-            $dir = \dirname($reflection->getFileName());
+            $dir        = \dirname($reflection->getFileName());
 
-            while (!\file_exists($dir . '/composer.json')) {
+            while (! \file_exists($dir . '/composer.json')) {
                 $dir = \dirname($dir);
             }
 
