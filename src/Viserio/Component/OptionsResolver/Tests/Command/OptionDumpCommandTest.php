@@ -51,6 +51,23 @@ class OptionDumpCommandTest extends TestCase
         );
     }
 
+    /**
+     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Config directory [vfs://bar] cannot be created or is write protected.
+     */
+    public function testCommandCantCreateDir(): void
+    {
+        $dir = vfsStream::newDirectory('bar', 0000);
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['dir' => $dir->url()], ['interactive' => false]);
+
+        self::assertEquals(
+            'Argument [dir] can\'t be empty.',
+            trim($tester->getDisplay())
+        );
+    }
+
     public function testCommandWithMerge(): void
     {
         $tester = new CommandTester($this->command);

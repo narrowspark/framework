@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
-use InvalidArgumentException;
+use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
@@ -54,7 +54,7 @@ class OptionDumpCommand extends Command
     /**
      * {@inheritdoc}
      *
-     * @throws \InvalidArgumentException if dir cant be created or is not writable
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException if dir cant be created or is not writable
      */
     public function handle()
     {
@@ -243,7 +243,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
      *
      * @param string $dir
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException
      *
      * @return void
      */
