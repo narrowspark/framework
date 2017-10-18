@@ -167,7 +167,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
                 }
 
                 if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
-                    $mandatoryOptions = $this->readMandatoryOption($className, $className::getMandatoryOptions());
+                    $mandatoryOptions = $this->readMandatoryOption($className, $dimensions, $className::getMandatoryOptions());
                 }
 
                 $options = \array_merge_recursive($defaultOptions, $mandatoryOptions);
@@ -188,23 +188,28 @@ return ' . $this->getPrettyPrintArray($config) . ';';
      * Read the mandatory options and ask for the value.
      *
      * @param string   $className
+     * @param array    $dimensions
      * @param iterable $mandatoryOptions
      *
      * @return array
      */
-    private function readMandatoryOption($className, iterable $mandatoryOptions): array
+    private function readMandatoryOption(string $className, array $dimensions, iterable $mandatoryOptions): array
     {
         $options = [];
 
         foreach ($mandatoryOptions as $key => $mandatoryOption) {
             if (! \is_scalar($mandatoryOption)) {
-                $options[$key] = $this->readMandatoryOption($className, $mandatoryOptions[$key]);
+                $options[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryOptions[$key]);
 
                 continue;
             }
 
             $options[$mandatoryOption] = $this->ask(
-                \sprintf('%s: Please enter the following mandatory value for [%s]', $className, $mandatoryOption)
+                \sprintf(
+                    '%s: Please enter the following mandatory value for [%s]',
+                    $className,
+                    implode('.', $dimensions) . '.' . $mandatoryOption
+                )
             );
         }
 

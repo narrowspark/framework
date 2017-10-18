@@ -12,6 +12,8 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class OptionDumpCommandTest extends TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
@@ -156,6 +158,26 @@ return [
     ],
 ];",
             $this->root->getChild('package.php')->getContent()
+        );
+    }
+
+    public function testFindTheFirstComposerVendorFolder()
+    {
+        $command = new class() extends OptionDumpCommand {
+            use NormalizePathAndDirectorySeparatorTrait;
+
+            /**
+             * {@inheritdoc}
+             */
+            public function getComposerVendorPath(): string
+            {
+                return self::normalizeDirectorySeparator(parent::getComposerVendorPath());
+            }
+        };
+
+        self::assertSame(
+            self::normalizeDirectorySeparator(dirname(__DIR__, 6) . '/vendor/composer/'),
+            $command->getComposerVendorPath()
         );
     }
 }
