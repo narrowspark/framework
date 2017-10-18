@@ -52,7 +52,7 @@ class OptionDumpCommandTest extends TestCase
     public function testCommandWithMerge(): void
     {
         $tester = new CommandTester($this->command);
-        $eol = PHP_EOL;
+        $eol    = PHP_EOL;
 
         vfsStream::newFile('package.php')
             ->withContent("<?php
