@@ -96,7 +96,7 @@ return [
         $eol = PHP_EOL;
 
         self::assertEquals(
-            "Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.{$eol}  0/26 [>---------------------------]   0%{$eol}  2/26 [==>-------------------------]   7%{$eol}  4/26 [====>-----------------------]  15%{$eol}  6/26 [======>---------------------]  23%{$eol}  8/26 [========>-------------------]  30%{$eol} 10/26 [==========>-----------------]  38%{$eol} 12/26 [============>---------------]  46%{$eol} 14/26 [===============>------------]  53%{$eol} 16/26 [=================>----------]  61%{$eol} 18/26 [===================>--------]  69%{$eol} 20/26 [=====================>------]  76%{$eol} 22/26 [=======================>----]  84%{$eol} 24/26 [=========================>--]  92%{$eol} 26/26 [============================] 100%{$eol}Output array:\n\n<?php\ndeclare(strict_types=1);\n\nreturn [\n    'vendor' => [\n        'package' => [\n            'minLength' => 2,\n            'maxLength' => NULL,\n        ],\n    ],\n];",
+            "Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.{$eol} 0/1 [>---------------------------]   0%{$eol} 1/1 [============================] 100%{$eol}Output array:\n\n<?php\ndeclare(strict_types=1);\n\nreturn [\n    'vendor' => [\n        'package' => [\n            'minLength' => 2,\n            'maxLength' => NULL,\n        ],\n    ],\n];",
             trim($tester->getDisplay())
         );
     }
