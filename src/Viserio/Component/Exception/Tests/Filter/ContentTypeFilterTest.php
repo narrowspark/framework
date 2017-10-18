@@ -59,7 +59,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptAll(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('*/*');
 
         $debug = $this->whoopsDisplayer;
@@ -74,7 +74,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptHtmlAndAll(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('text/html,*/*');
 
         $debug = $this->whoopsDisplayer;
@@ -89,7 +89,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptJustHtml(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('text/html');
 
         $debug = $this->whoopsDisplayer;
@@ -104,7 +104,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptText(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('text/*');
 
         $debug = $this->whoopsDisplayer;
@@ -119,8 +119,8 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptJsonAndAll(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
-            ->andReturn('application/json,*/*');
+            ->with('content-type')
+            ->andReturn('application/json, */*');
 
         $debug = $this->whoopsDisplayer;
         $html  = $this->htmlDisplayer;
@@ -134,7 +134,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptJustJson(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('application/json');
 
         $debug = $this->whoopsDisplayer;
@@ -149,7 +149,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptApplication(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('application/*');
 
         $debug = $this->whoopsDisplayer;
@@ -165,7 +165,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptComplexJson(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('application/foo+json');
 
         $debug = $this->whoopsDisplayer;
@@ -181,7 +181,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptJsonApi(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('application/vnd.api+json');
 
         $debug = $this->whoopsDisplayer;
@@ -197,7 +197,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptManyThings(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('text/*,application/foo+xml');
 
         $debug = $this->whoopsDisplayer;
@@ -212,7 +212,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     public function testAcceptNothing(): void
     {
         $this->serverRequest->shouldReceive('getHeaderLine')
-            ->with('Accept')
+            ->with('content-type')
             ->andReturn('application/xml');
 
         $debug = $this->whoopsDisplayer;

@@ -16,7 +16,7 @@ if (typeof(Profiler) == 'undefined') {
         };
     }
 
-    var profilerStorageKey = 'ns/profiler/';
+    var profilerStorageKey = 'narrowspark/profiler/';
 
     var openPanel = false;
 

@@ -1,3 +1,6 @@
+.profiler-menu.profiler-menu-viserio-http-data-collector.profiler-menu-position-left .profiler-menu-content {
+    padding: 0 7px 0 0!important;
+}
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-green .profiler-menu-label,
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-yellow .profiler-menu-label,
 .profiler-menu.profiler-menu-viserio-http-data-collector.response-status-red .profiler-menu-label {

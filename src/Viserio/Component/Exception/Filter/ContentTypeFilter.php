@@ -42,7 +42,7 @@ class ContentTypeFilter implements FilterContract
      */
     private function accepts($contentTypes, ServerRequestInterface $request): bool
     {
-        $accepts = $this->getAcceptableContentTypes($request->getHeaderLine('Accept'));
+        $accepts = $this->getAcceptableContentTypes($request->getHeaderLine('content-type'));
 
         if (\count($accepts) === 0) {
             return true;
