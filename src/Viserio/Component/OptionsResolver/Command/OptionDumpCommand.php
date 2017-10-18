@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
@@ -12,6 +11,7 @@ use RegexIterator;
 use SplFileObject;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
