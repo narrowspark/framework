@@ -130,9 +130,13 @@ class ErrorHandler implements
     {
         $this->resolvedOptions     = self::resolveOptions($data);
         $this->exceptionIdentifier = new ExceptionIdentifier();
-        $this->transformers        = $this->transformArray($this->resolvedOptions['transformers']);
-        $this->dontReport          = $this->resolvedOptions['dont_report'];
-        $this->logger              = $logger ?? new NullLogger();
+        $this->transformers        = array_merge(
+            $this->getErrorTransformer(),
+            $this->transformArray($this->resolvedOptions['transformers'])
+        );
+
+        $this->dontReport = $this->resolvedOptions['dont_report'];
+        $this->logger     = $logger ?? new NullLogger();
     }
 
     /**
@@ -160,11 +164,7 @@ class ErrorHandler implements
                 AbstractServerErrorException::class => LogLevel::ERROR,
             ],
             // Exception transformers.
-            'transformers' => [
-                ClassNotFoundFatalErrorTransformer::class     => new ClassNotFoundFatalErrorTransformer(),
-                UndefinedFunctionFatalErrorTransformer::class => new UndefinedFunctionFatalErrorTransformer(),
-                UndefinedMethodFatalErrorTransformer::class   => new UndefinedMethodFatalErrorTransformer(),
-            ],
+            'transformers' => [],
         ];
     }
 
@@ -504,6 +504,20 @@ class ErrorHandler implements
         }
 
         return array_values($classes);
+    }
+
+    /**
+     * The default error transformers.
+     *
+     * @return array
+     */
+    protected function getErrorTransformer(): array
+    {
+        return [
+            ClassNotFoundFatalErrorTransformer::class     => new ClassNotFoundFatalErrorTransformer(),
+            UndefinedFunctionFatalErrorTransformer::class => new UndefinedFunctionFatalErrorTransformer(),
+            UndefinedMethodFatalErrorTransformer::class   => new UndefinedMethodFatalErrorTransformer(),
+        ];
     }
 
     /**

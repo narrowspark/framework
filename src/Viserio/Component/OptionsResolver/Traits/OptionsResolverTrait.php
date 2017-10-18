@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Traits;
 
 use ArrayAccess;
-use InvalidArgumentException;
 use Iterator;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\OptionsResolver\Exception\InvalidValidatorException;
 use Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
 use Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException;
@@ -38,7 +38,7 @@ trait OptionsResolverTrait
      * @param mixed       $config
      * @param null|string $configId Config name, must be provided if factory uses RequiresConfigId interface
      *
-     * @throws \InvalidArgumentException                                                              If the $configId parameter is provided but factory does not support it
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException         If the $configId parameter is provided but factory does not support it
      * @throws \Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException         If the $config parameter has the wrong type
      * @throws \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException          If no options are available
      * @throws \Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException If a mandatory option is missing

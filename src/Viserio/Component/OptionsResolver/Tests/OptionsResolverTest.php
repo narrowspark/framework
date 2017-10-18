@@ -41,13 +41,13 @@ class OptionsResolverTest extends MockeryTestCase
      * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException
      * @expectedExceptionMessage Configuration must either be of type [array] or implement [\ArrayAccess]. Configuration position is [doctrine].
      */
-    public function testOptionsResolverThrowsInvalidArgumentExceptionIfConfigIsNotAnArray(): void
+    public function testOptionsResolverThrowsUnexpectedValueExceptionIfConfigIsNotAnArray(): void
     {
         $this->getOptionsResolver(new ConnectionConfiguration(), ['doctrine' => new stdClass()]);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException
      * @expectedExceptionMessage The factory [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionConfiguration] does not support multiple instances.
      */
     public function testOptionsThrowsInvalidArgumentExIfConfigIdIsProvidedButRequiresConfigIdIsNotImplemented(): void
