@@ -5,9 +5,10 @@ namespace Viserio\Component\Session\Handler;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface;
+use SessionUpdateTimestampHandlerInterface;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 
-class CookieSessionHandler implements SessionHandlerInterface
+class CookieSessionHandler implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
 {
     /**
      * The cookie jar instance.

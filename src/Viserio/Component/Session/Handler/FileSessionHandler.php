@@ -4,10 +4,11 @@ namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
 use SessionHandlerInterface;
+use SessionUpdateTimestampHandlerInterface;
 use Symfony\Component\Finder\Finder;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 
-class FileSessionHandler implements SessionHandlerInterface
+class FileSessionHandler implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
 {
     /**
      * The filesystem instance.
@@ -113,5 +114,21 @@ class FileSessionHandler implements SessionHandlerInterface
         }
 
         return ! \in_array('false', $boolArray, true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateId($sessionId): bool
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateTimestamp($sessionId, $data): bool
+    {
+
     }
 }
