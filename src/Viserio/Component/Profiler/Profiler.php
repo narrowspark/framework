@@ -179,12 +179,13 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
 
         $token = \mb_substr(\hash('sha256', \uniqid((string) \mt_rand(), true)), 0, 6);
         $response->withHeader('X-Debug-Token', $token);
+
         //@TODO Send json data or redirect.
         try {
             if ($this->isRedirect($response)) {
                 // $this->stackData();
             } elseif ($this->isJsonRequest($serverRequest)) {
-                // $this->sendDataInHeaders(true);
+                $this->sendDataInHeaders(true);
             } elseif ($this->isHtmlResponse($response) || $this->isHtmlAccepted($serverRequest)) {
                 // Just collect + store data, don't inject it.
                 $this->collectData($token, $serverRequest, $response);
@@ -333,7 +334,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     private function isHtmlResponse(ResponseInterface $response): bool
     {
-        return $this->hasHeaderContains($response, 'Content-Type', 'html');
+        return $this->hasHeaderContains($response, 'content-type', 'html');
     }
 
     /**
@@ -345,7 +346,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     private function isJsonRequest(ServerRequestInterface $request): bool
     {
-        return $this->hasHeaderContains($request, 'Accept', 'application/json');
+        return $this->hasHeaderContains($request, 'content-type', 'application/json');
     }
 
     /**
