@@ -110,7 +110,7 @@ class ProfilerServiceProvider implements
         ?EventManagerContract $eventManager = null
     ): ?EventManagerContract {
         if ($eventManager !== null) {
-            $eventManager->attach(TerminableContract::TERMINATE, function () use ($container) {
+            $eventManager->attach(TerminableContract::TERMINATE, function () use ($container): void {
                 $container->get(ProfilerContract::class)->flush();
             });
         }

@@ -99,7 +99,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return void
      */
-    public function __unset($key)
+    public function __unset($key): void
     {
         unset($this->data[$key]);
     }

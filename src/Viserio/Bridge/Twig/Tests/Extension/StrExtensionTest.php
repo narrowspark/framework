@@ -89,7 +89,7 @@ class StrExtensionTest extends MockeryTestCase
         }
     }
 
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         parent::assertPreConditions();
 

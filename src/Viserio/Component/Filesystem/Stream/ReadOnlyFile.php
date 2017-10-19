@@ -64,7 +64,7 @@ class ReadOnlyFile implements FileStream
     /**
      * ReadOnlyFile constructor.
      *
-     * @param string|resource                        $file
+     * @param resource|string                        $file
      * @param null|\Viserio\Component\Encryption\Key $key
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException
@@ -236,13 +236,13 @@ class ReadOnlyFile implements FileStream
      * through verifying that the hash matches and the current cursor position/file
      * size matches their values when the file was first opened.
      *
-     * @link https://cwe.mitre.org/data/definitions/367.html
+     * @see https://cwe.mitre.org/data/definitions/367.html
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      *
      * @return void
      */
-    private function toctouTest()
+    private function toctouTest(): void
     {
         if (\ftell($this->stream) !== $this->position) {
             throw new FileModifiedException(

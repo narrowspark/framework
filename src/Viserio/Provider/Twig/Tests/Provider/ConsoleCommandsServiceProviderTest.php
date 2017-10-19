@@ -27,12 +27,12 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertInstanceOf(LintCommand::class, $commands['twig:lint']);
     }
 
-    public function testGetDimensions()
+    public function testGetDimensions(): void
     {
         self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
-    public function testGetDefaultOptions()
+    public function testGetDefaultOptions(): void
     {
         self::assertSame(
             [

@@ -17,7 +17,7 @@ trait ChooseEncoderTrait
      *
      * @internal
      *
-     * @param string|bool $chosen
+     * @param bool|string $chosen
      * @param bool        $decode
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidTypeException

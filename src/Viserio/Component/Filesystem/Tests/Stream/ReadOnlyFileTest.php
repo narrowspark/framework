@@ -22,7 +22,7 @@ class ReadOnlyFileTest extends TestCase
         $this->root = vfsStream::setup();
     }
 
-    public function testGetHashWithEmptyKey()
+    public function testGetHashWithEmptyKey(): void
     {
         $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 
@@ -41,7 +41,7 @@ class ReadOnlyFileTest extends TestCase
         \fclose($fp);
     }
 
-    public function testGetHashWithKey()
+    public function testGetHashWithKey(): void
     {
         $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 
@@ -63,7 +63,7 @@ class ReadOnlyFileTest extends TestCase
         \fclose($fp);
     }
 
-    public function testRead()
+    public function testRead(): void
     {
         $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 
@@ -79,7 +79,7 @@ class ReadOnlyFileTest extends TestCase
         $fStream->seek(0);
     }
 
-    public function testGetRemainingBytes()
+    public function testGetRemainingBytes(): void
     {
         $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 
@@ -102,7 +102,7 @@ class ReadOnlyFileTest extends TestCase
      * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      * @expectedExceptionMessage Read-only file has been modified since it was opened for reading.
      */
-    public function testReadToThrowException()
+    public function testReadToThrowException(): void
     {
         $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 
@@ -128,7 +128,7 @@ class ReadOnlyFileTest extends TestCase
      * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      * @expectedExceptionMessage This is a read-only file handle.
      */
-    public function testWrite()
+    public function testWrite(): void
     {
         $filename = vfsStream::newFile('temp.txt')->at($this->root)->url();
 

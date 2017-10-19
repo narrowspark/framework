@@ -777,7 +777,7 @@ class ContainerTest extends MockeryTestCase
         $container->get(ContainerTestContextInjectOneFixture::class);
     }
 
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());
@@ -786,7 +786,7 @@ class ContainerTest extends MockeryTestCase
         self::assertInstanceOf(ServiceFixture::class, $container['service']);
     }
 
-    public function testProviderWithRegisterMethod()
+    public function testProviderWithRegisterMethod(): void
     {
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider(), [
@@ -798,7 +798,7 @@ class ContainerTest extends MockeryTestCase
         self::assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
-    public function testExtendingValue()
+    public function testExtendingValue(): void
     {
         $container = new Container();
         $container->instance('previous', 'foo');
@@ -807,7 +807,7 @@ class ContainerTest extends MockeryTestCase
         self::assertEquals('foofoo', $container->get('previous'));
     }
 
-    public function testExtendingNothing()
+    public function testExtendingNothing(): void
     {
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());

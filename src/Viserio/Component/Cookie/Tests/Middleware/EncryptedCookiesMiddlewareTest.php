@@ -23,7 +23,7 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
      */
     private $encrypter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -21,7 +21,7 @@ class CanDisplayFilterTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

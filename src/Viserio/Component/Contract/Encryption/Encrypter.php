@@ -12,7 +12,7 @@ interface Encrypter
      *
      * @param \Viserio\Component\Contract\Encryption\HiddenString $plaintext
      * @param string                                              $additionalData
-     * @param string|bool                                         $encoding
+     * @param bool|string                                         $encoding
      *
      * @return string
      */

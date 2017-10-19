@@ -27,7 +27,7 @@ class VerboseFilterTest extends MockeryTestCase
     private $jsonDisplayer;
 
     /**
-     * @var \Psr\Http\Message\ServerRequestInterface|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
      */
     private $requestMock;
 
@@ -36,7 +36,7 @@ class VerboseFilterTest extends MockeryTestCase
      */
     private $exception;
 
-    public function setUp()
+    public function setUp(): void
     {
         $response              = new ResponseFactory();
         $this->whoopsDisplayer = new WhoopsDisplayer($response);

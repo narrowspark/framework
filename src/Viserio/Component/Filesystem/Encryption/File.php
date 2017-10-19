@@ -29,8 +29,8 @@ final class File
     /**
      * Encrypt a file using key encryption.
      *
-     * @param string|resource $input  File name or file handle
-     * @param string|resource $output File name or file handle
+     * @param resource|string $input  File name or file handle
+     * @param resource|string $output File name or file handle
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
@@ -65,8 +65,8 @@ final class File
     /**
      * Decrypt a file using key encryption.
      *
-     * @param string|resource $input  File name or file handle
-     * @param string|resource $output File name or file handle
+     * @param resource|string $input  File name or file handle
+     * @param resource|string $output File name or file handle
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException

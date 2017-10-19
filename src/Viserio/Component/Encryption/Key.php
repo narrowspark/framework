@@ -55,7 +55,7 @@ final class Key
     /**
      * Don't allow this object to ever be serialized.
      */
-    public function __sleep()
+    public function __sleep(): void
     {
         throw new CannotSerializeKeyException();
     }
@@ -63,7 +63,7 @@ final class Key
     /**
      * Don't allow this object to ever be unserialized.
      */
-    public function __wakeup()
+    public function __wakeup(): void
     {
         throw new CannotSerializeKeyException();
     }

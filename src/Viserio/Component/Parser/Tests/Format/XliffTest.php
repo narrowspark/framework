@@ -256,7 +256,7 @@ class XliffTest extends TestCase
         );
     }
 
-    public function testDumpXliffV2WithNotes()
+    public function testDumpXliffV2WithNotes(): void
     {
         $datas = [
             'version'  => '2.0',
@@ -290,7 +290,7 @@ class XliffTest extends TestCase
         );
     }
 
-    public function testParserXliffV2WithNotes()
+    public function testParserXliffV2WithNotes(): void
     {
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv2-notes-meta.xlf'));
 

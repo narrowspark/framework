@@ -24,7 +24,7 @@ class HandlerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         if (\extension_loaded('xdebug')) {
             $this->markTestSkipped('@todo fix output with xdebug');
@@ -35,7 +35,7 @@ class HandlerTest extends TestCase
         $this->handler = new Handler();
     }
 
-    public function testRenderWithStringCommand()
+    public function testRenderWithStringCommand(): void
     {
         $application = new Application();
         $output      = new SpyOutput();
@@ -79,7 +79,7 @@ Exception trace:
 ", $output->output);
     }
 
-    public function testRenderWithCommand()
+    public function testRenderWithCommand(): void
     {
         $application = new Application();
         $output      = new SpyOutput();
@@ -113,7 +113,7 @@ Exception trace:
 ", $output->output);
     }
 
-    public function testRenderWithCommandNoFound()
+    public function testRenderWithCommandNoFound(): void
     {
         $application = new Application();
         $output      = new SpyOutput();

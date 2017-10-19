@@ -20,7 +20,7 @@ class ProfilerTest extends MockeryTestCase
      */
     private $profiler;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -158,7 +158,7 @@ class ProfilerTest extends MockeryTestCase
         self::assertEquals($response, $orginalResponse);
     }
 
-    public function testFlush()
+    public function testFlush(): void
     {
         $collector = $this->mock(DataCollector::class);
         $collector->shouldReceive('getName')

@@ -11,7 +11,7 @@ use Viserio\Component\Encryption\HiddenString;
  */
 class HiddenStringTest extends TestCase
 {
-    public function testHiddenStringOutput()
+    public function testHiddenStringOutput(): void
     {
         $str = Base64UrlSafe::encode(\random_bytes(32));
 

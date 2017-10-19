@@ -77,7 +77,7 @@ class FnStream implements StreamInterface
      *
      * @throws \Viserio\Component\Contract\Http\Exception\LogicException
      */
-    public function __wakeup()
+    public function __wakeup(): void
     {
         throw new LogicException('FnStream should never be unserialized');
     }

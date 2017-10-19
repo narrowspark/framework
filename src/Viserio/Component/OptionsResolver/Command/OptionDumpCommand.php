@@ -269,9 +269,11 @@ return ' . $this->getPrettyPrintArray($config) . ';';
         $classMap = \array_keys((array) require $this->getComposerVendorPath() . '/autoload_classmap.php');
 
         $output = $this->getOutput();
-        $output->writeln(\sprintf(
+        $output->writeln(
+            \sprintf(
             'Searching for php classes with implemented \%s interface.',
-            RequiresConfigContract::class)
+            RequiresConfigContract::class
+        )
         );
 
         $splObjects = $this->getSplFileObjects();
@@ -284,7 +286,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
             $tokens    = \token_get_all($content);
             $namespace = '';
 
-            for ($index = 0; isset($tokens[$index]); $index++) {
+            for ($index = 0; isset($tokens[$index]); ++$index) {
                 if (! isset($tokens[$index][0])) {
                     continue;
                 }

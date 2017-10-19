@@ -19,7 +19,7 @@ interface Log extends PsrLoggerInterface
      *
      * @param string              $path
      * @param string              $level
-     * @param null|callable|array $processors
+     * @param null|array|callable $processors
      * @param null|object|string  $formatter
      *
      * @return void
@@ -37,7 +37,7 @@ interface Log extends PsrLoggerInterface
      * @param string              $path
      * @param int                 $days
      * @param string              $level
-     * @param null|callable|array $processors
+     * @param null|array|callable $processors
      * @param null|object|string  $formatter
      *
      * @return void

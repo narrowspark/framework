@@ -18,7 +18,7 @@ class SymfonyDisplayerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->displayer = new SymfonyDisplayer(new ResponseFactory());
     }

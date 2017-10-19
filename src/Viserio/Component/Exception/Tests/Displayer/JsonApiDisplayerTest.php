@@ -19,7 +19,7 @@ class JsonApiDisplayerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->displayer = new JsonApiDisplayer(new ExceptionInfo(), new ResponseFactory());
     }

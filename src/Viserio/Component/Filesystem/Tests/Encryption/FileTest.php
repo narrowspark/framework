@@ -22,7 +22,7 @@ class FileTest extends TestCase
      */
     private $root;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ class FileTest extends TestCase
         $this->file = new File($key);
     }
 
-    public function testFileToFileEncryptionAndDecryption()
+    public function testFileToFileEncryptionAndDecryption(): void
     {
         [$file, $encryptedFile, $decryptedFile] = $this->arrangeStreamFiles();
 
@@ -47,7 +47,7 @@ class FileTest extends TestCase
         );
     }
 
-    public function testResourceToResourceEncryptionAndDecryption()
+    public function testResourceToResourceEncryptionAndDecryption(): void
     {
         [$file, $encryptedFile, $decryptedFile] = $this->arrangeStreamFiles();
 
@@ -63,7 +63,7 @@ class FileTest extends TestCase
         );
     }
 
-    public function testEmptyFileToFileEncryptionAndDecryption()
+    public function testEmptyFileToFileEncryptionAndDecryption(): void
     {
         $file          = vfsStream::newFile('file.txt')->withContent('')->at($this->root);
         $encryptedFile = vfsStream::newFile('encrypted.txt')->at($this->root);

@@ -13,7 +13,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 class ViewDisplayerTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contract\View\Factory|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Factory
      */
     private $factoryMock;
 
@@ -25,7 +25,7 @@ class ViewDisplayerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->factoryMock = $this->mock(Factory::class);
         $this->displayer   = new ViewDisplayer(new ExceptionInfo(), new ResponseFactory(), $this->factoryMock);

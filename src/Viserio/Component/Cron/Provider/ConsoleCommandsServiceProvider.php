@@ -67,7 +67,7 @@ class ConsoleCommandsServiceProvider implements
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-            /* @var Application $console */
+            // @var Application $console
             $console->addCommands([
                 new CronListCommand(),
                 new ScheduleRunCommand(),

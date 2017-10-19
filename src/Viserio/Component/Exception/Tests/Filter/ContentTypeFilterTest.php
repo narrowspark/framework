@@ -16,7 +16,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 class ContentTypeFilterTest extends MockeryTestCase
 {
     /**
-     * @var \Psr\Http\Message\ServerRequestInterface|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
      */
     private $serverRequest;
 
@@ -43,7 +43,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

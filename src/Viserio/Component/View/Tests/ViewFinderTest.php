@@ -19,7 +19,7 @@ class ViewFinderTest extends MockeryTestCase
     private $finder;
 
     /**
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Viserio\Component\Contract\Filesystem\Filesystem
      */
     private $filesystem;
 
@@ -28,7 +28,7 @@ class ViewFinderTest extends MockeryTestCase
      */
     private $path;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -60,7 +60,7 @@ class PhpInputStreamTest extends TestCase
         self::assertEquals(\mb_substr($contents, 128), $remainder);
     }
 
-    public function testGetContentsReturnCacheWhenReachedEof()
+    public function testGetContentsReturnCacheWhenReachedEof(): void
     {
         $this->stream->getContents();
 

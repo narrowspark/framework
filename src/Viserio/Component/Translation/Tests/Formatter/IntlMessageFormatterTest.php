@@ -26,7 +26,7 @@ class IntlMessageFormatterTest extends TestCase
     public function testFormatToThrowException(): void
     {
         self::assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
-  male {He avoids bugs}
+\u{a0}\u{a0}male {He avoids bugs}
 female {She avoids bugs} }', 'en', [1]));
     }
 

@@ -178,7 +178,7 @@ return [
         );
     }
 
-    public function testFindTheFirstComposerVendorFolder()
+    public function testFindTheFirstComposerVendorFolder(): void
     {
         $command = new class() extends OptionDumpCommand {
             use NormalizePathAndDirectorySeparatorTrait;

@@ -7,7 +7,7 @@ use Throwable;
 class IOException extends RuntimeException
 {
     /**
-     * @var string|null
+     * @var null|string
      */
     private $path;
 

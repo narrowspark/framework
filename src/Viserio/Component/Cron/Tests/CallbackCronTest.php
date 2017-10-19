@@ -12,7 +12,7 @@ class CallbackCronTest extends MockeryTestCase
     /**
      * Mocked CacheItemPoolInterface.
      *
-     * @var \Psr\Cache\CacheItemPoolInterface|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Psr\Cache\CacheItemPoolInterface
      */
     protected $cache;
 

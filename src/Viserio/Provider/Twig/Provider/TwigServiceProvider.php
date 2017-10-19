@@ -101,7 +101,7 @@ class TwigServiceProvider implements
         ?FactoryContract $view = null
     ): ?FactoryContract {
         if ($view !== null) {
-            /* @var FactoryContract $view */
+            // @var FactoryContract $view
             $view->addExtension('twig', 'twig');
         }
 
@@ -121,7 +121,7 @@ class TwigServiceProvider implements
         ?EngineResolver $engines = null
     ): ?EngineResolver {
         if ($engines !== null) {
-            /* @var EngineResolver $engines */
+            // @var EngineResolver $engines
             $engines->register('twig', function () use ($container) {
                 return $container->get(TwigEngine::class);
             });

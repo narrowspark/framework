@@ -20,7 +20,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 class HandlerTest extends MockeryTestCase
 {
     /**
-     * @var \Psr\Container\ContainerInterface|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Psr\Container\ContainerInterface
      */
     private $container;
 
@@ -30,7 +30,7 @@ class HandlerTest extends MockeryTestCase
     private $responseFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
      */
     private $loggger;
 
@@ -42,7 +42,7 @@ class HandlerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

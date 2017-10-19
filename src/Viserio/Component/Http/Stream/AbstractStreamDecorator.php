@@ -24,7 +24,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
      * Magic method used to create a new stream if streams are not added in
      * the constructor of a decorator (e.g., LazyOpenStream).
      *
-     * @param string $name Name of the property (allows "stream" only).
+     * @param string $name name of the property (allows "stream" only)
      *
      * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      *

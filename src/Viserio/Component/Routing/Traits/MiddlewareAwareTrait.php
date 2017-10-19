@@ -59,7 +59,7 @@ trait MiddlewareAwareTrait
     /**
      * Adds a middleware or a array of middlewares to the route/controller.
      *
-     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|array|string $middlewares
+     * @param array|\Interop\Http\ServerMiddleware\MiddlewareInterface|string $middlewares
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *

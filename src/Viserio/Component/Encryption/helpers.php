@@ -46,7 +46,7 @@ if (! \function_exists('raw_keyed_hash')) {
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
      *
-     * @return string Returns raw binary.
+     * @return string returns raw binary
      */
     function raw_keyed_hash(string $input, string $key, int $length = SODIUM_CRYPTO_GENERICHASH_BYTES): string
     {
@@ -84,7 +84,7 @@ if (! \function_exists('keyed_hash')) {
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
      *
-     * @return string Returns hexadecimal characters.
+     * @return string returns hexadecimal characters
      */
     function keyed_hash(string $input, string $key, int $length = SODIUM_CRYPTO_GENERICHASH_BYTES): string
     {

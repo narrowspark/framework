@@ -37,12 +37,12 @@ class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(ServeCommand::class, $commands['serve']);
     }
 
-    public function testGetDimensions()
+    public function testGetDimensions(): void
     {
         self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
-    public function testGetDefaultOptions()
+    public function testGetDefaultOptions(): void
     {
         self::assertSame(
             [

@@ -33,12 +33,12 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertInstanceOf(RouteListCommand::class, $commands['route:table']);
     }
 
-    public function testGetDimensions()
+    public function testGetDimensions(): void
     {
         self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
-    public function testGetDefaultOptions()
+    public function testGetDefaultOptions(): void
     {
         self::assertSame(
             [

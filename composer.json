@@ -23,10 +23,10 @@
     },
     "authors"    : [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name"    : "Daniel Bannert",
+            "email"   : "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role"    : "Developer"
         }
     ],
     "require": {
@@ -143,6 +143,7 @@
         "nikic/fast-route"                    : "^1.2",
         "nyholm/nsa"                          : "^1.1",
         "mockery/mockery"                     : "^1.0",
+        "narrowspark/php-cs-fixer-config"     : "^2.0",
         "phpunit/phpunit"                     : "^6.0",
         "phpbench/phpbench"                   : "^0.12",
         "phpstan/phpstan"                     : "^0.8",
@@ -181,6 +182,7 @@
         }
     },
     "scripts": {
+        "cs"                                 : "sh vendor/bin/php-cs-fixer fix",
         "coverage"                           : "sh vendor/bin/phpunit --coverage-html=\"build/logs\"",
         "phpstan"                            : "sh ./vendor/bin/phpstan analyse -c phpstan.neon -l 6 src/Viserio"
     },

@@ -19,7 +19,7 @@ class PasswordTest extends TestCase
      */
     private $encrypter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +28,7 @@ class PasswordTest extends TestCase
         $this->encrypter = new Encrypter($key);
     }
 
-    public function testPasswordEncryption()
+    public function testPasswordEncryption(): void
     {
         $password = new Password($this->encrypter);
         $hash     = $password->hash(new HiddenString('test password'));

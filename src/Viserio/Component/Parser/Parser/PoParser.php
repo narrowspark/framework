@@ -95,21 +95,21 @@ class PoParser implements ParserContract
             switch ($key) {
                 case '#': // # Translator comments
                     $entry['tcomment'][] = self::convertString($data);
-                    break;
 
+                    break;
                 case '#.': // #. Comments extracted from source code
                     $entry['ccomment'][] = self::convertString($data);
-                    break;
 
+                    break;
                 case '#,': // Flagged translation
                     $entry['flags'] = \preg_split('/,\s*/', $data);
                     $entry['fuzzy'] = \in_array('fuzzy', $entry['flags'], true);
-                    break;
 
+                    break;
                 case '#:':
                     $entry = self::addReferences($data, $entry);
-                    break;
 
+                    break;
                 case '#|':  // Previous untranslated string
                 case '#~':  // Old entries
                 case '#~|': // Previous-Old untranslated string.
@@ -142,11 +142,10 @@ class PoParser implements ParserContract
                     }
 
                     break;
-
                 case '#@': // ignore #@ default
                     $entry['@'] = self::convertString($data);
-                    break;
 
+                    break;
                 // Allows disambiguation of different messages that have same msgid.
                 case 'msgctxt':
                 case 'msgid':        // untranslated-string
@@ -158,8 +157,8 @@ class PoParser implements ParserContract
                 case 'msgstr':       // translated-string
                     $state           = 'msgstr';
                     $entry[$state][] = self::convertString($data);
-                    break;
 
+                    break;
                 default:
                     if (mb_strpos($key, 'msgstr[') !== false) {
                         // translated-string-case-n
@@ -245,7 +244,7 @@ class PoParser implements ParserContract
             \preg_match_all('/(.*):\s/', $header, $matches, PREG_SET_ORDER);
 
             if (isset($matches[0]) && \in_array($matches[0][1], $keys, true)) {
-                $headerItems++;
+                ++$headerItems;
 
                 unset($headerKeys[$matches[0][1]]);
 
@@ -337,6 +336,7 @@ class PoParser implements ParserContract
                 $entry['msgstr'][] = self::convertString($str);
 
                 $lastPreviousKey = $tmpKey;
+
                 break;
             default:
                 break;
@@ -369,9 +369,11 @@ class PoParser implements ParserContract
             case 'msgstr':
                 $entry[$key][$tmpKey][] = self::convertString($str);
                 $lastPreviousKey        = $tmpKey;
+
                 break;
             default:
                 $entry[$key][$tmpKey] = self::convertString($str);
+
                 break;
         }
 
@@ -421,6 +423,7 @@ class PoParser implements ParserContract
             case 'msgid':
             case 'msgid_plural':
                 $entry = $addEntry($entry, $state, $line);
+
                 break;
             case 'msgstr':
                 $entry['msgstr'][] = self::convertString($line);

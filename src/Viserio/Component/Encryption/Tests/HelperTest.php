@@ -9,7 +9,7 @@ class HelperTest extends TestCase
     /**
      * Verify that safe_str_cpy() doesn't fall prey to interned strings.
      */
-    public function testSafeStrCpy()
+    public function testSafeStrCpy(): void
     {
         //var_dump(get_extension_funcs('sodium'));die;
         $unique = \random_bytes(128);
@@ -26,7 +26,7 @@ class HelperTest extends TestCase
     /**
      * Test our HKDF-esque construct built atop BLAKE2b.
      */
-    public function testBlake2bKDF()
+    public function testBlake2bKDF(): void
     {
         $ikm  = 'YELLOW SUBMARINE';
         $len  = 32;

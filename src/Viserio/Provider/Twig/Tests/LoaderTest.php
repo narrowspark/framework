@@ -12,16 +12,16 @@ use Viserio\Provider\Twig\Loader;
 class LoaderTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Viserio\Component\Contract\Filesystem\Filesystem
      */
     private $file;
 
     /**
-     * @var \Viserio\Component\View\ViewFinder|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Viserio\Component\View\ViewFinder
      */
     private $finder;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

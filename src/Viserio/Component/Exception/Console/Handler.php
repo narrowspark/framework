@@ -98,6 +98,7 @@ final class Handler
                 $output->writeln(
                     '<info>Please use the argument <fg=red>-v</> to see all trace.</info>'
                 );
+
                 break;
             }
 
@@ -126,7 +127,7 @@ final class Handler
                 $output->writeln('');
             }
 
-            $count++;
+            ++$count;
         }
     }
 
@@ -282,6 +283,7 @@ final class Handler
             switch (true) {
                 case \is_string($argument):
                     $result[] = '"' . $argument . '"';
+
                     break;
                 case \is_array($argument):
                     $associative = \array_keys($argument) !== \range(0, \count($argument) - 1);
@@ -294,6 +296,7 @@ final class Handler
                 case \is_object($argument):
                     $class    = \get_class($argument);
                     $result[] = "Object($class)";
+
                     break;
             }
         }
@@ -309,7 +312,7 @@ final class Handler
      * @param int    $start
      * @param int    $length
      *
-     * @return string[]|null
+     * @return null|string[]
      */
     private static function getFileLines(string $filePath, int $start, int $length): ?array
     {
@@ -332,7 +335,7 @@ final class Handler
      *
      * @param string $filePath
      *
-     * @return string|null
+     * @return null|string
      */
     private static function getFileContents(string $filePath): ?string
     {

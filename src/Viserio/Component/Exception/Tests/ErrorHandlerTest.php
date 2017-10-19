@@ -12,7 +12,7 @@ use Viserio\Component\Exception\ErrorHandler;
 class ErrorHandlerTest extends MockeryTestCase
 {
     /**
-     * @var \Psr\Log\LoggerInterface|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
      */
     private $loggger;
 
@@ -24,7 +24,7 @@ class ErrorHandlerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

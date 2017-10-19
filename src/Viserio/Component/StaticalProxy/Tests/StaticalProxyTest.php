@@ -145,7 +145,7 @@ class StaticalProxyTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         parent::assertPreConditions();
 

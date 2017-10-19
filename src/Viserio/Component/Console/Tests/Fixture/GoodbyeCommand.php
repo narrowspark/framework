@@ -7,11 +7,11 @@ use Viserio\Component\Console\Command\Command;
 class GoodbyeCommand extends Command
 {
     /**
-     * @var string|null The default command name
+     * @var null|string The default command name
      */
     protected static $defaultName = 'goodbye';
 
-    public function handle(LazyWhiner $lazyWhiner)
+    public function handle(LazyWhiner $lazyWhiner): void
     {
         $lazyWhiner->whine($this);
 

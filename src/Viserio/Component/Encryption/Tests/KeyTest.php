@@ -18,7 +18,7 @@ class KeyTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
-    public function testGenerateKey()
+    public function testGenerateKey(): void
     {
         $passString = 'apple';
         $key        = KeyFactory::generateKey($passString);
@@ -26,7 +26,7 @@ class KeyTest extends TestCase
         self::assertInstanceOf(Key::class, $key);
     }
 
-    public function testDeriveKey()
+    public function testDeriveKey(): void
     {
         $key = KeyFactory::deriveKey(
             new HiddenString('apple'),
@@ -41,7 +41,7 @@ class KeyTest extends TestCase
         );
     }
 
-    public function testInvalidKeyLevels()
+    public function testInvalidKeyLevels(): void
     {
         try {
             KeyFactory::deriveKey(
@@ -58,7 +58,7 @@ class KeyTest extends TestCase
         }
     }
 
-    public function testKeyLevels()
+    public function testKeyLevels(): void
     {
         $key = KeyFactory::deriveKey(
             new HiddenString('apple'),
@@ -83,7 +83,7 @@ class KeyTest extends TestCase
         );
     }
 
-    public function testExportAndImportKey()
+    public function testExportAndImportKey(): void
     {
         $passString   = 'apple';
         $key          = KeyFactory::generateKey($passString);

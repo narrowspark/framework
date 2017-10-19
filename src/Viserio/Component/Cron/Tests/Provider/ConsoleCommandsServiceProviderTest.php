@@ -45,12 +45,12 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertNull($container->get(Application::class));
     }
 
-    public function testGetDimensions()
+    public function testGetDimensions(): void
     {
         self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
-    public function testGetDefaultOptions()
+    public function testGetDefaultOptions(): void
     {
         self::assertSame(
             [

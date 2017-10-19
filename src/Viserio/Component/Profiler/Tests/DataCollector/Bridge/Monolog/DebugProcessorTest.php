@@ -14,7 +14,7 @@ class DebugProcessorTest extends TestCase
      */
     private $logger;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -24,13 +24,13 @@ class DebugProcessorTest extends TestCase
         $this->logger = new Logger(__METHOD__, [$handler], [$processor]);
     }
 
-    public function testGetLogsWithDebugProcessor()
+    public function testGetLogsWithDebugProcessor(): void
     {
         self::assertTrue($this->logger->error('error message'));
         self::assertCount(1, $this->getDebugLogger()->getLogs());
     }
 
-    public function testCountErrorsWithDebugProcessor()
+    public function testCountErrorsWithDebugProcessor(): void
     {
         self::assertTrue($this->logger->debug('test message'));
         self::assertTrue($this->logger->info('test message'));
@@ -44,7 +44,7 @@ class DebugProcessorTest extends TestCase
         self::assertSame(4, $this->getDebugLogger()->countErrors());
     }
 
-    public function testGetLogsWithDebugProcessor2()
+    public function testGetLogsWithDebugProcessor2(): void
     {
         $handler = new TestHandler();
         $logger  = new Logger('test', [$handler]);
@@ -59,7 +59,7 @@ class DebugProcessorTest extends TestCase
         self::assertEquals(Logger::INFO, $record['priority']);
     }
 
-    public function testFlush()
+    public function testFlush(): void
     {
         $handler = new TestHandler();
         $logger  = new Logger('test', [$handler]);

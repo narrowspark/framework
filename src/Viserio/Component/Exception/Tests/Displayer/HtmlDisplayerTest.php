@@ -20,7 +20,7 @@ class HtmlDisplayerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')

@@ -101,7 +101,7 @@ class HandlerParser
      * @param object|string       $handler
      * @param string              $path
      * @param string              $level
-     * @param null|callable|array $processors
+     * @param null|array|callable $processors
      * @param null|object|string  $formatter
      *
      * @return void

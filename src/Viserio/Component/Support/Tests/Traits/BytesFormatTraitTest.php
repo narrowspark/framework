@@ -45,7 +45,7 @@ class BytesFormatTraitTest extends TestCase
      *
      * @expectedException \InvalidArgumentException
      */
-    public function testConvertToBytesBadFormat($number)
+    public function testConvertToBytesBadFormat($number): void
     {
         self::convertToBytes($number);
     }
@@ -68,7 +68,7 @@ class BytesFormatTraitTest extends TestCase
      *
      * @dataProvider convertToBytes64DataProvider
      */
-    public function testConvertToBytes64($number, $expected)
+    public function testConvertToBytes64($number, $expected): void
     {
         if (PHP_INT_SIZE <= 4) {
             $this->markTestSkipped('A 64-bit system is required to perform this test.');
@@ -92,7 +92,7 @@ class BytesFormatTraitTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testConvertToBytesInvalidArgument()
+    public function testConvertToBytesInvalidArgument(): void
     {
         self::convertToBytes('3Z');
     }
@@ -100,7 +100,7 @@ class BytesFormatTraitTest extends TestCase
     /**
      * @expectedException \OutOfBoundsException
      */
-    public function testConvertToBytesOutOfBounds()
+    public function testConvertToBytesOutOfBounds(): void
     {
         if (PHP_INT_SIZE > 4) {
             self::markTestSkipped('A 32-bit system is required to perform this test.');

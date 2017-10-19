@@ -18,7 +18,7 @@ class EncrypterTest extends TestCase
      */
     private $encrypter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -27,7 +27,7 @@ class EncrypterTest extends TestCase
         $this->encrypter = new Encrypter($key);
     }
 
-    public function testEncrypt()
+    public function testEncrypt(): void
     {
         $message = $this->encrypter->encrypt(new HiddenString('test message'));
 
@@ -38,7 +38,7 @@ class EncrypterTest extends TestCase
         self::assertSame($plain->getString(), 'test message');
     }
 
-    public function testEncryptEmpty()
+    public function testEncryptEmpty(): void
     {
         $message = $this->encrypter->encrypt(new HiddenString(''));
 
@@ -49,7 +49,7 @@ class EncrypterTest extends TestCase
         self::assertSame($plain->getString(), '');
     }
 
-    public function testRawEncrypt()
+    public function testRawEncrypt(): void
     {
         $message = $this->encrypter->encrypt(new HiddenString('test message'), '', true);
 
@@ -60,7 +60,7 @@ class EncrypterTest extends TestCase
         self::assertSame($plain->getString(), 'test message');
     }
 
-    public function testEncryptFail()
+    public function testEncryptFail(): void
     {
         $message = $this->encrypter->encrypt(new HiddenString('test message'), '', true);
 
@@ -83,7 +83,7 @@ class EncrypterTest extends TestCase
         }
     }
 
-    public function testEncryptWithAd()
+    public function testEncryptWithAd(): void
     {
         $message = $this->encrypter->encrypt(new HiddenString('test message'), 'test');
 

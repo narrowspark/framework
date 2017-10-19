@@ -58,7 +58,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     {
         $this->data['template_paths'] = [];
 
-        $templateFinder = function (Profile $profile) use (&$templateFinder) {
+        $templateFinder = function (Profile $profile) use (&$templateFinder): void {
             if ($profile->isTemplate() &&
                 $template = $this->twigEnvironment->load($profile->getName())->getSourceContext()->getPath()
             ) {
@@ -252,7 +252,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     /**
      * {@inheritdoc}
      */
-    public function reset()
+    public function reset(): void
     {
         $this->profile->reset();
 

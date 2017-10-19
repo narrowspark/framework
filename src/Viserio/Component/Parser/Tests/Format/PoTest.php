@@ -28,7 +28,7 @@ class PoTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -39,7 +39,7 @@ class PoTest extends TestCase
         $this->fixturePath = __DIR__ . '/../Fixtures/po';
     }
 
-    public function testRead()
+    public function testRead(): void
     {
         try {
             $result = $this->parser->parse(self::readFile($this->fixturePath . '/healthy.po'));
@@ -115,7 +115,7 @@ class PoTest extends TestCase
         self::assertCount(0, $result['headers']);
     }
 
-    public function testHeaders()
+    public function testHeaders(): void
     {
         $result  = $this->parser->parse(self::readFile($this->fixturePath . '/healthy.po'));
         $headers = $result['headers'];
@@ -141,7 +141,7 @@ class PoTest extends TestCase
         self::assertSame('../../../modules', $headers['X-Poedit-SearchPath-2']);
     }
 
-    public function testMultiLinesHeaders()
+    public function testMultiLinesHeaders(): void
     {
         $result  = $this->parser->parse(self::readFile($this->fixturePath . '/multiline-header.po'));
         $headers = $result['headers'];
@@ -174,7 +174,7 @@ class PoTest extends TestCase
         self::assertSame('../../../modules', $headers['X-Poedit-SearchPath-2']);
     }
 
-    public function testMultiLineId()
+    public function testMultiLineId(): void
     {
         $result = $this->parser->parse(self::readFile($this->fixturePath . '/multilines.po'));
 
@@ -248,7 +248,7 @@ class PoTest extends TestCase
         );
     }
 
-    public function testPlurals()
+    public function testPlurals(): void
     {
         $result = $this->parser->parse(self::readFile($this->fixturePath . '/plurals.po'));
 
@@ -288,7 +288,7 @@ class PoTest extends TestCase
         );
     }
 
-    public function testPluralsMultiline()
+    public function testPluralsMultiline(): void
     {
         $result = $this->parser->parse(self::readFile($this->fixturePath . '/pluralsMultiline.po'));
 
@@ -302,7 +302,7 @@ class PoTest extends TestCase
         }
     }
 
-    public function testNoBlankLines()
+    public function testNoBlankLines(): void
     {
         $result = $this->parser->parse(self::readFile($this->fixturePath . '/noblankline.po'));
 
@@ -336,7 +336,7 @@ class PoTest extends TestCase
         self::assertEquals($result, $expected);
     }
 
-    public function testPreviousUnstranslated()
+    public function testPreviousUnstranslated(): void
     {
         $result = $this->parser->parse(self::readFile($this->fixturePath . '/previous_unstranslated.po'));
 
@@ -363,7 +363,7 @@ class PoTest extends TestCase
         self::assertEquals($result, $expected);
     }
 
-    public function testNoSpaceBetweenCommentAndMessage()
+    public function testNoSpaceBetweenCommentAndMessage(): void
     {
         $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Parse error! Comments must have a space after them on line: [12].');
@@ -371,7 +371,7 @@ class PoTest extends TestCase
         $this->parser->parse(self::readFile($this->fixturePath . '/no_space_between_comment_and_space.po'));
     }
 
-    public function testBrokenPoFile()
+    public function testBrokenPoFile(): void
     {
         $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Parse error! Unknown key [msgida] on line: [0].');
@@ -379,7 +379,7 @@ class PoTest extends TestCase
         $this->parser->parse(self::readFile($this->fixturePath . '/broken.po'));
     }
 
-    public function testDumpSimplePoFile()
+    public function testDumpSimplePoFile(): void
     {
         $fileContent = self::readFile($this->fixturePath . '/healthy.po');
         $result      = $this->parser->parse($fileContent);
@@ -388,7 +388,7 @@ class PoTest extends TestCase
         self::assertEquals(str_replace("\r", '', $fileContent), $output);
     }
 
-    public function testDumpPoFileWithNoHeader()
+    public function testDumpPoFileWithNoHeader(): void
     {
         $fileContent = self::readFile($this->fixturePath . '/noheader.po');
         $result      = $this->parser->parse($fileContent);
@@ -397,7 +397,7 @@ class PoTest extends TestCase
         self::assertEquals(str_replace("\r", '', $fileContent . "\n"), $output);
     }
 
-    public function testDumpPoFileWithMultilines()
+    public function testDumpPoFileWithMultilines(): void
     {
         $fileContent = self::readFile($this->fixturePath . '/multilines.po');
         $result      = $this->parser->parse($fileContent);
@@ -406,7 +406,7 @@ class PoTest extends TestCase
         self::assertEquals(str_replace("\r", '', $fileContent), $output);
     }
 
-    public function testDumpPoFileWithContext()
+    public function testDumpPoFileWithContext(): void
     {
         $fileContent = self::readFile($this->fixturePath . '/context.po');
         $result      = $this->parser->parse($fileContent);
@@ -415,7 +415,7 @@ class PoTest extends TestCase
         self::assertEquals(str_replace("\r", '', $fileContent), $output);
     }
 
-    public function testDumpPoFileWithPreviousUnstranslated()
+    public function testDumpPoFileWithPreviousUnstranslated(): void
     {
         $fileContent = self::readFile($this->fixturePath . '/previous_unstranslated.po');
         $result      = $this->parser->parse($fileContent);
@@ -424,7 +424,7 @@ class PoTest extends TestCase
         self::assertEquals(str_replace("\r", '', $fileContent), $output);
     }
 
-    public function testDumpPoFileWithMultiflags()
+    public function testDumpPoFileWithMultiflags(): void
     {
         $fileContent = self::readFile($this->fixturePath . '/multiflags.po');
         $result      = $this->parser->parse($fileContent);
@@ -433,7 +433,7 @@ class PoTest extends TestCase
         self::assertEquals(str_replace("\r", '', $fileContent), $output);
     }
 
-    public function testDumpPoFileWithFlagsPhpformat()
+    public function testDumpPoFileWithFlagsPhpformat(): void
     {
         $fileContent = self::readFile($this->fixturePath . '/flags-phpformat.po');
         $result      = $this->parser->parse($fileContent);
@@ -442,7 +442,7 @@ class PoTest extends TestCase
         self::assertEquals(str_replace("\r", '', $fileContent), $output);
     }
 
-    public function testDumpPoFileWithFlagsPhpformatAndFuzzy()
+    public function testDumpPoFileWithFlagsPhpformatAndFuzzy(): void
     {
         $fileContent = self::readFile($this->fixturePath . '/flags-phpformat-fuzzy.po');
         $result      = $this->parser->parse($fileContent);

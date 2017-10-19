@@ -45,7 +45,7 @@ class LazyWhiner
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public static function setOutput(OutputInterface $output)
+    public static function setOutput(OutputInterface $output): void
     {
         self::$output = $output;
     }

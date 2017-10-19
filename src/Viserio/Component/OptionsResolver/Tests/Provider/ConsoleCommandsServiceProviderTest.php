@@ -23,12 +23,12 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertInstanceOf(OptionDumpCommand::class, $commands['option:dump']);
     }
 
-    public function testGetDimensions()
+    public function testGetDimensions(): void
     {
         self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
-    public function testGetDefaultOptions()
+    public function testGetDefaultOptions(): void
     {
         self::assertSame(
             [

@@ -35,7 +35,7 @@ final class Util
      * @param string $filename File to open
      * @param string $mode     Mode used to open the file
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\\RuntimeException if the file cannot be opened
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the file cannot be opened
      *
      * @return resource
      */

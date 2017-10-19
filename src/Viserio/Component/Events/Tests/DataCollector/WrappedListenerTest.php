@@ -14,7 +14,7 @@ class WrappedListenerTest extends TestCase
      * @param mixed $listener
      * @param mixed $pretty
      */
-    public function testGetPretty($listener, $pretty)
+    public function testGetPretty($listener, $pretty): void
     {
         $wrappedListener = new WrappedListener($listener, 'name', $this->createStopwatchMock());
 
@@ -27,7 +27,7 @@ class WrappedListenerTest extends TestCase
      * @param mixed $listener
      * @param mixed $pretty
      */
-    public function testStub($listener, $pretty)
+    public function testStub($listener, $pretty): void
     {
         $wrappedListener = new WrappedListener($listener, 'name', $this->createStopwatchMock());
 
@@ -42,7 +42,7 @@ class WrappedListenerTest extends TestCase
     {
         return [
             [[$this, 'getListeners'], __METHOD__],
-            [function () {
+            [function (): void {
             }, 'closure'],
             ['strtolower', 'strtolower'],
             [new Listener(), Listener::class . '::__invoke'],
@@ -59,14 +59,14 @@ class WrappedListenerTest extends TestCase
 
 class Listener
 {
-    public function __invoke()
+    public function __invoke(): void
     {
     }
 }
 
 class DecoratedListener
 {
-    public function __invoke()
+    public function __invoke(): void
     {
     }
 

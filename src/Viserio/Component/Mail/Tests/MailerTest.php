@@ -21,14 +21,14 @@ use Viserio\Component\Mail\Mailer;
 class MailerTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Contract\View\Factory|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Factory
      */
     private $viewFactory;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -421,7 +421,7 @@ class MailerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         parent::assertPreConditions();
 

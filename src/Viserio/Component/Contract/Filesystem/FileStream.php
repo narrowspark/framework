@@ -14,7 +14,7 @@ interface FileStream
     /**
      * Get the size of the buffer.
      *
-     * @return int Returns the size in bytes.
+     * @return int returns the size in bytes
      */
     public function getSize(): int;
 
@@ -22,12 +22,12 @@ interface FileStream
      * Write to a stream; prevent partial writes.
      *
      * @param string   $string
-     * @param int|null $length (number of bytes)
+     * @param null|int $length (number of bytes)
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException
      *
-     * @return int Returns the number of bytes written to the stream.
+     * @return int returns the number of bytes written to the stream
      */
     public function write(string $string, int $length = null): int;
 
@@ -41,8 +41,8 @@ interface FileStream
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException
      *
-     * @return string Returns the data read from the stream, or an empty string
-     *                if no bytes are available.
+     * @return string returns the data read from the stream, or an empty string
+     *                if no bytes are available
      */
     public function read(int $length): string;
 
@@ -63,11 +63,11 @@ interface FileStream
     /**
      * Seek to a position in the stream.
      *
-     * @link http://www.php.net/manual/en/function.fseek.php
+     * @see http://www.php.net/manual/en/function.fseek.php
      *
      * @param int $offset Stream offset
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException on failure.
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException on failure
      *
      * @return void
      */

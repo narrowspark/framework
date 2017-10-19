@@ -9,7 +9,7 @@ use Viserio\Component\Http\Stream\FnStream;
 
 class FnStreamTest extends TestCase
 {
-    public function testDoNotAllowUnserialization()
+    public function testDoNotAllowUnserialization(): void
     {
         $this->expectException(LogicException::class);
 

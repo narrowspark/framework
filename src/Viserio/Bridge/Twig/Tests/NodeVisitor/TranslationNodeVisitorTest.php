@@ -65,7 +65,7 @@ class TranslationNodeVisitorTest extends TestCase
     /**
      * @param string      $message
      * @param null|string $domain
-     * @param array|null  $arguments
+     * @param null|array  $arguments
      *
      * @return FilterExpression
      */
