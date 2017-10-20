@@ -54,9 +54,9 @@ class EventManager implements EventManagerContract
     public function getListeners(string $eventName = null): array
     {
         if ($eventName === null) {
-            foreach ($this->listeners as $eventName => $eventListeners) {
-                if (! isset($this->sorted[$eventName])) {
-                    $this->sortListeners($eventName);
+            foreach ($this->listeners as $name => $eventListeners) {
+                if (! isset($this->sorted[$name])) {
+                    $this->sortListeners($name);
                 }
             }
 
@@ -179,15 +179,37 @@ class EventManager implements EventManagerContract
             return false;
         }
 
-        foreach ($this->listeners[$eventName] as $priority => $listeners) {
-            if (($key = \array_search($listener, $listeners, true)) !== false) {
-                unset($this->listeners[$eventName][$priority][$key], $this->sorted[$eventName]);
+        if (is_array($listener) && isset($listener[0]) && $listener[0] instanceof \Closure) {
+            $listener[0] = $listener[0]();
+        }
 
-                return true;
+        $bool = false;
+
+        foreach ($this->listeners[$eventName] as $priority => $listeners) {
+            foreach ($listeners as $key => $value) {
+                if ($listener !== $value && is_array($value) && isset($value[0]) && $value[0] instanceof Closure) {
+                    $value[0] = $value[0]();
+                }
+
+                if ($value === $listener) {
+                    unset($listeners[$key], $this->sorted[$eventName]);
+
+                    $bool = true;
+                } else {
+                    $listeners[$key] = $value;
+                }
+            }
+
+            if ($listeners) {
+                $this->listeners[$eventName][$priority] = $listeners;
+            } else {
+                unset($this->listeners[$eventName][$priority]);
+
+                $bool = true;
             }
         }
 
-        return false;
+        return $bool;
     }
 
     /**
@@ -269,7 +291,7 @@ class EventManager implements EventManagerContract
      */
     protected function removeListenerPattern(string $eventPattern, $listener): void
     {
-        if (! isset($this->patterns[$eventPattern])) {
+        if (empty($this->patterns[$eventPattern])) {
             return;
         }
 
