@@ -38,7 +38,7 @@ class LazyOpenStreamTest extends TestCase
         self::assertEquals('foo', (string) $lazy);
     }
 
-    public function testProxiesToFile(): void
+    public function testProxyToFile(): void
     {
         \file_put_contents($this->fname, 'foo');
         $lazy = new LazyOpenStream($this->fname, 'r');

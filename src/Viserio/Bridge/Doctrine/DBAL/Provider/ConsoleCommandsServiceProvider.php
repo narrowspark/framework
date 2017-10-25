@@ -1,43 +1,49 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\DBAL\Providers;
+namespace Viserio\Bridge\Doctrine\DBAL\Provider;
 
 use Doctrine\DBAL\Tools\Console\Command\ImportCommand;
 use Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand;
 use Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Console\Application;
 
-class ConsoleCommandsServiceProvider implements ServiceProvider
+class ConsoleCommandsServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
-            Application::class => [self::class, 'extendsConsoleWithCommands'],
+            Application::class => [self::class, 'extendConsole'],
         ];
     }
 
     /**
-     * Extend viserio console with new commands.
+     * Extend viserio console with commands.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
+     * @param \Psr\Container\ContainerInterface           $container
+     * @param null|\Viserio\Component\Console\Application $console
      *
      * @return null|\Viserio\Component\Console\Application
      */
-    public static function extendsConsoleWithCommands(
+    public static function extendConsole(
         ContainerInterface $container,
-        ?callable $getPrevious = null
+        ?Application $console = null
     ): ?Application {
-        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
         if ($console !== null) {
             $console->setHelperSet(new HelperSet([
                 'db' => new ConnectionHelper($container->get(Connection::class)),
@@ -48,8 +54,6 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
                 new ImportCommand(),
                 new ReservedWordsCommand(),
             ]);
-
-            return $console;
         }
 
         return $console;

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\ORM\Providers;
+namespace Viserio\Bridge\Doctrine\ORM\Provider;
 
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,7 +11,6 @@ use Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand;
 use Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand;
 use Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand;
 use Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand;
-use Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand;
 use Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand;
 use Doctrine\ORM\Tools\Console\Command\InfoCommand;
 use Doctrine\ORM\Tools\Console\Command\MappingDescribeCommand;
@@ -21,27 +20,44 @@ use Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand;
 use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
-use Interop\Container\ContainerInterface;
-use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
+use Interop\Container\ServiceProviderInterface;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Component\Console\Application;
 
-class ConsoleCommandsServiceProvider implements ServiceProvider
+class ConsoleCommandsServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions()
     {
         return [
-            Application::class => [self::class, 'createConsoleCommands'],
+            Application::class => [self::class, 'extendConsole'],
         ];
     }
 
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
-    {
-        if ($getPrevious !== null) {
-            $console = $getPrevious();
+    /**
+     * Extend viserio console with commands.
+     *
+     * @param \Psr\Container\ContainerInterface           $container
+     * @param null|\Viserio\Component\Console\Application $console
+     *
+     * @return null|\Viserio\Component\Console\Application
+     */
+    public static function extendConsole(
+        ContainerInterface $container,
+        ?Application $console = null
+    ): ?Application {
+        if ($console !== null) {
             $manager = $container->get(EntityManagerInterface::class);
 
             $console->setHelperSet(new HelperSet([
@@ -60,7 +76,6 @@ class ConsoleCommandsServiceProvider implements ServiceProvider
                 new ConvertDoctrine1SchemaCommand(),
                 new GenerateRepositoriesCommand(),
                 new GenerateEntitiesCommand(),
-                new GenerateProxiesCommand(),
                 new ConvertMappingCommand(),
                 new RunDqlCommand(),
                 new ValidateSchemaCommand(),

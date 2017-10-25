@@ -22,7 +22,7 @@ class SetRequestForConsoleTest extends MockeryTestCase
                 SetRequestForConsole::class,
             ];
 
-            protected function registerBaseServiceProviders(): void
+            protected function registerBaseServiceProvider(): void
             {
             }
         };

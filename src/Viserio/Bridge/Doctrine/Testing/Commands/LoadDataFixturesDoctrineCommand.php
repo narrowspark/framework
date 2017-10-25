@@ -6,4 +6,8 @@ use Viserio\Bridge\Doctrine\ORM\Commands\AbstractDoctrineCommand;
 
 class LoadDataFixturesDoctrineCommand extends AbstractDoctrineCommand
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected static $defaultName = 'doctrine:testing:fixtures:load';
 }

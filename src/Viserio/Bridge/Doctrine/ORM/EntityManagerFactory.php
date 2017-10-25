@@ -12,11 +12,11 @@ use InvalidArgumentException;
 use Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager;
 use Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager;
 use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class EntityManagerFactory implements
@@ -82,7 +82,7 @@ class EntityManagerFactory implements
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'doctrine', 'orm'];
     }
@@ -90,7 +90,7 @@ class EntityManagerFactory implements
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'logger' => false,
@@ -121,7 +121,7 @@ class EntityManagerFactory implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'connections' => [
@@ -153,7 +153,7 @@ class EntityManagerFactory implements
         $configuration = $this->setMetadataDriver($configuration);
         $configuration = $this->configureCustomFunctions($configuration);
         $configuration = $this->configureFirstLevelCacheSettings($configuration);
-        $configuration = $this->configureProxies($configuration);
+        $configuration = $this->configureProxy($configuration);
 
         $configuration->setDefaultRepositoryClassName($this->options['repository']);
         $configuration->setEntityListenerResolver($this->resolver);
@@ -261,7 +261,7 @@ class EntityManagerFactory implements
      *
      * @return \Doctrine\ORM\Configuration
      */
-    protected function configureProxies(Configuration $configuration): Configuration
+    protected function configureProxy(Configuration $configuration): Configuration
     {
         $configuration->setProxyDir(
            $this->options['proxies']['path']

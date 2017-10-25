@@ -5,7 +5,7 @@ namespace Viserio\Bridge\Doctrine\ORM\Resolvers;
 use Doctrine\ORM\Mapping\EntityListenerResolver as ResolverContract;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 
 class EntityListenerResolver implements ResolverContract
 {
@@ -51,7 +51,7 @@ class EntityListenerResolver implements ResolverContract
             return $this->instances[$className];
         }
 
-        return $this->instances[$className] = $this->getContainer()->get($className);
+        return $this->instances[$className] = $this->container->get($className);
     }
 
     /**

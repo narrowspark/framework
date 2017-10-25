@@ -7,8 +7,8 @@ use Doctrine\DBAL\Logging\DebugStack;
 use Doctrine\DBAL\Types\Type;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
+use Viserio\Component\Contract\WebProfiler\PanelAware as PanelAwareContract;
+use Viserio\Component\Contract\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class DoctrineDataCollector extends AbstractDataCollector implements

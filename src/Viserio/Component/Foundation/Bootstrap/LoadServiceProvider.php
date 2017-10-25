@@ -14,7 +14,7 @@ class LoadServiceProvider implements BootstrapContract
     {
         $container = $kernel->getContainer();
 
-        foreach ($this->registerServiceProviders($kernel) as $provider) {
+        foreach ($this->registerServiceProvider($kernel) as $provider) {
             $container->register($container->resolve($provider));
         }
     }
@@ -26,7 +26,7 @@ class LoadServiceProvider implements BootstrapContract
      *
      * @return array
      */
-    protected function registerServiceProviders(KernelContract $kernel): array
+    protected function registerServiceProvider(KernelContract $kernel): array
     {
         $providers = $kernel->getConfigPath('/serviceproviders.php');
 

@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use LaravelDoctrine\Fluent\Builders\Builder;
 use LaravelDoctrine\Fluent\Extensions\ExtensibleClassMetadataFactory;
 use LaravelDoctrine\Fluent\FluentDriver;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Support\AbstractManager;
 
 class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsContract
@@ -23,7 +23,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): iterable
     {
         return [
             'default' => 'annotations',
@@ -42,9 +42,9 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
-        return ['viserio', 'doctrine', $this->getConfigName()];
+        return ['viserio', 'doctrine', self::getConfigName()];
     }
 
     /**
@@ -193,7 +193,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
     /**
      * {@inheritdoc}
      */
-    protected function getConfigName(): string
+    protected static function getConfigName(): string
     {
         return 'metadata';
     }

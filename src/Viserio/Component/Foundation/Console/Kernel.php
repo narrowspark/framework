@@ -281,9 +281,9 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      *
      * @return void
      */
-    protected function registerBaseServiceProviders(): void
+    protected function registerBaseServiceProvider(): void
     {
-        parent::registerBaseServiceProviders();
+        parent::registerBaseServiceProvider();
 
         $this->getContainer()->register(new ConsoleServiceProvider());
     }

@@ -70,7 +70,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
     }
 
     /**
-     * Proxies all method calls to the original event manager.
+     * Proxy all method calls to the original event manager.
      *
      * @param string $method
      * @param array  $parameters

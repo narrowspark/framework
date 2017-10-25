@@ -39,7 +39,7 @@ abstract class AbstractDoctrineCommand extends Command
      */
     protected function getEntityManager(string $name, ?int $shardId = null): EntityManager
     {
-        $manager = $this->getContainer()->get('doctrine')->getManager($name);
+        $manager = $this->container->get('doctrine')->getManager($name);
 
         if ($shardId) {
             if (! $manager->getConnection() instanceof PoolingShardConnection) {
@@ -61,6 +61,6 @@ abstract class AbstractDoctrineCommand extends Command
      */
     protected function getDoctrineConnection(string $name): Connection
     {
-        return $this->getContainer()->get('doctrine')->getConnection($name);
+        return $this->container->get('doctrine')->getConnection($name);
     }
 }

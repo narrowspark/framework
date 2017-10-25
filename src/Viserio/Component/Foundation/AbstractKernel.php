@@ -124,7 +124,7 @@ abstract class AbstractKernel implements
 
         $this->initializeContainer();
         $this->registerBaseBindings();
-        $this->registerBaseServiceProviders();
+        $this->registerBaseServiceProvider();
     }
 
     /**
@@ -388,7 +388,7 @@ abstract class AbstractKernel implements
      *
      * @return array
      */
-    public function registerServiceProviders(KernelContract $kernel): array
+    public function registerServiceProvider(KernelContract $kernel): array
     {
         $providers = $kernel->getConfigPath('/serviceproviders.php');
 
@@ -404,7 +404,7 @@ abstract class AbstractKernel implements
      *
      * @return void
      */
-    protected function registerBaseServiceProviders(): void
+    protected function registerBaseServiceProvider(): void
     {
         $container = $this->getContainer();
 

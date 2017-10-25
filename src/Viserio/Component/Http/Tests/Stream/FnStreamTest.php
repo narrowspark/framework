@@ -28,7 +28,7 @@ class FnStreamTest extends TestCase
         (new FnStream([]))->seek(1);
     }
 
-    public function testProxiesToFunction(): void
+    public function testProxyToFunction(): void
     {
         $stream = new FnStream([
             'read' => function ($len) {

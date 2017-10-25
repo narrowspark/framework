@@ -8,7 +8,7 @@ use Doctrine\ORM\ORMException;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use ReflectionClass;
-use Viserio\Component\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 
 final class ManagerRegistry implements BaseManagerRegistry
 {

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Migration\Providers;
+namespace Viserio\Bridge\Doctrine\Migration\Provider;
 
 use Doctrine\DBAL\Migrations\Configuration\Configuration;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand;
@@ -9,35 +9,43 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand;
-use Interop\Container\ContainerInterface;
-use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
+use Interop\Container\ServiceProviderInterface;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ConsoleCommandsServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    use StaticOptionsResolverTrait;
+    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
     {
         return [
-            Application::class => [self::class, 'createConsoleCommands'],
+            Application::class => [self::class, 'extendConsole'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDimensions(): iterable
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'doctrine'];
     }
@@ -45,52 +53,42 @@ class ConsoleCommandsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): iterable
     {
         return ['migrations'];
     }
 
     /**
-     * Extend viserio console with new commands.
+     * Extend viserio console with commands.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param null|callable                         $getPrevious
+     * @param \Psr\Container\ContainerInterface           $container
+     * @param null|\Viserio\Component\Console\Application $console
      *
      * @return null|\Viserio\Component\Console\Application
      */
-    public static function createConsoleCommands(ContainerInterface $container, ?callable $getPrevious = null): ?Application
-    {
-        $console = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
+    public static function extendConsole(
+        ContainerInterface $container,
+        ?Application $console = null
+    ): ?Application {
         if ($console !== null) {
             $console->addCommands(self::createMigrationsCommands($container));
-
-            return $console;
         }
 
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): RequiresConfigContract
-    {
-        return new self();
+        return $console;
     }
 
     /**
      * Create and configure migrations commands.
      *
-     * @param \Interop\Container\ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      *
      * @return array
      */
     private static function createMigrationsCommands(ContainerInterface $container): array
     {
-        self::resolveOptions($container);
+        $options = self::resolveOptions($container);
 
-        $config = self::$options['migrations'];
+        $config = $options['migrations'];
 
         $doctrineConfig = new Configuration($container->get(Connection::class));
 

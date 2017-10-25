@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\ORM\Proxies;
+namespace Viserio\Bridge\Doctrine\ORM\Proxy;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Viserio\Bridge\Doctrine\ORM\DoctrineManager;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
-class Registry extends StaticalProxy
+class Doctrine extends StaticalProxy
 {
     /**
      * {@inheritdoc}
@@ -14,6 +14,6 @@ class Registry extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return ManagerRegistry::class;
+        return DoctrineManager::class;
     }
 }

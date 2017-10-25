@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Testing\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\Testing\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Bridge\Doctrine\DBAL\Providers\DoctrineDBALServiceProvider;
-use Viserio\Bridge\Doctrine\Testing\Providers\ConsoleCommandsServiceProvider;
+use Viserio\Bridge\Doctrine\DBAL\Provider\DoctrineDBALServiceProvider;
+use Viserio\Bridge\Doctrine\Testing\Provider\ConsoleCommandsServiceProvider;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Console\Providers\ConsoleServiceProvider;
+use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 
 class ConsoleCommandsServiceProviderTest extends TestCase

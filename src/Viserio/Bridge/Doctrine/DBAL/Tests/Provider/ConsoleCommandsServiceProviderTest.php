@@ -1,17 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\DBAL\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\DBAL\Tests\Provider;
 
 use Doctrine\DBAL\Tools\Console\Command\ImportCommand;
 use Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand;
 use Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
 use PHPUnit\Framework\TestCase;
-use Viserio\Bridge\Doctrine\DBAL\Providers\ConsoleCommandsServiceProvider;
-use Viserio\Bridge\Doctrine\DBAL\Providers\DoctrineDBALServiceProvider;
+use Viserio\Bridge\Doctrine\DBAL\Provider\ConsoleCommandsServiceProvider;
+use Viserio\Bridge\Doctrine\DBAL\Provider\DoctrineDBALServiceProvider;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Console\Providers\ConsoleServiceProvider;
+use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
@@ -19,7 +18,6 @@ class ConsoleCommandsServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new ConsoleServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new DoctrineDBALServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
 

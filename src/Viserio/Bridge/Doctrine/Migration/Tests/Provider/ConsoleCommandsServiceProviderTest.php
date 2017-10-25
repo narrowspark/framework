@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Migration\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\Migration\Tests\Provider;
 
 use Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand;
@@ -9,19 +9,18 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand;
 use PHPUnit\Framework\TestCase;
-use Viserio\Bridge\Doctrine\DBAL\Providers\DoctrineDBALServiceProvider;
-use Viserio\Bridge\Doctrine\Migration\Providers\ConsoleCommandsServiceProvider;
+use Viserio\Bridge\Doctrine\DBAL\Provider\DoctrineDBALServiceProvider;
+use Viserio\Bridge\Doctrine\Migration\Provider\ConsoleCommandsServiceProvider;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Console\Providers\ConsoleServiceProvider;
+use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
+use Viserio\Component\OptionsResolver\Provider\OptionsResolverServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ConsoleServiceProvider());
         $container->register(new DoctrineDBALServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
@@ -32,17 +31,19 @@ class ConsoleCommandsServiceProviderTest extends TestCase
                     'version' => '1',
                 ],
                 'doctrine' => [
-                    'default'     => 'mysql',
-                    'connections' => [
-                        'mysql' => [
-                            'driver'        => 'pdo_mysql',
-                            'host'          => 'DB_HOST',
-                            'port'          => 'DB_PORT',
-                            'database'      => 'DB_DATABASE_NAME',
-                            'username'      => 'DB_DATABASE_USER',
-                            'password'      => 'DB_DATABASE_PASSWORD',
-                            'charset'       => 'DB_CHARSET', 'UTF8',
-                            'driverOptions' => [1002 => 'SET NAMES utf8'],
+                    'dbal' => [
+                        'default'     => 'mysql',
+                        'connections' => [
+                            'mysql' => [
+                                'driver'        => 'pdo_mysql',
+                                'host'          => 'DB_HOST',
+                                'port'          => 'DB_PORT',
+                                'database'      => 'DB_DATABASE_NAME',
+                                'username'      => 'DB_DATABASE_USER',
+                                'password'      => 'DB_DATABASE_PASSWORD',
+                                'charset'       => 'DB_CHARSET', 'UTF8',
+                                'driverOptions' => [1002 => 'SET NAMES utf8'],
+                            ],
                         ],
                     ],
                     'migrations' => [

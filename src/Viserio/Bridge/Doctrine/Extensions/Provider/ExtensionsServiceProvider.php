@@ -1,33 +1,39 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Migration\Providers;
+namespace Viserio\Bridge\Doctrine\Migration\Provider;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Gedmo\DoctrineExtensions;
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use LaravelDoctrine\Fluent\Extensions\GedmoExtensions;
 use LaravelDoctrine\Fluent\FluentDriver;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\OptionsResolver\Traits\StaticOptionsResolverTrait;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ExtensionsServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
-    use StaticOptionsResolverTrait;
+    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories()
     {
-        return [
-            Application::class => [self::class, 'registerExtensions'],
-        ];
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [];
     }
 
     /**
@@ -46,29 +52,6 @@ class ExtensionsServiceProvider implements
         return [
             'all_mappings' => false,
         ];
-    }
-
-    /**
-     * Register some doctrine extensions.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param null|callable                     $getPrevious
-     *
-     * @return null|\Viserio\Component\Console\Application
-     */
-    public static function registerExtensions(ContainerInterface $container, ?callable $getPrevious = null): ?Application
-    {
-        $events = is_callable($getPrevious) ? $getPrevious() : $getPrevious;
-
-        if ($events !== null) {
-            $options = self::resolveOptions($container);
-
-            $events = $getPrevious();
-
-            return $events;
-        }
-
-        return $events;
     }
 
     /**

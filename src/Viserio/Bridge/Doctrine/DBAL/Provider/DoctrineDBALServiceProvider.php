@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\DBAL\Providers;
+namespace Viserio\Bridge\Doctrine\DBAL\Provider;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection as DoctrineConnection;
 use Doctrine\DBAL\DriverManager;
-use Interop\Container\ContainerInterface;
-use Interop\Container\ServiceProvider;
+use Psr\Container\ContainerInterface;
+use Interop\Container\ServiceProviderInterface;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
-use Viserio\Component\Contracts\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contracts\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class DoctrineDBALServiceProvider implements
-    ServiceProvider,
+    ServiceProviderInterface,
     ProvidesDefaultOptionsContract,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
@@ -25,7 +25,7 @@ class DoctrineDBALServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getServices()
+    public function getFactories(): array
     {
         return [
             Connection::class         => [self::class, 'createConnection'],
@@ -46,6 +46,14 @@ class DoctrineDBALServiceProvider implements
     /**
      * {@inheritdoc}
      */
+    public function getExtensions(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function getDimensions(): iterable
     {
         return ['viserio', 'doctrine', 'dbal'];
@@ -56,9 +64,7 @@ class DoctrineDBALServiceProvider implements
      */
     public static function getMandatoryOptions(): iterable
     {
-        return [
-            'default',
-        ];
+        return ['default'];
     }
 
     /**
@@ -124,6 +130,8 @@ class DoctrineDBALServiceProvider implements
 
     /**
      * Map our config style to doctrine config.
+     *
+     * @param array $config
      *
      * @return array
      */

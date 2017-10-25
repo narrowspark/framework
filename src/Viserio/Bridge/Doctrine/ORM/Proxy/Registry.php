@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Proxies;
+namespace Viserio\Bridge\Doctrine\ORM\Proxy;
 
-use Viserio\Bridge\Doctrine\DBAL\Connection;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
-class DBAL extends StaticalProxy
+class Registry extends StaticalProxy
 {
     /**
      * {@inheritdoc}
@@ -14,6 +14,6 @@ class DBAL extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return Connection::class;
+        return ManagerRegistry::class;
     }
 }

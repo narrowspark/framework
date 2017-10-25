@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\ORM\Tests\Providers;
+namespace Viserio\Bridge\Doctrine\ORM\Tests\Provider;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,7 +10,7 @@ use Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand;
 use Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand;
 use Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand;
 use Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand;
-use Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand;
+use Doctrine\ORM\Tools\Console\Command\GenerateProxyCommand;
 use Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand;
 use Doctrine\ORM\Tools\Console\Command\InfoCommand;
 use Doctrine\ORM\Tools\Console\Command\MappingDescribeCommand;
@@ -20,11 +20,10 @@ use Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand;
 use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Bridge\Doctrine\ORM\Providers\ConsoleCommandsServiceProvider;
+use Viserio\Bridge\Doctrine\ORM\Provider\ConsoleCommandsServiceProvider;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Console\Providers\ConsoleServiceProvider;
+use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Providers\OptionsResolverServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends MockeryTestCase
 {
@@ -37,7 +36,6 @@ class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $container = new Container();
         $container->instance(EntityManagerInterface::class, $entityManager);
         $container->register(new ConsoleServiceProvider());
-        $container->register(new OptionsResolverServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
 
         $container->instance('config', [
@@ -57,7 +55,6 @@ class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         self::assertInstanceOf(ConvertDoctrine1SchemaCommand::class, $commands['orm:convert-d1-schema']);
         self::assertInstanceOf(ConvertMappingCommand::class, $commands['orm:convert-mapping']);
         self::assertInstanceOf(EnsureProductionSettingsCommand::class, $commands['orm:ensure-production-settings']);
-        self::assertInstanceOf(GenerateProxiesCommand::class, $commands['orm:generate-proxies']);
         self::assertInstanceOf(GenerateRepositoriesCommand::class, $commands['orm:generate-repositories']);
         self::assertInstanceOf(InfoCommand::class, $commands['orm:info']);
         self::assertInstanceOf(MappingDescribeCommand::class, $commands['orm:mapping:describe']);

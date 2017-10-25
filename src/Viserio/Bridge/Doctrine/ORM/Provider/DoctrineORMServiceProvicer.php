@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\ORM\Providers;
+namespace Viserio\Bridge\Doctrine\ORM\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry as DoctrineManagerRegistry;
 use Doctrine\ORM\EntityManager;
