@@ -20,8 +20,8 @@ use Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand;
 use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
-use Psr\Container\ContainerInterface;
 use Interop\Container\ServiceProviderInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Component\Console\Application;
 

@@ -14,7 +14,6 @@ use Viserio\Bridge\Doctrine\Migration\Provider\ConsoleCommandsServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\OptionsResolver\Provider\OptionsResolverServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {

@@ -5,11 +5,11 @@ namespace Viserio\Bridge\Doctrine\Testing\Provider;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Faker\Factory as FakerFactory;
 use Faker\Generator as FakerGenerator;
-use Psr\Container\ContainerInterface;
 use Interop\Container\ServiceProviderInterface;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Doctrine\Testing\Factory as EntityFactory;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
 class DoctrineORMTestingServiceProvider implements
     ServiceProviderInterface,
@@ -49,7 +49,7 @@ class DoctrineORMTestingServiceProvider implements
     public static function getDefaultOptions(): iterable
     {
         return [
-            'locale' => FakerFactory::DEFAULT_LOCALE
+            'locale' => FakerFactory::DEFAULT_LOCALE,
         ];
     }
 

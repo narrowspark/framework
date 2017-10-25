@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Testing\Provider;
 
-use Psr\Container\ContainerInterface;
 use Interop\Container\ServiceProviderInterface;
+use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Doctrine\Testing\Commands\LoadDataFixturesDoctrineCommand;
 use Viserio\Component\Console\Application;
 
@@ -40,7 +40,7 @@ class ConsoleCommandsServiceProvider implements ServiceProviderInterface
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-             $console->add(new LoadDataFixturesDoctrineCommand());
+            $console->add(new LoadDataFixturesDoctrineCommand());
         }
 
         return $console;

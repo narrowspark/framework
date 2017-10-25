@@ -8,7 +8,6 @@ use Gedmo\DoctrineExtensions;
 use Interop\Container\ServiceProviderInterface;
 use LaravelDoctrine\Fluent\Extensions\GedmoExtensions;
 use LaravelDoctrine\Fluent\FluentDriver;
-use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;

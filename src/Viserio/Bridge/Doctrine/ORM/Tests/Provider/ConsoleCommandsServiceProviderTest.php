@@ -10,7 +10,6 @@ use Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand;
 use Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand;
 use Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand;
 use Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand;
-use Doctrine\ORM\Tools\Console\Command\GenerateProxyCommand;
 use Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand;
 use Doctrine\ORM\Tools\Console\Command\InfoCommand;
 use Doctrine\ORM\Tools\Console\Command\MappingDescribeCommand;

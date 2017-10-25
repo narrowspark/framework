@@ -5,7 +5,6 @@ namespace Viserio\Bridge\Doctrine\Tests\Provider;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Bridge\Doctrine\DBAL\Provider\DoctrineDBALServiceProvider;
 use Viserio\Component\Container\Container;
