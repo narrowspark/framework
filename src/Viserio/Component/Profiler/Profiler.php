@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler;
 
-use Psr\Http\Message\MessageInterface;
+use Narrowspark\Http\Message\Util\InteractsWithContentTypes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -178,14 +178,15 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
         }
 
         $token = \mb_substr(\hash('sha256', \uniqid((string) \mt_rand(), true)), 0, 6);
+
         $response->withHeader('X-Debug-Token', $token);
 
         //@TODO Send json data or redirect.
         try {
             if ($this->isRedirect($response)) {
                 // $this->stackData();
-            } elseif ($this->isJsonRequest($serverRequest)) {
-                $this->sendDataInHeaders(true);
+            } elseif ($this->isJsonRequest($serverRequest)) {var_dump('da');die;
+                //$this->sendDataInHeaders(true);
             } elseif ($this->isHtmlResponse($response) || $this->isHtmlAccepted($serverRequest)) {
                 // Just collect + store data, don't inject it.
                 $this->collectData($token, $serverRequest, $response);
@@ -196,6 +197,8 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
             } else {
                 throw $exception;
             }
+
+            return $response;
         }
 
         return $this->injectProfiler($response, $token);
@@ -216,6 +219,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     public function flush(): void
     {
+        /** @var \Viserio\Component\Contract\Profiler\DataCollector $data */
         foreach ($this->collectors as $data) {
             $data['collector']->flush();
         }
@@ -334,7 +338,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     private function isHtmlResponse(ResponseInterface $response): bool
     {
-        return $this->hasHeaderContains($response, 'content-type', 'html');
+        return \mb_strpos($response->getHeaderLine('Content-Type'), 'html', 0, 'UTF-8') !== false;
     }
 
     /**
@@ -346,7 +350,11 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     private function isJsonRequest(ServerRequestInterface $request): bool
     {
-        return $this->hasHeaderContains($request, 'content-type', 'application/json');
+        if (InteractsWithContentTypes::isAjax($request)) {
+            return true;
+        }
+
+        return InteractsWithContentTypes::accepts(['application/json'], $request);
     }
 
     /**
@@ -358,21 +366,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     private function isHtmlAccepted(ServerRequestInterface $request): bool
     {
-        return $this->hasHeaderContains($request, 'Accept', 'html');
-    }
-
-    /**
-     * Checks if headers contains searched header.
-     *
-     * @param \Psr\Http\Message\MessageInterface $message
-     * @param string                             $headerName
-     * @param string                             $value
-     *
-     * @return bool
-     */
-    private function hasHeaderContains(MessageInterface $message, string $headerName, string $value): bool
-    {
-        return \mb_strpos($message->getHeaderLine($headerName), $value) !== false;
+        return InteractsWithContentTypes::accepts(['text/html'], $request);
     }
 
     /**

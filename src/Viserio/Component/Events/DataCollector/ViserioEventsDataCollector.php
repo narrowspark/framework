@@ -20,6 +20,12 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
     public function __construct(TraceableEventManager $eventManager)
     {
         $this->eventManager = $eventManager;
+
+        $this->data = [
+            'called_listeners'     => [],
+            'not_called_listeners' => [],
+            'orphaned_events'      => [],
+        ];
     }
 
     /**
