@@ -30,13 +30,7 @@ matrix:
       # phpstan
     - php: 7.2
       env: PHPSTAN=true
-      # Nightly
-    - php: nightly
-      env: PHPUNIT=true SETUP=high
-    - php: nightly
-      env: PHPUNIT=true SETUP=lowest
   allow_failures:
-    - php: nightly
     - php: 7.2
       env: PHPUNIT=true SETUP=lowest
   fast_finish: true
