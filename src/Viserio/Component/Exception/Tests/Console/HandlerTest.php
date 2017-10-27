@@ -102,7 +102,7 @@ Exception trace:
 Symfony\Component\Debug\Exception\FatalThrowableError : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
 
 at $file : 16
-12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle()\n15:     {\n16:         Console::test('error');\n17:     }\n18: }
+12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle(): void\n15:     {\n16:         Console::test('error');\n17:     }\n18: }
 19: 
 
 Exception trace:
