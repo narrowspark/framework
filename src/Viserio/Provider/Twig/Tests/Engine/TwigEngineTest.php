@@ -36,11 +36,11 @@ class TwigEngineTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'view' => [
-                    'paths'      => [
+                    'paths' => [
                         __DIR__ . '/../Fixtures/',
                         __DIR__,
                     ],
-                    'engines'    => [
+                    'engines' => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,
@@ -84,13 +84,13 @@ class TwigEngineTest extends MockeryTestCase
             ->once()
             ->with('view')
             ->andReturn(true);
-        $config =  [
+        $config = [
             'viserio' => [
                 'view' => [
-                    'paths'      => [
+                    'paths' => [
                         __DIR__ . '/../Fixtures/',
                     ],
-                    'engines'    => [
+                    'engines' => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,
@@ -140,13 +140,13 @@ class TwigEngineTest extends MockeryTestCase
      */
     public function testTwigExtensionsToThrowException(): void
     {
-        $config =  [
+        $config = [
             'viserio' => [
                 'view' => [
-                    'paths'      => [
+                    'paths' => [
                         __DIR__ . '/../Fixtures/',
                     ],
-                    'engines'    => [
+                    'engines' => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,

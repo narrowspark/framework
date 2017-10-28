@@ -210,8 +210,8 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         $helpers = [];
 
         if (\preg_match("/^(.*?)\[(.*?)\]$/", $translation, $match)) {
-            $helpers     = \explode('|', $match[2]);
-            $helpers     = \array_map(function ($helper) {
+            $helpers = \explode('|', $match[2]);
+            $helpers = \array_map(function ($helper) {
                 $name = $helper;
                 $arguments = [];
 
@@ -319,12 +319,12 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         }
 
         $this->messages[] = [
-            'locale'            => $locale,
-            'domain'            => $domain,
-            'id'                => $id,
-            'translation'       => $translation,
-            'parameters'        => $parameters,
-            'state'             => $state,
+            'locale'      => $locale,
+            'domain'      => $domain,
+            'id'          => $id,
+            'translation' => $translation,
+            'parameters'  => $parameters,
+            'state'       => $state,
         ];
     }
 }

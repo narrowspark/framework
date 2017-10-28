@@ -44,7 +44,7 @@ class ProfilerServiceProvider implements
             Profiler::class         => function (ContainerInterface $container) {
                 return $container->get(ProfilerContract::class);
             },
-            Stopwatch::class        => function () {
+            Stopwatch::class => function () {
                 return new Stopwatch();
             },
         ];

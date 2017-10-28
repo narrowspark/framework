@@ -60,8 +60,8 @@ class CleanCommandTest extends MockeryTestCase
             ->once()
             ->andReturn(false);
         $container = new ArrayContainer([
-            FilesystemContract::class       => $files,
-            'config'                        => [
+            FilesystemContract::class => $files,
+            'config'                  => [
                 'viserio' => [
                     'view' => [
                         'engines' => [

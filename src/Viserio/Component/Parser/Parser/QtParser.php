@@ -21,7 +21,7 @@ class QtParser implements ParserContract
     public function parse(string $payload): array
     {
         try {
-            $dom  = XmlUtils::loadString($payload);
+            $dom = XmlUtils::loadString($payload);
         } catch (InvalidArgumentException $exception) {
             throw new ParseException([
                 'message' => $exception->getMessage(),
@@ -35,9 +35,9 @@ class QtParser implements ParserContract
 
         \libxml_clear_errors();
 
-        $xpath  = \simplexml_import_dom($dom);
-        $nodes  = $xpath->xpath('//TS/context');
-        $datas  = [];
+        $xpath = \simplexml_import_dom($dom);
+        $nodes = $xpath->xpath('//TS/context');
+        $datas = [];
 
         foreach ($nodes as $node) {
             $name         = (string) $node->name;

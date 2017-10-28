@@ -68,7 +68,7 @@ class ConfigureLoggingServiceProvider implements
     public static function getDefaultOptions(): iterable
     {
         return [
-            'log'  => [
+            'log' => [
                 'handler'   => 'single',
                 'level'     => 'debug',
                 'max_files' => 5,

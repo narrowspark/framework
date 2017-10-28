@@ -53,8 +53,8 @@ trait OptionsResolverTrait
         $dimensions  = [];
 
         if (isset($interfaces[RequiresComponentConfigContract::class])) {
-            $dimensions  = $configClass::getDimensions();
-            $dimensions  = $dimensions instanceof Iterator ? \iterator_to_array($dimensions) : $dimensions;
+            $dimensions = $configClass::getDimensions();
+            $dimensions = $dimensions instanceof Iterator ? \iterator_to_array($dimensions) : $dimensions;
         }
 
         if (isset($interfaces[RequiresConfigIdContract::class]) || isset($interfaces[RequiresComponentConfigIdContract::class])) {

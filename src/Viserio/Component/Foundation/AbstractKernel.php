@@ -38,7 +38,7 @@ abstract class AbstractKernel implements
      *
      * @var int
      */
-    public const VERSION_ID  = 10000;
+    public const VERSION_ID = 10000;
 
     /**
      * The current Framework "major" version.

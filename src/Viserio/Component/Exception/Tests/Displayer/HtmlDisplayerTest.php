@@ -47,9 +47,9 @@ class HtmlDisplayerTest extends MockeryTestCase
 
     public function testServerError(): void
     {
-        $response  = $this->displayer->display(new Exception(), 'foo', 502, []);
-        $expected  = \file_get_contents(__DIR__ . '/../../Resources/error.html');
-        $infos     = [
+        $response = $this->displayer->display(new Exception(), 'foo', 502, []);
+        $expected = \file_get_contents(__DIR__ . '/../../Resources/error.html');
+        $infos    = [
             'code'    => '502',
             'summary' => 'Houston, We Have A Problem.',
             'name'    => 'Bad Gateway',
@@ -68,9 +68,9 @@ class HtmlDisplayerTest extends MockeryTestCase
 
     public function testClientError(): void
     {
-        $response  = $this->displayer->display(new Exception(), 'bar', 404, []);
-        $expected  = \file_get_contents(__DIR__ . '/../../Resources/error.html');
-        $infos     = [
+        $response = $this->displayer->display(new Exception(), 'bar', 404, []);
+        $expected = \file_get_contents(__DIR__ . '/../../Resources/error.html');
+        $infos    = [
             'code'    => '404',
             'summary' => 'Houston, We Have A Problem.',
             'name'    => 'Not Found',

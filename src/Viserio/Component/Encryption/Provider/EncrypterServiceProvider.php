@@ -91,8 +91,8 @@ class EncrypterServiceProvider implements
      */
     public static function createPassword(ContainerInterface $container): PasswordContract
     {
-        $options   = self::resolveOptions($container);
-        $key       = KeyFactory::loadKey($options['password_key_path']);
+        $options = self::resolveOptions($container);
+        $key     = KeyFactory::loadKey($options['password_key_path']);
 
         return new Password(new Encrypter($key));
     }

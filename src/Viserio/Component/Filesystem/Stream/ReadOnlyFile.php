@@ -192,7 +192,7 @@ class ReadOnlyFile implements FileStream
             }
 
             $buf .= $read;
-            $readSize        = \mb_strlen($read, '8bit');
+            $readSize = \mb_strlen($read, '8bit');
             $this->position += $readSize;
             $remaining -= $readSize;
         } while ($remaining > 0);

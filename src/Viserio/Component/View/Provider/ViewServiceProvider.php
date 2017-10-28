@@ -28,18 +28,18 @@ class ViewServiceProvider implements ServiceProviderInterface
             'view.engine.resolver' => function (ContainerInterface $container) {
                 return $container->get(EngineResolver::class);
             },
-            FinderContract::class  => [self::class, 'createViewFinder'],
-            ViewFinder::class      => function (ContainerInterface $container) {
+            FinderContract::class => [self::class, 'createViewFinder'],
+            ViewFinder::class     => function (ContainerInterface $container) {
                 return $container->get(FinderContract::class);
             },
-            'view.finder'          => function (ContainerInterface $container) {
+            'view.finder' => function (ContainerInterface $container) {
                 return $container->get(FinderContract::class);
             },
-            FactoryContract::class      => [self::class, 'createViewFactory'],
-            ViewFactory::class          => function (ContainerInterface $container) {
+            FactoryContract::class => [self::class, 'createViewFactory'],
+            ViewFactory::class     => function (ContainerInterface $container) {
                 return $container->get(FactoryContract::class);
             },
-            'view'                  => function (ContainerInterface $container) {
+            'view' => function (ContainerInterface $container) {
                 return $container->get(FactoryContract::class);
             },
         ];

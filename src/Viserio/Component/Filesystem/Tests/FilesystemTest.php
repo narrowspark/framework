@@ -569,7 +569,7 @@ class FilesystemTest extends TestCase
 
     public function testAppend(): void
     {
-        $url  = $this->root->url() . '/file.php';
+        $url = $this->root->url() . '/file.php';
 
         $this->files->append($url, 'test');
 

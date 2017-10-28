@@ -78,15 +78,15 @@ class SessionManagerTest extends MockeryTestCase
 
     private function getSessionManager($config)
     {
-        $pw      = \random_bytes(32);
-        $key     = KeyFactory::generateKey($pw);
+        $pw  = \random_bytes(32);
+        $key = KeyFactory::generateKey($pw);
 
         return new SessionManager(
             new ArrayContainer([
                 RepositoryContract::class   => $config,
                 JarContract::class          => $this->mock(JarContract::class),
                 CacheManagerContract::class => new CacheManager(new ArrayContainer([
-                    RepositoryContract::class   => $config,
+                    RepositoryContract::class => $config,
                 ])),
                 EncrypterContract::class => new Encrypter($key),
             ])

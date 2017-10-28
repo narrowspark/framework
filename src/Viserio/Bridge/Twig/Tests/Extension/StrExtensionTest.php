@@ -75,7 +75,7 @@ class StrExtensionTest extends MockeryTestCase
         $mock->shouldReceive('fooBar')
             ->once();
 
-        $string  = $this->getString();
+        $string = $this->getString();
         $string->setCallback($mock);
 
         $filters = $string->getFilters();

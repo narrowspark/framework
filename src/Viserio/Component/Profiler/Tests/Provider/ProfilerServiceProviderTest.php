@@ -43,8 +43,8 @@ class ProfilerServiceProviderTest extends MockeryTestCase
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
-        $router  = $container->get(RouterContract::class);
-        $routes  = $router->getRoutes()->getRoutes();
+        $router = $container->get(RouterContract::class);
+        $routes = $router->getRoutes()->getRoutes();
 
         $action1 = $routes[0]->getAction();
         $action2 = $routes[1]->getAction();

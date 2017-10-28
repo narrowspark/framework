@@ -318,10 +318,10 @@ class CronTest extends MockeryTestCase
 
     public function testBuildCommandSendOutputTo(): void
     {
-        $quote         = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
-        $isWindows     = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
-        $windows       = $isWindows ? 'start /B ' : '';
-        $background    = $isWindows ? '' : ' &';
+        $quote      = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
+        $isWindows  = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
+        $windows    = $isWindows ? 'start /B ' : '';
+        $background = $isWindows ? '' : ' &';
 
         $cron = new Cron('php -i');
         $cron->sendOutputTo('/dev/null');
@@ -336,10 +336,10 @@ class CronTest extends MockeryTestCase
 
     public function testBuildCommandAppendOutput(): void
     {
-        $quote         = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
-        $isWindows     = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
-        $windows       = $isWindows ? 'start /B ' : '';
-        $background    = $isWindows ? '' : ' &';
+        $quote      = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
+        $isWindows  = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
+        $windows    = $isWindows ? 'start /B ' : '';
+        $background = $isWindows ? '' : ' &';
 
         $cron = new Cron('php -i');
         $cron->appendOutputTo('/dev/null');

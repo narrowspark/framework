@@ -22,22 +22,22 @@ class ParserServiceProvider implements ServiceProviderInterface
             LoaderContract::class => function (ContainerInterface $container): FileLoader {
                 return new FileLoader();
             },
-            FileLoader::class     => function (ContainerInterface $container) {
+            FileLoader::class => function (ContainerInterface $container) {
                 return $container->get(LoaderContract::class);
             },
             TaggableParser::class => function (ContainerInterface $container): TaggableParser {
                 return new TaggableParser();
             },
-            GroupParser::class    => function (ContainerInterface $container): GroupParser {
+            GroupParser::class => function (ContainerInterface $container): GroupParser {
                 return new GroupParser();
             },
-            Parser::class         => function (ContainerInterface $container): Parser {
+            Parser::class => function (ContainerInterface $container): Parser {
                 return new Parser();
             },
-            'parser'              => function (ContainerInterface $container) {
+            'parser' => function (ContainerInterface $container) {
                 return $container->get(Parser::class);
             },
-            Dumper::class         => function (ContainerInterface $container): Dumper {
+            Dumper::class => function (ContainerInterface $container): Dumper {
                 return new Dumper();
             },
         ];

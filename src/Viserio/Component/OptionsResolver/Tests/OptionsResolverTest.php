@@ -486,8 +486,8 @@ class OptionsResolverTest extends MockeryTestCase
                 ],
             ],
         ];
-        $container  = $this->mock(ContainerInterface::class);
-        $config     = $this->mock(RepositoryContract::class);
+        $container = $this->mock(ContainerInterface::class);
+        $config    = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
             ->once()
             ->with('doctrine')
@@ -514,7 +514,7 @@ class OptionsResolverTest extends MockeryTestCase
 
     public function testDataResolverWithRepository(): void
     {
-        $container  = $this->mock(ContainerInterface::class);
+        $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('has')
             ->with(RepositoryContract::class)
             ->andReturn(false);
@@ -536,7 +536,7 @@ class OptionsResolverTest extends MockeryTestCase
 
     public function testDataResolverWithOptions(): void
     {
-        $container  = $this->mock(ContainerInterface::class);
+        $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('has')
             ->with(RepositoryContract::class)
             ->andReturn(false);

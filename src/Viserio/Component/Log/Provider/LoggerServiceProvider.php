@@ -32,7 +32,7 @@ class LoggerServiceProvider implements
             'log'                => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
-            'logger'             => function (ContainerInterface $container) {
+            'logger' => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
             Log::class => function (ContainerInterface $container) {

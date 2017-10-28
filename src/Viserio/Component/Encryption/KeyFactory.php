@@ -226,7 +226,7 @@ final class KeyFactory
             \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX,
             '8bit'
         );
-        $calc    = \sodium_crypto_generichash(
+        $calc = \sodium_crypto_generichash(
             $version . $keyData,
             '',
             \SODIUM_CRYPTO_GENERICHASH_BYTES_MAX

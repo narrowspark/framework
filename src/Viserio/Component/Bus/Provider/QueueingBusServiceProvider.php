@@ -20,7 +20,7 @@ class QueueingBusServiceProvider implements ServiceProviderInterface
             QueueingDispatcher::class         => function (ContainerInterface $container) {
                 return $container->get(QueueingDispatcherContract::class);
             },
-            'bus'                             => function (ContainerInterface $container) {
+            'bus' => function (ContainerInterface $container) {
                 return $container->get(QueueingDispatcherContract::class);
             },
         ];

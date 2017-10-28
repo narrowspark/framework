@@ -81,7 +81,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         return \array_merge(
             parent::getDefaultOptions(),
             [
-                'displayers'        => [
+                'displayers' => [
                     WhoopsDisplayer::class,
                     SymfonyDisplayer::class,
                     ViewDisplayer::class,
@@ -248,10 +248,10 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
-        $id          = $this->exceptionIdentifier->identify($exception);
-        $flattened   = FlattenException::create($exception);
-        $code        = $flattened->getStatusCode();
-        $headers     = $flattened->getHeaders();
+        $id        = $this->exceptionIdentifier->identify($exception);
+        $flattened = FlattenException::create($exception);
+        $code      = $flattened->getStatusCode();
+        $headers   = $flattened->getHeaders();
 
         return $this->getDisplayer(
             $request,

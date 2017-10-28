@@ -99,8 +99,8 @@ class LintCommand extends Command
      */
     protected function getFinder(array $paths): iterable
     {
-        $foundFiles   = [];
-        $baseDir      = (array) $this->argument('dir');
+        $foundFiles = [];
+        $baseDir    = (array) $this->argument('dir');
 
         foreach ($baseDir as $dir) {
             if (\count($paths) !== 0) {
@@ -148,9 +148,9 @@ class LintCommand extends Command
         }
 
         return [
-            'template'  => $template,
-            'file'      => $file,
-            'valid'     => true,
+            'template' => $template,
+            'file'     => $file,
+            'valid'    => true,
         ];
     }
 

@@ -273,9 +273,9 @@ class Cron implements CronContract
      */
     public function buildCommand(): string
     {
-        $output    = \escapeshellarg($this->output);
-        $redirect  = $this->shouldAppendOutput ? ' >> ' : ' > ';
-        $command   = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
+        $output   = \escapeshellarg($this->output);
+        $redirect = $this->shouldAppendOutput ? ' >> ' : ' > ';
+        $command  = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
 
         return $this->ensureCorrectUser($command);
     }

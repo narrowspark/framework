@@ -34,11 +34,11 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
                 'profiler' => [
                     'enable'    => true,
                     'collector' => [
-                        'twig'  => true,
+                        'twig' => true,
                     ],
                 ],
                 'view' => [
-                    'paths'      => [
+                    'paths' => [
                         __DIR__ . '/../Fixture/',
                         __DIR__,
                     ],

@@ -14,7 +14,7 @@ class UrlGeneratorTest extends MockeryTestCase
 {
     public function testAbsoluteUrlWithPort80(): void
     {
-        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
+        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' => 'testing']));
 
         $url = $this->getGenerator($routes)->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
@@ -23,7 +23,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     public function testAbsoluteSecureUrlWithPort443(): void
     {
-        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
+        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' => 'testing']));
 
         $url = $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
@@ -32,7 +32,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     public function testAbsoluteUrlWithNonStandardPort(): void
     {
-        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
+        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' => 'testing']));
 
         $url = $this->getGenerator($routes, ['SERVER_PORT' => 8080])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
@@ -41,7 +41,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     public function testAbsoluteSecureUrlWithNonStandardPort(): void
     {
-        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
+        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' => 'testing']));
 
         $url = $this->getGenerator($routes, ['HTTPS' => 'on', 'SERVER_PORT' => 8080])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
@@ -50,7 +50,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     public function testRelativeUrlWithoutParameters(): void
     {
-        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' =>'testing']));
+        $routes = $this->getRoutes(new Route('GET', '/testing', ['as' => 'testing']));
 
         $url = $this->getGenerator($routes)->generate('testing');
 
@@ -59,7 +59,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     public function testRelativeUrlWithParameter(): void
     {
-        $routes = $this->getRoutes(new Route('GET', '/testing/{param1}', ['as' =>'testing']));
+        $routes = $this->getRoutes(new Route('GET', '/testing/{param1}', ['as' => 'testing']));
 
         $url = $this->getGenerator($routes)->generate('testing', ['param1' => 'bar']);
 
@@ -68,7 +68,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     public function testRelativeUrlWithQueries(): void
     {
-        $routes = $this->getRoutes(new Route('GET', '/testing/{param1}', ['as' =>'testing']));
+        $routes = $this->getRoutes(new Route('GET', '/testing/{param1}', ['as' => 'testing']));
 
         $url = $this->getGenerator($routes)->generate('testing', ['param1' => 'bar']);
 
@@ -438,7 +438,7 @@ class UrlGeneratorTest extends MockeryTestCase
 
     protected function getGenerator(RouteCollection $routes, array $serverVar = [])
     {
-        $server =  [
+        $server = [
             'PHP_SELF'    => '',
             'REQUEST_URI' => '',
             'SERVER_ADDR' => '127.0.0.1',

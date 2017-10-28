@@ -200,12 +200,12 @@ class PoTest extends TestCase
 
         self::assertSame(
             [
-                'msgid'      => [
+                'msgid' => [
                     '',
                     'El archivo {file} es demasiado pequeño, el tamaño mínimo de archivo es ',
                     '{minSizeLimit}.',
                 ],
-                'msgstr'     => [
+                'msgstr' => [
                     '',
                     'El fitxer {file} es massa petit, el tamany mínim de fitxer es ',
                     '{minSizeLimit}.',
@@ -222,19 +222,19 @@ class PoTest extends TestCase
         );
         self::assertSame(
             [
-                'msgid'      => [
+                'msgid' => [
                     'El archivo supera el tamaño máximo permitido: %size%MB',
                 ],
-                'msgstr'     => [
+                'msgstr' => [
                     '',
                     'El fitxer {file} es massa gran, el tamany máxim de fitxer es {sizeLimit}.',
                 ],
-                'msgctxt'    => [],
-                'ccomment'   => [],
-                'tcomment'   => ['@ default'],
-                'obsolete'   => false,
-                'fuzzy'      => true,
-                'flags'      => [
+                'msgctxt'  => [],
+                'ccomment' => [],
+                'tcomment' => ['@ default'],
+                'obsolete' => false,
+                'fuzzy'    => true,
+                'flags'    => [
                     'fuzzy',
                 ],
                 'references' => [
@@ -354,8 +354,8 @@ class PoTest extends TestCase
                 'flags'      => [],
                 'references' => [],
                 'previous'   => [
-                    'msgid' => ['this is a previous string'],
-                    'msgstr'=> ['this is a previous translation string'],
+                    'msgid'  => ['this is a previous string'],
+                    'msgstr' => ['this is a previous translation string'],
                 ],
             ],
         ];

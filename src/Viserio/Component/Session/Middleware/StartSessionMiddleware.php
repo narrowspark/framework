@@ -102,9 +102,9 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     protected function startSession(ServerRequestInterface $request): StoreContract
     {
-        $session    = $this->manager->getDriver();
-        $cookies    = RequestCookies::fromRequest($request);
-        $hasCookie  = $cookies->has($session->getName());
+        $session   = $this->manager->getDriver();
+        $cookies   = RequestCookies::fromRequest($request);
+        $hasCookie = $cookies->has($session->getName());
 
         $session->setId($hasCookie ? $cookies->get($session->getName())->getValue() : '');
 

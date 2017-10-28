@@ -35,7 +35,7 @@ class NoSeekStreamTest extends TestCase
         \fwrite($stream, $body);
         \fseek($stream, 0);
 
-        $s       = new Stream($stream);
+        $s = new Stream($stream);
         $s->seek(1);
 
         $wrapped = new NoSeekStream($s);

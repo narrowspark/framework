@@ -28,11 +28,11 @@ class IniTest extends TestCase
         $this->root     = vfsStream::setup();
         $this->iniArray = [
             'first_section' => [
-                'one'     => true,
-                'two'     => false,
-                'tree'    => null,
-                'five'    => 5,
-                'animal'  => 'BIRD',
+                'one'    => true,
+                'two'    => false,
+                'tree'   => null,
+                'five'   => 5,
+                'animal' => 'BIRD',
             ],
             'second_section' => [
                 'path' => '/usr/local/bin',

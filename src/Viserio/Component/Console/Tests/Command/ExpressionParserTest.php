@@ -126,7 +126,7 @@ class ExpressionParserTest extends TestCase
             'arguments' => [
                 new InputArgument('argument', InputArgument::OPTIONAL, '', 'defaultArgumentValue'),
             ],
-            'options'   => [
+            'options' => [
                 new InputOption('option', null, InputOption::VALUE_OPTIONAL, '', 'defaultOptionValue'),
             ],
         ]);
@@ -139,7 +139,7 @@ class ExpressionParserTest extends TestCase
             'arguments' => [
                 new InputArgument('argument', InputArgument::OPTIONAL, 'The option description.', 'defaultArgumentValue'),
             ],
-            'options'   => [
+            'options' => [
                 new InputOption('option', null, InputOption::VALUE_OPTIONAL, 'The option description.', 'defaultOptionValue'),
             ],
         ]);
@@ -152,7 +152,7 @@ class ExpressionParserTest extends TestCase
             'arguments' => [
                 new InputArgument('argument', InputArgument::IS_ARRAY, '', ['test', 'test2']),
             ],
-            'options'   => [
+            'options' => [
                 new InputOption('option', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, '', ['doptionValue', 'test']),
             ],
         ]);
@@ -172,7 +172,7 @@ class ExpressionParserTest extends TestCase
                 new InputArgument('test', InputArgument::REQUIRED),
                 new InputArgument('argument_desc', InputArgument::OPTIONAL, 'description', 'test'),
             ],
-            'options'   => [
+            'options' => [
                 new InputOption('yell', 'y', InputOption::VALUE_OPTIONAL, '', 'hello'),
             ],
         ]);

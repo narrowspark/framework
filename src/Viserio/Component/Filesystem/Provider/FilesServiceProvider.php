@@ -18,10 +18,10 @@ class FilesServiceProvider implements ServiceProviderInterface
             FilesystemContract::class => function (): Filesystem {
                 return new Filesystem();
             },
-            'files'                   => function (ContainerInterface $container) {
+            'files' => function (ContainerInterface $container) {
                 return $container->get(Filesystem::class);
             },
-            Filesystem::class         => function (ContainerInterface $container) {
+            Filesystem::class => function (ContainerInterface $container) {
                 return $container->get(FilesystemContract::class);
             },
         ];

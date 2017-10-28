@@ -117,7 +117,7 @@ class Parser
             $fileName = self::normalizeDirectorySeparator($payload);
 
             if (\is_file($fileName)) {
-                $payload  = \file_get_contents($fileName);
+                $payload = \file_get_contents($fileName);
 
                 if ($payload === false) {
                     throw new RuntimeException(\sprintf('A error occurred during reading [%s]', $fileName));

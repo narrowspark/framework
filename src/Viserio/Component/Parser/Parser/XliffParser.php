@@ -55,9 +55,9 @@ class XliffParser implements ParserContract
      */
     private function extractXliffVersion1(DOMDocument $dom): array
     {
-        $xml       = \simplexml_import_dom($dom);
-        $encoding  = \mb_strtoupper($dom->encoding);
-        $datas     = [
+        $xml      = \simplexml_import_dom($dom);
+        $encoding = \mb_strtoupper($dom->encoding);
+        $datas    = [
             'version'         => '1.2',
             'source-language' => '',
             'target-language' => '',
@@ -150,9 +150,9 @@ class XliffParser implements ParserContract
         $xml      = \simplexml_import_dom($dom);
         $encoding = \mb_strtoupper($dom->encoding);
         $datas    = [
-            'version'  => '2.0',
-            'srcLang'  => '',
-            'trgLang'  => '',
+            'version' => '2.0',
+            'srcLang' => '',
+            'trgLang' => '',
         ];
 
         foreach ($xml->attributes() as $key => $value) {
@@ -175,10 +175,10 @@ class XliffParser implements ParserContract
             }
 
             $datas[$id] = [
-                'source'   => $source,
+                'source' => $source,
                 // If the xlf file has another encoding specified, try to convert it because
                 // simple_xml will always return utf-8 encoded values
-                'target'   => $target,
+                'target' => $target,
             ];
 
             if ($target !== null && $unit->segment->target->attributes()) {

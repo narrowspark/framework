@@ -20,7 +20,7 @@ class ConfigServiceProvider implements ServiceProviderInterface
             Repository::class         => function (ContainerInterface $container) {
                 return $container->get(RepositoryContract::class);
             },
-            'config'                  => function (ContainerInterface $container) {
+            'config' => function (ContainerInterface $container) {
                 return $container->get(RepositoryContract::class);
             },
         ];

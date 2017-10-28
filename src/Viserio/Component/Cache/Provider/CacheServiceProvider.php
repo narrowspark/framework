@@ -17,8 +17,8 @@ class CacheServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            CacheManagerContract::class   => [self::class, 'createCacheManager'],
-            CacheManager::class           => function (ContainerInterface $container): CacheManagerContract {
+            CacheManagerContract::class => [self::class, 'createCacheManager'],
+            CacheManager::class         => function (ContainerInterface $container): CacheManagerContract {
                 return $container->get(CacheManagerContract::class);
             },
             'cache' => function (ContainerInterface $container): CacheManagerContract {

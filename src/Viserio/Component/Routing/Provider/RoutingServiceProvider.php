@@ -24,15 +24,15 @@ class RoutingServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            DispatcherContract::class   => [self::class, 'createRouteDispatcher'],
-            RouterContract::class       => [self::class, 'createRouter'],
-            'route'                     => function (ContainerInterface $container) {
+            DispatcherContract::class => [self::class, 'createRouteDispatcher'],
+            RouterContract::class     => [self::class, 'createRouter'],
+            'route'                   => function (ContainerInterface $container) {
                 return $container->get(Router::class);
             },
-            'router'                    => function (ContainerInterface $container) {
+            'router' => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
             },
-            Router::class               => function (ContainerInterface $container) {
+            Router::class => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
             },
             UrlGeneratorContract::class => [self::class, 'createUrlGenerator'],

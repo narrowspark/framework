@@ -29,7 +29,7 @@ class EventsDataCollectorServiceProviderTest extends MockeryTestCase
                     'profiler' => [
                         'enable'    => true,
                         'collector' => [
-                            'events'  => true,
+                            'events' => true,
                         ],
                     ],
                 ],

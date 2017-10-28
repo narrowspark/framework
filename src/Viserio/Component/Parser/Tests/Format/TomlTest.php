@@ -21,8 +21,8 @@ class TomlTest extends TestCase
 
     public function setUp(): void
     {
-        $this->file   = new Filesystem();
-        $this->root   = vfsStream::setup();
+        $this->file = new Filesystem();
+        $this->root = vfsStream::setup();
     }
 
     public function testParses(): void

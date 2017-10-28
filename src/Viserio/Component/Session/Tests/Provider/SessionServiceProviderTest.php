@@ -28,8 +28,8 @@ class SessionServiceProviderTest extends TestCase
         $container->instance('config', [
             'viserio' => [
                 'session' => [
-                    'default'  => 'file',
-                    'drivers'  => [
+                    'default' => 'file',
+                    'drivers' => [
                         'file' => [
                             'path' => '',
                         ],
