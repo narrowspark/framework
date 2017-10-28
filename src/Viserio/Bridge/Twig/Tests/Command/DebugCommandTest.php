@@ -37,8 +37,8 @@ class DebugCommandTest extends MockeryTestCase
             \array_merge(
                 $config,
                 [
-                    FinderContract::class       => $finder,
-                    LoaderInterface::class      => $loader,
+                    FinderContract::class  => $finder,
+                    LoaderInterface::class => $loader,
                 ]
             )
         ));
@@ -53,7 +53,7 @@ class DebugCommandTest extends MockeryTestCase
 
     public function testDebug(): void
     {
-        $tester   = $this->createCommandTester();
+        $tester = $this->createCommandTester();
         $tester->execute([], ['decorated' => false]);
 
         self::assertTrue(\is_string($tester->getDisplay(true)));
@@ -61,7 +61,7 @@ class DebugCommandTest extends MockeryTestCase
 
     public function testDebugJsonFormat(): void
     {
-        $tester   = $this->createCommandTester();
+        $tester = $this->createCommandTester();
         $tester->execute(['--format' => 'json'], ['decorated' => false]);
 
         self::assertTrue(\is_string($tester->getDisplay(true)));
@@ -92,9 +92,9 @@ class DebugCommandTest extends MockeryTestCase
             \array_merge(
                 $config,
                 [
-                    Environment::class          => $twig,
-                    FinderContract::class       => $finder,
-                    LoaderInterface::class      => $loader,
+                    Environment::class     => $twig,
+                    FinderContract::class  => $finder,
+                    LoaderInterface::class => $loader,
                 ]
             )
         ));

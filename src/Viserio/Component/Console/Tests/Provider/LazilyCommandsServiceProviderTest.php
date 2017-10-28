@@ -50,7 +50,7 @@ Viserio\Component\Console\Tests\Fixture\HelloCommand made me do work! :-(
 ', LazyWhiner::getOutput());
 
         LazyWhiner::setOutput(new SpyOutput());
-        $output  = new SpyOutput();
+        $output = new SpyOutput();
         $application->run(new StringInput('goodbye'), $output);
 
         self::assertSame('Goodbye World!', $output->output);

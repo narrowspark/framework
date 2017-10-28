@@ -29,7 +29,7 @@ class MarkdownEngine implements EngineContract
         // @codeCoverageIgnoreStart
         if ($markdown === null) {
             if (\class_exists(ParsedownExtra::class)) {
-                $markdown =  new ParsedownExtra();
+                $markdown = new ParsedownExtra();
             } elseif (\class_exists(Parsedown::class)) {
                 $markdown = new Parsedown();
             }

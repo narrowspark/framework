@@ -100,7 +100,7 @@ class Pipeline implements PipelineContract
                 }
 
                 if (\is_array($stage)) {
-                    $parameters      = [$traveler, $stack];
+                    $parameters = [$traveler, $stack];
 
                     return (new ReflectionClass(\array_shift($stage)))->newInstanceArgs($stage)(...$parameters);
                 }

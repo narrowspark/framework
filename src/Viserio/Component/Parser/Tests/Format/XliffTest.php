@@ -19,7 +19,7 @@ class XliffTest extends TestCase
 
     public function setUp(): void
     {
-        $this->file   = new Filesystem();
+        $this->file = new Filesystem();
     }
 
     public function testParseXliffV1(): void
@@ -130,10 +130,10 @@ class XliffTest extends TestCase
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf'));
 
         self::assertSame([
-            'version'  => '2.0',
-            'srcLang'  => 'en-US',
-            'trgLang'  => 'de-CH',
-            'key1'     => [
+            'version' => '2.0',
+            'srcLang' => 'en-US',
+            'trgLang' => 'de-CH',
+            'key1'    => [
                 'source' => 'foo',
                 'target' => 'bär',
             ],
@@ -295,10 +295,10 @@ class XliffTest extends TestCase
         $datas = (new XliffParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/xliff/xliffv2-notes-meta.xlf'));
 
         $exceptedDatas = [
-            'version'  => '2.0',
-            'srcLang'  => 'en-US',
-            'trgLang'  => 'de-CH',
-            'key1'     => [
+            'version' => '2.0',
+            'srcLang' => 'en-US',
+            'trgLang' => 'de-CH',
+            'key1'    => [
                 'source' => 'foo',
                 'target' => 'bar',
                 'notes'  => [

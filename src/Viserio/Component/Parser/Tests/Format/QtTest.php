@@ -21,8 +21,8 @@ class QtTest extends TestCase
 
     public function setUp(): void
     {
-        $this->file   = new Filesystem();
-        $this->data   = [
+        $this->file = new Filesystem();
+        $this->data = [
             'contentstructuremenu/show_content_structure' => [
                 [
                     'source'      => 'Node ID: %node_id Visibility: %visibility',

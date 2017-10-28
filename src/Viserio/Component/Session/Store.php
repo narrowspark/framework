@@ -674,7 +674,7 @@ class Store implements StoreContract
      */
     private function readFromHandler(): array
     {
-        $data         = $this->handler->read($this->id);
+        $data = $this->handler->read($this->id);
 
         if ($data === '') {
             return [];
@@ -710,7 +710,7 @@ class Store implements StoreContract
             'fingerprint'       => $this->fingerprint,
         ];
 
-        $value =  \json_encode($values, \JSON_PRESERVE_ZERO_FRACTION);
+        $value = \json_encode($values, \JSON_PRESERVE_ZERO_FRACTION);
 
         $this->handler->write(
             $this->id,

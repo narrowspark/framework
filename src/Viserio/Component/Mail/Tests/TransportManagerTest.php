@@ -30,7 +30,7 @@ class TransportManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'mail' => [
-                    'drivers'   => [],
+                    'drivers' => [],
                 ],
             ]);
 
@@ -38,7 +38,7 @@ class TransportManagerTest extends MockeryTestCase
             RepositoryContract::class => $config,
         ]));
         $manager->setContainer(new ArrayContainer([
-            LoggerInterface::class    => $this->mock(LoggerInterface::class),
+            LoggerInterface::class => $this->mock(LoggerInterface::class),
         ]));
 
         self::assertInstanceOf(LogTransport::class, $manager->getDriver('log'));
@@ -56,7 +56,7 @@ class TransportManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'mail' => [
-                    'drivers'   => [],
+                    'drivers' => [],
                 ],
             ]);
 
@@ -79,7 +79,7 @@ class TransportManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'mail' => [
-                    'drivers'   => [
+                    'drivers' => [
                         'smtp' => [
                             'host'       => '',
                             'port'       => '',
@@ -111,7 +111,7 @@ class TransportManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'mail' => [
-                    'drivers'   => [
+                    'drivers' => [
                         'mailgun' => [
                             'secret' => '',
                             'domain' => '',
@@ -139,7 +139,7 @@ class TransportManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'mail' => [
-                    'drivers'   => [
+                    'drivers' => [
                         'mandrill' => [
                             'secret' => '',
                         ],
@@ -166,7 +166,7 @@ class TransportManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'mail' => [
-                    'drivers'   => [
+                    'drivers' => [
                         'sparkpost' => [
                             'secret' => '',
                         ],
@@ -193,7 +193,7 @@ class TransportManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'mail' => [
-                    'drivers'   => [
+                    'drivers' => [
                         'ses' => [
                             'secret' => 'test',
                             'key'    => 'test',
@@ -222,7 +222,7 @@ class TransportManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'mail' => [
-                    'drivers'=> [
+                    'drivers' => [
                     ],
                 ],
             ]);

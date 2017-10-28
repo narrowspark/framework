@@ -82,7 +82,7 @@ class PhpInputStreamTest extends TestCase
 
     public function testMultipleCastsToStringReturnSameContentsEvenIfReadsOccur(): void
     {
-        $first  = (string) $this->stream;
+        $first = (string) $this->stream;
         $this->stream->read(128);
         $second = (string) $this->stream;
 

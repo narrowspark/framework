@@ -128,7 +128,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             return \array_merge(
                 $tabInfos,
                 [
-                    'value'  => \implode(' | ', $this->route->getMethods()),
+                    'value' => \implode(' | ', $this->route->getMethods()),
                 ]
             );
         }
@@ -206,7 +206,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 'name'    => 'Response',
                 'content' => $this->createTable(
                     $response->getHeaders(),
-                    ['name'    => 'Response Headers']
+                    ['name' => 'Response Headers']
                 ),
             ],
             $this->createCookieTab($request, $response),

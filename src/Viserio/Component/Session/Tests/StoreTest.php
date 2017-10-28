@@ -134,7 +134,7 @@ class StoreTest extends MockeryTestCase
                 \JSON_PRESERVE_ZERO_FRACTION
             )
         ));
-        $session       = $this->session;
+        $session = $this->session;
         $session->getHandler()
             ->shouldReceive('read')
             ->once()
@@ -145,7 +145,7 @@ class StoreTest extends MockeryTestCase
 
     public function testSessionReturnsFalseOnFirstTraceNull(): void
     {
-        $session       = $this->session;
+        $session = $this->session;
         $session->getHandler()
             ->shouldReceive('read')
             ->once()

@@ -44,7 +44,7 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request   = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $dispatcher = new Dispatcher([
             new CallableMiddleware(function ($request, $delegate) use ($encrypter) {
@@ -74,7 +74,7 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request   = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $dispatcher = new Dispatcher([
             new EncryptedCookiesMiddleware($this->encrypter),

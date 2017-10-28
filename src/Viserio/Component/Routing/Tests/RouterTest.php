@@ -32,7 +32,7 @@ class RouterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $dispatcher  = new MiddlewareBasedDispatcher();
+        $dispatcher = new MiddlewareBasedDispatcher();
         $dispatcher->setContainer($this->mock(ContainerInterface::class));
         $dispatcher->setCachePath($this->dir . '/RouterTest.cache');
         $dispatcher->refreshCache(true);

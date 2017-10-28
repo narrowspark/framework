@@ -30,7 +30,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
 
         $name = (new ReflectionClass($this))->getShortName();
 
-        $dispatcher  = new MiddlewareBasedDispatcher();
+        $dispatcher = new MiddlewareBasedDispatcher();
         $dispatcher->setCachePath(__DIR__ . '/../Cache/' . $name . '.cache');
         $dispatcher->refreshCache(true);
         $dispatcher->setEventManager(new EventManager());

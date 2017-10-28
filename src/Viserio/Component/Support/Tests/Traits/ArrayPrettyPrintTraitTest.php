@@ -33,7 +33,7 @@ class ArrayPrettyPrintTraitTest extends TestCase
     \'fooa\' => 18896141256,
 ]')
             ->at($this->root);
-        $outFile  = vfsStream::newFile('simpleArrayOutput.php')
+        $outFile = vfsStream::newFile('simpleArrayOutput.php')
             ->withContent($array)
             ->at($this->root);
 
@@ -51,7 +51,7 @@ class ArrayPrettyPrintTraitTest extends TestCase
     \'fooa\' => 1.2,
 ]')
             ->at($this->root);
-        $outFile  = vfsStream::newFile('classAndInterfaceArrayOutput.php')
+        $outFile = vfsStream::newFile('classAndInterfaceArrayOutput.php')
             ->withContent($array)
             ->at($this->root);
 
@@ -69,7 +69,7 @@ class ArrayPrettyPrintTraitTest extends TestCase
     \'bar\' => 2,
 ]')
             ->at($this->root);
-        $outFile  = vfsStream::newFile('dimensionalArrayOutput.php')
+        $outFile = vfsStream::newFile('dimensionalArrayOutput.php')
             ->withContent($array)
             ->at($this->root);
 

@@ -19,7 +19,7 @@ class BusServiceProvider implements ServiceProviderInterface
             Dispatcher::class         => function (ContainerInterface $container) {
                 return $container->get(DispatcherContract::class);
             },
-            'bus'                     => function (ContainerInterface $container) {
+            'bus' => function (ContainerInterface $container) {
                 return $container->get(DispatcherContract::class);
             },
         ];

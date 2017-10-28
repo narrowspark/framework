@@ -89,7 +89,7 @@ class ProfilerTest extends MockeryTestCase
             $response
         );
 
-        $template   = new TemplateManager(
+        $template = new TemplateManager(
             [],
             $profiler->getTemplate(),
             '12213435415',
@@ -126,7 +126,7 @@ class ProfilerTest extends MockeryTestCase
             $response
         );
 
-        $template   = new TemplateManager(
+        $template = new TemplateManager(
             [],
             $profiler->getTemplate(),
             '12213435415',

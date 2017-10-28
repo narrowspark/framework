@@ -46,7 +46,7 @@ class ExceptionServiceProviderTest extends TestCase
                     'paths' => [],
                 ],
                 'log' => [
-                    'env'  => 'dev',
+                    'env' => 'dev',
                 ],
             ],
         ]);

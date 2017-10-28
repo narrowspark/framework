@@ -199,7 +199,7 @@ final class CommandResolver
             if ($this->isStaticCallToNonStaticMethod($callable)) {
                 [$class, $method] = $callable;
 
-                $message  = "['{$class}', '{$method}'] is not a callable because '{$method}' is a static method.";
+                $message = "['{$class}', '{$method}'] is not a callable because '{$method}' is a static method.";
                 $message .= " Either use [new {$class}(), '{$method}'] or configure a dependency injection container that supports autowiring.";
 
                 throw new InvalidArgumentException($message);

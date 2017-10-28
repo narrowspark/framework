@@ -19,11 +19,11 @@ class SessionServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            SessionManager::class       => [self::class, 'createSessionManager'],
-            'session'                   => function (ContainerInterface $container) {
+            SessionManager::class => [self::class, 'createSessionManager'],
+            'session'             => function (ContainerInterface $container) {
                 return $container->get(SessionManager::class);
             },
-            'session.store'             => [self::class, 'createSessionStore'],
+            'session.store' => [self::class, 'createSessionStore'],
         ];
     }
 

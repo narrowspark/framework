@@ -25,7 +25,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'awss3' => [
                             'key'     => 'your-key',
                             'secret'  => 'your-secret',
@@ -58,7 +58,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'dropbox' => [
                             'token' => 'your-token',
                         ],
@@ -91,7 +91,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'ftp' => [
                             'host'     => 'ftp.example.com',
                             'port'     => 21,
@@ -123,7 +123,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'local' => [
                             'path' => __DIR__,
                         ],
@@ -152,7 +152,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'null' => [],
                     ],
                 ],
@@ -179,7 +179,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'rackspace' => [
                             'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
                             'region'    => 'LON',
@@ -218,7 +218,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'sftp' => [
                             'host'     => 'sftp.example.com',
                             'port'     => 22,
@@ -250,7 +250,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'vfs' => [],
                     ],
                 ],
@@ -277,7 +277,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'webdav' => [
                             'baseUri'  => 'http://example.org/dav/',
                             'userName' => 'your-username',
@@ -308,7 +308,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'zip' => [
                             'path' => __DIR__ . '\Adapter\stubs\test.zip',
                         ],
@@ -337,7 +337,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'zip' => [
                             'path' => __DIR__ . '\Adapter\stubs\test.zip',
                         ],
@@ -366,7 +366,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'local' => [
                             'path'  => __DIR__,
                             'cache' => 'local',
@@ -411,7 +411,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'filesystem' => [
-                    'connections'   => [
+                    'connections' => [
                         'local' => [
                             'path' => __DIR__,
                         ],

@@ -38,7 +38,7 @@ class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
                     'profiler' => [
                         'enable'    => true,
                         'collector' => [
-                            'routes'  => true,
+                            'routes' => true,
                         ],
                     ],
                 ],

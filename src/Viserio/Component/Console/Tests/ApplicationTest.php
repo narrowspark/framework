@@ -232,8 +232,8 @@ class ApplicationTest extends MockeryTestCase
 
     public function testItCanInjectUsingTypeHints(): void
     {
-        $stdClass       = new stdClass();
-        $stdClass->foo  = 'hello';
+        $stdClass      = new stdClass();
+        $stdClass->foo = 'hello';
 
         $container = new ArrayContainer([
             'stdClass' => $stdClass,
@@ -249,8 +249,8 @@ class ApplicationTest extends MockeryTestCase
 
     public function testItCanInjectUsingParameterNames(): void
     {
-        $stdClass       = new stdClass();
-        $stdClass->foo  = 'hello';
+        $stdClass      = new stdClass();
+        $stdClass->foo = 'hello';
 
         $container = new ArrayContainer([
             'stdClass' => $stdClass,

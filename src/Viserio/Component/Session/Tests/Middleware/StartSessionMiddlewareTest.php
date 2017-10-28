@@ -147,7 +147,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request  = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $middleware->process($request, new DelegateMiddleware(function ($request) {
             self::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));

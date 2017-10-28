@@ -147,8 +147,8 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $request    = $request->withMethod('POST');
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request = $request->withMethod('POST');
 
         $dispatcher = new Dispatcher(
             [
@@ -206,8 +206,8 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $request    = $request->withMethod('POST');
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request = $request->withMethod('POST');
 
         $dispatcher = new Dispatcher(
             [
@@ -271,8 +271,8 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $server['SERVER_ADDR'] = '127.0.0.1';
         unset($server['PHP_SELF']);
 
-        $request    = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $request    = $request->withMethod('POST');
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request = $request->withMethod('POST');
 
         $dispatcher = new Dispatcher(
             [

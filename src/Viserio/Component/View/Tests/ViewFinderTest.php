@@ -79,7 +79,7 @@ class ViewFinderTest extends MockeryTestCase
 
     public function testCascadingFileLoading(): void
     {
-        $path  = self::normalizeDirectorySeparator($this->path . '/' . 'foo.phtml');
+        $path = self::normalizeDirectorySeparator($this->path . '/' . 'foo.phtml');
 
         $this->filesystem->shouldReceive('has')
             ->once()

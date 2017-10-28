@@ -128,7 +128,7 @@ class MutableFile implements FileStream
                 throw new FileAccessDeniedException('Could not write to the file.');
             }
 
-            $string           = \mb_substr($string, $written, null, '8bit');
+            $string = \mb_substr($string, $written, null, '8bit');
             $this->position += $written;
             $this->statistics = \fstat($this->stream);
 

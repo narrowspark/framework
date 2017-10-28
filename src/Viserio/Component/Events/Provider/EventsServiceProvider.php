@@ -18,10 +18,10 @@ class EventsServiceProvider implements ServiceProviderInterface
             EventManagerContract::class => function (): EventManager {
                 return new EventManager();
             },
-            EventManager::class         => function (ContainerInterface $container) {
+            EventManager::class => function (ContainerInterface $container) {
                 return $container->get(EventManagerContract::class);
             },
-            'events'                    => function (ContainerInterface $container) {
+            'events' => function (ContainerInterface $container) {
                 return $container->get(EventManagerContract::class);
             },
         ];

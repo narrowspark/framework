@@ -340,7 +340,7 @@ class KernelTest extends MockeryTestCase
         $function  = function () {
             return 'true';
         };
-        $command  = new ClosureCommand('foo', $function);
+        $command = new ClosureCommand('foo', $function);
 
         $kernel = $this->getKernel($container);
 
@@ -351,7 +351,7 @@ class KernelTest extends MockeryTestCase
     {
         $container = $this->mock(ContainerContract::class);
 
-        $command  = new ClosureCommand('foo', function () {
+        $command = new ClosureCommand('foo', function () {
             return 'true';
         });
 

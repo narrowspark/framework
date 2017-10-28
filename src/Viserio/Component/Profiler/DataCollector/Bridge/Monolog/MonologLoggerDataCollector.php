@@ -93,7 +93,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $tableHeaders  = ['Level', 'Channel', 'Message'];
+        $tableHeaders = ['Level', 'Channel', 'Message'];
 
         $logs = $this->groupLogLevels();
         $html = $this->createTabs([

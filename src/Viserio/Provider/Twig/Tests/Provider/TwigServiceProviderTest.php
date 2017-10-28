@@ -32,7 +32,7 @@ class TwigServiceProviderTest extends MockeryTestCase
         $container->instance('config', [
             'viserio' => [
                 'view' => [
-                    'paths'      => [
+                    'paths' => [
                         __DIR__ . '/../Fixture/',
                         __DIR__,
                     ],

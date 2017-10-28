@@ -17,7 +17,7 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
 
     public function setUp(): void
     {
-        $dispatcher  = new SimpleDispatcher();
+        $dispatcher = new SimpleDispatcher();
         $dispatcher->setCachePath($this->patch . '/SimpleDispatcherTest.cache');
         $dispatcher->refreshCache(true);
 
