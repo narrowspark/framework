@@ -179,29 +179,23 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
 
         $token = \mb_substr(\hash('sha256', \uniqid((string) \mt_rand(), true)), 0, 6);
 
-        $response->withHeader('X-Debug-Token', $token);
+        $response = $response->withHeader('X-Debug-Token', $token);
 
-        //@TODO Send json data or redirect.
         try {
-            if ($this->isRedirect($response)) {
-                // $this->stackData();
-            } elseif ($this->isJsonRequest($serverRequest)) {var_dump('da');die;
-                //$this->sendDataInHeaders(true);
-            } elseif ($this->isHtmlResponse($response) || $this->isHtmlAccepted($serverRequest)) {
-                // Just collect + store data, don't inject it.
-                $this->collectData($token, $serverRequest, $response);
-            }
+            $this->collectData($token, $serverRequest, $response);
         } catch (Throwable $exception) {
             if ($this->logger !== null) {
                 $this->logger->error('Profiler exception: ' . $exception->getMessage());
             } else {
                 throw $exception;
             }
-
-            return $response;
         }
 
-        return $this->injectProfiler($response, $token);
+        if ($this->isHtmlResponse($response)) {
+            $response = $this->injectProfiler($response, $token);
+        }
+
+        return $response;
     }
 
     /**
@@ -295,10 +289,12 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
             $this->collectors[$name]['collector'] = $collector['collector'];
         }
 
+        $ip = (new ClientIp($serverRequest))->getIpAddress();
+
         if ($this->cachePool !== null) {
             $this->createProfile(
                 $token,
-                (new ClientIp($serverRequest))->getIpAddress(),
+                $ip ?? 'Unknown',
                 $serverRequest->getMethod(),
                 (string) $serverRequest->getUri(),
                 $response->getStatusCode(),
@@ -339,51 +335,6 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     private function isHtmlResponse(ResponseInterface $response): bool
     {
         return \mb_strpos($response->getHeaderLine('Content-Type'), 'html', 0, 'UTF-8') !== false;
-    }
-
-    /**
-     * Check if request is a json request.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return bool
-     */
-    private function isJsonRequest(ServerRequestInterface $request): bool
-    {
-        if (InteractsWithContentTypes::isAjax($request)) {
-            return true;
-        }
-
-        return InteractsWithContentTypes::accepts(['application/json'], $request);
-    }
-
-    /**
-     * Check if request accept html.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return bool
-     */
-    private function isHtmlAccepted(ServerRequestInterface $request): bool
-    {
-        return InteractsWithContentTypes::accepts(['text/html'], $request);
-    }
-
-    /**
-     * Returns a boolean TRUE for if the response has redirect status code.
-     *
-     * Five common HTTP status codes indicates a redirection beginning from 301.
-     * 304 not modified and 305 use proxy are not redirects.
-     *
-     * @see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return bool
-     */
-    private function isRedirect(ResponseInterface $response): bool
-    {
-        return \in_array($response->getStatusCode(), [301, 302, 303, 307, 308], true);
     }
 
     /**
