@@ -4,6 +4,7 @@ namespace Viserio\Component\Exception;
 
 use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
+use Narrowspark\Http\Message\Util\Traits\AcceptHeaderTrait;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,6 +32,7 @@ use Viserio\Component\Exception\Filter\VerboseFilter;
 class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
 {
     use ResponseFactoryAwareTrait;
+    use AcceptHeaderTrait;
 
     /**
      * Exception filters.
@@ -275,10 +277,12 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         Throwable $transformed,
         int $code
     ): DisplayerContract {
-        if ($request !== null &&
-            $filtered = $this->getFiltered($this->make($this->displayers), $request, $original, $transformed, $code)
-        ) {
-            return $filtered[0];
+        if ($request !== null) {
+            $filtered = $this->getFiltered($this->make($this->displayers), $request, $original, $transformed, $code);
+
+            if (count($filtered) !== 0) {
+                return $this->sortedFilter($filtered, $request);
+            }
         }
 
         $defaultDisplayer = $this->resolvedOptions['default_displayer'];
@@ -314,5 +318,28 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         }
 
         return \array_values($displayers);
+    }
+
+    /**
+     * Sort displayer after the first found accept header.
+     *
+     * @param array                                    $filtered
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return \Viserio\Component\Contract\Exception\Displayer
+     */
+    private function sortedFilter(array $filtered, ServerRequestInterface $request): DisplayerContract
+    {
+        $accepts = self::getHeaderValuesFromString($request->getHeaderLine('Accept'));
+
+        foreach ($accepts as $accept) {
+            foreach ($filtered as $filter) {
+                if ($filter->getContentType() === $accept) {
+                    return $filter;
+                }
+            }
+        }
+
+        return $filtered[0];
     }
 }
