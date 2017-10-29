@@ -25,9 +25,9 @@ class WhoopsJsonDisplayerTest extends TestCase
     public function testServerError(): void
     {
         $response = $this->whoops->display(new Exception(), 'foo', 503, []);
-        $dir = str_replace('\\', "\\\\", __DIR__);
+        $dir      = str_replace('\\', '\\\\', __DIR__);
         self::assertSame(
-            '{"errors":[{"type":"Exception","message":"","file":"'.$dir.'\\\\WhoopsJsonDisplayerTest.php","line":27}]}',
+            '{"errors":[{"type":"Exception","message":"","file":"' . $dir . '\\\\WhoopsJsonDisplayerTest.php","line":27}]}',
             (string) $response->getBody());
         self::assertSame(503, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
