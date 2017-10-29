@@ -84,7 +84,7 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addDisplayer(new JsonDisplayer($info, $repsonseFactory));
         $this->handler->addDisplayer(new WhoopsPrettyDisplayer($repsonseFactory));
 
-        self::assertCount(6, $this->handler->getDisplayers());
+        self::assertCount(7, $this->handler->getDisplayers());
     }
 
     public function testAddAndGetTransformer(): void
