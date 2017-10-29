@@ -15,7 +15,8 @@ use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
-use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
@@ -38,15 +39,16 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             ExceptionHandlerContract::class => function (ContainerInterface $container) {
                 return $container->get(HandlerContract::class);
             },
-            HtmlDisplayer::class     => [self::class, 'createHtmlDisplayer'],
-            JsonDisplayer::class     => [self::class, 'createJsonDisplayer'],
-            JsonApiDisplayer::class  => [self::class, 'createJsonApiDisplayer'],
-            SymfonyDisplayer::class  => [self::class, 'createSymfonyDisplayer'],
-            ViewDisplayer::class     => [self::class, 'createViewDisplayer'],
-            WhoopsDisplayer::class   => [self::class, 'createWhoopsDisplayer'],
-            VerboseFilter::class     => [self::class, 'createVerboseFilter'],
-            ContentTypeFilter::class => [self::class, 'createContentTypeFilter'],
-            CanDisplayFilter::class  => [self::class, 'createCanDisplayFilter'],
+            HtmlDisplayer::class         => [self::class, 'createHtmlDisplayer'],
+            JsonDisplayer::class         => [self::class, 'createJsonDisplayer'],
+            JsonApiDisplayer::class      => [self::class, 'createJsonApiDisplayer'],
+            SymfonyDisplayer::class      => [self::class, 'createSymfonyDisplayer'],
+            ViewDisplayer::class         => [self::class, 'createViewDisplayer'],
+            WhoopsPrettyDisplayer::class => [self::class, 'createWhoopsPrettyDisplayer'],
+            WhoopsJsonDisplayer::class   => [self::class, 'createWhoopsJsonDisplayer'],
+            VerboseFilter::class         => [self::class, 'createVerboseFilter'],
+            ContentTypeFilter::class     => [self::class, 'createContentTypeFilter'],
+            CanDisplayFilter::class      => [self::class, 'createCanDisplayFilter'],
         ];
     }
 
@@ -163,17 +165,31 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     }
 
     /**
-     * Create a new WhoopsDisplayer instance.
+     * Create a new WhoopsPrettyDisplayer instance.
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Exception\Displayer\WhoopsDisplayer
+     * @return \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer
      */
-    public static function createWhoopsDisplayer(ContainerInterface $container): WhoopsDisplayer
+    public static function createWhoopsPrettyDisplayer(ContainerInterface $container): WhoopsPrettyDisplayer
     {
-        return new WhoopsDisplayer(
+        return new WhoopsPrettyDisplayer(
             $container->get(ResponseFactoryInterface::class),
             $container
+        );
+    }
+
+    /**
+     * Create a new WhoopsJsonDisplayer instance.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer
+     */
+    public static function createWhoopsJsonDisplayer(ContainerInterface $container): WhoopsJsonDisplayer
+    {
+        return new WhoopsJsonDisplayer(
+            $container->get(ResponseFactoryInterface::class)
         );
     }
 

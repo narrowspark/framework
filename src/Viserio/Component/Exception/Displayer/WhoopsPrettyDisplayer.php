@@ -3,19 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayer;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Whoops\Handler\Handler;
 use Whoops\Handler\PrettyPageHandler;
 
-class WhoopsDisplayer extends AbstractWhoopsDisplayer implements
+class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
     use OptionsResolverTrait;
-    use ResponseFactoryAwareTrait;
 
     /**
      * Configurations list for whoops.

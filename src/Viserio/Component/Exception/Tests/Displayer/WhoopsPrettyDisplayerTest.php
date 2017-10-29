@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class WhoopsDisplayerTest extends TestCase
+class WhoopsPrettyDisplayerTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer

@@ -4,13 +4,13 @@ namespace Viserio\Component\Exception\Tests\Displayer;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class WhoopsPrettyDisplayerTest extends TestCase
+class WhoopsJsonDisplayerTest extends TestCase
 {
     /**
-     * @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer
+     * @var \Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer
      */
     private $whoops;
 
@@ -19,16 +19,18 @@ class WhoopsPrettyDisplayerTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->whoops = new WhoopsPrettyDisplayer(new ResponseFactory());
+        $this->whoops = new WhoopsJsonDisplayer(new ResponseFactory());
     }
 
     public function testServerError(): void
     {
         $response = $this->whoops->display(new Exception(), 'foo', 503, []);
-
-        self::assertInternalType('string', (string) $response->getBody());
+        $dir = str_replace('\\', "\\\\", __DIR__);
+        self::assertSame(
+            '{"errors":[{"type":"Exception","message":"","file":"'.$dir.'\\\\WhoopsJsonDisplayerTest.php","line":27}]}',
+            (string) $response->getBody());
         self::assertSame(503, $response->getStatusCode());
-        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
@@ -37,7 +39,7 @@ class WhoopsPrettyDisplayerTest extends TestCase
 
         self::assertInternalType('string', (string) $response->getBody());
         self::assertSame(403, $response->getStatusCode());
-        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
@@ -47,6 +49,6 @@ class WhoopsPrettyDisplayerTest extends TestCase
 
         self::assertTrue($displayer->isVerbose());
         self::assertTrue($displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $displayer->getContentType());
+        self::assertSame('application/json', $displayer->getContentType());
     }
 }

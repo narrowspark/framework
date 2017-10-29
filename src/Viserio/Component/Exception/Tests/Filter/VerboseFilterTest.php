@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
-use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -17,7 +17,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 class VerboseFilterTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Exception\Displayer\WhoopsDisplayer
+     * @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer
      */
     private $whoopsDisplayer;
 
@@ -39,7 +39,7 @@ class VerboseFilterTest extends MockeryTestCase
     public function setUp(): void
     {
         $response              = new ResponseFactory();
-        $this->whoopsDisplayer = new WhoopsDisplayer($response);
+        $this->whoopsDisplayer = new WhoopsPrettyDisplayer($response);
         $this->jsonDisplayer   = new JsonDisplayer(new ExceptionInfo(), $response);
         $this->requestMock     = $this->mock(ServerRequestInterface::class);
         $this->exception       = new Exception();
