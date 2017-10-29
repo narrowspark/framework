@@ -4,13 +4,13 @@ namespace Viserio\Component\Exception\Tests\Displayer;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
 class WhoopsDisplayerTest extends TestCase
 {
     /**
-     * @var \Viserio\Component\Exception\Displayer\WhoopsDisplayer
+     * @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer
      */
     private $whoops;
 
@@ -19,7 +19,7 @@ class WhoopsDisplayerTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->whoops = new WhoopsDisplayer(new ResponseFactory());
+        $this->whoops = new WhoopsPrettyDisplayer(new ResponseFactory());
     }
 
     public function testServerError(): void

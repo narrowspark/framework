@@ -3,19 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayer;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
-use Throwable;
-use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Whoops\Handler\Handler;
 use Whoops\Handler\PrettyPageHandler;
-use Whoops\Run as Whoops;
 
-class WhoopsDisplayer implements
-    DisplayerContract,
+class WhoopsDisplayer extends AbstractWhoopsDisplayer implements
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {
@@ -37,7 +32,7 @@ class WhoopsDisplayer implements
      */
     public function __construct(ResponseFactoryInterface $responseFactory, $data = [])
     {
-        $this->responseFactory = $responseFactory;
+        parent::__construct($responseFactory);
         $this->resolvedOptions = self::resolveOptions($data);
     }
 
@@ -63,35 +58,9 @@ class WhoopsDisplayer implements
     /**
      * {@inheritdoc}
      */
-    public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
-    {
-        $response = $this->responseFactory->createResponse($code);
-
-        foreach (\array_merge($headers, ['Content-Type' => $this->getContentType()]) as $header => $value) {
-            $response = $response->withAddedHeader($header, $value);
-        }
-
-        $body = $response->getBody();
-        $body->write($this->getWhoops()->handleException($exception));
-        $body->rewind();
-
-        return $response->withBody($body);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getContentType(): string
     {
         return 'text/html';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canDisplay(Throwable $original, Throwable $transformed, int $code): bool
-    {
-        return \class_exists(Whoops::class);
     }
 
     /**
@@ -107,7 +76,7 @@ class WhoopsDisplayer implements
      *
      * @return \Whoops\Handler\Handler
      */
-    private function getConfiguredHandler(): Handler
+    protected function getHandler(): Handler
     {
         $handler = new PrettyPageHandler();
 
@@ -122,20 +91,5 @@ class WhoopsDisplayer implements
         $handler->setApplicationPaths($this->resolvedOptions['application_paths']);
 
         return $handler;
-    }
-
-    /**
-     * Returns the whoops instance.
-     *
-     * @return Whoops
-     */
-    private function getWhoops(): Whoops
-    {
-        $whoops = new Whoops();
-        $whoops->allowQuit(false);
-        $whoops->writeToOutput(false);
-        $whoops->pushHandler($this->getConfiguredHandler());
-
-        return $whoops;
     }
 }
