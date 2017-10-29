@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
-use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -21,7 +21,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     private $serverRequest;
 
     /**
-     * @var \Viserio\Component\Exception\Displayer\WhoopsDisplayer
+     * @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer
      */
     private $whoopsDisplayer;
 
@@ -50,7 +50,7 @@ class ContentTypeFilterTest extends MockeryTestCase
         $response               = new ResponseFactory();
         $eInfo                  = new ExceptionInfo();
         $this->serverRequest    = $this->mock(ServerRequestInterface::class);
-        $this->whoopsDisplayer  = new WhoopsDisplayer($response);
+        $this->whoopsDisplayer  = new WhoopsPrettyDisplayer($response);
         $this->jsonDisplayer    = new JsonDisplayer($eInfo, $response);
         $this->jsonApiDisplayer = new JsonApiDisplayer($eInfo, $response);
         $this->htmlDisplayer    = new HtmlDisplayer($eInfo, $response);

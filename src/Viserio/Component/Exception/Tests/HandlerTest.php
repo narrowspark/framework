@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
-use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Handler;
@@ -82,9 +82,9 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addDisplayer(new HtmlDisplayer($info, $repsonseFactory, $this->container));
         $this->handler->addDisplayer(new JsonDisplayer($info, $repsonseFactory));
         $this->handler->addDisplayer(new JsonDisplayer($info, $repsonseFactory));
-        $this->handler->addDisplayer(new WhoopsDisplayer($repsonseFactory));
+        $this->handler->addDisplayer(new WhoopsPrettyDisplayer($repsonseFactory));
 
-        self::assertCount(6, $this->handler->getDisplayers());
+        self::assertCount(7, $this->handler->getDisplayers());
     }
 
     public function testAddAndGetTransformer(): void

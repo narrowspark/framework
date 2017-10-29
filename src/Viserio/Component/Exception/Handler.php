@@ -24,7 +24,8 @@ use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
-use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
@@ -82,10 +83,11 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
             parent::getDefaultOptions(),
             [
                 'displayers' => [
-                    WhoopsDisplayer::class,
+                    WhoopsPrettyDisplayer::class,
                     SymfonyDisplayer::class,
                     ViewDisplayer::class,
                     HtmlDisplayer::class,
+                    WhoopsJsonDisplayer::class,
                     JsonDisplayer::class,
                     JsonApiDisplayer::class,
                 ],

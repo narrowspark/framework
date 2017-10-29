@@ -13,7 +13,7 @@ use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
-use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
@@ -58,7 +58,7 @@ class ExceptionServiceProviderTest extends TestCase
         self::assertInstanceOf(JsonApiDisplayer::class, $container->get(JsonApiDisplayer::class));
         self::assertInstanceOf(SymfonyDisplayer::class, $container->get(SymfonyDisplayer::class));
         self::assertInstanceOf(ViewDisplayer::class, $container->get(ViewDisplayer::class));
-        self::assertInstanceOf(WhoopsDisplayer::class, $container->get(WhoopsDisplayer::class));
+        self::assertInstanceOf(WhoopsPrettyDisplayer::class, $container->get(WhoopsPrettyDisplayer::class));
 
         self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
         self::assertInstanceOf(CanDisplayFilter::class, $container->get(CanDisplayFilter::class));

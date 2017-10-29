@@ -4,13 +4,13 @@ namespace Viserio\Component\Exception\Tests\Displayer;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Exception\Displayer\WhoopsDisplayer;
+use Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class WhoopsDisplayerTest extends TestCase
+class WhoopsJsonDisplayerTest extends TestCase
 {
     /**
-     * @var \Viserio\Component\Exception\Displayer\WhoopsDisplayer
+     * @var \Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer
      */
     private $whoops;
 
@@ -19,7 +19,7 @@ class WhoopsDisplayerTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->whoops = new WhoopsDisplayer(new ResponseFactory());
+        $this->whoops = new WhoopsJsonDisplayer(new ResponseFactory());
     }
 
     public function testServerError(): void
@@ -28,7 +28,7 @@ class WhoopsDisplayerTest extends TestCase
 
         self::assertInternalType('string', (string) $response->getBody());
         self::assertSame(503, $response->getStatusCode());
-        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
@@ -37,7 +37,7 @@ class WhoopsDisplayerTest extends TestCase
 
         self::assertInternalType('string', (string) $response->getBody());
         self::assertSame(403, $response->getStatusCode());
-        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
@@ -47,6 +47,6 @@ class WhoopsDisplayerTest extends TestCase
 
         self::assertTrue($displayer->isVerbose());
         self::assertTrue($displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $displayer->getContentType());
+        self::assertSame('application/json', $displayer->getContentType());
     }
 }
