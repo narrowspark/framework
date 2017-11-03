@@ -85,8 +85,7 @@ class StartSessionMiddleware implements MiddlewareInterface
         // so that the attributes may be persisted to some storage medium. We will also
         // add the session identifier cookie to the application response headers now.
         if ($this->isSessionConfigured()) {
-            $session = $this->storeCurrentUrl($request, $session);
-
+            $session  = $this->storeCurrentUrl($request, $session);
             $response = $this->addCookieToResponse($request, $response, $session);
         }
 
@@ -135,7 +134,7 @@ class StartSessionMiddleware implements MiddlewareInterface
     {
         if ($request->getMethod() === 'GET' &&
             $request->getAttribute('_route') &&
-            $request->getHeaderLine('X-Requested-With') !== 'XMLHttpRequest'
+            $request->getHeaderLine('x-requested-with') !== 'XMLHttpRequest'
         ) {
             $session->setPreviousUrl((string) $request->getUri());
         }
@@ -190,7 +189,7 @@ class StartSessionMiddleware implements MiddlewareInterface
             $config['samesite'] ?? false
         );
 
-        return $response->withAddedHeader('Set-Cookie', (string) $setCookie);
+        return $response->withAddedHeader('set-cookie', (string) $setCookie);
     }
 
     /**

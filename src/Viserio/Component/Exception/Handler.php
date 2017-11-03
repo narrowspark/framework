@@ -230,7 +230,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
 
             $response = $this->responseFactory->createResponse();
             $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
-            $response = $response->withHeader('Content-Type', 'text/plain');
+            $response = $response->withHeader('content-type', 'text/plain');
         }
 
         return $response;

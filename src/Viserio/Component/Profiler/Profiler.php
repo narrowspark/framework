@@ -178,9 +178,8 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
         }
 
         $token = \mb_substr(\hash('sha256', \uniqid((string) \mt_rand(), true)), 0, 6);
-
-        $response = $response->withHeader('X-Debug-Token', $token);
-
+        $response->withHeader('x-debug-token', $token);
+        
         try {
             $this->collectData($token, $serverRequest, $response);
         } catch (Throwable $exception) {
@@ -242,7 +241,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
             );
 
             // Update the new content and reset the content length
-            $response = $response->withoutHeader('Content-Length');
+            $response = $response->withoutHeader('content-length');
 
             return $response->withBody($stream);
         }

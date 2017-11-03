@@ -65,7 +65,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         $opcache = \extension_loaded('Zend OPcache') && \ini_get('opcache.enable');
 
         $tooltip = $this->createTooltipGroup([
-            'Profiler token'   => $this->serverRequest->getHeaderLine('X-Debug-Token'),
+            'Profiler token'   => $this->serverRequest->getHeaderLine('x-debug-token'),
             'Application name' => '',
             'Environment'      => Env::get('APP_ENV', 'develop'),
             'Debug'            => [

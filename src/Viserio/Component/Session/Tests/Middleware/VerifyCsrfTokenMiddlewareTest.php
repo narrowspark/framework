@@ -108,7 +108,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('set-cookie')));
     }
 
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN(): void
@@ -154,7 +154,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             [
                 new StartSessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
-                    $request = $request->withAddedHeader('X-CSRF-TOKEN', $request->getAttribute('session')->getToken());
+                    $request = $request->withAddedHeader('x-csrf-token', $request->getAttribute('session')->getToken());
 
                     return $delegate->process($request);
                 }),
@@ -167,7 +167,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('set-cookie')));
     }
 
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN(): void
@@ -214,7 +214,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                 new StartSessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
                     $request = $request->withAddedHeader(
-                        'X-XSRF-TOKEN',
+                        'x-xsrf-token',
                         $this->encrypter->encrypt(new HiddenString($request->getAttribute('session')->getToken()))
                     );
 
@@ -229,7 +229,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('set-cookie')));
     }
 
     /**
@@ -286,7 +286,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('set-cookie')));
     }
 
     private function getSessionManager($config)

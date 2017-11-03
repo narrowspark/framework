@@ -99,7 +99,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('set-cookie')));
     }
 
     public function testAddSessionToCookie(): void

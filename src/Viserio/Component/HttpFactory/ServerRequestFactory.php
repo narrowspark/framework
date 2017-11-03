@@ -23,7 +23,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     public function createServerRequest($method, $uri): ServerRequestInterface
     {
-        return $this->buildServerRequest([], [], $method, $uri);
+        return self::buildServerRequest([], [], $method, $uri);
     }
 
     /**
@@ -32,15 +32,15 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     public function createServerRequestFromArray(array $server): ServerRequestInterface
     {
         $server         = static::normalizeServer($server);
-        $marshalHeaders = $this->getHeaders($server);
+        $marshalHeaders = static::getHeaders($server);
         $headers        = [];
         $method         = $server['REQUEST_METHOD'] ?? 'GET';
 
         \array_walk($marshalHeaders, function ($value, $key) use (&$headers): void {
-            $headers[$this->normalizeKey($key)] = $value;
+            $headers[self::normalizeKey($key)] = $value;
         });
 
-        return $this->buildServerRequest($server, $headers, $method, Uri::createFromServer($server));
+        return self::buildServerRequest($server, $headers, $method, Uri::createFromServer($server));
     }
 
     /**
@@ -55,14 +55,14 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return \Psr\Http\Message\ServerRequestInterface
      */
-    protected function buildServerRequest(array $server, array $headers, string $method, $uri = null): ServerRequestInterface
+    private static function buildServerRequest(array $server, array $headers, string $method, $uri = null): ServerRequestInterface
     {
         return new ServerRequest(
             $uri,
             $method,
             $headers,
             new LazyOpenStream('php://input', 'r+'),
-            $this->marshalProtocolVersion($server),
+            self::marshalProtocolVersion($server),
             $server
         );
     }
@@ -81,7 +81,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (http://www.zend.com)
      * @license   http://framework.zend.com/license/new-bsd New BSD License
      */
-    protected function marshalProtocolVersion(array $server): string
+    private static function marshalProtocolVersion(array $server): string
     {
         if (! isset($server['SERVER_PROTOCOL'])) {
             return '1.1';
@@ -110,7 +110,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return array
      */
-    protected function getHeaders(array $server): array
+    private static function getHeaders(array $server): array
     {
         $headers        = [];
         $contentHeaders = [
@@ -228,7 +228,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return string Normalized header name
      */
-    private function normalizeKey(string $key): string
+    private static function normalizeKey(string $key): string
     {
         $key = \str_replace('_', '-', \mb_strtolower($key));
 

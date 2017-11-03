@@ -3,12 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
-use SessionHandlerInterface;
-use SessionUpdateTimestampHandlerInterface;
 use Symfony\Component\Finder\Finder;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 
-class FileSessionHandler implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
+class FileSessionHandler extends AbstractSessionHandler
 {
     /**
      * The filesystem instance.
@@ -48,23 +46,7 @@ class FileSessionHandler implements SessionHandlerInterface, SessionUpdateTimest
     /**
      * {@inheritdoc}
      */
-    public function open($savePath, $name): bool
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function close(): bool
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function read($sessionId): string
+    protected function doRead($sessionId): string
     {
         $path = $this->path . '/' . $sessionId;
 
@@ -82,7 +64,7 @@ class FileSessionHandler implements SessionHandlerInterface, SessionUpdateTimest
     /**
      * {@inheritdoc}
      */
-    public function write($sessionId, $sessionData): bool
+    protected function doWrite($sessionId, $sessionData): bool
     {
         return $this->files->write($this->path . '/' . $sessionId, $sessionData, ['lock' => true]);
     }
@@ -90,9 +72,17 @@ class FileSessionHandler implements SessionHandlerInterface, SessionUpdateTimest
     /**
      * {@inheritdoc}
      */
-    public function destroy($sessionId): bool
+    protected function doDestroy($sessionId): bool
     {
         return $this->files->delete([$this->path . '/' . $sessionId]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function close(): bool
+    {
+        return true;
     }
 
     /**
@@ -119,16 +109,8 @@ class FileSessionHandler implements SessionHandlerInterface, SessionUpdateTimest
     /**
      * {@inheritdoc}
      */
-    public function validateId($sessionId): bool
-    {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function updateTimestamp($sessionId, $data): bool
     {
-
+        return \touch($this->path . '/' . $sessionId, Chronos::now() + $this->lifetime);
     }
 }

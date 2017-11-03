@@ -92,9 +92,9 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
         $sessionToken = $request->getAttribute('session')->getToken();
-        $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('X-CSRF-TOKEN');
+        $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('x-csrf-token');
 
-        if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
+        if (! $token && $header = $request->getHeaderLine('x-xsrf-token')) {
             $hiddenString = $this->manager->getEncrypter()->decrypt($header);
             $token        = $hiddenString->getString();
         }
@@ -134,7 +134,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
             $config['samesite']
         );
 
-        return $response->withAddedHeader('Set-Cookie', (string) $setCookie);
+        return $response->withAddedHeader('set-cookie', (string) $setCookie);
     }
 
     /**

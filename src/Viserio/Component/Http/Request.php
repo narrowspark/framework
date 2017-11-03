@@ -51,7 +51,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         $this->setHeaders($headers);
         $this->protocol = $version;
 
-        if (! $this->hasHeader('Host')) {
+        if (! $this->hasHeader('host')) {
             $this->updateHostFromUri();
         }
 

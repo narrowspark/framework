@@ -10,6 +10,7 @@ use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 
 class SessionServiceProvider implements ServiceProviderInterface
 {
@@ -71,7 +72,13 @@ class SessionServiceProvider implements ServiceProviderInterface
      */
     public static function createSessionManager(ContainerInterface $container): SessionManager
     {
-        return new SessionManager($container);
+        $manager = new SessionManager($container);
+
+        if ($container->has(EncrypterContract::class)) {
+            $manager->setEncrypter($container->get(EncrypterContract::class));
+        }
+
+        return $manager;
     }
 
     /**

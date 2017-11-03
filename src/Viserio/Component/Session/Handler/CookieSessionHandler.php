@@ -4,11 +4,9 @@ namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
-use SessionHandlerInterface;
-use SessionUpdateTimestampHandlerInterface;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 
-class CookieSessionHandler implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
+class CookieSessionHandler extends AbstractSessionHandler
 {
     /**
      * The cookie jar instance.
@@ -46,14 +44,6 @@ class CookieSessionHandler implements SessionHandlerInterface, SessionUpdateTime
     /**
      * {@inheritdoc}
      */
-    public function open($savePath, $name)
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function close()
     {
         return true;
@@ -62,13 +52,18 @@ class CookieSessionHandler implements SessionHandlerInterface, SessionUpdateTime
     /**
      * {@inheritdoc}
      */
-    public function read($sessionId): string
+    protected function doRead($sessionId): string
     {
         $cookies = $this->request->getCookieParams();
 
-        if (isset($cookies[$sessionId]) &&
-            ($decoded = \json_decode($cookies[$sessionId], true)) !== null &&
-            \is_array($decoded) &&
+        if (! isset($cookies[$sessionId])) {
+            return '';
+        }
+
+        $decoded = \json_decode(\base64_decode($cookies[$sessionId], true), true);
+
+        if ($decoded !== null &&
+             \is_array($decoded) &&
             (isset($decoded['expires']) && Chronos::now()->getTimestamp() <= $decoded['expires'])
         ) {
             return $decoded['data'];
@@ -80,17 +75,17 @@ class CookieSessionHandler implements SessionHandlerInterface, SessionUpdateTime
     /**
      * {@inheritdoc}
      */
-    public function write($sessionId, $data): bool
+    protected function doWrite($sessionId, $data): bool
     {
         $this->cookie->queue(
             $sessionId,
-            \json_encode(
+            \base64_encode(\json_encode(
                 [
                     'data'    => $data,
                     'expires' => Chronos::now()->addSeconds($this->lifetime)->getTimestamp(),
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
-            ),
+            )),
             $this->lifetime
         );
 
@@ -100,7 +95,7 @@ class CookieSessionHandler implements SessionHandlerInterface, SessionUpdateTime
     /**
      * {@inheritdoc}
      */
-    public function destroy($sessionId): bool
+    protected function doDestroy($sessionId): bool
     {
         $this->cookie->queue($this->cookie->delete($sessionId));
 
@@ -123,5 +118,13 @@ class CookieSessionHandler implements SessionHandlerInterface, SessionUpdateTime
     public function setRequest(ServerRequestInterface $request): void
     {
         $this->request = $request;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateTimestamp($sessionId, $data): bool
+    {
+        
     }
 }

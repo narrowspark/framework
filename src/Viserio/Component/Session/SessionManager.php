@@ -30,8 +30,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
         parent::__construct($container);
 
         $this->container = $container;
-
-        $this->setEncrypter($container->get(EncrypterContract::class));
     }
 
     /**
@@ -44,13 +42,12 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
             'cookie'          => 'NSSESSID',
             'lifetime'        => 86400, // 1 day
             'expire_on_close' => false,
+            'encrypt'         => true,
         ];
     }
 
     /**
      * Get the encrypter instance.
-     *
-     * @throws \RuntimeException
      *
      * @return \Viserio\Component\Contract\Encryption\Encrypter
      */
@@ -234,7 +231,23 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      */
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
-        return new Store(
+        if ($this->resolvedOptions['encrypt']) {
+            return $this->buildEncryptedSession($handler);
+        }
+
+        return new Store($this->resolvedOptions['cookie'], $handler);
+    }
+
+    /**
+     * Build the encrypted session instance.
+     *
+     * @param \SessionHandlerInterface $handler
+     *
+     * @return \Viserio\Component\Contract\Session\Store
+     */
+    protected function buildEncryptedSession(SessionHandlerInterface $handler): StoreContract
+    {
+        return new EncryptedStore(
             $this->resolvedOptions['cookie'],
             $handler,
             $this->encrypter

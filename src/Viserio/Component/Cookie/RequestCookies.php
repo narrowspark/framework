@@ -40,7 +40,7 @@ final class RequestCookies extends AbstractCookieCollector
      */
     public static function fromRequest(ServerRequestInterface $request): self
     {
-        return new static(self::listFromCookieString($request->getHeaderLine('Cookie')));
+        return new static(self::listFromCookieString($request->getHeaderLine('cookie')));
     }
 
     /**
@@ -53,7 +53,7 @@ final class RequestCookies extends AbstractCookieCollector
     public function renderIntoCookieHeader(ServerRequestInterface $request): ServerRequestInterface
     {
         $cookieString = \implode('; ', $this->cookies);
-        $request      = $request->withHeader('Cookie', $cookieString);
+        $request      = $request->withHeader('cookie', $cookieString);
 
         return $request;
     }
