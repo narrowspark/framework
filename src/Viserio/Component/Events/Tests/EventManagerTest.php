@@ -284,7 +284,7 @@ class EventManagerTest extends TestCase
         $argResult = 0;
 
         $callback = function () use (&$argResult): void {
-            ++$argResult;
+            $argResult++;
         };
 
         $ee = $this->dispatcher;
@@ -391,7 +391,7 @@ class EventManagerTest extends TestCase
         $listenerProviderInvoked = 0;
 
         $listenerProvider = function () use (&$listenerProviderInvoked) {
-            ++$listenerProviderInvoked;
+            $listenerProviderInvoked++;
 
             return 'callback';
         };
@@ -421,7 +421,7 @@ class EventManagerTest extends TestCase
     {
         $called  = 0;
         $factory = function () use (&$called) {
-            ++$called;
+            $called++;
 
             return $this->listener;
         };

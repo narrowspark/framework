@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
-use Symfony\Component\Finder\Finder;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileSessionHandler extends AbstractSessionHandler
@@ -16,7 +15,7 @@ class FileSessionHandler extends AbstractSessionHandler
      * @var string
      */
     public const FILE_EXTENSION = 'sess';
-    
+
     /**
      * The path where sessions should be stored.
      *
@@ -41,46 +40,6 @@ class FileSessionHandler extends AbstractSessionHandler
     {
         $this->path     = self::normalizeDirectorySeparator($path);
         $this->lifetime = $lifetime;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doRead($sessionId): string
-    {
-        $filePath = self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION);
-
-        if (\file_exists($filePath)) {
-            $timestamp = Chronos::now()->subSeconds($this->lifetime)->getTimestamp();
-
-            if (\filemtime($filePath) >= $timestamp) {
-                return (string) \file_get_contents($filePath);
-            }
-        }
-
-        return '';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doWrite($sessionId, $sessionData): bool
-    {
-        return \is_int(\file_put_contents(
-            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION),
-            $sessionData,
-            \LOCK_EX
-        ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doDestroy($sessionId): bool
-    {
-        return @\unlink(
-            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION)
-        );
     }
 
     /**
@@ -121,6 +80,46 @@ class FileSessionHandler extends AbstractSessionHandler
         return \touch(
             self::normalizeDirectorySeparator($this->path . '/' . $sessionId),
             Chronos::now()->addSeconds($this->lifetime)->getTimestamp()
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doRead($sessionId): string
+    {
+        $filePath = self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION);
+
+        if (\file_exists($filePath)) {
+            $timestamp = Chronos::now()->subSeconds($this->lifetime)->getTimestamp();
+
+            if (\filemtime($filePath) >= $timestamp) {
+                return (string) \file_get_contents($filePath);
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doWrite($sessionId, $sessionData): bool
+    {
+        return \is_int(\file_put_contents(
+            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION),
+            $sessionData,
+            \LOCK_EX
+        ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doDestroy($sessionId): bool
+    {
+        return @\unlink(
+            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION)
         );
     }
 }

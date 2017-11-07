@@ -6,8 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Encryption\KeyFactory;
-use Viserio\Component\Encryption\Provider\EncrypterServiceProvider;
-use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\Session\Provider\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
 

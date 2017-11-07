@@ -10,8 +10,8 @@ use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
-use Viserio\Component\Contract\Session\Exception\RuntimeException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\Session\Exception\RuntimeException;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\KeyFactory;
@@ -26,8 +26,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     use CacheManagerAwareTrait;
 
     /**
-     *
-     *
      * @var \Viserio\Component\Contract\Cookie\QueueingFactory
      */
     private $cookieJar;
@@ -53,7 +51,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
             'lifetime'        => 7200, // 2 hours
             'expire_on_close' => false,
             'encrypt'         => true,
-            'drivers'         => []
+            'drivers'         => [],
         ];
     }
 

@@ -4,15 +4,15 @@ namespace Viserio\Component\Session\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\Events\Event as EventContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\SessionManager;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 
 class SessionServiceProvider implements ServiceProviderInterface
 {

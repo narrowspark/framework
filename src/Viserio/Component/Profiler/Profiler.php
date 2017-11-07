@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler;
 
-use Narrowspark\Http\Message\Util\InteractsWithContentTypes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -179,7 +178,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
 
         $token = \mb_substr(\hash('sha256', \uniqid((string) \mt_rand(), true)), 0, 6);
         $response->withHeader('x-debug-token', $token);
-        
+
         try {
             $this->collectData($token, $serverRequest, $response);
         } catch (Throwable $exception) {

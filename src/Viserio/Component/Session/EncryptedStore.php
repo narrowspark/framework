@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Session;
 
 use SessionHandlerInterface as SessionHandlerContract;
-use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
+use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Encryption\HiddenString;
 
 class EncryptedStore extends Store

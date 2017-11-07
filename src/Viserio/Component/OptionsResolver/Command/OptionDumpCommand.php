@@ -286,7 +286,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
             $tokens    = \token_get_all($content);
             $namespace = '';
 
-            for ($index = 0; isset($tokens[$index]); ++$index) {
+            for ($index = 0; isset($tokens[$index]); $index++) {
                 if (! isset($tokens[$index][0])) {
                     continue;
                 }

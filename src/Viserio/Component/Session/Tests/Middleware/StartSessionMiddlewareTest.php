@@ -7,10 +7,8 @@ use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -76,7 +74,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                     'domain'          => 'google.com',
                     'http_only'       => false,
                     'secure'          => false,
-                    'key_path'        => ''
+                    'key_path'        => '',
                 ],
             ]);
 
@@ -135,7 +133,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-                JarContract::class        => $jar
+                JarContract::class        => $jar,
             ])
         );
 

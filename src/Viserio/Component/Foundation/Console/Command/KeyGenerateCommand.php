@@ -39,10 +39,10 @@ class KeyGenerateCommand extends Command
      */
     public function handle(RepositoryContract $config, ConsoleKernelContract $consoleKernel)
     {
-        $keyFolderPath = $consoleKernel->getStoragePath('keysring');
+        $keyFolderPath        = $consoleKernel->getStoragePath('keysring');
         $currentEncryptionKey = $config->get('viserio.encryption.key_path', '');
-        $currentPasswordKey = $config->get('viserio.encryption.password_key_path', '');
-        $currentSessionKey = $config->get('viserio.session.key_path', '');
+        $currentPasswordKey   = $config->get('viserio.encryption.password_key_path', '');
+        $currentSessionKey    = $config->get('viserio.session.key_path', '');
 
         if ($currentEncryptionKey !== '' && $currentPasswordKey !== '') {
             $message = 'Your sure to overwrite your ';
@@ -52,7 +52,7 @@ class KeyGenerateCommand extends Command
             }
 
             $message .= 'encryption and password key?';
-            
+
             if (! $this->confirmToProceed($message)) {
                 return 0;
             }
@@ -99,7 +99,8 @@ class KeyGenerateCommand extends Command
      *
      * @return void
      */
-    protected function saveKeyToFileAndPathToEnv(string $keyFolderPath, array $keys): void {
+    protected function saveKeyToFileAndPathToEnv(string $keyFolderPath, array $keys): void
+    {
         $encryptionKeyPath = $keyFolderPath . '/encryption_key';
         $passwordKeyPath   = $keyFolderPath . '/password_key';
 
@@ -112,7 +113,7 @@ class KeyGenerateCommand extends Command
         }
 
         if (\class_exists(SessionManager::class)) {
-            $sessionKeyPath   = $keyFolderPath . '/session_key';
+            $sessionKeyPath = $keyFolderPath . '/session_key';
 
             if (! KeyFactory::saveKeyToFile($sessionKeyPath, $this->generateRandomKey())) {
                 throw new RuntimeException('Session Key can\'t be created.');
@@ -172,7 +173,7 @@ class KeyGenerateCommand extends Command
 
     /**
      * Get the default keys.
-     * 
+     *
      * @param null|string $currentEncryptionKey
      * @param null|string $currentPasswordKey
      * @param null|string $currentSessionKey
@@ -187,7 +188,7 @@ class KeyGenerateCommand extends Command
         return [
             'encryption' => $currentEncryptionKey,
             'password'   => $currentPasswordKey,
-            'session'    => $currentSessionKey
+            'session'    => $currentSessionKey,
         ];
     }
 }

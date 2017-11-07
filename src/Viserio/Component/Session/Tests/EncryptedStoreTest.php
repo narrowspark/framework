@@ -2,14 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
-use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Encryption\Encrypter;
-use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\KeyFactory;
-use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Component\Session\EncryptedStore;
 
 class EncryptedStoreTest extends MockeryTestCase

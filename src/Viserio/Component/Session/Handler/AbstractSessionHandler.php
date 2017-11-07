@@ -43,34 +43,12 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
     }
 
     /**
-     * @param string $sessionId
-     *
-     * @return string
-     */
-    abstract protected function doRead($sessionId): string;
-
-    /**
-     * @param string $sessionId
-     * @param string $data
-     *
-     * @return bool
-     */
-    abstract protected function doWrite($sessionId, $data): bool;
-
-    /**
-     * @param string $sessionId
-     *
-     * @return bool
-     */
-    abstract protected function doDestroy($sessionId): bool;
-
-    /**
      * {@inheritdoc}
      */
     public function validateId($sessionId): bool
     {
         $this->prefetchData = $this->read($sessionId);
-        $this->prefetchId = $sessionId;
+        $this->prefetchId   = $sessionId;
 
         return $this->prefetchData !== '';
     }
@@ -88,11 +66,12 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
 
             if ($prefetchId === $sessionId || '' === $prefetchData) {
                 $this->newSessionId = '' === $prefetchData ? $sessionId : null;
+
                 return $prefetchData;
             }
         }
 
-        $data = $this->doRead($sessionId);
+        $data               = $this->doRead($sessionId);
         $this->newSessionId = '' === $data ? $sessionId : null;
 
         return $data;
@@ -124,4 +103,26 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
     {
         return $this->newSessionId === $sessionId || $this->doDestroy($sessionId);
     }
+
+    /**
+     * @param string $sessionId
+     *
+     * @return string
+     */
+    abstract protected function doRead($sessionId): string;
+
+    /**
+     * @param string $sessionId
+     * @param string $data
+     *
+     * @return bool
+     */
+    abstract protected function doWrite($sessionId, $data): bool;
+
+    /**
+     * @param string $sessionId
+     *
+     * @return bool
+     */
+    abstract protected function doDestroy($sessionId): bool;
 }

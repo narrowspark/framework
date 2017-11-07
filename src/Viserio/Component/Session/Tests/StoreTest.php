@@ -109,7 +109,7 @@ class StoreTest extends MockeryTestCase
         self::assertTrue($this->session->migrate());
         self::assertNotEquals($oldId, $this->session->getId());
 
-        $oldId   = $this->session->getId();
+        $oldId = $this->session->getId();
         $this->handler->shouldReceive('destroy')
             ->once()
             ->with($oldId);
@@ -417,14 +417,14 @@ class StoreTest extends MockeryTestCase
     {
         return \json_encode(
             [
-                'foo' => 'bar',
-                'bagged' => ['name' => 'viserio'],
+                'foo'          => 'bar',
+                'bagged'       => ['name' => 'viserio'],
                 '__metadata__' => [
-                    'firstTrace' => 0,
-                    'lastTrace' => 0,
+                    'firstTrace'        => 0,
+                    'lastTrace'         => 0,
                     'regenerationTrace' => $regenerationTrace,
-                    'requestsCount' => $requestsCount,
-                    'fingerprint' => $fingerprint,
+                    'requestsCount'     => $requestsCount,
+                    'fingerprint'       => $fingerprint,
                 ],
             ],
             \JSON_PRESERVE_ZERO_FRACTION

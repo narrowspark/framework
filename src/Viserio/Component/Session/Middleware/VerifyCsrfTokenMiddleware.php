@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
-use Cake\Chronos\Chronos;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;

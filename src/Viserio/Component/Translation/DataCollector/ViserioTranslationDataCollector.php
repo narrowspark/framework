@@ -171,7 +171,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                     $result[$messageId]['parameters'][] = $message['parameters'];
                 }
 
-                ++$result[$messageId]['count'];
+                $result[$messageId]['count']++;
             }
             unset($messages[$key]);
         }
@@ -195,7 +195,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
         ];
 
         foreach ($messages as $message) {
-            ++$count[$message['state']];
+            $count[$message['state']]++;
         }
 
         return $count;

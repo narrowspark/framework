@@ -18,7 +18,6 @@ class FileSessionHandlerTest extends TestCase
      */
     private $handler;
 
-
     public function setUp(): void
     {
         $this->root    = vfsStream::setup();

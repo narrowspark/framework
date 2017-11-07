@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
-use Cake\Chronos\Chronos;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -79,7 +78,7 @@ class StartSessionMiddleware implements MiddlewareInterface
         // Again, if the session has been configured we will need to close out the session
         // so that the attributes may be persisted to some storage medium. We will also
         // add the session identifier cookie to the application response headers now.
-        $session  = $this->storeCurrentUrl($request, $session);
+        $session = $this->storeCurrentUrl($request, $session);
 
         return $this->addCookieToResponse($request, $response, $session);
     }
@@ -155,8 +154,8 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Add the session cookie to the application response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
+     * @param \Psr\Http\Message\ResponseInterface       $response
      * @param \Viserio\Component\Contract\Session\Store $session
      *
      * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException

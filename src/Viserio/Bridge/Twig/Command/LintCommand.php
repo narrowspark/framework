@@ -195,7 +195,7 @@ class LintCommand extends Command
                 $file = ' in ' . $info['file'];
                 $this->line('<info>OK</info>' . $file);
             } elseif (! $info['valid']) {
-                ++$errors;
+                $errors++;
                 $this->renderException($info);
             }
         }
@@ -232,7 +232,7 @@ class LintCommand extends Command
 
                     unset($info['exception']);
 
-                    ++$errors;
+                    $errors++;
                 }
             }
         );
@@ -292,7 +292,7 @@ class LintCommand extends Command
 
         while ($position < $max) {
             $result[$position + 1] = $lines[$position];
-            ++$position;
+            $position++;
         }
 
         return $result;

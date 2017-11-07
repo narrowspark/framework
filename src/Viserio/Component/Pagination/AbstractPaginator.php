@@ -116,7 +116,7 @@ abstract class AbstractPaginator implements
     {
         $urls = [];
 
-        for ($page = $start; $page <= $end; ++$page) {
+        for ($page = $start; $page <= $end; $page++) {
             $urls[$page] = $this->getUrl($page);
         }
 

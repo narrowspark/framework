@@ -55,7 +55,7 @@ class PoParser implements ParserContract
         $state           = null;
         $firstLine       = true;
 
-        for ($n = \count($lines); $i < $n; ++$i) {
+        for ($n = \count($lines); $i < $n; $i++) {
             $line      = \trim($lines[$i]);
             $splitLine = \preg_split('/\s+/', $line, 2);
             $key       = $splitLine[0];
@@ -244,7 +244,7 @@ class PoParser implements ParserContract
             \preg_match_all('/(.*):\s/', $header, $matches, PREG_SET_ORDER);
 
             if (isset($matches[0]) && \in_array($matches[0][1], $keys, true)) {
-                ++$headerItems;
+                $headerItems++;
 
                 unset($headerKeys[$matches[0][1]]);
 

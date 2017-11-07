@@ -4,8 +4,8 @@ namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 
 class CookieSessionHandler extends AbstractSessionHandler
 {
@@ -48,6 +48,45 @@ class CookieSessionHandler extends AbstractSessionHandler
     public function close()
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function gc($lifetime): bool
+    {
+        return true;
+    }
+
+    /**
+     * Set the request instance.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     */
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateTimestamp($sessionId, $data): bool
+    {
+        $cookies = $this->cookie->getQueuedCookies();
+        $cookie  = $cookies[$sessionId] ?? null;
+
+        if ($cookie === null) {
+            return false;
+        }
+
+        $this->cookie->queue($this->cookie->delete($sessionId));
+        /* @var CookieContract $cookie */
+        $this->cookie->queue(
+            $cookie->withExpires(
+                Chronos::now()->addSeconds($this->lifetime)->getTimestamp()
+            )
+        );
     }
 
     /**
@@ -100,44 +139,5 @@ class CookieSessionHandler extends AbstractSessionHandler
         $this->cookie->queue($this->cookie->delete($sessionId));
 
         return $this->cookie->hasQueued($sessionId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function gc($lifetime): bool
-    {
-        return true;
-    }
-
-    /**
-     * Set the request instance.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     */
-    public function setRequest(ServerRequestInterface $request): void
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateTimestamp($sessionId, $data): bool
-    {
-        $cookies = $this->cookie->getQueuedCookies();
-        $cookie  = $cookies[$sessionId] ?? null;
-
-        if ($cookie === null) {
-            return false;
-        }
-
-        $this->cookie->queue($this->cookie->delete($sessionId));
-        /* @var CookieContract $cookie */
-        $this->cookie->queue(
-            $cookie->withExpires(
-                Chronos::now()->addSeconds($this->lifetime)->getTimestamp()
-            )
-        );
     }
 }
