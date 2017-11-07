@@ -52,7 +52,9 @@ class RequestCookiesTest extends MockeryTestCase
     public function testFromCookieHeaderWithoutExpire($cookieString, array $expectedCookies): void
     {
         $request = $this->mock(Request::class);
-        $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
+        $request->shouldReceive('getHeaderLine')
+            ->with('cookie')
+            ->andReturn($cookieString);
 
         $cookies = RequestCookies::fromRequest($request);
 
@@ -73,7 +75,9 @@ class RequestCookiesTest extends MockeryTestCase
     public function testItGetsCookieByName(string $cookieString, string $cookieName, Cookie $expectedCookie): void
     {
         $request = $this->mock(Request::class);
-        $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
+        $request->shouldReceive('getHeaderLine')
+            ->with('cookie')
+            ->andReturn($cookieString);
 
         $cookies = RequestCookies::fromRequest($request);
 
@@ -90,7 +94,9 @@ class RequestCookiesTest extends MockeryTestCase
     public function testItKnowsWhichCookiesAreAvailable(string $setCookieStrings, array $expectedSetCookies): void
     {
         $request = $this->mock(Request::class);
-        $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($setCookieStrings);
+        $request->shouldReceive('getHeaderLine')
+            ->with('cookie')
+            ->andReturn($setCookieStrings);
 
         $setCookies = RequestCookies::fromRequest($request);
 

@@ -108,8 +108,8 @@ class Store implements StoreContract
     /**
      * Create a new session instance.
      *
-     * @param string                                           $name
-     * @param \SessionHandlerInterface                         $handler
+     * @param string                   $name
+     * @param \SessionHandlerInterface $handler
      */
     public function __construct(string $name, SessionHandlerContract $handler)
     {

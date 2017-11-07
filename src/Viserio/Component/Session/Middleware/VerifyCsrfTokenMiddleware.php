@@ -126,7 +126,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         $setCookie = new SetCookie(
             'XSRF-TOKEN',
             $request->getAttribute('session')->getToken(),
-            Chronos::now()->addSeconds($config['lifetime']),
+            $config['lifetime'],
             $config['path'],
             $config['domain'] ?? $uri->getHost(),
             $config['secure'] ?? ($uri->getScheme() === 'https'),

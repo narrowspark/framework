@@ -38,11 +38,13 @@ class CookieJar implements JarContract
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function create(
         string $name,
         ?string $value = null,
-        int $minutes = 0,
+        int $second = 0,
         ?string $path = null,
         ?string $domain = null,
         bool $secure = false,
@@ -51,9 +53,9 @@ class CookieJar implements JarContract
     ): CookieContract {
         [$path, $domain, $secure] = $this->getPathAndDomain($path, $domain, $secure);
 
-        $time = ($minutes === 0) ? 0 : Chronos::now()->getTimestamp() + ($minutes * 60);
+        $second = $second === 0 ? 0 : Chronos::now()->addSecond($second)->getTimestamp();
 
-        return new SetCookie($name, $value, $time, $path, $domain, $secure, $httpOnly, $sameSite);
+        return new SetCookie($name, $value, $second, $path, $domain, $secure, $httpOnly, $sameSite);
     }
 
     /**

@@ -4,17 +4,19 @@ namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
 use Symfony\Component\Finder\Finder;
-use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileSessionHandler extends AbstractSessionHandler
 {
-    /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
-     */
-    protected $files;
+    use NormalizePathAndDirectorySeparatorTrait;
 
+    /**
+     * Get the file extension.
+     *
+     * @var string
+     */
+    public const FILE_EXTENSION = 'sess';
+    
     /**
      * The path where sessions should be stored.
      *
@@ -32,14 +34,12 @@ class FileSessionHandler extends AbstractSessionHandler
     /**
      * Create a new file driven handler instance.
      *
-     * @param \Viserio\Component\Contract\Filesystem\Filesystem $files
-     * @param string                                            $path
-     * @param int                                               $lifetime The session lifetime in seconds
+     * @param string $path
+     * @param int    $lifetime The session lifetime in seconds
      */
-    public function __construct(FilesystemContract $files, string $path, int $lifetime)
+    public function __construct(string $path, int $lifetime)
     {
-        $this->path     = $path;
-        $this->files    = $files;
+        $this->path     = self::normalizeDirectorySeparator($path);
         $this->lifetime = $lifetime;
     }
 
@@ -48,13 +48,13 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     protected function doRead($sessionId): string
     {
-        $path = $this->path . '/' . $sessionId;
+        $filePath = self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION);
 
-        if ($this->files->has($path)) {
-            $chronos = Chronos::now()->subSeconds($this->lifetime);
+        if (\file_exists($filePath)) {
+            $timestamp = Chronos::now()->subSeconds($this->lifetime)->getTimestamp();
 
-            if (\strtotime($this->files->getTimestamp($path)) >= $chronos->getTimestamp()) {
-                return (string) $this->files->read($path);
+            if (\filemtime($filePath) >= $timestamp) {
+                return (string) \file_get_contents($filePath);
             }
         }
 
@@ -66,7 +66,11 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     protected function doWrite($sessionId, $sessionData): bool
     {
-        return $this->files->write($this->path . '/' . $sessionId, $sessionData, ['lock' => true]);
+        return \is_int(\file_put_contents(
+            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION),
+            $sessionData,
+            \LOCK_EX
+        ));
     }
 
     /**
@@ -74,7 +78,9 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     protected function doDestroy($sessionId): bool
     {
-        return $this->files->delete([$this->path . '/' . $sessionId]);
+        return @\unlink(
+            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION)
+        );
     }
 
     /**
@@ -90,17 +96,18 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     public function gc($maxlifetime): bool
     {
-        $files = Finder::create()
-            ->in($this->path)
-            ->files()
-            ->ignoreDotFiles(false)
-            ->date('<= now - ' . $maxlifetime . ' seconds');
-
+        $files = array_filter(
+            glob($this->path . '/*.' . self::FILE_EXTENSION, GLOB_BRACE),
+            'is_file'
+        );
         $boolArray = [];
 
-        /** @var \SplFileObject $file */
         foreach ($files as $file) {
-            $boolArray[] = $this->files->delete([$file->getRealPath()]);
+            $file = self::normalizeDirectorySeparator($file);
+
+            if (\file_exists($file) && \filemtime($file) + $maxlifetime < \time()) {
+                $boolArray[] = @\unlink($file);
+            }
         }
 
         return ! \in_array('false', $boolArray, true);
@@ -111,6 +118,9 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     public function updateTimestamp($sessionId, $data): bool
     {
-        return \touch($this->path . '/' . $sessionId, Chronos::now() + $this->lifetime);
+        return \touch(
+            self::normalizeDirectorySeparator($this->path . '/' . $sessionId),
+            Chronos::now()->addSeconds($this->lifetime)->getTimestamp()
+        );
     }
 }

@@ -9,6 +9,7 @@ use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Encryption\Key;
 use Viserio\Component\Encryption\KeyFactory;
+use Viserio\Component\Session\SessionManager;
 
 class KeyGenerateCommand extends Command
 {
@@ -38,32 +39,40 @@ class KeyGenerateCommand extends Command
      */
     public function handle(RepositoryContract $config, ConsoleKernelContract $consoleKernel)
     {
-        $keyFolderPath        = $consoleKernel->getStoragePath('keysring');
+        $keyFolderPath = $consoleKernel->getStoragePath('keysring');
         $currentEncryptionKey = $config->get('viserio.encryption.key_path', '');
-        $currentPasswordKey   = $config->get('viserio.encryption.password_key_path', '');
+        $currentPasswordKey = $config->get('viserio.encryption.password_key_path', '');
+        $currentSessionKey = $config->get('viserio.session.key_path', '');
 
-        if ($currentEncryptionKey !== '' &&
-            $currentPasswordKey !== '' &&
-            (! $this->confirmToProceed('Your sure to overwrite your encryption and password key?'))
-        ) {
-            return 0;
+        if ($currentEncryptionKey !== '' && $currentPasswordKey !== '') {
+            $message = 'Your sure to overwrite your ';
+
+            if (\class_exists(SessionManager::class)) {
+                $message .= 'encryption session, ';
+            }
+
+            $message .= 'encryption and password key?';
+            
+            if (! $this->confirmToProceed($message)) {
+                return 0;
+            }
         }
 
-        $this->removeKeysAndFolder($currentEncryptionKey, $currentPasswordKey, $keyFolderPath);
+        $this->removeKeysAndFolder(
+            $keyFolderPath,
+            $this->getEncryptionKeys($currentEncryptionKey, $currentPasswordKey, $currentSessionKey)
+        );
 
         if (! mkdir($keyFolderPath) && ! is_dir($keyFolderPath)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created.', $keyFolderPath));
         }
 
         $this->saveKeyToFileAndPathToEnv(
-            $this->generateRandomKey(),
-            $this->generateRandomKey(),
             $keyFolderPath,
-            $currentEncryptionKey,
-            $currentPasswordKey
+            $this->getEncryptionKeys($currentEncryptionKey, $currentPasswordKey, $currentSessionKey)
         );
 
-        $this->info('Application & Password key set successfully.');
+        $this->info('Keys generated and set successfully.');
 
         return 0;
     }
@@ -83,36 +92,37 @@ class KeyGenerateCommand extends Command
     /**
      * Saves the key to a file and the file path to env vars.
      *
-     * @param \Viserio\Component\Encryption\Key $encryptionKey
-     * @param \Viserio\Component\Encryption\Key $passwordKey
-     * @param string                            $keyFolderPath
-     * @param string                            $currentEncryptionKey
-     * @param string                            $currentPasswordKey
+     * @param string $keyFolderPath
+     * @param array  $keys
      *
      * @throws \Symfony\Component\Console\Exception\RuntimeException
      *
      * @return void
      */
-    protected function saveKeyToFileAndPathToEnv(
-        Key $encryptionKey,
-        Key $passwordKey,
-        string $keyFolderPath,
-        string $currentEncryptionKey,
-        string $currentPasswordKey
-    ): void {
+    protected function saveKeyToFileAndPathToEnv(string $keyFolderPath, array $keys): void {
         $encryptionKeyPath = $keyFolderPath . '/encryption_key';
         $passwordKeyPath   = $keyFolderPath . '/password_key';
 
-        if (! KeyFactory::saveKeyToFile($encryptionKeyPath, $encryptionKey)) {
+        if (! KeyFactory::saveKeyToFile($encryptionKeyPath, $this->generateRandomKey())) {
             throw new RuntimeException('Encryption Key can\'t be created.');
         }
 
-        if (! KeyFactory::saveKeyToFile($passwordKeyPath, $passwordKey)) {
+        if (! KeyFactory::saveKeyToFile($passwordKeyPath, $this->generateRandomKey())) {
             throw new RuntimeException('Password Key can\'t be created.');
         }
 
-        $this->replaceEnvVariableValue('ENCRYPTION_KEY_PATH', $currentEncryptionKey, $encryptionKeyPath);
-        $this->replaceEnvVariableValue('ENCRYPTION_PASSWORD_KEY_PATH', $currentPasswordKey, $passwordKeyPath);
+        if (\class_exists(SessionManager::class)) {
+            $sessionKeyPath   = $keyFolderPath . '/session_key';
+
+            if (! KeyFactory::saveKeyToFile($sessionKeyPath, $this->generateRandomKey())) {
+                throw new RuntimeException('Session Key can\'t be created.');
+            }
+
+            $this->replaceEnvVariableValue('ENCRYPTION_SESSION_KEY_PATH', $keys['session'], $sessionKeyPath);
+        }
+
+        $this->replaceEnvVariableValue('ENCRYPTION_KEY_PATH', $keys['encryption'], $encryptionKeyPath);
+        $this->replaceEnvVariableValue('ENCRYPTION_PASSWORD_KEY_PATH', $keys['password'], $passwordKeyPath);
     }
 
     /**
@@ -142,21 +152,42 @@ class KeyGenerateCommand extends Command
     /**
      * Removes old keys if they exits.
      *
-     * @param string $currentEncryptionKey
-     * @param string $currentPasswordKey
      * @param string $keyFolderPath
+     * @param array  $keys
      *
      * @return void
      */
-    private function removeKeysAndFolder($currentEncryptionKey, $currentPasswordKey, $keyFolderPath): void
+    private function removeKeysAndFolder(string $keyFolderPath, array $keys): void
     {
-        if ($currentEncryptionKey !== '' && $currentPasswordKey !== '') {
-            \unlink($currentEncryptionKey);
-            \unlink($currentPasswordKey);
+        foreach ($keys as $key) {
+            if ($key !== '' && \is_file($key)) {
+                \unlink($key);
+            }
         }
 
         if (\is_dir($keyFolderPath)) {
             \rmdir($keyFolderPath);
         }
+    }
+
+    /**
+     * Get the default keys.
+     * 
+     * @param null|string $currentEncryptionKey
+     * @param null|string $currentPasswordKey
+     * @param null|string $currentSessionKey
+     *
+     * @return array
+     */
+    private function getEncryptionKeys(
+        ?string $currentEncryptionKey,
+        ?string $currentPasswordKey,
+        ?string $currentSessionKey
+    ): array {
+        return [
+            'encryption' => $currentEncryptionKey,
+            'password'   => $currentPasswordKey,
+            'session'    => $currentSessionKey
+        ];
     }
 }

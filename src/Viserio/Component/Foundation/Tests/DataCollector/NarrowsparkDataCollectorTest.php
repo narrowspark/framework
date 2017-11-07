@@ -31,7 +31,7 @@ class NarrowsparkDataCollectorTest extends MockeryTestCase
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()
-            ->with('X-Debug-Token');
+            ->with('x-debug-token');
         $collect->collect(
             $request,
             $this->mock(ResponseInterface::class)

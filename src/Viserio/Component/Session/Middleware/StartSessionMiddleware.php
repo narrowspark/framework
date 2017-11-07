@@ -65,31 +65,23 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-        $session = null;
+        // We need to start the session so that the data is ready.
+        // Note that the Narrowspark sessions do not make use of PHP
+        // "native" sessions in any way since they are crappy.
+        $session = $this->startSession($request);
 
-        // If a session driver has been configured, we will need to start the session
-        // so that the data is ready.
-        if ($this->isSessionConfigured()) {
-            // Note that the Narrowspark sessions do not make use of PHP
-            // "native" sessions in any way since they are crappy.
-            $session = $this->startSession($request);
+        $request = $request->withAttribute('session', $session);
 
-            $request = $request->withAttribute('session', $session);
-
-            $this->collectGarbage($session);
-        }
+        $this->collectGarbage($session);
 
         $response = $delegate->process($request);
 
         // Again, if the session has been configured we will need to close out the session
         // so that the attributes may be persisted to some storage medium. We will also
         // add the session identifier cookie to the application response headers now.
-        if ($this->isSessionConfigured()) {
-            $session  = $this->storeCurrentUrl($request, $session);
-            $response = $this->addCookieToResponse($request, $response, $session);
-        }
+        $session  = $this->storeCurrentUrl($request, $session);
 
-        return $response;
+        return $this->addCookieToResponse($request, $response, $session);
     }
 
     /**
@@ -156,16 +148,18 @@ class StartSessionMiddleware implements MiddlewareInterface
         // the odds needed to perform garbage collection on any given request. If we do
         // hit it, we'll call this handler to let it delete all the expired sessions.
         if ($hitsLottery) {
-            $session->getHandler()->gc($this->getSessionLifetimeInSeconds());
+            $session->getHandler()->gc($this->config['lifetime']);
         }
     }
 
     /**
      * Add the session cookie to the application response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface  $request
-     * @param \Psr\Http\Message\ResponseInterface       $response
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @param \Viserio\Component\Contract\Session\Store $session
+     *
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -181,7 +175,7 @@ class StartSessionMiddleware implements MiddlewareInterface
         $setCookie = new SetCookie(
             $session->getName(),
             $session->getId(),
-            $this->getCookieExpirationDate($config),
+            $config['expire_on_close'] ? 0 : $config['lifetime'],
             $config['path'] ?? '/',
             $config['domain'] ?? $uri->getHost(),
             $config['secure'] ?? ($uri->getScheme() === 'https'),
@@ -190,42 +184,5 @@ class StartSessionMiddleware implements MiddlewareInterface
         );
 
         return $response->withAddedHeader('set-cookie', (string) $setCookie);
-    }
-
-    /**
-     * Get the session lifetime in seconds.
-     *
-     * @return int
-     */
-    protected function getSessionLifetimeInSeconds(): int
-    {
-        // Default 1 day
-        $lifetime = $this->config['lifetime'] ?? 86400;
-
-        return Chronos::now()->subSeconds($lifetime)->getTimestamp();
-    }
-
-    /**
-     * Get the cookie lifetime in seconds.
-     *
-     * @param array $config
-     *
-     * @return \Cake\Chronos\Chronos|int
-     */
-    protected function getCookieExpirationDate(array $config)
-    {
-        return ($config['expire_on_close'] ?? false) ?
-            0 :
-            Chronos::now()->addSeconds($config['lifetime']);
-    }
-
-    /**
-     * Determine if a session driver has been configured.
-     *
-     * @return bool
-     */
-    private function isSessionConfigured(): bool
-    {
-        return isset($this->config['drivers'][$this->manager->getDefaultDriver()]);
     }
 }

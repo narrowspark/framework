@@ -46,7 +46,6 @@ class StartSessionMiddlewareTest extends MockeryTestCase
     public function tearDown(): void
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
-        $this->files = null;
 
         parent::tearDown();
     }
@@ -77,6 +76,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
                     'domain'          => 'google.com',
                     'http_only'       => false,
                     'secure'          => false,
+                    'key_path'        => ''
                 ],
             ]);
 
@@ -84,7 +84,6 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-                EncrypterContract::class  => new Encrypter($this->key),
             ])
         );
 
@@ -95,8 +94,8 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $request  = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-            return (new ResponseFactory())->createResponse(200);
+        $response = $middleware->process($request, new DelegateMiddleware(function () {
+            return (new ResponseFactory())->createResponse();
         }));
 
         self::assertTrue(\is_array($response->getHeader('set-cookie')));
@@ -136,8 +135,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             new ArrayContainer([
                 RepositoryContract::class => $config,
                 FilesystemContract::class => $this->files,
-                JarContract::class        => $jar,
-                EncrypterContract::class  => new Encrypter($this->key),
+                JarContract::class        => $jar
             ])
         );
 

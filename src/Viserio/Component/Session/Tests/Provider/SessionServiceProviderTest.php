@@ -16,9 +16,7 @@ class SessionServiceProviderTest extends TestCase
     public function testProvider(): void
     {
         $container = new Container();
-        $container->register(new EncrypterServiceProvider());
         $container->register(new SessionServiceProvider());
-        $container->register(new FilesServiceProvider());
 
         $password = \random_bytes(32);
         $path     = __DIR__ . '/test_key';
@@ -36,10 +34,7 @@ class SessionServiceProviderTest extends TestCase
                     ],
                     'lifetime' => 3000,
                     'cookie'   => 'test',
-                ],
-                'encryption' => [
-                    'key_path'          => $path,
-                    'password_key_path' => $path,
+                    'key_path' => $path,
                 ],
             ],
         ]);

@@ -47,7 +47,7 @@ class ProfilerMiddlewareTest extends MockeryTestCase
             $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
-        self::assertRegExp('/^\d+.\d+ms$/', $response->getHeaderLine('X-Response-Time'));
+        self::assertRegExp('/^\d+.\d+ms$/', $response->getHeaderLine('x-response-time'));
     }
 
     private function removeId(string $html): string

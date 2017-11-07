@@ -5,6 +5,7 @@ namespace Viserio\Component\Session\Handler;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
 
 class CookieSessionHandler extends AbstractSessionHandler
 {
@@ -62,8 +63,7 @@ class CookieSessionHandler extends AbstractSessionHandler
 
         $decoded = \json_decode(\base64_decode($cookies[$sessionId], true), true);
 
-        if ($decoded !== null &&
-             \is_array($decoded) &&
+        if (\is_array($decoded) &&
             (isset($decoded['expires']) && Chronos::now()->getTimestamp() <= $decoded['expires'])
         ) {
             return $decoded['data'];
@@ -125,6 +125,19 @@ class CookieSessionHandler extends AbstractSessionHandler
      */
     public function updateTimestamp($sessionId, $data): bool
     {
-        
+        $cookies = $this->cookie->getQueuedCookies();
+        $cookie  = $cookies[$sessionId] ?? null;
+
+        if ($cookie === null) {
+            return false;
+        }
+
+        $this->cookie->queue($this->cookie->delete($sessionId));
+        /* @var CookieContract $cookie */
+        $this->cookie->queue(
+            $cookie->withExpires(
+                Chronos::now()->addSeconds($this->lifetime)->getTimestamp()
+            )
+        );
     }
 }

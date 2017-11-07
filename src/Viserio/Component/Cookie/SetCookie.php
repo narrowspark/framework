@@ -24,7 +24,7 @@ final class SetCookie extends AbstractCookie
      *                                                       through the HTTP protocol.
      * @param bool|string                        $sameSite   Whether the cookie will be available for cross-site requests
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function __construct(
         string $name,

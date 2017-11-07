@@ -6,19 +6,31 @@ use Cache\SessionHandler\Psr6SessionHandler;
 use Psr\Container\ContainerInterface as ContainerInteropInterface;
 use SessionHandlerInterface;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
-use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Contract\Session\Exception\RuntimeException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Encryption\Encrypter;
+use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
+use Viserio\Component\Session\Handler\NullSessionHandler;
 use Viserio\Component\Support\AbstractManager;
 
 class SessionManager extends AbstractManager implements ProvidesDefaultOptionsContract
 {
     use EncrypterAwareTrait;
+    use CacheManagerAwareTrait;
+
+    /**
+     *
+     *
+     * @var \Viserio\Component\Contract\Cookie\QueueingFactory
+     */
+    private $cookieJar;
 
     /**
      * Create a new session manager instance.
@@ -28,8 +40,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     public function __construct(ContainerInteropInterface $container)
     {
         parent::__construct($container);
-
-        $this->container = $container;
     }
 
     /**
@@ -40,10 +50,19 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
         return [
             'default'         => 'array',
             'cookie'          => 'NSSESSID',
-            'lifetime'        => 86400, // 1 day
+            'lifetime'        => 7200, // 2 hours
             'expire_on_close' => false,
             'encrypt'         => true,
+            'drivers'         => []
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getMandatoryOptions(): iterable
+    {
+        return ['key_path'];
     }
 
     /**
@@ -57,6 +76,16 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     }
 
     /**
+     * Set the encrypter instance.
+     *
+     * @param \Viserio\Component\Contract\Cookie\QueueingFactory $cookieJar
+     */
+    public function setCookieJar(JarContract $cookieJar)
+    {
+        $this->cookieJar = $cookieJar;
+    }
+
+    /**
      * Create an instance of the file session driver.
      *
      * @param array $config
@@ -67,7 +96,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     {
         return $this->buildSession(
             new FileSessionHandler(
-                $this->container->get(FilesystemContract::class),
                 $config['path'],
                 $this->resolvedOptions['lifetime']
             )
@@ -77,16 +105,32 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the "cookie" session driver.
      *
+     * @throws \Viserio\Component\Contract\Session\Exception\RuntimeException
+     *
      * @return \Viserio\Component\Contract\Session\Store
      */
     protected function createCookieDriver(): StoreContract
     {
+        if ($this->cookieJar === null) {
+            throw new RuntimeException(\sprintf('No instance of [%s] found.', JarContract::class));
+        }
+
         return $this->buildSession(
             new CookieSessionHandler(
-                $this->container->get(JarContract::class),
+                $this->cookieJar,
                 $this->resolvedOptions['lifetime']
             )
         );
+    }
+
+    /**
+     * Create an instance of the Array session driver.
+     *
+     * @return \Viserio\Component\Contract\Session\Store
+     */
+    protected function createArrayDriver(): StoreContract
+    {
+        return $this->buildSession(new NullSessionHandler());
     }
 
     /**
@@ -162,16 +206,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     }
 
     /**
-     * Create an instance of the Array session driver.
-     *
-     * @return \Viserio\Component\Contract\Session\Store
-     */
-    protected function createArrayDriver(): StoreContract
-    {
-        return $this->createCacheBased('array');
-    }
-
-    /**
      * Create an instance of the APCu session driver.
      *
      * @return \Viserio\Component\Contract\Session\Store
@@ -210,13 +244,19 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @param string $driver
      *
+     * @throws \Viserio\Component\Contract\Session\Exception\RuntimeException
+     *
      * @return \Viserio\Component\Contract\Session\Store
      */
     protected function createCacheBased($driver): StoreContract
     {
+        if ($this->cacheManager === null) {
+            throw new RuntimeException(\sprintf('No instance of [%s] found.', CacheManagerContract::class));
+        }
+
         return $this->buildSession(
             new Psr6SessionHandler(
-                clone $this->container->get(CacheManagerContract::class)->getDriver($driver),
+                clone $this->cacheManager->getDriver($driver),
                 ['ttl' => $this->resolvedOptions['lifetime'], 'prefix' => 'ns_ses_']
             )
         );
@@ -231,7 +271,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      */
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
-        if ($this->resolvedOptions['encrypt']) {
+        if ($this->resolvedOptions['encrypt'] === true) {
             return $this->buildEncryptedSession($handler);
         }
 
@@ -243,14 +283,19 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @param \SessionHandlerInterface $handler
      *
+     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
+     *
      * @return \Viserio\Component\Contract\Session\Store
      */
     protected function buildEncryptedSession(SessionHandlerInterface $handler): StoreContract
     {
+        $key = KeyFactory::loadKey($this->resolvedOptions['key_path']);
+
         return new EncryptedStore(
             $this->resolvedOptions['cookie'],
             $handler,
-            $this->encrypter
+            new Encrypter($key)
         );
     }
 

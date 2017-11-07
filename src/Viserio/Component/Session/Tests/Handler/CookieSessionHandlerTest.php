@@ -27,16 +27,12 @@ class CookieSessionHandlerTest extends MockeryTestCase
 
     public function testOpenReturnsTrue(): void
     {
-        $handler = $this->handler;
-
-        self::assertTrue($handler->open('test', 'temp'));
+        self::assertTrue($this->handler->open('test', 'temp'));
     }
 
     public function testCloseReturnsTrue(): void
     {
-        $handler = $this->handler;
-
-        self::assertTrue($handler->close());
+        self::assertTrue($this->handler->close());
     }
 
     public function testReadExistingSessionReturnsTheData(): void
@@ -45,14 +41,15 @@ class CookieSessionHandlerTest extends MockeryTestCase
         $request
             ->shouldReceive('getCookieParams')
             ->once()
-            ->andReturn(['temp' => '{
-                "expires": "' . Chronos::now()->addSeconds(350)->getTimestamp() . '",
-                "data": "Foo Bar"
-            }']);
-        $handler = $this->handler;
-        $handler->setRequest($request);
+            ->andReturn(['temp' => \base64_encode(\json_encode(
+                [
+                    'expires' => Chronos::now()->addSeconds(350)->getTimestamp(),
+                    'data' => 'Foo Bar'
+                ],
+                    \JSON_PRESERVE_ZERO_FRACTION))]);
+        $this->handler->setRequest($request);
 
-        self::assertSame('Foo Bar', $handler->read('temp'));
+        self::assertSame('Foo Bar', $this->handler->read('temp'));
     }
 
     public function testReadMissingSessionReturnsAnEmptyString(): void
@@ -75,13 +72,13 @@ class CookieSessionHandlerTest extends MockeryTestCase
             ->once()
             ->with(
                 'write.sess',
-                \json_encode(
+                \base64_encode(\json_encode(
                     [
                         'data'    => ['user_id' => 1],
                         'expires' => Chronos::now()->addSeconds(300)->getTimestamp(),
                     ],
                     \JSON_PRESERVE_ZERO_FRACTION
-                ),
+                )),
                 300
             );
         $handler = new CookieSessionHandler(
