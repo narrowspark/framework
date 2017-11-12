@@ -5,9 +5,12 @@ namespace Viserio\Component\Session\Tests\Handler;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Session\Handler\FileSessionHandler;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileSessionHandlerTest extends TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
@@ -57,7 +60,7 @@ class FileSessionHandlerTest extends TestCase
 
     public function testWriteSuccessfullyReturnsTrue(): void
     {
-        $dir = __DIR__ . '/stubs';
+        $dir = self::normalizeDirectorySeparator(__DIR__ . '/' . __FUNCTION__);
 
         \mkdir($dir);
 
@@ -65,13 +68,13 @@ class FileSessionHandlerTest extends TestCase
 
         self::assertTrue($handler->write('write', \json_encode(['user_id' => 1])));
 
-        \unlink($dir . '\write.' . FileSessionHandler::FILE_EXTENSION);
+        \unlink(self::normalizeDirectorySeparator($dir . '\write.' . FileSessionHandler::FILE_EXTENSION));
         \rmdir($dir);
     }
 
     public function testGcSuccessfullyReturnsTrue(): void
     {
-        $dir = __DIR__ . '/stubs';
+        $dir = self::normalizeDirectorySeparator(__DIR__ . '/' . __FUNCTION__);
 
         \mkdir($dir);
 
