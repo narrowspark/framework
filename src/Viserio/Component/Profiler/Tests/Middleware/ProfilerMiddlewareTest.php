@@ -39,8 +39,11 @@ class ProfilerMiddlewareTest extends MockeryTestCase
 
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
-        $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-            return (new ResponseFactory())->createResponse();
+        $response = $middleware->process($request, new DelegateMiddleware(function () {
+            $response = (new ResponseFactory())->createResponse();
+            $response = $response->withHeader('content-type', 'text/html; charset=utf-8');
+
+            return $response;
         }));
 
         self::assertEquals(
