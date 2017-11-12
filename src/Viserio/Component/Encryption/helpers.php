@@ -26,7 +26,7 @@ if (! \function_exists('safe_str_cpy')) {
 
         $return = '';
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $return .= $string[$i];
         }
 
@@ -140,7 +140,7 @@ if (! \function_exists('hash_hkdf_blake2b')) {
         $t          = '';
         $last_block = '';
 
-        for ($block_index = 1; \mb_strlen($t, '8bit') < $length; $block_index++) {
+        for ($block_index = 1; \mb_strlen($t, '8bit') < $length; ++$block_index) {
             // T(i) = HMAC-Hash(PRK, T(i-1) | info | 0x??)
             $last_block = \raw_keyed_hash(
                 $last_block . $info . \chr($block_index),

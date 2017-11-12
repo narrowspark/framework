@@ -19,7 +19,7 @@ class StoreTest extends MockeryTestCase
     private $session;
 
     /**
-     * @var \SessionHandlerInterface|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\SessionHandlerInterface
      */
     private $handler;
 
@@ -400,7 +400,7 @@ class StoreTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         parent::assertPreConditions();
 
@@ -410,6 +410,7 @@ class StoreTest extends MockeryTestCase
     /**
      * @param int    $requestsCount
      * @param string $fingerprint
+     * @param int    $regenerationTrace
      *
      * @return string
      */
@@ -433,7 +434,10 @@ class StoreTest extends MockeryTestCase
 
     private function assertReflashNewAndOldFlashData(): void
     {
-        self::assertTrue(\array_search('foo', $this->session->get('_flash.new'), true));
-        self::assertFalse(\array_search('foo', $this->session->get('_flash.old'), true));
+        $new = array_flip($this->session->get('_flash.new'));
+        $old = array_flip($this->session->get('_flash.old'));
+
+        self::assertTrue(isset($new['foo']));
+        self::assertFalse(isset($old['foo']));
     }
 }

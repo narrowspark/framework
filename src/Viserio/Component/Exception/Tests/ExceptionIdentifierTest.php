@@ -32,7 +32,7 @@ class ExceptionIdentifierTest extends TestCase
         $i   = new ExceptionIdentifier();
         $arr = [];
 
-        for ($j = 0; $j < 20; $j++) {
+        for ($j = 0; $j < 20; ++$j) {
             $arr[] = new Exception();
         }
 

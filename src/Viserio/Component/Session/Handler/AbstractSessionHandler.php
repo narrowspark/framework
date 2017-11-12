@@ -8,27 +8,27 @@ use SessionUpdateTimestampHandlerInterface;
 abstract class AbstractSessionHandler implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
 {
     /**
-     * @var string|null
+     * @var null|string
      */
     private $sessionName;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $prefetchId;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $prefetchData;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $newSessionId;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $igbinaryEmptyData;
 

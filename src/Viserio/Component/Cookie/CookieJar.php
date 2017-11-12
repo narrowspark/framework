@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie;
 
-use Cake\Chronos\Chronos;
 use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 
@@ -38,8 +37,6 @@ class CookieJar implements JarContract
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function create(
         string $name,
@@ -52,8 +49,6 @@ class CookieJar implements JarContract
         $sameSite = false
     ): CookieContract {
         [$path, $domain, $secure] = $this->getPathAndDomain($path, $domain, $secure);
-
-        $second = $second === 0 ? 0 : Chronos::now()->addSecond($second)->getTimestamp();
 
         return new SetCookie($name, $value, $second, $path, $domain, $secure, $httpOnly, $sameSite);
     }

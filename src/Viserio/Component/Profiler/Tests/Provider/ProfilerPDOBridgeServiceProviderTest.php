@@ -33,10 +33,10 @@ class ProfilerPDOBridgeServiceProviderTest extends MockeryTestCase
     {
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME_FLOAT')
+            ->with('request_time_float')
             ->andReturn(false);
         $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME')
+            ->with('request_time')
             ->andReturn(false);
 
         return $request;

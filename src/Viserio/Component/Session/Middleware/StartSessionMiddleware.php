@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
+use Cake\Chronos\Chronos;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -31,11 +32,18 @@ class StartSessionMiddleware implements MiddlewareInterface
     protected $driverConfig = [];
 
     /**
-     * Manager default driver config.
+     * Cookie config from session manager.
      *
      * @var array
      */
-    protected $config = [];
+    protected $cookieConfig = [];
+
+    /**
+     * Session cookie lifetime.
+     *
+     * @var int
+     */
+    protected $lifetime;
 
     /**
      * List of fingerprint generators.
@@ -56,7 +64,8 @@ class StartSessionMiddleware implements MiddlewareInterface
     {
         $this->manager      = $manager;
         $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
-        $this->config       = $manager->getConfig();
+        $this->lifetime     = $manager->getConfig()['lifetime'];
+        $this->cookieConfig = $manager->getConfig()['cookie'];
     }
 
     /**
@@ -124,7 +133,6 @@ class StartSessionMiddleware implements MiddlewareInterface
     protected function storeCurrentUrl(ServerRequestInterface $request, StoreContract $session): StoreContract
     {
         if ($request->getMethod() === 'GET' &&
-            $request->getAttribute('_route') &&
             $request->getHeaderLine('x-requested-with') !== 'XMLHttpRequest'
         ) {
             $session->setPreviousUrl((string) $request->getUri());
@@ -140,14 +148,14 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     protected function collectGarbage(StoreContract $session): void
     {
-        $lottery     = $this->config['lottery'];
+        $lottery     = $this->cookieConfig['lottery'];
         $hitsLottery = \random_int(1, $lottery[1]) <= $lottery[0];
 
         // Here we will see if this request hits the garbage collection lottery by hitting
         // the odds needed to perform garbage collection on any given request. If we do
         // hit it, we'll call this handler to let it delete all the expired sessions.
         if ($hitsLottery) {
-            $session->getHandler()->gc($this->config['lifetime']);
+            $session->getHandler()->gc($this->lifetime);
         }
     }
 
@@ -168,18 +176,17 @@ class StartSessionMiddleware implements MiddlewareInterface
             $session->save();
         }
 
-        $config = $this->config;
         $uri    = $request->getUri();
 
         $setCookie = new SetCookie(
             $session->getName(),
             $session->getId(),
-            $config['expire_on_close'] ? 0 : $config['lifetime'],
-            $config['path'] ?? '/',
-            $config['domain'] ?? $uri->getHost(),
-            $config['secure'] ?? ($uri->getScheme() === 'https'),
-            $config['http_only'] ?? true,
-            $config['samesite'] ?? false
+            $this->cookieConfig['expire_on_close'] ? 0 : Chronos::now()->addSeconds($this->lifetime),
+            $this->cookieConfig['path'] ?? '/',
+            $this->cookieConfig['domain'] ?? $uri->getHost(),
+            $this->cookieConfig['secure'] ?? ($uri->getScheme() === 'https'),
+            $this->cookieConfig['http_only'] ?? true,
+            $this->cookieConfig['samesite'] ?? false
         );
 
         return $response->withAddedHeader('set-cookie', (string) $setCookie);

@@ -6,7 +6,6 @@ use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\Events\Event as EventContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
@@ -54,7 +53,7 @@ class SessionServiceProvider implements ServiceProviderInterface
     ): ?EventManagerContract {
         if ($eventManager !== null) {
             $eventManager->attach(TerminableContract::TERMINATE, function (EventContract $event): void {
-                /* @var StoreContract $driver */
+                // @var StoreContract $driver
                 $driver = $event->getTarget()->getContainer()->get(SessionManager::class)->getDriver();
 
                 if (! $driver->getHandler() instanceof CookieSessionHandler) {
@@ -76,10 +75,6 @@ class SessionServiceProvider implements ServiceProviderInterface
     public static function createSessionManager(ContainerInterface $container): SessionManager
     {
         $manager = new SessionManager($container);
-
-        if ($container->has(EncrypterContract::class)) {
-            $manager->setEncrypter($container->get(EncrypterContract::class));
-        }
 
         if ($container->has(CacheManagerContract::class)) {
             $manager->setCacheManager($container->get(CacheManagerContract::class));

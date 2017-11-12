@@ -81,7 +81,7 @@ class CookieSessionHandler extends AbstractSessionHandler
         }
 
         $this->cookie->queue($this->cookie->delete($sessionId));
-        /* @var CookieContract $cookie */
+        // @var CookieContract $cookie
         $this->cookie->queue(
             $cookie->withExpires(
                 Chronos::now()->addSeconds($this->lifetime)->getTimestamp()

@@ -46,7 +46,8 @@ class CookieSessionHandlerTest extends MockeryTestCase
                     'expires' => Chronos::now()->addSeconds(350)->getTimestamp(),
                     'data'    => 'Foo Bar',
                 ],
-                    \JSON_PRESERVE_ZERO_FRACTION))]);
+                    \JSON_PRESERVE_ZERO_FRACTION
+            ))]);
         $this->handler->setRequest($request);
 
         self::assertSame('Foo Bar', $this->handler->read('temp'));
