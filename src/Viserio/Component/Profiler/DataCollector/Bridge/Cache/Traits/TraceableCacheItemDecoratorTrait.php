@@ -20,9 +20,9 @@ trait TraceableCacheItemDecoratorTrait
         }
 
         if ($event->result[$key] = $item->isHit()) {
-            ++$event->hits;
+            $event->hits++;
         } else {
-            ++$event->misses;
+            $event->misses++;
         }
 
         return $item;
@@ -102,9 +102,9 @@ trait TraceableCacheItemDecoratorTrait
 
             foreach ($result as $key => $item) {
                 if ($event->result[$key] = $item->isHit()) {
-                    ++$event->hits;
+                    $event->hits++;
                 } else {
-                    ++$event->misses;
+                    $event->misses++;
                 }
 
                 yield $key => $item;

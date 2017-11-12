@@ -51,7 +51,7 @@ if (! \function_exists('retry')) {
      */
     function retry($times, callable $callback, $sleep = 0)
     {
-        --$times;
+        $times--;
         beginning:
 
         try {
@@ -61,7 +61,7 @@ if (! \function_exists('retry')) {
                 throw $e;
             }
 
-            --$times;
+            $times--;
 
             if ($sleep) {
                 \usleep($sleep * 1000);
