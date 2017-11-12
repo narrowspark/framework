@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Contract\Profiler\DataCollector;
 use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -82,11 +83,10 @@ class ProfilerTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $profiler->enable();
-        $response = $this->getHtmlResponse();
 
         $response = $profiler->modifyResponse(
             (new ServerRequestFactory())->createServerRequestFromArray($server),
-            $response
+            $this->getHtmlResponse()
         );
 
         $template = new TemplateManager(
@@ -177,9 +177,9 @@ class ProfilerTest extends MockeryTestCase
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface|static
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    private function getHtmlResponse()
+    private function getHtmlResponse(): ResponseInterface
     {
         $response = (new ResponseFactory())->createResponse();
 

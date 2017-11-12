@@ -70,7 +70,6 @@ parameters:
 
         # Is wrong
         - '#Function sodium_memzero invoked with 1 parameter, 2 required#'
-        - '#Call to an undefined method SessionHandlerInterface::setRequest#'
         - "#Casting to mixed[] something that's already mixed[]#"
         - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream() should return resource but returns mixed|string#'
@@ -89,6 +88,8 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Dispatcher::setContainer#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Output\\OutputInterface::fetch\(\)#'
+        - '#Call to an undefined method SessionHandlerInterface::setRequest#'
+        - '#Function igbinary_serialize not found#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'
