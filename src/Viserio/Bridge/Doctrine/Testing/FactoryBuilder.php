@@ -123,7 +123,7 @@ class FactoryBuilder
 
         $results = [];
 
-        for ($i = 0; $i < $this->amount; ++$i) {
+        for ($i = 0; $i < $this->amount; $i++) {
             $results[] = $this->makeInstance($attributes);
         }
 
