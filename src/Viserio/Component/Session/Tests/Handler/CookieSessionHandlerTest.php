@@ -7,7 +7,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Cookie\AbstractCookie;
-use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 
 class CookieSessionHandlerTest extends MockeryTestCase
@@ -130,7 +129,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
         $jar->shouldReceive('getQueuedCookies')
             ->once()
             ->andReturn([
-                'cookie.sess' => $cookie
+                'cookie.sess' => $cookie,
             ]);
         $jar->shouldReceive('queue')
             ->twice();

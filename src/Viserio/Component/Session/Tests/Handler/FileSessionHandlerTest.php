@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Handler;
 
-use Cake\Chronos\Chronos;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Session\Handler\FileSessionHandler;
@@ -112,7 +111,7 @@ class FileSessionHandlerTest extends TestCase
         \mkdir($dir);
 
         $lifetime = 120;
-        $handler = new FileSessionHandler($dir, $lifetime);
+        $handler  = new FileSessionHandler($dir, $lifetime);
 
         $filePath = self::normalizeDirectorySeparator($dir . '\update.' . FileSessionHandler::FILE_EXTENSION);
 
