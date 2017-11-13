@@ -2,18 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
-use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Encryption\KeyFactory;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
@@ -23,66 +19,37 @@ use Viserio\Component\Session\SessionManager;
 class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Filesystem\Filesystem
+     * @var string
      */
-    private $files;
-
-    /**
-     * @var null|\Viserio\Component\Encryption\Encrypter
-     */
-    private $encrypter;
+    private $keyPath;
 
     public function setUp(): void
     {
         parent::setUp();
 
+        $dir = __DIR__ . '/stubs';
+
+        \mkdir($dir);
+
         $pw  = \random_bytes(32);
         $key = KeyFactory::generateKey($pw);
 
-        $this->files = new Filesystem();
-        $this->files->createDirectory(__DIR__ . '/stubs');
+        KeyFactory::saveKeyToFile($dir . '/session_key', $key);
 
-        $this->encrypter = new Encrypter($key);
+        $this->keyPath = $dir . '/session_key';
     }
 
     public function tearDown(): void
     {
-        $this->files->deleteDirectory(__DIR__ . '/stubs');
+        \unlink($this->keyPath);
+        \rmdir(__DIR__ . '/stubs');
 
         parent::tearDown();
     }
 
     public function testSessionCsrfMiddlewareSetCookie(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'session' => [
-                    'default' => 'file',
-                    'drivers' => [
-                        'file' => [
-                            'path' => __DIR__ . '/stubs',
-                        ],
-                    ],
-                    'cookie'          => 'session',
-                    'path'            => '/',
-                    'expire_on_close' => false,
-                    'lottery'         => [2, 100],
-                    'lifetime'        => 1440,
-                    'domain'          => 'test.com',
-                    'http_only'       => false,
-                    'secure'          => false,
-                    'samesite'        => false,
-                    'livetime'        => Chronos::now()->getTimestamp() + 60 * 1200,
-                ],
-            ]);
-        $manager = $this->getSessionManager($config);
+        $manager = $this->getSessionManager();
 
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
@@ -100,48 +67,20 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                     return $delegate->process($request);
                 }),
                 new VerifyCsrfTokenMiddleware($manager),
-                new CallableMiddleware(function ($request, $delegate) {
-                    return (new ResponseFactory())->createResponse(200);
+                new CallableMiddleware(function () {
+                    return (new ResponseFactory())->createResponse();
                 }),
             ]
         );
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('set-cookie')));
     }
 
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'session' => [
-                    'default' => 'file',
-                    'drivers' => [
-                        'file' => [
-                            'path' => __DIR__ . '/stubs',
-                        ],
-                    ],
-                    'cookie'          => 'session',
-                    'path'            => '/',
-                    'expire_on_close' => false,
-                    'lottery'         => [2, 100],
-                    'lifetime'        => 1440,
-                    'domain'          => 'test.com',
-                    'http_only'       => false,
-                    'secure'          => false,
-                    'samesite'        => false,
-                    'livetime'        => Chronos::now()->getTimestamp() + 60 * 120,
-                ],
-            ]);
-        $manager = $this->getSessionManager($config);
+        $manager = $this->getSessionManager();
 
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
@@ -154,53 +93,25 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             [
                 new StartSessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
-                    $request = $request->withAddedHeader('X-CSRF-TOKEN', $request->getAttribute('session')->getToken());
+                    $request = $request->withAddedHeader('x-csrf-token', $request->getAttribute('session')->getToken());
 
                     return $delegate->process($request);
                 }),
                 new VerifyCsrfTokenMiddleware($manager),
-                new CallableMiddleware(function ($request, $delegate) {
-                    return (new ResponseFactory())->createResponse(200);
+                new CallableMiddleware(function () {
+                    return (new ResponseFactory())->createResponse();
                 }),
             ]
         );
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('set-cookie')));
     }
 
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'session' => [
-                    'default' => 'file',
-                    'drivers' => [
-                        'file' => [
-                            'path' => __DIR__ . '/stubs',
-                        ],
-                    ],
-                    'cookie'          => 'session',
-                    'path'            => '/',
-                    'expire_on_close' => false,
-                    'lottery'         => [2, 100],
-                    'lifetime'        => 1440,
-                    'domain'          => 'test.com',
-                    'http_only'       => false,
-                    'secure'          => false,
-                    'samesite'        => false,
-                    'livetime'        => Chronos::now()->getTimestamp() + 60 * 120,
-                ],
-            ]);
-        $manager = $this->getSessionManager($config);
+        $manager = $this->getSessionManager();
 
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
@@ -214,28 +125,55 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                 new StartSessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
                     $request = $request->withAddedHeader(
-                        'X-XSRF-TOKEN',
-                        $this->encrypter->encrypt(new HiddenString($request->getAttribute('session')->getToken()))
+                        'x-xsrf-token',
+                        (new Encrypter(KeyFactory::loadKey($this->keyPath)))->encrypt(new HiddenString($request->getAttribute('session')->getToken()))
                     );
 
                     return $delegate->process($request);
                 }),
                 new VerifyCsrfTokenMiddleware($manager),
-                new CallableMiddleware(function ($request, $delegate) {
-                    return (new ResponseFactory())->createResponse(200);
+                new CallableMiddleware(function () {
+                    return (new ResponseFactory())->createResponse();
                 }),
             ]
         );
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(\is_array($response->getHeader('set-cookie')));
     }
 
     /**
      * @expectedException \Viserio\Component\Contract\Session\Exception\TokenMismatchException
      */
     public function testSessionCsrfMiddlewareToThrowException(): void
+    {
+        $manager = $this->getSessionManager();
+
+        $server                = $_SERVER;
+        $server['SERVER_ADDR'] = '127.0.0.1';
+
+        unset($server['PHP_SELF']);
+
+        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request = $request->withMethod('POST');
+
+        $dispatcher = new Dispatcher(
+            [
+                new StartSessionMiddleware($manager),
+                new VerifyCsrfTokenMiddleware($manager),
+                new CallableMiddleware(function () {
+                    return (new ResponseFactory())->createResponse();
+                }),
+            ]
+        );
+
+        $response = $dispatcher->dispatch($request);
+
+        self::assertTrue(\is_array($response->getHeader('set-cookie')));
+    }
+
+    private function getSessionManager()
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
@@ -253,49 +191,13 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                             'path' => __DIR__ . '/stubs',
                         ],
                     ],
-                    'cookie'          => 'session',
-                    'path'            => '/',
-                    'expire_on_close' => false,
-                    'lottery'         => [2, 100],
-                    'lifetime'        => 1440,
-                    'domain'          => 'test.com',
-                    'http_only'       => false,
-                    'secure'          => false,
-                    'samesite'        => false,
-                    'livetime'        => Chronos::now()->getTimestamp() + 60 * 120,
+                    'key_path' => $this->keyPath,
                 ],
             ]);
-        $manager = $this->getSessionManager($config);
 
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $request = $request->withMethod('POST');
-
-        $dispatcher = new Dispatcher(
-            [
-                new StartSessionMiddleware($manager),
-                new VerifyCsrfTokenMiddleware($manager),
-                new CallableMiddleware(function ($request, $delegate) {
-                    return (new ResponseFactory())->createResponse(200);
-                }),
-            ]
-        );
-
-        $response = $dispatcher->dispatch($request);
-
-        self::assertTrue(\is_array($response->getHeader('Set-Cookie')));
-    }
-
-    private function getSessionManager($config)
-    {
         return new SessionManager(
             new ArrayContainer([
                 RepositoryContract::class => $config,
-                FilesystemContract::class => $this->files,
-                EncrypterContract::class  => $this->encrypter,
             ])
         );
     }

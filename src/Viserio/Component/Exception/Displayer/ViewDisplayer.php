@@ -52,7 +52,7 @@ class ViewDisplayer implements DisplayerContract
     {
         $response = $this->responseFactory->createResponse($code);
 
-        foreach (\array_merge($headers, ['Content-Type' => $this->getContentType()]) as $header => $value) {
+        foreach (\array_merge($headers, ['content-type' => $this->getContentType()]) as $header => $value) {
             $response = $response->withAddedHeader($header, $value);
         }
 

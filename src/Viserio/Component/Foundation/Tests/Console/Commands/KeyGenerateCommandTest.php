@@ -16,7 +16,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $file    = __DIR__ . '/../../Fixtures/.env.key';
         $dirPath = __DIR__ . '/keysring';
 
-        \file_put_contents($file, "ENCRYPTION_KEY_PATH=\r\nENCRYPTION_PASSWORD_KEY_PATH=");
+        \file_put_contents($file, "ENCRYPTION_KEY_PATH=\r\nENCRYPTION_PASSWORD_KEY_PATH=\r\nENCRYPTION_SESSION_KEY_PATH=");
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
@@ -27,10 +27,14 @@ class KeyGenerateCommandTest extends MockeryTestCase
             ->once()
             ->with('viserio.encryption.password_key_path', '')
             ->andReturn('');
+        $config->shouldReceive('get')
+            ->once()
+            ->with('viserio.session.key_path', '')
+            ->andReturn('');
 
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getEnvironmentFilePath')
-            ->twice()
+            ->times(3)
             ->andReturn($file);
         $kernel->shouldReceive('getStoragePath')
             ->once()
@@ -50,11 +54,12 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("Application & Password key set successfully.\n", $output);
+        self::assertEquals("Keys generated and set successfully.\n", $output);
 
         @\unlink($file);
         @\unlink($dirPath . '\encryption_key');
         @\unlink($dirPath . '\password_key');
+        @\unlink($dirPath . '\session_key');
         @\rmdir($dirPath);
     }
 
@@ -70,6 +75,10 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $config->shouldReceive('get')
             ->once()
             ->with('viserio.encryption.password_key_path', '')
+            ->andReturn('test');
+        $config->shouldReceive('get')
+            ->once()
+            ->with('viserio.session.key_path', '')
             ->andReturn('test');
 
         $kernel = $this->mock(ConsoleKernelContract::class);
@@ -111,6 +120,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         @\unlink($dirPath . '\encryption_key');
         @\unlink($dirPath . '\password_key');
+        @\unlink($dirPath . '\session_key');
         @\rmdir($dirPath);
     }
 }

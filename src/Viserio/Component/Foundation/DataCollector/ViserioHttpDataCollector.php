@@ -313,7 +313,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
            'uri'     => $route->getUri() ?: '-',
            'methods' => \count($route->getMethods()) > 1 ?
                 \implode(' | ', $route->getMethods()) :
-                $route->getMethods(),
+                $route->getMethods()[0],
         ];
 
         $result = \array_merge($result, $action);

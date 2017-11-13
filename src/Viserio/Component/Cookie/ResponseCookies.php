@@ -44,7 +44,7 @@ final class ResponseCookies extends AbstractCookieCollector
     {
         return new static(\array_map(function ($setCookieString) {
             return self::fromStringCookie($setCookieString);
-        }, $response->getHeader('Set-Cookie')));
+        }, $response->getHeader('set-cookie')));
     }
 
     /**
@@ -56,10 +56,10 @@ final class ResponseCookies extends AbstractCookieCollector
      */
     public function renderIntoSetCookieHeader(ResponseInterface $response): ResponseInterface
     {
-        $response = $response->withoutHeader('Set-Cookie');
+        $response = $response->withoutHeader('set-cookie');
 
         foreach ($this->cookies as $cookies) {
-            $response = $response->withAddedHeader('Set-Cookie', (string) $cookies);
+            $response = $response->withAddedHeader('set-cookie', (string) $cookies);
         }
 
         return $response;

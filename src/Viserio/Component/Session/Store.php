@@ -5,20 +5,15 @@ namespace Viserio\Component\Session;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Component\Contract\Session\Exception\SuspiciousOperationException;
 use Viserio\Component\Contract\Session\Fingerprint as FingerprintContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\HiddenString;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Support\Str;
 
 class Store implements StoreContract
 {
-    use EncrypterAwareTrait;
-
     /**
      * The session ID.
      *
@@ -113,15 +108,13 @@ class Store implements StoreContract
     /**
      * Create a new session instance.
      *
-     * @param string                                           $name
-     * @param \SessionHandlerInterface                         $handler
-     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
+     * @param string                   $name
+     * @param \SessionHandlerInterface $handler
      */
-    public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
+    public function __construct(string $name, SessionHandlerContract $handler)
     {
-        $this->name      = $name;
-        $this->handler   = $handler;
-        $this->encrypter = $encrypter;
+        $this->name    = $name;
+        $this->handler = $handler;
     }
 
     /**
@@ -165,7 +158,7 @@ class Store implements StoreContract
                 }
 
                 $this->started = true;
-                ++$this->requestsCount;
+                $this->requestsCount++;
             }
         }
 
@@ -596,6 +589,36 @@ class Store implements StoreContract
     }
 
     /**
+     * Prepare the raw string data from the session.
+     *
+     * @param string $data
+     *
+     * @return array
+     */
+    protected function prepareForReadFromHandler($data): array
+    {
+        $value = json_decode($data, true);
+
+        if ($value === null) {
+            return [];
+        }
+
+        return $value;
+    }
+
+    /**
+     * Prepare the session data for storage.
+     *
+     * @param string $data
+     *
+     * @return string
+     */
+    protected function prepareForWriteToHandler(string $data): string
+    {
+        return $data;
+    }
+
+    /**
      * Merge new flash keys into the new flash array.
      *
      * @param array $keys
@@ -680,17 +703,7 @@ class Store implements StoreContract
             return [];
         }
 
-        $hiddenString = $this->encrypter->decrypt($data);
-
-        if ($decryptedValue = $hiddenString->getString()) {
-            $sessionData = \json_decode($decryptedValue, true);
-
-            \sodium_memzero($decryptedValue);
-
-            return $sessionData;
-        }
-
-        return [];
+        return $this->prepareForReadFromHandler($data);
     }
 
     /**
@@ -714,7 +727,7 @@ class Store implements StoreContract
 
         $this->handler->write(
             $this->id,
-            $this->encrypter->encrypt(new HiddenString($value))
+            $this->prepareForWriteToHandler($value)
         );
     }
 

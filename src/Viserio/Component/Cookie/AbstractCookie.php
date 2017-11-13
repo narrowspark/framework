@@ -322,14 +322,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     protected function normalizeExpires($expiration = null): int
     {
-        $expires = null;
-
-        if (\is_int($expiration)) {
-            $expires = Chronos::now()->addSeconds($expiration)->toCookieString();
-        } elseif ($expiration instanceof DateTimeInterface) {
-            $expires = $expiration->format(DateTime::COOKIE);
-        }
-
+        $expires   = $this->getTimestamp($expiration);
         $tsExpires = $expires;
 
         if (\is_string($expires)) {
@@ -499,5 +492,45 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         }
 
         return $cookieStringParts;
+    }
+
+    /**
+     * Check if the string / int is a unix timestamp.
+     *
+     * @param int|string $timestamp
+     *
+     * @return bool
+     */
+    protected function isValidTimeStamp($timestamp): bool
+    {
+        return ((int) $timestamp <= \PHP_INT_MAX) && ((int) $timestamp >= ~\PHP_INT_MAX);
+    }
+
+    /**
+     * Get timestamp as cookie string format.
+     *
+     * @param null|\DateTimeInterface|int|string $expiration
+     *
+     * @return null|string
+     */
+    protected function getTimestamp($expiration): ?string
+    {
+        if (\is_int($expiration) && \mb_strlen((string) $expiration) === 10 && $this->isValidTimeStamp($expiration)) {
+            return Chronos::createFromTimestamp($expiration)->toCookieString();
+        }
+
+        if (\is_int($expiration)) {
+            return Chronos::now()->addSeconds($expiration)->toCookieString();
+        }
+
+        if ($expiration instanceof DateTimeInterface) {
+            return $expiration->format(DateTime::COOKIE);
+        }
+
+        if (\is_string($expiration)) {
+            return $expiration;
+        }
+
+        return null;
     }
 }

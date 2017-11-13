@@ -162,6 +162,30 @@ class SetCookieTest extends TestCase
         );
     }
 
+    public function testGetExpiresWithChronosTimestamp(): void
+    {
+        $expire = Chronos::now()->addSeconds(7200);
+        $cookie = new SetCookie('foo', 'bar', $expire->getTimestamp());
+
+        self::assertEquals(
+            \strtotime($expire->toCookieString()),
+            $cookie->getExpiresTime(),
+            '->getExpiresTime() returns the expire date'
+        );
+    }
+
+    public function testGetExpiresWithSeconds(): void
+    {
+        $expire = 7200;
+        $cookie = new SetCookie('foo', 'bar', $expire);
+
+        self::assertEquals(
+            Chronos::now()->getTimestamp() + $expire,
+            $cookie->getExpiresTime(),
+            '->getExpiresTime() returns the expire date'
+        );
+    }
+
     public function testGetExpiresTimeWithStringValue(): void
     {
         $expire = new Chronos('+1 day');

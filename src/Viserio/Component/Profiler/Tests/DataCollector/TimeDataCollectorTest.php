@@ -35,11 +35,11 @@ class TimeDataCollectorTest extends MockeryTestCase
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()
-            ->with('REQUEST_TIME_FLOAT')
+            ->with('request_time_float')
             ->andReturn('');
         $request->shouldReceive('getHeaderLine')
             ->once()
-            ->with('REQUEST_TIME')
+            ->with('request_time')
             ->andReturn('');
         $collect = new TimeDataCollector($request);
 
@@ -92,11 +92,11 @@ class TimeDataCollectorTest extends MockeryTestCase
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()
-            ->with('REQUEST_TIME_FLOAT')
+            ->with('request_time_float')
             ->andReturn('');
         $request->shouldReceive('getHeaderLine')
             ->once()
-            ->with('REQUEST_TIME')
+            ->with('request_time')
             ->andReturn('');
         $collect = new TimeDataCollector($request);
         $collect->collect($request, $this->mock(ResponseInterface::class));

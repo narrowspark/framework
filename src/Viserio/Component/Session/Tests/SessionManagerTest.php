@@ -5,41 +5,49 @@ namespace Viserio\Component\Session\Tests;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Cache\CacheManager;
-use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Session\SessionManager;
 
 class SessionManagerTest extends MockeryTestCase
 {
+    /**
+     * @var string
+     */
+    private $keyPath;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $dir = __DIR__ . '/stubs';
+
+        \mkdir($dir);
+
+        $pw  = \random_bytes(32);
+        $key = KeyFactory::generateKey($pw);
+
+        KeyFactory::saveKeyToFile($dir . '/session_key', $key);
+
+        $this->keyPath = $dir . '/session_key';
+    }
+
+    public function tearDown(): void
+    {
+        \unlink($this->keyPath);
+        \rmdir(__DIR__ . '/stubs');
+
+        parent::tearDown();
+    }
+
     public function testCookieStore(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->twice()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->twice()
-            ->with('viserio')
-            ->andReturn([
-                'session' => [
-                    'drivers' => [
-                    ],
-                    'cookie'   => '',
-                    'lifetime' => 5,
-                ],
-                'cache' => [
-                    'drivers'   => [],
-                    'namespace' => false,
-                ],
-            ]);
-        $manager = $this->getSessionManager($config);
+        $manager = $this->getSessionManager();
+
+        $manager->setCookieJar($this->mock(JarContract::class));
+
         $session = $manager->getDriver('cookie');
 
         $session->setRequestOnHandler($this->mock(ServerRequestInterface::class));
@@ -48,47 +56,58 @@ class SessionManagerTest extends MockeryTestCase
         self::assertTrue($session->handlerNeedsRequest());
     }
 
+    /**
+     * @expectedException \Viserio\Component\Contract\Session\Exception\RuntimeException
+     * @expectedExceptionMessage No instance of [Viserio\Component\Contract\Cookie\QueueingFactory] found.
+     */
+    public function testCookieStoreThrowException(): void
+    {
+        $manager = $this->getSessionManager();
+        $manager->getDriver('cookie');
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Session\Exception\RuntimeException
+     * @expectedExceptionMessage No instance of [Viserio\Component\Contract\Cache\Manager] found.
+     */
+    public function testFilesystemStoreThrowException(): void
+    {
+        $manager = $this->getSessionManager();
+        $manager->getDriver('filesystem');
+    }
+
     public function testArrayStore(): void
+    {
+        $manager = $this->getSessionManager();
+        $session = $manager->getDriver('array');
+
+        self::assertInstanceOf(StoreContract::class, $session);
+    }
+
+    private function getSessionManager()
     {
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('offsetExists')
-            ->twice()
+            ->once()
             ->with('viserio')
             ->andReturn(true);
         $config->shouldReceive('offsetGet')
-            ->twice()
+            ->once()
             ->with('viserio')
             ->andReturn([
                 'session' => [
-                    'drivers' => [
-                    ],
-                    'cookie'   => 'test',
                     'lifetime' => 5,
+                    'key_path' => $this->keyPath,
                 ],
                 'cache' => [
                     'drivers'   => [],
                     'namespace' => false,
                 ],
             ]);
-        $manager = $this->getSessionManager($config);
-        $session = $manager->getDriver('array');
-
-        self::assertInstanceOf(StoreContract::class, $session);
-    }
-
-    private function getSessionManager($config)
-    {
-        $pw  = \random_bytes(32);
-        $key = KeyFactory::generateKey($pw);
 
         return new SessionManager(
             new ArrayContainer([
-                RepositoryContract::class   => $config,
-                JarContract::class          => $this->mock(JarContract::class),
-                CacheManagerContract::class => new CacheManager(new ArrayContainer([
-                    RepositoryContract::class => $config,
-                ])),
-                EncrypterContract::class => new Encrypter($key),
+                RepositoryContract::class => $config,
             ])
         );
     }

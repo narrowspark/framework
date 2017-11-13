@@ -32,7 +32,8 @@
         "php-di/invoker"                           : "^2.0",
         "phpunit/phpunit"                          : "^6.0",
         "symfony/var-dumper"                       : "~3.4 || ~4.0",
-        "viserio/config"                           : "self.version"
+        "viserio/config"                           : "self.version",
+        "viserio/options-resolver"                 : "self.version"
     },
     "autoload": {
         "files": [

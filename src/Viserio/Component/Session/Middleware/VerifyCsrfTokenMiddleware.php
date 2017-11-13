@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
-use Cake\Chronos\Chronos;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
 use Viserio\Component\Contract\Session\Store as StoreContract;
@@ -23,18 +23,18 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected $manager;
 
     /**
-     * Session manager driver config.
+     * Cookie config from session manager.
      *
      * @var array
      */
-    protected $driverConfig = [];
+    protected $cookieConfig = [];
 
     /**
-     * Manager default driver config.
+     * Session cookie lifetime.
      *
-     * @var array
+     * @var int
      */
-    protected $config = [];
+    protected $lifetime;
 
     /**
      * Create a new session middleware.
@@ -44,8 +44,8 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     public function __construct(SessionManager $manager)
     {
         $this->manager      = $manager;
-        $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
-        $this->config       = $manager->getConfig();
+        $this->lifetime     = $manager->getConfig()['lifetime'];
+        $this->cookieConfig = $manager->getConfig()['cookie'];
     }
 
     /**
@@ -79,7 +79,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return PHP_SAPI === 'cli' && ($this->config['env'] ?? 'production') === 'testing';
+        return PHP_SAPI === 'cli' && ($this->manager->getConfig()['env'] ?? 'production') === 'testing';
     }
 
     /**
@@ -92,11 +92,15 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
         $sessionToken = $request->getAttribute('session')->getToken();
-        $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('X-CSRF-TOKEN');
+        $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('x-csrf-token');
 
-        if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
-            $hiddenString = $this->manager->getEncrypter()->decrypt($header);
-            $token        = $hiddenString->getString();
+        if (! $token && $header = $request->getHeaderLine('x-xsrf-token')) {
+            try {
+                $hiddenString = $this->manager->getEncrypter()->decrypt($header);
+                $token        = $hiddenString->getString();
+            } catch (InvalidMessageException $exception) {
+                $token = $header;
+            }
         }
 
         if (! \is_string($sessionToken) || ! \is_string($token)) {
@@ -120,21 +124,20 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         ResponseInterface $response
     ): ResponseInterface {
-        $config = $this->config;
-        $uri    = $request->getUri();
+        $uri = $request->getUri();
 
         $setCookie = new SetCookie(
             'XSRF-TOKEN',
             $request->getAttribute('session')->getToken(),
-            Chronos::now()->addSeconds($config['lifetime']),
-            $config['path'],
-            $config['domain'] ?? $uri->getHost(),
-            $config['secure'] ?? ($uri->getScheme() === 'https'),
+            $this->lifetime,
+            $this->cookieConfig['path'],
+            $this->cookieConfig['domain'] ?? $uri->getHost(),
+            $this->cookieConfig['secure'] ?? ($uri->getScheme() === 'https'),
             false,
-            $config['samesite']
+            $this->cookieConfig['samesite']
         );
 
-        return $response->withAddedHeader('Set-Cookie', (string) $setCookie);
+        return $response->withAddedHeader('set-cookie', (string) $setCookie);
     }
 
     /**

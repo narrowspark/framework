@@ -30,7 +30,7 @@ class ResponseCookiesTest extends MockeryTestCase
     public function testFromSetCookieHeader(array $cookieStrings, array $expectedCookies): void
     {
         $response = $this->mock(Response::class);
-        $response->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieStrings);
+        $response->shouldReceive('getHeader')->with('set-cookie')->andReturn($cookieStrings);
 
         $setCookies = ResponseCookies::fromResponse($response);
 
@@ -50,7 +50,7 @@ class ResponseCookiesTest extends MockeryTestCase
     public function testFromSetCookieHeaderWithoutExpire(array $cookieStrings, array $expectedCookies): void
     {
         $response = $this->mock(Response::class);
-        $response->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieStrings);
+        $response->shouldReceive('getHeader')->with('set-cookie')->andReturn($cookieStrings);
 
         $setCookies = ResponseCookies::fromResponse($response);
 

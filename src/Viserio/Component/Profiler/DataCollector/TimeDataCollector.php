@@ -45,9 +45,9 @@ class TimeDataCollector extends AbstractDataCollector
     {
         $time = \microtime(true);
 
-        if (($requestTimeFloat = $serverRequest->getHeaderLine('REQUEST_TIME_FLOAT')) !== '') {
+        if (($requestTimeFloat = $serverRequest->getHeaderLine('request_time_float')) !== '') {
             $time = $requestTimeFloat;
-        } elseif (($requestTime = $serverRequest->getHeaderLine('REQUEST_TIME')) !== '') {
+        } elseif (($requestTime = $serverRequest->getHeaderLine('request_time')) !== '') {
             $time = $requestTime;
         }
 

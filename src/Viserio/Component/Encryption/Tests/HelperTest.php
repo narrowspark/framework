@@ -11,7 +11,6 @@ class HelperTest extends TestCase
      */
     public function testSafeStrCpy(): void
     {
-        //var_dump(get_extension_funcs('sodium'));die;
         $unique = \random_bytes(128);
 
         $clone = \safe_str_cpy($unique);

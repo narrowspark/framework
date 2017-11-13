@@ -28,9 +28,9 @@ trait SimpleTraceableCacheDecoratorTrait
         }
 
         if ($event->result[$key] = $miss !== $value) {
-            ++$event->hits;
+            $event->hits++;
         } else {
-            ++$event->misses;
+            $event->misses++;
             $value = $default;
         }
 
@@ -125,9 +125,9 @@ trait SimpleTraceableCacheDecoratorTrait
             $event->result = [];
             foreach ($result as $key => $value) {
                 if ($event->result[$key] = $miss !== $value) {
-                    ++$event->hits;
+                    $event->hits++;
                 } else {
-                    ++$event->misses;
+                    $event->misses++;
                     $value = $default;
                 }
                 yield $key => $value;

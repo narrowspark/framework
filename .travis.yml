@@ -21,17 +21,17 @@ addons:
 
 matrix:
   include:
-    - php: 7.2
+    - php: 7.2.0RC5
       env: PHPUNIT=true SEND_COVERAGE=true
-    - php: 7.2
+    - php: 7.2.0RC5
       env: PHPUNIT=true SETUP=high
-    - php: 7.2
+    - php: 7.2.0RC5
       env: PHPUNIT=true SETUP=lowest
       # phpstan
-    - php: 7.2
+    - php: 7.2.0RC5
       env: PHPSTAN=true
   allow_failures:
-    - php: 7.2
+    - php: 7.2.0RC5
       env: PHPUNIT=true SETUP=lowest
   fast_finish: true
 

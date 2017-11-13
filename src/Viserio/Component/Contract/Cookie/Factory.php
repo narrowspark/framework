@@ -9,7 +9,7 @@ interface Factory
      *
      * @param string           $name
      * @param null|string      $value
-     * @param int              $minutes
+     * @param int              $second
      * @param null|string      $path
      * @param null|string      $domain
      * @param bool             $secure
@@ -21,7 +21,7 @@ interface Factory
     public function create(
         string $name,
         ?string $value = null,
-        int $minutes = 0,
+        int $second = 0,
         ?string $path = null,
         ?string $domain = null,
         bool $secure = false,

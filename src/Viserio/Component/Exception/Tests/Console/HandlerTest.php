@@ -137,25 +137,25 @@ Exception trace:
         self::assertSame("
 Symfony\Component\Console\Exception\CommandNotFoundException : Command \"error\" is not defined.
 
-at $vendorFile : 615
-611:                 }
-612:                 \$message .= implode(\"\\n    \", \$alternatives);
-613:             }
-614: 
-615:             throw new CommandNotFoundException(\$message, \$alternatives);
-616:         }
-617: 
-618:         // filter out aliases for commands which are already on the list
-619:         if (count(\$commands) > 1) {
-620:             \$commandList = \$this->commandLoader ? array_merge(array_flip(\$this->commandLoader->getNames()), \$this->commands) : \$this->commands;
+at $vendorFile : 597
+593:                 }
+594:                 \$message .= implode(\"\\n    \", \$alternatives);
+595:             }
+596: 
+597:             throw new CommandNotFoundException(\$message, \$alternatives);
+598:         }
+599: 
+600:         // filter out aliases for commands which are already on the list
+601:         if (count(\$commands) > 1) {
+602:             \$commandList = \$this->commandLoader ? array_merge(array_flip(\$this->commandLoader->getNames()), \$this->commands) : \$this->commands;
 
 Exception trace:
 
 1   Symfony\Component\Console\Exception\CommandNotFoundException::__construct(\"Command \"error\" is not defined.\")
-    $vendorFile : 615
+    $vendorFile : 597
 
 2   Symfony\Component\Console\Application::find(\"error\")
-    $vendorFile : 212
+    $vendorFile : 206
 
 3   Symfony\Component\Console\Application::doRun(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
     $viserioFile : 296

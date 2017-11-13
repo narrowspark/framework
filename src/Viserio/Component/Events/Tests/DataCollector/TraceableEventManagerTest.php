@@ -200,13 +200,13 @@ class TraceableEventManagerTest extends MockeryTestCase
         $dispatchedEvents = 0;
 
         $dispatcher->attach('foo', $listener1 = function () use ($dispatcher, &$loop): void {
-            ++$loop;
+            $loop++;
             if (2 == $loop) {
                 $dispatcher->trigger('foo');
             }
         });
         $dispatcher->attach('foo', function () use (&$dispatchedEvents): void {
-            ++$dispatchedEvents;
+            $dispatchedEvents++;
         });
         $dispatcher->trigger('foo');
 

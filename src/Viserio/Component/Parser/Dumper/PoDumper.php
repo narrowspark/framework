@@ -99,7 +99,7 @@ class PoDumper implements DumperContract
 
             $output = $this->addMsgstrToOutput($entry, $isPlural, $output, $isObsolete);
 
-            ++$counter;
+            $counter++;
 
             // Avoid inserting an extra newline at end of file
             if ($counter < $entriesCount) {
