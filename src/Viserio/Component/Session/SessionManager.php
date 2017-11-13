@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Session;
 
 use Cache\SessionHandler\Psr6SessionHandler;
-use Psr\Container\ContainerInterface as ContainerInteropInterface;
 use SessionHandlerInterface;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
@@ -38,14 +37,14 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create a new session manager instance.
      *
-     * @param \Psr\Container\ContainerInterface $container
+     * @param iterable|\Psr\Container\ContainerInterface $data
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
      * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
      */
-    public function __construct(ContainerInteropInterface $container)
+    public function __construct($data)
     {
-        parent::__construct($container);
+        parent::__construct($data);
 
         $key             = KeyFactory::loadKey($this->resolvedOptions['key_path']);
         $this->encrypter = new Encrypter($key);
@@ -98,7 +97,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     }
 
     /**
-     * Set the encrypter instance.
+     * Set the cookie jar instance.
      *
      * @param \Viserio\Component\Contract\Cookie\QueueingFactory $cookieJar
      */

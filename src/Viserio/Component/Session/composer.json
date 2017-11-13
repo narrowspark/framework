@@ -22,7 +22,6 @@
         "ext-mbstring"                             : "*",
         "cache/session-handler"                    : "^1.0",
         "cakephp/chronos"                          : "^1.0",
-        "psr/container"                            : "^1.0",
         "viserio/contract"                         : "self.version",
         "viserio/encryption"                       : "self.version",
         "viserio/options-resolver"                 : "self.version",
