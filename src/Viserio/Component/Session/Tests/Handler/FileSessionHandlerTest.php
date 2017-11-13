@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Handler;
 
+use Cake\Chronos\Chronos;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Session\Handler\FileSessionHandler;
@@ -98,5 +99,32 @@ class FileSessionHandlerTest extends TestCase
             ->at($this->root);
 
         self::assertTrue($this->handler->destroy('destroy'));
+    }
+
+    public function testUpdateTimestamp(): void
+    {
+        if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win') {
+            $this->markTestSkipped('Test is skipped on windows.');
+        }
+
+        $dir = self::normalizeDirectorySeparator(__DIR__ . '/' . __FUNCTION__);
+
+        \mkdir($dir);
+
+        $lifetime = 120;
+        $handler = new FileSessionHandler($dir, $lifetime);
+
+        $filePath = self::normalizeDirectorySeparator($dir . '\update.' . FileSessionHandler::FILE_EXTENSION);
+
+        $handler->write('update', \json_encode(['user_id' => 1]));
+
+        $beforeTime = \filemtime($filePath);
+
+        self::assertTrue($handler->updateTimestamp('update', 'no'));
+
+        self::assertNotSame($beforeTime, \filemtime($filePath));
+
+        \unlink($filePath);
+        \rmdir($dir);
     }
 }

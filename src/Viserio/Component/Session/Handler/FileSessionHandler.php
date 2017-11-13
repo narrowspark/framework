@@ -61,11 +61,11 @@ class FileSessionHandler extends AbstractSessionHandler
         );
         $boolArray = [];
 
-        foreach ($files as $file) {
-            $file = self::normalizeDirectorySeparator($file);
+        foreach ($files as $filePath) {
+            $filePath = self::normalizeDirectorySeparator($filePath);
 
-            if (\file_exists($file) && \filemtime($file) + $maxlifetime < \time()) {
-                $boolArray[] = @\unlink($file);
+            if (\file_exists($filePath) && \filemtime($filePath) + $maxlifetime < \time()) {
+                $boolArray[] = @\unlink($filePath);
             }
         }
 
@@ -77,8 +77,9 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     public function updateTimestamp($sessionId, $data): bool
     {
+        // touch wont work on windows.
         return \touch(
-            self::normalizeDirectorySeparator($this->path . '/' . $sessionId),
+            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION),
             Chronos::now()->addSeconds($this->lifetime)->getTimestamp()
         );
     }

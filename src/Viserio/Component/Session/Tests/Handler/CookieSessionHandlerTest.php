@@ -6,6 +6,8 @@ use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
+use Viserio\Component\Cookie\AbstractCookie;
+use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 
 class CookieSessionHandlerTest extends MockeryTestCase
@@ -115,5 +117,35 @@ class CookieSessionHandlerTest extends MockeryTestCase
         );
 
         self::assertTrue($handler->destroy('cookie.sess'));
+    }
+
+    public function testUpdateTimestamp(): void
+    {
+        $cookie = $this->mock(AbstractCookie::class);
+        $cookie->shouldReceive('withExpires')
+            ->once()
+            ->with(\Mockery::type('int'));
+
+        $jar = $this->mock(JarContract::class);
+        $jar->shouldReceive('getQueuedCookies')
+            ->once()
+            ->andReturn([
+                'cookie.sess' => $cookie
+            ]);
+        $jar->shouldReceive('queue')
+            ->twice();
+        $jar->shouldReceive('delete')
+            ->once()
+            ->with('cookie.sess');
+        $jar->shouldReceive('hasQueued')
+            ->once()
+            ->andReturn(true);
+
+        $handler = new CookieSessionHandler(
+            $jar,
+            300
+        );
+
+        self::assertTrue($handler->updateTimestamp('cookie.sess', 'foo'));
     }
 }

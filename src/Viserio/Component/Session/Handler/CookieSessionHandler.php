@@ -87,6 +87,8 @@ class CookieSessionHandler extends AbstractSessionHandler
                 Chronos::now()->addSeconds($this->lifetime)->getTimestamp()
             )
         );
+
+        return $this->cookie->hasQueued($sessionId);
     }
 
     /**
