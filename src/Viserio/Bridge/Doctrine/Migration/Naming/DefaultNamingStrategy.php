@@ -3,33 +3,32 @@ namespace LaravelDoctrine\Migrations\Naming;
 
 use Doctrine\DBAL\Migrations\Finder\MigrationFinderInterface;
 use Doctrine\DBAL\Migrations\Finder\RecursiveRegexFinder;
+use Viserio\Bridge\Doctrine\Contract\Migration\NamingStrategy as NamingStrategyContract;
 
-class DefaultNamingStrategy implements NamingStrategy
+class DefaultNamingStrategy implements NamingStrategyContract
 {
     /**
-     * @return string|string
+     * {@inheritdoc}
      */
-    public function getFilename(?string $version = null)
+    public function getFilename(?string $version = null): string
     {
-        $version = $version ?? date('YmdHis');
+        $version = $version ?? \date('YmdHis');
 
         return 'Version' . $version;
     }
 
     /**
-     * @param string|null $version
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getClassName(?string $version = null): string
     {
-        $version = $version ?? date('YmdHis');
+        $version = $version ?? \date('YmdHis');
 
         return 'Version' . $version;
     }
 
     /**
-     * @return MigrationFinderInterface
+     * {@inheritdoc}
      */
     public function getFinder(): MigrationFinderInterface
     {

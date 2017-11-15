@@ -20,9 +20,9 @@
     "require": {
         "php"                                          : "^7.1",
         "ext-pdo"                                      : "*",
+        "ext-mbstring"                                 : "*",
         "doctrine/dbal"                                : "^2.5",
-        "narrowspark/collection"                       : "^0.1",
-        "symfony/polyfill-mbstring"                    : "^1.0"
+        "narrowspark/collection"                       : "^0.1"
     },
     "require-dev": {
         "container-interop/service-provider"           : "^0.3",

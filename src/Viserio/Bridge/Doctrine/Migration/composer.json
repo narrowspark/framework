@@ -18,14 +18,14 @@
         }
     ],
     "require": {
-        "php"                                               : "^7.1",
+        "php"                                               : "^7.2",
         "ext-pdo"                                           : "*",
-        "doctrine/migrations"                               : "^1.5",
+        "doctrine/migrations"                               : "^1.6",
         "viserio/console"                                   : "self.version",
         "viserio/options-resolver"                          : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"                : "^0.3",
+        "container-interop/service-provider"                : "^0.4",
         "phpunit/phpunit"                                   : "^6.0",
         "viserio/container"                                 : "self.version"
     },
